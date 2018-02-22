@@ -10,11 +10,10 @@ export const zip = (array1, array2) =>
 export const namespace = (category, action) =>
   `@kd/kinops/home/${category}/${action}`;
 export const noPayload = type => () => ({ type });
-// export const withPayload = (type, ...names) => (...data) =>
-//   names.length === 0
-//     ? { type, payload: data[0] }
-//     : { type, payload: zip(names, data) };
-export const withPayload = type => payload => ({ type, payload });
+export const withPayload = (type, ...names) => (...data) =>
+  names.length === 0
+    ? { type, payload: data[0] }
+    : { type, payload: zip(names, data) };
 
 export function combineSagas(allSagas) {
   return function* combinedSagas() {
