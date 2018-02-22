@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
+import { foo } from 'common';
 import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  componentWillMount() {
+    foo();
+  }
   render() {
     return (
       <div className="App">

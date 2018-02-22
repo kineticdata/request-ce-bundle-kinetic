@@ -1,0 +1,1026 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Header /> .hasSidebar exists when there is a #toggleSidebarOpen 1`] = `
+ShallowWrapper {
+  "complexSelector": ComplexSelector {
+    "buildPredicate": [Function],
+    "childrenOfNode": [Function],
+    "findWhereUnwrapped": [Function],
+  },
+  "length": 1,
+  "node": <nav
+    className="navbar navbar-light bg-faded fixed-top"
+>
+    <Nav
+        className="nav-header"
+        tag="ul"
+    >
+        <NavItem
+            id="header-sidebar-toggle"
+            tag="li"
+        >
+            <NavLink
+                className="drawer-button icon-wrapper"
+                onClick={[Function]}
+                role="button"
+                tabIndex="0"
+                tag="a"
+            >
+                <SVGInline
+                    className="icon"
+                    classSuffix="-svg"
+                    cleanup={Array []}
+                    cleanupExceptions={Array []}
+                    component="span"
+                    svg="test-file-stub"
+                />
+            </NavLink>
+        </NavItem>
+        <UncontrolledDropdown
+            id="header-kapp-dropdown"
+        >
+            <DropdownToggle
+                aria-haspopup={true}
+                caret={true}
+                color="secondary"
+                data-toggle="dropdown"
+                nav={true}
+                role="button"
+            >
+                name
+            </DropdownToggle>
+            <DropdownMenu
+                tag="div"
+            >
+                <DropdownItem
+                    href="/acme"
+                    tag="a"
+                    toggle={true}
+                >
+                    <span
+                        className="fa fa-fw fa-home"
+                    />
+                    Home
+                </DropdownItem>
+                <DropdownItem
+                    divider={true}
+                    tag="button"
+                    toggle={true}
+                />
+                <BuildKappLink
+                    kapp={
+                        Object {
+                            "name": "Preferred Name",
+                            "slug": "preferred-slug",
+                          }
+                    }
+                />
+            </DropdownMenu>
+        </UncontrolledDropdown>
+        <Connect(Alerts) />
+        <Connect(withHandlers(Profile)) />
+    </Nav>
+</nav>,
+  "nodes": Array [
+    <nav
+      className="navbar navbar-light bg-faded fixed-top"
+>
+      <Nav
+            className="nav-header"
+            tag="ul"
+      >
+            <NavItem
+                  id="header-sidebar-toggle"
+                  tag="li"
+            >
+                  <NavLink
+                        className="drawer-button icon-wrapper"
+                        onClick={[Function]}
+                        role="button"
+                        tabIndex="0"
+                        tag="a"
+                  >
+                        <SVGInline
+                              className="icon"
+                              classSuffix="-svg"
+                              cleanup={Array []}
+                              cleanupExceptions={Array []}
+                              component="span"
+                              svg="test-file-stub"
+                        />
+                  </NavLink>
+            </NavItem>
+            <UncontrolledDropdown
+                  id="header-kapp-dropdown"
+            >
+                  <DropdownToggle
+                        aria-haspopup={true}
+                        caret={true}
+                        color="secondary"
+                        data-toggle="dropdown"
+                        nav={true}
+                        role="button"
+                  >
+                        name
+                  </DropdownToggle>
+                  <DropdownMenu
+                        tag="div"
+                  >
+                        <DropdownItem
+                              href="/acme"
+                              tag="a"
+                              toggle={true}
+                        >
+                              <span
+                                    className="fa fa-fw fa-home"
+                              />
+                              Home
+                        </DropdownItem>
+                        <DropdownItem
+                              divider={true}
+                              tag="button"
+                              toggle={true}
+                        />
+                        <BuildKappLink
+                              kapp={
+                                    Object {
+                                          "name": "Preferred Name",
+                                          "slug": "preferred-slug",
+                                        }
+                              }
+                        />
+                  </DropdownMenu>
+            </UncontrolledDropdown>
+            <Connect(Alerts) />
+            <Connect(withHandlers(Profile)) />
+      </Nav>
+</nav>,
+  ],
+  "options": Object {},
+  "renderer": ReactShallowRenderer {
+    "_instance": ShallowComponentWrapper {
+      "_calledComponentWillUnmount": false,
+      "_compositeType": 2,
+      "_context": Object {},
+      "_currentElement": <Navbar
+        color="faded"
+        fixed="top"
+        light={true}
+        tag="nav"
+        toggleable={false}
+>
+        <Nav
+                className="nav-header"
+                tag="ul"
+        >
+                <NavItem
+                        id="header-sidebar-toggle"
+                        tag="li"
+                >
+                        <NavLink
+                                className="drawer-button icon-wrapper"
+                                onClick={[Function]}
+                                role="button"
+                                tabIndex="0"
+                                tag="a"
+                        >
+                                <SVGInline
+                                        className="icon"
+                                        classSuffix="-svg"
+                                        cleanup={Array []}
+                                        cleanupExceptions={Array []}
+                                        component="span"
+                                        svg="test-file-stub"
+                                />
+                        </NavLink>
+                </NavItem>
+                <UncontrolledDropdown
+                        id="header-kapp-dropdown"
+                >
+                        <DropdownToggle
+                                aria-haspopup={true}
+                                caret={true}
+                                color="secondary"
+                                data-toggle="dropdown"
+                                nav={true}
+                                role="button"
+                        >
+                                name
+                        </DropdownToggle>
+                        <DropdownMenu
+                                tag="div"
+                        >
+                                <DropdownItem
+                                        href="/acme"
+                                        tag="a"
+                                        toggle={true}
+                                >
+                                        <span
+                                                className="fa fa-fw fa-home"
+                                        />
+                                        Home
+                                </DropdownItem>
+                                <DropdownItem
+                                        divider={true}
+                                        tag="button"
+                                        toggle={true}
+                                />
+                                <BuildKappLink
+                                        kapp={
+                                                Object {
+                                                        "name": "Preferred Name",
+                                                        "slug": "preferred-slug",
+                                                      }
+                                        }
+                                />
+                        </DropdownMenu>
+                </UncontrolledDropdown>
+                <Connect(Alerts) />
+                <Connect(withHandlers(Profile)) />
+        </Nav>
+</Navbar>,
+      "_debugID": 5,
+      "_hostContainerInfo": null,
+      "_hostParent": null,
+      "_instance": StatelessComponent {
+        "_reactInternalInstance": [Circular],
+        "context": Object {},
+        "props": Object {
+          "children": <Nav
+            className="nav-header"
+            tag="ul"
+>
+            <NavItem
+                        id="header-sidebar-toggle"
+                        tag="li"
+            >
+                        <NavLink
+                                    className="drawer-button icon-wrapper"
+                                    onClick={[Function]}
+                                    role="button"
+                                    tabIndex="0"
+                                    tag="a"
+                        >
+                                    <SVGInline
+                                                className="icon"
+                                                classSuffix="-svg"
+                                                cleanup={Array []}
+                                                cleanupExceptions={Array []}
+                                                component="span"
+                                                svg="test-file-stub"
+                                    />
+                        </NavLink>
+            </NavItem>
+            <UncontrolledDropdown
+                        id="header-kapp-dropdown"
+            >
+                        <DropdownToggle
+                                    aria-haspopup={true}
+                                    caret={true}
+                                    color="secondary"
+                                    data-toggle="dropdown"
+                                    nav={true}
+                                    role="button"
+                        >
+                                    name
+                        </DropdownToggle>
+                        <DropdownMenu
+                                    tag="div"
+                        >
+                                    <DropdownItem
+                                                href="/acme"
+                                                tag="a"
+                                                toggle={true}
+                                    >
+                                                <span
+                                                            className="fa fa-fw fa-home"
+                                                />
+                                                Home
+                                    </DropdownItem>
+                                    <DropdownItem
+                                                divider={true}
+                                                tag="button"
+                                                toggle={true}
+                                    />
+                                    <BuildKappLink
+                                                kapp={
+                                                            Object {
+                                                                        "name": "Preferred Name",
+                                                                        "slug": "preferred-slug",
+                                                                      }
+                                                }
+                                    />
+                        </DropdownMenu>
+            </UncontrolledDropdown>
+            <Connect(Alerts) />
+            <Connect(withHandlers(Profile)) />
+</Nav>,
+          "color": "faded",
+          "fixed": "top",
+          "light": true,
+          "tag": "nav",
+          "toggleable": false,
+        },
+        "refs": Object {},
+        "state": null,
+        "updater": Object {
+          "enqueueCallback": [Function],
+          "enqueueCallbackInternal": [Function],
+          "enqueueElementInternal": [Function],
+          "enqueueForceUpdate": [Function],
+          "enqueueReplaceState": [Function],
+          "enqueueSetState": [Function],
+          "isMounted": [Function],
+          "validateCallback": [Function],
+        },
+      },
+      "_mountOrder": 3,
+      "_pendingCallbacks": null,
+      "_pendingElement": null,
+      "_pendingForceUpdate": false,
+      "_pendingReplaceState": false,
+      "_pendingStateQueue": null,
+      "_renderedComponent": NoopInternalComponent {
+        "_currentElement": <nav
+          className="navbar navbar-light bg-faded fixed-top"
+>
+          <Nav
+                    className="nav-header"
+                    tag="ul"
+          >
+                    <NavItem
+                              id="header-sidebar-toggle"
+                              tag="li"
+                    >
+                              <NavLink
+                                        className="drawer-button icon-wrapper"
+                                        onClick={[Function]}
+                                        role="button"
+                                        tabIndex="0"
+                                        tag="a"
+                              >
+                                        <SVGInline
+                                                  className="icon"
+                                                  classSuffix="-svg"
+                                                  cleanup={Array []}
+                                                  cleanupExceptions={Array []}
+                                                  component="span"
+                                                  svg="test-file-stub"
+                                        />
+                              </NavLink>
+                    </NavItem>
+                    <UncontrolledDropdown
+                              id="header-kapp-dropdown"
+                    >
+                              <DropdownToggle
+                                        aria-haspopup={true}
+                                        caret={true}
+                                        color="secondary"
+                                        data-toggle="dropdown"
+                                        nav={true}
+                                        role="button"
+                              >
+                                        name
+                              </DropdownToggle>
+                              <DropdownMenu
+                                        tag="div"
+                              >
+                                        <DropdownItem
+                                                  href="/acme"
+                                                  tag="a"
+                                                  toggle={true}
+                                        >
+                                                  <span
+                                                            className="fa fa-fw fa-home"
+                                                  />
+                                                  Home
+                                        </DropdownItem>
+                                        <DropdownItem
+                                                  divider={true}
+                                                  tag="button"
+                                                  toggle={true}
+                                        />
+                                        <BuildKappLink
+                                                  kapp={
+                                                            Object {
+                                                                      "name": "Preferred Name",
+                                                                      "slug": "preferred-slug",
+                                                                    }
+                                                  }
+                                        />
+                              </DropdownMenu>
+                    </UncontrolledDropdown>
+                    <Connect(Alerts) />
+                    <Connect(withHandlers(Profile)) />
+          </Nav>
+</nav>,
+        "_debugID": 6,
+        "_renderedOutput": <nav
+          className="navbar navbar-light bg-faded fixed-top"
+>
+          <Nav
+                    className="nav-header"
+                    tag="ul"
+          >
+                    <NavItem
+                              id="header-sidebar-toggle"
+                              tag="li"
+                    >
+                              <NavLink
+                                        className="drawer-button icon-wrapper"
+                                        onClick={[Function]}
+                                        role="button"
+                                        tabIndex="0"
+                                        tag="a"
+                              >
+                                        <SVGInline
+                                                  className="icon"
+                                                  classSuffix="-svg"
+                                                  cleanup={Array []}
+                                                  cleanupExceptions={Array []}
+                                                  component="span"
+                                                  svg="test-file-stub"
+                                        />
+                              </NavLink>
+                    </NavItem>
+                    <UncontrolledDropdown
+                              id="header-kapp-dropdown"
+                    >
+                              <DropdownToggle
+                                        aria-haspopup={true}
+                                        caret={true}
+                                        color="secondary"
+                                        data-toggle="dropdown"
+                                        nav={true}
+                                        role="button"
+                              >
+                                        name
+                              </DropdownToggle>
+                              <DropdownMenu
+                                        tag="div"
+                              >
+                                        <DropdownItem
+                                                  href="/acme"
+                                                  tag="a"
+                                                  toggle={true}
+                                        >
+                                                  <span
+                                                            className="fa fa-fw fa-home"
+                                                  />
+                                                  Home
+                                        </DropdownItem>
+                                        <DropdownItem
+                                                  divider={true}
+                                                  tag="button"
+                                                  toggle={true}
+                                        />
+                                        <BuildKappLink
+                                                  kapp={
+                                                            Object {
+                                                                      "name": "Preferred Name",
+                                                                      "slug": "preferred-slug",
+                                                                    }
+                                                  }
+                                        />
+                              </DropdownMenu>
+                    </UncontrolledDropdown>
+                    <Connect(Alerts) />
+                    <Connect(withHandlers(Profile)) />
+          </Nav>
+</nav>,
+      },
+      "_renderedNodeType": 0,
+      "_rootNodeID": 0,
+      "_topLevelWrapper": null,
+      "_updateBatchNumber": null,
+      "_warnedAboutRefsInRender": false,
+    },
+    "getRenderOutput": [Function],
+    "render": [Function],
+  },
+  "root": [Circular],
+  "unrendered": <Navbar
+    color="faded"
+    fixed="top"
+    light={true}
+    tag="nav"
+    toggleable={false}
+>
+    <Nav
+        className="nav-header"
+        tag="ul"
+    >
+        <NavItem
+            id="header-sidebar-toggle"
+            tag="li"
+        >
+            <NavLink
+                className="drawer-button icon-wrapper"
+                onClick={[Function]}
+                role="button"
+                tabIndex="0"
+                tag="a"
+            >
+                <SVGInline
+                    className="icon"
+                    classSuffix="-svg"
+                    cleanup={Array []}
+                    cleanupExceptions={Array []}
+                    component="span"
+                    svg="test-file-stub"
+                />
+            </NavLink>
+        </NavItem>
+        <UncontrolledDropdown
+            id="header-kapp-dropdown"
+        >
+            <DropdownToggle
+                aria-haspopup={true}
+                caret={true}
+                color="secondary"
+                data-toggle="dropdown"
+                nav={true}
+                role="button"
+            >
+                name
+            </DropdownToggle>
+            <DropdownMenu
+                tag="div"
+            >
+                <DropdownItem
+                    href="/acme"
+                    tag="a"
+                    toggle={true}
+                >
+                    <span
+                        className="fa fa-fw fa-home"
+                    />
+                    Home
+                </DropdownItem>
+                <DropdownItem
+                    divider={true}
+                    tag="button"
+                    toggle={true}
+                />
+                <BuildKappLink
+                    kapp={
+                        Object {
+                            "name": "Preferred Name",
+                            "slug": "preferred-slug",
+                          }
+                    }
+                />
+            </DropdownMenu>
+        </UncontrolledDropdown>
+        <Connect(Alerts) />
+        <Connect(withHandlers(Profile)) />
+    </Nav>
+</Navbar>,
+}
+`;
+
+exports[`<Header /> snapshot 1`] = `
+ShallowWrapper {
+  "complexSelector": ComplexSelector {
+    "buildPredicate": [Function],
+    "childrenOfNode": [Function],
+    "findWhereUnwrapped": [Function],
+  },
+  "length": 1,
+  "node": <Navbar
+    color="faded"
+    fixed="top"
+    light={true}
+    tag="nav"
+    toggleable={false}
+>
+    <Nav
+        className="nav-header"
+        tag="ul"
+    >
+        <NavItem
+            id="header-sidebar-toggle"
+            tag="li"
+        >
+            <NavLink
+                className="drawer-button icon-wrapper"
+                onClick={[Function]}
+                role="button"
+                tabIndex="0"
+                tag="a"
+            >
+                <SVGInline
+                    className="icon"
+                    classSuffix="-svg"
+                    cleanup={Array []}
+                    cleanupExceptions={Array []}
+                    component="span"
+                    svg="test-file-stub"
+                />
+            </NavLink>
+        </NavItem>
+        <UncontrolledDropdown
+            id="header-kapp-dropdown"
+        >
+            <DropdownToggle
+                aria-haspopup={true}
+                caret={true}
+                color="secondary"
+                data-toggle="dropdown"
+                nav={true}
+                role="button"
+            >
+                name
+            </DropdownToggle>
+            <DropdownMenu
+                tag="div"
+            >
+                <DropdownItem
+                    href="/acme"
+                    tag="a"
+                    toggle={true}
+                >
+                    <span
+                        className="fa fa-fw fa-home"
+                    />
+                    Home
+                </DropdownItem>
+                <DropdownItem
+                    divider={true}
+                    tag="button"
+                    toggle={true}
+                />
+                <BuildKappLink
+                    kapp={
+                        Object {
+                            "name": "Preferred Name",
+                            "slug": "preferred-slug",
+                          }
+                    }
+                />
+            </DropdownMenu>
+        </UncontrolledDropdown>
+        <Connect(Alerts) />
+        <Connect(withHandlers(Profile)) />
+    </Nav>
+</Navbar>,
+  "nodes": Array [
+    <Navbar
+      color="faded"
+      fixed="top"
+      light={true}
+      tag="nav"
+      toggleable={false}
+>
+      <Nav
+            className="nav-header"
+            tag="ul"
+      >
+            <NavItem
+                  id="header-sidebar-toggle"
+                  tag="li"
+            >
+                  <NavLink
+                        className="drawer-button icon-wrapper"
+                        onClick={[Function]}
+                        role="button"
+                        tabIndex="0"
+                        tag="a"
+                  >
+                        <SVGInline
+                              className="icon"
+                              classSuffix="-svg"
+                              cleanup={Array []}
+                              cleanupExceptions={Array []}
+                              component="span"
+                              svg="test-file-stub"
+                        />
+                  </NavLink>
+            </NavItem>
+            <UncontrolledDropdown
+                  id="header-kapp-dropdown"
+            >
+                  <DropdownToggle
+                        aria-haspopup={true}
+                        caret={true}
+                        color="secondary"
+                        data-toggle="dropdown"
+                        nav={true}
+                        role="button"
+                  >
+                        name
+                  </DropdownToggle>
+                  <DropdownMenu
+                        tag="div"
+                  >
+                        <DropdownItem
+                              href="/acme"
+                              tag="a"
+                              toggle={true}
+                        >
+                              <span
+                                    className="fa fa-fw fa-home"
+                              />
+                              Home
+                        </DropdownItem>
+                        <DropdownItem
+                              divider={true}
+                              tag="button"
+                              toggle={true}
+                        />
+                        <BuildKappLink
+                              kapp={
+                                    Object {
+                                          "name": "Preferred Name",
+                                          "slug": "preferred-slug",
+                                        }
+                              }
+                        />
+                  </DropdownMenu>
+            </UncontrolledDropdown>
+            <Connect(Alerts) />
+            <Connect(withHandlers(Profile)) />
+      </Nav>
+</Navbar>,
+  ],
+  "options": Object {},
+  "renderer": ReactShallowRenderer {
+    "_instance": ShallowComponentWrapper {
+      "_calledComponentWillUnmount": false,
+      "_compositeType": 2,
+      "_context": Object {},
+      "_currentElement": <Header
+        additionalKapps={Array []}
+        alerts={
+                Immutable.List [
+                ]
+        }
+        currentKapp={
+                Object {
+                        "name": "name",
+                      }
+        }
+        fetchAlerts={[Function]}
+        hasSidebar={true}
+        isGuest={false}
+        openFeedbackForm={[Function]}
+        openHelpForm={[Function]}
+        openInviteOthersForm={[Function]}
+        openKitchenSinkForm={[Function]}
+        predefinedKapps={
+                Array [
+                        Object {
+                          "name": "Preferred Name",
+                          "slug": "preferred-slug",
+                        },
+                      ]
+        }
+        profile={Object {}}
+        toggleSidebarOpen={[Function]}
+/>,
+      "_debugID": 1,
+      "_hostContainerInfo": null,
+      "_hostParent": null,
+      "_instance": StatelessComponent {
+        "_reactInternalInstance": [Circular],
+        "context": Object {},
+        "props": Object {
+          "additionalKapps": Array [],
+          "alerts": Immutable.List [
+],
+          "currentKapp": Object {
+            "name": "name",
+          },
+          "fetchAlerts": [Function],
+          "hasSidebar": true,
+          "isGuest": false,
+          "openFeedbackForm": [Function],
+          "openHelpForm": [Function],
+          "openInviteOthersForm": [Function],
+          "openKitchenSinkForm": [Function],
+          "predefinedKapps": Array [
+            Object {
+              "name": "Preferred Name",
+              "slug": "preferred-slug",
+            },
+          ],
+          "profile": Object {},
+          "toggleSidebarOpen": [Function],
+        },
+        "refs": Object {},
+        "state": null,
+        "updater": Object {
+          "enqueueCallback": [Function],
+          "enqueueCallbackInternal": [Function],
+          "enqueueElementInternal": [Function],
+          "enqueueForceUpdate": [Function],
+          "enqueueReplaceState": [Function],
+          "enqueueSetState": [Function],
+          "isMounted": [Function],
+          "validateCallback": [Function],
+        },
+      },
+      "_mountOrder": 1,
+      "_pendingCallbacks": null,
+      "_pendingElement": null,
+      "_pendingForceUpdate": false,
+      "_pendingReplaceState": false,
+      "_pendingStateQueue": null,
+      "_renderedComponent": NoopInternalComponent {
+        "_currentElement": <Navbar
+          color="faded"
+          fixed="top"
+          light={true}
+          tag="nav"
+          toggleable={false}
+>
+          <Nav
+                    className="nav-header"
+                    tag="ul"
+          >
+                    <NavItem
+                              id="header-sidebar-toggle"
+                              tag="li"
+                    >
+                              <NavLink
+                                        className="drawer-button icon-wrapper"
+                                        onClick={[Function]}
+                                        role="button"
+                                        tabIndex="0"
+                                        tag="a"
+                              >
+                                        <SVGInline
+                                                  className="icon"
+                                                  classSuffix="-svg"
+                                                  cleanup={Array []}
+                                                  cleanupExceptions={Array []}
+                                                  component="span"
+                                                  svg="test-file-stub"
+                                        />
+                              </NavLink>
+                    </NavItem>
+                    <UncontrolledDropdown
+                              id="header-kapp-dropdown"
+                    >
+                              <DropdownToggle
+                                        aria-haspopup={true}
+                                        caret={true}
+                                        color="secondary"
+                                        data-toggle="dropdown"
+                                        nav={true}
+                                        role="button"
+                              >
+                                        name
+                              </DropdownToggle>
+                              <DropdownMenu
+                                        tag="div"
+                              >
+                                        <DropdownItem
+                                                  href="/acme"
+                                                  tag="a"
+                                                  toggle={true}
+                                        >
+                                                  <span
+                                                            className="fa fa-fw fa-home"
+                                                  />
+                                                  Home
+                                        </DropdownItem>
+                                        <DropdownItem
+                                                  divider={true}
+                                                  tag="button"
+                                                  toggle={true}
+                                        />
+                                        <BuildKappLink
+                                                  kapp={
+                                                            Object {
+                                                                      "name": "Preferred Name",
+                                                                      "slug": "preferred-slug",
+                                                                    }
+                                                  }
+                                        />
+                              </DropdownMenu>
+                    </UncontrolledDropdown>
+                    <Connect(Alerts) />
+                    <Connect(withHandlers(Profile)) />
+          </Nav>
+</Navbar>,
+        "_debugID": 2,
+        "_renderedOutput": <Navbar
+          color="faded"
+          fixed="top"
+          light={true}
+          tag="nav"
+          toggleable={false}
+>
+          <Nav
+                    className="nav-header"
+                    tag="ul"
+          >
+                    <NavItem
+                              id="header-sidebar-toggle"
+                              tag="li"
+                    >
+                              <NavLink
+                                        className="drawer-button icon-wrapper"
+                                        onClick={[Function]}
+                                        role="button"
+                                        tabIndex="0"
+                                        tag="a"
+                              >
+                                        <SVGInline
+                                                  className="icon"
+                                                  classSuffix="-svg"
+                                                  cleanup={Array []}
+                                                  cleanupExceptions={Array []}
+                                                  component="span"
+                                                  svg="test-file-stub"
+                                        />
+                              </NavLink>
+                    </NavItem>
+                    <UncontrolledDropdown
+                              id="header-kapp-dropdown"
+                    >
+                              <DropdownToggle
+                                        aria-haspopup={true}
+                                        caret={true}
+                                        color="secondary"
+                                        data-toggle="dropdown"
+                                        nav={true}
+                                        role="button"
+                              >
+                                        name
+                              </DropdownToggle>
+                              <DropdownMenu
+                                        tag="div"
+                              >
+                                        <DropdownItem
+                                                  href="/acme"
+                                                  tag="a"
+                                                  toggle={true}
+                                        >
+                                                  <span
+                                                            className="fa fa-fw fa-home"
+                                                  />
+                                                  Home
+                                        </DropdownItem>
+                                        <DropdownItem
+                                                  divider={true}
+                                                  tag="button"
+                                                  toggle={true}
+                                        />
+                                        <BuildKappLink
+                                                  kapp={
+                                                            Object {
+                                                                      "name": "Preferred Name",
+                                                                      "slug": "preferred-slug",
+                                                                    }
+                                                  }
+                                        />
+                              </DropdownMenu>
+                    </UncontrolledDropdown>
+                    <Connect(Alerts) />
+                    <Connect(withHandlers(Profile)) />
+          </Nav>
+</Navbar>,
+      },
+      "_renderedNodeType": 1,
+      "_rootNodeID": 0,
+      "_topLevelWrapper": null,
+      "_updateBatchNumber": null,
+      "_warnedAboutRefsInRender": false,
+    },
+    "getRenderOutput": [Function],
+    "render": [Function],
+  },
+  "root": [Circular],
+  "unrendered": <Header
+    additionalKapps={Array []}
+    alerts={
+        Immutable.List [
+        ]
+    }
+    currentKapp={
+        Object {
+            "name": "name",
+          }
+    }
+    fetchAlerts={[Function]}
+    hasSidebar={true}
+    isGuest={false}
+    openFeedbackForm={[Function]}
+    openHelpForm={[Function]}
+    openInviteOthersForm={[Function]}
+    openKitchenSinkForm={[Function]}
+    predefinedKapps={
+        Array [
+            Object {
+              "name": "Preferred Name",
+              "slug": "preferred-slug",
+            },
+          ]
+    }
+    profile={Object {}}
+    toggleSidebarOpen={[Function]}
+/>,
+}
+`;

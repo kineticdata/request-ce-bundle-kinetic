@@ -1,0 +1,25 @@
+{
+  "name": "kinops",
+  "version": "0.1.0",
+  "main": "./src/index.js",
+  "scripts": {
+    "start": "react-app-rewired start --scripts-version kinops-react-scripts",
+    "build": "react-app-rewired build --scripts-version kinops-react-scripts",
+    "test": "react-app-rewired test --scripts-version kinops-react-scripts --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "connected-react-router": "^4.3.0",
+    "kinops-react-scripts": "0.9.0",
+    "react": "^16.2.0",
+    "react-app-rewire-yarn-workspaces": "^1.0.2",
+    "react-app-rewired": "^1.4.1",
+    "react-dom": "^16.2.0",
+    "react-kinops-discussions": "^0.1.9",
+    "react-redux": "^5.0.7",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "redux-saga": "^0.16.0"
+  }
+}
