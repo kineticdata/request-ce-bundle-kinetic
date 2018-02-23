@@ -1,0 +1,89 @@
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//   Modular Scale
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+h1 {
+  @include ms-respond(font-size, 6);
+  // Mobile
+  line-height: 1.2;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+h2 {
+  @include ms-respond(font-size, 5);
+  font-weight: 600;
+  // Mobile
+  line-height: 1.2631578947;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+h3 {
+  @include ms-respond(font-size, 4);
+  font-weight: 600;
+  // Mobile
+  line-height: 1.333333333;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+}
+h4 {
+  @include ms-respond(font-size, 3);
+  // Mobile
+  line-height: 1.333926146;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+}
+h5 {
+  @include ms-respond(font-size, 2);
+  // Mobile
+  line-height: 1.411764706;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+h6 {
+  @include ms-respond(font-size, 1);
+  // Mobile
+  line-height: 1;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+p {
+  @include ms-respond(font-size, 0);
+  margin-bottom: 1.5rem;
+}
+
+blockquote {
+  @include ms-respond(font-size, 2);
+  border-left: 4px solid #54698d;
+  padding-left: 1rem;
+  line-height: 24px;
+}
+header h1 {
+  @include ms-respond(font-size, 12);
+  margin-top: 3rem;
+  margin-bottom: 0;
+  font-weight: 600;
+}
+/* Let's make sure all's aligned */
+hr,
+.hr {
+  border: 1px solid;
+  margin: -1px 0;
+}
+// Misused line-height
+// a, b, i, strong, em, code {
+//   line-height: 0;
+// }
+
+sub,
+sup {
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}

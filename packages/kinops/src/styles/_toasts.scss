@@ -1,0 +1,74 @@
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//   Toasts
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.toasts {
+  position: absolute;
+  top: 0;
+  z-index: 9999;
+  left: calc((100vw - 622px) / 2);
+  /* width: 100vw; */
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* justify-content: centered; */
+
+  .toast {
+    width: 622px;
+    min-height: 75px;
+    background-color: white;
+    margin: 1em;
+    padding: 15px 22px 15px 22px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    & > .message {
+      flex-grow: 1;
+      color: rgba(12, 18, 28, 0.54);
+      font-family: 'Open Sans';
+      font-size: 14px;
+      line-height: 19px;
+
+      .headline-copy {
+        color: rgba(12, 18, 28, 0.84);
+        font-family: 'Open Sans';
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 22px;
+      }
+    }
+
+    & > .actions {
+      button.btn.btn-link {
+        padding: 0;
+        .icon-svg {
+          width: 1em;
+          height: 1em;
+          path {
+            opacity: 0.5;
+            fill: black;
+          }
+        }
+      }
+    }
+
+    &.info {
+      background-color: #1094c4;
+    }
+
+    &.warn {
+      background-color: #ffcf4a;
+    }
+
+    &.success {
+      background-color: #00d46a;
+    }
+
+    &.error {
+      background-color: #fa3a37;
+    }
+
+    &.normal {
+      background-color: #ffffff;
+    }
+  }
+}

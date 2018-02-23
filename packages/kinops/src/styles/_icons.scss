@@ -1,0 +1,26 @@
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//   Icons, svg images
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// SVG colors
+.icon-svg {
+  height: 1rem;
+  width: 1rem;
+  path,
+  .primary-fill {
+    fill: $gray;
+  }
+  .primary-stroke {
+    stroke: $gray;
+    fill: none;
+  }
+}
+
+// Wrapper for React icons
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  .icon {
+    display: flex;
+  }
+}

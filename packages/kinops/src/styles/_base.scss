@@ -1,0 +1,27 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #f7f7f7;
+}
+
+.nav-link:focus,
+.nav-link:hover {
+  text-decoration: none;
+}
+a{
+  color: $blue0;
+  &:focus {
+    box-shadow: none;
+    outline: $blue3 dotted thin;
+  }
+}
+
+
+
+.tooltip {
+  font-size: .75rem;
+}
+
+.main-content {
+  display: flex;
+  overflow-y: auto !important;
+}

@@ -1,0 +1,360 @@
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//   Buttons
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.queue-details-nav {
+  .btn.btn-outline-secondary[disabled] {
+    background-color: white;
+  }
+}
+
+.btn.btn-link {
+  color: $blue1;
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none;
+  }
+  &:focus {
+    box-shadow: none;
+    outline: $blue3 dotted thin;
+  }
+}
+.btn.btn-primary {
+  color: white;
+  background-color: $blue1;
+  border: none;
+  &:focus,
+  &.focus {
+    box-shadow: none;
+    outline: $blue3 dotted thin;
+  }
+}
+.btn.btn-inverse.btn-primary {
+  color: $blue1;
+  background-color: white;
+  border: 1px solid $gray3;
+  line-height: 1.75rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.1875rem 0.5rem;
+  &:focus,
+  &.focus {
+    box-shadow: none;
+    outline: $blue3 dotted thin;
+  }
+  &:hover {
+    border-color: $gray2;
+    color: $blue0;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  }
+}
+
+.sidebar .btn.btn-sidebar {
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  margin: 0;
+}
+/* Form Button Styles
+ *-------------------------------------- */
+
+button,
+input[type='submit'],
+input[type='button'],
+.btn {
+  -webkit-transition: all 0.15s ease-out;
+  transition: all 0.15s ease-out;
+}
+
+.btn {
+  display: inline-block;
+  font-family: $font-family-base;
+  font-size: 0.875rem;
+  @include border-radius();
+  color: $white;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none;
+    outline: none;
+  }
+}
+
+.btn-lg,
+.btn-group-lg > .btn {
+  padding: 0.6rem 1.2rem;
+  @include font-size-line-height(1.4rem, 2.2rem);
+}
+.btn-sm,
+.btn-group-sm > .btn {
+  padding: 0.3rem 0.6rem;
+  @include font-size-line-height(1.2rem, 1.8rem);
+}
+.btn-xs,
+.btn-group-xs > .btn {
+  padding: 0.1rem 0.4rem;
+  @include font-size-line-height(1.2rem, 1.6rem);
+}
+
+.btn[disabled] {
+  background-color: $gray;
+  color: $lightgray;
+  pointer-events: none;
+}
+
+.btn-round {
+  height: 5rem;
+  width: 5rem;
+  font-weight: 400;
+  font-size: 3rem;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.btn-primary {
+  @extend .btn;
+
+  background-color: $primary;
+  border-color: darken($primary, 10%);
+  color: $primary-complement;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: tint($primary, 10%);
+    border-color: darken($primary, 10%);
+    color: $primary-complement;
+  }
+}
+
+.btn-primary-complement {
+  @extend .btn;
+
+  background-color: $primary-complement;
+  color: $primary;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: tint($primary-complement, 10%);
+    color: $primary;
+  }
+}
+
+.btn-secondary {
+  @extend .btn;
+
+  background-color: $secondary;
+  color: $secondary-complement;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: tint($secondary, 10%);
+    // border-color: darken($secondary, 10%);
+    color: $secondary-complement;
+  }
+}
+
+.btn-secondary-complement {
+  @extend .btn;
+
+  background-color: $secondary-complement;
+  // border-color: darken($secondary-complement, 10%);
+  color: $secondary;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: tint($secondary-complement, 10%);
+    // border-color: darken($secondary-complement, 10%);
+    color: $secondary;
+  }
+}
+
+.btn-tertiary {
+  @extend .btn;
+
+  background-color: $tertiary;
+  // border-color: darken($tertiary, 10%);
+  color: $tertiary-complement;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: tint($blue0, 10%);
+    // border-color: darken($blue0, 10%);
+    color: $tertiary-complement;
+  }
+}
+
+.btn-tertiary-complement {
+  @extend .btn;
+
+  background-color: $tertiary-complement;
+  // border-color: darken($tertiary-complement, 10%);
+  color: $blue0;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: tint($tertiary-complement, 10%);
+    // border-color: darken($tertiary-complement, 10%);
+    color: $blue0;
+  }
+}
+
+.btn-default {
+  @extend .btn;
+  background-color: $blue1;
+  color: $white;
+  background-color: $blue2;
+  border-color: $blue2;
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: $blue0;
+    background-color: $blue3;
+  }
+}
+
+.btn-link {
+  @extend .btn;
+
+  background-color: transparent;
+  border-color: transparent;
+  color: $link-color;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: transparent;
+    border-color: transparent;
+    color: tint($link-color, 10%);
+  }
+
+  &.danger {
+    color: #ca332d;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: tint(#ca332d, 10%);
+    }
+  }
+  &[disabled] {
+    background-color: transparent;
+    color: $lightgray;
+    pointer-events: none;
+  }
+}
+
+.btn-subtle {
+  @extend .btn;
+
+  background-color: $gray2;
+  color: $black;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: $gray4;
+    // border-color: darken($blue3, 5%);
+    color: $blue0;
+  }
+}
+
+.fileinput-button {
+  background: $blue3;
+  color: $blue0;
+  border-radius: 4px;
+  &:hover {
+    background: $blue2;
+  }
+}
+
+.input-group-addon:not(:first-child):not(:last-child) {
+  border-right: 0;
+  border-left: 0;
+}
+
+button[data-element-type='button'] {
+  display: inline-block;
+  line-height: 1.8rem;
+  @include border-radius();
+  padding: 0.5rem;
+  border-width: 1px;
+  border-style: solid;
+  color: $black;
+  background-color: $blue1;
+  cursor: pointer;
+  font-size: inherit;
+  margin-left: 0.5rem;
+
+  &[data-button-type='submit-page'],
+  &[data-button-type='custom'] {
+    @extend .btn-default;
+  }
+  &[data-button-type='custom'] {
+    @extend .btn-default;
+  }
+  &[data-button-type='custom'].btn-link {
+    @extend .btn-link;
+  }
+  &[data-button-type='custom'].btn-subtle {
+    @extend .btn-subtle;
+  }
+
+  &[data-button-type='previous-page'] {
+    @extend .btn-default;
+    float: left;
+    position: relative;
+    padding-left: 2.4rem;
+    &:before {
+      font-family: 'FontAwesome';
+      font-weight: 400;
+      content: '\f053';
+      position: absolute;
+      top: 50%;
+      left: 0.5rem;
+      width: 1.4rem;
+      height: 1.4rem;
+      line-height: 1;
+      margin-top: -0.4rem;
+    }
+  }
+
+  &[data-button-type='save'] {
+    @extend .btn-subtle;
+    position: relative;
+    padding-left: 2rem;
+
+    &:before {
+      font-family: 'FontAwesome';
+      font-weight: 400;
+      content: '\f0c7';
+      position: absolute;
+      top: 50%;
+      left: 0.5rem;
+      width: 1rem;
+      height: 1rem;
+      line-height: 1;
+      margin-top: -0.4rem;
+    }
+  }
+  &[disabled] {
+    cursor: not-allowed;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    opacity: 0.65;
+  }
+}
+button.back-button {
+  display: flex;
+  border-radius: 0;
+}

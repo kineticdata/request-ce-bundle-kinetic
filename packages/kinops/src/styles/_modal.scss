@@ -1,0 +1,201 @@
+@media (max-width: 767px) {
+  .modal-dialog {
+    height: 100%;
+    margin: 0;
+    max-width: none;
+    .modal-content {
+      border: none;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      .modal-body {
+        flex: 1 0 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .modal-dialog {
+    .modal-content {
+      border: none;
+      box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+
+.modal-dialog {
+  // margin: 1.5rem auto;
+  // max-width: 40rem;
+  .modal-content {
+    border-radius: 0;
+
+    .modal-header {
+      align-items: stretch;
+      border-bottom: 1px solid rgba(211, 220, 231, 1);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      .modal-title {
+        display: flex;
+        justify-content: center;
+        position: relative;
+        font-size: 1rem;
+        margin: 0;
+        line-height: 1;
+        font-weight: bold;
+        span {
+          padding: 1rem;
+        }
+        a,
+        button {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          &:first-child {
+            left: 0;
+          }
+          &:last-child {
+            right: 0;
+          }
+        }
+      }
+      .btn.btn-link {
+        font-size: 0.875rem;
+        padding: 0 1rem;
+      }
+      a.btn.btn-link {
+        display: flex;
+        align-items: center;
+      }
+      .btn.back-button {
+        border-top: 1px solid rgba(211, 220, 231, 1);
+        border-bottom: 0;
+        padding: 0.9375rem 1rem;
+        text-align: left;
+        .icon {
+          margin-right: 5px;
+        }
+      }
+    }
+
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+      .embedded-core-form .container,
+      form{
+        padding: 0;
+      }
+      .list-group.button-list {
+        .list-group-item {
+          border-bottom: 1px solid rgba(244, 246, 249, 1);
+          padding: 0;
+          .btn.btn-link {
+            font-size: 0.875rem;
+            padding: 0.875rem 1rem;
+            flex-grow: 1;
+            display: flex;
+            .button-title {
+              font-weight: 600;
+              margin-right: auto;
+            }
+            .icon-svg {
+              margin-left: 10px;
+              path {
+                fill: $blue1;
+              }
+            }
+          }
+        }
+      }
+      .btn.btn-inverse {
+        font-size: 0.875rem;
+        margin: 1rem;
+      }
+      &.main-section {
+        justify-content: space-between;
+
+        .button-list .btn-link {
+          .validation-error {
+            max-width: 200px;
+            text-align: right;
+            white-space: normal;
+          }
+        }
+
+        // TODO: Review this and make it consistent.
+        .save-filter {
+          display: flex;
+          flex-direction: column;
+          margin-top: 2rem;
+
+          label {
+            height: 17px;
+            width: 65px;
+            margin-left: 1em;
+            color: #54698d;
+            font-family: 'Open Sans';
+            font-size: 12px;
+            line-height: 17px;
+          }
+
+          input {
+            margin-left: 1em;
+            margin-right: 1em;
+            height: 30px;
+            border: 1px solid #54698d;
+            border-radius: 3px;
+            background-color: #fff;
+
+            padding: 0.5em;
+            color: #54698d;
+            font-family: 'Open Sans';
+            font-size: 13px;
+            line-height: 18px;
+
+            &:focus {
+              outline: 0;
+              box-shadow: 0 0 3px 0 #54698d;
+            }
+          }
+        }
+      }
+      &.filter-section {
+        padding-bottom: 3rem;
+        h5 {
+          font-weight: 600;
+          color: $blue1;
+          font-size: 1rem;
+          padding: 1rem;
+          margin: 0;
+        }
+        label {
+          border-bottom: 1px solid rgba(244, 246, 249, 1);
+          color: $blue1;
+          font-size: 0.875rem;
+          margin-bottom: 0;
+          padding: 1rem;
+        }
+        input[type='checkbox'],
+        input[type='radio'] {
+          margin-right: 0.75rem;
+        }
+        select {
+          margin: 1rem;
+        }
+      }
+    }
+
+    .modal-footer {
+      padding: 0;
+      .btn.btn-primary {
+        flex-grow: 1;
+        border-radius: 0;
+        padding: 1rem;
+      }
+    }
+  }
+}
