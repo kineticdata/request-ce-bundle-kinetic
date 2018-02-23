@@ -6,6 +6,7 @@ import { HeaderContainer } from './components/HeaderContainer';
 import { ModalFormContainer } from './components/ModalFormContainer';
 import { actions as kinopsActions } from './redux/modules/kinops';
 import { actions as alertsActions } from './redux/modules/alerts';
+import { AppRouter } from './AppRouter';
 
 import 'bootstrap/scss/bootstrap.scss';
 import 'font-awesome/css/font-awesome.css';
@@ -19,18 +20,16 @@ export const AppComponent = props => (
       hasSidebar
       toggleSidebarOpen={() => console.log('toggle')}
     />
-    <div className="App" style={{ marginTop: '50px' }}>
-      <header className="App-header">
-        <h1 className="App-title">Welcome to React</h1>
-      </header>
-      <p className="App-intro">
-        To get started, edit <code>src/App.js</code> and save to reload.
-      </p>
+    <div className="App" style={{ marginTop: '49px' }}>
+      {!props.loading && <AppRouter kapps={props.kapps} />}
     </div>
   </Fragment>
 );
 
-export const mapStateToProps = () => ({});
+export const mapStateToProps = state => ({
+  loading: state.loading,
+  kapps: state.kinops.kapps,
+});
 export const mapDispatchToProps = {
   loadApp: kinopsActions.loadApp,
   fetchAlerts: alertsActions.fetchAlerts,
