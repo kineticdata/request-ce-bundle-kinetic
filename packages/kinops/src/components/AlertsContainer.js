@@ -3,10 +3,10 @@ import { compose } from 'recompose';
 import { List } from 'immutable';
 import moment from 'moment';
 import { Alerts } from './Alerts';
-import { actions } from '../redux/modules/kinops';
+import { actions } from '../redux/modules/alerts';
 
 export const mapStateToProps = state => ({
-  alerts: List(state.kinops.alerts.get('data'))
+  alerts: List(state.alerts.get('data'))
     .filter(
       alert =>
         !alert.values['End Date Time'] ||

@@ -1,16 +1,16 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { ModalForm } from './ModalForm';
-import { actions as kinopsActions } from '../redux/modules/kinops';
+import { actions } from '../redux/modules/modalForm';
 
 export const mapStateToProps = state => ({
-  form: state.kinops.getIn(['modal', 'form']),
-  isCompleted: state.kinops.getIn(['modal', 'isCompleted']),
+  form: state.modalForm.form,
+  isCompleted: state.modalForm.isCompleted,
 });
 
 const mapDispatchToProps = {
-  closeForm: kinopsActions.closeForm,
-  completeForm: kinopsActions.completeForm,
+  closeForm: actions.closeForm,
+  completeForm: actions.completeForm,
 };
 
 export const ModalFormContainer = compose(

@@ -1,6 +1,10 @@
 import { bundle } from 'react-kinetic-core';
-
-import { getAttributeValue, isMemberOf, getTeams, getRoles } from '../utils';
+import {
+  getAttributeValue,
+  isMemberOf,
+  getTeams,
+  getRoles,
+} from 'common/utils';
 
 // Find a Kapp by Space Attribute Value
 const kappBySpaceAttribute = (state, slugAttributeName) =>

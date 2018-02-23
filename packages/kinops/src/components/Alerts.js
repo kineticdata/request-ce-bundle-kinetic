@@ -1,15 +1,14 @@
 import React from 'react';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
-import SVGInline from 'react-svg-inline';
 import { bundle } from 'react-kinetic-core';
-
-import bellIcon from 'font-awesome-svg-png/white/svg/bell.svg';
 
 export const Alerts = ({ alerts, fetchAlerts }) => (
   <UncontrolledDropdown className="nav-item-right">
-    <DropdownToggle nav role="button" className="icon-wrapper">
-      <SVGInline svg={bellIcon} className="icon" />
-      {alerts.size > 0 && <span className="badge">{alerts.size}</span>}
+    <DropdownToggle nav role="button">
+      <i className="fa fa-fw fa-bell" />
+      {alerts.size > 0 && (
+        <span className="badge badge-secondary">{alerts.size}</span>
+      )}
     </DropdownToggle>
     <DropdownMenu right className="alerts-menu">
       <div className="alerts-header">
@@ -44,9 +43,7 @@ export const Alerts = ({ alerts, fetchAlerts }) => (
           </li>
         ))}
         {alerts.size < 1 && (
-          <h6 className="empty-alerts icon-wrapper">
-            There are no active alerts.
-          </h6>
+          <h6 className="empty-alerts">There are no active alerts.</h6>
         )}
       </ul>
     </DropdownMenu>

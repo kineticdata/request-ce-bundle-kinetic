@@ -9,14 +9,10 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap';
-import classNames from 'classnames';
 import { bundle } from 'react-kinetic-core';
-import SVGInline from 'react-svg-inline';
-
-import { getAttributeValue } from '../utils';
+import { getAttributeValue } from 'common/utils';
 import { AlertsContainer } from './AlertsContainer';
 import { ProfileContainer } from './ProfileContainer';
-import hamburgerIcon from '../images/hamburger.svg';
 
 export const dropdownTitleName = currentKapp =>
   currentKapp ? currentKapp.name : 'Home';
@@ -24,10 +20,7 @@ export const dropdownTitleName = currentKapp =>
 const BuildKappLink = ({ kapp, nameOverride = kapp.name }) => (
   <DropdownItem tag="a" href={bundle.kappLocation(kapp.slug)}>
     <span
-      className={classNames(
-        'fa fa-fw',
-        getAttributeValue(kapp, 'Icon') || 'fa-book',
-      )}
+      className={`fa fa-fw' ${getAttributeValue(kapp, 'Icon') || 'fa-book'}`}
     />
     {nameOverride}
   </DropdownItem>
@@ -49,12 +42,12 @@ export const Header = ({
       {hasSidebar && (
         <NavItem id="header-sidebar-toggle">
           <NavLink
-            className="drawer-button icon-wrapper"
+            className="drawer-button"
             role="button"
             tabIndex="0"
             onClick={toggleSidebarOpen}
           >
-            <SVGInline svg={hamburgerIcon} className="icon" />
+            <i className="fa fa-fw fa-bars" />
           </NavLink>
         </NavItem>
       )}

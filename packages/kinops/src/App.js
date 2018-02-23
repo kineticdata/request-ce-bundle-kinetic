@@ -2,13 +2,24 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { ToastsContainer } from './components/ToastsContainer';
+import { HeaderContainer } from './components/HeaderContainer';
+import { ModalFormContainer } from './components/ModalFormContainer';
 import { actions as kinopsActions } from './redux/modules/kinops';
 import { actions as alertsActions } from './redux/modules/alerts';
 
-export const AppComponent = () => (
+import 'bootstrap/scss/bootstrap.scss';
+import 'font-awesome/css/font-awesome.css';
+import './styles/master.scss';
+
+export const AppComponent = props => (
   <Fragment>
     <ToastsContainer />
-    <div className="App">
+    <ModalFormContainer />
+    <HeaderContainer
+      hasSidebar
+      toggleSidebarOpen={() => console.log('toggle')}
+    />
+    <div className="App" style={{ marginTop: '50px' }}>
       <header className="App-header">
         <h1 className="App-title">Welcome to React</h1>
       </header>

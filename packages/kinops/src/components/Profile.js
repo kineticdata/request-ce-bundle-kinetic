@@ -15,7 +15,7 @@ export const Profile = ({
       nav
       role="button"
       className="icon-wrapper"
-      style={{ padding: '0.5em' }}
+      style={{ padding: '0 1em' }}
     >
       <Avatar
         size={24}

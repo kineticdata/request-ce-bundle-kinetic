@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 
 import { Profile } from './Profile';
-import { actions } from '../redux/modules/kinops';
+import { actions } from '../redux/modules/modalForm';
 
 const HELP_FORM_CONFIG = {
   formSlug: 'help',
