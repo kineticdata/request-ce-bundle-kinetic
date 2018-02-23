@@ -1,10 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-
 import SVGInline from 'react-svg-inline';
 import timesIcon from 'font-awesome-svg-png/white/svg/times.svg';
-
 import { actions } from '../redux/modules/toasts';
 
 const defaultTitle = {
@@ -38,7 +36,7 @@ const Toasts = ({ toasts, dismiss }) => (
 );
 
 const mapStateToProps = state => ({
-  toasts: state.kinopsToasts.notifications,
+  toasts: state.toasts.notifications,
 });
 
 const mapDispatchToProps = {

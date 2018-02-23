@@ -1,4 +1,4 @@
-import { takeEvery, all, call, put } from 'redux-saga/effects';
+import { takeEvery, call, put } from 'redux-saga/effects';
 import { Map } from 'immutable';
 import { CoreAPI } from 'react-kinetic-core';
 import { actions, types } from '../modules/kinops';

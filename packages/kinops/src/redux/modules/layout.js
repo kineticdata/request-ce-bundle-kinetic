@@ -1,5 +1,5 @@
 import { Record } from 'immutable';
-import { namespace, noPayload, withPayload } from 'common/utils';
+import { namespace, withPayload } from 'common/utils';
 
 export const types = {
   SET_SIZE: namespace('layout', 'SET_SIZE'),

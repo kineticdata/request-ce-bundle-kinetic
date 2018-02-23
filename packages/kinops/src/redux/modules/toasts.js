@@ -1,5 +1,5 @@
 import { Record, List } from 'immutable';
-import { namespace, noPayload, withPayload } from 'common/utils';
+import { namespace, withPayload } from 'common/utils';
 
 export const types = {
   ADD_NOTIFICATION: namespace('toasts', 'ADD_NOTIFICATION'),
