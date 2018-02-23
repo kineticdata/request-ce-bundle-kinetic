@@ -1,25 +1,32 @@
 import React, { Component } from 'react';
-import { foo } from 'common';
-import logo from './logo.svg';
-import './App.css';
+import { connect } from 'react-redux';
+import { compose, lifecycle } from 'recompose';
+import { actions as kinopsActions } from './redux/modules/kinops';
+import { actions as alertsActions } from './redux/modules/alerts';
 
-class App extends Component {
-  componentWillMount() {
-    foo();
-  }
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
+export const AppComponent = () => (
+  <div className="App">
+    <header className="App-header">
+      <h1 className="App-title">Welcome to React</h1>
+    </header>
+    <p className="App-intro">
+      To get started, edit <code>src/App.js</code> and save to reload.
+    </p>
+  </div>
+);
 
-export default App;
+export const mapStateToProps = () => ({});
+export const mapDispatchToProps = {
+  loadApp: kinopsActions.loadApp,
+  fetchAlerts: alertsActions.fetchAlerts,
+};
+
+export const App = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  lifecycle({
+    componentDidMount() {
+      this.props.loadApp();
+      this.props.fetchAlerts();
+    },
+  }),
+)(AppComponent);

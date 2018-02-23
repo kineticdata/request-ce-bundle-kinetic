@@ -2,9 +2,9 @@ import { Record } from 'immutable';
 import { namespace, noPayload, withPayload } from 'common/utils';
 
 export const types = {
-  OPEN_FORM: namespace('modals', 'OPEN_FORM'),
-  CLOSE_FORM: namespace('modals', 'CLOSE_FORM'),
-  COMPLETE_FORM: namespace('modals', 'COMPLETE_FORM'),
+  OPEN_FORM: namespace('modalForm', 'OPEN_FORM'),
+  CLOSE_FORM: namespace('modalForm', 'CLOSE_FORM'),
+  COMPLETE_FORM: namespace('modalForm', 'COMPLETE_FORM'),
 };
 
 export const actions = {
