@@ -1,0 +1,802 @@
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//   Services Kapp Styles
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Services Layouts
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// Services top border bar
+.bordercolor {
+  margin-top: $header-height;
+  height: 1.5rem;
+  width: 100%;
+  display: block;
+  background-color: $blueSlate;
+}
+// Services Main content
+.services {
+  flex-direction: column;
+  margin-top: 48px;
+}
+// Services Container
+.services-home-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  @media all and (min-width: 0) {
+    flex-direction: column;
+  }
+  @media all and (min-width: 576px) {
+    flex-direction: column;
+  }
+  @media all and (min-width: 768px) {
+    flex-direction: column;
+  }
+  @media all and (min-width: 992px) {
+    flex-direction: row;
+  }
+  @media all and (min-width: 1200px) {
+  }
+  .c-card,
+  .s-card {
+    @media all and (min-width: 0) {
+      flex-basis: 100%;
+    }
+    @media all and (min-width: 576px) {
+      flex-basis: 48%;
+    }
+    @media all and (min-width: 768px) {
+    }
+    @media all and (min-width: 992px) {
+    }
+    @media all and (min-width: 1200px) {
+    }
+  }
+}
+
+// Categories container
+.services-category-container {
+  .c-card,
+  .r-card,
+  .s-card {
+    @media all and (min-width: 0) {
+      flex-basis: 100%;
+    }
+    @media all and (min-width: 576px) {
+      flex-basis: 48%;
+    }
+    @media all and (min-width: 768px) {
+      flex-basis: 48%;
+    }
+    @media all and (min-width: 992px) {
+      flex-basis: 31%;
+    }
+    @media all and (min-width: 1200px) {
+    }
+  }
+}
+// Search container
+.services-search-container {
+  width: 100%;
+  background-color: $blueSlate;
+  height: 216px;
+  padding: 0 0 2rem;
+  display: flex;
+  flex: 0 1 100%;
+  justify-content: center;
+  flex-direction: row;
+}
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Services Wrappers
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// Search Wrapper
+.services-search-wrapper {
+  @media all and (min-width: 0) {
+    flex-basis: 90%;
+  }
+  @media all and (min-width: 576px) {
+    flex-basis: 75%;
+  }
+  @media all and (min-width: 768px) {
+    flex-basis: 66.667%;
+  }
+  @media all and (min-width: 992px) {
+    flex-basis: 48%;
+  }
+  @media all and (min-width: 1200px) {
+  }
+}
+// My Requests Wrapper
+.myRequests-wrapper {
+  flex-basis: 31%;
+  flex-direction: column;
+  display: flex;
+}
+
+// Services Wrapper
+.services-wrapper {
+  // flex-grow: 2;
+  flex-basis: 66%;
+  display: flex;
+  flex-direction: column;
+}
+.s-cards-wrapper,
+.r-cards-wrapper,
+.c-cards-wrapper {
+  padding: 0 0 3rem;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+.c-cards-wrapper,
+.s-cards-wrapper {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  // align-items: flex-start;
+}
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Page Elements
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// Page Titles **TODO: Potential Breadcrumbs**
+.page-title-wrapper {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  h1 {
+    margin-top: 0;
+    color: $blueSlate;
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 3rem;
+  }
+  h3 {
+    color: $orange-kinops;
+    font-size: 0.9375rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    line-height: 1.5rem;
+    a {
+      color: $orange-kinops;
+      font-size: 0.9375rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      line-height: 1.5rem;
+    }
+  }
+  a {
+    margin-bottom: 1.875rem;
+    align-self: flex-end;
+    line-height: normal;
+  }
+}
+
+.section-title {
+  align-items: center;
+  color: $black;
+  display: flex;
+  font-size: 1rem;
+  line-height: 2.125rem;
+  font-weight: 600;
+  padding-left: 0.75rem;
+  margin: 0 0 1rem 0;
+  border-top: 2px solid $black-16;
+}
+// Sort by
+.sort-block {
+  // height: 2rem;
+  color: $blueGray;
+  font-size: 0.9166666667rem;
+  line-height: 2rem;
+  text-align: right;
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  strong {
+    font-weight: 300;
+    color: $blueGray;
+  }
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Card Elements
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.s-card,
+.r-card,
+.c-card {
+  border: 1px solid $black-16;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
+  display: flow-root;
+  @include setBgColorAndHover($white);
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+
+  h1 {
+    color: $black;
+    font-size: 1.4375rem;
+    font-weight: 600;
+    line-height: 2.25rem;
+    margin: 0;
+    display: inline-flex;
+  }
+  p {
+    color: $black-50;
+    font-size: 1rem;
+    line-height: 2rem;
+    margin-bottom: 0;
+  }
+}
+// Request Card
+.r-card {
+  h1 {
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    display: flex;
+  }
+  p {
+    color: $black-50;
+    font-size: 0.875rem;
+    line-height: 1rem;
+    padding: 0.5rem 0;
+  }
+  .card-icon {
+    margin-top: 0;
+  }
+  .fa.edit {
+    color: $black-50;
+    line-height: 1.5rem;
+    margin-left: 1rem;
+  }
+  .meta dl {
+    color: $black;
+    font-size: 0.5625rem;
+    margin-bottom: 0;
+    line-height: normal;
+  }
+}
+
+.card-icon {
+  height: 24px;
+  width: 24px;
+  font-size: 0.75rem;
+  background-color: $greenGrass;
+  margin-right: 5px;
+  margin-top: 6px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  color: $white;
+  flex-shrink: 0;
+  &.icon-greengrass {
+    background-color: $greenGrass;
+  }
+  &.icon-sunflower {
+    background-color: $sunflower;
+  }
+}
+//
+.status {
+  color: $white;
+  text-align: center;
+  padding: 0.125rem 0.625rem;
+  font-size: 55%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  align-self: center;
+  border-radius: 12px;
+  margin-left: auto;
+  &.status-gray {
+    background-color: $black-50;
+  }
+  &.status-yellow {
+    background-color: $sunflower;
+    color: $black;
+  }
+  &.status-green {
+    background-color: $greenGrass;
+  }
+  &.status-red {
+    background-color: $red;
+  }
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Service Item Elements
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// Service Item page
+.services-item {
+  h1 {
+    color: $black;
+    font-size: 1.625rem;
+    font-weight: 600;
+    line-height: 3rem;
+    margin: 0;
+    display: inline-flex;
+  }
+  p {
+    color: $black-50;
+    font-size: 1rem;
+    line-height: 2rem;
+  }
+  .card-icon {
+    margin-top: 12px;
+    border-radius: 50%;
+  }
+  form {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    input[type='text'],
+    input[type='password'] {
+      width: 40%;
+    }
+    textarea {
+      width: 60%;
+    }
+  }
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   My Request Elements
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// My Request details
+.request-details-container {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  .meta-wrapper {
+    min-height: 3.75rem;
+    width: 100%;
+    background-color: $black-5;
+    padding: 0.5rem;
+    margin-bottom: 2rem;
+    .col {
+      border-right: 1px solid $black-16;
+      justify-content: center;
+      &:last-child {
+        border: none;
+      }
+      &.btn-group-col {
+        display: flex;
+        align-items: center;
+        margin-top: 0;
+        .btn {
+          margin-right: 1rem;
+        }
+        @media all and (min-width: 0) {
+          margin-top: 1rem;
+        }
+        @media all and (min-width: 576px) {
+          margin-top: 1rem;
+        }
+        @media all and (min-width: 768px) {
+          margin-top: 1rem;
+        }
+        @media all and (min-width: 992px) {
+          margin-top: 0;
+        }
+        @media all and (min-width: 1200px) {
+          margin-top: 0;
+        }
+      }
+    }
+    dt {
+      color: $black-50;
+      font-size: 0.625rem;
+      font-weight: 600;
+      line-height: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    dd {
+      color: $black-50;
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 0.75rem;
+    }
+  }
+  .back-link {
+    border-bottom: 1px solid $black-16;
+    color: $blue;
+    font-size: 0.875rem;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    .icon {
+      margin-right: 0.5em;
+    }
+  }
+}
+
+.request-list-container {
+  .page-title-wrapper {
+    .btn {
+      margin-left: 1rem;
+    }
+  }
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Button Elements
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// Hover state with darkened hover color
+
+.btn {
+  font-size: 0.75rem;
+  border-radius: 4px;
+  line-height: 1.5rem;
+  padding: 0.25rem 1rem;
+  &.btn-primary {
+    @include setBgColorAndHover($blueSlate);
+  }
+  &.btn-default {
+    @include setBgColorAndHover($orange-kinops);
+    border: none;
+    &:hover {
+      color: $white;
+    }
+  }
+  &.btn-outline-primary {
+    color: $black;
+    @include setBgColorAndHover($white);
+    border: 1px solid $black-50;
+  }
+  &.btn-outline-danger {
+    color: #d9534f;
+    &:hover {
+      color: $white;
+    }
+  }
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Submission Detail Elements
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.submission-detail-wrapper {
+  h1 {
+    color: $black;
+    font-size: 1.625rem;
+    font-weight: 600;
+    line-height: 3rem;
+    margin: 0;
+    display: flex;
+  }
+  p {
+    color: $black-50;
+    font-size: 1rem;
+    line-height: 2rem;
+  }
+  .card-icon {
+    margin-top: 12px;
+    border-radius: 50%;
+  }
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Timeline Elements
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// Timeline
+.submission-timeline-wrapper {
+  ul {
+    margin: 0 0 2rem 2rem;
+    padding: 0;
+    border-left: 1px solid $black-16;
+  }
+  li {
+    list-style: none;
+  }
+  dt {
+    // color: $black-50;
+    font-size: 0.625rem;
+    font-weight: 600;
+    line-height: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  dd {
+    color: $black-50;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1rem;
+  }
+}
+
+.timeline-item {
+  position: relative;
+  border: 1px solid $black-16;
+  border-radius: 4px;
+  padding: 1rem;
+  margin: 1rem 0 1rem 1rem;
+  list-style: none;
+  @include setBgColorAndHover($white);
+  .circle {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: $blueSlate;
+    border-radius: 50%;
+    display: block;
+    position: absolute;
+    left: -1.3725rem;
+    top: 45%;
+  }
+  .status {
+    // margin-left: 0;
+    margin-right: 1rem;
+  }
+  &.expanded,
+  &.active {
+    box-shadow: 0 0 0.5rem 0.125rem $black-16;
+
+    &:hover {
+      background-color: $white;
+    }
+    h1 {
+      color: $blue;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid $black-16;
+    }
+    .circle {
+      background-color: $blue;
+    }
+  }
+
+  h1 {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+  }
+  p {
+    color: $black;
+    margin-bottom: 0;
+  }
+  .time-ago-text {
+    font-weight: 100;
+  }
+}
+.timeline-start,
+.timeline-end,
+.timeline-pending {
+  display: table;
+  font-size: 0.5rem;
+  font-weight: 900;
+  background-color: $greenGrass;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  color: $white;
+  text-align: center;
+  margin-left: -1.5rem;
+}
+.timeline-end {
+  background-color: $red;
+}
+.timeline-pending {
+  background-color: $sunflower;
+  color: $black;
+  margin-left: -3rem;
+}
+.submission-details-tab-wrapper {
+  ul {
+    margin-bottom: 1rem;
+  }
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Search Elements
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.services-search-wrapper {
+  h1 {
+    color: $white;
+    font-size: 2.583333333rem;
+    font-weight: 300;
+    line-height: 4rem;
+    margin-top: 1.5rem;
+  }
+}
+.select {
+  form {
+    margin: 0;
+    padding: 0;
+    border-radius: 4px;
+    border: 1px solid rgba($black-16, 1);
+    display: flex;
+    justify-content: space-between;
+  }
+  // Search Input
+  input[type='text'] {
+    height: auto;
+    border: none;
+    border-radius: 4px;
+    background-color: $white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.125rem;
+    padding: 1rem;
+    &::-webkit-input-placeholder {
+      color: rgba($black-50, 0.5);
+    }
+  }
+  button,
+  input {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    outline: 0;
+  }
+  input {
+    flex-grow: 1;
+    &::placeholder {
+      color: $black;
+    }
+  }
+  button {
+    width: 4rem;
+  }
+}
+
+// Highlight
+.highlight {
+  background-color: rgba($sunflower, 0.5);
+}
+
+// Search Results Search block
+.search-results-wrapper {
+  .select {
+    width: 60%;
+  }
+}
+// Search Results list
+.search-results-list {
+  ul {
+    margin: 0 0 2rem;
+    padding: 0;
+  }
+  li {
+    list-style: none;
+    background-color: $white;
+    .s-card {
+      display: flow-root;
+      padding-bottom: 0;
+    }
+  }
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Form Elements
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// Hover state with darkened hover color
+@mixin setBgColorAndHover($baseColor) {
+  background-color: $baseColor;
+  &:hover {
+    background-color: darken($baseColor, 5%);
+  }
+}
+
+.form-wrapper {
+  form {
+    background-color: transparent;
+    padding: 0;
+    h1 {
+      color: $black;
+      font-size: 1.625rem;
+      font-weight: 600;
+      line-height: 3rem;
+      margin: 0;
+      display: inline-flex;
+    }
+    p,
+    label {
+      color: $black-50;
+      font-size: 1rem;
+      line-height: 2rem;
+    }
+    label {
+      line-height: 1;
+    }
+    button[data-element-type='button'][data-button-type='submit-page'],
+    button[data-element-type='button'][data-button-type='custom'],
+    button[data-element-type='button'][data-button-type='previous-page'],
+    button[data-element-type='button'][data-button-type='save'] {
+      border-radius: 4px;
+      line-height: 1.5rem;
+      padding: 0.25rem 1rem;
+      margin-right: 0.5rem;
+      border: none;
+      color: $white;
+      font-size: 0.75rem;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    button[data-element-type='button'][data-button-type='submit-page'] {
+      @include setBgColorAndHover($blueSlate);
+    }
+    button[data-element-type='button'][data-button-type='save'] {
+      color: $black;
+      @include setBgColorAndHover($white);
+      border: 1px solid $black-50;
+      font-size: 0.75rem;
+      padding-left: 2rem;
+    }
+  }
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   My Requests Elements
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// Temporary fix until sidebar tabs is solved
+.nav-tabs {
+  padding-bottom: 0.5rem;
+  > li a {
+    text-decoration: none;
+    padding-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  > li a.active {
+    border-bottom: 2px solid $orange;
+  }
+  .badge {
+    margin-left: 0.25rem;
+  }
+  .badge-primary {
+    background-color: $blue;
+  }
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Sidebar
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.services-sidebar {
+  background-color: $black-3;
+  border-right: 1px solid $black-16;
+  margin-top: 48px;
+
+  h6 {
+    color: $blueLake;
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    margin: 0.75rem 0 0 0;
+    text-transform: uppercase;
+    a {
+      line-height: normal;
+      margin-left: auto;
+      text-transform: none;
+    }
+  }
+
+  .nav-link {
+    border-left: 3px solid $black-3;
+    color: $black-50;
+    display: flex;
+    align-items: center;
+    line-height: normal;
+    margin: 0 0 0.75rem 0;
+    font-size: 0.875rem;
+    padding: 0.25rem 1.5rem;
+    transition: border-left-color 0.5s, color 0.5s;
+    i {
+      font-size: 1.2rem;
+      margin-right: 0.5rem;
+    }
+    &.active,
+    &:hover {
+      border-left-color: $blueLake;
+      color: $blueLake;
+    }
+  }
+}

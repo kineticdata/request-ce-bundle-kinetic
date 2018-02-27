@@ -1,0 +1,93 @@
+// Colors
+// --------------------------------------
+
+$primary: #313e47;
+$primary-complement: #ffffff;
+$secondary: #6f7e82;
+$secondary-complement: #ffffff;
+$tertiary: #1594c4;
+$tertiary-complement: #ffffff;
+$lightestgray: #f1f1f1;
+$lightgray: #d5d6d7;
+$gray: #7e8083;
+$darkgray: #4b4c4e;
+$darkestgray: #333333;
+
+$black: rgb(52, 52, 52);
+$black-3: rgb(247, 247, 247);
+$black-5: rgb(241, 241, 241);
+$black-16: rgb(213, 213, 213);
+$black-50: rgb(126, 128, 131);
+$blue: rgb(16, 148, 196);
+$blueGray: rgb(168, 183, 199);
+$blueLake: rgb(9, 84, 130);
+$blueSlate: rgb(12, 56, 79);
+$blueSky: rgb(11, 168, 224);
+$greenGrass: rgb(0, 212, 106);
+$greenTeal: rgb(2, 212, 177);
+$orange: rgb(255, 153, 28);
+$orange-kinetic: rgb(214, 105, 42);
+$orange-kinops: rgb(255, 119, 0);
+$purple: rgb(166, 48, 150);
+$red: rgb(250, 58, 55);
+$sunflower: rgb(255, 207, 74);
+$white: rgb(255, 255, 255);
+
+$text-color: $gray !default; // Global text color on `<body>`.
+$link-color: $tertiary !default; // Global textual link color.
+$body-bg-color: #eceff1 !default; // Background color for `<body>`.
+$header-color: rgb(102, 102, 102) !default; // Background color for header
+$header-text-color: rgba(255, 255, 255, 0.8) !default; // Text color for header
+$subheader-color: rgba(255, 255, 255, 0.6) !default;
+$subheader-text-color: $darkgray !default;
+$font-path: '../../fonts';
+$image-path: '../../images';
+
+// Color Tint Function
+// --------------------------------------
+
+// If average RGB value of $color is > 128, tint will darken $color by $percentage (or if $percentage is negative, lighten $color by abs($percentage))
+// If average RGB value of $color is <= 128, tint will lighten $color by $percentage (or if $percentage is negative, darken $color by abs($percentage))
+@function tint($color, $percentage) {
+  @return if(
+        (red($color) + green($color) + blue($color)) / 3 > 128,
+        if($percentage > 0, darken($color, abs($percentage)), lighten($color, abs($percentage))),
+        if($percentage > 0, lighten($color, abs($percentage)), darken($color, abs($percentage)))
+    );
+}
+
+// Color Subtle Function
+// --------------------------------------
+
+// Returns the $color with the $lightness and $alpha specified
+@function subtle($color, $percentage, $alpha: 1) {
+  @return hsla(hue($color), saturation($color), $percentage, $alpha);
+}
+
+// Scaffold
+// --------------------------------------
+
+$footer-height: 6rem;
+
+// Typography
+// --------------------------------------
+
+$font-family-sans-serif: 'Source Sans Pro', sans-serif !default;
+$font-family-serif: Georgia, 'Times New Roman', Times, serif !default;
+$font-family-monospace: Menlo, Monaco, Consolas, 'Courier New',
+  monospace !default; // Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
+$font-family-base: $font-family-sans-serif !default;
+
+$font-size-base: 1.4rem !default; // Default font size. Equal to 14px.
+$line-height-base: 2rem !default; // Default line height. Equal to 20px.
+
+// Components
+// --------------------------------------
+
+$enable-rounded: true;
+$border-radius-base: 0.4rem !default;
+
+$margin-increment: 0.5rem;
+$margin-count: 5;
+$padding-increment: 0.5rem;
+$padding-count: 5;

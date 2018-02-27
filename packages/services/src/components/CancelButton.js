@@ -1,0 +1,41 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { compose, withHandlers } from 'recompose';
+import { KinopsModule } from 'react-kinops-common';
+import { actions } from '../redux/modules/submission';
+import * as constants from '../constants';
+import { getCancelFormConfig } from '../helpers';
+
+const CancelButton = props => (
+  <button
+    type="button"
+    onClick={props.handleClick}
+    className="btn btn-outline-danger"
+  >
+    {props.submission.coreState === constants.CORE_STATE_DRAFT
+      ? 'Cancel Request'
+      : 'Request to Cancel'}
+  </button>
+);
+
+export const mapStateToProps = () => ({});
+
+export const mapDispatchToProps = {
+  deleteSubmission: actions.deleteSubmission,
+  openForm: KinopsModule.actions.openForm,
+};
+
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withHandlers({
+    handleClick: props => () => {
+      if (props.submission.coreState === constants.CORE_STATE_DRAFT) {
+        props.deleteSubmission(props.submission.id);
+      } else {
+        props.openForm(getCancelFormConfig(props.submission.id));
+      }
+    },
+  }),
+);
+
+export const CancelButtonContainer = enhance(CancelButton);

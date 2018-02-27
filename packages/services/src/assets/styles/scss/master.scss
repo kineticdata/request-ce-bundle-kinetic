@@ -1,0 +1,31 @@
+// compileNested, nestedFilenamePattern: ../$1.css
+/* ==========================================================================
+
+   Base CSS Stylesheet. Copyright Kinetic Data, Inc.
+   Contains most important styles of the bundle.
+
+   DO NOT MODIFY IT!! It will probably get updated and your work might get overwritten.
+
+  1rem = 10px
+* ========================================================================== */
+
+@import '~react-kinops-common/styles/variables';
+@import '~react-kinops-common/styles/mixins';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+// Core variables and mixins
+@import 'variables';
+@import 'mixins';
+
+// Core CSS
+
+@import 'buttons';
+
+// Components
+@import 'services';
+
+// Utility classes
+@import 'fa';
+
+// Temp css
+@import 'temp';
