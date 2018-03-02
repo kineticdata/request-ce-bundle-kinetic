@@ -1,3 +1,7 @@
+import 'bootstrap/scss/bootstrap.scss';
+import 'font-awesome/css/font-awesome.css';
+import 'typeface-open-sans/index.css';
+import './styles/master.scss';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
@@ -9,11 +13,6 @@ import { ModalFormContainer } from './components/ModalFormContainer';
 import { actions as kinopsActions } from './redux/modules/kinops';
 import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';
-
-import 'bootstrap/scss/bootstrap.scss';
-import 'font-awesome/css/font-awesome.css';
-import 'typeface-open-sans/index.css';
-import './styles/master.scss';
 import { App as ServicesApp } from 'services/src/App';
 import { App as SpaceApp } from 'space/src/App';
 
