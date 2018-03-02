@@ -30,6 +30,7 @@
     "reactstrap": "^5.0.0-beta",
     "recompose": "^0.26.0",
     "redux": "^3.7.2",
-    "redux-saga": "^0.16.0"
+    "redux-saga": "^0.16.0",
+    "typeface-open-sans": "^0.0.54"
   }
 }

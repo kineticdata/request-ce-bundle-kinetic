@@ -11,6 +11,7 @@ import { actions as layoutActions } from './redux/modules/layout';
 
 import 'bootstrap/scss/bootstrap.scss';
 import 'font-awesome/css/font-awesome.css';
+import 'typeface-open-sans/index.css';
 import './styles/master.scss';
 import { App as ServicesApp } from 'services/src/App';
 import { App as SpaceApp } from 'space/src/App';
