@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import Sidebar from 'react-sidebar';
+import { Helmet } from 'react-helmet';
 import { ToastsContainer } from './components/ToastsContainer';
 import { HeaderContainer } from './components/HeaderContainer';
 import { ModalFormContainer } from './components/ModalFormContainer';
@@ -19,6 +20,12 @@ import { App as SpaceApp } from 'space/src/App';
 export const AppComponent = props =>
   !props.loading && (
     <Fragment>
+      <Helmet>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+        />
+      </Helmet>
       <ToastsContainer />
       <ModalFormContainer />
       <HeaderContainer hasSidebar toggleSidebarOpen={props.toggleSidebarOpen} />
