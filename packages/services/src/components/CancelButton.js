@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { KinopsModule } from 'react-kinops-common';
+import { commonActions } from 'common';
 import { actions } from '../redux/modules/submission';
 import * as constants from '../constants';
 import { getCancelFormConfig } from '../helpers';
@@ -22,7 +22,7 @@ export const mapStateToProps = () => ({});
 
 export const mapDispatchToProps = {
   deleteSubmission: actions.deleteSubmission,
-  openForm: KinopsModule.actions.openForm,
+  openForm: commonActions.openForm,
 };
 
 const enhance = compose(

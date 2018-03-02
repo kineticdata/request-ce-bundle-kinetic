@@ -9,7 +9,7 @@ export class TimeAgo extends Component {
     super(props);
     this.state = this.getState(props);
     this.tick = this.tick.bind(this);
-    this.uuid = uuid();
+    this.uuid = `tooltip-${uuid()}`;
   }
 
   componentDidMount() {

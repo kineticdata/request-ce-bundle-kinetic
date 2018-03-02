@@ -1,32 +1,24 @@
-import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
-import {
-  KinopsModule,
-  HeaderContainer,
-  ToastsContainer,
-  ModalFormContainer,
-} from 'react-kinops-common';
-import Sidebar from 'react-sidebar';
-import { Helmet } from 'react-helmet';
-import '../assets/styles';
-import { actions as categoriesActions } from '../redux/modules/categories';
-import { actions as formsActions } from '../redux/modules/forms';
-import { actions as submissionsActions } from '../redux/modules/submissions';
-import { actions as submissionCountActions } from '../redux/modules/submissionCounts';
-import { actions as appActions } from '../redux/modules/app';
-import { CatalogContainer } from './CatalogContainer';
-import { CategoryListContainer } from './Services/CategoryListContainer';
-import { CategoryContainer } from './Services/CategoryContainer';
-import { CatalogSearchResultsContainer } from '../components/Services/CatalogSearchResultsContainer';
-import { Loading } from './app/Loading';
-import { Sidebar as SidebarContent } from './Sidebar';
-import { FormContainer } from './Services/FormContainer';
-import { FormListContainer } from './Services/FormListContainer';
-import { RequestListContainer } from './Requests/RequestListContainer';
-import { RequestShowContainer } from './Requests/RequestShowContainer';
-import { displayableFormPredicate } from '../helpers';
+import { KappRoute as Route } from 'common';
+import { actions as categoriesActions } from './redux/modules/categories';
+import { actions as formsActions } from './redux/modules/forms';
+import { actions as submissionsActions } from './redux/modules/submissions';
+import { actions as submissionCountActions } from './redux/modules/submissionCounts';
+import { CatalogContainer } from './components/CatalogContainer';
+import { CategoryListContainer } from './components/Services/CategoryListContainer';
+import { CategoryContainer } from './components/Services/CategoryContainer';
+import { CatalogSearchResultsContainer } from './components/Services/CatalogSearchResultsContainer';
+import { Loading } from './components/app/Loading';
+import { Sidebar } from './components/Sidebar';
+import { FormContainer } from './components/Services/FormContainer';
+import { FormListContainer } from './components/Services/FormListContainer';
+import { RequestListContainer } from './components/Requests/RequestListContainer';
+import { RequestShowContainer } from './components/Requests/RequestShowContainer';
+import { displayableFormPredicate } from './helpers';
+import './assets/styles/scss/master.scss';
 
 const mapStateToProps = (state, props) => {
   const { kinops, categories, forms, systemError } = state;
@@ -37,10 +29,6 @@ const mapStateToProps = (state, props) => {
     loading: kinops.loading || categories.loading || forms.loading,
     errors: [...categories.errors, ...forms.errors],
     systemError,
-    layoutSize: state.app.layoutSize,
-    sidebarOpen: state.app.sidebarOpen,
-    homeSidebarOpen: state.app.homeSidebarOpen,
-    isHome: props.location.pathname === '/',
   };
 };
 
@@ -49,40 +37,22 @@ const mapDispatchToProps = {
   fetchForms: formsActions.fetchForms,
   fetchSubmissions: submissionsActions.fetchSubmissions,
   fetchSubmissionCounts: submissionCountActions.fetchSubmissionCounts,
-  loadApp: KinopsModule.actions.loadApp,
-  setSidebarOpen: appActions.setSidebarOpen,
-  setHomeSidebarOpen: appActions.setHomeSidebarOpen,
 };
 
-export const App = props => {
+export const AppComponent = props => {
   if (props.loading) {
     return <Loading text="App is loading ..." />;
   }
-  return (
-    <div>
-      <Helmet>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-        />
-      </Helmet>
-      <ToastsContainer />
-      <ModalFormContainer />
-      <HeaderContainer hasSidebar toggleSidebarOpen={props.toggleSidebar} />
+  return props.render({
+    sidebar: (
       <Sidebar
-        sidebar={
-          <SidebarContent
-            counts={props.submissionCounts}
-            homePageMode={props.homePageMode}
-            homePageItems={props.homePageItems}
-          />
-        }
-        shadow={false}
-        open={props.sidebarOpen && props.layoutSize === 'small'}
-        docked={props.sidebarOpen && props.layoutSize !== 'small'}
-        onSetOpen={props.setSidebarOpen}
-        sidebarClassName={`services-sidebar ${true ? 'drawer' : 'overlay'}`}
-      >
+        counts={props.submissionCounts}
+        homePageMode={props.homePageMode}
+        homePageItems={props.homePageItems}
+      />
+    ),
+    main: (
+      <div className="services">
         <Route
           path="/submissions/:id"
           exact
@@ -128,23 +98,13 @@ export const App = props => {
           path="/requests/:type?/request/:submissionId/:mode"
           component={RequestShowContainer}
         />
-      </Sidebar>
-    </div>
-  );
+      </div>
+    ),
+  });
 };
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withProps(props => ({
-    sidebarOpen: props.isHome ? props.homeSidebarOpen : props.sidebarOpen,
-  })),
-  withHandlers({
-    toggleSidebar: props => () => {
-      props.isHome
-        ? props.setHomeSidebarOpen(!props.sidebarOpen)
-        : props.setSidebarOpen(!props.sidebarOpen);
-    },
-  }),
   withProps(props => {
     return props.categories.isEmpty()
       ? {
@@ -160,7 +120,6 @@ const enhance = compose(
   }),
   lifecycle({
     componentWillMount() {
-      this.props.loadApp();
       this.props.fetchCategories();
       this.props.fetchForms();
       this.props.fetchSubmissions();
@@ -169,4 +128,4 @@ const enhance = compose(
   }),
 );
 
-export const AppContainer = enhance(App);
+export const App = enhance(AppComponent);

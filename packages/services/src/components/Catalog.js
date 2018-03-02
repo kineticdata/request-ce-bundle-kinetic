@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { KappLink as Link } from 'common';
 import { CatalogSearchContainer } from './Services/CatalogSearchContainer';
 import { CategoryCard } from './CategoryCard';
 import { ServiceCard } from './ServiceCard';
@@ -17,7 +17,7 @@ export const Catalog = ({
   return (
     <div className="main-content services">
       <PageTitle parts={[]} />
-      <div className="services-search-container container">
+      <div className="services-search-container">
         <div className="services-search-wrapper">
           <h1 className="text-truncate">Services from the team</h1>
           <div className="select">

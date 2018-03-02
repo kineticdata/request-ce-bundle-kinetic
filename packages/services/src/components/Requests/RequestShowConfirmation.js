@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { KinopsModule } from 'react-kinops-common';
+import { commonActions } from 'common';
 import { getFeedbackFormConfig } from '../../helpers';
 
 export const RequestShowConfirmation = ({ handleOpenFeedback }) => (
@@ -23,7 +23,7 @@ export const RequestShowConfirmation = ({ handleOpenFeedback }) => (
 );
 
 const enhance = compose(
-  connect(null, { openForm: KinopsModule.actions.openForm }),
+  connect(null, { openForm: commonActions.openForm }),
   withHandlers({
     handleOpenFeedback: props => () =>
       props.openForm(getFeedbackFormConfig(props.submission.id)),

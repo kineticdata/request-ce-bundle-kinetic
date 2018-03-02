@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { KinopsModule } from 'react-kinops-common';
+import { commonActions } from 'common';
 import { getFeedbackFormConfig } from '../helpers';
 
 const FeedbackButton = props => (
@@ -13,7 +13,7 @@ const FeedbackButton = props => (
 export const mapStateToProps = () => ({});
 
 export const mapDispatchToProps = {
-  openForm: KinopsModule.actions.openForm,
+  openForm: commonActions.openForm,
 };
 
 const enhance = compose(

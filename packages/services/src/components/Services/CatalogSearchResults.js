@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { KappLink as Link } from 'common';
 import { ServiceCard } from '../ServiceCard';
 import { CatalogSearchContainer } from './CatalogSearchContainer';
 import { PageTitle } from '../Shared/PageTitle';
@@ -27,12 +27,8 @@ export const CatalogSearchResults = ({ query, forms }) => (
         <div className="search-results-list">
           <ul>
             {forms.map(form => (
-              <li>
-                <ServiceCard
-                  path={`forms/${form.slug}`}
-                  form={form}
-                  key={form.slug}
-                />
+              <li key={form.slug}>
+                <ServiceCard path={`/forms/${form.slug}`} form={form} />
               </li>
             ))}
           </ul>

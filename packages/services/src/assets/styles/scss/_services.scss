@@ -17,7 +17,7 @@
 // Services Main content
 .services {
   flex-direction: column;
-  margin-top: 48px;
+  margin-top: $header-height;
 }
 // Services Container
 .services-home-container {
@@ -762,7 +762,8 @@
 .services-sidebar {
   background-color: $black-3;
   border-right: 1px solid $black-16;
-  margin-top: 48px;
+  margin-top: $header-height;
+  padding-top: 0.5rem;
 
   h6 {
     color: $blueLake;

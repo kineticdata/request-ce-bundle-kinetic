@@ -29,6 +29,7 @@ export const mapStateToProps = (state, { match: { params } }) => ({
     : null,
   forms: state.forms.data,
   values: valuesFromQueryParams(state.router.location.search),
+  kappSlug: state.kinops.kappSlug,
 });
 
 export const getSubmissionId = props =>
@@ -37,13 +38,19 @@ export const getSubmissionId = props =>
     : props.location.pathname.replace(props.match.url, '').replace('/', '');
 
 export const handleCompleted = props => response => {
-  props.push(`/requests/request/${response.submission.id}/confirmation`);
+  props.push(
+    `/kapps/${props.kappSlug}/requests/request/${
+      response.submission.id
+    }/confirmation`,
+  );
 };
 
 export const handleCreated = props => response => {
   props.push(
     response.submission.coreState === 'Submitted'
-      ? `/requests/request/${response.submission.id}/confirmation`
+      ? `/kapps/${props.kappSlug}/requests/request/${
+          response.submission.id
+        }/confirmation`
       : `${props.match.url}/${response.submission.id}`,
   );
 };

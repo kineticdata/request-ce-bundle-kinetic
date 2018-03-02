@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { KappLink as Link } from 'common';
 import { ServiceCard } from '../ServiceCard';
 import { PageTitle } from '../Shared/PageTitle';
 

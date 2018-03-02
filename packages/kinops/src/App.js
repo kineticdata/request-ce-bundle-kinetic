@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { compose, lifecycle, withHandlers } from 'recompose';
+import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import Sidebar from 'react-sidebar';
 import { ToastsContainer } from './components/ToastsContainer';
 import { HeaderContainer } from './components/HeaderContainer';
@@ -8,37 +8,42 @@ import { ModalFormContainer } from './components/ModalFormContainer';
 import { actions as kinopsActions } from './redux/modules/kinops';
 import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';
-import { AppRouter } from './AppRouter';
 
 import 'bootstrap/scss/bootstrap.scss';
 import 'font-awesome/css/font-awesome.css';
 import './styles/master.scss';
+import { App as ServicesApp } from 'services/src/App';
+import { App as SpaceApp } from 'space/src/App';
 
-export const AppComponent = props => (
-  <Fragment>
-    <ToastsContainer />
-    <ModalFormContainer />
-    <HeaderContainer hasSidebar toggleSidebarOpen={props.toggleSidebarOpen} />
-    <Sidebar
-      sidebar={<div style={{ marginTop: '49px' }}>Sidebar Content</div>}
-      shadow={false}
-      open={props.sidebarOpen && props.layoutSize === 'small'}
-      docked={props.sidebarOpen && props.layoutSize !== 'small'}
-      onSetOpen={props.setSidebarOpen}
-      sidebarClassName={`sidebar ${true ? 'drawer' : 'overlay'}`}
-    >
-      <div className="App" style={{ marginTop: '49px' }}>
-        {!props.loading && <AppRouter kapps={props.kapps} />}
-      </div>
-    </Sidebar>
-  </Fragment>
-);
+export const AppComponent = props =>
+  !props.loading && (
+    <Fragment>
+      <ToastsContainer />
+      <ModalFormContainer />
+      <HeaderContainer hasSidebar toggleSidebarOpen={props.toggleSidebarOpen} />
+      <props.AppProvider
+        render={({ main, sidebar }) => (
+          <Sidebar
+            sidebar={sidebar}
+            shadow={false}
+            open={props.sidebarOpen && props.layoutSize === 'small'}
+            docked={props.sidebarOpen && props.layoutSize !== 'small'}
+            onSetOpen={props.setSidebarOpen}
+            sidebarClassName={`sidebar ${true ? 'drawer' : 'overlay'}`}
+          >
+            {main}
+          </Sidebar>
+        )}
+      />
+    </Fragment>
+  );
 
 export const mapStateToProps = state => ({
   loading: state.loading,
   kapps: state.kinops.kapps,
   sidebarOpen: state.layout.sidebarOpen,
   layoutSize: state.layout.size,
+  pathname: state.router.location.pathname,
 });
 export const mapDispatchToProps = {
   loadApp: kinopsActions.loadApp,
@@ -48,6 +53,12 @@ export const mapDispatchToProps = {
 
 export const App = compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withProps(props => ({
+    AppProvider:
+      props.pathname && props.pathname.startsWith('/kapps/services')
+        ? ServicesApp
+        : SpaceApp,
+  })),
   withHandlers({
     toggleSidebarOpen: props => () => props.setSidebarOpen(!props.sidebarOpen),
   }),

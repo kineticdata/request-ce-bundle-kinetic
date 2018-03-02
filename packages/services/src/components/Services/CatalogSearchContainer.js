@@ -6,9 +6,12 @@ import { actions } from '../../redux/modules/search';
 
 const stateMapper = state => ({
   searchTerm: state.search.inputValue,
+  kappSlug: state.kinops.kappSlug,
   submitHandler: props => event => {
     event.preventDefault();
-    props.push(`/search?${stringify({ q: props.searchTerm })}`);
+    props.push(
+      `/kapps/${props.kappSlug}/search?${stringify({ q: props.searchTerm })}`,
+    );
   },
 });
 

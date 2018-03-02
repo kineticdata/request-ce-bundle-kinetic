@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { KappLink as Link } from 'common';
 
 const ServiceCardTop = ({ form }) => (
   <div className="service-icon-wrapper">

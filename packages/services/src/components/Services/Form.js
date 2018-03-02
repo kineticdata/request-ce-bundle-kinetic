@@ -1,6 +1,6 @@
 import React from 'react';
 import { CoreForm } from 'react-kinetic-core';
-import { Link } from 'react-router-dom';
+import { KappLink as Link } from 'common';
 import { SERVICES_KAPP as kappSlug } from '../../constants';
 import { PageTitle } from '../Shared/PageTitle';
 
@@ -8,7 +8,7 @@ import { PageTitle } from '../Shared/PageTitle';
 // forms. Note that we deliberately do this as a const so that it should start
 // immediately without making the application wait but it will likely be ready
 // before users nagivate to the actual forms.
-const globals = import('../../globals');
+const globals = import('common/globals');
 
 export const Form = ({
   form,

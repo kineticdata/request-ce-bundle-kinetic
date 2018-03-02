@@ -3,11 +3,13 @@ import createSagaMiddleware from 'redux-saga';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { combineSagas } from 'common/utils';
 import reducers from './reducers';
+import servicesReducers from 'services/src/redux/reducers';
 // import {
 //   sagas as discussionSagas,
 //   reducers as discussionReducers,
 // } from 'react-kinops-discussions';
 import { sagas } from './sagas';
+import servicesSagas from 'services/src/redux/sagas';
 
 export const configureStore = history => {
   // To enable the redux dev tools in the browser we need to conditionally use a
@@ -25,6 +27,7 @@ export const configureStore = history => {
     connectRouter(history)(
       combineReducers({
         ...reducers,
+        ...servicesReducers,
       }),
     ),
     composeEnhancers(
@@ -35,7 +38,7 @@ export const configureStore = history => {
   // After we've created the store using the saga middleware we will start
   // the run it and pass it the saga watcher so that it can start watching
   // for applicable actions.
-  sagaMiddleware.run(combineSagas([sagas]));
+  sagaMiddleware.run(combineSagas([sagas, servicesSagas]));
 
   // Enable hot module replacement so that file changes are automatically
   // communicated to the browser when running in development mode

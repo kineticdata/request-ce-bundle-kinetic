@@ -1,12 +1,10 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import SVGInline from 'react-svg-inline';
+import { KappLink as Link, KappNavLink as NavLink } from 'common';
 import { Icon } from '../Icon';
 import { bundle, CoreForm } from 'react-kinetic-core';
 import { RequestShowConfirmationContainer } from './RequestShowConfirmation';
 import { RequestActivityList } from './RequestActivityList';
 import { TimeAgo } from '../TimeAgo';
-import chevronLeftIcon from 'font-awesome-svg-png/black/svg/chevron-left.svg';
 import { CancelButtonContainer } from '../CancelButton';
 import { CommentButtonContainer } from '../CommentButton';
 import { CloneButtonContainer } from '../CloneButton';
@@ -16,7 +14,7 @@ import { PageTitle } from '../Shared/PageTitle';
 import * as constants from '../../constants';
 import * as helpers from '../../helpers';
 
-const globals = import('../../globals');
+const globals = import('common/globals');
 
 const getIcon = form =>
   helpers.getAttributeValue(
@@ -140,7 +138,7 @@ export const RequestShow = ({ submission, listType, mode }) => (
     <div className="request-details-container">
       <Link className="back-link" to={`/requests/${listType || ''}`}>
         <div className="icon-wrapper">
-          <SVGInline svg={chevronLeftIcon} className="icon" />
+          <i className="fa fa-fw fa-chevron-left" />
           Return to {listType || 'All'} Requests
         </div>
       </Link>

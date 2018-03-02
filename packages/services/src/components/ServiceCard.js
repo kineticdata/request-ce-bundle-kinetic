@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { KappLink as Link } from 'common';
 import { Icon } from './Icon';
 
 export const ServiceCard = ({ path, form }) => (

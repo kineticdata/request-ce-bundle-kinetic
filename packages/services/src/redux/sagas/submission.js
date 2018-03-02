@@ -1,5 +1,13 @@
 import { delay } from 'redux-saga';
-import { call, put, cancel, take, fork, takeEvery } from 'redux-saga/effects';
+import {
+  call,
+  put,
+  cancel,
+  take,
+  fork,
+  takeEvery,
+  select,
+} from 'redux-saga/effects';
 import { CoreAPI } from 'react-kinetic-core';
 import { Map, Seq } from 'immutable';
 import { push } from 'connected-react-router';
@@ -27,6 +35,7 @@ export function* fetchSubmissionSaga(action) {
 
 export function* cloneSubmissionSaga(action) {
   const include = 'details,values,form,form.fields.details,form.kapp';
+  const kappSlug = yield select(state => state.kinops.kappSlug);
   const { submission, errors, serverError } = yield call(
     CoreAPI.fetchSubmission,
     { id: action.payload, include },
@@ -76,7 +85,9 @@ export function* cloneSubmissionSaga(action) {
       yield put(actions.cloneSubmissionErrors(postErrors));
     } else {
       yield put(actions.cloneSubmissionSuccess());
-      yield put(push(`/requests/Draft/request/${cloneSubmission.id}`));
+      yield put(
+        push(`/kapps/${kappSlug}/requests/Draft/request/${cloneSubmission.id}`),
+      );
     }
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { KappLink as Link, KappNavLink as NavLink } from 'common';
 import { Nav, NavItem } from 'reactstrap';
 
 const formatCount = count =>
@@ -9,7 +9,7 @@ const itemLink = (mode, slug) =>
   `${mode === 'Categories' ? '/categories' : '/forms'}/${slug}`;
 
 export const Sidebar = props => (
-  <div>
+  <div className="services-sidebar">
     <h6>My Requests</h6>
     <Nav vertical>
       <NavItem>
