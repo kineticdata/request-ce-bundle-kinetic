@@ -92,6 +92,7 @@
 
 // Search Wrapper
 .services-search-wrapper {
+  width: 90%;
   @media all and (min-width: 0) {
     flex-basis: 90%;
   }
@@ -108,7 +109,7 @@
   }
 }
 // My Requests Wrapper
-.myRequests-wrapper {
+.my-requests-wrapper {
   flex-basis: 31%;
   flex-direction: column;
   display: flex;

@@ -26,7 +26,7 @@ export const Catalog = ({
         </div>
       </div>
       <div className="services-home-container container">
-        <div className="myRequests-wrapper">
+        <div className="my-requests-wrapper">
           <div className="page-title-wrapper">
             <div className="page-title">
               <h3>services /</h3>
