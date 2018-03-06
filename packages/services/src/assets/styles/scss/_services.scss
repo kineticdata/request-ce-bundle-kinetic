@@ -22,8 +22,8 @@
 // Services Container
 .services-home-container {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
+  flex: 0 0 auto;
   @media all and (min-width: 0) {
     flex-direction: column;
   }
@@ -40,11 +40,21 @@
   }
   .c-card,
   .s-card {
+    flex: 0 0 auto;
+    min-width: auto;
     @media all and (min-width: 0) {
       flex-basis: 100%;
+      @media all and (-ms-high-contrast: none) {
+        width: 100%;
+        flex-basis: auto;
+      }
     }
     @media all and (min-width: 576px) {
       flex-basis: 48%;
+      @media all and (-ms-high-contrast: none) {
+        width: 48%;
+        flex-basis: auto;
+      }
     }
     @media all and (min-width: 768px) {
     }
@@ -60,17 +70,35 @@
   .c-card,
   .r-card,
   .s-card {
+    flex: 0 0 auto;
+    min-width: auto;
     @media all and (min-width: 0) {
       flex-basis: 100%;
+      @media all and (-ms-high-contrast: none) {
+        width: 100%;
+        flex-basis: auto;
+      }
     }
     @media all and (min-width: 576px) {
       flex-basis: 48%;
+      @media all and (-ms-high-contrast: none) {
+        width: 48%;
+        flex-basis: auto;
+      }
     }
     @media all and (min-width: 768px) {
       flex-basis: 48%;
+      @media all and (-ms-high-contrast: none) {
+        width: 48%;
+        flex-basis: auto;
+      }
     }
     @media all and (min-width: 992px) {
       flex-basis: 31%;
+      @media all and (-ms-high-contrast: none) {
+        width: 31%;
+        flex-basis: auto;
+      }
     }
     @media all and (min-width: 1200px) {
     }
@@ -85,6 +113,7 @@
   display: flex;
   justify-content: center;
   flex-direction: row;
+  flex: 0 0 auto;
 }
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Services Wrappers
@@ -92,6 +121,9 @@
 
 // Search Wrapper
 .services-search-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   width: 90%;
   @media all and (min-width: 0) {
     flex-basis: 90%;
@@ -110,17 +142,50 @@
 }
 // My Requests Wrapper
 .my-requests-wrapper {
-  flex-basis: 31%;
   flex-direction: column;
   display: flex;
+  @media all and (min-width: 0) {
+    flex-basis: 100%;
+    @media all and (-ms-high-contrast: none) {
+      width: 100%;
+      flex-basis: auto;
+    }
+  }
+  @media all and (min-width: 768px) {
+  }
+  @media all and (min-width: 992px) {
+    flex-basis: 31%;
+    @media all and (-ms-high-contrast: none) {
+      width: 31%;
+      flex-basis: auto;
+    }
+  }
+  @media all and (min-width: 1200px) {
+  }
 }
 
 // Services Wrapper
 .services-wrapper {
-  // flex-grow: 2;
-  flex-basis: 66%;
   display: flex;
   flex-direction: column;
+  @media all and (min-width: 0) {
+    flex-basis: 100%;
+    @media all and (-ms-high-contrast: none) {
+      width: 100%;
+      flex-basis: auto;
+    }
+  }
+  @media all and (min-width: 768px) {
+  }
+  @media all and (min-width: 992px) {
+    flex-basis: 66.667%;
+    @media all and (-ms-high-contrast: none) {
+      width: 66.667%;
+      flex-basis: auto;
+    }
+  }
+  @media all and (min-width: 1200px) {
+  }
 }
 .s-cards-wrapper,
 .r-cards-wrapper,
@@ -142,7 +207,7 @@
  *   Page Elements
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-// Page Titles **TODO: Potential Breadcrumbs**
+// Page Titles
 .page-title-wrapper {
   justify-content: space-between;
   display: flex;
