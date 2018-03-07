@@ -3,6 +3,9 @@ import { KappLink as Link } from 'common';
 import { Icon } from './Icon';
 import { StatusPill } from './StatusPill';
 import { TimeAgo } from './TimeAgo';
+import { DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { CardDropdown } from './CardDropdown';
+import { CancelButtonContainer } from './CancelButton';
 import * as helpers from '../helpers';
 import * as constants from '../constants';
 import { Form } from '../models';
@@ -54,7 +57,17 @@ export const RequestCard = props => (
       <Icon image={Form(props.submission.form).icon} background="greenGrass" />
       <span>{props.submission.form.name}</span>
       <StatusPill submission={props.submission} />
-      <span className="fa fa-ellipsis-h edit" />
+      <CardDropdown>
+        <DropdownToggle className="ellipsis-button">
+          <span className="fa fa-ellipsis-h edit" />
+        </DropdownToggle>
+        <DropdownMenu right>
+          <CancelButtonContainer
+            submission={props.submission}
+            deleteCallback={props.deleteCallback}
+          />
+        </DropdownMenu>
+      </CardDropdown>
     </h1>
     <p>{props.submission.form.description}</p>
     <span className="meta">

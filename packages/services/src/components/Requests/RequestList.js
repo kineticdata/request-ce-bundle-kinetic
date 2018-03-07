@@ -12,6 +12,7 @@ export const RequestList = ({
   hasPreviousPage,
   handleNextPage,
   handlePreviousPage,
+  refreshPage,
 }) => (
   <div>
     <PageTitle parts={['My Requests']} />
@@ -54,6 +55,7 @@ export const RequestList = ({
             forms,
             key: submission.id,
             path: getSubmissionPath(submission, null, type),
+            deleteCallback: refreshPage,
           }))
           .map(props => <RequestCard {...props} />)}
       </div>

@@ -30,7 +30,10 @@ export const actions = {
     type: types.CLONE_SUBMISSION_ERROR,
     payload: errors,
   }),
-  deleteSubmission: id => ({ type: types.DELETE_SUBMISSION, payload: id }),
+  deleteSubmission: (id, callback) => ({
+    type: types.DELETE_SUBMISSION,
+    payload: { id, callback },
+  }),
   deleteSubmissionSuccess: () => ({ type: types.DELETE_SUBMISSION_SUCCESS }),
   deleteSubmissionErrors: errors => ({
     type: types.DELETE_SUBMISSION_ERROR,

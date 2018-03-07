@@ -94,7 +94,7 @@ export function* cloneSubmissionSaga(action) {
 
 export function* deleteSubmissionSaga(action) {
   const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
-    id: action.payload,
+    id: action.payload.id,
   });
 
   if (serverError) {
@@ -103,6 +103,9 @@ export function* deleteSubmissionSaga(action) {
     yield put(actions.deleteSubmissionErrors(errors));
   } else {
     yield put(actions.deleteSubmissionSuccess());
+    if (typeof action.payload.callback === 'function') {
+      action.payload.callback();
+    }
   }
 }
 

@@ -4,6 +4,7 @@ export const types = {
   FETCH_SUBMISSIONS: '@kd/catalog/FETCH_SUBMISSIONS',
   FETCH_NEXT_PAGE: '@kd/catalog/FETCH_NEXT_PAGE',
   FETCH_PREVIOUS_PAGE: '@kd/catalog/FETCH_PREVIOUS_PAGE',
+  FETCH_CURRENT_PAGE: '@kd/catalog/FETCH_CURRENT_PAGE',
   SET_SUBMISSIONS: '@kd/catalog/SET_SUBMISSIONS',
 };
 
@@ -18,6 +19,10 @@ export const actions = {
   }),
   fetchPreviousPage: coreState => ({
     type: types.FETCH_PREVIOUS_PAGE,
+    payload: { coreState },
+  }),
+  fetchCurrentPage: coreState => ({
+    type: types.FETCH_CURRENT_PAGE,
     payload: { coreState },
   }),
   setSubmissions: (submissions, nextPageToken) => ({
@@ -57,6 +62,11 @@ const reducer = (state = defaultState, action) => {
         loading: true,
         previous: state.previous.pop(),
         current: state.previous.last(),
+      };
+    case types.FETCH_CURRENT_PAGE:
+      return {
+        ...state,
+        loading: true,
       };
     case types.SET_SUBMISSIONS:
       return {

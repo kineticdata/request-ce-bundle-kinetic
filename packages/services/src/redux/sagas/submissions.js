@@ -43,7 +43,12 @@ export function* fetchSubmissionsSaga({ payload: { coreState } }) {
 
 export function* watchSubmissions() {
   yield takeEvery(
-    [types.FETCH_SUBMISSIONS, types.FETCH_NEXT_PAGE, types.FETCH_PREVIOUS_PAGE],
+    [
+      types.FETCH_SUBMISSIONS,
+      types.FETCH_NEXT_PAGE,
+      types.FETCH_PREVIOUS_PAGE,
+      types.FETCH_CURRENT_PAGE,
+    ],
     fetchSubmissionsSaga,
   );
 }

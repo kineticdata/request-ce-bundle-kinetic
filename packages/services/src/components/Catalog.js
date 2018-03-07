@@ -13,6 +13,7 @@ export const Catalog = ({
   submissions,
   homePageMode,
   homePageItems,
+  fetchSubmissions,
 }) => {
   return (
     <div className="main-content services">
@@ -42,6 +43,7 @@ export const Catalog = ({
                 forms,
                 key: submission.id,
                 path: getSubmissionPath(submission),
+                deleteCallback: fetchSubmissions,
               }))
               .map(props => <RequestCard {...props} />)}
           </div>

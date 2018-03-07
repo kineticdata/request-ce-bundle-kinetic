@@ -16,6 +16,7 @@ const mapDispatchToProps = {
   fetchSubmissions: submissionsActions.fetchSubmissions,
   fetchNextPage: submissionsActions.fetchNextPage,
   fetchPreviousPage: submissionsActions.fetchPreviousPage,
+  fetchCurrentPage: submissionsActions.fetchCurrentPage,
 };
 
 const enhance = compose(
@@ -27,6 +28,7 @@ const enhance = compose(
   withHandlers({
     handleNextPage: props => () => props.fetchNextPage(props.coreState),
     handlePreviousPage: props => () => props.fetchPreviousPage(props.coreState),
+    refreshPage: props => () => props.fetchCurrentPage(props.coreState),
   }),
   lifecycle({
     componentWillMount() {

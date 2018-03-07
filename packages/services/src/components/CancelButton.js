@@ -30,7 +30,7 @@ const enhance = compose(
   withHandlers({
     handleClick: props => () => {
       if (props.submission.coreState === constants.CORE_STATE_DRAFT) {
-        props.deleteSubmission(props.submission.id);
+        props.deleteSubmission(props.submission.id, props.deleteCallback);
       } else {
         props.openForm(getCancelFormConfig(props.submission.id));
       }

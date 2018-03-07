@@ -319,13 +319,18 @@
   .fa.edit {
     color: $black-50;
     line-height: 1.5rem;
-    margin-left: 1rem;
   }
   .meta dl {
     color: $black;
     font-size: 0.5625rem;
     margin-bottom: 0;
     line-height: normal;
+  }
+  .ellipsis-button {
+    background-color: inherit;
+    border: none;
+    font-size: 1.125rem;
+    margin-left: 1rem;
   }
 }
 

@@ -35,7 +35,6 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = {
   fetchCategories: categoriesActions.fetchCategories,
   fetchForms: formsActions.fetchForms,
-  fetchSubmissions: submissionsActions.fetchSubmissions,
   fetchSubmissionCounts: submissionCountActions.fetchSubmissionCounts,
 };
 
@@ -122,7 +121,6 @@ const enhance = compose(
     componentWillMount() {
       this.props.fetchCategories();
       this.props.fetchForms();
-      this.props.fetchSubmissions();
       this.props.fetchSubmissionCounts();
     },
   }),
