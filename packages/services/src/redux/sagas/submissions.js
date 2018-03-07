@@ -37,7 +37,11 @@ export function* fetchSubmissionsSaga({ payload: { coreState } }) {
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
   } else {
-    yield put(actions.setSubmissions(submissions, nextPageToken));
+    yield put(
+      pageToken && submissions.length === 0
+        ? actions.fetchPreviousPage(coreState)
+        : actions.setSubmissions(submissions, nextPageToken),
+    );
   }
 }
 
