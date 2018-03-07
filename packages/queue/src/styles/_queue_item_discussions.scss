@@ -1,0 +1,313 @@
+.queue-item-discussions,
+.queue-item-discussions-modal-body {
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .messages {
+    background-color: #f7f7f7;
+    flex: 1;
+    position: relative;
+    .message-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+    .messages-group {
+      display: flex;
+      margin-bottom: 1.5rem;
+      .sb-avatar {
+        margin: 0 0.75rem 0 0;
+        img {
+          border: 2px solid transparent;
+        }
+        &.present img {
+          border-color: $present;
+        }
+      }
+      .message-list {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        color: $blue1;
+        @include ms-respond(font-size, 0);
+        .message {
+          background-color: $gray4;
+          border-radius: 0.5rem;
+          margin-bottom: 0.75rem;
+          padding: 0.75rem;
+          position: relative;
+          white-space: pre-wrap;
+          // line-height: 0.75rem;
+          &:after {
+            content: ' ';
+            position: absolute;
+            width: 0;
+            height: 0;
+            top: 8px;
+            bottom: auto;
+            border: 4px solid;
+          }
+        }
+        .message-upload {
+          display: flex;
+          flex-direction: column;
+
+          &.message-other {
+            align-items: flex-start;
+          }
+
+          &.message-mine {
+            align-items: flex-end;
+          }
+
+          .upload-image {
+            display: flex;
+            height: 120px;
+            img {
+              height: 100%;
+              width: auto;
+            }
+            & + .upload-description {
+              margin-top: 0.75rem;
+            }
+          }
+
+          .upload-filename {
+          }
+        }
+        .meta {
+          @include ms-respond(font-size, -2);
+          line-height: 1.5rem;
+          .author {
+            margin-right: 1rem;
+          }
+          .timestamp {
+            color: $blue2;
+          }
+        }
+      }
+      &.mine {
+        .message-list {
+          align-items: flex-end;
+          .message {
+            background-color: $blue3;
+            &:after {
+              left: auto;
+              right: -8px;
+              border-color: $blue3 transparent transparent $blue3;
+            }
+          }
+        }
+      }
+      &.other {
+        .message-list {
+          .message {
+            &:after {
+              left: -8px;
+              right: auto;
+              border-color: $gray4 $gray4 transparent transparent;
+            }
+          }
+        }
+      }
+    }
+    .date {
+      align-items: center;
+      color: $blue0;
+      display: flex;
+      @include ms-respond(font-size, -1);
+      font-weight: bold;
+      margin: 1.5rem 0;
+      text-align: center;
+      hr {
+        border: 2px solid $blue3;
+        flex: 1;
+      }
+      span {
+        margin: 0 0.75rem;
+      }
+    }
+    button.more-messages {
+      position: absolute;
+      bottom: 20px;
+      width: 180px;
+      left: 50%;
+      margin-left: -90px;
+      font-size: 12px;
+      display: flex;
+      justify-content: center;
+      .icon {
+        margin-left: 10px;
+        path {
+          fill: white;
+        }
+      }
+    }
+  }
+
+  .load-more-messages {
+    text-align: center;
+    // padding: 1.5rem;
+    h5 {
+      color: $blue1;
+      @include ms-respond(font-size, 2);
+      font-weight: 600;
+      line-height: 1.5rem;
+      margin-top: 0;
+    }
+
+    h6 {
+      color: $blue2;
+      @include ms-respond(font-size, -1);
+      margin-top: 0;
+      line-height: 1.5rem;
+    }
+  }
+  .new-message {
+    display: flex;
+    padding: 0;
+    overflow: visible;
+    button {
+      // height: 48px;
+      width: 48px;
+
+      border-radius: 0;
+
+      &.btn-more {
+        background-color: #d3dce7;
+        border-width: 0;
+        opacity: 0.5;
+        display: flex;
+        justify-content: center;
+      }
+
+      &.btn-send {
+        background-color: #d3dce7;
+        cursor: pointer;
+        &:disabled {
+          cursor: not-allowed;
+        }
+      }
+
+      &.btn.btn-subtle {
+        background-color: $blue3;
+        .icon-svg path {
+          fill: $blue1;
+        }
+      }
+
+      &.btn.disabled,
+      &.btn:disabled {
+        opacity: 1;
+      }
+    }
+
+    .show > .dropdown-menu {
+      display: flex;
+    }
+    .dropdown-menu {
+      border: none;
+      flex-direction: column;
+      margin: 0.5rem;
+      padding: 0.5rem;
+      filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 3px 4px);
+      button {
+        cursor: pointer;
+        font-size: 12px;
+        padding: 0.25rem 0.5rem;
+        width: auto;
+        .icon {
+          margin-right: 0.5rem;
+        }
+      }
+      &:after {
+        content: ' ';
+        position: absolute;
+        height: 0;
+        width: 0;
+        border-color: transparent;
+        border-style: solid;
+        bottom: -8px;
+        left: 8px;
+        border-width: 8px 8px 0;
+        border-top-color: white;
+      }
+    }
+
+    .input-container {
+      flex: 1;
+      padding: 12px;
+      background-color: #d3dce7;
+
+      .placeholder {
+        color: #a8b7c7;
+        position: absolute;
+        pointer-events: none;
+        &.hidden {
+          display: none;
+        }
+      }
+    }
+
+    .message-input {
+      min-height: 24px;
+      max-height: 48px;
+      overflow-y: auto;
+      overflow-wrap: break-word;
+      color: #54698d;
+
+      &:focus {
+        outline: unset;
+      }
+    }
+  }
+
+  .participants-preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 0.33rem 1.5rem;
+    .sb-avatar {
+      margin-right: 0.33rem;
+      img {
+        border: 2px solid rgba(0, 212, 106, 0);
+        transition: border-color 300ms;
+      }
+    }
+    .present {
+      .sb-avatar img {
+        border-color: rgba(0, 212, 106, 1);
+      }
+    }
+
+    button.view-all {
+      margin-left: auto;
+    }
+  }
+
+  .empty-discussion {
+    background-color: $gray4;
+    border-radius: 0.5rem;
+    margin: 1rem;
+    text-align: center;
+
+    h6 {
+      color: $blue1;
+    }
+
+    button {
+      color: $blue2;
+    }
+  }
+}

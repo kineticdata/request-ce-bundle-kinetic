@@ -1,0 +1,114 @@
+.assignment-badge {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid $gray3;
+  border-bottom: 1px solid $gray3;
+  color: $gray;
+  margin: 1.5rem 0;
+  padding: 0.3125rem 1rem;
+  .badge {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #a8b7c7;
+    border-radius: 50%;
+    color: #f7f9fb;
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-right: 0.5rem;
+    height: 2rem;
+    width: 2rem;
+    text-align: center;
+    cursor: pointer;
+    &:focus, &.focus{
+      box-shadow: none;
+      outline: $blue3 dotted thin;
+    }
+  }
+  &.read-only .badge {
+    cursor: default;
+  }
+  .team {
+    font-size: .625rem;
+    font-weight: 300;
+  }
+  .individual {
+    font-size: .875rem;
+    color:$blue0;
+  }
+  .icon {
+    margin-left: auto;
+  }
+
+  &.read-only div[role='button'] {
+    cursor: default;
+  }
+
+  .select {
+    // The div that wraps the select up.
+    padding-left: 1rem;
+    & > div {
+      display: inline-block;
+      // The input for the select.
+      input {
+        height: 32px;
+        width: 299.63px;
+        border: 1px solid #359be0;
+        border-radius: 4px;
+        background-color: #ffffff;
+      }
+
+      & > div {
+        position: absolute;
+        overflow: auto;
+        margin-top: 4px;
+        padding-top: 1em;
+        z-index: 1050;
+        height: 285px;
+        width: 299.63px;
+        border: 1px solid #e6e8ed;
+        border-radius: 4px;
+        background-color: #ffffff;
+        box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
+      }
+
+      .team {
+        display: flex;
+        align-items: center;
+        height: 17px;
+        color: #54698d;
+        font-family: 'Open Sans';
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 17px;
+        margin: 0;
+
+        padding-left: 11px;
+      }
+
+      .item {
+        display: flex;
+        align-items: center;
+        height: 36px;
+        /* width: 298.13px; */
+        border-radius: 4px 4px 0 0;
+
+        color: #494949;
+        font-family: 'Open Sans';
+        font-size: 14px;
+        line-height: 19px;
+
+        padding-left: 20px;
+        cursor: pointer;
+
+        &.item-highlighted {
+          background-color: #f6f6f6;
+        }
+
+        &:hover {
+          background-color: #f6f6f6;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,134 @@
+.queue-item-details {
+  background-color: $white;
+  position: relative;
+
+  .scroll-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+  }
+
+  .general {
+    color: $blue1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+
+    h1 {
+      color: #222222;
+      margin: 0;
+      line-height: 3rem;
+    }
+
+    .summary {
+      @include ms-respond(font-size, -1);
+      line-height: 1.5rem;
+      // margin-bottom: 0;
+      color: #222;
+    }
+
+    .actions {
+      display: flex;
+
+      .assignment-badge {
+        flex-grow: 1;
+      }
+
+      .wally-button {
+        border-radius: 0;
+        margin: 1.5rem 0;
+        padding: 0 1.5rem;
+      }
+    }
+
+    pre {
+      color: $blue1;
+      @include ms-respond(font-size, -2);
+      line-height: 1.5rem;
+      margin-bottom: 0;
+    }
+  }
+
+  .request-button {
+    display: block;
+    width: 100%;
+  }
+
+  .discussion-button {
+    display: flex;
+    justify-content: center;
+    .icon {
+      width: 2rem;
+    }
+  }
+
+  .subtasks-section {
+    margin: 1.5rem;
+    @media (max-width: 767px) {
+      margin-bottom: 4rem;
+    }
+
+    h2 {
+      align-items: center;
+      color: $blue1;
+      display: flex;
+      @include ms-respond(font-size, 0);
+      line-height: 2.125rem;
+      font-weight: 600;
+      padding-left: 0.75rem;
+      margin: 0;
+      border-top: 2px solid $gray4;
+      button {
+        margin-left: auto;
+      }
+    }
+
+    .submissions {
+      border-top: 1px solid $gray4;
+    }
+
+    .submission {
+      padding: 0.75rem;
+    }
+
+    .empty-subtasks {
+      border-radius: 0.5rem;
+      background-color: $gray4;
+      font-family: 'Open Sans';
+      text-align: center;
+      padding: 1.5em;
+      h5 {
+        color: $blue1;
+        font-size: 14px;
+        @include ms-respond(font-size, 2);
+        font-weight: 600;
+        line-height: 1.5rem;
+      }
+
+      h6 {
+        color: $blue2;
+        @include ms-respond(font-size, -1);
+        line-height: 1.5rem;
+      }
+    }
+  }
+
+  .general .timestamps {
+    margin: 1.5rem 0 0;
+    .timestamp {
+      @include ms-respond(font-size, -1);
+      line-height: 1.5rem;
+      padding: 0 2rem;
+      .label {
+        color: $gray;
+        width: 70px;
+      }
+      .value {
+        color: $blue0;
+      }
+    }
+  }
+}

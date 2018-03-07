@@ -1,0 +1,142 @@
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//   Submissions
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.submissions {
+  .wally {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    h5 {
+      color: $blue1;
+      @include ms-respond(font-size, 2);
+      font-weight: 600;
+      line-height: 1.5rem;
+    }
+    h6 {
+      color: $blue2;
+      @include ms-respond(font-size, -1);
+      line-height: 1.5rem;
+    }
+  }
+
+  // This represents the overall submission "card" in the queue list view.
+  .submission {
+    border-bottom: 1px solid $gray4;
+    color: $blue1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    padding: 0.75rem 1.5rem;
+    &:hover {
+      background-color: $lightestgray;
+    }
+    // This is the details part of the card.
+    .summary-group {
+      flex-grow: 1;
+      text-decoration: none;
+      &:focus {
+        outline: $blue3 dotted thin;
+      }
+      h6 {
+        color: $black;
+        font-weight: 400;
+        margin: 0;
+        line-height: 1.5rem;
+      }
+      .summary {
+        @include ms-respond(font-size, -1);
+        line-height: 1.5rem;
+        margin-bottom: 0;
+        color: $gray;
+      }
+
+      .assignment {
+        margin-bottom: 0;
+      }
+
+      .assignment,
+      .timestamps {
+        font-weight: 300;
+        @include ms-respond(font-size, -2);
+        line-height: 1.5rem;
+        color: $gray;
+      }
+
+      .timestamps {
+        display: flex;
+        flex-direction: row;
+        text-transform: uppercase;
+        .list-group-item {
+          padding: 0;
+          color: $gray;
+          background-color: transparent;
+          @include ms-respond(font-size, -3);
+          &:not(:first-child):before {
+            content: '•';
+            font-weight: 700;
+            margin: 0 0.3125rem;
+          }
+        }
+      }
+    }
+
+    // This is for the action dropdown.
+    .actions {
+      // This is for the vertical ellipsis dropdown menu on the queue list view.
+      .btn.btn-ellipsis {
+        border: none;
+        padding: 0;
+        box-shadow: none;
+        background-color: transparent;
+        &:hover {
+          background-color: white;
+          cursor: pointer;
+          path {
+            fill: $blue1;
+          }
+        }
+      }
+
+      .dropdown > .dropdown-menu {
+        left: -5.5rem;
+        top: 1rem;
+        padding: 0;
+        min-width: 7rem;
+        border-radius: 0;
+        border: none;
+        margin-top: 15px;
+        position: absolute;
+        box-sizing: border-box;
+        filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 3px 4px);
+        // Add the up arrow.
+
+        &:after {
+          content: '';
+          border: 10px solid;
+          border-color: transparent transparent white;
+          content: '';
+          right: 10%;
+          margin-left: -10px;
+          position: absolute;
+          top: -20px;
+          z-index: 9998;
+        }
+
+        a.dropdown-item,
+        button.dropdown-item {
+          height: 24px;
+          color: #54698d;
+          font-family: 'Open Sans';
+          font-size: 0.75rem;
+          line-height: 1.5rem;
+          padding: 3px 0.75rem;
+        }
+      }
+    }
+  }
+}
