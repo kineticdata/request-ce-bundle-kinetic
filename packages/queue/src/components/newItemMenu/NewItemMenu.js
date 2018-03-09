@@ -3,7 +3,7 @@ import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { CoreForm } from 'react-kinetic-core';
 import { AssignmentSelector } from '../QueueItem/AssignmentSelector';
 
-const globals = import('../../globals');
+const globals = import('common/globals');
 
 const FormList = ({ myTeamForms, handleFormClick, permittedSubtasks }) => (
   <ul className="list-group button-list">

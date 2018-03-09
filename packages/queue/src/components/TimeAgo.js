@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { UncontrolledTooltip } from 'reactstrap';
-
-const TIME_FORMAT = 'MMMM D, YYYY h:mm A';
-const TIME_AGO_INTERVAL = 10000;
+import uuid from 'uuid';
+import * as constants from '../constants';
 
 export class TimeAgo extends Component {
   constructor(props) {
     super(props);
     this.state = this.getState(props);
     this.tick = this.tick.bind(this);
+    this.uuid = `tooltip-${uuid()}`;
   }
 
   componentDidMount() {
-    this.interval = setInterval(this.tick, TIME_AGO_INTERVAL);
+    this.interval = setInterval(this.tick, constants.TIME_AGO_INTERVAL);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -32,7 +32,7 @@ export class TimeAgo extends Component {
 
   getState(props) {
     return {
-      formatted: moment(props.timestamp).format(TIME_FORMAT),
+      formatted: moment(props.timestamp).format(constants.TIME_FORMAT),
       timeAgo: moment(props.timestamp).fromNow(),
     };
   }
@@ -40,10 +40,10 @@ export class TimeAgo extends Component {
   render() {
     return (
       <span className="time-ago-wrapper">
-        <span className="time-ago-text" id={this.props.id}>
+        <span className="time-ago-text" id={this.uuid}>
           {this.state.timeAgo}
         </span>
-        <UncontrolledTooltip placement="top" target={this.props.id} delay={0}>
+        <UncontrolledTooltip placement="top" target={this.uuid} delay={0}>
           {this.state.formatted}
         </UncontrolledTooltip>
       </span>

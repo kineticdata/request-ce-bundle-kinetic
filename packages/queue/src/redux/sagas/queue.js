@@ -174,6 +174,7 @@ export const sortSubmissions = (submissions, filter) =>
 export function* fetchListTask(action) {
   const filter = action.payload;
   const appSettings = yield select(getAppSettings);
+  const kappSlug = yield select(state => state.kinops.kappSlug);
   const { search, assignmentContext } = yield call(
     buildSearch,
     filter,
@@ -187,7 +188,7 @@ export function* fetchListTask(action) {
   } else {
     const { submissions, messages, nextPageToken, serverError } = yield call(
       CoreAPI.searchSubmissions,
-      { search, limit: 1000 },
+      { kapp: kappSlug, search, limit: 1000 },
     );
 
     if (serverError || (messages && messages.length > 0)) {

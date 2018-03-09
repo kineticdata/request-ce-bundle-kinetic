@@ -3,7 +3,7 @@ import { compose, withHandlers, withProps, withState } from 'recompose';
 import { Modal, ModalBody } from 'reactstrap';
 import { CoreForm } from 'react-kinetic-core';
 
-const globals = import('../../globals');
+const globals = import('common/globals');
 
 export const ViewOriginalRequestComponent = ({
   originId,

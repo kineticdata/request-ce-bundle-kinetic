@@ -27,9 +27,9 @@ export const actions = {
   setSidebarOpen: withPayload(types.SET_SIDEBAR_OPEN),
 };
 
-const ADHOC_PATH = { path: '/adhoc', exact: false };
-const DEFAULT_LIST_PATH = { path: '/list/:name', exact: false };
-const CUSTOM_LIST_PATH = { path: '/custom/:name', exact: false };
+const ADHOC_PATH = { path: '/kapps/:slug/adhoc', exact: false };
+const DEFAULT_LIST_PATH = { path: '/kapps/:slug/list/:name', exact: false };
+const CUSTOM_LIST_PATH = { path: '/kapps/:slug/custom/:name', exact: false };
 
 export const getFilterByPath = (state, pathname) => {
   const findByName = name => filter => filter.name === name;

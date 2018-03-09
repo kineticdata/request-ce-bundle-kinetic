@@ -1,13 +1,13 @@
 import React from 'react';
 import { UncontrolledTooltip, ButtonGroup, Button } from 'reactstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 
 const CLOSED_STATUSES = ['Cancelled', 'Complete'];
 
 const getStatusClass = status =>
   `icon-wrapper status status-${status.toLowerCase().replace(/\s+/g, '-')}`;
 
-const getStatusId = queueItem => `${queueItem.id}-status-paragraph`;
+const getStatusId = queueItem => `tooltip-${queueItem.id}-status-paragraph`;
 
 const getStatusReason = queueItem => {
   switch (queueItem.values.Status) {
@@ -24,7 +24,7 @@ const getStatusReason = queueItem => {
 
 const PrevAndNextGroup = ({ prevAndNext }) => (
   <ButtonGroup className="queue-details-nav btn-group-xs">
-    <LinkContainer to={prevAndNext.prev || ''}>
+    <Link to={prevAndNext.prev || ''}>
       <Button color="secondary" outline disabled={!prevAndNext.prev}>
         <span className="icon">
           <span
@@ -33,8 +33,8 @@ const PrevAndNextGroup = ({ prevAndNext }) => (
           />
         </span>
       </Button>
-    </LinkContainer>
-    <LinkContainer to={prevAndNext.next || ''}>
+    </Link>
+    <Link to={prevAndNext.next || ''}>
       <Button color="secondary" outline disabled={!prevAndNext.next}>
         <span className="icon">
           <span
@@ -43,7 +43,7 @@ const PrevAndNextGroup = ({ prevAndNext }) => (
           />
         </span>
       </Button>
-    </LinkContainer>
+    </Link>
   </ButtonGroup>
 );
 

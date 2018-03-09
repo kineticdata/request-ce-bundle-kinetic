@@ -5,7 +5,7 @@ import { actions } from '../redux/modules/workMenu';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { CoreForm } from 'react-kinetic-core';
 
-const globals = import('../globals');
+const globals = import('common/globals');
 
 export const WorkMenu = ({
   queueItem,

@@ -1,13 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Nav, NavItem } from 'reactstrap';
-//import chevronRightIcon from 'font-awesome-svg-png/black/svg/angle-right.svg';
 
 const formatCount = count => (count >= 1000 ? '999+' : `${count}`);
 
 export const Sidebar = ({
-  documentationUrl,
-  supportUrl,
   counts,
   handleOpenNewItemMenu,
   handleNewPersonalFilter,
