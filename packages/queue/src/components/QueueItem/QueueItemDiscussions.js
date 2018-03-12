@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { KappLink as Link } from 'common';
 import { Discussion } from 'react-kinops-discussions';
 
 export const QueueItemDiscussions = props => {

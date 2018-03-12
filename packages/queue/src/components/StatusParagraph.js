@@ -1,6 +1,6 @@
 import React from 'react';
 import { UncontrolledTooltip, ButtonGroup, Button } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { KappLinkContainer as LinkContainer } from 'common';
 
 const CLOSED_STATUSES = ['Cancelled', 'Complete'];
 
@@ -24,7 +24,7 @@ const getStatusReason = queueItem => {
 
 const PrevAndNextGroup = ({ prevAndNext }) => (
   <ButtonGroup className="queue-details-nav btn-group-xs">
-    <Link to={prevAndNext.prev || ''}>
+    <LinkContainer to={prevAndNext.prev || ''}>
       <Button color="secondary" outline disabled={!prevAndNext.prev}>
         <span className="icon">
           <span
@@ -33,8 +33,8 @@ const PrevAndNextGroup = ({ prevAndNext }) => (
           />
         </span>
       </Button>
-    </Link>
-    <Link to={prevAndNext.next || ''}>
+    </LinkContainer>
+    <LinkContainer to={prevAndNext.next || ''}>
       <Button color="secondary" outline disabled={!prevAndNext.next}>
         <span className="icon">
           <span
@@ -43,7 +43,7 @@ const PrevAndNextGroup = ({ prevAndNext }) => (
           />
         </span>
       </Button>
-    </Link>
+    </LinkContainer>
   </ButtonGroup>
 );
 

@@ -31,6 +31,7 @@ export const mapStateToProps = state => ({
   ),
   filterName: state.filterMenu.get('filterName'),
   appliedAssignments: selectAppliedAssignments(state),
+  kappSlug: state.kinops.kappSlug,
 });
 
 export const mapDispatchToProps = {
@@ -82,7 +83,7 @@ export const FilterMenuContainer = compose(
       props.setAdhocFilter(
         props.currentFilter.set('name', '').set('type', 'adhoc'),
       );
-      props.push('/adhoc');
+      props.push(`/kapps/${props.kappSlug}/adhoc`);
       props.close();
     },
     handleSaveFilter: ({
@@ -93,6 +94,7 @@ export const FilterMenuContainer = compose(
       filterName,
       push,
       close,
+      kappSlug,
     }) => () => {
       if (
         currentFilter.type === 'custom' &&
@@ -105,7 +107,7 @@ export const FilterMenuContainer = compose(
         addPersonalFilter(
           currentFilter.set('name', filterName).set('type', 'custom'),
         );
-        push(`/custom/${filterName}`);
+        push(`/kapps/${kappSlug}/custom/${filterName}`);
       }
 
       close();
@@ -115,10 +117,11 @@ export const FilterMenuContainer = compose(
       currentFilter,
       push,
       close,
+      kappSlug,
     }) => () => {
       removePersonalFilter(currentFilter);
 
-      push('/list/Mine');
+      push(`/kapps/${kappSlug}/list/Mine`);
       close();
     },
     handleChangeFilterName: ({ setFilterName }) => e =>

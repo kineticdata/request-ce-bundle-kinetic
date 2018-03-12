@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, withProps } from 'recompose';
-import { Link } from 'react-router-dom';
+import { KappLink as Link } from 'common';
 import { bundle } from 'react-kinetic-core';
 import { actions as discussionActions } from 'react-kinops-discussions';
 import { selectAssignments } from '../../redux/modules/app';

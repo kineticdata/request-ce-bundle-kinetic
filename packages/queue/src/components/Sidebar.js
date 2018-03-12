@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { KappNavLink as NavLink } from 'common';
 import { Nav, NavItem } from 'reactstrap';
 
 const formatCount = count => (count >= 1000 ? '999+' : `${count}`);

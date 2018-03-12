@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { KappLink as Link } from 'common';
 import { TimeAgo } from '../TimeAgo';
 import { StatusParagraph } from '../StatusParagraph';
 import { buildFilterPath } from '../../redux/modules/app';
