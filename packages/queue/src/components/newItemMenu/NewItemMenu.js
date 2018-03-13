@@ -68,6 +68,7 @@ const AssignmentBackButton = ({ handleAssignmentClick }) => (
 );
 
 export const NewItemMenu = ({
+  kappSlug,
   isOpen,
   options,
   closeNewItemMenu,
@@ -124,6 +125,7 @@ export const NewItemMenu = ({
       ) : (
         <div style={{ margin: '12px' }}>
           <CoreForm
+            kapp={kappSlug}
             form={currentForm.slug}
             globals={globals}
             values={currentAssignment}
