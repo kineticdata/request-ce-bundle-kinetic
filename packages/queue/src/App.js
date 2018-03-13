@@ -38,6 +38,9 @@ const mapDispatchToProps = {
 };
 
 export const AppComponent = props => {
+  if (props.loading) {
+    return <div>App is loading...</div>;
+  }
   return props.render({
     sidebar: (
       <Sidebar
@@ -50,7 +53,7 @@ export const AppComponent = props => {
         handleNewPersonalFilter={props.handleNewPersonalFilter}
       />
     ),
-    main: !props.loading && (
+    main: (
       <div className="queue">
         <Route
           path="/submissions/:id"
@@ -87,13 +90,17 @@ const enhance = compose(
   lifecycle({
     componentWillMount() {
       this.props.loadAppSettings();
-      this.props.defaultFilters
-        .filter(
-          filter =>
-            !this.props.currentFilter ||
-            !filter.equals(this.props.currentFilter),
-        )
-        .forEach(this.props.fetchList);
+    },
+    componentWillReceiveProps(nextProps) {
+      if (this.props.loading && !nextProps.loading) {
+        this.props.defaultFilters
+          .filter(
+            filter =>
+              !this.props.currentFilter ||
+              !filter.equals(this.props.currentFilter),
+          )
+          .forEach(this.props.fetchList);
+      }
     },
   }),
 );

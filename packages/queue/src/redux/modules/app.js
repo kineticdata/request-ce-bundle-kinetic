@@ -129,6 +129,8 @@ export const State = Record({
 
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
+    case types.LOAD_APP_SETTINGS:
+      return state.set('loading', true);
     case types.SET_APP_SETTINGS:
       return state
         .set('documentationUrl', payload.documentationUrl)
