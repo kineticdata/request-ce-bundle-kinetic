@@ -40,14 +40,16 @@ export const Profile = ({
         >
           Profile
         </a>
-        <a
-          role="button"
-          tabIndex="0"
-          onClick={openInviteOthersForm}
-          className="dropdown-item"
-        >
-          Invite Others
-        </a>
+        {profile.spaceAdmin && (
+          <a
+            role="button"
+            tabIndex="0"
+            onClick={openInviteOthersForm}
+            className="dropdown-item"
+          >
+            Invite Others
+          </a>
+        )}
         <a
           role="button"
           tabIndex="0"
@@ -63,14 +65,6 @@ export const Profile = ({
           className="dropdown-item"
         >
           Give Feedback
-        </a>
-        <a
-          role="button"
-          tabIndex="0"
-          onClick={openKitchenSinkForm}
-          className="dropdown-item"
-        >
-          Kitchen Sink
         </a>
         <a
           href={`${bundle.spaceLocation()}?page=about`}
