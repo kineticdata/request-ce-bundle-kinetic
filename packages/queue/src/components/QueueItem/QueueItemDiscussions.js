@@ -1,5 +1,4 @@
 import React from 'react';
-import { KappLink as Link } from 'common';
 import { Discussion } from 'react-kinops-discussions';
 
 export const QueueItemDiscussions = props => {
@@ -9,11 +8,7 @@ export const QueueItemDiscussions = props => {
     <Discussion
       discussionId={discussionId}
       isMobileModal
-      renderClose={() => (
-        <Link to={`/item/${queueItem.id}`} className="btn btn-link">
-          Close
-        </Link>
-      )}
+      renderClose={() => null}
     />
   ) : (
     <div className="kinops-discussions hidden-sm-down">
