@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, withProps } from 'recompose';
 import { KappLink as Link } from 'common';
-import { bundle } from 'react-kinetic-core';
 import { actions as discussionActions } from 'react-kinops-discussions';
 import { selectAssignments } from '../../redux/modules/app';
 import { actions, selectPrevAndNext } from '../../redux/modules/queue';
@@ -14,17 +13,17 @@ import { StatusParagraph } from '../StatusParagraph';
 import { QueueListItemSmall } from '../queueList/QueueListItem';
 import { WallyButtonContainer } from '../WallyButton';
 
-const nonQueueLink = queueItem =>
+const nonQueueLink = (queueItem, kappSlug) =>
   queueItem.parent &&
   queueItem.parent.form &&
   queueItem.parent.form.kapp &&
-  queueItem.parent.form.kapp.slug !== bundle.kappSlug();
+  queueItem.parent.form.kapp.slug !== kappSlug;
 
-const queueLink = queueItem =>
+const queueLink = (queueItem, kappSlug) =>
   queueItem.parent &&
   queueItem.parent.form &&
   queueItem.parent.form.kapp &&
-  queueItem.parent.form.kapp.slug === bundle.kappSlug();
+  queueItem.parent.form.kapp.slug === kappSlug;
 
 export const QueueItemDetails = ({
   queueItem,
@@ -39,6 +38,7 @@ export const QueueItemDetails = ({
   openDiscussion,
   createDiscussion,
   prevAndNext,
+  kappSlug,
 }) => (
   <div className="queue-item-details">
     <div className="scroll-wrapper">
@@ -92,10 +92,10 @@ export const QueueItemDetails = ({
             onGrabbed={refreshQueueItem}
           />
         </div>
-        {nonQueueLink(queueItem) && (
+        {nonQueueLink(queueItem, kappSlug) && (
           <ViewOriginalRequest queueItem={queueItem} />
         )}
-        {queueLink(queueItem) && (
+        {queueLink(queueItem, kappSlug) && (
           <Link
             to={`/item/${queueItem.parent.id}`}
             className="btn btn-primary btn-inverse request-button"
@@ -170,6 +170,7 @@ export const mapStateToProps = (state, props) => ({
   queueItem: state.queue.currentItem,
   assignments: selectAssignments(state).toJS(),
   prevAndNext: selectPrevAndNext(state, props.filter),
+  kappSlug: state.kinops.kappSlug,
 });
 
 export const mapDispatchToProps = {
