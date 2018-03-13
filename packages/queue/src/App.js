@@ -12,6 +12,7 @@ import { QueueListContainer } from './components/queueList/QueueListContainer';
 import { FilterMenuContainer } from './components/FilterMenu/FilterMenuContainer';
 import { NewItemMenuContainer } from './components/newItemMenu/NewItemMenuContainer';
 import { WorkMenuContainer } from './components/WorkMenu';
+import './styles/master.scss';
 
 const mapStateToProps = (state, props) => ({
   loading: state.app.loading,
@@ -50,7 +51,7 @@ export const AppComponent = props => {
       />
     ),
     main: !props.loading && (
-      <div style={{ marginTop: '49px' }} className="queue">
+      <div className="queue">
         <Route
           path="/submissions/:id"
           exact

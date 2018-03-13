@@ -1,15 +1,7 @@
-.sidebar-content {
-  background-color: #f7f7f7;
-}
-
-.sidebar {
-  border-right: 1px solid $gray3;
+.queue-sidebar {
   display: flex;
   flex-direction: column;
-  margin-top: 3rem;
-  min-height: $page-height;
   padding: 1.5rem 0;
-  width: 252px;
 
   h6 {
     color: $blue0;

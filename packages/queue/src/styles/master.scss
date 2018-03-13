@@ -1,16 +1,15 @@
-@import '~react-kinops-common/styles/variables';
-@import '~react-kinops-common/styles/mixins';
+@import '~kinops/src/styles/variables';
+@import '~kinops/src/styles/mixins';
 @import '~modularscale-sass/stylesheets/modularscale';
 
 @import 'list-group';
 @import 'sidebar';
 
 @import 'submissions';
+@import 'queue';
 @import 'queue_list';
 @import 'queue_item';
 @import 'queue_item_details';
 @import 'queue_item_discussions';
 @import 'assignments';
 @import 'status';
-// Temporary
-@import 'temp';

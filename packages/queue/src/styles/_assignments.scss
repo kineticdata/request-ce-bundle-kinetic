@@ -1,4 +1,4 @@
-.assignment-badge {
+.queue .assignment-badge {
   display: flex;
   align-items: center;
   border-top: 1px solid $gray3;
@@ -20,7 +20,8 @@
     width: 2rem;
     text-align: center;
     cursor: pointer;
-    &:focus, &.focus{
+    &:focus,
+    &.focus {
       box-shadow: none;
       outline: $blue3 dotted thin;
     }
@@ -29,12 +30,12 @@
     cursor: default;
   }
   .team {
-    font-size: .625rem;
+    font-size: 0.625rem;
     font-weight: 300;
   }
   .individual {
-    font-size: .875rem;
-    color:$blue0;
+    font-size: 0.875rem;
+    color: $blue0;
   }
   .icon {
     margin-left: auto;
