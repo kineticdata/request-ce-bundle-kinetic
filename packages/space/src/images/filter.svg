@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 10 10">
+    <rect class="primary-fill" x="0" y="2.5" width="10" height="1" />
+    <rect class="primary-fill" x="0" y="6.5" width="10" height="1" />
+    <circle cx="3.75" cy="3" r="2.5" fill="white" />
+    <circle cx="3.75" cy="3" r="1.75" class="primary-fill" />
+    <circle cx="3.75" cy="3" r="0.75" fill="white" />
+    <circle cx="6.25" cy="7" r="2.5" fill="white" />
+    <circle cx="6.25" cy="7" r="1.75" class="primary-fill" />
+    <circle cx="6.25" cy="7" r="0.75" fill="white" />
+</svg>

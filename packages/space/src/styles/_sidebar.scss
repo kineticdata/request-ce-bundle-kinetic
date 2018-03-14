@@ -1,0 +1,107 @@
+.layout {
+  margin-top: $header-height;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
+.sidebar {
+  background-color: $black-3;
+  border-right: 1px solid $black-16;
+  background-color: $black-3;
+  margin-top: $header-height;
+  min-height: $page-height;
+  width: 252px;
+  h6 {
+    color: $blueLake;
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    margin: 0.75rem 0 0 0;
+    text-transform: uppercase;
+    a {
+      line-height: normal;
+      margin-left: auto;
+      text-transform: none;
+    }
+  }
+
+  .nav-link {
+    border-left: 3px solid $black-3;
+    color: $black-50;
+    display: flex;
+    align-items: center;
+    line-height: normal;
+    margin: 0 0 0.75rem 0;
+    font-size: 0.875rem;
+    padding: 0.25rem 1.5rem;
+    transition: border-left-color 0.5s, color 0.5s;
+    i {
+      font-size: 1.2rem;
+      margin-right: 0.5rem;
+    }
+    &.active,
+    &:hover {
+      border-left-color: $blueLake;
+      color: $blueLake;
+    }
+  }
+  .my-teams-wrapper {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    .card-icon {
+      margin-top: 0;
+      font-size: 0.75rem;
+    }
+  }
+}
+
+.kapp-cards-wrapper {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  .kapp-card {
+    background: $white;
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin: 1rem 1rem 0;
+    transition: background-color 0.3s;
+    display: flow-root;
+    &:focus,
+    &:hover {
+      @include setBgColorAndHover($white);
+      text-decoration: none;
+    }
+    h1 {
+      color: $black;
+      font-size: 1.125rem;
+      font-weight: 600;
+      line-height: 1.5rem;
+      margin: 0;
+
+      display: inline-flex;
+    }
+    p {
+      color: $black-50;
+      font-size: 0.75rem;
+      line-height: 1.125rem;
+      margin-top: 0.5rem;
+      margin-bottom: 0;
+      margin-left: 1.875rem;
+    }
+    a {
+      text-decoration: none;
+    }
+    .card-icon {
+      margin-top: 0;
+    }
+  }
+}

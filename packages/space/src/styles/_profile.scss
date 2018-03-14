@@ -1,0 +1,148 @@
+.form-alert {
+  border: 1px solid $red;
+  color: $red;
+  background: $redRose;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.profile-container {
+  display: flex;
+  flex-direction: row;
+
+  .profile-content {
+    overflow-y: auto;
+    border-right: 1px solid #ddd;
+    flex-grow: 1;
+
+    table.user-attributes {
+      color: $black-50;
+
+      tbody > tr:not(:last-child) {
+        border-bottom: #d5d5d5 1px solid;
+        padding-bottom: 0.5rem;
+      }
+
+      .name {
+        font-weight: 600;
+      }
+
+      button {
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.5rem;
+        vertical-align: baseline;
+      }
+
+      tbody > tr > td {
+        width: 50%;
+      }
+    }
+
+    label {
+      display: block;
+    }
+
+    .profile-input-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      flex-basis: 50%;
+    }
+
+    .footer-save {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+  }
+}
+.profile-roles-wrapper {
+  margin: 1rem;
+}
+.profile-role {
+  background-color: $blue;
+  padding: 0.25rem 0.5rem;
+  margin: 0.25rem;
+  color: $white;
+  font-size: 0.625rem;
+  border-radius: 2px;
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline-flex;
+  line-height: 1;
+}
+
+.profile-sidebar {
+  display: none;
+  flex-direction: row;
+  flex-basis: 31%;
+  justify-content: center;
+  align-items: flex-start;
+  @media all and (min-width: 0) {
+    display: none;
+  }
+  @media all and (min-width: 576px) {
+    display: none;
+  }
+  @media all and (min-width: 768px) {
+    display: flex;
+    .p-card {
+      width: 90%;
+    }
+  }
+}
+
+.p-card {
+  padding: 1rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid $black-16;
+  border-radius: 4px;
+  max-width: 216px;
+  margin-top: 1rem;
+  text-align: center;
+  word-break: break-all;
+  h1 {
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    margin-top: 1rem;
+  }
+  p {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    margin-bottom: 0;
+  }
+  img {
+    flex-shrink: 0;
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+  }
+  .btn {
+    padding: 0.25rem 1rem !important;
+    @include setBgColorAndHover($blueLake);
+    margin: 1rem 0;
+    line-height: 1 !important;
+  }
+  dl span {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+    dt {
+      margin-right: 1rem;
+    }
+  }
+  // Profile view
+  &.profile {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    max-width: 100%;
+    .profile-row {
+      width: auto;
+    }
+  }
+}
