@@ -13,7 +13,7 @@ export const TOO_MANY_STATUS_STRING =
 export const SUBMISSION_INCLUDES =
   'details,values,attributes,form,children,children.details,children.form,children.values,form.attributes,parent,parent.details,parent.values,parent.form,parent.form.kapp';
 
-export const getAppSettings = state => state.app;
+export const getAppSettings = state => state.queueApp;
 export const getCurrentItem = state => state.queue.currentItem;
 
 /* eslint-disable no-param-reassign */

@@ -2,7 +2,7 @@ import React from 'react';
 import { KappLink as Link } from 'common';
 import { TimeAgo } from '../TimeAgo';
 import { StatusParagraph } from '../StatusParagraph';
-import { buildFilterPath } from '../../redux/modules/app';
+import { buildFilterPath } from '../../redux/modules/queueApp';
 
 const AssignmentParagraph = ({ values }) => (
   <p className="assignment">

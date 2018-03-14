@@ -5,7 +5,7 @@ import { push } from 'connected-react-router';
 import { FilterMenu } from './FilterMenu';
 import { actions } from '../../redux/modules/filterMenu';
 import { actions as queueActions } from '../../redux/modules/queue';
-import { actions as appActions } from '../../redux/modules/app';
+import { actions as appActions } from '../../redux/modules/queueApp';
 
 const selectAppliedAssignments = state => {
   if (state.filterMenu.get('currentFilter')) {
@@ -21,7 +21,7 @@ const selectAppliedAssignments = state => {
 };
 
 export const mapStateToProps = state => ({
-  teams: state.app.myTeams,
+  teams: state.queueApp.myTeams,
   isOpen: state.filterMenu.get('isOpen'),
   activeSection: state.filterMenu.get('activeSection'),
   currentFilter: state.filterMenu.get('currentFilter'),

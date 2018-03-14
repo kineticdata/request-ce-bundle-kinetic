@@ -4,7 +4,7 @@ import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { List } from 'immutable';
 import { KappRoute as Route, KappRedirect as Redirect } from 'common';
 import { Sidebar } from './components/Sidebar';
-import { actions, selectMyTeamForms } from './redux/modules/app';
+import { actions, selectMyTeamForms } from './redux/modules/queueApp';
 import { actions as queueActions } from './redux/modules/queue';
 import { actions as filterMenuActions } from './redux/modules/filterMenu';
 import { QueueItemContainer } from './components/QueueItem/QueueItem';
@@ -15,17 +15,17 @@ import { WorkMenuContainer } from './components/WorkMenu';
 import './styles/master.scss';
 
 const mapStateToProps = (state, props) => ({
-  loading: state.app.loading,
-  defaultFilters: state.app.filters,
-  myFilters: state.app.myFilters,
-  counts: state.app.filters
+  loading: state.queueApp.loading,
+  defaultFilters: state.queueApp.filters,
+  myFilters: state.queueApp.myFilters,
+  counts: state.queueApp.filters
     .toMap()
     .mapEntries(([_, filter]) => [
       filter.name,
       state.queue.getIn(['lists', filter], List()).size,
     ]),
-  hasTeammates: state.app.myTeammates.size > 0,
-  hasTeams: state.app.myTeams.size > 0,
+  hasTeammates: state.queueApp.myTeammates.size > 0,
+  hasTeams: state.queueApp.myTeams.size > 0,
   hasForms:
     selectMyTeamForms(state).filter(form => form.type === 'Task').length > 0,
 });

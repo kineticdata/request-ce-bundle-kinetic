@@ -1,10 +1,10 @@
 import { List } from 'immutable';
-import { State as AppState, getFilterByPath } from './app';
+import { State as AppState, getFilterByPath } from './queueApp';
 import { State as QueueState } from './queue';
 import { Filter } from '../../records';
 
 const state = {
-  app: AppState({
+  queueApp: AppState({
     filters: List([Filter({ name: 'Mine' }), Filter({ name: 'Teammates' })]),
     myFilters: List([
       Filter({ name: 'Facilities Teammates' }),

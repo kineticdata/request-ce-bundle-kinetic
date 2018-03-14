@@ -1,7 +1,7 @@
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { connect } from 'react-redux';
 import { is, List } from 'immutable';
-import { getFilterByPath } from '../../redux/modules/app';
+import { getFilterByPath } from '../../redux/modules/queueApp';
 import { actions as queueActions } from '../../redux/modules/queue';
 import { actions as filterMenuActions } from '../../redux/modules/filterMenu';
 import { QueueList } from './QueueList';
