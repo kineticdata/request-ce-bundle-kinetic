@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 export const KappNavLinkComponent = ({ to, kappSlug, ...rest }) => (
-  <NavLink {...rest} to={`/kapps/${kappSlug}${to}`} />
+  <NavLink {...rest} to={kappSlug ? `/kapps/${kappSlug}${to}` : ''} />
 );
 
 export const mapStateToProps = state => ({

@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { Redirect } from 'react-router-dom';
 
-export const KappRedirectComponent = ({ kappSlug = 'services', to, ...rest }) =>
-  kappSlug && <Redirect {...rest} to={`/kapps/${kappSlug}${to}`} />;
+export const KappRedirectComponent = ({ kappSlug, to, ...rest }) => (
+  <Redirect {...rest} to={kappSlug ? `/kapps/${kappSlug}${to}` : ''} />
+);
 
 export const mapStateToProps = state => ({
   kappSlug: state.kinops.kappSlug,
