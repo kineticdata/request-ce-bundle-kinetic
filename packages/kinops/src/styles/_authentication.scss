@@ -1,0 +1,129 @@
+.login-screens {
+  margin: 120px auto;
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+  width: 1110px;
+
+  .logo-right {
+    position: relative;
+    background-color: #000;
+    opacity: 0.85;
+    min-height: 384px;
+    min-width: 576px;
+    img.logo-image {
+      position: relative;
+      top: 0;
+      left: 0;
+      width: 576px;
+      height: 384px;
+    }
+    .logo-text {
+      position: absolute;
+      top: 210px;
+      left: 30px;
+
+      img {
+        height: 40px;
+        width: 110px;
+      }
+
+      h3 {
+        color: #fff;
+        font-family: 'Open Sans';
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 48px;
+      }
+
+      p {
+        color: #fff;
+        font-family: 'Open Sans';
+        font-size: 16px;
+        line-height: 24px;
+      }
+    }
+  }
+
+  .form-wrapper {
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 2em 1em 2em;
+
+    .submitted {
+      .subtitle {
+        color: #333333;
+        font-family: 'Open Sans';
+      }
+      .explaination {
+        color: #333333;
+        font-family: 'Open Sans';
+        font-size: 13px;
+        line-height: 18px;
+      }
+    }
+
+    h3.form-title {
+      color: #354052;
+      font-family: 'Open Sans';
+      font-size: 24px;
+      line-height: 48px;
+    }
+
+    .name-section {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      & > .form-group:nth-child(1) {
+        width: 25%;
+      }
+
+      & > .form-group:nth-child(2) {
+        width: 70%;
+      }
+    }
+
+    .form-group {
+      label {
+        color: #333333;
+        font-family: 'Open Sans';
+        font-size: 12px;
+        line-height: 24px;
+
+        &.required:after {
+          content: '*';
+          color: red;
+        }
+      }
+      p.form-control-static {
+        color: #333333;
+        font-family: 'Open Sans';
+        font-size: 13px;
+        line-height: 18px;
+      }
+      input.form-control {
+        height: 30px;
+        border: 1px solid #d5d5d5;
+        border-radius: 4px;
+        color: #333333;
+        font-family: 'Open Sans';
+        font-size: 13px;
+        line-height: 18px;
+
+        &::placeholder {
+          opacity: 1;
+          color: #a8b7c7;
+        }
+      }
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

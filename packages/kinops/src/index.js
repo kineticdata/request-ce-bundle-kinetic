@@ -8,6 +8,7 @@ import { createHashHistory } from 'history';
 import { configureStore } from './redux/store';
 import { actions as layoutActions } from './redux/modules/layout';
 import { actions as kinopsActions } from './redux/modules/kinops';
+import { AuthenticatedContainer } from './AuthenticatedContainer';
 import { App } from './App';
 
 // Create the history instance that enables client-side application routing.
@@ -19,7 +20,9 @@ const store = configureStore(history);
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <Route path="/" component={App} />
+      <AuthenticatedContainer>
+        <Route path="/" component={App} />
+      </AuthenticatedContainer>
     </ConnectedRouter>
   </Provider>,
   document.getElementById('root'),
