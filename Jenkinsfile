@@ -4,7 +4,7 @@ pipeline {
     stage('Prepare Environment') {
       steps {
         echo 'Doing a yarn install'
-        sh 'pushd packages/kinops; yarn install; popd'
+        sh 'yarn install'
         echo 'Setting AWS Credentials in files at ~/.aws for the CLI to use'
         withCredentials(bindings: [[$class: 'UsernamePasswordMultiBinding', credentialsId: '7306312f-5257-43bc-8109-923c956df9c1', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
           sh 'mkdir -p ~/.aws'
