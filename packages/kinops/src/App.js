@@ -48,7 +48,7 @@ export const AppComponent = props =>
   );
 
 export const mapStateToProps = state => ({
-  loading: state.loading,
+  loading: state.kinops.loading,
   kapps: state.kinops.kapps,
   sidebarOpen: state.layout.sidebarOpen,
   layoutSize: state.layout.size,
