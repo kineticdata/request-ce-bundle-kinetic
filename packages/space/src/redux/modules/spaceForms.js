@@ -4,8 +4,8 @@ import { Utils } from 'common';
 // import { getAttributeValues } from '../../helpers/utils';
 
 export const types = {
-  FETCH_FORMS: namespace('forms', 'FETCH_FORMS'),
-  SET_FORMS: namespace('forms', 'SET_FORMS'),
+  FETCH_FORMS: namespace('spaceForms', 'FETCH_FORMS'),
+  SET_FORMS: namespace('spaceForms', 'SET_FORMS'),
 };
 
 export const actions = {
@@ -19,12 +19,12 @@ export const State = Record({
 });
 
 export const selectFormsForTeam = state => {
-  const { team, forms } = state;
+  const { team, spaceForms } = state;
   if (team.loading || team.data === null) {
     return List();
   }
 
-  return forms.data.filter(form =>
+  return spaceForms.data.filter(form =>
     Utils.getAttributeValues(form, 'Owning Team', List()).includes(
       team.data.name,
     ),

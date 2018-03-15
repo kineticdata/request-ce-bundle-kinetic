@@ -14,9 +14,9 @@ import {
 } from '../../redux/modules/team';
 import { actions as teamListActions } from '../../redux/modules/teamList';
 import {
-  actions as formsActions,
+  actions as spaceFormsActions,
   selectFormsForTeam,
-} from '../../redux/modules/forms';
+} from '../../redux/modules/spaceForms';
 
 import { Team } from './Team';
 
@@ -32,7 +32,7 @@ const mapStateToProps = state => {
 
   return {
     loading:
-      state.team.loading || state.teamList.loading || state.forms.loading,
+      state.team.loading || state.teamList.loading || state.spaceForms.loading,
     space: state.kinops.space,
     catalogSlug: Utils.getAttributeValue(
       state.kinops.space,
@@ -68,7 +68,7 @@ const mapDispatchToProps = {
   openForm: commonActions.openForm,
   fetchTeam: actions.fetchTeam,
   fetchTeams: teamListActions.fetchTeams,
-  fetchForms: formsActions.fetchForms,
+  fetchForms: spaceFormsActions.fetchForms,
   resetTeam: actions.resetTeam,
   openModal: discussionActions.openModal,
 };

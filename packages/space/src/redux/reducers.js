@@ -5,7 +5,7 @@ import { reducer as profiles } from './modules/profiles';
 import { reducer as datastore } from './modules/datastore';
 import { reducer as team } from './modules/team';
 import { reducer as teamList } from './modules/teamList';
-import { reducer as forms } from './modules/forms';
+import { reducer as spaceForms } from './modules/spaceForms';
 
 export default {
   errors,
@@ -15,5 +15,5 @@ export default {
   profiles,
   team,
   teamList,
-  forms,
+  spaceForms,
 };
