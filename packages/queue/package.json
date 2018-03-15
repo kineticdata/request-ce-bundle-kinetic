@@ -1,5 +1,32 @@
 {
   "name": "queue",
   "version": "0.1.0",
-  "main": "./src/index.js"
+  "main": "./src/index.js",
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "bootstrap": "^4.0.0",
+    "classnames": "^2.2.5",
+    "connected-react-router": "^4.2.3",
+    "history": "^4.7.2",
+    "immutable": "4.0.0-rc.9",
+    "is-function": "^1.0.1",
+    "isarray": "^2.0.2",
+    "moment": "^2.20.1",
+    "react": "^16.2.0",
+    "react-addons-shallow-compare": "^15.6.2",
+    "react-autocomplete": "^1.8.1",
+    "react-document-title": "^2.0.3",
+    "react-dom": "^16.2.0",
+    "react-kinetic-core": "^0.3.3",
+    "react-kinops-discussions": "^0.2.7",
+    "react-popper": "^0.8.2",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "react-svg-inline": "^2.0.0",
+    "react-transition-group": "^1.1.2",
+    "reactstrap": "^5.0.0-beta",
+    "recompose": "^0.25.0",
+    "redux": "^3.7.2",
+    "redux-saga": "^0.15.6"
+  }
 }

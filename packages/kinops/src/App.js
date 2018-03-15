@@ -2,6 +2,7 @@ import 'bootstrap/scss/bootstrap.scss';
 import 'font-awesome/css/font-awesome.css';
 import 'typeface-open-sans/index.css';
 import './styles/master.scss';
+import 'react-kinops-discussions/styles/master.scss';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
@@ -14,6 +15,7 @@ import { actions as kinopsActions } from './redux/modules/kinops';
 import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';
 import { App as ServicesApp } from 'services/src/App';
+import { App as QueueApp } from 'queue/src/App';
 import { App as SpaceApp } from 'space/src/App';
 
 export const AppComponent = props =>
@@ -50,7 +52,7 @@ export const mapStateToProps = state => ({
   kapps: state.kinops.kapps,
   sidebarOpen: state.layout.sidebarOpen,
   layoutSize: state.layout.size,
-  pathname: state.router.location.pathname,
+  kappSlug: state.kinops.kappSlug,
 });
 export const mapDispatchToProps = {
   loadApp: kinopsActions.loadApp,
@@ -62,9 +64,9 @@ export const App = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withProps(props => ({
     AppProvider:
-      props.pathname && props.pathname.startsWith('/kapps/services')
+      props.kappSlug === 'services'
         ? ServicesApp
-        : SpaceApp,
+        : props.kappSlug === 'queue' ? QueueApp : SpaceApp,
   })),
   withHandlers({
     toggleSidebarOpen: props => () => props.setSidebarOpen(!props.sidebarOpen),
