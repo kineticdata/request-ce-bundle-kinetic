@@ -2,7 +2,7 @@ import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 import { actions as discussionActions } from 'react-kinops-discussions';
 
-import { KinopsModule, Utils } from 'react-kinops-common';
+import { commonActions, Utils } from 'common';
 
 import { buildHierarchy } from '../helpers/utils';
 
@@ -19,8 +19,6 @@ import {
 } from '../../redux/modules/forms';
 
 import { Team } from './Team';
-
-const commonActions = KinopsModule.actions;
 
 const mapStateToProps = state => {
   const team = selectTeam(state);

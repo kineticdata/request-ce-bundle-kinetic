@@ -2,15 +2,11 @@ import { takeEvery, put, all, call, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { CoreAPI } from 'react-kinetic-core';
 import { List } from 'immutable';
-
-import { KinopsModule, ToastsModule } from 'react-kinops-common';
+import { commonActions } from 'common';
 import { actions, types, selectServerUrl } from '../modules/app';
 import { actions as errorActions } from '../modules/errors';
 
 import { DiscussionAPI } from 'react-kinops-discussions';
-
-const { actions: kinopsActions } = KinopsModule;
-const { actions: toastActions } = ToastsModule;
 
 export function* fetchAppSettingsSaga() {
   const [{ users, usersServerError }, { space, spaceServerError }] = yield all([
@@ -55,8 +51,8 @@ export function* deleteAlertSaga(action) {
   if (serverError || errors) {
     yield put(errorActions.setSystemError(serverError));
   } else {
-    yield put(toastActions.addSuccess('Deleted alert.'));
-    yield put(kinopsActions.fetchAlerts());
+    yield put(commonActions.addSuccess('Deleted alert.'));
+    yield put(commonActions.fetchAlerts());
   }
 }
 

@@ -1,6 +1,6 @@
 import { Record, List } from 'immutable';
 import { namespace, withPayload } from '../../utils';
-import { Utils } from 'react-kinops-common';
+import { Utils } from 'common';
 // import { getAttributeValues } from '../../helpers/utils';
 
 export const types = {

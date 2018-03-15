@@ -4,6 +4,7 @@ import { KappNavLink } from './components/KappNavLink';
 import { KappRedirect } from './components/KappRedirect';
 import { KappRoute } from './components/KappRoute';
 import { actions as commonActions } from './redux/modules/common';
+import * as Utils from '../utils';
 
 export {
   KappLink,
@@ -12,4 +13,5 @@ export {
   KappRedirect,
   KappRoute,
   commonActions,
+  Utils,
 };

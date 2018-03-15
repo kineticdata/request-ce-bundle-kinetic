@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import { KinopsModule } from 'react-kinops-common';
+import { commonActions } from 'common';
 import { Link } from 'react-router-dom';
 import { List } from 'immutable';
 import moment from 'moment';
@@ -10,8 +10,6 @@ import { PageTitle } from '../shared/PageTitle';
 import wallyHappyImage from '../../images/wally-happy.svg';
 
 import { Alert } from './Alert';
-
-const { actions: kinopsActions } = KinopsModule;
 
 const WallyEmptyMessage = ({ canEdit }) => {
   return (
@@ -102,7 +100,7 @@ export const mapStateToProps = ({ kinops }) => ({
 });
 
 export const mapDispatchToProps = {
-  fetchAlerts: kinopsActions.fetchAlerts,
+  fetchAlerts: commonActions.fetchAlerts,
 };
 
 export const Alerts = compose(

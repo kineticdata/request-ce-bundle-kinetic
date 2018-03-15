@@ -5,6 +5,7 @@ import { combineSagas } from 'common/utils';
 import reducers from './reducers';
 import servicesReducers from 'services/src/redux/reducers';
 import queueReducers from 'queue/src/redux/reducers';
+import spaceReducers from 'space/src/redux/reducers';
 import {
   sagas as discussionSagas,
   reducers as discussionReducers,
@@ -12,6 +13,7 @@ import {
 import { sagas } from './sagas';
 import servicesSagas from 'services/src/redux/sagas';
 import queueSagas from 'queue/src/redux/sagas';
+import spaceSagas from 'space/src/redux/sagas';
 
 export const configureStore = history => {
   // To enable the redux dev tools in the browser we need to conditionally use a
@@ -31,6 +33,7 @@ export const configureStore = history => {
         ...reducers,
         ...servicesReducers,
         ...queueReducers,
+        ...spaceReducers,
         ...discussionReducers,
       }),
     ),
@@ -43,7 +46,13 @@ export const configureStore = history => {
   // the run it and pass it the saga watcher so that it can start watching
   // for applicable actions.
   sagaMiddleware.run(
-    combineSagas([sagas, servicesSagas, queueSagas, discussionSagas]),
+    combineSagas([
+      sagas,
+      servicesSagas,
+      queueSagas,
+      spaceSagas,
+      discussionSagas,
+    ]),
   );
 
   // Enable hot module replacement so that file changes are automatically

@@ -1,12 +1,10 @@
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
-import { KinopsModule, Utils } from 'react-kinops-common';
+import { commonActions, Utils } from 'common';
 
 import { actions } from '../../redux/modules/teamList';
 
 import { Teams } from './Teams';
-
-const commonActions = KinopsModule.actions;
 
 export const mapStateToProps = state => ({
   loading: state.teamList.loading,

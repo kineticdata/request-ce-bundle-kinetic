@@ -1,13 +1,11 @@
 import React from 'react';
 import { PageTitle } from '../shared/PageTitle';
 import { CoreForm } from 'react-kinetic-core';
-import { Utils, KinopsModule } from 'react-kinops-common';
+import { Utils, commonActions } from 'common';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { compose, withHandlers } from 'recompose';
-
-const { actions: kinopsActions } = KinopsModule;
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -85,7 +83,7 @@ const handleCreateOrUpdate = props => response => {
 
 const mapDispatchToProps = {
   push,
-  fetchAlerts: kinopsActions.fetchAlerts,
+  fetchAlerts: commonActions.fetchAlerts,
 };
 
 export const AlertForm = compose(

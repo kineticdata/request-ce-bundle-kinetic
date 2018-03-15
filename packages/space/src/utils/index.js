@@ -1,5 +1,5 @@
 import md5 from 'md5';
-import { Utils } from 'react-kinops-common';
+import { Utils } from 'common';
 
 export const zip = (array1, array2) =>
   array1.reduce(

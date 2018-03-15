@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { bundle } from 'react-kinetic-core';
-import { Utils } from 'react-kinops-common';
+import { Utils } from 'common';
 
 import { Icon } from './Icon';
 

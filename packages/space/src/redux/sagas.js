@@ -6,7 +6,7 @@ import { watchTeams } from './sagas/team';
 import { watchForms } from './sagas/forms';
 import { watchApp } from './sagas/app';
 
-export function* sagas() {
+export default function* sagas() {
   yield all([
     watchApp(),
     watchAbout(),

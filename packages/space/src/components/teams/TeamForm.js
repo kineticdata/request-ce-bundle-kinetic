@@ -5,7 +5,7 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
 import md5 from 'md5';
 import { fromJS } from 'immutable';
-import { Utils } from 'react-kinops-common';
+import { Utils } from 'common';
 
 import { AddMemberModal } from './AddMemberModal';
 import { buildHierarchy } from '../helpers/utils';
