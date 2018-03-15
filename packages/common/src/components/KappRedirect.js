@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import { Redirect } from 'react-router-dom';
 
 export const KappRedirectComponent = ({ kappSlug, to, ...rest }) => (
-  <Redirect {...rest} to={kappSlug ? `/kapps/${kappSlug}${to}` : ''} />
+  <Redirect {...rest} to={kappSlug ? `/kapps/${kappSlug}${to}` : to} />
 );
 
 export const mapStateToProps = state => ({
