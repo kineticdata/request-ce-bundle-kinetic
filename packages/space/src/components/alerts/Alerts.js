@@ -8,7 +8,6 @@ import moment from 'moment';
 import SVGInline from 'react-svg-inline';
 import { PageTitle } from '../shared/PageTitle';
 import wallyHappyImage from '../../images/wally-happy.svg';
-
 import { Alert } from './Alert';
 
 const WallyEmptyMessage = ({ canEdit }) => {
@@ -78,9 +77,9 @@ const AlertsComponent = ({ alerts, loading, match, error, canEdit }) => {
   );
 };
 
-export const mapStateToProps = ({ kinops }) => ({
-  loading: kinops.alerts.loading,
-  alerts: List(kinops.alerts.get('data'))
+export const mapStateToProps = state => ({
+  loading: state.alerts.loading,
+  alerts: List(state.alerts.get('data'))
     .filter(
       alert =>
         !alert.values['End Date Time'] ||
@@ -95,8 +94,8 @@ export const mapStateToProps = ({ kinops }) => ({
       moment(alert.values['Start Date Time'] || alert.createdAt).unix(),
     )
     .reverse(),
-  error: kinops.alerts.error,
-  canEdit: kinops.profile.spaceAdmin ? true : false,
+  error: state.alerts.error,
+  canEdit: state.kinops.profile.spaceAdmin ? true : false,
 });
 
 export const mapDispatchToProps = {

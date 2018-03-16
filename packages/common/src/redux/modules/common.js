@@ -4,6 +4,6 @@ import { actions as toastsActions } from 'kinops/src/redux/modules/toasts';
 
 export const actions = {
   openForm: modalFormActions.openForm,
-  fetchALerts: alertsActions.fetchAlerts,
+  fetchAlerts: alertsActions.fetchAlerts,
   addSuccess: toastsActions.addSuccess,
 };

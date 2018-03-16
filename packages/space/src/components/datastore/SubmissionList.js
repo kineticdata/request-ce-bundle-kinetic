@@ -12,7 +12,7 @@ import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import Autocomplete from 'react-autocomplete';
 
 import chevronLeftIcon from 'font-awesome-svg-png/black/svg/chevron-left.svg';
-import { TimeAgo } from '../TimeAgo';
+import { TimeAgo } from 'common';
 import {
   actions,
   IndexPart,

@@ -13,7 +13,7 @@ import {
   DropdownItem,
 } from 'reactstrap';
 
-import { TimeAgo } from '../TimeAgo';
+import { TimeAgo } from 'common';
 import { actions } from '../../redux/modules/datastore';
 
 const WallyEmptyMessage = ({ filter }) => {

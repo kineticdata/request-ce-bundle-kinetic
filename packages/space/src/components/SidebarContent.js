@@ -1,11 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Utils } from 'common';
 import { Link, NavLink } from 'react-router-dom';
 import { getTeamColor } from '../utils';
 import { KappCard } from './shared/KappCard';
 
-const SidebarComponent = ({ kapps, teams, isSpaceAdmin }) => (
+export const SidebarContent = ({ kapps, teams, isSpaceAdmin }) => (
   <div className="sidebar">
     {kapps.length > 0 && (
       <div className="kapp-cards-wrapper">
@@ -62,15 +61,3 @@ const SidebarComponent = ({ kapps, teams, isSpaceAdmin }) => (
     </div>
   </div>
 );
-
-export const mapStateToProps = ({ kinops }) => ({
-  kapps: kinops.kapps
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .filter(kapp => kapp.slug !== 'admin'),
-  teams: Utils.getTeams(kinops.profile).sort((a, b) =>
-    a.name.localeCompare(b.name),
-  ),
-  isSpaceAdmin: kinops.profile.spaceAdmin,
-});
-
-export const SidebarContent = connect(mapStateToProps)(SidebarComponent);
