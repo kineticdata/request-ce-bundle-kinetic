@@ -19,10 +19,11 @@
     justify-content: center;
     align-items: center;
   }
-  @media all and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape) {
-    /* Landscape styles */
-    height: auto;
-  }
+  // TODO: Need to find a way for mobile not to scruntch
+  // @media all and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape) {
+  //   /* Landscape styles */
+  //   height: auto;
+  // }
 }
 .login-wrapper {
   display: flex;
