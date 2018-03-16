@@ -1,6 +1,6 @@
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
-import { actions as discussionActions } from 'react-kinops-discussions';
+import { actions as discussionActions } from 'discussions';
 
 import { commonActions, Utils } from 'common';
 
