@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   UncontrolledDropdown,
   DropdownToggle,
@@ -10,6 +10,7 @@ import {
   NavLink,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { KappLink } from 'common';
 import { bundle } from 'react-kinetic-core';
 import { getAttributeValue } from 'common/utils';
 import { AlertsContainer } from './AlertsContainer';
@@ -53,44 +54,51 @@ export const Header = ({
         </NavItem>
       )}
       {!isGuest && (
-        <UncontrolledDropdown id="header-kapp-dropdown">
-          <DropdownToggle caret nav role="button">
-            {dropdownTitleName(currentKapp)}
-          </DropdownToggle>
-          <DropdownMenu>
-            {currentKapp && (
-              <Link className="dropdown-item" to="/">
-                <span className="fa fa-fw fa-home" />Home
-              </Link>
-            )}
-            {currentKapp && <DropdownItem divider />}
-            {predefinedKapps.map(thisKapp => (
-              <BuildKappLink kapp={thisKapp} key={thisKapp.slug} />
-            ))}
-            {additionalKapps.map(thisKapp => (
-              <BuildKappLink kapp={thisKapp} key={thisKapp.slug} />
-            ))}
-            {(hasAccessToManagement || hasAccessToSupport) && (
-              <DropdownItem divider />
-            )}
-            {hasAccessToManagement && (
-              <BuildKappLink kapp={adminKapp} nameOverride="Admin Console" />
-            )}
-            {hasAccessToSupport && (
-              <DropdownItem
-                tag="a"
-                href={`${bundle.kappLocation(
-                  adminKapp.slug,
-                )}/submission-support`}
-              >
-                <span className="fa fa-fw fa-clipboard" />Submission Support
-              </DropdownItem>
-            )}
-          </DropdownMenu>
-        </UncontrolledDropdown>
+        <Fragment>
+          <NavItem>
+            <KappLink className="nav-link" to="/">
+              {dropdownTitleName(currentKapp)}
+            </KappLink>
+          </NavItem>
+          <UncontrolledDropdown id="header-kapp-dropdown">
+            <DropdownToggle nav role="button">
+              <i className="fa fa-fw fa-caret-down" />
+            </DropdownToggle>
+            <DropdownMenu>
+              {currentKapp && (
+                <Link className="dropdown-item" to="/">
+                  <span className="fa fa-fw fa-home" />Home
+                </Link>
+              )}
+              {currentKapp && <DropdownItem divider />}
+              {predefinedKapps.map(thisKapp => (
+                <BuildKappLink kapp={thisKapp} key={thisKapp.slug} />
+              ))}
+              {additionalKapps.map(thisKapp => (
+                <BuildKappLink kapp={thisKapp} key={thisKapp.slug} />
+              ))}
+              {(hasAccessToManagement || hasAccessToSupport) && (
+                <DropdownItem divider />
+              )}
+              {hasAccessToManagement && (
+                <BuildKappLink kapp={adminKapp} nameOverride="Admin Console" />
+              )}
+              {hasAccessToSupport && (
+                <DropdownItem
+                  tag="a"
+                  href={`${bundle.kappLocation(
+                    adminKapp.slug,
+                  )}/submission-support`}
+                >
+                  <span className="fa fa-fw fa-clipboard" />Submission Support
+                </DropdownItem>
+              )}
+            </DropdownMenu>
+          </UncontrolledDropdown>
+          <AlertsContainer />
+          <ProfileContainer />
+        </Fragment>
       )}
-      {!isGuest && <AlertsContainer />}
-      {!isGuest && <ProfileContainer />}
     </Nav>
   </Navbar>
 );
