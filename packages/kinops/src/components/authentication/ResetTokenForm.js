@@ -17,7 +17,7 @@ const ResetToken = ({
   routed,
   toSignIn,
 }) => (
-  <form className="form-wrapper" onSubmit={handlePasswordReset}>
+  <form className="login-form-container" onSubmit={handlePasswordReset}>
     <div>
       <h3 className="form-title">Password Reset</h3>
       <div className="form-group">

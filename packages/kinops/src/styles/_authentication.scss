@@ -1,27 +1,67 @@
-.login-screens {
-  margin: 120px auto;
+.login-container {
+  justify-content: center;
+  align-items: center;
   display: flex;
+  height: calc(100vh);
   flex-direction: row;
-  background-color: #fff;
-  width: 1110px;
+  @media all and (min-width: 0) {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+  @media all and (min-width: 768px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  @media all and (min-width: 992px) {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.login-wrapper {
+  display: flex;
 
-  .logo-right {
-    position: relative;
-    background-color: #000;
-    opacity: 0.85;
-    min-height: 384px;
-    min-width: 576px;
-    img.logo-image {
-      position: relative;
-      top: 0;
-      left: 0;
-      width: 576px;
-      height: 384px;
+  @media all and (min-width: 0) {
+    flex-direction: column;
+    .login-image-container {
+      order: 1;
     }
-    .logo-text {
-      position: absolute;
-      top: 210px;
-      left: 30px;
+    .login-form-container {
+      order: 2;
+    }
+  }
+  @media all and (min-width: 768px) {
+    flex-direction: column;
+  }
+  @media all and (min-width: 992px) {
+    flex-direction: row;
+    width: 75%;
+    .login-image-container {
+      order: 2;
+    }
+    .login-form-container {
+      order: 1;
+    }
+  }
+  .login-image-container {
+    background-color: $black;
+    background-size: cover;
+    opacity: 0.85;
+    display: flex;
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+    min-height: 6rem;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start;
+    flex-grow: 2;
+    padding: 1.5rem;
+    .kinops-text {
+      order: 0;
+      flex: 0 1 auto;
+      align-self: auto;
 
       img {
         height: 40px;
@@ -29,46 +69,50 @@
       }
 
       h3 {
-        color: #fff;
-        font-family: 'Open Sans';
+        color: $white;
         font-size: 24px;
         font-weight: 600;
         line-height: 48px;
       }
 
       p {
-        color: #fff;
-        font-family: 'Open Sans';
+        color: $white;
         font-size: 16px;
         line-height: 24px;
       }
     }
   }
 
-  .form-wrapper {
+  .login-form-container {
     flex-grow: 1;
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 0 2em 1em 2em;
-
+    padding: 1.5rem;
+    h3 {
+      justify-content: space-between;
+      display: flex;
+      align-items: baseline;
+      small {
+        font-size: 65%;
+      }
+    }
+    .btn {
+      padding: 0.5rem 0.75rem;
+    }
     .submitted {
       .subtitle {
-        color: #333333;
-        font-family: 'Open Sans';
+        color: $black;
       }
       .explaination {
-        color: #333333;
-        font-family: 'Open Sans';
+        color: $black;
         font-size: 13px;
         line-height: 18px;
       }
     }
 
     h3.form-title {
-      color: #354052;
-      font-family: 'Open Sans';
+      color: rgb(53, 64, 82);
       font-size: 24px;
       line-height: 48px;
     }
@@ -89,8 +133,7 @@
 
     .form-group {
       label {
-        color: #333333;
-        font-family: 'Open Sans';
+        color: $black;
         font-size: 12px;
         line-height: 24px;
 
@@ -100,17 +143,15 @@
         }
       }
       p.form-control-static {
-        color: #333333;
-        font-family: 'Open Sans';
+        color: $black;
         font-size: 13px;
         line-height: 18px;
       }
       input.form-control {
         height: 30px;
-        border: 1px solid #d5d5d5;
+        border: 1px solid $black-16;
         border-radius: 4px;
-        color: #333333;
-        font-family: 'Open Sans';
+        color: $black;
         font-size: 13px;
         line-height: 18px;
 

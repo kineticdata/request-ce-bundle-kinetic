@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { matchPath } from 'react-router';
 import { Route } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { createHashHistory } from 'history';
 import { configureStore } from './redux/store';
+import { Helmet } from 'react-helmet';
 import { actions as layoutActions } from './redux/modules/layout';
 import { actions as kinopsActions } from './redux/modules/kinops';
 import { AuthenticatedContainer } from './AuthenticatedContainer';
@@ -18,13 +19,21 @@ const history = createHashHistory();
 const store = configureStore(history);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <AuthenticatedContainer>
-        <Route path="/" component={App} />
-      </AuthenticatedContainer>
-    </ConnectedRouter>
-  </Provider>,
+  <Fragment>
+    <Helmet>
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+      />
+    </Helmet>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <AuthenticatedContainer>
+          <Route path="/" component={App} />
+        </AuthenticatedContainer>
+      </ConnectedRouter>
+    </Provider>
+  </Fragment>,
   document.getElementById('root'),
 );
 

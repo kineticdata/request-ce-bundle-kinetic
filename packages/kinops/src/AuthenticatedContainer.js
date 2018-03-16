@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { bundle } from 'react-kinetic-core';
 
-import logoImage from './login-logo.png';
+import logoImage from './login-background.png';
 import logoName from './login-name.png';
 
 import { ResetTokenForm } from './components/authentication/ResetTokenForm';
@@ -14,18 +14,21 @@ import { LoginForm } from './components/authentication/LoginForm';
 import { CreateAccountForm } from './components/authentication/CreateAccountForm';
 
 export const LoginScreen = props => (
-  <div className="login-screens">
-    {props.children}
-    <div className="logo-right" style={{}}>
-      <img
-        src={logoImage}
-        alt="Kinops - streamline everyday work for teams"
-        className="logo-image"
-      />
-      <div className="logo-text">
-        <img src={logoName} alt="Kinops - streamline everyday work for teams" />
-        <h3>Welcome to kinops</h3>
-        <p>Streamline everyday work for teams.</p>
+  <div className="login-container">
+    <div className="login-wrapper">
+      {props.children}
+      <div
+        className="login-image-container"
+        style={{ backgroundImage: `url(${logoImage})` }}
+      >
+        <div className="kinops-text">
+          <img
+            src={logoName}
+            alt="Kinops - streamline everyday work for teams"
+          />
+          <h3>Welcome to kinops</h3>
+          <p>Streamline everyday work for teams.</p>
+        </div>
       </div>
     </div>
   </div>

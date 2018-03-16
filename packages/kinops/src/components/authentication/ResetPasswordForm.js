@@ -12,7 +12,7 @@ const ResetPassword = ({
   routed,
 }) =>
   showConfirmation ? (
-    <div className="form-wrapper">
+    <div className="login-form-container">
       <h3 className="form-title">Password Reset Requested</h3>
       <p>
         In a few moments you should receive an email which will allow you to
@@ -22,7 +22,7 @@ const ResetPassword = ({
       <p>If you don't receieve an email, contact your kinops administrator.</p>
     </div>
   ) : (
-    <form className="form-wrapper" onSubmit={handleResetPassword}>
+    <form className="login-form-container" onSubmit={handleResetPassword}>
       <div>
         <h3 className="form-title">Reset Password</h3>
         <div className="form-group">

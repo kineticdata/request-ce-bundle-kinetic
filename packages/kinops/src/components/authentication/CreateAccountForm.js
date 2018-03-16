@@ -21,7 +21,7 @@ const CreateAccount = ({
   handleSubmit,
 }) =>
   submitted ? (
-    <div className="form-wrapper">
+    <div className="login-form-container">
       <div className="submitted">
         <h3 className="form-title">Create Account</h3>
         <p className="subtitle">
@@ -34,7 +34,7 @@ const CreateAccount = ({
       </div>
     </div>
   ) : (
-    <form className="form-wrapper" onSubmit={handleSubmit}>
+    <form className="login-form-container" onSubmit={handleSubmit}>
       <div>
         <h3 className="form-title">Create Account</h3>
 

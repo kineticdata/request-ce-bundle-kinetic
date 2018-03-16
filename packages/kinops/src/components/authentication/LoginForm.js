@@ -14,8 +14,16 @@ export const Login = ({
   error,
   routed,
 }) => (
-  <form className="form-wrapper" onSubmit={handleLogin}>
-    <h3>Sign In</h3>
+  <form className="login-form-container" onSubmit={handleLogin}>
+    <h3>
+      Sign In
+      <small>
+        {'or '}
+        <a role="button" tabIndex="0" onClick={toCreateAccount(routed)}>
+          Create Account
+        </a>
+      </small>
+    </h3>
     <div
       style={{
         display: 'flex',
@@ -54,13 +62,6 @@ export const Login = ({
         onClick={toResetPassword(routed)}
       >
         Reset Password
-      </button>
-      <button
-        type="button"
-        className="btn btn-primary btn-outline"
-        onClick={toCreateAccount(routed)}
-      >
-        Create Account
       </button>
     </div>
   </form>
