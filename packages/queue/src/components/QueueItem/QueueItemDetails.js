@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose, withState, withHandlers, withProps } from 'recompose';
 import { KappLink as Link } from 'common';
 import { actions as discussionActions } from 'react-kinops-discussions';
-import { selectAssignments } from '../../redux/modules/app';
+import { selectAssignments } from '../../redux/modules/queueApp';
 import { actions, selectPrevAndNext } from '../../redux/modules/queue';
 import { AssignmentSelector } from './AssignmentSelector';
 import { ViewOriginalRequest } from './ViewOriginalRequest';

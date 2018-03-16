@@ -1,4 +1,3 @@
-import { bundle } from 'react-kinetic-core';
 import {
   getAttributeValue,
   isMemberOf,
@@ -18,8 +17,8 @@ const kappBySpaceAttribute = (state, slugAttributeName) =>
 
 // Kapp Selectors
 export const selectCurrentKapp = state =>
-  !state.kinops.loading && bundle.kappSlug()
-    ? state.kinops.kapps.find(kapp => kapp.slug === `${bundle.kappSlug()}`) ||
+  !state.kinops.loading && state.kinops.kappSlug
+    ? state.kinops.kapps.find(kapp => kapp.slug === state.kinops.kappSlug) ||
       null
     : null;
 

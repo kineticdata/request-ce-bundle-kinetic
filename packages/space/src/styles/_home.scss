@@ -1,0 +1,118 @@
+.space {
+  .home-container {
+    display: flex;
+    flex-direction: row;
+    .home-content {
+      padding: 0 1.5rem;
+      flex-grow: 1;
+
+      .home-title {
+        color: $black;
+        font-family: 'Open Sans';
+        font-size: 26px;
+        font-weight: 600;
+        line-height: 48px;
+      }
+
+      .page-title-wrapper {
+        justify-content: space-between;
+        display: flex;
+        flex-direction: row;
+        .search-discussion-form {
+          justify-content: space-between;
+          display: flex;
+          flex-direction: row;
+          align-items: flex-end;
+          .select {
+            flex: 1 1 auto;
+          }
+          form {
+            padding: 0;
+            margin: 0 0.75rem 0 0;
+            input {
+              padding: 0.325rem 0.75rem;
+            }
+          }
+        }
+        @media all and (min-width: 0) {
+          flex-direction: column;
+          .page-title {
+            align-self: flex-start;
+          }
+          .search-discussion-form {
+            align-items: center;
+            align-self: stretch;
+          }
+        }
+        @media all and (min-width: 768px) {
+          flex-direction: row;
+          .page-title {
+            align-self: flex-start;
+          }
+          .search-discussion-form {
+            align-items: flex-end;
+          }
+        }
+        @media all and (min-width: 992px) {
+          flex-direction: row;
+        }
+      }
+      .discussion-summary-wrapper {
+        display: flex;
+        flex-direction: column;
+
+        .discussion-summary {
+          display: flex;
+          flex-direction: column;
+          border: 1px solid $black-5;
+          border-radius: 4px;
+          background-color: $white;
+          padding: 0.5em 1em 0.5em 1em;
+          margin-bottom: 0.75rem;
+
+          .header {
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
+            margin-bottom: 24px;
+
+            & > a {
+              margin-right: 0.25em;
+              height: 1.5rem;
+              font-size: 1rem;
+              font-weight: 600;
+              line-height: 1.5rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+
+            .participants {
+              display: flex;
+              flex-direction: row;
+              justify-content: flex-end;
+              flex-basis: 50%;
+              overflow-x: scroll;
+              & > .avatar {
+                padding: 0;
+              }
+            }
+          }
+          .messages .messages-group {
+            margin-bottom: 0;
+            background-color: #ffffff;
+          }
+        }
+      }
+    }
+    .discussion-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2em 0 2em 0;
+      .btn {
+        padding: 1rem 3rem;
+      }
+    }
+  }
+}

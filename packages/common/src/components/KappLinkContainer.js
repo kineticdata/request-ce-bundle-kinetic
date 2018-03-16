@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 
 export const KappLinkContainerComponent = ({ to, kappSlug, ...rest }) => (
-  <LinkContainer {...rest} to={`/kapps/${kappSlug}${to}`} />
+  <LinkContainer {...rest} to={kappSlug ? `/kapps/${kappSlug}${to}` : to} />
 );
 
 export const mapStateToProps = state => ({

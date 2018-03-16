@@ -11,7 +11,6 @@ const mapStateToProps = state => {
 
   return {
     queueItem: state.queue.currentItem,
-    profile: state.app.profile,
     discussionId,
   };
 };

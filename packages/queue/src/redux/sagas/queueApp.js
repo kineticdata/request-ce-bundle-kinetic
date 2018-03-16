@@ -10,15 +10,15 @@ import {
   types,
   DEFAULT_DOCUMENTATION_URL,
   DEFAULT_SUPPORT_URL,
-} from '../modules/app';
+} from '../modules/queueApp';
 
 import { filterReviver } from '../../records';
 
 const PROFILE_INCLUDES =
   'attributes,profileAttributes,memberships,memberships.team,memberships.team.attributes,memberships.team.memberships,memberships.team.memberships.user';
 
-export const selectPersonalFilters = ({ app }) => app.myFilters;
-export const selectProfile = ({ app }) => app.profile;
+export const selectPersonalFilters = ({ queueApp }) => queueApp.myFilters;
+export const selectProfile = ({ queueApp }) => queueApp.profile;
 
 // We'll implicitly believe teams to be assignable.
 export const isAssignable = team => {

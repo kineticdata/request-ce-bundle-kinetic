@@ -6,7 +6,7 @@ import { actions } from '../../redux/modules/queue';
 import { QueueItemDetailsContainer } from './QueueItemDetails';
 import { QueueItemDiscussionsContainer } from './QueueItemDiscussionsContainer';
 import { PageTitle } from '../PageTitle';
-import { getFilterByPath, buildFilterPath } from '../../redux/modules/app';
+import { getFilterByPath, buildFilterPath } from '../../redux/modules/queueApp';
 
 export const QueueItem = ({ filter, queueItem }) =>
   queueItem !== null && (

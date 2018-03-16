@@ -1,0 +1,122 @@
+.space,
+.space-sidebar {
+  .fragment {
+    display: flex;
+    flex-grow: 1;
+  }
+
+  .pane {
+    background: $white;
+    padding: 0 1.5rem;
+    min-height: $page-height;
+  }
+
+  .section-title {
+    justify-content: space-between;
+    align-items: center;
+    color: $black;
+    display: flex;
+    font-size: 1rem;
+    line-height: 2.125rem;
+    font-weight: 600;
+    padding-left: 0.75rem;
+    margin: 0 0 1rem 0;
+    border-top: 2px solid $black-16;
+    a {
+      color: $black;
+    }
+  }
+
+  .s-cards-wrapper {
+    padding: 0 0 3rem;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+
+    .s-card {
+      width: 31%;
+      border: 1px solid $black-16;
+      border-radius: 4px;
+      padding: 1rem;
+      margin-top: 1rem;
+      transition: background-color 0.3s;
+      display: flow-root;
+      &:focus,
+      &:hover {
+        background-color: $white;
+        text-decoration: none;
+      }
+      h1 {
+        color: $black;
+        font-size: 1.4375rem;
+        font-weight: 600;
+        line-height: 2.25rem;
+        margin: 0;
+        display: inline-flex;
+      }
+      p {
+        color: $black-50;
+        font-size: 1rem;
+        line-height: 2rem;
+        margin-bottom: 0;
+      }
+    }
+  }
+  .s-card {
+    border: 1px solid $black-16;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-top: 1rem;
+    @media all and (min-width: 0) {
+      flex-basis: 100%;
+    }
+    @media all and (min-width: 576px) {
+      flex-basis: 48%;
+    }
+    @media all and (min-width: 768px) {
+      flex-basis: 48%;
+    }
+    @media all and (min-width: 992px) {
+      flex-basis: 31%;
+    }
+    @media all and (min-width: 1200px) {
+    }
+    h1 {
+      color: $black;
+      font-size: 1.4375rem;
+      font-weight: 600;
+      line-height: 2.25rem;
+      margin: 0;
+      display: inline-flex;
+    }
+    p {
+      color: $black-50;
+      font-size: 1rem;
+      line-height: 2rem;
+    }
+  }
+  .fa.card-icon,
+  .card-icon {
+    height: 24px;
+    width: 24px;
+    font-size: 0.75rem;
+    background-color: $greenGrass;
+    margin-right: 5px;
+    margin-top: 6px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 24px;
+    color: $white;
+    flex-shrink: 0;
+    &.icon-greengrass {
+      background-color: $greenGrass;
+    }
+    &.icon-sunflower {
+      background-color: $sunflower;
+    }
+  }
+}

@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { Route } from 'react-router-dom';
 
-export const KappRouteComponent = ({ kappSlug = 'services', path, ...rest }) =>
-  kappSlug && <Route {...rest} path={`/kapps/${kappSlug}${path}`} />;
+export const KappRouteComponent = ({ kappSlug, path, ...rest }) => (
+  <Route {...rest} path={kappSlug ? `/kapps/${kappSlug}${path}` : path} />
+);
 
 export const mapStateToProps = state => ({
   kappSlug: state.kinops.kappSlug,

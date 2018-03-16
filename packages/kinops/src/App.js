@@ -39,6 +39,7 @@ export const AppComponent = props =>
             docked={props.sidebarOpen && props.layoutSize !== 'small'}
             onSetOpen={props.setSidebarOpen}
             sidebarClassName={`sidebar ${true ? 'drawer' : 'overlay'}`}
+            contentClassName="main-content"
           >
             {main}
           </Sidebar>
@@ -48,7 +49,7 @@ export const AppComponent = props =>
   );
 
 export const mapStateToProps = state => ({
-  loading: state.loading,
+  loading: state.kinops.loading,
   kapps: state.kinops.kapps,
   sidebarOpen: state.layout.sidebarOpen,
   layoutSize: state.layout.size,

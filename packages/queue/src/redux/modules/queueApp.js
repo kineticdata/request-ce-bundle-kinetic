@@ -8,13 +8,13 @@ export const DEFAULT_DOCUMENTATION_URL = 'https://help.kinops.io/queue/';
 export const DEFAULT_SUPPORT_URL = 'https://kinops.io/manage/public/support';
 
 export const types = {
-  LOAD_APP_SETTINGS: namespace('app', 'LOAD_APP_SETTINGS'),
-  SET_APP_SETTINGS: namespace('app', 'SET_APP_SETTINGS'),
-  ADD_PERSONAL_FILTER: namespace('app', 'ADD_PERSONAL_FILTER'),
-  UPDATE_PERSONAL_FILTER: namespace('app', 'UPDATE_PERSONAL_FILTER'),
-  REMOVE_PERSONAL_FILTER: namespace('app', 'REMOVE_PERSONAL_FILTER'),
-  SET_LAYOUT_SIZE: namespace('app', 'SET_LAYOUT_SIZE'),
-  SET_SIDEBAR_OPEN: namespace('app', 'SET_SIDEBAR_OPEN'),
+  LOAD_APP_SETTINGS: namespace('queueApp', 'LOAD_APP_SETTINGS'),
+  SET_APP_SETTINGS: namespace('queueApp', 'SET_APP_SETTINGS'),
+  ADD_PERSONAL_FILTER: namespace('queueApp', 'ADD_PERSONAL_FILTER'),
+  UPDATE_PERSONAL_FILTER: namespace('queueApp', 'UPDATE_PERSONAL_FILTER'),
+  REMOVE_PERSONAL_FILTER: namespace('queueApp', 'REMOVE_PERSONAL_FILTER'),
+  SET_LAYOUT_SIZE: namespace('queueApp', 'SET_LAYOUT_SIZE'),
+  SET_SIDEBAR_OPEN: namespace('queueApp', 'SET_SIDEBAR_OPEN'),
 };
 
 export const actions = {
@@ -39,9 +39,13 @@ export const getFilterByPath = (state, pathname) => {
   if (adhocMatch) {
     return state.queue.adhocFilter;
   } else if (defaultListMatch) {
-    return state.app.filters.find(findByName(defaultListMatch.params.name));
+    return state.queueApp.filters.find(
+      findByName(defaultListMatch.params.name),
+    );
   } else if (customListMatch) {
-    return state.app.myFilters.find(findByName(customListMatch.params.name));
+    return state.queueApp.myFilters.find(
+      findByName(customListMatch.params.name),
+    );
   }
 };
 
@@ -58,10 +62,10 @@ export const buildFilterPath = filter => {
 };
 
 export const selectMyTeamForms = state =>
-  state.app.forms.filter(f => {
+  state.queueApp.forms.filter(f => {
     const owningTeam = f.attributes['Owning Team'];
     return owningTeam
-      ? state.app.myTeams
+      ? state.queueApp.myTeams
           .map(t => t.name)
           .toSet()
           .intersect(new Set(owningTeam)).size > 0
@@ -69,7 +73,7 @@ export const selectMyTeamForms = state =>
   });
 
 export const selectAssignments = state =>
-  state.app.allTeams
+  state.queueApp.allTeams
     .flatMap(t =>
       t.memberships.map(m => {
         const user = m.user;
@@ -78,7 +82,7 @@ export const selectAssignments = state =>
       }),
     )
     .concat(
-      state.app.allTeams.map(t => ({
+      state.queueApp.allTeams.map(t => ({
         username: null,
         displayName: 'Unassigned',
         team: t.name,

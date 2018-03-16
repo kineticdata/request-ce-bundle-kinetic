@@ -1,7 +1,10 @@
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, withProps } from 'recompose';
 
-import { selectMyTeamForms, selectAssignments } from '../../redux/modules/app';
+import {
+  selectMyTeamForms,
+  selectAssignments,
+} from '../../redux/modules/queueApp';
 import { actions } from '../../redux/modules/queue';
 import { NewItemMenu } from './NewItemMenu';
 

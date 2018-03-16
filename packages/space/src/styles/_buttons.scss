@@ -1,0 +1,33 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Button Elements
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.space {
+  .btn {
+    font-size: 0.75rem;
+    font-weight: 300;
+    border-radius: 4px;
+    &.btn-primary {
+      @include setBgColorAndHover($blueSlate);
+    }
+    &.btn-default {
+      @include setBgColorAndHover($orange-kinops);
+      border: none;
+      line-height: 1.5rem;
+      padding: 0.25rem 1.5rem;
+      &:hover {
+        color: $white;
+      }
+    }
+    &.btn-outline-primary {
+      color: $black;
+      @include setBgColorAndHover($white);
+      border: 1px solid $black-50;
+    }
+    &.btn-outline-danger {
+      color: #d9534f;
+      &:hover {
+        color: $white;
+      }
+    }
+  }
+}

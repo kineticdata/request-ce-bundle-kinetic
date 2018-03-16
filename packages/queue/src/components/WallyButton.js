@@ -21,7 +21,7 @@ export const WallyButton = ({ className, buttonMode, handleClick }) => (
 );
 
 export const mapStateToProps = state => ({
-  profile: state.app.profile,
+  profile: state.kinops.profile,
 });
 export const mapDispatchToProps = {
   openWorkMenu: actions.openWorkMenu,

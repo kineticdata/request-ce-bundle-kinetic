@@ -1,0 +1,31 @@
+.space {
+  .page-title-wrapper {
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    align-items: flex-end;
+    h1 {
+      margin-top: 0;
+      margin-bottom: 0;
+      color: $blueSlate;
+      font-size: 2rem;
+      font-weight: 300;
+      line-height: 2.75rem;
+    }
+    h3 {
+      color: $orange-kinops;
+      font-size: 0.9375rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      line-height: 1.5rem;
+      a {
+        color: $orange-kinops;
+        font-size: 0.9375rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+        line-height: 1.5rem;
+      }
+    }
+  }
+}
