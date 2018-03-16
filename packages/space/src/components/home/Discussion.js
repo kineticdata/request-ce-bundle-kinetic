@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { List } from 'immutable';
-import { MessagesGroup } from 'react-kinops-discussions';
+import { MessagesGroup } from 'discussions';
 
 import { getTeamColor } from '../../utils';
 

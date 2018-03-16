@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import SVGInline from 'react-svg-inline';
 import Avatar from 'react-avatar';
-import plusIcon from 'font-awesome-svg-png/black/svg/plus.svg';
 import { actions } from '../redux/modules/discussions';
 
 export const ParticipantsDialog = props => (
@@ -12,10 +10,10 @@ export const ParticipantsDialog = props => (
       Participants
       <button
         type="button"
-        className="btn btn-link icon-wrapper"
+        className="btn btn-link"
         onClick={props.openInvitation}
       >
-        <SVGInline svg={plusIcon} className="icon" />
+        <i className="fa fa-fw fa-plus" />
       </button>
     </h4>
     <ul className="participants-list">

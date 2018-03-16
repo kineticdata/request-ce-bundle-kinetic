@@ -9,11 +9,9 @@ import {
 import { List } from 'immutable';
 
 import { actions, formatMessages } from '../redux/modules/discussions';
-import { ToastsModule } from 'react-kinops-common';
+import { commonActions } from 'common';
 
 import { Discussion } from './Discussion';
-
-const { actions: notificationActions } = ToastsModule;
 
 const mapStateToProps = (state, props) => {
   const discussion =
@@ -38,7 +36,7 @@ const mapDispatchToProps = {
   leaveDiscussion: actions.leaveDiscussion,
   stopConnection: actions.stopConnection,
   fetchMoreMessages: actions.fetchMoreMessages,
-  addWarn: notificationActions.addWarn,
+  addWarn: commonActions.addWarn,
   createDiscussion: actions.createIssue,
   openModal: actions.openModal,
   closeModal: actions.closeModal,

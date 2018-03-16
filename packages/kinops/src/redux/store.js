@@ -9,7 +9,7 @@ import spaceReducers from 'space/src/redux/reducers';
 import {
   sagas as discussionSagas,
   reducers as discussionReducers,
-} from 'react-kinops-discussions';
+} from 'discussions';
 import { sagas } from './sagas';
 import servicesSagas from 'services/src/redux/sagas';
 import queueSagas from 'queue/src/redux/sagas';

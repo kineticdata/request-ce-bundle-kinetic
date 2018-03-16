@@ -9,12 +9,6 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import classNames from 'classnames';
-import plusIcon from 'font-awesome-svg-png/black/svg/plus.svg';
-import removeIcon from 'font-awesome-svg-png/black/svg/times.svg';
-import sendIcon from 'font-awesome-svg-png/black/svg/paper-plane.svg';
-import userPlusIcon from 'font-awesome-svg-png/black/svg/user-plus.svg';
-import attachmentIcon from 'font-awesome-svg-png/black/svg/paperclip.svg';
-import SVGInline from 'react-svg-inline';
 
 import { actions } from '../redux/modules/discussions';
 
@@ -195,19 +189,13 @@ class ChatInput extends Component {
             dropup
           >
             <DropdownToggle className="btn-suble btn-more">
-              <span className="icon-wrapper icon-small">
-                <SVGInline svg={plusIcon} className="icon" />
-              </span>
+              <i className="fa fa-fw fa-plus" />
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem
-                className="icon-wrapper"
-                onClick={this.handleAttachmentClick}
-              >
-                <SVGInline svg={attachmentIcon} className="icon" />Add File
+              <DropdownItem onClick={this.handleAttachmentClick}>
+                <i className="fa fa-fw fa-paperclip" /> Add File
               </DropdownItem>
               <DropdownItem
-                className="icon-wrapper"
                 onClick={() =>
                   this.props.openModal(
                     this.props.discussion.issue.guid,
@@ -215,7 +203,7 @@ class ChatInput extends Component {
                   )
                 }
               >
-                <SVGInline svg={userPlusIcon} className="icon" />Invite Person
+                <i className="fa fa-fw fa-plus" /> Invite Person
               </DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
@@ -254,7 +242,7 @@ class ChatInput extends Component {
                   style={{ width: '24px', height: '24px' }}
                   onClick={this.handleAttachmentCancel}
                 >
-                  <SVGInline svg={removeIcon} className="icon" />
+                  <i className="fa fa-fw fa-time" />
                 </button>
               </div>
             )}
@@ -281,8 +269,8 @@ class ChatInput extends Component {
             className="btn btn-subtle btn-send"
             disabled={this.isChatInputInvalid()}
           >
-            <span className="icon-wrapper icon-small">
-              <SVGInline svg={sendIcon} className="icon" />
+            <span className="icon-small">
+              <i className="fa fa-fw fa-paper-plane" />
             </span>
           </button>
         </form>

@@ -2,8 +2,7 @@ import { delay } from 'redux-saga';
 import { select, put, call, all, race, take } from 'redux-saga/effects';
 import { List } from 'immutable';
 import { actions, types } from '../modules/discussions';
-import { ToastsModule } from 'react-kinops-common';
-const { types: errorTypes } = ToastsModule;
+import { commonTypes } from 'common';
 
 global.bundle = {
   apiLocation: () => '/acme/app/api/v1',
@@ -695,7 +694,7 @@ describe('discussion saga', () => {
 
         expect(
           saga.next({ error: 'error message ' }).value.PUT.action.type,
-        ).toEqual(errorTypes.ADD_NOTIFICATION);
+        ).toEqual(commonTypes.ADD_NOTIFICATION);
       });
     });
   });

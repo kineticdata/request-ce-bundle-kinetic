@@ -1,7 +1,5 @@
 import React from 'react';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
-import downArrow from 'font-awesome-svg-png/black/svg/arrow-down.svg';
-import SVGInline from 'react-svg-inline';
 import { LoadMoreMessages } from './LoadMoreMessagesContainer';
 import { MessagesDateContainer } from './MessagesDate';
 import { ChatInputForm } from './ChatInputForm';
@@ -35,11 +33,11 @@ const Messages = ({
     {unreadMessages && (
       <button
         type="button"
-        className="btn btn-primary icon-wrapper more-messages"
+        className="btn btn-primary more-messages"
         onClick={scrollToBottom}
       >
         New messages
-        <SVGInline svg={downArrow} className="icon" />
+        <i className="fa fa-fw fa-arrow-down" />
       </button>
     )}
   </div>

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { actions } from 'react-kinops-discussions';
+import { actions } from 'discussions';
 
 import { QueueItemDiscussions } from './QueueItemDiscussions';
 

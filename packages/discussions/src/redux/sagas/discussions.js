@@ -13,7 +13,7 @@ import {
 } from 'redux-saga/effects';
 import { CoreAPI } from 'react-kinetic-core';
 
-import { ToastsModule } from 'react-kinops-common';
+import { commonActions } from 'common';
 import { types, actions } from '../modules/discussions';
 import { selectServerUrl } from '../selectors';
 
@@ -32,8 +32,6 @@ import {
   fetchResponseProfile,
   getResponseAuthentication,
 } from '../../utils/discussion_api';
-
-const { actions: toastActions } = ToastsModule;
 
 export const SUBMISSION_INCLUDES =
   'details,values,attributes,form,form.attributes';
@@ -210,7 +208,7 @@ export function* createInviteTask({ payload }) {
   );
 
   if (error) {
-    yield put(toastActions.addError('Failed to create invitation!'));
+    yield put(commonActions.addError('Failed to create invitation!'));
   } else {
     yield all([
       put(actions.createInviteDone()),

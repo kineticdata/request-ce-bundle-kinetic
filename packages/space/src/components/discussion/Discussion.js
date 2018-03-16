@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import { Link } from 'react-router-dom';
 import { Utils } from 'common';
 import { bundle } from 'react-kinetic-core';
-import { Discussion as KinopsDiscussion } from 'react-kinops-discussions';
+import { Discussion as KinopsDiscussion } from 'discussions';
 
 import { PageTitle } from '../shared/PageTitle';
 

@@ -1,8 +1,7 @@
 import { Record, List, Map } from 'immutable';
 import moment from 'moment';
 import { namespace, noPayload, withPayload } from '../../utils';
-import { LayoutModule } from 'react-kinops-common';
-const { types: layoutTypes } = LayoutModule;
+import { commonTypes } from 'common';
 
 export const types = {
   // API-based actions.
@@ -308,7 +307,7 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('invitationPending', false);
     case types.SET_INVITATION_FIELD:
       return state.setIn(['invitationFields', payload.field], payload.value);
-    case layoutTypes.SET_SIZE:
+    case commonTypes.SET_SIZE:
       return state.delete('currentOpenModals');
     case types.SET_DISCUSSION_VISIBILITY:
       return state.set('isVisible', payload === 'visible' ? true : false);
