@@ -5,7 +5,7 @@ import { getTeamColor } from '../utils';
 import { KappCard } from './shared/KappCard';
 
 export const SidebarContent = ({ kapps, teams, isSpaceAdmin }) => (
-  <div className="sidebar">
+  <div className="space-sidebar">
     {kapps.length > 0 && (
       <div className="kapp-cards-wrapper">
         <h6>Kapps</h6>

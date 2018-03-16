@@ -17,6 +17,7 @@ import { ViewProfile } from './components/profile/ViewProfile';
 import { TeamContainer } from './components/teams/TeamContainer';
 import { TeamForm } from './components/teams/TeamForm';
 import { TeamsContainer } from './components/teams/TeamsContainer';
+import './styles/master.scss';
 
 export const AppComponent = props => {
   if (props.loading) {

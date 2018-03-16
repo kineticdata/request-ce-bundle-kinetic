@@ -1,17 +1,11 @@
-.layout {
+.space.layout {
   margin-top: $header-height;
   display: flex;
   flex-grow: 1;
   flex-direction: column;
 }
 
-.sidebar {
-  background-color: $black-3;
-  border-right: 1px solid $black-16;
-  background-color: $black-3;
-  margin-top: $header-height;
-  min-height: $page-height;
-  width: 252px;
+.space-sidebar {
   h6 {
     color: $blueLake;
     display: flex;
