@@ -47,12 +47,13 @@ const ResetPassword = ({
         <button type="submit" className="btn btn-primary">
           Reset
         </button>
+        <hr />
         <button
           type="button"
           className="btn btn-link"
           onClick={toSignIn(routed)}
         >
-          Back to Sign In
+          &larr; Back to Sign In
         </button>
       </div>
     </form>

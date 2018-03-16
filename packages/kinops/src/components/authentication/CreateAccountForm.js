@@ -80,12 +80,13 @@ const CreateAccount = ({
         <button className="btn btn-primary" type="submit" disabled={!formValid}>
           Request Account
         </button>
+        <hr />
         <button
           className="btn btn-link"
           type="button"
           onClick={toSignIn(routed)}
         >
-          Back to Sign In
+          &larr; Back to Sign In
         </button>
       </div>
     </form>

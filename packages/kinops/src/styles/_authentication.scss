@@ -6,8 +6,8 @@
   flex-direction: row;
   @media all and (min-width: 0) {
     flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
+    // align-items: stretch;
+    // justify-content: flex-start;
   }
   @media all and (min-width: 768px) {
     flex-direction: column;
@@ -19,12 +19,17 @@
     justify-content: center;
     align-items: center;
   }
+  @media all and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape) {
+    /* Landscape styles */
+    height: auto;
+  }
 }
 .login-wrapper {
   display: flex;
 
   @media all and (min-width: 0) {
     flex-direction: column;
+    min-width: 90%;
     .login-image-container {
       order: 1;
     }
@@ -34,10 +39,11 @@
   }
   @media all and (min-width: 768px) {
     flex-direction: column;
+    min-width: 90%;
   }
   @media all and (min-width: 992px) {
     flex-direction: row;
-    width: 75%;
+    min-width: 65%;
     .login-image-container {
       order: 2;
     }
@@ -52,7 +58,6 @@
     display: flex;
     flex-direction: column-reverse;
     flex-wrap: wrap;
-    min-height: 6rem;
     justify-content: flex-start;
     align-content: flex-start;
     align-items: flex-start;
@@ -97,8 +102,15 @@
         font-size: 65%;
       }
     }
-    .btn {
+    .btn,
+    .btn[disabled] {
       padding: 0.5rem 0.75rem;
+    }
+    hr {
+      background-color: $black-16;
+      margin: 1rem 0 0.5rem 0;
+      border: 0;
+      height: 1px;
     }
     .submitted {
       .subtitle {
@@ -123,11 +135,11 @@
       justify-content: space-between;
 
       & > .form-group:nth-child(1) {
-        width: 25%;
+        width: 35%;
       }
 
       & > .form-group:nth-child(2) {
-        width: 70%;
+        width: 55%;
       }
     }
 
@@ -139,7 +151,7 @@
 
         &.required:after {
           content: '*';
-          color: red;
+          color: $red;
         }
       }
       p.form-control-static {

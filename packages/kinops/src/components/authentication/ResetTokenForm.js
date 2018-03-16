@@ -53,7 +53,7 @@ const ResetToken = ({
         Reset
       </button>
       <button type="button" className="btn btn-link" onClick={toSignIn(routed)}>
-        Back to Sign In
+        &larr; Back to Sign In
       </button>
     </div>
   </form>

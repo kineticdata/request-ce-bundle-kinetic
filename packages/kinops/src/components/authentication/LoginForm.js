@@ -56,6 +56,7 @@ export const Login = ({
     </div>
     <div className="button-group">
       <button className="btn btn-primary">Sign In</button>
+      <hr />
       <button
         type="button"
         className="btn btn-link"
