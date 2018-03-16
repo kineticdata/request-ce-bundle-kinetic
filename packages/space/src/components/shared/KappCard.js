@@ -1,8 +1,6 @@
 import React from 'react';
-
-import { bundle } from 'react-kinetic-core';
+import { Link } from 'react-router-dom';
 import { Utils } from 'common';
-
 import { Icon } from './Icon';
 
 export const KappCard = ({
@@ -14,11 +12,11 @@ export const KappCard = ({
   ),
   icon = Utils.getAttributeValue(kapp, 'Icon', 'fa-circle'),
 }) => (
-  <a className="kapp-card" href={bundle.kappLocation(kapp.slug)}>
+  <Link className="kapp-card" to={`/kapps/${kapp.slug}`}>
     <h1>
       <Icon image={icon} />
       {kapp.name}
     </h1>
     {description !== '' ? <p>{description}</p> : ''}
-  </a>
+  </Link>
 );

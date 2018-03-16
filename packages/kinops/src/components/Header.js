@@ -9,6 +9,7 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import { bundle } from 'react-kinetic-core';
 import { getAttributeValue } from 'common/utils';
 import { AlertsContainer } from './AlertsContainer';
@@ -18,12 +19,12 @@ export const dropdownTitleName = currentKapp =>
   currentKapp ? currentKapp.name : 'Home';
 
 const BuildKappLink = ({ kapp, nameOverride = kapp.name }) => (
-  <DropdownItem tag="a" href={bundle.kappLocation(kapp.slug)}>
+  <Link className="dropdown-item" to={`/kapps/${kapp.slug}`}>
     <span
       className={`fa fa-fw' ${getAttributeValue(kapp, 'Icon') || 'fa-book'}`}
     />
     {nameOverride}
-  </DropdownItem>
+  </Link>
 );
 
 export const Header = ({
