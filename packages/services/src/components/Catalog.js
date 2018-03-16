@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { KappLink as Link } from 'common';
 import { CatalogSearchContainer } from './Services/CatalogSearchContainer';
 import { CategoryCard } from './CategoryCard';
@@ -16,7 +16,7 @@ export const Catalog = ({
   fetchSubmissions,
 }) => {
   return (
-    <div className="main-content services">
+    <Fragment>
       <PageTitle parts={[]} />
       <div className="services-search-container">
         <div className="services-search-wrapper">
@@ -80,6 +80,6 @@ export const Catalog = ({
           </div>
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
