@@ -59,9 +59,9 @@ export const Header = ({
           </DropdownToggle>
           <DropdownMenu>
             {currentKapp && (
-              <DropdownItem tag="a" href={bundle.spaceLocation()}>
+              <Link className="dropdown-item" to="/">
                 <span className="fa fa-fw fa-home" />Home
-              </DropdownItem>
+              </Link>
             )}
             {currentKapp && <DropdownItem divider />}
             {predefinedKapps.map(thisKapp => (
