@@ -6,7 +6,7 @@ import { commonActions } from 'common';
 import { actions, types, selectServerUrl } from '../modules/app';
 import { actions as errorActions } from '../modules/errors';
 
-import { DiscussionAPI } from 'react-kinops-discussions';
+import { DiscussionAPI } from 'discussions';
 
 export function* fetchAppSettingsSaga() {
   const [{ users, usersServerError }, { space, spaceServerError }] = yield all([
