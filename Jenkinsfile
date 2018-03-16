@@ -19,7 +19,7 @@ pipeline {
     stage('Test') {
       steps {
         echo 'Re-enable tests when they are fixed'
-        /* sh 'pushd packages/kinops; CI=true yarn test:ci; popd'
+        /* sh '#!/bin/bash \n pushd packages/kinops; CI=true yarn test:ci; popd'
         junit(testResults: 'junit.xml', healthScaleFactor: 1) */
       }
     }
