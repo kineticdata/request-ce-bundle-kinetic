@@ -25,7 +25,7 @@ pipeline {
     }
     stage('Build') {
       steps {
-        sh 'pushd packages/kinops; yarn run build; popd'
+        sh "#!/bin/bash \n pushd packages/kinops; yarn run build; popd"
       }
     }
     stage('Upload to S3') {
