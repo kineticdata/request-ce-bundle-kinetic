@@ -13,7 +13,6 @@ import {
   DropdownItem,
 } from 'reactstrap';
 
-import { TimeAgo } from 'common';
 import { actions } from '../../redux/modules/datastore';
 
 const WallyEmptyMessage = ({ filter }) => {
@@ -29,32 +28,30 @@ const WallyEmptyMessage = ({ filter }) => {
   );
 };
 
-const Timestamp = ({ slug, label, value }) =>
-  value && (
-    <li className="list-group-item">
-      {label}
-      &nbsp;
-      <TimeAgo timestamp={value} id={`${slug}-${label}`} />
-    </li>
-  );
-
-const FormListItem = ({ form }) => {
-  const { createdAt, updatedAt, slug, name, description } = form;
-  return (
-    <li className="submission list-group-item">
-      <Link to={`datastore/${slug}`} className="summary-group">
-        <h6>
-          {name} ({slug})
-        </h6>
-        <p className="summary">{description}</p>
-        <ul className="timestamps list-group">
-          <Timestamp label="Updated" value={updatedAt} slug={slug} />
-          <Timestamp label="Created" value={createdAt} slug={slug} />
-        </ul>
-      </Link>
-    </li>
-  );
-};
+const FormListItem = ({ form, openDropdown, toggleDropdown, match }) => (
+  <tr>
+    <td>
+      <Link to={`/datastore/${form.slug}`}>{form.name}</Link>
+    </td>
+    <td>{form.description}</td>
+    <td>
+      <Dropdown
+        toggle={toggleDropdown(form.slug)}
+        isOpen={openDropdown === form.slug}
+        className="list-dropdown"
+      >
+        <DropdownToggle className="btn btn-link">
+          <span className="fa fa-ellipsis-h fa-2x" />
+        </DropdownToggle>
+        <DropdownMenu>
+          <DropdownItem tag={Link} to={`${match.path}/${form.slug}/new`}>
+            Create
+          </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+    </td>
+  </tr>
+);
 
 const FormListComponent = ({
   datastoreForms,
@@ -83,30 +80,13 @@ const FormListComponent = ({
             </thead>
             <tbody>
               {datastoreForms.map(form => (
-                <tr key={form.slug}>
-                  <td>
-                    <Link to={`/datastore/${form.slug}`}>{form.name}</Link>
-                  </td>
-                  <td>{form.description}</td>
-                  <td>
-                    <Dropdown
-                      toggle={toggleDropdown(form.slug)}
-                      isOpen={openDropdown === form.slug}
-                    >
-                      <DropdownToggle className="btn btn-link">
-                        <span className="fa fa-ellipsis-h fa-2x" />
-                      </DropdownToggle>
-                      <DropdownMenu>
-                        <DropdownItem
-                          tag={Link}
-                          to={`${match.path}/${form.slug}/new`}
-                        >
-                          Create
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </td>
-                </tr>
+                <FormListItem
+                  key={form.slug}
+                  form={form}
+                  toggleDropdown={toggleDropdown}
+                  openDropdown={openDropdown}
+                  match={match}
+                />
               ))}
             </tbody>
           </table>
