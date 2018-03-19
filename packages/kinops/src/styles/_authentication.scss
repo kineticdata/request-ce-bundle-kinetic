@@ -39,18 +39,19 @@
     }
   }
   @media all and (min-width: 768px) {
-    flex-direction: column;
-    min-width: 90%;
-  }
-  @media all and (min-width: 992px) {
     flex-direction: row;
-    min-width: 65%;
+    min-width: 85%;
     .login-image-container {
       order: 2;
     }
     .login-form-container {
       order: 1;
+      width: 40%;
+      height: 540px;
     }
+  }
+  @media all and (min-width: 992px) {
+    flex-direction: row;
   }
   .login-image-container {
     background-color: $black;
@@ -63,6 +64,7 @@
     align-content: flex-start;
     align-items: flex-start;
     flex-grow: 2;
+    flex-shrink: 1;
     padding: 1.5rem;
     .kinops-text {
       order: 0;
@@ -90,7 +92,7 @@
   }
 
   .login-form-container {
-    flex-grow: 1;
+    flex-grow: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
