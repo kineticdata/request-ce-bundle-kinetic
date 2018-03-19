@@ -134,6 +134,7 @@ const getPageText = (pageTokens, nextPageToken, submissions) => {
 
 const SubmissionListComponent = ({
   form,
+  indexDefinitions,
   searchParams,
   handleResetSearch,
   shouldItemRender,
@@ -187,7 +188,7 @@ const SubmissionListComponent = ({
                 </div>
               )}
               value={indexLookup}
-              items={form.indexDefinitions}
+              items={indexDefinitions}
               getItemValue={item => item.name}
               onChange={e => setIndexLookup(e.target.value)}
               onSelect={setIndexHandler}
@@ -349,6 +350,11 @@ const SubmissionListComponent = ({
 export const mapStateToProps = state => ({
   loading: state.datastore.currentFormLoading,
   form: state.datastore.currentForm,
+  indexDefinitions: state.datastore.currentForm
+    ? state.datastore.currentForm.indexDefinitions.filter(
+        d => d.status === 'Built',
+      )
+    : [],
   submissions: selectSubmissionPage(state),
   allSubmissions: state.datastore.submissions,
   searchParams: state.datastore.searchParams,
@@ -387,8 +393,9 @@ const setIndexHandler = ({
   setIndexLookup,
   setIndexParts,
   form,
+  indexDefinitions,
 }) => val => {
-  const index = form.indexDefinitions.find(indexDef => indexDef.name === val);
+  const index = indexDefinitions.find(indexDef => indexDef.name === val);
   const parts = List(
     index.parts.map(part =>
       IndexPart({
