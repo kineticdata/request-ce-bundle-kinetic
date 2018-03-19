@@ -78,3 +78,10 @@ export const selectAdditionalKapps = state =>
         )
         .filter(kapp => kapp !== selectCurrentKapp(state))
     : [];
+
+// Discussion Server
+export const selectDiscussionsEnabled = state =>
+  state.kinops.space &&
+  getAttributeValue(state.kinops.space, 'Discussion Server Url', null) === null
+    ? false
+    : true;

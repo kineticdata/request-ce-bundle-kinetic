@@ -2,10 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
+import SVGInline from 'react-svg-inline';
+
+import { selectDiscussionsEnabled } from 'kinops/src/redux/selectors';
 
 import {
   actions,
-  selectServerUrl,
   selectIsMoreDiscussions,
   selectGroupedDiscussions,
 } from '../../redux/modules/app';
@@ -15,16 +17,17 @@ import { actions as teamListActions } from '../../redux/modules/teamList';
 import { CreateDiscussionModal } from './CreateDiscussionModal';
 import { Discussion } from './Discussion';
 import { PageTitle } from '../shared/PageTitle';
+import wallyMissingImage from '../../images/wally-missing.svg';
 
 const HomeComponent = ({
   spaceName,
   kapps,
   teams,
+  discussionsEnabled,
   discussionGroups,
   discussionsError,
   discussionsLoading,
   discussionsSearchTerm,
-  discussionServerUrl,
   isMoreDiscussions,
   me,
   handleCreateDiscussionButtonClick,
@@ -37,43 +40,54 @@ const HomeComponent = ({
     <CreateDiscussionModal />
     <div className="home-content">
       <h4 className="home-title">Welcome to kinops for {spaceName}</h4>
-
-      <div className="page-title-wrapper">
-        <div className="page-title">
-          <h3>
-            <Link to="/">home</Link> /{' '}
-            {discussionsSearchTerm !== '' ? `search results` : ''}
-          </h3>
-          <h1>
-            {discussionsSearchTerm !== ''
-              ? `${discussionsSearchTerm}`
-              : 'Recent Discussions'}
-          </h1>
-        </div>
-        <div className="search-discussion-form">
-          <div className="select">
-            <form onSubmit={handleDiscussionSearchInputSubmit}>
-              <input
-                placeholder="Search discussions"
-                className="form-control"
-                onChange={handleDiscussionSearchInputChange}
-              />
-              <button type="submit">
-                <span className="fa fa-search" />
-              </button>
-            </form>
+      {discussionsEnabled ? (
+        <div className="page-title-wrapper">
+          <div className="page-title">
+            <h3>
+              <Link to="/">home</Link> /{' '}
+              {discussionsSearchTerm !== '' ? `search results` : ''}
+            </h3>
+            <h1>
+              {discussionsSearchTerm !== ''
+                ? `${discussionsSearchTerm}`
+                : 'Recent Discussions'}
+            </h1>
           </div>
-          <button
-            onClick={handleCreateDiscussionButtonClick}
-            className="btn btn-default"
-          >
-            Create Discussion
-          </button>
+          <div className="search-discussion-form">
+            <div className="select">
+              <form onSubmit={handleDiscussionSearchInputSubmit}>
+                <input
+                  placeholder="Search discussions"
+                  className="form-control"
+                  onChange={handleDiscussionSearchInputChange}
+                />
+                <button type="submit">
+                  <span className="fa fa-search" />
+                </button>
+              </form>
+            </div>
+            <button
+              onClick={handleCreateDiscussionButtonClick}
+              className="btn btn-default"
+            >
+              Create Discussion
+            </button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="wally">
+          <h5>Woops...</h5>
+          <SVGInline svg={wallyMissingImage} />
+          <h6>
+            Looks like this space does not have a Discussion Server configured!
+          </h6>
+        </div>
+      )}
 
-      {!discussionsError &&
-        !discussionsLoading && (
+      {discussionsEnabled &&
+        !discussionsError &&
+        !discussionsLoading &&
+        discussionGroups.size > 0 && (
           <div className="discussion-summary-wrapper kinops-discussions">
             {discussionGroups
               .map((discussions, dateGroup) => (
@@ -87,7 +101,6 @@ const HomeComponent = ({
                     <Discussion
                       key={discussion.id}
                       discussion={discussion}
-                      discussionServerUrl={discussionServerUrl}
                       teams={teams}
                       me={me}
                     />
@@ -107,6 +120,15 @@ const HomeComponent = ({
             )}
           </div>
         )}
+      {!discussionsError &&
+        !discussionsLoading &&
+        discussionGroups.size === 0 && (
+          <div className="wally">
+            <h5>No discussions found</h5>
+            <SVGInline svg={wallyMissingImage} />
+            <h6>You are not involved in any discussions!</h6>
+          </div>
+        )}
     </div>
   </div>
 );
@@ -120,10 +142,10 @@ export const mapStateToProps = state => ({
   discussionsOffset: state.app.discussionsOffset,
   discussionsSearchInputValue: state.app.discussionsSearchInputValue,
   discussionsSearchTerm: state.app.discussionsSearchTerm,
-  discussionServerUrl: selectServerUrl(state),
   isMoreDiscussions: selectIsMoreDiscussions(state),
   me: state.kinops.profile,
   teams: state.teamList.data,
+  discussionsEnabled: selectDiscussionsEnabled(state),
 });
 
 export const mapDispatchToProps = {
@@ -163,7 +185,7 @@ export const Home = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchTeams();
-      this.props.fetchDiscussions();
+      this.props.discussionsEnabled && this.props.fetchDiscussions();
     },
   }),
 )(HomeComponent);
