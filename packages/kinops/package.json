@@ -5,7 +5,8 @@
   "scripts": {
     "start": "react-app-rewired start --scripts-version kinops-react-scripts",
     "build": "react-app-rewired build --scripts-version kinops-react-scripts",
-    "test": "react-app-rewired test --scripts-version kinops-react-scripts --env=jsdom",
+    "test":
+      "react-app-rewired test --scripts-version kinops-react-scripts --env=jsdom",
     "eject": "react-scripts eject"
   },
   "dependencies": {
@@ -22,7 +23,7 @@
     "react-avatar": "^2.5.1",
     "react-dom": "^16.2.0",
     "react-helmet": "^5.2.0",
-    "react-kinetic-core": "^0.3.3",
+    "react-kinetic-core": "^0.3.4",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",

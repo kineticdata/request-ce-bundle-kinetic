@@ -5891,9 +5891,9 @@ react-helmet@^5.2.0:
     prop-types "^15.5.4"
     react-side-effect "^1.1.0"
 
-react-kinetic-core@^0.3.3:
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/react-kinetic-core/-/react-kinetic-core-0.3.3.tgz#497f796149c62754c5d7e567c5b5a9df7a84f0c6"
+react-kinetic-core@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/react-kinetic-core/-/react-kinetic-core-0.3.4.tgz#617914ed2940655151f9388f6b1444538b3d287b"
   dependencies:
     axios "^0.16.1"
     deepequal "^0.0.1"
