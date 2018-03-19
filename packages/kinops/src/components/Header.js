@@ -81,7 +81,14 @@ export const Header = ({
                 <DropdownItem divider />
               )}
               {hasAccessToManagement && (
-                <BuildKappLink kapp={adminKapp} nameOverride="Admin Console" />
+                <DropdownItem
+                  tag="a"
+                  href={`${bundle.kappLocation(
+                    adminKapp.slug,
+                  )}`}
+                >
+                  <span className="fa fa-fw fa-gear" />Admin Console
+                </DropdownItem>
               )}
               {hasAccessToSupport && (
                 <DropdownItem

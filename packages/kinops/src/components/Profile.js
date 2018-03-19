@@ -1,5 +1,6 @@
 import React from 'react';
 import Avatar from 'react-avatar';
+import { Link } from 'react-router-dom';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { bundle } from 'react-kinetic-core';
 
@@ -34,12 +35,12 @@ export const Profile = ({
       </div>
       <div className="profile-links">
         <div className="dropdown-divider" />
-        <a
-          href={`${bundle.spaceLocation()}?page=profile`}
+        <Link
+          to="/profile"
           className="dropdown-item"
         >
           Profile
-        </a>
+        </Link>
         {profile.spaceAdmin && (
           <a
             role="button"
@@ -66,12 +67,12 @@ export const Profile = ({
         >
           Give Feedback
         </a>
-        <a
-          href={`${bundle.spaceLocation()}?page=about`}
+        <Link
+          to="/about"
           className="dropdown-item"
         >
           About My Space
-        </a>
+        </Link>
         <div className="dropdown-divider" />
         <a
           href={`${bundle.spaceLocation()}/app/logout`}

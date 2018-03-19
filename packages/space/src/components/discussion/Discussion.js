@@ -45,10 +45,10 @@ const buildRelatedItemLink = (relatedItem, profile) => {
       assignedIndividual === profile.username ||
       Utils.isMemberOf(profile, assignedTeam)
     ) {
-      link = bundle.spaceLocation() + '/queue/#/submissions/' + relatedItem.ID;
+      link = '#/kapps/queue/submissions/' + relatedItem.ID;
     }
   } else if ('Team' === relatedItem.TYPE) {
-    link = bundle.spaceLocation() + '/#/teams/' + relatedItem.ID;
+    link = '#/teams/' + relatedItem.ID;
   }
 
   return (

@@ -21,6 +21,7 @@ export const mapStateToProps = state => ({
       moment(alert.values['Start Date Time'] || alert.createdAt).unix(),
     )
     .reverse(),
+  isSpaceAdmin: state.kinops.profile.spaceAdmin,
 });
 
 const mapDispatchToProps = {

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
-import { bundle } from 'react-kinetic-core';
 
-export const Alerts = ({ alerts, fetchAlerts }) => (
+export const Alerts = ({ alerts, fetchAlerts, isSpaceAdmin }) => (
   <UncontrolledDropdown className="nav-item-right">
     <DropdownToggle nav role="button">
       <i className="fa fa-fw fa-bell" />
@@ -18,24 +18,23 @@ export const Alerts = ({ alerts, fetchAlerts }) => (
             Refresh
           </a>
           <span className="divider">&bull;</span>
-          <a href={`${bundle.spaceLocation()}?page=alerts`}>View All</a>
-          <span className="divider">&bull;</span>
-          <a href={`${bundle.spaceLocation()}/admin/alerts`}>Create Alert</a>
+          <Link to="/alerts">View All</Link>
+          {isSpaceAdmin && (
+            <Fragment>
+              <span className="divider">&bull;</span>
+              <Link to="/alerts/new">Create Alert</Link>
+            </Fragment>
+          )}
         </div>
       </div>
       <ul className="alerts-list">
         {alerts.map(alert => (
           <li key={alert.id} className="alert-item">
             <h1>
-              <a
-                href={
-                  alert.values.URL ||
-                  `${bundle.spaceLocation()}?page=alerts#id-${alert.id}`
-                }
-              >
+              <Link to={`/alerts/${alert.id}`}>
                 <small className="source">{alert.values.Source}</small>
                 {alert.values.Title}
-              </a>
+              </Link>
             </h1>
 
             <p dangerouslySetInnerHTML={{ __html: alert.values.Content }} />
