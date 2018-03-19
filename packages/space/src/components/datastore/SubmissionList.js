@@ -183,6 +183,7 @@ const SubmissionListComponent = ({
                   className={classNames('item', {
                     'item-highlighted': isHighlighted,
                   })}
+                  key={`${item.name}-${item.unique}`}
                 >
                   {item.name}
                 </div>
