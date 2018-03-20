@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
-import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
-import { KappRoute as Route } from 'common';
+import { KappRoute as Route, KappRedirect as Redirect } from 'common';
 import { actions as categoriesActions } from './redux/modules/categories';
 import { actions as formsActions } from './redux/modules/forms';
 import { actions as submissionsActions } from './redux/modules/submissions';
