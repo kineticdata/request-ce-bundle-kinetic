@@ -12,6 +12,7 @@ import { ResetTokenForm } from './components/authentication/ResetTokenForm';
 import { ResetPasswordForm } from './components/authentication/ResetPasswordForm';
 import { LoginForm } from './components/authentication/LoginForm';
 import { CreateAccountForm } from './components/authentication/CreateAccountForm';
+import { UnauthenticatedForm } from './components/authentication/UnauthenticatedForm';
 
 export const LoginScreen = props => (
   <div className="login-container">
@@ -103,6 +104,16 @@ const Authenticated = props => {
         )}
       />
       <Route
+        path="/kapps/:kappSlug/forms/:formSlug"
+        exact
+        render={route => <UnauthenticatedForm {...props} {...route} routed />}
+      />
+      <Route
+        path="/kapps/:kappSlug/submissions/:id"
+        exact
+        render={route => <UnauthenticatedForm {...props} {...route} routed />}
+      />
+      <Route
         path="/"
         render={route => (
           <LoginScreen>
@@ -122,12 +133,12 @@ const Authenticated = props => {
   );
 };
 
-const mapDispatchToProps = state => ({
+const mapStateToProps = state => ({
   pathname: state.router.location.pathname,
 });
 
 export const AuthenticatedContainer = compose(
-  connect(mapDispatchToProps, { push }),
+  connect(mapStateToProps, { push }),
   withState('display', 'setDisplay', 'none'),
   withState('error', 'setError', ''),
   withState('email', 'setEmail', ''),
