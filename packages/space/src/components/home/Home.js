@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import SVGInline from 'react-svg-inline';
 
 import { selectDiscussionsEnabled } from 'kinops/src/redux/selectors';
+import { selectServerUrl } from 'discussions/src/redux/selectors';
+
 
 import {
   actions,
@@ -28,6 +30,7 @@ const HomeComponent = ({
   discussionsError,
   discussionsLoading,
   discussionsSearchTerm,
+  discussionServerUrl,
   isMoreDiscussions,
   me,
   handleCreateDiscussionButtonClick,
@@ -103,6 +106,7 @@ const HomeComponent = ({
                       discussion={discussion}
                       teams={teams}
                       me={me}
+                      discussionServerUrl={discussionServerUrl}
                     />
                   ))}
                 </div>
@@ -142,10 +146,11 @@ export const mapStateToProps = state => ({
   discussionsOffset: state.app.discussionsOffset,
   discussionsSearchInputValue: state.app.discussionsSearchInputValue,
   discussionsSearchTerm: state.app.discussionsSearchTerm,
+  discussionServerUrl: selectServerUrl(state),
   isMoreDiscussions: selectIsMoreDiscussions(state),
+  discussionsEnabled: selectDiscussionsEnabled(state),
   me: state.kinops.profile,
   teams: state.teamList.data,
-  discussionsEnabled: selectDiscussionsEnabled(state),
 });
 
 export const mapDispatchToProps = {
