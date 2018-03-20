@@ -19,6 +19,8 @@ import { ViewProfile } from './profile/ViewProfile';
 import { TeamContainer } from './teams/TeamContainer';
 import { TeamForm } from './teams/TeamForm';
 import { TeamsContainer } from './teams/TeamsContainer';
+import { IsolatedForm } from './shared/IsolatedForm';
+
 
 import { actions } from '../redux/modules/app';
 
@@ -59,6 +61,7 @@ const Layout = ({
           <Route path="/teams/:slug" exact component={TeamContainer} />
         </Switch>
         <Route path="/teams/:slug/edit" exact component={TeamForm} />
+        <Route path="/kapps/:kappSlug/forms/:formSlug" exact component={IsolatedForm} />
       </div>
       <ModalFormContainer globals={globals} />
     </Sidebar>

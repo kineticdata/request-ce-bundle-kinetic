@@ -17,6 +17,7 @@ import { ViewProfile } from './components/profile/ViewProfile';
 import { TeamContainer } from './components/teams/TeamContainer';
 import { TeamForm } from './components/teams/TeamForm';
 import { TeamsContainer } from './components/teams/TeamsContainer';
+import { IsolatedForm } from './components/shared/IsolatedForm';
 import './styles/master.scss';
 
 export const AppComponent = props => {
@@ -49,6 +50,8 @@ export const AppComponent = props => {
             <Route path="/teams/:slug" exact component={TeamContainer} />
           </Switch>
           <Route path="/teams/:slug/edit" exact component={TeamForm} />
+          <Route path="/kapps/:kappSlug/forms/:formSlug" exact component={IsolatedForm} />
+          <Route path="/kapps/:kappSlug/submissions/:id" exact component={IsolatedForm} />
         </div>
       </Fragment>
     ),
