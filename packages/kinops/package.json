@@ -5,8 +5,7 @@
   "scripts": {
     "start": "react-app-rewired start --scripts-version kinops-react-scripts",
     "build": "react-app-rewired build --scripts-version kinops-react-scripts",
-    "test":
-      "react-app-rewired test --scripts-version kinops-react-scripts --env=jsdom",
+    "test": "react-app-rewired test --scripts-version kinops-react-scripts --env=jsdom",
     "eject": "react-scripts eject"
   },
   "dependencies": {
@@ -33,6 +32,7 @@
     "recompose": "^0.26.0",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
+    "semver": "^5.5.0",
     "typeface-open-sans": "^0.0.54"
   }
 }
