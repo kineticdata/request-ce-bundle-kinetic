@@ -1,6 +1,6 @@
-# Services (request-ce-bundle-services)
+# Services
 The Services Kapp is designed to be a place for internal or external users you request things from teams within an organization. This is also where a user can go to review or follow-up on existing requests.
-![Services Screenshot](/screenshot.png)
+![Services Screenshot](./screenshot.png)
 
 ## Kapp Configuration References
 The Services Application leverages different type of Kinetic Request CE configurations for driving logic within the App. These configurations have been outlined below.

@@ -1,6 +1,6 @@
 # Space
 The Space bundle is designed to be a launching point for all other Kapps in the system. Within the space bundle, you can see a list of discussions you are involved in, access other kapps, update your profile, and browse/update teams.
-![Services Screenshot](/screenshot.png)
+![Space Screenshot](./screenshot.png)
 
 ## Space Configuration References
 The Space bundle leverages different type of Kinetic Request CE configurations for driving logic within the App. These configurations have been outlined below.

@@ -1,6 +1,6 @@
-# Queue (request-ce-bundle-queue)
+# Queue
 The Queue Kapp is a work management system build on Kinetic Request CE. Work items can be tasks, approvals, cases or any combination that make up a fulfillment process. Queue helps organize your todo's into lists of work to be completed, and allows you to spawn off ad-hoc work items, and invite others to work on an item with you.
-![Queue Screenshot](/screenshot.png)
+![Queue Screenshot](./screenshot.png)
 
 ## Kapp Configuration References
 The Queue Application leverages different type of Kinetic Request CE configurations for driving logic within the App. These configurations have been outlined below.
