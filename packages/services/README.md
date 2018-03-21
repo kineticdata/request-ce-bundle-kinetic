@@ -54,6 +54,9 @@ _**Approver_ | Options are: a Team Name, a Users username, `manager` or `none`. 
 _**Approval Form Slug_ | The Queue kapp form which approvals related to this form should be created in (Kapp setting is used if not set here) | `approval`
 Description | A short description of what this kapp is used for, typically displayed on the Kapp Listing (home) Page | `Need something from HR? Request it here!`
 Discussion Id | The Id of the Discussion related to this form. Typically where form owners can collaborate on suggestions or changes. | `<discussion guid>`
+Cancel Disabled | This attribute controls whether or not submissions for this form can be canceled. If set to true, the Request to Cancel button will not display. | `true`
+Cloning Disabled | This attribute controls whether or not submissions for this form can be cloned. If set to true, the Clone as Draft button will not display. | ``
+Comment Disabled_ | This attribute controls whether or not submissions for this form can have comments added. If set to true, the Add Comment button will not display. | `true`
 _**Form Workflow_ | Defines which workflow type should be executed for each type of action. All values should be prefixed with an action (Created, Deleted, Updated) Workflow types are (Standard, True, False, or a custom process name) Example (Created - False | Deleted - True | Updated - My Custom Process) | `Updated - False`
 Icon | The [Font Awesome Icons](http://fontawesome.io/icons/) Font Awesome icon used to represent this form. | `fa-truck`
 Owning Team | The Owning Team attribute is used to control who has access to manage this service (form). Users that are a part of the team set here can update this form. | `HR`
