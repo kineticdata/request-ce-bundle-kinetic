@@ -28,7 +28,7 @@ const ResetPassword = ({
         <div className="form-group">
           <label htmlFor="email">Email Address</label>
           <input
-            type="email"
+            type="text"
             id="email"
             className="form-control"
             placeholder="wally@kineticdata.com"

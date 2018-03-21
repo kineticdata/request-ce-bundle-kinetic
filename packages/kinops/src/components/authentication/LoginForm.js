@@ -33,7 +33,7 @@ export const Login = ({
       <div className="form-group">
         <label htmlFor="email">Email Address</label>
         <input
-          type="email"
+          type="text"
           className="form-control"
           id="email"
           placeholder="wally@kineticdata.com"
