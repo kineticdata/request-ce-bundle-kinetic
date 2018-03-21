@@ -1,7 +1,8 @@
 import 'bootstrap/scss/bootstrap.scss';
 import 'font-awesome/css/font-awesome.css';
 import 'typeface-open-sans/index.css';
-import './styles/master.scss';
+import 'common/src/assets/styles/master.scss';
+import './assets/styles/master.scss';
 import 'discussions/styles/master.scss';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';

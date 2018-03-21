@@ -1,7 +1,7 @@
 import React from 'react';
 import SVGInline from 'react-svg-inline';
-import wallyHappyImage from '../../images/wally-happy.svg';
-import wallyMissingImage from '../../images/wally-missing.svg';
+import wallyHappyImage from '../../assets/images/wally-happy.svg';
+import wallyMissingImage from '../../assets/images/wally-missing.svg';
 import { QueueListItemSmall } from './QueueListItem';
 import { TOO_MANY_STATUS_STRING } from '../../redux/sagas/queue';
 import { PageTitle } from '../PageTitle';

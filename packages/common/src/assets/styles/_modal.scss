@@ -84,9 +84,9 @@
     .modal-body {
       display: flex;
       flex-direction: column;
-      padding: 1.5rem;
+      padding: 0;
       .embedded-core-form .container,
-      form{
+      form {
         padding: 0;
       }
       .list-group.button-list {

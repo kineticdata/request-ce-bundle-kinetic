@@ -13,7 +13,7 @@ import { QueueListContainer } from './components/queueList/QueueListContainer';
 import { FilterMenuContainer } from './components/FilterMenu/FilterMenuContainer';
 import { NewItemMenuContainer } from './components/newItemMenu/NewItemMenuContainer';
 import { WorkMenuContainer } from './components/WorkMenu';
-import './styles/master.scss';
+import './assets/styles/master.scss';
 
 const mapStateToProps = (state, props) => ({
   loading: state.queueApp.loading,

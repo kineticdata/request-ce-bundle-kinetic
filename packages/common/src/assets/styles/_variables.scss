@@ -1,6 +1,9 @@
 $header-height: 49px;
 $page-height: calc(100vh - 49px);
 
+$z-index-page: 100;
+$z-index-navigation: 200;
+$z-index-newsletter-modal: 300;
 // Set Responsive Base sizes
 $modularscale: (
   base: 12px,

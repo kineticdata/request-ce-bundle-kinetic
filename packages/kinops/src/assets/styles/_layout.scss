@@ -1,0 +1,22 @@
+body {
+  font-family: $font-family-sans-serif;
+  background-color: $black-3;
+}
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}

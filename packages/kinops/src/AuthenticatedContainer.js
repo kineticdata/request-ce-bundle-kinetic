@@ -5,8 +5,8 @@ import { Route, Switch } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { bundle } from 'react-kinetic-core';
 
-import logoImage from './login-background.png';
-import logoName from './login-name.png';
+import logoImage from './assets/images/login-background.png';
+import logoName from './assets/images/login-name.png';
 
 import { ResetTokenForm } from './components/authentication/ResetTokenForm';
 import { ResetPasswordForm } from './components/authentication/ResetPasswordForm';

@@ -1,6 +1,8 @@
-.queue .list-group-item {
+.queue .list-group-item,
+.modal-body .list-group-item {
   border: none;
   margin-bottom: 0;
+  display: flex;
   &:first-child {
     border-top-right-radius: 0;
     border-top-left-radius: 0;
