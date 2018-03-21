@@ -3,6 +3,7 @@ import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { RequestList } from './RequestList';
 import * as constants from '../../constants';
 import { actions as submissionsActions } from '../../redux/modules/submissions';
+import { actions as submissionCountActions } from '../../redux/modules/submissionCounts';
 
 const mapStateToProps = (state, props) => ({
   submissions: state.submissions.data,
@@ -17,6 +18,7 @@ const mapDispatchToProps = {
   fetchNextPage: submissionsActions.fetchNextPage,
   fetchPreviousPage: submissionsActions.fetchPreviousPage,
   fetchCurrentPage: submissionsActions.fetchCurrentPage,
+  fetchSubmissionCounts: submissionCountActions.fetchSubmissionCounts,
 };
 
 const enhance = compose(
@@ -37,6 +39,7 @@ const enhance = compose(
     componentWillUpdate(nextProps) {
       if (this.props.coreState !== nextProps.coreState) {
         this.props.fetchSubmissions(nextProps.coreState);
+        this.props.fetchSubmissionCounts();
       }
     },
   }),
