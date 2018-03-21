@@ -5,10 +5,10 @@ import 'bootstrap/scss/bootstrap.scss';
 import 'font-awesome/scss/font-awesome.scss';
 import 'typeface-open-sans/index.css';
 
-import 'react-kinops-common/styles/master.scss';
-import 'react-kinops-discussions/styles/master.scss';
+import 'common/src/assets/styles/master.scss';
+import 'discussions/src/assets/styles/master.scss';
 
-import '../styles/master.scss';
+import '../assets/styles/master.scss';
 import { LayoutContainer } from './Layout';
 import { SidebarContent } from './SidebarContent';
 
