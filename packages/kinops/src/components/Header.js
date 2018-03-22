@@ -65,12 +65,10 @@ export const Header = ({
               <i className="fa fa-fw fa-caret-down" />
             </DropdownToggle>
             <DropdownMenu>
-              {currentKapp && (
-                <Link className="dropdown-item" to="/">
-                  <span className="fa fa-fw fa-home" />Home
-                </Link>
-              )}
-              {currentKapp && <DropdownItem divider />}
+              <Link className="dropdown-item" to="/">
+                <span className="fa fa-fw fa-home" />Home
+              </Link>
+              <DropdownItem divider />
               {predefinedKapps.map(thisKapp => (
                 <BuildKappLink kapp={thisKapp} key={thisKapp.slug} />
               ))}

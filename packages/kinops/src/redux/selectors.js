@@ -66,7 +66,6 @@ export const selectPredefinedKapps = state =>
         selectQueueKapp(state),
       ]
         .filter(kapp => kapp != null)
-        .filter(kapp => kapp !== selectCurrentKapp(state))
     : [];
 export const selectAdditionalKapps = state =>
   !state.kinops.loading
