@@ -5,6 +5,14 @@ import {
   types as toastsTypes,
 } from 'kinops/src/redux/modules/toasts';
 import { types as layoutTypes } from 'kinops/src/redux/modules/layout';
+import { getAttributeValue } from '../../../utils';
+
+// Discussion Server
+export const selectDiscussionsEnabled = state =>
+  state.kinops.space &&
+  getAttributeValue(state.kinops.space, 'Discussion Server Url', null) === null
+    ? false
+    : true;
 
 export const actions = {
   openForm: modalFormActions.openForm,

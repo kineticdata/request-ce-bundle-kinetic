@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, withProps } from 'recompose';
 import { KappLink as Link } from 'common';
+import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { actions as discussionActions } from 'discussions';
 import { selectAssignments } from '../../redux/modules/queueApp';
 import { actions, selectPrevAndNext } from '../../redux/modules/queue';
@@ -39,28 +40,31 @@ export const QueueItemDetails = ({
   createDiscussion,
   prevAndNext,
   kappSlug,
+  discussionsEnabled,
 }) => (
   <div className="queue-item-details">
     <div className="scroll-wrapper">
       <div className="general">
-        <button
-          onClick={
-            queueItem.values['Discussion Id'] === null
-              ? createDiscussion
-              : openDiscussion
-          }
-          className="btn btn-primary btn-inverse discussion-button icon-wrapper hidden-md-up"
-        >
-          <span className="icon">
-            <span
-              className="fa fa-comments"
-              style={{ color: '#7e8083', fontSize: '16px' }}
-            />
-          </span>
-          {queueItem.values['Discussion Id'] === null
-            ? 'Create Discussion'
-            : 'View Discussion'}
-        </button>
+        {discussionsEnabled && (
+          <button
+            onClick={
+              queueItem.values['Discussion Id'] === null
+                ? createDiscussion
+                : openDiscussion
+            }
+            className="btn btn-primary btn-inverse discussion-button icon-wrapper hidden-md-up"
+          >
+            <span className="icon">
+              <span
+                className="fa fa-comments"
+                style={{ color: '#7e8083', fontSize: '16px' }}
+              />
+            </span>
+            {queueItem.values['Discussion Id'] === null
+              ? 'Create Discussion'
+              : 'View Discussion'}
+          </button>
+        )}
         <StatusParagraph queueItem={queueItem} prevAndNext={prevAndNext} />
         <h1>
           {queueItem.form.name} ({queueItem.handle})
@@ -171,6 +175,7 @@ export const mapStateToProps = (state, props) => ({
   assignments: selectAssignments(state).toJS(),
   prevAndNext: selectPrevAndNext(state, props.filter),
   kappSlug: state.kinops.kappSlug,
+  discussionsEnabled: selectDiscussionsEnabled(state),
 });
 
 export const mapDispatchToProps = {

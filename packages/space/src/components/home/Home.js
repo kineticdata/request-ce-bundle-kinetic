@@ -4,7 +4,7 @@ import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 import SVGInline from 'react-svg-inline';
 
-import { selectDiscussionsEnabled } from 'kinops/src/redux/selectors';
+import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { selectServerUrl } from 'discussions/src/redux/selectors';
 
 

@@ -8,7 +8,7 @@ export const SubmissionCompletedHeader = ({ activity }) => {
     <div>
       <h1>
         {activity.label}
-        <span className="status status-green">{data.Status}</span>
+        <span className="status status-green">{data.Status || 'Complete'}</span>
       </h1>
     </div>
   );
