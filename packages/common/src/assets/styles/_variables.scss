@@ -1,16 +1,5 @@
-$header-height: 49px;
-$page-height: calc(100vh - 49px);
-
-$z-index-page: 100;
-$z-index-navigation: 200;
-$z-index-newsletter-modal: 300;
-// Set Responsive Base sizes
-$modularscale: (
-  base: 12px,
-  ratio: 1.125,
-  768px: (14px ratio: 1.125),
-  1200px: (base: 16px, ratio: 1.125)
-);
+// Colors
+// --------------------------------------
 
 $transparent-gray1: rgba(51, 51, 51, 0.15);
 $gray2: rgba(213, 213, 213, 1);
@@ -51,9 +40,6 @@ $redRose: rgb(255, 74, 94);
 $yellow: rgb(254, 233, 78);
 $sunflower: rgb(255, 207, 74);
 
-// Colors
-// --------------------------------------
-
 $primary: #313e47;
 $primary-complement: #ffffff;
 $secondary: #6f7e82;
@@ -65,7 +51,6 @@ $lightgray: #d5d6d7;
 $gray: #7e8083;
 $darkgray: #4b4c4e;
 $darkestgray: #333333;
-$black: #222222;
 $white: #ffffff;
 
 $text-color: $gray !default; // Global text color on `<body>`.
@@ -86,9 +71,30 @@ $line-height-base: 1.5rem !default; // Default line height. Equal to 24px.
 // --------------------------------------
 
 $enable-rounded: true;
-$border-radius-base: 0.4rem !default;
+$border-radius-base: 0.25rem !default; // Default border radius. Equal to 4px
 
 $margin-increment: 0.5rem;
 $margin-count: 5;
 $padding-increment: 0.5rem;
 $padding-count: 5;
+
+// Image & Fonts paths variable
+$image-path: '../images';
+$font-path: '../../fonts';
+
+// Header height & Page Height
+$header-height: 48px;
+$page-height: calc(100vh - #{$header-height});
+
+// Z-index defaults
+$z-index-page: 100;
+$z-index-navigation: 200;
+$z-index-modal: 300;
+
+// Set Responsive Base sizes for Modularscale
+$modularscale: (
+  base: 12px,
+  ratio: 1.125,
+  768px: (14px ratio: 1.125),
+  1200px: (base: 16px, ratio: 1.125)
+);
