@@ -42,7 +42,7 @@ const Layout = ({
       docked={sidebarOpen && isLarge}
       onSetOpen={setSidebarOpen}
       sidebarClassName={`sidebar-content ${isLarge ? 'drawer' : 'overlay'}`}
-      contentClassName="main-content"
+      contentClassName="main-container"
     >
       <ToastsContainer />
       <Notifications />

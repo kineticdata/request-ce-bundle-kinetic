@@ -9,7 +9,7 @@ const itemLink = (mode, slug) =>
   `${mode === 'Categories' ? '/categories' : '/forms'}/${slug}`;
 
 export const Sidebar = props => (
-  <div className="services-sidebar">
+  <div className="sidebar services-sidebar">
     <h6>My Requests</h6>
     <Nav vertical>
       <NavItem>

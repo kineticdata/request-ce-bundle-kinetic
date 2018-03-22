@@ -13,7 +13,7 @@ export const Sidebar = ({
   hasTeams,
   hasForms,
 }) => (
-  <div className="queue-sidebar">
+  <div className="sidebar sidebar-queue">
     {hasForms && (
       <button
         type="button"

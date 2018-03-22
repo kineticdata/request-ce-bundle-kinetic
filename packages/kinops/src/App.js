@@ -33,8 +33,10 @@ export const AppComponent = props =>
             open={props.sidebarOpen && props.layoutSize === 'small'}
             docked={props.sidebarOpen && props.layoutSize !== 'small'}
             onSetOpen={props.setSidebarOpen}
-            sidebarClassName={`sidebar ${true ? 'drawer' : 'overlay'}`}
-            contentClassName="main-content"
+            sidebarClassName={`sidebar-container ${
+              true ? 'drawer' : 'overlay'
+            }`}
+            contentClassName="main-container"
           >
             {main}
           </Sidebar>
