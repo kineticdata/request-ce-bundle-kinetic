@@ -17,7 +17,7 @@ import { FormListContainer } from './components/Services/FormListContainer';
 import { RequestListContainer } from './components/Requests/RequestListContainer';
 import { RequestShowContainer } from './components/Requests/RequestShowContainer';
 import { displayableFormPredicate } from './helpers';
-import './assets/styles/scss/master.scss';
+import './assets/styles/master.scss';
 
 const mapStateToProps = (state, props) => {
   const { kinops, categories, forms, systemError } = state;

@@ -41,7 +41,7 @@ $header-text-color: rgba(255, 255, 255, 0.8) !default; // Text color for header
 $subheader-color: rgba(255, 255, 255, 0.6) !default;
 $subheader-text-color: $darkgray !default;
 $font-path: '../../fonts';
-$image-path: '../../images';
+$image-path: '../images';
 
 // Color Tint Function
 // --------------------------------------
@@ -50,10 +50,18 @@ $image-path: '../../images';
 // If average RGB value of $color is <= 128, tint will lighten $color by $percentage (or if $percentage is negative, darken $color by abs($percentage))
 @function tint($color, $percentage) {
   @return if(
-        (red($color) + green($color) + blue($color)) / 3 > 128,
-        if($percentage > 0, darken($color, abs($percentage)), lighten($color, abs($percentage))),
-        if($percentage > 0, lighten($color, abs($percentage)), darken($color, abs($percentage)))
-    );
+    (red($color) + green($color) + blue($color)) / 3 > 128,
+    if(
+      $percentage > 0,
+      darken($color, abs($percentage)),
+      lighten($color, abs($percentage))
+    ),
+    if(
+      $percentage > 0,
+      lighten($color, abs($percentage)),
+      darken($color, abs($percentage))
+    )
+  );
 }
 
 // Color Subtle Function
@@ -74,8 +82,7 @@ $footer-height: 6rem;
 
 $font-family-sans-serif: 'Source Sans Pro', sans-serif !default;
 $font-family-serif: Georgia, 'Times New Roman', Times, serif !default;
-$font-family-monospace: Menlo, Monaco, Consolas, 'Courier New',
-  monospace !default; // Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
+$font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace !default; // Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-base: $font-family-sans-serif !default;
 
 $font-size-base: 1.4rem !default; // Default font size. Equal to 14px.
