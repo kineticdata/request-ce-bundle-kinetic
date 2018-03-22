@@ -2,13 +2,17 @@ import React from 'react';
 import { TimeAgo } from '../../../TimeAgo';
 import { activityData } from '../../RequestActivityList';
 
+const getStatusColor = (status) => (
+  status === 'In Progress' ? 'status-yellow' : status === 'Denied' ? 'status-red' : 'status-green'
+);
+
 export const ApprovalHeader = ({ activity }) => {
   const data = activityData(activity);
   return (
     <div>
       <h1>
         {activity.label}
-        <span className="status status-green">{data.Status}</span>
+        <span className={`status ${getStatusColor(data.Status)}`}>{data.Status}</span>
       </h1>
     </div>
   );

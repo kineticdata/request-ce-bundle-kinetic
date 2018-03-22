@@ -7,12 +7,8 @@ export const TaskHeader = ({ activity }) => {
   return (
     <div>
       <h1>
-        <span>
-          <span className="status status-green">{data.Status}</span>
-          {activity.label}
-        </span>
-
-        <TimeAgo timestamp={activity.createdAt} />
+        {activity.label}
+        <span className="status status-green">{data.Status}</span>
       </h1>
     </div>
   );
