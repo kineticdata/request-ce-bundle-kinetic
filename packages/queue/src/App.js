@@ -4,6 +4,7 @@ import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { List } from 'immutable';
 import { Filter } from './records/index';
 import { KappRoute as Route, KappRedirect as Redirect } from 'common';
+import { Loading } from './components/app/Loading';
 import { Sidebar } from './components/Sidebar';
 import { actions, selectMyTeamForms } from './redux/modules/queueApp';
 import { actions as queueActions } from './redux/modules/queue';
@@ -40,7 +41,7 @@ const mapDispatchToProps = {
 
 export const AppComponent = props => {
   if (props.loading) {
-    return <div>App is loading...</div>;
+    return <Loading text="App is loading ..." />;
   }
   return props.render({
     sidebar: (

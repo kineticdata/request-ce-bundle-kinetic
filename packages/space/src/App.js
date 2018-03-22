@@ -12,6 +12,7 @@ import { Datastore } from './components/datastore/Datastore';
 import { Discussion } from './components/discussion/Discussion';
 import { EditProfile } from './components/profile/EditProfile';
 import { Home } from './components/home/Home';
+import { Loading } from './components/app/Loading';
 import { Notifications } from './components/notifications/Notifications';
 import { ViewProfile } from './components/profile/ViewProfile';
 import { TeamContainer } from './components/teams/TeamContainer';
@@ -22,7 +23,7 @@ import './assets/styles/master.scss';
 
 export const AppComponent = props => {
   if (props.loading) {
-    return <div>App is loading...</div>;
+    return <Loading text="App is loading ..." />;
   }
   return props.render({
     sidebar: (

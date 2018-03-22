@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageTitle } from '../Shared/PageTitle';
+import { PageTitle } from '../PageTitle';
 
 export const Loading = ({ text }) => (
   <div className="loadingWrapper">
