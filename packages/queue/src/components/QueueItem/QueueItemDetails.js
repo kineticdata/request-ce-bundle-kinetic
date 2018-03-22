@@ -52,7 +52,7 @@ export const QueueItemDetails = ({
                 ? createDiscussion
                 : openDiscussion
             }
-            className="btn btn-primary btn-inverse discussion-button icon-wrapper hidden-md-up"
+            className="btn btn-primary btn-inverse discussion-button icon-wrapper d-md-none d-lg-none d-xl-none"
           >
             <span className="icon">
               <span

@@ -46,7 +46,7 @@ export const Team = ({
               <div className="discussion-button-wrapper">
                 <button
                   onClick={openDiscussion}
-                  className="btn btn-primary btn-inverse discussion-button hidden-md-up"
+                  className="btn btn-primary btn-inverse discussion-button d-md-none d-lg-none d-xl-none"
                 >
                   <span className="fa fa-comments fa-fw icon" />
                   View Discussion
@@ -138,7 +138,7 @@ export const Team = ({
         </div>
         {userIsMember &&
           discussionId && (
-            <div className="team-sidebar hidden-sm-down">
+            <div className="team-sidebar d-none d-md-flex">
               <KinopsDiscussion
                 discussionId={discussionId}
                 isMobileModal
