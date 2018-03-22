@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as SpaceLink } from 'react-router-dom';
 import { KappLink as Link, KappNavLink as NavLink } from 'common';
 import { Icon } from '../Icon';
 import { bundle, CoreForm } from 'react-kinetic-core';
@@ -24,13 +25,9 @@ const getIcon = form =>
   );
 
 const ProfileLink = ({ submitter }) => (
-  <a
-    href={`${bundle.spaceLocation()}?page=profile&username=${encodeURIComponent(
-      submitter,
-    )}`}
-  >
+  <SpaceLink to={`/profile/${encodeURIComponent(submitter)}`}>
     {submitter === bundle.identity() ? 'you' : submitter}
-  </a>
+  </SpaceLink>
 );
 
 const StatusItem = ({ submission }) => (
