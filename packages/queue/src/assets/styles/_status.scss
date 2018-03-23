@@ -1,3 +1,7 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Queue Status
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 .queue {
   .status-paragraph {
     display: flex;
@@ -11,35 +15,15 @@
     line-height: 1.5rem;
     &.status-cancelled {
       color: rgba(250, 58, 55, 1);
-      .icon-svg path {
-        fill: rgba(250, 58, 55, 1);
-      }
     }
     &.status-complete {
       color: rgba(16, 148, 196, 1);
-      .icon-svg path {
-        fill: rgba(16, 148, 196, 1);
-      }
     }
     &.status-open {
       color: rgba(2, 212, 177, 1);
-      .icon-svg path {
-        fill: rgba(2, 212, 177, 1);
-      }
     }
     &.status-pending {
       color: rgba(255, 153, 28, 1);
-      .icon-svg path {
-        fill: rgba(255, 153, 28, 1);
-      }
-    }
-    .icon-svg {
-      margin-right: 3px;
-      height: 0.5rem;
-      width: 0.5rem;
-      path {
-        fill: $blue1;
-      }
     }
     .status-reason {
       color: rgba(11, 168, 224, 1);

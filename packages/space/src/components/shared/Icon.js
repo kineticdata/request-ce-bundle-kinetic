@@ -18,7 +18,7 @@ const colors = {
 };
 
 export const Icon = props => (
-  <i
+  <span
     style={
       props.background
         ? { background: colors[props.background] || colors.default }

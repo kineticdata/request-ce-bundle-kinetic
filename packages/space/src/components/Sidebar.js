@@ -7,18 +7,18 @@ import { KappCard } from './shared/KappCard';
 export const SidebarContent = ({ kapps, teams, isSpaceAdmin }) => (
   <div className="sidebar space-sidebar">
     {kapps.length > 0 && (
-      <div className="kapp-cards-wrapper">
-        <h6>Kapps</h6>
+      <div className="sidebar-group sidebar-kapp-cards">
+        <h1>Kapps</h1>
         {kapps.map(kapp => <KappCard key={kapp.slug} kapp={kapp} />)}
       </div>
     )}
-    <div className="my-teams-wrapper">
-      <h6>
+    <div className="sidebar-group sidebar-my-teams">
+      <h1>
         My Teams
         <Link to="/teams" className="view-all">
           All Teams
         </Link>
-      </h6>
+      </h1>
 
       {teams.length === 0 && (
         <ul className="nav flex-column">
@@ -45,7 +45,7 @@ export const SidebarContent = ({ kapps, teams, isSpaceAdmin }) => (
                 className="nav-link"
                 activeClassName="active"
               >
-                <i
+                <span
                   style={{ background: getTeamColor(team) }}
                   className={`fa ${Utils.getAttributeValue(
                     team,

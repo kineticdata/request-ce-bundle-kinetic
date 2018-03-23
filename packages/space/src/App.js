@@ -4,7 +4,7 @@ import { compose, lifecycle } from 'recompose';
 import { Route, Switch } from 'react-router-dom';
 import { Utils } from 'common';
 import { actions } from './redux/modules/app';
-import { SidebarContent } from './components/SidebarContent';
+import { SidebarContent } from './components/Sidebar';
 import { About } from './components/about/About';
 import { AlertForm } from './components/alerts/AlertForm';
 import { Alerts } from './components/alerts/Alerts';

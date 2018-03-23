@@ -10,7 +10,7 @@ import 'discussions/src/assets/styles/master.scss';
 
 import '../assets/styles/master.scss';
 import { LayoutContainer } from './Layout';
-import { SidebarContent } from './SidebarContent';
+import { SidebarContent } from './Sidebar';
 
 export const App = ({ loading }) => (
   <div>

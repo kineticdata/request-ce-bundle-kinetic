@@ -1,5 +1,4 @@
-.space,
-.space-sidebar {
+.space {
   .fragment {
     display: flex;
     flex-grow: 1;
@@ -99,24 +98,18 @@
       line-height: 2rem;
     }
   }
-  .fa.card-icon,
-  .card-icon {
-    height: 24px;
-    width: 24px;
-    font-size: 0.75rem;
-    background-color: $greenGrass;
-    margin-right: 5px;
-    margin-top: 6px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 24px;
-    color: $white;
-    flex-shrink: 0;
-    &.icon-greengrass {
-      background-color: $greenGrass;
-    }
-    &.icon-sunflower {
-      background-color: $sunflower;
-    }
-  }
+}
+.fa.card-icon,
+.card-icon {
+  height: 1.5rem;
+  width: 1.5rem;
+  font-size: 0.75rem;
+  background-color: $greenGrass;
+  margin-right: 5px;
+  margin-top: 6px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 1.5rem;
+  color: $white;
+  flex-shrink: 0;
 }
