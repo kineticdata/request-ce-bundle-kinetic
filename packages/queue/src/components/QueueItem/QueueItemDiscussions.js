@@ -11,7 +11,7 @@ export const QueueItemDiscussions = props => {
       renderClose={() => null}
     />
   ) : (
-    <div className="kinops-discussions hidden-sm-down">
+    <div className="kinops-discussions d-none d-md-flex">
       <div className="empty-discussion">
         <h6>No discussion to display</h6>
         <p>

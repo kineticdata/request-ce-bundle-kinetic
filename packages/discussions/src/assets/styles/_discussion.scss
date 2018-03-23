@@ -65,7 +65,7 @@
           h5,
           p {
             margin: 0;
-            a{
+            a {
               overflow-wrap: break-word;
             }
           }
@@ -197,18 +197,24 @@
       border-radius: 0;
 
       &.btn-more {
-        background-color: #d3dce7;
+        background-color: $blue3;
         border-width: 0;
         opacity: 0.5;
         display: flex;
         justify-content: center;
+        .fa-plus {
+          color: $black-50;
+        }
       }
 
       &.btn-send {
-        background-color: #d3dce7;
+        background-color: $blue3;
         cursor: pointer;
         &:disabled {
           cursor: not-allowed;
+        }
+        .fa-paper-plane {
+          color: $blue1;
         }
       }
 
@@ -260,7 +266,7 @@
     .input-container {
       flex: 1;
       padding: 12px;
-      background-color: #d3dce7;
+      background-color: $blue3;
 
       .placeholder {
         color: #a8b7c7;

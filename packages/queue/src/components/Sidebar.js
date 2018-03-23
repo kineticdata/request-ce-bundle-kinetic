@@ -112,40 +112,5 @@ export const Sidebar = ({
         </NavItem>
       )}
     </Nav>
-    {/*
-      ** TODO REMOVING UNTIL FURTHER DEFINED **
-      <Nav vertical className="bottom-nav">
-        <NavItem>
-          <a
-            href={documentationUrl}
-            className="nav-link icon-wrapper d-flex justify-content-between"
-            target="_blank"
-          >
-            <span>Documentation</span>
-            <SVGInline svg={chevronRightIcon} className="icon" />
-          </a>
-        </NavItem>
-        <NavItem>
-          <a
-            href={supportUrl}
-            className="nav-link icon-wrapper d-flex justify-content-between"
-            target="_blank"
-          >
-            <span>Need Help?</span>
-            <SVGInline svg={chevronRightIcon} className="icon" />
-          </a>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            to="/settings"
-            className="nav-link icon-wrapper d-flex justify-content-between"
-            activeClassName="active"
-          >
-            <span>Settings</span>
-            <SVGInline svg={chevronRightIcon} className="icon" />
-          </NavLink>
-        </NavItem>
-      </Nav>
-    */}
   </div>
 );

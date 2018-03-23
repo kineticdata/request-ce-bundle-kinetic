@@ -128,13 +128,13 @@ export const Discussion = props => {
 
   if (discussion && isModal) {
     return (
-      <div className="kinops-discussions hidden-sm-down">
+      <div className="kinops-discussions d-none d-md-flex">
         <DiscussionModal {...props} />
       </div>
     );
   } else if (discussion && isMobileModal) {
     return (
-      <div className="kinops-discussions hidden-sm-down">
+      <div className="kinops-discussions d-none d-md-flex">
         {!isSmallLayout && <Messages {...props} />}
         {!isSmallLayout && <ChatInputForm discussion={discussion} />}
         <DiscussionModal {...props} />

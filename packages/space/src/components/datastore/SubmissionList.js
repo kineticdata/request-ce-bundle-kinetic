@@ -1,5 +1,4 @@
 import React from 'react';
-import SVGInline from 'react-svg-inline';
 import wallyHappyImage from '../../images/wally-happy.svg';
 
 import { List } from 'immutable';
@@ -36,7 +35,7 @@ const WallyEmptyMessage = ({ form }) => {
   return (
     <div className="wally">
       <h5>No {form.name} Submissions Found</h5>
-      <SVGInline svg={wallyHappyImage} />
+      <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>Add some records by hitting the new button!.</h6>
     </div>
   );
@@ -97,17 +96,7 @@ const BetweenCriteria = ({ part, handleIndexPartBetween }) => (
       value={part.value.values.get(0)}
       onChange={handleIndexPartBetween(part, 0)}
     />
-    <span
-      style={{
-        color: '#7e8083',
-        fontSize: '13px',
-        fontWeight: '600',
-        lineHeight: '18px',
-        padding: '0 0.5em',
-      }}
-    >
-      to
-    </span>
+    <span>to</span>
     <input
       className="search-lookup-input"
       value={part.value.values.get(1)}
@@ -162,46 +151,46 @@ const SubmissionListComponent = ({
 }) =>
   !loading ? (
     <div className="submission-wrapper">
-      <div className="subheader">
-        <Link to={`/datastore`} className="back-link">
-          <div className="icon-wrapper">
-            <SVGInline svg={chevronLeftIcon} className="icon" />
-            Forms / {form.name} / Records
-          </div>
-        </Link>
-      </div>
-
       <div className="datastore-container">
-        <h5>{form.name} Records</h5>
-        <div className="search-lookup">
-          <span className="search-lookup-label">Look up by</span>
-          <div className="search-lookup-select">
-            <Autocomplete
-              shouldItemRender={shouldItemRender}
-              renderItem={(item, isHighlighted) => (
-                <div
-                  className={classNames('item', {
-                    'item-highlighted': isHighlighted,
-                  })}
-                  key={`${item.name}-${item.unique}`}
-                >
-                  {item.name}
-                </div>
-              )}
-              value={indexLookup}
-              items={indexDefinitions}
-              getItemValue={item => item.name}
-              onChange={e => setIndexLookup(e.target.value)}
-              onSelect={setIndexHandler}
-            />
-          </div>
-          <div className="search-lookup-reset">
-            <button className="btn btn-link" onClick={handleResetSearch}>
-              Reset
-            </button>
+        <div className="page-title-wrapper">
+          <div className="page-title">
+            <h3>
+              <Link to={`/datastore/`}>datastore</Link> /{` `}
+              <Link to={`${form.slug}`}>{form.name}</Link> /
+            </h3>
+            <h1>Records</h1>
           </div>
         </div>
-
+        <div className="search-lookup-wrapper">
+          <div className="search-lookup">
+            <strong>Look up by</strong>
+            <div className="search-lookup-select">
+              <Autocomplete
+                shouldItemRender={shouldItemRender}
+                renderItem={(item, isHighlighted) => (
+                  <div
+                    className={classNames('item', {
+                      'item-highlighted': isHighlighted,
+                    })}
+                    key={`${item.name}-${item.unique}`}
+                  >
+                    {item.name}
+                  </div>
+                )}
+                value={indexLookup}
+                items={indexDefinitions}
+                getItemValue={item => item.name}
+                onChange={e => setIndexLookup(e.target.value)}
+                onSelect={setIndexHandler}
+              />
+            </div>
+            <div className="search-lookup-reset">
+              <button className="btn btn-link" onClick={handleResetSearch}>
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
         {searchParams.index &&
           searchParams.indexParts.map(part => (
             <div className="search-lookup-param" key={part.name}>
@@ -245,7 +234,7 @@ const SubmissionListComponent = ({
               </span>
             </div>
           ))}
-        <div className="search-lookup-actions">
+        <div className="search-lookup-fotter">
           {(pageTokens.size > 0 || nextPageToken !== null) && (
             <span className="search-lookup-error">
               {`The Datastore contains too many records to display at one time.
