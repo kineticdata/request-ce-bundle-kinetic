@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, withHandlers, withState } from 'recompose';
 import { Link } from 'react-router-dom';
-import SVGInline from 'react-svg-inline';
-import chevronLeftIcon from 'font-awesome-svg-png/black/svg/chevron-left.svg';
 import { parse } from 'query-string';
 import { CoreForm } from 'react-kinetic-core';
 
@@ -21,19 +19,16 @@ const DatastoreSubmissionComponent = ({
   values,
 }) => (
   <div className="submission-wrapper">
-    <div className="subheader">
-      <Link
-        to={`/datastore${submissionId ? '/' + form.slug : ''}`}
-        className="back-link"
-      >
-        <div className="icon-wrapper">
-          <SVGInline svg={chevronLeftIcon} className="icon" />
-          Forms / {form.name} / {submissionId || ' New'}
-        </div>
-      </Link>
-    </div>
-
     <div className="datastore-container">
+      <div className="page-title-wrapper">
+        <div className="page-title">
+          <h3>
+            <Link to={`/datastore/`}>datastore</Link> /{` `}
+            <Link to={`/datastore/${form.slug}/`}>{form.name}</Link> /
+          </h3>
+          <h1>{submissionId || ' New'}</h1>
+        </div>
+      </div>
       <div className="form-wrapper">
         {submissionId ? (
           <CoreForm

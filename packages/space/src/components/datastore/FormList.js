@@ -13,6 +13,7 @@ import {
   DropdownItem,
 } from 'reactstrap';
 
+import { TimeAgo } from '../TimeAgo';
 import { actions } from '../../redux/modules/datastore';
 
 const WallyEmptyMessage = ({ filter }) => {
@@ -28,30 +29,32 @@ const WallyEmptyMessage = ({ filter }) => {
   );
 };
 
-const FormListItem = ({ form, openDropdown, toggleDropdown, match }) => (
-  <tr>
-    <td>
-      <Link to={`/datastore/${form.slug}`}>{form.name}</Link>
-    </td>
-    <td>{form.description}</td>
-    <td>
-      <Dropdown
-        toggle={toggleDropdown(form.slug)}
-        isOpen={openDropdown === form.slug}
-        className="list-dropdown"
-      >
-        <DropdownToggle className="btn btn-link">
-          <span className="fa fa-ellipsis-h fa-2x" />
-        </DropdownToggle>
-        <DropdownMenu>
-          <DropdownItem tag={Link} to={`${match.path}/${form.slug}/new`}>
-            Create
-          </DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-    </td>
-  </tr>
-);
+const Timestamp = ({ slug, label, value }) =>
+  value && (
+    <li className="list-group-item">
+      {label}
+      &nbsp;
+      <TimeAgo timestamp={value} id={`${slug}-${label}`} />
+    </li>
+  );
+
+const FormListItem = ({ form }) => {
+  const { createdAt, updatedAt, slug, name, description } = form;
+  return (
+    <li className="submission list-group-item">
+      <Link to={`datastore/${slug}`} className="summary-group">
+        <h6>
+          {name} ({slug})
+        </h6>
+        <p className="summary">{description}</p>
+        <ul className="timestamps list-group">
+          <Timestamp label="Updated" value={updatedAt} slug={slug} />
+          <Timestamp label="Created" value={createdAt} slug={slug} />
+        </ul>
+      </Link>
+    </li>
+  );
+};
 
 const FormListComponent = ({
   datastoreForms,
@@ -63,9 +66,15 @@ const FormListComponent = ({
   console.log(match);
   return (
     <div className="datastore-container">
-      <div className="controls">
-        <h3>Forms</h3>
+      <div className="page-title-wrapper">
+        <div className="page-title">
+          <h3>
+            <Link to={`/datastore/`}>datastore</Link> /{` `}
+          </h3>
+          <h1>Forms</h1>
+        </div>
       </div>
+
       <div className="queue-list-content submissions">
         {loading ? (
           <h3>Loading</h3>
@@ -80,13 +89,30 @@ const FormListComponent = ({
             </thead>
             <tbody>
               {datastoreForms.map(form => (
-                <FormListItem
-                  key={form.slug}
-                  form={form}
-                  toggleDropdown={toggleDropdown}
-                  openDropdown={openDropdown}
-                  match={match}
-                />
+                <tr key={form.slug}>
+                  <td>
+                    <Link to={`/datastore/${form.slug}`}>{form.name}</Link>
+                  </td>
+                  <td>{form.description}</td>
+                  <td>
+                    <Dropdown
+                      toggle={toggleDropdown(form.slug)}
+                      isOpen={openDropdown === form.slug}
+                    >
+                      <DropdownToggle color="link">
+                        <span className="fa fa-ellipsis-h fa-2x" />
+                      </DropdownToggle>
+                      <DropdownMenu right>
+                        <DropdownItem
+                          tag={Link}
+                          to={`${match.path}/${form.slug}/new`}
+                        >
+                          Create Submission
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </td>
+                </tr>
               ))}
             </tbody>
           </table>

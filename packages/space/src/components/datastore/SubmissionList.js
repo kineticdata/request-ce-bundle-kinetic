@@ -97,17 +97,7 @@ const BetweenCriteria = ({ part, handleIndexPartBetween }) => (
       value={part.value.values.get(0)}
       onChange={handleIndexPartBetween(part, 0)}
     />
-    <span
-      style={{
-        color: '#7e8083',
-        fontSize: '13px',
-        fontWeight: '600',
-        lineHeight: '18px',
-        padding: '0 0.5em',
-      }}
-    >
-      to
-    </span>
+    <span>to</span>
     <input
       className="search-lookup-input"
       value={part.value.values.get(1)}
