@@ -27,7 +27,7 @@ export const SortedBySection = ({ filter, setSortedByHandler }) => (
         />
         {label}
       </label>
-    ))}
+    )).toList()}
   </ModalBody>
 );
 
