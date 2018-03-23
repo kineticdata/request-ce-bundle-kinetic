@@ -1,5 +1,4 @@
 import React from 'react';
-import SVGInline from 'react-svg-inline';
 import wallyHappyImage from '../../images/wally-happy.svg';
 
 import { Link } from 'react-router-dom';
