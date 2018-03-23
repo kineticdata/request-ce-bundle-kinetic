@@ -80,7 +80,7 @@ const HomeComponent = ({
       ) : (
         <div className="wally">
           <h5>Woops...</h5>
-          <SVGInline svg={wallyMissingImage} />
+          <img src={wallyMissingImage} alt="Missing Wally" />
           <h6>
             Looks like this space does not have a Discussion Server configured!
           </h6>
@@ -129,7 +129,7 @@ const HomeComponent = ({
         discussionGroups.size === 0 && (
           <div className="wally">
             <h5>No discussions found</h5>
-            <SVGInline svg={wallyMissingImage} />
+            <img src={wallyMissingImage} alt="Missing Wally" />
             <h6>You are not involved in any discussions!</h6>
           </div>
         )}

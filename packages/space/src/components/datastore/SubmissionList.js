@@ -36,7 +36,7 @@ const WallyEmptyMessage = ({ form }) => {
   return (
     <div className="wally">
       <h5>No {form.name} Submissions Found</h5>
-      <SVGInline svg={wallyHappyImage} />
+      <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>Add some records by hitting the new button!.</h6>
     </div>
   );

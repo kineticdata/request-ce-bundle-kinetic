@@ -19,7 +19,7 @@ const WallyEmptyMessage = ({ filter }) => {
   return (
     <div className="wally">
       <h5>No Datstore Forms Found</h5>
-      <SVGInline svg={wallyHappyImage} />
+      <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>
         Datastore Forms are used for storing reference data that can be used by
         other Kapps.

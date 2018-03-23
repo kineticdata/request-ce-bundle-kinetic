@@ -11,7 +11,7 @@ const WallyEmptyMessage = ({ me }) => {
   return (
     <div className="wally">
       <h5>No Teams Right Now...</h5>
-      <SVGInline svg={wallyHappyImage} />
+      <img src={wallyHappyImage} alt="Happy Wally" />
       {me.spaceAdmin && <h6>Add a team by hitting the new button!</h6>}
     </div>
   );

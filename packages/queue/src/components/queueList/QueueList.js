@@ -1,5 +1,4 @@
 import React from 'react';
-import SVGInline from 'react-svg-inline';
 import wallyHappyImage from '../../assets/images/wally-happy.svg';
 import wallyMissingImage from '../../assets/images/wally-missing.svg';
 import { QueueListItemSmall } from './QueueListItem';
@@ -18,7 +17,7 @@ const WallyEmptyMessage = ({ filter }) => {
     return (
       <div className="wally">
         <h5>No Results</h5>
-        <SVGInline svg={wallyMissingImage} />
+        <img src={wallyMissingImage} alt="Missing Wally" />
         <h6>Try a less specific filter.</h6>
         <h5>Try again</h5>
       </div>
@@ -28,7 +27,7 @@ const WallyEmptyMessage = ({ filter }) => {
   return (
     <div className="wally">
       <h5>No Assignments</h5>
-      <SVGInline svg={wallyHappyImage} />
+      <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>An empty queue is a happy queue.</h6>
     </div>
   );
@@ -38,7 +37,7 @@ const WallyErrorMessage = ({ message }) => {
   return (
     <div className="wally">
       <h5>{message === TOO_MANY_STATUS_STRING ? 'Too Many Items' : 'Error'}</h5>
-      <SVGInline svg={wallyMissingImage} />
+      <img src={wallyMissingImage} alt="Missing Wally" />
       <h6>{message}</h6>
       <h5>Try again</h5>
     </div>
@@ -48,7 +47,7 @@ const WallyErrorMessage = ({ message }) => {
 const WallyBadFilter = () => (
   <div className="wally">
     <h5>Invalid List</h5>
-    <SVGInline svg={wallyMissingImage} />
+    <img src={wallyMissingImage} alt="Missing Wally" />
     <h6>Invalid list, please choose a valid list from the left side.</h6>
   </div>
 );
