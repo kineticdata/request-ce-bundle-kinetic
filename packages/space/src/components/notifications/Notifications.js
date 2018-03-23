@@ -2,9 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 
-import SVGInline from 'react-svg-inline';
-import timesIcon from 'font-awesome-svg-png/white/svg/times.svg';
-
 import { actions } from '../../redux/modules/errors';
 
 const defaultTitle = {
@@ -25,7 +22,7 @@ const Notification = ({ notification, dismiss }) => (
     </div>
     <div className="actions">
       <button className="btn btn-link" onClick={dismiss}>
-        <SVGInline svg={timesIcon} className="icon" />
+        <span className="fa fa-fw fa-times" />
       </button>
     </div>
   </div>
