@@ -1,26 +1,18 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import { Map } from 'immutable';
-import { CoreAPI, bundle } from 'react-kinetic-core';
+import { CoreAPI } from 'react-kinetic-core';
 import { actions, types } from '../modules/kinops';
 import semver from 'semver';
-import axios from 'axios';
 
-const VERSION_ENDPOINT = `${bundle.apiLocation()}/version`;
 const MINIMUM_CE_VERSION = '2.0.2';
-
-export const fetchVersion = () =>
-  axios
-    .get(`${VERSION_ENDPOINT}`)
-    .then(response => ({ version: response.data.version.version }))
-    .catch(response => ({ error: response }));
 
 // Fetch Entire App
 export function* fetchAppTask() {
 
-  const { version } = yield call(fetchVersion);
+  const { version } = yield call(CoreAPI.fetchVersion);
 
   // Check to make sure the version is compatible with this bundle.
-  if (semver.satisfies(semver.coerce(version), `>=${MINIMUM_CE_VERSION}`)) {
+  if (semver.satisfies(semver.coerce(version.version), `>=${MINIMUM_CE_VERSION}`)) {
     const { profile } = yield call(CoreAPI.fetchProfile, {
       include:
         'attributes,profileAttributes,memberships,memberships.team,memberships.team.attributes,memberships.team.memberships,memberships.team.memberships.user,attributes,space,space.details,space.attributes,space.kapps,space.kapps.attributes',
