@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, withHandlers, withState } from 'recompose';
 import { Header } from './Header';
 import * as selectors from '../redux/selectors';
 
@@ -17,4 +17,10 @@ export const mapStateToProps = state => ({
   currentKapp: selectors.selectCurrentKapp(state),
 });
 
-export const HeaderContainer = compose(connect(mapStateToProps))(Header);
+export const HeaderContainer = compose(
+  connect(mapStateToProps),
+  withState('kappDropdownOpen', 'setKappDropdownOpen', false),
+  withHandlers({
+    kappDropdownToggle: props => () => props.setKappDropdownOpen(open => !open),
+  }),
+)(Header);

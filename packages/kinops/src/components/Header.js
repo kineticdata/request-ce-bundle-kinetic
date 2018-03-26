@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import {
-  UncontrolledDropdown,
+  Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
@@ -19,8 +19,8 @@ import { ProfileContainer } from './ProfileContainer';
 export const dropdownTitleName = currentKapp =>
   currentKapp ? currentKapp.name : 'Home';
 
-const BuildKappLink = ({ kapp, nameOverride = kapp.name }) => (
-  <Link className="dropdown-item" to={`/kapps/${kapp.slug}`}>
+const BuildKappLink = ({ kapp, onClick, nameOverride = kapp.name }) => (
+  <Link className="dropdown-item" to={`/kapps/${kapp.slug}`} onClick={onClick}>
     <span
       className={`fa fa-fw' ${getAttributeValue(kapp, 'Icon') || 'fa-book'}`}
     />
@@ -38,6 +38,8 @@ export const Header = ({
   adminKapp,
   predefinedKapps,
   additionalKapps,
+  kappDropdownOpen,
+  kappDropdownToggle,
 }) => (
   <Navbar color="faded" light fixed="top">
     <Nav className="nav-header">
@@ -60,20 +62,36 @@ export const Header = ({
               {dropdownTitleName(currentKapp)}
             </KappLink>
           </NavItem>
-          <UncontrolledDropdown id="header-kapp-dropdown">
+          <Dropdown
+            id="header-kapp-dropdown"
+            isOpen={kappDropdownOpen}
+            toggle={kappDropdownToggle}
+          >
             <DropdownToggle nav role="button">
               <i className="fa fa-fw fa-caret-down" />
             </DropdownToggle>
             <DropdownMenu>
-              <Link className="dropdown-item" to="/">
+              <Link
+                className="dropdown-item"
+                to="/"
+                onClick={kappDropdownToggle}
+              >
                 <span className="fa fa-fw fa-home" />Home
               </Link>
               <DropdownItem divider />
               {predefinedKapps.map(thisKapp => (
-                <BuildKappLink kapp={thisKapp} key={thisKapp.slug} />
+                <BuildKappLink
+                  kapp={thisKapp}
+                  key={thisKapp.slug}
+                  onClick={kappDropdownToggle}
+                />
               ))}
               {additionalKapps.map(thisKapp => (
-                <BuildKappLink kapp={thisKapp} key={thisKapp.slug} />
+                <BuildKappLink
+                  kapp={thisKapp}
+                  key={thisKapp.slug}
+                  onClick={kappDropdownToggle}
+                />
               ))}
               {(hasAccessToManagement || hasAccessToSupport) && (
                 <DropdownItem divider />
@@ -81,9 +99,7 @@ export const Header = ({
               {hasAccessToManagement && (
                 <DropdownItem
                   tag="a"
-                  href={`${bundle.kappLocation(
-                    adminKapp.slug,
-                  )}`}
+                  href={`${bundle.kappLocation(adminKapp.slug)}`}
                 >
                   <span className="fa fa-fw fa-gear" />Admin Console
                 </DropdownItem>
@@ -99,7 +115,7 @@ export const Header = ({
                 </DropdownItem>
               )}
             </DropdownMenu>
-          </UncontrolledDropdown>
+          </Dropdown>
           <AlertsContainer />
           <ProfileContainer />
         </Fragment>
