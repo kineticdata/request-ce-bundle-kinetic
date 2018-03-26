@@ -11,6 +11,7 @@
   flex-direction: column;
   padding: 0 0 1.5rem 0;
   width: 252px;
+  // Major action button for kapp
   .btn {
     font-size: 0.875rem;
     margin: 0 auto;
@@ -24,7 +25,7 @@
       }
     }
   }
-
+  // Grouping of related links
   .sidebar-group {
     display: flex;
     flex-direction: column;
@@ -32,6 +33,7 @@
     padding-left: 0;
     margin: 0.75rem 0 0 0;
     list-style: none;
+    // Group Title
     h1 {
       color: $blueLake;
       display: flex;
@@ -42,6 +44,7 @@
       margin: 0;
       text-transform: uppercase;
       justify-content: space-between;
+      // Group Title Link or action
       a {
         line-height: normal;
         margin-left: auto;
@@ -51,14 +54,18 @@
           color: $blueLake;
         }
       }
-    }
-    .btn-sidebar {
-      .fa {
-        color: $gray;
-        &:hover {
-          color: $blueLake;
+      // Group Title Button color
+      .btn-sidebar {
+        .fa {
+          color: $gray;
+          &:hover {
+            color: $blueLake;
+          }
         }
       }
+    }
+    .card-icon {
+      margin-top: 0;
     }
     .nav-link {
       border-left: 3px solid $black-3;
@@ -71,7 +78,6 @@
       padding: 0.25rem 1.5rem;
       transition: border-left-color 0.5s, color 0.5s;
       .fa {
-        // display: flex;
         font-size: 1rem;
         margin-right: 0.5rem;
       }

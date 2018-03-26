@@ -3,7 +3,7 @@
   border-top-right-radius: 0;
   color: $blue1;
   padding: 0;
-  width: 22.5rem;
+  min-width: 22.5rem;
   a {
     color: $blue1;
     text-decoration: none;
@@ -16,13 +16,13 @@
     justify-content: space-between;
     padding: 0.5rem 1.5rem;
     .title {
-      @include ms-respond(font-size, -1);
+      @include ms-respond(font-size, 0);
     }
     .actions {
       align-items: center;
       display: flex;
       a {
-        @include ms-respond(font-size, -2);
+        @include ms-respond(font-size, -1);
         padding: 0.5rem;
         line-height: 0.5;
       }
