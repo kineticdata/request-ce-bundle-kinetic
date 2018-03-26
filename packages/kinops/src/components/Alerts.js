@@ -1,9 +1,15 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 
-export const Alerts = ({ alerts, fetchAlerts, isSpaceAdmin }) => (
-  <UncontrolledDropdown className="nav-item-right">
+export const Alerts = ({
+  alerts,
+  fetchAlerts,
+  isSpaceAdmin,
+  isOpen,
+  toggle,
+}) => (
+  <Dropdown className="nav-item-right" isOpen={isOpen} toggle={toggle}>
     <DropdownToggle nav role="button">
       <i className="fa fa-fw fa-bell" />
       {alerts.size > 0 && (
@@ -18,11 +24,15 @@ export const Alerts = ({ alerts, fetchAlerts, isSpaceAdmin }) => (
             Refresh
           </a>
           <span className="divider">&bull;</span>
-          <Link to="/alerts">View All</Link>
+          <Link to="/alerts" onClick={toggle}>
+            View All
+          </Link>
           {isSpaceAdmin && (
             <Fragment>
               <span className="divider">&bull;</span>
-              <Link to="/alerts/new">Create Alert</Link>
+              <Link to="/alerts/new" onClick={toggle}>
+                Create Alert
+              </Link>
             </Fragment>
           )}
         </div>
@@ -46,5 +56,5 @@ export const Alerts = ({ alerts, fetchAlerts, isSpaceAdmin }) => (
         )}
       </ul>
     </DropdownMenu>
-  </UncontrolledDropdown>
+  </Dropdown>
 );

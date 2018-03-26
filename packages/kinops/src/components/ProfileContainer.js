@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, withState } from 'recompose';
 
 import { Profile } from './Profile';
 import { actions } from '../redux/modules/modalForm';
@@ -43,12 +43,24 @@ const mapDispatchToProps = {
 
 export const ProfileContainer = compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withState('isOpen', 'setIsOpen', false),
   withHandlers({
-    openHelpForm: props => () => props.openForm(HELP_FORM_CONFIG),
-    openFeedbackForm: props => () => props.openForm(FEEDBACK_FORM_CONFIG),
-    openInviteOthersForm: props => () =>
-      props.openForm(INVITE_OTHERS_FORM_CONFIG),
-    openKitchenSinkForm: props => () =>
-      props.openForm(KITCHEN_SINK_FORM_CONFIG),
+    openHelpForm: props => () => {
+      props.setIsOpen(false);
+      props.openForm(HELP_FORM_CONFIG);
+    },
+    openFeedbackForm: props => () => {
+      props.setIsOpen(false);
+      props.openForm(FEEDBACK_FORM_CONFIG);
+    },
+    openInviteOthersForm: props => () => {
+      props.setIsOpen(false);
+      props.openForm(INVITE_OTHERS_FORM_CONFIG);
+    },
+    openKitchenSinkForm: props => () => {
+      props.setIsOpen(false);
+      props.openForm(KITCHEN_SINK_FORM_CONFIG);
+    },
+    toggle: props => () => props.setIsOpen(open => !open),
   }),
 )(Profile);

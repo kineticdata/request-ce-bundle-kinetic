@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, withHandlers, withState } from 'recompose';
 import { List } from 'immutable';
 import moment from 'moment';
 import { Alerts } from './Alerts';
@@ -30,4 +30,8 @@ const mapDispatchToProps = {
 
 export const AlertsContainer = compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withState('isOpen', 'setIsOpen', false),
+  withHandlers({
+    toggle: props => () => props.setIsOpen(open => !open),
+  }),
 )(Alerts);

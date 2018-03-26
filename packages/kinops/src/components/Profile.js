@@ -1,7 +1,7 @@
 import React from 'react';
 import Avatar from 'react-avatar';
 import { Link } from 'react-router-dom';
-import { UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { bundle } from 'react-kinetic-core';
 
 export const Profile = ({
@@ -10,8 +10,10 @@ export const Profile = ({
   openHelpForm,
   openInviteOthersForm,
   openKitchenSinkForm,
+  isOpen,
+  toggle,
 }) => (
-  <UncontrolledDropdown>
+  <Dropdown isOpen={isOpen} toggle={toggle}>
     <DropdownToggle
       nav
       role="button"
@@ -35,10 +37,7 @@ export const Profile = ({
       </div>
       <div className="profile-links">
         <div className="dropdown-divider" />
-        <Link
-          to="/profile"
-          className="dropdown-item"
-        >
+        <Link to="/profile" className="dropdown-item" onClick={toggle}>
           Profile
         </Link>
         {profile.spaceAdmin && (
@@ -67,10 +66,7 @@ export const Profile = ({
         >
           Give Feedback
         </a>
-        <Link
-          to="/about"
-          className="dropdown-item"
-        >
+        <Link to="/about" className="dropdown-item" onClick={toggle}>
           About My Space
         </Link>
         <div className="dropdown-divider" />
@@ -82,5 +78,5 @@ export const Profile = ({
         </a>
       </div>
     </DropdownMenu>
-  </UncontrolledDropdown>
+  </Dropdown>
 );
