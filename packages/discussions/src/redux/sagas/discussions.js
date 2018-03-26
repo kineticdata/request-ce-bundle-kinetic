@@ -10,6 +10,7 @@ import {
   select,
   takeEvery,
   takeLatest,
+  fork,
 } from 'redux-saga/effects';
 import { CoreAPI } from 'react-kinetic-core';
 
@@ -403,7 +404,6 @@ export function* watchDiscussion() {
   yield all([
     takeEvery(types.MESSAGE_TX, sendMessageTask),
     takeEvery(types.FETCH_MORE_MESSAGES, fetchMoreMessagesTask),
-    takeLatest(types.JOIN_DISCUSSION, joinDiscussionTask),
     takeLatest(types.CREATE_ISSUE, createIssueTask),
     takeEvery(types.CREATE_INVITE, createInviteTask),
     takeEvery(
@@ -414,4 +414,31 @@ export function* watchDiscussion() {
     takeEvery(types.MESSAGE_RX, watchUnreadMessages),
     takeEvery(types.SET_DISCUSSION_VISIBILITY, watchDiscussionVisibility),
   ]);
+}
+
+export function* watchJoinDiscussion() {
+  const discussionTasks = {};
+  while (true) {
+    const { joinAction, leaveAction } = yield race({
+      joinAction: take(types.JOIN_DISCUSSION),
+      leaveAction: take(types.LEAVE_DISCUSSION),
+    });
+    const discussionId = joinAction ? joinAction.payload : leaveAction.payload;
+    const discussionTask = discussionTasks[discussionId];
+    if (joinAction) {
+      if (!discussionTask) {
+        discussionTasks[discussionId] = yield fork(
+          joinDiscussionTask,
+          joinAction,
+        );
+      }
+    } else {
+      if (discussionTask) {
+        delete discussionTasks[discussionId];
+        if (discussionTask.isRunning()) {
+          yield cancel(discussionTask);
+        }
+      }
+    }
+  }
 }

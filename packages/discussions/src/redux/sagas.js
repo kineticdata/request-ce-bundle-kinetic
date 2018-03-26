@@ -1,8 +1,8 @@
 import { all, fork } from 'redux-saga/effects';
-import { watchDiscussion } from './sagas/discussions';
+import { watchDiscussion, watchJoinDiscussion } from './sagas/discussions';
 
 export function* sagas() {
-  yield all([watchDiscussion()]);
+  yield all([watchDiscussion(), watchJoinDiscussion()]);
 }
 
 export function combineSagas(allSagas) {
