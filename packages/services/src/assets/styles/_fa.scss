@@ -1,5 +1,5 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   FA Extensions
+ *   FA Extensions ~ Services
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 .fa.fa-file-stack {
@@ -16,24 +16,24 @@
 }
 
 .fa.fa-kinetic-request {
-  background-image: url("#{$image-path}/fa-image/kinetic-request.png");
+  background-image: url('#{$image-path}/fa-image/kinetic-request.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: 50% 43%;
 
   &:before {
-    content: "\f111";
+    content: '\f111';
     visibility: hidden;
   }
 }
 .fa.fa-kinetic-task {
-  background-image: url("#{$image-path}/fa-image/kinetic-task.png");
+  background-image: url('#{$image-path}/fa-image/kinetic-task.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: 50% 43%;
 
   &:before {
-    content: "\f111";
+    content: '\f111';
     visibility: hidden;
   }
 }

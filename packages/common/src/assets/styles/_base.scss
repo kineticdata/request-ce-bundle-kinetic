@@ -1,3 +1,6 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Base ~ Common
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 body {
   font-family: 'Open Sans', sans-serif;
   background-color: #f7f7f7;
@@ -7,7 +10,7 @@ body {
 .nav-link:hover {
   text-decoration: none;
 }
-a{
+a {
   color: $blue0;
   &:focus {
     box-shadow: none;
@@ -15,10 +18,8 @@ a{
   }
 }
 
-
-
 .tooltip {
-  font-size: .75rem;
+  font-size: 0.75rem;
 }
 
 .main-container {

@@ -1,3 +1,7 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * kinops Queue v0.1
+ * Copyright (c) 2017 - 2018 Kinetic Data, Inc.
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 @import '~common/src/assets/styles/variables';
 @import '~common/src/assets/styles/mixins';
 @import '~modularscale-sass/stylesheets/modularscale';
@@ -5,7 +9,7 @@
 @import 'list-group';
 
 @import 'submissions';
-@import 'queue';
+@import 'layout';
 @import 'queue_list';
 @import 'queue_item';
 @import 'queue_item_details';

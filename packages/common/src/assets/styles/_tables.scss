@@ -1,6 +1,6 @@
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Tables
- *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Tables ~ Common
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 /* Attachment files
  *-------------------------------------- */
@@ -14,18 +14,6 @@
   padding: 0px;
 }
 
-// .file-row {
-//   display: table-row;
-//   > span {
-//     list-style:none;
-//     display: table-cell;
-//     border: 1px solid #000;
-//     padding: 2px 6px;
-//     .file-actions a{
-//       margin: 0 .5rem;
-//     }
-//   }
-// }
 .file-row {
   display: table-row;
   > span {

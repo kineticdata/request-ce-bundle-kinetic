@@ -1,14 +1,7 @@
-// compileNested, nestedFilenamePattern: ../$1.css
-/* ==========================================================================
-
-   Base CSS Stylesheet. Copyright Kinetic Data, Inc.
-   Contains most important styles of the bundle.
-
-   DO NOT MODIFY IT!! It will probably get updated and your work might get overwritten.
-
-  1rem = 10px
-* ========================================================================== */
-
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * kinops Services v0.1
+ * Copyright (c) 2017 - 2018 Kinetic Data, Inc.
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 @import '~common/src/assets/styles/variables';
 @import '~common/src/assets/styles/mixins';
 @import '~modularscale-sass/stylesheets/modularscale';
