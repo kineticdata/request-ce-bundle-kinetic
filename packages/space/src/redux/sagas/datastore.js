@@ -67,24 +67,20 @@ export function* fetchFormSaga(action) {
 }
 
 export function* updateFormSaga() {
-  const formSlug = yield select(selectCurrentForm).slug;
+  const currentForm = yield select(selectCurrentForm);
   const columnsConfig = yield select(selectColumnConfigs);
-  const form = {
-    form: {
-      attributesMap: { 'Datastore Configuration': [columnsConfig.toJS()] },
-    },
+  const formContent = {
+    attributesMap: { 'Datastore Configuration': [columnsConfig.toJS()] },
+    description: 'test'
   };
-
-  // const { serverError } = yield call(CoreAPI.updateForm, {
-  //   formSlug,
-  //   form,
-  //   include: FORM_INCLUDES,
-  // });
+  const { form, serverError } = yield call(CoreAPI.updateForm, {
+    datastore: true,
+    formSlug: currentForm.slug,
+    form: formContent,
+    include: FORM_INCLUDES,
+  });
   if (!serverError) {
-    // TODO: What should we do on success?
-    // const newFilters = newProfile.profileAttributes['Queue Personal Filters']
-    //   ? newProfile.profileAttributes['Queue Personal Filters'].map(f => f)
-    //   : List();
+    yield put(actions.setForm(form));
   }
 }
 

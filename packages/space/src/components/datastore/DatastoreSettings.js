@@ -85,7 +85,7 @@ const SettingsComponent = ({
                   id="description"
                   className="form-control"
                   onChange={e => console.log(e)}
-                  value={form.description}
+                  value={form.description || ''}
                   rows="3"
                   name="description"
                 />
@@ -208,8 +208,8 @@ const handleColumnChange = ({ updateColumnsConfig, setHasChanged }) => (
   updateColumnsConfig({ original: column, updated });
 };
 
-const handleSave = () => () => () => {
-  console.log('time to save');
+const handleSave = ({updateForm}) => () => () => {
+  updateForm();
 };
 
 export const mapStateToProps = (state, { match: { params } }) => ({
@@ -224,6 +224,7 @@ export const mapDispatchToProps = {
   push,
   fetchForm: actions.fetchForm,
   updateColumnsConfig: actions.updateColumnsConfig,
+  updateForm: actions.updateForm,
 };
 
 export const DatastoreSettings = compose(
