@@ -30,30 +30,12 @@ const WallyEmptyMessage = ({ filter }) => {
 
 const Timestamp = ({ slug, label, value }) =>
   value && (
-    <li className="list-group-item">
+    <span>
       {label}
       &nbsp;
       <TimeAgo timestamp={value} id={`${slug}-${label}`} />
-    </li>
+    </span>
   );
-
-const FormListItem = ({ form }) => {
-  const { createdAt, updatedAt, slug, name, description } = form;
-  return (
-    <li className="submission list-group-item">
-      <Link to={`datastore/${slug}`} className="summary-group">
-        <h6>
-          {name} ({slug})
-        </h6>
-        <p className="summary">{description}</p>
-        <ul className="timestamps list-group">
-          <Timestamp label="Updated" value={updatedAt} slug={slug} />
-          <Timestamp label="Created" value={createdAt} slug={slug} />
-        </ul>
-      </Link>
-    </li>
-  );
-};
 
 const FormListComponent = ({
   datastoreForms,
@@ -61,10 +43,11 @@ const FormListComponent = ({
   match,
   toggleDropdown,
   openDropdown,
+  manageableForms,
 }) => {
-  console.log(match);
   return (
     <div className="datastore-container">
+      <div className="datastore-content pane">
       <div className="page-title-wrapper">
         <div className="page-title">
           <h3>
@@ -74,50 +57,80 @@ const FormListComponent = ({
         </div>
       </div>
 
-      <div className="queue-list-content submissions">
+      <div>
         {loading ? (
           <h3>Loading</h3>
         ) : datastoreForms && datastoreForms.size > 0 ? (
           <table className="table forms-list">
-            <thead>
+            <thead className="header">
               <tr>
                 <th>Form Name</th>
                 <th>Description</th>
+                <th>Dates</th>
                 <th style={{ width: '48px' }}>&nbsp;</th>
               </tr>
             </thead>
             <tbody>
-              {datastoreForms.map(form => (
-                <tr key={form.slug}>
-                  <td>
-                    <Link to={`/datastore/${form.slug}`}>{form.name}</Link>
-                  </td>
-                  <td>{form.description}</td>
-                  <td>
-                    <Dropdown
-                      toggle={toggleDropdown(form.slug)}
-                      isOpen={openDropdown === form.slug}
-                    >
-                      <DropdownToggle color="link">
-                        <span className="fa fa-ellipsis-h fa-2x" />
-                      </DropdownToggle>
-                      <DropdownMenu right>
-                        <DropdownItem
-                          tag={Link}
-                          to={`${match.path}/${form.slug}/new`}
-                        >
-                          Create Submission
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </td>
-                </tr>
-              ))}
+              {datastoreForms.map(form => {
+                const canManage = manageableForms.includes(form.slug);
+                return (
+                  <tr key={form.slug}>
+                    <td>
+                      <Link to={`/datastore/${form.slug}`}>
+                        <span>{form.name}</span>
+                        <br />
+                        <span><small>({form.slug})</small></span>
+                      </Link>
+                    </td>
+                    <td>{form.description}</td>
+                    <td>
+                        <Timestamp
+                          label="Updated"
+                          value={form.updatedAt}
+                          slug={form.slug}
+                        />
+                        <br/>
+                        <Timestamp
+                          label="Created"
+                          value={form.createdAt}
+                          slug={form.slug}
+                        />
+                    </td>
+                    <td>
+                      <Dropdown
+                        toggle={toggleDropdown(form.slug)}
+                        isOpen={openDropdown === form.slug}
+                      >
+                        <DropdownToggle color="link">
+                          <span className="fa fa-ellipsis-h fa-2x" />
+                        </DropdownToggle>
+                        <DropdownMenu right>
+                          <DropdownItem
+                            tag={Link}
+                            to={`${match.path}/${form.slug}/new`}
+                          >
+                            Create Submission
+                          </DropdownItem>
+                          {canManage && (
+                            <DropdownItem
+                              tag={Link}
+                              to={`${match.path}/${form.slug}/settings`}
+                            >
+                              Configure Form
+                            </DropdownItem>
+                          )}
+                        </DropdownMenu>
+                      </Dropdown>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         ) : (
           <WallyEmptyMessage />
         )}
+      </div>
       </div>
     </div>
   );
@@ -126,6 +139,7 @@ const FormListComponent = ({
 export const mapStateToProps = state => ({
   loading: state.datastore.loading,
   datastoreForms: state.datastore.forms,
+  manageableForms: state.datastore.manageableForms,
 });
 
 export const mapDispatchToProps = {

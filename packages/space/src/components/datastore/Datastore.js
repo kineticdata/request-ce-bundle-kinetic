@@ -1,29 +1,26 @@
 import React from 'react';
-import { compose, lifecycle } from 'recompose';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { compose, lifecycle } from 'recompose';
 import { DatastoreSubmission } from './Submission';
 import { FormList } from './FormList';
-import { SubmissionList } from './SubmissionList';
-
+import { SubmissionSearch } from './SubmissionSearch/SubmissionSearch';
+import { DatastoreSettings } from './DatastoreSettings';
 import { actions } from '../../redux/modules/datastore';
 
 const NewDatastore = () => <h1>Create a new Datastore</h1>;
+const DatastoreError = () => <h1>Error loading Datastore</h1>;
 
-const DatstoreSettings = ({ match }) => (
-  <h1>Viewing Settings for the{match.params.slug} Datastore</h1>
-);
-
-export const DatastoreRouter = ({ loading, match }) =>
+export const DatastoreComponent = ({ match, loading }) =>
   !loading && (
     <Switch>
       <Route exact path={`${match.path}/new`} component={NewDatastore} />
-      <Route exact path={`${match.path}/:slug`} component={SubmissionList} />
+      <Route exact path={`${match.path}/error`} component={DatastoreError} />
+      <Route exact path={`${match.path}/:slug`} component={SubmissionSearch} />
       <Route
         exact
         path={`${match.path}/:slug/settings`}
-        component={DatstoreSettings}
+        component={DatastoreSettings}
       />
       <Route
         exact
@@ -41,19 +38,17 @@ export const DatastoreRouter = ({ loading, match }) =>
 
 export const mapStateToProps = state => ({
   loading: state.datastore.loading,
-  datastoreForms: state.datastore.forms,
 });
 
 export const mapDispatchToProps = {
-  push,
   fetchForms: actions.fetchForms,
 };
 
 export const Datastore = compose(
   connect(mapStateToProps, mapDispatchToProps),
   lifecycle({
-    componentWillMount() {
+    componentWillMount(prev, next) {
       this.props.fetchForms();
     },
   }),
-)(DatastoreRouter);
+)(DatastoreComponent);
