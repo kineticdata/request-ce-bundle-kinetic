@@ -75,9 +75,10 @@
 
         .header {
           display: flex;
+          width: 100%;
           justify-content: space-between;
-          flex-grow: 1;
           margin-bottom: 24px;
+          align-items: center;
 
           & > a {
             margin-right: 0.25em;
