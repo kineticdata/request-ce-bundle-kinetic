@@ -1,6 +1,6 @@
 import { call, put, takeEvery, select, all } from 'redux-saga/effects';
 import { CoreAPI } from 'react-kinetic-core';
-import { fromJS, Seq, Map } from 'immutable';
+import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'connected-react-router';
 
 import {
@@ -14,11 +14,9 @@ import {
 
 import { actions as systemErrorActions } from '../modules/errors';
 
-export const selectCurrentForm = state =>
-  state.datastore.currentForm
+export const selectCurrentForm = state => state.datastore.currentForm;
 
-export const selectColumnConfigs = state =>
-  state.datastore.columnsConfig
+export const selectColumnConfigs = state => state.datastore.columnsConfig;
 
 export function* fetchFormsSaga() {
   const displayableForms = yield call(CoreAPI.fetchForms, {
@@ -68,23 +66,27 @@ export function* fetchFormSaga(action) {
   }
 }
 
-// export function* updateFormSaga() {
-//   const formSlug = yield select(selectCurrentForm).slug;
-//   const columnsConfig = yield select(selectColumnConfigs);
-//   const form = {form:{attributesMap: {'Datastore Configuration': [columnsConfig.toJS()]}}}
-//
-//   const { serverError } = yield call(CoreAPI.updateForm, {
-//     formSlug,
-//     form,
-//     include: FORM_INCLUDES,
-//   });
-//   if (!serverError) {
-//     // TODO: What should we do on success?
-//     // const newFilters = newProfile.profileAttributes['Queue Personal Filters']
-//     //   ? newProfile.profileAttributes['Queue Personal Filters'].map(f => f)
-//     //   : List();
-//   }
-// }
+export function* updateFormSaga() {
+  const formSlug = yield select(selectCurrentForm).slug;
+  const columnsConfig = yield select(selectColumnConfigs);
+  const form = {
+    form: {
+      attributesMap: { 'Datastore Configuration': [columnsConfig.toJS()] },
+    },
+  };
+
+  // const { serverError } = yield call(CoreAPI.updateForm, {
+  //   formSlug,
+  //   form,
+  //   include: FORM_INCLUDES,
+  // });
+  if (!serverError) {
+    // TODO: What should we do on success?
+    // const newFilters = newProfile.profileAttributes['Queue Personal Filters']
+    //   ? newProfile.profileAttributes['Queue Personal Filters'].map(f => f)
+    //   : List();
+  }
+}
 
 export const selectSearchParams = state => ({
   searchParams: state.datastore.searchParams,
@@ -93,96 +95,32 @@ export const selectSearchParams = state => ({
   pageTokens: state.datastore.pageTokens,
   simpleSearchActive: state.datastore.simpleSearchActive,
   simpleSearchParam: state.datastore.simpleSearchParam,
+  simpleSearchNextPageIndex: state.datastore.simpleSearchNextPageIndex,
 });
 
-export function* fetchSubmissionsSaga() {
+export function* fetchSubmissionsSimpleSaga() {
   const {
-    searchParams,
     form,
     pageToken,
-    simpleSearchActive,
     simpleSearchParam,
+    simpleSearchNextPageIndex,
   } = yield select(selectSearchParams);
 
-  if (simpleSearchActive) {
-    // Get build field indexes
-    /// HANDLE UNIQUE???
-    const indiciesToSearch = form.indexDefinitions.filter(
-      def => def.status === 'Built' && def.parts.length === 1 && def.name.startsWith('values['),
-    );
-
-    const searchActions = indiciesToSearch.map(index => {
-      const searcher = new CoreAPI.SubmissionSearch(true);
-      searcher.include(SUBMISSION_INCLUDES);
-      searcher.limit(DATASTORE_LIMIT);
-      searcher.index(index.name);
-      searcher.sw(index.parts[0], simpleSearchParam);
-
-      return call(CoreAPI.searchSubmissions, {
-        search: searcher.build(),
-        datastore: true,
-        form: form.slug,
-      });
+  if (pageToken) {
+    const index = form.indexDefinitions.find(definition => {
+      console.log(index);
+      return definition.name === simpleSearchNextPageIndex;
     });
-
-    // Search each field index
-    const searchResults = yield all(searchActions);
-    // Combine the results together and make sure they are unique
-    const combinedSubmissions = fromJS(searchResults)
-      .flatMap(searchResult => searchResult.get('submissions'))
-      .toSet()
-      .toJS();
-
-    yield put(actions.setSubmissions(combinedSubmissions));
-
-  } else {
-    const searcher = new CoreAPI.SubmissionSearch(true);
-
-    searcher.include(SUBMISSION_INCLUDES);
-    searcher.limit(DATASTORE_LIMIT);
-    if (pageToken) {
-      searcher.pageToken(pageToken);
-    }
-    searcher.index(searchParams.index.name);
-    searchParams.indexParts.forEach(part => {
-      switch (part.criteria) {
-        case 'Between':
-          searcher.between(
-            part.name,
-            part.value.values.get(0),
-            part.value.values.get(1),
-          );
-          break;
-        case 'Is Equal To':
-          if (part.value.size > 1) {
-            searcher.in(part.name, part.value.values.toJS());
-          } else {
-            searcher.eq(part.name, part.value.values.get(0));
-          }
-          break;
-        case 'Is Greater Than':
-          searcher.gt(part.name, part.value.input);
-          break;
-        case 'Is Less Than':
-          searcher.lt(part.name, part.value.input);
-          break;
-        case 'Is Greater Than or Equal':
-          searcher.gteq(part.name, part.value.input);
-          break;
-        case 'Is Less Than or Equal':
-          searcher.lteq(part.name, part.value.input);
-          break;
-        case 'All':
-          // Don't do anything with 'All'.
-          break;
-        default:
-          console.warn(`Invalid criteria: "${part.criteria}"`);
-      }
-    });
+    const query = new CoreAPI.SubmissionSearch(true);
+    query.include(SUBMISSION_INCLUDES);
+    query.limit(DATASTORE_LIMIT);
+    query.index(index.name);
+    query.sw(index.parts[0], simpleSearchParam);
+    query.pageToken(pageToken);
 
     const { submissions, nextPageToken = null, serverError } = yield call(
       CoreAPI.searchSubmissions,
-      { search: searcher.build(), datastore: true, form: form.slug },
+      { search: query.build(), datastore: true, form: form.slug },
     );
 
     if (serverError) {
@@ -192,13 +130,152 @@ export function* fetchSubmissionsSaga() {
       if (pageToken) {
         yield put(actions.pushPageToken(pageToken));
       }
-
       // Set the next available page token to the one returned.
       yield put(actions.setNextPageToken(nextPageToken));
       // Reset the client-side page offset.
       yield put(actions.setPageOffset(0));
     }
+    yield put(actions.setSubmissions(submissions));
+  } else {
+    const searchQueries = form.indexDefinitions
+      .filter(
+        definition =>
+          definition.status === 'Built' &&
+          definition.parts.length === 1 &&
+          definition.name.startsWith('values['),
+      )
+      .map(index => {
+        const query = new CoreAPI.SubmissionSearch(true);
+        query.include(SUBMISSION_INCLUDES);
+        query.limit(DATASTORE_LIMIT);
+        query.index(index.name);
+        query.sw(index.parts[0], simpleSearchParam);
+        return query;
+      });
 
+    const searchCalls = searchQueries.map(searchQuery =>
+      call(CoreAPI.searchSubmissions, {
+        search: searchQuery.build(),
+        datastore: true,
+        form: form.slug,
+      }),
+    );
+
+    const responses = fromJS(yield all(searchCalls));
+    const responsesWithResults = responses.filter(
+      result => result.get('submissions').size > 0,
+    );
+    const responsesWithPageTokens = responses.filter(
+      result => result.get('nextPageToken') !== null,
+    );
+
+    if (responsesWithResults.size > 1 && responsesWithPageTokens.size > 0) {
+      // Multiple searches had results and at least one had a next page token);
+      yield put(actions.setSubmissions(List()));
+      alert('Need to use advanced search');
+    } else if (
+      responsesWithResults.size === 1 &&
+      responsesWithPageTokens.size === 1
+    ) {
+      // One search had results and next page token
+      const indexWithNextPage = responses.indexOf(
+        responsesWithPageTokens.first(),
+      );
+      yield put(
+        actions.setSimpleSearchNextPageIndex(
+          searchQueries[indexWithNextPage].searchMeta.index,
+        ),
+      );
+      yield put(
+        actions.setNextPageToken(
+          responsesWithPageTokens.first().get('nextPageToken'),
+        ),
+      );
+      yield put(actions.setPageOffset(0));
+      yield put(
+        actions.setSubmissions(
+          responsesWithPageTokens
+            .first()
+            .get('submissions')
+            .toJS(),
+        ),
+      );
+    } else {
+      // Multiple searches had Results but none had next page token.
+      const combinedSubmissions = responses
+        .flatMap(searchResult => searchResult.get('submissions'))
+        .toSet()
+        .toJS();
+      yield put(actions.setPageOffset(0));
+      yield put(actions.setSubmissions(combinedSubmissions));
+    }
+  }
+}
+
+export function* fetchSubmissionsAdvancedSaga() {
+  const { searchParams, form, pageToken } = yield select(selectSearchParams);
+
+  const searcher = new CoreAPI.SubmissionSearch(true);
+
+  searcher.include(SUBMISSION_INCLUDES);
+  searcher.limit(DATASTORE_LIMIT);
+  if (pageToken) {
+    searcher.pageToken(pageToken);
+  }
+  searcher.index(searchParams.index.name);
+  searchParams.indexParts.forEach(part => {
+    switch (part.criteria) {
+      case 'Between':
+        searcher.between(
+          part.name,
+          part.value.values.get(0),
+          part.value.values.get(1),
+        );
+        break;
+      case 'Is Equal To':
+        if (part.value.size > 1) {
+          searcher.in(part.name, part.value.values.toJS());
+        } else {
+          searcher.eq(part.name, part.value.values.get(0));
+        }
+        break;
+      case 'Is Greater Than':
+        searcher.gt(part.name, part.value.input);
+        break;
+      case 'Is Less Than':
+        searcher.lt(part.name, part.value.input);
+        break;
+      case 'Is Greater Than or Equal':
+        searcher.gteq(part.name, part.value.input);
+        break;
+      case 'Is Less Than or Equal':
+        searcher.lteq(part.name, part.value.input);
+        break;
+      case 'All':
+        // Don't do anything with 'All'.
+        break;
+      default:
+        console.warn(`Invalid criteria: "${part.criteria}"`);
+    }
+  });
+
+  const { submissions, nextPageToken = null, serverError } = yield call(
+    CoreAPI.searchSubmissions,
+    { search: searcher.build(), datastore: true, form: form.slug },
+  );
+
+  if (serverError) {
+    // What should we do?
+  } else {
+    // If we made a request for page > 2, then push that page token to the stack.
+    if (pageToken) {
+      yield put(actions.pushPageToken(pageToken));
+    }
+
+    // Set the next available page token to the one returned.
+    yield put(actions.setNextPageToken(nextPageToken));
+    // Reset the client-side page offset.
+    yield put(actions.setPageOffset(0));
     yield put(actions.setSubmissions(submissions));
   }
 }
@@ -206,10 +283,11 @@ export function* fetchSubmissionsSaga() {
 export function* fetchSubmissionSaga(action) {
   const include =
     'details,values,form,form.attributes,activities,activities.details';
-  const { submission, serverError } = yield call(
-    CoreAPI.fetchSubmission,
-    { id: action.payload, include, datastore: true },
-  );
+  const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
+    id: action.payload,
+    include,
+    datastore: true,
+  });
 
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
@@ -271,9 +349,7 @@ export function* cloneSubmissionSaga(action) {
       yield put(actions.cloneSubmissionErrors(postErrors));
     } else {
       yield put(actions.cloneSubmissionSuccess());
-      yield put(
-        push(`/datastore/${form.slug}/${cloneSubmission.id}`),
-      );
+      yield put(push(`/datastore/${form.slug}/${cloneSubmission.id}`));
     }
   }
 }
@@ -281,7 +357,7 @@ export function* cloneSubmissionSaga(action) {
 export function* deleteSubmissionSaga(action) {
   const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
     id: action.payload.id,
-    datastore: true
+    datastore: true,
   });
 
   if (serverError) {
@@ -300,8 +376,12 @@ export function* watchDatastore() {
   yield takeEvery(types.FETCH_FORMS, fetchFormsSaga);
   yield takeEvery(types.FETCH_FORM, fetchFormSaga);
   yield takeEvery(types.FETCH_SUBMISSION, fetchSubmissionSaga);
-  yield takeEvery(types.FETCH_SUBMISSIONS, fetchSubmissionsSaga);
+  yield takeEvery(
+    types.FETCH_SUBMISSIONS_ADVANCED,
+    fetchSubmissionsAdvancedSaga,
+  );
+  yield takeEvery(types.FETCH_SUBMISSIONS_SIMPLE, fetchSubmissionsSimpleSaga);
   yield takeEvery(types.CLONE_SUBMISSION, cloneSubmissionSaga);
   yield takeEvery(types.DELETE_SUBMISSION, deleteSubmissionSaga);
-  //yield takeEvery(types.UPDATE_FORM, updateFormSaga);
+  yield takeEvery(types.UPDATE_FORM, updateFormSaga);
 }

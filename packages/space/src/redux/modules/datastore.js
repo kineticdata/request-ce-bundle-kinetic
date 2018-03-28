@@ -45,7 +45,8 @@ export const types = {
   SET_FORMS_ERRORS: namespace('datastore', 'SET_FORMS_ERRORS'),
   FETCH_FORM: namespace('datastore', 'FETCH_FORM'),
   SET_FORM: namespace('datastore', 'SET_FORM'),
-  FETCH_SUBMISSIONS: namespace('datastore', 'FETCH_SUBMISSIONS'),
+  FETCH_SUBMISSIONS_ADVANCED: namespace('datastore', 'FETCH_SUBMISSIONS_ADVANCED'),
+  FETCH_SUBMISSIONS_SIMPLE: namespace('datastore', 'FETCH_SUBMISSIONS_SIMPLE'),
   SET_SUBMISSIONS: namespace('datastore', 'SET_SUBMISSIONS'),
   FETCH_SUBMISSION: namespace('datastore', 'FETCH_SUBMISSION'),
   SET_SUBMISSION: namespace('datastore', 'SET_SUBMISSION'),
@@ -63,6 +64,10 @@ export const types = {
   SET_PAGE_OFFSET: namespace('datastore', 'SET_PAGE_OFFSET'),
   TOGGLE_SIMPLE_SEARCH: namespace('datastore', 'TOGGLE_SIMPLE_SEARCH'),
   SET_SIMPLE_SEARCH_PARAM: namespace('datastore', 'SET_SIMPLE_SEARCH_PARAM'),
+  SET_SIMPLE_SEARCH_NEXT_PAGE_INDEX: namespace(
+    'datastore',
+    'SET_SIMPLE_SEARCH_NEXT_PAGE_INDEX',
+  ),
   CLONE_SUBMISSION: namespace('datastore', 'CLONE_SUBMISSION'),
   CLONE_SUBMISSION_SUCCESS: namespace('datastore', 'CLONE_SUBMISSION_SUCCESS'),
   CLONE_SUBMISSION_ERROR: namespace('datastore', 'CLONE_SUBMISSION_ERROR'),
@@ -81,7 +86,8 @@ export const actions = {
   setFormsErrors: withPayload(types.SET_FORMS_ERRORS),
   fetchForm: withPayload(types.FETCH_FORM),
   setForm: withPayload(types.SET_FORM),
-  fetchSubmissions: noPayload(types.FETCH_SUBMISSIONS),
+  fetchSubmissionsAdvanced: noPayload(types.FETCH_SUBMISSIONS_ADVANCED),
+  fetchSubmissionsSimple: noPayload(types.FETCH_SUBMISSIONS_SIMPLE),
   setSubmissions: withPayload(types.SET_SUBMISSIONS),
   fetchSubmission: withPayload(types.FETCH_SUBMISSION),
   resetSubmission: noPayload(types.RESET_SUBMISSION),
@@ -108,6 +114,9 @@ export const actions = {
   setPageOffset: withPayload(types.SET_PAGE_OFFSET),
   toggleSimpleSearch: noPayload(types.TOGGLE_SIMPLE_SEARCH),
   setSimpleSearchParam: withPayload(types.SET_SIMPLE_SEARCH_PARAM),
+  setSimpleSearchNextPageIndex: withPayload(
+    types.SET_SIMPLE_SEARCH_NEXT_PAGE_INDEX,
+  ),
   cloneSubmission: withPayload(types.CLONE_SUBMISSION),
   cloneSubmissionSuccess: noPayload(types.CLONE_SUBMISSION_SUCCESS),
   cloneSubmissionErrors: withPayload(types.CLONE_SUBMISSION_ERROR),
@@ -207,6 +216,7 @@ export const State = Record({
   // Simple or Advanced Search
   simpleSearchActive: true,
   simpleSearchParam: '',
+  simpleSearchNextPageIndex: null,
   // Submission List Actions
   submissionActionErrors: [],
   cloning: false,
@@ -292,8 +302,10 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.RESET_SEARCH_PARAMS:
       return state
         .set('searchParams', SearchParams())
-        .set('simpleSearchActive', true)
         .set('simpleSearchParam', '')
+        .set('simpleSearchNextPageIndex', null)
+        .set('nextPageToken', null)
+        .set('pageTokens', List())
         .set('submissions', List());
     case types.PUSH_PAGE_TOKEN:
       return state.update('pageTokens', pageTokens => pageTokens.push(payload));
@@ -306,9 +318,14 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.TOGGLE_SIMPLE_SEARCH:
       return state
         .set('simpleSearchActive', !state.simpleSearchActive)
-        .set('simpleSearchParam', '')
         .set('searchParams', SearchParams())
+        .set('simpleSearchParam', '')
+        .set('simpleSearchNextPageIndex', null)
+        .set('nextPageToken', null)
+        .set('pageTokens', List())
         .set('submissions', List());
+    case types.SET_SIMPLE_SEARCH_NEXT_PAGE_INDEX:
+      return state.set('simpleSearchNextPageIndex', payload);
     case types.SET_SIMPLE_SEARCH_PARAM:
       return state.set('simpleSearchParam', payload);
     case types.CLONE_SUBMISSION:

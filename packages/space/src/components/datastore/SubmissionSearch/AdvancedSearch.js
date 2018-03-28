@@ -9,7 +9,6 @@ import Autocomplete from 'react-autocomplete';
 import {
   actions,
   IndexPart,
-  DATASTORE_LIMIT,
 } from '../../../redux/modules/datastore';
 
 const PARAM_CRITERIAS = [
@@ -20,6 +19,7 @@ const PARAM_CRITERIAS = [
   'Is Less Than',
   'Is Greater Than or Equal',
   'Is Less Than or Equal',
+  'Starts With',
 ];
 
 const EqualsCriteria = ({
@@ -31,7 +31,7 @@ const EqualsCriteria = ({
     <div>
       {part.value.values.map((v, index) => (
         <div className="search-lookup-param-group" key={index}>
-          <input className="search-lookup-input" value={v} />
+          <input readOnly className="search-lookup-input" value={v} />
           <button className="btn btn-link">
             <span className="fa fa-fw fa-remove" />
           </button>
@@ -109,7 +109,7 @@ const AdvancedSearchComponent = ({
       <strong>Look up by</strong>
       <div className="search-lookup-select">
         <Autocomplete
-          shouldItemRender={shouldItemRender}
+          shouldItemRender={() => true}
           renderItem={(item, isHighlighted) => (
             <div
               key={`${item.name}-${item.unique}`}
@@ -127,6 +127,12 @@ const AdvancedSearchComponent = ({
           onSelect={setIndexHandler}
         />
       </div>
+      <button
+        className="btn btn-primary btn-search-lookup"
+        onClick={handleSearchSubmissions}
+      >
+        Search
+      </button>
       <div className="search-lookup-reset">
         <button className="btn btn-link" onClick={handleResetSearch}>
           Reset
@@ -147,6 +153,7 @@ const AdvancedSearchComponent = ({
               shouldItemRender={() => true}
               renderItem={(item, isHighlighted) => (
                 <div
+                  key={`${item.replace(/\s/g,'')}-part.name`}
                   className={classNames('item', {
                     'item-highlighted': isHighlighted,
                   })}
@@ -180,22 +187,6 @@ const AdvancedSearchComponent = ({
           </span>
         </div>
       ))}
-    <div className="search-lookup-fotter">
-      {(pageTokens.size > 0 || nextPageToken !== null) && (
-        <span className="search-lookup-error">
-          {`The Datastore contains too many records to display at one time.
-      Please enter additional search criteria to narrow down the
-      results, or use the buttons below the table to navigate between
-      chunks of ${DATASTORE_LIMIT} records.`}
-        </span>
-      )}
-      <button
-        className="btn btn-primary btn-search-lookup"
-        onClick={handleSearchSubmissions}
-      >
-        Search
-      </button>
-    </div>
   </div>
 );
 
@@ -215,7 +206,7 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = {
-  fetchSubmissions: actions.fetchSubmissions,
+  fetchSubmissions: actions.fetchSubmissionsAdvanced,
   setIndex: actions.setIndex,
   setIndexParts: actions.setIndexParts,
   setIndexPartCriteria: actions.setIndexPartCriteria,

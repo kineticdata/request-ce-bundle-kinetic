@@ -46,7 +46,7 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = {
-  fetchSubmissions: actions.fetchSubmissions,
+  fetchSubmissions: actions.fetchSubmissionsSimple,
   toggleSimpleSearch: actions.toggleSimpleSearch,
   setSimpleSearchParam: actions.setSimpleSearchParam,
   resetSearchParams: actions.resetSearchParams,

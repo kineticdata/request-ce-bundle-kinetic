@@ -897,7 +897,7 @@ babel-preset-jest@^20.0.3:
   dependencies:
     babel-plugin-jest-hoist "^20.0.3"
 
-babel-preset-react-app@^3.1.0:
+babel-preset-react-app@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/babel-preset-react-app/-/babel-preset-react-app-3.1.1.tgz#d3f06a79742f0e89d7afcb72e282d9809c850920"
   dependencies:
@@ -1995,9 +1995,9 @@ detect-node@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.3.tgz#a2033c09cc8e158d37748fbde7507832bd6ce127"
 
-detect-port-alt@1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/detect-port-alt/-/detect-port-alt-1.1.3.tgz#a4d2f061d757a034ecf37c514260a98750f2b131"
+detect-port-alt@1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/detect-port-alt/-/detect-port-alt-1.1.5.tgz#a1aa8fc805a4a5df9b905b7ddc7eed036bcce889"
   dependencies:
     address "^1.0.1"
     debug "^2.6.0"
@@ -2107,6 +2107,10 @@ dot-prop@^4.1.0:
   resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-4.2.0.tgz#1f19e0c2e1aa0e32797c49799f2837ac6af69c57"
   dependencies:
     is-obj "^1.0.0"
+
+dotenv-expand@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/dotenv-expand/-/dotenv-expand-4.2.0.tgz#def1f1ca5d6059d24a766e587942c21106ce1275"
 
 dotenv@4.0.0, dotenv@^4.0.0:
   version "4.0.0"
@@ -2291,7 +2295,7 @@ escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-react-app@^2.0.1:
+eslint-config-react-app@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/eslint-config-react-app/-/eslint-config-react-app-2.1.0.tgz#23c909f71cbaff76b945b831d2d814b8bde169eb"
 
@@ -2857,14 +2861,7 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
 
-fsevents@1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-1.1.2.tgz#3282b713fb3ad80ede0e9fcf4611b5aa6fc033f4"
-  dependencies:
-    nan "^2.3.0"
-    node-pre-gyp "^0.6.36"
-
-fsevents@^1.0.0:
+fsevents@^1.0.0, fsevents@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-1.1.3.tgz#11f82318f5fe7bb2cd22965a108e9306208216d8"
   dependencies:
@@ -4223,9 +4220,9 @@ kind-of@^4.0.0:
   dependencies:
     is-buffer "^1.1.5"
 
-kinops-react-scripts@0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/kinops-react-scripts/-/kinops-react-scripts-0.9.0.tgz#3884012d535d7cfbc75f0de7332b584456d5f5ad"
+kinops-react-scripts@0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/kinops-react-scripts/-/kinops-react-scripts-0.9.1.tgz#ad0a9b7c231cda203922b06e47244adfa15160bc"
   dependencies:
     autoprefixer "7.1.6"
     babel-core "6.26.0"
@@ -4233,14 +4230,15 @@ kinops-react-scripts@0.9.0:
     babel-jest "20.0.3"
     babel-loader "7.1.2"
     babel-polyfill "6.26.0"
-    babel-preset-react-app "^3.1.0"
+    babel-preset-react-app "^3.1.1"
     babel-runtime "6.26.0"
     case-sensitive-paths-webpack-plugin "2.1.1"
     chalk "1.1.3"
     css-loader "0.28.7"
     dotenv "4.0.0"
+    dotenv-expand "4.2.0"
     eslint "4.10.0"
-    eslint-config-react-app "^2.0.1"
+    eslint-config-react-app "^2.1.0"
     eslint-loader "1.9.0"
     eslint-plugin-flowtype "2.39.1"
     eslint-plugin-import "2.8.0"
@@ -4258,7 +4256,7 @@ kinops-react-scripts@0.9.0:
     promise "8.0.1"
     raf "3.4.0"
     raw-loader "0.5.1"
-    react-dev-utils "^4.2.1"
+    react-dev-utils "^5.0.0"
     sass-loader "6.0.6"
     style-loader "0.19.0"
     sw-precache-webpack-plugin "0.11.4"
@@ -4268,7 +4266,7 @@ kinops-react-scripts@0.9.0:
     webpack-manifest-plugin "1.3.2"
     whatwg-fetch "2.0.3"
   optionalDependencies:
-    fsevents "1.1.2"
+    fsevents "^1.1.3"
 
 klaw@^1.0.0:
   version "1.3.1"
@@ -4443,7 +4441,7 @@ lodash.isarray@^3.0.0:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
 
-lodash.isfunction@^3.0.8:
+lodash.isfunction@^3.0.9:
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/lodash.isfunction/-/lodash.isfunction-3.0.9.tgz#06de25df4db327ac931981d1bdb067e5af68d051"
 
@@ -4733,10 +4731,6 @@ modularscale-sass@^3.0.4, modularscale-sass@^3.0.5:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/modularscale-sass/-/modularscale-sass-3.0.5.tgz#18847c3ae4fc506b7dfab0c0df3b398663c97b5f"
 
-moment@^2.20.1:
-  version "2.20.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
-
 moment@^2.21.0:
   version "2.21.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.21.0.tgz#2a114b51d2a6ec9e6d83cf803f838a878d8a023a"
@@ -4854,7 +4848,7 @@ node-notifier@^5.0.2:
     shellwords "^0.1.1"
     which "^1.3.0"
 
-node-pre-gyp@^0.6.36, node-pre-gyp@^0.6.39:
+node-pre-gyp@^0.6.39:
   version "0.6.39"
   resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.6.39.tgz#c00e96860b23c0e1420ac7befc5044e1d78d8649"
   dependencies:
@@ -5017,13 +5011,7 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-opn@5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/opn/-/opn-5.1.0.tgz#72ce2306a17dbea58ff1041853352b4a8fc77519"
-  dependencies:
-    is-wsl "^1.1.0"
-
-opn@^5.1.0:
+opn@5.2.0, opn@^5.1.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/opn/-/opn-5.2.0.tgz#71fdf934d6827d676cecbea1531f95d354641225"
   dependencies:
@@ -5283,7 +5271,7 @@ pluralize@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"
 
-popper.js@^1.12.5, popper.js@^1.12.9:
+popper.js@^1.12.9:
   version "1.12.9"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.9.tgz#0dfbc2dff96c451bb332edcfcfaaf566d331d5b3"
 
@@ -5832,23 +5820,23 @@ react-avatar@^2.5.1:
     is-retina "^1.0.3"
     md5 "^2.0.0"
 
-react-dev-utils@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-4.2.1.tgz#9f2763e7bafa1a1b9c52254d2a479deec280f111"
+react-dev-utils@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-5.0.0.tgz#425ac7c9c40c2603bc4f7ab8836c1406e96bb473"
   dependencies:
     address "1.0.3"
     babel-code-frame "6.26.0"
     chalk "1.1.3"
     cross-spawn "5.1.0"
-    detect-port-alt "1.1.3"
+    detect-port-alt "1.1.5"
     escape-string-regexp "1.0.5"
     filesize "3.5.11"
     global-modules "1.0.0"
     gzip-size "3.0.0"
     inquirer "3.3.0"
     is-root "1.0.0"
-    opn "5.1.0"
-    react-error-overlay "^3.0.0"
+    opn "5.2.0"
+    react-error-overlay "^4.0.0"
     recursive-readdir "2.2.1"
     shell-quote "1.6.1"
     sockjs-client "1.1.4"
@@ -5878,9 +5866,9 @@ react-dropzone@^4.2.3:
     attr-accept "^1.0.3"
     prop-types "^15.5.7"
 
-react-error-overlay@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-3.0.0.tgz#c2bc8f4d91f1375b3dad6d75265d51cd5eeaf655"
+react-error-overlay@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.0.tgz#d198408a85b4070937a98667f500c832f86bd5d4"
 
 react-helmet@^5.2.0:
   version "5.2.0"
@@ -5891,9 +5879,9 @@ react-helmet@^5.2.0:
     prop-types "^15.5.4"
     react-side-effect "^1.1.0"
 
-react-kinetic-core@^0.3.5:
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/react-kinetic-core/-/react-kinetic-core-0.3.5.tgz#446ebd51f96c36b818c08c12d9f370b64454bb97"
+react-kinetic-core@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/react-kinetic-core/-/react-kinetic-core-0.4.0.tgz#4860d738b3cdc7833260081478cb9b1cf5156d8c"
   dependencies:
     axios "^0.16.1"
     deepequal "^0.0.1"
@@ -5912,16 +5900,16 @@ react-markdown@^3.2.0:
     unist-util-visit "^1.3.0"
     xtend "^4.0.1"
 
-react-popper@^0.7.2:
-  version "0.7.5"
-  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.7.5.tgz#71c25946f291db381231281f6b95729e8b801596"
-  dependencies:
-    popper.js "^1.12.5"
-    prop-types "^15.5.10"
-
 react-popper@^0.8.2:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.8.2.tgz#092095ff13933211d3856d9f325511ec3a42f12c"
+  dependencies:
+    popper.js "^1.12.9"
+    prop-types "^15.6.0"
+
+react-popper@^0.8.3:
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.8.3.tgz#0f73333137c9fb0af6ec4074d2d0585a0a0461e1"
   dependencies:
     popper.js "^1.12.9"
     prop-types "^15.6.0"
@@ -5994,7 +5982,7 @@ react-transition-group@^1.1.2:
     prop-types "^15.5.6"
     warning "^3.0.0"
 
-react-transition-group@^2.2.0, react-transition-group@^2.2.1:
+react-transition-group@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.2.1.tgz#e9fb677b79e6455fd391b03823afe84849df4a10"
   dependencies:
@@ -6014,17 +6002,17 @@ react@^16.2.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-reactstrap@^5.0.0-beta:
-  version "5.0.0-beta"
-  resolved "https://registry.yarnpkg.com/reactstrap/-/reactstrap-5.0.0-beta.tgz#0372acae7665ec3396abe87e5cdddf3077e98995"
+reactstrap@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/reactstrap/-/reactstrap-5.0.0.tgz#d8948534df4816eddfb162a51643a499388e9228"
   dependencies:
     classnames "^2.2.3"
-    lodash.isfunction "^3.0.8"
+    lodash.isfunction "^3.0.9"
     lodash.isobject "^3.0.2"
     lodash.tonumber "^4.0.3"
     prop-types "^15.5.8"
-    react-popper "^0.7.2"
-    react-transition-group "^2.2.0"
+    react-popper "^0.8.3"
+    react-transition-group "^2.2.1"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"

@@ -63,7 +63,7 @@ const SubmissionListComponent = ({
           </tbody>
         </table>
 
-        {pageOffset > 0 && (
+        {allSubmissions.size > 0 && (
           <div className="datastore-bottom-pagination">
             <Pagination size="sm">
               <PaginationItem disabled={pageOffset === 0}>
