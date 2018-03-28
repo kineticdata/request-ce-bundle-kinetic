@@ -15,7 +15,7 @@ const SimpleSearchComponent = ({
   <div className="search-lookup">
     <div className="input-group">
       <div className="input-group-prepend">
-        <span className="input-group-text" id="">Enter Search Term</span>
+        <span className="input-group-text">Enter Search Term</span>
       </div>
       <input
         type="text"
@@ -57,9 +57,8 @@ const handleSearchSubmissions = ({ fetchSubmissions }) => e => {
   fetchSubmissions();
 };
 
-const handleResetSearch = ({ resetSearchParams, setIndexLookup }) => () => {
+const handleResetSearch = ({ resetSearchParams }) => () => {
   resetSearchParams();
-  setIndexLookup('');
 };
 
 export const SimpleSearch = compose(
