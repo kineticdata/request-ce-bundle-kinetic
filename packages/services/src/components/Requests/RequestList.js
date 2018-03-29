@@ -29,22 +29,26 @@ export const RequestList = ({
           </h3>
           <h1>{type || 'All Requests'}</h1>
         </div>
-        <div>
+        <div className="btn-group">
           <button
             type="button"
-            className="btn btn-outline-primary"
+            className="btn btn-inverse"
             disabled={!hasPreviousPage}
             onClick={handlePreviousPage}
           >
-            Previous
+            <span className="icon">
+              <span className="fa fa-fw fa-caret-left" />
+            </span>
           </button>
           <button
             type="button"
-            className="btn btn-outline-primary"
+            className="btn btn-inverse"
             disabled={!hasNextPage}
             onClick={handleNextPage}
           >
-            Next
+            <span className="icon">
+              <span className="fa fa-fw fa-caret-right" />
+            </span>
           </button>
         </div>
       </div>
