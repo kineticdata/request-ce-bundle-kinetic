@@ -52,14 +52,12 @@ export const QueueItemDetails = ({
                 ? createDiscussion
                 : openDiscussion
             }
-            className="btn btn-primary btn-inverse discussion-button icon-wrapper d-md-none d-lg-none d-xl-none"
+            className="btn btn-inverse btn-discussion d-md-none d-lg-none d-xl-none"
           >
-            <span className="icon">
-              <span
-                className="fa fa-comments"
-                style={{ color: '#7e8083', fontSize: '16px' }}
-              />
-            </span>
+            <span
+              className="fa fa-fw fa-comments"
+              style={{ fontSize: '16px' }}
+            />
             {queueItem.values['Discussion Id'] === null
               ? 'Create Discussion'
               : 'View Discussion'}

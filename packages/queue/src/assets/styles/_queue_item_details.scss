@@ -60,14 +60,6 @@
     width: 100%;
   }
 
-  .discussion-button {
-    display: flex;
-    justify-content: center;
-    .icon {
-      width: 2rem;
-    }
-  }
-
   .subtasks-section {
     margin: 1.5rem;
     @media (max-width: 767px) {

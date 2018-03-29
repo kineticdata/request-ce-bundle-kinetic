@@ -28,7 +28,7 @@ const AlertComponent = ({
     {canEdit && (
       <td>
         <div className="actions">
-          <div className="btn-group">
+          <div className="btn-group btn-group-sm">
             <button
               id={`alert-confirm-${alert.id}`}
               className="btn btn-danger"

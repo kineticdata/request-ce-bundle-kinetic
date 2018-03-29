@@ -23,24 +23,18 @@ const getStatusReason = queueItem => {
 };
 
 const PrevAndNextGroup = ({ prevAndNext }) => (
-  <ButtonGroup className="queue-details-nav btn-group-xs">
+  <ButtonGroup className="queue-details-nav">
     <LinkContainer to={prevAndNext.prev || ''}>
-      <Button color="secondary" outline disabled={!prevAndNext.prev}>
+      <Button color="inverse" disabled={!prevAndNext.prev}>
         <span className="icon">
-          <span
-            className="fa fa-fw fa-caret-left"
-            style={{ color: '#7e8083' }}
-          />
+          <span className="fa fa-fw fa-caret-left" />
         </span>
       </Button>
     </LinkContainer>
     <LinkContainer to={prevAndNext.next || ''}>
-      <Button color="secondary" outline disabled={!prevAndNext.next}>
+      <Button color="inverse" disabled={!prevAndNext.next}>
         <span className="icon">
-          <span
-            className="fa fa-fw fa-caret-right"
-            style={{ color: '#7e8083' }}
-          />
+          <span className="fa fa-fw fa-caret-right" />
         </span>
       </Button>
     </LinkContainer>

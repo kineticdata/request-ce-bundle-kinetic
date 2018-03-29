@@ -37,7 +37,7 @@ const AlertsComponent = ({ alerts, loading, match, error, canEdit }) => {
                 <h1>Alerts</h1>
               </div>
               {canEdit && (
-                <Link to="/alerts/new" className="btn btn-default">
+                <Link to="/alerts/new" className="btn btn-secondary">
                   Create New Alert
                 </Link>
               )}

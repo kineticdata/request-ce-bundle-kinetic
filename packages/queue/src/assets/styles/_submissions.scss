@@ -86,21 +86,6 @@
 
     // This is for the action dropdown.
     .actions {
-      // This is for the vertical ellipsis dropdown menu on the queue list view.
-      .btn.btn-ellipsis {
-        border: none;
-        padding: 0;
-        box-shadow: none;
-        background-color: transparent;
-        &:hover {
-          background-color: white;
-          cursor: pointer;
-          path {
-            fill: $blue1;
-          }
-        }
-      }
-
       .dropdown > .dropdown-menu {
         left: -5.5rem;
         top: 1rem;

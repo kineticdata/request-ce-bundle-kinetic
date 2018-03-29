@@ -58,7 +58,7 @@ export const RequestCard = props => (
       <span>{props.submission.form.name}</span>
       <StatusPill submission={props.submission} />
       <CardDropdown>
-        <DropdownToggle className="ellipsis-button">
+        <DropdownToggle color="icon">
           <span className="fa fa-ellipsis-h edit" />
         </DropdownToggle>
         <DropdownMenu right>

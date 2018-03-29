@@ -38,7 +38,7 @@ const AssignmentList = ({ assignments, handleSelect }) => (
 const FormsBackButton = ({ handleFormClick }) => (
   <button
     type="button"
-    className="btn btn-link back-button icon-wrapper"
+    className="btn btn-link btn-back icon-wrapper"
     onClick={handleFormClick(null)}
   >
     <span className="icon">
@@ -54,7 +54,7 @@ const FormsBackButton = ({ handleFormClick }) => (
 const AssignmentBackButton = ({ handleAssignmentClick }) => (
   <button
     type="button"
-    className="btn btn-link back-button icon-wrapper"
+    className="btn btn-link btn-back icon-wrapper"
     onClick={handleAssignmentClick(null)}
   >
     <span className="icon">

@@ -29,7 +29,7 @@ const ViewProfileComponent = ({
             <h1>Profile</h1>
           </div>
           {isMyProfile ? (
-            <Link to="/profile" className="btn btn-default">
+            <Link to="/profile" className="btn btn-secondary">
               Edit Profile
             </Link>
           ) : null}

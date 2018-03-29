@@ -504,7 +504,7 @@
     &.btn-primary {
       @include setBgColorAndHover($blueSlate);
     }
-    &.btn-default {
+    &.btn-secondary {
       @include setBgColorAndHover($orange-kinops);
       border: none;
       &:hover {

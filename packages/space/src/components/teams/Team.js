@@ -36,22 +36,23 @@ export const Team = ({
               <h1>Team Profile</h1>
             </div>
             {me.spaceAdmin && (
-              <Link to={`/teams/${team.slug}/edit`} className="btn btn-default">
+              <Link
+                to={`/teams/${team.slug}/edit`}
+                className="btn btn-secondary"
+              >
                 Edit Team
               </Link>
             )}
           </div>
           {userIsMember &&
             discussionId && (
-              <div className="discussion-button-wrapper">
-                <button
-                  onClick={openDiscussion}
-                  className="btn btn-primary btn-inverse discussion-button d-md-none d-lg-none d-xl-none"
-                >
-                  <span className="fa fa-comments fa-fw icon" />
-                  View Discussion
-                </button>
-              </div>
+              <button
+                onClick={openDiscussion}
+                className="btn btn-primary btn-inverse btn-discussion d-md-none d-lg-none d-xl-none"
+              >
+                <span className="fa fa-comments fa-fw icon" />
+                View Discussion
+              </button>
             )}
           <div className="t-card">
             <div
@@ -70,14 +71,14 @@ export const Team = ({
               {userIsMember ? (
                 <button
                   onClick={openRequestToLeaveForm}
-                  className="btn btn-primary"
+                  className="btn btn-primary btn-sm"
                 >
                   Request to Leave
                 </button>
               ) : (
                 <button
                   onClick={openRequestToJoinForm}
-                  className="btn btn-primary"
+                  className="btn btn-primary btn-sm"
                 >
                   Request to Join
                 </button>

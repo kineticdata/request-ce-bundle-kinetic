@@ -3,10 +3,11 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .space {
   .team-container {
-    display: flex;
     min-height: $page-height;
     .team-content {
       flex: 6;
+      display: flex;
+      flex-direction: column;
     }
 
     .team-sidebar {
@@ -48,13 +49,6 @@
       flex-direction: column;
       flex-basis: 27.5%;
       justify-content: flex-start;
-    }
-  }
-  .discussion-button-wrapper {
-    display: flex;
-    flex-direction: column;
-    .btn.discussion-button:hover {
-      background-color: $white;
     }
   }
   .team-form-container {
@@ -129,9 +123,6 @@
       }
       a {
         .edit {
-          // position: absolute;
-          // top: 1rem;
-          // right: 1rem;
           color: white;
         }
       }
@@ -160,12 +151,7 @@
       }
     }
     .btn {
-      padding: 0.25rem 1rem !important;
       margin: 1rem 0;
-      line-height: 1 !important;
-      &.btn-primary {
-        @include setBgColorAndHover($blueLake);
-      }
     }
 
     img {

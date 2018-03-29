@@ -23,6 +23,7 @@ textarea {
 }
 
 .select {
+  flex: 1 1 auto;
   form {
     margin: 0;
     padding: 0;
@@ -55,7 +56,6 @@ textarea {
     outline: 0;
   }
   input {
-    flex-grow: 1;
     &::placeholder {
       color: $black;
     }

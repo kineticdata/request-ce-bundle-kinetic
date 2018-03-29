@@ -17,7 +17,6 @@
     .profile-content {
       overflow-y: auto;
       border-right: 1px solid #ddd;
-      flex-grow: 1;
 
       table.user-attributes {
         color: $black-50;
@@ -80,21 +79,9 @@
   .profile-sidebar {
     display: none;
     flex-direction: row;
-    flex-basis: 31%;
+    flex: 0 0 33%;
     justify-content: center;
     align-items: flex-start;
-    @media all and (min-width: 0) {
-      display: none;
-    }
-    @media all and (min-width: 576px) {
-      display: none;
-    }
-    @media all and (min-width: 768px) {
-      display: flex;
-      .p-card {
-        width: 90%;
-      }
-    }
   }
 
   .p-card {
@@ -106,7 +93,6 @@
     justify-content: center;
     border: 1px solid $black-16;
     border-radius: 4px;
-    max-width: 216px;
     margin-top: 1rem;
     text-align: center;
     word-break: break-all;
@@ -125,12 +111,6 @@
       border-radius: 50%;
       height: 100%;
       width: 100%;
-    }
-    .btn {
-      padding: 0.25rem 1rem !important;
-      @include setBgColorAndHover($blueLake);
-      margin: 1rem 0;
-      line-height: 1 !important;
     }
     dl span {
       display: flex;

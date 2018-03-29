@@ -26,7 +26,7 @@ const TeamCardComponent = props => {
         <pre>{description}</pre>
 
         {slug && (
-          <Link to={`/teams/${slug}`} className="btn btn-primary">
+          <Link to={`/teams/${slug}`} className="btn btn-primary btn-sm">
             View Team
           </Link>
         )}
