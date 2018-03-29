@@ -49,25 +49,42 @@ export const mapStateToProps = state => ({
   loading: state.kinops.loading,
   kapps: state.kinops.kapps,
   sidebarOpen: state.layout.sidebarOpen,
+  suppressedSidebarOpen: state.layout.suppressedSidebarOpen,
   layoutSize: state.layout.size,
   kappSlug: state.kinops.kappSlug,
+  pathname: state.router.location.pathname,
 });
 export const mapDispatchToProps = {
   loadApp: kinopsActions.loadApp,
   fetchAlerts: alertsActions.fetchAlerts,
   setSidebarOpen: layoutActions.setSidebarOpen,
+  setSuppressedSidebarOpen: layoutActions.setSuppressedSidebarOpen,
 };
 
 export const App = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withProps(props => ({
-    AppProvider:
+  withProps(props => {
+    const AppProvider =
       props.kappSlug === 'services'
         ? ServicesApp
-        : props.kappSlug === 'queue' ? QueueApp : SpaceApp,
-  })),
+        : props.kappSlug === 'queue' ? QueueApp : SpaceApp;
+    const shouldSuppressSidebar =
+      AppProvider.shouldSuppressSidebar &&
+      AppProvider.shouldSuppressSidebar(props.pathname, props.kappSlug);
+    const sidebarOpen = shouldSuppressSidebar
+      ? props.suppressedSidebarOpen
+      : props.sidebarOpen;
+    return {
+      AppProvider,
+      shouldSuppressSidebar,
+      sidebarOpen,
+    };
+  }),
   withHandlers({
-    toggleSidebarOpen: props => () => props.setSidebarOpen(!props.sidebarOpen),
+    toggleSidebarOpen: props => () =>
+      props.shouldSuppressSidebar
+        ? props.setSuppressedSidebarOpen(!props.sidebarOpen)
+        : props.setSidebarOpen(!props.sidebarOpen),
   }),
   lifecycle({
     componentDidMount() {

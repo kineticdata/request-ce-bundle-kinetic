@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
+import { matchPath } from 'react-router-dom';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { KappRoute as Route, KappRedirect as Redirect } from 'common';
 import { actions as categoriesActions } from './redux/modules/categories';
@@ -126,3 +127,6 @@ const enhance = compose(
 );
 
 export const App = enhance(AppComponent);
+
+App.shouldSuppressSidebar = (pathname, kappSlug) =>
+  matchPath(pathname, { path: `/kapps/${kappSlug}`, exact: true });
