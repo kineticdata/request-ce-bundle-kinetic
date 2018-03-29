@@ -194,43 +194,31 @@
     padding: 0;
     overflow: visible;
     button {
-      // height: 48px;
-      width: 48px;
-
       border-radius: 0;
-
-      &.btn-more {
+      &.btn-subtle {
         background-color: $blue3;
         border-width: 0;
         opacity: 0.5;
         display: flex;
         justify-content: center;
-        .fa-plus {
-          color: $black-50;
-        }
+        width: 48px;
       }
 
       &.btn-send {
         background-color: $blue3;
+        color: $primary;
+        opacity: 1;
         cursor: pointer;
         &:disabled {
           cursor: not-allowed;
-        }
-        .fa-paper-plane {
-          color: $blue1;
+          color: $gray;
         }
       }
-
-      &.btn.btn-subtle {
-        background-color: $blue3;
-        .icon-svg path {
-          fill: $blue1;
+      &.btn {
+        &.disabled,
+        &:disabled {
+          opacity: 1;
         }
-      }
-
-      &.btn.disabled,
-      &.btn:disabled {
-        opacity: 1;
       }
     }
 
@@ -267,8 +255,8 @@
     }
 
     .input-container {
-      flex: 1;
-      padding: 12px;
+      flex: 1 1 auto;
+      padding: 0.75rem;
       background-color: $blue3;
 
       .placeholder {

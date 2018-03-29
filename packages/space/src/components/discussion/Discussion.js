@@ -53,7 +53,7 @@ const buildRelatedItemLink = (relatedItem, profile) => {
 
   return (
     link && (
-      <a className="btn btn-primary related-link ml-3" href={link}>
+      <a className="btn btn-primary btn-sm related-link ml-3" href={link}>
         {label}
       </a>
     )

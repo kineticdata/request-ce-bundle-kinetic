@@ -188,7 +188,7 @@ class ChatInput extends Component {
             toggle={this.toggleActionsOpen}
             dropup
           >
-            <DropdownToggle className="btn-suble btn-more">
+            <DropdownToggle color="subtle">
               <i className="fa fa-fw fa-plus" />
             </DropdownToggle>
             <DropdownMenu>
@@ -237,12 +237,17 @@ class ChatInput extends Component {
                   {this.state.fileAttachment.name}
                 </span>
                 <button
-                  className="btn btn-xs btn-link"
+                  className="btn btn-icon"
                   type="button"
-                  style={{ width: '24px', height: '24px' }}
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
                   onClick={this.handleAttachmentCancel}
                 >
-                  <i className="fa fa-fw fa-time" />
+                  <i className="fa fa-fw fa-times" />
                 </button>
               </div>
             )}
@@ -269,9 +274,7 @@ class ChatInput extends Component {
             className="btn btn-subtle btn-send"
             disabled={this.isChatInputInvalid()}
           >
-            <span className="icon-small">
-              <i className="fa fa-fw fa-paper-plane" />
-            </span>
+            <i className="fa fa-fw fa-paper-plane" />
           </button>
         </form>
       </Dropzone>

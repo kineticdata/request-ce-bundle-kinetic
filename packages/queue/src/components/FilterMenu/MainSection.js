@@ -160,7 +160,7 @@ export const MainSection = ({
       />
       <button
         type="button"
-        className="btn btn-primary btn-inverse"
+        className="btn btn-inverse"
         onClick={handleSaveFilter}
         disabled={filterName === '' || !errors.isEmpty()}
       >
@@ -173,7 +173,7 @@ export const MainSection = ({
         filter.name.length > 0 && (
           <button
             type="button"
-            className="btn btn-primary btn-inverse"
+            className="btn btn-inverse"
             style={{
               marginTop: '0',
               color: 'red',

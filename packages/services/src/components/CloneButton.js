@@ -9,7 +9,7 @@ const CloneButton = props =>
     <button
       type="button"
       onClick={props.handleClick}
-      className="btn btn-default"
+      className="btn btn-secondary"
     >
       Clone as Draft
     </button>

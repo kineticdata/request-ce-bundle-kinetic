@@ -483,46 +483,38 @@
     }
   }
 
-  .request-list-container {
-    .page-title-wrapper {
-      .btn {
-        margin-left: 1rem;
-      }
-    }
-  }
-
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Button Elements
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   // Hover state with darkened hover color
 
-  .btn {
-    font-size: 0.75rem;
-    border-radius: 4px;
-    line-height: 1.5rem;
-    padding: 0.25rem 1rem;
-    &.btn-primary {
-      @include setBgColorAndHover($blueSlate);
-    }
-    &.btn-default {
-      @include setBgColorAndHover($orange-kinops);
-      border: none;
-      &:hover {
-        color: $white;
-      }
-    }
-    &.btn-outline-primary {
-      color: $black;
-      @include setBgColorAndHover($white);
-      border: 1px solid $black-50;
-    }
-    &.btn-outline-danger {
-      color: #d9534f;
-      &:hover {
-        color: $white;
-      }
-    }
-  }
+  // .btn {
+  //   font-size: 0.75rem;
+  //   border-radius: 4px;
+  //   line-height: 1.5rem;
+  //   padding: 0.25rem 1rem;
+  //   &.btn-primary {
+  //     @include setBgColorAndHover($blueSlate);
+  //   }
+  //   &.btn-secondary {
+  //     @include setBgColorAndHover($orange-kinops);
+  //     border: none;
+  //     &:hover {
+  //       color: $white;
+  //     }
+  //   }
+  //   &.btn-outline-primary {
+  //     color: $black;
+  //     @include setBgColorAndHover($white);
+  //     border: 1px solid $black-50;
+  //   }
+  //   &.btn-outline-danger {
+  //     color: #d9534f;
+  //     &:hover {
+  //       color: $white;
+  //     }
+  //   }
+  // }
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Submission Detail Elements

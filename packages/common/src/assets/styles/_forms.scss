@@ -361,7 +361,7 @@ section.page {
 
       &[data-button-type='submit-page'],
       &[data-button-type='custom'] {
-        @extend .btn-default;
+        @extend .btn-secondary;
       }
       &[data-button-type='custom'].btn-link {
         @extend .btn-link;
@@ -371,7 +371,7 @@ section.page {
       }
 
       &[data-button-type='previous-page'] {
-        @extend .btn-default;
+        @extend .btn-secondary;
         float: left;
         margin-right: 0.5rem;
         margin-left: 0;

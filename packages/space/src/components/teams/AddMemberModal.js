@@ -96,7 +96,7 @@ const AddMemberModalComponent = ({
                   <td>
                     <button
                       onClick={() => handleRemoveMemberTemp(memeber)}
-                      className="btn btn-danger btn-xs pull-right"
+                      className="btn btn-danger pull-right"
                     >
                       <span className="fa fa-times fa-fw" />
                     </button>

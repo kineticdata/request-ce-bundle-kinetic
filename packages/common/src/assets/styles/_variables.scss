@@ -16,7 +16,6 @@ $blue2: rgba(168, 183, 199, 1);
 $blue3: rgba(211, 220, 231, 1);
 $blue4: rgba(244, 246, 249, 1);
 
-$orange1: rgba(255, 120, 0, 1);
 $present: rgba(0, 212, 100, 1);
 
 $black: rgb(52, 52, 52);
@@ -44,21 +43,19 @@ $redRose: rgb(255, 74, 94);
 $yellow: rgb(254, 233, 78);
 $sunflower: rgb(255, 207, 74);
 
-$primary: #313e47;
-$primary-complement: #ffffff;
-$secondary: #6f7e82;
-$secondary-complement: #ffffff;
-$tertiary: #1594c4;
-$tertiary-complement: #ffffff;
+$primary: $blueLake;
+$primary-complement: $white;
+$secondary: $orange-kinops;
+$secondary-complement: $white;
+
 $lightestgray: #f1f1f1;
 $lightgray: #d5d6d7;
 $gray: #7e8083;
 $darkgray: #4b4c4e;
 $darkestgray: #333333;
-$white: #ffffff;
 
-$text-color: $gray !default; // Global text color on `<body>`.
-$link-color: $tertiary !default; // Global textual link color.
+$text-color: $black-50 !default; // Global text color on `<body>`.
+$link-color: $blueLake !default; // Global textual link color.
 
 // Typography
 // --------------------------------------
@@ -75,7 +72,7 @@ $line-height-base: 1.5rem !default; // Default line height. Equal to 24px.
 // --------------------------------------
 
 $enable-rounded: true;
-$border-radius-base: 0.4rem !default; // Default border radius. Equal to 4px
+$border-radius-base: 0.25rem !default; // Default border radius. Equal to 4px
 
 $margin-increment: 0.5rem;
 $margin-count: 5;

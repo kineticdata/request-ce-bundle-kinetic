@@ -18,7 +18,7 @@ export const Sidebar = ({
       <div className="sidebar-group sidebar-new-task">
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-secondary btn-sidebar-action btn-lg"
           onClick={handleOpenNewItemMenu}
         >
           Create New Task
@@ -67,7 +67,7 @@ export const Sidebar = ({
     <div className="sidebar-group sidebar-my-filters">
       <h1>
         My Filters
-        <button className="btn btn-sidebar" onClick={handleNewPersonalFilter}>
+        <button className="btn btn-icon" onClick={handleNewPersonalFilter}>
           <span className="fa fa-plus" />
         </button>
       </h1>

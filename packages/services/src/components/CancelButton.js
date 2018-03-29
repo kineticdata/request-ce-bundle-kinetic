@@ -11,7 +11,7 @@ const CancelButton = props =>
     <button
       type="button"
       onClick={props.handleClick}
-      className="btn btn-outline-danger"
+      className="btn btn-danger"
     >
       {props.submission.coreState === constants.CORE_STATE_DRAFT
         ? 'Cancel Request'

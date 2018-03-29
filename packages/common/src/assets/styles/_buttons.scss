@@ -1,67 +1,8 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Buttons ~ Common
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.queue-details-nav {
-  .btn.btn-outline-secondary[disabled] {
-    background-color: white;
-  }
-}
 
-.btn.btn-link {
-  color: $blue1;
-  &:hover,
-  &:focus,
-  &:active {
-    text-decoration: none;
-  }
-  &:focus {
-    box-shadow: none;
-    outline: $blue3 dotted thin;
-  }
-}
-
-.btn.btn-primary {
-  color: white;
-  background-color: $blue1;
-  border: none;
-  &:focus,
-  &.focus {
-    box-shadow: none;
-    outline: $blue3 dotted thin;
-  }
-}
-
-.btn.btn-inverse.btn-primary {
-  color: $blue1;
-  background-color: white;
-  border: 1px solid $gray3;
-  line-height: 1.75rem;
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
-  padding: 0.1875rem 0.5rem;
-  &:focus,
-  &.focus {
-    box-shadow: none;
-    outline: $blue3 dotted thin;
-  }
-  &:hover {
-    border-color: $gray2;
-    color: $blue0;
-    background-color: white;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  }
-}
-
-.sidebar .btn.btn-sidebar {
-  border: 0;
-  padding: 0;
-  background-color: transparent;
-  margin: 0;
-}
-
-/* Form Button Styles
- *-------------------------------------- */
-
+// Button transtions
 button,
 input[type='submit'],
 input[type='button'],
@@ -70,222 +11,174 @@ input[type='button'],
   transition: all 0.15s ease-out;
 }
 
+// Basic Button
 .btn {
   display: inline-block;
   font-family: $font-family-base;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 400;
   @include border-radius();
-  color: $white;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
+  line-height: 1.75rem;
+  padding: 0.1875rem 0.75rem;
   &:hover,
   &:focus,
   &:active {
     text-decoration: none;
     outline: none;
   }
-}
-
-.btn-lg,
-.btn-group-lg > .btn {
-  padding: 0.6rem 1.2rem;
-  @include font-size-line-height(1.4rem, 2.2rem);
-}
-.btn-sm,
-.btn-group-sm > .btn {
-  padding: 0.3rem 0.6rem;
-  @include font-size-line-height(1.2rem, 1.8rem);
-}
-.btn-xs,
-.btn-group-xs > .btn {
-  padding: 0.1rem 0.4rem;
-  @include font-size-line-height(1.2rem, 1.6rem);
-}
-
-.btn[disabled] {
-  background-color: $gray;
-  color: $lightgray;
-  pointer-events: none;
-}
-
-.btn-round {
-  height: 5rem;
-  width: 5rem;
-  font-weight: 400;
-  font-size: 3rem;
-  border-radius: 50%;
-  padding: 0;
-}
-
-.btn-primary {
-  @extend .btn;
-
-  background-color: $primary;
-  border-color: darken($primary, 10%);
-  color: $primary-complement;
-
-  &:hover,
-  &:focus,
-  &:active {
-    background-color: tint($primary, 10%);
-    border-color: darken($primary, 10%);
-    color: $primary-complement;
-  }
-}
-
-.btn-primary-complement {
-  @extend .btn;
-
-  background-color: $primary-complement;
-  color: $primary;
-
-  &:hover,
-  &:focus,
-  &:active {
-    background-color: tint($primary-complement, 10%);
-    color: $primary;
-  }
-}
-
-.btn-secondary {
-  @extend .btn;
-
-  background-color: $secondary;
-  color: $secondary-complement;
-
-  &:hover,
-  &:focus,
-  &:active {
-    background-color: tint($secondary, 10%);
-    // border-color: darken($secondary, 10%);
-    color: $secondary-complement;
-  }
-}
-
-.btn-secondary-complement {
-  @extend .btn;
-
-  background-color: $secondary-complement;
-  // border-color: darken($secondary-complement, 10%);
-  color: $secondary;
-
-  &:hover,
-  &:focus,
-  &:active {
-    background-color: tint($secondary-complement, 10%);
-    // border-color: darken($secondary-complement, 10%);
-    color: $secondary;
-  }
-}
-
-.btn-tertiary {
-  @extend .btn;
-
-  background-color: $tertiary;
-  // border-color: darken($tertiary, 10%);
-  color: $tertiary-complement;
-
-  &:hover,
-  &:focus,
-  &:active {
-    background-color: tint($blue0, 10%);
-    // border-color: darken($blue0, 10%);
-    color: $tertiary-complement;
-  }
-}
-
-.btn-tertiary-complement {
-  @extend .btn;
-
-  background-color: $tertiary-complement;
-  // border-color: darken($tertiary-complement, 10%);
-  color: $blue0;
-
-  &:hover,
-  &:focus,
-  &:active {
-    background-color: tint($tertiary-complement, 10%);
-    // border-color: darken($tertiary-complement, 10%);
-    color: $blue0;
-  }
-}
-
-.btn-default {
-  @extend .btn;
-  background-color: $blue1;
-  color: $white;
-  background-color: $blue2;
-  border-color: $blue2;
-
-  &:hover,
-  &:focus,
-  &:active {
-    color: $blue0;
-    background-color: $blue3;
-  }
-}
-
-.btn-link {
-  @extend .btn;
-
-  background-color: transparent;
-  border-color: transparent;
-  color: $link-color;
-
-  &:hover,
-  &:focus,
-  &:active {
-    background-color: transparent;
-    border-color: transparent;
-    color: tint($link-color, 10%);
-  }
-
-  &.danger {
-    color: #ca332d;
-
-    &:hover,
-    &:focus,
-    &:active {
-      color: tint(#ca332d, 10%);
-    }
-  }
+  &.disabled,
   &[disabled] {
-    background-color: transparent;
-    color: $lightgray;
     pointer-events: none;
+    opacity: 0.65;
   }
 }
 
+// Primary Button
+.btn-primary {
+  @include setButtonColorAndHover($primary);
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active {
+    @include setButtonColorAndHover($primary);
+  }
+  &.disabled,
+  &[disabled] {
+    background-color: lighten($primary, 5%);
+    border-color: lighten($primary, 5%);
+  }
+}
+
+// Secondary Button
+.btn-secondary {
+  @include setButtonColorAndHover($secondary);
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active {
+    @include setButtonColorAndHover($secondary);
+  }
+  &.disabled,
+  &[disabled] {
+    background-color: lighten($secondary, 5%);
+    border-color: lighten($secondary, 5%);
+  }
+}
+
+// Button Link
+.btn-link {
+  @include setButtonColorAndHover(transparent);
+  color: $link-color;
+  &:hover,
+  &:focus,
+  &:active {
+    color: tint($link-color, 10%);
+    text-decoration: none;
+  }
+}
+
+// Button Subtle
 .btn-subtle {
   @extend .btn;
-
-  background-color: $gray2;
+  @include setButtonColorAndHover($gray2);
   color: $black;
 
   &:hover,
   &:focus,
   &:active {
-    background-color: $gray4;
-    // border-color: darken($blue3, 5%);
     color: $blue0;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  }
+  &:disabled {
+    cursor: not-allowed;
   }
 }
-
-.fileinput-button {
-  background: $blue3;
-  color: $blue0;
-  border-radius: 4px;
+// Button Inverse
+.btn-inverse {
+  color: $primary;
+  background-color: white;
+  border-color: $gray3;
   &:hover {
-    background: $blue2;
+    border-color: $gray2;
+    color: $primary;
+    background-color: white;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   }
 }
 
+// Buttons with icons
+.btn-icon {
+  border: 0;
+  background-color: transparent;
+
+  color: $gray;
+  &:hover {
+    color: $primary;
+  }
+
+  &.btn-subtle {
+    background-color: $blue3;
+    color: $blue1;
+  }
+}
+
+// Button Outline primary
+.btn-outline-primary {
+  border-color: $primary;
+  color: $primary;
+  &:hover {
+    background-color: $primary;
+    border-color: $primary;
+  }
+}
+
+// Button Secondary primary
+.btn-outline-secondary {
+  border-color: $secondary;
+  color: $secondary;
+  &:hover {
+    background-color: $secondary;
+    border-color: $secondary;
+  }
+}
+
+// Button groups for Next/Previous
+.btn-group {
+  .btn-inverse {
+    @include setBgColorAndHover($white);
+  }
+}
+
+// Button Large
+.btn-lg,
+.btn-group-lg > .btn {
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  border-radius: 0.3rem;
+}
+
+// Button Small
+.btn-sm,
+.btn-group-sm > .btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.6125rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
+
+// Discussion Button
+.btn-discussion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+//
 .input-group-addon:not(:first-child):not(:last-child) {
   border-right: 0;
   border-left: 0;
 }
 
+// Kinetic Form Buttons
 button[data-element-type='button'] {
+  @extend .btn;
   display: inline-block;
   line-height: 1.8rem;
   @include border-radius();
@@ -300,10 +193,10 @@ button[data-element-type='button'] {
 
   &[data-button-type='submit-page'],
   &[data-button-type='custom'] {
-    @extend .btn-default;
+    @extend .btn-secondary;
   }
   &[data-button-type='custom'] {
-    @extend .btn-default;
+    @extend .btn-secondary;
   }
   &[data-button-type='custom'].btn-link {
     @extend .btn-link;
@@ -313,7 +206,7 @@ button[data-element-type='button'] {
   }
 
   &[data-button-type='previous-page'] {
-    @extend .btn-default;
+    @extend .btn-secondary;
     float: left;
     position: relative;
     padding-left: 2.4rem;
@@ -335,7 +228,7 @@ button[data-element-type='button'] {
     @extend .btn-subtle;
     position: relative;
     padding-left: 2rem;
-
+    // Save Icon
     &:before {
       font-family: 'FontAwesome';
       font-weight: 400;
@@ -356,8 +249,4 @@ button[data-element-type='button'] {
     box-shadow: none;
     opacity: 0.65;
   }
-}
-button.back-button {
-  display: flex;
-  border-radius: 0;
 }

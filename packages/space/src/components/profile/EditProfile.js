@@ -75,6 +75,7 @@ export const EditProfileComponent = ({
               </div>
               {editingPassword ? (
                 <div>
+                  <hr />
                   <div className="profile-input-container">
                     <div className="form-group required two-columns first-column">
                       <label htmlFor="newPassword">New Password</label>
@@ -105,7 +106,7 @@ export const EditProfileComponent = ({
                   <div>
                     <button
                       onClick={handleTogglePassword}
-                      className="btn btn-primary"
+                      className="btn btn-secondary btn-sm"
                     >
                       Cancel Password Change
                     </button>
@@ -114,7 +115,7 @@ export const EditProfileComponent = ({
               ) : (
                 <button
                   onClick={handleTogglePassword}
-                  className="change-password btn btn-primary"
+                  className="change-password btn btn-secondary btn-sm"
                 >
                   Change Password
                 </button>
@@ -122,7 +123,7 @@ export const EditProfileComponent = ({
               <div className="footer-save">
                 <button
                   disabled={!fieldValuesValid(fieldValues)}
-                  className="btn btn-default"
+                  className="btn btn-primary"
                 >
                   Save
                 </button>
@@ -141,7 +142,7 @@ export const EditProfileComponent = ({
                         <td>
                           {manager || <i>No Manager</i>}
                           <button
-                            className="btn btn-link"
+                            className="btn btn-link btn-sm"
                             onClick={handleChangeManagerClick}
                           >
                             Change Manager
@@ -179,12 +180,12 @@ export const EditProfileComponent = ({
           </div>
         </div>
 
-        <div className="profile-sidebar pane">
+        <div className="profile-sidebar pane d-none d-sm-block">
           <ProfileCard
             user={buildProfile(fieldValues, profile)}
             button={
               <Link to={`/profile/${profile.username}`}>
-                <button className="btn btn-default">View Profile</button>
+                <button className="btn btn-primary btn-sm">View Profile</button>
               </Link>
             }
           />

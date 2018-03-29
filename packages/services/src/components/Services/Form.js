@@ -51,7 +51,7 @@ export const Form = ({
           {form && <h1>{form.name}</h1>}
         </div>
         {/* TODO Show if in Draft mode
-        <a href="/" className="btn btn-default">
+        <a href="/" className="btn btn-secondary">
           Cancel/Delete Request
         </a>
         */}

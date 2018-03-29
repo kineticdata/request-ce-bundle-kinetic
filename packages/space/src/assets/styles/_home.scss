@@ -26,14 +26,13 @@
         display: flex;
         flex-direction: row;
         align-items: flex-end;
-        .select {
-          flex: 1 1 auto;
-        }
+        flex: 0 0 50%;
         form {
           padding: 0;
           margin: 0 0.75rem 0 0;
           input {
-            padding: 0.325rem 0.75rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
           }
         }
       }

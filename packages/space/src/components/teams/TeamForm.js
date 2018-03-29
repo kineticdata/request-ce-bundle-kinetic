@@ -131,7 +131,7 @@ const TeamFormComponent = ({
               <span className="left-side">
                 {editing && (
                   <button
-                    className="btn btn-link danger"
+                    className="btn btn-link text-danger"
                     onClick={handleDelete}
                   >
                     Delete
@@ -139,7 +139,7 @@ const TeamFormComponent = ({
                 )}
               </span>
               <span className="right-side">
-                <button className="btn btn-default">Save</button>
+                <button className="btn btn-primary">Save</button>
                 <button className="btn btn-link" onClick={handleCancel}>
                   Cancel
                 </button>
@@ -199,7 +199,7 @@ const TeamFormComponent = ({
           )}
         </div>
 
-        <div className="team-form-sidebar pane">
+        <div className="team-form-sidebar pane d-none d-sm-block">
           <TeamCard
             team={Object.assign(translateFieldValuesToTeam(fieldValues, team), {
               memberships: team.memberships,
