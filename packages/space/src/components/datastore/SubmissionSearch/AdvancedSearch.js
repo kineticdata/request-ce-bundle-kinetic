@@ -13,13 +13,13 @@ import {
 
 const PARAM_CRITERIAS = [
   'All',
-  'Between',
+  'Starts With',
   'Is Equal To',
   'Is Greater Than',
   'Is Less Than',
   'Is Greater Than or Equal',
   'Is Less Than or Equal',
-  'Starts With',
+  'Between',
 ];
 
 const EqualsCriteria = ({

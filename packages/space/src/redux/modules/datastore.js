@@ -170,9 +170,9 @@ export const buildColumnsConfig = form => {
         return ColumnConfig({
           name: dc.name,
           type: dc.type,
-          label: saved.label || dc.label,
-          visible: saved.visible || dc.visible,
-          filterable: saved.filterable || dc.filterable,
+          label: dc.label,
+          visible: saved.visible,
+          filterable: saved.filterable,
         });
       } else {
         return dc;
@@ -200,7 +200,7 @@ export const IndexPart = Record({
 });
 
 export const State = Record({
-  pageLimit: 25,
+  pageLimit: 50,
   pageOffset: 0,
   loading: true,
   errors: [],

@@ -34,7 +34,7 @@ const PagingComponent = ({
   handleNextThousandPage,
   handlePrevThousandPage,
 }) =>
-  (nextPageToken !== null || pageTokens > 0) && (
+  (nextPageToken !== null || pageTokens.size > 0) && (
     <Fragment>
       <div className="search-lookup-fotter">
         {(pageTokens.size > 0 || nextPageToken !== null) && (
@@ -100,13 +100,13 @@ const handleNextThousandPage = ({
 };
 
 const handlePrevThousandPage = ({
-  setNextPageToken,
   popPageToken,
-  pageTokens,
-  fetchSubmissions,
+  simpleSearchActive,
+  fetchSubmissionsSimple,
+  fetchSubmissionsAdvanced,
 }) => () => {
   popPageToken();
-  fetchSubmissions();
+  simpleSearchActive ? fetchSubmissionsSimple() : fetchSubmissionsAdvanced();
 };
 
 export const Paging = compose(

@@ -247,6 +247,9 @@ export function* fetchSubmissionsAdvancedSaga() {
       case 'Is Less Than or Equal':
         searcher.lteq(part.name, part.value.input);
         break;
+      case 'Starts With':
+        searcher.sw(part.name, part.value.input);
+        break;
       case 'All':
         // Don't do anything with 'All'.
         break;
