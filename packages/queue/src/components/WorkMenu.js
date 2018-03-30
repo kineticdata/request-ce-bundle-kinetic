@@ -33,16 +33,14 @@ export const WorkMenu = ({
         </h4>
       </div>
       <ModalBody>
-        <div style={{ margin: '1em' }}>
-          <CoreForm
-            globals={globals}
-            submission={queueItem.id}
-            review={queueItem.coreState !== 'Draft'}
-            onLoaded={handleLoaded}
-            onUpdated={handleUpdated}
-            onCompleted={handleCompleted}
-          />
-        </div>
+        <CoreForm
+          globals={globals}
+          submission={queueItem.id}
+          review={queueItem.coreState !== 'Draft'}
+          onLoaded={handleLoaded}
+          onUpdated={handleUpdated}
+          onCompleted={handleCompleted}
+        />
       </ModalBody>
       {mode === 'Work' &&
         !complete && (

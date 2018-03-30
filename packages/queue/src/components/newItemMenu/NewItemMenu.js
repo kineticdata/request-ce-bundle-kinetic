@@ -114,18 +114,16 @@ export const NewItemMenu = ({
       ) : assignmentRequired && currentAssignment === null ? (
         <AssignmentList assignments={assignments} handleSelect={handleSelect} />
       ) : (
-        <div style={{ margin: '12px' }}>
-          <CoreForm
-            kapp={kappSlug}
-            form={currentForm.slug}
-            globals={globals}
-            values={currentAssignment}
-            onLoaded={onFormLoaded}
-            onCreated={onCreated}
-            originId={options.get('originId')}
-            parentId={options.get('parentId')}
-          />
-        </div>
+        <CoreForm
+          kapp={kappSlug}
+          form={currentForm.slug}
+          globals={globals}
+          values={currentAssignment}
+          onLoaded={onFormLoaded}
+          onCreated={onCreated}
+          originId={options.get('originId')}
+          parentId={options.get('parentId')}
+        />
       )}
     </ModalBody>
     {currentForm !== null &&

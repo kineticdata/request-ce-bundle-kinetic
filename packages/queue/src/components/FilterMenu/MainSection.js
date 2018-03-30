@@ -150,26 +150,19 @@ export const MainSection = ({
         disabled={filterName === '' || !errors.isEmpty()}
       >
         {filter && filter.type === 'custom' && filter.name === filterName
-          ? 'Save'
-          : 'Save As'}
+          ? 'Save Filter'
+          : 'Save Filter As'}
       </button>
       {filter &&
         filter.type === 'custom' &&
         filter.name.length > 0 && (
           <button
             type="button"
-            className="btn btn-inverse"
-            style={{
-              marginTop: '0',
-              color: 'red',
-              fontSize: '0.66rem',
-              paddingTop: '0px',
-              paddingBottom: '0px',
-            }}
+            className="btn btn-inverse text-danger"
             onClick={handleRemoveFilter}
             disabled={filterName === '' || !errors.isEmpty()}
           >
-            Delete
+            Delete Filter
           </button>
         )}
     </div>

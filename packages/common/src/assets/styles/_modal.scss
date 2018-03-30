@@ -86,6 +86,9 @@
       display: flex;
       flex-direction: column;
       padding: 0;
+      > .embedded-core-form {
+        padding: 1.5rem;
+      }
       .embedded-core-form .container,
       form {
         padding: 0;
@@ -103,18 +106,8 @@
               font-weight: 600;
               margin-right: auto;
             }
-            .icon-svg {
-              margin-left: 10px;
-              path {
-                fill: $blue1;
-              }
-            }
           }
         }
-      }
-      .btn.btn-inverse {
-        font-size: 0.875rem;
-        margin: 1rem;
       }
 
       .button-list .btn-link {
@@ -125,39 +118,37 @@
         }
       }
 
-      // TODO: Review this and make it consistent.
       .save-filter {
         display: flex;
         flex-direction: column;
-        margin-top: 2rem;
-
+        margin: 1rem;
         label {
-          height: 17px;
-          width: 65px;
-          margin-left: 1em;
-          color: #54698d;
+          color: $primary;
           font-family: 'Open Sans';
-          font-size: 12px;
-          line-height: 17px;
+          font-size: 0.75rem;
+          line-height: 1.5rem;
         }
 
         input {
-          margin-left: 1em;
-          margin-right: 1em;
-          height: 30px;
-          border: 1px solid #54698d;
-          border-radius: 3px;
-          background-color: #fff;
+          min-height: 1.5rem;
+          border: 1px solid $black-16;
+          border-radius: $border-radius-base;
+          background-color: $white;
 
           padding: 0.5em;
-          color: #54698d;
-          font-family: 'Open Sans';
-          font-size: 13px;
-          line-height: 18px;
+          color: $black;
+          font-size: 0.75rem;
+          line-height: 1.5rem;
 
           &:focus {
             outline: 0;
-            box-shadow: 0 0 3px 0 #54698d;
+            box-shadow: 0 0 3px 0 $gray2;
+          }
+        }
+        .btn {
+          margin: 1rem 0;
+          + .btn {
+            margin-top: 0;
           }
         }
       }
