@@ -58,14 +58,13 @@ export const RequestCard = props => (
       <span>{props.submission.form.name}</span>
       <StatusPill submission={props.submission} />
       <CardDropdown>
-        <DropdownToggle color="icon">
-          <span className="fa fa-ellipsis-h edit" />
+        <DropdownToggle color="icon" className="btn-sm">
+          <span className="fa fa-ellipsis-h fa-2x" />
         </DropdownToggle>
         <DropdownMenu right>
-          <CancelButtonContainer
-            submission={props.submission}
-            deleteCallback={props.deleteCallback}
-          />
+          <DropdownItem tag={Link} to={``}>
+            Request to Cancel
+          </DropdownItem>
         </DropdownMenu>
       </CardDropdown>
     </h1>
