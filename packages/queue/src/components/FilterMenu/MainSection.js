@@ -64,21 +64,18 @@ export const MainSection = ({
   appliedAssignments,
   errors,
 }) => (
-  <ModalBody className="main-section">
+  <ModalBody>
     <ul className="list-group button-list">
       <li className="list-group-item">
         <button
           type="button"
-          className="btn btn-link icon-wrapper"
+          className="btn btn-link"
           onClick={() => showSection('teams')}
         >
           <span className="button-title">Teams</span>
           <ListSummary type="Teams" list={filter.teams} />
           <span className="icon">
-            <span
-              className="fa fa-angle-right"
-              style={{ color: '#7e8083', fontSize: '16px' }}
-            />
+            <span className="fa fa-angle-right" />
           </span>
         </button>
       </li>
@@ -94,10 +91,7 @@ export const MainSection = ({
             appliedAssignments={appliedAssignments}
           />
           <span className="icon">
-            <span
-              className="fa fa-angle-right"
-              style={{ color: '#7e8083', fontSize: '16px' }}
-            />
+            <span className="fa fa-angle-right" />
           </span>
         </button>
       </li>
@@ -110,10 +104,7 @@ export const MainSection = ({
           <span className="button-title">Status</span>
           <ListSummary type="Statuses" list={filter.status} />
           <span className="icon">
-            <span
-              className="fa fa-angle-right"
-              style={{ color: '#7e8083', fontSize: '16px' }}
-            />
+            <span className="fa fa-angle-right" />
           </span>
         </button>
       </li>
@@ -126,10 +117,7 @@ export const MainSection = ({
           <span className="button-title">Date Range</span>
           <DateRangeSummary errors={errors} filter={filter} />
           <span className="icon">
-            <span
-              className="fa fa-angle-right"
-              style={{ color: '#7e8083', fontSize: '16px' }}
-            />
+            <span className="fa fa-angle-right" />
           </span>
         </button>
       </li>
@@ -142,10 +130,7 @@ export const MainSection = ({
           <span className="button-title">Sorted By</span>
           <span>{SORT_OPTIONS.get(filter.sortBy).label}</span>
           <span className="icon">
-            <span
-              className="fa fa-angle-right"
-              style={{ color: '#7e8083', fontSize: '16px' }}
-            />
+            <span className="fa fa-angle-right" />
           </span>
         </button>
       </li>

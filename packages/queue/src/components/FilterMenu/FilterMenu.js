@@ -43,14 +43,11 @@ export const FilterMenu = ({
       {activeSection !== null && (
         <button
           type="button"
-          className="btn btn-link btn-back icon-wrapper"
+          className="btn btn-link btn-back"
           onClick={() => showSection(null)}
         >
           <span className="icon">
-            <span
-              className="fa fa-chevron-left"
-              style={{ color: '#7e8083', fontSize: '16px' }}
-            />
+            <span className="fa fa-fw fa-chevron-left" />
           </span>
           Filters
         </button>

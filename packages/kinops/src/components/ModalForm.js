@@ -20,7 +20,7 @@ export const ModalForm = ({
           <span />
         </h4>
       </div>
-      <ModalBody className="main-section">
+      <ModalBody>
         {isCompleted ? (
           <h5>{form.confirmationMessage}</h5>
         ) : (

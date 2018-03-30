@@ -20,10 +20,7 @@ const FormList = ({ myTeamForms, handleFormClick, permittedSubtasks }) => (
           >
             <span className="button-title">{form.name}</span>
             <span className="icon">
-              <span
-                className="fa fa-angle-right"
-                style={{ color: '#7e8083', fontSize: '16px' }}
-              />
+              <span className="fa fa-angle-right" />
             </span>
           </button>
         </li>
@@ -38,14 +35,11 @@ const AssignmentList = ({ assignments, handleSelect }) => (
 const FormsBackButton = ({ handleFormClick }) => (
   <button
     type="button"
-    className="btn btn-link btn-back icon-wrapper"
+    className="btn btn-link btn-back"
     onClick={handleFormClick(null)}
   >
     <span className="icon">
-      <span
-        className="fa fa-chevron-left"
-        style={{ color: '#7e8083', fontSize: '16px' }}
-      />
+      <span className="fa fa-fw fa-chevron-left" />
     </span>
     Forms
   </button>
@@ -54,14 +48,11 @@ const FormsBackButton = ({ handleFormClick }) => (
 const AssignmentBackButton = ({ handleAssignmentClick }) => (
   <button
     type="button"
-    className="btn btn-link btn-back icon-wrapper"
+    className="btn btn-link btn-back"
     onClick={handleAssignmentClick(null)}
   >
     <span className="icon">
-      <span
-        className="fa fa-chevron-left"
-        style={{ color: '#7e8083', fontSize: '16px' }}
-      />
+      <span className="fa fa-fw fa-chevron-left" />
     </span>
     Assignment
   </button>

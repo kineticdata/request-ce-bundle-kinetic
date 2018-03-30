@@ -14,15 +14,10 @@ export const QueueItem = ({ filter, queueItem, discussionsEnabled }) =>
     <div className="queue-item">
       {filter && (
         <Link to={buildFilterPath(filter)} className="back-link">
-          <div className="icon-wrapper">
-            <span className="icon">
-              <span
-                className="fa fa-fw fa-chevron-left"
-                style={{ fontSize: '16px' }}
-              />
-            </span>
-            {filter.name || 'Adhoc'}
-          </div>
+          <span className="icon">
+            <span className="fa fa-fw fa-chevron-left" />
+          </span>
+          {filter.name || 'Adhoc'}
         </Link>
       )}
       <div className="queue-item-content">
