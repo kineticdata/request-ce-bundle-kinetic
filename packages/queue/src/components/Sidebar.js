@@ -18,7 +18,7 @@ export const Sidebar = ({
       <div className="sidebar-group sidebar-new-task">
         <button
           type="button"
-          className="btn btn-secondary btn-sidebar-action btn-lg"
+          className="btn btn-secondary btn-sidebar-action"
           onClick={handleOpenNewItemMenu}
         >
           Create New Task
