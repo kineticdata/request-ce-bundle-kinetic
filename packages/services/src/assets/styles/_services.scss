@@ -301,6 +301,7 @@
       font-size: 1.125rem;
       line-height: 1.5rem;
       display: flex;
+      align-items: center;
     }
     p {
       color: $black-50;
@@ -429,32 +430,8 @@
       margin-bottom: 2rem;
       .col {
         border-right: 1px solid $black-16;
-        justify-content: center;
         &:last-child {
           border: none;
-        }
-        &.btn-group-col {
-          display: flex;
-          align-items: center;
-          margin-top: 0;
-          .btn {
-            margin-right: 1rem;
-          }
-          @media all and (min-width: 0) {
-            margin-top: 1rem;
-          }
-          @media all and (min-width: 576px) {
-            margin-top: 1rem;
-          }
-          @media all and (min-width: 768px) {
-            margin-top: 1rem;
-          }
-          @media all and (min-width: 992px) {
-            margin-top: 0;
-          }
-          @media all and (min-width: 1200px) {
-            margin-top: 0;
-          }
         }
       }
       dt {
@@ -469,6 +446,30 @@
         font-size: 1rem;
         font-weight: 300;
         line-height: 0.75rem;
+      }
+      .btn-group-col {
+        display: flex;
+        align-items: center;
+        margin-top: 0;
+        justify-content: space-around;
+        .btn {
+          margin-right: 1rem;
+        }
+        @media all and (min-width: 0) {
+          margin-top: 1rem;
+        }
+        @media all and (min-width: 576px) {
+          margin-top: 1rem;
+        }
+        @media all and (min-width: 768px) {
+          margin-top: 1rem;
+        }
+        @media all and (min-width: 992px) {
+          margin-top: 0;
+        }
+        @media all and (min-width: 1200px) {
+          margin-top: 0;
+        }
       }
     }
     .back-link {

@@ -155,7 +155,7 @@ export const RequestShow = ({ submission, listType, mode }) => (
                 <ServiceOwnerItem submission={submission} />
                 <EstCompletionItem submission={submission} />
                 <CompletedInItem submission={submission} />
-                <div className="col btn-group-col">
+                <div className="col-lg-auto btn-group-col">
                   <CloneButtonContainer submission={submission} />
                   {submission.coreState === constants.CORE_STATE_SUBMITTED && (
                     <CommentButtonContainer submission={submission} />
