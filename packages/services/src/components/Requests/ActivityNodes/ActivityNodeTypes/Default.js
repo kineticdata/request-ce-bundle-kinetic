@@ -19,7 +19,7 @@ export const DefaultBody = ({ activity }) => {
         <div className="col">
           <dl>
             <dt>
-              <span className="fa fa-calendar" />
+              <span className="fa fa-fw fa-calendar" />
               <span>Created</span>
             </dt>
             <dd>
@@ -30,7 +30,7 @@ export const DefaultBody = ({ activity }) => {
         <div className="col">
           <dl>
             <dt>
-              <span className="fa fa-calendar" />
+              <span className="fa fa-fw fa-calendar" />
               <span>Updated</span>
             </dt>
             <dd>
