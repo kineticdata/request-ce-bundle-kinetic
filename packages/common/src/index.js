@@ -4,6 +4,9 @@ import { KappNavLink } from './components/KappNavLink';
 import { KappRedirect } from './components/KappRedirect';
 import { KappRoute } from './components/KappRoute';
 import { TimeAgo } from './components/TimeAgo';
+import { ErrorNotFound } from './components/ErrorNotFound';
+import { ErrorUnauthorized } from './components/ErrorUnauthorized';
+import { ErrorUnexpected } from './components/ErrorUnexpected';
 import {
   actions as commonActions,
   types as commonTypes,
@@ -20,4 +23,7 @@ export {
   commonActions,
   commonTypes,
   Utils,
+  ErrorNotFound,
+  ErrorUnauthorized,
+  ErrorUnexpected,
 };

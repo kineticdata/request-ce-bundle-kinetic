@@ -1,6 +1,11 @@
 import React from 'react';
 import { CoreForm } from 'react-kinetic-core';
-import { KappLink as Link } from 'common';
+import {
+  KappLink as Link,
+  ErrorNotFound,
+  ErrorUnauthorized,
+  ErrorUnexpected,
+} from 'common';
 import { SERVICES_KAPP as kappSlug } from '../../constants';
 import { PageTitle } from '../Shared/PageTitle';
 
@@ -76,6 +81,9 @@ export const Form = ({
             created={handleCreated}
             completed={handleCompleted}
             values={values}
+            notFoundComponent={ErrorNotFound}
+            unauthorizedComponent={ErrorUnauthorized}
+            unexpectedErrorComponent={ErrorUnexpected}
           />
         )}
       </div>

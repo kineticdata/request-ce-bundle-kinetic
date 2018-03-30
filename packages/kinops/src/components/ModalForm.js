@@ -1,6 +1,7 @@
 import React from 'react';
 import { CoreForm } from 'react-kinetic-core';
 import { Modal, ModalBody } from 'reactstrap';
+import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
 
 export const ModalForm = ({
   form,
@@ -30,6 +31,9 @@ export const ModalForm = ({
             values={form.values}
             globals={globals}
             onCompleted={handleCompleted}
+            notFoundComponent={ErrorNotFound}
+            unauthorizedComponent={ErrorUnauthorized}
+            unexpectedErrorComponent={ErrorUnexpected}
           />
         )}
       </ModalBody>
