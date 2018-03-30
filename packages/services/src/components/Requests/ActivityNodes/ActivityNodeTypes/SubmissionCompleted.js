@@ -21,7 +21,9 @@ export const SubmissionCompletedBody = ({ activity, submission }) => {
       <div className="row">
         <div className="col">
           <dl>
-            <dt>Closed</dt>
+            <dt>
+              <span className="fa fa-fw fa-calendar" />Closed
+            </dt>
             <dd>
               <TimeAgo timestamp={submission.closedAt} />
             </dd>

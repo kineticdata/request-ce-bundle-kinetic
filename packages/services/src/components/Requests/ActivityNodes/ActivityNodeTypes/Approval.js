@@ -2,9 +2,10 @@ import React from 'react';
 import { TimeAgo } from '../../../TimeAgo';
 import { activityData } from '../../RequestActivityList';
 
-const getStatusColor = (status) => (
-  status === 'In Progress' ? 'status-yellow' : status === 'Denied' ? 'status-red' : 'status-green'
-);
+const getStatusColor = status =>
+  status === 'In Progress'
+    ? 'status-yellow'
+    : status === 'Denied' ? 'status-red' : 'status-green';
 
 export const ApprovalHeader = ({ activity }) => {
   const data = activityData(activity);
@@ -12,7 +13,9 @@ export const ApprovalHeader = ({ activity }) => {
     <div>
       <h1>
         {activity.label}
-        <span className={`status ${getStatusColor(data.Status)}`}>{data.Status}</span>
+        <span className={`status ${getStatusColor(data.Status)}`}>
+          {data.Status}
+        </span>
       </h1>
     </div>
   );
@@ -25,7 +28,9 @@ export const ApprovalBody = ({ activity }) => {
       <div className="row">
         <div className="col">
           <dl>
-            <dt>Created</dt>
+            <dt>
+              <span className="fa fa-fw fa-calendar" />Created
+            </dt>
             <dd>
               <TimeAgo timestamp={activity.createdAt} />
             </dd>
@@ -33,7 +38,9 @@ export const ApprovalBody = ({ activity }) => {
         </div>
         <div className="col">
           <dl>
-            <dt>Updated</dt>
+            <dt>
+              <span className="fa fa-fw fa-calendar" />Updated
+            </dt>
             <dd>
               <TimeAgo timestamp={activity.updatedAt} />
             </dd>
