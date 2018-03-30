@@ -346,61 +346,6 @@ section.page {
       }
     }
 
-    button[data-element-type='button'] {
-      display: inline-block;
-      line-height: 1.8rem;
-      @include border-radius();
-      padding: 0.5rem;
-      border-width: 1px;
-      border-style: solid;
-      color: $black;
-      background-color: #e9e9e9;
-      cursor: pointer;
-      font-size: inherit;
-      margin-left: 0.5rem;
-
-      &[data-button-type='submit-page'],
-      &[data-button-type='custom'] {
-        @extend .btn-secondary;
-      }
-      &[data-button-type='custom'].btn-link {
-        @extend .btn-link;
-      }
-      &[data-button-type='custom'].btn-subtle {
-        @extend .btn-subtle;
-      }
-
-      &[data-button-type='previous-page'] {
-        @extend .btn-secondary;
-        float: left;
-        margin-right: 0.5rem;
-        margin-left: 0;
-      }
-
-      &[data-button-type='save'] {
-        @extend .btn-subtle;
-        position: relative;
-        padding-left: 2.4rem;
-
-        &:before {
-          font-family: 'FontAwesome';
-          font-weight: 400;
-          content: '\f0c7';
-          position: absolute;
-          top: 50%;
-          left: 0.5rem;
-          width: 1.4rem;
-          height: 1.4rem;
-          line-height: 1;
-          margin-top: -0.7rem;
-        }
-      }
-    }
-
-    .fileinput-button {
-      @extend .btn-subtle;
-    }
-
     /* Attachment files
      *-------------------------------------- */
     .empty > .file-table > .file-header {

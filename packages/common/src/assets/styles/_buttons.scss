@@ -35,6 +35,8 @@ input[type='button'],
 
 // Primary Button
 .btn-primary {
+  @extend .btn;
+  color: $white;
   @include setButtonColorAndHover($primary);
   &:not(:disabled):not(.disabled):active,
   &:not(:disabled):not(.disabled).active {
@@ -49,6 +51,8 @@ input[type='button'],
 
 // Secondary Button
 .btn-secondary {
+  @extend .btn;
+  color: $white;
   @include setButtonColorAndHover($secondary);
   &:not(:disabled):not(.disabled):active,
   &:not(:disabled):not(.disabled).active {
@@ -63,6 +67,7 @@ input[type='button'],
 
 // Button Link
 .btn-link {
+  @extend .btn;
   @include setButtonColorAndHover(transparent);
   color: $link-color;
   &:hover,
@@ -178,25 +183,10 @@ input[type='button'],
 
 // Kinetic Form Buttons
 button[data-element-type='button'] {
-  @extend .btn;
-  display: inline-block;
-  line-height: 1.8rem;
-  @include border-radius();
-  padding: 0.5rem;
-  border-width: 1px;
-  border-style: solid;
-  color: $black;
-  background-color: $blue1;
-  cursor: pointer;
-  font-size: inherit;
-  margin-left: 0.5rem;
-
+  @extend .btn-primary;
   &[data-button-type='submit-page'],
   &[data-button-type='custom'] {
-    @extend .btn-secondary;
-  }
-  &[data-button-type='custom'] {
-    @extend .btn-secondary;
+    @extend .btn-primary;
   }
   &[data-button-type='custom'].btn-link {
     @extend .btn-link;
@@ -249,4 +239,7 @@ button[data-element-type='button'] {
     box-shadow: none;
     opacity: 0.65;
   }
+}
+.fileinput-button {
+  @extend .btn-subtle;
 }
