@@ -8,7 +8,7 @@ import { CoreForm } from 'react-kinetic-core';
 
 import { selectFormBySlug, actions } from '../../redux/modules/datastore';
 
-const globals = import('../../globals');
+const globals = import('common/globals');
 
 const DatastoreSubmissionComponent = ({
   form,
@@ -27,7 +27,9 @@ const DatastoreSubmissionComponent = ({
             <Link to={`/datastore/`}>datastore</Link> /{` `}
             <Link to={`/datastore/${form.slug}/`}>{form.name}</Link> /
           </h3>
-          <h1>{submissionId ? submission ? submission.label: '' : ' New'}</h1>
+          <h1>
+            {submissionId ? (submission ? submission.label : '') : ' New'}
+          </h1>
         </div>
       </div>
       <div className="">
