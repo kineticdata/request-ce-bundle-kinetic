@@ -23,6 +23,9 @@ window._ = underscore;
 window.Bloodhound = require('typeahead.js');
 
 require('datatables.net');
+require('datatables.net-responsive' );
 require('datatables.net-dt/css/jquery.dataTables.css');
+require('datatables.net-responsive-bs/css/responsive.bootstrap.css');
+
 require('bootstrap-select/dist/js/bootstrap-select');
 require('./lib/kd-typeahead/kd-typeahead');
