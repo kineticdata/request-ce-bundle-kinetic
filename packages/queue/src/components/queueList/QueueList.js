@@ -15,7 +15,7 @@ const SORT_NAMES = {
 const WallyEmptyMessage = ({ filter }) => {
   if (filter.type === 'adhoc') {
     return (
-      <div className="wally">
+      <div className="wally-empty-state">
         <h5>No Results</h5>
         <img src={wallyMissingImage} alt="Missing Wally" />
         <h6>Try a less specific filter.</h6>
@@ -25,7 +25,7 @@ const WallyEmptyMessage = ({ filter }) => {
   }
 
   return (
-    <div className="wally">
+    <div className="wally-empty-state">
       <h5>No Assignments</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>An empty queue is a happy queue.</h6>
@@ -35,7 +35,7 @@ const WallyEmptyMessage = ({ filter }) => {
 
 const WallyErrorMessage = ({ message }) => {
   return (
-    <div className="wally">
+    <div className="wally-empty-state">
       <h5>{message === TOO_MANY_STATUS_STRING ? 'Too Many Items' : 'Error'}</h5>
       <img src={wallyMissingImage} alt="Missing Wally" />
       <h6>{message}</h6>
@@ -45,7 +45,7 @@ const WallyErrorMessage = ({ message }) => {
 };
 
 const WallyBadFilter = () => (
-  <div className="wally">
+  <div className="wally-empty-state">
     <h5>Invalid List</h5>
     <img src={wallyMissingImage} alt="Missing Wally" />
     <h6>Invalid list, please choose a valid list from the left side.</h6>

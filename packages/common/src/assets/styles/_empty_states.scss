@@ -1,0 +1,23 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Empty States ~ Common
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.wally-empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  h5 {
+    color: $blueLake;
+    @include ms-respond(font-size, 2);
+    font-weight: 600;
+    line-height: 1.5rem;
+  }
+  h6 {
+    color: $blueGray;
+    @include ms-respond(font-size, -1);
+    line-height: 1.5rem;
+  }
+}

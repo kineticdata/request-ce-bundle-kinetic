@@ -35,17 +35,25 @@ export const Catalog = ({
             </div>
             <Link to="/requests">View All</Link>
           </div>
+
           <div className="r-cards-wrapper">
-            {submissions
-              .take(5)
-              .map(submission => ({
-                submission,
-                forms,
-                key: submission.id,
-                path: getSubmissionPath(submission),
-                deleteCallback: fetchSubmissions,
-              }))
-              .map(props => <RequestCard {...props} />)}
+            {submissions.size > 0 ? (
+              submissions
+                .take(5)
+                .map(submission => ({
+                  submission,
+                  forms,
+                  key: submission.id,
+                  path: getSubmissionPath(submission),
+                  deleteCallback: fetchSubmissions,
+                }))
+                .map(props => <RequestCard {...props} />)
+            ) : (
+              <div className="card empty-state-card">
+                <h1>You have no requests yet.</h1>
+                <p>As you request new services, they’ll appear here.</p>
+              </div>
+            )}
           </div>
         </div>
         <div className="services-wrapper">

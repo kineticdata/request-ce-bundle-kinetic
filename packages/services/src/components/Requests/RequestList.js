@@ -1,4 +1,5 @@
 import React from 'react';
+import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { KappLink as Link } from 'common';
 import { RequestCard } from '../RequestCard';
 import { getSubmissionPath } from '../../helpers';
@@ -53,15 +54,23 @@ export const RequestList = ({
         </div>
       </div>
       <div className="r-cards-wrapper">
-        {submissions
-          .map(submission => ({
-            submission,
-            forms,
-            key: submission.id,
-            path: getSubmissionPath(submission, null, type),
-            deleteCallback: refreshPage,
-          }))
-          .map(props => <RequestCard {...props} />)}
+        {submissions.size > 0 ? (
+          submissions
+            .map(submission => ({
+              submission,
+              forms,
+              key: submission.id,
+              path: getSubmissionPath(submission, null, type),
+              deleteCallback: refreshPage,
+            }))
+            .map(props => <RequestCard {...props} />)
+        ) : (
+          <div className="wally-empty-state">
+            <h5>You have no requests yet.</h5>
+            <img src={wallyHappyImage} alt="Happy Wally" />
+            <h6>As you request new services, they’ll appear here.</h6>
+          </div>
+        )}
       </div>
     </div>
   </div>
