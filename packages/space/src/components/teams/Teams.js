@@ -5,11 +5,11 @@ import SVGInline from 'react-svg-inline';
 import { PageTitle } from '../shared/PageTitle';
 import { TeamCard } from '../shared/TeamCard';
 
-import wallyHappyImage from '../../images/wally-happy.svg';
+import wallyHappyImage from '../../assets/images/wally-happy.svg';
 
 const WallyEmptyMessage = ({ me }) => {
   return (
-    <div className="wally">
+    <div className="wally-empty-state">
       <h5>No Teams Right Now...</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       {me.spaceAdmin && <h6>Add a team by hitting the new button!</h6>}

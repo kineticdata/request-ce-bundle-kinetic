@@ -7,12 +7,12 @@ import { List } from 'immutable';
 import moment from 'moment';
 
 import { PageTitle } from '../shared/PageTitle';
-import wallyHappyImage from '../../images/wally-happy.svg';
+import wallyHappyImage from '../../assets/images/wally-happy.svg';
 import { Alert } from './Alert';
 
 const WallyEmptyMessage = ({ canEdit }) => {
   return (
-    <div className="wally">
+    <div className="wally-empty-state">
       <h5>No Alerts Right Now...</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       {canEdit && <h6>Add an alert by hitting the new button!</h6>}

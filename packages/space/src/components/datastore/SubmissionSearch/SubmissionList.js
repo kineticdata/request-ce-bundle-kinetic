@@ -6,7 +6,7 @@ import { compose, withHandlers, withState } from 'recompose';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 import { SubmissionListItem } from './SubmissionListItem';
-import wallyHappyImage from '../../../images/wally-happy.svg';
+import wallyHappyImage from '../../../assets/images/wally-happy.svg';
 import {
   actions,
   selectSubmissionPage,
@@ -14,7 +14,7 @@ import {
 
 const WallyEmptyMessage = ({ form }) => {
   return (
-    <div className="wally">
+    <div className="wally-empty-state">
       <h5>No {form.name} Submissions Found</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>Add some records by hitting the new button!.</h6>

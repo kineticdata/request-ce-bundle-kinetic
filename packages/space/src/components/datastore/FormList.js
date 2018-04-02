@@ -1,5 +1,5 @@
 import React from 'react';
-import wallyHappyImage from '../../images/wally-happy.svg';
+import wallyHappyImage from '../../assets/images/wally-happy.svg';
 
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -17,7 +17,7 @@ import { actions } from '../../redux/modules/datastore';
 
 const WallyEmptyMessage = ({ filter }) => {
   return (
-    <div className="wally">
+    <div className="wally-empty-state">
       <h5>No Datstore Forms Found</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>
@@ -48,89 +48,91 @@ const FormListComponent = ({
   return (
     <div className="datastore-container">
       <div className="datastore-content pane">
-      <div className="page-title-wrapper">
-        <div className="page-title">
-          <h3>
-            <Link to={`/datastore/`}>datastore</Link> /{` `}
-          </h3>
-          <h1>Forms</h1>
+        <div className="page-title-wrapper">
+          <div className="page-title">
+            <h3>
+              <Link to={`/datastore/`}>datastore</Link> /{` `}
+            </h3>
+            <h1>Forms</h1>
+          </div>
         </div>
-      </div>
 
-      <div>
-        {loading ? (
-          <h3>Loading</h3>
-        ) : datastoreForms && datastoreForms.size > 0 ? (
-          <table className="table forms-list">
-            <thead className="header">
-              <tr>
-                <th>Form Name</th>
-                <th>Description</th>
-                <th>Dates</th>
-                <th style={{ width: '48px' }}>&nbsp;</th>
-              </tr>
-            </thead>
-            <tbody>
-              {datastoreForms.map(form => {
-                const canManage = manageableForms.includes(form.slug);
-                return (
-                  <tr key={form.slug}>
-                    <td>
-                      <Link to={`/datastore/${form.slug}`}>
-                        <span>{form.name}</span>
-                        <br />
-                        <span><small>({form.slug})</small></span>
-                      </Link>
-                    </td>
-                    <td>{form.description}</td>
-                    <td>
+        <div>
+          {loading ? (
+            <h3>Loading</h3>
+          ) : datastoreForms && datastoreForms.size > 0 ? (
+            <table className="table forms-list">
+              <thead className="header">
+                <tr>
+                  <th>Form Name</th>
+                  <th>Description</th>
+                  <th>Dates</th>
+                  <th style={{ width: '48px' }}>&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody>
+                {datastoreForms.map(form => {
+                  const canManage = manageableForms.includes(form.slug);
+                  return (
+                    <tr key={form.slug}>
+                      <td>
+                        <Link to={`/datastore/${form.slug}`}>
+                          <span>{form.name}</span>
+                          <br />
+                          <span>
+                            <small>({form.slug})</small>
+                          </span>
+                        </Link>
+                      </td>
+                      <td>{form.description}</td>
+                      <td>
                         <Timestamp
                           label="Updated"
                           value={form.updatedAt}
                           slug={form.slug}
                         />
-                        <br/>
+                        <br />
                         <Timestamp
                           label="Created"
                           value={form.createdAt}
                           slug={form.slug}
                         />
-                    </td>
-                    <td>
-                      <Dropdown
-                        toggle={toggleDropdown(form.slug)}
-                        isOpen={openDropdown === form.slug}
-                      >
-                        <DropdownToggle color="link">
-                          <span className="fa fa-ellipsis-h fa-2x" />
-                        </DropdownToggle>
-                        <DropdownMenu right>
-                          <DropdownItem
-                            tag={Link}
-                            to={`${match.path}/${form.slug}/new`}
-                          >
-                            Create Submission
-                          </DropdownItem>
-                          {canManage && (
+                      </td>
+                      <td>
+                        <Dropdown
+                          toggle={toggleDropdown(form.slug)}
+                          isOpen={openDropdown === form.slug}
+                        >
+                          <DropdownToggle color="link">
+                            <span className="fa fa-ellipsis-h fa-2x" />
+                          </DropdownToggle>
+                          <DropdownMenu right>
                             <DropdownItem
                               tag={Link}
-                              to={`${match.path}/${form.slug}/settings`}
+                              to={`${match.path}/${form.slug}/new`}
                             >
-                              Configure Form
+                              Create Submission
                             </DropdownItem>
-                          )}
-                        </DropdownMenu>
-                      </Dropdown>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        ) : (
-          <WallyEmptyMessage />
-        )}
-      </div>
+                            {canManage && (
+                              <DropdownItem
+                                tag={Link}
+                                to={`${match.path}/${form.slug}/settings`}
+                              >
+                                Configure Form
+                              </DropdownItem>
+                            )}
+                          </DropdownMenu>
+                        </Dropdown>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          ) : (
+            <WallyEmptyMessage />
+          )}
+        </div>
       </div>
     </div>
   );

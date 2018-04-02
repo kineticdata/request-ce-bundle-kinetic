@@ -17,7 +17,7 @@ import { actions as teamListActions } from '../../redux/modules/teamList';
 import { CreateDiscussionModal } from './CreateDiscussionModal';
 import { Discussion } from './Discussion';
 import { PageTitle } from '../shared/PageTitle';
-import wallyMissingImage from '../../images/wally-missing.svg';
+import wallyMissingImage from '../../assets/images/wally-missing.svg';
 
 const HomeComponent = ({
   spaceName,
@@ -76,7 +76,7 @@ const HomeComponent = ({
           </div>
         </div>
       ) : (
-        <div className="wally">
+        <div className="wally-empty-state">
           <h5>Woops...</h5>
           <img src={wallyMissingImage} alt="Missing Wally" />
           <h6>
@@ -125,7 +125,7 @@ const HomeComponent = ({
       {!discussionsError &&
         !discussionsLoading &&
         discussionGroups.size === 0 && (
-          <div className="wally">
+          <div className="wally-empty-state">
             <h5>No discussions found</h5>
             <img src={wallyMissingImage} alt="Missing Wally" />
             <h6>You are not involved in any discussions!</h6>
