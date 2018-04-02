@@ -99,7 +99,7 @@ export const mapStateToProps = state => ({
   nextPageToken: state.datastore.nextPageToken,
   pageLimit: state.datastore.pageLimit,
   pageOffset: state.datastore.pageOffset,
-  columns: state.datastore.columnsConfig.filter(c => c.visible),
+  columns: state.datastore.currentForm.columns.filter(c => c.visible),
 });
 
 export const mapDispatchToProps = {

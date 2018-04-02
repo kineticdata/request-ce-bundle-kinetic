@@ -133,7 +133,7 @@ const getSubmissionData = (submission, column) => {
 export const mapStateToProps = state => ({
   loading: state.datastore.currentFormLoading,
   form: state.datastore.currentForm,
-  columns: state.datastore.columnsConfig.filter(c => c.visible === true),
+  columns: state.datastore.currentForm.columns.filter(c => c.visible === true),
   path: state.router.location.pathname.replace(/\/$/, ''),
 });
 

@@ -11,7 +11,7 @@ import { compose, withHandlers } from 'recompose';
 // forms. Note that we deliberately do this as a const so that it should start
 // immediately without making the application wait but it will likely be ready
 // before users nagivate to the actual forms.
-const globals = import('../../globals');
+const globals = import('common/globals');
 
 const AlertFormComponent = ({
   alertsKappSlug,

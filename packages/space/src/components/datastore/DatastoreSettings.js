@@ -3,16 +3,23 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { lifecycle, compose, withHandlers, withState } from 'recompose';
+import { lifecycle, compose, withHandlers } from 'recompose';
 import { bundle } from 'react-kinetic-core';
 
-import { actions, selectCanManage } from '../../redux/modules/datastore';
+import {
+  actions,
+  selectCanManage,
+} from '../../redux/modules/datastore';
 
 const SettingsComponent = ({
   canManage,
-  form,
+  updatedForm,
+  origForm,
+  bridges,
+  activeBridge,
   columns,
   handleColumnChange,
+  handleFormChange,
   loading,
   hasChanged,
   handleSave,
@@ -24,28 +31,30 @@ const SettingsComponent = ({
           <div className="page-title">
             <h3>
               <Link to={`/datastore/`}>datastore</Link> /{` `}
-              <Link to={`/datastore/${form.slug}/`}>{form.name}</Link> /
+              <Link to={`/datastore/${origForm.slug}/`}>{origForm.name}</Link> /
             </h3>
             <h1>Configuration</h1>
           </div>
-          {hasChanged && (
-            <button
-              type="button"
-              onClick={handleSave()}
-              className="btn btn-default"
+          <div className="datastore-settings-buttons">
+            {hasChanged && (
+              <button
+                type="button"
+                onClick={handleSave()}
+                className="btn btn-secondary mr-3"
+              >
+                Save Changes
+              </button>
+            )}
+            <a
+              href={`${bundle.spaceLocation()}/app/#/admin/datastore/form/${
+                origForm.slug
+              }/builder`}
+              className="btn btn-primary"
+              target="blank"
             >
-              Save Configuration
-            </button>
-          )}
-          <a
-            href={`${bundle.spaceLocation()}/app/#/admin/datastore/form/${
-              form.slug
-            }/builder`}
-            className="btn btn-primary"
-            target="blank"
-          >
-            Form Builder
-          </a>
+              Form Builder
+            </a>
+          </div>
         </div>
         {canManage ? (
           <div className="datastore-settings">
@@ -58,8 +67,8 @@ const SettingsComponent = ({
                     <input
                       id="name"
                       name="name"
-                      onChange={e => console.log(e)}
-                      value={form.name}
+                      onChange={e => handleFormChange('name', e.target.value)}
+                      value={updatedForm.name}
                       className="form-control"
                     />
                   </div>
@@ -70,8 +79,8 @@ const SettingsComponent = ({
                     <input
                       id="slug"
                       name="slug"
-                      onChange={e => console.log(e)}
-                      value={form.slug}
+                      onChange={e => handleFormChange('slug', e.target.value)}
+                      value={updatedForm.slug}
                       className="form-control"
                     />
                   </div>
@@ -84,8 +93,10 @@ const SettingsComponent = ({
                 <textarea
                   id="description"
                   className="form-control"
-                  onChange={e => console.log(e)}
-                  value={form.description || ''}
+                  onChange={e =>
+                    handleFormChange('description', e.target.value)
+                  }
+                  value={updatedForm.description || ''}
                   rows="3"
                   name="description"
                 />
@@ -99,52 +110,48 @@ const SettingsComponent = ({
                     <tr className="header">
                       <th>Field</th>
                       <th>Visible in Table</th>
-                      <th>Filterable in Table</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {columns.filter(col => col.type === 'value').map(col => (
-                      <tr key={col.name}>
-                        <td>{col.label}</td>
-                        <td>
-                          <input
-                            onChange={handleColumnChange(col, 'visible')}
-                            type="checkbox"
-                            checked={col.visible}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            onChange={handleColumnChange(col, 'filterable')}
-                            type="checkbox"
-                            checked={col.filterable}
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                    {columns.filter(col => col.type !== 'value').map(col => (
-                      <tr key={col.name}>
-                        <td>
-                          <i>
-                            {col.label} <small>(system field)</small>
-                          </i>
-                        </td>
-                        <td>
-                          <input
-                            onChange={handleColumnChange(col, 'visible')}
-                            type="checkbox"
-                            checked={col.visible}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            onChange={handleColumnChange(col, 'filterable')}
-                            type="checkbox"
-                            checked={col.filterable}
-                          />
-                        </td>
-                      </tr>
-                    ))}
+                    {updatedForm.columns
+                      .filter(col => col.type === 'value')
+                      .map(col => (
+                        <tr key={col.name}>
+                          <td>{col.label}</td>
+                          <td>
+                            <input
+                              onChange={handleColumnChange(col, 'visible')}
+                              type="checkbox"
+                              checked={col.visible}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    {updatedForm.columns
+                      .filter(col => col.type !== 'value')
+                      .map(col => (
+                        <tr key={col.name}>
+                          <td>
+                            <i>
+                              {col.label} <small>(system field)</small>
+                            </i>
+                          </td>
+                          <td>
+                            <input
+                              onChange={handleColumnChange(col, 'visible')}
+                              type="checkbox"
+                              checked={col.visible}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              onChange={handleColumnChange(col, 'filterable')}
+                              type="checkbox"
+                              checked={col.filterable}
+                            />
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
@@ -157,14 +164,14 @@ const SettingsComponent = ({
                   <select
                     id="bridgeName"
                     name="bridgeName"
-                    onChange={e => console.log(e)}
-                    value={form.slug}
+                    onChange={e => handleFormChange('bridge', e.target.value)}
+                    value={activeBridge}
                     className="form-control"
                   >
                     <option />
-                    {form.space.bridges.map(b => (
-                      <option key={b.name} value={b.name}>
-                        {b.name}
+                    {bridges.map(b => (
+                      <option key={b} value={b}>
+                        {b}
                       </option>
                     ))}
                   </select>
@@ -199,38 +206,45 @@ const SettingsComponent = ({
     </div>
   );
 
-const handleColumnChange = ({ updateColumnsConfig, setHasChanged }) => (
+const handleColumnChange = ({ setFormChanges, hasChanged }) => (
   column,
-  type,
+  prop,
 ) => () => {
-  const updated = column.set(type, !column.get(type));
-  setHasChanged(true);
-  updateColumnsConfig({ original: column, updated });
+  const updated = column.set(prop, !column.get(prop));
+  setFormChanges({ type: 'column', original: column, updated });
 };
 
-const handleSave = ({updateForm}) => () => () => {
+const handleFormChange = ({ setFormChanges }) => (type, value) => {
+  setFormChanges({ type, value });
+};
+
+const handleSave = ({ updateForm }) => () => () => {
   updateForm();
 };
 
 export const mapStateToProps = (state, { match: { params } }) => ({
   loading: state.datastore.currentFormLoading,
   canManage: selectCanManage(state, params.slug),
-  form: state.datastore.currentForm,
-  columns: state.datastore.columnsConfig,
+  origForm: state.datastore.currentForm,
+  updatedForm: state.datastore.currentFormChanges,
   formSlug: params.slug,
+  bridges: state.datastore.bridges,
+  activeBridge: state.datastore.currentFormChanges.bridge,
+  hasChanged: !state.datastore.currentForm.equals(
+    state.datastore.currentFormChanges,
+  ),
 });
 
 export const mapDispatchToProps = {
   push,
   fetchForm: actions.fetchForm,
-  updateColumnsConfig: actions.updateColumnsConfig,
+  setFormChanges: actions.setFormChanges,
   updateForm: actions.updateForm,
 };
 
 export const DatastoreSettings = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withState('hasChanged', 'setHasChanged', false),
-  withHandlers({ handleColumnChange, handleSave }),
+  withHandlers({ handleColumnChange, handleFormChange, handleSave }),
   lifecycle({
     componentWillMount() {
       this.props.fetchForm(this.props.formSlug);

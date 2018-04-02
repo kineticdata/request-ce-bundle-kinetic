@@ -3,6 +3,8 @@ import { CoreAPI } from 'react-kinetic-core';
 import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'connected-react-router';
 
+import { ColumnConfig } from '../../records';
+import { actions as systemErrorActions } from '../modules/errors';
 import {
   actions,
   types,
@@ -10,13 +12,71 @@ import {
   SUBMISSION_INCLUDES,
   FORMS_INCLUDES,
   FORM_INCLUDES,
+  SPACE_INCLUDES,
+  SUBMISSION_SYSTEM_PROPS,
 } from '../modules/datastore';
 
-import { actions as systemErrorActions } from '../modules/errors';
+const parseJson = json => {
+  try {
+    return List(JSON.parse(json));
+  } catch (e) {
+    return List();
+  }
+};
+
+export const getActiveBridgeName = (bridgeModel) => {
+  if(bridgeModel && bridgeModel.activeMappingName){
+    const activeMappingName = bridgeModel.activeMappingName || '';
+    const activeMapping = bridgeModel.mappings
+      ? bridgeModel.mappings.find(m => m.name === activeMappingName)
+      : '';
+    return activeMapping ? activeMapping.bridgeName : '';
+  }else{
+    return ''
+  }
+};
+
+export const buildColumns = form => {
+  // Parse Form Attribute for Configuration Values
+  const savedColumnConfig = parseJson(
+    form.attributesMap['Datastore Configuration']
+      ? form.attributesMap['Datastore Configuration'][0]
+      : [],
+  );
+  // Build a list of all current column properties
+  const defaultColumnConfig = List(
+    SUBMISSION_SYSTEM_PROPS.concat(
+      form.fields.map(f =>
+        ColumnConfig({ name: f.name, label: f.name, type: 'value' }),
+      ),
+    ),
+  );
+  // If there are saved column configs, apply them
+  if (savedColumnConfig.size > 0) {
+    return defaultColumnConfig.map(dc => {
+      const saved = savedColumnConfig.find(
+        sc => sc.name === dc.name && sc.type === dc.type,
+      );
+      if (saved) {
+        return ColumnConfig({
+          name: dc.name,
+          type: dc.type,
+          label: dc.label,
+          visible: saved.visible,
+          filterable: saved.filterable,
+        });
+      } else {
+        return dc;
+      }
+    });
+  } else {
+    return defaultColumnConfig;
+  }
+};
 
 export const selectCurrentForm = state => state.datastore.currentForm;
-
-export const selectColumnConfigs = state => state.datastore.columnsConfig;
+export const selectCurrentFormChanges = state =>
+  state.datastore.currentFormChanges;
 
 export function* fetchFormsSaga() {
   const displayableForms = yield call(CoreAPI.fetchForms, {
@@ -51,36 +111,58 @@ export function* fetchFormsSaga() {
 }
 
 export function* fetchFormSaga(action) {
-  const { form, errors, serverError } = yield call(CoreAPI.fetchForm, {
-    datastore: true,
-    formSlug: action.payload,
-    include: FORM_INCLUDES,
-  });
+  const [formCall, spaceCall] = yield all([
+    call(CoreAPI.fetchForm, {
+      datastore: true,
+      formSlug: action.payload,
+      include: FORM_INCLUDES,
+    }),
+    call(CoreAPI.fetchSpace, {
+      formSlug: action.payload,
+      include: SPACE_INCLUDES,
+    }),
+  ]);
 
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
-  } else if (errors) {
-    yield put(actions.setFormsErrors(errors));
+  if (formCall.serverError) {
+    yield put(
+      systemErrorActions.setSystemError(formCall.serverError),
+    );
+  } else if (formCall.errors) {
+    yield put(actions.setFormsErrors(formCall.errors));
   } else {
-    yield put(actions.setForm(form));
+    const { form } = formCall;
+    const bridgeModel = spaceCall.space.bridgeModels.find(m =>
+      m.name === `Datastore - ${form.name}`
+    );
+    const bridges = spaceCall.space.bridges.map(b => b.name);
+    const bridge = getActiveBridgeName(bridgeModel);
+    const columns = buildColumns(form);
+    yield put(actions.setForm({...form, bridgeModel, columns, bridges, bridge}));
   }
 }
 
 export function* updateFormSaga() {
   const currentForm = yield select(selectCurrentForm);
-  const columnsConfig = yield select(selectColumnConfigs);
+  const currentFormChanges = yield select(selectCurrentFormChanges);
   const formContent = {
-    attributesMap: { 'Datastore Configuration': [columnsConfig.toJS()] },
-    description: 'test'
+    attributesMap: {
+      'Datastore Configuration': [
+        JSON.stringify(currentFormChanges.columns.toJS()),
+      ],
+    },
+    slug: currentFormChanges.slug,
+    name: currentFormChanges.name,
+    description: currentFormChanges.description,
   };
-  const { form, serverError } = yield call(CoreAPI.updateForm, {
+  const { serverError } = yield call(CoreAPI.updateForm, {
     datastore: true,
     formSlug: currentForm.slug,
     form: formContent,
     include: FORM_INCLUDES,
   });
   if (!serverError) {
-    yield put(actions.setForm(form));
+    yield put(actions.fetchForm());
+    yield put(actions.fetchForms());
   }
 }
 
