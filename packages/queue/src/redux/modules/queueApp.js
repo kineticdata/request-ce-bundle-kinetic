@@ -5,9 +5,6 @@ import { Utils } from 'common';
 import { Profile, Filter, AssignmentCriteria } from '../../records';
 const { namespace, withPayload, noPayload } = Utils;
 
-export const DEFAULT_DOCUMENTATION_URL = 'https://help.kinops.io/queue/';
-export const DEFAULT_SUPPORT_URL = 'https://kinops.io/manage/public/support';
-
 export const types = {
   LOAD_APP_SETTINGS: namespace('queueApp', 'LOAD_APP_SETTINGS'),
   SET_APP_SETTINGS: namespace('queueApp', 'SET_APP_SETTINGS'),
@@ -119,9 +116,6 @@ export const State = Record({
       }),
     }),
   ]),
-  documentationUrl: DEFAULT_DOCUMENTATION_URL,
-  supportUrl: DEFAULT_SUPPORT_URL,
-  discussionServerUrl: '',
   allTeams: List(),
   myTeams: List(),
   myTeammates: List(),
@@ -138,9 +132,6 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('loading', true);
     case types.SET_APP_SETTINGS:
       return state
-        .set('documentationUrl', payload.documentationUrl)
-        .set('supportUrl', payload.supportUrl)
-        .set('discussionServerUrl', payload.discussionServerUrl)
         .set('profile', payload.profile)
         .set('allTeams', List(payload.allTeams))
         .set('myTeams', List(payload.myTeams))
