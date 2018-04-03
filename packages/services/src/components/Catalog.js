@@ -4,7 +4,7 @@ import { CatalogSearchContainer } from './Services/CatalogSearchContainer';
 import { CategoryCard } from './CategoryCard';
 import { ServiceCard } from './ServiceCard';
 import { RequestCard } from './RequestCard';
-import { getSubmissionPath } from '../helpers';
+import { getSubmissionPath } from '../utils';
 
 export const Catalog = ({
   profile,

@@ -4,7 +4,7 @@ import { StatusPill } from './StatusPill';
 import { DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { CardDropdown } from './CardDropdown';
 import { CancelButtonContainer } from './CancelButton';
-import * as helpers from '../helpers';
+import * as helpers from '../utils';
 import * as constants from '../constants';
 import { Form } from '../models';
 

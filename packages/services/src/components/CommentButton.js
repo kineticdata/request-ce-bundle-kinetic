@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { commonActions, Utils } from 'common';
-import { getCommentFormConfig } from '../helpers';
+import { getCommentFormConfig } from '../utils';
 
 const CommentButton = props =>
   props.enableButton && (

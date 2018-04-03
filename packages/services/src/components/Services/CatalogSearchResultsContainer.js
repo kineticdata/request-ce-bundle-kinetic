@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { parse } from 'query-string';
 import { CatalogSearchResults } from './CatalogSearchResults';
-import { displayableFormPredicate } from '../../helpers';
+import { displayableFormPredicate } from '../../utils';
 
 const matches = (form, term) =>
   form.name.toLowerCase().includes(term.toLowerCase()) ||

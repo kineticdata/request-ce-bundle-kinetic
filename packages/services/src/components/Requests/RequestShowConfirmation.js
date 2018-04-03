@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { commonActions } from 'common';
-import { getFeedbackFormConfig } from '../../helpers';
+import { getFeedbackFormConfig } from '../../utils';
 
 export const RequestShowConfirmation = ({ handleOpenFeedback }) => (
   <div>

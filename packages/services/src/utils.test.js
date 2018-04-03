@@ -1,4 +1,4 @@
-import { getSubmissionPath } from './helpers';
+import { getSubmissionPath } from './utils';
 
 describe('getSubmissionPath', () => {
   test('test with single argument, draft submission', () => {

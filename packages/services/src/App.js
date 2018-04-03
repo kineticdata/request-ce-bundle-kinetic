@@ -16,7 +16,7 @@ import { FormContainer } from './components/Services/FormContainer';
 import { FormListContainer } from './components/Services/FormListContainer';
 import { RequestListContainer } from './components/Requests/RequestListContainer';
 import { RequestShowContainer } from './components/Requests/RequestShowContainer';
-import { displayableFormPredicate } from './helpers';
+import { displayableFormPredicate } from './utils';
 import './assets/styles/master.scss';
 
 const mapStateToProps = (state, props) => {

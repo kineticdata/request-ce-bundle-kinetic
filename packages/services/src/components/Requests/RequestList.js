@@ -2,7 +2,7 @@ import React from 'react';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { KappLink as Link, PageTitle } from 'common';
 import { RequestCard } from '../RequestCard';
-import { getSubmissionPath } from '../../helpers';
+import { getSubmissionPath } from '../../utils';
 
 export const RequestList = ({
   forms,

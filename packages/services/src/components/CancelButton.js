@@ -4,7 +4,7 @@ import { compose, withHandlers, withProps } from 'recompose';
 import { commonActions, Utils } from 'common';
 import { actions } from '../redux/modules/submission';
 import * as constants from '../constants';
-import { getCancelFormConfig } from '../helpers';
+import { getCancelFormConfig } from '../utils';
 
 const CancelButton = props =>
   props.enableButton && (

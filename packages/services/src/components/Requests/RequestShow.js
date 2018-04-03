@@ -16,7 +16,12 @@ import { CommentButtonContainer } from '../CommentButton';
 import { CloneButtonContainer } from '../CloneButton';
 import { FeedbackButtonContainer } from '../FeedbackButton';
 import * as constants from '../../constants';
-import * as helpers from '../../helpers';
+import {
+  getDueDate,
+  getDurationInDays,
+  getStatus,
+  getSubmissionPath,
+} from '../../utils';
 
 const globals = import('common/globals');
 
@@ -37,7 +42,7 @@ const StatusItem = ({ submission }) => (
   <div className="col">
     <dl>
       <dt>Status:</dt>
-      <dd>{helpers.getStatus(submission)}</dd>
+      <dd>{getStatus(submission)}</dd>
     </dl>
   </div>
 );
@@ -92,10 +97,7 @@ const ServiceOwnerItem = ({ submission }) => {
 };
 
 const EstCompletionItem = ({ submission }) => {
-  const dueDate = helpers.getDueDate(
-    submission,
-    constants.ATTRIBUTE_SERVICE_DAYS_DUE,
-  );
+  const dueDate = getDueDate(submission, constants.ATTRIBUTE_SERVICE_DAYS_DUE);
   return (
     submission.coreState === constants.CORE_STATE_SUBMITTED &&
     !!dueDate && (
@@ -114,7 +116,7 @@ const EstCompletionItem = ({ submission }) => {
 const CompletedInItem = ({ submission }) => {
   const duration =
     submission.coreState === constants.CORE_STATE_CLOSED &&
-    helpers.getDurationInDays(submission.createdAt, submission.closedAt);
+    getDurationInDays(submission.createdAt, submission.closedAt);
   return (
     (duration || duration === 0) && (
       <div className="col">
@@ -192,7 +194,7 @@ export const RequestShow = ({ submission, listType, mode }) => (
               <ul className="nav nav-tabs">
                 <li role="presentation">
                   <NavLink
-                    to={helpers.getSubmissionPath(submission, null, listType)}
+                    to={getSubmissionPath(submission, null, listType)}
                     activeClassName="active"
                   >
                     Timeline
@@ -200,11 +202,7 @@ export const RequestShow = ({ submission, listType, mode }) => (
                 </li>
                 <li role="presentation">
                   <NavLink
-                    to={`${helpers.getSubmissionPath(
-                      submission,
-                      'review',
-                      listType,
-                    )}`}
+                    to={`${getSubmissionPath(submission, 'review', listType)}`}
                     activeClassName="active"
                   >
                     Review Request
