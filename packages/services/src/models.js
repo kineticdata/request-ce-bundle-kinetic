@@ -1,5 +1,5 @@
-import { getAttributeValue } from '../helpers';
-import * as constants from '../constants';
+import { getAttributeValue } from './helpers';
+import * as constants from './constants';
 
 export const Form = object => ({
   name: object.name,

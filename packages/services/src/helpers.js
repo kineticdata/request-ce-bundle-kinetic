@@ -1,6 +1,6 @@
 import isarray from 'isarray';
 import moment from 'moment';
-import * as constants from '../constants';
+import * as constants from './constants';
 
 /**
  * Given a model and an attribute name returns the value of that attribute.
@@ -139,9 +139,7 @@ export const getDueDate = (submission, attrName) => {
   const daysDueNumber = parseInt(daysDue, 10);
   if (!daysDueNumber) {
     throw new Error(
-      `getDueDate failed because value of "${attrName}" (${
-        daysDue
-      }) is not a number`,
+      `getDueDate failed because value of "${attrName}" (${daysDue}) is not a number`,
     );
   }
   return submission.submittedAt
