@@ -1,6 +1,5 @@
 import React from 'react';
-import { KappLink as Link } from 'common';
-import { Icon } from './Icon';
+import { KappLink as Link, Icon } from 'common';
 
 export const CategoryCard = props => (
   <Link to={props.path} className="c-card">

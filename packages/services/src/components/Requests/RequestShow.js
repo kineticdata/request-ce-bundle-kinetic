@@ -4,9 +4,9 @@ import {
   KappLink as Link,
   KappNavLink as NavLink,
   PageTitle,
+  Icon,
   TimeAgo,
 } from 'common';
-import { Icon } from '../Icon';
 import { bundle, CoreForm } from 'react-kinetic-core';
 import { RequestShowConfirmationContainer } from './RequestShowConfirmation';
 import { RequestActivityList } from './RequestActivityList';

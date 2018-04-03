@@ -4,6 +4,7 @@ import { KappNavLink } from './components/KappNavLink';
 import { KappRedirect } from './components/KappRedirect';
 import { KappRoute } from './components/KappRoute';
 import { TimeAgo } from './components/TimeAgo';
+import { Icon } from './components/Icon';
 import { Loading } from './components/Loading';
 import { PageTitle } from './components/PageTitle';
 import { ErrorNotFound } from './components/ErrorNotFound';
@@ -22,6 +23,7 @@ export {
   KappRedirect,
   KappRoute,
   TimeAgo,
+  Icon,
   Loading,
   PageTitle,
   commonActions,

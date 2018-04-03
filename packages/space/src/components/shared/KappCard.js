@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Utils } from 'common';
-import { Icon } from './Icon';
+import { Icon, Utils } from 'common';
 
 export const KappCard = ({
   kapp,
