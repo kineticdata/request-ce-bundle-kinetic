@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
-import { actions } from '../redux/modules/workMenu';
-import { actions as queueActions } from '../redux/modules/queue';
+import { actions } from '../../redux/modules/workMenu';
+import { actions as queueActions } from '../../redux/modules/queue';
 
 const getButtonMode = (queueItem, profile) => {
   if (queueItem.coreState !== 'Draft') {

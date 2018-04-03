@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { ModalBody } from 'reactstrap';
-import { SORT_OPTIONS } from '../FilterMenu/SortedBySection';
+import { SORT_OPTIONS } from './SortedBySection';
 
 const ListSummary = ({ type, list }) =>
   list.size > 0 &&

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { CoreForm } from 'react-kinetic-core';
-import { AssignmentSelector } from '../QueueItem/AssignmentSelector';
+import { AssignmentSelector } from '../shared/AssignmentSelector';
 
 const globals = import('common/globals');
 

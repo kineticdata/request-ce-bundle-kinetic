@@ -1,6 +1,6 @@
 import React from 'react';
 import { KappLink as Link, TimeAgo } from 'common';
-import { StatusParagraph } from '../StatusParagraph';
+import { StatusParagraph } from '../shared/StatusParagraph';
 import { buildFilterPath } from '../../redux/modules/queueApp';
 
 const AssignmentParagraph = ({ values }) => (

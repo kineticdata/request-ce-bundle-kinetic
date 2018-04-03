@@ -6,12 +6,12 @@ import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { actions as discussionActions } from 'discussions';
 import { selectAssignments } from '../../redux/modules/queueApp';
 import { actions, selectPrevAndNext } from '../../redux/modules/queue';
-import { AssignmentSelector } from './AssignmentSelector';
 import { ViewOriginalRequest } from './ViewOriginalRequest';
 import { AssignmentBadge } from './AssignmentBadge';
-import { StatusParagraph } from '../StatusParagraph';
-import { QueueListItemSmall } from '../queueList/QueueListItem';
-import { WallyButtonContainer } from '../WallyButton';
+import { QueueListItemSmall } from '../queue_list/QueueListItem';
+import { AssignmentSelector } from '../shared/AssignmentSelector';
+import { StatusParagraph } from '../shared/StatusParagraph';
+import { WallyButtonContainer } from '../shared/WallyButton';
 
 const nonQueueLink = (queueItem, kappSlug) =>
   queueItem.parent &&

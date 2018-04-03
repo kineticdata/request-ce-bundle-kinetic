@@ -8,11 +8,11 @@ import { Sidebar } from './components/Sidebar';
 import { actions, selectMyTeamForms } from './redux/modules/queueApp';
 import { actions as queueActions } from './redux/modules/queue';
 import { actions as filterMenuActions } from './redux/modules/filterMenu';
-import { QueueItemContainer } from './components/QueueItem/QueueItem';
-import { QueueListContainer } from './components/queueList/QueueListContainer';
-import { FilterMenuContainer } from './components/FilterMenu/FilterMenuContainer';
-import { NewItemMenuContainer } from './components/newItemMenu/NewItemMenuContainer';
-import { WorkMenuContainer } from './components/WorkMenu';
+import { QueueItemContainer } from './components/queue_item/QueueItem';
+import { QueueListContainer } from './components/queue_list/QueueListContainer';
+import { FilterMenuContainer } from './components/filter_menu/FilterMenuContainer';
+import { NewItemMenuContainer } from './components/new_item_menu/NewItemMenuContainer';
+import { WorkMenuContainer } from './components/work_menu/WorkMenu';
 import './assets/styles/master.scss';
 
 const mapStateToProps = (state, props) => ({
