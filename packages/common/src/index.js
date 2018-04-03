@@ -15,6 +15,7 @@ import {
   types as commonTypes,
 } from './redux/modules/common';
 import * as Utils from './utils';
+import * as Constants from './constants';
 
 export {
   KappLink,
@@ -29,6 +30,7 @@ export {
   commonActions,
   commonTypes,
   Utils,
+  Constants,
   ErrorNotFound,
   ErrorUnauthorized,
   ErrorUnexpected,
