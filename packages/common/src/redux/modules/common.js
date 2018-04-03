@@ -5,7 +5,7 @@ import {
   types as toastsTypes,
 } from 'kinops/src/redux/modules/toasts';
 import { types as layoutTypes } from 'kinops/src/redux/modules/layout';
-import { getAttributeValue } from '../../../utils';
+import { getAttributeValue } from '../../utils';
 
 // Discussion Server
 export const selectDiscussionsEnabled = state =>

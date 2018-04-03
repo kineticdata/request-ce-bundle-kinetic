@@ -1,9 +1,4 @@
-import {
-  getAttributeValue,
-  isMemberOf,
-  getTeams,
-  getRoles,
-} from 'common/utils';
+import { Utils } from 'common';
 
 // Find a Kapp by Space Attribute Value
 const kappBySpaceAttribute = (state, slugAttributeName) =>
@@ -11,7 +6,7 @@ const kappBySpaceAttribute = (state, slugAttributeName) =>
     ? state.kinops.kapps.find(
         kapp =>
           kapp.slug ===
-          getAttributeValue(state.kinops.space, slugAttributeName),
+          Utils.getAttributeValue(state.kinops.space, slugAttributeName),
       )
     : null;
 
@@ -34,17 +29,17 @@ export const selectTeamsKapp = state =>
 // Role Selectors
 export const selectHasRoleDataAdmin = state =>
   !state.kinops.loading
-    ? isMemberOf(state.kinops.profile, 'Role::Data Admin')
+    ? Utils.isMemberOf(state.kinops.profile, 'Role::Data Admin')
     : false;
 export const selectHasRoleSubmissionSupport = state =>
   !state.kinops.loading
-    ? isMemberOf(state.kinops.profile, 'Role::Submission Support')
+    ? Utils.isMemberOf(state.kinops.profile, 'Role::Submission Support')
     : false;
 export const selectHasAccessToManagement = state =>
   !state.kinops.loading
     ? state.kinops.profile.spaceAdmin ||
       selectHasRoleDataAdmin(state) ||
-      getTeams(state.kinops.profile).length > 0
+      Utils.getTeams(state.kinops.profile).length > 0
     : false;
 export const selectHasAccessToSupport = state =>
   !state.kinops.loading
@@ -54,7 +49,7 @@ export const selectHasAccessToSupport = state =>
 export const selectIsGuest = state =>
   !state.kinops.loading
     ? state.kinops.profile.spaceAdmin === false &&
-      getRoles(state.kinops.profile).length === 0
+      Utils.getRoles(state.kinops.profile).length === 0
     : false;
 
 // Kapp List Selectors
@@ -64,8 +59,7 @@ export const selectPredefinedKapps = state =>
         selectTeamsKapp(state),
         selectServicesKapp(state),
         selectQueueKapp(state),
-      ]
-        .filter(kapp => kapp != null)
+      ].filter(kapp => kapp != null)
     : [];
 export const selectAdditionalKapps = state =>
   !state.kinops.loading

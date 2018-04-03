@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { List } from 'immutable';
-import { Filter } from './records/index';
+import { Filter } from './records';
 import { KappRoute as Route, KappRedirect as Redirect, Loading } from 'common';
 import { Sidebar } from './components/Sidebar';
 import { actions, selectMyTeamForms } from './redux/modules/queueApp';
