@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import { KappLink as Link } from 'common';
+import { KappLink as Link, PageTitle } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { actions } from '../../redux/modules/queue';
 import { QueueItemDetailsContainer } from './QueueItemDetails';
 import { QueueItemDiscussionsContainer } from './QueueItemDiscussionsContainer';
-import { PageTitle } from '../PageTitle';
 import { getFilterByPath, buildFilterPath } from '../../redux/modules/queueApp';
 
 export const QueueItem = ({ filter, queueItem, discussionsEnabled }) =>

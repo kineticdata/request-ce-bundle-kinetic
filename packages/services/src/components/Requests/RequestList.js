@@ -1,8 +1,7 @@
 import React from 'react';
-import { KappLink as Link } from 'common';
+import { KappLink as Link, PageTitle } from 'common';
 import { RequestCard } from '../RequestCard';
 import { getSubmissionPath } from '../../helpers';
-import { PageTitle } from '../Shared/PageTitle';
 
 export const RequestList = ({
   forms,

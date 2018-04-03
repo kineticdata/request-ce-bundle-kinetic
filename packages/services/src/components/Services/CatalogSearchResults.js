@@ -1,8 +1,7 @@
 import React from 'react';
-import { KappLink as Link } from 'common';
+import { KappLink as Link, PageTitle } from 'common';
 import { ServiceCard } from '../ServiceCard';
 import { CatalogSearchContainer } from './CatalogSearchContainer';
-import { PageTitle } from '../Shared/PageTitle';
 
 export const CatalogSearchResults = ({ query, forms }) => (
   <div>

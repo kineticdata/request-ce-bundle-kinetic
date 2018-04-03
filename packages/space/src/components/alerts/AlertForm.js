@@ -1,7 +1,6 @@
 import React from 'react';
-import { PageTitle } from '../shared/PageTitle';
 import { CoreForm } from 'react-kinetic-core';
-import { Utils, commonActions } from 'common';
+import { Utils, commonActions, PageTitle } from 'common';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';

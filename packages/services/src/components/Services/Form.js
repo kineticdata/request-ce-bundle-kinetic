@@ -5,9 +5,9 @@ import {
   ErrorNotFound,
   ErrorUnauthorized,
   ErrorUnexpected,
+  PageTitle,
 } from 'common';
 import { SERVICES_KAPP as kappSlug } from '../../constants';
-import { PageTitle } from '../Shared/PageTitle';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start

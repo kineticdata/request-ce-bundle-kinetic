@@ -3,9 +3,9 @@ import DocumentTitle from 'react-document-title';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
-export const PageTitleComponent = ({ space, parts }) => {
+export const PageTitleComponent = ({ space, kapp, parts }) => {
   const title = parts
-    .concat(['Services', space.name, 'kinops'])
+    .concat([kapp && kapp.name, space.name, 'kinops'])
     .filter(item => !!item)
     .join(' | ');
 
@@ -14,6 +14,7 @@ export const PageTitleComponent = ({ space, parts }) => {
 
 export const mapStateToProps = state => ({
   space: state.kinops.space || 'Home',
+  kapp: state.kinops.kapps.find(kapp => kapp.slug === state.kinops.kappSlug),
 });
 
 export const mapDispatchToProps = {};

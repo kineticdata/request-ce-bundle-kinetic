@@ -1,10 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import SVGInline from 'react-svg-inline';
-
-import { PageTitle } from '../shared/PageTitle';
+import { PageTitle } from 'common';
 import { TeamCard } from '../shared/TeamCard';
-
 import wallyHappyImage from '../../images/wally-happy.svg';
 
 const WallyEmptyMessage = ({ me }) => {
