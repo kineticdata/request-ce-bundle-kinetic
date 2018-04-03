@@ -1,20 +1,6 @@
 import md5 from 'md5';
 import { Utils } from 'common';
 
-export const zip = (array1, array2) =>
-  array1.reduce(
-    (reduction, key, i) => ({ ...reduction, [key]: array2[i] }),
-    {},
-  );
-
-export const namespace = (category, action) =>
-  `@kd/kinops/home/${category}/${action}`;
-export const noPayload = type => () => ({ type });
-export const withPayload = (type, ...names) => (...data) =>
-  names.length === 0
-    ? { type, payload: data[0] }
-    : { type, payload: zip(names, data) };
-
 const COLORS = [
   'rgb(16, 148, 196)',
   'rgb(11, 168, 224)',

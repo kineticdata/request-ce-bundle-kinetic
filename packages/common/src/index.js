@@ -13,7 +13,7 @@ import {
   actions as commonActions,
   types as commonTypes,
 } from './redux/modules/common';
-import * as Utils from '../utils';
+import * as Utils from './utils';
 
 export {
   KappLink,

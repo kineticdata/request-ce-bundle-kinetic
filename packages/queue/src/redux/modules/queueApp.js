@@ -1,8 +1,9 @@
 import { Record, List, Set } from 'immutable';
 import { matchPath } from 'react-router-dom';
 import { LOCATION_CHANGE } from 'connected-react-router';
-import { namespace, noPayload, withPayload } from '../../utils';
+import { Utils } from 'common';
 import { Profile, Filter, AssignmentCriteria } from '../../records';
+const { namespace, withPayload, noPayload } = Utils;
 
 export const DEFAULT_DOCUMENTATION_URL = 'https://help.kinops.io/queue/';
 export const DEFAULT_SUPPORT_URL = 'https://kinops.io/manage/public/support';

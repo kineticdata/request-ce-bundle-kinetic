@@ -1,4 +1,4 @@
-import { zip, withPayload } from './index';
+import { zip, withPayload } from './utils';
 
 describe('zip', () => {
   test('returns empty object given empty arrays', () => {

@@ -1,6 +1,7 @@
 import { List, Record } from 'immutable';
-import { namespace, withPayload, noPayload } from '../../utils';
+import { Utils } from 'common';
 import { ColumnConfig, DatastoreForm } from '../../records';
+const { namespace, noPayload, withPayload } = Utils;
 
 export const DATASTORE_LIMIT = 1000;
 export const SUBMISSION_INCLUDES = 'values,details';
