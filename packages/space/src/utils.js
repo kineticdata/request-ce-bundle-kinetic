@@ -31,3 +31,21 @@ export const getTeamIcon = team => {
     ? iconAttribute.slice('fa-'.length)
     : iconAttribute;
 };
+
+export const buildHierarchy = name => {
+  const segments = name.split('::');
+  let parent = null;
+  let ancestors = [];
+  segments.forEach(segment => {
+    const item = {
+      localName: segment,
+      name: parent ? `${parent.name}::${segment}` : segment,
+      slug: md5(parent ? `${parent.name}::${segment}` : segment),
+      parent,
+      ancestors,
+    };
+    parent = item;
+    ancestors = [...ancestors, item];
+  });
+  return parent;
+};
