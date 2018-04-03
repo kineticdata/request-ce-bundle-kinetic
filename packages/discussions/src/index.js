@@ -7,7 +7,7 @@ import {
   UploadMessage,
   MessagesGroup,
 } from './components/MessagesGroup';
-import * as DiscussionAPI from './utils/discussion_api';
+import * as DiscussionAPI from './discussion_api';
 
 // Components
 export { Discussion, TextMessage, UploadMessage, MessagesGroup };
