@@ -1,22 +1,22 @@
 import md5 from 'md5';
-import { Utils } from 'common';
+import { Utils, Constants } from 'common';
 
 const COLORS = [
-  'rgb(16, 148, 196)',
-  'rgb(11, 168, 224)',
-  'rgb(9, 84, 130)',
-  'rgb(12, 56, 79)',
-  'rgb(102, 225, 65)',
-  'rgb(0, 212, 106)',
-  'rgb(2, 212, 177)',
-  'rgb(255, 153, 28)',
-  'rgb(255, 119, 0)',
-  'rgb(166, 48, 150)',
-  'rgb(191, 52, 121)',
-  'rgb(250, 58, 55)',
-  'rgb(255, 74, 94)',
-  'rgb(255, 207, 74)',
-  'rgb(254, 233, 78)',
+  Constants.COLORS.blue,
+  Constants.COLORS.blueSky,
+  Constants.COLORS.blueLake,
+  Constants.COLORS.blueSlate,
+  Constants.COLORS.green,
+  Constants.COLORS.greenGrass,
+  Constants.COLORS.greenTeal,
+  Constants.COLORS.orange,
+  Constants.COLORS.orangeKinops,
+  Constants.COLORS.purple,
+  Constants.COLORS.redPurple,
+  Constants.COLORS.red,
+  Constants.COLORS.redRose,
+  Constants.COLORS.sunflower,
+  Constants.COLORS.yellow,
 ];
 
 export const getColor = string =>
@@ -30,4 +30,22 @@ export const getTeamIcon = team => {
   return iconAttribute.indexOf('fa-') === 0
     ? iconAttribute.slice('fa-'.length)
     : iconAttribute;
+};
+
+export const buildHierarchy = name => {
+  const segments = name.split('::');
+  let parent = null;
+  let ancestors = [];
+  segments.forEach(segment => {
+    const item = {
+      localName: segment,
+      name: parent ? `${parent.name}::${segment}` : segment,
+      slug: md5(parent ? `${parent.name}::${segment}` : segment),
+      parent,
+      ancestors,
+    };
+    parent = item;
+    ancestors = [...ancestors, item];
+  });
+  return parent;
 };

@@ -1,5 +1,4 @@
 import md5 from 'md5';
-
 import { buildHierarchy } from './utils';
 
 describe('helpers/utils.js', () => {

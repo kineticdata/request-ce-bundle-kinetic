@@ -1,6 +1,5 @@
 import React from 'react';
-import { KappLink as Link } from 'common';
-import { Icon } from './Icon';
+import { KappLink as Link, Icon } from 'common';
 
 export const ServiceCard = ({ path, form }) => (
   <Link to={path} className="s-card">

@@ -13,7 +13,7 @@ import {
 import { actions as teamListActions } from '../../redux/modules/teamList';
 import { CreateDiscussionModal } from './CreateDiscussionModal';
 import { Discussion } from './Discussion';
-import wallyMissingImage from '../../assets/images/wally-missing.svg';
+import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 
 const HomeComponent = ({
   spaceName,

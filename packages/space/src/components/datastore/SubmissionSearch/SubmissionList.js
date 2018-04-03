@@ -1,12 +1,10 @@
 import React from 'react';
-
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, withHandlers, withState } from 'recompose';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
-
 import { SubmissionListItem } from './SubmissionListItem';
-import wallyHappyImage from '../../../assets/images/wally-happy.svg';
+import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import {
   actions,
   selectSubmissionPage,
