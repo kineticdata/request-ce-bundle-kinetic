@@ -3,7 +3,7 @@ import wallyHappyImage from '../../assets/images/wally-happy.svg';
 import wallyMissingImage from '../../assets/images/wally-missing.svg';
 import { QueueListItemSmall } from './QueueListItem';
 import { TOO_MANY_STATUS_STRING } from '../../redux/sagas/queue';
-import { PageTitle } from '../PageTitle';
+import { PageTitle } from 'common';
 
 const SORT_NAMES = {
   createdAt: 'Created At',

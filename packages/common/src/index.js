@@ -4,6 +4,8 @@ import { KappNavLink } from './components/KappNavLink';
 import { KappRedirect } from './components/KappRedirect';
 import { KappRoute } from './components/KappRoute';
 import { TimeAgo } from './components/TimeAgo';
+import { Loading } from './components/Loading';
+import { PageTitle } from './components/PageTitle';
 import { ErrorNotFound } from './components/ErrorNotFound';
 import { ErrorUnauthorized } from './components/ErrorUnauthorized';
 import { ErrorUnexpected } from './components/ErrorUnexpected';
@@ -20,6 +22,8 @@ export {
   KappRedirect,
   KappRoute,
   TimeAgo,
+  Loading,
+  PageTitle,
   commonActions,
   commonTypes,
   Utils,

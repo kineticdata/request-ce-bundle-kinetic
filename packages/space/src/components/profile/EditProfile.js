@@ -3,10 +3,8 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fromJS } from 'immutable';
-import { commonActions } from 'common';
-
+import { commonActions, PageTitle } from 'common';
 import { actions } from '../../redux/modules/profiles';
-import { PageTitle } from '../shared/PageTitle';
 import { ProfileCard } from '../shared/ProfileCard';
 import { TeamCard } from '../shared/TeamCard';
 

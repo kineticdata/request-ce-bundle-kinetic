@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as SpaceLink } from 'react-router-dom';
-import { KappLink as Link, KappNavLink as NavLink } from 'common';
+import { KappLink as Link, KappNavLink as NavLink, PageTitle } from 'common';
 import { Icon } from '../Icon';
 import { bundle, CoreForm } from 'react-kinetic-core';
 import { RequestShowConfirmationContainer } from './RequestShowConfirmation';
@@ -10,8 +10,6 @@ import { CancelButtonContainer } from '../CancelButton';
 import { CommentButtonContainer } from '../CommentButton';
 import { CloneButtonContainer } from '../CloneButton';
 import { FeedbackButtonContainer } from '../FeedbackButton';
-import { PageTitle } from '../Shared/PageTitle';
-
 import * as constants from '../../constants';
 import * as helpers from '../../helpers';
 

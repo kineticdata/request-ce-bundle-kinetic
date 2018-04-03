@@ -2,11 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { Link } from 'react-router-dom';
-import { Utils } from 'common';
+import { Utils, PageTitle } from 'common';
 import { bundle } from 'react-kinetic-core';
 import { Discussion as KinopsDiscussion } from 'discussions';
-
-import { PageTitle } from '../shared/PageTitle';
 
 const buildRelatedItem = issue => {
   const tagList = issue.tag_list;

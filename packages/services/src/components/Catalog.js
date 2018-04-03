@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react';
-import { KappLink as Link } from 'common';
+import { KappLink as Link, PageTitle } from 'common';
 import { CatalogSearchContainer } from './Services/CatalogSearchContainer';
 import { CategoryCard } from './CategoryCard';
 import { ServiceCard } from './ServiceCard';
 import { RequestCard } from './RequestCard';
-import { PageTitle } from './Shared/PageTitle';
 import { getSubmissionPath } from '../helpers';
 
 export const Catalog = ({

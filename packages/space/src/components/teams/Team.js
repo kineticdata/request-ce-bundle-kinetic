@@ -2,8 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { getTeamColor, getTeamIcon } from '../../utils';
 import { Discussion as KinopsDiscussion } from 'discussions';
-
-import { PageTitle } from '../shared/PageTitle';
+import { PageTitle } from 'common';
 import { ServiceCard } from '../shared/ServiceCard';
 import { TeamMemberAvatar } from './TeamMemberAvatar';
 import { Hoverable } from '../shared/Hoverable';

@@ -5,12 +5,10 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
 import md5 from 'md5';
 import { fromJS } from 'immutable';
-import { Utils } from 'common';
-
+import { Utils, PageTitle } from 'common';
 import { AddMemberModal } from './AddMemberModal';
 import { buildHierarchy } from '../helpers/utils';
 import { IconPicker } from '../helpers/IconPicker';
-import { PageTitle } from '../shared/PageTitle';
 import { ProfileCard } from '../shared/ProfileCard';
 import { TeamCard } from '../shared/TeamCard';
 import { Hoverable } from '../shared/Hoverable';
