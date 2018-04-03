@@ -10,7 +10,7 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import { TimeAgo } from 'common';
-import wallyHappyImage from '../../assets/images/wally-happy.svg';
+import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../redux/modules/datastore';
 
 const WallyEmptyMessage = ({ filter }) => {
