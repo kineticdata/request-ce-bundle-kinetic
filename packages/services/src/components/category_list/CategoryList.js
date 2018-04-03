@@ -1,6 +1,6 @@
 import React from 'react';
 import { KappLink as Link, PageTitle } from 'common';
-import { CategoryCard } from '../CategoryCard';
+import { CategoryCard } from '../shared/CategoryCard';
 
 export const CategoryList = ({ categories }) => (
   <div>

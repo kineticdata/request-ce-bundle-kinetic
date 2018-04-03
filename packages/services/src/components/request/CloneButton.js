@@ -1,24 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
-import { commonActions, Utils } from 'common';
-import { getCommentFormConfig } from '../utils';
+import { Utils } from 'common';
+import { actions } from '../../redux/modules/submission';
 
-const CommentButton = props =>
+const CloneButton = props =>
   props.enableButton && (
     <button
       type="button"
       onClick={props.handleClick}
-      className="btn btn-success"
+      className="btn btn-secondary"
     >
-      Add Comment
+      Clone as Draft
     </button>
   );
 
 export const mapStateToProps = () => ({});
 
 export const mapDispatchToProps = {
-  openForm: commonActions.openForm,
+  cloneSubmission: actions.cloneSubmission,
 };
 
 const enhance = compose(
@@ -26,7 +26,7 @@ const enhance = compose(
   withProps(props => {
     const disabledAttribute = Utils.getAttributeValue(
       props.submission.form,
-      'Comment Disabled',
+      'Cloning Disabled',
       'false',
     ).toLowerCase();
     return {
@@ -37,9 +37,8 @@ const enhance = compose(
     };
   }),
   withHandlers({
-    handleClick: props => () =>
-      props.openForm(getCommentFormConfig(props.submission.id)),
+    handleClick: props => () => props.cloneSubmission(props.submission.id),
   }),
 );
 
-export const CommentButtonContainer = enhance(CommentButton);
+export const CloneButtonContainer = enhance(CloneButton);

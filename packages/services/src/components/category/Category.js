@@ -1,10 +1,10 @@
 import React from 'react';
 import { KappLink as Link, PageTitle } from 'common';
-import { ServiceCard } from '../ServiceCard';
+import { ServiceCard } from '../shared/ServiceCard';
 
-export const FormList = ({ forms }) => (
+export const Category = ({ category }) => (
   <div>
-    <PageTitle parts={['Forms']} />
+    <PageTitle parts={[`Categories: ${category.name}`]} />
     <div className="services-bar">
       <span className="bordercolor" />
     </div>
@@ -12,16 +12,17 @@ export const FormList = ({ forms }) => (
       <div className="page-title-wrapper">
         <div className="page-title">
           <h3>
-            <Link to="/">services</Link> /
+            <Link to="/">services</Link> /{' '}
+            <Link to="/categories">categories</Link> /
           </h3>
-          <h1>All Forms</h1>
+          <h1>{category.name} Services</h1>
         </div>
       </div>
-      <div className="c-cards-wrapper">
-        {forms
+      <div className="s-cards-wrapper">
+        {category.forms
           .map(form => ({
             form,
-            path: `/forms/${form.slug}`,
+            path: `/categories/${category.slug}/${form.slug}`,
             key: form.slug,
           }))
           .map(props => <ServiceCard {...props} />)}

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { Catalog } from './Catalog';
-import { actions } from '../redux/modules/submissions';
+import { actions } from '../../redux/modules/submissions';
 
 const mapStateToProps = state => ({
   forms: state.forms.data,

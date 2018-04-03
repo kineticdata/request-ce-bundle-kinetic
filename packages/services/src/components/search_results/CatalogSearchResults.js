@@ -1,8 +1,8 @@
 import React from 'react';
 import { KappLink as Link, PageTitle } from 'common';
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
-import { ServiceCard } from '../ServiceCard';
-import { CatalogSearchContainer } from './CatalogSearchContainer';
+import { ServiceCard } from '../shared/ServiceCard';
+import { CatalogSearchContainer } from '../shared/CatalogSearchContainer';
 
 export const CatalogSearchResults = ({ query, forms }) => (
   <div>

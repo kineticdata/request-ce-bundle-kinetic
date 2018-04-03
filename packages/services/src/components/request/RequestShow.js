@@ -11,10 +11,10 @@ import {
 import { bundle, CoreForm } from 'react-kinetic-core';
 import { RequestShowConfirmationContainer } from './RequestShowConfirmation';
 import { RequestActivityList } from './RequestActivityList';
-import { CancelButtonContainer } from '../CancelButton';
-import { CommentButtonContainer } from '../CommentButton';
-import { CloneButtonContainer } from '../CloneButton';
-import { FeedbackButtonContainer } from '../FeedbackButton';
+import { CancelButtonContainer } from './CancelButton';
+import { CommentButtonContainer } from './CommentButton';
+import { CloneButtonContainer } from './CloneButton';
+import { FeedbackButtonContainer } from './FeedbackButton';
 import * as constants from '../../constants';
 import {
   getDueDate,
