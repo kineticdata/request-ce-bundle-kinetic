@@ -6,6 +6,7 @@ import {
   PageTitle,
   Icon,
   TimeAgo,
+  Utils as CommonUtils,
 } from 'common';
 import { bundle, CoreForm } from 'react-kinetic-core';
 import { RequestShowConfirmationContainer } from './RequestShowConfirmation';
@@ -20,7 +21,7 @@ import * as helpers from '../../helpers';
 const globals = import('common/globals');
 
 const getIcon = form =>
-  helpers.getAttributeValue(
+  CommonUtils.getAttributeValue(
     form,
     constants.ATTRIBUTE_ICON,
     constants.DEFAULT_FORM_ICON,
@@ -74,7 +75,7 @@ const DisplayDateItem = ({ submission }) =>
   );
 
 const ServiceOwnerItem = ({ submission }) => {
-  const serviceOwner = helpers.getConfig({
+  const serviceOwner = CommonUtils.getConfig({
     submission,
     name: constants.ATTRIBUTE_SERVICE_OWNING_TEAM,
   });

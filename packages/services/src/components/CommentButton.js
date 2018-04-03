@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
-import { commonActions } from 'common';
-import { getCommentFormConfig, getAttributeValue } from '../helpers';
+import { commonActions, Utils } from 'common';
+import { getCommentFormConfig } from '../helpers';
 
 const CommentButton = props =>
   props.enableButton && (
@@ -24,7 +24,7 @@ export const mapDispatchToProps = {
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withProps(props => {
-    const disabledAttribute = getAttributeValue(
+    const disabledAttribute = Utils.getAttributeValue(
       props.submission.form,
       'Comment Disabled',
       'false',

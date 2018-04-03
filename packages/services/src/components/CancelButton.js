@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
-import { commonActions } from 'common';
+import { commonActions, Utils } from 'common';
 import { actions } from '../redux/modules/submission';
 import * as constants from '../constants';
-import { getCancelFormConfig, getAttributeValue } from '../helpers';
+import { getCancelFormConfig } from '../helpers';
 
 const CancelButton = props =>
   props.enableButton && (
@@ -29,7 +29,7 @@ export const mapDispatchToProps = {
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withProps(props => {
-    const disabledAttribute = getAttributeValue(
+    const disabledAttribute = Utils.getAttributeValue(
       props.submission.form,
       'Cancel Disabled',
       'false',

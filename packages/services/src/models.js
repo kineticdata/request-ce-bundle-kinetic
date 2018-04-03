@@ -1,11 +1,11 @@
-import { getAttributeValue } from './helpers';
+import { Utils } from 'common';
 import * as constants from './constants';
 
 export const Form = object => ({
   name: object.name,
   slug: object.slug,
   description: object.description,
-  icon: getAttributeValue(
+  icon: Utils.getAttributeValue(
     object,
     constants.ATTRIBUTE_ICON,
     constants.DEFAULT_FORM_ICON,
@@ -20,20 +20,20 @@ export const Category = object => ({
   name: object.name,
   slug: object.slug,
   sortOrder: parseInt(
-    getAttributeValue(object, constants.ATTRIBUTE_ORDER, 1000),
+    Utils.getAttributeValue(object, constants.ATTRIBUTE_ORDER, 1000),
     10,
   ),
-  icon: getAttributeValue(
+  icon: Utils.getAttributeValue(
     object,
     constants.ATTRIBUTE_ICON,
     constants.DEFAULT_CATEGORY_ICON,
   ),
   hidden:
-    getAttributeValue(
+    Utils.getAttributeValue(
       object,
       constants.ATTRIBUTE_HIDDEN,
       'false',
     ).toLowerCase() === 'true',
-  parent: getAttributeValue(object, constants.ATTRIBUTE_PARENT),
+  parent: Utils.getAttributeValue(object, constants.ATTRIBUTE_PARENT),
   forms: object.categorizations && object.categorizations.map(c => c.form.slug),
 });
