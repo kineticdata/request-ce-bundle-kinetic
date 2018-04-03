@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, withProps } from 'recompose';
-import { KappLink as Link } from 'common';
+import { KappLink as Link, TimeAgo } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { actions as discussionActions } from 'discussions';
 import { selectAssignments } from '../../redux/modules/queueApp';
@@ -9,7 +9,6 @@ import { actions, selectPrevAndNext } from '../../redux/modules/queue';
 import { AssignmentSelector } from './AssignmentSelector';
 import { ViewOriginalRequest } from './ViewOriginalRequest';
 import { AssignmentBadge } from './AssignmentBadge';
-import { TimeAgo } from '../TimeAgo';
 import { StatusParagraph } from '../StatusParagraph';
 import { QueueListItemSmall } from '../queueList/QueueListItem';
 import { WallyButtonContainer } from '../WallyButton';

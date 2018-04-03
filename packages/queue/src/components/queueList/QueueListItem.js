@@ -1,6 +1,5 @@
 import React from 'react';
-import { KappLink as Link } from 'common';
-import { TimeAgo } from '../TimeAgo';
+import { KappLink as Link, TimeAgo } from 'common';
 import { StatusParagraph } from '../StatusParagraph';
 import { buildFilterPath } from '../../redux/modules/queueApp';
 

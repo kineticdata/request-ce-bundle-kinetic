@@ -1,5 +1,5 @@
 import React from 'react';
-import { TimeAgo } from '../../../TimeAgo';
+import { TimeAgo } from 'common';
 import { activityData } from '../../RequestActivityList';
 
 const getStatusColor = status =>

@@ -1,11 +1,15 @@
 import React from 'react';
 import { Link as SpaceLink } from 'react-router-dom';
-import { KappLink as Link, KappNavLink as NavLink, PageTitle } from 'common';
+import {
+  KappLink as Link,
+  KappNavLink as NavLink,
+  PageTitle,
+  TimeAgo,
+} from 'common';
 import { Icon } from '../Icon';
 import { bundle, CoreForm } from 'react-kinetic-core';
 import { RequestShowConfirmationContainer } from './RequestShowConfirmation';
 import { RequestActivityList } from './RequestActivityList';
-import { TimeAgo } from '../TimeAgo';
 import { CancelButtonContainer } from '../CancelButton';
 import { CommentButtonContainer } from '../CommentButton';
 import { CloneButtonContainer } from '../CloneButton';

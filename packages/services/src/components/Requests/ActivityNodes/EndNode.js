@@ -1,5 +1,5 @@
 import React from 'react';
-import { TimeAgo } from '../../TimeAgo';
+import { TimeAgo } from 'common';
 
 export const EndNode = ({ timestamp }) => (
   <div className="timeline-end">

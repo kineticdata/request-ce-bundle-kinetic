@@ -1,8 +1,7 @@
 import React from 'react';
-import { KappLink as Link } from 'common';
+import { KappLink as Link, TimeAgo } from 'common';
 import { Icon } from './Icon';
 import { StatusPill } from './StatusPill';
-import { TimeAgo } from './TimeAgo';
 import { DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { CardDropdown } from './CardDropdown';
 import { CancelButtonContainer } from './CancelButton';

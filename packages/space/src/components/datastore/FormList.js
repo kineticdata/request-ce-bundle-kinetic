@@ -1,6 +1,4 @@
 import React from 'react';
-import wallyHappyImage from '../../assets/images/wally-happy.svg';
-
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
@@ -11,8 +9,8 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-
-import { TimeAgo } from '../TimeAgo';
+import { TimeAgo } from 'common';
+import wallyHappyImage from '../../assets/images/wally-happy.svg';
 import { actions } from '../../redux/modules/datastore';
 
 const WallyEmptyMessage = ({ filter }) => {
@@ -33,7 +31,7 @@ const Timestamp = ({ slug, label, value }) =>
     <span>
       {label}
       &nbsp;
-      <TimeAgo timestamp={value} id={`${slug}-${label}`} />
+      <TimeAgo timestamp={value} />
     </span>
   );
 
