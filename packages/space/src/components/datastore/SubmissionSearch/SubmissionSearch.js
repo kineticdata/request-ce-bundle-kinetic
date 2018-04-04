@@ -19,9 +19,8 @@ const SubmissionSearchComponent = ({ form, loading, simpleSearchActive }) =>
           <div className="page-title">
             <h3>
               <Link to={`/datastore/`}>datastore</Link> /{` `}
-              <Link to={`/datastore/${form.slug}`}>{form.name}</Link> /
             </h3>
-            <h1>Records</h1>
+            <h1>{form.name} Records</h1>
           </div>
           <Link to={`/datastore/${form.slug}/new`} className="btn btn-primary">
             New Record

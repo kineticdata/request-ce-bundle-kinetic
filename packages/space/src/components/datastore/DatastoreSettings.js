@@ -10,8 +10,6 @@ import { BridgeModelQualification } from '../../records';
 
 import {
   actions,
-  selectCanManage,
-  selectUpdatedFormActiveBridge,
 } from '../../redux/modules/datastore';
 
 const SettingsComponent = ({
@@ -40,9 +38,8 @@ const SettingsComponent = ({
           <div className="page-title">
             <h3>
               <Link to={`/datastore/`}>datastore</Link> /{` `}
-              <Link to={`/datastore/${origForm.slug}/`}>{origForm.name}</Link> /
             </h3>
-            <h1>Configuration</h1>
+            <h1>{origForm.name} Configuration</h1>
           </div>
           <div className="datastore-settings-buttons">
             {hasChanged && (
@@ -158,6 +155,7 @@ const SettingsComponent = ({
                 </table>
               </div>
             </div>
+            {/*
             <div className="table-settings">
               <h3 className="section-title">Bridge Configuration</h3>
               <div className="settings">
@@ -296,7 +294,7 @@ const SettingsComponent = ({
                   </table>
                 </div>
               </div>
-            </div>
+            </div>*/}
           </div>
         ) : (
           <p>You do not have access to configure this datastore.</p>
@@ -337,11 +335,6 @@ const handleBridgeChange = ({
   if (type === 'bridgeName') {
     const updated = bridgeModelMapping.set('bridgeName', value);
     setFormChanges({ type: 'bridgeModelMapping', value: updated });
-  } else if (type === 'qual-result-type') {
-    const updated = value.set(
-      'resultType',
-      value.resultType === 'Single' ? 'Multiple' : 'Single',
-    );
   }
 };
 

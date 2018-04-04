@@ -90,14 +90,14 @@ export function* updateFormSaga() {
     name: currentFormChanges.name,
     description: currentFormChanges.description,
   };
-  const { serverError } = yield call(CoreAPI.updateForm, {
+  const { serverError, form } = yield call(CoreAPI.updateForm, {
     datastore: true,
     formSlug: currentForm.slug,
     form: formContent,
     include: FORM_INCLUDES,
   });
   if (!serverError) {
-    yield put(actions.fetchForm());
+    yield put(actions.fetchForm(form.slug));
     yield put(actions.fetchForms());
   }
 }
