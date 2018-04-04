@@ -1,5 +1,6 @@
 import { Record, List } from 'immutable';
-import { namespace, withPayload } from '../../utils';
+import { Utils } from 'common';
+const { namespace, withPayload } = Utils;
 
 export const types = {
   SET_SYSTEM_ERROR: '@kd/boilerplate/SET_SYSTEM_ERROR',

@@ -1,20 +1,25 @@
 import { List, Record } from 'immutable';
-import { namespace, withPayload, noPayload } from '../../utils';
-import { ColumnConfig, DatastoreForm } from '../../records';
+import { Utils } from 'common';
+import {
+  ColumnConfig,
+  DatastoreForm,
+  SearchParams,
+  IndexValues,
+  BridgeModel,
+  BridgeModelMapping,
+} from '../../records';
+
+const { namespace, noPayload, withPayload } = Utils;
 
 export const DATASTORE_LIMIT = 1000;
 export const SUBMISSION_INCLUDES = 'values,details';
 export const FORMS_INCLUDES = 'details';
 export const FORM_INCLUDES = 'details,fields,indexDefinitions,attributesMap';
-export const SPACE_INCLUDES =
-  'bridges,' +
-  'bridgeModels,' +
-  'bridgeModels.mappings,' +
-  'bridgeModels.mappings.attributes,' +
-  'bridgeModels.mappings.qualifications' +
-  'bridgeModels.attributes,' +
-  'bridgeModels.qualifications,' +
-  'bridgeModels.qualifications.parameters';
+export const SPACE_INCLUDES = 'bridges';
+export const BRIDGE_MODEL_INCLUDES =
+  'attributes, ' +
+  'qualifications,qualifications.parameters,' +
+  'mappings,mappings.attributes,mappings.qualifications';
 
 export const SUBMISSION_SYSTEM_PROPS = [
   ColumnConfig({
@@ -45,6 +50,7 @@ export const types = {
   FETCH_FORM: namespace('datastore', 'FETCH_FORM'),
   SET_FORM: namespace('datastore', 'SET_FORM'),
   UPDATE_FORM: namespace('datastore', 'UPDATE_FORM'),
+  CREATE_FORM: namespace('datastore', 'CREATE_FORM'),
   FETCH_SUBMISSIONS_ADVANCED: namespace(
     'datastore',
     'FETCH_SUBMISSIONS_ADVANCED',
@@ -90,6 +96,7 @@ export const actions = {
   fetchForm: withPayload(types.FETCH_FORM),
   setForm: withPayload(types.SET_FORM),
   updateForm: withPayload(types.UPDATE_FORM),
+  createForm: withPayload(types.CREATE_FORM),
   fetchSubmissionsAdvanced: noPayload(types.FETCH_SUBMISSIONS_ADVANCED),
   fetchSubmissionsSimple: noPayload(types.FETCH_SUBMISSIONS_SIMPLE),
   setSubmissions: withPayload(types.SET_SUBMISSIONS),
@@ -130,41 +137,113 @@ export const actions = {
   setFormChanges: withPayload(types.SET_FORM_CHANGES),
 };
 
+// export const selectFormBridgeModelTemplate = state => {
+//   const form = state.datastore.currentForm;
+//   const name = `Datastore - ${form.name}`;
+//   const model = selectCurrentFormModel(state);
+//   const activeMappingBridgeName = selectBridgeNameByModel(model);
+//   const activeMappingName = name;
+//   const attributes = form.columns.map(p => p.label);
+//   const mappings = [
+//     Map({
+//       attributes: List(
+//         form.columns.map(p =>
+//           Map({
+//             name: p.label,
+//             structureField: `\${fields('${
+//               p.type === 'system' ? p.name : `values[${p.name}]`
+//             }')}`,
+//           }),
+//         ),
+//       ),
+//       name: activeMappingName,
+//       bridgeName: activeMappingBridgeName,
+//       structure: 'Datastore',
+//       status: 'Active',
+//     }),
+//   ];
+//   return BridgeModel({ name, activeMappingName, attributes, mappings });
+// };
+
+const parseJson = json => {
+  try {
+    return List(JSON.parse(json));
+  } catch (e) {
+    return List();
+  }
+};
+
+export const buildColumns = form => {
+  // Parse Form Attribute for Configuration Values
+  const savedColumnConfig = parseJson(
+    form.attributesMap['Datastore Configuration']
+      ? form.attributesMap['Datastore Configuration'][0]
+      : [],
+  );
+  // Build a list of all current column properties
+  const defaultColumnConfig = List(
+    SUBMISSION_SYSTEM_PROPS.concat(
+      form.fields.map(f =>
+        ColumnConfig({ name: f.name, label: f.name, type: 'value' }),
+      ),
+    ),
+  );
+  // If there are saved column configs, apply them
+  if (savedColumnConfig.size > 0) {
+    return defaultColumnConfig.map(dc => {
+      const saved = savedColumnConfig.find(
+        sc => sc.name === dc.name && sc.type === dc.type,
+      );
+      if (saved) {
+        return ColumnConfig({
+          name: dc.name,
+          type: dc.type,
+          label: dc.label,
+          visible: saved.visible,
+          filterable: saved.filterable,
+        });
+      } else {
+        return dc;
+      }
+    });
+  } else {
+    return defaultColumnConfig;
+  }
+};
+
+export const selectBridgeNameByModel = model => {
+  if (model && model.activeMappingName) {
+    const activeMappingName = model.activeMappingName || '';
+    const activeMapping = model.mappings
+      ? model.mappings.find(m => m.name === activeMappingName)
+      : '';
+    return activeMapping ? activeMapping.bridgeName : '';
+  } else {
+    return '';
+  }
+};
+export const selectUpdatedFormActiveBridge = state =>
+  state.datastore.currentFormChanges.bridgeModelMapping.bridgeName;
+
+export const selectCurrentForm = state => state.datastore.currentForm;
+export const selectCurrentFormChanges = state =>
+  state.datastore.currentFormChanges;
 export const selectCanManage = (state, formSlug) =>
   state.datastore.manageableForms.find(form => form === formSlug);
-
 export const selectFormBySlug = (state, formSlug) =>
   state.datastore.forms.find(form => form.slug === formSlug);
-
 export const selectSubmissionPage = state => {
   const { submissions, pageLimit, pageOffset } = state.datastore;
   return submissions.slice(pageOffset, pageLimit + pageOffset);
 };
-
-export const SearchParams = Record({
-  index: null,
-  indexParts: List(),
-});
-
-export const IndexValues = Record({
-  values: List(),
-  input: '',
-});
-
-export const IndexPart = Record({
-  name: '',
-  criteria: 'All',
-  value: IndexValues(),
-});
 
 export const State = Record({
   pageLimit: 50,
   pageOffset: 0,
   loading: true,
   errors: [],
-  forms: [],
-  bridges: [],
-  manageableForms: [],
+  forms: List(),
+  bridges: List(),
   currentForm: DatastoreForm(),
   currentFormChanges: DatastoreForm(),
   currentFormLoading: true,
@@ -192,22 +271,42 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.FETCH_FORMS:
       return state.set('loading', true).set('errors', []);
     case types.SET_FORMS:
+      const forms = List(
+        payload.displayableForms.map(form => {
+          const canManage = payload.manageableForms.includes(form.slug);
+          return DatastoreForm({ ...form, canManage });
+        }),
+      );
+      const bridges = payload.bridges.map(b => b.name);
       return state
         .set('loading', false)
         .set('errors', [])
-        .set('forms', List(payload.displayableForms))
-        .set('manageableForms', List(payload.manageableForms));
+        .set('forms', forms)
+        .set('bridges', bridges);
     case types.SET_FORMS_ERRORS:
       return state.set('loading', false).set('errors', payload);
     case types.FETCH_FORM:
       return state.set('currentFormLoading', true);
     case types.SET_FORM:
+      const { form } = payload;
+      const bridgeModel = BridgeModel(
+        payload.bridgeModels.find(m => m.name === `Datastore - ${form.name}`),
+      );
+      const bridgeModelMapping = BridgeModelMapping(
+        bridgeModel.mappings.find(m => m.name === `Datastore - ${form.name}`),
+      );
+      const columns = buildColumns(form);
+      const dsForm = DatastoreForm({
+        ...form,
+        columns,
+        bridgeModel,
+        bridgeModelMapping,
+      });
       return state
         .set('currentFormLoading', false)
-        .set('currentForm', DatastoreForm(payload))
-        .set('currentFormChanges', DatastoreForm(payload))
-        .set('bridges', payload.bridges)
-        .setIn(['searchParams', 'index'], payload.indexDefinitions[0]);
+        .set('currentForm', dsForm)
+        .set('currentFormChanges', dsForm)
+        .setIn(['searchParams', 'index'], payload.form.indexDefinitions[0]);
     case types.SET_SUBMISSIONS:
       return state.set('submissions', List(payload));
     case types.SET_INDEX:

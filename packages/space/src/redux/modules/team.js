@@ -1,5 +1,6 @@
 import { Record, List } from 'immutable';
-import { namespace, withPayload, noPayload } from '../../utils';
+import { Utils } from 'common';
+const { namespace, noPayload, withPayload } = Utils;
 
 export const State = Record({
   loading: true,

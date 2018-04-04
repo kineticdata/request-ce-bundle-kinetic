@@ -1,7 +1,7 @@
 import { Record, List, Map } from 'immutable';
 import moment from 'moment';
-import { namespace, noPayload, withPayload } from '../../utils';
-import { commonTypes } from 'common';
+import { commonTypes, Utils } from 'common';
+const { namespace, noPayload, withPayload } = Utils;
 
 export const types = {
   // API-based actions.

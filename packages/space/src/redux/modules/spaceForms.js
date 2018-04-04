@@ -1,7 +1,6 @@
 import { Record, List } from 'immutable';
-import { namespace, withPayload } from '../../utils';
 import { Utils } from 'common';
-// import { getAttributeValues } from '../../helpers/utils';
+const { namespace, noPayload, withPayload } = Utils;
 
 export const types = {
   FETCH_FORMS: namespace('spaceForms', 'FETCH_FORMS'),

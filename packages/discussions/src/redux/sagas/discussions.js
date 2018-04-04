@@ -32,7 +32,7 @@ import {
   fetchParticipants,
   fetchResponseProfile,
   getResponseAuthentication,
-} from '../../utils/discussion_api';
+} from '../../discussion_api';
 
 export const SUBMISSION_INCLUDES =
   'details,values,attributes,form,form.attributes';

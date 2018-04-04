@@ -1,5 +1,6 @@
 import { Record } from 'immutable';
-import { namespace, noPayload } from '../../utils';
+import { Utils } from 'common';
+const { namespace, noPayload } = Utils;
 
 export const types = {
   OPEN_WORK_MENU: namespace('workMenu', 'OPEN_WORK_MENU'),

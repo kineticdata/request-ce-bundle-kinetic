@@ -2,11 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-
+import { PageTitle } from 'common';
 import { actions, selectIsMyProfile } from '../../redux/modules/profiles';
 import { TeamCard } from '../shared/TeamCard';
 import { Avatar } from '../shared/Avatar';
-import { PageTitle } from '../shared/PageTitle';
 
 const ViewProfileComponent = ({
   loading,

@@ -3,91 +3,34 @@ import { CoreAPI } from 'react-kinetic-core';
 import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'connected-react-router';
 
-import { ColumnConfig } from '../../records';
 import { actions as systemErrorActions } from '../modules/errors';
 import {
   actions,
   types,
+  selectCurrentForm,
+  selectCurrentFormChanges,
   DATASTORE_LIMIT,
   SUBMISSION_INCLUDES,
   FORMS_INCLUDES,
   FORM_INCLUDES,
   SPACE_INCLUDES,
-  SUBMISSION_SYSTEM_PROPS,
+  BRIDGE_MODEL_INCLUDES,
 } from '../modules/datastore';
 
-const parseJson = json => {
-  try {
-    return List(JSON.parse(json));
-  } catch (e) {
-    return List();
-  }
-};
-
-export const getActiveBridgeName = (bridgeModel) => {
-  if(bridgeModel && bridgeModel.activeMappingName){
-    const activeMappingName = bridgeModel.activeMappingName || '';
-    const activeMapping = bridgeModel.mappings
-      ? bridgeModel.mappings.find(m => m.name === activeMappingName)
-      : '';
-    return activeMapping ? activeMapping.bridgeName : '';
-  }else{
-    return ''
-  }
-};
-
-export const buildColumns = form => {
-  // Parse Form Attribute for Configuration Values
-  const savedColumnConfig = parseJson(
-    form.attributesMap['Datastore Configuration']
-      ? form.attributesMap['Datastore Configuration'][0]
-      : [],
-  );
-  // Build a list of all current column properties
-  const defaultColumnConfig = List(
-    SUBMISSION_SYSTEM_PROPS.concat(
-      form.fields.map(f =>
-        ColumnConfig({ name: f.name, label: f.name, type: 'value' }),
-      ),
-    ),
-  );
-  // If there are saved column configs, apply them
-  if (savedColumnConfig.size > 0) {
-    return defaultColumnConfig.map(dc => {
-      const saved = savedColumnConfig.find(
-        sc => sc.name === dc.name && sc.type === dc.type,
-      );
-      if (saved) {
-        return ColumnConfig({
-          name: dc.name,
-          type: dc.type,
-          label: dc.label,
-          visible: saved.visible,
-          filterable: saved.filterable,
-        });
-      } else {
-        return dc;
-      }
-    });
-  } else {
-    return defaultColumnConfig;
-  }
-};
-
-export const selectCurrentForm = state => state.datastore.currentForm;
-export const selectCurrentFormChanges = state =>
-  state.datastore.currentFormChanges;
-
 export function* fetchFormsSaga() {
-  const displayableForms = yield call(CoreAPI.fetchForms, {
-    datastore: true,
-    include: FORMS_INCLUDES,
-  });
-
-  const manageableForms = yield call(CoreAPI.fetchForms, {
-    datastore: true,
-    manage: 'true',
-  });
+  const [displayableForms, manageableForms, space] = yield all([
+    call(CoreAPI.fetchForms, {
+      datastore: true,
+      include: FORMS_INCLUDES,
+    }),
+    call(CoreAPI.fetchForms, {
+      datastore: true,
+      manage: 'true',
+    }),
+    call(CoreAPI.fetchSpace, {
+      include: SPACE_INCLUDES,
+    }),
+  ]);
 
   if (displayableForms.serverError || manageableForms.serverError) {
     yield put(
@@ -105,39 +48,32 @@ export function* fetchFormsSaga() {
       actions.setForms({
         manageableForms: manageableFormsSlugs,
         displayableForms: displayableForms.forms,
+        bridges: space.space.bridges,
       }),
     );
   }
 }
 
 export function* fetchFormSaga(action) {
-  const [formCall, spaceCall] = yield all([
+  const [formCall, modelsCall] = yield all([
     call(CoreAPI.fetchForm, {
       datastore: true,
       formSlug: action.payload,
       include: FORM_INCLUDES,
     }),
-    call(CoreAPI.fetchSpace, {
-      formSlug: action.payload,
-      include: SPACE_INCLUDES,
+    call(CoreAPI.fetchBridgeModels, {
+      include: BRIDGE_MODEL_INCLUDES,
     }),
   ]);
 
   if (formCall.serverError) {
-    yield put(
-      systemErrorActions.setSystemError(formCall.serverError),
-    );
+    yield put(systemErrorActions.setSystemError(formCall.serverError));
   } else if (formCall.errors) {
     yield put(actions.setFormsErrors(formCall.errors));
   } else {
     const { form } = formCall;
-    const bridgeModel = spaceCall.space.bridgeModels.find(m =>
-      m.name === `Datastore - ${form.name}`
-    );
-    const bridges = spaceCall.space.bridges.map(b => b.name);
-    const bridge = getActiveBridgeName(bridgeModel);
-    const columns = buildColumns(form);
-    yield put(actions.setForm({...form, bridgeModel, columns, bridges, bridge}));
+    const { bridgeModels } = modelsCall;
+    yield put(actions.setForm({ form, bridgeModels }));
   }
 }
 
@@ -154,15 +90,40 @@ export function* updateFormSaga() {
     name: currentFormChanges.name,
     description: currentFormChanges.description,
   };
-  const { serverError } = yield call(CoreAPI.updateForm, {
+  const { serverError, form } = yield call(CoreAPI.updateForm, {
     datastore: true,
     formSlug: currentForm.slug,
     form: formContent,
     include: FORM_INCLUDES,
   });
   if (!serverError) {
-    yield put(actions.fetchForm());
+    yield put(actions.fetchForm(form.slug));
     yield put(actions.fetchForms());
+  }
+}
+
+export function* createFormSaga(action) {
+  const form = action.payload.form;
+  const formContent = {
+    attributesMap: {
+      'Datastore Configuration': [JSON.stringify(form.columns.toJS())],
+    },
+    slug: form.slug,
+    name: form.name,
+    description: form.description,
+  };
+  const { serverError } = yield call(CoreAPI.createForm, {
+    datastore: true,
+    form: formContent,
+    include: FORM_INCLUDES,
+  });
+  if (!serverError) {
+    // TODO: Build Initial Bridge Model and Mapping here
+    yield put(actions.fetchForms());
+    if (typeof action.payload.callback === 'function') {
+      console.log('calling back');
+      action.payload.callback();
+    }
   }
 }
 
@@ -465,4 +426,5 @@ export function* watchDatastore() {
   yield takeEvery(types.CLONE_SUBMISSION, cloneSubmissionSaga);
   yield takeEvery(types.DELETE_SUBMISSION, deleteSubmissionSaga);
   yield takeEvery(types.UPDATE_FORM, updateFormSaga);
+  yield takeEvery(types.CREATE_FORM, createFormSaga);
 }

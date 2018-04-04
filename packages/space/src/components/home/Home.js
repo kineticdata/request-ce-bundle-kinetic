@@ -2,22 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
-
+import { PageTitle } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { selectServerUrl } from 'discussions/src/redux/selectors';
-
 import {
   actions,
   selectIsMoreDiscussions,
   selectGroupedDiscussions,
 } from '../../redux/modules/app';
-
 import { actions as teamListActions } from '../../redux/modules/teamList';
-
 import { CreateDiscussionModal } from './CreateDiscussionModal';
 import { Discussion } from './Discussion';
-import { PageTitle } from '../shared/PageTitle';
-import wallyMissingImage from '../../assets/images/wally-missing.svg';
+import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 
 const HomeComponent = ({
   spaceName,

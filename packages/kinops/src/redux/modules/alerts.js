@@ -1,5 +1,6 @@
 import { Record, List } from 'immutable';
-import { namespace, noPayload, withPayload } from 'common/utils';
+import * as Utils from 'common/src/utils';
+const { namespace, noPayload, withPayload } = Utils;
 
 export const types = {
   FETCH_ALERTS: namespace('alerts', 'FETCH_ALERTS'),

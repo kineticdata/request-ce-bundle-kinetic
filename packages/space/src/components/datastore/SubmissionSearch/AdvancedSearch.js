@@ -6,10 +6,9 @@ import { lifecycle, compose, withHandlers, withState } from 'recompose';
 import classNames from 'classnames';
 import Autocomplete from 'react-autocomplete';
 
-import {
-  actions,
-  IndexPart,
-} from '../../../redux/modules/datastore';
+import { actions } from '../../../redux/modules/datastore';
+
+import { IndexPart } from '../../../records';
 
 const PARAM_CRITERIAS = [
   'All',
@@ -153,7 +152,7 @@ const AdvancedSearchComponent = ({
               shouldItemRender={() => true}
               renderItem={(item, isHighlighted) => (
                 <div
-                  key={`${item.replace(/\s/g,'')}-part.name`}
+                  key={`${item.replace(/\s/g, '')}-part.name`}
                   className={classNames('item', {
                     'item-highlighted': isHighlighted,
                   })}
