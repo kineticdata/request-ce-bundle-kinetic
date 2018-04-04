@@ -1,5 +1,6 @@
 import { Record } from 'immutable';
-import { namespace, withPayload } from '../../utils';
+import { Utils } from 'common';
+const { namespace, noPayload, withPayload } = Utils;
 
 export const types = {
   FETCH_PROFILE: namespace('profiles', 'FETCH_PROFILE'),

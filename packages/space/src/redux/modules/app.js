@@ -1,6 +1,7 @@
 import { Record, List } from 'immutable';
-import { namespace, withPayload, noPayload } from '../../utils';
+import { Utils } from 'common';
 import moment from 'moment';
+const { namespace, noPayload, withPayload } = Utils;
 
 export const types = {
   FETCH_APP_SETTINGS: namespace('app', 'FETCH_APP_SETTINGS'),

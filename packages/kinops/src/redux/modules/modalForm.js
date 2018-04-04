@@ -1,5 +1,6 @@
 import { Record } from 'immutable';
-import { namespace, noPayload, withPayload } from 'common/utils';
+import * as Utils from 'common/src/utils';
+const { namespace, noPayload, withPayload } = Utils;
 
 export const types = {
   OPEN_FORM: namespace('modalForm', 'OPEN_FORM'),

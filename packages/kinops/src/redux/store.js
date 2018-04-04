@@ -1,7 +1,7 @@
 import { compose, createStore, combineReducers, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
-import { combineSagas } from 'common/utils';
+import { Utils } from 'common';
 import reducers from './reducers';
 import servicesReducers from 'services/src/redux/reducers';
 import queueReducers from 'queue/src/redux/reducers';
@@ -46,7 +46,7 @@ export const configureStore = history => {
   // the run it and pass it the saga watcher so that it can start watching
   // for applicable actions.
   sagaMiddleware.run(
-    combineSagas([
+    Utils.combineSagas([
       sagas,
       servicesSagas,
       queueSagas,

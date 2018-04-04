@@ -2,16 +2,7 @@ import { takeEvery } from 'redux-saga';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import { List } from 'immutable';
 import { CoreAPI } from 'react-kinetic-core';
-
-import { getAttributeValue } from '../../utils';
-
-import {
-  actions,
-  types,
-  DEFAULT_DOCUMENTATION_URL,
-  DEFAULT_SUPPORT_URL,
-} from '../modules/queueApp';
-
+import { actions, types } from '../modules/queueApp';
 import { filterReviver } from '../../records';
 
 const PROFILE_INCLUDES =
@@ -47,14 +38,10 @@ export const isAssignable = team => {
 export function* fetchAppSettingsTask() {
   const kappSlug = yield select(state => state.kinops.kappSlug);
   const {
-    space: { space },
-    kapp: { kapp },
     profile: { profile },
     forms: { forms },
     teams: { teams },
   } = yield all({
-    kapp: call(CoreAPI.fetchKapp, { kappSlug, include: 'attributes' }),
-    space: call(CoreAPI.fetchSpace, { include: 'attributes' }),
     profile: call(CoreAPI.fetchProfile, {
       include: PROFILE_INCLUDES,
     }),
@@ -85,19 +72,6 @@ export function* fetchAppSettingsTask() {
     : List();
 
   const appSettings = {
-    documentationUrl: getAttributeValue(
-      'Documentation Url',
-      DEFAULT_DOCUMENTATION_URL,
-      kapp,
-      space,
-    )[0],
-    supportUrl: getAttributeValue(
-      'Support Url',
-      DEFAULT_SUPPORT_URL,
-      kapp,
-      space,
-    )[0],
-    discussionServerUrl: `/${space.slug}/kinetic-response`,
     profile,
     myTeams,
     myTeammates,

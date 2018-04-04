@@ -1,5 +1,5 @@
-import { List, Record, Map } from 'immutable';
-import { namespace, withPayload, noPayload } from '../../utils';
+import { List, Record } from 'immutable';
+import { Utils } from 'common';
 import {
   ColumnConfig,
   DatastoreForm,
@@ -8,6 +8,8 @@ import {
   BridgeModel,
   BridgeModelMapping,
 } from '../../records';
+
+const { namespace, noPayload, withPayload } = Utils;
 
 export const DATASTORE_LIMIT = 1000;
 export const SUBMISSION_INCLUDES = 'values,details';

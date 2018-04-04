@@ -4,7 +4,7 @@ import { actions as discussionActions } from 'discussions';
 
 import { commonActions, Utils } from 'common';
 
-import { buildHierarchy } from '../helpers/utils';
+import { buildHierarchy } from '../../utils';
 
 import {
   actions,

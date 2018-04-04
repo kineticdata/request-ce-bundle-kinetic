@@ -1,6 +1,6 @@
 import { List } from 'immutable';
 import { Category, Form } from '../../models';
-import { displayableFormPredicate } from '../../helpers';
+import { displayableFormPredicate } from '../../utils';
 
 export const types = {
   FETCH_CATEGORIES: '@kd/catalog/FETCH_CATEGORIES',

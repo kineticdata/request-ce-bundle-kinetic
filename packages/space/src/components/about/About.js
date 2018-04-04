@@ -2,9 +2,8 @@ import React from 'react';
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { TimeAgo } from 'common';
+import { TimeAgo, PageTitle } from 'common';
 import { Avatar } from '../shared/Avatar';
-import { PageTitle } from '../shared/PageTitle';
 import { actions } from '../../redux/modules/about';
 
 const AboutComponent = ({ space, about, loading }) => (

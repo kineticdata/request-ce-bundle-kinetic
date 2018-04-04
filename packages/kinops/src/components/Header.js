@@ -10,9 +10,8 @@ import {
   NavLink,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { KappLink } from 'common';
+import { KappLink, Utils } from 'common';
 import { bundle } from 'react-kinetic-core';
-import { getAttributeValue } from 'common/utils';
 import { AlertsContainer } from './AlertsContainer';
 import { ProfileContainer } from './ProfileContainer';
 
@@ -22,7 +21,8 @@ export const dropdownTitleName = currentKapp =>
 const BuildKappLink = ({ kapp, onClick, nameOverride = kapp.name }) => (
   <Link className="dropdown-item" to={`/kapps/${kapp.slug}`} onClick={onClick}>
     <span
-      className={`fa fa-fw' ${getAttributeValue(kapp, 'Icon') || 'fa-book'}`}
+      className={`fa fa-fw' ${Utils.getAttributeValue(kapp, 'Icon') ||
+        'fa-book'}`}
     />
     {nameOverride}
   </Link>

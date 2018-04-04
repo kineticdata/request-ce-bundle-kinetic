@@ -1,7 +1,8 @@
 import { Record, List, Map } from 'immutable';
-import { namespace, noPayload, withPayload } from 'common/utils';
 import { LOCATION_CHANGE } from 'connected-react-router';
 import { matchPath } from 'react-router';
+import * as Utils from 'common/src/utils';
+const { namespace, noPayload, withPayload } = Utils;
 
 export const types = {
   LOAD_APP: namespace('app', 'LOAD_APP'),

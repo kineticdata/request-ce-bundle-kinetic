@@ -1,7 +1,8 @@
 import { Record, Map, List } from 'immutable';
-import { namespace, withPayload, noPayload } from '../../utils';
+import { Utils } from 'common';
 import { Filter, AssignmentCriteria } from '../../records';
 import { buildFilterPath } from './queueApp';
+const { namespace, withPayload, noPayload } = Utils;
 
 export const types = {
   SET_ADHOC_FILTER: namespace('queue', 'SET_ADHOC_FILTER'),

@@ -1,6 +1,7 @@
 import { Record } from 'immutable';
 import { LOCATION_CHANGE } from 'connected-react-router';
-import { namespace, withPayload } from 'common/utils';
+import * as Utils from 'common/src/utils';
+const { namespace, withPayload } = Utils;
 
 export const types = {
   SET_SIZE: namespace('layout', 'SET_SIZE'),

@@ -1,6 +1,6 @@
 import { bundle } from 'react-kinetic-core';
-
-import { getAttributeValue, isMemberOf, getTeams, getRoles } from '../utils';
+import { Utils } from 'common';
+const { getAttributeValue, isMemberOf, getTeams, getRoles } = Utils;
 
 export const selectServerUrl = state =>
   state.kinops.space && `/${state.kinops.space.slug}/kinetic-response`;
