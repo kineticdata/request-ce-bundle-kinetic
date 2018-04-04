@@ -6,15 +6,15 @@ import { DatastoreSubmission } from './Submission';
 import { FormList } from './FormList';
 import { SubmissionSearch } from './SubmissionSearch/SubmissionSearch';
 import { DatastoreSettings } from './DatastoreSettings';
+import { CreateDatastore } from './CreateDatastore';
 import { actions } from '../../redux/modules/datastore';
 
-const NewDatastore = () => <h1>Create a new Datastore</h1>;
 const DatastoreError = () => <h1>Error loading Datastore</h1>;
 
 export const DatastoreComponent = ({ match, loading }) =>
   !loading && (
     <Switch>
-      <Route exact path={`${match.path}/new`} component={NewDatastore} />
+      <Route exact path={`${match.path}/new`} component={CreateDatastore} />
       <Route exact path={`${match.path}/error`} component={DatastoreError} />
       <Route exact path={`${match.path}/:slug`} component={SubmissionSearch} />
       <Route

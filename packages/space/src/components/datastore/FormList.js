@@ -18,7 +18,7 @@ import { actions } from '../../redux/modules/datastore';
 const WallyEmptyMessage = ({ filter }) => {
   return (
     <div className="wally-empty-state">
-      <h5>No Datstore Forms Found</h5>
+      <h5>No Datastore Forms Found</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>
         Datastore Forms are used for storing reference data that can be used by
@@ -51,10 +51,16 @@ const FormListComponent = ({
         <div className="page-title-wrapper">
           <div className="page-title">
             <h3>
-              <Link to={`/datastore/`}>datastore</Link> /{` `}
+              <Link to={match.path}>datastore</Link> /{` `}
             </h3>
             <h1>Forms</h1>
           </div>
+          <Link to={`${match.path}/new`}
+            className="btn btn-primary"
+            target="blank"
+          >
+            Create Datastore
+          </Link>
         </div>
 
         <div>
@@ -72,7 +78,7 @@ const FormListComponent = ({
               </thead>
               <tbody>
                 {datastoreForms.map(form => {
-                  const canManage = manageableForms.includes(form.slug);
+                  const canManage = form.canManage;
                   return (
                     <tr key={form.slug}>
                       <td>

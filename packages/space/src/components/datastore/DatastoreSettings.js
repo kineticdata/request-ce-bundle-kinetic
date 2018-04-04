@@ -3,12 +3,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { lifecycle, compose, withHandlers } from 'recompose';
+import { lifecycle, compose, withHandlers, withState } from 'recompose';
 import { bundle } from 'react-kinetic-core';
+
+import { BridgeModelQualification } from '../../records';
 
 import {
   actions,
   selectCanManage,
+  selectUpdatedFormActiveBridge,
 } from '../../redux/modules/datastore';
 
 const SettingsComponent = ({
@@ -16,7 +19,13 @@ const SettingsComponent = ({
   updatedForm,
   origForm,
   bridges,
-  activeBridge,
+  bridgeModel,
+  bridgeName,
+  handleBridgeChange,
+  newQualification,
+  setNewQualification,
+  handleAddNewQualfication,
+  handleRebuildBridges,
   columns,
   handleColumnChange,
   handleFormChange,
@@ -143,13 +152,6 @@ const SettingsComponent = ({
                               checked={col.visible}
                             />
                           </td>
-                          <td>
-                            <input
-                              onChange={handleColumnChange(col, 'filterable')}
-                              type="checkbox"
-                              checked={col.filterable}
-                            />
-                          </td>
                         </tr>
                       ))}
                   </tbody>
@@ -159,13 +161,37 @@ const SettingsComponent = ({
             <div className="table-settings">
               <h3 className="section-title">Bridge Configuration</h3>
               <div className="settings">
+                {!bridgeName && (
+                  <div>
+                    <p>
+                      No Bridge Model found. Please select a bridge to build
+                      one.
+                    </p>
+                  </div>
+                )}
+                {bridgeName &&
+                  !bridgeModel && (
+                    <div>
+                      <p>
+                        Click Build Bridge to build a bridge model for your form
+                      </p>
+                      <button
+                        onClick={handleRebuildBridges}
+                        className="btn btn-secondary"
+                      >
+                        Build Bridge
+                      </button>
+                    </div>
+                  )}
                 <div className="form-group">
                   <label htmlFor="name">Bridge Name</label>
                   <select
                     id="bridgeName"
                     name="bridgeName"
-                    onChange={e => handleFormChange('bridge', e.target.value)}
-                    value={activeBridge}
+                    onChange={e =>
+                      handleBridgeChange('bridgeName', e.target.value)
+                    }
+                    value={bridgeName}
                     className="form-control"
                   >
                     <option />
@@ -175,6 +201,99 @@ const SettingsComponent = ({
                       </option>
                     ))}
                   </select>
+                  Bridge Qualifications
+                  <table className="table">
+                    <thead>
+                      <tr className="header">
+                        <th>Name</th>
+                        <th>Result Type</th>
+                        <th>Parameters</th>
+                        <th />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {updatedForm.bridgeModel.qualifications.map(qual => (
+                        <tr key={qual.name}>
+                          <td>{qual.name}</td>
+                          <td>
+                            <select
+                              className="form-control"
+                              value={qual.resultType}
+                              onChange={handleBridgeChange(
+                                'qual-result-type',
+                                qual,
+                              )}
+                            >
+                              <option value="Single">Single</option>
+                              <option value="Multiple">Multiple</option>
+                            </select>
+                          </td>
+                          <td>
+                            <button
+                              type="link"
+                              className="btn btn-link"
+                              onClick={() => console.log('clicked', qual)}
+                            >
+                              Parameters ({qual.parameters.size})
+                            </button>
+                          </td>
+                          <td>
+                            <div className="btn-group btn-group-sm pull-right">
+                              <button className="btn btn-danger">
+                                <span className="fa fa-fw fa-close" />
+                              </button>
+                              <a className="btn btn-primary" href="">
+                                <span className="fa fa-fw fa-pencil" />
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                      <tr>
+                        <td>
+                          <input
+                            id="qualification-name"
+                            name="qualification-name"
+                            placeholder="Qualification Name"
+                            onChange={e =>
+                              setNewQualification(
+                                newQualification.set('name', e.target.value),
+                              )
+                            }
+                            value={newQualification.name}
+                            className="form-control"
+                          />
+                        </td>
+                        <td>
+                          <select
+                            className="form-control"
+                            onChange={e =>
+                              setNewQualification(
+                                newQualification.set(
+                                  'resultType',
+                                  e.target.value,
+                                ),
+                              )
+                            }
+                            value={newQualification.resultType}
+                          >
+                            <option value="Single">Single</option>
+                            <option value="Multiple">Multiple</option>
+                          </select>
+                        </td>
+                        <td />
+                        <td>
+                          <button
+                            disabled={newQualification.name === ''}
+                            onClick={handleAddNewQualfication}
+                            className="btn btn-primary pull-right"
+                          >
+                            Add Qualification
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -206,12 +325,37 @@ const SettingsComponent = ({
     </div>
   );
 
-const handleColumnChange = ({ setFormChanges, hasChanged }) => (
-  column,
-  prop,
-) => () => {
+const handleColumnChange = ({ setFormChanges }) => (column, prop) => () => {
   const updated = column.set(prop, !column.get(prop));
   setFormChanges({ type: 'column', original: column, updated });
+};
+
+const handleBridgeChange = ({
+  setFormChanges,
+  updatedForm: { bridgeModel, bridgeModelMapping },
+}) => (type, value) => {
+  if (type === 'bridgeName') {
+    const updated = bridgeModelMapping.set('bridgeName', value);
+    setFormChanges({ type: 'bridgeModelMapping', value: updated });
+  } else if (type === 'qual-result-type') {
+    const updated = value.set(
+      'resultType',
+      value.resultType === 'Single' ? 'Multiple' : 'Single',
+    );
+  }
+};
+
+const handleAddNewQualfication = ({
+  setFormChanges,
+  setNewQualification,
+  newQualification,
+  updatedForm: { bridgeModel },
+}) => () => {
+  const updated = bridgeModel.updateIn(['qualifications'], quals =>
+    quals.push(newQualification),
+  );
+  setFormChanges({ type: 'bridgeModel', value: updated });
+  setNewQualification(BridgeModelQualification());
 };
 
 const handleFormChange = ({ setFormChanges }) => (type, value) => {
@@ -222,17 +366,27 @@ const handleSave = ({ updateForm }) => () => () => {
   updateForm();
 };
 
+const handleRebuildBridges = ({
+  createBridgeModel,
+  updateBridgeModel,
+  bridgeModel,
+  bridgeModelTemplate,
+}) =>
+  bridgeModel
+    ? updateBridgeModel(bridgeModelTemplate)
+    : createBridgeModel(bridgeModelTemplate);
+
 export const mapStateToProps = (state, { match: { params } }) => ({
   loading: state.datastore.currentFormLoading,
-  canManage: selectCanManage(state, params.slug),
+  canManage: state.datastore.currentForm.canManage,
   origForm: state.datastore.currentForm,
   updatedForm: state.datastore.currentFormChanges,
   formSlug: params.slug,
-  bridges: state.datastore.bridges,
-  activeBridge: state.datastore.currentFormChanges.bridge,
   hasChanged: !state.datastore.currentForm.equals(
     state.datastore.currentFormChanges,
   ),
+  bridges: state.datastore.bridges,
+  bridgeName: '',
 });
 
 export const mapDispatchToProps = {
@@ -240,11 +394,25 @@ export const mapDispatchToProps = {
   fetchForm: actions.fetchForm,
   setFormChanges: actions.setFormChanges,
   updateForm: actions.updateForm,
+  updateBridgeModel: actions.updateBridgeModel,
+  createBridgeModel: actions.createBridgeModel,
 };
 
 export const DatastoreSettings = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withHandlers({ handleColumnChange, handleFormChange, handleSave }),
+  withState(
+    'newQualification',
+    'setNewQualification',
+    BridgeModelQualification(),
+  ),
+  withHandlers({
+    handleBridgeChange,
+    handleColumnChange,
+    handleFormChange,
+    handleSave,
+    handleRebuildBridges,
+    handleAddNewQualfication,
+  }),
   lifecycle({
     componentWillMount() {
       this.props.fetchForm(this.props.formSlug);
