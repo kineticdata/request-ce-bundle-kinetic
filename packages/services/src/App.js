@@ -20,14 +20,13 @@ import { displayableFormPredicate } from './utils';
 import './assets/styles/master.scss';
 
 const mapStateToProps = (state, props) => {
-  const { kinops, categories, forms, systemError } = state;
   return {
-    categories: categories.data,
-    forms: forms.data,
+    categories: state.categories.data,
+    forms: state.forms.data,
     submissionCounts: state.submissionCounts.data,
-    loading: kinops.loading || categories.loading || forms.loading,
-    errors: [...categories.errors, ...forms.errors],
-    systemError,
+    loading: state.categories.loading || state.forms.loading,
+    errors: [...state.categories.errors, ...state.forms.errors],
+    systemError: state.systemError,
   };
 };
 

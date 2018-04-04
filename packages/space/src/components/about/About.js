@@ -80,10 +80,10 @@ const AboutComponent = ({ space, about, loading }) => (
   </div>
 );
 
-const mapStateToProps = ({ kinops, about }) => ({
-  space: kinops.space,
-  about: about.data,
-  loading: about.loading,
+const mapStateToProps = state => ({
+  space: state.kinops.space,
+  about: state.about.data,
+  loading: state.about.loading,
 });
 
 const mapDispatchToProps = {

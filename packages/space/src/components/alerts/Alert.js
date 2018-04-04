@@ -60,8 +60,8 @@ const AlertComponent = ({
   </tr>
 );
 
-export const mapStateToProps = ({ kinops }) => ({
-  canEdit: kinops.profile.spaceAdmin ? true : false,
+export const mapStateToProps = state => ({
+  canEdit: state.kinops.profile.spaceAdmin ? true : false,
 });
 
 export const mapDispatchToProps = {
