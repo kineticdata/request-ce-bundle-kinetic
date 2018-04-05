@@ -1,0 +1,61 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Page Title ~ Common
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.page-title-wrapper {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  h1 {
+    margin-top: 0;
+    color: $blueSlate;
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 3rem;
+  }
+  h3 {
+    color: $orange-kinops;
+    font-size: 0.9375rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    line-height: 1.5rem;
+    a {
+      color: $orange-kinops;
+      font-size: 0.9375rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      line-height: 1.5rem;
+    }
+  }
+  a {
+    margin-bottom: 1.875rem;
+    align-self: flex-end;
+    line-height: normal;
+  }
+}
+
+.section-title {
+  align-items: center;
+  color: $black;
+  display: flex;
+  font-size: 1rem;
+  line-height: 2.125rem;
+  font-weight: 600;
+  padding-left: 0.75rem;
+  margin: 0 0 1rem 0;
+  border-top: 2px solid $black-16;
+}
+// Sort by
+.sort-block {
+  // height: 2rem;
+  color: $blueGray;
+  font-size: 0.9166666667rem;
+  line-height: 2rem;
+  text-align: right;
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  strong {
+    font-weight: 300;
+    color: $blueGray;
+  }
+}

@@ -1,0 +1,60 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Forms Overrides ~ Services
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// Hover state with darkened hover color
+@mixin setBgColorAndHover($baseColor) {
+  background-color: $baseColor;
+  &:hover {
+    background-color: darken($baseColor, 5%);
+  }
+}
+
+.form-wrapper {
+  form {
+    background-color: transparent;
+    padding: 0;
+    h1 {
+      color: $black;
+      font-size: 1.625rem;
+      font-weight: 600;
+      line-height: 3rem;
+      margin: 0;
+      display: inline-flex;
+    }
+    p,
+    label {
+      color: $black-50;
+      font-size: 1rem;
+      line-height: 2rem;
+    }
+    label {
+      line-height: 1;
+    }
+    button[data-element-type='button'][data-button-type='submit-page'],
+    button[data-element-type='button'][data-button-type='custom'],
+    button[data-element-type='button'][data-button-type='previous-page'],
+    button[data-element-type='button'][data-button-type='save'] {
+      border-radius: 4px;
+      line-height: 1.5rem;
+      padding: 0.25rem 1rem;
+      margin-right: 0.5rem;
+      border: none;
+      color: $white;
+      font-size: 0.75rem;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    button[data-element-type='button'][data-button-type='submit-page'] {
+      @include setBgColorAndHover($blueSlate);
+    }
+    button[data-element-type='button'][data-button-type='save'] {
+      color: $black;
+      @include setBgColorAndHover($white);
+      border: 1px solid $black-50;
+      font-size: 0.75rem;
+      padding-left: 2rem;
+    }
+  }
+}

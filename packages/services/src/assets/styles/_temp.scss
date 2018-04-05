@@ -21,21 +21,3 @@
     z-index: 9998;
   }
 }
-
-.card.empty-state-card {
-  margin-top: 1rem;
-  padding: 1rem;
-  text-align: center;
-  align-items: center;
-  background-color: transparent;
-  h1 {
-    font-size: 1.125rem;
-    color: $blueSlate;
-    font-weight: 600;
-    margin-top: 1rem;
-  }
-  p {
-    color: $blueGray;
-    font-size: 0.875rem;
-  }
-}

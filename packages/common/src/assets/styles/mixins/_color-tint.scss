@@ -1,0 +1,28 @@
+// Color Tint Function
+// --------------------------------------
+
+// If average RGB value of $color is > 128, tint will darken $color by $percentage (or if $percentage is negative, lighten $color by abs($percentage))
+// If average RGB value of $color is <= 128, tint will lighten $color by $percentage (or if $percentage is negative, darken $color by abs($percentage))
+@function tint($color, $percentage) {
+  @return if(
+    (red($color) + green($color) + blue($color)) / 3 > 128,
+    if(
+      $percentage > 0,
+      darken($color, abs($percentage)),
+      lighten($color, abs($percentage))
+    ),
+    if(
+      $percentage > 0,
+      lighten($color, abs($percentage)),
+      darken($color, abs($percentage))
+    )
+  );
+}
+
+// Color Subtle Function
+// --------------------------------------
+
+// Returns the $color with the $lightness and $alpha specified
+@function subtle($color, $percentage, $alpha: 1) {
+  @return hsla(hue($color), saturation($color), $percentage, $alpha);
+}

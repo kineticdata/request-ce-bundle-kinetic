@@ -1,0 +1,34 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Services Item  ~ services
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.services-item {
+  h1 {
+    color: $black;
+    font-size: 1.625rem;
+    font-weight: 600;
+    line-height: 3rem;
+    margin: 0;
+    display: inline-flex;
+  }
+  p {
+    color: $black-50;
+    font-size: 1rem;
+    line-height: 2rem;
+  }
+  .card-icon {
+    margin-top: 12px;
+    border-radius: 50%;
+  }
+  form {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    input[type='text'],
+    input[type='password'] {
+      width: 40%;
+    }
+    textarea {
+      width: 60%;
+    }
+  }
+}
