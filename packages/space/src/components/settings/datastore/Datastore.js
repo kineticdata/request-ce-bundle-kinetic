@@ -7,11 +7,11 @@ import { FormList } from './FormList';
 import { SubmissionSearch } from './SubmissionSearch/SubmissionSearch';
 import { DatastoreSettings } from './DatastoreSettings';
 import { CreateDatastore } from './CreateDatastore';
-import { actions } from '../../redux/modules/datastore';
+import { actions } from '../../../redux/modules/settingsDatastore';
 
 const DatastoreError = () => <h1>Error loading Datastore</h1>;
 
-export const DatastoreComponent = ({ match, loading }) =>
+export const DatastoreRouter = ({ match, loading }) =>
   !loading && (
     <Switch>
       <Route exact path={`${match.path}/new`} component={CreateDatastore} />
@@ -37,7 +37,7 @@ export const DatastoreComponent = ({ match, loading }) =>
   );
 
 export const mapStateToProps = state => ({
-  loading: state.datastore.loading,
+  loading: state.settingsDatastore.loading,
 });
 
 export const mapDispatchToProps = {
@@ -51,4 +51,4 @@ export const Datastore = compose(
       this.props.fetchForms();
     },
   }),
-)(DatastoreComponent);
+)(DatastoreRouter);

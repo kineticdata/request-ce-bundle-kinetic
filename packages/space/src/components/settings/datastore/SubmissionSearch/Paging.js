@@ -8,7 +8,7 @@ import {
   actions,
   selectSubmissionPage,
   DATASTORE_LIMIT,
-} from '../../../redux/modules/datastore';
+} from '../../../../redux/modules/settingsDatastore';
 
 const getPageText = (pageTokens, nextPageToken, submissions) => {
   let pages = pageTokens.size + 1;
@@ -75,10 +75,10 @@ const PagingComponent = ({
 
 export const mapStateToProps = state => ({
   submissions: selectSubmissionPage(state),
-  allSubmissions: state.datastore.submissions,
-  pageTokens: state.datastore.pageTokens,
-  nextPageToken: state.datastore.nextPageToken,
-  simpleSearchActive: state.datastore.simpleSearchActive,
+  allSubmissions: state.settingsDatastore.submissions,
+  pageTokens: state.settingsDatastore.pageTokens,
+  nextPageToken: state.settingsDatastore.nextPageToken,
+  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
 });
 
 export const mapDispatchToProps = {

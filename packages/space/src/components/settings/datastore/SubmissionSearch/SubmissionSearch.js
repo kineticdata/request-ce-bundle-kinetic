@@ -4,25 +4,27 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { lifecycle, compose } from 'recompose';
 
-import { actions } from '../../../redux/modules/datastore';
+import { actions } from '../../../../redux/modules/settingsDatastore';
 
 import { SimpleSearch } from './SimpleSearch';
 import { AdvancedSearch } from './AdvancedSearch';
 import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
 
-const SubmissionSearchComponent = ({ form, loading, simpleSearchActive }) =>
+const SubmissionSearchComponent = ({ form, loading, simpleSearchActive, match }) =>
   !loading ? (
     <div className="datastore-container">
       <div className="datastore-content pane scrollable">
         <div className="page-title-wrapper">
           <div className="page-title">
             <h3>
-              <Link to={`/datastore/`}>datastore</Link> /{` `}
+              <Link to="/">home</Link> /{` `}
+              <Link to="/settings">settings</Link> /{` `}
+              <Link to={`/settings/datastore/`}>datastore</Link> /{` `}
             </h3>
             <h1>{form.name} Records</h1>
           </div>
-          <Link to={`/datastore/${form.slug}/new`} className="btn btn-primary">
+          <Link to={`/settings/datastore/${form.slug}/new`} className="btn btn-primary">
             New Record
           </Link>
         </div>
@@ -36,9 +38,9 @@ const SubmissionSearchComponent = ({ form, loading, simpleSearchActive }) =>
   ) : null;
 
 export const mapStateToProps = state => ({
-  loading: state.datastore.currentFormLoading,
-  form: state.datastore.currentForm,
-  simpleSearchActive: state.datastore.simpleSearchActive,
+  loading: state.settingsDatastore.currentFormLoading,
+  form: state.settingsDatastore.currentForm,
+  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
 });
 
 export const mapDispatchToProps = {

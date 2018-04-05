@@ -8,7 +8,7 @@ import { SidebarContent } from './components/Sidebar';
 import { About } from './components/about/About';
 import { AlertForm } from './components/alerts/AlertForm';
 import { Alerts } from './components/alerts/Alerts';
-import { Datastore } from './components/datastore/Datastore';
+import { Settings } from './components/settings/Settings';
 import { Discussion } from './components/discussion/Discussion';
 import { EditProfile } from './components/profile/EditProfile';
 import { Home } from './components/home/Home';
@@ -43,7 +43,7 @@ export const AppComponent = props => {
           <Route path="/discussions/:id" exact component={Discussion} />
           <Route path="/profile" exact component={EditProfile} />
           <Route path="/profile/:username" exact component={ViewProfile} />
-          <Route path="/datastore" component={Datastore} />
+          <Route path="/settings" component={Settings} />
           <Route path="/teams" exact component={TeamsContainer} />
           <Switch>
             <Route path="/teams/new" exact component={TeamForm} />

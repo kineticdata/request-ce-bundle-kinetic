@@ -8,7 +8,7 @@ import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import {
   actions,
   selectSubmissionPage,
-} from '../../../redux/modules/datastore';
+} from '../../../../redux/modules/settingsDatastore';
 
 const WallyEmptyMessage = ({ form }) => {
   return (
@@ -89,15 +89,15 @@ const SubmissionListComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.datastore.currentFormLoading,
-  form: state.datastore.currentForm,
+  loading: state.settingsDatastore.currentFormLoading,
+  form: state.settingsDatastore.currentForm,
   submissions: selectSubmissionPage(state),
-  allSubmissions: state.datastore.submissions,
-  pageTokens: state.datastore.pageTokens,
-  nextPageToken: state.datastore.nextPageToken,
-  pageLimit: state.datastore.pageLimit,
-  pageOffset: state.datastore.pageOffset,
-  columns: state.datastore.currentForm.columns.filter(c => c.visible),
+  allSubmissions: state.settingsDatastore.submissions,
+  pageTokens: state.settingsDatastore.pageTokens,
+  nextPageToken: state.settingsDatastore.nextPageToken,
+  pageLimit: state.settingsDatastore.pageLimit,
+  pageOffset: state.settingsDatastore.pageOffset,
+  columns: state.settingsDatastore.currentForm.columns.filter(c => c.visible),
 });
 
 export const mapDispatchToProps = {

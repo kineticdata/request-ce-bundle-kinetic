@@ -6,11 +6,11 @@ import { push } from 'connected-react-router';
 import { lifecycle, compose, withHandlers, withState } from 'recompose';
 import { bundle } from 'react-kinetic-core';
 
-import { BridgeModelQualification } from '../../records';
+import { BridgeModelQualification } from '../../../records';
 
 import {
   actions,
-} from '../../redux/modules/datastore';
+} from '../../../redux/modules/settingsDatastore';
 
 const SettingsComponent = ({
   canManage,
@@ -37,7 +37,9 @@ const SettingsComponent = ({
         <div className="page-title-wrapper">
           <div className="page-title">
             <h3>
-              <Link to={`/datastore/`}>datastore</Link> /{` `}
+              <Link to="/">home</Link> /{` `}
+              <Link to="/settings">settings</Link> /{` `}
+              <Link to={`/settings/datastore/`}>datastore</Link> /{` `}
             </h3>
             <h1>{origForm.name} Configuration</h1>
           </div>
@@ -370,15 +372,15 @@ const handleRebuildBridges = ({
     : createBridgeModel(bridgeModelTemplate);
 
 export const mapStateToProps = (state, { match: { params } }) => ({
-  loading: state.datastore.currentFormLoading,
-  canManage: state.datastore.currentForm.canManage,
-  origForm: state.datastore.currentForm,
-  updatedForm: state.datastore.currentFormChanges,
+  loading: state.settingsDatastore.currentFormLoading,
+  canManage: state.settingsDatastore.currentForm.canManage,
+  origForm: state.settingsDatastore.currentForm,
+  updatedForm: state.settingsDatastore.currentFormChanges,
   formSlug: params.slug,
-  hasChanged: !state.datastore.currentForm.equals(
-    state.datastore.currentFormChanges,
+  hasChanged: !state.settingsDatastore.currentForm.equals(
+    state.settingsDatastore.currentFormChanges,
   ),
-  bridges: state.datastore.bridges,
+  bridges: state.settingsDatastore.bridges,
   bridgeName: '',
 });
 

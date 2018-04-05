@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { parse } from 'query-string';
 import { CoreForm } from 'react-kinetic-core';
 
-import { selectFormBySlug, actions } from '../../redux/modules/datastore';
+import { selectFormBySlug, actions } from '../../../redux/modules/settingsDatastore';
 
 const globals = import('common/globals');
 
@@ -24,8 +24,10 @@ const DatastoreSubmissionComponent = ({
       <div className="page-title-wrapper">
         <div className="page-title">
           <h3>
-            <Link to={`/datastore/`}>datastore</Link> /{` `}
-            <Link to={`/datastore/${form.slug}/`}>{form.name}</Link> /
+            <Link to="/">home</Link> /{` `}
+            <Link to="/settings">settings</Link> /{` `}
+            <Link to={`/settings/datastore/`}>datastore</Link> /{` `}
+            <Link to={`/settings/datastore/${form.slug}/`}>{form.name}</Link> /
           </h3>
           <h1>
             {submissionId ? (submission ? submission.label : '') : ' New'}
@@ -84,7 +86,7 @@ export const handleCreated = props => response => {
 
 export const mapStateToProps = (state, { match: { params } }) => ({
   submissionId: params.id,
-  submission: state.datastore.submission,
+  submission: state.settingsDatastore.submission,
   form: selectFormBySlug(state, params.slug),
   values: valuesFromQueryParams(state.router.location.search),
 });

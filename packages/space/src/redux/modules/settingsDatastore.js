@@ -138,7 +138,7 @@ export const actions = {
 };
 
 // export const selectFormBridgeModelTemplate = state => {
-//   const form = state.datastore.currentForm;
+//   const form = state.settingsDatastore.currentForm;
 //   const name = `Datastore - ${form.name}`;
 //   const model = selectCurrentFormModel(state);
 //   const activeMappingBridgeName = selectBridgeNameByModel(model);
@@ -223,17 +223,17 @@ export const selectBridgeNameByModel = model => {
   }
 };
 export const selectUpdatedFormActiveBridge = state =>
-  state.datastore.currentFormChanges.bridgeModelMapping.bridgeName;
+  state.settingsDatastore.currentFormChanges.bridgeModelMapping.bridgeName;
 
-export const selectCurrentForm = state => state.datastore.currentForm;
+export const selectCurrentForm = state => state.settingsDatastore.currentForm;
 export const selectCurrentFormChanges = state =>
-  state.datastore.currentFormChanges;
+  state.settingsDatastore.currentFormChanges;
 export const selectCanManage = (state, formSlug) =>
-  state.datastore.manageableForms.find(form => form === formSlug);
+  state.settingsDatastore.manageableForms.find(form => form === formSlug);
 export const selectFormBySlug = (state, formSlug) =>
-  state.datastore.forms.find(form => form.slug === formSlug);
+  state.settingsDatastore.forms.find(form => form.slug === formSlug);
 export const selectSubmissionPage = state => {
-  const { submissions, pageLimit, pageOffset } = state.datastore;
+  const { submissions, pageLimit, pageOffset } = state.settingsDatastore;
   return submissions.slice(pageOffset, pageLimit + pageOffset);
 };
 

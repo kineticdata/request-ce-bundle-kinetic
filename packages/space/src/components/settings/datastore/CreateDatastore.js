@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, withHandlers, withState } from 'recompose';
 
-import { DatastoreForm } from '../../records';
+import { DatastoreForm } from '../../../records';
 
-import { actions } from '../../redux/modules/datastore';
+import { actions } from '../../../redux/modules/settingsDatastore';
 
 const CreateDatastoreComponent = ({
   spaceAdmin,
@@ -25,7 +25,9 @@ const CreateDatastoreComponent = ({
       <div className="page-title-wrapper">
         <div className="page-title">
           <h3>
-            <Link to={`/datastore/`}>datastore</Link> /{` `}
+            <Link to="/">home</Link> /{` `}
+            <Link to="/settings">settings</Link> /{` `}
+            <Link to={`/settings/datastore/`}>datastore</Link> /{` `}
           </h3>
           <h1>New Datastore</h1>
         </div>
@@ -156,7 +158,7 @@ const handleNameChange = ({ setNewForm, newForm }) => value => {
 
 export const mapStateToProps = (state, { match: { params } }) => ({
   spaceAdmin: state.kinops.profile.spaceAdmin,
-  bridges: state.datastore.bridges,
+  bridges: state.settingsDatastore.bridges,
 });
 
 export const mapDispatchToProps = {

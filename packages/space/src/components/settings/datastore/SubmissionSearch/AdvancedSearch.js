@@ -6,9 +6,9 @@ import { lifecycle, compose, withHandlers, withState } from 'recompose';
 import classNames from 'classnames';
 import Autocomplete from 'react-autocomplete';
 
-import { actions } from '../../../redux/modules/datastore';
+import { actions } from '../../../../redux/modules/settingsDatastore';
 
-import { IndexPart } from '../../../records';
+import { IndexPart } from '../../../../records';
 
 const PARAM_CRITERIAS = [
   'All',
@@ -190,18 +190,18 @@ const AdvancedSearchComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.datastore.currentFormLoading,
-  form: state.datastore.currentForm,
-  indexDefinitions: state.datastore.currentForm
-    ? state.datastore.currentForm.indexDefinitions.filter(
+  loading: state.settingsDatastore.currentFormLoading,
+  form: state.settingsDatastore.currentForm,
+  indexDefinitions: state.settingsDatastore.currentForm
+    ? state.settingsDatastore.currentForm.indexDefinitions.filter(
         d => d.status === 'Built',
       )
     : [],
-  searchParams: state.datastore.searchParams,
-  indexParts: state.datastore.searchParams.indexParts,
-  pageTokens: state.datastore.pageTokens,
-  nextPageToken: state.datastore.nextPageToken,
-  simpleSearchActive: state.datastore.simpleSearchActive,
+  searchParams: state.settingsDatastore.searchParams,
+  indexParts: state.settingsDatastore.searchParams.indexParts,
+  pageTokens: state.settingsDatastore.pageTokens,
+  nextPageToken: state.settingsDatastore.nextPageToken,
+  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
 });
 
 export const mapDispatchToProps = {

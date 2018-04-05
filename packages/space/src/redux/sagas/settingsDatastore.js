@@ -15,7 +15,7 @@ import {
   FORM_INCLUDES,
   SPACE_INCLUDES,
   BRIDGE_MODEL_INCLUDES,
-} from '../modules/datastore';
+} from '../modules/settingsDatastore';
 
 export function* fetchFormsSaga() {
   const [displayableForms, manageableForms, space] = yield all([
@@ -128,13 +128,13 @@ export function* createFormSaga(action) {
 }
 
 export const selectSearchParams = state => ({
-  searchParams: state.datastore.searchParams,
-  form: state.datastore.currentForm,
-  pageToken: state.datastore.nextPageToken,
-  pageTokens: state.datastore.pageTokens,
-  simpleSearchActive: state.datastore.simpleSearchActive,
-  simpleSearchParam: state.datastore.simpleSearchParam,
-  simpleSearchNextPageIndex: state.datastore.simpleSearchNextPageIndex,
+  searchParams: state.settingsDatastore.searchParams,
+  form: state.settingsDatastore.currentForm,
+  pageToken: state.settingsDatastore.nextPageToken,
+  pageTokens: state.settingsDatastore.pageTokens,
+  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
+  simpleSearchParam: state.settingsDatastore.simpleSearchParam,
+  simpleSearchNextPageIndex: state.settingsDatastore.simpleSearchNextPageIndex,
 });
 
 export function* fetchSubmissionsSimpleSaga() {
@@ -414,7 +414,7 @@ export function* deleteSubmissionSaga(action) {
   }
 }
 
-export function* watchDatastore() {
+export function* watchSettingsDatastore() {
   yield takeEvery(types.FETCH_FORMS, fetchFormsSaga);
   yield takeEvery(types.FETCH_FORM, fetchFormSaga);
   yield takeEvery(types.FETCH_SUBMISSION, fetchSubmissionSaga);

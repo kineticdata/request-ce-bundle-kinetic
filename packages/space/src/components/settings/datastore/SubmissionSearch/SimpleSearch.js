@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
 
-import { actions } from '../../../redux/modules/datastore';
+import { actions } from '../../../../redux/modules/settingsDatastore';
 
 const SimpleSearchComponent = ({
   handleResetSearch,
@@ -42,7 +42,7 @@ const SimpleSearchComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  simpleSearchParam: state.datastore.simpleSearchParam,
+  simpleSearchParam: state.settingsDatastore.simpleSearchParam,
 });
 
 export const mapDispatchToProps = {

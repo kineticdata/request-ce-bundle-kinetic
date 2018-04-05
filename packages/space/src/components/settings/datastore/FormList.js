@@ -11,7 +11,7 @@ import {
 } from 'reactstrap';
 import { TimeAgo } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
-import { actions } from '../../redux/modules/datastore';
+import { actions } from '../../../redux/modules/settingsDatastore';
 
 const WallyEmptyMessage = ({ filter }) => {
   return (
@@ -49,9 +49,10 @@ const FormListComponent = ({
         <div className="page-title-wrapper">
           <div className="page-title">
             <h3>
-              <Link to={match.path}>datastore</Link> /{` `}
+              <Link to="/">home</Link> /{` `}
+              <Link to="/settings">settings</Link> /{` `}
             </h3>
-            <h1>Forms</h1>
+            <h1>Datastore Forms</h1>
           </div>
           <Link to={`${match.path}/new`}
             className="btn btn-primary"
@@ -80,7 +81,7 @@ const FormListComponent = ({
                   return (
                     <tr key={form.slug}>
                       <td>
-                        <Link to={`/datastore/${form.slug}`}>
+                        <Link to={`${match.path}/${form.slug}`}>
                           <span>{form.name}</span>
                           <br />
                           <span>
@@ -143,9 +144,9 @@ const FormListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.datastore.loading,
-  datastoreForms: state.datastore.forms,
-  manageableForms: state.datastore.manageableForms,
+  loading: state.settingsDatastore.loading,
+  datastoreForms: state.settingsDatastore.forms,
+  manageableForms: state.settingsDatastore.manageableForms,
 });
 
 export const mapDispatchToProps = {

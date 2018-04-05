@@ -10,7 +10,7 @@ import {
   DropdownItem,
 } from 'reactstrap';
 
-import { actions } from '../../../redux/modules/datastore';
+import { actions } from '../../../../redux/modules/settingsDatastore';
 
 const SubmissionListItemComponent = ({
   submission,
@@ -131,9 +131,9 @@ const getSubmissionData = (submission, column) => {
 };
 
 export const mapStateToProps = state => ({
-  loading: state.datastore.currentFormLoading,
-  form: state.datastore.currentForm,
-  columns: state.datastore.currentForm.columns.filter(c => c.visible === true),
+  loading: state.settingsDatastore.currentFormLoading,
+  form: state.settingsDatastore.currentForm,
+  columns: state.settingsDatastore.currentForm.columns.filter(c => c.visible === true),
   path: state.router.location.pathname.replace(/\/$/, ''),
 });
 
