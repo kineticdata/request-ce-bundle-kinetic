@@ -1,7 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-
+import { KappLink } from 'common';
 import { QueueItemDetails } from './QueueItemDetails';
+import { ViewOriginalRequest } from './ViewOriginalRequest';
 
 describe('<QueueItemDetails />', () => {
   let props;
@@ -27,6 +28,7 @@ describe('<QueueItemDetails />', () => {
       assignments: [],
       openNewItemMenu: jest.fn(),
       prohibitSubtasks: false,
+      kappSlug: 'queue',
     };
   });
 
@@ -52,12 +54,9 @@ describe('<QueueItemDetails />', () => {
         };
         props.queueItem.origin = { id: 'id1' };
         const wrapper = shallow(<QueueItemDetails {...props} />);
-        const originButton = wrapper.find('.request-button');
+        const originButton = wrapper.find(ViewOriginalRequest);
         expect(originButton).toHaveLength(1);
-        expect(originButton.first().text()).toBe('View Original Request');
-        expect(originButton.first().prop('href')).toContain(
-          props.queueItem.origin.id,
-        );
+        expect(originButton.first().prop('queueItem')).toBe(props.queueItem);
       });
     });
 
@@ -69,7 +68,7 @@ describe('<QueueItemDetails />', () => {
         };
         props.queueItem.origin = { id: 'id1' };
         const wrapper = shallow(<QueueItemDetails {...props} />);
-        const originButton = wrapper.find('.request-button');
+        const originButton = wrapper.find(KappLink);
         expect(originButton).toHaveLength(1);
         expect(originButton.first().prop('children')).toBe('View Parent');
         expect(originButton.first().prop('to')).toContain(

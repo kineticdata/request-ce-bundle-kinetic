@@ -7,6 +7,7 @@ ShallowWrapper {
   Symbol(enzyme.__unrendered__): <Unknown
     assignments={Array []}
     isAssigning={false}
+    kappSlug="queue"
     openNewItemMenu={[Function]}
     prohibitSubtasks={false}
     queueItem={
@@ -45,20 +46,6 @@ ShallowWrapper {
         <div
                 className="general"
         >
-                <button
-                        className="btn btn-primary btn-inverse discussion-button icon-wrapper hidden-md-up"
-                        onClick={undefined}
-                >
-                        <SVGInline
-                                className="icon"
-                                classSuffix="-svg"
-                                cleanup={Array []}
-                                cleanupExceptions={Array []}
-                                component="span"
-                                svg="comments.svg"
-                        />
-                        View Discussion
-                </button>
                 <Unknown
                         prevAndNext={undefined}
                         queueItem={
@@ -196,14 +183,18 @@ ShallowWrapper {
                                 className="btn btn-link"
                                 onClick={[Function]}
                         >
-                                <SVGInline
+                                <span
                                         className="icon"
-                                        classSuffix="-svg"
-                                        cleanup={Array []}
-                                        cleanupExceptions={Array []}
-                                        component="span"
-                                        svg="plus.svg"
-                                />
+                                >
+                                        <span
+                                                className="fa fa-plus"
+                                                style={
+                                                        Object {
+                                                                "color": "#7e8083",
+                                                              }
+                                                }
+                                        />
+                                </span>
                         </button>
                 </h2>
                 <div
@@ -230,20 +221,6 @@ ShallowWrapper {
           <div
             className="general"
 >
-            <button
-                        className="btn btn-primary btn-inverse discussion-button icon-wrapper hidden-md-up"
-                        onClick={undefined}
-            >
-                        <SVGInline
-                                    className="icon"
-                                    classSuffix="-svg"
-                                    cleanup={Array []}
-                                    cleanupExceptions={Array []}
-                                    component="span"
-                                    svg="comments.svg"
-                        />
-                        View Discussion
-            </button>
             <Unknown
                         prevAndNext={undefined}
                         queueItem={
@@ -381,14 +358,18 @@ ShallowWrapper {
                                     className="btn btn-link"
                                     onClick={[Function]}
                         >
-                                    <SVGInline
+                                    <span
                                                 className="icon"
-                                                classSuffix="-svg"
-                                                cleanup={Array []}
-                                                cleanupExceptions={Array []}
-                                                component="span"
-                                                svg="plus.svg"
-                                    />
+                                    >
+                                                <span
+                                                            className="fa fa-plus"
+                                                            style={
+                                                                        Object {
+                                                                                    "color": "#7e8083",
+                                                                                  }
+                                                            }
+                                                />
+                                    </span>
                         </button>
             </h2>
             <div
@@ -413,20 +394,7 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": Array [
-              <button
-                className="btn btn-primary btn-inverse discussion-button icon-wrapper hidden-md-up"
-                onClick={undefined}
->
-                <SVGInline
-                                className="icon"
-                                classSuffix="-svg"
-                                cleanup={Array []}
-                                cleanupExceptions={Array []}
-                                component="span"
-                                svg="comments.svg"
-                />
-                View Discussion
-</button>,
+              undefined,
               <Unknown
                 prevAndNext={undefined}
                 queueItem={
@@ -559,47 +527,7 @@ ShallowWrapper {
           },
           "ref": null,
           "rendered": Array [
-            Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": Array [
-                  <SVGInline
-                    className="icon"
-                    classSuffix="-svg"
-                    cleanup={Array []}
-                    cleanupExceptions={Array []}
-                    component="span"
-                    svg="comments.svg"
-/>,
-                  "View Discussion",
-                ],
-                "className": "btn btn-primary btn-inverse discussion-button icon-wrapper hidden-md-up",
-                "onClick": undefined,
-              },
-              "ref": null,
-              "rendered": Array [
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "class",
-                  "props": Object {
-                    "className": "icon",
-                    "classSuffix": "-svg",
-                    "cleanup": Array [],
-                    "cleanupExceptions": Array [],
-                    "component": "span",
-                    "svg": "comments.svg",
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
-                "View Discussion",
-              ],
-              "type": "button",
-            },
+            undefined,
             Object {
               "instance": null,
               "key": undefined,
@@ -1048,14 +976,18 @@ ShallowWrapper {
                                 className="btn btn-link"
                                 onClick={[Function]}
                 >
-                                <SVGInline
+                                <span
                                                 className="icon"
-                                                classSuffix="-svg"
-                                                cleanup={Array []}
-                                                cleanupExceptions={Array []}
-                                                component="span"
-                                                svg="plus.svg"
-                                />
+                                >
+                                                <span
+                                                                className="fa fa-plus"
+                                                                style={
+                                                                                Object {
+                                                                                                "color": "#7e8083",
+                                                                                              }
+                                                                }
+                                                />
+                                </span>
                 </button>
 </h2>,
               false,
@@ -1087,14 +1019,18 @@ ShallowWrapper {
                     className="btn btn-link"
                     onClick={[Function]}
 >
-                    <SVGInline
+                    <span
                                         className="icon"
-                                        classSuffix="-svg"
-                                        cleanup={Array []}
-                                        cleanupExceptions={Array []}
-                                        component="span"
-                                        svg="plus.svg"
-                    />
+                    >
+                                        <span
+                                                            className="fa fa-plus"
+                                                            style={
+                                                                                Object {
+                                                                                                    "color": "#7e8083",
+                                                                                                  }
+                                                            }
+                                        />
+                    </span>
 </button>,
                 ],
               },
@@ -1116,14 +1052,18 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "host",
                   "props": Object {
-                    "children": <SVGInline
+                    "children": <span
                       className="icon"
-                      classSuffix="-svg"
-                      cleanup={Array []}
-                      cleanupExceptions={Array []}
-                      component="span"
-                      svg="plus.svg"
-/>,
+>
+                      <span
+                                            className="fa fa-plus"
+                                            style={
+                                                                  Object {
+                                                                                        "color": "#7e8083",
+                                                                                      }
+                                            }
+                      />
+</span>,
                     "className": "btn btn-link",
                     "onClick": [Function],
                   },
@@ -1131,18 +1071,34 @@ ShallowWrapper {
                   "rendered": Object {
                     "instance": null,
                     "key": undefined,
-                    "nodeType": "class",
+                    "nodeType": "host",
                     "props": Object {
+                      "children": <span
+                        className="fa fa-plus"
+                        style={
+                                                Object {
+                                                                        "color": "#7e8083",
+                                                                      }
+                        }
+/>,
                       "className": "icon",
-                      "classSuffix": "-svg",
-                      "cleanup": Array [],
-                      "cleanupExceptions": Array [],
-                      "component": "span",
-                      "svg": "plus.svg",
                     },
                     "ref": null,
-                    "rendered": null,
-                    "type": [Function],
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "host",
+                      "props": Object {
+                        "className": "fa fa-plus",
+                        "style": Object {
+                          "color": "#7e8083",
+                        },
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": "span",
+                    },
+                    "type": "span",
                   },
                   "type": "button",
                 },
@@ -1212,20 +1168,6 @@ ShallowWrapper {
           <div
                     className="general"
           >
-                    <button
-                              className="btn btn-primary btn-inverse discussion-button icon-wrapper hidden-md-up"
-                              onClick={undefined}
-                    >
-                              <SVGInline
-                                        className="icon"
-                                        classSuffix="-svg"
-                                        cleanup={Array []}
-                                        cleanupExceptions={Array []}
-                                        component="span"
-                                        svg="comments.svg"
-                              />
-                              View Discussion
-                    </button>
                     <Unknown
                               prevAndNext={undefined}
                               queueItem={
@@ -1363,14 +1305,18 @@ ShallowWrapper {
                                         className="btn btn-link"
                                         onClick={[Function]}
                               >
-                                        <SVGInline
+                                        <span
                                                   className="icon"
-                                                  classSuffix="-svg"
-                                                  cleanup={Array []}
-                                                  cleanupExceptions={Array []}
-                                                  component="span"
-                                                  svg="plus.svg"
-                                        />
+                                        >
+                                                  <span
+                                                            className="fa fa-plus"
+                                                            style={
+                                                                      Object {
+                                                                                "color": "#7e8083",
+                                                                              }
+                                                            }
+                                                  />
+                                        </span>
                               </button>
                     </h2>
                     <div
@@ -1397,20 +1343,6 @@ ShallowWrapper {
             <div
               className="general"
 >
-              <button
-                            className="btn btn-primary btn-inverse discussion-button icon-wrapper hidden-md-up"
-                            onClick={undefined}
-              >
-                            <SVGInline
-                                          className="icon"
-                                          classSuffix="-svg"
-                                          cleanup={Array []}
-                                          cleanupExceptions={Array []}
-                                          component="span"
-                                          svg="comments.svg"
-                            />
-                            View Discussion
-              </button>
               <Unknown
                             prevAndNext={undefined}
                             queueItem={
@@ -1548,14 +1480,18 @@ ShallowWrapper {
                                           className="btn btn-link"
                                           onClick={[Function]}
                             >
-                                          <SVGInline
+                                          <span
                                                         className="icon"
-                                                        classSuffix="-svg"
-                                                        cleanup={Array []}
-                                                        cleanupExceptions={Array []}
-                                                        component="span"
-                                                        svg="plus.svg"
-                                          />
+                                          >
+                                                        <span
+                                                                      className="fa fa-plus"
+                                                                      style={
+                                                                                    Object {
+                                                                                                  "color": "#7e8083",
+                                                                                                }
+                                                                      }
+                                                        />
+                                          </span>
                             </button>
               </h2>
               <div
@@ -1580,20 +1516,7 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <button
-                  className="btn btn-primary btn-inverse discussion-button icon-wrapper hidden-md-up"
-                  onClick={undefined}
->
-                  <SVGInline
-                                    className="icon"
-                                    classSuffix="-svg"
-                                    cleanup={Array []}
-                                    cleanupExceptions={Array []}
-                                    component="span"
-                                    svg="comments.svg"
-                  />
-                  View Discussion
-</button>,
+                undefined,
                 <Unknown
                   prevAndNext={undefined}
                   queueItem={
@@ -1726,47 +1649,7 @@ ShallowWrapper {
             },
             "ref": null,
             "rendered": Array [
-              Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": Array [
-                    <SVGInline
-                      className="icon"
-                      classSuffix="-svg"
-                      cleanup={Array []}
-                      cleanupExceptions={Array []}
-                      component="span"
-                      svg="comments.svg"
-/>,
-                    "View Discussion",
-                  ],
-                  "className": "btn btn-primary btn-inverse discussion-button icon-wrapper hidden-md-up",
-                  "onClick": undefined,
-                },
-                "ref": null,
-                "rendered": Array [
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "class",
-                    "props": Object {
-                      "className": "icon",
-                      "classSuffix": "-svg",
-                      "cleanup": Array [],
-                      "cleanupExceptions": Array [],
-                      "component": "span",
-                      "svg": "comments.svg",
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  "View Discussion",
-                ],
-                "type": "button",
-              },
+              undefined,
               Object {
                 "instance": null,
                 "key": undefined,
@@ -2215,14 +2098,18 @@ ShallowWrapper {
                                     className="btn btn-link"
                                     onClick={[Function]}
                   >
-                                    <SVGInline
+                                    <span
                                                       className="icon"
-                                                      classSuffix="-svg"
-                                                      cleanup={Array []}
-                                                      cleanupExceptions={Array []}
-                                                      component="span"
-                                                      svg="plus.svg"
-                                    />
+                                    >
+                                                      <span
+                                                                        className="fa fa-plus"
+                                                                        style={
+                                                                                          Object {
+                                                                                                            "color": "#7e8083",
+                                                                                                          }
+                                                                        }
+                                                      />
+                                    </span>
                   </button>
 </h2>,
                 false,
@@ -2254,14 +2141,18 @@ ShallowWrapper {
                       className="btn btn-link"
                       onClick={[Function]}
 >
-                      <SVGInline
+                      <span
                                             className="icon"
-                                            classSuffix="-svg"
-                                            cleanup={Array []}
-                                            cleanupExceptions={Array []}
-                                            component="span"
-                                            svg="plus.svg"
-                      />
+                      >
+                                            <span
+                                                                  className="fa fa-plus"
+                                                                  style={
+                                                                                        Object {
+                                                                                                              "color": "#7e8083",
+                                                                                                            }
+                                                                  }
+                                            />
+                      </span>
 </button>,
                   ],
                 },
@@ -2283,14 +2174,18 @@ ShallowWrapper {
                     "key": undefined,
                     "nodeType": "host",
                     "props": Object {
-                      "children": <SVGInline
+                      "children": <span
                         className="icon"
-                        classSuffix="-svg"
-                        cleanup={Array []}
-                        cleanupExceptions={Array []}
-                        component="span"
-                        svg="plus.svg"
-/>,
+>
+                        <span
+                                                className="fa fa-plus"
+                                                style={
+                                                                        Object {
+                                                                                                "color": "#7e8083",
+                                                                                              }
+                                                }
+                        />
+</span>,
                       "className": "btn btn-link",
                       "onClick": [Function],
                     },
@@ -2298,18 +2193,34 @@ ShallowWrapper {
                     "rendered": Object {
                       "instance": null,
                       "key": undefined,
-                      "nodeType": "class",
+                      "nodeType": "host",
                       "props": Object {
+                        "children": <span
+                          className="fa fa-plus"
+                          style={
+                                                    Object {
+                                                                              "color": "#7e8083",
+                                                                            }
+                          }
+/>,
                         "className": "icon",
-                        "classSuffix": "-svg",
-                        "cleanup": Array [],
-                        "cleanupExceptions": Array [],
-                        "component": "span",
-                        "svg": "plus.svg",
                       },
                       "ref": null,
-                      "rendered": null,
-                      "type": [Function],
+                      "rendered": Object {
+                        "instance": null,
+                        "key": undefined,
+                        "nodeType": "host",
+                        "props": Object {
+                          "className": "fa fa-plus",
+                          "style": Object {
+                            "color": "#7e8083",
+                          },
+                        },
+                        "ref": null,
+                        "rendered": null,
+                        "type": "span",
+                      },
+                      "type": "span",
                     },
                     "type": "button",
                   },
@@ -2369,9 +2280,9 @@ ShallowWrapper {
     },
   ],
   Symbol(enzyme.__options__): Object {
-    "adapter": ReactFifteenAdapter {
+    "adapter": ReactSixteenAdapter {
       "options": Object {
-        "supportPrevContextArgumentOfComponentDidUpdate": true,
+        "enableComponentDidUpdateOnSetState": true,
       },
     },
   },

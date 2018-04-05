@@ -1,9 +1,6 @@
 import { List, Map } from 'immutable';
-import * as matchers from 'jest-immutable-matchers';
 import { reducer, actions, State } from './queue';
 import { Filter } from '../../records';
-
-beforeEach(() => jest.addMatchers(matchers));
 
 describe('reducer', () => {
   describe('INIT', () => {

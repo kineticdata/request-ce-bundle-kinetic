@@ -1,5 +1,4 @@
 import { List, Map } from 'immutable';
-import * as matchers from 'jest-immutable-matchers';
 import {
   reducer,
   actions,
@@ -316,8 +315,6 @@ const [
   message8,
   message9,
 ] = messages;
-
-beforeEach(() => jest.addMatchers(matchers));
 
 describe('partitionListBy', () => {
   test('empty list returns empty list', () => {
@@ -671,7 +668,10 @@ describe('reducer', () => {
   });
 
   test('SET_INVITES', () => {
-    const invites = [{ id: '1' }, { id: '2' }];
+    const invites = [
+      { id: '1', status: 'Unassociated' },
+      { id: '2', status: 'Unassociated' },
+    ];
     const state = State({
       discussions: Map({
         abc123: Discussion({ invites: List() }),
