@@ -34,5 +34,10 @@
     "redux-saga": "^0.16.0",
     "semver": "^5.5.0",
     "typeface-open-sans": "^0.0.54"
+  },
+  "devDependencies": {
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "jest-immutable-matchers": "^2.0.1"
   }
 }

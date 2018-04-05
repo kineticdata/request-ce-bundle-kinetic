@@ -19,45 +19,49 @@ const state = {
 describe('getFilterByPath', () => {
   describe('matches adhoc filter', () => {
     it('should return the adhocFilter property from queue state', () => {
-      expect(getFilterByPath(state, '/adhoc').name).toBe('Adhoc');
-      expect(getFilterByPath(state, '/adhoc/foo/bar').name).toBe('Adhoc');
+      expect(getFilterByPath(state, '/kapps/q/adhoc').name).toBe('Adhoc');
+      expect(getFilterByPath(state, '/kapps/q/adhoc/foo/bar').name).toBe(
+        'Adhoc',
+      );
     });
   });
 
   describe('matches custom filter', () => {
     it('should return the custom filter with matching name', () => {
-      expect(getFilterByPath(state, '/custom/Everything').name).toBe(
+      expect(getFilterByPath(state, '/kapps/q/custom/Everything').name).toBe(
         'Everything',
       );
-      expect(getFilterByPath(state, '/custom/Everything/').name).toBe(
+      expect(getFilterByPath(state, '/kapps/q/custom/Everything/').name).toBe(
         'Everything',
       );
-      expect(getFilterByPath(state, '/custom/Everything/foo/bar').name).toBe(
-        'Everything',
-      );
+      expect(
+        getFilterByPath(state, '/kapps/q/custom/Everything/foo/bar').name,
+      ).toBe('Everything');
     });
   });
 
   describe('matches default filter', () => {
     it('should return the default filter with matching name', () => {
-      expect(getFilterByPath(state, '/list/Mine').name).toBe('Mine');
+      expect(getFilterByPath(state, '/kapps/q/list/Mine').name).toBe('Mine');
     });
     it('should return the default filter with matching name', () => {
-      expect(getFilterByPath(state, '/list/Mine/').name).toBe('Mine');
+      expect(getFilterByPath(state, '/kapps/q/list/Mine/').name).toBe('Mine');
     });
     it('should return the default filter with matching name', () => {
-      expect(getFilterByPath(state, '/list/Mine/foo/bar').name).toBe('Mine');
+      expect(getFilterByPath(state, '/kapps/q/list/Mine/foo/bar').name).toBe(
+        'Mine',
+      );
     });
   });
 
   describe('does not match any filter type', () => {
     it('returns undefined', () => {
-      expect(getFilterByPath(state, '/')).toBeUndefined();
-      expect(getFilterByPath(state, '/x')).toBeUndefined();
-      expect(getFilterByPath(state, '/list')).toBeUndefined();
-      expect(getFilterByPath(state, '/list/other')).toBeUndefined();
-      expect(getFilterByPath(state, '/custom')).toBeUndefined();
-      expect(getFilterByPath(state, '/custom/other')).toBeUndefined();
+      expect(getFilterByPath(state, '/kapps/q/')).toBeUndefined();
+      expect(getFilterByPath(state, '/kapps/q/x')).toBeUndefined();
+      expect(getFilterByPath(state, '/kapps/q/list')).toBeUndefined();
+      expect(getFilterByPath(state, '/kapps/q/list/other')).toBeUndefined();
+      expect(getFilterByPath(state, '/kapps/q/custom')).toBeUndefined();
+      expect(getFilterByPath(state, '/kapps/q/custom/other')).toBeUndefined();
     });
   });
 });

@@ -15,6 +15,7 @@ export const SUBMISSION_INCLUDES =
 
 export const getAppSettings = state => state.queueApp;
 export const getCurrentItem = state => state.queue.currentItem;
+export const getKappSlug = state => state.kinops.kappSlug;
 
 /* eslint-disable no-param-reassign */
 export const prepareStatusFilter = (searcher, filter) => {
@@ -174,7 +175,7 @@ export const sortSubmissions = (submissions, filter) =>
 export function* fetchListTask(action) {
   const filter = action.payload;
   const appSettings = yield select(getAppSettings);
-  const kappSlug = yield select(state => state.kinops.kappSlug);
+  const kappSlug = yield select(getKappSlug);
   const { search, assignmentContext } = yield call(
     buildSearch,
     filter,

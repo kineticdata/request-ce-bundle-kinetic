@@ -24,6 +24,7 @@ const {
   prepareUnassignedFilter,
   prepareMineFilter,
   prepareTeammatesFilter,
+  getKappSlug,
 } = require('./queue');
 
 const findQuery = (searcher, value) =>
@@ -430,13 +431,16 @@ describe('queue saga', () => {
 
         // First get the app settings out of the state.
         expect(saga.next().value).toEqual(select(getAppSettings));
+        // Second get the kapp slug out of the state.
+        expect(saga.next(appSettings).value).toEqual(select(getKappSlug));
         // Build the search criteria.
-        expect(saga.next(appSettings).value).toEqual(
+        expect(saga.next('queue').value).toEqual(
           call(buildSearch, action.payload, appSettings),
         );
         // Execute the search.
         expect(saga.next(search).value).toEqual(
           call(CoreAPI.searchSubmissions, {
+            kapp: 'queue',
             search: search.search,
             limit: 1000,
           }),
@@ -454,13 +458,16 @@ describe('queue saga', () => {
 
         // First get the app settings out of the state.
         expect(saga.next().value).toEqual(select(getAppSettings));
+        // Second get the kapp slug out of the state.
+        expect(saga.next(appSettings).value).toEqual(select(getKappSlug));
         // Build the search criteria.
-        expect(saga.next(appSettings).value).toEqual(
+        expect(saga.next('queue').value).toEqual(
           call(buildSearch, action.payload, appSettings),
         );
         // Execute the search.
         expect(saga.next(search).value).toEqual(
           call(CoreAPI.searchSubmissions, {
+            kapp: 'queue',
             search: search.search,
             limit: 1000,
           }),
@@ -478,13 +485,16 @@ describe('queue saga', () => {
 
         // First get the app settings out of the state.
         expect(saga.next().value).toEqual(select(getAppSettings));
+        // Second get the kapp slug out of the state.
+        expect(saga.next(appSettings).value).toEqual(select(getKappSlug));
         // Build the search criteria.
-        expect(saga.next(appSettings).value).toEqual(
+        expect(saga.next('queue').value).toEqual(
           call(buildSearch, action.payload, appSettings),
         );
         // Execute the search.
         expect(saga.next(search).value).toEqual(
           call(CoreAPI.searchSubmissions, {
+            kapp: 'queue',
             search: search.search,
             limit: 1000,
           }),

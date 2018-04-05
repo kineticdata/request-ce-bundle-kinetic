@@ -4,7 +4,7 @@ import { stringify } from 'query-string';
 import { CatalogSearch } from './CatalogSearch';
 import { actions } from '../../redux/modules/search';
 
-const stateMapper = state => ({
+const mapStateToProps = state => ({
   searchTerm: state.search.inputValue,
   kappSlug: state.kinops.kappSlug,
   submitHandler: props => event => {
@@ -17,6 +17,6 @@ const stateMapper = state => ({
 
 const dispatchMapper = { push, catalogSearchInput: actions.searchInputChange };
 
-export const CatalogSearchContainer = connect(stateMapper, dispatchMapper)(
+export const CatalogSearchContainer = connect(mapStateToProps, dispatchMapper)(
   CatalogSearch,
 );
