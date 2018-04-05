@@ -18,7 +18,7 @@ function rewireYarnWorkspaces(config, env, from) {
 }
 
 module.exports = {
-  override: function(config, env) {
+  webpack: function(config, env) {
     return rewireYarnWorkspaces(config, env);
   },
   jest: function(config) {
