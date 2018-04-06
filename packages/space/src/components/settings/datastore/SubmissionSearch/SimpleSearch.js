@@ -11,6 +11,7 @@ const SimpleSearchComponent = ({
   simpleSearchParam,
   setSimpleSearchParam,
   handleSearchSubmissions,
+  handleInputKeypress
 }) => (
   <div className="search-lookup">
     <div className="input-group">
@@ -19,6 +20,8 @@ const SimpleSearchComponent = ({
       </div>
       <input
         type="text"
+        ref={input => input && input.focus()}
+        onKeyPress={handleInputKeypress}
         id="simple-search-term"
         name="simple-search-term"
         onChange={e => setSimpleSearchParam(e.target.value)}
@@ -55,7 +58,14 @@ export const mapDispatchToProps = {
 const handleSearchSubmissions = ({ fetchSubmissions }) => e => {
   e.preventDefault();
   fetchSubmissions();
+
 };
+
+const handleInputKeypress = ({ fetchSubmissions }) => e => {
+  if(e.key === 'Enter'){
+    fetchSubmissions();
+  }
+}
 
 const handleResetSearch = ({ resetSearchParams }) => () => {
   resetSearchParams();
@@ -67,5 +77,6 @@ export const SimpleSearch = compose(
   withHandlers({
     handleSearchSubmissions,
     handleResetSearch,
+    handleInputKeypress
   }),
 )(SimpleSearchComponent);

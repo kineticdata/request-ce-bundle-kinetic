@@ -61,6 +61,12 @@ const SubmissionListItemComponent = ({
                         to={`${path}/${submission.id}`}
                         className="btn btn-info"
                       >
+                        View
+                      </Link>
+                      <Link
+                        to={`${path}/${submission.id}/edit`}
+                        className="btn btn-info"
+                      >
                         Edit
                       </Link>
                       <button
@@ -107,6 +113,9 @@ const SubmissionListItemComponent = ({
           </DropdownToggle>
           <DropdownMenu right>
             <DropdownItem tag={Link} to={`${path}/${submission.id}`}>
+              View
+            </DropdownItem>
+            <DropdownItem tag={Link} to={`${path}/${submission.id}/edit`}>
               Edit
             </DropdownItem>
             <DropdownItem onClick={handleClone(submission.id)}>
