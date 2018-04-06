@@ -11,9 +11,7 @@
     flex-wrap: nowrap;
     align-items: flex-start;
     padding: 0.75rem 1.5rem;
-    &:hover {
-      background-color: $lightestgray;
-    }
+    @include setBgColorAndHover($white);
     // This is the details part of the card.
     .summary-group {
       flex-grow: 1;
