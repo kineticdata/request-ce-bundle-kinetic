@@ -4,7 +4,6 @@
 .page-title-wrapper {
   justify-content: space-between;
   display: flex;
-  align-items: center;
   h1 {
     margin-top: 0;
     color: $blueSlate;
@@ -15,13 +14,13 @@
   h3 {
     color: $orange-kinops;
     font-size: 0.9375rem;
-    font-weight: bold;
+    font-weight: 700;
     letter-spacing: 1px;
     line-height: 1.5rem;
     a {
       color: $orange-kinops;
       font-size: 0.9375rem;
-      font-weight: bold;
+      font-weight: 700;
       letter-spacing: 1px;
       line-height: 1.5rem;
     }
@@ -29,25 +28,35 @@
   a {
     margin-bottom: 1.875rem;
     align-self: flex-end;
-    line-height: normal;
+    // line-height: normal;
   }
 }
 
+// Section Title with top bar.
 .section-title {
-  align-items: center;
   color: $black;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 1rem;
   line-height: 2.125rem;
   font-weight: 600;
-  padding-left: 0.75rem;
+  padding: 0 0.75rem;
   margin: 0 0 1rem 0;
   border-top: 2px solid $black-16;
+  a,
+  .fa {
+    color: $gray;
+    font-size: 0.75rem;
+    &:hover {
+      color: $blueLake;
+    }
+  }
 }
 // Sort by
 .sort-block {
   // height: 2rem;
-  color: $blueGray;
+  color: $blueLake;
   font-size: 0.9166666667rem;
   line-height: 2rem;
   text-align: right;
@@ -56,6 +65,6 @@
   justify-content: flex-end;
   strong {
     font-weight: 300;
-    color: $blueGray;
+    color: $blueLake;
   }
 }
