@@ -3,7 +3,6 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 .space {
-
   .datastore-container {
     display: flex;
     width: auto;
@@ -12,22 +11,20 @@
 
     .datastore-content {
       padding: 0 1.375rem;
-      background-color: #fff;
+      background-color: $white;
       flex-grow: 1;
       //overflow-y: auto;
-      border-right: 1px solid #d5d5d5;
+      border-right: 1px solid $black-16;
 
       .settings {
         padding: 0 1rem;
         margin-bottom: 1rem;
       }
-
-
     }
 
     .datastore-sidebar {
       padding: 0 1.375rem;
-      background-color: #f7f9fb;
+      background-color: $black-3;
       flex-direction: row;
       flex-basis: 31%;
       justify-content: center;
@@ -38,7 +35,7 @@
     }
 
     .search-wrapper {
-      background-color: #fff;
+      background-color: $white;
       width: 100%;
     }
 
@@ -67,10 +64,10 @@
 
     .search-lookup {
       min-height: 60px;
-      border: 1px solid rgba(126, 128, 131, 0.5);
+      // border: 1px solid $border-color;
       box-sizing: border-box;
-      border-radius: 8px 8px 0 0;
-      background-color: #f7f9fb;
+      border-radius: $border-radius-base;
+      background-color: $blue5;
       padding: 1rem;
       display: flex;
       justify-content: space-between;
@@ -255,25 +252,15 @@
       flex-grow: 1;
       thead {
         color: #9e9e9e;
-        font-family: 'Open Sans';
-        font-size: 12px;
-        line-height: 17px;
       }
       tbody {
         td {
           color: #7e8083;
-          font-family: 'Open Sans';
-          font-size: 14px;
-          line-height: 24px;
-          padding: 0.5em 0.75em;
         }
 
         td > a {
           color: #7e8083;
-          font-family: 'Open Sans';
-          font-size: 14px;
           font-weight: 600;
-          line-height: 24px;
         }
 
         td > .list-dropdown {
@@ -287,9 +274,6 @@
 
           & .dropdown-item {
             padding: 0.25rem 1rem;
-            font-family: 'Open Sans';
-            font-size: 14px;
-            line-height: 24px;
           }
         }
       }

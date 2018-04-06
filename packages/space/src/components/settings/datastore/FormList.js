@@ -54,24 +54,24 @@ const FormListComponent = ({
             </h3>
             <h1>Datastore Forms</h1>
           </div>
-          <Link to={`${match.path}/new`}
-            className="btn btn-primary"
-          >
+          <Link to={`${match.path}/new`} className="btn btn-primary">
             Create Datastore
           </Link>
         </div>
 
-        <div>
+        <div className="forms-list-wrapper">
           {loading ? (
             <h3>Loading</h3>
           ) : datastoreForms && datastoreForms.size > 0 ? (
-            <table className="table forms-list">
+            <table className="table table-sm forms-list">
               <thead className="header">
                 <tr>
                   <th>Form Name</th>
+                  <th>Form Slug</th>
                   <th>Description</th>
-                  <th>Dates</th>
-                  <th style={{ width: '48px' }}>&nbsp;</th>
+                  <th>Updated</th>
+                  <th>Created</th>
+                  <th width="48px">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -82,20 +82,14 @@ const FormListComponent = ({
                       <td>
                         <Link to={`${match.path}/${form.slug}`}>
                           <span>{form.name}</span>
-                          <br />
-                          <span>
-                            <small>({form.slug})</small>
-                          </span>
                         </Link>
                       </td>
+                      <td>{form.slug}</td>
                       <td>{form.description}</td>
                       <td>
-                        <Timestamp
-                          label="Updated"
-                          value={form.updatedAt}
-                          slug={form.slug}
-                        />
-                        <br />
+                        <Timestamp value={form.updatedAt} slug={form.slug} />
+                      </td>
+                      <td>
                         <Timestamp
                           label="Created"
                           value={form.createdAt}
@@ -107,7 +101,7 @@ const FormListComponent = ({
                           toggle={toggleDropdown(form.slug)}
                           isOpen={openDropdown === form.slug}
                         >
-                          <DropdownToggle color="link">
+                          <DropdownToggle color="btn-link btn-sm">
                             <span className="fa fa-ellipsis-h fa-2x" />
                           </DropdownToggle>
                           <DropdownMenu right>
