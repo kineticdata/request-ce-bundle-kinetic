@@ -128,13 +128,11 @@ export const QueueItemDetails = ({
 
       {!prohibitSubtasks && (
         <div className="subtasks-section">
-          <h2>
-            <span>Subtasks</span>
+          <h2 className="section-title">
+            Subtasks
             {queueItem.coreState === 'Draft' && (
               <button className="btn btn-link" onClick={openNewItemMenu}>
-                <span className="icon">
-                  <span className="fa fa-plus" style={{ color: '#7e8083' }} />
-                </span>
+                <span className="fa fa-plus" />
               </button>
             )}
           </h2>

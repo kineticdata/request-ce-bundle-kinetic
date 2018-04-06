@@ -66,21 +66,6 @@
       margin-bottom: 4rem;
     }
 
-    h2 {
-      align-items: center;
-      color: $blue1;
-      display: flex;
-      @include ms-respond(font-size, 0);
-      line-height: 2.125rem;
-      font-weight: 600;
-      padding-left: 0.75rem;
-      margin: 0;
-      border-top: 2px solid $gray4;
-      button {
-        margin-left: auto;
-      }
-    }
-
     .submissions {
       border-top: 1px solid $gray4;
     }

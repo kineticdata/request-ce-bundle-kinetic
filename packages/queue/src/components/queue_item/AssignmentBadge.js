@@ -26,7 +26,6 @@ export const AssignmentBadge = ({ queueItem, toggle, readOnly }) => (
           onClick={toggle}
           role="button"
           tabIndex={0}
-          style={{ color: '#7e8083', fontSize: '16px' }}
         />
       </span>
     )}
