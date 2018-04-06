@@ -8,9 +8,7 @@ import { bundle } from 'react-kinetic-core';
 
 import { BridgeModelQualification } from '../../../records';
 
-import {
-  actions,
-} from '../../../redux/modules/settingsDatastore';
+import { actions } from '../../../redux/modules/settingsDatastore';
 
 const SettingsComponent = ({
   canManage,
@@ -43,7 +41,7 @@ const SettingsComponent = ({
             </h3>
             <h1>{origForm.name} Configuration</h1>
           </div>
-          <div className="datastore-settings-buttons">
+          <div className="page-title-actions">
             {hasChanged && (
               <button
                 type="button"
