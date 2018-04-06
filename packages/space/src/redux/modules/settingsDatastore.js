@@ -211,6 +211,28 @@ export const buildColumns = form => {
   }
 };
 
+export const selectPrevAndNext = state => {
+  const submissions = state.settingsDatastore.submissions || List();
+  const submission = state.settingsDatastore.submission;
+  if (submission !== null) {
+    const currentItemIndex = submissions.findIndex(
+      item => item.id === submission.id,
+    );
+    const prevItem =
+      currentItemIndex > 0 ? submissions.get(currentItemIndex - 1).id : null;
+    const nextItem =
+      currentItemIndex < submissions.size - 1
+        ? submissions.get(currentItemIndex + 1).id
+        : null;
+    return {
+      prev:
+        prevItem && `/settings/datastore/${submission.form.slug}/${prevItem}`,
+      next:
+        nextItem && `/settings/datastore/${submission.form.slug}/${nextItem}`,
+    };
+  }
+};
+
 export const selectBridgeNameByModel = model => {
   if (model && model.activeMappingName) {
     const activeMappingName = model.activeMappingName || '';
@@ -247,6 +269,7 @@ export const State = Record({
   currentForm: DatastoreForm(),
   currentFormChanges: DatastoreForm(),
   currentFormLoading: true,
+  hasStartedSearching: false,
   submissions: List(),
   searchParams: SearchParams(),
   // Represents the pages navigated.
@@ -308,7 +331,9 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('currentFormChanges', dsForm)
         .setIn(['searchParams', 'index'], payload.form.indexDefinitions[0]);
     case types.SET_SUBMISSIONS:
-      return state.set('submissions', List(payload));
+      return state
+        .set('submissions', List(payload))
+        .set('hasStartedSearching', true);
     case types.SET_INDEX:
       const index = state.currentForm.indexDefinitions.find(
         indexDef => indexDef.name === payload,
@@ -367,7 +392,8 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('simpleSearchNextPageIndex', null)
         .set('nextPageToken', null)
         .set('pageTokens', List())
-        .set('submissions', List());
+        .set('submissions', List())
+        .set('hasStartedSearching', false);
     case types.PUSH_PAGE_TOKEN:
       return state.update('pageTokens', pageTokens => pageTokens.push(payload));
     case types.POP_PAGE_TOKEN:

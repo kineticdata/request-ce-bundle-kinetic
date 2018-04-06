@@ -32,6 +32,11 @@ export const DatastoreRouter = ({ match, loading }) =>
         path={`${match.path}/:slug/:id`}
         component={DatastoreSubmission}
       />
+      <Route
+        exact
+        path={`${match.path}/:slug/:id/:mode`}
+        component={DatastoreSubmission}
+      />
       <Route component={FormList} />
     </Switch>
   );

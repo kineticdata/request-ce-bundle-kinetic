@@ -56,7 +56,6 @@ const FormListComponent = ({
           </div>
           <Link to={`${match.path}/new`}
             className="btn btn-primary"
-            target="blank"
           >
             Create Datastore
           </Link>
