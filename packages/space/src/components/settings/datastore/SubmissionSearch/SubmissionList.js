@@ -55,7 +55,7 @@ const SubmissionListComponent = ({
       <div>
         {submissions.size > 0 && (
           <div>
-            <table className="table table-sm">
+            <table className="table table-sm table-datastore">
               <thead className="d-none d-md-table-header-group">
                 <tr>
                   {columns.map(c => (

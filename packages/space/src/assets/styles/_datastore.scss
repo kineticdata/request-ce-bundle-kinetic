@@ -237,7 +237,6 @@
 
       .search-lookup-error {
         color: #fa3a37;
-        font-family: 'Open Sans';
         font-size: 12px;
         line-height: 12px;
       }
@@ -248,30 +247,31 @@
       }
     }
 
-    table.forms-list {
-      flex-grow: 1;
+    table.table-datastore {
+      font-size: 0.875rem;
       thead {
-        color: #9e9e9e;
+        // color: $black-50;
       }
       tbody {
         td {
-          color: #7e8083;
-        }
-
-        td > a {
-          color: #7e8083;
-          font-weight: 600;
-        }
-
-        td > .list-dropdown {
-          & > button {
-            padding: 0;
-            color: #7e8083;
-            &:hover {
-              color: #9e9e9e;
+          > a {
+            font-weight: 600;
+          }
+          > small {
+            color: $gray;
+          }
+          > .list-dropdown {
+            & > button {
+              padding: 0;
+              color: #7e8083;
+              &:hover {
+                color: #9e9e9e;
+              }
             }
           }
-
+          > .dropdown .btn {
+            background-color: transparent;
+          }
           & .dropdown-item {
             padding: 0.25rem 1rem;
           }

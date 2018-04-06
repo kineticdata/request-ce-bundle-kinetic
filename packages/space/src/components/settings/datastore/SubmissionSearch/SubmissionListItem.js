@@ -108,7 +108,7 @@ const SubmissionListItemComponent = ({
           toggle={toggleDropdown(submission.id)}
           isOpen={openDropdown === submission.id}
         >
-          <DropdownToggle color="link">
+          <DropdownToggle color="link" className="btn-sm">
             <span className="fa fa-ellipsis-h fa-2x" />
           </DropdownToggle>
           <DropdownMenu right>
@@ -142,7 +142,9 @@ const getSubmissionData = (submission, column) => {
 export const mapStateToProps = state => ({
   loading: state.settingsDatastore.currentFormLoading,
   form: state.settingsDatastore.currentForm,
-  columns: state.settingsDatastore.currentForm.columns.filter(c => c.visible === true),
+  columns: state.settingsDatastore.currentForm.columns.filter(
+    c => c.visible === true,
+  ),
   path: state.router.location.pathname.replace(/\/$/, ''),
 });
 

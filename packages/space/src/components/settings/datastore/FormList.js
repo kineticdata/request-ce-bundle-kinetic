@@ -63,11 +63,10 @@ const FormListComponent = ({
           {loading ? (
             <h3>Loading</h3>
           ) : datastoreForms && datastoreForms.size > 0 ? (
-            <table className="table table-sm forms-list">
+            <table className="table table-sm table-hover table-datastore">
               <thead className="header">
                 <tr>
                   <th>Form Name</th>
-                  <th>Form Slug</th>
                   <th>Description</th>
                   <th>Updated</th>
                   <th>Created</th>
@@ -83,25 +82,22 @@ const FormListComponent = ({
                         <Link to={`${match.path}/${form.slug}`}>
                           <span>{form.name}</span>
                         </Link>
+                        <br />
+                        <small>{form.slug}</small>
                       </td>
-                      <td>{form.slug}</td>
                       <td>{form.description}</td>
                       <td>
                         <Timestamp value={form.updatedAt} slug={form.slug} />
                       </td>
                       <td>
-                        <Timestamp
-                          label="Created"
-                          value={form.createdAt}
-                          slug={form.slug}
-                        />
+                        <Timestamp value={form.createdAt} slug={form.slug} />
                       </td>
                       <td>
                         <Dropdown
                           toggle={toggleDropdown(form.slug)}
                           isOpen={openDropdown === form.slug}
                         >
-                          <DropdownToggle color="btn-link btn-sm">
+                          <DropdownToggle color="link" className="btn-sm">
                             <span className="fa fa-ellipsis-h fa-2x" />
                           </DropdownToggle>
                           <DropdownMenu right>
