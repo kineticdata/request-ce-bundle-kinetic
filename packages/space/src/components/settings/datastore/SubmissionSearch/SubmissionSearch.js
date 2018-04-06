@@ -61,7 +61,6 @@ export const SubmissionSearch = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchForm(this.props.match.params.slug);
-      //this.props.resetSearch();
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.match.params.slug !== nextProps.match.params.slug) {

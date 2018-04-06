@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { compose, withState, withHandlers } from 'recompose';
+import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import {
   Dropdown,
   DropdownToggle,
@@ -151,6 +151,7 @@ export const mapStateToProps = state => ({
 export const mapDispatchToProps = {
   push,
   fetchForms: actions.fetchForms,
+  resetSearch: actions.resetSearchParams,
 };
 
 const toggleDropdown = ({
@@ -163,4 +164,9 @@ export const FormList = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withState('openDropdown', 'setOpenDropdown', ''),
   withHandlers({ toggleDropdown }),
+  lifecycle({
+    componentWillMount() {
+      this.props.resetSearch();
+    },
+  }),
 )(FormListComponent);
