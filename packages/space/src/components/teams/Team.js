@@ -128,7 +128,7 @@ export const Team = ({
                 {services.map(service => (
                   <ServiceCard
                     key={service.slug}
-                    path={`/services/${service.slug}`}
+                    path={`/kapps/services/forms/${service.slug}`}
                     form={service}
                   />
                 ))}
