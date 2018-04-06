@@ -11,7 +11,12 @@ import { AdvancedSearch } from './AdvancedSearch';
 import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
 
-const SubmissionSearchComponent = ({ form, loading, simpleSearchActive, match }) =>
+const SubmissionSearchComponent = ({
+  form,
+  loading,
+  simpleSearchActive,
+  match,
+}) =>
   !loading ? (
     <div className="datastore-container">
       <div className="datastore-content pane scrollable">
@@ -24,7 +29,10 @@ const SubmissionSearchComponent = ({ form, loading, simpleSearchActive, match })
             </h3>
             <h1>{form.name} Records</h1>
           </div>
-          <Link to={`/settings/datastore/${form.slug}/new`} className="btn btn-primary">
+          <Link
+            to={`/settings/datastore/${form.slug}/new`}
+            className="btn btn-primary"
+          >
             New Record
           </Link>
         </div>
@@ -53,13 +61,13 @@ export const SubmissionSearch = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchForm(this.props.match.params.slug);
-      this.props.resetSearch();
+      //this.props.resetSearch();
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.match.params.slug !== nextProps.match.params.slug) {
         this.props.fetchForm(nextProps.match.params.slug);
         this.props.resetSearch();
       }
-    }
+    },
   }),
 )(SubmissionSearchComponent);
