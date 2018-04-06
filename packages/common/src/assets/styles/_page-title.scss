@@ -25,7 +25,9 @@
       line-height: 1.5rem;
     }
   }
-  a {
+  // Any object to the right of the title
+  a,
+  .btn-group {
     margin-bottom: 1.875rem;
     align-self: flex-end;
     // line-height: normal;
