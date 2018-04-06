@@ -4,6 +4,23 @@ import { KappLink as Link, PageTitle } from 'common';
 import { RequestCard } from '../shared/RequestCard';
 import { getSubmissionPath } from '../../utils';
 
+const emptyStateMessage = type => {
+  switch (type) {
+    case 'Draft': {
+      return 'You have no draft requests. Draft services are forms you started but haven\t submitted yet.';
+    }
+    case 'Open': {
+      return 'You have no open requests. If you request something, it will show up here.';
+    }
+    case 'Closed': {
+      return "Closed requests are services  you've requested that have been completed or canceled.";
+    }
+    default: {
+      return 'No requests found. Submit a service and it will show up here!';
+    }
+  }
+};
+
 export const RequestList = ({
   forms,
   submissions,
@@ -65,9 +82,9 @@ export const RequestList = ({
             .map(props => <RequestCard {...props} />)
         ) : (
           <div className="wally-empty-state">
-            <h5>You have no requests yet.</h5>
+            <h5>No {type !== 'All' ? type : ''} Requests Found...</h5>
             <img src={wallyHappyImage} alt="Happy Wally" />
-            <h6>As you request new services, they’ll appear here.</h6>
+            <h6>{emptyStateMessage(type)}</h6>
           </div>
         )}
       </div>
