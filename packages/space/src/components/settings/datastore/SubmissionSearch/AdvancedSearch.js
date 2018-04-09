@@ -3,8 +3,7 @@ import React from 'react';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import { lifecycle, compose, withHandlers, withState } from 'recompose';
-import classNames from 'classnames';
-import Autocomplete from 'react-autocomplete';
+import { Input } from 'reactstrap';
 
 import { actions } from '../../../../redux/modules/settingsDatastore';
 
@@ -29,16 +28,16 @@ const EqualsCriteria = ({
   return (
     <div>
       {part.value.values.map((v, index) => (
-        <div className="search-lookup-param-group" key={index}>
-          <input readOnly className="search-lookup-input" value={v} />
+        <div className="index-part-values-group" key={index}>
+          <input readOnly className="index-part-value" value={v} />
           <button className="btn btn-link">
             <span className="fa fa-fw fa-remove" />
           </button>
         </div>
       ))}
-      <div className="search-lookup-param-group">
+      <div className="index-part-values-group">
         <input
-          className="search-lookup-input"
+          className="index-part-value"
           value={part.value.input}
           onChange={handleIndexPartInput(part)}
         />
@@ -54,9 +53,9 @@ const EqualsCriteria = ({
 };
 
 const SingleCriteria = ({ part, handleIndexPartInput }) => (
-  <div className="search-lookup-param-group">
+  <div className="index-part-values-group">
     <input
-      className="search-lookup-input"
+      className="index-part-value"
       value={part.value.input}
       onChange={handleIndexPartInput(part)}
     />
@@ -65,20 +64,20 @@ const SingleCriteria = ({ part, handleIndexPartInput }) => (
 
 const BetweenCriteria = ({ part, handleIndexPartBetween }) => (
   <div
-    className="search-lookup-param-group"
+    className="index-part-values-group"
     style={{
       display: 'flex',
       justifyContent: 'space-between',
     }}
   >
     <input
-      className="search-lookup-input"
+      className="index-part-value"
       value={part.value.values.get(0)}
       onChange={handleIndexPartBetween(part, 0)}
     />
     <span>to</span>
     <input
-      className="search-lookup-input"
+      className="index-part-value"
       value={part.value.values.get(1)}
       onChange={handleIndexPartBetween(part, 1)}
     />
@@ -103,89 +102,67 @@ const AdvancedSearchComponent = ({
   nextPageToken,
   toggleSimpleSearch,
 }) => (
-  <div>
-    <div className="search-lookup">
-      <strong>Look up by</strong>
-      <div className="search-lookup-select">
-        <Autocomplete
-          shouldItemRender={() => true}
-          renderItem={(item, isHighlighted) => (
-            <div
-              key={`${item.name}-${item.unique}`}
-              className={classNames('item', {
-                'item-highlighted': isHighlighted,
-              })}
-            >
-              {item.name}
-            </div>
-          )}
-          value={indexLookup}
-          items={indexDefinitions}
-          getItemValue={item => item.name}
-          onChange={e => setIndexLookup(e.target.value)}
-          onSelect={setIndexHandler}
-        />
-      </div>
-      <button
-        className="btn btn-primary btn-search-lookup"
-        onClick={handleSearchSubmissions}
+  <div className="advanced-search-content">
+    <h5>Advanced Search</h5>
+    <div className="index-chooser">
+      <span className="index-chooser-label">Look up by:</span>
+      <Input
+        className="index-chooser-select"
+        onChange={e => setIndexHandler(e.target.value)}
+        value={indexLookup}
+        type="select"
+        name="Search By"
+        id="index-chooser"
       >
-        Search
-      </button>
-      <div className="search-lookup-reset">
-        <button className="btn btn-link" onClick={handleResetSearch}>
-          Reset
-        </button>
-        <button className="btn btn-link" onClick={toggleSimpleSearch}>
-          Simple Search
-        </button>
-      </div>
+        <option/>
+        {indexDefinitions.map(index => (
+          <option key={index.name} value={index.name}>
+            {index.name}
+          </option>
+        ))}
+      </Input>
     </div>
-
+    <hr/>
     {searchParams.index &&
       searchParams.indexParts.map(part => (
-        <div className="search-lookup-param" key={part.name}>
-          <span className="search-lookup-param-name">{part.name}</span>
-          <div className="search-lookup-param-select search-lookup-select">
-            <Autocomplete
-              getItemValue={val => val}
-              shouldItemRender={() => true}
-              renderItem={(item, isHighlighted) => (
-                <div
-                  key={`${item.replace(/\s/g, '')}-part.name`}
-                  className={classNames('item', {
-                    'item-highlighted': isHighlighted,
-                  })}
-                >
-                  {item}
-                </div>
-              )}
-              items={PARAM_CRITERIAS}
+        <div className="index-part" key={part.name}>
+          <span className="index-part-label">{part.name}</span>
+            <Input
+              className="index-part-operation"
+              type="select"
+              name={`${part.name} Operation`}
+              id={`${part.name}-operation`}
               value={part.criteria}
-              onSelect={handleIndexPartCriteria(part)}
-            />
+              onChange={e => handleIndexPartCriteria(part, e.target.value)}
+            >
+              {PARAM_CRITERIAS.map(criteria => (
+                <option key={criteria} value={criteria}>
+                  {criteria}
+                </option>
+              ))}
+            </Input>
+            <span className="index-part-values">
+              {part.criteria === 'Is Equal To' ? (
+                <EqualsCriteria
+                  part={part}
+                  handleIndexPartInput={handleIndexPartInput}
+                  handleAddIndexPartInput={handleAddIndexPartInput}
+                />
+              ) : part.criteria === 'Between' ? (
+                <BetweenCriteria
+                  part={part}
+                  handleIndexPartBetween={handleIndexPartBetween}
+                />
+              ) : part.criteria !== 'All' ? (
+                <SingleCriteria
+                  part={part}
+                  handleIndexPartInput={handleIndexPartInput}
+                />
+              ) : null}
+            </span>
           </div>
-          <span className="search-lookup-params">
-            {part.criteria === 'Is Equal To' ? (
-              <EqualsCriteria
-                part={part}
-                handleIndexPartInput={handleIndexPartInput}
-                handleAddIndexPartInput={handleAddIndexPartInput}
-              />
-            ) : part.criteria === 'Between' ? (
-              <BetweenCriteria
-                part={part}
-                handleIndexPartBetween={handleIndexPartBetween}
-              />
-            ) : part.criteria !== 'All' ? (
-              <SingleCriteria
-                part={part}
-                handleIndexPartInput={handleIndexPartInput}
-              />
-            ) : null}
-          </span>
-        </div>
       ))}
+      <button className="btn btn-primary advanced-search-button" onClick={handleSearchSubmissions}>Search</button>
   </div>
 );
 
@@ -243,9 +220,10 @@ const setIndexHandler = ({
   setIndexParts(parts);
 };
 
-const handleIndexPartCriteria = ({
-  setIndexPartCriteria,
-}) => part => criteria => setIndexPartCriteria(part, criteria);
+const handleIndexPartCriteria = ({ setIndexPartCriteria }) => (
+  part,
+  criteria,
+) => setIndexPartCriteria(part, criteria);
 
 const handleIndexPartInput = ({ setIndexPartInput }) => part => e =>
   setIndexPartInput(part, e.target.value);

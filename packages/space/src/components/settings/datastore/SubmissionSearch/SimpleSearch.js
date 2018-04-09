@@ -1,9 +1,18 @@
 import React from 'react';
-
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
+import {
+  Button,
+  Input,
+  InputGroup,
+  InputGroupButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+} from 'reactstrap';
 
 import { actions } from '../../../../redux/modules/settingsDatastore';
+
+import { AdvancedSearch } from './AdvancedSearch';
 
 const SimpleSearchComponent = ({
   handleResetSearch,
@@ -11,35 +20,46 @@ const SimpleSearchComponent = ({
   simpleSearchParam,
   setSimpleSearchParam,
   handleSearchSubmissions,
-  handleInputKeypress
+  handleInputKeypress,
+  dropdownOpen,
+  handleOpenDropdown,
 }) => (
-  <div className="search-lookup">
-    <div className="input-group">
-      <div className="input-group-prepend">
-        <span className="input-group-text">Enter Search Term</span>
-      </div>
-      <input
-        type="text"
-        ref={input => input && input.focus()}
-        onKeyPress={handleInputKeypress}
-        id="simple-search-term"
-        name="simple-search-term"
-        onChange={e => setSimpleSearchParam(e.target.value)}
-        value={simpleSearchParam}
-        className="form-control"
-        placeholder="Enter search term"
-      />
-    </div>
-    <div className="input-group-append">
-      <button onClick={handleSearchSubmissions} className="btn btn-primary" type="button">Search</button>
-    </div>
+  <div>
     <div className="search-lookup-reset">
       <button className="btn btn-link" onClick={handleResetSearch}>
         Reset
       </button>
-      <button className="btn btn-link" onClick={toggleSimpleSearch}>
-        Advanced Search
-      </button>
+    </div>
+    <div className="search-lookup">
+      <InputGroup size="lg" className="datastore-search-bar">
+        <Input
+          aria-label="Search"
+          autoFocus
+          onKeyPress={handleInputKeypress}
+          id="simple-search-term"
+          name="simple-search-term"
+          onChange={e => setSimpleSearchParam(e.target.value)}
+          value={simpleSearchParam}
+          placeholder="Enter search term"
+        />
+        <div className="input-group-append">
+          <Button outline color="secondary" onClick={handleSearchSubmissions}>
+            Search
+          </Button>
+          <Button
+            onClick={handleOpenDropdown}
+            color="secondary"
+            className="dropdown-toggle dropdown-toggle-split"
+            outline
+          />
+        </div>
+      </InputGroup>
+    </div>
+    <div
+      style={{display: dropdownOpen ? '' : 'none'}}
+      className="advanced-search-dropdown"
+    >
+      <AdvancedSearch />
     </div>
   </div>
 );
@@ -58,25 +78,28 @@ export const mapDispatchToProps = {
 const handleSearchSubmissions = ({ fetchSubmissions }) => e => {
   e.preventDefault();
   fetchSubmissions();
-
 };
 
 const handleInputKeypress = ({ fetchSubmissions }) => e => {
-  if(e.key === 'Enter'){
+  if (e.key === 'Enter') {
     fetchSubmissions();
   }
-}
+};
 
 const handleResetSearch = ({ resetSearchParams }) => () => {
   resetSearchParams();
 };
 
+const handleOpenDropdown = ({ dropdownOpen, setDropdownOpen }) => () =>
+  setDropdownOpen(!dropdownOpen);
+
 export const SimpleSearch = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withState('openDropdown', 'setOpenDropdown', ''),
+  withState('dropdownOpen', 'setDropdownOpen', false),
   withHandlers({
     handleSearchSubmissions,
     handleResetSearch,
-    handleInputKeypress
+    handleInputKeypress,
+    handleOpenDropdown,
   }),
 )(SimpleSearchComponent);
