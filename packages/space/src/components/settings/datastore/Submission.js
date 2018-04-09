@@ -47,28 +47,32 @@ const DatastoreSubmissionComponent = ({
             {submissionId ? (submission ? submission.label : '') : ' New'}
           </h1>
         </div>
-        <div>
-          {showPrevAndNext && !isEditing && (
-            <ButtonGroup className="datastore-prev-next">
-              <LinkContainer to={prevAndNext.prev || ''}>
-                <Button color="inverse" disabled={!prevAndNext.prev}>
-                  <span className="icon">
-                    <span className="fa fa-fw fa-caret-left" />
-                  </span>
-                </Button>
-              </LinkContainer>
-              <LinkContainer to={prevAndNext.next || ''}>
-                <Button color="inverse" disabled={!prevAndNext.next}>
-                  <span className="icon">
-                    <span className="fa fa-fw fa-caret-right" />
-                  </span>
-                </Button>
-              </LinkContainer>
-            </ButtonGroup>
-          )}
+        <div className="page-title-actions">
+          {showPrevAndNext &&
+            !isEditing && (
+              <ButtonGroup className="datastore-prev-next">
+                <LinkContainer to={prevAndNext.prev || ''}>
+                  <Button color="inverse" disabled={!prevAndNext.prev}>
+                    <span className="icon">
+                      <span className="fa fa-fw fa-caret-left" />
+                    </span>
+                  </Button>
+                </LinkContainer>
+                <LinkContainer to={prevAndNext.next || ''}>
+                  <Button color="inverse" disabled={!prevAndNext.next}>
+                    <span className="icon">
+                      <span className="fa fa-fw fa-caret-right" />
+                    </span>
+                  </Button>
+                </LinkContainer>
+              </ButtonGroup>
+            )}
           {submissionId &&
             !isEditing && (
-              <Link to={`/settings/datastore/${form.slug}/${submissionId}/edit`} className="btn btn-primary ml-3 datastore-edit">
+              <Link
+                to={`/settings/datastore/${form.slug}/${submissionId}/edit`}
+                className="btn btn-primary ml-3 datastore-edit"
+              >
                 Edit Record
               </Link>
             )}
@@ -180,7 +184,10 @@ export const DatastoreSubmission = compose(
       }
     },
     componentWillReceiveProps(nextProps) {
-      if (nextProps.match.params.id && this.props.match.params.id !== nextProps.match.params.id) {
+      if (
+        nextProps.match.params.id &&
+        this.props.match.params.id !== nextProps.match.params.id
+      ) {
         this.props.fetchSubmission(nextProps.match.params.id);
       }
     },

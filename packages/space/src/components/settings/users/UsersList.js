@@ -30,7 +30,7 @@ const UsersListComponent = ({ users, loading, match }) => {
             </h3>
             <h1>Users</h1>
           </div>
-          <div>
+          <div className="page-title-actions">
             <Link
               to={`${match.path}/import`}
               className="btn btn-secondary"

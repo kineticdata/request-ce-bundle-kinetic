@@ -26,11 +26,18 @@
     }
   }
   // Any object to the right of the title
-  a,
-  .btn-group {
+  > a,
+  > .btn-group,
+  > .page-title-actions {
     margin-bottom: 1.875rem;
     align-self: flex-end;
     // line-height: normal;
+  }
+  > a:not(.btn) {
+    color: $gray;
+    &:hover {
+      color: $blueLake;
+    }
   }
 }
 
