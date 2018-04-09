@@ -10,60 +10,12 @@
     margin-top: 1.5rem;
   }
 }
-.select {
-  form {
-    margin: 0;
-    padding: 0;
-    border-radius: 4px;
-    border: 1px solid rgba($black-16, 1);
-    display: flex;
-    justify-content: space-between;
-  }
-  // Search Input
-  input[type='text'] {
-    height: auto;
-    border: none;
-    border-radius: 4px;
-    background-color: $white;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1.125rem;
-    padding: 1rem;
-    &::-webkit-input-placeholder {
-      color: rgba($black-50, 0.5);
-    }
-  }
-  button,
-  input {
-    appearance: none;
-    background: transparent;
-    border: 0;
-    color: inherit;
-    font: inherit;
-    outline: 0;
-  }
-  input {
-    flex-grow: 1;
-    &::placeholder {
-      color: $black;
-    }
-  }
-  button {
-    width: 4rem;
-  }
-}
 
 // Highlight
 .highlight {
   background-color: rgba($sunflower, 0.5);
 }
 
-// Search Results Search block
-.search-results-wrapper {
-  .select {
-    width: 60%;
-  }
-}
 // Search Results list
 .search-results-list {
   ul {
