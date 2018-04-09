@@ -59,7 +59,7 @@ const SubmissionListItemComponent = ({
                     >
                       <Link
                         to={`${path}/${submission.id}`}
-                        className="btn btn-info"
+                        className="btn btn-primary"
                       >
                         View
                       </Link>

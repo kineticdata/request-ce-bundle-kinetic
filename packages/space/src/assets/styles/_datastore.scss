@@ -249,6 +249,7 @@
 
     table.table-datastore {
       font-size: 0.875rem;
+      margin-top: 1.5rem;
       thead {
         // color: $black-50;
       }
@@ -271,6 +272,7 @@
           }
           > .dropdown .btn {
             background-color: transparent;
+            padding: 0rem 0.25rem;
           }
           & .dropdown-item {
             padding: 0.25rem 1rem;
