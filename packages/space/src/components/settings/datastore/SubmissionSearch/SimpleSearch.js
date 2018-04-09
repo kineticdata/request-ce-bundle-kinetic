@@ -5,9 +5,6 @@ import {
   Button,
   Input,
   InputGroup,
-  InputGroupButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
 } from 'reactstrap';
 
 import { actions } from '../../../../redux/modules/settingsDatastore';
