@@ -19,6 +19,22 @@ export function* fetchUsersSaga() {
   }
 }
 
+export function* updateUserSaga({ payload }) {
+  debugger
+  const { serverError, user } = yield call(CoreAPI.updateUser, {
+    include: 'attributes,memberships,profileAttributes',
+    username: payload.username,
+    user: payload,
+  });
+
+  if (serverError) {
+    yield put(actions.setUserError(serverError));
+  } else {
+    yield put(actions.setUser(user));
+  }
+}
+
 export function* watchSettingsUsers() {
   yield takeEvery(types.FETCH_USERS, fetchUsersSaga);
+  yield takeEvery(types.UPDATE_USER, updateUserSaga);
 }
