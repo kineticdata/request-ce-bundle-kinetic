@@ -6,7 +6,6 @@ import { compose, withHandlers } from 'recompose';
 
 import {
   actions,
-  selectSubmissionPage,
   DATASTORE_LIMIT,
 } from '../../../../redux/modules/settingsDatastore';
 
@@ -28,7 +27,6 @@ const getPageText = (pageTokens, nextPageToken, submissions) => {
 
 const PagingComponent = ({
   submissions,
-  allSubmissions,
   nextPageToken,
   pageTokens,
   handleNextThousandPage,
@@ -58,7 +56,7 @@ const PagingComponent = ({
         <span>
           <strong>Sorting &amp; Filtering</strong>
           {submissions.size > 0
-            ? getPageText(pageTokens, nextPageToken, allSubmissions)
+            ? getPageText(pageTokens, nextPageToken, submissions)
             : ''}
         </span>
         <button
@@ -74,8 +72,7 @@ const PagingComponent = ({
   );
 
 export const mapStateToProps = state => ({
-  submissions: selectSubmissionPage(state),
-  allSubmissions: state.settingsDatastore.submissions,
+  submissions: state.settingsDatastore.submissions,
   pageTokens: state.settingsDatastore.pageTokens,
   nextPageToken: state.settingsDatastore.nextPageToken,
   simpleSearchActive: state.settingsDatastore.simpleSearchActive,
@@ -88,7 +85,6 @@ export const mapDispatchToProps = {
   pushPageToken: actions.pushPageToken,
   popPageToken: actions.popPageToken,
   setNextPageToken: actions.setNextPageToken,
-  setPageOffset: actions.setPageOffset,
 };
 
 const handleNextThousandPage = ({

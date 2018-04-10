@@ -6,8 +6,7 @@ import { lifecycle, compose } from 'recompose';
 
 import { actions } from '../../../../redux/modules/settingsDatastore';
 
-import { SimpleSearch } from './SimpleSearch';
-import { AdvancedSearch } from './AdvancedSearch';
+import { Searchbar } from './Searchbar';
 import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
 
@@ -36,9 +35,7 @@ const SubmissionSearchComponent = ({
             New Record
           </Link>
         </div>
-        <div className="search-lookup-wrapper">
-          {simpleSearchActive ? <SimpleSearch /> : <AdvancedSearch />}
-        </div>
+        <Searchbar />
         <Paging />
         <SubmissionList />
       </div>
