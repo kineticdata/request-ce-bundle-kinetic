@@ -34,16 +34,6 @@ const PagingComponent = ({
 }) =>
   (nextPageToken !== null || pageTokens.size > 0) && (
     <Fragment>
-      <div className="search-lookup-footer">
-        {(pageTokens.size > 0 || nextPageToken !== null) && (
-          <p className="search-lookup-error text-danger">
-            {`The Datastore contains too many records to display at one time.
-      Please enter additional search criteria to narrow down the
-      results, or use the buttons below the table to navigate between
-      chunks of ${DATASTORE_LIMIT} records.`}
-          </p>
-        )}
-      </div>
       <div className="datastore-top-pagination">
         <button
           className="btn btn-primary"
@@ -51,7 +41,7 @@ const PagingComponent = ({
           onClick={handlePrevThousandPage}
         >
           <span className="fa fa-fw fa-caret-left" />
-          Previous 1000
+          Previous {DATASTORE_LIMIT}
         </button>
         <span>
           <strong>Sorting &amp; Filtering</strong>
@@ -64,7 +54,7 @@ const PagingComponent = ({
           disabled={nextPageToken === null}
           onClick={handleNextThousandPage}
         >
-          Next 1000
+          Next {DATASTORE_LIMIT}
           <span className="fa fa-fw fa-caret-right" />
         </button>
       </div>

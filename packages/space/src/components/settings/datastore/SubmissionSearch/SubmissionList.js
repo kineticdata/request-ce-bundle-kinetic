@@ -9,15 +9,15 @@ const WallyNoResultsFoundMessage = ({ form }) => {
     <div className="wally-empty-state">
       <h5>No {form.name} Submissions Found</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
-      <h6>Add some records by hitting the new button!.</h6>
+      <h6>Add a new one by hitting the new button!.</h6>
     </div>
   );
 };
 
-const WallyEnterSearchTerm = () => {
+const WallyEnterSearchTerm = ({ form }) => {
   return (
     <div className="wally-empty-state">
-      <h5>Enter a search term to find some records.</h5>
+      <h5>Enter a term to search</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>
         You can search by any field on the form, or by choosing an index and
@@ -80,15 +80,13 @@ const SubmissionListComponent = ({
             </table>
           </div>
         )}
-        {searching ? (
-          <WallySearching />
-        ):(
-          hasStartedSearching ? (
-            <WallyNoResultsFoundMessage form={form} />
-          ):(
-            <WallyEnterSearchTerm />
-          )
-        )}
+        {searching && <WallySearching />}
+        {!searching &&
+          hasStartedSearching &&
+          submissions.size === 0 && <WallyNoResultsFoundMessage form={form} />}
+        {!searching &&
+          !hasStartedSearching &&
+          submissions.size === 0 && <WallyEnterSearchTerm form={form} />}
       </div>
     )}
   </div>

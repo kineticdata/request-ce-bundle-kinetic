@@ -82,6 +82,12 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
               icon="fa-drive"
               description="View, Create and Edit Reference Data"
             />
+            <SettingsCard
+              name="Notifications"
+              path={`/settings/notifications`}
+              icon="fa-drive"
+              description="View, Create and Edit Email Notifications"
+            />
           </Fragment>
         )}
       </div>

@@ -6,6 +6,8 @@
     "bootstrap": "^4.0.0",
     "classnames": "^2.2.5",
     "connected-react-router": "^4.2.3",
+    "draft-js": "^0.10.5",
+    "draft-js-plugins-editor": "^2.0.4",
     "font-awesome": "^4.7.0",
     "history": "^4.7.2",
     "immutable": "4.0.0-rc.9",

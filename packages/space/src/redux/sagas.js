@@ -6,12 +6,14 @@ import { watchTeams } from './sagas/team';
 import { watchForms } from './sagas/spaceForms';
 import { watchApp } from './sagas/app';
 import { watchSettingsUsers } from './sagas/settingsUsers';
+import { watchSettingsNotifications } from './sagas/settingsNotifications';
 
 export default function* sagas() {
   yield all([
     watchApp(),
     watchAbout(),
     watchSettingsDatastore(),
+    watchSettingsNotifications(),
     watchProfiles(),
     watchTeams(),
     watchForms(),
