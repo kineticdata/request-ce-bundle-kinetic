@@ -160,7 +160,7 @@ const SearchbarComponent = ({
       className="advanced-dropdown"
     >
       <h4 className="advanced-dropdown-header">
-        Adavnced Search
+        Advanced Search
         <button
           onClick={toggleAdvancedSearchOpen}
           type="button"
