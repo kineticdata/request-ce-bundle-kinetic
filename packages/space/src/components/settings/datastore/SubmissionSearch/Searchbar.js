@@ -157,10 +157,10 @@ const SearchbarComponent = ({
     </InputGroup>
     <div
       style={{ display: advancedSearchOpen ? '' : 'none' }}
-      className="advanced-dropdown"
+      className="advanced-dropdown-wrapper"
     >
-      <h4 className="advanced-dropdown-header">
-        Advanced Search
+      <div className="advanced-dropdown-header">
+        <h5>Advanced Search</h5>
         <button
           onClick={toggleAdvancedSearchOpen}
           type="button"
@@ -169,11 +169,10 @@ const SearchbarComponent = ({
         >
           <span aria-hidden="true">&times;</span>
         </button>
-      </h4>
-
+      </div>
       <Row className="index-selector">
         <Col sm={2}>
-          <span className="index-chooser-label">Search By:</span>
+          <strong>Search By:</strong>
         </Col>
         <Col sm={simpleSearchActive ? 4 : 10}>
           <Input
@@ -265,7 +264,7 @@ const SearchbarComponent = ({
             </Row>
           );
         })}
-      <div className="reset-search-link">
+      <div className="row justify-content-end">
         <button className="btn btn-link" onClick={handleResetSearch}>
           Reset
         </button>

@@ -50,42 +50,49 @@ textarea {
     button.advanced-dropdown-caret {
       background-color: transparent;
       color: inherit;
-      border-left-color: white;
-      border-top: 1px solid #ced4da;
-      border-bottom: 1px solid #ced4da;
-    }
-    button.advanced-open {
-      border-radius: 0 0.25rem 0 0;
+      border-left-color: $white;
+      border-top: 1px solid $border-color;
+      border-bottom: 1px solid $border-color;
     }
   }
-  .advanced-dropdown {
-    border: 1px solid rgba(0, 0, 0, 0.15);
+  .advanced-dropdown-wrapper {
+    border: 1px solid rgba($border-color, 0.5);
     border-top: 0px;
-    border-radius: 0 0 0.25rem;
-    padding: 0.2rem 1.5rem 2.5rem;
-    background-color: #f7f7f7;
+    border-bottom-right-radius: $border-radius-base;
+    border-bottom-left-radius: $border-radius-base;
+    padding: 1rem 1.5rem;
+    background-color: $black-3;
+    width: calc(100% - 3.75rem);
     .advanced-dropdown-header {
-      margin-bottom: 0.5rem;
+      justify-content: space-between;
+
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    h5 {
+      margin: 0;
     }
 
     .index-selector {
-    }
-
-    .reset-search-link {
-      float: right;
+      margin-bottom: 1rem;
+      align-items: center;
+      strong {
+        color: $black;
+      }
     }
 
     .index-part {
-      min-height: 64px;
-      //display: flex;
-
+      align-items: center;
+      margin-bottom: 1rem;
       .index-part-label {
         //width: 25%;
-        color: #7e8083;
-        font-family: 'Open Sans';
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 19px;
+        color: $black-50;
+        font-weight: 600;
+        // font-family: 'Open Sans';
+        // font-size: 14px;
+        // font-weight: bold;
+        // line-height: 19px;
       }
 
       .index-part-operation {
@@ -102,19 +109,20 @@ textarea {
       .index-part-values-group {
         display: flex;
         flex-direction: row;
+        align-items: center;
         & > input {
           flex-grow: 1;
         }
         input.index-part-value {
-          height: 32px;
-          padding: 0.5rem;
-          color: #7e8083;
-          border-radius: 3px;
-          border: 1px solid #dfe3e9;
-          background-color: #ffffff;
-          font-size: 13px;
-          line-height: 18px;
-          min-width: 0;
+          // height: 32px;
+          // padding: 0.5rem;
+          // color: #7e8083;
+          // border-radius: 3px;
+          // border: 1px solid #dfe3e9;
+          // background-color: #ffffff;
+          // font-size: 13px;
+          // line-height: 18px;
+          // min-width: 0;
         }
       }
     }

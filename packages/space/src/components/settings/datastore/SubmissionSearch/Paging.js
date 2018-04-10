@@ -34,14 +34,14 @@ const PagingComponent = ({
 }) =>
   (nextPageToken !== null || pageTokens.size > 0) && (
     <Fragment>
-      <div className="search-lookup-fotter">
+      <div className="search-lookup-footer">
         {(pageTokens.size > 0 || nextPageToken !== null) && (
-          <span className="search-lookup-error">
+          <p className="search-lookup-error text-danger">
             {`The Datastore contains too many records to display at one time.
       Please enter additional search criteria to narrow down the
       results, or use the buttons below the table to navigate between
       chunks of ${DATASTORE_LIMIT} records.`}
-          </span>
+          </p>
         )}
       </div>
       <div className="datastore-top-pagination">
