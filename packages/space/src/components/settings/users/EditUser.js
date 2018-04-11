@@ -4,15 +4,17 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fromJS } from 'immutable';
 import { commonActions, PageTitle } from 'common';
-import { actions } from '../../../redux/modules/profiles';
+import { actions as profileActions } from '../../../redux/modules/profiles';
+import { actions as usersActions } from '../../../redux/modules/settingsUsers';
 import { ProfileCard } from '../../shared/ProfileCard';
 import { TeamCard } from '../../shared/TeamCard';
+import { UsersDropdown } from './DropDown';
 
 export const EditUserComponent = ({
   loading,
-  profile,
+  user,
+  users,
   error,
-  editingPassword,
   fieldValues,
   location,
   locationEnabled,
@@ -21,7 +23,7 @@ export const EditUserComponent = ({
   handleChangeManagerClick,
   handleFieldChange,
   handleSubmit,
-  handleTogglePassword,
+  userProfileAttributes,
 }) => (
   <div className="profile-container">
     <PageTitle parts={['Users', 'Settings']} />
@@ -35,7 +37,7 @@ export const EditUserComponent = ({
                 <Link to="/settings">settings</Link> /{` `}
                 <Link to={`/settings/users/`}>users</Link> /{` `}
               </h3>
-              <h1>Edit: {profile.displayName || profile.username}</h1>
+              <h1>Edit: {user.displayName || user.username}</h1>
             </div>
           </div>
           <div>
@@ -51,75 +53,98 @@ export const EditUserComponent = ({
                   value={fieldValues.displayName}
                 />
               </div>
-              <div className="profile-input-container">
-                <div className="form-group required two-columns first-column">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="text"
-                    id="email"
-                    name="email"
-                    onChange={handleFieldChange}
-                    value={fieldValues.email}
-                  />
-                </div>
-                <div className="form-group two-columns second-column">
-                  <label htmlFor="phoneNumber">Phone number</label>
-                  <input
-                    type="text"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    onChange={handleFieldChange}
-                    value={fieldValues.phoneNumber}
-                  />
+              <div className="form-group required">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="text"
+                  id="email"
+                  name="email"
+                  onChange={handleFieldChange}
+                  value={fieldValues.email}
+                />
+              </div>
+              <div>
+                <h2 className="section-title">Profile Attributes</h2>
+                <div className="user-attributes-wrapper">
+                  <div className="form-group">
+                    <label htmlFor="firstName">First Name</label>
+                    <input
+                      id="firstName"
+                      name="firstName"
+                      className="form-control"
+                      value={fieldValues.firstName}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="lastName">Last Name</label>
+                    <input
+                      id="lastName"
+                      name="lastName"
+                      className="form-control"
+                      value={fieldValues.lastName}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="phoneNumber">Phone Number</label>
+                    <input
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      className="form-control"
+                      value={fieldValues.phoneNumber}
+                    />
+                  </div>
                 </div>
               </div>
-              {editingPassword ? (
-                <div>
-                  <hr />
-                  <div className="profile-input-container">
-                    <div className="form-group required two-columns first-column">
-                      <label htmlFor="newPassword">New Password</label>
-                      <input
-                        type="text"
-                        id="newPassword"
-                        name="newPassword"
-                        onChange={handleFieldChange}
-                        value={fieldValues.newPassword}
-                      />
-                    </div>
-                    <div className="form-group required two-columns second-column">
-                      <label htmlFor="confirmPassword">
-                        Password Confirmation
-                      </label>
-                      <input
-                        type="text"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        onChange={handleFieldChange}
-                        value={fieldValues.confirmPassword}
-                      />
-                    </div>
+              <div>
+                <h2 className="section-title">User Attributes</h2>
+                <div className="user-attributes-wrapper">
+                  <div className="form-group">
+                    <label htmlFor="department">Department</label>
+                    <input
+                      id="department"
+                      name="department"
+                      className="form-control"
+                    />
                   </div>
-                  {fieldValues.newPassword !== fieldValues.confirmPassword && (
-                    <p className="form-alert">Passwords Must Match</p>
-                  )}
-                  <div>
-                    <button
-                      onClick={handleTogglePassword}
-                      className="btn btn-secondary btn-sm"
-                    >
-                      Cancel Password Change
-                    </button>
+                  <div className="form-group">
+                    <label htmlFor="manager">Manager</label>
+                    <UsersDropdown users={users} />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="organization">Organization</label>
+                    <input
+                      id="organization"
+                      name="organization"
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="site">Site</label>
+                    <input
+                      id="site"
+                      name="site"
+                      className="form-control"
+                    />
                   </div>
                 </div>
-              ) : (
-                <button
-                  onClick={handleTogglePassword}
-                  className="change-password btn btn-secondary btn-sm"
-                >
-                  Change Password
-                </button>
-              )}
+              </div>
+              <div>
+                <h2 className="section-title">Roles</h2>
+
+                <UserRoles
+                  roles={user.memberships.filter(item =>
+                    item.team.name.startsWith('Role::'),
+                  )}
+                />
+              </div>
+              <div>
+                <h2 className="section-title">Teams</h2>
+                <UserTeams
+                  teams={user.memberships.filter(
+                    item => !item.team.name.startsWith('Role::'),
+                  )}
+                />
+              </div>
               <div className="footer-save">
                 <button
                   disabled={!fieldValuesValid(fieldValues)}
@@ -130,61 +155,12 @@ export const EditUserComponent = ({
               </div>
             </form>
           </div>
-          {(managerEnabled || locationEnabled) && (
-            <div>
-              <h2 className="section-title">User Attributes</h2>
-              <div className="user-attributes-wrapper">
-                <table className="user-attributes table">
-                  <tbody>
-                    {managerEnabled && (
-                      <tr>
-                        <td className="name">Manager</td>
-                        <td>
-                          {manager || <i>No Manager</i>}
-                          <button
-                            className="btn btn-link btn-sm"
-                            onClick={handleChangeManagerClick}
-                          >
-                            Change Manager
-                          </button>
-                        </td>
-                      </tr>
-                    )}
-                    {locationEnabled && (
-                      <tr>
-                        <td className="name">Location</td>
-                        <td>{location || <i>No Location</i>}</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-          <div>
-            <h2 className="section-title">Roles</h2>
-
-            <UserRoles
-              roles={profile.memberships.filter(item =>
-                item.team.name.startsWith('Role::'),
-              )}
-            />
-          </div>
-          <div>
-            <h2 className="section-title">Teams</h2>
-            <UserTeams
-              teams={profile.memberships.filter(
-                item => !item.team.name.startsWith('Role::'),
-              )}
-            />
-          </div>
         </div>
-
         <div className="profile-sidebar pane d-none d-sm-block">
           <ProfileCard
-            user={buildProfile(fieldValues, profile)}
+            user={buildProfile(fieldValues, user)}
             button={
-              <Link to={`/settings/users/${profile.username}`}>
+              <Link to={`/settings/users/${user.username}`}>
                 <button className="btn btn-primary btn-sm">View Profile</button>
               </Link>
             }
@@ -221,12 +197,11 @@ const UserRoles = ({ roles }) => (
 
 const fieldValuesValid = fieldValues =>
   fieldValues.displayName &&
-  fieldValues.email &&
-  fieldValues.newPassword === fieldValues.confirmPassword;
+  fieldValues.email;
 
-const getProfilePhone = profile =>
-  profile.profileAttributes && profile.profileAttributes['Phone Number']
-    ? profile.profileAttributes['Phone Number'].join(', ')
+const getProfileAttribute = (user, attr) =>
+  user.profileAttributes && user.profileAttributes[attr]
+    ? user.profileAttributes[attr].join(', ')
     : '';
 
 const buildProfile = (fieldValues, profile) => {
@@ -245,12 +220,12 @@ const buildProfile = (fieldValues, profile) => {
   };
 };
 
-const translateProfileToFieldValues = profile => ({
-  displayName: profile.displayName || '',
-  email: profile.email || '',
-  newPassword: '',
-  confirmPassword: '',
-  phoneNumber: getProfilePhone(profile) || '',
+const translateProfileToFieldValues = user => ({
+  displayName: user.displayName || '',
+  email: user.email || '',
+  phoneNumber: getProfileAttribute(user, 'Phone Number'),
+  firstName: getProfileAttribute(user, 'First Name'),
+  lastName: getProfileAttribute(user, 'Last Name'),
 });
 
 const translateFieldValuesToProfile = (fieldValues, profile) => {
@@ -260,9 +235,6 @@ const translateFieldValuesToProfile = (fieldValues, profile) => {
     email: updatedProfile.email,
     profileAttributes: updatedProfile.profileAttributes,
   };
-  if (fieldValues.newPassword !== '') {
-    result.password = fieldValues.newPassword;
-  }
   return result;
 };
 
@@ -278,9 +250,9 @@ const openChangeManagerForm = ({ spaceAttributes, openForm }) => config => {
 
 const mapStateToProps = state => ({
   loading: state.profiles.loading,
-  profile: state.profiles.profile,
+  user: state.profiles.profile,
+  users: state.settingsUsers.users,
   error: state.profiles.error,
-  editingPassword: state.profiles.isChangePasswordVisible,
   location:
     state.profiles.profile &&
     state.profiles.profile.profileAttributes['Location'],
@@ -297,9 +269,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  fetchProfile: actions.fetchProfile,
-  toggleChangePassword: actions.setChangePasswordVisible,
-  updateProfile: actions.updateProfile,
+  fetchUsers: usersActions.fetchUsers,
+  fetchProfile: profileActions.fetchProfile,
+  updateProfile: profileActions.updateProfile,
   openForm: commonActions.openForm,
 };
 
@@ -311,30 +283,25 @@ export const EditUser = compose(
     handleFieldChange: props => ({ target: { name, value } }) => {
       name && props.setFieldValues({ ...props.fieldValues, [name]: value });
     },
-    handleTogglePassword: props => event => {
-      props.toggleChangePassword(!props.editingPassword);
-      props.setFieldValues({
-        ...props.fieldValues,
-        newPassword: '',
-        confirmPassword: '',
-      });
-    },
     handleSubmit: props => event => {
       event.preventDefault();
       props.updateProfile(
-        translateFieldValuesToProfile(props.fieldValues, props.profile),
+        translateFieldValuesToProfile(props.fieldValues, props.user),
       );
     },
   }),
   lifecycle({
     componentWillMount() {
       this.props.fetchProfile(this.props.match.params.username);
+      if(this.props.users.size <= 0) {
+        this.props.fetchUsers()
+      }
     },
     componentWillReceiveProps(nextProps) {
-      if (this.props.profile !== nextProps.profile) {
+      if (this.props.user !== nextProps.user) {
         this.props.setFieldValues({
           ...this.props.fieldValues,
-          ...translateProfileToFieldValues(nextProps.profile),
+          ...translateProfileToFieldValues(nextProps.user),
         });
       }
     },
