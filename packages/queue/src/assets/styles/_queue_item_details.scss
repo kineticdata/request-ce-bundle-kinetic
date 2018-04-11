@@ -77,7 +77,6 @@
     .empty-subtasks {
       border-radius: 0.5rem;
       background-color: $gray4;
-      font-family: 'Open Sans';
       text-align: center;
       padding: 1.5em;
       h5 {
@@ -107,7 +106,7 @@
         width: 70px;
       }
       .value {
-        color: $blue0;
+        color: $blueLake;
       }
     }
   }

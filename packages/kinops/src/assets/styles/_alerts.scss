@@ -4,11 +4,10 @@
 .alerts-menu {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  color: $blue1;
+  color: $blueLake;
   padding: 0;
   min-width: 22.5rem;
   a {
-    color: $blue1;
     text-decoration: none;
   }
   .alerts-header {
@@ -53,7 +52,7 @@
         a {
           color: $black;
           &:hover {
-            color: $blue0;
+            color: $blueLake;
           }
         }
         font-weight: bold;
@@ -67,15 +66,12 @@
       }
       p {
         @include ms-respond(font-size, -1);
+
         margin: 0.25rem 0;
         line-height: 1.5;
         color: $gray;
         a {
-          color: rgba(11, 168, 224, 1);
           text-decoration: underline;
-          &:hover {
-            color: $blue0;
-          }
         }
       }
       &:last-of-type {
