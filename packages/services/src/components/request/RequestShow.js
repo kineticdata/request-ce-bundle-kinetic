@@ -138,9 +138,9 @@ export const RequestShow = ({ submission, listType, mode }) => (
       <span className="bordercolor" />
     </div>
     <div className="request-details-container">
-      <Link className="back-link" to={`/requests/${listType || ''}`}>
+      <Link className="nav-return" to={`/requests/${listType || ''}`}>
         <span className="fa fa-fw fa-chevron-left" />
-        Return to {listType || 'All'} Requests
+        {listType || 'All'} Requests
       </Link>
       {submission && (
         <div className="submission-detail-wrapper">
