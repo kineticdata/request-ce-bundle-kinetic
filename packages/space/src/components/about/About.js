@@ -50,7 +50,7 @@ const AboutComponent = ({ space, about, loading }) => (
 
         <h2 className="section-title">Space Admins</h2>
         <div className="space-admin-wrapper">
-          <table className="table">
+          <table className="table table-responsive-sm">
             <thead>
               <tr className="header">
                 <th />
