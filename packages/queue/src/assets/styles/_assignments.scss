@@ -95,14 +95,15 @@
       .item {
         display: flex;
         align-items: center;
-        height: 36px;
-        border-radius: 4px 4px 0 0;
-
+        height: 2.25rem;
+        border-radius: $border-radius-base;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
         color: $black;
-        font-size: 14px;
-        line-height: 19px;
+        font-size: 0.875rem;
+        line-height: 1.1875rem;
 
-        padding-left: 20px;
+        padding-left: 1.25rem;
         cursor: pointer;
 
         &.item-highlighted {
