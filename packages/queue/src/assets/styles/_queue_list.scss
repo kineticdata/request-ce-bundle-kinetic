@@ -5,11 +5,11 @@
   .controls {
     border-bottom: 2px solid $gray4;
     display: flex;
-    flex-shrink: 0;
+    flex: 0 0 auto;
     padding: 0 1.5rem;
     justify-content: space-between;
     h6 {
-      color: $blue1;
+      color: $blueLake;
       font-size: 0.875rem;
       margin: 0;
       padding: 0.5625rem 0;
@@ -23,9 +23,6 @@
       align-self: center;
       button {
         padding: 0.25rem;
-        .icon-svg path {
-          fill: $gray;
-        }
       }
     }
     .nav-buttons {
@@ -34,7 +31,7 @@
   }
 
   .queue-list-content {
-    flex-grow: 1;
+    flex: 1 1 auto;
     overflow-y: auto;
   }
 }
