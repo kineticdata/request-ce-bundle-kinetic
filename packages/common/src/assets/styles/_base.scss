@@ -26,3 +26,9 @@ a {
   display: flex;
   overflow-y: auto !important;
 }
+
+.layout {
+  margin-top: $header-height;
+  flex: 1 1 100%;
+  flex-direction: column;
+}

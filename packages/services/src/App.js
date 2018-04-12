@@ -49,7 +49,7 @@ export const AppComponent = props => {
       />
     ),
     main: (
-      <div className="services">
+      <div className="services layout">
         <Route
           path="/submissions/:id"
           exact

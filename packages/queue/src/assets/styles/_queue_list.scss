@@ -1,12 +1,7 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Queue List ~ Queue
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.queue .queue-list {
-  margin-top: $header-height;
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-
+.queue-list-container {
   .controls {
     border-bottom: 2px solid $gray4;
     display: flex;
