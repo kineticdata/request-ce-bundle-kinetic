@@ -7,7 +7,7 @@
   form {
     margin: 0;
     padding: 0;
-    border-radius: 4px;
+    border-radius: $border-radius-base;
     border: 1px solid rgba($black-16, 1);
     display: flex;
     justify-content: space-between;
@@ -16,7 +16,7 @@
   input[type='text'] {
     height: auto;
     border: none;
-    border-radius: 4px;
+    border-radius: $border-radius-base;
     background-color: $white;
     font-size: 0.875rem;
     font-weight: 600;
