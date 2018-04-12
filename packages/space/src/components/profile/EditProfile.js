@@ -49,55 +49,55 @@ export const EditProfileComponent = ({
                   value={fieldValues.displayName}
                 />
               </div>
-              <div className="profile-input-container">
-                <div className="form-group required two-columns first-column">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="text"
-                    id="email"
-                    name="email"
-                    onChange={handleFieldChange}
-                    value={fieldValues.email}
-                  />
-                </div>
-                <div className="form-group two-columns second-column">
-                  <label htmlFor="phoneNumber">Phone number</label>
-                  <input
-                    type="text"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    onChange={handleFieldChange}
-                    value={fieldValues.phoneNumber}
-                  />
-                </div>
+              <div className="form-group required">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="text"
+                  id="email"
+                  name="email"
+                  onChange={handleFieldChange}
+                  value={fieldValues.email}
+                />
               </div>
+              <div className="form-group">
+                <label htmlFor="phoneNumber">Phone number</label>
+                <input
+                  type="text"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  onChange={handleFieldChange}
+                  value={fieldValues.phoneNumber}
+                  className="col-md-6"
+                />
+              </div>
+
               {editingPassword ? (
-                <div>
+                <div className="profile-password-wrapper">
                   <hr />
-                  <div className="profile-input-container">
-                    <div className="form-group required two-columns first-column">
-                      <label htmlFor="newPassword">New Password</label>
-                      <input
-                        type="text"
-                        id="newPassword"
-                        name="newPassword"
-                        onChange={handleFieldChange}
-                        value={fieldValues.newPassword}
-                      />
-                    </div>
-                    <div className="form-group required two-columns second-column">
-                      <label htmlFor="confirmPassword">
-                        Password Confirmation
-                      </label>
-                      <input
-                        type="text"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        onChange={handleFieldChange}
-                        value={fieldValues.confirmPassword}
-                      />
-                    </div>
+
+                  <div className="form-group required">
+                    <label htmlFor="newPassword">New Password</label>
+                    <input
+                      type="text"
+                      id="newPassword"
+                      name="newPassword"
+                      onChange={handleFieldChange}
+                      value={fieldValues.newPassword}
+                    />
                   </div>
+                  <div className="form-group required">
+                    <label htmlFor="confirmPassword">
+                      Password Confirmation
+                    </label>
+                    <input
+                      type="text"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      onChange={handleFieldChange}
+                      value={fieldValues.confirmPassword}
+                    />
+                  </div>
+
                   {fieldValues.newPassword !== fieldValues.confirmPassword && (
                     <p className="form-alert">Passwords Must Match</p>
                   )}
