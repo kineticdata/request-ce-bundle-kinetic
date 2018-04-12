@@ -23,7 +23,7 @@ const AlertFormComponent = ({
   spaceName,
   editing,
 }) => (
-  <div className="alerts-container">
+  <div className="space-alerts-container">
     <PageTitle parts={[editing ? 'Edit Alert' : 'New Alert', 'Alerts']} />
 
     <div className="alerts-content pane">
