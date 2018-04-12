@@ -32,11 +32,11 @@ const HomeComponent = ({
   handleDiscussionSearchInputSubmit,
   handleLoadMoreButtonClick,
 }) => (
-  <div className="home-container">
+  <div className="space-home-container">
     <PageTitle parts={['Home']} />
     <CreateDiscussionModal />
-    <div className="home-content">
-      <h4 className="home-title">Welcome to kinops for {spaceName}</h4>
+    <div className="space-home-content">
+      <h4 className="space-home-title">Welcome to kinops for {spaceName}</h4>
       {discussionsEnabled ? (
         <div className="page-title-wrapper">
           <div className="page-title">
@@ -50,7 +50,7 @@ const HomeComponent = ({
                 : 'Recent Discussions'}
             </h1>
           </div>
-          <div className="search-discussion-form">
+          <div className="discussion-search-form">
             <div className="select">
               <form onSubmit={handleDiscussionSearchInputSubmit}>
                 <input
@@ -85,7 +85,7 @@ const HomeComponent = ({
         !discussionsError &&
         !discussionsLoading &&
         discussionGroups.size > 0 && (
-          <div className="discussion-summary-wrapper kinops-discussions">
+          <div className="recent-discussions-wrapper kinops-discussions">
             {discussionGroups
               .map((discussions, dateGroup) => (
                 <div className="messages" key={dateGroup}>
@@ -107,7 +107,7 @@ const HomeComponent = ({
               ))
               .toList()}
             {isMoreDiscussions && (
-              <div className="discussion-actions">
+              <div className="recent-discussion-actions">
                 <button
                   className="btn btn-primary"
                   onClick={handleLoadMoreButtonClick}
