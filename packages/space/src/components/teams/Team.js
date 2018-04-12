@@ -53,7 +53,7 @@ export const Team = ({
                 View Discussion
               </button>
             )}
-          <div className="t-card">
+          <div className="card t-card">
             <div
               className="header"
               style={{ backgroundColor: getTeamColor(team) }}
