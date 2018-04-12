@@ -5,7 +5,7 @@
 // My Request details
 .request-details-container {
   display: flex;
-  flex-grow: 1;
+  flex: 1 1 auto;
   flex-direction: column;
   .submission-meta-wrapper {
     min-height: 3.75rem;
@@ -30,7 +30,7 @@
       color: $black-50;
       font-size: 1rem;
       font-weight: 300;
-      line-height: 0.75rem;
+      line-height: 1rem;
     }
     .btn-group-col {
       display: flex;
@@ -39,6 +39,9 @@
       justify-content: space-around;
       .btn {
         margin-right: 1rem;
+        &:last-child {
+          margin-right: 0;
+        }
       }
       @media all and (min-width: 0) {
         margin-top: 1rem;

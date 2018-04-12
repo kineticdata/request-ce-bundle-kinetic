@@ -15,7 +15,7 @@ const CancelButton = props =>
     >
       {props.submission.coreState === constants.CORE_STATE_DRAFT
         ? 'Cancel Request'
-        : 'Request to Cancel'}
+        : 'Cancel Request'}
     </button>
   );
 
