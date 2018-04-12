@@ -15,7 +15,7 @@ export const AssignmentBadge = ({ queueItem, toggle, readOnly }) => (
       <div className="team">
         {queueItem.values['Assigned Team Display Name']}
       </div>
-      <div className="individual">
+      <div className="individual text-truncate">
         {queueItem.values['Assigned Individual Display Name']}
       </div>
     </div>
