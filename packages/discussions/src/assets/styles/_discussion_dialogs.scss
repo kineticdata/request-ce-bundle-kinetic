@@ -2,18 +2,19 @@
  *   Discussion Dialogs ~ Discussions
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .discussion-dialog {
-  flex-grow: 1;
+  flex: 1 1 auto;
   &.participants-dialog {
-    background-color: $blue4;
-    padding: 1.5rem;
-    .header {
-      color: $blue2;
+    h1 {
+      color: $blueLake;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      @include ms-respond(font-size, 0);
+      line-height: 1;
+      font-size: 0.75rem;
       margin-top: 0;
       text-transform: uppercase;
+      padding: 0;
+      margin: 0;
     }
     ul.participants-list,
     ul.invitees-list {
@@ -21,7 +22,7 @@
       margin: 0;
       padding: 0;
       li {
-        color: $blue1;
+        color: $blue;
         font-size: 12px;
         margin-bottom: 0.5rem;
         .sb-avatar {
@@ -32,35 +33,12 @@
           }
         }
         .subtext {
-          color: $blue2;
+          color: $blueLake;
           margin-left: 0.5rem;
         }
       }
       li.present .sb-avatar img {
-        border-color: rgba(0, 212, 106, 1);
-      }
-    }
-  }
-  &.invitation-dialog {
-    padding: 1rem;
-    .invitation-form {
-      padding: 0;
-      label {
-        color: $blue1;
-        margin: 0.5rem 0;
-      }
-      ::-webkit-input-placeholder {
-        color: $blue2;
-      }
-      ::-moz-placeholder {
-        color: $blue2;
-      }
-      :-ms-input-placeholder {
-        color: $blue2;
-      }
-      .help-block {
-        color: $blue2;
-        margin: 0.5rem 0 1rem 0;
+        border-color: $present;
       }
     }
   }

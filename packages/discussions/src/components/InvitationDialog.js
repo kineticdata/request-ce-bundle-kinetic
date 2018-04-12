@@ -4,7 +4,7 @@ import { compose, withHandlers, lifecycle } from 'recompose';
 import { actions } from '../redux/modules/discussions';
 
 export const InvitationDialog = props => (
-  <div className="discussion-dialog invitation-dialog">
+  <div className="discussion-dialog modal-form invitation-dialog">
     <form className="invitation-form" onSubmit={props.createInvitation}>
       <label htmlFor="invitation-email-address" className="field-label">
         Invitee's Email

@@ -86,7 +86,8 @@
       display: flex;
       flex-direction: column;
       padding: 0;
-      > .embedded-core-form {
+      > .embedded-core-form,
+      > .modal-form {
         padding: 1.5rem;
       }
       .embedded-core-form .container,
