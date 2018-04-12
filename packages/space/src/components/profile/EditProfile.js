@@ -26,7 +26,7 @@ export const EditProfileComponent = ({
   <div className="profile-container">
     <PageTitle parts={['Edit Profile']} />
     {!loading && (
-      <div className="fragment">
+      <div className="edit-profile-container">
         <div className="profile-content pane">
           <div className="page-title-wrapper">
             <div className="page-title">
