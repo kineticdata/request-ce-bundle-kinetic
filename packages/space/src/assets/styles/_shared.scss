@@ -25,8 +25,8 @@
 
     .s-card {
       width: 31%;
-      border: 1px solid $black-16;
-      border-radius: 4px;
+      border: 1px solid $border-color;
+      border-radius: $border-radius-base;
       padding: 1rem;
       margin-top: 1rem;
       transition: background-color 0.3s;
@@ -53,8 +53,8 @@
     }
   }
   .s-card {
-    border: 1px solid $black-16;
-    border-radius: 4px;
+    border: 1px solid $border-color;
+    border-radius: $border-radius-base;
     padding: 1rem;
     margin-top: 1rem;
     @media all and (min-width: 0) {

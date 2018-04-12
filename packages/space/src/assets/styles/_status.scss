@@ -13,40 +13,20 @@
     margin: 0;
     line-height: 1.5rem;
     &.status-cancelled {
-      color: rgba(250, 58, 55, 1);
-      .icon-svg path {
-        fill: rgba(250, 58, 55, 1);
-      }
+      color: $red;
     }
     &.status-complete {
-      color: rgba(16, 148, 196, 1);
-      .icon-svg path {
-        fill: rgba(16, 148, 196, 1);
-      }
+      color: $blue;
     }
     &.status-open {
-      color: rgba(2, 212, 177, 1);
-      .icon-svg path {
-        fill: rgba(2, 212, 177, 1);
-      }
+      color: $greenTeal;
     }
     &.status-pending {
-      color: rgba(255, 153, 28, 1);
-      .icon-svg path {
-        fill: rgba(255, 153, 28, 1);
-      }
-    }
-    .icon-svg {
-      margin-right: 3px;
-      height: 0.5rem;
-      width: 0.5rem;
-      path {
-        fill: $blue1;
-      }
+      color: $orange;
     }
     .status-reason {
-      color: rgba(11, 168, 224, 1);
-      margin-left: 6px;
+      color: $blueSky;
+      margin-left: 0.375rem;
       overflow: hidden;
       text-overflow: ellipsis;
       text-transform: none;

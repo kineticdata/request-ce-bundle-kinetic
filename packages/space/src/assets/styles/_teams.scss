@@ -5,7 +5,7 @@
   .team-container {
     min-height: $page-height;
     .team-content {
-      flex: 6;
+      flex: 1 1 60%;
       display: flex;
       flex-direction: column;
     }
@@ -13,7 +13,7 @@
     .team-sidebar {
       display: flex;
       flex-direction: column;
-      flex: 4;
+      flex: 1 1 40%;
       .kinops-discussions {
         flex-grow: 1;
       }
@@ -25,25 +25,6 @@
 
   .teams-container {
     padding: 0 1.75rem;
-
-    .teams-controls {
-      display: flex;
-      flex-direction: column;
-      flex-basis: 17.5%;
-      background-color: #f7f7f7;
-      justify-content: flex-start;
-
-      button {
-        height: 2.5rem;
-        background-color: $orange-kinops;
-        color: #f4f6f9;
-        font-size: 1rem;
-        a {
-          color: $white;
-        }
-      }
-    }
-
     .teams-sidebar {
       display: flex;
       flex-direction: column;
@@ -94,7 +75,7 @@
     flex-direction: column;
     text-align: center;
     border: 1px solid $black-16;
-    border-radius: 4px;
+    border-radius: $border-radius-base;
 
     @include setBgColorAndHover($white);
     .header {
@@ -161,8 +142,6 @@
     }
     pre {
       width: 100%;
-      /* border: 1px solid red; */
-      /* overflow: auto; */
       font-family: $font-family-sans-serif;
       word-break: keep-all;
       white-space: pre-wrap;
@@ -187,7 +166,7 @@
       color: $black;
     }
     .online {
-      border: 2px solid $greenGrass;
+      border: 2px solid $present;
     }
     .t-card-members-wrapper {
       display: flex;
