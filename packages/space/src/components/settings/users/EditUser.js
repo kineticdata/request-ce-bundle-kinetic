@@ -9,6 +9,7 @@ import { actions as usersActions } from '../../../redux/modules/settingsUsers';
 import { ProfileCard } from '../../shared/ProfileCard';
 import { TeamCard } from '../../shared/TeamCard';
 import { UsersDropdown } from './DropDown';
+import { get } from 'https';
 
 export const EditUserComponent = ({
   loading,
@@ -18,10 +19,8 @@ export const EditUserComponent = ({
   fieldValues,
   location,
   locationEnabled,
-  manager,
-  managerEnabled,
-  handleChangeManagerClick,
   handleFieldChange,
+  handleOptionChange,
   handleSubmit,
   userProfileAttributes,
 }) => (
@@ -72,6 +71,7 @@ export const EditUserComponent = ({
                       id="firstName"
                       name="firstName"
                       className="form-control"
+                      onChange={handleFieldChange}
                       value={fieldValues.firstName}
                     />
                   </div>
@@ -81,6 +81,7 @@ export const EditUserComponent = ({
                       id="lastName"
                       name="lastName"
                       className="form-control"
+                      onChange={handleFieldChange}
                       value={fieldValues.lastName}
                     />
                   </div>
@@ -90,6 +91,7 @@ export const EditUserComponent = ({
                       id="phoneNumber"
                       name="phoneNumber"
                       className="form-control"
+                      onChange={handleFieldChange}
                       value={fieldValues.phoneNumber}
                     />
                   </div>
@@ -104,11 +106,19 @@ export const EditUserComponent = ({
                       id="department"
                       name="department"
                       className="form-control"
+                      onChange={handleFieldChange}
+                      value={fieldValues.department}
                     />
                   </div>
                   <div className="form-group">
                     <label htmlFor="manager">Manager</label>
-                    <UsersDropdown users={users} />
+                    <UsersDropdown
+                      users={users}
+                      initialValue={managerLookup(users, fieldValues.manager)}
+                      onSelect={user =>
+                        handleOptionChange('manager', user.username)
+                      }
+                    />
                   </div>
                   <div className="form-group">
                     <label htmlFor="organization">Organization</label>
@@ -116,6 +126,8 @@ export const EditUserComponent = ({
                       id="organization"
                       name="organization"
                       className="form-control"
+                      onChange={handleFieldChange}
+                      value={fieldValues.organization}
                     />
                   </div>
                   <div className="form-group">
@@ -124,6 +136,8 @@ export const EditUserComponent = ({
                       id="site"
                       name="site"
                       className="form-control"
+                      onChange={handleFieldChange}
+                      value={fieldValues.site}
                     />
                   </div>
                 </div>
@@ -171,6 +185,11 @@ export const EditUserComponent = ({
   </div>
 );
 
+const managerLookup = (users, managerUsername) => {
+  let manager = users.find(user => user.username === managerUsername);
+  return manager ? manager.displayName : null;
+};
+
 const UserTeams = ({ teams }) => (
   <div className="t-card-wrapper">
     {Object.keys(teams).length > 0 ? (
@@ -196,12 +215,16 @@ const UserRoles = ({ roles }) => (
 );
 
 const fieldValuesValid = fieldValues =>
-  fieldValues.displayName &&
-  fieldValues.email;
+  fieldValues.displayName && fieldValues.email;
 
 const getProfileAttribute = (user, attr) =>
   user.profileAttributes && user.profileAttributes[attr]
     ? user.profileAttributes[attr].join(', ')
+    : '';
+
+const getAttribute = (user, attr) =>
+  user.attributes && user.attributes[attr]
+    ? user.attributes[attr].join(', ')
     : '';
 
 const buildProfile = (fieldValues, profile) => {
@@ -226,26 +249,20 @@ const translateProfileToFieldValues = user => ({
   phoneNumber: getProfileAttribute(user, 'Phone Number'),
   firstName: getProfileAttribute(user, 'First Name'),
   lastName: getProfileAttribute(user, 'Last Name'),
+  department: getAttribute(user, 'Department'),
+  organization: getAttribute(user, 'Organization'),
+  manager: getAttribute(user, 'Manager'),
+  site: getAttribute(user, 'Site'),
 });
 
 const translateFieldValuesToProfile = (fieldValues, profile) => {
-  const updatedProfile = buildProfile(fieldValues, profile);
   const result = {
-    displayName: updatedProfile.displayName,
-    email: updatedProfile.email,
-    profileAttributes: updatedProfile.profileAttributes,
+    displayName: profile.displayName,
+    email: profile.email,
+    profileAttributesMap,
+    attributesMap,
   };
   return result;
-};
-
-const openChangeManagerForm = ({ spaceAttributes, openForm }) => config => {
-  openForm({
-    kappSlug: spaceAttributes['Admin Kapp Slug'] || 'admin',
-    formSlug:
-      spaceAttributes['Change Manager Form Slug'] || 'manager-change-request',
-    title: 'Change Manager',
-    confirmationMessage: 'Your request has been submitted.',
-  });
 };
 
 const mapStateToProps = state => ({
@@ -257,9 +274,6 @@ const mapStateToProps = state => ({
     state.profiles.profile &&
     state.profiles.profile.profileAttributes['Location'],
   locationEnabled: state.app.userProfileAttributeDefinitions['Location'],
-  manager:
-    state.profiles.profile && state.profiles.profile.attributes['Manager'],
-  managerEnabled: state.app.userAttributeDefinitions['Manager'],
   spaceAttributes:
     state.kinops.space &&
     state.kinops.space.attributes.reduce((memo, item) => {
@@ -279,8 +293,10 @@ export const EditUser = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withState('fieldValues', 'setFieldValues', translateProfileToFieldValues({})),
   withHandlers({
-    handleChangeManagerClick: openChangeManagerForm,
     handleFieldChange: props => ({ target: { name, value } }) => {
+      name && props.setFieldValues({ ...props.fieldValues, [name]: value });
+    },
+    handleOptionChange: props => (name, value) => {
       name && props.setFieldValues({ ...props.fieldValues, [name]: value });
     },
     handleSubmit: props => event => {
@@ -293,8 +309,8 @@ export const EditUser = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchProfile(this.props.match.params.username);
-      if(this.props.users.size <= 0) {
-        this.props.fetchUsers()
+      if (this.props.users.size <= 0) {
+        this.props.fetchUsers();
       }
     },
     componentWillReceiveProps(nextProps) {
