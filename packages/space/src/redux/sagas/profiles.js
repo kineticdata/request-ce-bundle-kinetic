@@ -14,7 +14,6 @@ export function* fetchProfileSaga({ payload }) {
     : yield call(CoreAPI.fetchProfile, { include: PROFILE_INCUDES });
 
   if (serverError) {
-    // Fetch a specific user.
     yield put(actions.setProfileError(serverError));
   } else {
     yield put(actions.setProfile(user || profile));
@@ -22,16 +21,20 @@ export function* fetchProfileSaga({ payload }) {
 }
 
 export function* updateProfileSaga({ payload }) {
-  const { serverError, profile } = yield call(CoreAPI.updateProfile, {
-    include: PROFILE_INCUDES,
-    profile: payload,
-  });
+  const { serverError, profile, user } = paylaod.user
+    ? yield call(CoreAPI.updateUser, {
+        include: PROFILE_INCUDES,
+        user: payload,
+      })
+    : yield call(CoreAPI.updateProfile, {
+        include: PROFILE_INCUDES,
+        profile: payload,
+      });
 
   if (serverError) {
-    // Fetch a specific user.
     yield put(actions.setProfileError(serverError));
   } else {
-    yield put(actions.setProfile(profile));
+    yield put(actions.setProfile(user || profile));
   }
 }
 
