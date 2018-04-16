@@ -32,10 +32,6 @@ const NotificationComponent = ({
   handleEditClick,
   formKey,
   notificationType,
-  editorState,
-  setEditorState,
-
-  handleBoldClick,
 }) => (
   <div className="datastore-container">
     <div className="datastore-content">

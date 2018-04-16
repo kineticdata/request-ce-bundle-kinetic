@@ -4,7 +4,7 @@ import { Kapp } from '../../records';
 
 const { namespace, noPayload, withPayload } = Utils;
 
-export const NOTIFICATIONS_FORM_SLUG = 'notifications';
+export const NOTIFICATIONS_FORM_SLUG = 'notification-data';
 
 export const types = {
   FETCH_NOTIFICATIONS: namespace(
