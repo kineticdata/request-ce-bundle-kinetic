@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { Utils, Loading } from 'common';
 import { actions } from './redux/modules/app';
 import { SidebarContent } from './components/Sidebar';
@@ -60,6 +60,7 @@ export const AppComponent = props => {
             exact
             component={IsolatedForm}
           />
+          <Route path="/reset-password" render={() => <Redirect to="/" />} />
         </div>
       </Fragment>
     ),
