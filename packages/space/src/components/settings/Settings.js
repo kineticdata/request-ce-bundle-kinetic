@@ -6,7 +6,6 @@ import { compose } from 'recompose';
 import { Icon } from 'common';
 
 import { SpaceSettings } from './spaceSettings/SpaceSettings';
-import { Translations } from './translations/Translations';
 import { Notifications } from './notifications/Notifications';
 import { Datastore } from './datastore/Datastore';
 import { Users } from './users/Users';
@@ -17,7 +16,6 @@ export const Settings = () => (
     <Route path="/settings/profile" component={Profile} />
     <Route path="/settings/space" component={SpaceSettings} />
     <Route path="/settings/datastore" component={Datastore} />
-    <Route path="/settings/translations" component={Translations} />
     <Route path="/settings/users" component={Users} />
     <Route path="/settings/notifications" component={Notifications} />
     <Route component={SettingsNavigation} />
@@ -67,13 +65,6 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
               path={`/settings/space`}
               icon="fa-gear"
               description="View and Modify all System Settings"
-            />
-
-            <SettingsCard
-              name="Translations"
-              path={`/settings/translations`}
-              icon="fa-language"
-              description="Configure multiple languages within the system"
             />
 
             <SettingsCard

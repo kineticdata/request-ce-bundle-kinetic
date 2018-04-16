@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { ButtonGroup, Button } from 'reactstrap';
 import { CoreForm } from 'react-kinetic-core';
 import { LinkContainer } from 'react-router-bootstrap';
-import {Editor, EditorState} from 'draft-js';
 
 import { actions as toastActions } from 'kinops/src/redux/modules/toasts';
 
@@ -18,22 +17,6 @@ import {
 } from '../../../redux/modules/settingsNotifications';
 
 const globals = import('common/globals');
-
-// const KappSelector = (props) => {
-//   var currentStyle = props.editorState.getCurrentInlineStyle();
-//   return (
-//     <div style={styles.controls}>
-//       {kapps.map(type =>
-//         <StyleButton
-//           active={currentStyle.has(type.style)}
-//           label={type.label}
-//           onToggle={props.onToggle}
-//           style={type.style}
-//         />
-//       )}
-//     </div>
-//   );
-// };
 
 const NotificationComponent = ({
   form,
@@ -99,24 +82,29 @@ const NotificationComponent = ({
         </div>
       </div>
       <div>
-        {submission !== null && (
-          <div className="editor">
-          <button onClick={handleBoldClick()}>Bold</button>
-          <Editor
-            editorState={editorState}
-            onChange={setEditorState}
-            ref={ref => (this.editor = ref)}
+        {submissionId ? (
+          <CoreForm
+            datastore
+            review={!isEditing}
+            submission={submissionId}
+            updated={handleUpdated}
+            error={handleError}
+            globals={globals}
           />
-          </div>
+        ) : (
+          <CoreForm
+            key={formKey}
+            form={NOTIFICATIONS_FORM_SLUG}
+            datastore
+            onCreated={handleCreated}
+            error={handleError}
+            globals={globals}
+          />
         )}
       </div>
     </div>
   </div>
 );
-
-const handleBoldClick = props => () => () =>
-  console.log(props)
-  //props.setEditorState(RichUtils.toggleInlineStyle(props.editorState, 'BOLD'));
 
 export const getRandomKey = () =>
   Math.floor(Math.random() * (100000 - 100 + 1)) + 100;
@@ -176,14 +164,11 @@ export const mapDispatchToProps = {
 export const Notification = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withState('formKey', 'setFormKey', getRandomKey),
-  withState('editorState', 'setEditorState', EditorState.createEmpty()),
   withHandlers({
     handleUpdated,
     handleCreated,
     handleEditClick,
     handleError,
-
-    handleBoldClick,
   }),
   lifecycle({
     componentWillMount() {
