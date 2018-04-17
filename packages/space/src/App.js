@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
+import { compose, lifecycle, withHandlers } from 'recompose';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { Utils, Loading } from 'common';
 import { actions } from './redux/modules/app';
@@ -30,6 +30,8 @@ export const AppComponent = props => {
         kapps={props.kapps}
         teams={props.teams}
         isSpaceAdmin={props.isSpaceAdmin}
+        openSettings={props.openSettings}
+        settingsBackPath={props.settingsBackPath}
       />
     ),
     main: (
@@ -76,13 +78,19 @@ export const mapStateToProps = state => ({
     a.name.localeCompare(b.name),
   ),
   isSpaceAdmin: state.kinops.profile.spaceAdmin,
+  pathname: state.router.location.pathname,
+  settingsBackPath: state.app.settingsBackPath || '/',
 });
 const mapDispatchToProps = {
   fetchSettings: actions.fetchAppSettings,
+  setSettingsBackPath: actions.setSettingsBackPath,
 };
 
 export const App = compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withHandlers({
+    openSettings: props => () => props.setSettingsBackPath(props.pathname),
+  }),
   lifecycle({
     componentWillMount() {
       this.props.fetchSettings();
