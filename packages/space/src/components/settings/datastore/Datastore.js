@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { DatastoreSubmission } from './Submission';
@@ -15,7 +15,15 @@ const MINIMUM_CE_VERSION = '2.1.0';
 const DatastoreError = () => <h1>Error loading Datastore</h1>;
 const DatastoreVersionError = ({ version }) => (
   <div className="pane">
-    <h1>Invalid CE Version</h1>
+    <div className="page-title-wrapper">
+      <div className="page-title">
+        <h3>
+          <Link to="/">home</Link> /{` `}
+          <Link to="/settings">settings</Link> /{` `}
+        </h3>
+        <h1>Invalid CE Version</h1>
+      </div>
+    </div>
     <p>
       {`You are currently running Kinetic CE ${version.version}. Datastore
       requires Kinetic CE ${MINIMUM_CE_VERSION} or greater.`}
