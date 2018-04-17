@@ -17,11 +17,11 @@ export const SidebarContent = ({
         path="/settings"
         render={() => (
           <Fragment>
-            <Link to={settingsBackPath}>
+            <Link to={settingsBackPath} className="nav-return">
               <span className="fa fa-fw fa-chevron-left" />
               Return to Home
             </Link>
-            <ul className="nav flex-column">
+            <ul className="nav flex-column settings-group">
               <li className="nav-item">
                 <NavLink
                   to="/settings/space"
@@ -29,7 +29,7 @@ export const SidebarContent = ({
                   activeClassName="active"
                 >
                   General
-                  <span className="fa fa-fw fa-chevron-right" />
+                  <span className="fa fa-fw fa-angle-right" />
                 </NavLink>
                 <NavLink
                   to="/settings/datastore"
@@ -37,7 +37,7 @@ export const SidebarContent = ({
                   activeClassName="active"
                 >
                   Datastore
-                  <span className="fa fa-fw fa-chevron-right" />
+                  <span className="fa fa-fw fa-angle-right" />
                 </NavLink>
                 <NavLink
                   to="/settings/notifications"
@@ -45,7 +45,7 @@ export const SidebarContent = ({
                   activeClassName="active"
                 >
                   Notifications
-                  <span className="fa fa-fw fa-chevron-right" />
+                  <span className="fa fa-fw fa-angle-right" />
                 </NavLink>
                 <NavLink
                   to="/settings/users"
@@ -53,7 +53,7 @@ export const SidebarContent = ({
                   activeClassName="active"
                 >
                   Users
-                  <span className="fa fa-fw fa-chevron-right" />
+                  <span className="fa fa-fw fa-angle-right" />
                 </NavLink>
                 <NavLink
                   to="/settings/profile"
@@ -61,7 +61,7 @@ export const SidebarContent = ({
                   activeClassName="active"
                 >
                   Profile
-                  <span className="fa fa-fw fa-chevron-right" />
+                  <span className="fa fa-fw fa-angle-right" />
                 </NavLink>
               </li>
             </ul>
@@ -124,10 +124,12 @@ export const SidebarContent = ({
                   ))}
               </ul>
             </div>
-            <Link to="/settings" onClick={openSettings}>
-              Settings
-              <span className="fa fa-fw fa-chevron-right" />
-            </Link>
+            <ul className="nav flex-column settings-group">
+              <Link to="/settings" onClick={openSettings} className="nav-link">
+                Settings
+                <span className="fa fa-fw fa-angle-right" />
+              </Link>
+            </ul>
           </Fragment>
         )}
       />
