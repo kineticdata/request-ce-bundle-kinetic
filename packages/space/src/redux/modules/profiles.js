@@ -44,8 +44,8 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('error', payload);
     case types.TOGGLE_PASSWORD:
       return state.set('isChangePasswordVisible', payload);
-    // case types.UPDATE_PROFILE:
-    //   return state.set('loading', false);
+    case types.UPDATE_PROFILE:
+      return state.set('loading', false);
     default:
       return state;
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose, withState, withHandlers } from 'recompose';
+import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Autocomplete from 'react-autocomplete';
@@ -50,24 +50,35 @@ const handleChange = ({ setLookup, onChange }) => e => {
   }
 };
 
-const handleSelect = ({ setLookup, onSelect }) => user => {
+const handleSelect = ({ setLookup, onSelect }) => (user, item) => {
   setLookup(user);
   if (typeof onSelect === 'function') {
-    onSelect(user);
+    onSelect(item);
   }
 };
 
 export const UsersDropdown = compose(
-  withState('lookup', 'setLookup', ''),
+  withState('lookup', 'setLookup', props => {
+    return props.initialValue && typeof props.initialValue === 'string'
+      ? props.initialValue
+      : '';
+  }),
   withHandlers({
     handleChange,
     handleSelect,
+  }),
+  lifecycle({
+    componentWillReceiveProps(nextProps) {
+      if (this.props.initialValue !== nextProps.initialValue) {
+        nextProps.setLookup(nextProps.initialValue);
+      }
+    },
   }),
 )(UsersDropdownComponent);
 
 UsersDropdown.propTypes = {
   users: PropTypes.array.isRequired,
-  onSelect: PropTypes.func,
+  onSelect: PropTypes.func.isRequired,
   onChange: PropTypes.func,
   renderUser: PropTypes.func,
   shouldUserRender: PropTypes.func,
