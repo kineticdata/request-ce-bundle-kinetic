@@ -257,10 +257,20 @@ const translateProfileToFieldValues = user => ({
 
 const translateFieldValuesToProfile = (fieldValues, profile) => {
   const result = {
+    username: profile.username,
     displayName: profile.displayName,
     email: profile.email,
-    profileAttributesMap,
-    attributesMap,
+    profileAttributesMap: {
+      'First Name': [fieldValues.firstName],
+      'Last Name': [fieldValues.lastName],
+      'Phone Number': [fieldValues.phoneNumber],
+    },
+    attributesMap: {
+      Department: [fieldValues.department],
+      Organization: [fieldValues.organization],
+      Manager: [fieldValues.manager],
+      Site: [fieldValues.site],
+    },
   };
   return result;
 };

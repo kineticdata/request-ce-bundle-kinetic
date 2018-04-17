@@ -21,9 +21,10 @@ export function* fetchProfileSaga({ payload }) {
 }
 
 export function* updateProfileSaga({ payload }) {
-  const { serverError, profile, user } = paylaod.user
+  const { serverError, profile, user } = payload.username
     ? yield call(CoreAPI.updateUser, {
         include: PROFILE_INCUDES,
+        username: payload.username,
         user: payload,
       })
     : yield call(CoreAPI.updateProfile, {
