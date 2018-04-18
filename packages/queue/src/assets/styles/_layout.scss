@@ -1,7 +1,9 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Layout ~ Queue
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.queue {
-  flex: 1;
+.queue-item-container,
+.queue-list-container {
   display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
 }

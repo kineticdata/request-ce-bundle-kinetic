@@ -6,8 +6,7 @@ import { lifecycle, compose } from 'recompose';
 
 import { actions } from '../../../../redux/modules/settingsDatastore';
 
-import { SimpleSearch } from './SimpleSearch';
-import { AdvancedSearch } from './AdvancedSearch';
+import { Searchbar } from './Searchbar';
 import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
 
@@ -27,18 +26,16 @@ const SubmissionSearchComponent = ({
               <Link to="/settings">settings</Link> /{` `}
               <Link to={`/settings/datastore/`}>datastore</Link> /{` `}
             </h3>
-            <h1>{form.name} Records</h1>
+            <h1>{form.name}</h1>
           </div>
           <Link
             to={`/settings/datastore/${form.slug}/new`}
             className="btn btn-primary"
           >
-            New Record
+            New
           </Link>
         </div>
-        <div className="search-lookup-wrapper">
-          {simpleSearchActive ? <SimpleSearch /> : <AdvancedSearch />}
-        </div>
+        <Searchbar />
         <Paging />
         <SubmissionList />
       </div>

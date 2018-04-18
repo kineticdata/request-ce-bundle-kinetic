@@ -52,7 +52,7 @@ class App extends Component {
           <hr />
           <div className="flex-row">
             <h2>Button Tags</h2>
-            <a class="btn btn-primary" href="" role="button">
+            <a className="btn btn-primary" href="" role="button">
               Link
             </a>
             <button className="btn btn-primary" type="submit">
@@ -291,7 +291,7 @@ class App extends Component {
           {/* Bootstrap */}
           <div className="flex-row">
             <h2>Bootstrap Examples</h2>
-            <button type="button" class="btn btn-primary">
+            <button type="button" className="btn btn-primary">
               Primary
             </button>
             <button type="button" className="btn btn-secondary">
@@ -319,7 +319,7 @@ class App extends Component {
           <hr />
           <div className="flex-row">
             <h2>Bootstrap Outline Buttons</h2>
-            <button type="button" class="btn btn-outline-primary">
+            <button type="button" className="btn btn-outline-primary">
               Primary
             </button>
             <button type="button" className="btn btn-outline-secondary">

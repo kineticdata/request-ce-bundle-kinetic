@@ -2,108 +2,93 @@
  *   Home ~ Space
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.home-container {
+.space-home-container {
   display: flex;
   flex-direction: row;
-  .home-content {
+  .space-home-content {
     padding: 0 1.5rem;
     flex-grow: 1;
 
-    .home-title {
+    .space-home-title {
       color: $black;
-      font-family: 'Open Sans';
       font-size: 1.625rem;
       font-weight: 600;
       line-height: 3rem;
     }
     .page-title-wrapper {
       flex-direction: row;
-      .search-discussion-form {
+      .discussion-search-form {
         justify-content: space-between;
         display: flex;
         flex-direction: row;
         align-items: flex-end;
         flex: 0 0 50%;
         margin-bottom: 1.875rem;
-        form {
-          padding: 0;
-          margin: 0 0.75rem 0 0;
-          input {
-            padding: 0.5rem 0.75rem;
-            font-size: 0.75rem;
-          }
-        }
       }
       @media all and (min-width: 0) {
         flex-direction: column;
-        .search-discussion-form {
+        .discussion-search-form {
           align-items: center;
           align-self: stretch;
         }
       }
       @media all and (min-width: 768px) {
         flex-direction: row;
-        .search-discussion-form {
+        .discussion-search-form {
           align-items: flex-end;
         }
       }
     }
-    .discussion-summary-wrapper {
+  }
+}
+.recent-discussions-wrapper {
+  .discussion-summary {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $black-5;
+    border-radius: $border-radius-base;
+    background-color: $white;
+    padding: 0.5em 1em 0.5em 1em;
+    margin-bottom: 0.75rem;
+
+    .header {
       display: flex;
-      flex-direction: column;
+      width: 100%;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      align-items: center;
 
-      .discussion-summary {
+      & > a {
+        margin-right: 0.25em;
+        height: 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .participants {
         display: flex;
-        flex-direction: column;
-        border: 1px solid $black-5;
-        border-radius: 4px;
-        background-color: $white;
-        padding: 0.5em 1em 0.5em 1em;
-        margin-bottom: 0.75rem;
-
-        .header {
-          display: flex;
-          width: 100%;
-          justify-content: space-between;
-          margin-bottom: 24px;
-          align-items: center;
-
-          & > a {
-            margin-right: 0.25em;
-            height: 1.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            line-height: 1.5rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-
-          .participants {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-            flex-basis: 50%;
-            overflow-x: scroll;
-            & > .avatar {
-              padding: 0;
-            }
-          }
-        }
-        .messages .messages-group {
-          margin-bottom: 0;
-          background-color: #ffffff;
+        flex-direction: row;
+        justify-content: flex-end;
+        flex-basis: 50%;
+        overflow-x: scroll;
+        & > .avatar {
+          padding: 0;
         }
       }
     }
+    .messages .messages-group {
+      margin-bottom: 0;
+      background-color: $white;
+    }
   }
-  .discussion-actions {
+  .recent-discussion-actions {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2em 0 2em 0;
-    .btn {
-      padding: 1rem 3rem;
-    }
+    padding: 2em 0;
   }
 }

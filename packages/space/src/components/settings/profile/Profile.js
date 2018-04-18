@@ -26,13 +26,13 @@ export const EditProfileComponent = ({
   <div className="profile-container">
     <PageTitle parts={['Edit Profile']} />
     {!loading && (
-      <div className="fragment">
+      <div className="edit-profile-container">
         <div className="profile-content pane">
           <div className="page-title-wrapper">
             <div className="page-title">
               <h3>
-                <Link to="/">home</Link> /{' '}
-                <Link to="/settings">settings</Link> /{' '}
+                <Link to="/">home</Link> / <Link to="/settings">settings</Link>{' '}
+                /{' '}
               </h3>
               <h1>Edit Profile</h1>
             </div>

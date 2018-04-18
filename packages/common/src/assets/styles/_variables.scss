@@ -1,24 +1,22 @@
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Variables  ~ Common
- *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// Variables  ~ Common
 
 // Colors
 // --------------------------------------
 
+// Discussion colors
 $transparent-gray1: rgba(51, 51, 51, 0.15);
 $gray: rgb(126, 128, 131);
 $gray2: rgba(213, 213, 213, 1);
 $gray3: rgba(223, 226, 229, 1);
 $gray4: rgba(236, 236, 236, 1);
 
-$blue0: rgba(0, 59, 114, 1);
 $blue1: rgba(84, 105, 141, 1);
 $blue2: rgba(168, 183, 199, 1);
 $blue3: rgba(211, 220, 231, 1);
 $blue4: rgba(244, 246, 249, 1);
-$blue5: rgba(247, 249, 251, 1);
 $present: rgba(0, 212, 100, 1);
 
+// Black, grays, and whites
 $black: rgb(52, 52, 52);
 $black-3: rgb(247, 247, 247);
 $black-5: rgb(241, 241, 241);
@@ -26,6 +24,7 @@ $black-16: rgb(213, 213, 213);
 $black-50: rgb(126, 128, 131);
 $white: rgb(255, 255, 255);
 
+// Color range with similar hue
 $blue: rgb(16, 148, 196);
 $blueGray: rgb(168, 183, 199);
 $blueLake: rgb(9, 84, 130);
@@ -44,11 +43,13 @@ $redRose: rgb(255, 74, 94);
 $yellow: rgb(254, 233, 78);
 $sunflower: rgb(255, 207, 74);
 
+// Button colors
 $primary: $blueLake;
 $primary-complement: $white;
 $secondary: $orange-kinops;
 $secondary-complement: $white;
 
+// Text, link, border colors
 $text-color: $black-50 !default; // Global text color on `<body>`.
 $link-color: $blueLake !default; // Global textual link color.
 $border-color: $black-16 !default; // Global border color.

@@ -74,7 +74,7 @@ export const QueueList = ({
   (!filter ? (
     <WallyBadFilter />
   ) : (
-    <div className="queue-list">
+    <div className="queue-list-container">
       <PageTitle parts={[filter.name || 'Adhoc']} />
       <div className="controls">
         <h6>

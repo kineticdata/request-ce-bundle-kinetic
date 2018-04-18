@@ -35,7 +35,7 @@
     button[data-element-type='button'][data-button-type='custom'],
     button[data-element-type='button'][data-button-type='previous-page'],
     button[data-element-type='button'][data-button-type='save'] {
-      border-radius: 4px;
+      border-radius: $border-radius-base;
       line-height: 1.5rem;
       padding: 0.25rem 1rem;
       margin-right: 0.5rem;

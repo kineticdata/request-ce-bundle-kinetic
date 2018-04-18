@@ -55,7 +55,7 @@ export const AppComponent = props => {
       />
     ),
     main: (
-      <div className="queue">
+      <div className="queue layout">
         <Route
           path="/submissions/:id"
           exact

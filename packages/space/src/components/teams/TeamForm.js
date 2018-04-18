@@ -33,6 +33,7 @@ const TeamFormComponent = ({
   fieldValues,
   handleAddMemberClick,
   handleAddSubteamClick,
+  handleRemoveMember,
   handleCancel,
   handleDelete,
   handleFieldChange,
@@ -165,7 +166,7 @@ const TeamFormComponent = ({
                       <ProfileCard
                         user={user}
                         button={
-                          <button className="btn btn-primary">
+                          <button onClick={handleRemoveMember(user.username)} className="btn btn-primary">
                             Remove Member
                           </button>
                         }
@@ -294,6 +295,12 @@ export const TeamForm = compose(
         props.createTeam(team);
       }
     },
+    handleRemoveMember: props => username => event => {
+      event.preventDefault();
+      const team = props.team;
+      const memberships = props.team.data.memberships.filter(user => user.username === username);
+      props.updateTeam(...team, memberships)
+    }
   }),
   lifecycle({
     componentWillMount() {

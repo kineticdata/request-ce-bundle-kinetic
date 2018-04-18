@@ -171,8 +171,6 @@ export function* fetchSubmissionsSimpleSaga() {
       }
       // Set the next available page token to the one returned.
       yield put(actions.setNextPageToken(nextPageToken));
-      // Reset the client-side page offset.
-      yield put(actions.setPageOffset(0));
     }
     yield put(actions.setSubmissions(submissions));
   } else {
@@ -230,7 +228,6 @@ export function* fetchSubmissionsSimpleSaga() {
           responsesWithPageTokens.first().get('nextPageToken'),
         ),
       );
-      yield put(actions.setPageOffset(0));
       yield put(
         actions.setSubmissions(
           responsesWithPageTokens
@@ -245,7 +242,6 @@ export function* fetchSubmissionsSimpleSaga() {
         .flatMap(searchResult => searchResult.get('submissions'))
         .toSet()
         .toJS();
-      yield put(actions.setPageOffset(0));
       yield put(actions.setSubmissions(combinedSubmissions));
     }
   }
@@ -263,7 +259,7 @@ export function* fetchSubmissionsAdvancedSaga() {
   }
   searcher.index(searchParams.index.name);
   searchParams.indexParts.forEach(part => {
-    switch (part.criteria) {
+    switch (part.operation) {
       case 'Between':
         searcher.between(
           part.name,
@@ -272,10 +268,11 @@ export function* fetchSubmissionsAdvancedSaga() {
         );
         break;
       case 'Is Equal To':
-        if (part.value.size > 1) {
-          searcher.in(part.name, part.value.values.toJS());
+        const partWithInput = part.value.input !== '' ? part.updateIn(['value','values'], values => values.push(part.value.input)) : part;
+        if (partWithInput.value.values.size > 1) {
+          searcher.in(partWithInput.name, partWithInput.value.values.toJS());
         } else {
-          searcher.eq(part.name, part.value.values.get(0));
+          searcher.eq(partWithInput.name, partWithInput.value.values.get(0));
         }
         break;
       case 'Is Greater Than':
@@ -297,7 +294,7 @@ export function* fetchSubmissionsAdvancedSaga() {
         // Don't do anything with 'All'.
         break;
       default:
-        console.warn(`Invalid criteria: "${part.criteria}"`);
+        console.warn(`Invalid operation: "${part.operation}"`);
     }
   });
 
@@ -317,7 +314,6 @@ export function* fetchSubmissionsAdvancedSaga() {
     // Set the next available page token to the one returned.
     yield put(actions.setNextPageToken(nextPageToken));
     // Reset the client-side page offset.
-    yield put(actions.setPageOffset(0));
     yield put(actions.setSubmissions(submissions));
   }
 }

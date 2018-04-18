@@ -10,7 +10,7 @@ const TeamCardComponent = props => {
   const { team, showMembers, toggleShowMembers } = props;
   const { name, slug, description, memberships } = team;
   return (
-    <div className="t-card">
+    <div className="card t-card">
       <div className="header" style={{ backgroundColor: getTeamColor(team) }}>
         <span />
         <i className={`fa fa-${getTeamIcon(team)} card-icon`} />

@@ -1,95 +1,73 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Alerts ~ Space
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.space {
-  .alerts-container {
-    display: flex;
-    width: auto;
-    flex-direction: row;
-    height: $page-height;
 
-    .alerts-content {
-      padding: 0 1.375rem;
-      background-color: $white;
-      flex-grow: 1;
-      overflow-y: auto;
-      border-right: 1px solid $black-16;
+.space-alerts-container {
+  display: flex;
+  flex-direction: row;
+}
 
-      .alerts-title {
-        height: 48px;
-        width: 794px;
-        color: #333333;
-        font-family: 'Open Sans';
-        font-size: 26px;
-        font-weight: 600;
-        line-height: 48px;
-      }
+.alerts-content {
+  .table-alert {
+    tr:not(.header) {
+      border-bottom: 1px solid #e0e0e0;
+      border-top: 1px solid #e0e0e0;
+    }
 
-      .alerts-table {
-        width: 100%;
+    td.actions {
+      width: 20%;
+    }
 
-        tr:not(.header) {
-          border-bottom: 1px solid #e0e0e0;
-          border-top: 1px solid #e0e0e0;
+    tr > td {
+      padding: 12px;
+      // This is for the action dropdown.
+      .actions {
+        // This is for the vertical ellipsis dropdown menu on the queue list view.
+        .btn.btn-ellipsis {
+          border: none;
+          padding: 0;
+          box-shadow: none;
+          background-color: transparent;
+          &:hover {
+            background-color: white;
+            cursor: pointer;
+            path {
+              fill: $blue1;
+            }
+          }
         }
 
-        td.actions {
-          width: 20%;
-        }
+        .dropdown > .dropdown-menu {
+          left: -5.5rem;
+          top: 1rem;
+          padding: 0;
+          min-width: 7rem;
+          border-radius: 0;
+          border: none;
+          margin-top: 15px;
+          position: absolute;
+          box-sizing: border-box;
+          filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 3px 4px);
+          // Add the up arrow.
 
-        tr > td {
-          padding: 12px;
-          // This is for the action dropdown.
-          .actions {
-            // This is for the vertical ellipsis dropdown menu on the queue list view.
-            .btn.btn-ellipsis {
-              border: none;
-              padding: 0;
-              box-shadow: none;
-              background-color: transparent;
-              &:hover {
-                background-color: white;
-                cursor: pointer;
-                path {
-                  fill: $blue1;
-                }
-              }
-            }
+          &:after {
+            content: '';
+            border: 10px solid;
+            border-color: transparent transparent white;
+            content: '';
+            right: 10%;
+            margin-left: -10px;
+            position: absolute;
+            top: -20px;
+            z-index: 9998;
+          }
 
-            .dropdown > .dropdown-menu {
-              left: -5.5rem;
-              top: 1rem;
-              padding: 0;
-              min-width: 7rem;
-              border-radius: 0;
-              border: none;
-              margin-top: 15px;
-              position: absolute;
-              box-sizing: border-box;
-              filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 3px 4px);
-              // Add the up arrow.
-
-              &:after {
-                content: '';
-                border: 10px solid;
-                border-color: transparent transparent white;
-                content: '';
-                right: 10%;
-                margin-left: -10px;
-                position: absolute;
-                top: -20px;
-                z-index: 9998;
-              }
-
-              a.dropdown-item,
-              button.dropdown-item {
-                height: 24px;
-                color: #54698d;
-                font-family: 'Open Sans';
-                font-size: 12px;
-                line-height: 24px;
-              }
-            }
+          a.dropdown-item,
+          button.dropdown-item {
+            height: 24px;
+            color: #54698d;
+            font-size: 12px;
+            line-height: 24px;
           }
         }
       }

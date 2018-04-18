@@ -10,9 +10,9 @@ import { getFilterByPath, buildFilterPath } from '../../redux/modules/queueApp';
 
 export const QueueItem = ({ filter, queueItem, discussionsEnabled }) =>
   queueItem !== null && (
-    <div className="queue-item">
+    <div className="queue-item-container">
       {filter && (
-        <Link to={buildFilterPath(filter)} className="back-link">
+        <Link to={buildFilterPath(filter)} className="nav-return">
           <span className="icon">
             <span className="fa fa-fw fa-chevron-left" />
           </span>

@@ -14,19 +14,19 @@
     margin: 0;
     line-height: 1.5rem;
     &.status-cancelled {
-      color: rgba(250, 58, 55, 1);
+      color: $red;
     }
     &.status-complete {
-      color: rgba(16, 148, 196, 1);
+      color: $blue;
     }
     &.status-open {
-      color: rgba(2, 212, 177, 1);
+      color: $greenTeal;
     }
     &.status-pending {
-      color: rgba(255, 153, 28, 1);
+      color: $orange;
     }
     .status-reason {
-      color: rgba(11, 168, 224, 1);
+      color: $blueSky;
       margin-left: 6px;
       overflow: hidden;
       text-overflow: ellipsis;
