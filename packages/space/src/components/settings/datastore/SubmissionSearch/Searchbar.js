@@ -16,15 +16,16 @@ import { IndexPart } from '../../../../records';
 import { actions } from '../../../../redux/modules/settingsDatastore';
 
 const OPERATIONS = [
+  'Equal To',
   'Starts With',
-  'Is Equal To',
   'All',
   'Is Greater Than',
   'Is Less Than',
   'Is Greater Than or Equal',
   'Is Less Than or Equal',
-  'Between',
+  'Is Between',
 ];
+const EQUALS_OPERATION = 'Equal To';
 const DEFAULT_PLACEHOLDER =
   'Searching by any field that matches the value entered here...';
 
@@ -230,7 +231,7 @@ const SearchbarComponent = ({
                   {OPERATIONS.filter(
                     operation =>
                       !previousPartOperations.some(
-                        opp => opp !== 'Is Equal To',
+                        opp => opp !== EQUALS_OPERATION,
                       ) || operation === 'All',
                   ).map(operation => (
                     <option key={operation} value={operation}>
@@ -241,7 +242,7 @@ const SearchbarComponent = ({
               </Col>
               <Col sm={6}>
                 <span className="index-part-values">
-                  {part.operation === 'Is Equal To' ? (
+                  {part.operation === 'Equal To' ? (
                     <EqualsOperation
                       part={part}
                       handleIndexPartInput={handleIndexPartInput}
@@ -364,7 +365,7 @@ const setIndexHandler = ({
       index.parts.map((part, i) =>
         IndexPart({
           name: part,
-          operation: i === 0 ? 'Starts With' : 'All',
+          operation: i === 0 ? 'Equal To' : 'All',
         }),
       ),
     );
