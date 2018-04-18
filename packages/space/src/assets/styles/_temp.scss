@@ -80,9 +80,8 @@ textarea {
   }
 }
 
-.fragment .profile-content .checkbox-group {
-  label {
-    display: inline-block;
-    margin-left: 0.5rem;
+.profile-content {
+  input[type='checkbox'] {
+    margin-right: 0.3rem;
   }
 }

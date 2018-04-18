@@ -40,15 +40,16 @@ export const EditUserComponent = ({
               <h1>Edit: {user.displayName || user.username}</h1>
             </div>
           </div>
-          <div className="checkbox-group">
+          <label htmlFor="spaceAdmin">
             <input
               type="checkbox"
+              id="spaceAdmin"
               name="spaceAdmin"
               onChange={handleCheckboxChange}
-              //checked={fieldValues.spaceAdmin}
-            />
-            <label>Space Admin</label>
-          </div>
+              checked={fieldValues.spaceAdmin}
+              value={fieldValues.spaceAdmin}
+            />Space Admin
+          </label>
           <div>
             <h2 className="section-title">General</h2>
             <form onSubmit={handleSubmit}>
@@ -314,7 +315,11 @@ const mapDispatchToProps = {
 
 export const EditUser = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withState('fieldValues', 'setFieldValues', translateProfileToFieldValues({})),
+  withState(
+    'fieldValues',
+    'setFieldValues',
+    translateProfileToFieldValues({ spaceAdmin: false }),
+  ),
   withHandlers({
     handleFieldChange: props => ({ target: { name, value } }) => {
       name && props.setFieldValues({ ...props.fieldValues, [name]: value });
