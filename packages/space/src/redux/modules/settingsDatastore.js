@@ -323,11 +323,9 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('currentForm', dsForm)
         .set('currentFormChanges', dsForm);
     case types.FETCH_SUBMISSIONS_ADVANCED:
-      return state
-        .set('searching', true)
+      return state.set('searching', true);
     case types.FETCH_SUBMISSIONS_SIMPLE:
-      return state
-        .set('searching', true)
+      return state.set('searching', true);
     case types.SET_SUBMISSIONS:
       return state
         .set('searching', false)
@@ -339,15 +337,27 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.setIn(['searchParams', 'indexParts'], payload);
     case types.SET_INDEX_PART_OPERATION: {
       const { part, operation } = payload;
+      const partIndex = state.searchParams.indexParts.findIndex(
+        p => part.name === p.name,
+      );
       return state.updateIn(['searchParams', 'indexParts'], indexParts =>
-        indexParts.update(indexParts.findIndex(p => part.name === p.name), p =>
-          p.set('operation', operation).set(
-            'value',
-            IndexValues({
-              values: operation === 'Between' ? List(['', '']) : List(),
-            }),
+        indexParts
+          .update(partIndex, p =>
+            p.set('operation', operation).set(
+              'value',
+              IndexValues({
+                values: operation === 'Between' ? List(['', '']) : List(),
+              }),
+            ),
+          )
+          .map(
+            (part, index) =>
+              index > partIndex && operation !== 'Is Equal To'
+                ? part
+                    .set('operation', 'All')
+                    .set('value', IndexValues({ values: List() }))
+                : part,
           ),
-        ),
       );
     }
     case types.SET_INDEX_PART_INPUT: {
