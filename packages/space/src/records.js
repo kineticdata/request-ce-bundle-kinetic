@@ -67,6 +67,6 @@ export const IndexValues = Record({
 
 export const IndexPart = Record({
   name: '',
-  criteria: 'All',
+  operation: 'Starts With',
   value: IndexValues(),
 });

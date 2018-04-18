@@ -67,9 +67,9 @@ const FormListComponent = ({
               <thead className="header">
                 <tr>
                   <th>Form Name</th>
-                  <th>Description</th>
-                  <th>Updated</th>
-                  <th>Created</th>
+                  <th width="40%">Description</th>
+                  <th width="10%">Updated</th>
+                  <th width="10%">Created</th>
                   <th width="48px">&nbsp;</th>
                 </tr>
               </thead>

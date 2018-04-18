@@ -5,7 +5,7 @@
   .submissions {
     // This represents the overall submission "card" in the queue list view.
     .submission {
-      border-bottom: 1px solid $gray4;
+      border-bottom: 1px solid $border-color;
       color: $blue1;
       display: flex;
       flex-direction: row;
@@ -18,7 +18,7 @@
         flex-grow: 1;
         text-decoration: none;
         &:focus {
-          outline: $blue3 dotted thin;
+          outline: $blueLake dotted thin;
         }
         h6 {
           color: $black;
@@ -65,21 +65,6 @@
 
       // This is for the action dropdown.
       .actions {
-        // This is for the vertical ellipsis dropdown menu on the queue list view.
-        .btn.btn-ellipsis {
-          border: none;
-          padding: 0;
-          box-shadow: none;
-          background-color: transparent;
-          &:hover {
-            background-color: white;
-            cursor: pointer;
-            path {
-              fill: $blue1;
-            }
-          }
-        }
-
         .dropdown > .dropdown-menu {
           left: -5.5rem;
           top: 1rem;
@@ -96,7 +81,7 @@
           &:after {
             content: '';
             border: 10px solid;
-            border-color: transparent transparent white;
+            border-color: transparent transparent $white;
             content: '';
             right: 10%;
             margin-left: -10px;
@@ -108,8 +93,7 @@
           a.dropdown-item,
           button.dropdown-item {
             height: 24px;
-            color: #54698d;
-            font-family: 'Open Sans';
+            color: $blueGray;
             font-size: 0.75rem;
             line-height: 1.5rem;
             padding: 3px 0.75rem;

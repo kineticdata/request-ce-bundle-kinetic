@@ -1,20 +1,47 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { compose, lifecycle } from 'recompose';
+import { Notification } from './Notification';
+import { NotificationsList } from './NotificationsList';
+import { actions } from '../../../redux/modules/settingsNotifications';
 
 
-export const Notifications = () => (
-  <div className="datastore-container">
-    <div className="datastore-content pane">
-      <div className="page-title-wrapper">
-        <div className="page-title">
-          <h3>
-            <Link to="/">home</Link> /{` `}
-            <Link to="/settings">settings</Link> /{` `}
-          </h3>
-          <h1>Notifications</h1>
-        </div>
-      </div>
-      <h2>Notifications Go Here</h2>
-    </div>
-  </div>
-);
+export const NotificationsRouter = ({ match, loading }) =>
+  !loading && (
+    <Switch>
+      <Route
+        exact
+        path={`${match.path}/new`}
+        component={Notification}
+      />
+      <Route
+        exact
+        path={`${match.path}/:id`}
+        component={Notification}
+      />
+      <Route
+        exact
+        path={`${match.path}/:id/:mode`}
+        component={Notification}
+      />
+      <Route component={NotificationsList} />
+    </Switch>
+  );
+
+export const mapStateToProps = state => ({
+  loading: state.settingsNotifications.loading,
+});
+
+export const mapDispatchToProps = {
+  fetchNotifications: actions.fetchNotifications,
+};
+
+export const Notifications = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  lifecycle({
+    componentWillMount() {
+      this.props.fetchNotifications();
+    },
+  }),
+)(NotificationsRouter);

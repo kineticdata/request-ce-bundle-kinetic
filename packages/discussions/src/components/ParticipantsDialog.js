@@ -5,17 +5,17 @@ import Avatar from 'react-avatar';
 import { actions } from '../redux/modules/discussions';
 
 export const ParticipantsDialog = props => (
-  <div className="discussion-dialog participants-dialog">
-    <h4 className="header">
+  <div className="discussion-dialog modal-form participants-dialog">
+    <h1>
       Participants
       <button
         type="button"
-        className="btn btn-link"
+        className="btn btn-icon"
         onClick={props.openInvitation}
       >
         <i className="fa fa-fw fa-plus" />
       </button>
-    </h4>
+    </h1>
     <ul className="participants-list">
       {props.discussion.participants
         .toList()

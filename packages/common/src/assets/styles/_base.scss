@@ -2,8 +2,8 @@
  *   Base ~ Common
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 body {
-  font-family: 'Open Sans', sans-serif;
-  background-color: #f7f7f7;
+  font-family: $font-family-sans-serif;
+  background-color: $black-3;
 }
 
 .nav-link:focus,
@@ -11,10 +11,10 @@ body {
   text-decoration: none;
 }
 a {
-  color: $blue0;
+  @include setColorAndHover($link-color);
   &:focus {
     box-shadow: none;
-    outline: $blue3 dotted thin;
+    outline: $blueGray dotted thin;
   }
 }
 
@@ -25,4 +25,11 @@ a {
 .main-container {
   display: flex;
   overflow-y: auto !important;
+}
+
+.layout {
+  margin-top: $header-height;
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: column;
 }

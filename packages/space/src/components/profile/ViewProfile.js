@@ -33,7 +33,7 @@ const ViewProfileComponent = ({
             </Link>
           ) : null}
         </div>
-        <div className="p-card profile">
+        <div className="card p-card profile">
           <Avatar user={profile} size={96} />
           <h3>{profile.displayName}</h3>
           <p>{getEmail(profile)}</p>

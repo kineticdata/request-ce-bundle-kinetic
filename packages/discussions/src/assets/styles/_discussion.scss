@@ -138,7 +138,7 @@
     }
     .date {
       align-items: center;
-      color: $blue0;
+      color: $blueLake;
       display: flex;
       @include ms-respond(font-size, -1);
       font-weight: bold;
@@ -304,7 +304,7 @@
       }
     }
 
-    button.view-all {
+    .view-all {
       margin-left: auto;
     }
   }

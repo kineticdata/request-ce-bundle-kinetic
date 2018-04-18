@@ -138,13 +138,13 @@ export const RequestShow = ({ submission, listType, mode }) => (
       <span className="bordercolor" />
     </div>
     <div className="request-details-container">
-      <Link className="back-link" to={`/requests/${listType || ''}`}>
+      <Link className="nav-return" to={`/requests/${listType || ''}`}>
         <span className="fa fa-fw fa-chevron-left" />
-        Return to {listType || 'All'} Requests
+        {listType || 'All'} Requests
       </Link>
       {submission && (
-        <div className="submission-detail-wrapper">
-          <div className="meta-wrapper">
+        <div className="request-detail-wrapper">
+          <div className="submission-meta-wrapper">
             <div className="container">
               <div className="row">
                 <StatusItem submission={submission} />
@@ -185,7 +185,7 @@ export const RequestShow = ({ submission, listType, mode }) => (
                 <p>{submission.label}</p>
               )}
             </div>
-            <div className="confirmation-wrapper">
+            <div className="submission-confirmation-wrapper">
               {mode === 'confirmation' && (
                 <RequestShowConfirmationContainer submission={submission} />
               )}
@@ -211,15 +211,12 @@ export const RequestShow = ({ submission, listType, mode }) => (
               </ul>
             </div>
 
-            <div className="submission-timeline-wrapper">
+            <div className="submission-timeline-wrapper submission-request-wrapper">
               {mode === 'review' ? (
                 <CoreForm submission={submission.id} review globals={globals} />
               ) : (
                 <RequestActivityList submission={submission} />
               )}
-            </div>
-            <div className="submission-request-wrapper">
-              {/* Review Request goes here */}
             </div>
           </div>
         </div>

@@ -6,7 +6,6 @@ import { compose, withHandlers } from 'recompose';
 
 import {
   actions,
-  selectSubmissionPage,
   DATASTORE_LIMIT,
 } from '../../../../redux/modules/settingsDatastore';
 
@@ -28,7 +27,6 @@ const getPageText = (pageTokens, nextPageToken, submissions) => {
 
 const PagingComponent = ({
   submissions,
-  allSubmissions,
   nextPageToken,
   pageTokens,
   handleNextThousandPage,
@@ -36,16 +34,6 @@ const PagingComponent = ({
 }) =>
   (nextPageToken !== null || pageTokens.size > 0) && (
     <Fragment>
-      <div className="search-lookup-fotter">
-        {(pageTokens.size > 0 || nextPageToken !== null) && (
-          <span className="search-lookup-error">
-            {`The Datastore contains too many records to display at one time.
-      Please enter additional search criteria to narrow down the
-      results, or use the buttons below the table to navigate between
-      chunks of ${DATASTORE_LIMIT} records.`}
-          </span>
-        )}
-      </div>
       <div className="datastore-top-pagination">
         <button
           className="btn btn-primary"
@@ -53,12 +41,12 @@ const PagingComponent = ({
           onClick={handlePrevThousandPage}
         >
           <span className="fa fa-fw fa-caret-left" />
-          Previous 1000
+          Previous {DATASTORE_LIMIT}
         </button>
         <span>
           <strong>Sorting &amp; Filtering</strong>
           {submissions.size > 0
-            ? getPageText(pageTokens, nextPageToken, allSubmissions)
+            ? getPageText(pageTokens, nextPageToken, submissions)
             : ''}
         </span>
         <button
@@ -66,7 +54,7 @@ const PagingComponent = ({
           disabled={nextPageToken === null}
           onClick={handleNextThousandPage}
         >
-          Next 1000
+          Next {DATASTORE_LIMIT}
           <span className="fa fa-fw fa-caret-right" />
         </button>
       </div>
@@ -74,8 +62,7 @@ const PagingComponent = ({
   );
 
 export const mapStateToProps = state => ({
-  submissions: selectSubmissionPage(state),
-  allSubmissions: state.settingsDatastore.submissions,
+  submissions: state.settingsDatastore.submissions,
   pageTokens: state.settingsDatastore.pageTokens,
   nextPageToken: state.settingsDatastore.nextPageToken,
   simpleSearchActive: state.settingsDatastore.simpleSearchActive,
@@ -88,7 +75,6 @@ export const mapDispatchToProps = {
   pushPageToken: actions.pushPageToken,
   popPageToken: actions.popPageToken,
   setNextPageToken: actions.setNextPageToken,
-  setPageOffset: actions.setPageOffset,
 };
 
 const handleNextThousandPage = ({

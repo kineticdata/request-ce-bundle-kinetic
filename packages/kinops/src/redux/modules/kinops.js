@@ -24,6 +24,7 @@ export const State = Record({
   profile: Map(),
   loading: true,
   kappSlug: null,
+  version: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -33,6 +34,7 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('space', payload.space)
         .set('kapps', payload.kapps)
         .set('profile', payload.profile)
+        .set('version', payload.version)
         .set('loading', false);
     case LOCATION_CHANGE:
       const path = '/kapps/:kappSlug';

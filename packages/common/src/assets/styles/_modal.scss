@@ -35,7 +35,7 @@
     border-radius: 0;
     .modal-header {
       align-items: stretch;
-      border-bottom: 1px solid rgba(211, 220, 231, 1);
+      border-bottom: 1px solid $gray4;
       padding: 0;
       display: flex;
       flex-direction: column;
@@ -72,7 +72,7 @@
         align-items: center;
       }
       .btn.btn-back {
-        border-top: 1px solid rgba(211, 220, 231, 1);
+        border-top: 1px solid $border-color;
         border-bottom: 0;
         padding: 0.9375rem 1rem;
         text-align: left;
@@ -86,7 +86,9 @@
       display: flex;
       flex-direction: column;
       padding: 0;
-      > .embedded-core-form {
+      > .embedded-core-form,
+      > .modal-form,
+      > .modal-confirmation {
         padding: 1.5rem;
       }
       .embedded-core-form .container,
@@ -95,7 +97,7 @@
       }
       .list-group.button-list {
         .list-group-item {
-          border-bottom: 1px solid rgba(244, 246, 249, 1);
+          border-bottom: 1px solid $border-color;
           padding: 0;
           .btn.btn-link {
             font-size: 0.875rem;
@@ -124,7 +126,6 @@
         margin: 1rem;
         label {
           color: $primary;
-          font-family: 'Open Sans';
           font-size: 0.75rem;
           line-height: 1.5rem;
         }
@@ -157,14 +158,14 @@
         padding-bottom: 3rem;
         h5 {
           font-weight: 600;
-          color: $blue1;
+          color: $blueSlate;
           font-size: 1rem;
           padding: 1rem;
           margin: 0;
         }
         label {
           border-bottom: 1px solid rgba(244, 246, 249, 1);
-          color: $blue1;
+          color: $blueLake;
           font-size: 0.875rem;
           margin-bottom: 0;
           padding: 1rem;

@@ -21,7 +21,7 @@ const WallyEmptyMessage = ({ canEdit }) => {
 const AlertsComponent = ({ alerts, loading, match, error, canEdit }) => {
   const selectedAlert = match.params.id;
   return (
-    <div className="alerts-container">
+    <div className="space-alerts-container">
       <PageTitle parts={['Alerts']} />
 
       {!loading && (
@@ -45,7 +45,7 @@ const AlertsComponent = ({ alerts, loading, match, error, canEdit }) => {
               alerts.size <= 0 && <WallyEmptyMessage canEdit={canEdit} />}
             {!error &&
               alerts.size > 0 && (
-                <table className="alerts-table">
+                <table className="table table-alerts">
                   <thead>
                     <tr className="header">
                       <td width="25%">Title</td>

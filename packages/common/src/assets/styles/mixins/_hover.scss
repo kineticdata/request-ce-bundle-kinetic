@@ -1,3 +1,11 @@
+// Color with hover tint built in
+// -----------
+@mixin setColorAndHover($baseColor) {
+  color: $baseColor;
+  &:hover {
+    color: darken($baseColor, 5%);
+  }
+}
 // Background color with hover tint built in
 // -----------
 @mixin setBgColorAndHover($baseColor) {

@@ -11,7 +11,7 @@ import {
 
 const { namespace, noPayload, withPayload } = Utils;
 
-export const DATASTORE_LIMIT = 1000;
+export const DATASTORE_LIMIT = 500;
 export const SUBMISSION_INCLUDES = 'values,details';
 export const FORMS_INCLUDES = 'details';
 export const FORM_INCLUDES = 'details,fields,indexDefinitions,attributesMap';
@@ -62,10 +62,11 @@ export const types = {
   RESET_SUBMISSION: namespace('datastore', 'RESET_SUBMISSION'),
   SET_INDEX: namespace('datastore', 'SET_INDEX'),
   SET_INDEX_PARTS: namespace('datastore', 'SET_INDEX_PARTS'),
-  SET_INDEX_PART_CRITERIA: namespace('datastore', 'SET_INDEX_PART_CRITERIA'),
+  SET_INDEX_PART_OPERATION: namespace('datastore', 'SET_INDEX_PART_OPERATION'),
   SET_INDEX_PART_INPUT: namespace('datastore', 'SET_INDEX_PART_INPUT'),
   SET_INDEX_PART_BETWEEN: namespace('datastore', 'SET_INDEX_PART_BETWEEN'),
   ADD_INDEX_PART_INPUT: namespace('datastore', 'ADD_INDEX_PART_INPUT'),
+  REMOVE_INDEX_PART_INPUT: namespace('datastore', 'REMOVE_INDEX_PART_INPUT'),
   RESET_SEARCH_PARAMS: namespace('datastore', 'RESET_SEARCH_PARAMS'),
   PUSH_PAGE_TOKEN: namespace('datastore', 'PUSH_PAGE_TOKEN'),
   POP_PAGE_TOKEN: namespace('datastore', 'POP_PAGE_TOKEN'),
@@ -105,9 +106,9 @@ export const actions = {
   setSubmission: withPayload(types.SET_SUBMISSION),
   setIndex: withPayload(types.SET_INDEX),
   setIndexParts: withPayload(types.SET_INDEX_PARTS),
-  setIndexPartCriteria: (part, criteria) => ({
-    type: types.SET_INDEX_PART_CRITERIA,
-    payload: { part, criteria },
+  setIndexPartOperation: (part, operation) => ({
+    type: types.SET_INDEX_PART_OPERATION,
+    payload: { part, operation },
   }),
   setIndexPartInput: (part, input) => ({
     type: types.SET_INDEX_PART_INPUT,
@@ -118,11 +119,11 @@ export const actions = {
     payload: { part, field, value },
   }),
   addIndexPartInput: withPayload(types.ADD_INDEX_PART_INPUT),
+  removeIndexPartInput: withPayload(types.REMOVE_INDEX_PART_INPUT),
   resetSearchParams: noPayload(types.RESET_SEARCH_PARAMS),
   pushPageToken: withPayload(types.PUSH_PAGE_TOKEN),
   popPageToken: noPayload(types.POP_PAGE_TOKEN),
   setNextPageToken: withPayload(types.SET_NEXT_PAGE_TOKEN),
-  setPageOffset: withPayload(types.SET_PAGE_OFFSET),
   toggleSimpleSearch: noPayload(types.TOGGLE_SIMPLE_SEARCH),
   setSimpleSearchParam: withPayload(types.SET_SIMPLE_SEARCH_PARAM),
   setSimpleSearchNextPageIndex: withPayload(
@@ -246,22 +247,13 @@ export const selectBridgeNameByModel = model => {
 };
 export const selectUpdatedFormActiveBridge = state =>
   state.settingsDatastore.currentFormChanges.bridgeModelMapping.bridgeName;
-
 export const selectCurrentForm = state => state.settingsDatastore.currentForm;
 export const selectCurrentFormChanges = state =>
   state.settingsDatastore.currentFormChanges;
-export const selectCanManage = (state, formSlug) =>
-  state.settingsDatastore.manageableForms.find(form => form === formSlug);
 export const selectFormBySlug = (state, formSlug) =>
   state.settingsDatastore.forms.find(form => form.slug === formSlug);
-export const selectSubmissionPage = state => {
-  const { submissions, pageLimit, pageOffset } = state.settingsDatastore;
-  return submissions.slice(pageOffset, pageLimit + pageOffset);
-};
 
 export const State = Record({
-  pageLimit: 50,
-  pageOffset: 0,
   loading: true,
   errors: [],
   forms: List(),
@@ -270,6 +262,7 @@ export const State = Record({
   currentFormChanges: DatastoreForm(),
   currentFormLoading: true,
   hasStartedSearching: false,
+  searching: false,
   submissions: List(),
   searchParams: SearchParams(),
   // Represents the pages navigated.
@@ -328,27 +321,30 @@ export const reducer = (state = State(), { type, payload }) => {
       return state
         .set('currentFormLoading', false)
         .set('currentForm', dsForm)
-        .set('currentFormChanges', dsForm)
-        .setIn(['searchParams', 'index'], payload.form.indexDefinitions[0]);
+        .set('currentFormChanges', dsForm);
+    case types.FETCH_SUBMISSIONS_ADVANCED:
+      return state
+        .set('searching', true)
+    case types.FETCH_SUBMISSIONS_SIMPLE:
+      return state
+        .set('searching', true)
     case types.SET_SUBMISSIONS:
       return state
+        .set('searching', false)
         .set('submissions', List(payload))
         .set('hasStartedSearching', true);
     case types.SET_INDEX:
-      const index = state.currentForm.indexDefinitions.find(
-        indexDef => indexDef.name === payload,
-      );
-      return state.setIn(['searchParams', 'index'], index);
+      return state.setIn(['searchParams', 'index'], payload);
     case types.SET_INDEX_PARTS:
       return state.setIn(['searchParams', 'indexParts'], payload);
-    case types.SET_INDEX_PART_CRITERIA: {
-      const { part, criteria } = payload;
+    case types.SET_INDEX_PART_OPERATION: {
+      const { part, operation } = payload;
       return state.updateIn(['searchParams', 'indexParts'], indexParts =>
         indexParts.update(indexParts.findIndex(p => part.name === p.name), p =>
-          p.set('criteria', criteria).set(
+          p.set('operation', operation).set(
             'value',
             IndexValues({
-              values: criteria === 'Between' ? List(['', '']) : List(),
+              values: operation === 'Between' ? List(['', '']) : List(),
             }),
           ),
         ),
@@ -363,7 +359,6 @@ export const reducer = (state = State(), { type, payload }) => {
         ),
       );
     }
-
     case types.SET_INDEX_PART_BETWEEN: {
       const { part, field, value } = payload;
       return state.updateIn(['searchParams', 'indexParts'], indexParts =>
@@ -372,7 +367,6 @@ export const reducer = (state = State(), { type, payload }) => {
         ),
       );
     }
-
     case types.ADD_INDEX_PART_INPUT:
       return state.updateIn(['searchParams', 'indexParts'], indexParts =>
         indexParts.update(
@@ -383,6 +377,16 @@ export const reducer = (state = State(), { type, payload }) => {
                 values.push(p.value.input),
               )
               .setIn(['value', 'input'], ''),
+        ),
+      );
+    case types.REMOVE_INDEX_PART_INPUT:
+      return state.updateIn(['searchParams', 'indexParts'], indexParts =>
+        indexParts.update(
+          indexParts.findIndex(p => payload.part.name === p.name),
+          p =>
+            p.updateIn(['value', 'values'], values =>
+              values.delete(values.findIndex(v => v === payload.value)),
+            ),
         ),
       );
     case types.RESET_SEARCH_PARAMS:
@@ -400,8 +404,6 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.update('pageTokens', pageTokens => pageTokens.pop());
     case types.SET_NEXT_PAGE_TOKEN:
       return state.set('nextPageToken', payload);
-    case types.SET_PAGE_OFFSET:
-      return state.set('pageOffset', payload);
     case types.TOGGLE_SIMPLE_SEARCH:
       return state
         .set('simpleSearchActive', !state.simpleSearchActive)

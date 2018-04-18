@@ -1,35 +1,19 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Queue Item ~ Queue
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.queue .queue-item {
-  margin-top: $header-height;
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-
-  .back-link {
-    border-bottom: 2px solid $gray4;
-    color: $blue1;
-    font-size: 14px;
-    padding: 0.75rem 1rem;
-    text-decoration: none;
-    .icon {
-      margin-right: 0.5em;
-    }
-  }
-
+.queue-item-container {
   .queue-item-content {
     display: flex;
-    flex-grow: 1;
+    flex: 1 1 auto;
 
     .queue-item-details {
-      flex: 6;
+      flex: 1 1 60%;
     }
 
     // Make the discussion box fit in the right sidebar.
     .kinops-discussions {
       border-left: 2px solid $gray4;
-      flex: 4;
+      flex: 1 1 40%;
     }
   }
 }

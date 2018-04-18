@@ -23,7 +23,9 @@ export const ModalForm = ({
       </div>
       <ModalBody>
         {isCompleted ? (
-          <h5>{form.confirmationMessage}</h5>
+          <div className="modal-confirmation">
+            <h5>{form.confirmationMessage}</h5>
+          </div>
         ) : (
           <CoreForm
             kapp={form.kappSlug}
