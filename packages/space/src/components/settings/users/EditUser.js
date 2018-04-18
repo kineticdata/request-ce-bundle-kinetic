@@ -21,6 +21,7 @@ export const EditUserComponent = ({
   locationEnabled,
   handleFieldChange,
   handleOptionChange,
+  handleCheckboxChange,
   handleSubmit,
   userProfileAttributes,
 }) => (
@@ -38,6 +39,15 @@ export const EditUserComponent = ({
               </h3>
               <h1>Edit: {user.displayName || user.username}</h1>
             </div>
+          </div>
+          <div className="checkbox-group">
+            <input
+              type="checkbox"
+              name="spaceAdmin"
+              onChange={handleCheckboxChange}
+              //checked={fieldValues.spaceAdmin}
+            />
+            <label>Space Admin</label>
           </div>
           <div>
             <h2 className="section-title">General</h2>
@@ -253,13 +263,16 @@ const translateProfileToFieldValues = user => ({
   organization: getAttribute(user, 'Organization'),
   manager: getAttribute(user, 'Manager'),
   site: getAttribute(user, 'Site'),
+  spaceAdmin: user.spaceAdmin,
+  enabled: user.enabled,
 });
 
 const translateFieldValuesToProfile = (fieldValues, profile) => {
   const result = {
     username: profile.username,
-    displayName: profile.displayName,
-    email: profile.email,
+    displayName: fieldValues.displayName,
+    email: fieldValues.email,
+    spaceAdmin: fieldValues.spaceAdmin,
     profileAttributesMap: {
       'First Name': [fieldValues.firstName],
       'Last Name': [fieldValues.lastName],
@@ -308,6 +321,9 @@ export const EditUser = compose(
     },
     handleOptionChange: props => (name, value) => {
       name && props.setFieldValues({ ...props.fieldValues, [name]: value });
+    },
+    handleCheckboxChange: props => ({ target: { name, checked } }) => {
+      name && props.setFieldValues({ ...props.fieldValues, [name]: checked });
     },
     handleSubmit: props => event => {
       event.preventDefault();
