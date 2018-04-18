@@ -40,19 +40,31 @@ export const EditUserComponent = ({
               <h1>Edit: {user.displayName || user.username}</h1>
             </div>
           </div>
-          <label htmlFor="spaceAdmin">
-            <input
-              type="checkbox"
-              id="spaceAdmin"
-              name="spaceAdmin"
-              onChange={handleCheckboxChange}
-              checked={fieldValues.spaceAdmin}
-              value={fieldValues.spaceAdmin}
-            />Space Admin
-          </label>
           <div>
             <h2 className="section-title">General</h2>
             <form onSubmit={handleSubmit}>
+              <div className="user-admin">
+                <label htmlFor="spaceAdmin">
+                  <input
+                    type="checkbox"
+                    id="spaceAdmin"
+                    name="spaceAdmin"
+                    onChange={handleCheckboxChange}
+                    checked={fieldValues.spaceAdmin}
+                    value={fieldValues.spaceAdmin}
+                  />Space Admin
+                </label>
+                <label htmlFor="enabled">
+                  <input
+                    type="checkbox"
+                    id="enabled"
+                    name="spaceAdmin"
+                    onChange={handleCheckboxChange}
+                    checked={fieldValues.enabled}
+                    value={fieldValues.enabled}
+                  />Enabled
+                </label>
+              </div>
               <div className="form-group required">
                 <label htmlFor="displayName">Display Name</label>
                 <input
@@ -274,6 +286,7 @@ const translateFieldValuesToProfile = (fieldValues, profile) => {
     displayName: fieldValues.displayName,
     email: fieldValues.email,
     spaceAdmin: fieldValues.spaceAdmin,
+    enabled: fieldValues.enabled,
     profileAttributesMap: {
       'First Name': [fieldValues.firstName],
       'Last Name': [fieldValues.lastName],

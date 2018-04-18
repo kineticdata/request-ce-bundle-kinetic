@@ -80,7 +80,12 @@ textarea {
   }
 }
 
-.profile-content {
+.profile-content .user-admin {
+  display: flex;
+  margin-bottom: 1rem;
+  label {
+    margin-right: 0.8rem;
+  }
   input[type='checkbox'] {
     margin-right: 0.3rem;
   }
