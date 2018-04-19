@@ -33,6 +33,7 @@ const EqualsOperation = ({
   part,
   handleIndexPartInput,
   handleAddIndexPartInput,
+  handleAddIndexPartEnter,
   handleRemoveIndexPartInput,
 }) => {
   return (
@@ -53,6 +54,7 @@ const EqualsOperation = ({
           className="index-part-value"
           value={part.value.input}
           ref={input => input && input.focus()}
+          onKeyPress={handleAddIndexPartEnter(part)}
           onChange={handleIndexPartInput(part)}
         />
         <button
@@ -118,6 +120,7 @@ const SearchbarComponent = ({
   handleIndexPartBetween,
   handleIndexPartInput,
   handleAddIndexPartInput,
+  handleAddIndexPartEnter,
   handleRemoveIndexPartInput,
   toggleAdvancedSearchOpen,
   simpleSearchActive,
@@ -250,6 +253,7 @@ const SearchbarComponent = ({
                       part={part}
                       handleIndexPartInput={handleIndexPartInput}
                       handleAddIndexPartInput={handleAddIndexPartInput}
+                      handleAddIndexPartEnter={handleAddIndexPartEnter}
                       handleRemoveIndexPartInput={handleRemoveIndexPartInput}
                     />
                   ) : part.operation === 'Is Between' ? (
@@ -392,6 +396,11 @@ const handleIndexPartBetween = ({ setIndexPartBetween }) => (
   field,
 ) => e => setIndexPartBetween(part, field, e.target.value);
 
+const handleAddIndexPartEnter = ({ addIndexPartInput }) => part => e => {
+  if (e.key === 'Enter') {
+    addIndexPartInput(part);
+  }
+};
 const handleAddIndexPartInput = ({ addIndexPartInput }) => part => () =>
   addIndexPartInput(part);
 
@@ -427,6 +436,7 @@ export const Searchbar = compose(
     handleIndexPartInput,
     handleIndexPartBetween,
     handleAddIndexPartInput,
+    handleAddIndexPartEnter,
     handleRemoveIndexPartInput,
   }),
 )(SearchbarComponent);
