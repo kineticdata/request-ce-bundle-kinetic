@@ -401,6 +401,7 @@ export const reducer = (state = State(), { type, payload }) => {
       );
     case types.RESET_SEARCH_PARAMS:
       return state
+        .set('simpleSearchActive', true)
         .set('searchParams', SearchParams())
         .set('simpleSearchParam', '')
         .set('simpleSearchNextPageIndex', null)
