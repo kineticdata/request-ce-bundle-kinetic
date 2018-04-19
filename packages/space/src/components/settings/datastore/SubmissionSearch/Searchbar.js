@@ -52,6 +52,7 @@ const EqualsOperation = ({
         <input
           className="index-part-value"
           value={part.value.input}
+          ref={input => input && input.focus()}
           onChange={handleIndexPartInput(part)}
         />
         <button
@@ -69,6 +70,7 @@ const SingleOperation = ({ part, handleIndexPartInput }) => (
   <div className="index-part-values-group">
     <input
       className="index-part-value"
+      ref={input => input && input.focus()}
       value={part.value.input}
       onChange={handleIndexPartInput(part)}
     />
@@ -86,6 +88,7 @@ const BetweenOperation = ({ part, handleIndexPartBetween }) => (
     <input
       className="index-part-value"
       value={part.value.values.get(0)}
+      ref={input => input && input.focus()}
       onChange={handleIndexPartBetween(part, 0)}
     />
     <span>to</span>
@@ -124,7 +127,7 @@ const SearchbarComponent = ({
     <InputGroup size="lg" className="simple-search-input-group">
       <Input
         aria-label="Search"
-        autoFocus
+        innerRef={input => input && input.focus()}
         onKeyPress={handleInputKeypress}
         id="simple-search-term"
         name="simple-search-term"
@@ -196,7 +199,7 @@ const SearchbarComponent = ({
           <Col sm={6}>
             <Input
               aria-label="Search"
-              autoFocus
+              innerRef={input => input && input.focus()}
               onKeyPress={handleInputKeypress}
               id="simple-search-term2"
               name="simple-search-term"
@@ -249,7 +252,7 @@ const SearchbarComponent = ({
                       handleAddIndexPartInput={handleAddIndexPartInput}
                       handleRemoveIndexPartInput={handleRemoveIndexPartInput}
                     />
-                  ) : part.operation === 'Between' ? (
+                  ) : part.operation === 'Is Between' ? (
                     <BetweenOperation
                       part={part}
                       handleIndexPartBetween={handleIndexPartBetween}
