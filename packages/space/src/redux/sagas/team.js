@@ -36,6 +36,7 @@ export function* fetchTeamsSaga() {
     yield put(errorActions.setSystemError(serverError));
   } else {
     yield put(listActions.setTeams(teams));
+    yield put(listActions.setRoles(teams));
   }
 }
 

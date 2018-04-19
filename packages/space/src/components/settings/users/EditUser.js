@@ -2,10 +2,11 @@ import React from 'react';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fromJS } from 'immutable';
+import { fromJS, List } from 'immutable';
 import { commonActions, PageTitle } from 'common';
 import { actions as profileActions } from '../../../redux/modules/profiles';
 import { actions as usersActions } from '../../../redux/modules/settingsUsers';
+import { actions as teamsActions } from '../../../redux/modules/teamList';
 import { ProfileCard } from '../../shared/ProfileCard';
 import { TeamCard } from '../../shared/TeamCard';
 import { UsersDropdown } from './DropDown';
@@ -16,12 +17,14 @@ export const EditUserComponent = ({
   user,
   users,
   error,
+  roles,
   fieldValues,
   location,
   locationEnabled,
   handleFieldChange,
   handleOptionChange,
   handleCheckboxChange,
+  handleRolesChange,
   handleSubmit,
   userProfileAttributes,
 }) => (
@@ -51,7 +54,6 @@ export const EditUserComponent = ({
                     name="spaceAdmin"
                     onChange={handleCheckboxChange}
                     checked={fieldValues.spaceAdmin}
-                    value={fieldValues.spaceAdmin}
                   />Space Admin
                 </label>
                 <label htmlFor="enabled">
@@ -61,7 +63,6 @@ export const EditUserComponent = ({
                     name="spaceAdmin"
                     onChange={handleCheckboxChange}
                     checked={fieldValues.enabled}
-                    value={fieldValues.enabled}
                   />Enabled
                 </label>
               </div>
@@ -167,12 +168,19 @@ export const EditUserComponent = ({
               </div>
               <div>
                 <h2 className="section-title">Roles</h2>
-
-                <UserRoles
-                  roles={user.memberships.filter(item =>
-                    item.team.name.startsWith('Role::'),
-                  )}
-                />
+                {roles &&
+                  roles.map(role => (
+                    <label key={role.slug} htmlFor={role.name}>
+                      <input
+                        type="checkbox"
+                        id={role.name}
+                        onChange={handleRolesChange}
+                        checked={fieldValues.userRoles.includes(role.name)}
+                        value={role.name}
+                      />
+                      {role.name.replace(/^Role::(.*?)/, '$1')}
+                    </label>
+                  ))}
               </div>
               <div>
                 <h2 className="section-title">Teams</h2>
@@ -223,20 +231,6 @@ const UserTeams = ({ teams }) => (
   </div>
 );
 
-const UserRoles = ({ roles }) => (
-  <div className="profile-roles-wrapper">
-    {Object.keys(roles).length > 0 ? (
-      roles.map(item => (
-        <span className="profile-role" key={item.team.name}>
-          {item.team.name.replace(/^Role::(.*?)/, '$1')}
-        </span>
-      ))
-    ) : (
-      <p>No roles assigned</p>
-    )}
-  </div>
-);
-
 const fieldValuesValid = fieldValues =>
   fieldValues.displayName && fieldValues.email;
 
@@ -278,6 +272,11 @@ const translateProfileToFieldValues = user => ({
   site: getAttribute(user, 'Site'),
   spaceAdmin: user.spaceAdmin,
   enabled: user.enabled,
+  userRoles: user.memberships
+    ? user.memberships
+        .filter(membership => membership.team.name.startsWith('Role::'))
+        .reduce((acc, membership) => acc.push(membership.team.name), List([]))
+    : [],
 });
 
 const translateFieldValuesToProfile = (fieldValues, profile) => {
@@ -317,10 +316,12 @@ const mapStateToProps = state => ({
       memo[item.name] = item.value;
       return memo;
     }, {}),
+  roles: state.teamList.roles,
 });
 
 const mapDispatchToProps = {
   fetchUsers: usersActions.fetchUsers,
+  fetchTeams: teamsActions.fetchTeams,
   fetchProfile: profileActions.fetchProfile,
   updateProfile: profileActions.updateProfile,
   openForm: commonActions.openForm,
@@ -331,7 +332,7 @@ export const EditUser = compose(
   withState(
     'fieldValues',
     'setFieldValues',
-    translateProfileToFieldValues({ spaceAdmin: false }),
+    translateProfileToFieldValues({ spaceAdmin: false, enabled: false }),
   ),
   withHandlers({
     handleFieldChange: props => ({ target: { name, value } }) => {
@@ -342,6 +343,20 @@ export const EditUser = compose(
     },
     handleCheckboxChange: props => ({ target: { name, checked } }) => {
       name && props.setFieldValues({ ...props.fieldValues, [name]: checked });
+    },
+    handleRolesChange: props => ({ target: { value, checked } }) => {
+      let userRoles;
+      if (!checked) {
+        userRoles = props.fieldValues.userRoles.delete(
+          props.fieldValues.userRoles.findIndex(role => role === value),
+        );
+      } else {
+        userRoles = [value, ...props.fieldValues.userRoles];
+      }
+      props.setFieldValues({
+        ...props.fieldValues,
+        userRoles,
+      });
     },
     handleSubmit: props => event => {
       event.preventDefault();
@@ -356,6 +371,7 @@ export const EditUser = compose(
       if (this.props.users.size <= 0) {
         this.props.fetchUsers();
       }
+      this.props.fetchTeams();
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.user !== nextProps.user) {
