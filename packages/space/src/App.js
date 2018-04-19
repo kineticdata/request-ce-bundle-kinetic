@@ -60,6 +60,22 @@ export const AppComponent = props => {
             exact
             component={IsolatedForm}
           />
+          <Route
+            path="/datastore/forms/:slug/submissions/:id"
+            render={({ match }) => (
+              <Redirect
+                to={`/settings/datastore/${match.params.slug}/${
+                  match.params.id
+                }`}
+              />
+            )}
+          />
+          <Route
+            path="/datastore/forms/:slug"
+            render={({ match }) => (
+              <Redirect to={`/settings/datastore/${match.params.slug}/new`} />
+            )}
+          />
           <Route path="/reset-password" render={() => <Redirect to="/" />} />
         </div>
       </Fragment>
