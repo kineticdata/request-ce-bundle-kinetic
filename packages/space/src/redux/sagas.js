@@ -7,6 +7,7 @@ import { watchForms } from './sagas/spaceForms';
 import { watchApp } from './sagas/app';
 import { watchSettingsUsers } from './sagas/settingsUsers';
 import { watchSettingsNotifications } from './sagas/settingsNotifications';
+import { watchSpaceSettings } from './sagas/spaceSettings';
 
 export default function* sagas() {
   yield all([
@@ -18,5 +19,6 @@ export default function* sagas() {
     watchTeams(),
     watchForms(),
     watchSettingsUsers(),
+    watchSpaceSettings(),
   ]);
 }
