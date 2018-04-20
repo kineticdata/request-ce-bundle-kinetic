@@ -323,6 +323,7 @@ const SearchbarComponent = ({
 
 export const mapStateToProps = state => ({
   simpleSearchActive: state.settingsDatastore.simpleSearchActive,
+  advancedSearchOpen: state.settingsDatastore.advancedSearchOpen,
   form: state.settingsDatastore.currentForm,
   indexDefinitions: state.settingsDatastore.currentForm
     ? List(state.settingsDatastore.currentForm.indexDefinitions).filter(
@@ -339,6 +340,7 @@ export const mapDispatchToProps = {
   fetchSubmissionsSimple: actions.fetchSubmissionsSimple,
   fetchSubmissionsAdvanced: actions.fetchSubmissionsAdvanced,
   toggleSimpleSearch: actions.toggleSimpleSearch,
+  setAdvancedSearchOpen: actions.setAdvancedSearchOpen,
   setSimpleSearchParam: actions.setSimpleSearchParam,
   resetSearchParams: actions.resetSearchParams,
   setIndex: actions.setIndex,
@@ -463,7 +465,6 @@ const handleResetSearch = ({
 
 export const Searchbar = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withState('advancedSearchOpen', 'setAdvancedSearchOpen', false),
   withState('indexLookup', 'setIndexLookup', ''),
   withState('placeholderText', 'setPlaceholderText', DEFAULT_PLACEHOLDER),
   withHandlers({
