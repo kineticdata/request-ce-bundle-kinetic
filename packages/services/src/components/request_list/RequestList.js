@@ -37,8 +37,8 @@ export const RequestList = ({
       <span className="bordercolor" />
     </div>
     <div className="request-list-container container">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">services</Link> /{' '}
             {type && <Link to="/requests">requests</Link>}
@@ -81,7 +81,7 @@ export const RequestList = ({
             }))
             .map(props => <RequestCard {...props} />)
         ) : (
-          <div className="wally-empty-state">
+          <div className="empty-state empty-state--wally">
             <h5>No {type !== 'All' ? type : ''} Requests Found...</h5>
             <img src={wallyHappyImage} alt="Happy Wally" />
             <h6>{emptyStateMessage(type)}</h6>

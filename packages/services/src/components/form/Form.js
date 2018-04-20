@@ -31,8 +31,8 @@ export const Form = ({
       <span className="bordercolor" />
     </div>
     <div className="services-form-container container">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">services</Link> /{' '}
             {match.url.startsWith('/request') && (

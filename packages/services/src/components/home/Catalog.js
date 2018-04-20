@@ -27,8 +27,8 @@ export const Catalog = ({
       </div>
       <div className="services-home-container container">
         <div className="my-requests-wrapper">
-          <div className="page-title-wrapper">
-            <div className="page-title">
+          <div className="page-title">
+            <div className="page-title__wrapper">
               <h3>services /</h3>
               <h1>Recent Requests</h1>
             </div>
@@ -56,8 +56,8 @@ export const Catalog = ({
           </div>
         </div>
         <div className="services-wrapper">
-          <div className="page-title-wrapper">
-            <div className="page-title">
+          <div className="page-title">
+            <div className="page-title__wrapper">
               <h3>services /</h3>
               <h1>Top {homePageMode}</h1>
             </div>

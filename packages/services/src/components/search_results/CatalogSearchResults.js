@@ -12,8 +12,8 @@ export const CatalogSearchResults = ({ query, forms }) => (
     </div>
 
     <div className="search-results-container container">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">services</Link> / search results
           </h3>
@@ -34,7 +34,7 @@ export const CatalogSearchResults = ({ query, forms }) => (
               ))}
             </ul>
           ) : (
-            <div className="wally-empty-state">
+            <div className="empty-state empty-state--wally">
               <h5>No Results for '{query}'</h5>
               <img src={wallyMissingImage} alt="Missing Wally" />
               <h6>

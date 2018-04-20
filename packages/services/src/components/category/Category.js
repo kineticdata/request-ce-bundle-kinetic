@@ -9,8 +9,8 @@ export const Category = ({ category }) => (
       <span className="bordercolor" />
     </div>
     <div className="services-category-container container">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">services</Link> /{' '}
             <Link to="/categories">categories</Link> /

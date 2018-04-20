@@ -1,0 +1,121 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Card Overrides ~ services
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.s-card,
+.r-card,
+.c-card {
+  border: 1px solid $black-16;
+  padding: 1rem;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
+  @include setBgColorAndHover($white);
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+
+  h1 {
+    color: $black;
+    font-size: 1.4375rem;
+    font-weight: 600;
+    line-height: 2.25rem;
+    margin: 0;
+    display: inline-flex;
+  }
+  p {
+    color: $black-50;
+    font-size: 1rem;
+    line-height: 1.1428571429rem;
+    margin-bottom: 0;
+  }
+}
+// Request Card
+.r-card {
+  h1 {
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    display: flex;
+    align-items: center;
+  }
+  p {
+    color: $black-50;
+    font-size: 0.875rem;
+    line-height: 1rem;
+    padding: 0.5rem 0;
+  }
+  .card-icon {
+    margin-top: 0;
+  }
+  .fa.edit {
+    color: $black-50;
+    line-height: 1.5rem;
+  }
+  .meta dl {
+    color: $black;
+    font-size: 0.5625rem;
+    margin-bottom: 0;
+    line-height: normal;
+  }
+  .ellipsis-button {
+    background-color: inherit;
+    border: none;
+    font-size: 1.125rem;
+    margin-left: 1rem;
+  }
+}
+
+.card-icon {
+  &.icon-greengrass {
+    background-color: $greenGrass;
+  }
+  &.icon-sunflower {
+    background-color: $sunflower;
+  }
+}
+//
+.status {
+  color: $white;
+  text-align: center;
+  padding: 0.125rem 0.625rem;
+  font-size: 55%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  align-self: center;
+  border-radius: 12px;
+  margin-left: auto;
+  &.status-gray {
+    background-color: $black-50;
+  }
+  &.status-yellow {
+    background-color: $sunflower;
+    color: $black;
+  }
+  &.status-green {
+    background-color: $greenGrass;
+  }
+  &.status-red {
+    background-color: $red;
+  }
+}
+
+// Empty State Card
+.card.empty-state-card {
+  margin-top: 1rem;
+  padding: 1rem;
+  text-align: center;
+  align-items: center;
+  background-color: transparent;
+  h1 {
+    font-size: 1.125rem;
+    color: $blueSlate;
+    font-weight: 600;
+    margin-top: 1rem;
+  }
+  p {
+    color: $blueGray;
+    font-size: 0.875rem;
+  }
+}
