@@ -37,7 +37,6 @@ export function* updateProfileSaga({ payload }) {
     yield put(actions.setProfileError(serverError));
   } else {
     const username = yield select(state => state.kinops.profile.username);
-    console.log(username);
     if (username === user.username) {
       yield put(kinopsActions.loadApp());
     }
