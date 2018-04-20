@@ -134,10 +134,8 @@ const CompletedInItem = ({ submission }) => {
 export const RequestShow = ({ submission, listType, mode }) => (
   <div>
     <PageTitle parts={[submission && `#${submission.handle}`, 'Requests']} />
-    <div className="services-bar">
-      <span className="bordercolor" />
-    </div>
-    <div className="request-details-container">
+    <span className="services-color-bar services-color-bar__blue-slate" />
+    <div className="page-container page-container--submission-details">
       <Link className="nav-return" to={`/requests/${listType || ''}`}>
         <span className="fa fa-fw fa-chevron-left" />
         {listType || 'All'} Requests

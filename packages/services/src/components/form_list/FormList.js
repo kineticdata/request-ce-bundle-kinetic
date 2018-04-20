@@ -5,10 +5,8 @@ import { ServiceCard } from '../shared/ServiceCard';
 export const FormList = ({ forms }) => (
   <div>
     <PageTitle parts={['Forms']} />
-    <div className="services-bar">
-      <span className="bordercolor" />
-    </div>
-    <div className="services-category-container container">
+    <span className="services-color-bar services-color-bar__blue-slate" />
+    <div className="page-container page-container--services-category container">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
@@ -17,7 +15,7 @@ export const FormList = ({ forms }) => (
           <h1>All Forms</h1>
         </div>
       </div>
-      <div className="c-cards-wrapper">
+      <div className="cards__wrapper cards__wrapper--categories">
         {forms
           .map(form => ({
             form,

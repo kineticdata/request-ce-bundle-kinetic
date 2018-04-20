@@ -3,195 +3,126 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // Services top border bar
-.bordercolor {
+.services-color-bar {
   height: 1.5rem;
   width: 100%;
   display: block;
-  background-color: $blueSlate;
+  &__blue-slate {
+    background-color: $blueSlate;
+  }
+  &__green-grass {
+    background-color: $greenGrass;
+  }
 }
 // Services Main content
-.services {
-  // Services Container
-  .services-home-container {
-    display: flex;
-    justify-content: space-between;
-    flex: 0 0 auto;
-    @media all and (min-width: 0) {
-      flex-direction: column;
-    }
-    @media all and (min-width: 576px) {
-      flex-direction: column;
-    }
-    @media all and (min-width: 768px) {
-      flex-direction: column;
-    }
-    @media all and (min-width: 992px) {
-      flex-direction: row;
-    }
-    @media all and (min-width: 1200px) {
-    }
-    .c-card,
-    .s-card {
-      flex: 0 0 auto;
+.package-layout--services {
+  .page-container {
+    // Services Container
+    &--services-home {
+      display: flex;
       @media all and (min-width: 0) {
-        flex-basis: 100%;
-        @media all and (-ms-high-contrast: none) {
-          width: 100%;
-          flex-basis: auto;
-        }
+        flex-direction: column;
       }
       @media all and (min-width: 576px) {
-        flex-basis: 48%;
-        @media all and (-ms-high-contrast: none) {
-          width: 48%;
-          flex-basis: auto;
-        }
+        flex-direction: column;
       }
       @media all and (min-width: 768px) {
+        flex-direction: column;
       }
       @media all and (min-width: 992px) {
+        flex-direction: row;
       }
       @media all and (min-width: 1200px) {
       }
+      .card {
+        flex: 0 0 auto;
+        @media all and (min-width: 0) {
+          flex-basis: 100%;
+          @media all and (-ms-high-contrast: none) {
+            width: 100%;
+            flex-basis: auto;
+          }
+        }
+        @media all and (min-width: 576px) {
+          flex-basis: 48%;
+          @media all and (-ms-high-contrast: none) {
+            width: 48%;
+            flex-basis: auto;
+          }
+        }
+        @media all and (min-width: 768px) {
+        }
+        @media all and (min-width: 992px) {
+        }
+        @media all and (min-width: 1200px) {
+        }
+      }
     }
-  }
 
-  // Categories container
-  .services-category-container {
-    .c-card,
-    .r-card,
-    .s-card {
-      flex: 0 0 auto;
-      @media all and (min-width: 0) {
-        flex-basis: 100%;
-        @media all and (-ms-high-contrast: none) {
-          width: 100%;
-          flex-basis: auto;
+    // Categories container
+    &--services-category {
+      .card {
+        flex: 0 0 auto;
+        @media all and (min-width: 0) {
+          flex-basis: 100%;
+          @media all and (-ms-high-contrast: none) {
+            width: 100%;
+            flex-basis: auto;
+          }
         }
-      }
-      @media all and (min-width: 576px) {
-        flex-basis: 48%;
-        @media all and (-ms-high-contrast: none) {
-          width: 48%;
-          flex-basis: auto;
+        @media all and (min-width: 576px) {
+          flex-basis: 48%;
+          @media all and (-ms-high-contrast: none) {
+            width: 48%;
+            flex-basis: auto;
+          }
         }
-      }
-      @media all and (min-width: 768px) {
-        flex-basis: 48%;
-        @media all and (-ms-high-contrast: none) {
-          width: 48%;
-          flex-basis: auto;
+        @media all and (min-width: 768px) {
+          flex-basis: 48%;
+          @media all and (-ms-high-contrast: none) {
+            width: 48%;
+            flex-basis: auto;
+          }
         }
-      }
-      @media all and (min-width: 992px) {
-        flex-basis: 31%;
-        @media all and (-ms-high-contrast: none) {
-          width: 31%;
-          flex-basis: auto;
+        @media all and (min-width: 992px) {
+          flex-basis: 31%;
+          @media all and (-ms-high-contrast: none) {
+            width: 31%;
+            flex-basis: auto;
+          }
         }
-      }
-      @media all and (min-width: 1200px) {
+        @media all and (min-width: 1200px) {
+        }
       }
     }
   }
-  // Search container
-  .services-search-container {
-    width: 100%;
-    background-color: $blueSlate;
-    height: 216px;
-    padding: 0 0 2rem;
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    flex: 0 0 auto;
-  }
+}
 
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Services Wrappers
- *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-
-  // Search Wrapper
-  .services-search-wrapper {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    width: 90%;
-    @media all and (min-width: 0) {
-      flex-basis: 90%;
-    }
-    @media all and (min-width: 576px) {
-      flex-basis: 75%;
-    }
-    @media all and (min-width: 768px) {
-      flex-basis: 66.667%;
-    }
-    @media all and (min-width: 992px) {
-      flex-basis: 48%;
-    }
-    @media all and (min-width: 1200px) {
-    }
-  }
+.page-panel {
   // My Requests Wrapper
-  .my-requests-wrapper {
+  &--my-requests {
     flex-direction: column;
-    display: flex;
-    @media all and (min-width: 0) {
-      flex-basis: 100%;
-      @media all and (-ms-high-contrast: none) {
-        width: 100%;
-        flex-basis: auto;
-      }
-    }
-    @media all and (min-width: 768px) {
-    }
-    @media all and (min-width: 992px) {
-      flex-basis: 31%;
-      @media all and (-ms-high-contrast: none) {
-        width: 31%;
-        flex-basis: auto;
-      }
-    }
-    @media all and (min-width: 1200px) {
-    }
   }
 
   // Services Wrapper
-  .services-wrapper {
-    display: flex;
+  &--services {
     flex-direction: column;
-    @media all and (min-width: 0) {
-      flex-basis: 100%;
-      @media all and (-ms-high-contrast: none) {
-        width: 100%;
-        flex-basis: auto;
-      }
-    }
-    @media all and (min-width: 768px) {
-    }
-    @media all and (min-width: 992px) {
-      flex-basis: 66.667%;
-      @media all and (-ms-high-contrast: none) {
-        width: 66.667%;
-        flex-basis: auto;
-      }
-    }
-    @media all and (min-width: 1200px) {
-    }
   }
-  .s-cards-wrapper,
-  .r-cards-wrapper,
-  .c-cards-wrapper {
+}
+
+.package-layout--services {
+  .cards__wrapper {
     padding: 0 0 3rem;
     margin: 0;
     list-style: none;
     display: flex;
     flex-direction: column;
-  }
-  .c-cards-wrapper,
-  .s-cards-wrapper {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    // align-items: flex-start;
+    &--services,
+    &--categories {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      // align-items: flex-start;
+    }
   }
 }

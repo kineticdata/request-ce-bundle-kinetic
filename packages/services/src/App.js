@@ -49,7 +49,7 @@ export const AppComponent = props => {
       />
     ),
     main: (
-      <div className="services layout">
+      <main className="package-layout package-layout--services">
         <Route
           path="/submissions/:id"
           exact
@@ -106,7 +106,7 @@ export const AppComponent = props => {
           path="/requests/:type?/request/:submissionId/:mode"
           component={RequestShowContainer}
         />
-      </div>
+      </main>
     ),
   });
 };

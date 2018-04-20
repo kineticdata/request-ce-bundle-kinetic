@@ -7,11 +7,8 @@ import { CatalogSearchContainer } from '../shared/CatalogSearchContainer';
 export const CatalogSearchResults = ({ query, forms }) => (
   <div>
     <PageTitle parts={[`Search: ${query}`]} />
-    <div className="services-bar">
-      <span className="bordercolor" />
-    </div>
-
-    <div className="search-results-container container">
+    <span className="services-color-bar services-color-bar__blue-slate" />
+    <div className="page-container page-container--search-results container">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
@@ -20,11 +17,11 @@ export const CatalogSearchResults = ({ query, forms }) => (
           <h1>{query}</h1>
         </div>
       </div>
-      <div className="search-results-wrapper">
+      <div className="search-results">
         <div className="select">
           <CatalogSearchContainer />
         </div>
-        <div className="search-results-list">
+        <div className="search-results__list">
           {forms.size > 0 ? (
             <ul>
               {forms.map(form => (

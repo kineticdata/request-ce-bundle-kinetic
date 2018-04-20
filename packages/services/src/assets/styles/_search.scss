@@ -1,0 +1,66 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Search ~ services
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// Search container
+.page-container--search-services {
+  width: 100%;
+  height: 216px;
+  padding: 0 0 2rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex: 0 0 auto;
+  background-color: $blueSlate;
+
+  &--green-grass {
+    background-color: $greenGrass;
+  }
+  &__wrapper {
+    h1 {
+      color: $white;
+      font-size: 2.583333333rem;
+      font-weight: 300;
+      line-height: 4rem;
+      margin-top: 1.5rem;
+    }
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 90%;
+    @media all and (min-width: 0) {
+      flex-basis: 90%;
+    }
+    @media all and (min-width: 576px) {
+      flex-basis: 75%;
+    }
+    @media all and (min-width: 768px) {
+      flex-basis: 66.667%;
+    }
+    @media all and (min-width: 992px) {
+      flex-basis: 48%;
+    }
+    @media all and (min-width: 1200px) {
+    }
+  }
+}
+
+// Highlight
+.highlight {
+  background-color: rgba($sunflower, 0.5);
+}
+
+// Search Results list
+.search-results__list {
+  ul {
+    margin: 0 0 2rem;
+    padding: 0;
+  }
+  li {
+    list-style: none;
+    background-color: $white;
+    .card {
+      display: block;
+      // padding-bottom: 0;
+    }
+  }
+}

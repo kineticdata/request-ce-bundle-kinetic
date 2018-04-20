@@ -33,10 +33,8 @@ export const RequestList = ({
 }) => (
   <div>
     <PageTitle parts={['My Requests']} />
-    <div className="services-bar">
-      <span className="bordercolor" />
-    </div>
-    <div className="request-list-container container">
+    <span className="services-color-bar services-color-bar__blue-slate" />
+    <div className="page-container page-container--request-list container">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
@@ -69,7 +67,7 @@ export const RequestList = ({
           </button>
         </div>
       </div>
-      <div className="r-cards-wrapper">
+      <div className="cards__wrapper cards__wrapper--requests">
         {submissions.size > 0 ? (
           submissions
             .map(submission => ({

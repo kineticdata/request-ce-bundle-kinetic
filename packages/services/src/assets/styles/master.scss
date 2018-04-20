@@ -13,16 +13,15 @@
 @import 'layout';
 
 // Components
-@import 'services-item';
-@import 'my-requests';
-@import 'search-results';
-@import 'timeline';
-@import 'submission-detail';
+@import 'search';
+@import 'submission';
+@import 'submission-timeline';
 @import 'navigation';
 
 // Utility classes
 @import 'cards';
 @import 'buttons';
+@import 'page-title';
 
 // Temp css
 @import 'temp';
