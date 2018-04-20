@@ -7,12 +7,14 @@ export const types = {
   ADD_TEAM: namespace('teams', 'ADD_TEAM'),
   REMOVE_TEAM: namespace('teams', 'REMOVE_TEAM'),
   SET_TEAMS: namespace('teams', 'SET_TEAMS'),
+  SET_ROLES: namespace('teams', 'SET_ROLES'),
   RESET_TEAMS: namespace('teams', 'RESET_TEAMS'),
 };
 
 export const actions = {
   fetchTeams: noPayload(types.FETCH_TEAMS),
   setTeams: withPayload(types.SET_TEAMS),
+  setRoles: withPayload(types.SET_ROLES),
   addTeam: withPayload(types.ADD_TEAM),
   removeTeam: withPayload(types.REMOVE_TEAM),
   resetTeams: noPayload(types.RESET_TEAMS),
@@ -22,6 +24,7 @@ export const State = Record({
   loading: true,
   error: null,
   data: List(),
+  roles: List(),
 });
 
 export const selectParentTeams = state => {
@@ -58,6 +61,16 @@ export const reducer = (state = State(), { type, payload }) => {
           'data',
           List(payload).filter(
             team => team.name !== 'Role' && !team.name.startsWith('Role::'),
+          ),
+        );
+    case types.SET_ROLES:
+      return state
+        .set('error', null)
+        .set('loading', false)
+        .set(
+          'roles',
+          List(payload).filter(
+            team => team.name !== 'Role' && team.name.startsWith('Role::'),
           ),
         );
     case types.ADD_TEAM:

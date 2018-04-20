@@ -62,6 +62,17 @@ export const AppComponent = props => {
           )}
         />
         <Route
+          path="/forms/:formSlug/submissions/:id"
+          exact
+          render={({ match, location }) => (
+            <Redirect
+              to={`/requests/request/${match.params.id}/${
+                location.search.includes('review') ? 'review' : 'activity'
+              }`}
+            />
+          )}
+        />
+        <Route
           exact
           path="/"
           render={() => (
