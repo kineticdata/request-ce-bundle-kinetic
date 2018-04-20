@@ -67,7 +67,9 @@ a {
   // Thirds
   &--two-thirds {
     flex: 1 1 66%;
-    border-right: 1px solid $black-16;
+    &:first-child {
+      border-right: 1px solid $black-16;
+    }
   }
   &--one-thirds {
     flex: 1 1 33%;
