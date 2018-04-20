@@ -16,12 +16,12 @@ const ViewProfileComponent = ({
   manager,
   managerEnabled,
 }) => (
-  <div className="profile-container">
+  <div className="page-container page-container--space-profile">
     <PageTitle parts={['Profile']} />
     {!loading && (
-      <div className="profile-content pane">
-        <div className="page-title-wrapper">
-          <div className="page-title">
+      <div className="page-panel page-panel--profile">
+        <div className="page-title">
+          <div className="page-title__wrapper">
             <h3>
               <Link to="/">home</Link> /
             </h3>
@@ -33,7 +33,7 @@ const ViewProfileComponent = ({
             </Link>
           ) : null}
         </div>
-        <div className="card p-card profile">
+        <div className="card card--profile">
           <Avatar user={profile} size={96} />
           <h3>{profile.displayName}</h3>
           <p>{getEmail(profile)}</p>
@@ -56,8 +56,10 @@ const ViewProfileComponent = ({
             </dl>
           )}
         </div>
-        <h2 className="section-title">Teams</h2>
-        <UserTeams teams={profile.memberships} />
+        <section>
+          <h2 className="section__title">Teams</h2>
+          <UserTeams teams={profile.memberships} />
+        </section>
       </div>
     )}
   </div>
@@ -86,7 +88,7 @@ const UserTeams = ({ teams }) => {
     item => !item.team.name.startsWith('Role::'),
   );
   return filteredTeams.length > 0 ? (
-    <div className="t-card-wrapper">
+    <div className="cards__wrapper cards__wrapper--team">
       {filteredTeams.map(item => (
         <TeamCard key={item.team.name} team={item.team} />
       ))}

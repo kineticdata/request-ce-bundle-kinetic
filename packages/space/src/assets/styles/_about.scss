@@ -1,23 +1,19 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   About ~ Space
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.space {
-  .about-container {
-    .details-wrapper {
-      color: $black;
-      font-size: 0.875rem;
-      padding: 0 1rem;
-      margin-bottom: 1rem;
-      .detail {
-        margin-right: 2rem;
-        .name {
-          font-weight: 600;
-        }
-      }
-    }
-    .space-admin-wrapper {
-      padding: 0 1rem;
-      margin-bottom: 1rem;
-    }
+
+.data-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0.75rem;
+  &__col {
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+  }
+  dl {
+    color: $black;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
   }
 }

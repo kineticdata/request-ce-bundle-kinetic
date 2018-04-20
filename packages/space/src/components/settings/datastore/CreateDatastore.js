@@ -21,9 +21,9 @@ const CreateDatastoreComponent = ({
   match,
 }) => (
   <div className="datastore-container">
-    <div className="datastore-content pane scrollable">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+    <div className="datastore-content panel scrollable">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">home</Link> /{` `}
             <Link to="/settings">settings</Link> /{` `}
@@ -34,7 +34,7 @@ const CreateDatastoreComponent = ({
       </div>
       <div className="datastore-settings">
         <h3>THIS FUNCTIONALITY IS NOT CURRENTLY WORKING</h3>
-        <h3 className="section-title">General Settings</h3>
+        <h3 className="section__title">General Settings</h3>
         <div className="settings">
           <div className="form-row">
             <div className="col">

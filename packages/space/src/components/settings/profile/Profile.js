@@ -27,9 +27,9 @@ export const EditProfileComponent = ({
     <PageTitle parts={['Edit Profile']} />
     {!loading && (
       <div className="edit-profile-container">
-        <div className="profile-content pane">
-          <div className="page-title-wrapper">
-            <div className="page-title">
+        <div className="profile-content panel">
+          <div className="page-title">
+            <div className="page-title__wrapper">
               <h3>
                 <Link to="/">home</Link> / <Link to="/settings">settings</Link>{' '}
                 /{' '}
@@ -38,7 +38,7 @@ export const EditProfileComponent = ({
             </div>
           </div>
           <div>
-            <h2 className="section-title">General</h2>
+            <h2 className="section__title">General</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group required">
                 <label htmlFor="displayName">Display Name</label>
@@ -131,7 +131,7 @@ export const EditProfileComponent = ({
           </div>
           {(managerEnabled || locationEnabled) && (
             <div>
-              <h2 className="section-title">User Attributes</h2>
+              <h2 className="section__title">User Attributes</h2>
               <div className="user-attributes-wrapper">
                 <table className="user-attributes table">
                   <tbody>
@@ -161,7 +161,7 @@ export const EditProfileComponent = ({
             </div>
           )}
           <div>
-            <h2 className="section-title">Roles</h2>
+            <h2 className="section__title">Roles</h2>
 
             <UserRoles
               roles={profile.memberships.filter(item =>
@@ -170,7 +170,7 @@ export const EditProfileComponent = ({
             />
           </div>
           <div>
-            <h2 className="section-title">Teams</h2>
+            <h2 className="section__title">Teams</h2>
             <UserTeams
               teams={profile.memberships.filter(
                 item => !item.team.name.startsWith('Role::'),
@@ -179,7 +179,7 @@ export const EditProfileComponent = ({
           </div>
         </div>
 
-        <div className="profile-sidebar pane d-none d-sm-block">
+        <div className="profile-sidebar panel d-none d-sm-block">
           <ProfileCard
             user={buildProfile(fieldValues, profile)}
             button={

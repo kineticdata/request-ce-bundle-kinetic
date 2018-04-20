@@ -19,9 +19,9 @@ const ViewUserComponent = ({
   <div className="datastore-container">
     <PageTitle parts={['Users', 'Settings']} />
     {!loading && (
-      <div className="datastore-content pane">
-        <div className="page-title-wrapper">
-          <div className="page-title">
+      <div className="datastore-content panel">
+        <div className="page-title">
+          <div className="page-title__wrapper">
             <h3>
               <Link to="/">home</Link> /{` `}
               <Link to="/settings">settings</Link> /{` `}
@@ -36,7 +36,7 @@ const ViewUserComponent = ({
             Edit Profile
           </Link>
         </div>
-        <div className="p-card profile">
+        <div className="card card--profile profile">
           <Avatar user={profile} size={96} />
           <h3>{profile.displayName}</h3>
           <p>{getEmail(profile)}</p>
@@ -59,7 +59,7 @@ const ViewUserComponent = ({
             </dl>
           )}
         </div>
-        <h2 className="section-title">Teams</h2>
+        <h2 className="section__title">Teams</h2>
         <UserTeams teams={profile.memberships} />
       </div>
     )}

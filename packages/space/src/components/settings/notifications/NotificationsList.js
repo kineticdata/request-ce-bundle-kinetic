@@ -9,7 +9,7 @@ import { actions } from '../../../redux/modules/settingsNotifications';
 
 const WallyNoResultsFoundMessage = ({ type }) => {
   return (
-    <div className="wally-empty-state">
+    <div className="empty-state empty-state--wally">
       <h5>No Notification {type}s Found</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>Add some {type}s by hitting the new button!</h6>
@@ -22,9 +22,9 @@ const NotificationsListComponent = ({
   notificationType,
 }) => (
   <div className="datastore-container">
-    <div className="datastore-content pane">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+    <div className="datastore-content panel">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">home</Link> /{` `}
             <Link to="/settings">settings</Link> /{` `}

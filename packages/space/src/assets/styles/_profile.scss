@@ -1,7 +1,7 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Profile ~ Space
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.space {
+.package-space {
   .form-alert {
     border: 1px solid $red;
     color: $red;
@@ -9,59 +9,54 @@
     padding: 1rem;
     border-radius: $border-radius-base;
   }
+}
 
-  .profile-container {
-    display: flex;
-    flex-direction: row;
+.profile-content {
+  overflow-y: auto;
+  border-right: 1px solid $border-color;
+  table.user-attributes {
+    color: $black-50;
 
-    .profile-content {
-      overflow-y: auto;
-      border-right: 1px solid $border-color;
-      table.user-attributes {
-        color: $black-50;
+    tbody > tr:not(:last-child) {
+      border-bottom: 1px solid $border-color;
+      padding-bottom: 0.5rem;
+    }
 
-        tbody > tr:not(:last-child) {
-          border-bottom: 1px solid $border-color;
-          padding-bottom: 0.5rem;
-        }
+    .name {
+      font-weight: 600;
+    }
 
-        .name {
-          font-weight: 600;
-        }
+    button {
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.5rem;
+      vertical-align: baseline;
+    }
 
-        button {
-          font-size: 1rem;
-          font-weight: 600;
-          line-height: 1.5rem;
-          vertical-align: baseline;
-        }
-
-        tbody > tr > td {
-          width: 50%;
-        }
-      }
-
-      label {
-        display: block;
-      }
-
-      .profile-input-container {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        flex-basis: 50%;
-      }
-
-      .footer-save {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 1.5rem;
-      }
+    tbody > tr > td {
+      width: 50%;
     }
   }
-  .profile-roles-wrapper {
-    margin: 1rem;
+
+  label {
+    display: block;
   }
+
+  .profile-input-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-basis: 50%;
+  }
+
+  .form__footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+  }
+}
+.profile-roles-wrapper {
+  margin: 1rem;
   .profile-role {
     background-color: $blue;
     padding: 0.25rem 0.5rem;
@@ -74,59 +69,47 @@
     display: inline-flex;
     line-height: 1;
   }
+}
 
-  .profile-sidebar {
-    display: none;
-    flex-direction: row;
-    flex: 0 0 33%;
-    justify-content: center;
-    align-items: flex-start;
-  }
-
-  .p-card {
-    padding: 1rem;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    border: 1px solid $border-color;
-    border-radius: $border-radius-base;
+.card--profile {
+  padding: 1rem;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-base;
+  text-align: center;
+  word-break: break-all;
+  h1 {
+    font-size: 1.125rem;
+    line-height: 1.5rem;
     margin-top: 1rem;
-    text-align: center;
-    word-break: break-all;
-    h1 {
-      font-size: 1.125rem;
-      line-height: 1.5rem;
-      margin-top: 1rem;
-    }
-    p {
-      font-size: 0.875rem;
-      line-height: 1.5rem;
-      margin-bottom: 0;
-    }
-    img {
-      flex-shrink: 0;
-      border-radius: 50%;
-      height: 100%;
-      width: 100%;
-    }
-    dl span {
-      display: flex;
-      justify-content: space-between;
-      margin: 1rem 0;
-      dt {
-        margin-right: 1rem;
-      }
-    }
-    // Profile view
-    &.profile {
-      margin-top: 0;
-      margin-bottom: 1.5rem;
-      max-width: 100%;
-      .profile-row {
-        width: auto;
-      }
+  }
+  p {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    margin-bottom: 0;
+  }
+  img {
+    flex-shrink: 0;
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+  }
+  dl span {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+    dt {
+      margin-right: 1rem;
     }
   }
+}
+
+.page-panel--space-profile-edit-sidebar {
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
 }

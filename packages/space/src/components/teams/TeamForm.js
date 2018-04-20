@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
@@ -39,117 +39,120 @@ const TeamFormComponent = ({
   handleFieldChange,
   handleSubmit,
 }) => (
-  <div className="team-form-container">
+  <div className="page-container page-container--panels page-container--space-team-form">
     <PageTitle
       parts={[editing ? team.name && `Edit: ${team.name}` : 'New', 'Teams']}
     />
 
     {!loading && (
-      <div className="fragment">
-        <div className="team-form-content pane">
-          <div className="page-title-wrapper">
-            <div className="page-title">
+      <Fragment>
+        <div className="page-panel page-panel--two-thirds page-panel--scrollable">
+          <div className="page-title">
+            <div className="page-title__wrapper">
               <h3>
                 <Link to="/">home</Link> / <Link to="/teams">teams</Link> /
               </h3>
               <h1>{editing ? 'Edit' : 'New'} Team</h1>
             </div>
           </div>
-          <h3 className="section-title">General</h3>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group required">
-              <label htmlFor="name">Display Name</label>
-              <input
-                id="name"
-                name="name"
-                onChange={handleFieldChange}
-                value={fieldValues.name}
-                className="form-control"
-              />
-            </div>
 
-            <div className="form-group">
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                className="form-control"
-                onChange={handleFieldChange}
-                value={fieldValues.description}
-                rows="3"
-                name="description"
-              />
-            </div>
+          <section>
+            <h2 className="section__title">General</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group required">
+                <label htmlFor="name">Display Name</label>
+                <input
+                  id="name"
+                  name="name"
+                  onChange={handleFieldChange}
+                  value={fieldValues.name}
+                  className="form-control"
+                />
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="parent">Parent Team</label>
-              <select
-                id="parent"
-                onChange={handleFieldChange}
-                name="parentName"
-                value={fieldValues.parentName}
-              >
-                <option key={''} value={''} />
-                {teams.map(team => (
-                  <option key={team.slug} value={team.name}>
-                    {team.name}
+              <div className="form-group">
+                <label htmlFor="description">Description</label>
+                <textarea
+                  id="description"
+                  className="form-control"
+                  onChange={handleFieldChange}
+                  value={fieldValues.description}
+                  rows="3"
+                  name="description"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="parent">Parent Team</label>
+                <select
+                  id="parent"
+                  onChange={handleFieldChange}
+                  name="parentName"
+                  value={fieldValues.parentName}
+                >
+                  <option key={''} value={''} />
+                  {teams.map(team => (
+                    <option key={team.slug} value={team.name}>
+                      {team.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="assignable">Assignable</label>
+                <select
+                  id="assignable"
+                  onChange={handleFieldChange}
+                  name="assignable"
+                  value={fieldValues.assignable}
+                >
+                  <option key={'true'} value={'True'}>
+                    True
                   </option>
-                ))}
-              </select>
-            </div>
+                  <option key={'false'} value={'False'}>
+                    False
+                  </option>
+                </select>
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="assignable">Assignable</label>
-              <select
-                id="assignable"
-                onChange={handleFieldChange}
-                name="assignable"
-                value={fieldValues.assignable}
-              >
-                <option key={'true'} value={'True'}>
-                  True
-                </option>
-                <option key={'false'} value={'False'}>
-                  False
-                </option>
-              </select>
-            </div>
+              <div className="form-group">
+                <label htmlFor="icon">Icon</label>
+                <IconPicker
+                  id="icon"
+                  controls={{
+                    onChange: handleFieldChange,
+                    name: 'icon',
+                    value: fieldValues.icon,
+                  }}
+                />
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="icon">Icon</label>
-              <IconPicker
-                id="icon"
-                controls={{
-                  onChange: handleFieldChange,
-                  name: 'icon',
-                  value: fieldValues.icon,
-                }}
-              />
-            </div>
-
-            <div className="form-button-wrapper">
-              <span className="left-side">
-                {editing && (
-                  <button
-                    className="btn btn-link text-danger"
-                    onClick={handleDelete}
-                  >
-                    Delete
+              <div className="form__footer">
+                <span className="form__footer__left">
+                  {editing && (
+                    <button
+                      className="btn btn-link text-danger"
+                      onClick={handleDelete}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </span>
+                <span className="form__footer__right">
+                  <button className="btn btn-primary">Save</button>
+                  <button className="btn btn-link" onClick={handleCancel}>
+                    Cancel
                   </button>
-                )}
-              </span>
-              <span className="right-side">
-                <button className="btn btn-primary">Save</button>
-                <button className="btn btn-link" onClick={handleCancel}>
-                  Cancel
-                </button>
-              </span>
-            </div>
-          </form>
+                </span>
+              </div>
+            </form>
+          </section>
 
           {editing && (
-            <div className="team-members-wrapper">
+            <section className="team-members-wrapper">
               <AddMemberModal />
-              <h3 className="section-title">
+              <h3 className="section__title">
                 Members
                 <i
                   className={'fa fa-plus control'}
@@ -158,7 +161,7 @@ const TeamFormComponent = ({
                 />
               </h3>
 
-              <div className="t-card-wrapper">
+              <div className="cards__wrapper cards__wrapper--members">
                 {memberships.map(user => (
                   <Hoverable
                     key={user.username}
@@ -166,7 +169,10 @@ const TeamFormComponent = ({
                       <ProfileCard
                         user={user}
                         button={
-                          <button onClick={handleRemoveMember(user.username)} className="btn btn-primary">
+                          <button
+                            onClick={handleRemoveMember(user.username)}
+                            className="btn btn-primary"
+                          >
                             Remove Member
                           </button>
                         }
@@ -177,12 +183,12 @@ const TeamFormComponent = ({
                   </Hoverable>
                 ))}
               </div>
-            </div>
+            </section>
           )}
 
           {editing && (
-            <div className="team-subteams-wrapper">
-              <h3 className="section-title">
+            <section className="team-subteams-wrapper">
+              <h3 className="section__title">
                 Subteams
                 <Link to={`/teams/new?parent=${team.name}`}>
                   <i className={'fa fa-plus control'} />
@@ -194,18 +200,18 @@ const TeamFormComponent = ({
                   <TeamCard key={subteam.slug} team={subteam} />
                 ))}
               </div>
-            </div>
+            </section>
           )}
         </div>
 
-        <div className="team-form-sidebar pane d-none d-sm-block">
+        <div className="page-panel page-panel--one-thirds page-panel--sidebar page-panel--card page-panel--team-edit-sidebar">
           <TeamCard
             team={Object.assign(translateFieldValuesToTeam(fieldValues, team), {
               memberships: team.memberships,
             })}
           />
         </div>
-      </div>
+      </Fragment>
     )}
   </div>
 );
@@ -298,9 +304,11 @@ export const TeamForm = compose(
     handleRemoveMember: props => username => event => {
       event.preventDefault();
       const team = props.team;
-      const memberships = props.team.data.memberships.filter(user => user.username === username);
-      props.updateTeam(...team, memberships)
-    }
+      const memberships = props.team.data.memberships.filter(
+        user => user.username === username,
+      );
+      props.updateTeam(...team, memberships);
+    },
   }),
   lifecycle({
     componentWillMount() {
