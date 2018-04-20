@@ -114,6 +114,11 @@ const Authenticated = props => {
         render={route => <UnauthenticatedForm {...props} {...route} routed />}
       />
       <Route
+        path="/kapps/:kappSlug/forms/:formSlug/submissions/:id"
+        exact
+        render={route => <UnauthenticatedForm {...props} {...route} routed />}
+      />
+      <Route
         path="/"
         render={route => (
           <LoginScreen>

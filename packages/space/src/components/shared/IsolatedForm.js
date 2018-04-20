@@ -69,7 +69,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
 });
 
 export const handleCreated = props => response => {
-  props.push(`/kapps/${props.kappSlug}/submissions/${response.submission.id}`);
+  props.push(`/kapps/${props.kappSlug}/forms/${props.formSlug}/submissions/${response.submission.id}`);
 };
 
 export const handleLoaded = props => form => {

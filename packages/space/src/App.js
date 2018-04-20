@@ -61,6 +61,11 @@ export const AppComponent = props => {
             component={IsolatedForm}
           />
           <Route
+            path="/kapps/:kappSlug/forms/:formSlug/submissions/:id"
+            exact
+            component={IsolatedForm}
+          />
+          <Route
             path="/datastore/forms/:slug/submissions/:id"
             render={({ match }) => (
               <Redirect
