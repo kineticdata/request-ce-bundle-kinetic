@@ -4,7 +4,8 @@ import { compose, lifecycle, withHandlers } from 'recompose';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { Utils, Loading } from 'common';
 import { actions } from './redux/modules/app';
-import { SidebarContent } from './components/Sidebar';
+import { Sidebar } from './components/Sidebar';
+import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { About } from './components/about/About';
 import { AlertForm } from './components/alerts/AlertForm';
 import { Alerts } from './components/alerts/Alerts';
@@ -26,13 +27,24 @@ export const AppComponent = props => {
   }
   return props.render({
     sidebar: (
-      <SidebarContent
-        kapps={props.kapps}
-        teams={props.teams}
-        isSpaceAdmin={props.isSpaceAdmin}
-        openSettings={props.openSettings}
-        settingsBackPath={props.settingsBackPath}
-      />
+      <Switch>
+        <Route
+          path="/settings"
+          render={() => (
+            <SettingsSidebar settingsBackPath={props.settingsBackPath} />
+          )}
+        />
+        <Route
+          render={() => (
+            <Sidebar
+              kapps={props.kapps}
+              teams={props.teams}
+              isSpaceAdmin={props.isSpaceAdmin}
+              openSettings={props.openSettings}
+            />
+          )}
+        />
+      </Switch>
     ),
     main: (
       <Fragment>
