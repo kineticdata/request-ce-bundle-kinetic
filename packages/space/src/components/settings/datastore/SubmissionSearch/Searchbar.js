@@ -67,9 +67,9 @@ const EqualsOperation = ({
 
 const SingleOperation = ({ part, handleIndexPartInput }) => (
   <div className="index-part-values-group">
-    <input
+    <Input
       className="index-part-value"
-      ref={input => input && input.focus()}
+      innerRef={input => input && input.focus()}
       value={part.value.input}
       onChange={handleIndexPartInput(part)}
     />

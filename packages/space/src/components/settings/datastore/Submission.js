@@ -30,7 +30,6 @@ const DatastoreSubmissionComponent = ({
   values,
   submission,
   isEditing,
-  handleEditClick,
   formKey,
 }) => (
   <div className="datastore-container">
@@ -122,8 +121,6 @@ export const shouldPrevNextShow = state =>
   state.settingsDatastore.submission !== null &&
   state.settingsDatastore.submissions.size > 0;
 
-export const getIsEditing = props => (props.match.params.mode ? true : false);
-
 export const handleUpdated = props => response => {
   if (props.submissionId) {
     props.addSuccess(
@@ -144,10 +141,6 @@ export const handleCreated = props => (response, actions) => {
     'Submission Created!',
   );
   props.setFormKey(getRandomKey());
-};
-
-export const handleEditClick = props => () => {
-  props.push(`${props.match.url}/edit`);
 };
 
 export const mapStateToProps = (state, { match: { params } }) => ({
@@ -174,7 +167,6 @@ export const DatastoreSubmission = compose(
   withHandlers({
     handleUpdated,
     handleCreated,
-    handleEditClick,
     handleError,
   }),
   lifecycle({
