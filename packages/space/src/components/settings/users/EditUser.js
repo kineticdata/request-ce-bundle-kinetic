@@ -297,6 +297,11 @@ const translateFieldValuesToProfile = (fieldValues, profile) => {
       Manager: [fieldValues.manager],
       Site: [fieldValues.site],
     },
+    memberships: fieldValues.userRoles.map(role => ({
+      team: {
+        name: role,
+      },
+    })),
   };
   return result;
 };
