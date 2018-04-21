@@ -26,21 +26,25 @@ export const AppComponent = props =>
       <ModalFormContainer />
       <HeaderContainer hasSidebar toggleSidebarOpen={props.toggleSidebarOpen} />
       <props.AppProvider
-        render={({ main, sidebar }) => (
-          <Sidebar
-            sidebar={sidebar}
-            shadow={false}
-            open={props.sidebarOpen && props.layoutSize === 'small'}
-            docked={props.sidebarOpen && props.layoutSize !== 'small'}
-            onSetOpen={props.setSidebarOpen}
-            sidebarClassName={`sidebar-container ${
-              true ? 'drawer' : 'overlay'
-            }`}
-            contentClassName="main-container"
-          >
-            {main}
-          </Sidebar>
-        )}
+        render={({ main, sidebar }) =>
+          sidebar ? (
+            <Sidebar
+              sidebar={sidebar}
+              shadow={false}
+              open={props.sidebarOpen && props.layoutSize === 'small'}
+              docked={props.sidebarOpen && props.layoutSize !== 'small'}
+              onSetOpen={props.setSidebarOpen}
+              sidebarClassName={`sidebar-container ${
+                true ? 'drawer' : 'overlay'
+              }`}
+              contentClassName="main-container"
+            >
+              {main}
+            </Sidebar>
+          ) : (
+            main
+          )
+        }
       />
     </Fragment>
   );

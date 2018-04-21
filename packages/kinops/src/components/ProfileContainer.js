@@ -3,6 +3,8 @@ import { compose, withHandlers, withState } from 'recompose';
 
 import { Profile } from './Profile';
 import { actions } from '../redux/modules/modalForm';
+import * as selectors from '../redux/selectors';
+
 
 const HELP_FORM_CONFIG = {
   formSlug: 'help',
@@ -35,6 +37,7 @@ const KITCHEN_SINK_FORM_CONFIG = {
 
 export const mapStateToProps = state => ({
   profile: state.kinops.profile,
+  isGuest: selectors.selectIsGuest(state),
 });
 
 const mapDispatchToProps = {

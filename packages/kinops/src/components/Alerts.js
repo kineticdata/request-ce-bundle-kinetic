@@ -9,7 +9,7 @@ export const Alerts = ({
   isOpen,
   toggle,
 }) => (
-  <Dropdown className="nav-item-right" isOpen={isOpen} toggle={toggle}>
+  <Dropdown isOpen={isOpen} toggle={toggle}>
     <DropdownToggle nav role="button">
       <i className="fa fa-fw fa-bell" />
       {alerts.size > 0 && (

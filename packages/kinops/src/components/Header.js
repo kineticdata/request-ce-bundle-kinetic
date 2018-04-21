@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import {
   Dropdown,
   DropdownToggle,
@@ -43,83 +43,80 @@ export const Header = ({
 }) => (
   <Navbar color="faded" light fixed="top">
     <Nav className="nav-header">
-      {hasSidebar && (
-        <NavItem id="header-sidebar-toggle">
-          <NavLink
-            className="drawer-button"
-            role="button"
-            tabIndex="0"
-            onClick={toggleSidebarOpen}
-          >
-            <i className="fa fa-fw fa-bars" />
-          </NavLink>
-        </NavItem>
-      )}
-      {!isGuest && (
-        <Fragment>
-          <NavItem>
-            <KappLink className="nav-link" to="/">
-              {dropdownTitleName(currentKapp)}
-            </KappLink>
+      {hasSidebar &&
+        !isGuest && (
+          <NavItem id="header-sidebar-toggle">
+            <NavLink
+              className="drawer-button"
+              role="button"
+              tabIndex="0"
+              onClick={toggleSidebarOpen}
+            >
+              <i className="fa fa-fw fa-bars" />
+            </NavLink>
           </NavItem>
-          <Dropdown
-            id="header-kapp-dropdown"
-            isOpen={kappDropdownOpen}
-            toggle={kappDropdownToggle}
-          >
-            <DropdownToggle nav role="button">
-              <i className="fa fa-fw fa-caret-down" />
-            </DropdownToggle>
-            <DropdownMenu>
-              <Link
-                className="dropdown-item"
-                to="/"
+        )}
+      <NavItem>
+        <KappLink className="nav-link" to="/">
+          {dropdownTitleName(currentKapp)}
+        </KappLink>
+      </NavItem>
+      {!isGuest && (
+        <Dropdown
+          id="header-kapp-dropdown"
+          isOpen={kappDropdownOpen}
+          toggle={kappDropdownToggle}
+        >
+          <DropdownToggle nav role="button">
+            <i className="fa fa-fw fa-caret-down" />
+          </DropdownToggle>
+          <DropdownMenu>
+            <Link className="dropdown-item" to="/" onClick={kappDropdownToggle}>
+              <span className="fa fa-fw fa-home" />Home
+            </Link>
+            <DropdownItem divider />
+            {predefinedKapps.map(thisKapp => (
+              <BuildKappLink
+                kapp={thisKapp}
+                key={thisKapp.slug}
                 onClick={kappDropdownToggle}
-              >
-                <span className="fa fa-fw fa-home" />Home
-              </Link>
+              />
+            ))}
+            {additionalKapps.map(thisKapp => (
+              <BuildKappLink
+                kapp={thisKapp}
+                key={thisKapp.slug}
+                onClick={kappDropdownToggle}
+              />
+            ))}
+            {(hasAccessToManagement || hasAccessToSupport) && (
               <DropdownItem divider />
-              {predefinedKapps.map(thisKapp => (
-                <BuildKappLink
-                  kapp={thisKapp}
-                  key={thisKapp.slug}
-                  onClick={kappDropdownToggle}
-                />
-              ))}
-              {additionalKapps.map(thisKapp => (
-                <BuildKappLink
-                  kapp={thisKapp}
-                  key={thisKapp.slug}
-                  onClick={kappDropdownToggle}
-                />
-              ))}
-              {(hasAccessToManagement || hasAccessToSupport) && (
-                <DropdownItem divider />
-              )}
-              {hasAccessToManagement && (
-                <DropdownItem
-                  tag="a"
-                  href={`${bundle.kappLocation(adminKapp.slug)}`}
-                >
-                  <span className="fa fa-fw fa-gear" />Admin Console
-                </DropdownItem>
-              )}
-              {hasAccessToSupport && (
-                <DropdownItem
-                  tag="a"
-                  href={`${bundle.kappLocation(
-                    adminKapp.slug,
-                  )}/submission-support`}
-                >
-                  <span className="fa fa-fw fa-clipboard" />Submission Support
-                </DropdownItem>
-              )}
-            </DropdownMenu>
-          </Dropdown>
-          <AlertsContainer />
-          <ProfileContainer />
-        </Fragment>
+            )}
+            {hasAccessToManagement && (
+              <DropdownItem
+                tag="a"
+                href={`${bundle.kappLocation(adminKapp.slug)}`}
+              >
+                <span className="fa fa-fw fa-gear" />Admin Console
+              </DropdownItem>
+            )}
+            {hasAccessToSupport && (
+              <DropdownItem
+                tag="a"
+                href={`${bundle.kappLocation(
+                  adminKapp.slug,
+                )}/submission-support`}
+              >
+                <span className="fa fa-fw fa-clipboard" />Submission Support
+              </DropdownItem>
+            )}
+          </DropdownMenu>
+        </Dropdown>
       )}
+      <div className="nav-item-right">
+        {!isGuest && <AlertsContainer />}
+        <ProfileContainer />
+      </div>
     </Nav>
   </Navbar>
 );
