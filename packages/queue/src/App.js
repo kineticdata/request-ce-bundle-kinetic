@@ -55,7 +55,7 @@ export const AppComponent = props => {
       />
     ),
     main: (
-      <div className="queue layout">
+      <main className="queue layout">
         <Route
           path="/submissions/:id"
           exact
@@ -81,7 +81,7 @@ export const AppComponent = props => {
         <FilterMenuContainer />
         <NewItemMenuContainer />
         <WorkMenuContainer />
-      </div>
+      </main>
     ),
   });
 };
