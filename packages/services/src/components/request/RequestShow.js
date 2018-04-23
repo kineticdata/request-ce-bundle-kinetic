@@ -66,7 +66,7 @@ const DisplayDateItem = ({ submission }) =>
     <div className="data-list-row__col">
       <dl>
         <dt>Submitted:</dt>
-        <dd>
+        <dd className="text-truncate">
           <TimeAgo timestamp={submission.submittedAt} />
           <br />
           <small>
