@@ -28,7 +28,7 @@ export const Form = ({
   <div>
     <PageTitle parts={[form ? form.name : '']} />
     <span className="services-color-bar services-color-bar__blue-slate" />
-    <div className="page-container page-container--services-form container">
+    <div className="page-container page-container--services-form">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>

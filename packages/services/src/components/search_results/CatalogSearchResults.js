@@ -8,7 +8,7 @@ export const CatalogSearchResults = ({ query, forms }) => (
   <div>
     <PageTitle parts={[`Search: ${query}`]} />
     <span className="services-color-bar services-color-bar__blue-slate" />
-    <div className="page-container page-container--search-results container">
+    <div className="page-container page-container--search-results">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>

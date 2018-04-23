@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { KappLink as Link, PageTitle } from 'common';
 import { CategoryCard } from '../shared/CategoryCard';
 
 export const CategoryList = ({ categories }) => (
-  <div>
+  <Fragment>
     <PageTitle parts={['Categories']} />
     <span className="services-color-bar services-color-bar__blue-slate" />
-    <div className="page-container page-container--services-category container">
+    <div className="page-container page-container--services-category">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
@@ -28,5 +28,5 @@ export const CategoryList = ({ categories }) => (
           ))}
       </div>
     </div>
-  </div>
+  </Fragment>
 );

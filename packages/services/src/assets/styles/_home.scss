@@ -1,0 +1,103 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Home ~ services
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// Search container
+.search-services-home {
+  width: 100%;
+  height: 216px;
+  padding: 0 0 2rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex: 0 0 auto;
+  background-color: $blueSlate;
+
+  &--green-grass {
+    background-color: $greenGrass;
+  }
+  &__wrapper {
+    h1 {
+      color: $white;
+      font-size: 2.583333333rem;
+      font-weight: 300;
+      line-height: 4rem;
+      margin-top: 1.5rem;
+    }
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 90%;
+    @media all and (min-width: 0) {
+      flex-basis: 90%;
+    }
+    @media all and (min-width: 576px) {
+      flex-basis: 75%;
+    }
+    @media all and (min-width: 768px) {
+      flex-basis: 66.667%;
+    }
+    @media all and (min-width: 992px) {
+      flex-basis: 48%;
+    }
+    @media all and (min-width: 1200px) {
+    }
+  }
+}
+
+// Home panels
+.page-panel {
+  // My Requests Wrapper
+  &--my-requests {
+    flex-direction: column;
+  }
+
+  // Services Wrapper
+  &--services {
+    flex-direction: column;
+  }
+}
+
+.page-container {
+  // Services Home Container
+  &--services-home {
+    display: flex;
+    @media all and (min-width: 0) {
+      flex-direction: column;
+    }
+    @media all and (min-width: 576px) {
+      flex-direction: column;
+    }
+    @media all and (min-width: 768px) {
+      flex-direction: column;
+    }
+    @media all and (min-width: 992px) {
+      flex-direction: row;
+    }
+    @media all and (min-width: 1200px) {
+    }
+    .card {
+      flex: 0 0 auto;
+      @media all and (min-width: 0) {
+        flex-basis: 100%;
+        @media all and (-ms-high-contrast: none) {
+          width: 100%;
+          flex-basis: auto;
+        }
+      }
+      @media all and (min-width: 576px) {
+        flex-basis: 48%;
+        @media all and (-ms-high-contrast: none) {
+          width: 48%;
+          flex-basis: auto;
+        }
+      }
+      @media all and (min-width: 768px) {
+      }
+      @media all and (min-width: 992px) {
+      }
+      @media all and (min-width: 1200px) {
+      }
+    }
+  }
+}

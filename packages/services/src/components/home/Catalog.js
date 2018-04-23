@@ -17,16 +17,16 @@ export const Catalog = ({
   return (
     <Fragment>
       <PageTitle parts={[]} />
-      <div className="page-container page-container--search-services">
-        <div className="page-container--search-services__wrapper">
+      <div className="search-services-home">
+        <div className="search-services-home__wrapper">
           <h1 className="text-truncate">Services from the team</h1>
           <div className="select">
             <CatalogSearchContainer />
           </div>
         </div>
       </div>
-      <div className="page-container page-container--services-home container">
-        <div className="page-panel page-panel--transparent page-panel--one-thirds page-panel--my-requests">
+      <div className="page-container page-container--services-home">
+        <div className="page-panel page-panel--transparent page-panel--one-thirds page-panel--auto-height page-panel--my-requests">
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>services /</h3>

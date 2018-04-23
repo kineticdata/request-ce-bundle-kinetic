@@ -72,14 +72,15 @@
   color: $white;
   text-align: center;
   padding: 0.125rem 0.625rem;
-  font-size: 55%;
+  font-size: 50%;
   font-weight: 700;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
   align-self: center;
-  border-radius: 12px;
+  border-radius: 0.75rem;
   margin-left: auto;
+  flex: 0 0 auto;
   &--gray {
     background-color: $black-50;
   }

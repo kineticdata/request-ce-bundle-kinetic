@@ -11,12 +11,14 @@
 
 // Core CSS
 @import 'layout';
+@import 'navigation';
 
 // Components
+@import 'home';
 @import 'search';
+@import 'categories';
 @import 'submission';
 @import 'submission-timeline';
-@import 'navigation';
 
 // Utility classes
 @import 'cards';

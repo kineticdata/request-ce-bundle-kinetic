@@ -6,7 +6,8 @@
 .services-color-bar {
   height: 1.5rem;
   width: 100%;
-  display: block;
+  display: flex;
+  flex: 0 0 auto;
   &__blue-slate {
     background-color: $blueSlate;
   }
@@ -14,108 +15,37 @@
     background-color: $greenGrass;
   }
 }
-// Services Main content
+
 .package-layout--services {
+  // Services Page Container
   .page-container {
-    // Services Container
-    &--services-home {
-      display: flex;
-      @media all and (min-width: 0) {
-        flex-direction: column;
-      }
-      @media all and (min-width: 576px) {
-        flex-direction: column;
-      }
-      @media all and (min-width: 768px) {
-        flex-direction: column;
-      }
-      @media all and (min-width: 992px) {
-        flex-direction: row;
-      }
-      @media all and (min-width: 1200px) {
-      }
-      .card {
-        flex: 0 0 auto;
-        @media all and (min-width: 0) {
-          flex-basis: 100%;
-          @media all and (-ms-high-contrast: none) {
-            width: 100%;
-            flex-basis: auto;
-          }
-        }
-        @media all and (min-width: 576px) {
-          flex-basis: 48%;
-          @media all and (-ms-high-contrast: none) {
-            width: 48%;
-            flex-basis: auto;
-          }
-        }
-        @media all and (min-width: 768px) {
-        }
-        @media all and (min-width: 992px) {
-        }
-        @media all and (min-width: 1200px) {
-        }
-      }
+    width: 100%;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    margin-right: auto;
+    margin-left: auto;
+    &--no-padding {
+      padding-left: 0;
+      padding-right: 0;
     }
-
-    // Categories container
-    &--services-category {
-      .card {
-        flex: 0 0 auto;
-        @media all and (min-width: 0) {
-          flex-basis: 100%;
-          @media all and (-ms-high-contrast: none) {
-            width: 100%;
-            flex-basis: auto;
-          }
-        }
-        @media all and (min-width: 576px) {
-          flex-basis: 48%;
-          @media all and (-ms-high-contrast: none) {
-            width: 48%;
-            flex-basis: auto;
-          }
-        }
-        @media all and (min-width: 768px) {
-          flex-basis: 48%;
-          @media all and (-ms-high-contrast: none) {
-            width: 48%;
-            flex-basis: auto;
-          }
-        }
-        @media all and (min-width: 992px) {
-          flex-basis: 31%;
-          @media all and (-ms-high-contrast: none) {
-            width: 31%;
-            flex-basis: auto;
-          }
-        }
-        @media all and (min-width: 1200px) {
-        }
-      }
+    @media all and (min-width: 576px) {
+      max-width: 540px;
+    }
+    @media all and (min-width: 768px) {
+      max-width: 720px;
+    }
+    @media all and (min-width: 992px) {
+      max-width: 960px;
+    }
+    @media all and (min-width: 1200px) {
+      max-width: 1140px;
     }
   }
-}
-
-.page-panel {
-  // My Requests Wrapper
-  &--my-requests {
-    flex-direction: column;
-  }
-
-  // Services Wrapper
-  &--services {
-    flex-direction: column;
-  }
-}
-
-.package-layout--services {
+  // Services Card Wrapper
   .cards__wrapper {
     padding: 0 0 3rem;
     margin: 0;
     list-style: none;
-    display: flex;
     flex-direction: column;
     &--services,
     &--categories {
