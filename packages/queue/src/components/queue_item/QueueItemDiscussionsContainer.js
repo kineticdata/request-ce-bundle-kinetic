@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { actions } from 'discussions';
-
+import { actions as discussionsActions } from 'discussions';
+import { actions } from '../../redux/modules/queue';
 import { QueueItemDiscussions } from './QueueItemDiscussions';
 
 const mapStateToProps = state => {
@@ -16,7 +16,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  createDiscussion: actions.createIssue,
+  createDiscussion: discussionsActions.createIssue,
+  joinDiscussion: discussionsActions.joinDiscussion,
+  setCurrentItem: actions.setCurrentItem,
 };
 
 const createDiscussion = props => () => {
@@ -24,6 +26,7 @@ const createDiscussion = props => () => {
     props.queueItem.label || 'Queue Discussion',
     props.queueItem.values['Details'] || '',
     props.queueItem,
+    null,
     (issue, submission) => {
       props.setCurrentItem(submission);
       props.joinDiscussion(issue.guid);
