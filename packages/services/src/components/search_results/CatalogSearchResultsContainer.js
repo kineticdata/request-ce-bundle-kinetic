@@ -8,8 +8,8 @@ const matches = (form, term) =>
   (form.description &&
     form.description.toLowerCase().includes(term.toLowerCase()));
 
-const mapStateToProps = (state, props) => {
-  const query = parse(props.location.search).q;
+const mapStateToProps = state => {
+  const query = parse(state.router.location.search).q;
   return {
     query,
     forms: state.forms.data
