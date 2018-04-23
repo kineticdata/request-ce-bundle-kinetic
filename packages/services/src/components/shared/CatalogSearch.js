@@ -6,6 +6,7 @@ export const CatalogSearch = props => (
       type="text"
       placeholder="Search services..."
       value={props.searchTerm}
+      autoFocus
       onChange={event => props.catalogSearchInput(event.target.value)}
     />
     <button type="submit">

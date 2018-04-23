@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { stringify } from 'query-string';
 import { CatalogSearch } from './CatalogSearch';
 import { actions } from '../../redux/modules/search';
 
@@ -10,13 +9,13 @@ const mapStateToProps = state => ({
   submitHandler: props => event => {
     event.preventDefault();
     props.push(
-      `/kapps/${props.kappSlug}/search?${stringify({ q: props.searchTerm })}`,
+      `/kapps/${props.kappSlug}/search/${props.searchTerm}`,
     );
   },
 });
 
-const dispatchMapper = { push, catalogSearchInput: actions.searchInputChange };
+const mapDispatchToProps = { push, catalogSearchInput: actions.searchInputChange };
 
-export const CatalogSearchContainer = connect(mapStateToProps, dispatchMapper)(
+export const CatalogSearchContainer = connect(mapStateToProps, mapDispatchToProps)(
   CatalogSearch,
 );

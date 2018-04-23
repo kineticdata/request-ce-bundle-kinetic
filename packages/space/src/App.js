@@ -4,6 +4,7 @@ import { compose, lifecycle } from 'recompose';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { Utils, Loading } from 'common';
 import { actions } from './redux/modules/app';
+import * as selectors from 'kinops/src/redux/selectors';
 import { SidebarContent } from './components/Sidebar';
 import { About } from './components/about/About';
 import { AlertForm } from './components/alerts/AlertForm';
@@ -25,13 +26,15 @@ export const AppComponent = props => {
     return <Loading text="App is loading ..." />;
   }
   return props.render({
-    sidebar: (
-      <SidebarContent
-        kapps={props.kapps}
-        teams={props.teams}
-        isSpaceAdmin={props.isSpaceAdmin}
-      />
-    ),
+    ...(!props.isGuest && {
+      sidebar: (
+        <SidebarContent
+          kapps={props.kapps}
+          teams={props.teams}
+          isSpaceAdmin={props.isSpaceAdmin}
+        />
+      ),
+    }),
     main: (
       <Fragment>
         <Notifications />
@@ -97,6 +100,7 @@ export const mapStateToProps = state => ({
     a.name.localeCompare(b.name),
   ),
   isSpaceAdmin: state.kinops.profile.spaceAdmin,
+  isGuest: selectors.selectIsGuest(state),
 });
 const mapDispatchToProps = {
   fetchSettings: actions.fetchAppSettings,

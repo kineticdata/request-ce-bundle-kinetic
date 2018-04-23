@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { parse } from 'query-string';
 import { CatalogSearchResults } from './CatalogSearchResults';
 import { displayableFormPredicate } from '../../utils';
 
@@ -9,7 +8,7 @@ const matches = (form, term) =>
     form.description.toLowerCase().includes(term.toLowerCase()));
 
 const mapStateToProps = (state, props) => {
-  const query = parse(props.location.search).q;
+  const query = props.match.params.query || '';
   return {
     query,
     forms: state.forms.data
