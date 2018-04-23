@@ -62,6 +62,17 @@ export const AppComponent = props => {
           )}
         />
         <Route
+          path="/forms/:formSlug/submissions/:id"
+          exact
+          render={({ match, location }) => (
+            <Redirect
+              to={`/requests/request/${match.params.id}/${
+                location.search.includes('review') ? 'review' : 'activity'
+              }`}
+            />
+          )}
+        />
+        <Route
           exact
           path="/"
           render={() => (
@@ -84,6 +95,7 @@ export const AppComponent = props => {
         <Route exact path="/forms" component={FormListContainer} />
         <Route path="/forms/:formSlug" component={FormContainer} />
         <Route exact path="/search" component={CatalogSearchResultsContainer} />
+        <Route exact path="/search/:query" component={CatalogSearchResultsContainer} />
         <Route exact path="/requests/:type?" component={RequestListContainer} />
         <Route
           exact

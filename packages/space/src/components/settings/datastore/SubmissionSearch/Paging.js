@@ -11,16 +11,9 @@ import {
 
 const getPageText = (pageTokens, nextPageToken, submissions) => {
   let pages = pageTokens.size + 1;
-  const initialOffset = submissions.size === 1 ? 0 : 1;
 
-  const bottom = pages > 1 ? pages * DATASTORE_LIMIT + 1 : pages;
-  const top = nextPageToken
-    ? // Has more pages
-      pages > 1 ? (pages + 1) * DATASTORE_LIMIT : pages * DATASTORE_LIMIT
-    : // Does not have more pages.
-      pages > 1
-      ? pages * DATASTORE_LIMIT + initialOffset + submissions.size
-      : submissions.size;
+  const bottom = pages > 1 ? (pages - 1) * DATASTORE_LIMIT + 1 : pages;
+  const top = (pages - 1) * DATASTORE_LIMIT + submissions.size;
 
   return ` ${bottom} to ${top}`;
 };
@@ -44,7 +37,6 @@ const PagingComponent = ({
           Previous {DATASTORE_LIMIT}
         </button>
         <span>
-          <strong>Sorting &amp; Filtering</strong>
           {submissions.size > 0
             ? getPageText(pageTokens, nextPageToken, submissions)
             : ''}

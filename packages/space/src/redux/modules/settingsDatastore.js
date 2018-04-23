@@ -73,6 +73,7 @@ export const types = {
   SET_NEXT_PAGE_TOKEN: namespace('datastore', 'SET_NEXT_PAGE_TOKEN'),
   SET_PAGE_OFFSET: namespace('datastore', 'SET_PAGE_OFFSET'),
   TOGGLE_SIMPLE_SEARCH: namespace('datastore', 'TOGGLE_SIMPLE_SEARCH'),
+  SET_ADVANCED_SEARCH_OPEN: namespace('datastore', 'SET_ADVANCED_SEARCH_OPEN'),
   SET_SIMPLE_SEARCH_PARAM: namespace('datastore', 'SET_SIMPLE_SEARCH_PARAM'),
   SET_SIMPLE_SEARCH_NEXT_PAGE_INDEX: namespace(
     'datastore',
@@ -125,6 +126,7 @@ export const actions = {
   popPageToken: noPayload(types.POP_PAGE_TOKEN),
   setNextPageToken: withPayload(types.SET_NEXT_PAGE_TOKEN),
   toggleSimpleSearch: noPayload(types.TOGGLE_SIMPLE_SEARCH),
+  setAdvancedSearchOpen: withPayload(types.SET_ADVANCED_SEARCH_OPEN),
   setSimpleSearchParam: withPayload(types.SET_SIMPLE_SEARCH_PARAM),
   setSimpleSearchNextPageIndex: withPayload(
     types.SET_SIMPLE_SEARCH_NEXT_PAGE_INDEX,
@@ -271,6 +273,7 @@ export const State = Record({
   nextPageToken: null,
   // Simple or Advanced Search
   simpleSearchActive: true,
+  advancedSearchOpen: false,
   simpleSearchParam: '',
   simpleSearchNextPageIndex: null,
   // Submission List Actions
@@ -323,11 +326,9 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('currentForm', dsForm)
         .set('currentFormChanges', dsForm);
     case types.FETCH_SUBMISSIONS_ADVANCED:
-      return state
-        .set('searching', true)
+      return state.set('searching', true);
     case types.FETCH_SUBMISSIONS_SIMPLE:
-      return state
-        .set('searching', true)
+      return state.set('searching', true);
     case types.SET_SUBMISSIONS:
       return state
         .set('searching', false)
@@ -339,15 +340,27 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.setIn(['searchParams', 'indexParts'], payload);
     case types.SET_INDEX_PART_OPERATION: {
       const { part, operation } = payload;
+      const partIndex = state.searchParams.indexParts.findIndex(
+        p => part.name === p.name,
+      );
       return state.updateIn(['searchParams', 'indexParts'], indexParts =>
-        indexParts.update(indexParts.findIndex(p => part.name === p.name), p =>
-          p.set('operation', operation).set(
-            'value',
-            IndexValues({
-              values: operation === 'Between' ? List(['', '']) : List(),
-            }),
+        indexParts
+          .update(partIndex, p =>
+            p.set('operation', operation).set(
+              'value',
+              IndexValues({
+                values: operation === 'Between' ? List(['', '']) : List(),
+              }),
+            ),
+          )
+          .map(
+            (part, index) =>
+              index > partIndex && operation !== 'Is Equal To'
+                ? part
+                    .set('operation', 'All')
+                    .set('value', IndexValues({ values: List() }))
+                : part,
           ),
-        ),
       );
     }
     case types.SET_INDEX_PART_INPUT: {
@@ -391,6 +404,7 @@ export const reducer = (state = State(), { type, payload }) => {
       );
     case types.RESET_SEARCH_PARAMS:
       return state
+        .set('simpleSearchActive', true)
         .set('searchParams', SearchParams())
         .set('simpleSearchParam', '')
         .set('simpleSearchNextPageIndex', null)
@@ -404,6 +418,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.update('pageTokens', pageTokens => pageTokens.pop());
     case types.SET_NEXT_PAGE_TOKEN:
       return state.set('nextPageToken', payload);
+    case types.SET_ADVANCED_SEARCH_OPEN:
+      return state.set('advancedSearchOpen', payload);
     case types.TOGGLE_SIMPLE_SEARCH:
       return state
         .set('simpleSearchActive', !state.simpleSearchActive)

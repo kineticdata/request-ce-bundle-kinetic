@@ -61,6 +61,11 @@ export const AppComponent = props => {
           exact
           render={({ match }) => <Redirect to={`/item/${match.params.id}`} />}
         />
+        <Route
+          path="/forms/:formSlug/submissions/:id"
+          exact
+          render={({ match }) => <Redirect to={`/item/${match.params.id}`} />}
+        />
         <Route path="/" exact render={() => <Redirect to="/list/Mine" />} />
         <Route path="/list/:filter" component={QueueListContainer} />
         <Route path="/custom/:filter" component={QueueListContainer} />

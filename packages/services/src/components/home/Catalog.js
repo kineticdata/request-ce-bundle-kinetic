@@ -59,15 +59,11 @@ export const Catalog = ({
           <div className="page-title-wrapper">
             <div className="page-title">
               <h3>services /</h3>
-              <h1>Top {homePageMode}</h1>
+              <h1>{homePageMode}</h1>
             </div>
-            <Link to={homePageMode === 'Categories' ? '/categories' : '/forms'}>
-              View All
-            </Link>
           </div>
           <div className="c-cards-wrapper">
             {homePageItems
-              .take(6)
               .map(
                 item =>
                   homePageMode === 'Categories' ? (

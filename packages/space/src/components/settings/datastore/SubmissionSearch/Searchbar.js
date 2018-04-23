@@ -16,15 +16,16 @@ import { IndexPart } from '../../../../records';
 import { actions } from '../../../../redux/modules/settingsDatastore';
 
 const OPERATIONS = [
+  'Equal To',
   'Starts With',
-  'Is Equal To',
   'All',
   'Is Greater Than',
   'Is Less Than',
   'Is Greater Than or Equal',
   'Is Less Than or Equal',
-  'Between',
+  'Is Between',
 ];
+const EQUALS_OPERATION = 'Equal To';
 const DEFAULT_PLACEHOLDER =
   'Searching by any field that matches the value entered here...';
 
@@ -32,13 +33,14 @@ const EqualsOperation = ({
   part,
   handleIndexPartInput,
   handleAddIndexPartInput,
+  handleAddIndexPartEnter,
   handleRemoveIndexPartInput,
 }) => {
   return (
     <div>
       {part.value.values.map((v, index) => (
         <div className="index-part-values-group" key={index}>
-          <input readOnly className="index-part-value" value={v} />
+          <Input readOnly className="index-part-value" value={v} />
           <button
             onClick={handleRemoveIndexPartInput(part, v)}
             className="btn btn-link"
@@ -48,17 +50,16 @@ const EqualsOperation = ({
         </div>
       ))}
       <div className="index-part-values-group">
-        <input
+        <Input
           className="index-part-value"
           value={part.value.input}
+          innerRef={input => input && input.focus()}
+          onKeyPress={handleAddIndexPartEnter(part)}
           onChange={handleIndexPartInput(part)}
         />
-        <button
-          className="btn btn-link"
-          onClick={handleAddIndexPartInput(part)}
-        >
+        <Button color="link" onClick={handleAddIndexPartInput(part)}>
           <span className="fa fa-fw fa-plus" />
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -66,8 +67,9 @@ const EqualsOperation = ({
 
 const SingleOperation = ({ part, handleIndexPartInput }) => (
   <div className="index-part-values-group">
-    <input
+    <Input
       className="index-part-value"
+      innerRef={input => input && input.focus()}
       value={part.value.input}
       onChange={handleIndexPartInput(part)}
     />
@@ -75,24 +77,127 @@ const SingleOperation = ({ part, handleIndexPartInput }) => (
 );
 
 const BetweenOperation = ({ part, handleIndexPartBetween }) => (
-  <div
-    className="index-part-values-group"
-    style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-    }}
-  >
-    <input
+  <div className="index-part-values-group operation-between">
+    <Input
       className="index-part-value"
       value={part.value.values.get(0)}
+      innerRef={input => input && input.focus()}
       onChange={handleIndexPartBetween(part, 0)}
     />
     <span>to</span>
-    <input
+    <Input
       className="index-part-value"
       value={part.value.values.get(1)}
       onChange={handleIndexPartBetween(part, 1)}
     />
+  </div>
+);
+
+const IndexSelector = ({
+  simpleSearchActive,
+  setIndexHandler,
+  setSimpleSearchParam,
+  searchParams,
+  indexDefinitions,
+  simpleSearchParam,
+  placeholderText,
+}) => (
+  <div className="index-selector">
+    <Col sm={2}>
+      <strong>Search By:</strong>
+    </Col>
+    <Col sm={simpleSearchActive ? 4 : 10}>
+      <Input
+        className="index-chooser-select"
+        onChange={e => setIndexHandler(e.target.value)}
+        value={searchParams.index ? searchParams.index.name : 'all-fields'}
+        type="select"
+        name="Search By"
+        id="index-chooser"
+      >
+        <option value="all-fields">All fields that start with</option>
+        {indexDefinitions.map(index => (
+          <option key={index.name} value={index.name}>
+            {index.name}
+          </option>
+        ))}
+      </Input>
+    </Col>
+    {simpleSearchActive && (
+      <Col sm={6}>
+        <Input
+          aria-label="Search"
+          innerRef={input => input && input.focus()}
+          onKeyPress={handleInputKeypress}
+          id="simple-search-term2"
+          name="simple-search-term"
+          onChange={e => setSimpleSearchParam(e.target.value)}
+          value={simpleSearchParam}
+          placeholder={placeholderText}
+          disabled={!simpleSearchActive}
+        />
+      </Col>
+    )}
+  </div>
+);
+
+const IndexPartSelector = ({
+  part,
+  previousPartOperations,
+  handleIndexPartOperation,
+  handleIndexPartInput,
+  handleAddIndexPartInput,
+  handleAddIndexPartEnter,
+  handleRemoveIndexPartInput,
+  handleIndexPartBetween,
+}) => (
+  <div className="index-part">
+    <Col sm={2}>
+      <span className="index-part-label">{part.name}</span>
+    </Col>
+    <Col sm={4}>
+      <Input
+        className="index-part-operation"
+        type="select"
+        name={`${part.name} Operation`}
+        id={`${part.name}-operation`}
+        value={part.operation}
+        onChange={e => handleIndexPartOperation(part, e.target.value)}
+      >
+        {OPERATIONS.filter(
+          operation =>
+            !previousPartOperations.some(opp => opp !== EQUALS_OPERATION) ||
+            operation === 'All',
+        ).map(operation => (
+          <option key={operation} value={operation}>
+            {operation}
+          </option>
+        ))}
+      </Input>
+    </Col>
+    <Col sm={6}>
+      <span className="index-part-values">
+        {part.operation === 'Equal To' ? (
+          <EqualsOperation
+            part={part}
+            handleIndexPartInput={handleIndexPartInput}
+            handleAddIndexPartInput={handleAddIndexPartInput}
+            handleAddIndexPartEnter={handleAddIndexPartEnter}
+            handleRemoveIndexPartInput={handleRemoveIndexPartInput}
+          />
+        ) : part.operation === 'Is Between' ? (
+          <BetweenOperation
+            part={part}
+            handleIndexPartBetween={handleIndexPartBetween}
+          />
+        ) : part.operation !== 'All' ? (
+          <SingleOperation
+            part={part}
+            handleIndexPartInput={handleIndexPartInput}
+          />
+        ) : null}
+      </span>
+    </Col>
   </div>
 );
 
@@ -114,6 +219,7 @@ const SearchbarComponent = ({
   handleIndexPartBetween,
   handleIndexPartInput,
   handleAddIndexPartInput,
+  handleAddIndexPartEnter,
   handleRemoveIndexPartInput,
   toggleAdvancedSearchOpen,
   simpleSearchActive,
@@ -123,7 +229,7 @@ const SearchbarComponent = ({
     <InputGroup size="lg" className="simple-search-input-group">
       <Input
         aria-label="Search"
-        autoFocus
+        innerRef={input => input && input.focus()}
         onKeyPress={handleInputKeypress}
         id="simple-search-term"
         name="simple-search-term"
@@ -170,43 +276,15 @@ const SearchbarComponent = ({
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <Row className="index-selector">
-        <Col sm={2}>
-          <strong>Search By:</strong>
-        </Col>
-        <Col sm={simpleSearchActive ? 4 : 10}>
-          <Input
-            className="index-chooser-select"
-            onChange={e => setIndexHandler(e.target.value)}
-            value={searchParams.index ? searchParams.index.name : 'all-fields'}
-            type="select"
-            name="Search By"
-            id="index-chooser"
-          >
-            <option value="all-fields">All fields that start with</option>
-            {indexDefinitions.map(index => (
-              <option key={index.name} value={index.name}>
-                {index.name}
-              </option>
-            ))}
-          </Input>
-        </Col>
-        {simpleSearchActive && (
-          <Col sm={6}>
-            <Input
-              aria-label="Search"
-              autoFocus
-              onKeyPress={handleInputKeypress}
-              id="simple-search-term2"
-              name="simple-search-term"
-              onChange={e => setSimpleSearchParam(e.target.value)}
-              value={simpleSearchParam}
-              placeholder={placeholderText}
-              disabled={!simpleSearchActive}
-            />
-          </Col>
-        )}
-      </Row>
+      <IndexSelector
+        simpleSearchActive={simpleSearchActive}
+        setIndexHandler={setIndexHandler}
+        setSimpleSearchParam={setSimpleSearchParam}
+        searchParams={searchParams}
+        indexDefinitions={indexDefinitions}
+        simpleSearchParam={simpleSearchParam}
+        placeholderText={placeholderText}
+      />
       {!simpleSearchActive && <hr />}
       {searchParams.index &&
         searchParams.indexParts.map((part, i) => {
@@ -214,60 +292,30 @@ const SearchbarComponent = ({
             .map(p => p.operation)
             .slice(0, i);
           return (
-            <Row className="index-part" key={part.name}>
-              <Col sm={2}>
-                <span className="index-part-label">{part.name}</span>
-              </Col>
-              <Col sm={4}>
-                <Input
-                  className="index-part-operation"
-                  type="select"
-                  name={`${part.name} Operation`}
-                  id={`${part.name}-operation`}
-                  value={part.operation}
-                  onChange={e => handleIndexPartOperation(part, e.target.value)}
-                >
-                  {OPERATIONS.filter(
-                    operation =>
-                      !previousPartOperations.some(
-                        opp => opp !== 'Is Equal To',
-                      ) || operation === 'All',
-                  ).map(operation => (
-                    <option key={operation} value={operation}>
-                      {operation}
-                    </option>
-                  ))}
-                </Input>
-              </Col>
-              <Col sm={6}>
-                <span className="index-part-values">
-                  {part.operation === 'Is Equal To' ? (
-                    <EqualsOperation
-                      part={part}
-                      handleIndexPartInput={handleIndexPartInput}
-                      handleAddIndexPartInput={handleAddIndexPartInput}
-                      handleRemoveIndexPartInput={handleRemoveIndexPartInput}
-                    />
-                  ) : part.operation === 'Between' ? (
-                    <BetweenOperation
-                      part={part}
-                      handleIndexPartBetween={handleIndexPartBetween}
-                    />
-                  ) : part.operation !== 'All' ? (
-                    <SingleOperation
-                      part={part}
-                      handleIndexPartInput={handleIndexPartInput}
-                    />
-                  ) : null}
-                </span>
-              </Col>
-            </Row>
+            <IndexPartSelector
+              key={part.name}
+              part={part}
+              previousPartOperations={previousPartOperations}
+              handleIndexPartOperation={handleIndexPartOperation}
+              handleIndexPartInput={handleIndexPartInput}
+              handleAddIndexPartInput={handleAddIndexPartInput}
+              handleAddIndexPartEnter={handleAddIndexPartEnter}
+              handleRemoveIndexPartInput={handleRemoveIndexPartInput}
+              handleIndexPartBetween={handleIndexPartBetween}
+            />
           );
         })}
       <div className="row justify-content-end">
         <button className="btn btn-link" onClick={handleResetSearch}>
           Reset
         </button>
+        <Button
+          disabled={searching}
+          color="primary"
+          onClick={handleSearchSubmissions}
+        >
+          Apply
+        </Button>
       </div>
     </div>
   </div>
@@ -275,6 +323,7 @@ const SearchbarComponent = ({
 
 export const mapStateToProps = state => ({
   simpleSearchActive: state.settingsDatastore.simpleSearchActive,
+  advancedSearchOpen: state.settingsDatastore.advancedSearchOpen,
   form: state.settingsDatastore.currentForm,
   indexDefinitions: state.settingsDatastore.currentForm
     ? List(state.settingsDatastore.currentForm.indexDefinitions).filter(
@@ -291,6 +340,7 @@ export const mapDispatchToProps = {
   fetchSubmissionsSimple: actions.fetchSubmissionsSimple,
   fetchSubmissionsAdvanced: actions.fetchSubmissionsAdvanced,
   toggleSimpleSearch: actions.toggleSimpleSearch,
+  setAdvancedSearchOpen: actions.setAdvancedSearchOpen,
   setSimpleSearchParam: actions.setSimpleSearchParam,
   resetSearchParams: actions.resetSearchParams,
   setIndex: actions.setIndex,
@@ -364,7 +414,7 @@ const setIndexHandler = ({
       index.parts.map((part, i) =>
         IndexPart({
           name: part,
-          operation: i === 0 ? 'Starts With' : 'All',
+          operation: i === 0 ? 'Equal To' : 'All',
         }),
       ),
     );
@@ -388,6 +438,11 @@ const handleIndexPartBetween = ({ setIndexPartBetween }) => (
   field,
 ) => e => setIndexPartBetween(part, field, e.target.value);
 
+const handleAddIndexPartEnter = ({ addIndexPartInput }) => part => e => {
+  if (e.key === 'Enter') {
+    addIndexPartInput(part);
+  }
+};
 const handleAddIndexPartInput = ({ addIndexPartInput }) => part => () =>
   addIndexPartInput(part);
 
@@ -410,7 +465,6 @@ const handleResetSearch = ({
 
 export const Searchbar = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withState('advancedSearchOpen', 'setAdvancedSearchOpen', false),
   withState('indexLookup', 'setIndexLookup', ''),
   withState('placeholderText', 'setPlaceholderText', DEFAULT_PLACEHOLDER),
   withHandlers({
@@ -423,6 +477,7 @@ export const Searchbar = compose(
     handleIndexPartInput,
     handleIndexPartBetween,
     handleAddIndexPartInput,
+    handleAddIndexPartEnter,
     handleRemoveIndexPartInput,
   }),
 )(SearchbarComponent);

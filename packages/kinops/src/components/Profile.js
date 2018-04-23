@@ -12,6 +12,7 @@ export const Profile = ({
   openKitchenSinkForm,
   isOpen,
   toggle,
+  isGuest,
 }) => (
   <Dropdown isOpen={isOpen} toggle={toggle}>
     <DropdownToggle
@@ -50,25 +51,31 @@ export const Profile = ({
             Invite Others
           </a>
         )}
-        <a
-          role="button"
-          tabIndex="0"
-          onClick={openHelpForm}
-          className="dropdown-item"
-        >
-          Get Help
-        </a>
-        <a
-          role="button"
-          tabIndex="0"
-          onClick={openFeedbackForm}
-          className="dropdown-item"
-        >
-          Give Feedback
-        </a>
-        <Link to="/about" className="dropdown-item" onClick={toggle}>
-          About My Space
-        </Link>
+        {!isGuest && (
+          <a
+            role="button"
+            tabIndex="0"
+            onClick={openHelpForm}
+            className="dropdown-item"
+          >
+            Get Help
+          </a>
+        )}
+        {!isGuest && (
+          <a
+            role="button"
+            tabIndex="0"
+            onClick={openFeedbackForm}
+            className="dropdown-item"
+          >
+            Give Feedback
+          </a>
+        )}
+        {!isGuest && (
+          <Link to="/about" className="dropdown-item" onClick={toggle}>
+            About My Space
+          </Link>
+        )}
         <div className="dropdown-divider" />
         <a
           href={`${bundle.spaceLocation()}/app/logout`}

@@ -4,6 +4,7 @@ import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'connected-react-router';
 
 import { actions as systemErrorActions } from '../modules/errors';
+import { actions as toastActions } from 'kinops/src/redux/modules/toasts';
 import {
   actions,
   types,
@@ -32,26 +33,17 @@ export function* fetchFormsSaga() {
     }),
   ]);
 
-  if (displayableForms.serverError || manageableForms.serverError) {
-    yield put(
-      systemErrorActions.setSystemError(
-        displayableForms.serverError || manageableForms.serverError,
-      ),
-    );
-  } else if (displayableForms.errors || manageableForms.errors) {
-    yield put(
-      actions.setFormsErrors(displayableForms.errors || manageableForms.errors),
-    );
-  } else {
-    const manageableFormsSlugs = manageableForms.forms.map(form => form.slug);
-    yield put(
-      actions.setForms({
-        manageableForms: manageableFormsSlugs,
-        displayableForms: displayableForms.forms,
-        bridges: space.space.bridges,
-      }),
-    );
-  }
+  const manageableFormsSlugs = manageableForms.forms
+    ? manageableForms.forms.map(form => form.slug)
+    : [];
+
+  yield put(
+    actions.setForms({
+      manageableForms: manageableFormsSlugs,
+      displayableForms: displayableForms.forms,
+      bridges: space.space ? space.space.bridges : [],
+    }),
+  );
 }
 
 export function* fetchFormSaga(action) {
@@ -208,8 +200,16 @@ export function* fetchSubmissionsSimpleSaga() {
 
     if (responsesWithResults.size > 1 && responsesWithPageTokens.size > 0) {
       // Multiple searches had results and at least one had a next page token);
-      yield put(actions.setSubmissions(List()));
-      alert('Need to use advanced search');
+      yield all([
+        put(actions.setSubmissions(List())),
+        put(actions.setAdvancedSearchOpen(true)),
+        put(
+          toastActions.addError(
+            'There were too many matching results. You will need to use an advanced search to create a better query.',
+            'Too many results.',
+          ),
+        ),
+      ]);
     } else if (
       responsesWithResults.size === 1 &&
       responsesWithPageTokens.size === 1
@@ -260,15 +260,20 @@ export function* fetchSubmissionsAdvancedSaga() {
   searcher.index(searchParams.index.name);
   searchParams.indexParts.forEach(part => {
     switch (part.operation) {
-      case 'Between':
+      case 'Is Between':
         searcher.between(
           part.name,
           part.value.values.get(0),
           part.value.values.get(1),
         );
         break;
-      case 'Is Equal To':
-        const partWithInput = part.value.input !== '' ? part.updateIn(['value','values'], values => values.push(part.value.input)) : part;
+      case 'Equal To':
+        const partWithInput =
+          part.value.input !== ''
+            ? part.updateIn(['value', 'values'], values =>
+                values.push(part.value.input),
+              )
+            : part;
         if (partWithInput.value.values.size > 1) {
           searcher.in(partWithInput.name, partWithInput.value.values.toJS());
         } else {
