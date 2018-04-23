@@ -1,44 +1,50 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { TimeAgo } from 'common';
 import { activityData } from '../../RequestActivityList';
 
 export const TaskHeader = ({ activity }) => {
   const data = activityData(activity);
   return (
-    <div>
+    <Fragment>
       <h1>
         {activity.label}
-        <span className="status status-green">{data.Status}</span>
+        <span className="status status--green">{data.Status}</span>
       </h1>
-    </div>
+    </Fragment>
   );
 };
 
 export const TaskBody = ({ activity }) => {
   const data = activityData(activity);
   return (
-    <div>
-      <div className="row">
-        <div className="col">
+    <Fragment>
+      <div className="data-list-row">
+        <div className="data-list-row__col">
           <dl>
-            <dt>Created</dt>
+            <dt>
+              <span className="fa fa-fw fa-calendar" />Created
+            </dt>
             <dd>
               <TimeAgo timestamp={activity.createdAt} />
             </dd>
           </dl>
         </div>
-        <div className="col">
+        <div className="data-list-row__col">
           <dl>
-            <dt>Updated</dt>
+            <dt>
+              <span className="fa fa-fw fa-calendar" />Updated
+            </dt>
             <dd>
               <TimeAgo timestamp={activity.updatedAt} />
             </dd>
           </dl>
         </div>
         {(data['Assigned Team'] || data['Assigned Individual']) && (
-          <div className="col">
+          <div className="data-list-row__col">
             <dl>
-              <dt>Assignee</dt>
+              <dt>
+                <span className="fa fa-fw fa-user" />Assignee
+              </dt>
               <dd>
                 {data['Assigned Team'] && data['Assigned Individual']
                   ? `${data['Assigned Team']} > ${data['Assigned Individual']}`
@@ -48,7 +54,7 @@ export const TaskBody = ({ activity }) => {
           </div>
         )}
         {data.Comments && (
-          <div className="col">
+          <div className="data-list-row__col">
             <dl>
               <dt>Comments</dt>
               <dd>{data.Comments}</dd>
@@ -56,6 +62,6 @@ export const TaskBody = ({ activity }) => {
           </div>
         )}
       </div>
-    </div>
+    </Fragment>
   );
 };

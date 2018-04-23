@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { CoreForm } from 'react-kinetic-core';
 import {
   KappLink as Link,
@@ -25,7 +25,7 @@ export const Form = ({
   handleLoaded,
   values,
 }) => (
-  <div>
+  <Fragment>
     <PageTitle parts={[form ? form.name : '']} />
     <span className="services-color-bar services-color-bar__blue-slate" />
     <div className="page-container page-container--services-form">
@@ -86,5 +86,5 @@ export const Form = ({
         )}
       </div>
     </div>
-  </div>
+  </Fragment>
 );

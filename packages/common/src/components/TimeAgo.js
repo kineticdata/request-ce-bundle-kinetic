@@ -39,8 +39,8 @@ export class TimeAgo extends Component {
 
   render() {
     return (
-      <span className="time-ago-wrapper">
-        <span className="time-ago-text" id={this.uuid}>
+      <span className="time-ago">
+        <span className="time-ago__text" id={this.uuid}>
           {this.state.timeAgo}
         </span>
         <UncontrolledTooltip placement="top" target={this.uuid} delay={0}>

@@ -39,7 +39,7 @@ const ProfileLink = ({ submitter }) => (
 );
 
 const StatusItem = ({ submission }) => (
-  <div className="col">
+  <div className="data-list-row__col">
     <dl>
       <dt>Status:</dt>
       <dd>{getStatus(submission)}</dd>
@@ -49,7 +49,7 @@ const StatusItem = ({ submission }) => (
 
 const DisplayDateItem = ({ submission }) =>
   !submission.submittedAt ? (
-    <div className="col">
+    <div className="data-list-row__col">
       <dl>
         <dt>Created:</dt>
         <dd>
@@ -63,7 +63,7 @@ const DisplayDateItem = ({ submission }) =>
       </dl>
     </div>
   ) : (
-    <div className="col">
+    <div className="data-list-row__col">
       <dl>
         <dt>Submitted:</dt>
         <dd>
@@ -86,7 +86,7 @@ const ServiceOwnerItem = ({ submission }) => {
   });
   return (
     !!serviceOwner && (
-      <div className="col">
+      <div className="data-list-row__col">
         <dl>
           <dt>Service Owning Team:</dt>
           <dd>{serviceOwner} Team</dd>
@@ -101,7 +101,7 @@ const EstCompletionItem = ({ submission }) => {
   return (
     submission.coreState === constants.CORE_STATE_SUBMITTED &&
     !!dueDate && (
-      <div className="col">
+      <div className="data-list-row__col">
         <dl>
           <dt>Est. Completion:</dt>
           <dd>
@@ -119,7 +119,7 @@ const CompletedInItem = ({ submission }) => {
     getDurationInDays(submission.createdAt, submission.closedAt);
   return (
     (duration || duration === 0) && (
-      <div className="col">
+      <div className="data-list-row__col">
         <dl>
           <dt>Completed in:</dt>
           <dd>
@@ -143,9 +143,9 @@ export const RequestShow = ({ submission, listType, mode }) => (
       <Fragment>
         <div className="submission-meta">
           <div className="page-container">
-            <div className="row">
+            <div className="data-list-row">
               <StatusItem submission={submission} />
-              <div className="col">
+              <div className="data-list-row__col">
                 <dl>
                   <dt>Confirmation #</dt>
                   <dd>{submission.handle}</dd>
@@ -169,52 +169,47 @@ export const RequestShow = ({ submission, listType, mode }) => (
             </div>
           </div>
         </div>
-        <div className="page-container page-container--submission-details">
-          <div className="request-detail-wrapper">
-            <div className="submission-details-container page-container">
-              <div className="submission-detail-wrapper">
-                <h1>
-                  <Icon
-                    image={getIcon(submission.form)}
-                    background="greenGrass"
-                  />
-                  {submission.form.name}
-                </h1>
-                {submission.form.name !== submission.label && (
-                  <p>{submission.label}</p>
-                )}
-              </div>
-              <div className="submission-confirmation-wrapper">
-                {mode === 'confirmation' && (
-                  <RequestShowConfirmationContainer submission={submission} />
-                )}
-              </div>
-              <div className="submission-details-tab-wrapper">
-                <ul className="nav nav-tabs">
-                  <li role="presentation">
-                    <NavLink
-                      to={getSubmissionPath(submission, null, listType)}
-                      activeClassName="active"
-                    >
-                      Timeline
-                    </NavLink>
-                  </li>
-                  <li role="presentation">
-                    <NavLink
-                      to={`${getSubmissionPath(
-                        submission,
-                        'review',
-                        listType,
-                      )}`}
-                      activeClassName="active"
-                    >
-                      Review Request
-                    </NavLink>
-                  </li>
-                </ul>
-              </div>
+        <div className="page-container page-container--submission">
+          <div className="page-content">
+            <div className="submission-title">
+              <h1>
+                <Icon
+                  image={getIcon(submission.form)}
+                  background="greenGrass"
+                />
+                {submission.form.name}
+              </h1>
+              {submission.form.name !== submission.label && (
+                <p>{submission.label}</p>
+              )}
+            </div>
 
-              <div className="submission-timeline-wrapper submission-request-wrapper">
+            {mode === 'confirmation' && (
+              <div className="card card--submission-confirmation">
+                <RequestShowConfirmationContainer submission={submission} />
+              </div>
+            )}
+
+            <div className="submission-tabs">
+              <ul className="nav nav-tabs">
+                <li role="presentation">
+                  <NavLink
+                    to={getSubmissionPath(submission, null, listType)}
+                    activeClassName="active"
+                  >
+                    Timeline
+                  </NavLink>
+                </li>
+                <li role="presentation">
+                  <NavLink
+                    to={`${getSubmissionPath(submission, 'review', listType)}`}
+                    activeClassName="active"
+                  >
+                    Review Request
+                  </NavLink>
+                </li>
+              </ul>
+              <div className="submission-tabs__content">
                 {mode === 'review' ? (
                   <CoreForm
                     submission={submission.id}

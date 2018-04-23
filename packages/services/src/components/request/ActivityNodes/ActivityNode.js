@@ -48,8 +48,8 @@ export const ActivityNode = props => {
   const ActivityNodeBody = getActivityNodeBody(props.activity.type);
   return (
     <li>
-      <div className="timeline-item expanded">
-        <span className="circle" />
+      <div className="card card--timeline">
+        <span className="card--timeline__circle" />
         <ActivityNodeHeader {...props} />
         <ActivityNodeBody {...props} />
       </div>

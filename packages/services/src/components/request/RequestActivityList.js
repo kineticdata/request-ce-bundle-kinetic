@@ -16,20 +16,22 @@ export const activityData = activity => {
 };
 
 export const RequestActivityList = ({ submission }) => (
-  <ul>
-    {submission.submittedAt ? (
-      <StartNode timestamp={submission.submittedAt} label="Started" />
-    ) : (
-      <StartNode timestamp={submission.createdAt} label="Created" />
-    )}
-    {submission.activities
-      .map(activity => ({ activity, submission, key: activity.id }))
-      .map(props => <ActivityNode {...props} />)}
-    {submission.activities.length === 0 && <EmptyNode />}
-    {submission.closedAt ? (
-      <EndNode timestamp={submission.closedAt} />
-    ) : (
-      <InProgressNode />
-    )}
-  </ul>
+  <div className="submission-timeline">
+    <ul>
+      {submission.submittedAt ? (
+        <StartNode timestamp={submission.submittedAt} label="Started" />
+      ) : (
+        <StartNode timestamp={submission.createdAt} label="Created" />
+      )}
+      {submission.activities
+        .map(activity => ({ activity, submission, key: activity.id }))
+        .map(props => <ActivityNode {...props} />)}
+      {submission.activities.length === 0 && <EmptyNode />}
+      {submission.closedAt ? (
+        <EndNode timestamp={submission.closedAt} />
+      ) : (
+        <InProgressNode />
+      )}
+    </ul>
+  </div>
 );
