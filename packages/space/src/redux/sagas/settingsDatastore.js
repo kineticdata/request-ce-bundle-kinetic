@@ -269,14 +269,14 @@ export function* fetchSubmissionsAdvancedSaga() {
   searcher.index(searchParams.index.name);
   searchParams.indexParts.forEach(part => {
     switch (part.operation) {
-      case 'Between':
+      case 'Is Between':
         searcher.between(
           part.name,
           part.value.values.get(0),
           part.value.values.get(1),
         );
         break;
-      case 'Is Equal To':
+      case 'Equal To':
         const partWithInput =
           part.value.input !== ''
             ? part.updateIn(['value', 'values'], values =>
