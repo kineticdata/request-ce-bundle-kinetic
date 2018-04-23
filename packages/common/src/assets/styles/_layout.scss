@@ -68,3 +68,22 @@
 .page-content {
   flex: 1 0 100%;
 }
+
+.data-list-row {
+  display: flex;
+  flex-wrap: wrap;
+  &__col {
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+  dl {
+    color: $black;
+    font-size: 0.875rem;
+  }
+}

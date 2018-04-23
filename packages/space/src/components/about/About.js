@@ -22,20 +22,20 @@ const AboutComponent = ({ space, about, loading }) => (
         <div className="page-content page-content--space-about">
           <section>
             <h2 className="section__title">General</h2>
-            <div className="data-list">
-              <dl className="data-list__col">
+            <div className="data-list-row">
+              <dl className="data-list-row__col">
                 <dt>Space Name</dt>
                 <dd>{space.name}</dd>
               </dl>
 
-              <dl className="data-list__col">
+              <dl className="data-list-row__col">
                 <dt>User Base</dt>
                 <dd>
                   {about.numberOfUsers} users in {about.numberOfTeams} teams
                 </dd>
               </dl>
 
-              <dl className="data-list__col">
+              <dl className="data-list-row__col">
                 <dt>Created At</dt>
                 <dd>
                   <TimeAgo timestamp={space.createdAt} id={space.slug} />
