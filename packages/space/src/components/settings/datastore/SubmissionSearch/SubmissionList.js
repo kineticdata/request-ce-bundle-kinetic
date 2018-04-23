@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { actions } from '../../../../redux/modules/settingsDatastore';
 import { SubmissionListItem } from './SubmissionListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 
@@ -45,52 +46,73 @@ const SubmissionListComponent = ({
   hasStartedSearching,
   nextPageToken,
   searching,
-}) => (
-  <div className="submissions">
-    {loading ? (
-      <h3>Loading</h3>
-    ) : (
-      <div>
-        {submissions.size > 0 && (
-          <div>
-            {nextPageToken === null && (
-              <div className="alert alert-success mt-3">
-                <strong>{submissions.size}</strong> results found
-              </div>
-            )}
-            <table className="table table-sm table-hover table-datastore">
-              <thead className="d-none d-md-table-header-group">
-                <tr>
-                  {columns.map(c => (
-                    <th
-                      key={`thead-${c.type}-${c.name}`}
-                      className="d-sm-none d-md-table-cell"
-                    >
-                      {c.label}
-                    </th>
+  path,
+  isMobile,
+  cloneSubmission,
+  deleteSubmission,
+  fetchSubmissions,
+}) => {
+  const visibleColumns = columns.filter(c => c.visible);
+  return (
+    <div className="submissions">
+      {loading ? (
+        <h3>Loading</h3>
+      ) : (
+        <div>
+          {submissions.size > 0 && (
+            <div>
+              {nextPageToken === null && (
+                <div className="alert alert-success mt-3">
+                  <strong>{submissions.size}</strong> results found
+                </div>
+              )}
+              <table className="table table-sm table-hover table-datastore">
+                <thead className="d-none d-md-table-header-group">
+                  <tr>
+                    {visibleColumns.map(c => (
+                      <th
+                        key={`thead-${c.type}-${c.name}`}
+                        className="d-sm-none d-md-table-cell"
+                      >
+                        {c.label}
+                      </th>
+                    ))}
+                    <th />
+                  </tr>
+                </thead>
+                <tbody>
+                  {submissions.map(s => (
+                    <SubmissionListItem
+                      key={`trow-${s.id}`}
+                      submission={s}
+                      loading={loading}
+                      form={form}
+                      columns={visibleColumns}
+                      path={path}
+                      isMobile={isMobile}
+                      cloneSubmission={cloneSubmission}
+                      fetchSubmissions={fetchSubmissions}
+                      deleteSubmission={deleteSubmission}
+                    />
                   ))}
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {submissions.map(s => (
-                  <SubmissionListItem key={`trow-${s.id}`} submission={s} />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-        {searching && <WallySearching />}
-        {!searching &&
-          hasStartedSearching &&
-          submissions.size === 0 && <WallyNoResultsFoundMessage form={form} />}
-        {!searching &&
-          !hasStartedSearching &&
-          submissions.size === 0 && <WallyEnterSearchTerm form={form} />}
-      </div>
-    )}
-  </div>
-);
+                </tbody>
+              </table>
+            </div>
+          )}
+          {searching && <WallySearching />}
+          {!searching &&
+            hasStartedSearching &&
+            submissions.size === 0 && (
+              <WallyNoResultsFoundMessage form={form} />
+            )}
+          {!searching &&
+            !hasStartedSearching &&
+            submissions.size === 0 && <WallyEnterSearchTerm form={form} />}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const mapStateToProps = state => ({
   loading: state.settingsDatastore.currentFormLoading,
@@ -98,11 +120,17 @@ export const mapStateToProps = state => ({
   submissions: state.settingsDatastore.submissions,
   searching: state.settingsDatastore.searching,
   nextPageToken: state.settingsDatastore.nextPageToken,
-  columns: state.settingsDatastore.currentForm.columns.filter(c => c.visible),
+  columns: state.settingsDatastore.currentForm.columns,
   hasStartedSearching: state.settingsDatastore.hasStartedSearching,
+  path: state.router.location.pathname.replace(/\/$/, ''),
+  isMobile: state.layout.size === 'small',
 });
 
-export const mapDispatchToProps = {};
+export const mapDispatchToProps = {
+  cloneSubmission: actions.cloneSubmission,
+  deleteSubmission: actions.deleteSubmission,
+  fetchSubmissions: actions.fetchSubmissions,
+};
 
 export const SubmissionList = compose(
   connect(mapStateToProps, mapDispatchToProps),
