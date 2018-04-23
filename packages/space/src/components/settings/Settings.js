@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, lifecycle } from 'recompose';
 import { Icon } from 'common';
 
 import { SpaceSettings } from './spaceSettings/SpaceSettings';
@@ -10,8 +10,9 @@ import { Notifications } from './notifications/Notifications';
 import { Datastore } from './datastore/Datastore';
 import { Users } from './users/Users';
 import { Profile } from './profile/Profile';
+import { actions as datastoreActions } from '../../redux/modules/settingsDatastore';
 
-export const Settings = () => (
+export const SettingsComponent = () => (
   <Switch>
     <Route path="/settings/profile" component={Profile} />
     <Route path="/settings/space" component={SpaceSettings} />
@@ -21,6 +22,19 @@ export const Settings = () => (
     <Route component={SettingsNavigation} />
   </Switch>
 );
+
+const mapDispatchToProps = {
+  fetchForms: datastoreActions.fetchForms,
+};
+
+export const Settings = compose(
+  connect(null, mapDispatchToProps),
+  lifecycle({
+    componentWillMount(prev, next) {
+      this.props.fetchForms();
+    },
+  }),
+)(SettingsComponent);
 
 const SettingsCard = ({ path, icon, name, description }) => (
   <Link to={path} className="s-card">

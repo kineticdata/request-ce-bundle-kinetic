@@ -76,4 +76,15 @@
       }
     }
   }
+
+  .settings-group {
+    .nav-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      &.active {
+        font-weight: 600;
+      }
+    }
+  }
 }
