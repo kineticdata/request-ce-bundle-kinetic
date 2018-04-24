@@ -34,8 +34,8 @@ const DatastoreSubmissionComponent = ({
 }) => (
   <div className="datastore-container">
     <div className="datastore-content">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">home</Link> /{` `}
             <Link to="/settings">settings</Link> /{` `}
@@ -46,7 +46,7 @@ const DatastoreSubmissionComponent = ({
             {submissionId ? (submission ? submission.label : '') : ' New'}
           </h1>
         </div>
-        <div className="page-title-actions">
+        <div className="page-title__actions">
           {showPrevAndNext &&
             !isEditing && (
               <ButtonGroup className="datastore-prev-next">

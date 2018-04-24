@@ -21,15 +21,3 @@ a {
 .tooltip {
   font-size: 0.75rem;
 }
-
-.main-container {
-  display: flex;
-  overflow-y: auto !important;
-}
-
-.layout {
-  margin-top: $header-height;
-  display: flex;
-  flex: 1 1 100%;
-  flex-direction: column;
-}

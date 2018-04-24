@@ -50,7 +50,7 @@ export const AppComponent = props => {
     main: (
       <Fragment>
         <Notifications />
-        <div className="space layout">
+        <main className="package-layout package-layout--space">
           <Route path="/" exact component={Home} />
           <Route path="/about" exact component={About} />
           <Route path="/alerts" exact component={Alerts} />
@@ -97,7 +97,7 @@ export const AppComponent = props => {
             )}
           />
           <Route path="/reset-password" render={() => <Redirect to="/" />} />
-        </div>
+        </main>
       </Fragment>
     ),
   });

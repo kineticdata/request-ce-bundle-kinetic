@@ -7,73 +7,70 @@ import { Avatar } from '../shared/Avatar';
 import { actions } from '../../redux/modules/about';
 
 const AboutComponent = ({ space, about, loading }) => (
-  <div className="about-container">
+  <div className="page-container page-container--space-about">
     <PageTitle parts={['About']} />
     {!loading && (
-      <div className="about-content pane">
-        <div className="page-title-wrapper">
-          <div className="page-title">
+      <div className="page-panel page-panel--space-about">
+        <div className="page-title">
+          <div className="page-title__wrapper">
             <h3>
               <Link to="/">home</Link> /
             </h3>
             <h1>About My Space</h1>
           </div>
         </div>
-
-        <h2 className="section-title">General</h2>
-        <div className="details-wrapper">
-          <div className="row">
-            <div className="col">
-              <dl>
+        <div className="page-content page-content--space-about">
+          <section>
+            <h2 className="section__title">General</h2>
+            <div className="data-list-row">
+              <dl className="data-list-row__col">
                 <dt>Space Name</dt>
                 <dd>{space.name}</dd>
               </dl>
-            </div>
-            <div className="col">
-              <dl>
+
+              <dl className="data-list-row__col">
                 <dt>User Base</dt>
                 <dd>
                   {about.numberOfUsers} users in {about.numberOfTeams} teams
                 </dd>
               </dl>
-            </div>
-            <div className="col">
-              <dl>
+
+              <dl className="data-list-row__col">
                 <dt>Created At</dt>
                 <dd>
                   <TimeAgo timestamp={space.createdAt} id={space.slug} />
                 </dd>
               </dl>
             </div>
-          </div>
-        </div>
+          </section>
+          <section>
+            <h2 className="section__title">Space Admins</h2>
 
-        <h2 className="section-title">Space Admins</h2>
-        <div className="space-admin-wrapper">
-          <table className="table table-responsive-sm">
-            <thead>
-              <tr className="header">
-                <th />
-                <th>Email</th>
-                <th>Display Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {about.spaceAdmins.map(user => (
-                <tr key={user.username}>
-                  <td>
-                    <Avatar user={user} />
-                  </td>
-                  <td>
-                    <Link to={`/profile/${user.username || user.email}`}>
-                      {user.email}
-                    </Link>
-                  </td>
-                  <td>{user.displayName}</td>
+            <table className="table table-responsive-sm">
+              <thead>
+                <tr>
+                  <th />
+                  <th>Email</th>
+                  <th>Display Name</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {about.spaceAdmins.map(user => (
+                  <tr key={user.username}>
+                    <td>
+                      <Avatar user={user} />
+                    </td>
+                    <td>
+                      <Link to={`/profile/${user.username || user.email}`}>
+                        {user.email}
+                      </Link>
+                    </td>
+                    <td>{user.displayName}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
         </div>
       </div>
     )}

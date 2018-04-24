@@ -2,8 +2,8 @@
  *   Queue Item Discussions ~ Queue
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.queue .queue-item-discussions,
-.queue .queue-item-discussions-modal-body {
+.package-layout--queue .queue-item-discussions,
+.package-layout--queue .queue-item-discussions-modal-body {
   background-color: $white;
   display: flex;
   flex-direction: column;

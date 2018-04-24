@@ -23,12 +23,12 @@ const AlertFormComponent = ({
   spaceName,
   editing,
 }) => (
-  <div className="space-alerts-container">
+  <div className="page-container page-container--space-alerts-form">
     <PageTitle parts={[editing ? 'Edit Alert' : 'New Alert', 'Alerts']} />
 
-    <div className="alerts-content pane">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+    <div className="page-panel page-panel--space-alerts-form">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">home</Link> / <Link to="/alerts">alerts</Link> /
           </h3>

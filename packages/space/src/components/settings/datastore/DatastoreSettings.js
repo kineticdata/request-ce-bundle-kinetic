@@ -31,9 +31,9 @@ const SettingsComponent = ({
 }) =>
   !loading && (
     <div className="datastore-container">
-      <div className="datastore-content pane scrollable">
-        <div className="page-title-wrapper">
-          <div className="page-title">
+      <div className="datastore-content panel scrollable">
+        <div className="page-title">
+          <div className="page-title__wrapper">
             <h3>
               <Link to="/">home</Link> /{` `}
               <Link to="/settings">settings</Link> /{` `}
@@ -41,7 +41,7 @@ const SettingsComponent = ({
             </h3>
             <h1>{origForm.name} Configuration</h1>
           </div>
-          <div className="page-title-actions">
+          <div className="page-title__actions">
             {hasChanged && (
               <button
                 type="button"
@@ -64,7 +64,7 @@ const SettingsComponent = ({
         </div>
         {canManage ? (
           <div className="datastore-settings">
-            <h3 className="section-title">General Settings</h3>
+            <h3 className="section__title">General Settings</h3>
             <div className="settings">
               <div className="form-row">
                 <div className="col">
@@ -109,7 +109,7 @@ const SettingsComponent = ({
               </div>
             </div>
             <div className="table-settings">
-              <h3 className="section-title">Table Display Settings</h3>
+              <h3 className="section__title">Table Display Settings</h3>
               <div className="settings">
                 <table className="table">
                   <thead>
@@ -157,7 +157,7 @@ const SettingsComponent = ({
             </div>
             {/*
             <div className="table-settings">
-              <h3 className="section-title">Bridge Configuration</h3>
+              <h3 className="section__title">Bridge Configuration</h3>
               <div className="settings">
                 {!bridgeName && (
                   <div>

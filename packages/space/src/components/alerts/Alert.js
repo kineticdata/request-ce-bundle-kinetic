@@ -17,8 +17,8 @@ const AlertComponent = ({
     {alert.values.URL ? (
       <td>
         <a href={alert.values.URL} target="blank">
-          <i className="fa fa-external-link fa-fw" />
           {alert.values.Title}
+          <i className="fa fa-fw fa-external-link " />
         </a>
       </td>
     ) : (
@@ -27,19 +27,17 @@ const AlertComponent = ({
     <td dangerouslySetInnerHTML={{ __html: alert.values.Content }} />
     {canEdit && (
       <td>
-        <div className="actions">
-          <div className="btn-group btn-group-sm">
-            <button
-              id={`alert-confirm-${alert.id}`}
-              className="btn btn-danger"
-              onClick={toggleDeleteConfirm(alert.id)}
-            >
-              <span className="fa fa-fw fa-close" />
-            </button>
-            <Link className="btn btn-primary" to={`/alerts/${alert.id}`}>
-              <span className="fa fa-fw fa-pencil" />
-            </Link>
-          </div>
+        <div className="btn-group btn-group-sm">
+          <button
+            id={`alert-confirm-${alert.id}`}
+            className="btn btn-danger"
+            onClick={toggleDeleteConfirm(alert.id)}
+          >
+            <span className="fa fa-fw fa-close" />
+          </button>
+          <Link className="btn btn-primary" to={`/alerts/${alert.id}`}>
+            <span className="fa fa-fw fa-pencil" />
+          </Link>
         </div>
         <PopConfirm
           target={`alert-confirm-${alert.id}`}

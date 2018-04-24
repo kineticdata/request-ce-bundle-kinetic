@@ -17,25 +17,25 @@ export const Catalog = ({
   return (
     <Fragment>
       <PageTitle parts={[]} />
-      <div className="services-search-container">
-        <div className="services-search-wrapper">
+      <div className="search-services-home">
+        <div className="search-services-home__wrapper">
           <h1 className="text-truncate">Services from the team</h1>
           <div className="select">
             <CatalogSearchContainer />
           </div>
         </div>
       </div>
-      <div className="services-home-container container">
-        <div className="my-requests-wrapper">
-          <div className="page-title-wrapper">
-            <div className="page-title">
+      <div className="page-container page-container--services-home">
+        <div className="page-panel page-panel--transparent page-panel--one-thirds page-panel--auto-height page-panel--my-requests">
+          <div className="page-title">
+            <div className="page-title__wrapper">
               <h3>services /</h3>
               <h1>Recent Requests</h1>
             </div>
             <Link to="/requests">View All</Link>
           </div>
 
-          <div className="r-cards-wrapper">
+          <div className="cards__wrapper cards__wrapper--requests">
             {submissions.size > 0 ? (
               submissions
                 .take(5)
@@ -48,21 +48,21 @@ export const Catalog = ({
                 }))
                 .map(props => <RequestCard {...props} />)
             ) : (
-              <div className="card empty-state-card">
+              <div className="card card--empty-state">
                 <h1>You have no requests yet.</h1>
                 <p>As you request new services, they’ll appear here.</p>
               </div>
             )}
           </div>
         </div>
-        <div className="services-wrapper">
-          <div className="page-title-wrapper">
-            <div className="page-title">
+        <div className="page-panel page-panel--transparent page-panel--two-thirds page-panel--services">
+          <div className="page-title">
+            <div className="page-title__wrapper">
               <h3>services /</h3>
               <h1>{homePageMode}</h1>
             </div>
           </div>
-          <div className="c-cards-wrapper">
+          <div className="cards__wrapper cards__wrapper--categories">
             {homePageItems
               .map(
                 item =>

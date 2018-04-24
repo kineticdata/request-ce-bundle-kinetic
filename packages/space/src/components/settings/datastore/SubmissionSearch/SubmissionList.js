@@ -7,7 +7,7 @@ import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 
 const WallyNoResultsFoundMessage = ({ form }) => {
   return (
-    <div className="wally-empty-state">
+    <div className="empty-state empty-state--wally">
       <h5>No {form.name} Submissions Found</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>Add a new one by hitting the new button!.</h6>
@@ -17,7 +17,7 @@ const WallyNoResultsFoundMessage = ({ form }) => {
 
 const WallyEnterSearchTerm = ({ form }) => {
   return (
-    <div className="wally-empty-state">
+    <div className="empty-state empty-state--wally">
       <h5>Enter a term to search</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>
@@ -30,7 +30,7 @@ const WallyEnterSearchTerm = ({ form }) => {
 
 const WallySearching = () => {
   return (
-    <div className="wally-empty-state">
+    <div className="empty-state empty-state--wally">
       <h5>Searching</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>Just a sec while we find those submissions.</h6>

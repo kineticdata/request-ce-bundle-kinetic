@@ -9,7 +9,7 @@ const getProfilePhone = profile =>
 
 export const ProfileCard = ({ user, button }) => {
   return (
-    <div className="card p-card">
+    <div className="card card--profile">
       <Avatar user={user} size={96} />
       <h1>{user.displayName}</h1>
       <p>{user.email}</p>

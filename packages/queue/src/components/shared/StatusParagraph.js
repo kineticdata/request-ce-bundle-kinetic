@@ -5,7 +5,7 @@ import { KappLinkContainer as LinkContainer } from 'common';
 const CLOSED_STATUSES = ['Cancelled', 'Complete'];
 
 const getStatusClass = status =>
-  `icon-wrapper status status-${status.toLowerCase().replace(/\s+/g, '-')}`;
+  `queue-status queue-status--${status.toLowerCase().replace(/\s+/g, '-')}`;
 
 const getStatusId = queueItem => `tooltip-${queueItem.id}-status-paragraph`;
 
@@ -26,16 +26,12 @@ const PrevAndNextGroup = ({ prevAndNext }) => (
   <ButtonGroup className="queue-details-nav">
     <LinkContainer to={prevAndNext.prev || ''}>
       <Button color="inverse" disabled={!prevAndNext.prev}>
-        <span className="icon">
-          <span className="fa fa-fw fa-caret-left" />
-        </span>
+        <span className="fa fa-fw fa-caret-left" />
       </Button>
     </LinkContainer>
     <LinkContainer to={prevAndNext.next || ''}>
       <Button color="inverse" disabled={!prevAndNext.next}>
-        <span className="icon">
-          <span className="fa fa-fw fa-caret-right" />
-        </span>
+        <span className="fa fa-fw fa-caret-right" />
       </Button>
     </LinkContainer>
   </ButtonGroup>
@@ -45,16 +41,9 @@ export const StatusParagraph = ({ queueItem, prevAndNext }) => (
   <div className="status-paragraph">
     <p className={getStatusClass(queueItem.values.Status)}>
       {CLOSED_STATUSES.includes(queueItem.values.Status) ? (
-        <span className="icon">
-          <span className="fa fa-fw fa-circle" style={{ fontSize: '10px' }} />
-        </span>
+        <span className="fa fa-fw fa-circle" />
       ) : (
-        <span className="icon">
-          <span
-            className="fa fa-fw fa-circle-o "
-            style={{ fontSize: '10px' }}
-          />
-        </span>
+        <span className="fa fa-fw fa-circle-o " />
       )}
 
       {queueItem.values.Status}

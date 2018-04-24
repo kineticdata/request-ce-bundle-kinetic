@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { getTeamColor, getTeamIcon } from '../../utils';
 import { Discussion as KinopsDiscussion } from 'discussions';
@@ -22,13 +22,16 @@ export const Team = ({
   openRequestToJoinForm,
   openRequestToLeaveForm,
 }) => (
-  <div className="team-container">
+  <div className="page-container page-container--panels page-container--space-team">
     <PageTitle parts={[team && team.name, 'Teams']} />
     {!loading && (
-      <div className="fragment">
-        <div className={`team-content pane ${userIsMember && 'scrollable'}`}>
-          <div className="page-title-wrapper">
-            <div className="page-title">
+      <Fragment>
+        <div
+          className={`page-panel page-panel--sixty page-panel--scrollable page-panel--space-team ${userIsMember &&
+            'page-panel--scrollable'}`}
+        >
+          <div className="page-title">
+            <div className="page-title__wrapper">
               <h3>
                 <Link to="/">home</Link> / <Link to="/teams">teams</Link> /
               </h3>
@@ -53,16 +56,16 @@ export const Team = ({
                 View Discussion
               </button>
             )}
-          <div className="card t-card">
+          <div className="card card--team">
             <div
-              className="header"
+              className="card--team__header"
               style={{ backgroundColor: getTeamColor(team) }}
             >
               <span />
               <i className={`fa fa-${getTeamIcon(team)} card-icon`} />
               <span />
             </div>
-            <div className="content">
+            <div className="card--team__body">
               <h1>{team.name}</h1>
 
               {team.description && <pre>{team.description}</pre>}
@@ -82,35 +85,34 @@ export const Team = ({
                   Request to Join
                 </button>
               )}
-
-              <div className="t-card-members-container">
-                <h1>Members</h1>
-                <div className="t-card-members-wrapper">
-                  {memberships.map(user => (
-                    <Hoverable
-                      key={user.username}
-                      render={() => <ProfileCard user={user} />}
-                    >
-                      <TeamMemberAvatar user={user} />
-                    </Hoverable>
-                  ))}
-                </div>
+            </div>
+            <div className="card--team__footer">
+              <h1>Members</h1>
+              <div className="card--team__footer__members">
+                {memberships.map(user => (
+                  <Hoverable
+                    key={user.username}
+                    render={() => <ProfileCard user={user} />}
+                  >
+                    <TeamMemberAvatar user={user} />
+                  </Hoverable>
+                ))}
               </div>
             </div>
           </div>
 
           {parent && (
-            <div>
-              <h3 className="section-title">Parent Team</h3>
+            <section>
+              <h3 className="section__title">Parent Team</h3>
               <div className="parent">
                 <Link to={`/teams/${parent.slug}`}>{parent.name}</Link>
                 {parent.description && <p>{parent.description}</p>}
               </div>
-            </div>
+            </section>
           )}
           {subteams.size > 0 && (
-            <div>
-              <h3 className="section-title">Subteams</h3>
+            <section>
+              <h3 className="section__title">Subteams</h3>
               <div className="subteams">
                 {subteams.map(subteam => (
                   <div key={subteam.slug} className="subteam">
@@ -119,12 +121,12 @@ export const Team = ({
                   </div>
                 ))}
               </div>
-            </div>
+            </section>
           )}
           {services.length > 0 && (
-            <div>
-              <h3 className="section-title">Services</h3>
-              <div className="services s-cards-wrapper">
+            <section>
+              <h3 className="section__title">Services</h3>
+              <div className="cards__wrapper cards__wrapper--services">
                 {services.map(service => (
                   <ServiceCard
                     key={service.slug}
@@ -133,24 +135,22 @@ export const Team = ({
                   />
                 ))}
               </div>
-            </div>
+            </section>
           )}
         </div>
         {userIsMember &&
           discussionId && (
-            <div className="team-sidebar d-none d-md-flex">
-              <KinopsDiscussion
-                discussionId={discussionId}
-                isMobileModal
-                renderClose={() => (
-                  <Link to={`/`} className="btn btn-link">
-                    Close
-                  </Link>
-                )}
-              />
-            </div>
+            <KinopsDiscussion
+              discussionId={discussionId}
+              isMobileModal
+              renderClose={() => (
+                <Link to={`/`} className="btn btn-link">
+                  Close
+                </Link>
+              )}
+            />
           )}
-      </div>
+      </Fragment>
     )}
   </div>
 );

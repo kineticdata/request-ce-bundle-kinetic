@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 
 export const Translations = () => (
   <div className="datastore-container">
-    <div className="datastore-content pane">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+    <div className="datastore-content panel">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">home</Link> /{` `}
             <Link to="/settings">settings</Link> /{` `}

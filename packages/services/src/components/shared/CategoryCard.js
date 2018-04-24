@@ -2,7 +2,7 @@ import React from 'react';
 import { KappLink as Link, Icon } from 'common';
 
 export const CategoryCard = props => (
-  <Link to={props.path} className="card c-card">
+  <Link to={props.path} className="card card--category">
     <h1>
       <Icon image={props.category.icon} background="blueSlate" />
       {props.category.name}

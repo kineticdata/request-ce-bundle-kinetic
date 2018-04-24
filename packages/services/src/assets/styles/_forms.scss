@@ -2,15 +2,7 @@
  *   Forms Overrides ~ Services
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-// Hover state with darkened hover color
-@mixin setBgColorAndHover($baseColor) {
-  background-color: $baseColor;
-  &:hover {
-    background-color: darken($baseColor, 5%);
-  }
-}
-
-.form-wrapper {
+.embedded-core-form--wrapper {
   form {
     background-color: transparent;
     padding: 0;

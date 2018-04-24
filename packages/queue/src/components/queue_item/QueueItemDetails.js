@@ -128,7 +128,7 @@ export const QueueItemDetails = ({
 
       {!prohibitSubtasks && (
         <div className="subtasks-section">
-          <h2 className="section-title">
+          <h2 className="section__title">
             Subtasks
             {queueItem.coreState === 'Draft' && (
               <button className="btn btn-link" onClick={openNewItemMenu}>

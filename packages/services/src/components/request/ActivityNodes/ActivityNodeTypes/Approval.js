@@ -1,32 +1,32 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { TimeAgo } from 'common';
 import { activityData } from '../../RequestActivityList';
 
 const getStatusColor = status =>
   status === 'In Progress'
     ? 'status-yellow'
-    : status === 'Denied' ? 'status-red' : 'status-green';
+    : status === 'Denied' ? 'status-red' : 'status--green';
 
 export const ApprovalHeader = ({ activity }) => {
   const data = activityData(activity);
   return (
-    <div>
+    <Fragment>
       <h1>
         {activity.label}
         <span className={`status ${getStatusColor(data.Status)}`}>
           {data.Status}
         </span>
       </h1>
-    </div>
+    </Fragment>
   );
 };
 
 export const ApprovalBody = ({ activity }) => {
   const data = activityData(activity);
   return (
-    <div>
-      <div className="row">
-        <div className="col">
+    <Fragment>
+      <div className="data-list-row">
+        <div className="data-list-row__col">
           <dl>
             <dt>
               <span className="fa fa-fw fa-calendar" />Created
@@ -36,7 +36,7 @@ export const ApprovalBody = ({ activity }) => {
             </dd>
           </dl>
         </div>
-        <div className="col">
+        <div className="data-list-row__col">
           <dl>
             <dt>
               <span className="fa fa-fw fa-calendar" />Updated
@@ -47,11 +47,13 @@ export const ApprovalBody = ({ activity }) => {
           </dl>
         </div>
       </div>
-      <div className="row">
+      <div className="data-list-row">
         {(data['Assigned Team'] || data['Assigned Individual']) && (
-          <div className="col">
+          <div className="data-list-row__col">
             <dl>
-              <dt>Approver</dt>
+              <dt>
+                <span className="fa fa-fw fa-user" />Approver
+              </dt>
               <dd>
                 {data['Assigned Team'] && data['Assigned Individual']
                   ? `${data['Assigned Team']} > ${data['Assigned Individual']}`
@@ -62,31 +64,37 @@ export const ApprovalBody = ({ activity }) => {
         )}
         {data.Status !== 'In Progress' &&
           data.Decision && (
-            <div className="col">
+            <div className="data-list-row__col">
               <dl>
-                <dt>Decision</dt>
+                <dt>
+                  <span className="fa fa-fw fa-code-fork" />Decision
+                </dt>
                 <dd>{data.Decision}</dd>
               </dl>
             </div>
           )}
         {data.Status === 'Denied' &&
           data['Denial Reason'] && (
-            <div className="col">
+            <div className="data-list-row__col">
               <dl>
-                <dt>Denial Reason</dt>
+                <dt>
+                  <span className="fa fa-fw fa-window-close" />Denial Reason
+                </dt>
                 <dd>{data['Denial Reason']}</dd>
               </dl>
             </div>
           )}
         {data.Comments && (
-          <div className="col">
+          <div className="data-list-row__col">
             <dl>
-              <dt>Comments</dt>
+              <dt>
+                <span className="fa fa-fw fa-comment" />Comments
+              </dt>
               <dd>{data.Comments}</dd>
             </dl>
           </div>
         )}
       </div>
-    </div>
+    </Fragment>
   );
 };
