@@ -38,7 +38,9 @@ const enhance = compose(
       enableButton:
         props.submission.coreState === constants.CORE_STATE_DRAFT
           ? true
-          : disabledAttribute === 'true' || disabledAttribute === 'yes'
+          : disabledAttribute === 'true' ||
+            disabledAttribute === 'yes' ||
+            props.submission.coreState === constants.CORE_STATE_CLOSED
             ? false
             : true,
     };
