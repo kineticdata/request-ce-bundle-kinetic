@@ -339,6 +339,7 @@ export const mapStateToProps = state => ({
 export const mapDispatchToProps = {
   fetchSubmissionsSimple: actions.fetchSubmissionsSimple,
   fetchSubmissionsAdvanced: actions.fetchSubmissionsAdvanced,
+  setSimpleSearch: actions.setSimpleSearch,
   toggleSimpleSearch: actions.toggleSimpleSearch,
   setAdvancedSearchOpen: actions.setAdvancedSearchOpen,
   setSimpleSearchParam: actions.setSimpleSearchParam,
@@ -393,22 +394,19 @@ const setIndexHandler = ({
   form,
   indexDefinitions,
   setAdvancedSearchOpen,
-  toggleSimpleSearch,
+  setSimpleSearch,
   simpleSearchActive,
   resetSearchParams,
   setPlaceholderText,
 }) => val => {
   resetSearchParams();
   setIndexLookup('');
+
   if (val === 'all-fields') {
-    if (!simpleSearchActive) {
-      toggleSimpleSearch();
-    }
+    setSimpleSearch(true);
     setPlaceholderText(DEFAULT_PLACEHOLDER);
   } else {
-    if (simpleSearchActive) {
-      toggleSimpleSearch();
-    }
+    setSimpleSearch(false);
     const index = indexDefinitions.find(indexDef => indexDef.name === val);
     const parts = List(
       index.parts.map((part, i) =>

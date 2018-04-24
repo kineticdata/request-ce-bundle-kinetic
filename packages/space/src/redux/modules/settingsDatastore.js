@@ -73,6 +73,7 @@ export const types = {
   SET_NEXT_PAGE_TOKEN: namespace('datastore', 'SET_NEXT_PAGE_TOKEN'),
   SET_PAGE_OFFSET: namespace('datastore', 'SET_PAGE_OFFSET'),
   TOGGLE_SIMPLE_SEARCH: namespace('datastore', 'TOGGLE_SIMPLE_SEARCH'),
+  SET_SIMPLE_SEARCH: namespace('datastore', 'SET_SIMPLE_SEARCH'),
   SET_ADVANCED_SEARCH_OPEN: namespace('datastore', 'SET_ADVANCED_SEARCH_OPEN'),
   SET_SIMPLE_SEARCH_PARAM: namespace('datastore', 'SET_SIMPLE_SEARCH_PARAM'),
   SET_SIMPLE_SEARCH_NEXT_PAGE_INDEX: namespace(
@@ -126,6 +127,7 @@ export const actions = {
   popPageToken: noPayload(types.POP_PAGE_TOKEN),
   setNextPageToken: withPayload(types.SET_NEXT_PAGE_TOKEN),
   toggleSimpleSearch: noPayload(types.TOGGLE_SIMPLE_SEARCH),
+  setSimpleSearch: withPayload(types.SET_SIMPLE_SEARCH),
   setAdvancedSearchOpen: withPayload(types.SET_ADVANCED_SEARCH_OPEN),
   setSimpleSearchParam: withPayload(types.SET_SIMPLE_SEARCH_PARAM),
   setSimpleSearchNextPageIndex: withPayload(
@@ -420,6 +422,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('nextPageToken', payload);
     case types.SET_ADVANCED_SEARCH_OPEN:
       return state.set('advancedSearchOpen', payload);
+    case types.SET_SIMPLE_SEARCH:
+      return state.set('simpleSearchActive', payload);
     case types.TOGGLE_SIMPLE_SEARCH:
       return state
         .set('simpleSearchActive', !state.simpleSearchActive)
