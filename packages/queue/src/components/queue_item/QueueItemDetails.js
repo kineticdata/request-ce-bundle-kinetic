@@ -233,6 +233,7 @@ export const QueueItemDetailsContainer = compose(
         props.queueItem.label || 'Queue Discussion',
         props.queueItem.values['Details'] || '',
         props.queueItem,
+        null,
         (issue, submission) => {
           props.setCurrentItem(submission);
           props.openModal(issue.guid, 'discussion');

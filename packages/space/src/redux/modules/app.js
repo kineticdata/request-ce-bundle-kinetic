@@ -24,6 +24,7 @@ export const types = {
   ),
   CREATE_DISCUSSION: namespace('app', 'CREATE_DISCUSSION'),
   DELETE_ALERT: namespace('app', 'DELETE_ALERT'),
+  SET_SETTINGS_BACK_PATH: namespace('app', 'SET_SETTINGS_BACK_PATH'),
 };
 
 export const actions = {
@@ -45,6 +46,7 @@ export const actions = {
   ),
   createDiscussion: withPayload(types.CREATE_DISCUSSION),
   deleteAlert: withPayload(types.DELETE_ALERT),
+  setSettingsBackPath: withPayload(types.SET_SETTINGS_BACK_PATH),
 };
 
 export const selectServerUrl = state =>
@@ -80,6 +82,7 @@ export const State = Record({
   spaceAdmins: List(),
   userAttributeDefinitions: {},
   userProfileAttributeDefinitions: {},
+  settingsBackPath: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -119,6 +122,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('discussionsSearchInputValue', payload);
     case types.SET_DISCUSSIONS_SEARCH_TERM:
       return state.set('discussionsSearchTerm', payload);
+    case types.SET_SETTINGS_BACK_PATH:
+      return state.set('settingsBackPath', payload);
     default:
       return state;
   }

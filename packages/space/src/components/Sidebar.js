@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Utils } from 'common';
 import { Link, NavLink } from 'react-router-dom';
 import { getTeamColor } from '../utils';
 import { KappCard } from './shared/KappCard';
 
-export const SidebarContent = ({ kapps, teams, isSpaceAdmin }) => (
+export const Sidebar = ({ kapps, teams, isSpaceAdmin, openSettings }) => (
   <div className="sidebar space-sidebar">
     {kapps.length > 0 && (
       <div className="sidebar-group sidebar-kapp-cards">
@@ -59,5 +59,11 @@ export const SidebarContent = ({ kapps, teams, isSpaceAdmin }) => (
           ))}
       </ul>
     </div>
+    <ul className="nav flex-column settings-group">
+      <Link to="/settings/profile" onClick={openSettings} className="nav-link">
+        Settings
+        <span className="fa fa-fw fa-angle-right" />
+      </Link>
+    </ul>
   </div>
 );

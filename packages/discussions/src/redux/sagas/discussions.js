@@ -35,7 +35,7 @@ import {
 } from '../../discussion_api';
 
 export const SUBMISSION_INCLUDES =
-  'details,values,attributes,form,form.attributes';
+  'details,values,attributes,form,form.attributes,children';
 
 // Supporting documentation:
 // * https://medium.com/@ebakhtarov/bidirectional-websockets-with-redux-saga-bfd5b677c7e7

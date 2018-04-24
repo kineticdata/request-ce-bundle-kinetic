@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
+import { compose, lifecycle, withHandlers } from 'recompose';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { Utils, Loading } from 'common';
 import { actions } from './redux/modules/app';
 import * as selectors from 'kinops/src/redux/selectors';
-import { SidebarContent } from './components/Sidebar';
+import { Sidebar } from './components/Sidebar';
+import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { About } from './components/about/About';
 import { AlertForm } from './components/alerts/AlertForm';
 import { Alerts } from './components/alerts/Alerts';
@@ -26,15 +27,26 @@ export const AppComponent = props => {
     return <Loading text="App is loading ..." />;
   }
   return props.render({
-    ...(!props.isGuest && {
-      sidebar: (
-        <SidebarContent
-          kapps={props.kapps}
-          teams={props.teams}
-          isSpaceAdmin={props.isSpaceAdmin}
+    sidebar: !props.isGuest && (
+      <Switch>
+        <Route
+          path="/settings"
+          render={() => (
+            <SettingsSidebar settingsBackPath={props.settingsBackPath} />
+          )}
         />
-      ),
-    }),
+        <Route
+          render={() => (
+            <Sidebar
+              kapps={props.kapps}
+              teams={props.teams}
+              isSpaceAdmin={props.isSpaceAdmin}
+              openSettings={props.openSettings}
+            />
+          )}
+        />
+      </Switch>
+    ),
     main: (
       <Fragment>
         <Notifications />
@@ -101,13 +113,19 @@ export const mapStateToProps = state => ({
   ),
   isSpaceAdmin: state.kinops.profile.spaceAdmin,
   isGuest: selectors.selectIsGuest(state),
+  pathname: state.router.location.pathname,
+  settingsBackPath: state.app.settingsBackPath || '/',
 });
 const mapDispatchToProps = {
   fetchSettings: actions.fetchAppSettings,
+  setSettingsBackPath: actions.setSettingsBackPath,
 };
 
 export const App = compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withHandlers({
+    openSettings: props => () => props.setSettingsBackPath(props.pathname),
+  }),
   lifecycle({
     componentWillMount() {
       this.props.fetchSettings();

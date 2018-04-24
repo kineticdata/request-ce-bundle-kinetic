@@ -33,26 +33,17 @@ export function* fetchFormsSaga() {
     }),
   ]);
 
-  if (displayableForms.serverError || manageableForms.serverError) {
-    yield put(
-      systemErrorActions.setSystemError(
-        displayableForms.serverError || manageableForms.serverError,
-      ),
-    );
-  } else if (displayableForms.errors || manageableForms.errors) {
-    yield put(
-      actions.setFormsErrors(displayableForms.errors || manageableForms.errors),
-    );
-  } else {
-    const manageableFormsSlugs = manageableForms.forms.map(form => form.slug);
-    yield put(
-      actions.setForms({
-        manageableForms: manageableFormsSlugs,
-        displayableForms: displayableForms.forms,
-        bridges: space.space.bridges,
-      }),
-    );
-  }
+  const manageableFormsSlugs = manageableForms.forms
+    ? manageableForms.forms.map(form => form.slug)
+    : [];
+
+  yield put(
+    actions.setForms({
+      manageableForms: manageableFormsSlugs,
+      displayableForms: displayableForms.forms,
+      bridges: space.space ? space.space.bridges : [],
+    }),
+  );
 }
 
 export function* fetchFormSaga(action) {
