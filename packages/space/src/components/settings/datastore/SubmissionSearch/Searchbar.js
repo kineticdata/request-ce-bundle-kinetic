@@ -15,6 +15,8 @@ import { List } from 'immutable';
 import { IndexPart } from '../../../../records';
 import { actions } from '../../../../redux/modules/settingsDatastore';
 
+import { AutoFocusInput } from './AutoFocusInput';
+
 const OPERATIONS = [
   'Equal To',
   'Starts With',
@@ -29,12 +31,13 @@ const EQUALS_OPERATION = 'Equal To';
 const DEFAULT_PLACEHOLDER =
   'Searching by any field that matches the value entered here...';
 
-const EqualsOperation = ({
+const EqualsOperationComponent = ({
   part,
   handleIndexPartInput,
-  handleAddIndexPartInput,
+  handleAdd,
   handleAddIndexPartEnter,
   handleRemoveIndexPartInput,
+  registerComponent,
 }) => {
   return (
     <div>
@@ -50,26 +53,39 @@ const EqualsOperation = ({
         </div>
       ))}
       <div className="index-part-values-group">
-        <Input
+        <AutoFocusInput
           className="index-part-value"
           value={part.value.input}
-          innerRef={input => input && input.focus()}
           onKeyPress={handleAddIndexPartEnter(part)}
           onChange={handleIndexPartInput(part)}
+          innerRef={registerComponent}
         />
-        <Button color="link" onClick={handleAddIndexPartInput(part)}>
+        <Button color="link" onClick={handleAdd(part)}>
           <span className="fa fa-fw fa-plus" />
         </Button>
       </div>
     </div>
   );
 };
+const EqualsOperation = compose(
+  withHandlers(() => {
+    let input;
+
+    return {
+      registerComponent: () => ref => (input = ref),
+      handleAdd: ({ handleAddIndexPartInput }) => part => e => {
+        handleAddIndexPartInput(part)(e);
+        input.focus();
+      },
+    };
+  }),
+)(EqualsOperationComponent);
 
 const SingleOperation = ({ part, handleIndexPartInput }) => (
   <div className="index-part-values-group">
     <Input
       className="index-part-value"
-      innerRef={input => input && input.focus()}
+      autoFocus
       value={part.value.input}
       onChange={handleIndexPartInput(part)}
     />
@@ -81,7 +97,7 @@ const BetweenOperation = ({ part, handleIndexPartBetween }) => (
     <Input
       className="index-part-value"
       value={part.value.values.get(0)}
-      innerRef={input => input && input.focus()}
+      autoFocus
       onChange={handleIndexPartBetween(part, 0)}
     />
     <span>to</span>
@@ -125,9 +141,8 @@ const IndexSelector = ({
     </Col>
     {simpleSearchActive && (
       <Col sm={6}>
-        <Input
+        <AutoFocusInput
           aria-label="Search"
-          innerRef={input => input && input.focus()}
           onKeyPress={handleInputKeypress}
           id="simple-search-term2"
           name="simple-search-term"
@@ -192,6 +207,7 @@ const IndexPartSelector = ({
           />
         ) : part.operation !== 'All' ? (
           <SingleOperation
+            key={`${part.operation}-${part.name}`}
             part={part}
             handleIndexPartInput={handleIndexPartInput}
           />
@@ -209,6 +225,7 @@ const SearchbarComponent = ({
   simpleSearchParam,
   setSimpleSearchParam,
   handleSearchSubmissions,
+  handleApplySearchSubmissions,
   handleInputKeypress,
   dropdownOpen,
   handleOpenDropdown,
@@ -227,9 +244,8 @@ const SearchbarComponent = ({
 }) => (
   <div className="datastore-searchbar">
     <InputGroup size="lg" className="simple-search-input-group">
-      <Input
+      <AutoFocusInput
         aria-label="Search"
-        innerRef={input => input && input.focus()}
         onKeyPress={handleInputKeypress}
         id="simple-search-term"
         name="simple-search-term"
@@ -261,63 +277,62 @@ const SearchbarComponent = ({
         </Button>
       </InputGroupAddon>
     </InputGroup>
-    <div
-      style={{ display: advancedSearchOpen ? '' : 'none' }}
-      className="advanced-dropdown-wrapper"
-    >
-      <div className="advanced-dropdown-header">
-        <h5>Advanced Search</h5>
-        <button
-          onClick={toggleAdvancedSearchOpen}
-          type="button"
-          className="close"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
+    {advancedSearchOpen && (
+      <div className="advanced-dropdown-wrapper">
+        <div className="advanced-dropdown-header">
+          <h5>Advanced Search</h5>
+          <button
+            onClick={toggleAdvancedSearchOpen}
+            type="button"
+            className="close"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <IndexSelector
+          simpleSearchActive={simpleSearchActive}
+          setIndexHandler={setIndexHandler}
+          setSimpleSearchParam={setSimpleSearchParam}
+          searchParams={searchParams}
+          indexDefinitions={indexDefinitions}
+          simpleSearchParam={simpleSearchParam}
+          placeholderText={placeholderText}
+        />
+        {!simpleSearchActive && <hr />}
+        {searchParams.index &&
+          searchParams.indexParts.map((part, i) => {
+            const previousPartOperations = searchParams.indexParts
+              .map(p => p.operation)
+              .slice(0, i);
+            return (
+              <IndexPartSelector
+                key={part.name}
+                part={part}
+                previousPartOperations={previousPartOperations}
+                handleIndexPartOperation={handleIndexPartOperation}
+                handleIndexPartInput={handleIndexPartInput}
+                handleAddIndexPartInput={handleAddIndexPartInput}
+                handleAddIndexPartEnter={handleAddIndexPartEnter}
+                handleRemoveIndexPartInput={handleRemoveIndexPartInput}
+                handleIndexPartBetween={handleIndexPartBetween}
+              />
+            );
+          })}
+        <div className="row justify-content-end">
+          <button className="btn btn-link" onClick={handleResetSearch}>
+            Reset
+          </button>
+          <Button
+            disabled={searching}
+            color="primary"
+            onClick={handleApplySearchSubmissions}
+          >
+            Apply
+          </Button>
+        </div>
       </div>
-      <IndexSelector
-        simpleSearchActive={simpleSearchActive}
-        setIndexHandler={setIndexHandler}
-        setSimpleSearchParam={setSimpleSearchParam}
-        searchParams={searchParams}
-        indexDefinitions={indexDefinitions}
-        simpleSearchParam={simpleSearchParam}
-        placeholderText={placeholderText}
-      />
-      {!simpleSearchActive && <hr />}
-      {searchParams.index &&
-        searchParams.indexParts.map((part, i) => {
-          const previousPartOperations = searchParams.indexParts
-            .map(p => p.operation)
-            .slice(0, i);
-          return (
-            <IndexPartSelector
-              key={part.name}
-              part={part}
-              previousPartOperations={previousPartOperations}
-              handleIndexPartOperation={handleIndexPartOperation}
-              handleIndexPartInput={handleIndexPartInput}
-              handleAddIndexPartInput={handleAddIndexPartInput}
-              handleAddIndexPartEnter={handleAddIndexPartEnter}
-              handleRemoveIndexPartInput={handleRemoveIndexPartInput}
-              handleIndexPartBetween={handleIndexPartBetween}
-            />
-          );
-        })}
-      <div className="row justify-content-end">
-        <button className="btn btn-link" onClick={handleResetSearch}>
-          Reset
-        </button>
-        <Button
-          disabled={searching}
-          color="primary"
-          onClick={handleSearchSubmissions}
-        >
-          Apply
-        </Button>
-      </div>
-    </div>
+    )}
   </div>
 );
 
@@ -351,6 +366,7 @@ export const mapDispatchToProps = {
   setIndexPartInput: actions.setIndexPartInput,
   addIndexPartInput: actions.addIndexPartInput,
   removeIndexPartInput: actions.removeIndexPartInput,
+  popPageToken: actions.popPageToken,
 };
 
 const handleSearchSubmissions = ({
@@ -359,6 +375,21 @@ const handleSearchSubmissions = ({
   simpleSearchActive,
 }) => e => {
   e.preventDefault();
+  if (simpleSearchActive) {
+    fetchSubmissionsSimple();
+  } else {
+    fetchSubmissionsAdvanced();
+  }
+};
+
+const handleApplySearchSubmissions = ({
+  fetchSubmissionsSimple,
+  fetchSubmissionsAdvanced,
+  simpleSearchActive,
+  popPageToken,
+}) => e => {
+  e.preventDefault();
+  popPageToken();
   if (simpleSearchActive) {
     fetchSubmissionsSimple();
   } else {
@@ -467,6 +498,7 @@ export const Searchbar = compose(
   withState('placeholderText', 'setPlaceholderText', DEFAULT_PLACEHOLDER),
   withHandlers({
     handleSearchSubmissions,
+    handleApplySearchSubmissions,
     handleResetSearch,
     handleInputKeypress,
     toggleAdvancedSearchOpen,
