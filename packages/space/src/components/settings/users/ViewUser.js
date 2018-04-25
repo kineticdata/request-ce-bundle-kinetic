@@ -33,7 +33,7 @@ const ViewUserComponent = ({
             to={`/settings/users/${profile.username}/edit`}
             className="btn btn-secondary"
           >
-            Edit Profile
+            Edit User
           </Link>
         </div>
         <div className="card card--profile">
