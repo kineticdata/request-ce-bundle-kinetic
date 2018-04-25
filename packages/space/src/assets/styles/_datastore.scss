@@ -2,135 +2,95 @@
  *   Datastore ~ Space
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.space {
-  .datastore-container {
+.package-layout--space {
+  .datastore-searchbar {
+    .btn.btn-none.advanced-dropdown-caret {
+      border-top: 1px solid $border-color;
+      border-bottom: 1px solid $border-color;
+    }
+
+    .advanced-dropdown-wrapper {
+      .index-selector,
+      .index-part {
+        display: flex;
+        flex-direction: row;
+        padding-bottom: 0.75em;
+      }
+
+      .index-part-values-group {
+        display: flex;
+        flex-direction: row;
+        padding-bottom: 0.25em;
+
+        &.operation-between {
+          justify-content: space-between;
+          span {
+            width: 4em;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+
+  .datastore-top-pagination {
+    margin: 2em 0;
+    background-color: $black-3;
+    border-radius: 8px;
     display: flex;
-    width: auto;
+    justify-content: space-between;
     flex-direction: row;
-    min-height: calc(100vh - 48px);
-
-    .datastore-content {
-      padding: 0 1.375rem;
-      background-color: $white;
-      flex-grow: 1;
-      //overflow-y: auto;
-      border-right: 1px solid $black-16;
-
-      .settings {
-        padding: 0 1rem;
-        margin-bottom: 1rem;
-      }
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-height: 48px;
+    align-items: baseline;
+    & > button,
+    & > span {
+      height: 36px;
     }
+  }
 
-    .datastore-sidebar {
-      padding: 0 1.375rem;
-      background-color: $black-3;
-      flex-direction: row;
-      flex-basis: 31%;
-      justify-content: center;
-      align-items: flex-start;
-    }
-    .form-wrapper {
-      padding: 1.5rem 0;
-    }
+  .datastore-bottom-pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
 
-    .search-wrapper {
-      background-color: $white;
-      width: 100%;
-    }
+  table.table-datastore {
+    font-size: 0.875rem;
+    margin-top: 1.5rem;
 
-    .datastore-searchbar {
-      .btn.btn-none.advanced-dropdown-caret {
-        border-top: 1px solid #ced4da;
-        border-bottom: 1px solid #ced4da;
-        border-left: 1px solid #ced4da;
-      }
-
-      .advanced-dropdown-wrapper {
-        .index-selector,
-        .index-part {
-          display: flex;
-          flex-direction: row;
-          padding-bottom: 0.75em;
+    tbody {
+      td {
+        > a {
+          font-weight: 600;
         }
-
-        .index-part-values-group {
-          display: flex;
-          flex-direction: row;
-          padding-bottom: 0.25em;
-
-          &.operation-between {
-            justify-content: space-between;
-            span {
-              width: 4em;
-              text-align: center;
+        > small {
+          color: $gray;
+        }
+        > .list-dropdown {
+          & > button {
+            padding: 0;
+            color: $black-50;
+            &:hover {
+              color: darken($black-50, 5%);
             }
           }
         }
-      }
-    }
-
-    .datastore-top-pagination {
-      margin: 2em 0;
-      background-color: $black-3;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      flex-direction: row;
-      flex-grow: 1;
-      flex-shrink: 1;
-      min-height: 48px;
-      align-items: baseline;
-      & > button,
-      & > span {
-        height: 36px;
-      }
-    }
-
-    .datastore-bottom-pagination {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-    }
-
-    table.table-datastore {
-      font-size: 0.875rem;
-      margin-top: 1.5rem;
-      thead {
-        // color: $black-50;
-      }
-      tbody {
-        td {
-          > a {
-            font-weight: 600;
-          }
-          > small {
-            color: $gray;
-          }
-          > .list-dropdown {
-            & > button {
-              padding: 0;
-              color: $black-50;
-              &:hover {
-                color: darken($black-50, 5%);
-              }
-            }
-          }
-          > .dropdown .btn {
-            background-color: transparent;
-            padding: 0rem 0.25rem;
-          }
-          & .dropdown-item {
-            padding: 0.25rem 1rem;
-          }
+        > .dropdown .btn {
+          background-color: transparent;
+          padding: 0rem 0.25rem;
+        }
+        & .dropdown-item {
+          padding: 0.25rem 1rem;
         }
       }
     }
+  }
 
-    @media (min-width: 768px) {
-      .d-md-table-header-group {
-        display: table-header-group !important;
-      }
+  @media (min-width: 768px) {
+    .d-md-table-header-group {
+      display: table-header-group !important;
     }
   }
 }
