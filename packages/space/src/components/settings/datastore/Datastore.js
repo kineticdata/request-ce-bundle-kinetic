@@ -11,7 +11,7 @@ const MINIMUM_CE_VERSION = '2.1.0';
 
 const DatastoreError = () => <h1>Error loading Datastore</h1>;
 const DatastoreVersionError = ({ version }) => (
-  <div className="panel">
+  <div className="page-panel page-panel--scrollable">
     <div className="page-title">
       <div className="page-title__wrapper">
         <h3>

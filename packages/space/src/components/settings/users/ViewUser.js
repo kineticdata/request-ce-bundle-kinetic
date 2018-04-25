@@ -16,10 +16,10 @@ const ViewUserComponent = ({
   manager,
   managerEnabled,
 }) => (
-  <div className="datastore-container">
+  <div className="page-container page-container--users">
     <PageTitle parts={['Users', 'Settings']} />
     {!loading && (
-      <div className="datastore-content panel">
+      <div className="page-panel page-panel--scrollable">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -36,7 +36,7 @@ const ViewUserComponent = ({
             Edit Profile
           </Link>
         </div>
-        <div className="card card--profile profile">
+        <div className="card card--profile">
           <Avatar user={profile} size={96} />
           <h3>{profile.displayName}</h3>
           <p>{getEmail(profile)}</p>

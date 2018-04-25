@@ -17,12 +17,9 @@ const WallyNoResultsFoundMessage = ({ type }) => {
   );
 };
 
-const NotificationsListComponent = ({
-  notifications,
-  notificationType,
-}) => (
-  <div className="datastore-container">
-    <div className="datastore-content panel">
+const NotificationsListComponent = ({ notifications, notificationType }) => (
+  <div className="page-container page-container--notifications">
+    <div className="page-panel page-panel--scrollable">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
@@ -31,19 +28,16 @@ const NotificationsListComponent = ({
           </h3>
           <h1>Notifications</h1>
         </div>
-        <Link
-          to={`/settings/notifications/new`}
-          className="btn btn-primary"
-        >
+        <Link to={`/settings/notifications/new`} className="btn btn-primary">
           Create New {notificationType}
         </Link>
       </div>
       <div>
         {notifications.size > 0 ? (
-          <table className="table table-sm table-hover table-datastore">
-            <thead className="d-none d-md-table-header-group">
+          <table className="table table-sm table-striped table-datastore">
+            <thead>
               <tr>
-                <th className="d-sm-none d-md-table-cell">Name</th>
+                <th>Name</th>
                 <th>Status</th>
                 <th>Subject</th>
                 <th />

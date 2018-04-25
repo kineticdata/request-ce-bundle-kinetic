@@ -20,8 +20,8 @@ const WallyEmptyMessage = ({ filter }) => {
 
 const UsersListComponent = ({ users, loading, match }) => {
   return (
-    <div className="datastore-container">
-      <div className="datastore-content panel">
+    <div className="page-container page-container--settings-users">
+      <div className="page-panel page-panel--scrollable">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>

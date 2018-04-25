@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -28,11 +29,11 @@ export const EditUserComponent = ({
   handleSubmit,
   userProfileAttributes,
 }) => (
-  <div className="profile-container">
+  <div className="page-container page-container--panels page-container--space-profile-edit">
     <PageTitle parts={['Users', 'Settings']} />
     {!loading && (
-      <div className="fragment">
-        <div className="profile-content panel">
+      <Fragment>
+        <div className="page-panel page-panel--sixty page-panel--scrollable page-panel--space-profile-edit">
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
@@ -201,7 +202,7 @@ export const EditUserComponent = ({
             </form>
           </div>
         </div>
-        <div className="profile-sidebar panel d-none d-sm-block">
+        <div className="page-panel page-panel--forty page-panel--sidebar page-panel--space-profile-edit-sidebar ">
           <ProfileCard
             user={buildProfile(fieldValues, user)}
             button={
@@ -211,7 +212,7 @@ export const EditUserComponent = ({
             }
           />
         </div>
-      </div>
+      </Fragment>
     )}
   </div>
 );

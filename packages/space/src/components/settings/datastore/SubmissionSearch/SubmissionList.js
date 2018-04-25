@@ -66,7 +66,7 @@ const SubmissionListComponent = ({
                   <strong>{submissions.size}</strong> results found
                 </div>
               )}
-              <table className="table table-sm table-hover table-datastore">
+              <table className="table table-sm table-striped table-datastore">
                 <thead className="d-none d-md-table-header-group">
                   <tr>
                     {visibleColumns.map(c => (

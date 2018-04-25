@@ -32,8 +32,8 @@ const DatastoreSubmissionComponent = ({
   isEditing,
   formKey,
 }) => (
-  <div className="datastore-container">
-    <div className="datastore-content">
+  <div className="page-container page-container--datastore">
+    <div className="page-panel page-panel--scrollable page-panel--space-datastore-submission">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>

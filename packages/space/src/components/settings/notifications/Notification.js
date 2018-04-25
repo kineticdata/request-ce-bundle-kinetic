@@ -33,8 +33,8 @@ const NotificationComponent = ({
   formKey,
   notificationType,
 }) => (
-  <div className="datastore-container">
-    <div className="datastore-content">
+  <div className="page-container page-container--notifications">
+    <div className="page-panel page-panel--scrollable">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>

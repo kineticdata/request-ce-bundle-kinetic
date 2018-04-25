@@ -17,8 +17,8 @@ const SubmissionSearchComponent = ({
   match,
 }) =>
   !loading ? (
-    <div className="datastore-container">
-      <div className="datastore-content panel scrollable">
+    <div className="page-container page-container--datastore">
+      <div className="page-panel page-panel--scrollable page-panel--datastore-content">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>

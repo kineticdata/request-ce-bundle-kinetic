@@ -44,8 +44,8 @@ const FormListComponent = ({
   manageableForms,
 }) => {
   return (
-    <div className="datastore-container">
-      <div className="datastore-content panel">
+    <div className="page-container page-container--datastore">
+      <div className="page-panel page-panel--scrollable page-panel--datastore-content">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -63,7 +63,7 @@ const FormListComponent = ({
           {loading ? (
             <h3>Loading</h3>
           ) : datastoreForms && datastoreForms.size > 0 ? (
-            <table className="table table-sm table-hover table-datastore">
+            <table className="table table-sm table-striped table-datastore">
               <thead className="header">
                 <tr>
                   <th>Form Name</th>

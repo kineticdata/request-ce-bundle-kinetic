@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-
 export const Translations = () => (
-  <div className="datastore-container">
-    <div className="datastore-content panel">
+  <div className="page-container page-container--translations">
+    <div className="page-panel page-panel--scrollable page-panel--translations">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>

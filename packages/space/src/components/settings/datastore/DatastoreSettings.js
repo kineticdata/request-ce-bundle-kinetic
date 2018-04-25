@@ -30,8 +30,8 @@ const SettingsComponent = ({
   handleSave,
 }) =>
   !loading && (
-    <div className="datastore-container">
-      <div className="datastore-content panel scrollable">
+    <div className="page-container page-container--panels page-container--datastore">
+      <div className="page-panel page-panel--two-thirds page-panel--scrollable page-panel--datastore-content">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -300,7 +300,7 @@ const SettingsComponent = ({
           <p>You do not have access to configure this datastore.</p>
         )}
       </div>
-      <div className="datastore-sidebar">
+      <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
         <h3>Datastore Configuration</h3>
         <p>
           To update the datastore form fields, click the Builder button, which
