@@ -1,5 +1,6 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
+import { takeEvery, call, put, select } from 'redux-saga/effects';
 import { actions, types } from '../modules/profiles';
+import { actions as kinopsActions } from 'kinops/src/redux/modules/kinops';
 import { CoreAPI } from 'react-kinetic-core';
 
 const PROFILE_INCUDES =
@@ -35,6 +36,10 @@ export function* updateProfileSaga({ payload }) {
   if (serverError) {
     yield put(actions.setProfileError(serverError));
   } else {
+    const username = yield select(state => state.kinops.profile.username);
+    if (username === user.username) {
+      yield put(kinopsActions.loadApp());
+    }
     yield put(actions.setProfile(user || profile));
   }
 }

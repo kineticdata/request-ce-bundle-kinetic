@@ -1,225 +1,39 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Teams ~ Space
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.space {
-  .team-container {
-    min-height: $page-height;
-    .team-content {
-      flex: 1 1 60%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .team-sidebar {
-      display: flex;
-      flex-direction: column;
-      flex: 1 1 40%;
-      .kinops-discussions {
-        flex-grow: 1;
-      }
-    }
-    .scrollable {
-      overflow-y: auto;
-    }
+.page-container--space-team {
+  .kinops-discussions {
+    flex: 1 1 40%;
   }
+}
 
-  .teams-container {
-    padding: 0 1.75rem;
-    .teams-sidebar {
-      display: flex;
-      flex-direction: column;
-      flex-basis: 27.5%;
-      justify-content: flex-start;
-    }
+.page-panel--team-edit-sidebar {
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  .card {
+    margin-top: 1rem;
+    width: 216px;
+    max-width: 216px;
   }
-  .team-form-container {
-    display: flex;
-    width: auto;
-    flex-direction: row;
+}
 
-    .team-form-content {
-      padding: 0 1.375rem;
-      background-color: $white;
-      flex-grow: 1;
-      overflow-y: auto;
-      border-right: 1px solid $black-16;
-    }
-    .t-card {
-      margin-top: 1rem;
-      width: 216px;
-      max-width: 216px;
-    }
-  }
+.cards__wrapper--members {
+  margin-left: 1rem;
+  justify-content: flex-start;
+}
 
-  .team-form-sidebar {
-    background-color: $white;
-    display: flex;
-    flex-direction: row;
-    flex-basis: 31%;
-    justify-content: center;
-    align-items: flex-start;
+.form__footer {
+  display: flex;
+  justify-content: space-between;
+  &__left {
   }
-
-  .p-card-wrapper,
-  .t-card-wrapper {
-    flex-direction: row;
-    flex-wrap: wrap;
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 1rem;
+  &__right {
+    align-self: flex-end;
+    margin-left: auto;
   }
-
-  .t-card {
-    margin: 0 0 1rem 0;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    border: 1px solid $black-16;
-    border-radius: $border-radius-base;
-
-    @include setBgColorAndHover($white);
-    .header {
-      height: 3rem;
-      width: 100%;
-      padding: 0 1rem;
-      border-radius: 4px 4px 0 0;
-      justify-content: space-between;
-      // justify-items: center;
-      align-items: baseline;
-      position: relative;
-      display: flex;
-      .card-icon {
-        margin-top: 1.5rem;
-        margin-right: 0;
-        height: 48px;
-        width: 48px;
-        font-size: 1.5rem;
-        background-color: $black-16;
-        line-height: 48px;
-        border: 2px solid $white;
-      }
-      span,
-      a {
-        align-self: center;
-      }
-      a {
-        .edit {
-          color: white;
-        }
-      }
-    }
-    .content {
-      padding: 1rem;
-      text-align: center;
-    }
-    h1 {
-      margin: 0.75rem 0;
-      color: $black;
-      word-break: break-word;
-      font-size: 1.125rem;
-      line-height: 1.5rem;
-      .fa {
-        padding: 0 0 0 1rem;
-      }
-    }
-    p {
-      color: $black-50;
-      font-size: 0.75rem;
-      line-height: 1.125rem;
-      margin-bottom: 0;
-      &.members-toggle {
-        margin-bottom: 1rem;
-      }
-    }
-    .btn {
-      margin: 1rem 0;
-    }
-
-    img {
-      flex-shrink: 0;
-      border-radius: 50%;
-      background-color: $black-16;
-    }
-    pre {
-      width: 100%;
-      font-family: $font-family-sans-serif;
-      word-break: keep-all;
-      white-space: pre-wrap;
-      color: $black-50;
-      font-size: 0.75rem;
-      line-height: 1.125rem;
-    }
-  }
-  .team-members-wrapper {
-    .t-card-wrapper {
-      margin-left: 1rem;
-    }
-  }
-  .t-card-members-container {
-    margin: 0 -1rem;
-    border-top: 1px solid $black-16;
-    text-align: left;
-    padding: 0 1rem;
-    h1 {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: $black;
-    }
-    .online {
-      border: 2px solid $present;
-    }
-    .t-card-members-wrapper {
-      display: flex;
-      justify-content: flex-start;
-    }
-  }
-  .avatar {
-    margin-right: 0.125rem;
-  }
-
-  .t-card-wrapper {
-    justify-content: flex-start;
-    .t-card {
-      @media all and (min-width: 0) {
-        flex-basis: 100%;
-      }
-      @media all and (min-width: 460px) and (max-width: 576px) {
-        flex-basis: 48%;
-        margin-right: 4%;
-        &:nth-child(2n) {
-          margin-right: 0;
-        }
-      }
-      @media all and (min-width: 577px) and (max-width: 768px) {
-        flex-basis: 30%;
-        margin-right: 5%;
-        &:nth-child(3n) {
-          margin-right: 0;
-        }
-      }
-      @media all and (min-width: 769px) {
-        flex-basis: 22%;
-        margin-right: 4%;
-        &:nth-child(4n) {
-          margin-right: 0;
-        }
-      }
-    }
-  }
-
-  .form-button-wrapper {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    .left-side {
-      align-self: flex-start;
-    }
-    .right-side {
-      align-self: flex-end;
-    }
-    a {
-      margin-bottom: 1.875rem;
-      line-height: normal;
-    }
+  a {
+    margin-bottom: 1.875rem;
+    line-height: normal;
   }
 }

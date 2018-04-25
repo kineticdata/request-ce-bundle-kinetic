@@ -1,34 +1,8 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Page Title Overrides ~ Services
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.page-title-wrapper {
-  justify-content: space-between;
-  display: flex;
-  align-items: center;
-  h1 {
-    margin-top: 0;
-    color: $blueSlate;
-    font-size: 2rem;
-    font-weight: 300;
-    line-height: 3rem;
-  }
-  h3 {
-    color: $orange-kinops;
-    font-size: 0.9375rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-    line-height: 1.5rem;
-    a {
-      color: $orange-kinops;
-      font-size: 0.9375rem;
-      font-weight: bold;
-      letter-spacing: 1px;
-      line-height: 1.5rem;
-    }
-  }
-  a {
-    margin-bottom: 1.875rem;
-    align-self: flex-end;
-    line-height: normal;
+.package-layout--services {
+  .page-title {
+    flex: none;
   }
 }

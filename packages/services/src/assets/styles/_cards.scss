@@ -2,9 +2,9 @@
  *   Card Overrides ~ services
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.s-card,
-.r-card,
-.c-card {
+.card--service,
+.card--request,
+.card--category {
   border: 1px solid $black-16;
   padding: 1rem;
   margin-top: 1rem;
@@ -31,7 +31,7 @@
   }
 }
 // Request Card
-.r-card {
+.card--request {
   h1 {
     font-size: 1.125rem;
     line-height: 1.5rem;
@@ -57,19 +57,13 @@
     margin-bottom: 0;
     line-height: normal;
   }
-  .ellipsis-button {
-    background-color: inherit;
-    border: none;
-    font-size: 1.125rem;
-    margin-left: 1rem;
-  }
 }
 
 .card-icon {
-  &.icon-greengrass {
+  &--greengrass {
     background-color: $greenGrass;
   }
-  &.icon-sunflower {
+  &--sunflower {
     background-color: $sunflower;
   }
 }
@@ -78,31 +72,32 @@
   color: $white;
   text-align: center;
   padding: 0.125rem 0.625rem;
-  font-size: 55%;
+  font-size: 50%;
   font-weight: 700;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
   align-self: center;
-  border-radius: 12px;
+  border-radius: 0.75rem;
   margin-left: auto;
-  &.status-gray {
+  flex: 0 0 auto;
+  &--gray {
     background-color: $black-50;
   }
-  &.status-yellow {
+  &--yellow {
     background-color: $sunflower;
     color: $black;
   }
-  &.status-green {
+  &--green {
     background-color: $greenGrass;
   }
-  &.status-red {
+  &--red {
     background-color: $red;
   }
 }
 
 // Empty State Card
-.card.empty-state-card {
+.card--empty-state {
   margin-top: 1rem;
   padding: 1rem;
   text-align: center;

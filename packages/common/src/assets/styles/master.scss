@@ -8,6 +8,7 @@
 @import 'base';
 @import '~modularscale-sass/stylesheets/modularscale';
 
+@import 'layout';
 @import 'icons';
 @import 'toasts';
 @import 'modal';
@@ -20,7 +21,6 @@
 @import 'empty-states';
 @import 'search-box';
 @import 'fa';
-@import 'card';
-@import 'status';
+@import 'cards';
 @import 'temp';
 @import 'design-systems';

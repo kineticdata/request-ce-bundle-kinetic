@@ -7,24 +7,21 @@ import { CatalogSearchContainer } from '../shared/CatalogSearchContainer';
 export const CatalogSearchResults = ({ query, forms }) => (
   <div>
     <PageTitle parts={[`Search: ${query}`]} />
-    <div className="services-bar">
-      <span className="bordercolor" />
-    </div>
-
-    <div className="search-results-container container">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+    <span className="services-color-bar services-color-bar__blue-slate" />
+    <div className="page-container page-container--search-results">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">services</Link> / search results
           </h3>
           <h1>{query}</h1>
         </div>
       </div>
-      <div className="search-results-wrapper">
-        <div className="select">
+      <div className="search-results">
+        <div className="select search-results__select">
           <CatalogSearchContainer />
         </div>
-        <div className="search-results-list">
+        <div className="search-results__list">
           {forms.size > 0 ? (
             <ul>
               {forms.map(form => (
@@ -34,7 +31,7 @@ export const CatalogSearchResults = ({ query, forms }) => (
               ))}
             </ul>
           ) : (
-            <div className="wally-empty-state">
+            <div className="empty-state empty-state--wally">
               <h5>No Results for '{query}'</h5>
               <img src={wallyMissingImage} alt="Missing Wally" />
               <h6>

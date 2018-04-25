@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link as SpaceLink } from 'react-router-dom';
 import {
   KappLink as Link,
@@ -39,7 +39,7 @@ const ProfileLink = ({ submitter }) => (
 );
 
 const StatusItem = ({ submission }) => (
-  <div className="col">
+  <div className="data-list-row__col">
     <dl>
       <dt>Status:</dt>
       <dd>{getStatus(submission)}</dd>
@@ -49,7 +49,7 @@ const StatusItem = ({ submission }) => (
 
 const DisplayDateItem = ({ submission }) =>
   !submission.submittedAt ? (
-    <div className="col">
+    <div className="data-list-row__col">
       <dl>
         <dt>Created:</dt>
         <dd>
@@ -63,10 +63,10 @@ const DisplayDateItem = ({ submission }) =>
       </dl>
     </div>
   ) : (
-    <div className="col">
+    <div className="data-list-row__col">
       <dl>
         <dt>Submitted:</dt>
-        <dd>
+        <dd className="text-truncate">
           <TimeAgo timestamp={submission.submittedAt} />
           <br />
           <small>
@@ -86,7 +86,7 @@ const ServiceOwnerItem = ({ submission }) => {
   });
   return (
     !!serviceOwner && (
-      <div className="col">
+      <div className="data-list-row__col">
         <dl>
           <dt>Service Owning Team:</dt>
           <dd>{serviceOwner} Team</dd>
@@ -101,7 +101,7 @@ const EstCompletionItem = ({ submission }) => {
   return (
     submission.coreState === constants.CORE_STATE_SUBMITTED &&
     !!dueDate && (
-      <div className="col">
+      <div className="data-list-row__col">
         <dl>
           <dt>Est. Completion:</dt>
           <dd>
@@ -119,7 +119,7 @@ const CompletedInItem = ({ submission }) => {
     getDurationInDays(submission.createdAt, submission.closedAt);
   return (
     (duration || duration === 0) && (
-      <div className="col">
+      <div className="data-list-row__col">
         <dl>
           <dt>Completed in:</dt>
           <dd>
@@ -132,48 +132,46 @@ const CompletedInItem = ({ submission }) => {
 };
 
 export const RequestShow = ({ submission, listType, mode }) => (
-  <div>
+  <Fragment>
     <PageTitle parts={[submission && `#${submission.handle}`, 'Requests']} />
-    <div className="services-bar">
-      <span className="bordercolor" />
-    </div>
-    <div className="request-details-container">
-      <Link className="nav-return" to={`/requests/${listType || ''}`}>
-        <span className="fa fa-fw fa-chevron-left" />
-        {listType || 'All'} Requests
-      </Link>
-      {submission && (
-        <div className="request-detail-wrapper">
-          <div className="submission-meta-wrapper">
-            <div className="container">
-              <div className="row">
-                <StatusItem submission={submission} />
-                <div className="col">
-                  <dl>
-                    <dt>Confirmation #</dt>
-                    <dd>{submission.handle}</dd>
-                  </dl>
-                </div>
-                <DisplayDateItem submission={submission} />
-                <ServiceOwnerItem submission={submission} />
-                <EstCompletionItem submission={submission} />
-                <CompletedInItem submission={submission} />
-                <div className="col-lg-auto btn-group-col">
-                  <CloneButtonContainer submission={submission} />
-                  {submission.coreState === constants.CORE_STATE_SUBMITTED && (
-                    <CommentButtonContainer submission={submission} />
-                  )}
-                  {submission.coreState === constants.CORE_STATE_CLOSED && (
-                    <FeedbackButtonContainer submission={submission} />
-                  )}
+    <span className="services-color-bar services-color-bar__blue-slate" />
+    <Link className="nav-return" to={`/requests/${listType || ''}`}>
+      <span className="fa fa-fw fa-chevron-left" />
+      {listType || 'All'} Requests
+    </Link>
+    {submission && (
+      <Fragment>
+        <div className="submission-meta">
+          <div className="page-container">
+            <div className="data-list-row">
+              <StatusItem submission={submission} />
+              <div className="data-list-row__col">
+                <dl>
+                  <dt>Confirmation #</dt>
+                  <dd>{submission.handle}</dd>
+                </dl>
+              </div>
+              <DisplayDateItem submission={submission} />
+              <ServiceOwnerItem submission={submission} />
+              <EstCompletionItem submission={submission} />
+              <CompletedInItem submission={submission} />
+              <div className="col-lg-auto btn-group-col">
+                <CloneButtonContainer submission={submission} />
+                {submission.coreState === constants.CORE_STATE_SUBMITTED && (
+                  <CommentButtonContainer submission={submission} />
+                )}
+                {submission.coreState === constants.CORE_STATE_CLOSED && (
+                  <FeedbackButtonContainer submission={submission} />
+                )}
 
-                  <CancelButtonContainer submission={submission} />
-                </div>
+                <CancelButtonContainer submission={submission} />
               </div>
             </div>
           </div>
-          <div className="submission-details-container container">
-            <div className="submission-detail-wrapper">
+        </div>
+        <div className="page-container page-container--submission">
+          <div className="page-content">
+            <div className="submission-title">
               <h1>
                 <Icon
                   image={getIcon(submission.form)}
@@ -185,12 +183,14 @@ export const RequestShow = ({ submission, listType, mode }) => (
                 <p>{submission.label}</p>
               )}
             </div>
-            <div className="submission-confirmation-wrapper">
-              {mode === 'confirmation' && (
+
+            {mode === 'confirmation' && (
+              <div className="card card--submission-confirmation">
                 <RequestShowConfirmationContainer submission={submission} />
-              )}
-            </div>
-            <div className="submission-details-tab-wrapper">
+              </div>
+            )}
+
+            <div className="submission-tabs">
               <ul className="nav nav-tabs">
                 <li role="presentation">
                   <NavLink
@@ -209,18 +209,21 @@ export const RequestShow = ({ submission, listType, mode }) => (
                   </NavLink>
                 </li>
               </ul>
-            </div>
-
-            <div className="submission-timeline-wrapper submission-request-wrapper">
-              {mode === 'review' ? (
-                <CoreForm submission={submission.id} review globals={globals} />
-              ) : (
-                <RequestActivityList submission={submission} />
-              )}
+              <div className="submission-tabs__content">
+                {mode === 'review' ? (
+                  <CoreForm
+                    submission={submission.id}
+                    review
+                    globals={globals}
+                  />
+                ) : (
+                  <RequestActivityList submission={submission} />
+                )}
+              </div>
             </div>
           </div>
         </div>
-      )}
-    </div>
-  </div>
+      </Fragment>
+    )}
+  </Fragment>
 );

@@ -1,25 +1,27 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { TimeAgo } from 'common';
 import { activityData } from '../../RequestActivityList';
 
 export const SubmissionCompletedHeader = ({ activity }) => {
   const data = activityData(activity);
   return (
-    <div>
+    <Fragment>
       <h1>
         {activity.label}
-        <span className="status status-green">{data.Status || 'Complete'}</span>
+        <span className="status status--green">
+          {data.Status || 'Complete'}
+        </span>
       </h1>
-    </div>
+    </Fragment>
   );
 };
 
 export const SubmissionCompletedBody = ({ activity, submission }) => {
   const data = activityData(activity);
   return (
-    <div>
-      <div className="row">
-        <div className="col">
+    <Fragment>
+      <div className="data-list-row">
+        <div className="data-list-row__col">
           <dl>
             <dt>
               <span className="fa fa-fw fa-calendar" />Closed
@@ -31,12 +33,12 @@ export const SubmissionCompletedBody = ({ activity, submission }) => {
         </div>
       </div>
       {data.Comments && (
-        <div className="row">
-          <div className="col">
+        <div className="data-list-row">
+          <div className="data-list-row__col">
             <span>{data.Comments}</span>
           </div>
         </div>
       )}
-    </div>
+    </Fragment>
   );
 };

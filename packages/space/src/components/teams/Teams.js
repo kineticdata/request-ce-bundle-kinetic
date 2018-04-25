@@ -6,7 +6,7 @@ import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 
 const WallyEmptyMessage = ({ me }) => {
   return (
-    <div className="wally-empty-state">
+    <div className="empty-state empty-state--wally">
       <h5>No Teams Right Now...</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       {me.spaceAdmin && <h6>Add a team by hitting the new button!</h6>}
@@ -15,13 +15,13 @@ const WallyEmptyMessage = ({ me }) => {
 };
 
 export const Teams = ({ loading, teams, me, openRequestNewTeam }) => (
-  <div className="teams-container">
+  <div className="space-teams--container page--container">
     <PageTitle parts={['Teams']} />
 
     {!loading && (
-      <div>
-        <div className="page-title-wrapper">
-          <div className="page-title">
+      <div className="page-panel">
+        <div className="page-title">
+          <div className="page-title__wrapper">
             <h3>
               <Link to="/">home</Link> /
             </h3>
@@ -38,7 +38,7 @@ export const Teams = ({ loading, teams, me, openRequestNewTeam }) => (
           )}
         </div>
         {teams.size > 0 ? (
-          <div className="t-card-wrapper">
+          <div className="cards__wrapper cards__wrapper--team">
             {teams.map(team => {
               return <TeamCard key={team.slug} team={team} />;
             })}

@@ -1,23 +1,21 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { KappLink as Link, PageTitle } from 'common';
 import { CategoryCard } from '../shared/CategoryCard';
 
 export const CategoryList = ({ categories }) => (
-  <div>
+  <Fragment>
     <PageTitle parts={['Categories']} />
-    <div className="services-bar">
-      <span className="bordercolor" />
-    </div>
-    <div className="services-category-container container">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+    <span className="services-color-bar services-color-bar__blue-slate" />
+    <div className="page-container page-container--services-category">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">services</Link> /
           </h3>
           <h1>All Categories</h1>
         </div>
       </div>
-      <div className="c-cards-wrapper">
+      <div className="cards__wrapper cards__wrapper--categories">
         {categories
           .filter(category => category.slug !== 'home-page-services')
           .map(category => (
@@ -30,5 +28,5 @@ export const CategoryList = ({ categories }) => (
           ))}
       </div>
     </div>
-  </div>
+  </Fragment>
 );

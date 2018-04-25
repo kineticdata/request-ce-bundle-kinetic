@@ -2,30 +2,31 @@
  *   Status ~ Queue
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.queue {
+.package-layout--queue {
   .status-paragraph {
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
 
-  .status {
+  .queue-status {
     text-transform: uppercase;
     @include ms-respond(font-size, -2);
     margin: 0;
     line-height: 1.5rem;
-    &.status-cancelled {
+    &.queue-status--cancelled {
       color: $red;
     }
-    &.status-complete {
+    &.queue-status--complete {
       color: $blue;
     }
-    &.status-open {
+    &.queue-status--open {
       color: $greenTeal;
     }
-    &.status-pending {
+    &.queue-status--pending {
       color: $orange;
     }
-    .status-reason {
+    .queue-status--reason {
       color: $blueSky;
       margin-left: 6px;
       overflow: hidden;

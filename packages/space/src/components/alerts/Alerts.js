@@ -10,7 +10,7 @@ import { Alert } from './Alert';
 
 const WallyEmptyMessage = ({ canEdit }) => {
   return (
-    <div className="wally-empty-state">
+    <div className="empty-state empty-state--wally">
       <h5>No Alerts Right Now...</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       {canEdit && <h6>Add an alert by hitting the new button!</h6>}
@@ -21,40 +21,36 @@ const WallyEmptyMessage = ({ canEdit }) => {
 const AlertsComponent = ({ alerts, loading, match, error, canEdit }) => {
   const selectedAlert = match.params.id;
   return (
-    <div className="space-alerts-container">
+    <div className="page-container page-container--space-alerts">
       <PageTitle parts={['Alerts']} />
 
       {!loading && (
-        <div className="alerts-content pane">
-          <div>
-            <div className="page-title-wrapper">
-              <div className="page-title">
-                <h3>
-                  <Link to="/">home</Link> /
-                </h3>
-                <h1>Alerts</h1>
-              </div>
-              {canEdit && (
-                <Link to="/alerts/new" className="btn btn-secondary">
-                  Create New Alert
-                </Link>
-              )}
+        <div className="page-panel page-panel--space-alerts">
+          <div className="page-title">
+            <div className="page-title__wrapper">
+              <h3>
+                <Link to="/">home</Link> /
+              </h3>
+              <h1>Alerts</h1>
             </div>
-            {error && <h3>There was a problem loading the alerts.</h3>}
+            {canEdit && (
+              <Link to="/alerts/new" className="btn btn-secondary">
+                Create New Alert
+              </Link>
+            )}
+          </div>
+          {error && <h3>There was a problem loading the alerts.</h3>}
+          <div className="page-content  page-content--space-alerts">
             {!error &&
               alerts.size <= 0 && <WallyEmptyMessage canEdit={canEdit} />}
             {!error &&
               alerts.size > 0 && (
-                <table className="table table-alerts">
+                <table className="table table--alerts">
                   <thead>
-                    <tr className="header">
-                      <td width="25%">Title</td>
-                      <td width="65%">Description</td>
-                      {canEdit && (
-                        <td className="actions" width="10%">
-                          Actions
-                        </td>
-                      )}
+                    <tr>
+                      <th width="25%">Title</th>
+                      <th width="65%">Description</th>
+                      {canEdit && <th width="10%">Actions</th>}
                     </tr>
                   </thead>
                   <tbody>

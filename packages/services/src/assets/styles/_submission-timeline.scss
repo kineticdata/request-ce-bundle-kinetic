@@ -1,0 +1,84 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Timeline  ~ services
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// Timeline
+.submission-timeline {
+  ul {
+    margin: 0 0 2rem 2rem;
+    padding: 0;
+    border-left: 1px solid $black-16;
+  }
+  li {
+    list-style: none;
+  }
+  dt {
+    font-size: 0.625rem;
+    font-weight: 600;
+    line-height: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  dd {
+    color: $black-50;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1rem;
+  }
+}
+.card--timeline {
+  position: relative;
+  border: 1px solid $black-16;
+  border-radius: $border-radius-base;
+  padding: 1rem;
+  margin: 1rem 0 1rem 1rem;
+  list-style: none;
+  @include setBgColorAndHover($white);
+  &__circle {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: $blue;
+    border-radius: 50%;
+    display: block;
+    position: absolute;
+    left: -1.3725rem;
+    top: 45%;
+  }
+  h1 {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin: 0;
+    color: $blue;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $black-16;
+  }
+  p {
+    color: $black;
+    margin-bottom: 0;
+  }
+  .time-ago__text {
+    font-weight: 100;
+  }
+}
+
+.timeline-status {
+  display: table;
+  font-size: 0.5rem;
+  font-weight: 900;
+  background-color: $greenGrass;
+  padding: 0.25rem 0.75rem;
+  border-radius: $border-radius-base;
+  color: $white;
+  text-align: center;
+  margin-left: -2.375rem;
+  &--end {
+    background-color: $red;
+  }
+  &--pending {
+    background-color: $sunflower;
+    color: $black;
+    margin-left: -3rem;
+  }
+}

@@ -29,10 +29,10 @@ export const RELATED_SUBMISSION_ID_FIELD = 'Related Submission Id';
 export const REFERRING_ID_FIELD = 'Referring Id';
 
 // Class names
-export const DEFAULT_LABEL_CLASS = 'status-gray';
-export const WARNING_LABEL_CLASS = 'status-yellow';
-export const SUCCESS_LABEL_CLASS = 'status-green';
-export const DANGER_LABEL_CLASS = 'status-red';
+export const DEFAULT_LABEL_CLASS = 'status--gray';
+export const WARNING_LABEL_CLASS = 'status--yellow';
+export const SUCCESS_LABEL_CLASS = 'status--green';
+export const DANGER_LABEL_CLASS = 'status--red';
 
 // App values
 export const CORE_STATE_DRAFT = 'Draft';

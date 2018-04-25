@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { TimeAgo } from 'common';
 import { activityData } from '../../RequestActivityList';
 
 const ActivityDataItem = ({ label, value }) => (
-  <div>
+  <Fragment>
     {label !== 'STRING' && <span className={'title'}>{label}</span>}
     <span>{value}</span>
-  </div>
+  </Fragment>
 );
 
 export const DefaultHeader = ({ activity }) => <h1>{activity.label}</h1>;
@@ -14,24 +14,22 @@ export const DefaultHeader = ({ activity }) => <h1>{activity.label}</h1>;
 export const DefaultBody = ({ activity }) => {
   const data = activityData(activity);
   return (
-    <div>
-      <div className="row">
-        <div className="col">
+    <Fragment>
+      <div className="data-list-row">
+        <div className="data-list-row__col">
           <dl>
             <dt>
-              <span className="fa fa-fw fa-calendar" />
-              <span>Created</span>
+              <span className="fa fa-fw fa-calendar" /> Created
             </dt>
             <dd>
               <TimeAgo timestamp={activity.createdAt} />
             </dd>
           </dl>
         </div>
-        <div className="col">
+        <div className="data-list-row__col">
           <dl>
             <dt>
-              <span className="fa fa-fw fa-calendar" />
-              <span>Updated</span>
+              <span className="fa fa-fw fa-calendar" /> Updated
             </dt>
             <dd>
               <TimeAgo timestamp={activity.updatedAt} />
@@ -39,8 +37,8 @@ export const DefaultBody = ({ activity }) => {
           </dl>
         </div>
       </div>
-      <div className="row">
-        <div className="col">
+      <div className="data-list-row">
+        <div className="data-list-row__col">
           {Object.keys(data)
             // map to a list of objects with label, value, and key properties
             .map(key => ({ key, label: key, value: data[key] }))
@@ -49,6 +47,6 @@ export const DefaultBody = ({ activity }) => {
             .map(props => <ActivityDataItem {...props} />)}
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
