@@ -191,13 +191,16 @@ export const EditUserComponent = ({
                   )}
                 />
               </div>
-              <div className="footer-save">
-                <button
-                  disabled={!fieldValuesValid(fieldValues)}
-                  className="btn btn-primary"
-                >
-                  Save
-                </button>
+              <div className="form__footer">
+                <div className="form__footer__right">
+                  {' '}
+                  <button
+                    disabled={!fieldValuesValid(fieldValues)}
+                    className="btn btn-primary"
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
             </form>
           </div>
@@ -223,7 +226,7 @@ const managerLookup = (users, managerUsername) => {
 };
 
 const UserTeams = ({ teams }) => (
-  <div className="t-card-wrapper">
+  <div className="cards__wrapper cards__wrapper--team">
     {Object.keys(teams).length > 0 ? (
       teams.map(item => <TeamCard key={item.team.name} team={item.team} />)
     ) : (
