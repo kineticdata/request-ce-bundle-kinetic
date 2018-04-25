@@ -79,7 +79,7 @@ export class AssignmentSelector extends Component {
       <div key="menu">
         {Object.keys(byTeams).map(t => (
           <div key={t}>
-            <h5 className="team">{t}</h5>
+            <h5 className="select-combobox__title">{t}</h5>
             {byTeams[t]}
           </div>
         ))}
@@ -91,7 +91,7 @@ export class AssignmentSelector extends Component {
     return (
       <div className="assignment-badge">
         Assignment
-        <div className="select">
+        <div className="select-combobox select-combobox--assignment">
           <Autocomplete
             ref={el => {
               this.input = el;
