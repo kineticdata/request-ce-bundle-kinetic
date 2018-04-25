@@ -34,7 +34,13 @@ export const types = {
   SET_DELETE_ERROR: namespace('settingsNotifications', 'SET_DELETE_ERROR'),
   FETCH_VARIABLES: namespace('settingsNotifications', 'FETCH_VARIABLES'),
   SET_VARIABLES: namespace('settingsNotifications', 'SET_VARIABLES'),
-  SET_VARIABLES_ERROR: namespace('settingsNotifications', 'SET_VARIABLES_ERROR'),
+  SET_VARIABLES_ERROR: namespace(
+    'settingsNotifications',
+    'SET_VARIABLES_ERROR',
+  ),
+  SAVE_NOTIFICATION: namespace('settingsNotifications', 'SAVE_NOTIFICATION'),
+  SET_SAVE_SUCCESS: namespace('settingsNotifications', 'SET_SAVE_SUCCESS'),
+  SET_SAVE_ERROR: namespace('settingsNotifications', 'SET_SAVE_ERROR'),
 };
 
 export const actions = {
@@ -54,6 +60,14 @@ export const actions = {
   fetchVariables: noPayload(types.FETCH_VARIABLES),
   setVariables: withPayload(types.SET_VARIABLES),
   setVariablesError: withPayload(types.SET_VARIABLES_ERROR),
+  saveNotification: withPayload(
+    types.SAVE_NOTIFICATION,
+    'values',
+    'id',
+    'callback',
+  ),
+  setSaveSuccess: withPayload(types.SET_SAVE_SUCCESS),
+  setSaveError: withPayload(types.SET_SAVE_ERROR),
 };
 
 export const selectPrevAndNext = state => {
@@ -77,7 +91,7 @@ export const selectPrevAndNext = state => {
 };
 
 export const selectKapps = state =>
-  state.variablesLoading ? List() : List(state.variables.kapps)
+  state.variablesLoading ? List() : List(state.variables.kapps);
 
 export const State = Record({
   // Notification List
@@ -88,6 +102,7 @@ export const State = Record({
   // Notification List Actions
   cloning: false,
   deleting: false,
+  saving: false,
   submissionActionErrors: [],
   // Single Notification
   notification: null,
@@ -129,6 +144,12 @@ export const reducer = (state = State(), { type, payload }) => {
       return state
         .set('deleting', false)
         .set('submissionActionErrors', payload);
+    case types.SAVE_NOTIFICATION:
+      return state.set('saving', true);
+    case types.SET_SAVE_SUCCESS:
+      return state.set('saving', false).delete('submissionActionErrors');
+    case types.SET_SAVE_ERROR:
+      return state.set('saving', false).set('submissionActionErrors', payload);
     case types.FETCH_VARIABLES:
       return state.set('variablesLoading', true);
     case types.SET_VARIABLES:
@@ -139,6 +160,13 @@ export const reducer = (state = State(), { type, payload }) => {
       return state
         .set('variablesErrors', payload)
         .set('variablesLoading', false);
+    case types.RESET_NOTIFICATION:
+      return state
+        .delete('notification')
+        .delete('notificationLoading')
+        .delete('variables')
+        .delete('variablesLoading')
+        .delete('submissionActionErrors');
     default:
       return state;
   }

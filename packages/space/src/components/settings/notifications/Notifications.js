@@ -6,25 +6,10 @@ import { Notification } from './Notification';
 import { NotificationsList } from './NotificationsList';
 import { actions } from '../../../redux/modules/settingsNotifications';
 
-
 export const NotificationsRouter = ({ match, loading }) =>
   !loading && (
     <Switch>
-      <Route
-        exact
-        path={`${match.path}/new`}
-        component={Notification}
-      />
-      <Route
-        exact
-        path={`${match.path}/:id`}
-        component={Notification}
-      />
-      <Route
-        exact
-        path={`${match.path}/:id/:mode`}
-        component={Notification}
-      />
+      <Route path={`${match.path}/:id`} component={Notification} />
       <Route component={NotificationsList} />
     </Switch>
   );

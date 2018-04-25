@@ -31,18 +31,21 @@ export function* fetchNotificationsSaga() {
 }
 
 export function* fetchNotificationSaga(action) {
-  const include =
-    'details,values';
-  const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
-    id: action.payload,
-    include,
-    datastore: true,
-  });
-
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
+  const include = 'details,values';
+  if (action.payload === 'new') {
+    yield put(actions.setNotification(null));
   } else {
-    yield put(actions.setNotification(submission));
+    const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
+      id: action.payload,
+      include,
+      datastore: true,
+    });
+
+    if (serverError) {
+      yield put(systemErrorActions.setSystemError(serverError));
+    } else {
+      yield put(actions.setNotification(submission));
+    }
   }
 }
 
@@ -121,9 +124,40 @@ export function* deleteNotificationSaga(action) {
   }
 }
 
+export function* saveNotificationSaga(action) {
+  const datastore = true;
+  const completed = false;
+  const formSlug = NOTIFICATIONS_FORM_SLUG;
+  const {
+    payload: { id, values, callback },
+  } = action;
+
+  const { errors, error, serverError, submission } = yield id
+    ? call(CoreAPI.updateSubmission, { datastore, id, values })
+    : call(CoreAPI.createSubmission, {
+        datastore,
+        completed,
+        formSlug,
+        values,
+      });
+
+  if (serverError) {
+    yield put(systemErrorActions.setSystemError(serverError));
+  } else if (errors || error) {
+    yield put(actions.setSaveError(errors || error));
+  } else {
+    yield put(actions.setSaveSuccess());
+    console.log(callback);
+    if (typeof callback === 'function') {
+      callback();
+    }
+  }
+}
+
 export function* fetchVariablesSaga() {
   const { space, errors, serverError } = yield call(CoreAPI.fetchSpace, {
-    include: 'space,space.attributesMap,kapps,kapps.attributesMap,kapps.forms,kapps.forms.attributesMap,kapps.forms.fields'
+    include:
+      'space,space.attributesMap,kapps,kapps.attributesMap,kapps.forms,kapps.forms.attributesMap,kapps.forms.fields',
   });
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
@@ -140,4 +174,5 @@ export function* watchSettingsNotifications() {
   yield takeEvery(types.FETCH_NOTIFICATION, fetchNotificationSaga);
   yield takeEvery(types.CLONE_NOTIFICATION, cloneNotificationSaga);
   yield takeEvery(types.DELETE_NOTIFICATION, deleteNotificationSaga);
+  yield takeEvery(types.SAVE_NOTIFICATION, saveNotificationSaga);
 }
