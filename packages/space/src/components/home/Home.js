@@ -51,11 +51,14 @@ const HomeComponent = ({
             </h1>
           </div>
           <div className="search-form--discussion">
-            <div className="select">
-              <form onSubmit={handleDiscussionSearchInputSubmit}>
+            <div className="search-box search-box--discussion">
+              <form
+                onSubmit={handleDiscussionSearchInputSubmit}
+                className="search-box__form"
+              >
                 <input
+                  type="text"
                   placeholder="Search discussions"
-                  className="form-control"
                   onChange={handleDiscussionSearchInputChange}
                 />
                 <button type="submit">

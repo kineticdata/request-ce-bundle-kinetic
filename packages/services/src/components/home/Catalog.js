@@ -20,7 +20,7 @@ export const Catalog = ({
       <div className="search-services-home">
         <div className="search-services-home__wrapper">
           <h1 className="text-truncate">Services from the team</h1>
-          <div className="select">
+          <div className="search-box">
             <CatalogSearchContainer />
           </div>
         </div>
@@ -63,23 +63,22 @@ export const Catalog = ({
             </div>
           </div>
           <div className="cards__wrapper cards__wrapper--categories">
-            {homePageItems
-              .map(
-                item =>
-                  homePageMode === 'Categories' ? (
-                    <CategoryCard
-                      key={item.slug}
-                      category={item}
-                      path={`/categories/${item.slug}`}
-                    />
-                  ) : (
-                    <ServiceCard
-                      key={item.slug}
-                      form={item}
-                      path={`/forms/${item.slug}`}
-                    />
-                  ),
-              )}
+            {homePageItems.map(
+              item =>
+                homePageMode === 'Categories' ? (
+                  <CategoryCard
+                    key={item.slug}
+                    category={item}
+                    path={`/categories/${item.slug}`}
+                  />
+                ) : (
+                  <ServiceCard
+                    key={item.slug}
+                    form={item}
+                    path={`/forms/${item.slug}`}
+                  />
+                ),
+            )}
           </div>
         </div>
       </div>

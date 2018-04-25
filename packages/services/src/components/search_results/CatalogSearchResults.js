@@ -18,7 +18,7 @@ export const CatalogSearchResults = ({ query, forms }) => (
         </div>
       </div>
       <div className="search-results">
-        <div className="select search-results__select">
+        <div className="search-box">
           <CatalogSearchContainer />
         </div>
         <div className="search-results__list">

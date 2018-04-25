@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const CatalogSearch = props => (
-  <form onSubmit={props.submitHandler(props)}>
+  <form onSubmit={props.submitHandler(props)} className="search-box__form">
     <input
       type="text"
       placeholder="Search services..."

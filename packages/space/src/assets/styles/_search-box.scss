@@ -1,15 +1,14 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Search Box Overrides ~ Space
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.package-layout--space {
-  .select {
-    form {
-      padding: 0;
-      margin: 0 0.75rem 0 0;
-      input {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.75rem;
-      }
+
+.search-box--discussion {
+  .search-box__form {
+    padding: 0;
+    margin: 0 0.75rem 0 0;
+    input[type='text'] {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.75rem;
     }
   }
 }
