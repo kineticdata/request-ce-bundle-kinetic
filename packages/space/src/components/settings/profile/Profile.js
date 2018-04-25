@@ -119,13 +119,15 @@ export const EditProfileComponent = ({
                   Change Password
                 </button>
               )}
-              <div className="footer-save">
-                <button
-                  disabled={!fieldValuesValid(fieldValues)}
-                  className="btn btn-primary"
-                >
-                  Save
-                </button>
+              <div className="form__footer">
+                <div className="form__footer__right">
+                  <button
+                    disabled={!fieldValuesValid(fieldValues)}
+                    className="btn btn-primary"
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
             </form>
           </section>
