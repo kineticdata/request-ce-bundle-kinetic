@@ -366,7 +366,7 @@ export const mapDispatchToProps = {
   setIndexPartInput: actions.setIndexPartInput,
   addIndexPartInput: actions.addIndexPartInput,
   removeIndexPartInput: actions.removeIndexPartInput,
-  popPageToken: actions.popPageToken,
+  clearPageTokens: actions.clearPageTokens,
 };
 
 const handleSearchSubmissions = ({
@@ -386,10 +386,10 @@ const handleApplySearchSubmissions = ({
   fetchSubmissionsSimple,
   fetchSubmissionsAdvanced,
   simpleSearchActive,
-  popPageToken,
+  clearPageTokens,
 }) => e => {
   e.preventDefault();
-  popPageToken();
+  clearPageTokens();
   if (simpleSearchActive) {
     fetchSubmissionsSimple();
   } else {

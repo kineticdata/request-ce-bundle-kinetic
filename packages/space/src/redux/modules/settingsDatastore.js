@@ -70,6 +70,7 @@ export const types = {
   RESET_SEARCH_PARAMS: namespace('datastore', 'RESET_SEARCH_PARAMS'),
   PUSH_PAGE_TOKEN: namespace('datastore', 'PUSH_PAGE_TOKEN'),
   POP_PAGE_TOKEN: namespace('datastore', 'POP_PAGE_TOKEN'),
+  CLEAR_PAGE_TOKENS: namespace('datastore', 'CLEAR_PAGE_TOKENS'),
   SET_NEXT_PAGE_TOKEN: namespace('datastore', 'SET_NEXT_PAGE_TOKEN'),
   SET_PAGE_OFFSET: namespace('datastore', 'SET_PAGE_OFFSET'),
   TOGGLE_SIMPLE_SEARCH: namespace('datastore', 'TOGGLE_SIMPLE_SEARCH'),
@@ -125,6 +126,7 @@ export const actions = {
   resetSearchParams: noPayload(types.RESET_SEARCH_PARAMS),
   pushPageToken: withPayload(types.PUSH_PAGE_TOKEN),
   popPageToken: noPayload(types.POP_PAGE_TOKEN),
+  clearPageTokens: noPayload(types.CLEAR_PAGE_TOKENS),
   setNextPageToken: withPayload(types.SET_NEXT_PAGE_TOKEN),
   toggleSimpleSearch: noPayload(types.TOGGLE_SIMPLE_SEARCH),
   setSimpleSearch: withPayload(types.SET_SIMPLE_SEARCH),
@@ -418,6 +420,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.update('pageTokens', pageTokens => pageTokens.push(payload));
     case types.POP_PAGE_TOKEN:
       return state.update('pageTokens', pageTokens => pageTokens.pop());
+    case types.CLEAR_PAGE_TOKENS:
+      return state.set('pageTokens', List()).set('nextPageToken', null);
     case types.SET_NEXT_PAGE_TOKEN:
       return state.set('nextPageToken', payload);
     case types.SET_ADVANCED_SEARCH_OPEN:
