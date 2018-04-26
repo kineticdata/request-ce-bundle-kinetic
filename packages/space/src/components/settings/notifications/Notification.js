@@ -2,9 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
-import { Map } from 'immutable';
+import { Map, Seq } from 'immutable';
 import { actions as toastActions } from 'kinops/src/redux/modules/toasts';
 import { actions } from '../../../redux/modules/settingsNotifications';
+import { NotificationMenu } from './NotificationMenu';
 
 const fields = ['Name', 'Status', 'Subject', 'HTML Content', 'Text Content'];
 
@@ -14,7 +15,9 @@ const NotificationComponent = ({
   dirty,
   values,
   handleFieldChange,
+  handleFieldBlur,
   handleSubmit,
+  handleVariableSelection,
 }) => (
   <div className="page-container page-container--notifications">
     {!loading &&
@@ -38,6 +41,7 @@ const NotificationComponent = ({
                 id="name"
                 name="Name"
                 onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
                 value={values.get('Name')}
               />
             </div>
@@ -49,6 +53,7 @@ const NotificationComponent = ({
                   name="Status"
                   value="Active"
                   onChange={handleFieldChange}
+                  onBlur={handleFieldBlur}
                   checked={values.get('Status') === 'Active'}
                 />
                 Active
@@ -59,10 +64,14 @@ const NotificationComponent = ({
                   name="Status"
                   value="Inactive"
                   onChange={handleFieldChange}
+                  onBlur={handleFieldBlur}
                   checked={values.get('Status') === 'Inactive'}
                 />
                 Inactive
               </label>
+            </div>
+            <div className="form-group">
+              <NotificationMenu onSelect={handleVariableSelection} />
             </div>
             <div className="form-group required">
               <label htmlFor="subject">Subject</label>
@@ -71,6 +80,7 @@ const NotificationComponent = ({
                 name="Subject"
                 rows="2"
                 onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
                 value={values.get('Subject')}
               />
             </div>
@@ -81,6 +91,7 @@ const NotificationComponent = ({
                 name="HTML Content"
                 rows="8"
                 onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
                 value={values.get('HTML Content')}
               />
             </div>
@@ -91,6 +102,7 @@ const NotificationComponent = ({
                 name="Text Content"
                 rows="8"
                 onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
                 value={values.get('Text Content')}
               />
             </div>
@@ -126,6 +138,31 @@ export const handleFieldChange = props => event => {
   props.setValues(props.values.set(event.target.name, event.target.value));
 };
 
+export const handleFieldBlur = props => event => {
+  props.setCursorPosition(
+    ['Subject', 'HTML Content', 'Text Content'].includes(event.target.name)
+      ? {
+          name: event.target.name,
+          start: event.target.selectionStart,
+          end: event.target.selectionEnd,
+        }
+      : null,
+  );
+};
+
+export const handleVariableSelection = props => variable => {
+  if (props.cursorPosition) {
+    const { name, start, end } = props.cursorPosition;
+    const value = props.values.get(name);
+    const newValue = Seq(value)
+      .take(start)
+      .concat(Seq(variable))
+      .concat(Seq(value).skip(end))
+      .join('');
+    props.setValues(props.values.set(name, newValue));
+  }
+};
+
 export const mapStateToProps = (state, { match: { params } }) => ({
   submission: state.settingsNotifications.notification,
   loading: state.settingsNotifications.notificationLoading,
@@ -144,9 +181,12 @@ export const Notification = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withState('dirty', 'setDirty', false),
   withState('values', 'setValues', Map(fields.map(field => [field, '']))),
+  withState('cursorPosition', 'setCursorPosition', null),
   withHandlers({
     handleSubmit,
     handleFieldChange,
+    handleFieldBlur,
+    handleVariableSelection,
   }),
   lifecycle({
     componentWillMount() {
