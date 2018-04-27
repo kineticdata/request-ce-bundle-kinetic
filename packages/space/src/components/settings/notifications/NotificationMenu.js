@@ -182,23 +182,27 @@ const OtherVariablesMenu = ({ handleClick }) => (
 
 const DateFormatMenu = ({ dateFormats, selection, handleClick }) => (
   <ul className="dropdown-menu">
-    <small className="dropdown-header">Formatting selection: {selection}</small>
     {selection && selection.startsWith('${') && selection.endsWith('}') ? (
-      dateFormats.map(name => (
-        <DropdownItem
-          key={name}
-          data-value={wrapVar('appearance')(
-            selection + wrapVar('format')(name),
-          )}
-          onClick={handleClick}
-        >
-          {name}
-        </DropdownItem>
-      ))
+      <Fragment>
+        <small className="dropdown-header">
+          Formatting selection: {selection}
+        </small>
+        {dateFormats.map(name => (
+          <DropdownItem
+            key={name}
+            data-value={wrapVar('appearance')(
+              selection + wrapVar('format')(name),
+            )}
+            onClick={handleClick}
+          >
+            {name}
+          </DropdownItem>
+        ))}
+      </Fragment>
     ) : (
       <small className="dropdown-header">
-        Please highlight a dynamic replacement value in one of the fields below
-        that you would like to apply a date format to.
+        Highlight a dynamic replacement value in one of the fields below that
+        you would like to apply a date format to.
       </small>
     )}
   </ul>
