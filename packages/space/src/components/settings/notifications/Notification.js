@@ -34,6 +34,9 @@ const NotificationComponent = ({
             </div>
           </div>
           <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <NotificationMenu onSelect={handleVariableSelection} />
+            </div>
             <div className="form-group required">
               <label htmlFor="name">Name</label>
               <input
@@ -69,9 +72,6 @@ const NotificationComponent = ({
                 />
                 Inactive
               </label>
-            </div>
-            <div className="form-group">
-              <NotificationMenu onSelect={handleVariableSelection} />
             </div>
             <div className="form-group required">
               <label htmlFor="subject">Subject</label>
@@ -191,7 +191,6 @@ export const Notification = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchNotification(this.props.match.params.id);
-      this.props.fetchVariables();
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.match.params.id !== nextProps.match.params.id) {

@@ -1,4 +1,4 @@
-import { List, Record, fromJS } from 'immutable';
+import { List, Record } from 'immutable';
 import { Utils } from 'common';
 import { Kapp } from '../../records';
 
@@ -57,7 +57,7 @@ export const actions = {
   deleteNotification: withPayload(types.DELETE_NOTIFICATION),
   setDeleteSuccess: noPayload(types.SET_DELETE_SUCCESS),
   setDeleteError: withPayload(types.SET_DELETE_ERROR),
-  fetchVariables: noPayload(types.FETCH_VARIABLES),
+  fetchVariables: withPayload(types.FETCH_VARIABLES, 'kappSlug'),
   setVariables: withPayload(types.SET_VARIABLES),
   setVariablesError: withPayload(types.SET_VARIABLES_ERROR),
   saveNotification: withPayload(
@@ -90,9 +90,6 @@ export const selectPrevAndNext = state => {
   }
 };
 
-export const selectKapps = state =>
-  state.variablesLoading ? List() : List(state.variables.kapps);
-
 export const State = Record({
   // Notification List
   loading: true,
@@ -108,7 +105,6 @@ export const State = Record({
   notification: null,
   notificationLoading: true,
   variables: null,
-  variablesLoading: true,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -151,21 +147,16 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_SAVE_ERROR:
       return state.set('saving', false).set('submissionActionErrors', payload);
     case types.FETCH_VARIABLES:
-      return state.set('variablesLoading', true);
+      return state.delete('variables');
     case types.SET_VARIABLES:
-      return state
-        .set('variablesLoading', false)
-        .set('variables', fromJS(payload));
+      return state.set('variables', payload);
     case types.SET_VARIABLES_ERROR:
-      return state
-        .set('variablesErrors', payload)
-        .set('variablesLoading', false);
+      return state.set('variablesErrors', payload);
     case types.RESET_NOTIFICATION:
       return state
         .delete('notification')
         .delete('notificationLoading')
         .delete('variables')
-        .delete('variablesLoading')
         .delete('submissionActionErrors');
     default:
       return state;

@@ -153,17 +153,20 @@ export function* saveNotificationSaga(action) {
   }
 }
 
-export function* fetchVariablesSaga() {
-  const { space, errors, serverError } = yield call(CoreAPI.fetchSpace, {
-    include:
-      'space,space.attributesMap,kapps,kapps.attributesMap,kapps.forms,kapps.forms.attributesMap,kapps.forms.fields',
-  });
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
-  } else if (errors) {
-    yield put(actions.setVariablesError(errors));
-  } else {
-    yield put(actions.setVariables(space));
+export function* fetchVariablesSaga(action) {
+  if (action.payload.kappSlug) {
+    const { forms, errors, serverError } = yield call(CoreAPI.fetchForms, {
+      kappSlug: action.payload.kappSlug,
+      include: 'attributes,fields',
+    });
+
+    if (serverError) {
+      yield put(systemErrorActions.setSystemError(serverError));
+    } else if (errors) {
+      yield put(actions.setVariablesError(errors));
+    } else {
+      yield put(actions.setVariables({ forms }));
+    }
   }
 }
 
