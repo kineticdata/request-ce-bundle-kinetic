@@ -14,6 +14,7 @@ const NotificationComponent = ({
   submission,
   dirty,
   values,
+  selection,
   handleFieldChange,
   handleFieldBlur,
   handleSubmit,
@@ -35,7 +36,10 @@ const NotificationComponent = ({
           </div>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <NotificationMenu onSelect={handleVariableSelection} />
+              <NotificationMenu
+                selection={selection}
+                onSelect={handleVariableSelection}
+              />
             </div>
             <div className="form-group required">
               <label htmlFor="name">Name</label>
@@ -139,15 +143,14 @@ export const handleFieldChange = props => event => {
 };
 
 export const handleFieldBlur = props => event => {
-  props.setCursorPosition(
-    ['Subject', 'HTML Content', 'Text Content'].includes(event.target.name)
-      ? {
-          name: event.target.name,
-          start: event.target.selectionStart,
-          end: event.target.selectionEnd,
-        }
-      : null,
-  );
+  const { name, selectionStart: start, selectionEnd: end } = event.target;
+  if (['Subject', 'HTML Content', 'Text Content'].includes(name)) {
+    props.setCursorPosition({ name, start, end });
+    props.setSelection(props.values.get(name).substring(start, end));
+  } else {
+    props.setCursorPosition(null);
+    props.setSelection(null);
+  }
 };
 
 export const handleVariableSelection = props => variable => {
@@ -182,6 +185,7 @@ export const Notification = compose(
   withState('dirty', 'setDirty', false),
   withState('values', 'setValues', Map(fields.map(field => [field, '']))),
   withState('cursorPosition', 'setCursorPosition', null),
+  withState('selection', 'setSelection', null),
   withHandlers({
     handleSubmit,
     handleFieldChange,

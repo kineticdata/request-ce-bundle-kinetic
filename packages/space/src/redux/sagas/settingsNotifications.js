@@ -8,6 +8,7 @@ import {
   actions,
   types,
   NOTIFICATIONS_FORM_SLUG,
+  NOTIFICATIONS_DATE_FORMAT_FORM_SLUG,
 } from '../modules/settingsNotifications';
 
 export function* fetchNotificationsSaga() {
@@ -170,8 +171,31 @@ export function* fetchVariablesSaga(action) {
   }
 }
 
+export function* fetchDateFormatsSaga(action) {
+  const { submissions } = yield call(CoreAPI.searchSubmissions, {
+    datastore: true,
+    form: NOTIFICATIONS_DATE_FORMAT_FORM_SLUG,
+    search: new CoreAPI.SubmissionSearch(true)
+      .index('values[Status]')
+      .eq('values[Status]', 'active')
+      .includes(['values'])
+      .build(),
+  });
+
+  yield put(
+    submissions
+      ? actions.setDateFormats(
+          submissions.map(submission => submission.values.Name),
+        )
+      : actions.setSystemError(
+          'Failed to fetch notification template date formats',
+        ),
+  );
+}
+
 export function* watchSettingsNotifications() {
   yield takeEvery(types.FETCH_VARIABLES, fetchVariablesSaga);
+  yield takeEvery(types.FETCH_DATE_FORMATS, fetchDateFormatsSaga);
   yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
   yield takeEvery(types.FETCH_NOTIFICATION, fetchNotificationSaga);
   yield takeEvery(types.CLONE_NOTIFICATION, cloneNotificationSaga);

@@ -5,6 +5,8 @@ import { Kapp } from '../../records';
 const { namespace, noPayload, withPayload } = Utils;
 
 export const NOTIFICATIONS_FORM_SLUG = 'notification-data';
+export const NOTIFICATIONS_DATE_FORMAT_FORM_SLUG =
+  'notification-template-dates';
 
 export const types = {
   FETCH_NOTIFICATIONS: namespace(
@@ -38,6 +40,8 @@ export const types = {
     'settingsNotifications',
     'SET_VARIABLES_ERROR',
   ),
+  FETCH_DATE_FORMATS: namespace('settingsNotifications', 'FETCH_DATE_FORMATS'),
+  SET_DATE_FORMATS: namespace('settingsNotifications', 'SET_DATE_FORMATS'),
   SAVE_NOTIFICATION: namespace('settingsNotifications', 'SAVE_NOTIFICATION'),
   SET_SAVE_SUCCESS: namespace('settingsNotifications', 'SET_SAVE_SUCCESS'),
   SET_SAVE_ERROR: namespace('settingsNotifications', 'SET_SAVE_ERROR'),
@@ -60,6 +64,8 @@ export const actions = {
   fetchVariables: withPayload(types.FETCH_VARIABLES, 'kappSlug'),
   setVariables: withPayload(types.SET_VARIABLES),
   setVariablesError: withPayload(types.SET_VARIABLES_ERROR),
+  fetchDateFormats: noPayload(types.FETCH_DATE_FORMATS),
+  setDateFormats: withPayload(types.SET_DATE_FORMATS),
   saveNotification: withPayload(
     types.SAVE_NOTIFICATION,
     'values',
@@ -105,6 +111,7 @@ export const State = Record({
   notification: null,
   notificationLoading: true,
   variables: null,
+  dateFormats: [],
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -152,6 +159,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('variables', payload);
     case types.SET_VARIABLES_ERROR:
       return state.set('variablesErrors', payload);
+    case types.SET_DATE_FORMATS:
+      return state.set('dateFormats', payload);
     case types.RESET_NOTIFICATION:
       return state
         .delete('notification')

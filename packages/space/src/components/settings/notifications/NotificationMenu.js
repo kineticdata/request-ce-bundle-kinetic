@@ -180,10 +180,36 @@ const OtherVariablesMenu = ({ handleClick }) => (
   </ul>
 );
 
+const DateFormatMenu = ({ dateFormats, selection, handleClick }) => (
+  <ul className="dropdown-menu">
+    <small className="dropdown-header">Formatting selection: {selection}</small>
+    {selection && selection.startsWith('${') && selection.endsWith('}') ? (
+      dateFormats.map(name => (
+        <DropdownItem
+          key={name}
+          data-value={wrapVar('appearance')(
+            selection + wrapVar('format')(name),
+          )}
+          onClick={handleClick}
+        >
+          {name}
+        </DropdownItem>
+      ))
+    ) : (
+      <small className="dropdown-header">
+        Please highlight a dynamic replacement value in one of the fields below
+        that you would like to apply a date format to.
+      </small>
+    )}
+  </ul>
+);
+
 export const NotificationMenuComponent = ({
+  selection,
   space,
   kapps,
   forms,
+  dateFormats,
   selectedKapp,
   selectedForm,
   handleClick,
@@ -270,7 +296,14 @@ export const NotificationMenuComponent = ({
             Other variables
             <OtherVariablesMenu handleClick={handleClick} />
           </li>
-          <li className="dropdown-item dropdown-submenu">Date Formats</li>
+          <li className="dropdown-item dropdown-submenu">
+            Date Formats
+            <DateFormatMenu
+              handleClick={handleClick}
+              selection={selection}
+              dateFormats={dateFormats}
+            />
+          </li>
         </DropdownMenu>
       </UncontrolledButtonDropdown>
     </div>
@@ -283,9 +316,11 @@ export const mapStateToProps = state => ({
   forms:
     state.settingsNotifications.variables &&
     state.settingsNotifications.variables.forms,
+  dateFormats: state.settingsNotifications.dateFormats,
 });
 
 const mapDispatchToProps = {
+  fetchDateFormats: actions.fetchDateFormats,
   fetchVariables: actions.fetchVariables,
 };
 
@@ -307,5 +342,9 @@ export const NotificationMenu = compose(
       );
     },
   }),
-  lifecycle({}),
+  lifecycle({
+    componentDidMount() {
+      this.props.fetchDateFormats();
+    },
+  }),
 )(NotificationMenuComponent);
