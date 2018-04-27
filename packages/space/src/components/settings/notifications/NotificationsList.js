@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { compose, withState } from 'recompose';
+import { compose, lifecycle, withProps, withState } from 'recompose';
+import { NavLink } from 'react-router-dom';
 import { NotificationListItem } from './NotificationListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
-
 import { actions } from '../../../redux/modules/settingsNotifications';
 
 const WallyNoResultsFoundMessage = ({ type }) => {
@@ -17,7 +17,7 @@ const WallyNoResultsFoundMessage = ({ type }) => {
   );
 };
 
-const NotificationsListComponent = ({ notifications, notificationType }) => (
+const NotificationsListComponent = ({ submissions, type, match }) => (
   <div className="page-container page-container--notifications">
     <div className="page-panel page-panel--scrollable">
       <div className="page-title">
@@ -28,46 +28,100 @@ const NotificationsListComponent = ({ notifications, notificationType }) => (
           </h3>
           <h1>Notifications</h1>
         </div>
-        <Link to={`/settings/notifications/new`} className="btn btn-primary">
-          Create New {notificationType}
+        <Link to={`${match.url}/new`} className="btn btn-primary">
+          Create New {type}
         </Link>
       </div>
+      <div className="notifications-tabs">
+        <ul className="nav nav-tabs">
+          <li role="presentation">
+            <NavLink
+              to="/settings/notifications/templates"
+              activeClassName="active"
+            >
+              Templates
+            </NavLink>
+          </li>
+          <li role="presentation">
+            <NavLink
+              to="/settings/notifications/snippets"
+              activeClassName="active"
+            >
+              Snippets
+            </NavLink>
+          </li>
+          <li role="presentation">
+            <NavLink
+              to="/settings/notifications/date-formats"
+              activeClassName="active"
+            >
+              Date Formats
+            </NavLink>
+          </li>
+        </ul>
+      </div>
       <div>
-        {notifications.size > 0 ? (
-          <table className="table table-sm table-striped table-datastore">
+        {submissions.length > 0 ? (
+          <table className="table table-sm">
             <thead>
               <tr>
                 <th>Name</th>
                 <th>Status</th>
-                <th>Subject</th>
+                <th className="d-none d-md-block">
+                  {type === 'Date Format' ? 'Format' : 'Subject'}
+                </th>
                 <th />
               </tr>
             </thead>
             <tbody>
-              {notifications.map(n => (
-                <NotificationListItem key={`trow-${n.id}`} notification={n} />
+              {submissions.map(s => (
+                <NotificationListItem
+                  key={`trow-${s.id}`}
+                  notification={s}
+                  path={`${match.url}/${s.id}`}
+                  type={type}
+                />
               ))}
             </tbody>
           </table>
         ) : (
-          <WallyNoResultsFoundMessage type={notificationType} />
+          <WallyNoResultsFoundMessage type={type} />
         )}
       </div>
     </div>
   </div>
 );
 
-export const mapStateToProps = state => ({
-  loading: state.settingsNotifications.loading,
-  notifications: state.settingsNotifications.notifications,
-  notificationType: state.settingsNotifications.notificationType,
+export const mapStateToProps = (state, props) => ({
+  loading:
+    state.settingsNotifications.loading ||
+    state.settingsNotifications.dateFormatsLoading,
+  templates: state.settingsNotifications.notificationTemplates,
+  snippets: state.settingsNotifications.notificationSnippets,
+  dateFormats: state.settingsNotifications.dateFormats,
 });
 
 export const mapDispatchToProps = {
   fetchNotifications: actions.fetchNotifications,
-  setNotificationType: actions.setNotificaitonType,
+  fetchDateFormats: actions.fetchDateFormats,
 };
 
 export const NotificationsList = compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withProps(props => {
+    switch (props.match.params.type) {
+      case 'templates':
+        return { type: 'Template', submissions: props.templates };
+      case 'snippets':
+        return { type: 'Snippet', submissions: props.snippets };
+      case 'date-formats':
+        return { type: 'Date Format', submissions: props.dateFormats };
+    }
+  }),
+  lifecycle({
+    componentWillMount() {
+      this.props.fetchNotifications();
+      this.props.fetchDateFormats();
+    },
+  }),
 )(NotificationsListComponent);

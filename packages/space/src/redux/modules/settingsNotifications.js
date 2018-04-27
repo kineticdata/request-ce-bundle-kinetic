@@ -18,10 +18,6 @@ export const types = {
     'settingsNotifications',
     'SET_FETCH_NOTIFICATIONS_ERROR',
   ),
-  SET_NOTIFICATION_TYPE: namespace(
-    'settingsNotifications',
-    'SET_NOTIFICATION_TYPE',
-  ),
   FETCH_NOTIFICATION: namespace('settingsNotifications', 'FETCH_NOTIFICATION'),
   SET_NOTIFICATION: namespace('settingsNotifications', 'SET_NOTIFICATION'),
   RESET_NOTIFICATION: namespace('settingsNotifications', 'RESET_NOTIFICATION'),
@@ -50,7 +46,6 @@ export const types = {
 export const actions = {
   fetchNotifications: noPayload(types.FETCH_NOTIFICATIONS),
   setNotifications: withPayload(types.SET_NOTIFICATIONS),
-  setNotificationType: withPayload(types.SET_NOTIFICATION_TYPE),
   setFetchNotificationsError: withPayload(types.SET_FETCH_NOTIFICATIONS_ERROR),
   fetchNotification: withPayload(types.FETCH_NOTIFICATION),
   setNotification: withPayload(types.SET_NOTIFICATION),
@@ -100,8 +95,8 @@ export const State = Record({
   // Notification List
   loading: true,
   errors: [],
-  notifications: List(),
-  notificationType: 'Template',
+  notificationTemplates: [],
+  notificationSnippets: [],
   // Notification List Actions
   cloning: false,
   deleting: false,
@@ -112,6 +107,7 @@ export const State = Record({
   notificationLoading: true,
   variables: null,
   dateFormats: [],
+  dateFormatsLoading: true,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -122,9 +118,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state
         .set('loading', false)
         .set('errors', [])
-        .set('notifications', List(payload));
-    case types.SET_NOTIFICAION_TYPE:
-      return state.set('notifiationType', payload);
+        .set('notificationTemplates', payload.templates)
+        .set('notificationSnippets', payload.snippets);
     case types.SET_FETCH_NOTIFICATIONS_ERROR:
       return state.set('loading', false).set('errors', payload);
     case types.FETCH_NOTIFICATION:
@@ -159,8 +154,10 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('variables', payload);
     case types.SET_VARIABLES_ERROR:
       return state.set('variablesErrors', payload);
+    case types.FETCH_DATE_FORMATS:
+      return state.set('dateFormatsLoading', true);
     case types.SET_DATE_FORMATS:
-      return state.set('dateFormats', payload);
+      return state.set('dateFormatsLoading', false).set('dateFormats', payload);
     case types.RESET_NOTIFICATION:
       return state
         .delete('notification')

@@ -12,6 +12,7 @@ const fields = ['Name', 'Status', 'Subject', 'HTML Content', 'Text Content'];
 const NotificationComponent = ({
   loading,
   submission,
+  type,
   dirty,
   values,
   selection,
@@ -29,9 +30,17 @@ const NotificationComponent = ({
               <h3>
                 <Link to="/">home</Link> /{` `}
                 <Link to="/settings">settings</Link> /{` `}
-                <Link to={`/settings/notifications`}>notifications</Link> /{` `}
+                <Link to={`/settings/notifications/${type}`}>
+                  notification {type}
+                </Link>
+                {` `}
+                /
               </h3>
-              <h1>{submission ? submission.label : ' New'}</h1>
+              <h1>
+                {submission
+                  ? submission.label
+                  : `New ${type === 'templates' ? 'Template' : 'Snippet'}`}
+              </h1>
             </div>
           </div>
           <form onSubmit={handleSubmit}>
@@ -166,8 +175,9 @@ export const handleVariableSelection = props => variable => {
   }
 };
 
-export const mapStateToProps = (state, { match: { params } }) => ({
+export const mapStateToProps = (state, props) => ({
   submission: state.settingsNotifications.notification,
+  type: props.match.params.type,
   loading: state.settingsNotifications.notificationLoading,
   saving: state.settingsNotifications.saving,
 });

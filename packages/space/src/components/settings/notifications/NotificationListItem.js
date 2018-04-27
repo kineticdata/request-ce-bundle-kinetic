@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
@@ -9,11 +8,12 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-
 import { actions } from '../../../redux/modules/settingsNotifications';
 
 const NotificationListItemComponent = ({
   notification,
+  type,
+  path,
   handleClone,
   handleDelete,
   openDropdown,
@@ -21,61 +21,16 @@ const NotificationListItemComponent = ({
 }) => {
   return (
     <tr>
-      <Fragment>
-        <td className="d-md-none d-table-cell">
-          <div className="card">
-            <div className="card-body">
-              <strong className="card-title">{notification.values['Name']}</strong>
-              <p className="card-text">
-                <span>
-                  <strong>Status:</strong> {notification.values['Status']}
-                </span>
-                <br />
-                <span>
-                  <strong>Subject:</strong> {notification.values['Subject']}
-                </span>
-                <br />
-              </p>
-              <div className="btn-group" role="group" aria-label="Actions">
-                <Link
-                  to={`/settings/notifications/${notification.id}`}
-                  className="btn btn-primary"
-                >
-                  View
-                </Link>
-                <Link
-                  to={`/settings/notifications/${notification.id}/edit`}
-                  className="btn btn-info"
-                >
-                  Edit
-                </Link>
-                <button
-                  type="button"
-                  onClick={handleClone(notification.id)}
-                  className="btn btn-success"
-                >
-                  Clone
-                </button>
-                <button
-                  type="button"
-                  onClick={handleDelete(notification.id)}
-                  className="btn btn-danger"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        </td>
-        <td className="d-none d-md-table-cell">
-          <Link to={`/settings/notifications/${notification.id}`}>
-            {notification.values['Name']}
-          </Link>
-        </td>
-      </Fragment>
-      <td className="d-none d-md-table-cell">{notification.values['Status']}</td>
-      <td className="d-none d-md-table-cell">{notification.values['Subject']}</td>
-      <td className="d-none d-md-table-cell">
+      <td>
+        <Link to={path}>{notification.values['Name']}</Link>
+      </td>
+      <td>{notification.values['Status']}</td>
+      <td className="d-none d-md-block">
+        {type === 'Date Format'
+          ? notification.values['Format']
+          : notification.values['Subject']}
+      </td>
+      <td>
         <Dropdown
           toggle={toggleDropdown(notification.id)}
           isOpen={openDropdown === notification.id}
@@ -84,12 +39,6 @@ const NotificationListItemComponent = ({
             <span className="fa fa-ellipsis-h fa-2x" />
           </DropdownToggle>
           <DropdownMenu right>
-            <DropdownItem tag={Link} to={`/settings/notifications/${notification.id}`}>
-              View
-            </DropdownItem>
-            <DropdownItem tag={Link} to={`/settings/notifications/${notification.id}/edit`}>
-              Edit
-            </DropdownItem>
             <DropdownItem onClick={handleClone(notification.id)}>
               Clone
             </DropdownItem>

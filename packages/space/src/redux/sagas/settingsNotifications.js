@@ -27,7 +27,12 @@ export function* fetchNotificationsSaga() {
   } else if (errors) {
     yield put(actions.setFetchNotificationsError(errors));
   } else {
-    yield put(actions.setNotifications(submissions));
+    yield put(
+      actions.setNotifications({
+        templates: submissions.filter(sub => sub.values.Type === 'Template'),
+        snippets: submissions.filter(sub => sub.values.Type === 'Snippet'),
+      }),
+    );
   }
 }
 
@@ -184,9 +189,7 @@ export function* fetchDateFormatsSaga(action) {
 
   yield put(
     submissions
-      ? actions.setDateFormats(
-          submissions.map(submission => submission.values.Name),
-        )
+      ? actions.setDateFormats(submissions)
       : actions.setSystemError(
           'Failed to fetch notification template date formats',
         ),
