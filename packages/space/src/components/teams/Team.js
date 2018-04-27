@@ -27,7 +27,7 @@ export const Team = ({
     {!loading && (
       <Fragment>
         <div
-          className={`page-panel page-panel--sixty page-panel--scrollable page-panel--space-team ${userIsMember &&
+          className={`page-panel page-panel--three-fifths page-panel--scrollable page-panel--space-team ${userIsMember &&
             'page-panel--scrollable'}`}
         >
           <div className="page-title">

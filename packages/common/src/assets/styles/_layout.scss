@@ -57,11 +57,11 @@
     flex: 1 1 33%;
   }
   // 60/40
-  &--sixty {
+  &--three-fifths {
     flex: 1 1 60%;
     border-right: 1px solid $black-16;
   }
-  &--forty {
+  &--two-fifths {
     flex: 1 1 40%;
   }
 }
