@@ -22,27 +22,29 @@ const NotificationComponent = ({
   handleVariableSelection,
 }) => (
   <div className="page-container page-container--notifications">
-    {!loading &&
-      values && (
-        <div className="page-panel page-panel--scrollable">
-          <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
-                <Link to="/">home</Link> /{` `}
-                <Link to="/settings">settings</Link> /{` `}
-                <Link to={`/settings/notifications/${type}`}>
-                  notification {type}
-                </Link>
-                {` `}
-                /
-              </h3>
-              <h1>
-                {submission
-                  ? submission.label
-                  : `New ${type === 'templates' ? 'Template' : 'Snippet'}`}
-              </h1>
-            </div>
-          </div>
+    <div className="page-panel page-panel--scrollable">
+      <div className="page-title">
+        <div className="page-title__wrapper">
+          <h3>
+            <Link to="/">home</Link> /{` `}
+            <Link to="/settings">settings</Link> /{` `}
+            <Link to={`/settings/notifications/${type}`}>
+              notification {type}
+            </Link>
+            {` `}
+            /
+          </h3>
+          {!loading && (
+            <h1>
+              {submission
+                ? submission.label
+                : `New ${type === 'templates' ? 'Template' : 'Snippet'}`}
+            </h1>
+          )}
+        </div>
+      </div>
+      {!loading &&
+        values && (
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <NotificationMenu
@@ -129,8 +131,8 @@ const NotificationComponent = ({
               </button>
             </div>
           </form>
-        </div>
-      )}
+        )}
+    </div>
   </div>
 );
 
