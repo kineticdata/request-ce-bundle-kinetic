@@ -95,7 +95,7 @@ export function* cloneNotificationSaga(action) {
       postServerError,
     } = yield call(CoreAPI.createSubmission, {
       datastore: true,
-      formSlug: NOTIFICATIONS_FORM_SLUG,
+      formSlug: submission.form.slug,
       values,
       completed: false,
     });
@@ -105,9 +105,17 @@ export function* cloneNotificationSaga(action) {
     } else if (postErrors) {
       yield put(actions.setCloneError(postErrors));
     } else {
+      // Determine the type route parameter for the redirect below based on
+      // either the form slug or the value of the 'Type' field.
+      const type =
+        submission.form.slug === NOTIFICATIONS_DATE_FORMAT_FORM_SLUG
+          ? 'date-formats'
+          : submission.values.Type === 'Template'
+            ? 'templates'
+            : 'snippets';
       yield put(actions.setCloneSuccess());
       yield put(actions.fetchNotifications());
-      yield put(push(`/settings/notifications/${cloneSubmission.id}`));
+      yield put(push(`/settings/notifications/${type}/${cloneSubmission.id}`));
     }
   }
 }
@@ -180,11 +188,7 @@ export function* fetchDateFormatsSaga(action) {
   const { submissions } = yield call(CoreAPI.searchSubmissions, {
     datastore: true,
     form: NOTIFICATIONS_DATE_FORMAT_FORM_SLUG,
-    search: new CoreAPI.SubmissionSearch(true)
-      .index('values[Status]')
-      .eq('values[Status]', 'active')
-      .includes(['values'])
-      .build(),
+    search: new CoreAPI.SubmissionSearch(true).includes(['values']).build(),
   });
 
   yield put(
