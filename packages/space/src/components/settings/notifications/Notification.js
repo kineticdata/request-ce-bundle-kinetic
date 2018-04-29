@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
 import { Map, Seq } from 'immutable';
+import { push } from 'connected-react-router';
 import { actions as toastActions } from 'kinops/src/redux/modules/toasts';
 import { actions } from '../../../redux/modules/settingsNotifications';
 import { NotificationMenu } from './NotificationMenu';
@@ -141,9 +142,16 @@ export const handleSubmit = props => event => {
   props.saveNotification(
     props.values.toJS(),
     props.submission && props.submission.id,
-    () => {
-      props.setDirty(false);
-      props.addSuccess('notification was successfully');
+    submission => {
+      const item = props.type === 'templates' ? 'Template' : 'Snippet';
+      const action = props.submission ? 'Updated' : 'Created';
+      props.push(`/settings/notifications/${props.type}`);
+      props.addSuccess(
+        `Successfully ${action.toLowerCase()} ${item.toLowerCase()} (${
+          submission.handle
+        })`,
+        `${action} ${item}`,
+      );
     },
   );
 };
@@ -190,6 +198,7 @@ export const mapDispatchToProps = {
   saveNotification: actions.saveNotification,
   fetchVariables: actions.fetchVariables,
   addSuccess: toastActions.addSuccess,
+  push,
 };
 
 export const Notification = compose(

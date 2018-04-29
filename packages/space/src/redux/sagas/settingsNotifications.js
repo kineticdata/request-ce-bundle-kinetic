@@ -154,7 +154,7 @@ export function* saveNotificationSaga(action) {
   } else {
     yield put(actions.setSaveSuccess());
     if (typeof callback === 'function') {
-      callback();
+      callback(submission);
     }
   }
 }
