@@ -60,13 +60,20 @@ export const mapDispatchToProps = {
   cloneNotification: actions.cloneNotification,
   deleteNotification: actions.deleteNotification,
   fetchNotifications: actions.fetchNotifications,
+  fetchDateFormats: actions.fetchDateFormats,
 };
 
 const handleClone = ({ cloneNotification }) => id => () =>
   cloneNotification(id);
 
-const handleDelete = ({ deleteNotification, fetchNotifications }) => id => () =>
-  deleteNotification({ id: id, callback: fetchNotifications });
+const handleDelete = props => id => () =>
+  props.deleteNotification({
+    id: id,
+    callback:
+      props.type === 'Date Format'
+        ? props.fetchDateFormats
+        : props.fetchNotifications,
+  });
 
 const toggleDropdown = ({
   setOpenDropdown,
