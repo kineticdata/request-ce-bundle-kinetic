@@ -235,7 +235,7 @@ export const NotificationMenuComponent = ({
   handleKappSelect,
   handleFormSelect,
 }) => (
-  <div className="alert alert-secondary form-inline">
+  <div className="alert alert-secondary">
     <h2>Dynamic Replacements</h2>
     <p>
       Use the dropdown to insert dynamic elements within the subject and body of
@@ -252,82 +252,89 @@ export const NotificationMenuComponent = ({
       fields, relying on attributes or fields that may not exist will yield
       unexpected results. Test your email templates!
     </p>
-    <div className="form-group">
-      <label htmlFor="notification-menu-kapp">Kapp</label>
-      <select
-        id="notification-menu-kapp"
-        value={selectedKapp ? selectedKapp.slug : ''}
-        onChange={handleKappSelect}
-      >
-        <option />
-        {kapps.map(kapp => (
-          <option key={kapp.slug} value={kapp.slug}>
-            {kapp.name}
-          </option>
-        ))}
-      </select>
-    </div>
-    <div className="form-group">
-      <label htmlFor="notification-menu-form">Form</label>
-      <select
-        id="notification-menu-form"
-        value={selectedForm ? selectedForm.slug : ''}
-        onChange={handleFormSelect}
-      >
-        {forms ? (
-          <Fragment>
-            <option />
-            {forms.map(form => (
-              <option key={form.slug} value={form.slug}>
-                {form.name}
-              </option>
-            ))}
-          </Fragment>
-        ) : (
-          <option value="" disabled>
-            Select a Kapp first
-          </option>
-        )}
-      </select>
-    </div>
-    <div className="form-group">
-      <UncontrolledButtonDropdown>
-        <DropdownToggle caret>Insert Dynamic Replacement Value</DropdownToggle>
-        <DropdownMenu className="dropdown-multi">
-          <li className="dropdown-item dropdown-submenu">
-            Snippets
-            <SnippetsMenu snippets={snippets} handleClick={handleClick} />
-          </li>
-          <li className="dropdown-item dropdown-submenu">
-            Submission
-            <SubmissionMenu form={selectedForm} handleClick={handleClick} />
-          </li>
-          <li className="dropdown-item dropdown-submenu">
-            Form
-            <FormMenu form={selectedForm} handleClick={handleClick} />
-          </li>
-          <li className="dropdown-item dropdown-submenu">
-            Kapp
-            <KappMenu kapp={selectedKapp} handleClick={handleClick} />
-          </li>
-          <li className="dropdown-item dropdown-submenu">
-            Space
-            <SpaceMenu space={space} handleClick={handleClick} />
-          </li>
-          <li className="dropdown-item dropdown-submenu">
-            Other variables
-            <OtherVariablesMenu handleClick={handleClick} />
-          </li>
-          <li className="dropdown-item dropdown-submenu">
-            Date Formats
-            <DateFormatMenu
-              handleClick={handleClick}
-              selection={selection}
-              dateFormats={dateFormats}
-            />
-          </li>
-        </DropdownMenu>
-      </UncontrolledButtonDropdown>
+    <div className="form-row">
+      <div className="form-group col-md-2">
+        <label htmlFor="notification-menu-kapp">Kapp</label>
+        <select
+          id="notification-menu-kapp"
+          className="form-control"
+          value={selectedKapp ? selectedKapp.slug : ''}
+          onChange={handleKappSelect}
+        >
+          <option />
+          {kapps.map(kapp => (
+            <option key={kapp.slug} value={kapp.slug}>
+              {kapp.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="form-group col-md-4">
+        <label htmlFor="notification-menu-form">Form</label>
+        <select
+          id="notification-menu-form"
+          className="form-control"
+          value={selectedForm ? selectedForm.slug : ''}
+          onChange={handleFormSelect}
+        >
+          {forms ? (
+            <Fragment>
+              <option />
+              {forms.map(form => (
+                <option key={form.slug} value={form.slug}>
+                  {form.name}
+                </option>
+              ))}
+            </Fragment>
+          ) : (
+            <option value="" disabled>
+              Select a Kapp first
+            </option>
+          )}
+        </select>
+      </div>
+      <div className="form-group col-md-6">
+        <label htmlFor="">Dynamic Replacement Value</label>
+        <UncontrolledButtonDropdown>
+          <DropdownToggle caret>
+            Insert Dynamic Replacement Value
+          </DropdownToggle>
+          <DropdownMenu className="dropdown-multi">
+            <li className="dropdown-item dropdown-submenu">
+              Snippets
+              <SnippetsMenu snippets={snippets} handleClick={handleClick} />
+            </li>
+            <li className="dropdown-item dropdown-submenu">
+              Submission
+              <SubmissionMenu form={selectedForm} handleClick={handleClick} />
+            </li>
+            <li className="dropdown-item dropdown-submenu">
+              Form
+              <FormMenu form={selectedForm} handleClick={handleClick} />
+            </li>
+            <li className="dropdown-item dropdown-submenu">
+              Kapp
+              <KappMenu kapp={selectedKapp} handleClick={handleClick} />
+            </li>
+            <li className="dropdown-item dropdown-submenu">
+              Space
+              <SpaceMenu space={space} handleClick={handleClick} />
+            </li>
+            <li className="dropdown-item dropdown-submenu">
+              Other variables
+              <OtherVariablesMenu handleClick={handleClick} />
+            </li>
+            <li className="dropdown-item dropdown-submenu">
+              Date Formats
+              <DateFormatMenu
+                handleClick={handleClick}
+                selection={selection}
+                dateFormats={dateFormats}
+              />
+            </li>
+          </DropdownMenu>
+        </UncontrolledButtonDropdown>
+      </div>
     </div>
   </div>
 );

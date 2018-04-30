@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
@@ -47,12 +47,12 @@ const NotificationComponent = ({
       {!loading &&
         values && (
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
+            <Fragment>
               <NotificationMenu
                 selection={selection}
                 onSelect={handleVariableSelection}
               />
-            </div>
+            </Fragment>
             <div className="form-group required">
               <label htmlFor="name">Name</label>
               <input
@@ -64,30 +64,32 @@ const NotificationComponent = ({
                 value={values.get('Name')}
               />
             </div>
-            <div className="form-group radio required">
-              <label className="field-label">Status</label>
-              <label>
-                <input
-                  type="radio"
-                  name="Status"
-                  value="Active"
-                  onChange={handleFieldChange}
-                  onBlur={handleFieldBlur}
-                  checked={values.get('Status') === 'Active'}
-                />
-                Active
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="Status"
-                  value="Inactive"
-                  onChange={handleFieldChange}
-                  onBlur={handleFieldBlur}
-                  checked={values.get('Status') === 'Inactive'}
-                />
-                Inactive
-              </label>
+            <div className="form-group">
+              <div className="radio required">
+                <label className="field-label">Status</label>
+                <label>
+                  <input
+                    type="radio"
+                    name="Status"
+                    value="Active"
+                    onChange={handleFieldChange}
+                    onBlur={handleFieldBlur}
+                    checked={values.get('Status') === 'Active'}
+                  />
+                  Active
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="Status"
+                    value="Inactive"
+                    onChange={handleFieldChange}
+                    onBlur={handleFieldBlur}
+                    checked={values.get('Status') === 'Inactive'}
+                  />
+                  Inactive
+                </label>
+              </div>
             </div>
             <div className="form-group required">
               <label htmlFor="subject">Subject</label>
@@ -122,14 +124,16 @@ const NotificationComponent = ({
                 value={values.get('Text Content')}
               />
             </div>
-            <div className="form-group">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={!dirty || values.valueSeq().some(val => !val)}
-              >
-                Save
-              </button>
+            <div className="form__footer">
+              <div className="form__footer__right">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={!dirty || values.valueSeq().some(val => !val)}
+                >
+                  Save
+                </button>
+              </div>
             </div>
           </form>
         )}
