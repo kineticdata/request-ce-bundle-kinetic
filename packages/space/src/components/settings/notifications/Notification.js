@@ -64,8 +64,8 @@ const NotificationComponent = ({
                 value={values.get('Name')}
               />
             </div>
-            <div className="form-group required">
-              <label>Status</label>
+            <div className="form-group radio required">
+              <label className="field-label">Status</label>
               <label>
                 <input
                   type="radio"
@@ -176,10 +176,10 @@ export const handleVariableSelection = props => variable => {
   if (props.cursorPosition) {
     const { name, start, end } = props.cursorPosition;
     const value = props.values.get(name);
-    const newValue = Seq(value)
+    const newValue = Seq(value || [])
       .take(start)
       .concat(Seq(variable))
-      .concat(Seq(value).skip(end))
+      .concat(Seq(value || []).skip(end))
       .join('');
     props.setValues(props.values.set(name, newValue));
   }
