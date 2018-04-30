@@ -208,11 +208,26 @@ const DateFormatMenu = ({ dateFormats, selection, handleClick }) => (
   </ul>
 );
 
+const SnippetsMenu = ({ snippets, handleClick }) => (
+  <ul className="dropdown-menu">
+    {snippets.map(snippet => (
+      <DropdownItem
+        key={snippet.values.Name}
+        data-value={wrapVar('snippet')(snippet.values.Name)}
+        onClick={handleClick}
+      >
+        {wrapVar('snippet')(snippet.values.Name)}
+      </DropdownItem>
+    ))}
+  </ul>
+);
+
 export const NotificationMenuComponent = ({
   selection,
   space,
   kapps,
   forms,
+  snippets,
   dateFormats,
   selectedKapp,
   selectedForm,
@@ -279,7 +294,10 @@ export const NotificationMenuComponent = ({
       <UncontrolledButtonDropdown>
         <DropdownToggle caret>Insert Dynamic Replacement Value</DropdownToggle>
         <DropdownMenu className="dropdown-multi">
-          <li className="dropdown-item dropdown-submenu">Snippets</li>
+          <li className="dropdown-item dropdown-submenu">
+            Snippets
+            <SnippetsMenu snippets={snippets} handleClick={handleClick} />
+          </li>
           <li className="dropdown-item dropdown-submenu">
             Submission
             <SubmissionMenu form={selectedForm} handleClick={handleClick} />
@@ -320,8 +338,11 @@ export const mapStateToProps = state => ({
   forms:
     state.settingsNotifications.variables &&
     state.settingsNotifications.variables.forms,
-  dateFormats: state.settingsNotifications.dateFormats.map(
-    submission => submission.values.Name,
+  dateFormats: state.settingsNotifications.dateFormats
+    .filter(submission => submission.values.Status === 'Active')
+    .map(submission => submission.values.Name),
+  snippets: state.settingsNotifications.notificationSnippets.filter(
+    submission => submission.values.Status === 'Active',
   ),
 });
 
