@@ -64,33 +64,33 @@ const NotificationComponent = ({
                 value={values.get('Name')}
               />
             </div>
-            <div className="form-group">
-              <div className="radio required">
-                <label className="field-label">Status</label>
-                <label>
-                  <input
-                    type="radio"
-                    name="Status"
-                    value="Active"
-                    onChange={handleFieldChange}
-                    onBlur={handleFieldBlur}
-                    checked={values.get('Status') === 'Active'}
-                  />
-                  Active
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="Status"
-                    value="Inactive"
-                    onChange={handleFieldChange}
-                    onBlur={handleFieldBlur}
-                    checked={values.get('Status') === 'Inactive'}
-                  />
-                  Inactive
-                </label>
-              </div>
+
+            <div className="radio required">
+              <label className="field-label">Status</label>
+              <label>
+                <input
+                  type="radio"
+                  name="Status"
+                  value="Active"
+                  onChange={handleFieldChange}
+                  onBlur={handleFieldBlur}
+                  checked={values.get('Status') === 'Active'}
+                />
+                Active
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="Status"
+                  value="Inactive"
+                  onChange={handleFieldChange}
+                  onBlur={handleFieldBlur}
+                  checked={values.get('Status') === 'Inactive'}
+                />
+                Inactive
+              </label>
             </div>
+
             <div className="form-group required">
               <label htmlFor="subject">Subject</label>
               <textarea
@@ -125,7 +125,7 @@ const NotificationComponent = ({
               />
             </div>
             <div className="form__footer">
-              <div className="form__footer__right">
+              <div className="form_footer__right">
                 <button
                   type="submit"
                   className="btn btn-primary"

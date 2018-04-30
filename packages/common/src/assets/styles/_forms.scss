@@ -27,7 +27,7 @@ form {
 // Required asterisk after label
 .checkbox.required label:first-child:after,
 .radio.required label:first-child:after,
-.form-group.required label:after {
+.form-group.required label.field-label:after {
   content: '*';
   color: red;
 }
@@ -63,6 +63,7 @@ form {
   }
   .radio,
   .checkbox {
+    margin-bottom: 1rem;
     &:after {
       visibility: hidden;
       display: block;
