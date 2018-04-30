@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import {
   UncontrolledButtonDropdown,
   DropdownToggle,
@@ -327,6 +327,8 @@ export const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   fetchVariables: actions.fetchVariables,
+  fetchNotifications: actions.fetchNotifications,
+  fetchDateFormats: actions.fetchDateFormats,
 };
 
 export const NotificationMenu = compose(
@@ -345,6 +347,12 @@ export const NotificationMenu = compose(
       props.setSelectedForm(
         props.forms.find(form => form.slug === event.target.value),
       );
+    },
+  }),
+  lifecycle({
+    componentDidMount() {
+      this.props.fetchNotifications();
+      this.props.fetchDateFormats();
     },
   }),
 )(NotificationMenuComponent);
