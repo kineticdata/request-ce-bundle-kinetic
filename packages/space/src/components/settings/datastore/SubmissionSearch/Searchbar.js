@@ -341,9 +341,12 @@ export const mapStateToProps = state => ({
   advancedSearchOpen: state.settingsDatastore.advancedSearchOpen,
   form: state.settingsDatastore.currentForm,
   indexDefinitions: state.settingsDatastore.currentForm
-    ? List(state.settingsDatastore.currentForm.indexDefinitions).filter(
-        d => d.status === 'Built',
-      )
+    ? List(state.settingsDatastore.currentForm.indexDefinitions)
+        .filter(d => d.status === 'Built')
+        .map(d => {
+          d.name = d.name.replace(':UNIQUE', '');
+          return d;
+        })
     : [],
   searchParams: state.settingsDatastore.searchParams,
   indexParts: state.settingsDatastore.searchParams.indexParts,
