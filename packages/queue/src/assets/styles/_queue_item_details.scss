@@ -1,18 +1,9 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Queue Item Details ~ Queue
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.queue .queue-item-details {
+.package-layout--queue .queue-item-details {
   background-color: $white;
   position: relative;
-
-  .scroll-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    overflow-y: auto;
-  }
 
   .general {
     color: $blueLake;
@@ -109,4 +100,12 @@
       }
     }
   }
+}
+.scroll-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
 }

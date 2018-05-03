@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { KappLink as Link, PageTitle } from 'common';
 import { RequestCard } from '../shared/RequestCard';
@@ -31,14 +31,12 @@ export const RequestList = ({
   handlePreviousPage,
   refreshPage,
 }) => (
-  <div>
+  <Fragment>
     <PageTitle parts={['My Requests']} />
-    <div className="services-bar">
-      <span className="bordercolor" />
-    </div>
-    <div className="request-list-container container">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+    <span className="services-color-bar services-color-bar__blue-slate" />
+    <div className="page-container page-container--request-list">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">services</Link> /{' '}
             {type && <Link to="/requests">requests</Link>}
@@ -69,7 +67,7 @@ export const RequestList = ({
           </button>
         </div>
       </div>
-      <div className="r-cards-wrapper">
+      <div className="cards__wrapper cards__wrapper--requests">
         {submissions.size > 0 ? (
           submissions
             .map(submission => ({
@@ -81,7 +79,7 @@ export const RequestList = ({
             }))
             .map(props => <RequestCard {...props} />)
         ) : (
-          <div className="wally-empty-state">
+          <div className="empty-state empty-state--wally">
             <h5>No {type !== 'All' ? type : ''} Requests Found...</h5>
             <img src={wallyHappyImage} alt="Happy Wally" />
             <h6>{emptyStateMessage(type)}</h6>
@@ -89,5 +87,5 @@ export const RequestList = ({
         )}
       </div>
     </div>
-  </div>
+  </Fragment>
 );

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -26,14 +27,14 @@ export const EditUserComponent = ({
   handleSubmit,
   userProfileAttributes,
 }) => (
-  <div className="profile-container">
+  <div className="page-container page-container--panels page-container--space-profile-edit">
     <PageTitle parts={['Users', 'Settings']} />
     {!loading &&
       !userLoading && (
-        <div className="fragment">
-          <div className="profile-content pane">
-            <div className="page-title-wrapper">
-              <div className="page-title">
+        <Fragment>
+          <div className="page-panel page-panel--three-fifths page-panel--scrollable page-panel--space-profile-edit">
+            <div className="page-title">
+              <div className="page-title__wrapper">
                 <h3>
                   <Link to="/">home</Link> /{` `}
                   <Link to="/settings">settings</Link> /{` `}
@@ -43,7 +44,7 @@ export const EditUserComponent = ({
               </div>
             </div>
             <div>
-              <h2 className="section-title">General</h2>
+              <h2 className="section__title">General</h2>
               <form onSubmit={handleSubmit}>
                 <div className="user-admin">
                   <label htmlFor="spaceAdmin">
@@ -86,7 +87,7 @@ export const EditUserComponent = ({
                   />
                 </div>
                 <div>
-                  <h2 className="section-title">Profile Attributes</h2>
+                  <h2 className="section__title">Profile Attributes</h2>
                   <div className="user-attributes-wrapper">
                     <div className="form-group">
                       <label htmlFor="firstName">First Name</label>
@@ -121,7 +122,7 @@ export const EditUserComponent = ({
                   </div>
                 </div>
                 <div>
-                  <h2 className="section-title">User Attributes</h2>
+                  <h2 className="section__title">User Attributes</h2>
                   <div className="user-attributes-wrapper">
                     <div className="form-group">
                       <label htmlFor="department">Department</label>
@@ -164,43 +165,46 @@ export const EditUserComponent = ({
                       />
                     </div>
                   </div>
+                  <div>
+                    <h2 className="section__title">Roles</h2>
+                    {roles &&
+                      roles.map(role => (
+                        <label key={role.slug} htmlFor={role.name}>
+                          <input
+                            type="checkbox"
+                            id={role.name}
+                            onChange={handleRolesChange}
+                            checked={fieldValues.userRoles.includes(role.name)}
+                            value={role.name}
+                          />
+                          {role.name.replace(/^Role::(.*?)/, '$1')}
+                        </label>
+                      ))}
+                  </div>
+                  <div>
+                    <h2 className="section__title">Teams</h2>
+                    <UserTeams
+                      teams={user.memberships.filter(
+                        item => !item.team.name.startsWith('Role::'),
+                      )}
+                    />
+                  </div>
                 </div>
-                <div>
-                  <h2 className="section-title">Roles</h2>
-                  {roles &&
-                    roles.map(role => (
-                      <label key={role.slug} htmlFor={role.name}>
-                        <input
-                          type="checkbox"
-                          id={role.name}
-                          onChange={handleRolesChange}
-                          checked={fieldValues.userRoles.includes(role.name)}
-                          value={role.name}
-                        />
-                        {role.name.replace(/^Role::(.*?)/, '$1')}
-                      </label>
-                    ))}
-                </div>
-                <div>
-                  <h2 className="section-title">Teams</h2>
-                  <UserTeams
-                    teams={user.memberships.filter(
-                      item => !item.team.name.startsWith('Role::'),
-                    )}
-                  />
-                </div>
-                <div className="footer-save">
-                  <button
-                    disabled={!fieldValuesValid(fieldValues)}
-                    className="btn btn-primary"
-                  >
-                    Save
-                  </button>
+                <div className="form__footer">
+                  <div className="form__footer__right">
+                    {' '}
+                    <button
+                      disabled={!fieldValuesValid(fieldValues)}
+                      className="btn btn-primary"
+                    >
+                      Save
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>
           </div>
-          <div className="profile-sidebar pane d-none d-sm-block">
+          <div className="page-panel page-panel--two-fifths page-panel--sidebar page-panel--space-profile-edit-sidebar ">
             <ProfileCard
               user={buildProfile(fieldValues, user)}
               button={
@@ -212,7 +216,7 @@ export const EditUserComponent = ({
               }
             />
           </div>
-        </div>
+        </Fragment>
       )}
   </div>
 );
@@ -223,7 +227,7 @@ const managerLookup = (users, managerUsername) => {
 };
 
 const UserTeams = ({ teams }) => (
-  <div className="t-card-wrapper">
+  <div className="cards__wrapper cards__wrapper--team">
     {Object.keys(teams).length > 0 ? (
       teams.map(item => <TeamCard key={item.team.name} team={item.team} />)
     ) : (

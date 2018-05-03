@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import { Avatar } from '../shared/Avatar';
 
 export const TeamMemberAvatar = ({ user }) => (
-  <span>
+  <Fragment>
     <Avatar user={user} />
-  </span>
+  </Fragment>
 );

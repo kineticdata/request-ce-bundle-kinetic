@@ -3,195 +3,56 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // Services top border bar
-.bordercolor {
+.services-color-bar {
   height: 1.5rem;
   width: 100%;
-  display: block;
-  background-color: $blueSlate;
-}
-// Services Main content
-.services {
-  // Services Container
-  .services-home-container {
-    display: flex;
-    justify-content: space-between;
-    flex: 0 0 auto;
-    @media all and (min-width: 0) {
-      flex-direction: column;
-    }
-    @media all and (min-width: 576px) {
-      flex-direction: column;
-    }
-    @media all and (min-width: 768px) {
-      flex-direction: column;
-    }
-    @media all and (min-width: 992px) {
-      flex-direction: row;
-    }
-    @media all and (min-width: 1200px) {
-    }
-    .c-card,
-    .s-card {
-      flex: 0 0 auto;
-      @media all and (min-width: 0) {
-        flex-basis: 100%;
-        @media all and (-ms-high-contrast: none) {
-          width: 100%;
-          flex-basis: auto;
-        }
-      }
-      @media all and (min-width: 576px) {
-        flex-basis: 48%;
-        @media all and (-ms-high-contrast: none) {
-          width: 48%;
-          flex-basis: auto;
-        }
-      }
-      @media all and (min-width: 768px) {
-      }
-      @media all and (min-width: 992px) {
-      }
-      @media all and (min-width: 1200px) {
-      }
-    }
-  }
-
-  // Categories container
-  .services-category-container {
-    .c-card,
-    .r-card,
-    .s-card {
-      flex: 0 0 auto;
-      @media all and (min-width: 0) {
-        flex-basis: 100%;
-        @media all and (-ms-high-contrast: none) {
-          width: 100%;
-          flex-basis: auto;
-        }
-      }
-      @media all and (min-width: 576px) {
-        flex-basis: 48%;
-        @media all and (-ms-high-contrast: none) {
-          width: 48%;
-          flex-basis: auto;
-        }
-      }
-      @media all and (min-width: 768px) {
-        flex-basis: 48%;
-        @media all and (-ms-high-contrast: none) {
-          width: 48%;
-          flex-basis: auto;
-        }
-      }
-      @media all and (min-width: 992px) {
-        flex-basis: 31%;
-        @media all and (-ms-high-contrast: none) {
-          width: 31%;
-          flex-basis: auto;
-        }
-      }
-      @media all and (min-width: 1200px) {
-      }
-    }
-  }
-  // Search container
-  .services-search-container {
-    width: 100%;
+  display: flex;
+  flex: 0 0 auto;
+  &__blue-slate {
     background-color: $blueSlate;
-    height: 216px;
-    padding: 0 0 2rem;
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    flex: 0 0 auto;
   }
+  &__green-grass {
+    background-color: $greenGrass;
+  }
+}
 
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Services Wrappers
- *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-
-  // Search Wrapper
-  .services-search-wrapper {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    width: 90%;
-    @media all and (min-width: 0) {
-      flex-basis: 90%;
+.package-layout--services {
+  // Services Page Container
+  .page-container {
+    width: 100%;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    margin-right: auto;
+    margin-left: auto;
+    &--no-padding {
+      padding-left: 0;
+      padding-right: 0;
     }
     @media all and (min-width: 576px) {
-      flex-basis: 75%;
+      max-width: 540px;
     }
     @media all and (min-width: 768px) {
-      flex-basis: 66.667%;
+      max-width: 720px;
     }
     @media all and (min-width: 992px) {
-      flex-basis: 48%;
+      max-width: 960px;
     }
     @media all and (min-width: 1200px) {
+      max-width: 1140px;
     }
   }
-  // My Requests Wrapper
-  .my-requests-wrapper {
-    flex-direction: column;
-    display: flex;
-    @media all and (min-width: 0) {
-      flex-basis: 100%;
-      @media all and (-ms-high-contrast: none) {
-        width: 100%;
-        flex-basis: auto;
-      }
-    }
-    @media all and (min-width: 768px) {
-    }
-    @media all and (min-width: 992px) {
-      flex-basis: 31%;
-      @media all and (-ms-high-contrast: none) {
-        width: 31%;
-        flex-basis: auto;
-      }
-    }
-    @media all and (min-width: 1200px) {
-    }
-  }
-
-  // Services Wrapper
-  .services-wrapper {
-    display: flex;
-    flex-direction: column;
-    @media all and (min-width: 0) {
-      flex-basis: 100%;
-      @media all and (-ms-high-contrast: none) {
-        width: 100%;
-        flex-basis: auto;
-      }
-    }
-    @media all and (min-width: 768px) {
-    }
-    @media all and (min-width: 992px) {
-      flex-basis: 66.667%;
-      @media all and (-ms-high-contrast: none) {
-        width: 66.667%;
-        flex-basis: auto;
-      }
-    }
-    @media all and (min-width: 1200px) {
-    }
-  }
-  .s-cards-wrapper,
-  .r-cards-wrapper,
-  .c-cards-wrapper {
+  // Services Card Wrapper
+  .cards__wrapper {
     padding: 0 0 3rem;
     margin: 0;
     list-style: none;
-    display: flex;
     flex-direction: column;
-  }
-  .c-cards-wrapper,
-  .s-cards-wrapper {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    // align-items: flex-start;
+    &--services,
+    &--categories {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      // align-items: flex-start;
+    }
   }
 }

@@ -38,21 +38,25 @@ export const getSubmissionId = props =>
     : props.location.pathname.replace(props.match.url, '').replace('/', '');
 
 export const handleCompleted = props => response => {
-  props.push(
-    `/kapps/${props.kappSlug}/requests/request/${
-      response.submission.id
-    }/confirmation`,
-  );
+  if (!response.submission.currentPage) {
+    props.push(
+      `/kapps/${props.kappSlug}/requests/request/${
+        response.submission.id
+      }/confirmation`,
+    );
+  }
 };
 
 export const handleCreated = props => response => {
-  props.push(
-    response.submission.coreState === 'Submitted'
-      ? `/kapps/${props.kappSlug}/requests/request/${
-          response.submission.id
-        }/confirmation`
-      : `${props.match.url}/${response.submission.id}`,
-  );
+  if (!response.submission.currentPage) {
+    props.push(
+      response.submission.coreState === 'Submitted'
+        ? `/kapps/${props.kappSlug}/requests/request/${
+            response.submission.id
+          }/confirmation`
+        : `${props.match.url}/${response.submission.id}`,
+    );
+  }
 };
 
 export const handleLoaded = props => form => {

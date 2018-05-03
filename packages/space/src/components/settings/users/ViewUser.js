@@ -16,12 +16,12 @@ const ViewUserComponent = ({
   manager,
   managerEnabled,
 }) => (
-  <div className="datastore-container">
+  <div className="page-container page-container--users">
     <PageTitle parts={['Users', 'Settings']} />
     {!loading && (
-      <div className="datastore-content pane">
-        <div className="page-title-wrapper">
-          <div className="page-title">
+      <div className="page-panel page-panel--scrollable">
+        <div className="page-title">
+          <div className="page-title__wrapper">
             <h3>
               <Link to="/">home</Link> /{` `}
               <Link to="/settings">settings</Link> /{` `}
@@ -33,10 +33,10 @@ const ViewUserComponent = ({
             to={`/settings/users/${profile.username}/edit`}
             className="btn btn-secondary"
           >
-            Edit Profile
+            Edit User
           </Link>
         </div>
-        <div className="p-card profile">
+        <div className="card card--profile">
           <Avatar user={profile} size={96} />
           <h3>{profile.displayName}</h3>
           <p>{getEmail(profile)}</p>
@@ -59,7 +59,7 @@ const ViewUserComponent = ({
             </dl>
           )}
         </div>
-        <h2 className="section-title">Teams</h2>
+        <h2 className="section__title">Teams</h2>
         <UserTeams teams={profile.memberships} />
       </div>
     )}
@@ -89,7 +89,7 @@ const UserTeams = ({ teams }) => {
     item => !item.team.name.startsWith('Role::'),
   );
   return filteredTeams.length > 0 ? (
-    <div className="t-card-wrapper">
+    <div className="cards__wrapper cards__wrapper--team">
       {filteredTeams.map(item => (
         <TeamCard key={item.team.name} team={item.team} />
       ))}

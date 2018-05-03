@@ -30,17 +30,19 @@ export const UsersDropdownComponent = ({
   handleChange,
   lookup,
 }) => (
-  <Autocomplete
-    shouldItemRender={
-      shouldUserRender ? shouldUserRender : defaultShouldUserRender
-    }
-    renderItem={renderUser ? renderUser : defaultRenderUser}
-    value={lookup}
-    items={users}
-    getItemValue={getUserValue ? getUserValue : defaultGetUserValue}
-    onChange={handleChange}
-    onSelect={handleSelect}
-  />
+  <div className="select-combobox">
+    <Autocomplete
+      shouldItemRender={
+        shouldUserRender ? shouldUserRender : defaultShouldUserRender
+      }
+      renderItem={renderUser ? renderUser : defaultRenderUser}
+      value={lookup}
+      items={users}
+      getItemValue={getUserValue ? getUserValue : defaultGetUserValue}
+      onChange={handleChange}
+      onSelect={handleSelect}
+    />
+  </div>
 );
 
 const handleChange = ({ setLookup, onChange }) => e => {

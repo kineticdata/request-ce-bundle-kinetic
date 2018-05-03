@@ -7,12 +7,12 @@ import { KappCard } from './shared/KappCard';
 export const Sidebar = ({ kapps, teams, isSpaceAdmin, openSettings }) => (
   <div className="sidebar space-sidebar">
     {kapps.length > 0 && (
-      <div className="sidebar-group sidebar-kapp-cards">
+      <div className="sidebar-group sidebar-group--kapp-cards">
         <h1>Kapps</h1>
         {kapps.map(kapp => <KappCard key={kapp.slug} kapp={kapp} />)}
       </div>
     )}
-    <div className="sidebar-group sidebar-my-teams">
+    <div className="sidebar-group sidebar-group--my-teams">
       <h1>
         My Teams
         <Link to="/teams" className="view-all">
@@ -59,11 +59,17 @@ export const Sidebar = ({ kapps, teams, isSpaceAdmin, openSettings }) => (
           ))}
       </ul>
     </div>
-    <ul className="nav flex-column settings-group">
-      <Link to="/settings/profile" onClick={openSettings} className="nav-link">
-        Settings
-        <span className="fa fa-fw fa-angle-right" />
-      </Link>
-    </ul>
+    <div className="sidebar-group sidebar-group--settings">
+      <ul className="nav flex-column settings-group">
+        <Link
+          to="/settings/profile"
+          onClick={openSettings}
+          className="nav-link"
+        >
+          Settings
+          <span className="fa fa-fw fa-angle-right" />
+        </Link>
+      </ul>
+    </div>
   </div>
 );

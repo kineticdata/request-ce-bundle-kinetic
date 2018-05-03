@@ -29,3 +29,4 @@ require('datatables.net-responsive-bs/css/responsive.bootstrap.css');
 
 require('bootstrap-select/dist/js/bootstrap-select');
 require('./lib/kd-typeahead/kd-typeahead');
+require('./lib/kd-dataviewer/kd-dataviewer');

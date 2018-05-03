@@ -44,7 +44,7 @@ const CreateDiscussionModalComponent = ({
               placeholder="Long description for easier searching"
             />
           </div>
-          <h1 className="section-title">Invite Members</h1>
+          <h1 className="section__title">Invite Members</h1>
           <div className="form-group required">
             <label>Invite member(s) </label>
             <textarea

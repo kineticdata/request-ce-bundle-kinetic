@@ -20,10 +20,10 @@ const CreateDatastoreComponent = ({
   handleNameChange,
   match,
 }) => (
-  <div className="datastore-container">
-    <div className="datastore-content pane scrollable">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+  <div className="page-container page-container--panels page-container--datastore">
+    <div className="page-panel page-panel--two-thirds page-panel--scrollable page-panel--datastore-content">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">home</Link> /{` `}
             <Link to="/settings">settings</Link> /{` `}
@@ -34,7 +34,7 @@ const CreateDatastoreComponent = ({
       </div>
       <div className="datastore-settings">
         <h3>THIS FUNCTIONALITY IS NOT CURRENTLY WORKING</h3>
-        <h3 className="section-title">General Settings</h3>
+        <h3 className="section__title">General Settings</h3>
         <div className="settings">
           <div className="form-row">
             <div className="col">
@@ -114,7 +114,7 @@ const CreateDatastoreComponent = ({
         </div>
       </div>
     </div>
-    <div className="datastore-sidebar">
+    <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
       <h3>New Datastore</h3>
       <p>
         Creating a new Datastore will create a new Kinetic Request datastore

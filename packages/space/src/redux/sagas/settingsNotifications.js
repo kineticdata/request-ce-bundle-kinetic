@@ -8,6 +8,7 @@ import {
   actions,
   types,
   NOTIFICATIONS_FORM_SLUG,
+  NOTIFICATIONS_DATE_FORMAT_FORM_SLUG,
 } from '../modules/settingsNotifications';
 
 export function* fetchNotificationsSaga() {
@@ -26,23 +27,31 @@ export function* fetchNotificationsSaga() {
   } else if (errors) {
     yield put(actions.setFetchNotificationsError(errors));
   } else {
-    yield put(actions.setNotifications(submissions));
+    yield put(
+      actions.setNotifications({
+        templates: submissions.filter(sub => sub.values.Type === 'Template'),
+        snippets: submissions.filter(sub => sub.values.Type === 'Snippet'),
+      }),
+    );
   }
 }
 
 export function* fetchNotificationSaga(action) {
-  const include =
-    'details,values';
-  const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
-    id: action.payload,
-    include,
-    datastore: true,
-  });
-
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
+  const include = 'details,values';
+  if (action.payload === 'new') {
+    yield put(actions.setNotification(null));
   } else {
-    yield put(actions.setNotification(submission));
+    const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
+      id: action.payload,
+      include,
+      datastore: true,
+    });
+
+    if (serverError) {
+      yield put(systemErrorActions.setSystemError(serverError));
+    } else {
+      yield put(actions.setNotification(submission));
+    }
   }
 }
 
@@ -86,7 +95,7 @@ export function* cloneNotificationSaga(action) {
       postServerError,
     } = yield call(CoreAPI.createSubmission, {
       datastore: true,
-      formSlug: NOTIFICATIONS_FORM_SLUG,
+      formSlug: submission.form.slug,
       values,
       completed: false,
     });
@@ -96,9 +105,17 @@ export function* cloneNotificationSaga(action) {
     } else if (postErrors) {
       yield put(actions.setCloneError(postErrors));
     } else {
+      // Determine the type route parameter for the redirect below based on
+      // either the form slug or the value of the 'Type' field.
+      const type =
+        submission.form.slug === NOTIFICATIONS_DATE_FORMAT_FORM_SLUG
+          ? 'date-formats'
+          : submission.values.Type === 'Template'
+            ? 'templates'
+            : 'snippets';
       yield put(actions.setCloneSuccess());
       yield put(actions.fetchNotifications());
-      yield put(push(`/settings/notifications/${cloneSubmission.id}`));
+      yield put(push(`/settings/notifications/${type}/${cloneSubmission.id}`));
     }
   }
 }
@@ -121,23 +138,74 @@ export function* deleteNotificationSaga(action) {
   }
 }
 
-export function* fetchVariablesSaga() {
-  const { space, errors, serverError } = yield call(CoreAPI.fetchSpace, {
-    include: 'space,space.attributesMap,kapps,kapps.attributesMap,kapps.forms,kapps.forms.attributesMap,kapps.forms.fields'
-  });
+export function* saveNotificationSaga(action) {
+  const datastore = true;
+  const completed = false;
+  const formSlug = NOTIFICATIONS_FORM_SLUG;
+  const {
+    payload: { id, values, callback },
+  } = action;
+
+  const { errors, error, serverError, submission } = yield id
+    ? call(CoreAPI.updateSubmission, { datastore, id, values })
+    : call(CoreAPI.createSubmission, {
+        datastore,
+        completed,
+        formSlug,
+        values,
+      });
+
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
-  } else if (errors) {
-    yield put(actions.setVariablesError(errors));
+  } else if (errors || error) {
+    yield put(actions.setSaveError(errors || error));
   } else {
-    yield put(actions.setVariables(space));
+    yield put(actions.setSaveSuccess());
+    if (typeof callback === 'function') {
+      callback(submission);
+    }
   }
+}
+
+export function* fetchVariablesSaga(action) {
+  if (action.payload.kappSlug) {
+    const { forms, errors, serverError } = yield call(CoreAPI.fetchForms, {
+      kappSlug: action.payload.kappSlug,
+      include: 'attributes,fields',
+    });
+
+    if (serverError) {
+      yield put(systemErrorActions.setSystemError(serverError));
+    } else if (errors) {
+      yield put(actions.setVariablesError(errors));
+    } else {
+      yield put(actions.setVariables({ forms }));
+    }
+  }
+}
+
+export function* fetchDateFormatsSaga(action) {
+  const { submissions } = yield call(CoreAPI.searchSubmissions, {
+    datastore: true,
+    form: NOTIFICATIONS_DATE_FORMAT_FORM_SLUG,
+    search: new CoreAPI.SubmissionSearch(true).includes(['values']).build(),
+  });
+
+  yield put(
+    submissions
+      ? actions.setDateFormats(submissions)
+      : actions.setSystemError(
+          'Failed to fetch notification template date formats',
+        ),
+  );
 }
 
 export function* watchSettingsNotifications() {
   yield takeEvery(types.FETCH_VARIABLES, fetchVariablesSaga);
+  yield takeEvery(types.FETCH_DATE_FORMATS, fetchDateFormatsSaga);
   yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
   yield takeEvery(types.FETCH_NOTIFICATION, fetchNotificationSaga);
   yield takeEvery(types.CLONE_NOTIFICATION, cloneNotificationSaga);
   yield takeEvery(types.DELETE_NOTIFICATION, deleteNotificationSaga);
+  yield takeEvery(types.SAVE_NOTIFICATION, saveNotificationSaga);
 }

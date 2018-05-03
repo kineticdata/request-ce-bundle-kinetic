@@ -32,14 +32,14 @@ const HomeComponent = ({
   handleDiscussionSearchInputSubmit,
   handleLoadMoreButtonClick,
 }) => (
-  <div className="space-home-container">
+  <div className="page-container page-container--space-home">
     <PageTitle parts={['Home']} />
     <CreateDiscussionModal />
-    <div className="space-home-content">
+    <div className="page-panel page-panel--space-home">
       <h4 className="space-home-title">Welcome to kinops for {spaceName}</h4>
       {discussionsEnabled ? (
-        <div className="page-title-wrapper">
-          <div className="page-title">
+        <div className="page-title">
+          <div className="page-title__wrapper">
             <h3>
               <Link to="/">home</Link> /{' '}
               {discussionsSearchTerm !== '' ? `search results` : ''}
@@ -50,12 +50,15 @@ const HomeComponent = ({
                 : 'Recent Discussions'}
             </h1>
           </div>
-          <div className="discussion-search-form">
-            <div className="select">
-              <form onSubmit={handleDiscussionSearchInputSubmit}>
+          <div className="search-form--discussion">
+            <div className="search-box search-box--discussion">
+              <form
+                onSubmit={handleDiscussionSearchInputSubmit}
+                className="search-box__form"
+              >
                 <input
+                  type="text"
                   placeholder="Search discussions"
-                  className="form-control"
                   onChange={handleDiscussionSearchInputChange}
                 />
                 <button type="submit">
@@ -72,7 +75,7 @@ const HomeComponent = ({
           </div>
         </div>
       ) : (
-        <div className="wally-empty-state">
+        <div className="empty-state empty-state--wally">
           <h5>Woops...</h5>
           <img src={wallyMissingImage} alt="Missing Wally" />
           <h6>
@@ -121,7 +124,7 @@ const HomeComponent = ({
       {!discussionsError &&
         !discussionsLoading &&
         discussionGroups.size === 0 && (
-          <div className="wally-empty-state">
+          <div className="empty-state empty-state--wally">
             <h5>No discussions found</h5>
             <img src={wallyMissingImage} alt="Missing Wally" />
             <h6>You are not involved in any discussions!</h6>

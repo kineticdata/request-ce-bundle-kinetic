@@ -28,10 +28,11 @@ export const ParticipantsHeader = ({
       <div className="view-all">
         <button
           type="button"
-          className="btn btn-link"
+          className="btn btn-icon"
           onClick={openInNewTab}
+          title="Expand Discussion"
         >
-          <i className="fa fa-external-link fa-fw" />
+          <i className="fa fa-expand fa-fw" />
         </button>
         <button
           type="button"

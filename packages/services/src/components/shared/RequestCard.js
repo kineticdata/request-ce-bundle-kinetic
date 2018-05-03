@@ -50,7 +50,7 @@ const ClosedDateListItem = ({ submission }) =>
   );
 
 export const RequestCard = props => (
-  <Link to={props.path} className="card r-card">
+  <Link to={props.path} className="card card--request">
     <h1>
       <Icon image={Form(props.submission.form).icon} background="greenGrass" />
       <span>{props.submission.form.name}</span>

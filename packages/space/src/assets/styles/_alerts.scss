@@ -2,75 +2,9 @@
  *   Alerts ~ Space
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.space-alerts-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.alerts-content {
-  .table-alert {
-    tr:not(.header) {
-      border-bottom: 1px solid #e0e0e0;
-      border-top: 1px solid #e0e0e0;
-    }
-
-    td.actions {
-      width: 20%;
-    }
-
-    tr > td {
-      padding: 12px;
-      // This is for the action dropdown.
-      .actions {
-        // This is for the vertical ellipsis dropdown menu on the queue list view.
-        .btn.btn-ellipsis {
-          border: none;
-          padding: 0;
-          box-shadow: none;
-          background-color: transparent;
-          &:hover {
-            background-color: white;
-            cursor: pointer;
-            path {
-              fill: $blue1;
-            }
-          }
-        }
-
-        .dropdown > .dropdown-menu {
-          left: -5.5rem;
-          top: 1rem;
-          padding: 0;
-          min-width: 7rem;
-          border-radius: 0;
-          border: none;
-          margin-top: 15px;
-          position: absolute;
-          box-sizing: border-box;
-          filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 3px 4px);
-          // Add the up arrow.
-
-          &:after {
-            content: '';
-            border: 10px solid;
-            border-color: transparent transparent white;
-            content: '';
-            right: 10%;
-            margin-left: -10px;
-            position: absolute;
-            top: -20px;
-            z-index: 9998;
-          }
-
-          a.dropdown-item,
-          button.dropdown-item {
-            height: 24px;
-            color: #54698d;
-            font-size: 12px;
-            line-height: 24px;
-          }
-        }
-      }
-    }
+.table--alerts {
+  tr {
+    border-bottom: 1px solid #e0e0e0;
+    border-top: 1px solid #e0e0e0;
   }
 }

@@ -15,7 +15,7 @@ import { actions } from '../../../redux/modules/settingsDatastore';
 
 const WallyEmptyMessage = ({ filter }) => {
   return (
-    <div className="wally-empty-state">
+    <div className="empty-state empty-state--wally">
       <h5>No Datastore Forms Found</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>
@@ -44,10 +44,10 @@ const FormListComponent = ({
   manageableForms,
 }) => {
   return (
-    <div className="datastore-container">
-      <div className="datastore-content pane">
-        <div className="page-title-wrapper">
-          <div className="page-title">
+    <div className="page-container page-container--datastore">
+      <div className="page-panel page-panel--scrollable page-panel--datastore-content">
+        <div className="page-title">
+          <div className="page-title__wrapper">
             <h3>
               <Link to="/">home</Link> /{` `}
               <Link to="/settings">settings</Link> /{` `}
@@ -63,7 +63,7 @@ const FormListComponent = ({
           {loading ? (
             <h3>Loading</h3>
           ) : datastoreForms && datastoreForms.size > 0 ? (
-            <table className="table table-sm table-hover table-datastore">
+            <table className="table table-sm table-striped table-datastore">
               <thead className="header">
                 <tr>
                   <th>Form Name</th>

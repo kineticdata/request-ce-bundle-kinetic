@@ -11,18 +11,19 @@
 
 // Core CSS
 @import 'layout';
-
-// Components
-@import 'services-item';
-@import 'my-requests';
-@import 'search-results';
-@import 'timeline';
-@import 'submission-detail';
 @import 'navigation';
 
+// Components
+@import 'home';
+@import 'search';
+@import 'categories';
+@import 'submission';
+@import 'submission-timeline';
+
 // Utility classes
-@import 'card';
+@import 'cards';
 @import 'buttons';
+@import 'page-title';
 
 // Temp css
 @import 'temp';

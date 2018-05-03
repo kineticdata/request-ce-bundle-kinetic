@@ -37,7 +37,7 @@ export const Settings = compose(
 )(SettingsComponent);
 
 const SettingsCard = ({ path, icon, name, description }) => (
-  <Link to={path} className="s-card">
+  <Link to={path} className="card card--service">
     <h1>
       <Icon image={icon || 'fa-sticky-note-o'} background="blueSlate" />
       {name}
@@ -47,10 +47,10 @@ const SettingsCard = ({ path, icon, name, description }) => (
 );
 
 const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
-  <div className="datastore-container">
-    <div className="datastore-content pane">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+  <div className="page-container page-container--space-settings">
+    <div className="page-panel page-panel--datastore-content">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">home</Link> /{` `}
           </h3>
@@ -58,7 +58,7 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
         </div>
       </div>
 
-      <div className="services s-cards-wrapper">
+      <div className="cards__wrapper cards__wrapper--services">
         <SettingsCard
           name="Edit My Profile"
           path={`/settings/profile`}

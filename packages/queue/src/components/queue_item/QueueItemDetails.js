@@ -128,7 +128,7 @@ export const QueueItemDetails = ({
 
       {!prohibitSubtasks && (
         <div className="subtasks-section">
-          <h2 className="section-title">
+          <h2 className="section__title">
             Subtasks
             {queueItem.coreState === 'Draft' && (
               <button className="btn btn-link" onClick={openNewItemMenu}>
@@ -233,6 +233,7 @@ export const QueueItemDetailsContainer = compose(
         props.queueItem.label || 'Queue Discussion',
         props.queueItem.values['Details'] || '',
         props.queueItem,
+        null,
         (issue, submission) => {
           props.setCurrentItem(submission);
           props.openModal(issue.guid, 'discussion');

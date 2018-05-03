@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Icon, Utils } from 'common';
 
 export const ServiceCard = ({ path, form }) => (
-  <Link to={path} className="card s-card">
+  <Link to={path} className="card card--service">
     <h1>
       <Icon
         image={Utils.getAttributeValue(form, 'Icon', 'fa-sticky-note-o')}

@@ -1,0 +1,89 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Layout ~ Common
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.main-container {
+  display: flex;
+  overflow-y: auto !important;
+}
+
+.package-layout {
+  margin-top: $header-height;
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: column;
+  min-height: $page-height;
+}
+
+.page-container {
+  // display: flex;
+  // flex: 1 1 auto;
+  &--panels {
+    display: flex;
+  }
+}
+
+.page-panel {
+  position: relative;
+  background: rgb(255, 255, 255);
+  padding: 0 1.5rem;
+  min-height: 100vh;
+  // height: 100%;
+  width: 100%;
+  &--sidebar {
+    @media (min-width: 0) {
+      display: none;
+    }
+    @media (min-width: 576px) {
+      display: flex !important;
+    }
+  }
+  &--transparent {
+    background-color: transparent;
+  }
+  &--auto-height {
+    min-height: auto;
+  }
+  &--scrollable {
+    overflow-y: auto;
+  }
+  // Thirds
+  &--two-thirds {
+    flex: 1 1 66%;
+    &:first-child {
+      border-right: 1px solid $black-16;
+    }
+  }
+  &--one-thirds {
+    flex: 1 1 33%;
+  }
+  // 60/40
+  &--three-fifths {
+    flex: 1 1 60%;
+    border-right: 1px solid $black-16;
+  }
+  &--two-fifths {
+    flex: 1 1 40%;
+  }
+}
+.page-content {
+  flex: 1 0 100%;
+}
+
+.data-list-row {
+  display: flex;
+  flex-wrap: wrap;
+  &__col {
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+  dl {
+    color: $black;
+    font-size: 0.875rem;
+  }
+}

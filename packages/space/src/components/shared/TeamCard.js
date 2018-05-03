@@ -10,18 +10,15 @@ const TeamCardComponent = props => {
   const { team, showMembers, toggleShowMembers } = props;
   const { name, slug, description, memberships } = team;
   return (
-    <div className="card t-card">
-      <div className="header" style={{ backgroundColor: getTeamColor(team) }}>
-        <span />
+    <div className="card card--team">
+      <div
+        className="card--team__header"
+        style={{ backgroundColor: getTeamColor(team) }}
+      >
         <i className={`fa fa-${getTeamIcon(team)} card-icon`} />
-        {/*{slug && (
-          <Link to={`/teams/${slug}/edit`}>
-            <span className="fa fa-fw fa-ellipsis-v edit" />
-          </Link>
-        )}*/}
         <span />
       </div>
-      <div className="content">
+      <div className="card--team__body">
         <h1>{name}</h1>
         <pre>{description}</pre>
 
@@ -40,10 +37,10 @@ const TeamCardComponent = props => {
         ) : (
           <p>No members</p>
         )}
-        {memberships && memberships.length > 0 && showMembers ? (
-          <Members members={memberships} />
-        ) : null}
       </div>
+      {memberships && memberships.length > 0 && showMembers ? (
+        <Members members={memberships} />
+      ) : null}
     </div>
   );
 };
@@ -59,13 +56,15 @@ export const TeamCard = compose(
 )(TeamCardComponent);
 
 const Members = ({ members }) => (
-  <div className="t-card-members-container">
+  <div className="card--team__footer">
     <h1>Members</h1>
-    <div className="t-card-members-wrapper">
+    <div className="card--team__footer__members">
       {(members || []).map(member => {
         return (
           <div
-            className={`t-card-member ${member.online ? 'online' : ''}`}
+            className={`card--team__footer__member ${
+              member.online ? 'online' : ''
+            }`}
             key={member.user.username}
           >
             <Avatar user={member.user} size={26} />

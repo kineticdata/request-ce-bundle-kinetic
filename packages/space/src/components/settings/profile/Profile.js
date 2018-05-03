@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -23,13 +23,13 @@ export const EditProfileComponent = ({
   handleSubmit,
   handleTogglePassword,
 }) => (
-  <div className="profile-container">
+  <div className="page-container page-container--panels page-container--space-profile-edit">
     <PageTitle parts={['Edit Profile']} />
     {!loading && (
-      <div className="edit-profile-container">
-        <div className="profile-content pane">
-          <div className="page-title-wrapper">
-            <div className="page-title">
+      <Fragment>
+        <div className="page-panel page-panel--three-fifths page-panel--scrollable page-panel--space-profile-edit">
+          <div className="page-title">
+            <div className="page-title__wrapper">
               <h3>
                 <Link to="/">home</Link> / <Link to="/settings">settings</Link>{' '}
                 /{' '}
@@ -37,8 +37,8 @@ export const EditProfileComponent = ({
               <h1>Edit Profile</h1>
             </div>
           </div>
-          <div>
-            <h2 className="section-title">General</h2>
+          <section>
+            <h2 className="section__title">General</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group required">
                 <label htmlFor="displayName">Display Name</label>
@@ -51,7 +51,7 @@ export const EditProfileComponent = ({
                 />
               </div>
               <div className="profile-input-container">
-                <div className="form-group required two-columns first-column">
+                <div className="form-group required">
                   <label htmlFor="email">Email</label>
                   <input
                     type="text"
@@ -61,7 +61,7 @@ export const EditProfileComponent = ({
                     value={fieldValues.email}
                   />
                 </div>
-                <div className="form-group two-columns second-column">
+                <div className="form-group">
                   <label htmlFor="phoneNumber">Phone number</label>
                   <input
                     type="text"
@@ -119,19 +119,21 @@ export const EditProfileComponent = ({
                   Change Password
                 </button>
               )}
-              <div className="footer-save">
-                <button
-                  disabled={!fieldValuesValid(fieldValues)}
-                  className="btn btn-primary"
-                >
-                  Save
-                </button>
+              <div className="form__footer">
+                <div className="form__footer__right">
+                  <button
+                    disabled={!fieldValuesValid(fieldValues)}
+                    className="btn btn-primary"
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
             </form>
-          </div>
+          </section>
           {(managerEnabled || locationEnabled) && (
-            <div>
-              <h2 className="section-title">User Attributes</h2>
+            <section>
+              <h2 className="section__title">User Attributes</h2>
               <div className="user-attributes-wrapper">
                 <table className="user-attributes table">
                   <tbody>
@@ -158,28 +160,28 @@ export const EditProfileComponent = ({
                   </tbody>
                 </table>
               </div>
-            </div>
+            </section>
           )}
-          <div>
-            <h2 className="section-title">Roles</h2>
+          <section>
+            <h2 className="section__title">Roles</h2>
 
             <UserRoles
               roles={profile.memberships.filter(item =>
                 item.team.name.startsWith('Role::'),
               )}
             />
-          </div>
-          <div>
-            <h2 className="section-title">Teams</h2>
+          </section>
+          <section>
+            <h2 className="section__title">Teams</h2>
             <UserTeams
               teams={profile.memberships.filter(
                 item => !item.team.name.startsWith('Role::'),
               )}
             />
-          </div>
+          </section>
         </div>
 
-        <div className="profile-sidebar pane d-none d-sm-block">
+        <div className="page-panel page-panel--two-fifths page-panel--sidebar page-panel--space-profile-edit-sidebar">
           <ProfileCard
             user={buildProfile(fieldValues, profile)}
             button={
@@ -189,13 +191,13 @@ export const EditProfileComponent = ({
             }
           />
         </div>
-      </div>
+      </Fragment>
     )}
   </div>
 );
 
 const UserTeams = ({ teams }) => (
-  <div className="t-card-wrapper">
+  <div className="cards__wrapper cards__wrapper--team">
     {Object.keys(teams).length > 0 ? (
       teams.map(item => <TeamCard key={item.team.name} team={item.team} />)
     ) : (

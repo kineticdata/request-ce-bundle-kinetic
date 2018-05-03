@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { CoreForm } from 'react-kinetic-core';
 import {
   KappLink as Link,
@@ -25,14 +25,12 @@ export const Form = ({
   handleLoaded,
   values,
 }) => (
-  <div>
+  <Fragment>
     <PageTitle parts={[form ? form.name : '']} />
-    <div className="services-bar">
-      <span className="bordercolor" />
-    </div>
-    <div className="services-form-container container">
-      <div className="page-title-wrapper">
-        <div className="page-title">
+    <span className="services-color-bar services-color-bar__blue-slate" />
+    <div className="page-container page-container--services-form">
+      <div className="page-title">
+        <div className="page-title__wrapper">
           <h3>
             <Link to="/">services</Link> /{' '}
             {match.url.startsWith('/request') && (
@@ -61,10 +59,10 @@ export const Form = ({
         </a>
         */}
       </div>
-      <div className="page-description-wrapper">
+      <div className="form-description">
         {form && <p>{form.description}</p>}
       </div>
-      <div className="form-wrapper">
+      <div className="embedded-core-form--wrapper">
         {submissionId ? (
           <CoreForm
             submission={submissionId}
@@ -88,5 +86,5 @@ export const Form = ({
         )}
       </div>
     </div>
-  </div>
+  </Fragment>
 );

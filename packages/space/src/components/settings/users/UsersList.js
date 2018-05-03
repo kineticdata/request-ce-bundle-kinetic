@@ -10,7 +10,7 @@ import { UsersListItem } from './UsersListItem';
 
 const WallyEmptyMessage = ({ filter }) => {
   return (
-    <div className="wally-empty-state">
+    <div className="empty-state empty-state--wally">
       <h5>No Users Found</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>Click Create User to add a new user</h6>
@@ -20,17 +20,17 @@ const WallyEmptyMessage = ({ filter }) => {
 
 const UsersListComponent = ({ users, loading, match }) => {
   return (
-    <div className="datastore-container">
-      <div className="datastore-content pane">
-        <div className="page-title-wrapper">
-          <div className="page-title">
+    <div className="page-container page-container--settings-users">
+      <div className="page-panel page-panel--scrollable">
+        <div className="page-title">
+          <div className="page-title__wrapper">
             <h3>
               <Link to="/">home</Link> /{` `}
               <Link to="/settings">settings</Link> /{` `}
             </h3>
             <h1>Users</h1>
           </div>
-          <div className="page-title-actions">
+          <div className="page-title__actions">
             <Link
               to={`${match.path}/import`}
               className="btn btn-secondary"
