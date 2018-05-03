@@ -35,7 +35,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_USERS:
       return state.set('loading', false).set('users', payload);
     case types.FETCH_USER:
-      return state.set('loading', true);
+      return state.set('userLoading', true);
     case types.SET_USER:
       return state
         .set('userLoading', false)

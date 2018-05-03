@@ -8,7 +8,6 @@ import { commonActions, PageTitle } from 'common';
 import { actions as usersActions } from '../../../redux/modules/settingsUsers';
 import { actions as teamsActions } from '../../../redux/modules/teamList';
 import { ProfileCard } from '../../shared/ProfileCard';
-import { TeamCard } from '../../shared/TeamCard';
 import { UsersDropdown } from './DropDown';
 import { get } from 'https';
 
@@ -19,11 +18,13 @@ export const EditUserComponent = ({
   users,
   error,
   roles,
+  teams,
   fieldValues,
   handleFieldChange,
   handleOptionChange,
   handleCheckboxChange,
   handleRolesChange,
+  handleTeamsChange,
   handleSubmit,
   userProfileAttributes,
 }) => (
@@ -183,11 +184,19 @@ export const EditUserComponent = ({
                   </div>
                   <div>
                     <h2 className="section__title">Teams</h2>
-                    <UserTeams
-                      teams={user.memberships.filter(
-                        item => !item.team.name.startsWith('Role::'),
-                      )}
-                    />
+                    {teams &&
+                      teams.map(team => (
+                        <label key={team.slug} htmlFor={team.name}>
+                          <input
+                            type="checkbox"
+                            id={team.name}
+                            onChange={handleTeamsChange}
+                            checked={fieldValues.userTeams.includes(team.name)}
+                            value={team.name}
+                          />
+                          {team.name}
+                        </label>
+                      ))}
                   </div>
                 </div>
                 <div className="form__footer">
@@ -225,16 +234,6 @@ const managerLookup = (users, managerUsername) => {
   let manager = users.find(user => user.username === managerUsername);
   return manager ? manager.displayName : null;
 };
-
-const UserTeams = ({ teams }) => (
-  <div className="cards__wrapper cards__wrapper--team">
-    {Object.keys(teams).length > 0 ? (
-      teams.map(item => <TeamCard key={item.team.name} team={item.team} />)
-    ) : (
-      <p>No teams assigned</p>
-    )}
-  </div>
-);
 
 const fieldValuesValid = fieldValues =>
   fieldValues.displayName && fieldValues.email;
@@ -282,6 +281,11 @@ const translateProfileToFieldValues = user => ({
         .filter(membership => membership.team.name.startsWith('Role::'))
         .reduce((acc, membership) => acc.push(membership.team.name), List([]))
     : [],
+  userTeams: user.memberships
+    ? user.memberships
+        .filter(membership => !membership.team.name.startsWith('Role::'))
+        .reduce((acc, membership) => acc.push(membership.team.name), List([]))
+    : [],
 });
 
 const translateFieldValuesToProfile = (fieldValues, user) => {
@@ -302,11 +306,18 @@ const translateFieldValuesToProfile = (fieldValues, user) => {
       Manager: [fieldValues.manager],
       Site: [fieldValues.site],
     },
-    memberships: fieldValues.userRoles.map(role => ({
-      team: {
-        name: role,
-      },
-    })),
+    memberships: [
+      ...fieldValues.userRoles.map(role => ({
+        team: {
+          name: role,
+        },
+      })),
+      ...fieldValues.userTeams.map(team => ({
+        team: {
+          name: team,
+        },
+      })),
+    ],
   };
   return result;
 };
@@ -324,6 +335,7 @@ const mapStateToProps = state => ({
       return memo;
     }, {}),
   roles: state.teamList.roles,
+  teams: state.teamList.data,
 });
 
 const mapDispatchToProps = {
@@ -363,6 +375,20 @@ export const EditUser = compose(
       props.setFieldValues({
         ...props.fieldValues,
         userRoles,
+      });
+    },
+    handleTeamsChange: props => ({ target: { value, checked } }) => {
+      let userTeams;
+      if (!checked) {
+        userTeams = props.fieldValues.userTeams.delete(
+          props.fieldValues.userTeams.findIndex(team => team === value),
+        );
+      } else {
+        userTeams = [value, ...props.fieldValues.userTeams];
+      }
+      props.setFieldValues({
+        ...props.fieldValues,
+        userTeams,
       });
     },
     handleSubmit: props => event => {
