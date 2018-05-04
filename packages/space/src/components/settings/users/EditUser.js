@@ -5,218 +5,228 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fromJS, List } from 'immutable';
 import { commonActions, PageTitle } from 'common';
-import { actions as profileActions } from '../../../redux/modules/profiles';
 import { actions as usersActions } from '../../../redux/modules/settingsUsers';
 import { actions as teamsActions } from '../../../redux/modules/teamList';
 import { ProfileCard } from '../../shared/ProfileCard';
-import { TeamCard } from '../../shared/TeamCard';
 import { UsersDropdown } from './DropDown';
 import { get } from 'https';
 
 export const EditUserComponent = ({
   loading,
+  userLoading,
   user,
   users,
   error,
   roles,
+  teams,
   fieldValues,
-  location,
-  locationEnabled,
   handleFieldChange,
   handleOptionChange,
   handleCheckboxChange,
   handleRolesChange,
+  handleTeamsChange,
   handleSubmit,
   userProfileAttributes,
 }) => (
   <div className="page-container page-container--panels page-container--space-profile-edit">
     <PageTitle parts={['Users', 'Settings']} />
-    {!loading && (
-      <Fragment>
-        <div className="page-panel page-panel--three-fifths page-panel--scrollable page-panel--space-profile-edit">
-          <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
-                <Link to="/">home</Link> /{` `}
-                <Link to="/settings">settings</Link> /{` `}
-                <Link to={`/settings/users/`}>users</Link> /{` `}
-              </h3>
-              <h1>Edit: {user.displayName || user.username}</h1>
+    {!loading &&
+      !userLoading && (
+        <Fragment>
+          <div className="page-panel page-panel--three-fifths page-panel--scrollable page-panel--space-profile-edit">
+            <div className="page-title">
+              <div className="page-title__wrapper">
+                <h3>
+                  <Link to="/">home</Link> /{` `}
+                  <Link to="/settings">settings</Link> /{` `}
+                  <Link to={`/settings/users/`}>users</Link> /{` `}
+                </h3>
+                <h1>Edit: {user.displayName || user.username}</h1>
+              </div>
+            </div>
+            <div>
+              <h2 className="section__title">General</h2>
+              <form onSubmit={handleSubmit}>
+                <div className="user-admin">
+                  <label htmlFor="spaceAdmin">
+                    <input
+                      type="checkbox"
+                      id="spaceAdmin"
+                      name="spaceAdmin"
+                      onChange={handleCheckboxChange}
+                      checked={fieldValues.spaceAdmin}
+                    />Space Admin
+                  </label>
+                  <label htmlFor="enabled">
+                    <input
+                      type="checkbox"
+                      id="enabled"
+                      name="spaceAdmin"
+                      onChange={handleCheckboxChange}
+                      checked={fieldValues.enabled}
+                    />Enabled
+                  </label>
+                </div>
+                <div className="form-group required">
+                  <label htmlFor="displayName">Display Name</label>
+                  <input
+                    type="text"
+                    id="displayName"
+                    name="displayName"
+                    onChange={handleFieldChange}
+                    value={fieldValues.displayName}
+                  />
+                </div>
+                <div className="form-group required">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    onChange={handleFieldChange}
+                    value={fieldValues.email}
+                  />
+                </div>
+                <div>
+                  <h2 className="section__title">Profile Attributes</h2>
+                  <div className="user-attributes-wrapper">
+                    <div className="form-group">
+                      <label htmlFor="firstName">First Name</label>
+                      <input
+                        id="firstName"
+                        name="firstName"
+                        className="form-control"
+                        onChange={handleFieldChange}
+                        value={fieldValues.firstName}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="lastName">Last Name</label>
+                      <input
+                        id="lastName"
+                        name="lastName"
+                        className="form-control"
+                        onChange={handleFieldChange}
+                        value={fieldValues.lastName}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="phoneNumber">Phone Number</label>
+                      <input
+                        id="phoneNumber"
+                        name="phoneNumber"
+                        className="form-control"
+                        onChange={handleFieldChange}
+                        value={fieldValues.phoneNumber}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h2 className="section__title">User Attributes</h2>
+                  <div className="user-attributes-wrapper">
+                    <div className="form-group">
+                      <label htmlFor="department">Department</label>
+                      <input
+                        id="department"
+                        name="department"
+                        className="form-control"
+                        onChange={handleFieldChange}
+                        value={fieldValues.department}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="manager">Manager</label>
+                      <UsersDropdown
+                        users={users}
+                        initialValue={managerLookup(users, fieldValues.manager)}
+                        onSelect={user =>
+                          handleOptionChange('manager', user.username)
+                        }
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="organization">Organization</label>
+                      <input
+                        id="organization"
+                        name="organization"
+                        className="form-control"
+                        onChange={handleFieldChange}
+                        value={fieldValues.organization}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="site">Site</label>
+                      <input
+                        id="site"
+                        name="site"
+                        className="form-control"
+                        onChange={handleFieldChange}
+                        value={fieldValues.site}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <h2 className="section__title">Roles</h2>
+                    {roles &&
+                      roles.map(role => (
+                        <label key={role.slug} htmlFor={role.name}>
+                          <input
+                            type="checkbox"
+                            id={role.name}
+                            onChange={handleRolesChange}
+                            checked={fieldValues.userRoles.includes(role.name)}
+                            value={role.name}
+                          />
+                          {role.name.replace(/^Role::(.*?)/, '$1')}
+                        </label>
+                      ))}
+                  </div>
+                  <div>
+                    <h2 className="section__title">Teams</h2>
+                    {teams &&
+                      teams.map(team => (
+                        <label key={team.slug} htmlFor={team.name}>
+                          <input
+                            type="checkbox"
+                            id={team.name}
+                            onChange={handleTeamsChange}
+                            checked={fieldValues.userTeams.includes(team.name)}
+                            value={team.name}
+                          />
+                          {team.name}
+                        </label>
+                      ))}
+                  </div>
+                </div>
+                <div className="form__footer">
+                  <div className="form__footer__right">
+                    {' '}
+                    <button
+                      disabled={!fieldValuesValid(fieldValues)}
+                      className="btn btn-primary"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
-          <div>
-            <h2 className="section__title">General</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="user-admin">
-                <label htmlFor="spaceAdmin">
-                  <input
-                    type="checkbox"
-                    id="spaceAdmin"
-                    name="spaceAdmin"
-                    onChange={handleCheckboxChange}
-                    checked={fieldValues.spaceAdmin}
-                  />Space Admin
-                </label>
-                <label htmlFor="enabled">
-                  <input
-                    type="checkbox"
-                    id="enabled"
-                    name="spaceAdmin"
-                    onChange={handleCheckboxChange}
-                    checked={fieldValues.enabled}
-                  />Enabled
-                </label>
-              </div>
-              <div className="form-group required">
-                <label htmlFor="displayName">Display Name</label>
-                <input
-                  type="text"
-                  id="displayName"
-                  name="displayName"
-                  onChange={handleFieldChange}
-                  value={fieldValues.displayName}
-                />
-              </div>
-              <div className="form-group required">
-                <label htmlFor="email">Email</label>
-                <input
-                  type="text"
-                  id="email"
-                  name="email"
-                  onChange={handleFieldChange}
-                  value={fieldValues.email}
-                />
-              </div>
-              <div>
-                <h2 className="section__title">Profile Attributes</h2>
-                <div className="user-attributes-wrapper">
-                  <div className="form-group">
-                    <label htmlFor="firstName">First Name</label>
-                    <input
-                      id="firstName"
-                      name="firstName"
-                      className="form-control"
-                      onChange={handleFieldChange}
-                      value={fieldValues.firstName}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="lastName">Last Name</label>
-                    <input
-                      id="lastName"
-                      name="lastName"
-                      className="form-control"
-                      onChange={handleFieldChange}
-                      value={fieldValues.lastName}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="phoneNumber">Phone Number</label>
-                    <input
-                      id="phoneNumber"
-                      name="phoneNumber"
-                      className="form-control"
-                      onChange={handleFieldChange}
-                      value={fieldValues.phoneNumber}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div>
-                <h2 className="section__title">User Attributes</h2>
-                <div className="user-attributes-wrapper">
-                  <div className="form-group">
-                    <label htmlFor="department">Department</label>
-                    <input
-                      id="department"
-                      name="department"
-                      className="form-control"
-                      onChange={handleFieldChange}
-                      value={fieldValues.department}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="manager">Manager</label>
-                    <UsersDropdown
-                      users={users}
-                      initialValue={managerLookup(users, fieldValues.manager)}
-                      onSelect={user =>
-                        handleOptionChange('manager', user.username)
-                      }
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="organization">Organization</label>
-                    <input
-                      id="organization"
-                      name="organization"
-                      className="form-control"
-                      onChange={handleFieldChange}
-                      value={fieldValues.organization}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="site">Site</label>
-                    <input
-                      id="site"
-                      name="site"
-                      className="form-control"
-                      onChange={handleFieldChange}
-                      value={fieldValues.site}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div>
-                <h2 className="section-title">Roles</h2>
-                {roles &&
-                  roles.map(role => (
-                    <label key={role.slug} htmlFor={role.name}>
-                      <input
-                        type="checkbox"
-                        id={role.name}
-                        onChange={handleRolesChange}
-                        checked={fieldValues.userRoles.includes(role.name)}
-                        value={role.name}
-                      />
-                      {role.name.replace(/^Role::(.*?)/, '$1')}
-                    </label>
-                  ))}
-              </div>
-              <div>
-                <h2 className="section__title">Teams</h2>
-                <UserTeams
-                  teams={user.memberships.filter(
-                    item => !item.team.name.startsWith('Role::'),
-                  )}
-                />
-              </div>
-              <div className="form__footer">
-                <div className="form__footer__right">
-                  {' '}
-                  <button
-                    disabled={!fieldValuesValid(fieldValues)}
-                    className="btn btn-primary"
-                  >
-                    Save
+          <div className="page-panel page-panel--two-fifths page-panel--sidebar page-panel--space-profile-edit-sidebar ">
+            <ProfileCard
+              user={buildProfile(fieldValues, user)}
+              button={
+                <Link to={`/settings/users/${user.username}`}>
+                  <button className="btn btn-primary btn-sm">
+                    View Profile
                   </button>
-                </div>
-              </div>
-            </form>
+                </Link>
+              }
+            />
           </div>
-        </div>
-        <div className="page-panel page-panel--two-fifths page-panel--sidebar page-panel--space-profile-edit-sidebar ">
-          <ProfileCard
-            user={buildProfile(fieldValues, user)}
-            button={
-              <Link to={`/settings/users/${user.username}`}>
-                <button className="btn btn-primary btn-sm">View Profile</button>
-              </Link>
-            }
-          />
-        </div>
-      </Fragment>
-    )}
+        </Fragment>
+      )}
   </div>
 );
 
@@ -224,16 +234,6 @@ const managerLookup = (users, managerUsername) => {
   let manager = users.find(user => user.username === managerUsername);
   return manager ? manager.displayName : null;
 };
-
-const UserTeams = ({ teams }) => (
-  <div className="cards__wrapper cards__wrapper--team">
-    {Object.keys(teams).length > 0 ? (
-      teams.map(item => <TeamCard key={item.team.name} team={item.team} />)
-    ) : (
-      <p>No teams assigned</p>
-    )}
-  </div>
-);
 
 const fieldValuesValid = fieldValues =>
   fieldValues.displayName && fieldValues.email;
@@ -281,11 +281,16 @@ const translateProfileToFieldValues = user => ({
         .filter(membership => membership.team.name.startsWith('Role::'))
         .reduce((acc, membership) => acc.push(membership.team.name), List([]))
     : [],
+  userTeams: user.memberships
+    ? user.memberships
+        .filter(membership => !membership.team.name.startsWith('Role::'))
+        .reduce((acc, membership) => acc.push(membership.team.name), List([]))
+    : [],
 });
 
-const translateFieldValuesToProfile = (fieldValues, profile) => {
+const translateFieldValuesToProfile = (fieldValues, user) => {
   const result = {
-    username: profile.username,
+    username: user.username,
     displayName: fieldValues.displayName,
     email: fieldValues.email,
     spaceAdmin: fieldValues.spaceAdmin,
@@ -301,24 +306,28 @@ const translateFieldValuesToProfile = (fieldValues, profile) => {
       Manager: [fieldValues.manager],
       Site: [fieldValues.site],
     },
-    memberships: fieldValues.userRoles.map(role => ({
-      team: {
-        name: role,
-      },
-    })),
+    memberships: [
+      ...fieldValues.userRoles.map(role => ({
+        team: {
+          name: role,
+        },
+      })),
+      ...fieldValues.userTeams.map(team => ({
+        team: {
+          name: team,
+        },
+      })),
+    ],
   };
   return result;
 };
 
 const mapStateToProps = state => ({
-  loading: state.profiles.loading,
-  user: state.profiles.profile,
+  loading: state.settingsUsers.loading,
+  userLoading: state.settingsUsers.userLoading,
+  user: state.settingsUsers.user,
   users: state.settingsUsers.users,
-  error: state.profiles.error,
-  location:
-    state.profiles.profile &&
-    state.profiles.profile.profileAttributes['Location'],
-  locationEnabled: state.app.userProfileAttributeDefinitions['Location'],
+  error: state.settingsUsers.error,
   spaceAttributes:
     state.kinops.space &&
     state.kinops.space.attributes.reduce((memo, item) => {
@@ -326,13 +335,14 @@ const mapStateToProps = state => ({
       return memo;
     }, {}),
   roles: state.teamList.roles,
+  teams: state.teamList.data,
 });
 
 const mapDispatchToProps = {
   fetchUsers: usersActions.fetchUsers,
   fetchTeams: teamsActions.fetchTeams,
-  fetchProfile: profileActions.fetchProfile,
-  updateProfile: profileActions.updateProfile,
+  fetchUser: usersActions.fetchUser,
+  updateUser: usersActions.updateUser,
   openForm: commonActions.openForm,
 };
 
@@ -367,16 +377,30 @@ export const EditUser = compose(
         userRoles,
       });
     },
+    handleTeamsChange: props => ({ target: { value, checked } }) => {
+      let userTeams;
+      if (!checked) {
+        userTeams = props.fieldValues.userTeams.delete(
+          props.fieldValues.userTeams.findIndex(team => team === value),
+        );
+      } else {
+        userTeams = [value, ...props.fieldValues.userTeams];
+      }
+      props.setFieldValues({
+        ...props.fieldValues,
+        userTeams,
+      });
+    },
     handleSubmit: props => event => {
       event.preventDefault();
-      props.updateProfile(
+      props.updateUser(
         translateFieldValuesToProfile(props.fieldValues, props.user),
       );
     },
   }),
   lifecycle({
     componentWillMount() {
-      this.props.fetchProfile(this.props.match.params.username);
+      this.props.fetchUser(this.props.match.params.username);
       if (this.props.users.size <= 0) {
         this.props.fetchUsers();
       }
