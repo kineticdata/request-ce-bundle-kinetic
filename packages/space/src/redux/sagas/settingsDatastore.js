@@ -40,7 +40,7 @@ export function* fetchFormsSaga() {
   yield put(
     actions.setForms({
       manageableForms: manageableFormsSlugs,
-      displayableForms: displayableForms.forms,
+      displayableForms: displayableForms.forms || [],
       bridges: space.space ? space.space.bridges : [],
     }),
   );
