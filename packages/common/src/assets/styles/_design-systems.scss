@@ -1,11 +1,4 @@
-[class*='design-system-'] {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  align-content: center;
-  background-color: $white;
-  min-height: 100vh;
-  padding: 3rem 0;
+.design-system-page {
   hr {
     border: 0;
     border-bottom: 1px dashed #ccc;
@@ -38,6 +31,20 @@
   .btn-group {
     .btn {
       margin-right: 0;
+    }
+  }
+}
+
+.package-layout {
+  &--design-system {
+    display: flex;
+    flex-direction: column;
+    background-color: $white;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    .sidebar {
+      margin-top: 0;
     }
   }
 }

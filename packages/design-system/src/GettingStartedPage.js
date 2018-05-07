@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 export const GettingStartedPage = () => (
-  <div>
+  <Fragment>
     <h1>Getting Started</h1>
-  </div>
+  </Fragment>
 );

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const ButtonsPage = () => (
-  <div className="design-system-buttons">
+  <div className="design-system-page">
     <div className="col-10">
       <h1>Buttons</h1>
       <hr />
