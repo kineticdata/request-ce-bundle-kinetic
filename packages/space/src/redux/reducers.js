@@ -8,7 +8,7 @@ import { reducer as spaceForms } from './modules/spaceForms';
 import { reducer as settingsDatastore } from './modules/settingsDatastore';
 import { reducer as settingsNotifications } from './modules/settingsNotifications';
 import { reducer as settingsUsers } from './modules/settingsUsers';
-import { reducer as spaceSettings } from './modules/spaceSettings';
+import { reducer as settingsSpace } from './modules/settingsSpace';
 
 export default {
   errors,
@@ -21,5 +21,5 @@ export default {
   team,
   teamList,
   spaceForms,
-  spaceSettings,
+  settingsSpace,
 };

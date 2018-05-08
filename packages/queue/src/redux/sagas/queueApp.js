@@ -1,5 +1,11 @@
-import { takeEvery } from 'redux-saga';
-import { all, call, put, select, takeLatest } from 'redux-saga/effects';
+import {
+  all,
+  call,
+  put,
+  select,
+  takeLatest,
+  takeEvery,
+} from 'redux-saga/effects';
 import { List } from 'immutable';
 import { CoreAPI } from 'react-kinetic-core';
 import { actions, types } from '../modules/queueApp';

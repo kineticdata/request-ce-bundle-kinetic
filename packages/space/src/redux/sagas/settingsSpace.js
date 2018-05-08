@@ -1,10 +1,8 @@
 import { Map } from 'immutable';
 import { takeEvery, call, put } from 'redux-saga/effects';
-import { actions, types } from '../modules/spaceSettings';
+import { actions, types } from '../modules/settingsSpace';
 import { actions as kinopsActions } from 'kinops/src/redux/modules/kinops';
-window.console.log(kinopsActions);
 
-// import { kinopsActions } from '../../../../kinops/src/modules/kinops';
 import { CoreAPI } from 'react-kinetic-core';
 
 const SPACE_SETTING_INCLUDES =
@@ -18,7 +16,7 @@ export function* fetchSpaceSaga({ payload }) {
       include: SPACE_SETTING_INCLUDES,
       space: payload,
     });
-  
+
     if (serverError) {
       yield put(actions.updateSpaceError(serverError));
     } else {
@@ -31,14 +29,14 @@ export function* fetchTeamsSaga({ payload }) {
       include: TEAMS_SETTING_INCLUDES,
       teams: payload,
     });
-  
+
     if (serverError) {
       yield put(actions.updateSpaceError(serverError));
     } else {
       yield put(actions.setSpaceSettingsTeams(teams));
     }
 }
-  
+
 export function* updateSpaceSaga({ payload }) {
     const attributes = Map(payload).filter(value => value).map(value => [value]).toJS();
     const { serverError, space } = yield call(CoreAPI.updateSpace, {
@@ -55,7 +53,7 @@ export function* updateSpaceSaga({ payload }) {
     }
 }
 
-export function* watchSpaceSettings() {
+export function* watchSettingsSpace() {
   yield takeEvery(types.FETCH_SPACE_SETTINGS, fetchSpaceSaga);
   yield takeEvery(types.FETCH_SPACE_SETTINGS_TEAMS, fetchTeamsSaga);
   yield takeEvery(types.UPDATE_SPACE_SETTINGS, updateSpaceSaga);
