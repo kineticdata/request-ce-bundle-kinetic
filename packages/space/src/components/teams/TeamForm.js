@@ -258,7 +258,9 @@ const mapDispatchToProps = {
 const mapStateToProps = (state, props) => {
   return {
     editing: props.match.params.slug !== undefined,
-    loading: state.teamList.loading || state.team.loading,
+    loading:
+      state.teamList.loading ||
+      (props.match.params.slug !== undefined && state.team.loading),
     teams: state.teamList.data,
     team: state.team.data || {},
     memberships: selectTeamMemberships(state).map(member => member.user),

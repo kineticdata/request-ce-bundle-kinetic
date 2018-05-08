@@ -1,17 +1,10 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Utils } from 'common';
 import { Link, NavLink } from 'react-router-dom';
 import { getTeamColor } from '../utils';
-import { KappCard } from './shared/KappCard';
 
 export const Sidebar = ({ kapps, teams, isSpaceAdmin, openSettings }) => (
   <div className="sidebar space-sidebar">
-    {kapps.length > 0 && (
-      <div className="sidebar-group sidebar-group--kapp-cards">
-        <h1>Kapps</h1>
-        {kapps.map(kapp => <KappCard key={kapp.slug} kapp={kapp} />)}
-      </div>
-    )}
     <div className="sidebar-group sidebar-group--my-teams">
       <h1>
         My Teams
