@@ -302,7 +302,6 @@ export const reducer = (state = State(), { type, payload }) => {
               'Datastore Hidden',
               'false',
             ).toLowerCase();
-            console.log(hiddenAttr)
             if (hiddenAttr === 'true' || hiddenAttr === 'yes') return false;
             else return true;
           })
