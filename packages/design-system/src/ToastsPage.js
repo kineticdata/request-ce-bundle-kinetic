@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 
-export const AlertsPage = () => (
+export const ToastsPage = () => (
   <Fragment>
     <div className="design-system-page">
       <div className="col-10">
-        <h1>Alerts</h1>
+        <h1>Toasts</h1>
         <hr />
         <h2>Structure</h2>
 

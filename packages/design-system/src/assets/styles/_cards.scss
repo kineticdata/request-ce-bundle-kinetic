@@ -1,0 +1,31 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Cards Overrides ~ Design System
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// Card
+.card--design-system {
+  border: 1px solid $black-16;
+  padding: 1rem;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
+  @include setBgColorAndHover($white);
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+
+  h1 {
+    color: $black;
+    font-size: 1.4375rem;
+    font-weight: 600;
+    line-height: 2.25rem;
+    margin: 0;
+    display: inline-flex;
+  }
+  p {
+    color: $black-50;
+    font-size: 1rem;
+    line-height: 1.1428571429rem;
+    margin-bottom: 0;
+  }
+}
