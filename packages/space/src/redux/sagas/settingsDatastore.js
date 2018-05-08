@@ -104,16 +104,17 @@ export function* createFormSaga(action) {
     name: form.name,
     description: form.description,
   };
-  const { serverError } = yield call(CoreAPI.createForm, {
+  const { error, serverError } = yield call(CoreAPI.createForm, {
     datastore: true,
     form: formContent,
     include: FORM_INCLUDES,
   });
-  if (!serverError) {
+  if (serverError || error) {
+    yield put(toastActions.addError(error || serverError.statusText));
+  } else {
     // TODO: Build Initial Bridge Model and Mapping here
     yield put(actions.fetchForms());
     if (typeof action.payload.callback === 'function') {
-      console.log('calling back');
       action.payload.callback();
     }
   }

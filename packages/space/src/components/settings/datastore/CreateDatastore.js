@@ -33,7 +33,6 @@ const CreateDatastoreComponent = ({
         </div>
       </div>
       <div className="datastore-settings">
-        <h3>THIS FUNCTIONALITY IS NOT CURRENTLY WORKING</h3>
         <h3 className="section__title">General Settings</h3>
         <div className="settings">
           <div className="form-row">
@@ -79,7 +78,7 @@ const CreateDatastoreComponent = ({
               name="description"
             />
           </div>
-          <div className="form-group">
+          {/*<div className="form-group">
             <label htmlFor="name">Bridge Name</label>
             <select
               id="bridgeName"
@@ -97,7 +96,7 @@ const CreateDatastoreComponent = ({
                 </option>
               ))}
             </select>
-          </div>
+          </div>*/}
           <div className="pull-right">
             <Link to="/datastore" className="btn btn-link">
               Cancel
@@ -120,12 +119,12 @@ const CreateDatastoreComponent = ({
         Creating a new Datastore will create a new Kinetic Request datastore
         form to be used for storing data.
       </p>
-      <p>
+      {/*<p>
         <strong>Bridge Name:</strong> Select the Kinetic Core bridge to allow
         for automatic bridge creation for this datastore (The Kinetic Core
         Bridge Adapter must first be installed into Bridgehub to allow this data
         to be retrieved via bridges).
-      </p>
+      </p>*/}
     </div>
   </div>
 );
@@ -134,7 +133,7 @@ const handleSave = ({ createForm, newForm, push, setCreating }) => () => () => {
   setCreating(true);
   createForm({
     form: newForm,
-    callback: () => push(`/datastore/${newForm.slug}/settings`),
+    callback: () => push(`/settings/datastore/${newForm.slug}/settings`),
   });
 };
 
