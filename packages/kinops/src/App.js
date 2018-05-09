@@ -8,6 +8,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import Sidebar from 'react-sidebar';
+import { Utils } from 'common';
 
 import { ToastsContainer } from './components/ToastsContainer';
 import { HeaderContainer } from './components/HeaderContainer';
@@ -65,13 +66,26 @@ export const mapDispatchToProps = {
   setSuppressedSidebarOpen: layoutActions.setSuppressedSidebarOpen,
 };
 
+const getAppProvider = kapp => {
+  const bundlePackage = kapp
+    ? Utils.getAttributeValue(kapp, 'Bundle Package', kapp.slug)
+    : SpaceApp;
+  switch (bundlePackage) {
+    case 'services':
+      return ServicesApp;
+    case 'queue':
+      return QueueApp;
+    default:
+      return SpaceApp;
+  }
+};
+
 export const App = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withProps(props => {
-    const AppProvider =
-      props.kappSlug === 'services'
-        ? ServicesApp
-        : props.kappSlug === 'queue' ? QueueApp : SpaceApp;
+    const AppProvider = getAppProvider(
+      props.kapps.find(kapp => kapp.slug === props.kappSlug),
+    );
     const shouldSuppressSidebar =
       AppProvider.shouldSuppressSidebar &&
       AppProvider.shouldSuppressSidebar(props.pathname, props.kappSlug);

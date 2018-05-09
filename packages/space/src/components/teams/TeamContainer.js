@@ -126,7 +126,6 @@ export const TeamContainer = compose(
     openRequestToJoinForm,
     openRequestToLeaveForm,
     openDiscussion: ({ discussionId, openModal }) => () => {
-      console.log(openModal);
       openModal(discussionId, 'discussion');
     },
   }),

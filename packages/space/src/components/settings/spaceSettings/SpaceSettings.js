@@ -4,11 +4,9 @@ import { connect } from 'react-redux';
 import { compose, lifecycle, withState } from 'recompose';
 import {
   Utils,
-  commonActions,
   PageTitle,
-  KappNavLink as NavLink,
 } from 'common';
-import { actions } from '../../../redux/modules/spaceSettings';
+import { actions } from '../../../redux/modules/settingsSpace';
 
 export const TextInput = ({ value, name, setInputs, inputs }) => (
   <input
@@ -51,7 +49,7 @@ export const Select = ({
     optionElements = options.map(option => {
       const kappName = type.charAt(0).toUpperCase() + type.slice(1);
       return (
-        <option value={option.value} selected={option.value === selected}>
+        <option key={option.value} value={option.value}>
           {kappName} > {option.label}
         </option>
       );
@@ -61,6 +59,7 @@ export const Select = ({
     <select
       className={`form-control ${className}`}
       name={name}
+      value={selected}
       onChange={event => setInputs({ ...inputs, [name]: event.target.value })}
     >
       {optionElements}
@@ -70,9 +69,9 @@ export const Select = ({
 
 const mapStateToProps = state => ({
   space: state.kinops.space,
-  spaceSettings: state.spaceSettings,
-  teams: state.spaceSettings.teams,
-  spaceKappsForms: state.spaceSettings.spaceKappsForms,
+  spaceSettings: state.settingsSpace,
+  teams: state.settingsSpace.teams,
+  spaceKappsForms: state.settingsSpace.spaceKappsForms,
 });
 
 const mapDispatchToProps = {
@@ -240,7 +239,7 @@ export const SettingsContainer = ({
               </div>
             )}
           </form>
-          <div class="form__footer">
+          <div className="form__footer">
             <span className="form__footer__right">
               <button
                 className="btn btn-primary"

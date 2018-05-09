@@ -13,7 +13,7 @@ const { namespace, noPayload, withPayload } = Utils;
 
 export const DATASTORE_LIMIT = 500;
 export const SUBMISSION_INCLUDES = 'values,details';
-export const FORMS_INCLUDES = 'details';
+export const FORMS_INCLUDES = 'details,attributes';
 export const FORM_INCLUDES = 'details,fields,indexDefinitions,attributesMap';
 export const SPACE_INCLUDES = 'bridges';
 export const BRIDGE_MODEL_INCLUDES =
@@ -295,10 +295,20 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('loading', true).set('errors', []);
     case types.SET_FORMS:
       const forms = List(
-        payload.displayableForms.map(form => {
-          const canManage = payload.manageableForms.includes(form.slug);
-          return DatastoreForm({ ...form, canManage });
-        }),
+        payload.displayableForms
+          .filter(form => {
+            const hiddenAttr = Utils.getAttributeValue(
+              form,
+              'Datastore Hidden',
+              'false',
+            ).toLowerCase();
+            if (hiddenAttr === 'true' || hiddenAttr === 'yes') return false;
+            else return true;
+          })
+          .map(form => {
+            const canManage = payload.manageableForms.includes(form.slug);
+            return DatastoreForm({ ...form, canManage });
+          }),
       );
       const bridges = payload.bridges.map(b => b.name);
       return state
