@@ -296,18 +296,15 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_FORMS:
       const forms = List(
         payload.displayableForms
-          .filter(form => {
+          .map(form => {
             const hiddenAttr = Utils.getAttributeValue(
               form,
               'Datastore Hidden',
               'false',
             ).toLowerCase();
-            if (hiddenAttr === 'true' || hiddenAttr === 'yes') return false;
-            else return true;
-          })
-          .map(form => {
+            const isHidden = hiddenAttr === 'true' || hiddenAttr === 'yes'
             const canManage = payload.manageableForms.includes(form.slug);
-            return DatastoreForm({ ...form, canManage });
+            return DatastoreForm({ ...form, canManage, isHidden });
           }),
       );
       const bridges = payload.bridges.map(b => b.name);
