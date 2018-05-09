@@ -51,53 +51,53 @@ export const AppComponent = props => {
       <Fragment>
         <Notifications />
         <main className="package-layout package-layout--space">
-          <Route path="/" exact component={Home} />
-          <Route path="/about" exact component={About} />
-          <Route path="/alerts" exact component={Alerts} />
-          <Route path="/alerts/:id" exact component={AlertForm} />
-          <Route path="/discussions/:id" exact component={Discussion} />
-          <Route path="/profile" exact component={EditProfile} />
-          <Route path="/profile/:username" exact component={ViewProfile} />
-          <Route path="/settings" component={Settings} />
-          <Route path="/teams" exact component={TeamsContainer} />
           <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/about" exact component={About} />
+            <Route path="/alerts" exact component={Alerts} />
+            <Route path="/alerts/:id" exact component={AlertForm} />
+            <Route path="/discussions/:id" exact component={Discussion} />
+            <Route path="/profile" exact component={EditProfile} />
+            <Route path="/profile/:username" exact component={ViewProfile} />
+            <Route path="/settings" component={Settings} />
+            <Route path="/teams" exact component={TeamsContainer} />
             <Route path="/teams/new" exact component={TeamForm} />
             <Route path="/teams/:slug" exact component={TeamContainer} />
+            <Route path="/teams/:slug/edit" exact component={TeamForm} />
+            <Route
+              path="/kapps/:kappSlug/forms/:formSlug"
+              exact
+              component={IsolatedForm}
+            />
+            <Route
+              path="/kapps/:kappSlug/submissions/:id"
+              exact
+              component={IsolatedForm}
+            />
+            <Route
+              path="/kapps/:kappSlug/forms/:formSlug/submissions/:id"
+              exact
+              component={IsolatedForm}
+            />
+            <Route
+              path="/datastore/forms/:slug/submissions/:id"
+              render={({ match }) => (
+                <Redirect
+                  to={`/settings/datastore/${match.params.slug}/${
+                    match.params.id
+                  }`}
+                />
+              )}
+            />
+            <Route
+              path="/datastore/forms/:slug"
+              render={({ match }) => (
+                <Redirect to={`/settings/datastore/${match.params.slug}/new`} />
+              )}
+            />
+            <Route path="/reset-password" render={() => <Redirect to="/" />} />
+            <Route component={ErrorNotFound} />
           </Switch>
-          <Route path="/teams/:slug/edit" exact component={TeamForm} />
-          <Route
-            path="/kapps/:kappSlug/forms/:formSlug"
-            exact
-            component={IsolatedForm}
-          />
-          <Route
-            path="/kapps/:kappSlug/submissions/:id"
-            exact
-            component={IsolatedForm}
-          />
-          <Route
-            path="/kapps/:kappSlug/forms/:formSlug/submissions/:id"
-            exact
-            component={IsolatedForm}
-          />
-          <Route
-            path="/datastore/forms/:slug/submissions/:id"
-            render={({ match }) => (
-              <Redirect
-                to={`/settings/datastore/${match.params.slug}/${
-                  match.params.id
-                }`}
-              />
-            )}
-          />
-          <Route
-            path="/datastore/forms/:slug"
-            render={({ match }) => (
-              <Redirect to={`/settings/datastore/${match.params.slug}/new`} />
-            )}
-          />
-          <Route path="/reset-password" render={() => <Redirect to="/" />} />
-          <Route component={ErrorNotFound} />
         </main>
       </Fragment>
     ),
