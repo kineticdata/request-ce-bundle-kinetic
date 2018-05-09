@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
-
+import { push } from 'connected-react-router';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fromJS, List } from 'immutable';
 import { commonActions, PageTitle } from 'common';
+
 import { actions as usersActions } from '../../../redux/modules/settingsUsers';
 import { actions as teamsActions } from '../../../redux/modules/teamList';
 import { ProfileCard } from '../../shared/ProfileCard';
@@ -26,6 +27,7 @@ export const EditUserComponent = ({
   handleRolesChange,
   handleTeamsChange,
   handleSubmit,
+  handleDelete,
   userProfileAttributes,
 }) => (
   <div className="page-container page-container--panels page-container--space-profile-edit">
@@ -200,14 +202,17 @@ export const EditUserComponent = ({
                   </div>
                 </div>
                 <div className="form__footer">
+                  <button className="btn btn-link" onClick={handleDelete}>
+                    Delete User
+                  </button>
                   <div className="form__footer__right">
-                    {' '}
                     <button
                       disabled={!fieldValuesValid(fieldValues)}
                       className="btn btn-primary"
                     >
                       Save
                     </button>
+                    <Link to={`/settings/users/${user.username}`}>Cancel</Link>
                   </div>
                 </div>
               </form>
@@ -343,7 +348,9 @@ const mapDispatchToProps = {
   fetchTeams: teamsActions.fetchTeams,
   fetchUser: usersActions.fetchUser,
   updateUser: usersActions.updateUser,
+  deleteUser: usersActions.deleteUser,
   openForm: commonActions.openForm,
+  push,
 };
 
 export const EditUser = compose(
@@ -354,6 +361,10 @@ export const EditUser = compose(
     translateProfileToFieldValues({ spaceAdmin: false, enabled: false }),
   ),
   withHandlers({
+    handleDelete: props => () => {
+      props.deleteUser();
+      props.push('/settings/users');
+    },
     handleFieldChange: props => ({ target: { name, value } }) => {
       name && props.setFieldValues({ ...props.fieldValues, [name]: value });
     },
