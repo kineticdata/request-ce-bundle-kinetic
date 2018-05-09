@@ -362,7 +362,7 @@ export const EditUser = compose(
   ),
   withHandlers({
     handleDelete: props => () => {
-      props.deleteUser();
+      props.deleteUser(props.user.username);
       props.push('/settings/users');
     },
     handleFieldChange: props => ({ target: { name, value } }) => {

@@ -18,7 +18,8 @@ export const defaultRenderUser = (user, isHighlighted) => (
 export const defaultGetUserValue = item => item.displayName;
 
 export const defaultShouldUserRender = (user, value) =>
-  user.displayName.toUpperCase().includes(value.toUpperCase()) ||
+  (user.displayName &&
+    user.displayName.toUpperCase().includes(value.toUpperCase())) ||
   user.username.toUpperCase().includes(value.toUpperCase());
 
 export const UsersDropdownComponent = ({

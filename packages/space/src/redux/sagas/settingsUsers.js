@@ -52,8 +52,8 @@ export function* fetchUsersSaga() {
   }
 }
 
-export function* deleteUserSaga(payload) {
-  yield call(CoreAPI.deleteUser, payload);
+export function* deleteUserSaga({ payload }) {
+  yield call(CoreAPI.deleteUser, { username: payload });
 }
 
 export function* watchSettingsUsers() {
