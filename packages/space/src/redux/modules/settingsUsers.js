@@ -18,6 +18,7 @@ export const types = {
   FETCH_USER: namespace('users', 'FETCH_USER'),
   SET_USER: namespace('users', 'SET_USER'),
   UPDATE_USER: namespace('users', 'UPDATE_USER'),
+  DELETE_USER: namespace('users', 'DELETE_USER'),
 };
 
 export const actions = {
@@ -26,6 +27,7 @@ export const actions = {
   setUsers: withPayload(types.SET_USERS),
   setUser: withPayload(types.SET_USER),
   updateUser: withPayload(types.UPDATE_USER),
+  deleteUser: withPayload(types.DELETE_USER),
 };
 
 export const reducer = (state = State(), { type, payload }) => {

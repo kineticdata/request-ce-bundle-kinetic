@@ -3,19 +3,11 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { PageTitle } from 'common';
-import { actions, selectIsMyProfile } from '../../../redux/modules/profiles';
+import { actions } from '../../../redux/modules/settingsUsers';
 import { TeamCard } from '../../shared/TeamCard';
 import { Avatar } from '../../shared/Avatar';
 
-const ViewUserComponent = ({
-  loading,
-  profile,
-  isMyProfile,
-  location,
-  locationEnabled,
-  manager,
-  managerEnabled,
-}) => (
+const ViewUserComponent = ({ loading, profile }) => (
   <div className="page-container page-container--users">
     <PageTitle parts={['Users', 'Settings']} />
     {!loading && (
@@ -42,22 +34,6 @@ const ViewUserComponent = ({
           <p>{getEmail(profile)}</p>
           <p>{getProfilePhone(profile)}</p>
           <UserRoles roles={profile.memberships} />
-          {(managerEnabled || locationEnabled) && (
-            <dl>
-              {managerEnabled && (
-                <span>
-                  <dt>Manager</dt>
-                  <dd>{manager || <i>No Manager</i>}</dd>
-                </span>
-              )}
-              {locationEnabled && (
-                <span>
-                  <dt>Location</dt>
-                  <dd>{location || <i>No Location</i>}</dd>
-                </span>
-              )}
-            </dl>
-          )}
         </div>
         <h2 className="section__title">Teams</h2>
         <UserTeams teams={profile.memberships} />
@@ -108,34 +84,26 @@ const getProfilePhone = profile =>
     : 'No phone number';
 
 export const mapStateToProps = state => ({
-  loading: state.profiles.loading,
-  profile: state.profiles.profile,
-  error: state.profiles.error,
-  location:
-    state.profiles.profile &&
-    state.profiles.profile.profileAttributes['Location'],
-  locationEnabled: state.app.userProfileAttributeDefinitions['Location'],
-  manager:
-    state.profiles.profile && state.profiles.profile.attributes['Manager'],
-  managerEnabled: state.app.userAttributeDefinitions['Manager'],
-  isMyProfile: selectIsMyProfile(state),
+  loading: state.settingsUsers.userLoading,
+  profile: state.settingsUsers.user,
+  error: state.settingsUsers.error,
 });
 
 export const mapDispatchToProps = {
-  fetchProfile: actions.fetchProfile,
+  fetchUser: actions.fetchUser,
 };
 
 export const ViewUser = compose(
   connect(mapStateToProps, mapDispatchToProps),
   lifecycle({
     componentWillMount() {
-      this.props.fetchProfile(this.props.match.params.username);
+      this.props.fetchUser(this.props.match.params.username);
     },
     componentWillReceiveProps(nextProps) {
       if (
         this.props.match.params.username !== nextProps.match.params.username
       ) {
-        this.props.fetchProfile(nextProps.match.params.username);
+        this.props.fetchUser(nextProps.match.params.username);
       }
     },
   }),
