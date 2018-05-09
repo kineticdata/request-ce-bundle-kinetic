@@ -5,6 +5,7 @@ import { push } from 'connected-react-router';
 import { compose, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
 
+import { PageTitle } from 'common';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -20,10 +21,18 @@ const UnauthenticatedFormComponent = ({
   handleLoaded,
   formName,
   values,
+  showHeader,
 }) => (
-  <div className="services">
-  <div className="container">
-    <div className="form-wrapper">
+  <div className="page--container">
+    <PageTitle parts={[formSlug]} />
+    <div className="page-panel">
+      {showHeader && (
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h1>{formName}</h1>
+          </div>
+        </div>
+      )}
       {submissionId ? (
         <div>
           <CoreForm
@@ -47,7 +56,6 @@ const UnauthenticatedFormComponent = ({
       )}
     </div>
   </div>
-</div>
 );
 
 const valuesFromQueryParams = queryParams => {
@@ -61,10 +69,16 @@ const valuesFromQueryParams = queryParams => {
   }, {});
 };
 
+const showHeader = queryParams => {
+  const params = parse(queryParams);
+  return Object.keys(params).includes('showHeader');
+};
+
 const mapStateToProps = (state, { match: { params } }) => ({
   submissionId: params.id,
   kappSlug: params.kappSlug,
   formSlug: params.formSlug,
+  showHeader: showHeader(state.router.location.search),
   values: valuesFromQueryParams(state.router.location.search),
 });
 
@@ -77,7 +91,7 @@ export const handleLoaded = props => form => {
 };
 
 export const UnauthenticatedForm = compose(
-  connect(mapStateToProps, {push}),
+  connect(mapStateToProps, { push }),
   withState('formName', 'setFormName', ''),
-  withHandlers({ handleCreated, handleLoaded  }),
+  withHandlers({ handleCreated, handleLoaded }),
 )(UnauthenticatedFormComponent);
