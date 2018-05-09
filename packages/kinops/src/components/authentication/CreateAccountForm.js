@@ -42,6 +42,7 @@ const CreateAccount = ({
           <div className="form-group">
             <label className="required">First Name</label>
             <input
+              autoFocus
               className="form-control"
               type="text"
               value={firstName}

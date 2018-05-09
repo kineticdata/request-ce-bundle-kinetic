@@ -34,6 +34,7 @@ export const Login = ({
         <label htmlFor="email">Email Address</label>
         <input
           type="text"
+          autoFocus
           className="form-control"
           id="email"
           placeholder="wally@kineticdata.com"

@@ -30,6 +30,7 @@ const ResetPassword = ({
           <input
             type="text"
             id="email"
+            autoFocus
             className="form-control"
             placeholder="wally@kineticdata.com"
             value={email}

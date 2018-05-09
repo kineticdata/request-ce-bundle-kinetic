@@ -27,6 +27,7 @@ const ResetToken = ({
       <div className="form-group">
         <label htmlFor="password">Password</label>
         <input
+          autoFocus
           type="password"
           className="form-control"
           id="password"
