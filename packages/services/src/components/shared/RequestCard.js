@@ -1,9 +1,6 @@
 import React from 'react';
 import { KappLink as Link, Icon, TimeAgo } from 'common';
 import { StatusPill } from './StatusPill';
-import { DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { CardDropdown } from './CardDropdown';
-import { CancelButtonContainer } from '../request/CancelButton';
 import * as helpers from '../../utils';
 import * as constants from '../../constants';
 import { Form } from '../../models';
@@ -49,29 +46,27 @@ const ClosedDateListItem = ({ submission }) =>
     </div>
   );
 
+const SubmissionSummary = ({ submission }) => (
+  <p>
+    {submission.label === submission.id
+      ? submission.form.description
+      : submission.label}
+  </p>
+);
+
 export const RequestCard = props => (
   <Link to={props.path} className="card card--request">
     <h1>
       <Icon image={Form(props.submission.form).icon} background="greenGrass" />
       <span>{props.submission.form.name}</span>
       <StatusPill submission={props.submission} />
-      <CardDropdown>
-        <DropdownToggle color="icon" className="btn-sm">
-          <span className="fa fa-ellipsis-h fa-2x" />
-        </DropdownToggle>
-        <DropdownMenu right>
-          <DropdownItem tag={Link} to={``}>
-            Request to Cancel
-          </DropdownItem>
-        </DropdownMenu>
-      </CardDropdown>
     </h1>
-    <p>{props.submission.form.description}</p>
+    <SubmissionSummary submission={props.submission} />
     <span className="meta">
       <dl className="row">
         <div className="col">
-          <dt className="">Confirmation</dt>
-          <dd className="">{props.submission.handle}</dd>
+          <dt>Confirmation</dt>
+          <dd>{props.submission.handle}</dd>
         </div>
         <DisplayDateListItem submission={props.submission} />
         <EstCompletionListItem submission={props.submission} />
