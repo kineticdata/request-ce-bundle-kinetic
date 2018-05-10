@@ -13,11 +13,6 @@ export const Sidebar = () => (
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="/alerts" className="nav-link">
-            Alerts
-          </Link>
-        </li>
-        <li className="nav-item">
           <Link to="/avatars" className="nav-link">
             Avatars
           </Link>
@@ -65,6 +60,11 @@ export const Sidebar = () => (
         <li className="nav-item">
           <Link to="/popovers" className="nav-link">
             Popovers
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link to="/toasts" className="nav-link">
+            Toasts
           </Link>
         </li>
         <li className="nav-item">
