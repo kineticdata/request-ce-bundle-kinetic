@@ -79,7 +79,7 @@ export const EditProfileComponent = ({
                     <div className="form-group required two-columns first-column">
                       <label htmlFor="newPassword">New Password</label>
                       <input
-                        type="text"
+                        type="password"
                         id="newPassword"
                         name="newPassword"
                         onChange={handleFieldChange}
@@ -91,7 +91,7 @@ export const EditProfileComponent = ({
                         Password Confirmation
                       </label>
                       <input
-                        type="text"
+                        type="password"
                         id="confirmPassword"
                         name="confirmPassword"
                         onChange={handleFieldChange}

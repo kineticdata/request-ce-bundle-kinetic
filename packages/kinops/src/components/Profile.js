@@ -38,7 +38,7 @@ export const Profile = ({
       </div>
       <div className="profile-links">
         <div className="dropdown-divider" />
-        <Link to="/profile" className="dropdown-item" onClick={toggle}>
+        <Link to="/settings/profile" className="dropdown-item" onClick={toggle}>
           Profile
         </Link>
         {profile.spaceAdmin && (
