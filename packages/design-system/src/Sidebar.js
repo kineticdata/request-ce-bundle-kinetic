@@ -33,6 +33,11 @@ export const Sidebar = () => (
           </Link>
         </li>
         <li className="nav-item">
+          <Link to="/colors" className="nav-link">
+            Colors
+          </Link>
+        </li>
+        <li className="nav-item">
           <Link to="/forms" className="nav-link">
             Forms
           </Link>
