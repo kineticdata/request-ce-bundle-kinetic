@@ -3,6 +3,7 @@ import { Route, Link } from 'react-router-dom';
 
 import { GettingStartedPage } from './GettingStartedPage';
 import { ButtonsPage } from './ButtonsPage';
+import { ColorsPage } from './ColorsPage'
 import { LayoutsPage } from './LayoutsPage';
 import { ToastsPage } from './ToastsPage';
 import { AvatarsPage } from './AvatarsPage';
@@ -44,6 +45,7 @@ class App extends Component {
             <Route path="/typography" exact component={TypographyPage} />
             <Route path="/" exact component={GettingStartedPage} />
             <Route path="/buttons" exact component={ButtonsPage} />
+            <Route path="/colors" exact component={ColorsPage} />
             <Route path="/layout" exact component={LayoutsPage} />
           </div>
         </div>
