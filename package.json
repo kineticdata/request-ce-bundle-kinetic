@@ -1,5 +1,5 @@
 {
-  "name": "request-ce-bundle-kinops",
+  "name": "request-ce-bundle-kinetic",
   "version": "0.1.0",
   "private": true,
   "workspaces": ["packages/*"]
