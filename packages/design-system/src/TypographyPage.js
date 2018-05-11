@@ -70,8 +70,10 @@ export const TypographyPage = () => (
       <div className="flex-row">
         <div className="highlight">
           <pre
-          >{`<p>In sed mauris montes, ultricies, platea et! Cum auctor placerat hac montes rhoncus quis pulvinar dolor placerat velit? Vut dapibus turpis aliquam lectus phasellus! Lundium mauris lacus duis nunc pellentesque tortor, placerat turpis eros, sagittis scelerisque? Pulvinar dis porttitor, massa sagittis pid, amet a enim enim.</p>
+          >{`<!-- paragraph -->
+<p>In sed mauris montes, ultricies, platea et! Cum auctor placerat hac montes rhoncus quis pulvinar dolor placerat velit? Vut dapibus turpis aliquam lectus phasellus! Lundium mauris lacus duis nunc pellentesque tortor, placerat turpis eros, sagittis scelerisque? Pulvinar dis porttitor, massa sagittis pid, amet a enim enim.</p>
 
+<!-- paragraph small -->
 <p>
   <small>
     In sed mauris montes, ultricies, platea et! Cum auctor placerat hac montes
@@ -84,6 +86,48 @@ export const TypographyPage = () => (
         </div>
       </div>
       <hr />
+      <h2>Lists</h2>
+  <ul>
+    <li>list item 1</li>
+    <li>list item 2
+      <ul>
+        <li>list item 2.1</li>
+        <li>list item 2.2</li>
+        <li>list item 2.3</li>
+      </ul>
+    </li>
+    <li>list item 3</li>
+  </ul>
+
+  <dl>
+    <dt>description list term</dt>
+    <dd>description list description</dd>
+  </dl>
+  <div className="flex-row">
+    <div className="highlight">
+      <pre
+      >{`<!-- unordered list -->
+<ul>
+  <li>list item 1</li>
+  <li>list item 2
+    <ul>
+      <li>list item 2.1</li>
+      <li>list item 2.2</li>
+      <li>list item 2.3</li>
+    </ul>
+  </li>
+  <li>list item 3</li>
+</ul>
+
+<!-- description list -->
+<dl>
+  <dt>description list term</dt>
+  <dd>description list description</dd>
+</dl>
+  `}</pre>
+  </div>
+</div>
+      <hr/>
       {/*<h1> Line Height</h1>
 
       <p>
