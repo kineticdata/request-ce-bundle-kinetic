@@ -7,7 +7,7 @@ export const KappLinkComponent = ({ to, kappSlug, ...rest }) => (
 );
 
 export const mapStateToProps = state => ({
-  kappSlug: state.kinops.kappSlug,
+  kappSlug: state.app.kappSlug,
 });
 
 export const KappLink = connect(mapStateToProps, {})(KappLinkComponent);

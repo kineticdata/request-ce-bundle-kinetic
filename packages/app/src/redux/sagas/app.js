@@ -1,7 +1,7 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import { Map } from 'immutable';
 import { CoreAPI } from 'react-kinetic-core';
-import { actions, types } from '../modules/kinops';
+import { actions, types } from '../modules/app';
 import semver from 'semver';
 
 const MINIMUM_CE_VERSION = '2.0.2';
@@ -42,6 +42,6 @@ export function* fetchAppTask() {
   }
 }
 
-export function* watchKinops() {
+export function* watchApp() {
   yield takeEvery(types.LOAD_APP, fetchAppTask);
 }

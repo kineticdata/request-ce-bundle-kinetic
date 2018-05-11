@@ -3,7 +3,7 @@ import { push } from 'connected-react-router';
 import { CoreAPI } from 'react-kinetic-core';
 import { List } from 'immutable';
 import { commonActions } from 'common';
-import { actions, types, selectServerUrl } from '../modules/app';
+import { actions, types, selectServerUrl } from '../modules/spaceApp';
 import { actions as errorActions } from '../modules/errors';
 
 import { DiscussionAPI } from 'discussions';
@@ -85,9 +85,9 @@ export function* fetchRecentDiscussionsSaga() {
   }
 
   const { limit, offset, search } = yield select(state => ({
-    limit: state.app.discussionsLimit,
-    offset: state.app.discussionsOffset,
-    search: state.app.discussionsSearchTerm,
+    limit: state.spaceApp.discussionsLimit,
+    offset: state.spaceApp.discussionsOffset,
+    search: state.spaceApp.discussionsSearchTerm,
   }));
 
   const { error, issues } = !!search
@@ -101,7 +101,7 @@ export function* fetchRecentDiscussionsSaga() {
   }
 }
 
-export function* watchApp() {
+export function* watchSpaceApp() {
   yield takeEvery(types.FETCH_APP_SETTINGS, fetchAppSettingsSaga);
   yield takeEvery(
     [types.FETCH_DISCUSSIONS, types.SET_DISCUSSIONS_SEARCH_TERM],

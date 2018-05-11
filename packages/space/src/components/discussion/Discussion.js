@@ -92,7 +92,7 @@ const mapStateToProps = (state, props) => {
   const discussion = state.discussions.discussions.get(discussionId);
 
   return {
-    profile: state.kinops.profile,
+    profile: state.app.profile,
     discussionId: props.match.params.id,
     discussionName:
       discussion && discussion.issue ? discussion.issue.name : 'Loading...',

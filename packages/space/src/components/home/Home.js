@@ -9,7 +9,7 @@ import {
   actions,
   selectIsMoreDiscussions,
   selectGroupedDiscussions,
-} from '../../redux/modules/app';
+} from '../../redux/modules/spaceApp';
 import { actions as teamListActions } from '../../redux/modules/teamList';
 import { CreateDiscussionModal } from './CreateDiscussionModal';
 import { Discussion } from './Discussion';
@@ -135,18 +135,18 @@ const HomeComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  spaceName: state.kinops.space.name,
+  spaceName: state.app.space.name,
   discussionGroups: selectGroupedDiscussions(state),
-  discussionsError: state.app.discussionsError,
-  discussionsLoading: state.app.discussionsLoading,
-  discussionsLimit: state.app.discussionsLimit,
-  discussionsOffset: state.app.discussionsOffset,
-  discussionsSearchInputValue: state.app.discussionsSearchInputValue,
-  discussionsSearchTerm: state.app.discussionsSearchTerm,
+  discussionsError: state.spaceApp.discussionsError,
+  discussionsLoading: state.spaceApp.discussionsLoading,
+  discussionsLimit: state.spaceApp.discussionsLimit,
+  discussionsOffset: state.spaceApp.discussionsOffset,
+  discussionsSearchInputValue: state.spaceApp.discussionsSearchInputValue,
+  discussionsSearchTerm: state.spaceApp.discussionsSearchTerm,
   discussionServerUrl: selectServerUrl(state),
   isMoreDiscussions: selectIsMoreDiscussions(state),
   discussionsEnabled: selectDiscussionsEnabled(state),
-  me: state.kinops.profile,
+  me: state.app.profile,
   teams: state.teamList.data,
 });
 

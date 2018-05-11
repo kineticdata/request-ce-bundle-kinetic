@@ -8,7 +8,7 @@ import { createHashHistory } from 'history';
 import { configureStore } from './redux/store';
 import { Helmet } from 'react-helmet';
 import { actions as layoutActions } from './redux/modules/layout';
-import { actions as kinopsActions } from './redux/modules/kinops';
+import { actions as kinopsActions } from './redux/modules/app';
 import { AuthenticatedContainer } from './AuthenticatedContainer';
 import { App } from './App';
 

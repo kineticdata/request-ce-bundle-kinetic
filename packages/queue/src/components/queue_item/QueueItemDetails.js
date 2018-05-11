@@ -169,7 +169,7 @@ export const mapStateToProps = (state, props) => ({
   queueItem: state.queue.currentItem,
   assignments: selectAssignments(state).toJS(),
   prevAndNext: selectPrevAndNext(state, props.filter),
-  kappSlug: state.kinops.kappSlug,
+  kappSlug: state.app.kappSlug,
   discussionsEnabled: selectDiscussionsEnabled(state),
 });
 

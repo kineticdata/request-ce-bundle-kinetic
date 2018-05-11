@@ -36,7 +36,7 @@ const KITCHEN_SINK_FORM_CONFIG = {
 };
 
 export const mapStateToProps = state => ({
-  profile: state.kinops.profile,
+  profile: state.app.profile,
   isGuest: selectors.selectIsGuest(state),
 });
 

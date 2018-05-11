@@ -4,7 +4,7 @@ import { compose, withState, withHandlers } from 'recompose';
 import { Link } from 'react-router-dom';
 import { PopConfirm } from '../shared/PopConfirm';
 import { Button } from 'reactstrap';
-import { actions as appActions } from '../../redux/modules/app';
+import { actions as appActions } from '../../redux/modules/spaceApp';
 
 const AlertComponent = ({
   alert,
@@ -59,7 +59,7 @@ const AlertComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  canEdit: state.kinops.profile.spaceAdmin ? true : false,
+  canEdit: state.app.profile.spaceAdmin ? true : false,
 });
 
 export const mapDispatchToProps = {

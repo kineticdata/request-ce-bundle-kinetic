@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { Utils, Loading, ErrorNotFound } from 'common';
-import { actions } from './redux/modules/app';
+import { actions } from './redux/modules/spaceApp';
 import * as selectors from 'app/src/redux/selectors';
 import { Sidebar } from './components/Sidebar';
 import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
@@ -103,17 +103,17 @@ export const AppComponent = props => {
 };
 
 export const mapStateToProps = state => ({
-  loading: state.app.appLoading,
-  kapps: state.kinops.kapps
+  loading: state.spaceApp.appLoading,
+  kapps: state.app.kapps
     .sort((a, b) => a.name.localeCompare(b.name))
     .filter(kapp => kapp.slug !== 'admin'),
-  teams: Utils.getTeams(state.kinops.profile).sort((a, b) =>
+  teams: Utils.getTeams(state.app.profile).sort((a, b) =>
     a.name.localeCompare(b.name),
   ),
-  isSpaceAdmin: state.kinops.profile.spaceAdmin,
+  isSpaceAdmin: state.app.profile.spaceAdmin,
   isGuest: selectors.selectIsGuest(state),
   pathname: state.router.location.pathname,
-  settingsBackPath: state.app.settingsBackPath || '/',
+  settingsBackPath: state.spaceApp.settingsBackPath || '/',
 });
 const mapDispatchToProps = {
   fetchSettings: actions.fetchAppSettings,

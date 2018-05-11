@@ -9,7 +9,7 @@ export const zip = (array1, array2) =>
 
 // Parameterize this for 'kapp' in addition to category.
 export const namespace = (category, action) =>
-  `@kd/kinops/${category}/${action}`;
+  `@kd/common/${category}/${action}`;
 export const noPayload = type => () => ({ type });
 export const withPayload = (type, ...names) => (...data) =>
   names.length === 0

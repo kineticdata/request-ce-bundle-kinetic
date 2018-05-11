@@ -340,8 +340,8 @@ export const NotificationMenuComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  space: state.kinops.space,
-  kapps: state.kinops.kapps,
+  space: state.app.space,
+  kapps: state.app.kapps,
   forms:
     state.settingsNotifications.variables &&
     state.settingsNotifications.variables.forms,

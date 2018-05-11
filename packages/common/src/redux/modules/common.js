@@ -1,5 +1,4 @@
 import { Record, List } from 'immutable';
-
 import { actions as alertsActions } from 'app/src/redux/modules/alerts';
 import { types as layoutTypes } from 'app/src/redux/modules/layout';
 import * as Utils from '../../utils';
@@ -8,8 +7,8 @@ const { namespace, noPayload, withPayload } = Utils;
 
 // Discussion Server
 export const selectDiscussionsEnabled = state =>
-  state.kinops.space &&
-  Utils.getAttributeValue(state.kinops.space, 'Discussion Server Url', null) === null
+  state.app.space &&
+  Utils.getAttributeValue(state.app.space, 'Discussion Server Url', null) === null
     ? false
     : true;
 
@@ -25,10 +24,8 @@ export const types = {
   OPEN_FORM: namespace('modalForm', 'OPEN_FORM'),
   CLOSE_FORM: namespace('modalForm', 'CLOSE_FORM'),
   COMPLETE_FORM: namespace('modalForm', 'COMPLETE_FORM'),
-
   ADD_NOTIFICATION: namespace('toasts', 'ADD_NOTIFICATION'),
   REMOVE_NOTIFICATION: namespace('toasts', 'REMOVE_NOTIFICATION'),
-
   ...layoutTypes,
 };
 

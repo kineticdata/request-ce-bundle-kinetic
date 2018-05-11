@@ -1,7 +1,7 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects';
 import { CoreAPI } from 'react-kinetic-core';
 
-import { actions as kinopsActions } from 'app/src/redux/modules/kinops';
+import { actions as kinopsActions } from 'app/src/redux/modules/app';
 import { types, actions } from '../modules/settingsUsers';
 import { actions as errorActions } from '../modules/errors';
 
@@ -30,7 +30,7 @@ export function* updateUserSaga({ payload }) {
   if (serverError) {
     yield put(actions.setUserError(serverError));
   } else {
-    const username = yield select(state => state.kinops.profile.username);
+    const username = yield select(state => state.app.profile.username);
     if (username === user.username) {
       yield put(kinopsActions.loadApp());
     }
