@@ -1,20 +1,20 @@
-import { List, Record } from 'immutable';
-import { State, actions, reducer, selectIsMoreDiscussions } from './app';
+import { List } from 'immutable';
+import { State, actions, reducer, selectIsMoreDiscussions } from './spaceApp';
 
-describe('app redux module', () => {
+describe('spaceApp redux module', () => {
   describe('selectors', () => {
     let state;
 
     beforeEach(() => {
       state = {
-        app: State(),
+        spaceApp: State(),
       };
     });
 
     describe('#selectIsMoreDiscussions', () => {
       describe('when on first page', () => {
         test('when the list is the same size as the limit', () => {
-          state.app = state.app
+          state.spaceApp = state.spaceApp
             .set('discussions', List([1, 2, 3]))
             .set('discussionsLimit', 3)
             .set('discussionsOffset', 0);
@@ -23,7 +23,7 @@ describe('app redux module', () => {
         });
 
         test('when the list is smaller than the limit', () => {
-          state.app = state.app
+          state.spaceApp = state.spaceApp
             .set('discussions', List([1, 2, 3]))
             .set('discussionsLimit', 4)
             .set('discussionsOffset', 0);

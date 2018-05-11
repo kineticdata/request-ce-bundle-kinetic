@@ -32,7 +32,7 @@ const mapStateToProps = state => {
 
   return {
     loading:
-      state.team.loading || state.teamList.loading || state.spaceAppForms.loading,
+      state.team.loading || state.teamList.loading || state.spaceForms.loading,
     space: state.app.space,
     catalogSlug: Utils.getAttributeValue(
       state.app.space,

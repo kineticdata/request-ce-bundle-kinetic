@@ -5,7 +5,7 @@ describe('selectors', () => {
 
   beforeEach(() => {
     state = {
-      kinops: {
+      app: {
         loading: false,
         kapps: [{ slug: 'this-kapp' }],
         kappSlug: 'this-kapp',

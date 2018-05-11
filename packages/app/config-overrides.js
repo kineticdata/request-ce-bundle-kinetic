@@ -26,12 +26,12 @@ module.exports = {
       ...config,
       rootDir: '..',
       roots: ['<rootDir>'],
-      setupTestFrameworkScriptFile: '<rootDir>/kinops/src/setupTests.js',
+      setupTestFrameworkScriptFile: '<rootDir>/app/src/setupTests.js',
       testMatch: config.testMatch.map(pattern =>
         pattern.replace('/src', '/**/src'),
       ),
       transformIgnorePatterns: [
-        '[/\\\\]node_modules[/\\\\](?!common|kinops|services|space|queue|discussions).+\\.(js|jsx|mjs)$',
+        '[/\\\\]node_modules[/\\\\](?!common|app|services|space|queue|discussions).+\\.(js|jsx|mjs)$',
       ],
     };
   },

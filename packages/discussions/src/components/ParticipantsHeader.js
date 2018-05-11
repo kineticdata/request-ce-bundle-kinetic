@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 import Avatar from 'react-avatar';
 import { bundle } from 'react-kinetic-core';
 import { actions } from '../redux/modules/discussions';
@@ -14,6 +14,7 @@ export const ParticipantsHeader = ({
   discussion,
   openParticipantsModal,
   openInNewTab,
+  isFullScreen,
 }) =>
   !discussion.participants.isEmpty() && (
     <div className="participants-preview">
@@ -26,7 +27,7 @@ export const ParticipantsHeader = ({
           </div>
         ))}
       <div className="view-all">
-        {!window.location.hash.startsWith('#/discussion') && (
+        {!isFullScreen && (
           <button
             type="button"
             className="btn btn-icon"
@@ -47,12 +48,18 @@ export const ParticipantsHeader = ({
     </div>
   );
 
+const mapStateToProps = state => ({
+  isFullScreen:
+    state.router.location.pathname &&
+    state.router.location.pathname.startsWith('/discussion'),
+});
+
 const mapDispatchToProps = {
   openModal: actions.openModal,
 };
 
 export const ParticipantsHeaderContainer = compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withHandlers({
     openParticipantsModal: props => () =>
       props.openModal(props.discussion.issue.guid, 'participants'),

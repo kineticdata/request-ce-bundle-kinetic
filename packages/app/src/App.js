@@ -11,7 +11,7 @@ import Sidebar from 'react-sidebar';
 import { Utils, ToastsContainer, ModalFormContainer } from 'common';
 
 import { HeaderContainer } from './components/HeaderContainer';
-import { actions as kinopsActions } from './redux/modules/app';
+import { actions as appActions } from './redux/modules/app';
 import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';
 import { App as ServicesApp } from 'services/src/App';
@@ -58,7 +58,7 @@ export const mapStateToProps = state => ({
   pathname: state.router.location.pathname,
 });
 export const mapDispatchToProps = {
-  loadApp: kinopsActions.loadApp,
+  loadApp: appActions.loadApp,
   fetchAlerts: alertsActions.fetchAlerts,
   setSidebarOpen: layoutActions.setSidebarOpen,
   setSuppressedSidebarOpen: layoutActions.setSuppressedSidebarOpen,
