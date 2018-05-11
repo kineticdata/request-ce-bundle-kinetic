@@ -36,6 +36,7 @@ export const handleCompleted = props => response => {
       }/confirmation`,
     );
   }
+  props.fetchCurrentPage();
 };
 
 export const handleCreated = props => response => {
