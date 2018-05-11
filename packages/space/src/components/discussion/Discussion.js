@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, withState, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
 import { Utils, PageTitle } from 'common';
 import { bundle } from 'react-kinetic-core';
 import { Discussion as KinopsDiscussion } from 'discussions';
+import { commonActions } from 'common';
 
 const buildRelatedItem = issue => {
   const tagList = issue.tag_list;
@@ -92,6 +93,7 @@ const mapStateToProps = (state, props) => {
   const discussion = state.discussions.discussions.get(discussionId);
 
   return {
+    sidebarOpen: state.app.sidebarOpen,
     profile: state.app.profile,
     discussionId: props.match.params.id,
     discussionName:
@@ -101,8 +103,23 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  setSidebarOpen: commonActions.setSidebarOpen,
+};
 
-export const Discussion = compose(connect(mapStateToProps, mapDispatchToProps))(
-  DiscussionComponent,
-);
+export const Discussion = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withState('sidebarWasOpen', '_', true, props => props.sidebarOpen),
+  lifecycle({
+    componentWillMount() {
+      if (this.props.sidebarWasOpen) {
+        this.props.setSidebarOpen(false);
+      }
+    },
+    componentWillUnmount() {
+      if (this.props.sidebarWasOpen) {
+        this.props.setSidebarOpen(true);
+      }
+    },
+  }),
+)(DiscussionComponent);

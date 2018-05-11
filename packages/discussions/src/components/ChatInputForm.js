@@ -186,7 +186,7 @@ class ChatInput extends Component {
           <ButtonDropdown
             isOpen={this.state.actionsOpen}
             toggle={this.toggleActionsOpen}
-            dropup
+            direction="up"
           >
             <DropdownToggle color="subtle">
               <i className="fa fa-fw fa-plus" />

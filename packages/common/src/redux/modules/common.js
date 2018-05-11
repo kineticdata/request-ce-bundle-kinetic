@@ -1,5 +1,6 @@
 import { Record, List } from 'immutable';
 import { actions as alertsActions } from 'app/src/redux/modules/alerts';
+import { actions as layoutActions } from 'app/src/redux/modules/layout'
 import { types as layoutTypes } from 'app/src/redux/modules/layout';
 import * as Utils from '../../utils';
 
@@ -57,6 +58,7 @@ export const actions = {
   removeNotification: withPayload(types.REMOVE_NOTIFICATION),
 
   ...alertsActions,
+  ...layoutActions,
 };
 
 export const State = Record({

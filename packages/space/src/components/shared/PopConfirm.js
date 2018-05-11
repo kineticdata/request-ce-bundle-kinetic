@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popover, PopoverTitle, PopoverContent } from 'reactstrap';
+import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 
 export const PopConfirm = props => (
   <Popover
@@ -8,7 +8,7 @@ export const PopConfirm = props => (
     target={props.target}
     toggle={props.toggle}
   >
-    <PopoverTitle>{props.title}</PopoverTitle>
-    <PopoverContent>{props.children}</PopoverContent>
+    <PopoverHeader>{props.title}</PopoverHeader>
+    <PopoverBody>{props.children}</PopoverBody>
   </Popover>
 );

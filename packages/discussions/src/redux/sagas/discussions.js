@@ -59,7 +59,6 @@ export function registerChannel(socket) {
     };
 
     socket.onclose = event => {
-      window.console.log('socket closed!', event);
       emit({ action: 'reconnect' });
     };
 
@@ -177,12 +176,12 @@ export function* watchDiscussionSocket(action) {
 
   while (true) {
     const { disconnect, reconnect } = yield race({
-      task: [
+      task: all([
         call(incomingMessages, socketChannel, guid),
         call(presenceKeepAlive, guid, responseUrl),
         call(uploadProcessingPoller, guid, responseUrl),
         // call(outgoingMessages, socket),
-      ],
+      ]),
       reconnect: take(types.RECONNECT),
       disconnect: take(types.DISCONNECT),
     });

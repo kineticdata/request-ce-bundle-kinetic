@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, withState } from 'recompose';
 import Avatar from 'react-avatar';
 import { bundle } from 'react-kinetic-core';
 import { actions } from '../redux/modules/discussions';
@@ -26,14 +26,16 @@ export const ParticipantsHeader = ({
           </div>
         ))}
       <div className="view-all">
-        <button
-          type="button"
-          className="btn btn-icon"
-          onClick={openInNewTab}
-          title="Expand Discussion"
-        >
-          <i className="fa fa-expand fa-fw" />
-        </button>
+        {!window.location.hash.startsWith('#/discussion') && (
+          <button
+            type="button"
+            className="btn btn-icon"
+            onClick={openInNewTab}
+            title="Expand Discussion"
+          >
+            <i className="fa fa-expand fa-fw" />
+          </button>
+        )}
         <button
           type="button"
           className="btn btn-link"
@@ -56,7 +58,9 @@ export const ParticipantsHeaderContainer = compose(
       props.openModal(props.discussion.issue.guid, 'participants'),
     openInNewTab: props => () =>
       window.open(
-        `${bundle.spaceLocation()}#/discussions/${props.discussion.issue.guid}`,
+        `${bundle.spaceLocation()}/#/discussions/${
+          props.discussion.issue.guid
+        }`,
         '_blank',
       ),
   }),
