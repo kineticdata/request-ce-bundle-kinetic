@@ -1,10 +1,9 @@
 import { all, fork } from 'redux-saga/effects';
 import { watchAlerts } from './sagas/alerts';
 import { watchKinops } from './sagas/kinops';
-import { watchToasts } from './sagas/toasts';
 
 export function* sagas() {
-  yield all([watchAlerts(), watchKinops(), watchToasts()]);
+  yield all([watchAlerts(), watchKinops()]);
 }
 
 export function combineSagas(allSagas) {

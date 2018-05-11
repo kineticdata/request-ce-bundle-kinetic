@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { actions } from '../redux/modules/toasts';
+import { actions } from '../redux/modules/common';
 
 const defaultTitle = {
   success: 'Success',
@@ -35,7 +35,7 @@ const Toasts = ({ toasts, dismiss }) => (
 );
 
 const mapStateToProps = state => ({
-  toasts: state.toasts.notifications,
+  toasts: state.common.notifications,
 });
 
 const mapDispatchToProps = {

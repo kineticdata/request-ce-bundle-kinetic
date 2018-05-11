@@ -4,7 +4,7 @@ import { compose, lifecycle, withHandlers } from 'recompose';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { Utils, Loading, ErrorNotFound } from 'common';
 import { actions } from './redux/modules/app';
-import * as selectors from 'kinops/src/redux/selectors';
+import * as selectors from 'app/src/redux/selectors';
 import { Sidebar } from './components/Sidebar';
 import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { About } from './components/about/About';

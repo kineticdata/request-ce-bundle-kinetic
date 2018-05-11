@@ -8,11 +8,9 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import Sidebar from 'react-sidebar';
-import { Utils } from 'common';
+import { Utils, ToastsContainer, ModalFormContainer } from 'common';
 
-import { ToastsContainer } from './components/ToastsContainer';
 import { HeaderContainer } from './components/HeaderContainer';
-import { ModalFormContainer } from './components/ModalFormContainer';
 import { actions as kinopsActions } from './redux/modules/kinops';
 import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';

@@ -4,7 +4,7 @@ import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'connected-react-router';
 
 import { actions as systemErrorActions } from '../modules/errors';
-import { actions as toastActions } from 'kinops/src/redux/modules/toasts';
+import { commonActions } from 'common';
 import {
   actions,
   types,
@@ -110,7 +110,7 @@ export function* createFormSaga(action) {
     include: FORM_INCLUDES,
   });
   if (serverError || error) {
-    yield put(toastActions.addError(error || serverError.statusText));
+    yield put(commonActions.addError(error || serverError.statusText));
   } else {
     // TODO: Build Initial Bridge Model and Mapping here
     yield put(actions.fetchForms());
@@ -205,7 +205,7 @@ export function* fetchSubmissionsSimpleSaga() {
         put(actions.setSubmissions(List())),
         put(actions.setAdvancedSearchOpen(true)),
         put(
-          toastActions.addError(
+          commonActions.addError(
             'There were too many matching results. You will need to use an advanced search to create a better query.',
             'Too many results.',
           ),

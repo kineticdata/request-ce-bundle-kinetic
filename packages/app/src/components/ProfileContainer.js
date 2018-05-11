@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
 
 import { Profile } from './Profile';
-import { actions } from '../redux/modules/modalForm';
+import { commonActions } from 'common';
 import * as selectors from '../redux/selectors';
 
 
@@ -41,7 +41,7 @@ export const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  openForm: actions.openForm,
+  openForm: commonActions.openForm,
 };
 
 export const ProfileContainer = compose(
