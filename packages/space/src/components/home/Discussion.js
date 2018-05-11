@@ -27,6 +27,43 @@ const getTeamHeaderStyle = (discussion, teams) => {
   return {};
 };
 
+const RelatedItemBadge = ({ discussion }) => {
+  const type = discussion.tag_list.find(t => t.startsWith('META:TYPE:'))
+    ? discussion.tag_list
+        .find(t => t.startsWith('META:TYPE:'))
+        .replace('META:TYPE:', '')
+    : null;
+
+  const id = discussion.tag_list.find(t => t.startsWith('META:ID:'))
+    ? discussion.tag_list
+        .find(t => t.startsWith('META:ID:'))
+        .replace('META:ID:', '')
+    : null;
+
+  switch (type) {
+    case 'Queue Task':
+      return (
+        <Link
+          className="btn btn-primary btn-sm related-link"
+          to={`/kapps/queue/submissions/${id}`}
+        >
+          View Task
+        </Link>
+      );
+    case 'Team':
+      return (
+        <Link
+          className="btn btn-primary btn-sm related-link"
+          to={`/teams/${id}`}
+        >
+          View Team
+        </Link>
+      );
+    default:
+      return <span />;
+  }
+};
+
 export const Discussion = ({ discussion, me, discussionServerUrl, teams }) => {
   const messages = discussion
     ? discussion.last_message ? List([discussion.last_message]) : List()
@@ -39,8 +76,8 @@ export const Discussion = ({ discussion, me, discussionServerUrl, teams }) => {
     >
       <div className="header">
         <Link to={`/discussions/${discussion.guid}`}>{discussion.name}</Link>
-
         <div className="participants">
+          <RelatedItemBadge discussion={discussion} />
           {discussion.participants.map(participant => (
             <Avatar key={participant.guid} user={participant} size={24} />
           ))}

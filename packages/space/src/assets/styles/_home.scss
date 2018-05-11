@@ -76,6 +76,13 @@
         & > .avatar {
           padding: 0;
         }
+
+        & > .related-link {
+          margin-right: 2rem;
+          height: auto;
+          font-weight: 400;
+          font-size: 0.6125rem;
+        }
       }
     }
     .messages .messages-group {
