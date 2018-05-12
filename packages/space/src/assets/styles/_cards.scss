@@ -1,14 +1,6 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Cards ~ Space
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.cards__wrapper {
-  flex-direction: row;
-  flex-wrap: wrap;
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 1rem;
-}
-
 .card--team {
   margin: 0 0 1rem 0;
   text-align: center;

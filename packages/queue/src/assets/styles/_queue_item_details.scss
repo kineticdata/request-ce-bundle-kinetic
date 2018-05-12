@@ -42,6 +42,8 @@
       @include ms-respond(font-size, -2);
       line-height: 1.5rem;
       margin-bottom: 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
   }
 

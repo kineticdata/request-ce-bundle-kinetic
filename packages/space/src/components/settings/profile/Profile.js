@@ -79,7 +79,7 @@ export const EditProfileComponent = ({
                     <div className="form-group required two-columns first-column">
                       <label htmlFor="newPassword">New Password</label>
                       <input
-                        type="text"
+                        type="password"
                         id="newPassword"
                         name="newPassword"
                         onChange={handleFieldChange}
@@ -91,7 +91,7 @@ export const EditProfileComponent = ({
                         Password Confirmation
                       </label>
                       <input
-                        type="text"
+                        type="password"
                         id="confirmPassword"
                         name="confirmPassword"
                         onChange={handleFieldChange}
@@ -285,13 +285,13 @@ const mapStateToProps = state => ({
   location:
     state.profiles.profile &&
     state.profiles.profile.profileAttributes['Location'],
-  locationEnabled: state.app.userProfileAttributeDefinitions['Location'],
+  locationEnabled: state.spaceApp.userProfileAttributeDefinitions['Location'],
   manager:
     state.profiles.profile && state.profiles.profile.attributes['Manager'],
-  managerEnabled: state.app.userAttributeDefinitions['Manager'],
+  managerEnabled: state.spaceApp.userAttributeDefinitions['Manager'],
   spaceAttributes:
-    state.kinops.space &&
-    state.kinops.space.attributes.reduce((memo, item) => {
+    state.app.space &&
+    state.app.space.attributes.reduce((memo, item) => {
       memo[item.name] = item.value;
       return memo;
     }, {}),

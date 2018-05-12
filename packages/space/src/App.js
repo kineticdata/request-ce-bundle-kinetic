@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { Utils, Loading } from 'common';
-import { actions } from './redux/modules/app';
-import * as selectors from 'kinops/src/redux/selectors';
+import { Utils, Loading, ErrorNotFound } from 'common';
+import { actions } from './redux/modules/spaceApp';
+import * as selectors from 'app/src/redux/selectors';
 import { Sidebar } from './components/Sidebar';
 import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { About } from './components/about/About';
@@ -12,7 +12,6 @@ import { AlertForm } from './components/alerts/AlertForm';
 import { Alerts } from './components/alerts/Alerts';
 import { Settings } from './components/settings/Settings';
 import { Discussion } from './components/discussion/Discussion';
-import { EditProfile } from './components/profile/EditProfile';
 import { Home } from './components/home/Home';
 import { Notifications } from './components/notifications/Notifications';
 import { ViewProfile } from './components/profile/ViewProfile';
@@ -51,52 +50,52 @@ export const AppComponent = props => {
       <Fragment>
         <Notifications />
         <main className="package-layout package-layout--space">
-          <Route path="/" exact component={Home} />
-          <Route path="/about" exact component={About} />
-          <Route path="/alerts" exact component={Alerts} />
-          <Route path="/alerts/:id" exact component={AlertForm} />
-          <Route path="/discussions/:id" exact component={Discussion} />
-          <Route path="/profile" exact component={EditProfile} />
-          <Route path="/profile/:username" exact component={ViewProfile} />
-          <Route path="/settings" component={Settings} />
-          <Route path="/teams" exact component={TeamsContainer} />
           <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/about" exact component={About} />
+            <Route path="/alerts" exact component={Alerts} />
+            <Route path="/alerts/:id" exact component={AlertForm} />
+            <Route path="/discussions/:id" exact component={Discussion} />
+            <Route path="/profile/:username" exact component={ViewProfile} />
+            <Route path="/settings" component={Settings} />
+            <Route path="/teams" exact component={TeamsContainer} />
             <Route path="/teams/new" exact component={TeamForm} />
             <Route path="/teams/:slug" exact component={TeamContainer} />
+            <Route path="/teams/:slug/edit" exact component={TeamForm} />
+            <Route
+              path="/kapps/:kappSlug/forms/:formSlug"
+              exact
+              component={IsolatedForm}
+            />
+            <Route
+              path="/kapps/:kappSlug/submissions/:id"
+              exact
+              component={IsolatedForm}
+            />
+            <Route
+              path="/kapps/:kappSlug/forms/:formSlug/submissions/:id"
+              exact
+              component={IsolatedForm}
+            />
+            <Route
+              path="/datastore/forms/:slug/submissions/:id"
+              render={({ match }) => (
+                <Redirect
+                  to={`/settings/datastore/${match.params.slug}/${
+                    match.params.id
+                  }`}
+                />
+              )}
+            />
+            <Route
+              path="/datastore/forms/:slug"
+              render={({ match }) => (
+                <Redirect to={`/settings/datastore/${match.params.slug}/new`} />
+              )}
+            />
+            <Route path="/reset-password" render={() => <Redirect to="/" />} />
+            <Route component={ErrorNotFound} />
           </Switch>
-          <Route path="/teams/:slug/edit" exact component={TeamForm} />
-          <Route
-            path="/kapps/:kappSlug/forms/:formSlug"
-            exact
-            component={IsolatedForm}
-          />
-          <Route
-            path="/kapps/:kappSlug/submissions/:id"
-            exact
-            component={IsolatedForm}
-          />
-          <Route
-            path="/kapps/:kappSlug/forms/:formSlug/submissions/:id"
-            exact
-            component={IsolatedForm}
-          />
-          <Route
-            path="/datastore/forms/:slug/submissions/:id"
-            render={({ match }) => (
-              <Redirect
-                to={`/settings/datastore/${match.params.slug}/${
-                  match.params.id
-                }`}
-              />
-            )}
-          />
-          <Route
-            path="/datastore/forms/:slug"
-            render={({ match }) => (
-              <Redirect to={`/settings/datastore/${match.params.slug}/new`} />
-            )}
-          />
-          <Route path="/reset-password" render={() => <Redirect to="/" />} />
         </main>
       </Fragment>
     ),
@@ -104,17 +103,17 @@ export const AppComponent = props => {
 };
 
 export const mapStateToProps = state => ({
-  loading: state.app.appLoading,
-  kapps: state.kinops.kapps
+  loading: state.spaceApp.appLoading,
+  kapps: state.app.kapps
     .sort((a, b) => a.name.localeCompare(b.name))
     .filter(kapp => kapp.slug !== 'admin'),
-  teams: Utils.getTeams(state.kinops.profile).sort((a, b) =>
+  teams: Utils.getTeams(state.app.profile).sort((a, b) =>
     a.name.localeCompare(b.name),
   ),
-  isSpaceAdmin: state.kinops.profile.spaceAdmin,
+  isSpaceAdmin: state.app.profile.spaceAdmin,
   isGuest: selectors.selectIsGuest(state),
   pathname: state.router.location.pathname,
-  settingsBackPath: state.app.settingsBackPath || '/',
+  settingsBackPath: state.spaceApp.settingsBackPath || '/',
 });
 const mapDispatchToProps = {
   fetchSettings: actions.fetchAppSettings,

@@ -42,7 +42,8 @@ export const processCategories = (categories, forms) => {
       ...category,
       forms: category.forms
         .map(slug => formsMap.get(slug))
-        .filter(displayableFormPredicate),
+        .filter(displayableFormPredicate)
+        .sort((a, b) => a.name.localeCompare(b.name)),
     }))
     .filter(category => category.forms.length > 0);
 };

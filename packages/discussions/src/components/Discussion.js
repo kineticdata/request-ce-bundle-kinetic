@@ -119,7 +119,6 @@ const DiscussionModal = props => {
 export const Discussion = props => {
   const {
     discussion,
-    createDiscussion,
     isModal,
     isMobileModal,
     isSmallLayout,

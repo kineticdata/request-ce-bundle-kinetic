@@ -175,26 +175,17 @@ ShallowWrapper {
         <div
                 className="subtasks-section"
         >
-                <h2>
-                        <span>
-                                Subtasks
-                        </span>
+                <h2
+                        className="section__title"
+                >
+                        Subtasks
                         <button
                                 className="btn btn-link"
                                 onClick={[Function]}
                         >
                                 <span
-                                        className="icon"
-                                >
-                                        <span
-                                                className="fa fa-plus"
-                                                style={
-                                                        Object {
-                                                                "color": "#7e8083",
-                                                              }
-                                                }
-                                        />
-                                </span>
+                                        className="fa fa-plus"
+                                />
                         </button>
                 </h2>
                 <div
@@ -350,26 +341,17 @@ ShallowWrapper {
           <div
             className="subtasks-section"
 >
-            <h2>
-                        <span>
-                                    Subtasks
-                        </span>
+            <h2
+                        className="section__title"
+            >
+                        Subtasks
                         <button
                                     className="btn btn-link"
                                     onClick={[Function]}
                         >
                                     <span
-                                                className="icon"
-                                    >
-                                                <span
-                                                            className="fa fa-plus"
-                                                            style={
-                                                                        Object {
-                                                                                    "color": "#7e8083",
-                                                                                  }
-                                                            }
-                                                />
-                                    </span>
+                                                className="fa fa-plus"
+                                    />
                         </button>
             </h2>
             <div
@@ -968,26 +950,17 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": Array [
-              <h2>
-                <span>
-                                Subtasks
-                </span>
+              <h2
+                className="section__title"
+>
+                Subtasks
                 <button
                                 className="btn btn-link"
                                 onClick={[Function]}
                 >
                                 <span
-                                                className="icon"
-                                >
-                                                <span
-                                                                className="fa fa-plus"
-                                                                style={
-                                                                                Object {
-                                                                                                "color": "#7e8083",
-                                                                                              }
-                                                                }
-                                                />
-                                </span>
+                                                className="fa fa-plus"
+                                />
                 </button>
 </h2>,
               false,
@@ -1012,58 +985,29 @@ ShallowWrapper {
               "nodeType": "host",
               "props": Object {
                 "children": Array [
-                  <span>
-                    Subtasks
-</span>,
+                  "Subtasks",
                   <button
                     className="btn btn-link"
                     onClick={[Function]}
 >
                     <span
-                                        className="icon"
-                    >
-                                        <span
-                                                            className="fa fa-plus"
-                                                            style={
-                                                                                Object {
-                                                                                                    "color": "#7e8083",
-                                                                                                  }
-                                                            }
-                                        />
-                    </span>
+                                        className="fa fa-plus"
+                    />
 </button>,
                 ],
+                "className": "section__title",
               },
               "ref": null,
               "rendered": Array [
-                Object {
-                  "instance": null,
-                  "key": undefined,
-                  "nodeType": "host",
-                  "props": Object {
-                    "children": "Subtasks",
-                  },
-                  "ref": null,
-                  "rendered": "Subtasks",
-                  "type": "span",
-                },
+                "Subtasks",
                 Object {
                   "instance": null,
                   "key": undefined,
                   "nodeType": "host",
                   "props": Object {
                     "children": <span
-                      className="icon"
->
-                      <span
-                                            className="fa fa-plus"
-                                            style={
-                                                                  Object {
-                                                                                        "color": "#7e8083",
-                                                                                      }
-                                            }
-                      />
-</span>,
+                      className="fa fa-plus"
+/>,
                     "className": "btn btn-link",
                     "onClick": [Function],
                   },
@@ -1073,31 +1017,10 @@ ShallowWrapper {
                     "key": undefined,
                     "nodeType": "host",
                     "props": Object {
-                      "children": <span
-                        className="fa fa-plus"
-                        style={
-                                                Object {
-                                                                        "color": "#7e8083",
-                                                                      }
-                        }
-/>,
-                      "className": "icon",
+                      "className": "fa fa-plus",
                     },
                     "ref": null,
-                    "rendered": Object {
-                      "instance": null,
-                      "key": undefined,
-                      "nodeType": "host",
-                      "props": Object {
-                        "className": "fa fa-plus",
-                        "style": Object {
-                          "color": "#7e8083",
-                        },
-                      },
-                      "ref": null,
-                      "rendered": null,
-                      "type": "span",
-                    },
+                    "rendered": null,
                     "type": "span",
                   },
                   "type": "button",
@@ -1297,26 +1220,17 @@ ShallowWrapper {
           <div
                     className="subtasks-section"
           >
-                    <h2>
-                              <span>
-                                        Subtasks
-                              </span>
+                    <h2
+                              className="section__title"
+                    >
+                              Subtasks
                               <button
                                         className="btn btn-link"
                                         onClick={[Function]}
                               >
                                         <span
-                                                  className="icon"
-                                        >
-                                                  <span
-                                                            className="fa fa-plus"
-                                                            style={
-                                                                      Object {
-                                                                                "color": "#7e8083",
-                                                                              }
-                                                            }
-                                                  />
-                                        </span>
+                                                  className="fa fa-plus"
+                                        />
                               </button>
                     </h2>
                     <div
@@ -1472,26 +1386,17 @@ ShallowWrapper {
             <div
               className="subtasks-section"
 >
-              <h2>
-                            <span>
-                                          Subtasks
-                            </span>
+              <h2
+                            className="section__title"
+              >
+                            Subtasks
                             <button
                                           className="btn btn-link"
                                           onClick={[Function]}
                             >
                                           <span
-                                                        className="icon"
-                                          >
-                                                        <span
-                                                                      className="fa fa-plus"
-                                                                      style={
-                                                                                    Object {
-                                                                                                  "color": "#7e8083",
-                                                                                                }
-                                                                      }
-                                                        />
-                                          </span>
+                                                        className="fa fa-plus"
+                                          />
                             </button>
               </h2>
               <div
@@ -2090,26 +1995,17 @@ ShallowWrapper {
             "nodeType": "host",
             "props": Object {
               "children": Array [
-                <h2>
-                  <span>
-                                    Subtasks
-                  </span>
+                <h2
+                  className="section__title"
+>
+                  Subtasks
                   <button
                                     className="btn btn-link"
                                     onClick={[Function]}
                   >
                                     <span
-                                                      className="icon"
-                                    >
-                                                      <span
-                                                                        className="fa fa-plus"
-                                                                        style={
-                                                                                          Object {
-                                                                                                            "color": "#7e8083",
-                                                                                                          }
-                                                                        }
-                                                      />
-                                    </span>
+                                                      className="fa fa-plus"
+                                    />
                   </button>
 </h2>,
                 false,
@@ -2134,58 +2030,29 @@ ShallowWrapper {
                 "nodeType": "host",
                 "props": Object {
                   "children": Array [
-                    <span>
-                      Subtasks
-</span>,
+                    "Subtasks",
                     <button
                       className="btn btn-link"
                       onClick={[Function]}
 >
                       <span
-                                            className="icon"
-                      >
-                                            <span
-                                                                  className="fa fa-plus"
-                                                                  style={
-                                                                                        Object {
-                                                                                                              "color": "#7e8083",
-                                                                                                            }
-                                                                  }
-                                            />
-                      </span>
+                                            className="fa fa-plus"
+                      />
 </button>,
                   ],
+                  "className": "section__title",
                 },
                 "ref": null,
                 "rendered": Array [
-                  Object {
-                    "instance": null,
-                    "key": undefined,
-                    "nodeType": "host",
-                    "props": Object {
-                      "children": "Subtasks",
-                    },
-                    "ref": null,
-                    "rendered": "Subtasks",
-                    "type": "span",
-                  },
+                  "Subtasks",
                   Object {
                     "instance": null,
                     "key": undefined,
                     "nodeType": "host",
                     "props": Object {
                       "children": <span
-                        className="icon"
->
-                        <span
-                                                className="fa fa-plus"
-                                                style={
-                                                                        Object {
-                                                                                                "color": "#7e8083",
-                                                                                              }
-                                                }
-                        />
-</span>,
+                        className="fa fa-plus"
+/>,
                       "className": "btn btn-link",
                       "onClick": [Function],
                     },
@@ -2195,31 +2062,10 @@ ShallowWrapper {
                       "key": undefined,
                       "nodeType": "host",
                       "props": Object {
-                        "children": <span
-                          className="fa fa-plus"
-                          style={
-                                                    Object {
-                                                                              "color": "#7e8083",
-                                                                            }
-                          }
-/>,
-                        "className": "icon",
+                        "className": "fa fa-plus",
                       },
                       "ref": null,
-                      "rendered": Object {
-                        "instance": null,
-                        "key": undefined,
-                        "nodeType": "host",
-                        "props": Object {
-                          "className": "fa fa-plus",
-                          "style": Object {
-                            "color": "#7e8083",
-                          },
-                        },
-                        "ref": null,
-                        "rendered": null,
-                        "type": "span",
-                      },
+                      "rendered": null,
                       "type": "span",
                     },
                     "type": "button",

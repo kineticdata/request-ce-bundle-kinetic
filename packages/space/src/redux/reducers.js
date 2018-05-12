@@ -1,6 +1,6 @@
 import { reducer as errors } from './modules/errors';
 import { reducer as about } from './modules/about';
-import { reducer as app } from './modules/app';
+import { reducer as spaceApp } from './modules/spaceApp';
 import { reducer as profiles } from './modules/profiles';
 import { reducer as team } from './modules/team';
 import { reducer as teamList } from './modules/teamList';
@@ -12,7 +12,7 @@ import { reducer as settingsSpace } from './modules/settingsSpace';
 
 export default {
   errors,
-  app,
+  spaceApp,
   about,
   settingsDatastore,
   settingsNotifications,

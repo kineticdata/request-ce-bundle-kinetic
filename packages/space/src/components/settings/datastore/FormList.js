@@ -41,7 +41,6 @@ const FormListComponent = ({
   match,
   toggleDropdown,
   openDropdown,
-  manageableForms,
 }) => {
   return (
     <div className="page-container page-container--datastore">
@@ -134,8 +133,7 @@ const FormListComponent = ({
 
 export const mapStateToProps = state => ({
   loading: state.settingsDatastore.loading,
-  datastoreForms: state.settingsDatastore.forms,
-  manageableForms: state.settingsDatastore.manageableForms,
+  datastoreForms: state.settingsDatastore.forms.filter(f => !f.isHidden),
 });
 
 export const mapDispatchToProps = {

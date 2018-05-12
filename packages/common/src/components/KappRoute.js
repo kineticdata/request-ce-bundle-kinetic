@@ -8,7 +8,7 @@ export const KappRouteComponent = ({ kappSlug, path, ...rest }) => (
 );
 
 export const mapStateToProps = state => ({
-  kappSlug: state.kinops.kappSlug,
+  kappSlug: state.app.kappSlug,
   // Need to map in the current pathname because the connect HOC will
   // not let the inner Route update if mapStateToProps doesn't return
   // a different value (its implicitly a pure component).

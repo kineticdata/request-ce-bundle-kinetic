@@ -3,6 +3,7 @@ import { Route, Link } from 'react-router-dom';
 
 import { GettingStartedPage } from './GettingStartedPage';
 import { ButtonsPage } from './ButtonsPage';
+import { ColorsPage } from './ColorsPage'
 import { LayoutsPage } from './LayoutsPage';
 import { ToastsPage } from './ToastsPage';
 import { AvatarsPage } from './AvatarsPage';
@@ -21,6 +22,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'typeface-open-sans/index.css';
 import 'common/src/assets/styles/master.scss';
 import 'kinops/src/assets/styles/master.scss';
+import 'services/src/assets/styles/master.scss'
 import './assets/styles/master.scss';
 
 class App extends Component {
@@ -43,6 +45,7 @@ class App extends Component {
             <Route path="/typography" exact component={TypographyPage} />
             <Route path="/" exact component={GettingStartedPage} />
             <Route path="/buttons" exact component={ButtonsPage} />
+            <Route path="/colors" exact component={ColorsPage} />
             <Route path="/layout" exact component={LayoutsPage} />
           </div>
         </div>

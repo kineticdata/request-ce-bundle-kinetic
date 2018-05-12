@@ -60,16 +60,16 @@ const AlertFormComponent = ({
 );
 
 const mapStateToProps = (state, { match: { params } }) => ({
-  spaceName: state.kinops.space.name,
+  spaceName: state.app.space.name,
   editing: params.id !== 'new',
   submissionId: params.id,
   alertsKappSlug: Utils.getAttributeValue(
-    state.kinops.space,
+    state.app.space,
     'Admin Kapp Slug',
     'admin',
   ),
   alertsFormSlug: Utils.getAttributeValue(
-    state.kinops.space,
+    state.app.space,
     'Alerts Form Slug',
     'alerts',
   ),

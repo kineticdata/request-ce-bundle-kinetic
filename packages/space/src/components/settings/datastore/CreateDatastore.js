@@ -156,7 +156,7 @@ const handleNameChange = ({ setNewForm, newForm }) => value => {
 };
 
 export const mapStateToProps = (state, { match: { params } }) => ({
-  spaceAdmin: state.kinops.profile.spaceAdmin,
+  spaceAdmin: state.app.profile.spaceAdmin,
   bridges: state.settingsDatastore.bridges,
 });
 

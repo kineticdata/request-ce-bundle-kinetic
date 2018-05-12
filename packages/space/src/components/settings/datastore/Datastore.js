@@ -68,9 +68,9 @@ export const DatastoreRouter = ({ match, loading, validVersion, version }) =>
 
 export const mapStateToProps = state => ({
   loading: state.settingsDatastore.loading,
-  version: state.kinops.version,
+  version: state.app.version,
   validVersion: semver.satisfies(
-    semver.coerce(state.kinops.version.version),
+    semver.coerce(state.app.version.version),
     `>=${MINIMUM_CE_VERSION}`,
   ),
 });

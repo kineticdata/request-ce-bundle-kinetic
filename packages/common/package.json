@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "src/index.js",
   "dependencies": {
-    "bootstrap-select": "^1.12.4",
+    "bootstrap-select": "1.12.4",
     "datatables.net": "^1.10.16",
     "datatables.net-dt": "^1.10.16",
     "datatables.net-responsive": "^2.2.1",
