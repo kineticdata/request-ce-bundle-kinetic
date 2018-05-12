@@ -38,11 +38,7 @@ const UsersListComponent = ({ users, loading, match }) => {
             >
               Bulk Import Users
             </Link>
-            <Link
-              to={`${match.path}/new`}
-              className="btn btn-primary ml-3"
-              target="blank"
-            >
+            <Link to={`${match.path}/new`} className="btn btn-primary ml-3">
               Create User
             </Link>
           </div>

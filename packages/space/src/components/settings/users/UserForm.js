@@ -13,6 +13,7 @@ import { UsersDropdown } from './DropDown';
 import { get } from 'https';
 
 export const UserFormComponent = ({
+  editing,
   loading,
   userLoading,
   user,
@@ -33,7 +34,7 @@ export const UserFormComponent = ({
   <div className="page-container page-container--panels page-container--space-profile-edit">
     <PageTitle parts={['Users', 'Settings']} />
     {!loading &&
-      !userLoading && (
+      (!userLoading || !editing) && (
         <Fragment>
           <div className="page-panel page-panel--three-fifths page-panel--scrollable page-panel--space-profile-edit">
             <div className="page-title">
@@ -43,7 +44,11 @@ export const UserFormComponent = ({
                   <Link to="/settings">settings</Link> /{` `}
                   <Link to={`/settings/users/`}>users</Link> /{` `}
                 </h3>
-                <h1>Edit: {user.displayName || user.username}</h1>
+                {editing ? (
+                  <h1>Edit: {user.displayName || user.username}</h1>
+                ) : (
+                  <h1>Create User</h1>
+                )}
               </div>
             </div>
             <div>
@@ -63,12 +68,24 @@ export const UserFormComponent = ({
                     <input
                       type="checkbox"
                       id="enabled"
-                      name="spaceAdmin"
+                      name="enabled"
                       onChange={handleCheckboxChange}
                       checked={fieldValues.enabled}
                     />Enabled
                   </label>
                 </div>
+                {!editing && (
+                  <div className="form-group required">
+                    <label htmlFor="username">Username</label>
+                    <input
+                      type="text"
+                      id="username"
+                      name="username"
+                      onChange={handleFieldChange}
+                      value={fieldValues.username}
+                    />
+                  </div>
+                )}
                 <div className="form-group required">
                   <label htmlFor="displayName">Display Name</label>
                   <input
@@ -202,9 +219,11 @@ export const UserFormComponent = ({
                   </div>
                 </div>
                 <div className="form__footer">
-                  <button className="btn btn-link" onClick={handleDelete}>
-                    Delete User
-                  </button>
+                  {editing && (
+                    <button className="btn btn-link" onClick={handleDelete}>
+                      Delete User
+                    </button>
+                  )}
                   <div className="form__footer__right">
                     <button
                       disabled={!fieldValuesValid(fieldValues)}
@@ -218,18 +237,20 @@ export const UserFormComponent = ({
               </form>
             </div>
           </div>
-          <div className="page-panel page-panel--two-fifths page-panel--sidebar page-panel--space-profile-edit-sidebar ">
-            <ProfileCard
-              user={buildProfile(fieldValues, user)}
-              button={
-                <Link to={`/settings/users/${user.username}`}>
-                  <button className="btn btn-primary btn-sm">
-                    View Profile
-                  </button>
-                </Link>
-              }
-            />
-          </div>
+          {editing && (
+            <div className="page-panel page-panel--two-fifths page-panel--sidebar page-panel--space-profile-edit-sidebar ">
+              <ProfileCard
+                user={buildProfile(fieldValues, user)}
+                button={
+                  <Link to={`/settings/users/${user.username}`}>
+                    <button className="btn btn-primary btn-sm">
+                      View Profile
+                    </button>
+                  </Link>
+                }
+              />
+            </div>
+          )}
         </Fragment>
       )}
   </div>
@@ -241,7 +262,7 @@ const managerLookup = (users, managerUsername) => {
 };
 
 const fieldValuesValid = fieldValues =>
-  fieldValues.displayName && fieldValues.email;
+  fieldValues.displayName && fieldValues.email && fieldValues.username;
 
 const getProfileAttribute = (user, attr) =>
   user.profileAttributes && user.profileAttributes[attr]
@@ -270,6 +291,7 @@ const buildProfile = (fieldValues, profile) => {
 };
 
 const translateProfileToFieldValues = user => ({
+  username: user.username || '',
   displayName: user.displayName || '',
   email: user.email || '',
   phoneNumber: getProfileAttribute(user, 'Phone Number'),
@@ -295,7 +317,7 @@ const translateProfileToFieldValues = user => ({
 
 const translateFieldValuesToProfile = (fieldValues, user) => {
   const result = {
-    username: user.username,
+    username: user.username ? user.username : fieldValues.username,
     displayName: fieldValues.displayName,
     email: fieldValues.email,
     spaceAdmin: fieldValues.spaceAdmin,
@@ -327,7 +349,8 @@ const translateFieldValuesToProfile = (fieldValues, user) => {
   return result;
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, props) => ({
+  editing: props.match.params.username !== undefined,
   loading: state.settingsUsers.loading,
   userLoading: state.settingsUsers.userLoading,
   user: state.settingsUsers.user,
@@ -348,6 +371,7 @@ const mapDispatchToProps = {
   fetchTeams: teamsActions.fetchTeams,
   fetchUser: usersActions.fetchUser,
   updateUser: usersActions.updateUser,
+  createUser: usersActions.createUser,
   deleteUser: usersActions.deleteUser,
   openForm: commonActions.openForm,
   push,
@@ -381,7 +405,7 @@ export const UserForm = compose(
           props.fieldValues.userRoles.findIndex(role => role === value),
         );
       } else {
-        userRoles = [value, ...props.fieldValues.userRoles];
+        userRoles = props.fieldValues.userRoles.push(value);
       }
       props.setFieldValues({
         ...props.fieldValues,
@@ -395,7 +419,7 @@ export const UserForm = compose(
           props.fieldValues.userTeams.findIndex(team => team === value),
         );
       } else {
-        userTeams = [value, ...props.fieldValues.userTeams];
+        userTeams = props.fieldValues.userTeams.push(value);
       }
       props.setFieldValues({
         ...props.fieldValues,
@@ -404,14 +428,23 @@ export const UserForm = compose(
     },
     handleSubmit: props => event => {
       event.preventDefault();
-      props.updateUser(
-        translateFieldValuesToProfile(props.fieldValues, props.user),
-      );
+      if (props.editing) {
+        props.updateUser(
+          translateFieldValuesToProfile(props.fieldValues, props.user),
+        );
+      } else {
+        props.createUser(
+          translateFieldValuesToProfile(props.fieldValues, props.user),
+        );
+        props.push(`settings/users`);
+      }
     },
   }),
   lifecycle({
     componentWillMount() {
-      this.props.fetchUser(this.props.match.params.username);
+      if (this.props.editing) {
+        this.props.fetchUser(this.props.match.params.username);
+      }
       if (this.props.users.size <= 0) {
         this.props.fetchUsers();
       }
