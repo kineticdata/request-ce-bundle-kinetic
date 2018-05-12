@@ -39,15 +39,16 @@ const PrevAndNextGroup = ({ prevAndNext }) => (
 
 export const StatusParagraph = ({ queueItem, prevAndNext }) => (
   <div className="status-paragraph">
-    <p className={getStatusClass(queueItem.values.Status)}>
-      {CLOSED_STATUSES.includes(queueItem.values.Status) ? (
-        <span className="fa fa-fw fa-circle" />
-      ) : (
-        <span className="fa fa-fw fa-circle-o " />
-      )}
-
-      {queueItem.values.Status}
-      <span className="status-reason" id={getStatusId(queueItem)}>
+    <p className="queue-status">
+      <span className={getStatusClass(queueItem.values.Status)}>
+        {CLOSED_STATUSES.includes(queueItem.values.Status) ? (
+          <span className="fa fa-fw fa-circle" />
+        ) : (
+          <span className="fa fa-fw fa-circle-o " />
+        )}
+        {queueItem.values.Status}
+      </span>
+      <span className="queue-status--reason" id={getStatusId(queueItem)}>
         {getStatusReason(queueItem)}
       </span>
       {queueItem.values.Status !== 'Open' && (

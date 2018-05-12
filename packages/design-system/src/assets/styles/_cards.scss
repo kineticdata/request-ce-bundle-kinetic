@@ -3,6 +3,21 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // Card
+.cards__wrapper--design-system{
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .card{
+      flex: 0 0 auto;
+    flex-basis: 33%;
+  }
+}
+
+
+
+
+
+
 .card--design-system {
   border: 1px solid $black-16;
   padding: 1rem;

@@ -8,7 +8,7 @@ import { ButtonGroup, Button } from 'reactstrap';
 import { CoreForm } from 'react-kinetic-core';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import { actions as toastActions } from 'kinops/src/redux/modules/toasts';
+import { commonActions } from 'common';
 
 import {
   selectPrevAndNext,
@@ -157,8 +157,8 @@ export const mapDispatchToProps = {
   push,
   fetchSubmission: actions.fetchSubmission,
   resetSubmission: actions.resetSubmission,
-  addSuccess: toastActions.addSuccess,
-  addError: toastActions.addError,
+  addSuccess: commonActions.addSuccess,
+  addError: commonActions.addError,
 };
 
 export const DatastoreSubmission = compose(

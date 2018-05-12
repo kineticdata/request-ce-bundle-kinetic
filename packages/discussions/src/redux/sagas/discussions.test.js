@@ -301,11 +301,11 @@ describe('discussion saga', () => {
       // Enter the loop - the first thing that should happen is to kick off the race.
       expect(saga.next(socketChannel).value).toEqual(
         race({
-          task: [
+          task: all([
             call(incomingMessages, socketChannel, ISSUE_GUID),
             call(presenceKeepAlive, ISSUE_GUID, RESPONSE_URL),
             call(uploadProcessingPoller, ISSUE_GUID, RESPONSE_URL),
-          ],
+          ]),
           reconnect: take(types.RECONNECT),
           disconnect: take(types.DISCONNECT),
         }),

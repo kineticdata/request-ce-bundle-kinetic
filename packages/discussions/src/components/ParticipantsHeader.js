@@ -14,6 +14,7 @@ export const ParticipantsHeader = ({
   discussion,
   openParticipantsModal,
   openInNewTab,
+  isFullScreen,
 }) =>
   !discussion.participants.isEmpty() && (
     <div className="participants-preview">
@@ -26,14 +27,16 @@ export const ParticipantsHeader = ({
           </div>
         ))}
       <div className="view-all">
-        <button
-          type="button"
-          className="btn btn-icon"
-          onClick={openInNewTab}
-          title="Expand Discussion"
-        >
-          <i className="fa fa-expand fa-fw" />
-        </button>
+        {!isFullScreen && (
+          <button
+            type="button"
+            className="btn btn-icon"
+            onClick={openInNewTab}
+            title="Expand Discussion"
+          >
+            <i className="fa fa-expand fa-fw" />
+          </button>
+        )}
         <button
           type="button"
           className="btn btn-link"
@@ -45,18 +48,26 @@ export const ParticipantsHeader = ({
     </div>
   );
 
+const mapStateToProps = state => ({
+  isFullScreen:
+    state.router.location.pathname &&
+    state.router.location.pathname.startsWith('/discussion'),
+});
+
 const mapDispatchToProps = {
   openModal: actions.openModal,
 };
 
 export const ParticipantsHeaderContainer = compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withHandlers({
     openParticipantsModal: props => () =>
       props.openModal(props.discussion.issue.guid, 'participants'),
     openInNewTab: props => () =>
       window.open(
-        `${bundle.spaceLocation()}#/discussions/${props.discussion.issue.guid}`,
+        `${bundle.spaceLocation()}/#/discussions/${
+          props.discussion.issue.guid
+        }`,
         '_blank',
       ),
   }),

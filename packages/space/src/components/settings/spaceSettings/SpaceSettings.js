@@ -68,7 +68,7 @@ export const Select = ({
 };
 
 const mapStateToProps = state => ({
-  space: state.kinops.space,
+  space: state.app.space,
   spaceSettings: state.settingsSpace,
   teams: state.settingsSpace.teams,
   spaceKappsForms: state.settingsSpace.spaceKappsForms,

@@ -7,6 +7,7 @@ import {
   ErrorUnexpected,
   PageTitle,
 } from 'common';
+
 import { SERVICES_KAPP as kappSlug } from '../../constants';
 
 // Asynchronously import the global dependencies that are used in the embedded
@@ -23,6 +24,7 @@ export const Form = ({
   handleCreated,
   handleCompleted,
   handleLoaded,
+  handleDelete,
   values,
 }) => (
   <Fragment>
@@ -53,11 +55,15 @@ export const Form = ({
           </h3>
           {form && <h1>{form.name}</h1>}
         </div>
-        {/* TODO Show if in Draft mode
-        <a href="/" className="btn btn-secondary">
-          Cancel/Delete Request
-        </a>
-        */}
+        {submissionId && (
+          <button
+            type="button"
+            onClick={handleDelete}
+            className="btn btn-outline-danger"
+          >
+            Cancel Request
+          </button>
+        )}
       </div>
       <div className="form-description">
         {form && <p>{form.description}</p>}

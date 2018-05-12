@@ -4,14 +4,14 @@ import { watchSettingsDatastore } from './sagas/settingsDatastore';
 import { watchProfiles } from './sagas/profiles';
 import { watchTeams } from './sagas/team';
 import { watchForms } from './sagas/spaceForms';
-import { watchApp } from './sagas/app';
+import { watchSpaceApp } from './sagas/spaceApp';
 import { watchSettingsUsers } from './sagas/settingsUsers';
 import { watchSettingsNotifications } from './sagas/settingsNotifications';
 import { watchSettingsSpace } from './sagas/settingsSpace';
 
 export default function* sagas() {
   yield all([
-    watchApp(),
+    watchSpaceApp(),
     watchAbout(),
     watchSettingsDatastore(),
     watchSettingsNotifications(),

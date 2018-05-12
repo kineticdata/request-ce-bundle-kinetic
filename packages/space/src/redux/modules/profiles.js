@@ -1,6 +1,6 @@
 import { Record } from 'immutable';
 import { Utils } from 'common';
-const { namespace, noPayload, withPayload } = Utils;
+const { namespace, withPayload } = Utils;
 
 export const types = {
   FETCH_PROFILE: namespace('profiles', 'FETCH_PROFILE'),
@@ -36,7 +36,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state
         .set('profile', payload)
         .set('loading', false)
-        .set('error', null);
+        .set('error', null)
+        .set('isChangePasswordVisible', false);
     case types.SET_PROFILE_ERROR:
       return state
         .set('profile', null)
@@ -45,7 +46,9 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.TOGGLE_PASSWORD:
       return state.set('isChangePasswordVisible', payload);
     case types.UPDATE_PROFILE:
-      return state.set('loading', false);
+      return state
+        .set('loading', false)
+        .set('isChangePasswordVisible', false);
     default:
       return state;
   }

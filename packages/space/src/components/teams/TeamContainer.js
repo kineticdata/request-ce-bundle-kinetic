@@ -22,7 +22,7 @@ import { Team } from './Team';
 
 const mapStateToProps = state => {
   const team = selectTeam(state);
-  const me = state.kinops.profile;
+  const me = state.app.profile;
 
   const heirarchy = buildHierarchy((team && team.name) || '');
   const teamsMap = state.teamList.data.reduce((memo, item) => {
@@ -33,16 +33,16 @@ const mapStateToProps = state => {
   return {
     loading:
       state.team.loading || state.teamList.loading || state.spaceForms.loading,
-    space: state.kinops.space,
+    space: state.app.space,
     catalogSlug: Utils.getAttributeValue(
-      state.kinops.space,
+      state.app.space,
       'Catalog Kapp Slug',
       'catalog',
     ),
     me,
     team,
     adminKappSlug: Utils.getAttributeValue(
-      state.kinops.space,
+      state.app.space,
       'Admin Kapp Slug',
       'admin',
     ),

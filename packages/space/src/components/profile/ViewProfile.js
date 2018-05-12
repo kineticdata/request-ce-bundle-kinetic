@@ -28,7 +28,7 @@ const ViewProfileComponent = ({
             <h1>Profile</h1>
           </div>
           {isMyProfile ? (
-            <Link to="/profile" className="btn btn-secondary">
+            <Link to="/settings/profile" className="btn btn-secondary">
               Edit Profile
             </Link>
           ) : null}
@@ -113,10 +113,10 @@ export const mapStateToProps = state => ({
   location:
     state.profiles.profile &&
     state.profiles.profile.profileAttributes['Location'],
-  locationEnabled: state.app.userProfileAttributeDefinitions['Location'],
+  locationEnabled: state.spaceApp.userProfileAttributeDefinitions['Location'],
   manager:
     state.profiles.profile && state.profiles.profile.attributes['Manager'],
-  managerEnabled: state.app.userAttributeDefinitions['Manager'],
+  managerEnabled: state.spaceApp.userAttributeDefinitions['Manager'],
   isMyProfile: selectIsMyProfile(state),
 });
 
