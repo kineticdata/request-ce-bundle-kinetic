@@ -38,19 +38,6 @@ export function* updateUserSaga({ payload }) {
   }
 }
 
-export function* createUserSaga({ payload }) {
-  const { serverError, user } = yield call(CoreAPI.createUser, {
-    include: USER_INCLUDES,
-    user: payload,
-  });
-
-  if (serverError) {
-    yield put(actions.setUserError(serverError));
-  } else {
-    yield put(actions.setUser(user));
-  }
-}
-
 export function* fetchUsersSaga() {
   const { users, serverError } = yield call(CoreAPI.fetchUsers);
 
@@ -73,6 +60,5 @@ export function* watchSettingsUsers() {
   yield takeEvery(types.FETCH_USERS, fetchUsersSaga);
   yield takeEvery(types.FETCH_USER, fetchUserSaga);
   yield takeEvery(types.UPDATE_USER, updateUserSaga);
-  yield takeEvery(types.CREATE_USER, createUserSaga);
   yield takeEvery(types.DELETE_USER, deleteUserSaga);
 }
