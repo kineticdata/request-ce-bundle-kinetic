@@ -1,7 +1,7 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects';
 import { CoreAPI } from 'react-kinetic-core';
 
-import { actions as appActions } from 'app/src/redux/modules/app';
+import { actions as kinopsActions } from 'app/src/redux/modules/app';
 import { types, actions } from '../modules/settingsUsers';
 import { actions as errorActions } from '../modules/errors';
 
@@ -32,8 +32,21 @@ export function* updateUserSaga({ payload }) {
   } else {
     const username = yield select(state => state.app.profile.username);
     if (username === user.username) {
-      yield put(appActions.loadApp());
+      yield put(kinopsActions.loadApp());
     }
+    yield put(actions.setUser(user));
+  }
+}
+
+export function* createUserSaga({ payload }) {
+  const { serverError, user } = yield call(CoreAPI.createUser, {
+    include: USER_INCLUDES,
+    user: payload,
+  });
+
+  if (serverError) {
+    yield put(actions.setUserError(serverError));
+  } else {
     yield put(actions.setUser(user));
   }
 }
@@ -60,5 +73,6 @@ export function* watchSettingsUsers() {
   yield takeEvery(types.FETCH_USERS, fetchUsersSaga);
   yield takeEvery(types.FETCH_USER, fetchUserSaga);
   yield takeEvery(types.UPDATE_USER, updateUserSaga);
+  yield takeEvery(types.CREATE_USER, createUserSaga);
   yield takeEvery(types.DELETE_USER, deleteUserSaga);
 }
