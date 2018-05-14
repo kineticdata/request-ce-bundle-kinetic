@@ -3,10 +3,9 @@ import { Route, Link } from 'react-router-dom';
 
 import { GettingStartedPage } from './GettingStartedPage';
 import { ButtonsPage } from './ButtonsPage';
-import { ColorsPage } from './ColorsPage'
+import { ColorsPage } from './ColorsPage';
 import { LayoutsPage } from './LayoutsPage';
 import { ToastsPage } from './ToastsPage';
-import { AvatarsPage } from './AvatarsPage';
 import { BreadcrumbsPage } from './BreadcrumbsPage';
 import { CardsPage } from './CardsPage';
 import { FormsPage } from './FormsPage';
@@ -22,7 +21,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'typeface-open-sans/index.css';
 import 'common/src/assets/styles/master.scss';
 import 'kinops/src/assets/styles/master.scss';
-import 'services/src/assets/styles/master.scss'
+import 'services/src/assets/styles/master.scss';
 import './assets/styles/master.scss';
 
 class App extends Component {
@@ -32,7 +31,6 @@ class App extends Component {
         <div className="page-container page-container--panels">
           <Sidebar />
           <div className="page-panel page-panel--two-thirds">
-            <Route path="/avatars" exact component={AvatarsPage} />
             <Route path="/breadcrumbs" exact component={BreadcrumbsPage} />
             <Route path="/cards" exact component={CardsPage} />
             <Route path="/forms" exact component={FormsPage} />

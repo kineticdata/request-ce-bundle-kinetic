@@ -13,11 +13,6 @@ export const Sidebar = () => (
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="/avatars" className="nav-link">
-            Avatars
-          </Link>
-        </li>
-        <li className="nav-item">
           <Link to="/breadcrumbs" className="nav-link">
             Breadcrumbs
           </Link>
