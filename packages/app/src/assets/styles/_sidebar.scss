@@ -36,7 +36,7 @@
     list-style: none;
     // Group Title
     h1 {
-      color: $blueLake;
+      color: $blue-lake;
       display: flex;
       align-items: center;
       line-height: 1;
@@ -52,7 +52,7 @@
         text-transform: none;
         color: $gray;
         &:hover {
-          color: $blueLake;
+          color: $blue-lake;
         }
       }
       // Group Title Button color
@@ -80,8 +80,8 @@
       }
       &.active,
       &:hover {
-        border-left-color: $blueLake;
-        color: $blueLake;
+        border-left-color: $blue-lake;
+        color: $blue-lake;
       }
     }
     &--settings {

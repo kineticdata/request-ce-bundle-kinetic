@@ -25,33 +25,33 @@ $black-50: rgb(126, 128, 131);
 $white: rgb(255, 255, 255);
 
 // Color range with similar hue
-$blue: rgb(16, 148, 196);
-$blueGray: rgb(168, 183, 199);
-$blueLake: rgb(9, 84, 130);
-$blueSlate: rgb(12, 56, 79);
-$blueSky: rgb(11, 168, 224);
-$greenGrass: rgb(0, 212, 106);
-$green: rgb(102, 225, 65);
-$greenTeal: rgb(2, 212, 177);
-$orange: rgb(255, 153, 28);
-$orange-kinetic: rgb(214, 105, 42);
-$orange-kinops: rgb(255, 119, 0);
-$purple: rgb(166, 48, 150);
-$red-purple: rgb(191, 52, 121);
-$red: rgb(250, 58, 55);
-$redRose: rgb(255, 74, 94);
-$yellow: rgb(254, 233, 78);
-$sunflower: rgb(255, 207, 74);
+$blue: rgb(16, 148, 196); // #1094C4
+$blue-gray: rgb(168, 183, 199); // #A8B7C7
+$blue-lake: rgb(9, 84, 130); // #095482
+$blue-slate: rgb(12, 56, 79); // #0C384F
+$blue-sky: rgb(11, 168, 224); // #0BA8E0
+$green-grass: rgb(0, 212, 106); // #00D46A
+$green: rgb(102, 225, 65); // #66E041
+$green-teal: rgb(2, 212, 177); // #02D4B1
+$orange: rgb(255, 153, 28); // #FF991C
+$orange-kinetic: rgb(214, 105, 42); // #D6692A
+$orange-kinops: rgb(255, 119, 0); // #FF7700
+$purple: rgb(166, 48, 150); // #A63096
+$red-purple: rgb(191, 52, 121); // #BF3479
+$red: rgb(250, 58, 55); // #FA3A37
+$red-rose: rgb(255, 74, 94); // #FF4A5E
+$yellow: rgb(254, 233, 78); // #FEE94D
+$sunflower: rgb(255, 207, 74); // #FFCF4A
 
 // Button colors
-$primary: $blueLake;
+$primary: $blue-lake;
 $primary-complement: $white;
 $secondary: $orange-kinops;
 $secondary-complement: $white;
 
 // Text, link, border colors
 $text-color: $black-50 !default; // Global text color on `<body>`.
-$link-color: $blueLake !default; // Global textual link color.
+$link-color: $blue-lake !default; // Global textual link color.
 $border-color: $black-16 !default; // Global border color.
 
 // Typography

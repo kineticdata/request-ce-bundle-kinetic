@@ -6,7 +6,7 @@
   position: relative;
 
   .general {
-    color: $blueLake;
+    color: $blue-lake;
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
@@ -38,7 +38,7 @@
     }
 
     pre {
-      color: $blueLake;
+      color: $blue-lake;
       @include ms-respond(font-size, -2);
       line-height: 1.5rem;
       margin-bottom: 0;
@@ -72,7 +72,7 @@
       text-align: center;
       padding: 1.5em;
       h5 {
-        color: $blueLake;
+        color: $blue-lake;
         font-size: 14px;
         @include ms-respond(font-size, 2);
         font-weight: 600;
@@ -80,7 +80,7 @@
       }
 
       h6 {
-        color: $blueGray;
+        color: $blue-gray;
         @include ms-respond(font-size, -1);
         line-height: 1.5rem;
       }
@@ -98,7 +98,7 @@
         width: 70px;
       }
       .value {
-        color: $blueLake;
+        color: $blue-lake;
       }
     }
   }

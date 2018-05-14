@@ -7,7 +7,7 @@
   flex: 1 1 100%;
   h1 {
     margin-top: 0;
-    color: $blueSlate;
+    color: $blue-slate;
     font-size: 2rem;
     font-weight: 300;
     line-height: 3rem;
@@ -38,7 +38,7 @@
   > a:not(.btn) {
     color: $gray;
     &:hover {
-      color: $blueLake;
+      color: $blue-lake;
     }
   }
 }
@@ -60,7 +60,7 @@
     color: $gray;
     font-size: 0.75rem;
     &:hover {
-      color: $blueLake;
+      color: $blue-lake;
     }
   }
 }

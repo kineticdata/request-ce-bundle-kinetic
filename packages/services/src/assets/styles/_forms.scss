@@ -39,7 +39,7 @@
       }
     }
     button[data-element-type='button'][data-button-type='submit-page'] {
-      @include setBgColorAndHover($blueSlate);
+      @include setBgColorAndHover($blue-slate);
     }
     button[data-element-type='button'][data-button-type='save'] {
       color: $black;

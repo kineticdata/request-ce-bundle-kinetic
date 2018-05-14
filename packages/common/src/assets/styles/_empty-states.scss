@@ -10,13 +10,13 @@
   width: 100%;
   height: 100%;
   h5 {
-    color: $blueLake;
+    color: $blue-lake;
     @include ms-respond(font-size, 2);
     font-weight: 600;
     line-height: 1.5rem;
   }
   h6 {
-    color: $blueGray;
+    color: $blue-gray;
     @include ms-respond(font-size, -1);
     line-height: 1.5rem;
   }

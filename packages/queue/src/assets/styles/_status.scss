@@ -21,13 +21,13 @@
       color: $blue;
     }
     &.queue-status--open {
-      color: $greenTeal;
+      color: $green-teal;
     }
     &.queue-status--pending {
       color: $orange;
     }
     .queue-status--reason {
-      color: $blueSky;
+      color: $blue-sky;
       margin-left: 6px;
       overflow: hidden;
       text-overflow: ellipsis;

@@ -5,7 +5,7 @@
   flex: 1 1 auto;
   &.participants-dialog {
     h1 {
-      color: $blueLake;
+      color: $blue-lake;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -33,7 +33,7 @@
           }
         }
         .subtext {
-          color: $blueLake;
+          color: $blue-lake;
           margin-left: 0.5rem;
         }
       }

@@ -67,7 +67,7 @@
 
 .card-icon {
   &--greengrass {
-    background-color: $greenGrass;
+    background-color: $green-grass;
   }
 
   &--sunflower {
@@ -100,7 +100,7 @@
   }
 
   &--green {
-    background-color: $greenGrass;
+    background-color: $green-grass;
   }
 
   &--red {
@@ -117,13 +117,13 @@
 
   h1 {
     font-size: 1.125rem;
-    color: $blueSlate;
+    color: $blue-slate;
     font-weight: 600;
     margin-top: 1rem;
   }
 
   p {
-    color: $blueGray;
+    color: $blue-gray;
     font-size: 0.875rem;
   }
 }

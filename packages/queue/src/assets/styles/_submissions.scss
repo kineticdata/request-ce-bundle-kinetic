@@ -5,7 +5,7 @@
   // This represents the overall submission "card" in the queue list view.
   .submission {
     border-bottom: 1px solid $gray4;
-    color: $blueLake;
+    color: $blue-lake;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -17,7 +17,7 @@
       flex-grow: 1;
       text-decoration: none;
       &:focus {
-        outline: $blueLake dotted thin;
+        outline: $blue-lake dotted thin;
       }
       h6 {
         color: $black;

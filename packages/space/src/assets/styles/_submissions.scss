@@ -18,7 +18,7 @@
         flex-grow: 1;
         text-decoration: none;
         &:focus {
-          outline: $blueLake dotted thin;
+          outline: $blue-lake dotted thin;
         }
         h6 {
           color: $black;
@@ -93,7 +93,7 @@
           a.dropdown-item,
           button.dropdown-item {
             height: 24px;
-            color: $blueGray;
+            color: $blue-gray;
             font-size: 0.75rem;
             line-height: 1.5rem;
             padding: 3px 0.75rem;
