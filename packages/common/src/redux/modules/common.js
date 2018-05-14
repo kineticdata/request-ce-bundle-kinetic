@@ -1,6 +1,6 @@
 import { Record, List } from 'immutable';
 import { actions as alertsActions } from 'app/src/redux/modules/alerts';
-import { actions as layoutActions } from 'app/src/redux/modules/layout'
+import { actions as layoutActions } from 'app/src/redux/modules/layout';
 import { types as layoutTypes } from 'app/src/redux/modules/layout';
 import * as Utils from '../../utils';
 
@@ -8,8 +8,12 @@ const { namespace, noPayload, withPayload } = Utils;
 
 // Discussion Server
 export const selectDiscussionsEnabled = state =>
-  state.app.space &&
-  Utils.getAttributeValue(state.app.space, 'Discussion Server Url', null) === null
+  state.app.app.space &&
+  Utils.getAttributeValue(
+    state.app.app.space,
+    'Discussion Server Url',
+    null,
+  ) === null
     ? false
     : true;
 

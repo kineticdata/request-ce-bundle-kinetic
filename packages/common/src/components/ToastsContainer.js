@@ -35,7 +35,7 @@ const Toasts = ({ toasts, dismiss }) => (
 );
 
 const mapStateToProps = state => ({
-  toasts: state.common.notifications,
+  toasts: state.common.common.notifications,
 });
 
 const mapDispatchToProps = {
