@@ -307,12 +307,12 @@ const translateProfileToFieldValues = user => ({
     ? user.memberships
         .filter(membership => membership.team.name.startsWith('Role::'))
         .reduce((acc, membership) => acc.push(membership.team.name), List([]))
-    : [],
+    : List([]),
   userTeams: user.memberships
     ? user.memberships
         .filter(membership => !membership.team.name.startsWith('Role::'))
         .reduce((acc, membership) => acc.push(membership.team.name), List([]))
-    : [],
+    : List([]),
 });
 
 const translateFieldValuesToProfile = (fieldValues, user) => {
@@ -357,8 +357,8 @@ const mapStateToProps = (state, props) => ({
   users: state.settingsUsers.users,
   error: state.settingsUsers.error,
   spaceAttributes:
-    state.kinops.space &&
-    state.kinops.space.attributes.reduce((memo, item) => {
+    state.app.space &&
+    state.app.space.attributes.reduce((memo, item) => {
       memo[item.name] = item.value;
       return memo;
     }, {}),
