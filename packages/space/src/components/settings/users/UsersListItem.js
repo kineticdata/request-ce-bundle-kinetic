@@ -40,7 +40,7 @@ const UsersListItemComponent = ({
               </p>
               <div className="btn-group" role="group" aria-label="Actions">
                 <Link
-                  to={`/settings/users/${user.username}`}
+                  to={`/settings/profile/${user.username}`}
                   className="btn btn-primary"
                 >
                   View
@@ -69,7 +69,7 @@ const UsersListItemComponent = ({
       <td>
         <Link
           className="d-none d-md-table-cell"
-          to={`/settings/users/${user.username}`}
+          to={`/settings/users/${user.username}/edit`}
         >
           {user.username}
         </Link>
@@ -85,7 +85,7 @@ const UsersListItemComponent = ({
             <span className="fa fa-ellipsis-h fa-2x" />
           </DropdownToggle>
           <DropdownMenu right>
-            <DropdownItem tag={Link} to={`/settings/users/${user.username}`}>
+            <DropdownItem tag={Link} to={`/settings/profile/${user.username}`}>
               View
             </DropdownItem>
             <DropdownItem
