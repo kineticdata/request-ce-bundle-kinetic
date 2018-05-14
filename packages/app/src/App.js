@@ -49,12 +49,12 @@ export const AppComponent = props =>
   );
 
 export const mapStateToProps = state => ({
-  loading: state.app.loading,
-  kapps: state.app.kapps,
-  sidebarOpen: state.layout.sidebarOpen,
-  suppressedSidebarOpen: state.layout.suppressedSidebarOpen,
-  layoutSize: state.layout.size,
-  kappSlug: state.app.kappSlug,
+  loading: state.app.app.loading,
+  kapps: state.app.app.kapps,
+  sidebarOpen: state.app.layout.sidebarOpen,
+  suppressedSidebarOpen: state.app.layout.suppressedSidebarOpen,
+  layoutSize: state.app.layout.size,
+  kappSlug: state.app.app.kappSlug,
   pathname: state.router.location.pathname,
 });
 export const mapDispatchToProps = {

@@ -4,9 +4,9 @@ import { Header } from './Header';
 import * as selectors from '../redux/selectors';
 
 export const mapStateToProps = state => ({
-  loading: state.app.loading,
-  space: state.app.space,
-  profile: state.app.profile,
+  loading: state.app.app.loading,
+  space: state.app.app.space,
+  profile: state.app.app.profile,
   // Selectors
   hasAccessToManagement: selectors.selectHasAccessToManagement(state),
   hasAccessToSupport: selectors.selectHasAccessToSupport(state),

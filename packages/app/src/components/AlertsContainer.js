@@ -6,7 +6,7 @@ import { Alerts } from './Alerts';
 import { actions } from '../redux/modules/alerts';
 
 export const mapStateToProps = state => ({
-  alerts: List(state.alerts.get('data'))
+  alerts: List(state.app.alerts.get('data'))
     .filter(
       alert =>
         !alert.values['End Date Time'] ||
@@ -21,7 +21,7 @@ export const mapStateToProps = state => ({
       moment(alert.values['Start Date Time'] || alert.createdAt).unix(),
     )
     .reverse(),
-  isSpaceAdmin: state.app.profile.spaceAdmin,
+  isSpaceAdmin: state.app.app.profile.spaceAdmin,
 });
 
 const mapDispatchToProps = {
