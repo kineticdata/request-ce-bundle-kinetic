@@ -1,3 +1,5 @@
+import { ToastsContainer } from './components/ToastsContainer';
+import { ModalFormContainer } from './components/ModalFormContainer';
 import { KappLink } from './components/KappLink';
 import { KappLinkContainer } from './components/KappLinkContainer';
 import { KappNavLink } from './components/KappNavLink';
@@ -10,10 +12,10 @@ import { PageTitle } from './components/PageTitle';
 import { ErrorNotFound } from './components/ErrorNotFound';
 import { ErrorUnauthorized } from './components/ErrorUnauthorized';
 import { ErrorUnexpected } from './components/ErrorUnexpected';
-import {
-  actions as commonActions,
-  types as commonTypes,
-} from './redux/modules/common';
+
+import { actions as commonActions } from './redux/modules/common';
+import { types as commonTypes } from './redux/modules/common';
+
 import * as Utils from './utils';
 import * as Constants from './constants';
 
@@ -23,6 +25,8 @@ export {
   KappNavLink,
   KappRedirect,
   KappRoute,
+  ToastsContainer,
+  ModalFormContainer,
   TimeAgo,
   Icon,
   Loading,

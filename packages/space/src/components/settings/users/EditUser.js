@@ -334,8 +334,8 @@ const mapStateToProps = state => ({
   users: state.settingsUsers.users,
   error: state.settingsUsers.error,
   spaceAttributes:
-    state.kinops.space &&
-    state.kinops.space.attributes.reduce((memo, item) => {
+    state.app.space &&
+    state.app.space.attributes.reduce((memo, item) => {
       memo[item.name] = item.value;
       return memo;
     }, {}),

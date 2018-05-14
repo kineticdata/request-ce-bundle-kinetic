@@ -1,6 +1,6 @@
 import { delay } from 'redux-saga';
 import { put, takeEvery } from 'redux-saga/effects';
-import { actions, types } from '../modules/toasts';
+import { actions, types } from '../modules/common';
 
 export function* addNotificationTask(action) {
   yield delay(3000);

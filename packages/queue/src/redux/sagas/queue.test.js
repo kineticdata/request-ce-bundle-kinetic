@@ -1,6 +1,6 @@
 import { List } from 'immutable';
 import moment from 'moment';
-import { select, call, put, all } from 'redux-saga/effects';
+import { select, call, put } from 'redux-saga/effects';
 import { actions } from '../modules/queue';
 import { types as errorTypes } from '../modules/errors';
 
@@ -284,8 +284,8 @@ describe('queue saga', () => {
           .setIn(['dateRange', 'end'], '2017-09-05');
         searcher = prepareDateRangeFilter(searcher, filter, moment());
         expect(searcher.searchMeta.timeline).toBe('updatedAt');
-        expect(searcher.searchMeta.start).toEqual('2017-09-02T05:00:00.000Z');
-        expect(searcher.searchMeta.end).toEqual('2017-09-06T05:00:00.000Z');
+        expect(searcher.searchMeta.start).toEqual('2017-09-02T04:00:00.000Z');
+        expect(searcher.searchMeta.end).toEqual('2017-09-06T04:00:00.000Z');
       });
 
       test('when using presets', () => {
@@ -298,8 +298,8 @@ describe('queue saga', () => {
           moment('2017-09-08T15:30:00.000'),
         );
         expect(searcher.searchMeta.timeline).toBe('closedAt');
-        expect(searcher.searchMeta.start).toBe('2017-09-05T05:00:00.000Z');
-        expect(searcher.searchMeta.end).toBe('2017-09-08T20:30:00.000Z');
+        expect(searcher.searchMeta.start).toBe('2017-09-05T04:00:00.000Z');
+        expect(searcher.searchMeta.end).toBe('2017-09-08T19:30:00.000Z');
       });
 
       test('when there is an invalid preset defaults to 7 days', () => {
@@ -312,8 +312,8 @@ describe('queue saga', () => {
           moment('2017-09-08T15:30:00.000'),
         );
         expect(searcher.searchMeta.timeline).toBe('closedAt');
-        expect(searcher.searchMeta.start).toBe('2017-09-01T05:00:00.000Z');
-        expect(searcher.searchMeta.end).toBe('2017-09-08T20:30:00.000Z');
+        expect(searcher.searchMeta.start).toBe('2017-09-01T04:00:00.000Z');
+        expect(searcher.searchMeta.end).toBe('2017-09-08T19:30:00.000Z');
       });
     });
 

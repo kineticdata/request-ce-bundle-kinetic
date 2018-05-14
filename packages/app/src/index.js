@@ -8,7 +8,7 @@ import { createHashHistory } from 'history';
 import { configureStore } from './redux/store';
 import { Helmet } from 'react-helmet';
 import { actions as layoutActions } from './redux/modules/layout';
-import { actions as kinopsActions } from './redux/modules/kinops';
+import { actions as appActions } from './redux/modules/app';
 import { AuthenticatedContainer } from './AuthenticatedContainer';
 import { App } from './App';
 
@@ -43,7 +43,7 @@ ReactDOM.render(
 const match = matchPath(history.location.pathname, {
   path: '/kapps/:kappSlug',
 });
-store.dispatch(kinopsActions.setKappSlug(match && match.params.kappSlug));
+store.dispatch(appActions.setKappSlug(match && match.params.kappSlug));
 
 // Add global listeners
 [

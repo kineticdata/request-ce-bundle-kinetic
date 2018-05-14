@@ -2,7 +2,7 @@ import React from 'react';
 import { Discussion } from 'discussions';
 
 export const QueueItemDiscussions = props => {
-  const { queueItem, discussionId, createDiscussion } = props;
+  const { discussionId, createDiscussion } = props;
 
   return discussionId ? (
     <Discussion

@@ -31,17 +31,15 @@ const UsersListComponent = ({ users, loading, match }) => {
             <h1>Users</h1>
           </div>
           <div className="page-title__actions">
-            <Link
+            {/*<Link
               to={`${match.path}/import`}
               className="btn btn-secondary"
-              target="blank"
             >
               Bulk Import Users
-            </Link>
+            </Link>*/}
             <Link
               to={`${match.path}/new`}
               className="btn btn-primary ml-3"
-              target="blank"
             >
               Create User
             </Link>

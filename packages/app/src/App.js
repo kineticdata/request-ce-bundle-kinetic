@@ -8,12 +8,10 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import Sidebar from 'react-sidebar';
-import { Utils } from 'common';
+import { Utils, ToastsContainer, ModalFormContainer } from 'common';
 
-import { ToastsContainer } from './components/ToastsContainer';
 import { HeaderContainer } from './components/HeaderContainer';
-import { ModalFormContainer } from './components/ModalFormContainer';
-import { actions as kinopsActions } from './redux/modules/kinops';
+import { actions as appActions } from './redux/modules/app';
 import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';
 import { App as ServicesApp } from 'services/src/App';
@@ -51,16 +49,16 @@ export const AppComponent = props =>
   );
 
 export const mapStateToProps = state => ({
-  loading: state.kinops.loading,
-  kapps: state.kinops.kapps,
+  loading: state.app.loading,
+  kapps: state.app.kapps,
   sidebarOpen: state.layout.sidebarOpen,
   suppressedSidebarOpen: state.layout.suppressedSidebarOpen,
   layoutSize: state.layout.size,
-  kappSlug: state.kinops.kappSlug,
+  kappSlug: state.app.kappSlug,
   pathname: state.router.location.pathname,
 });
 export const mapDispatchToProps = {
-  loadApp: kinopsActions.loadApp,
+  loadApp: appActions.loadApp,
   fetchAlerts: alertsActions.fetchAlerts,
   setSidebarOpen: layoutActions.setSidebarOpen,
   setSuppressedSidebarOpen: layoutActions.setSuppressedSidebarOpen,

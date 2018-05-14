@@ -2,18 +2,18 @@ import { Utils } from 'common';
 
 // Find a Kapp by Space Attribute Value
 const kappBySpaceAttribute = (state, slugAttributeName) =>
-  !state.kinops.loading
-    ? state.kinops.kapps.find(
+  !state.app.loading
+    ? state.app.kapps.find(
         kapp =>
           kapp.slug ===
-          Utils.getAttributeValue(state.kinops.space, slugAttributeName),
+          Utils.getAttributeValue(state.app.space, slugAttributeName),
       )
     : null;
 
 // Kapp Selectors
 export const selectCurrentKapp = state =>
-  !state.kinops.loading && state.kinops.kappSlug
-    ? state.kinops.kapps.find(kapp => kapp.slug === state.kinops.kappSlug) ||
+  !state.app.loading && state.app.kappSlug
+    ? state.app.kapps.find(kapp => kapp.slug === state.app.kappSlug) ||
       null
     : null;
 
@@ -28,33 +28,33 @@ export const selectTeamsKapp = state =>
 
 // Role Selectors
 export const selectHasRoleDataAdmin = state =>
-  !state.kinops.loading
-    ? Utils.isMemberOf(state.kinops.profile, 'Role::Data Admin')
+  !state.app.loading
+    ? Utils.isMemberOf(state.app.profile, 'Role::Data Admin')
     : false;
 export const selectHasRoleSubmissionSupport = state =>
-  !state.kinops.loading
-    ? Utils.isMemberOf(state.kinops.profile, 'Role::Submission Support')
+  !state.app.loading
+    ? Utils.isMemberOf(state.app.profile, 'Role::Submission Support')
     : false;
 export const selectHasAccessToManagement = state =>
-  !state.kinops.loading
-    ? state.kinops.profile.spaceAdmin ||
+  !state.app.loading
+    ? state.app.profile.spaceAdmin ||
       selectHasRoleDataAdmin(state) ||
-      Utils.getTeams(state.kinops.profile).length > 0
+      Utils.getTeams(state.app.profile).length > 0
     : false;
 export const selectHasAccessToSupport = state =>
-  !state.kinops.loading
-    ? state.kinops.profile.spaceAdmin || selectHasRoleSubmissionSupport(state)
+  !state.app.loading
+    ? state.app.profile.spaceAdmin || selectHasRoleSubmissionSupport(state)
     : false;
 
 export const selectIsGuest = state =>
-  !state.kinops.loading
-    ? state.kinops.profile.spaceAdmin === false &&
-      Utils.getRoles(state.kinops.profile).length === 0
+  !state.app.loading
+    ? state.app.profile.spaceAdmin === false &&
+      Utils.getRoles(state.app.profile).length === 0
     : false;
 
 // Kapp List Selectors
 export const selectPredefinedKapps = state =>
-  !state.kinops.loading
+  !state.app.loading
     ? [
         selectTeamsKapp(state),
         selectServicesKapp(state),
@@ -62,8 +62,8 @@ export const selectPredefinedKapps = state =>
       ].filter(kapp => kapp != null)
     : [];
 export const selectAdditionalKapps = state =>
-  !state.kinops.loading
-    ? state.kinops.kapps
+  !state.app.loading
+    ? state.app.kapps
         .filter(
           kapp =>
             kapp !== selectAdminKapp(state) &&

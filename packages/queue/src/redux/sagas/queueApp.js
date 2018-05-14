@@ -42,7 +42,7 @@ export const isAssignable = team => {
 
 // TODO decide on error handling for these calls.
 export function* fetchAppSettingsTask() {
-  const kappSlug = yield select(state => state.kinops.kappSlug);
+  const kappSlug = yield select(state => state.app.kappSlug);
   const {
     profile: { profile },
     forms: { forms },

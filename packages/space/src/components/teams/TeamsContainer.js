@@ -9,9 +9,9 @@ import { Teams } from './Teams';
 export const mapStateToProps = state => ({
   loading: state.teamList.loading,
   teams: state.teamList.data,
-  me: state.kinops.profile,
+  me: state.app.profile,
   adminKappSlug: Utils.getAttributeValue(
-    state.kinops.space,
+    state.app.space,
     'Admin Kapp Slug',
     'admin',
   ),

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Modal, ModalFooter } from 'reactstrap';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 
-import { actions } from '../../redux/modules/app';
+import { actions } from '../../redux/modules/spaceApp';
 
 const CreateDiscussionModalComponent = ({
   fieldValues,
@@ -71,7 +71,7 @@ const CreateDiscussionModalComponent = ({
 
 export const mapStateToProps = state => ({
   fieldValues: {},
-  isOpen: state.app.isCreateDiscussionModalOpen,
+  isOpen: state.spaceApp.isCreateDiscussionModalOpen,
 });
 
 export const mapDispatchToProps = {

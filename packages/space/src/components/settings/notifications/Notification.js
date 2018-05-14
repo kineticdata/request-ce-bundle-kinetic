@@ -4,7 +4,7 @@ import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
 import { Map, Seq } from 'immutable';
 import { push } from 'connected-react-router';
-import { actions as toastActions } from 'kinops/src/redux/modules/toasts';
+import { commonActions } from 'common';
 import { actions } from '../../../redux/modules/settingsNotifications';
 import { NotificationMenu } from './NotificationMenu';
 
@@ -201,7 +201,7 @@ export const mapDispatchToProps = {
   resetNotification: actions.resetNotification,
   saveNotification: actions.saveNotification,
   fetchVariables: actions.fetchVariables,
-  addSuccess: toastActions.addSuccess,
+  addSuccess: commonActions.addSuccess,
   push,
 };
 

@@ -101,7 +101,7 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
 );
 
 const mapStateToProps = state => ({
-  isSpaceAdmin: state.kinops.profile.spaceAdmin,
+  isSpaceAdmin: state.app.profile.spaceAdmin,
 });
 
 export const SettingsNavigation = compose(connect(mapStateToProps, {}))(

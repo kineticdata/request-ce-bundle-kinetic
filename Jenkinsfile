@@ -21,13 +21,13 @@ pipeline {
     stage('Test') {
       steps {
         echo 'Re-enable tests when they are fixed'
-        /* sh '#!/bin/bash \n pushd packages/kinops; CI=true yarn test:ci; popd'
+        /* sh '#!/bin/bash \n pushd packages/app; CI=true yarn test:ci; popd'
         junit(testResults: 'junit.xml', healthScaleFactor: 1) */
       }
     }
     stage('Build') {
       steps {
-        sh "#!/bin/bash \n pushd packages/kinops; yarn run build; popd"
+        sh "#!/bin/bash \n pushd packages/app; yarn run build; popd"
       }
     }
     stage('Upload to S3') {
@@ -39,7 +39,7 @@ pipeline {
           BUNDLE = sh(returnStdout: true, script: 'echo `expr "$GIT_URL" : \'^.*/request-ce-bundle-\\(.*\\)\\.git$\'`').trim()
           VERSION = env.BRANCH_NAME == "master" ? "v1" : "develop"
           OPTIONS = '--acl public-read --cache-control="must-revalidate; max-age: 0" --delete'
-          sh "aws s3 sync packages/kinops/build s3://kinops.io/bundles/hydrogen/${BUNDLE}/${VERSION} ${OPTIONS}"
+          sh "aws s3 sync packages/app/build s3://kinops.io/bundles/hydrogen/${BUNDLE}/${VERSION} ${OPTIONS}"
         }
 
       }

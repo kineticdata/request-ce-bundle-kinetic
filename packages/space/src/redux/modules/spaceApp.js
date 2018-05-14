@@ -50,13 +50,13 @@ export const actions = {
 };
 
 export const selectServerUrl = state =>
-  state.kinops.space && `/${state.kinops.space.slug}/kinetic-response`;
+  state.app.space && `/${state.app.space.slug}/kinetic-response`;
 
 export const selectIsMoreDiscussions = state =>
-  state.app.discussions.size === state.app.discussionsLimit;
+  state.spaceApp.discussions.size === state.spaceApp.discussionsLimit;
 
 export const selectGroupedDiscussions = state =>
-  state.app.discussions
+  state.spaceApp.discussions
     .sort(
       (s1, s2) =>
         moment(s1.messages_updated_at).isBefore(s2.messages_updated_at)

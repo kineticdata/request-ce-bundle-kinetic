@@ -285,13 +285,13 @@ const mapStateToProps = state => ({
   location:
     state.profiles.profile &&
     state.profiles.profile.profileAttributes['Location'],
-  locationEnabled: state.app.userProfileAttributeDefinitions['Location'],
+  locationEnabled: state.spaceApp.userProfileAttributeDefinitions['Location'],
   manager:
     state.profiles.profile && state.profiles.profile.attributes['Manager'],
-  managerEnabled: state.app.userAttributeDefinitions['Manager'],
+  managerEnabled: state.spaceApp.userAttributeDefinitions['Manager'],
   spaceAttributes:
-    state.kinops.space &&
-    state.kinops.space.attributes.reduce((memo, item) => {
+    state.app.space &&
+    state.app.space.attributes.reduce((memo, item) => {
       memo[item.name] = item.value;
       return memo;
     }, {}),

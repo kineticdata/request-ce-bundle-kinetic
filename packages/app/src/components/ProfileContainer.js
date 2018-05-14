@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
 
 import { Profile } from './Profile';
-import { actions } from '../redux/modules/modalForm';
+import { commonActions } from 'common';
 import * as selectors from '../redux/selectors';
 
 
@@ -36,12 +36,12 @@ const KITCHEN_SINK_FORM_CONFIG = {
 };
 
 export const mapStateToProps = state => ({
-  profile: state.kinops.profile,
+  profile: state.app.profile,
   isGuest: selectors.selectIsGuest(state),
 });
 
 const mapDispatchToProps = {
-  openForm: actions.openForm,
+  openForm: commonActions.openForm,
 };
 
 export const ProfileContainer = compose(
