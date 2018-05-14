@@ -231,7 +231,7 @@ export const UserFormComponent = ({
                     >
                       Save
                     </button>
-                    <Link to={`/settings/users/${user.username}`}>Cancel</Link>
+                    <Link to={`/settings/users`}>Cancel</Link>
                   </div>
                 </div>
               </form>
@@ -242,7 +242,7 @@ export const UserFormComponent = ({
               <ProfileCard
                 user={buildProfile(fieldValues, user)}
                 button={
-                  <Link to={`/settings/users/${user.username}`}>
+                  <Link to={`/settings/profile/${user.username}`}>
                     <button className="btn btn-primary btn-sm">
                       View Profile
                     </button>
