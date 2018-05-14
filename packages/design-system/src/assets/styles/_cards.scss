@@ -3,20 +3,15 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // Card
-.cards__wrapper--design-system{
+.cards__wrapper--design-system {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  .card{
-      flex: 0 0 auto;
+  .card {
+    flex: 0 0 auto;
     flex-basis: 33%;
   }
 }
-
-
-
-
-
 
 .card--design-system {
   border: 1px solid $black-16;
@@ -42,5 +37,28 @@
     font-size: 1rem;
     line-height: 1.1428571429rem;
     margin-bottom: 0;
+  }
+}
+
+.card--color {
+  margin: 0 0 1rem 0;
+  text-align: center;
+  border: 1px solid $black-16;
+  &__header {
+    height: 3rem;
+    width: 100%;
+    padding: 0 1rem;
+    justify-content: center;
+    border: none;
+    align-items: baseline;
+    position: relative;
+    display: flex;
+  }
+  &__body {
+    padding: 1rem;
+    text-align: center;
+  }
+  p {
+    margin: 0;
   }
 }
