@@ -9,15 +9,15 @@ import { actions } from '../../redux/modules/queue';
 import { NewItemMenu } from './NewItemMenu';
 
 const mapStateToProps = state => ({
-  myTeamForms: !state.queue.newItemMenuOptions.get('parentId')
+  myTeamForms: !state.queue.queue.newItemMenuOptions.get('parentId')
     ? selectMyTeamForms(state).filter(form => form.type === 'Task')
     : selectMyTeamForms(state).filter(
         form => form.type === 'Task' || form.type === 'Subtask',
       ),
-  isOpen: state.queue.newItemMenuOpen,
-  options: state.queue.newItemMenuOptions,
+  isOpen: state.queue.queue.newItemMenuOpen,
+  options: state.queue.queue.newItemMenuOptions,
   assignments: selectAssignments(state).toJS(),
-  kappSlug: state.app.kappSlug,
+  kappSlug: state.app.app.kappSlug,
 });
 
 const mapDispatchToProps = {

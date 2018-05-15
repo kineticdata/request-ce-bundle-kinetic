@@ -13,9 +13,9 @@ export const TOO_MANY_STATUS_STRING =
 export const SUBMISSION_INCLUDES =
   'details,values,attributes,form,children,children.details,children.form,children.values,form.attributes,parent,parent.details,parent.values,parent.form,parent.form.kapp';
 
-export const getAppSettings = state => state.queueApp;
-export const getCurrentItem = state => state.queue.currentItem;
-export const getKappSlug = state => state.app.kappSlug;
+export const getAppSettings = state => state.queue.queueApp;
+export const getCurrentItem = state => state.queue.queue.currentItem;
+export const getKappSlug = state => state.app.app.kappSlug;
 
 /* eslint-disable no-param-reassign */
 export const prepareStatusFilter = (searcher, filter) => {

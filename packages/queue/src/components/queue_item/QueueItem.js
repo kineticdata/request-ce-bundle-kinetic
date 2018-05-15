@@ -35,7 +35,7 @@ export const QueueItem = ({ filter, queueItem, discussionsEnabled }) =>
 export const mapStateToProps = (state, props) => ({
   id: props.match.params.id,
   filter: getFilterByPath(state, props.location.pathname),
-  queueItem: state.queue.currentItem,
+  queueItem: state.queue.queue.currentItem,
   discussionsEnabled: selectDiscussionsEnabled(state),
 });
 
