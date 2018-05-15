@@ -18,8 +18,9 @@ export const actions = {
   setChangePasswordVisible: withPayload(types.TOGGLE_PASSWORD),
 };
 
-export const selectIsMyProfile = ({ profiles, kinops }) =>
-  profiles.profile && profiles.profile.username === kinops.profile.username;
+export const selectIsMyProfile = state =>
+  state.profiles.profile &&
+  state.profiles.profile.username === state.kinops.profile.username;
 
 export const State = Record({
   loading: true,
@@ -46,9 +47,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.TOGGLE_PASSWORD:
       return state.set('isChangePasswordVisible', payload);
     case types.UPDATE_PROFILE:
-      return state
-        .set('loading', false)
-        .set('isChangePasswordVisible', false);
+      return state.set('loading', false).set('isChangePasswordVisible', false);
     default:
       return state;
   }

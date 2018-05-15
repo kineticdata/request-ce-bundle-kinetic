@@ -1,6 +1,6 @@
 import { Record, List } from 'immutable';
 import { Utils } from 'common';
-const { namespace, noPayload, withPayload } = Utils;
+const { namespace, withPayload } = Utils;
 
 export const types = {
   FETCH_FORMS: namespace('spaceForms', 'FETCH_FORMS'),
@@ -18,14 +18,13 @@ export const State = Record({
 });
 
 export const selectFormsForTeam = state => {
-  const { team, spaceForms } = state;
-  if (team.loading || team.data === null) {
+  if (state.team.loading || state.team.data === null) {
     return List();
   }
 
-  return spaceForms.data.filter(form =>
+  return state.spaceForms.data.filter(form =>
     Utils.getAttributeValues(form, 'Owning Team', List()).includes(
-      team.data.name,
+      state.team.data.name,
     ),
   );
 };
