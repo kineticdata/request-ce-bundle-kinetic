@@ -28,9 +28,9 @@ export const State = Record({
 });
 
 export const selectParentTeams = state => {
-  const { team, teamList } = state;
+  const team = state.team;
 
-  return teamList.data.filter(
+  return state.teamList.data.filter(
     parent =>
       !team.loading &&
       team.data !== null &&
@@ -40,13 +40,15 @@ export const selectParentTeams = state => {
 };
 
 export const selectSubTeams = state => {
-  const { team, teamList } = state;
+  const team = state.team;
 
   if (team.loading || team.data === null) {
     return List();
   }
 
-  return teamList.data.filter(t => t.name.startsWith(`${team.data.name}::`));
+  return state.teamList.data.filter(t =>
+    t.name.startsWith(`${team.data.name}::`),
+  );
 };
 
 export const reducer = (state = State(), { type, payload }) => {
