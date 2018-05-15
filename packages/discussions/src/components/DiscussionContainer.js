@@ -15,19 +15,20 @@ import { Discussion } from './Discussion';
 
 const mapStateToProps = (state, props) => {
   const discussion =
-    props.discussionId && state.discussions.discussions.get(props.discussionId);
+    props.discussionId &&
+    state.discussions.discussions.discussions.get(props.discussionId);
 
   return {
-    profile: state.app.profile,
+    profile: state.app.app.profile,
     discussion,
     messages: discussion ? discussion.messages : List(),
     hasMoreMessages: discussion && discussion.hasMoreMessages,
     loadingMoreMessages: discussion && discussion.loadingMoreMessages,
-    currentOpenModals: state.discussions.currentOpenModals,
-    invitationFields: state.discussions.invitationFields,
-    invitationPending: state.discussions.invitationPending,
-    isSmallLayout: state.layout.get('size') === 'small',
-    pageTitleInterval: state.discussions.pageTitleInterval,
+    currentOpenModals: state.discussions.discussions.currentOpenModals,
+    invitationFields: state.discussions.discussions.invitationFields,
+    invitationPending: state.discussions.discussions.invitationPending,
+    isSmallLayout: state.app.layout.get('size') === 'small',
+    pageTitleInterval: state.discussions.discussions.pageTitleInterval,
   };
 };
 

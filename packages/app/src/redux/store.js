@@ -38,7 +38,7 @@ export const configureStore = history => {
         services: servicesReducers,
         queue: queueReducers,
         space: spaceReducers,
-        discussion: discussionReducers,
+        discussions: discussionReducers,
       }),
     ),
     composeEnhancers(

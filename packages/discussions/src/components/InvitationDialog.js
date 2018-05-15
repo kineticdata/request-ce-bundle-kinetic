@@ -31,8 +31,8 @@ export const InvitationDialog = props => (
 );
 
 export const mapStateToProps = state => ({
-  email: state.discussions.invitationFields.get('email') || '',
-  notes: state.discussions.invitationFields.get('notes') || '',
+  email: state.discussions.discussions.invitationFields.get('email') || '',
+  notes: state.discussions.discussions.invitationFields.get('notes') || '',
 });
 export const mapDispatchToProps = {
   setInvitationField: actions.setInvitationField,
