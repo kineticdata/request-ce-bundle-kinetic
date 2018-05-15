@@ -63,13 +63,13 @@ export const handleDelete = props => () => {
 
 export const mapStateToProps = (state, { match: { params } }) => ({
   category: params.categorySlug
-    ? state.categories.data.find(
+    ? state.services.categories.data.find(
         category => category.slug === params.categorySlug,
       )
     : null,
-  forms: state.forms.data,
+  forms: state.services.forms.data,
   values: valuesFromQueryParams(state.router.location.search),
-  kappSlug: state.app.kappSlug,
+  kappSlug: state.app.app.kappSlug,
 });
 
 export const mapDispatchToProps = {
@@ -93,7 +93,10 @@ const enhance = compose(
       ) {
         this.props.setFormSlug(nextProps.match.params.formSlug);
       }
-      if (this.props.match.params.submissionId !== nextProps.match.params.submissionId) {
+      if (
+        this.props.match.params.submissionId !==
+        nextProps.match.params.submissionId
+      ) {
         this.props.setSubmissionId(nextProps.match.params.submissionId);
       }
     },

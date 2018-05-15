@@ -4,8 +4,8 @@ import { Catalog } from './Catalog';
 import { actions } from '../../redux/modules/submissions';
 
 const mapStateToProps = state => ({
-  forms: state.forms.data,
-  submissions: state.submissions.data,
+  forms: state.services.forms.data,
+  submissions: state.services.submissions.data,
 });
 
 const mapDispatchToProps = {
