@@ -16,17 +16,17 @@ import { WorkMenuContainer } from './components/work_menu/WorkMenu';
 import './assets/styles/master.scss';
 
 const mapStateToProps = (state, props) => ({
-  loading: state.queueApp.loading,
-  defaultFilters: state.queueApp.filters,
-  myFilters: state.queueApp.myFilters,
-  counts: state.queueApp.filters
+  loading: state.queue.queueApp.loading,
+  defaultFilters: state.queue.queueApp.filters,
+  myFilters: state.queue.queueApp.myFilters,
+  counts: state.queue.queueApp.filters
     .toMap()
     .mapEntries(([_, filter]) => [
       filter.name,
-      state.queue.getIn(['lists', filter], List()).size,
+      state.queue.queue.getIn(['lists', filter], List()).size,
     ]),
-  hasTeammates: state.queueApp.myTeammates.size > 0,
-  hasTeams: state.queueApp.myTeams.size > 0,
+  hasTeammates: state.queue.queueApp.myTeammates.size > 0,
+  hasTeams: state.queue.queueApp.myTeams.size > 0,
   hasForms:
     selectMyTeamForms(state).filter(form => form.type === 'Task').length > 0,
 });

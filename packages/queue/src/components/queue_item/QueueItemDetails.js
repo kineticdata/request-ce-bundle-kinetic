@@ -166,10 +166,10 @@ const getAttr = (form, attrName) => {
 };
 
 export const mapStateToProps = (state, props) => ({
-  queueItem: state.queue.currentItem,
+  queueItem: state.queue.queue.currentItem,
   assignments: selectAssignments(state).toJS(),
   prevAndNext: selectPrevAndNext(state, props.filter),
-  kappSlug: state.app.kappSlug,
+  kappSlug: state.app.app.kappSlug,
   discussionsEnabled: selectDiscussionsEnabled(state),
 });
 
