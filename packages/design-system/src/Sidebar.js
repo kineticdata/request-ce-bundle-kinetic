@@ -9,7 +9,7 @@ export const Sidebar = () => (
       <ul className="nav flex-column">
         <li className="nav-item">
           <Link to="/" className="nav-link">
-            Home
+            Getting Started
           </Link>
         </li>
         <li className="nav-item">
