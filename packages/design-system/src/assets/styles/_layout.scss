@@ -9,6 +9,7 @@
     min-height: 100vh;
     padding: 0;
     margin: 0;
+
     .sidebar {
       margin-top: 0;
     }
@@ -22,13 +23,15 @@
     background-color: #999;
     width: 100%;
   }
+
   .highlight {
     padding: 1rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
-    background-color: #f7f7f9;
+    background-color: $black-3;
     @include border-radius();
     -ms-overflow-style: -ms-autohiding-scrollbar;
+
     pre {
       padding: 0;
       margin-top: 0;
@@ -36,5 +39,88 @@
       background-color: transparent;
       border: 0;
     }
+  }
+}
+
+//
+// Container illustrations
+//
+
+.ki-example {
+  margin: 1rem 0;
+}
+.ki-example-container {
+  min-width: 16rem;
+  max-width: 25rem;
+  margin-right: auto;
+  margin-left: auto;
+  color: $black;
+  &--fluid {
+    max-width: none;
+  }
+  &--centering {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &--row {
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between;
+  }
+  &--header {
+    height: 1rem;
+    margin-bottom: 1%;
+    background-color: lighten($orange-kinops, 10%);
+    border-radius: $border-radius-base;
+  }
+
+  &--sidebar {
+    display: flex;
+    flex: 1 1 9%;
+    margin-right: 1%;
+    min-height: 8rem;
+    background-color: lighten($orange-kinops, 25%);
+    border-radius: $border-radius-base;
+  }
+
+  &--body {
+    height: 8rem;
+    flex: 1 1 100%;
+    background-color: lighten($blue-lake, 25%);
+    border-radius: $border-radius-base;
+  }
+  &--page-panels {
+    flex: 1 1 100%;
+    // padding: 1%;
+    // background-color: lighten($blue-lake, 1%);
+  }
+
+  &--two-thirds {
+    height: 8rem;
+    flex: 1 0 65.666667%;
+    border-radius: $border-radius-base;
+    background-color: lighten($blue-lake, 25%);
+  }
+
+  &--one-thirds {
+    height: 8rem;
+    flex: 0 0 33.3333%;
+    margin-left: 1%;
+    border-radius: $border-radius-base;
+    background-color: lighten($blue-lake, 15%);
+  }
+  // 60/40
+  &--three-fifths {
+    flex: 1 0 59%;
+    background-color: lighten($blue-lake, 25%);
+    border-radius: $border-radius-base;
+  }
+
+  &--two-fifths {
+    flex: 0 0 40%;
+    margin-left: 1%;
+    background-color: lighten($blue-lake, 15%);
+    border-radius: $border-radius-base;
   }
 }
