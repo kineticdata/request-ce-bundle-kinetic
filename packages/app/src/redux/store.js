@@ -16,7 +16,6 @@ import commonSagas from 'common/src/redux/sagas';
 import servicesSagas from 'services/src/redux/sagas';
 import queueSagas from 'queue/src/redux/sagas';
 import spaceSagas from 'space/src/redux/sagas';
-import nestReducers from './nestReducers';
 
 export const configureStore = history => {
   // To enable the redux dev tools in the browser we need to conditionally use a
@@ -32,13 +31,13 @@ export const configureStore = history => {
   // setup going on here as well.
   const store = createStore(
     connectRouter(history)(
-      nestReducers({
-        app: reducers,
-        common: commonReducers,
-        services: servicesReducers,
-        queue: queueReducers,
-        space: spaceReducers,
-        discussions: discussionReducers,
+      combineReducers({
+        app: combineReducers(reducers),
+        common: combineReducers(commonReducers),
+        services: combineReducers(servicesReducers),
+        queue: combineReducers(queueReducers),
+        space: combineReducers(spaceReducers),
+        discussions: combineReducers(discussionReducers),
       }),
     ),
     composeEnhancers(
