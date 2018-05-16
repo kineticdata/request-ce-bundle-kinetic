@@ -242,7 +242,7 @@ export const UserFormComponent = ({
               <ProfileCard
                 user={buildProfile(fieldValues, user)}
                 button={
-                  <Link to={`/settings/profile/${user.username}`}>
+                  <Link to={`/profile/${user.username}`}>
                     <button className="btn btn-primary btn-sm">
                       View Profile
                     </button>
