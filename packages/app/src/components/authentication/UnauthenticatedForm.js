@@ -13,50 +13,57 @@ import { PageTitle } from 'common';
 // before users nagivate to the actual forms.
 const globals = import('common/globals');
 
-const UnauthenticatedFormComponent = ({
-  kappSlug,
-  formSlug,
-  submissionId,
-  handleCreated,
-  handleLoaded,
-  formName,
-  values,
-  showHeader,
-}) => (
-  <div className="page--container">
-    <PageTitle parts={[formSlug]} />
-    <div className="page-panel">
-      {showHeader && (
-        <div className="page-title">
-          <div className="page-title__wrapper">
-            <h1>{formName}</h1>
+const UnauthenticatedFormComponent = props => {
+  const {
+    kappSlug,
+    formSlug,
+    submissionId,
+    handleCreated,
+    handleLoaded,
+    formName,
+    values,
+    showHeader,
+    handleUnauthorized,
+  } = props;
+
+  return (
+    <div className="page--container">
+      <PageTitle parts={[formSlug]} />
+      <div className="page-panel">
+        {showHeader && (
+          <div className="page-title">
+            <div className="page-title__wrapper">
+              <h1>{formName}</h1>
+            </div>
           </div>
-        </div>
-      )}
-      {submissionId ? (
-        <div>
-          <CoreForm
-            submission={submissionId}
-            globals={globals}
-            created={handleCreated}
-            loaded={handleLoaded}
-          />
-        </div>
-      ) : (
-        <div>
-          <CoreForm
-            kapp={kappSlug}
-            form={formSlug}
-            globals={globals}
-            created={handleCreated}
-            loaded={handleLoaded}
-            values={values}
-          />
-        </div>
-      )}
+        )}
+        {submissionId ? (
+          <div>
+            <CoreForm
+              onUnauthorized={handleUnauthorized}
+              submission={submissionId}
+              globals={globals}
+              created={handleCreated}
+              loaded={handleLoaded}
+            />
+          </div>
+        ) : (
+          <div>
+            <CoreForm
+              onUnauthorized={handleUnauthorized}
+              kapp={kappSlug}
+              form={formSlug}
+              globals={globals}
+              created={handleCreated}
+              loaded={handleLoaded}
+              values={values}
+            />
+          </div>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const valuesFromQueryParams = queryParams => {
   const params = parse(queryParams);
@@ -89,6 +96,7 @@ export const handleCreated = props => response => {
 export const handleLoaded = props => form => {
   props.setFormName(form.name());
 };
+
 
 export const UnauthenticatedForm = compose(
   connect(mapStateToProps, { push }),

@@ -60,81 +60,112 @@ const handleAuthenticated = ({
   setAuthenticated(true);
 };
 
+export const handleUnauthorized = props => () => {
+  props.setDisplay('login');
+};
+
 const Authenticated = props => {
   const { children, authenticated, attempting } = props;
 
   return authenticated ? (
     children
   ) : attempting ? null : (
-    <Switch>
-      <Route
-        path="/login"
-        exact
-        render={route => (
-          <LoginScreen>
-            <LoginForm {...props} {...route} routed />
-          </LoginScreen>
-        )}
-      />
-      <Route
-        path="/reset-password"
-        exact
-        render={route => (
-          <LoginScreen>
-            <ResetPasswordForm {...props} {...route} routed />{' '}
-          </LoginScreen>
-        )}
-      />
-      <Route
-        path="/reset-password/:token"
-        exact
-        render={route => (
-          <LoginScreen>
-            <ResetTokenForm {...props} {...route} routed />
-          </LoginScreen>
-        )}
-      />
-      <Route
-        path="/create-account"
-        exact
-        render={route => (
-          <LoginScreen>
-            <CreateAccountForm {...props} {...route} routed />
-          </LoginScreen>
-        )}
-      />
-      <Route
-        path="/kapps/:kappSlug/forms/:formSlug"
-        exact
-        render={route => <UnauthenticatedForm {...props} {...route} routed />}
-      />
-      <Route
-        path="/kapps/:kappSlug/submissions/:id"
-        exact
-        render={route => <UnauthenticatedForm {...props} {...route} routed />}
-      />
-      <Route
-        path="/kapps/:kappSlug/forms/:formSlug/submissions/:id"
-        exact
-        render={route => <UnauthenticatedForm {...props} {...route} routed />}
-      />
-      <Route
-        path="/"
-        render={route => (
-          <LoginScreen>
-            {props.display === 'reset' ? (
-              <ResetPasswordForm {...props} />
-            ) : props.display === 'reset-token' ? (
-              <ResetTokenForm {...props} />
-            ) : props.display === 'create-account' ? (
-              <CreateAccountForm {...props} />
-            ) : (
-              <LoginForm {...props} />
+    <div>
+      {props.display === 'none' ? (
+        <Switch>
+          <Route
+            path="/login"
+            exact
+            render={route => (
+              <LoginScreen>
+                <LoginForm {...props} {...route} routed />
+              </LoginScreen>
             )}
-          </LoginScreen>
-        )}
-      />
-    </Switch>
+          />
+          <Route
+            path="/reset-password"
+            exact
+            render={route => (
+              <LoginScreen>
+                <ResetPasswordForm {...props} {...route} routed />{' '}
+              </LoginScreen>
+            )}
+          />
+          <Route
+            path="/reset-password/:token"
+            exact
+            render={route => (
+              <LoginScreen>
+                <ResetTokenForm {...props} {...route} routed />
+              </LoginScreen>
+            )}
+          />
+          <Route
+            path="/create-account"
+            exact
+            render={route => (
+              <LoginScreen>
+                <CreateAccountForm {...props} {...route} routed />
+              </LoginScreen>
+            )}
+          />
+          <Route
+            path="/kapps/:kappSlug/forms/:formSlug"
+            exact
+            render={route => (
+              <UnauthenticatedForm {...props} {...route} routed />
+            )}
+          />
+          <Route
+            path="/kapps/:kappSlug/submissions/:id"
+            exact
+            render={route => (
+              <UnauthenticatedForm {...props} {...route} routed />
+            )}
+          />
+          <Route
+            path="/kapps/:kappSlug/forms/:formSlug/submissions/:id"
+            exact
+            render={route => (
+              <UnauthenticatedForm {...props} {...route} routed />
+            )}
+          />
+          <Route
+            path="/"
+            render={route => (
+              <LoginScreen>
+                {props.display === 'reset' ? (
+                  <ResetPasswordForm {...props} />
+                ) : props.display === 'reset-token' ? (
+                  <ResetTokenForm {...props} />
+                ) : props.display === 'create-account' ? (
+                  <CreateAccountForm {...props} />
+                ) : (
+                  <LoginForm {...props} />
+                )}
+              </LoginScreen>
+            )}
+          />
+        </Switch>
+      ) : (
+        <Route
+          path="/"
+          render={route => (
+            <LoginScreen>
+              {props.display === 'reset' ? (
+                <ResetPasswordForm {...props} />
+              ) : props.display === 'reset-token' ? (
+                <ResetTokenForm {...props} />
+              ) : props.display === 'create-account' ? (
+                <CreateAccountForm {...props} />
+              ) : (
+                <LoginForm {...props} />
+              )}
+            </LoginScreen>
+          )}
+        />
+      )}
+    </div>
   );
 };
 
@@ -148,7 +179,7 @@ export const AuthenticatedContainer = compose(
   withState('error', 'setError', ''),
   withState('email', 'setEmail', ''),
   withState('password', 'setPassword', ''),
-  withState('attempting', 'setAttempting', true),
+  withState('attempting', 'setAttempting', false),
   withState('authenticated', 'setAuthenticated', false),
 
   withHandlers({
@@ -158,14 +189,12 @@ export const AuthenticatedContainer = compose(
     handleEmail,
     handlePassword,
     handleAuthenticated,
+    handleUnauthorized,
   }),
 
   lifecycle({
     componentWillMount() {
-      if (bundle.identity() === 'anonymous') {
-        this.props.setAttempting(false);
-        this.props.setDisplay('login');
-      } else {
+      if (bundle.identity() !== 'anonymous') {
         this.props.setAttempting(false);
         this.props.setAuthenticated(true);
       }
