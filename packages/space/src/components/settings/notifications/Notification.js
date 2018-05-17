@@ -190,10 +190,10 @@ export const handleVariableSelection = props => variable => {
 };
 
 export const mapStateToProps = (state, props) => ({
-  submission: state.settingsNotifications.notification,
+  submission: state.space.settingsNotifications.notification,
   type: props.match.params.type,
-  loading: state.settingsNotifications.notificationLoading,
-  saving: state.settingsNotifications.saving,
+  loading: state.space.settingsNotifications.notificationLoading,
+  saving: state.space.settingsNotifications.saving,
 });
 
 export const mapDispatchToProps = {

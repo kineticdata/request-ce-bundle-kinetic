@@ -343,12 +343,12 @@ export const mapStateToProps = state => ({
   space: state.app.space,
   kapps: state.app.kapps,
   forms:
-    state.settingsNotifications.variables &&
-    state.settingsNotifications.variables.forms,
-  dateFormats: state.settingsNotifications.dateFormats
+    state.space.settingsNotifications.variables &&
+    state.space.settingsNotifications.variables.forms,
+  dateFormats: state.space.settingsNotifications.dateFormats
     .filter(submission => submission.values.Status === 'Active')
     .map(submission => submission.values.Name),
-  snippets: state.settingsNotifications.notificationSnippets.filter(
+  snippets: state.space.settingsNotifications.notificationSnippets.filter(
     submission => submission.values.Status === 'Active',
   ),
 });

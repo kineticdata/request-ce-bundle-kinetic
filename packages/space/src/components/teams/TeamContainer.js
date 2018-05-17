@@ -22,32 +22,32 @@ import { Team } from './Team';
 
 const mapStateToProps = state => {
   const team = selectTeam(state);
-  const me = state.app.profile;
+  const me = state.app.app.profile;
 
   const heirarchy = buildHierarchy((team && team.name) || '');
-  const teamsMap = state.teamList.data.reduce((memo, item) => {
+  const teamsMap = state.space.teamList.data.reduce((memo, item) => {
     memo[item.name] = item;
     return memo;
   }, {});
 
   return {
     loading:
-      state.team.loading || state.teamList.loading || state.spaceForms.loading,
-    space: state.app.space,
+      state.space.team.loading || state.space.teamList.loading || state.space.spaceForms.loading,
+    space: state.app.app.space,
     catalogSlug: Utils.getAttributeValue(
-      state.app.space,
+      state.app.app.space,
       'Catalog Kapp Slug',
       'catalog',
     ),
     me,
     team,
     adminKappSlug: Utils.getAttributeValue(
-      state.app.space,
+      state.app.app.space,
       'Admin Kapp Slug',
       'admin',
     ),
     discussionId:
-      !state.team.loading && team
+      !state.space.team.loading && team
         ? Utils.getAttributeValue(team, 'Discussion Id', null)
         : null,
     memberships: selectTeamMemberships(state).map(member => member.user),
@@ -55,7 +55,7 @@ const mapStateToProps = state => {
     parent: heirarchy.parent && teamsMap[heirarchy.parent.name],
     subteams:
       team &&
-      (state.teamList.data || []).filter(
+      (state.space.teamList.data || []).filter(
         item =>
           item.name !== team.name &&
           item.name.replace(/::[^:]+$/, '') === team.name,

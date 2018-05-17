@@ -118,8 +118,8 @@ export const getRandomKey = () =>
   Math.floor(Math.random() * (100000 - 100 + 1)) + 100;
 
 export const shouldPrevNextShow = state =>
-  state.settingsDatastore.submission !== null &&
-  state.settingsDatastore.submissions.size > 0;
+  state.space.settingsDatastore.submission !== null &&
+  state.space.settingsDatastore.submissions.size > 0;
 
 export const handleUpdated = props => response => {
   if (props.submissionId) {
@@ -145,7 +145,7 @@ export const handleCreated = props => (response, actions) => {
 
 export const mapStateToProps = (state, { match: { params } }) => ({
   submissionId: params.id,
-  submission: state.settingsDatastore.submission,
+  submission: state.space.settingsDatastore.submission,
   showPrevAndNext: shouldPrevNextShow(state),
   prevAndNext: selectPrevAndNext(state),
   form: selectFormBySlug(state, params.slug),

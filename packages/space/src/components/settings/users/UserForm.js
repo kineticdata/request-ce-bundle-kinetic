@@ -10,7 +10,6 @@ import { actions as usersActions } from '../../../redux/modules/settingsUsers';
 import { actions as teamsActions } from '../../../redux/modules/teamList';
 import { ProfileCard } from '../../shared/ProfileCard';
 import { UsersDropdown } from './DropDown';
-import { get } from 'https';
 
 export const UserFormComponent = ({
   editing,
@@ -351,19 +350,19 @@ const translateFieldValuesToProfile = (fieldValues, user) => {
 
 const mapStateToProps = (state, props) => ({
   editing: props.match.params.username !== undefined,
-  loading: state.settingsUsers.loading,
-  userLoading: state.settingsUsers.userLoading,
-  user: state.settingsUsers.user,
-  users: state.settingsUsers.users,
-  error: state.settingsUsers.error,
+  loading: state.space.settingsUsers.loading,
+  userLoading: state.space.settingsUsers.userLoading,
+  user: state.space.settingsUsers.user,
+  users: state.space.settingsUsers.users,
+  error: state.space.settingsUsers.error,
   spaceAttributes:
-    state.app.space &&
-    state.app.space.attributes.reduce((memo, item) => {
+    state.app.app.space &&
+    state.app.app.space.attributes.reduce((memo, item) => {
       memo[item.name] = item.value;
       return memo;
     }, {}),
-  roles: state.teamList.roles,
-  teams: state.teamList.data,
+  roles: state.space.teamList.roles,
+  teams: state.space.teamList.data,
 });
 
 const mapDispatchToProps = {

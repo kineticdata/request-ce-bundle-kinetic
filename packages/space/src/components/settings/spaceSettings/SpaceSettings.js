@@ -68,10 +68,10 @@ export const Select = ({
 };
 
 const mapStateToProps = state => ({
-  space: state.app.space,
-  spaceSettings: state.settingsSpace,
-  teams: state.settingsSpace.teams,
-  spaceKappsForms: state.settingsSpace.spaceKappsForms,
+  space: state.app.app.space,
+  spaceSettings: state.space.settingsSpace,
+  teams: state.space.settingsSpace.teams,
+  spaceKappsForms: state.space.settingsSpace.spaceKappsForms,
 });
 
 const mapDispatchToProps = {

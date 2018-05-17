@@ -18,13 +18,13 @@ export const State = Record({
 });
 
 export const selectFormsForTeam = state => {
-  if (state.team.loading || state.team.data === null) {
+  if (state.space.team.loading || state.space.team.data === null) {
     return List();
   }
 
-  return state.spaceForms.data.filter(form =>
+  return state.space.spaceForms.data.filter(form =>
     Utils.getAttributeValues(form, 'Owning Team', List()).includes(
-      state.team.data.name,
+      state.space.team.data.name,
     ),
   );
 };

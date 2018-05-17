@@ -7,11 +7,11 @@ import { actions } from '../../redux/modules/teamList';
 import { Teams } from './Teams';
 
 export const mapStateToProps = state => ({
-  loading: state.teamList.loading,
-  teams: state.teamList.data,
-  me: state.app.profile,
+  loading: state.space.teamList.loading,
+  teams: state.space.teamList.data,
+  me: state.app.app.profile,
   adminKappSlug: Utils.getAttributeValue(
-    state.app.space,
+    state.app.app.space,
     'Admin Kapp Slug',
     'admin',
   ),

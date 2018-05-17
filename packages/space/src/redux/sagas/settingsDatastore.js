@@ -121,13 +121,13 @@ export function* createFormSaga(action) {
 }
 
 export const selectSearchParams = state => ({
-  searchParams: state.settingsDatastore.searchParams,
-  form: state.settingsDatastore.currentForm,
-  pageToken: state.settingsDatastore.nextPageToken,
-  pageTokens: state.settingsDatastore.pageTokens,
-  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
-  simpleSearchParam: state.settingsDatastore.simpleSearchParam,
-  simpleSearchNextPageIndex: state.settingsDatastore.simpleSearchNextPageIndex,
+  searchParams: state.space.settingsDatastore.searchParams,
+  form: state.space.settingsDatastore.currentForm,
+  pageToken: state.space.settingsDatastore.nextPageToken,
+  pageTokens: state.space.settingsDatastore.pageTokens,
+  simpleSearchActive: state.space.settingsDatastore.simpleSearchActive,
+  simpleSearchParam: state.space.settingsDatastore.simpleSearchParam,
+  simpleSearchNextPageIndex: state.space.settingsDatastore.simpleSearchNextPageIndex,
 });
 
 export function* fetchSubmissionsSimpleSaga() {

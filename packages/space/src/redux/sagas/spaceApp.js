@@ -85,9 +85,9 @@ export function* fetchRecentDiscussionsSaga() {
   }
 
   const { limit, offset, search } = yield select(state => ({
-    limit: state.spaceApp.discussionsLimit,
-    offset: state.spaceApp.discussionsOffset,
-    search: state.spaceApp.discussionsSearchTerm,
+    limit: state.space.spaceApp.discussionsLimit,
+    offset: state.space.spaceApp.discussionsOffset,
+    search: state.space.spaceApp.discussionsSearchTerm,
   }));
 
   const { error, issues } = !!search

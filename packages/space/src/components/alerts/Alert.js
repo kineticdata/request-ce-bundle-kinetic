@@ -59,7 +59,7 @@ const AlertComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  canEdit: state.app.profile.spaceAdmin ? true : false,
+  canEdit: state.app.app.profile.spaceAdmin ? true : false,
 });
 
 export const mapDispatchToProps = {

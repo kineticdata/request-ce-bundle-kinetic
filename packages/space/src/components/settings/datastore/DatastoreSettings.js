@@ -370,15 +370,15 @@ const handleRebuildBridges = ({
     : createBridgeModel(bridgeModelTemplate);
 
 export const mapStateToProps = (state, { match: { params } }) => ({
-  loading: state.settingsDatastore.currentFormLoading,
-  canManage: state.settingsDatastore.currentForm.canManage,
-  origForm: state.settingsDatastore.currentForm,
-  updatedForm: state.settingsDatastore.currentFormChanges,
+  loading: state.space.settingsDatastore.currentFormLoading,
+  canManage: state.space.settingsDatastore.currentForm.canManage,
+  origForm: state.space.settingsDatastore.currentForm,
+  updatedForm: state.space.settingsDatastore.currentFormChanges,
   formSlug: params.slug,
-  hasChanged: !state.settingsDatastore.currentForm.equals(
-    state.settingsDatastore.currentFormChanges,
+  hasChanged: !state.space.settingsDatastore.currentForm.equals(
+    state.space.settingsDatastore.currentFormChanges,
   ),
-  bridges: state.settingsDatastore.bridges,
+  bridges: state.space.settingsDatastore.bridges,
   bridgeName: '',
 });
 
