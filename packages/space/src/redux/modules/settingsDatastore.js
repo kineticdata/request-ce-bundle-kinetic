@@ -325,9 +325,11 @@ export const reducer = (state = State(), { type, payload }) => {
       const bridgeModelMapping = BridgeModelMapping(
         bridgeModel.mappings.find(m => m.name === `Datastore - ${form.name}`),
       );
+      const canManage = state.forms.find(f => f.slug === form.slug).canManage;
       const columns = buildColumns(form);
       const dsForm = DatastoreForm({
         ...form,
+        canManage,
         columns,
         bridgeModel,
         bridgeModelMapping,
