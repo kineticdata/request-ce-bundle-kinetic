@@ -1,12 +1,12 @@
 import { delay } from 'redux-saga';
 import { put, takeEvery } from 'redux-saga/effects';
-import { actions, types } from '../modules/common';
+import { actions, types } from '../modules/toasts';
 
-export function* addNotificationTask(action) {
+export function* addToastTask(action) {
   yield delay(3000);
-  yield put(actions.removeNotification(action.payload.id));
+  yield put(actions.removeToast(action.payload.id));
 }
 
 export function* watchToasts() {
-  yield takeEvery(types.ADD_NOTIFICATION, addNotificationTask);
+  yield takeEvery(types.ADD_TOAST, addToastTask);
 }

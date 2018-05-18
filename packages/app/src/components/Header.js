@@ -39,7 +39,7 @@ export const Header = ({
   predefinedKapps,
   additionalKapps,
   kappDropdownOpen,
-  kappDropdownToggle,
+  kappDropdownToggle
 }) => (
   <Navbar color="faded" light fixed="top">
     <Nav className="nav-header">

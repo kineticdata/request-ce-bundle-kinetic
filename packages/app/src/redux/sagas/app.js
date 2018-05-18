@@ -1,7 +1,15 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
+import { takeEvery, call, put, all } from 'redux-saga/effects';
 import { Map } from 'immutable';
 import { CoreAPI } from 'react-kinetic-core';
-import { actions, types } from '../modules/app';
+import { actions as configActions } from '../modules/config';
+import { actions as kappActions } from '../modules/kapps';
+import {
+  actions as loadingActions,
+  types as loadingTypes,
+} from '../modules/loading';
+import { actions as profileActions } from '../modules/profile';
+import { actions as spaceActions } from '../modules/space';
+
 import semver from 'semver';
 
 const MINIMUM_CE_VERSION = '2.0.2';
@@ -27,14 +35,13 @@ export function* fetchAppTask() {
       .delete('space')
       .toJS();
 
-    const appData = {
-      space,
-      kapps,
-      profile: me,
-      version,
-    };
-
-    yield put(actions.setApp(appData));
+    yield all([
+      put(configActions.setVersion(version)),
+      put(kappActions.setKapps(kapps)),
+      put(profileActions.setProfile(me)),
+      put(spaceActions.setSpace(space)),
+    ]);
+    yield put(loadingActions.setLoading(false));
   } else {
     window.alert(
       `You must be running Kinetic Request v${MINIMUM_CE_VERSION} or later in order to use this app. You are currently running v${version}.`,
@@ -43,5 +50,5 @@ export function* fetchAppTask() {
 }
 
 export function* watchApp() {
-  yield takeEvery(types.LOAD_APP, fetchAppTask);
+  yield takeEvery(loadingTypes.LOAD_APP, fetchAppTask);
 }

@@ -9,13 +9,14 @@ import {
 import { List } from 'immutable';
 
 import { actions, formatMessages } from '../redux/modules/discussions';
-import { commonActions } from 'common';
+import { toastActions } from 'common';
 
 import { Discussion } from './Discussion';
 
 const mapStateToProps = (state, props) => {
   const discussion =
-    props.discussionId && state.discussions.discussions.get(props.discussionId);
+    props.discussionId &&
+    state.discussions.discussions.discussions.get(props.discussionId);
 
   return {
     profile: state.app.profile,
@@ -23,11 +24,11 @@ const mapStateToProps = (state, props) => {
     messages: discussion ? discussion.messages : List(),
     hasMoreMessages: discussion && discussion.hasMoreMessages,
     loadingMoreMessages: discussion && discussion.loadingMoreMessages,
-    currentOpenModals: state.discussions.currentOpenModals,
-    invitationFields: state.discussions.invitationFields,
-    invitationPending: state.discussions.invitationPending,
-    isSmallLayout: state.layout.get('size') === 'small',
-    pageTitleInterval: state.discussions.pageTitleInterval,
+    currentOpenModals: state.discussions.discussions.currentOpenModals,
+    invitationFields: state.discussions.discussions.invitationFields,
+    invitationPending: state.discussions.discussions.invitationPending,
+    isSmallLayout: state.app.layout.get('size') === 'small',
+    pageTitleInterval: state.discussions.discussions.pageTitleInterval,
   };
 };
 
@@ -36,7 +37,7 @@ const mapDispatchToProps = {
   leaveDiscussion: actions.leaveDiscussion,
   stopConnection: actions.stopConnection,
   fetchMoreMessages: actions.fetchMoreMessages,
-  addWarn: commonActions.addWarn,
+  addWarn: toastActions.addWarn,
   createDiscussion: actions.createIssue,
   openModal: actions.openModal,
   closeModal: actions.closeModal,

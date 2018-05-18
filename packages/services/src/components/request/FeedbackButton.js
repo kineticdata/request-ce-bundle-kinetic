@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { commonActions } from 'common';
+import { modalFormActions } from 'common';
 import { getFeedbackFormConfig } from '../../utils';
 
 const FeedbackButton = props => (
@@ -13,7 +13,7 @@ const FeedbackButton = props => (
 export const mapStateToProps = () => ({});
 
 export const mapDispatchToProps = {
-  openForm: commonActions.openForm,
+  openForm: modalFormActions.openForm,
 };
 
 const enhance = compose(

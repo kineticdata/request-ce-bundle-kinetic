@@ -74,8 +74,8 @@ export const SidebarComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.settingsDatastore.loading,
-  forms: state.settingsDatastore.forms,
+  loading: state.space.settingsDatastore.loading,
+  forms: state.space.settingsDatastore.forms,
   spaceAdmin: state.app.profile.spaceAdmin,
   pathname: state.router.location.pathname,
 });

@@ -11,12 +11,12 @@ const mapStateToProps = (state, props) => {
   return {
     filter,
     isExact: props.match.isExact,
-    offset: state.queue.offset,
-    limit: state.queue.limit,
-    sortDirection: state.queue.sortDirection,
+    offset: state.queue.queue.offset,
+    limit: state.queue.queue.limit,
+    sortDirection: state.queue.queue.sortDirection,
     sortBy: filter && filter.sortBy,
-    queueItems: filter && (state.queue.lists.get(filter) || List()),
-    statusMessage: filter && state.queue.statuses.get(filter),
+    queueItems: filter && (state.queue.queue.lists.get(filter) || List()),
+    statusMessage: filter && state.queue.queue.statuses.get(filter),
   };
 };
 

@@ -49,15 +49,15 @@ export const actions = {
   setUsers: withPayload(types.SET_USERS),
 };
 
-export const selectTeam = state => state.team.data;
-export const selectTeamStatus = state => state.team.loading;
+export const selectTeam = state => state.space.team.data;
+export const selectTeamStatus = state => state.space.team.loading;
 
 export const selectTeamMemberships = state =>
-  state.team.data ? state.team.data.memberships : [];
+  state.space.team.data ? state.space.team.data.memberships : [];
 
 export const selectIsTeamMember = (state, profile) =>
-  state.team.data
-    ? state.team.data.memberships.find(
+  state.space.team.data
+    ? state.space.team.data.memberships.find(
         m => m.user.username === profile.username,
       ) !== undefined
     : false;

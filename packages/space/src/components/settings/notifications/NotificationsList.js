@@ -94,11 +94,11 @@ const NotificationsListComponent = ({ submissions, type, match }) => (
 
 export const mapStateToProps = (state, props) => ({
   loading:
-    state.settingsNotifications.loading ||
-    state.settingsNotifications.dateFormatsLoading,
-  templates: state.settingsNotifications.notificationTemplates,
-  snippets: state.settingsNotifications.notificationSnippets,
-  dateFormats: state.settingsNotifications.dateFormats,
+    state.space.settingsNotifications.loading ||
+    state.space.settingsNotifications.dateFormatsLoading,
+  templates: state.space.settingsNotifications.notificationTemplates,
+  snippets: state.space.settingsNotifications.notificationSnippets,
+  dateFormats: state.space.settingsNotifications.dateFormats,
 });
 
 export const mapDispatchToProps = {
