@@ -77,27 +77,29 @@ export const SidebarComponent = ({
     {spaceAdmin && (
       <div className="sidebar-group sidebar-group--settings">
         <ul className="nav flex-column settings-group">
-          <a
-            href={`${bundle.spaceLocation()}/app`}
-            target="blank"
-            className="nav-link"
-          >
-            Kinetic Request Admin
-            <span className="fa fa-fw fa-external-link" />
-          </a>
-        </ul>
-        {!hasSharedTaskEngine && (
-          <ul className="nav flex-column settings-group">
+          <li>
             <a
-              href={`${bundle.spaceLocation()}/kinetic-task`}
+              href={`${bundle.spaceLocation()}/app`}
               target="blank"
               className="nav-link"
             >
-              Kinetic Task Admin
+              Kinetic Request Admin
               <span className="fa fa-fw fa-external-link" />
             </a>
-          </ul>
-        )}
+          </li>
+          {!hasSharedTaskEngine && (
+            <li>
+              <a
+                href={`${bundle.spaceLocation()}/kinetic-task`}
+                target="blank"
+                className="nav-link"
+              >
+                Kinetic Task Admin
+                <span className="fa fa-fw fa-external-link" />
+              </a>
+            </li>
+          )}
+        </ul>
       </div>
     )}
   </div>
