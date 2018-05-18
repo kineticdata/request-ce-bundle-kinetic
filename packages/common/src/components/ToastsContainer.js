@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { actions } from '../redux/modules/common';
+import { actions } from '../redux/modules/toasts';
 
 const defaultTitle = {
   success: 'Success',
@@ -35,16 +35,16 @@ const Toasts = ({ toasts, dismiss }) => (
 );
 
 const mapStateToProps = state => ({
-  toasts: state.common.common.notifications,
+  toasts: state.common.toasts,
 });
 
 const mapDispatchToProps = {
-  removeNotification: actions.removeNotification,
+  removeToast: actions.removeToast,
 };
 
 export const ToastsContainer = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withHandlers({
-    dismiss: ({ removeNotification }) => id => () => removeNotification(id),
+    dismiss: ({ removeToast }) => id => () => removeToast(id),
   }),
 )(Toasts);

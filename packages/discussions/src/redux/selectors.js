@@ -1,2 +1,2 @@
 export const selectServerUrl = state =>
-  state.app.app.space && `/${state.app.app.space.slug}/kinetic-response`;
+  state.app.space && `/${state.app.space.slug}/kinetic-response`;

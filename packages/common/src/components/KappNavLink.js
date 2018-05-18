@@ -7,7 +7,7 @@ export const KappNavLinkComponent = ({ to, kappSlug, ...rest }) => (
 );
 
 export const mapStateToProps = state => ({
-  kappSlug: state.app.app.kappSlug,
+  kappSlug: state.app.config.kappSlug,
   // Need to map in the current pathname because the connect HOC will
   // not let the inner NavLink update if mapStateToProps doesn't return
   // a different value (its implicitly a pure component).

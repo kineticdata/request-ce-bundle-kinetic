@@ -13,8 +13,8 @@ export const PageTitleComponent = ({ space, kapp, parts }) => {
 };
 
 export const mapStateToProps = state => ({
-  space: state.app.app.space || 'Home',
-  kapp: state.app.app.kapps.find(kapp => kapp.slug === state.app.app.kappSlug),
+  space: state.app.space || 'Home',
+  kapp: state.app.kapps.find(kapp => kapp.slug === state.app.config.kappSlug),
 });
 
 export const mapDispatchToProps = {};

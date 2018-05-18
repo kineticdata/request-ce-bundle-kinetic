@@ -78,7 +78,7 @@ const AboutComponent = ({ space, about, loading }) => (
 );
 
 const mapStateToProps = state => ({
-  space: state.app.app.space,
+  space: state.app.space,
   about: state.space.about.data,
   loading: state.space.about.loading,
 });

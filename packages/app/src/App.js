@@ -11,7 +11,7 @@ import Sidebar from 'react-sidebar';
 import { Utils, ToastsContainer, ModalFormContainer } from 'common';
 
 import { HeaderContainer } from './components/HeaderContainer';
-import { actions as appActions } from './redux/modules/app';
+import { actions as loadActions } from './redux/modules/loading';
 import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';
 import { App as ServicesApp } from 'services/src/App';
@@ -49,16 +49,16 @@ export const AppComponent = props =>
   );
 
 export const mapStateToProps = state => ({
-  loading: state.app.app.loading,
-  kapps: state.app.app.kapps,
+  loading: state.app.loading,
+  kapps: state.app.kapps,
   sidebarOpen: state.app.layout.sidebarOpen,
   suppressedSidebarOpen: state.app.layout.suppressedSidebarOpen,
   layoutSize: state.app.layout.size,
-  kappSlug: state.app.app.kappSlug,
+  kappSlug: state.app.config.kappSlug,
   pathname: state.router.location.pathname,
 });
 export const mapDispatchToProps = {
-  loadApp: appActions.loadApp,
+  loadApp: loadActions.loadApp,
   fetchAlerts: alertsActions.fetchAlerts,
   setSidebarOpen: layoutActions.setSidebarOpen,
   setSuppressedSidebarOpen: layoutActions.setSuppressedSidebarOpen,

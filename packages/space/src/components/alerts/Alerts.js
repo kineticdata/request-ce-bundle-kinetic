@@ -89,7 +89,7 @@ export const mapStateToProps = state => ({
     )
     .reverse(),
   error: state.app.alerts.error,
-  canEdit: state.app.app.profile.spaceAdmin ? true : false,
+  canEdit: state.app.profile.spaceAdmin ? true : false,
 });
 
 export const mapDispatchToProps = {

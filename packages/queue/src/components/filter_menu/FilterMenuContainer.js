@@ -31,7 +31,7 @@ export const mapStateToProps = state => ({
   ),
   filterName: state.queue.filterMenu.get('filterName'),
   appliedAssignments: selectAppliedAssignments(state),
-  kappSlug: state.app.app.kappSlug,
+  kappSlug: state.app.config.kappSlug,
 });
 
 export const mapDispatchToProps = {

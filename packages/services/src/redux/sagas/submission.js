@@ -35,7 +35,7 @@ export function* fetchSubmissionSaga(action) {
 
 export function* cloneSubmissionSaga(action) {
   const include = 'details,values,form,form.fields.details,form.kapp';
-  const kappSlug = yield select(state => state.app.app.kappSlug);
+  const kappSlug = yield select(state => state.app.config.kappSlug);
   const { submission, errors, serverError } = yield call(
     CoreAPI.fetchSubmission,
     { id: action.payload, include },

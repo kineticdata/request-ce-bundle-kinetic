@@ -15,7 +15,7 @@ export const SUBMISSION_INCLUDES =
 
 export const getAppSettings = state => state.queue.queueApp;
 export const getCurrentItem = state => state.queue.queue.currentItem;
-export const getKappSlug = state => state.app.app.kappSlug;
+export const getKappSlug = state => state.app.config.kappSlug;
 
 /* eslint-disable no-param-reassign */
 export const prepareStatusFilter = (searcher, filter) => {

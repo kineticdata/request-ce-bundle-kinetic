@@ -94,7 +94,7 @@ const mapStateToProps = (state, props) => {
 
   return {
     sidebarOpen: state.app.layout.sidebarOpen,
-    profile: state.app.app.profile,
+    profile: state.app.profile,
     discussionId: props.match.params.id,
     discussionName:
       discussion && discussion.issue ? discussion.issue.name : 'Loading...',

@@ -4,7 +4,7 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fromJS, List } from 'immutable';
-import { commonActions, PageTitle } from 'common';
+import { modalFormActions, PageTitle } from 'common';
 
 import { actions as usersActions } from '../../../redux/modules/settingsUsers';
 import { actions as teamsActions } from '../../../redux/modules/teamList';
@@ -356,8 +356,8 @@ const mapStateToProps = (state, props) => ({
   users: state.space.settingsUsers.users,
   error: state.space.settingsUsers.error,
   spaceAttributes:
-    state.app.app.space &&
-    state.app.app.space.attributes.reduce((memo, item) => {
+    state.app.space &&
+    state.app.space.attributes.reduce((memo, item) => {
       memo[item.name] = item.value;
       return memo;
     }, {}),
@@ -372,7 +372,7 @@ const mapDispatchToProps = {
   updateUser: usersActions.updateUser,
   createUser: usersActions.createUser,
   deleteUser: usersActions.deleteUser,
-  openForm: commonActions.openForm,
+  openForm: modalFormActions.openForm,
   push,
 };
 

@@ -3,7 +3,7 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fromJS } from 'immutable';
-import { commonActions, PageTitle } from 'common';
+import { modalFormActions, PageTitle } from 'common';
 import { actions } from '../../../redux/modules/profiles';
 import { ProfileCard } from '../../shared/ProfileCard';
 import { TeamCard } from '../../shared/TeamCard';
@@ -290,8 +290,8 @@ const mapStateToProps = state => ({
     state.space.profiles.profile && state.space.profiles.profile.attributes['Manager'],
   managerEnabled: state.space.spaceApp.userAttributeDefinitions['Manager'],
   spaceAttributes:
-    state.app.app.space &&
-    state.app.app.space.attributes.reduce((memo, item) => {
+    state.app.space &&
+    state.app.space.attributes.reduce((memo, item) => {
       memo[item.name] = item.value;
       return memo;
     }, {}),
@@ -301,7 +301,7 @@ const mapDispatchToProps = {
   fetchProfile: actions.fetchProfile,
   toggleChangePassword: actions.setChangePasswordVisible,
   updateProfile: actions.updateProfile,
-  openForm: commonActions.openForm,
+  openForm: modalFormActions.openForm,
 };
 
 export const Profile = compose(

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { commonActions } from 'common';
+import { modalFormActions } from 'common';
 import { getFeedbackFormConfig } from '../../utils';
 
 export const RequestShowConfirmation = ({ handleOpenFeedback }) => (
@@ -19,7 +19,7 @@ export const RequestShowConfirmation = ({ handleOpenFeedback }) => (
 );
 
 const enhance = compose(
-  connect(null, { openForm: commonActions.openForm }),
+  connect(null, { openForm: modalFormActions.openForm }),
   withHandlers({
     handleOpenFeedback: props => () =>
       props.openForm(getFeedbackFormConfig(props.submission.id)),

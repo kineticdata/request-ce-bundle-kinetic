@@ -5,7 +5,7 @@ import { actions } from '../../redux/modules/search';
 
 const mapStateToProps = state => ({
   searchTerm: state.services.search.inputValue,
-  kappSlug: state.app.app.kappSlug,
+  kappSlug: state.app.config.kappSlug,
   submitHandler: props => event => {
     event.preventDefault();
     props.push(`/kapps/${props.kappSlug}/search/${props.searchTerm}`);

@@ -69,7 +69,7 @@ export const mapStateToProps = (state, { match: { params } }) => ({
     : null,
   forms: state.services.forms.data,
   values: valuesFromQueryParams(state.router.location.search),
-  kappSlug: state.app.app.kappSlug,
+  kappSlug: state.app.config.kappSlug,
 });
 
 export const mapDispatchToProps = {

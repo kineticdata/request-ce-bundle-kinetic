@@ -14,7 +14,7 @@ import {
 } from 'redux-saga/effects';
 import { CoreAPI } from 'react-kinetic-core';
 
-import { commonActions } from 'common';
+import { toastActions } from 'common';
 import { types, actions } from '../modules/discussions';
 import { selectServerUrl } from '../selectors';
 
@@ -209,7 +209,7 @@ export function* createInviteTask({ payload }) {
   );
 
   if (error) {
-    yield put(commonActions.addError('Failed to create invitation!'));
+    yield put(toastActions.addError('Failed to create invitation!'));
   } else {
     yield all([
       put(actions.createInviteDone()),

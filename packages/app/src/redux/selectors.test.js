@@ -17,16 +17,16 @@ describe('selectors', () => {
 
   describe('#selectCurrentKapp', () => {
     it('returns the current kapp', () => {
-      expect(selectCurrentKapp(state)).toBe(state.app.app.kapps[0]);
+      expect(selectCurrentKapp(state)).toBe(state.app.kapps[0]);
     });
 
     it('returns null when loading', () => {
-      state.app.app.loading = true;
+      state.app.loading = true;
       expect(selectCurrentKapp(state)).toBeNull();
     });
 
     it('returns null when there is no current kapp', () => {
-      state.app.app.kappSlug = null;
+      state.app.config.kappSlug = null;
       expect(selectCurrentKapp(state)).toBeNull();
     });
   });

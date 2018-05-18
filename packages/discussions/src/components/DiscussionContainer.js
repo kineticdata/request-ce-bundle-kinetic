@@ -9,7 +9,7 @@ import {
 import { List } from 'immutable';
 
 import { actions, formatMessages } from '../redux/modules/discussions';
-import { commonActions } from 'common';
+import { toastActions } from 'common';
 
 import { Discussion } from './Discussion';
 
@@ -19,7 +19,7 @@ const mapStateToProps = (state, props) => {
     state.discussions.discussions.discussions.get(props.discussionId);
 
   return {
-    profile: state.app.app.profile,
+    profile: state.app.profile,
     discussion,
     messages: discussion ? discussion.messages : List(),
     hasMoreMessages: discussion && discussion.hasMoreMessages,
@@ -37,7 +37,7 @@ const mapDispatchToProps = {
   leaveDiscussion: actions.leaveDiscussion,
   stopConnection: actions.stopConnection,
   fetchMoreMessages: actions.fetchMoreMessages,
-  addWarn: commonActions.addWarn,
+  addWarn: toastActions.addWarn,
   createDiscussion: actions.createIssue,
   openModal: actions.openModal,
   closeModal: actions.closeModal,

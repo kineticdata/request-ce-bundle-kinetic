@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
   isOpen: state.queue.queue.newItemMenuOpen,
   options: state.queue.queue.newItemMenuOptions,
   assignments: selectAssignments(state).toJS(),
-  kappSlug: state.app.app.kappSlug,
+  kappSlug: state.app.config.kappSlug,
 });
 
 const mapDispatchToProps = {

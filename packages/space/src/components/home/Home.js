@@ -135,7 +135,7 @@ const HomeComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  spaceName: state.app.app.space.name,
+  spaceName: state.app.space.name,
   discussionGroups: selectGroupedDiscussions(state),
   discussionsError: state.space.spaceApp.discussionsError,
   discussionsLoading: state.space.spaceApp.discussionsLoading,
@@ -146,7 +146,7 @@ export const mapStateToProps = state => ({
   discussionServerUrl: selectServerUrl(state),
   isMoreDiscussions: selectIsMoreDiscussions(state),
   discussionsEnabled: selectDiscussionsEnabled(state),
-  me: state.app.app.profile,
+  me: state.app.profile,
   teams: state.space.teamList.data,
 });
 

@@ -2,7 +2,7 @@ import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 import { actions as discussionActions } from 'discussions';
 
-import { commonActions, Utils } from 'common';
+import { modalFormActions, Utils } from 'common';
 
 import { buildHierarchy } from '../../utils';
 
@@ -22,7 +22,7 @@ import { Team } from './Team';
 
 const mapStateToProps = state => {
   const team = selectTeam(state);
-  const me = state.app.app.profile;
+  const me = state.app.profile;
 
   const heirarchy = buildHierarchy((team && team.name) || '');
   const teamsMap = state.space.teamList.data.reduce((memo, item) => {
@@ -33,16 +33,16 @@ const mapStateToProps = state => {
   return {
     loading:
       state.space.team.loading || state.space.teamList.loading || state.space.spaceForms.loading,
-    space: state.app.app.space,
+    space: state.app.space,
     catalogSlug: Utils.getAttributeValue(
-      state.app.app.space,
+      state.app.space,
       'Catalog Kapp Slug',
       'catalog',
     ),
     me,
     team,
     adminKappSlug: Utils.getAttributeValue(
-      state.app.app.space,
+      state.app.space,
       'Admin Kapp Slug',
       'admin',
     ),
@@ -65,7 +65,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  openForm: commonActions.openForm,
+  openForm: modalFormActions.openForm,
   fetchTeam: actions.fetchTeam,
   fetchTeams: teamListActions.fetchTeams,
   fetchForms: spaceFormsActions.fetchForms,

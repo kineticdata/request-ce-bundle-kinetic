@@ -68,9 +68,9 @@ export const DatastoreRouter = ({ match, loading, validVersion, version }) =>
 
 export const mapStateToProps = state => ({
   loading: state.space.settingsDatastore.loading,
-  version: state.app.app.version,
+  version: state.app.config.version,
   validVersion: semver.satisfies(
-    semver.coerce(state.app.app.version.version),
+    semver.coerce(state.app.config.version),
     `>=${MINIMUM_CE_VERSION}`,
   ),
 });
