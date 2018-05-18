@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
 import { CoreAPI } from 'react-kinetic-core';
 import { Table } from 'reactstrap';
+import { Toast } from 'common';
 import csv from 'csvtojson';
 
 export class DatastoreImport extends Component {
   constructor(props) {
     super(props);
-
-    this.state = { submissions: [], form: {} };
+    console.log(this.props.match.params.slug);
+    this.state = {
+      submissions: [],
+      formSlug: this.props.match.params.slug,
+      missingFields: [],
+    };
+    this.form = {};
+    this.formFields = [];
     this.calls = [];
     this.failedCalls = [];
+    this.readFile = null;
   }
 
   responseHandler = arr => result => {
@@ -30,12 +38,12 @@ export class DatastoreImport extends Component {
     const promise = head.id
       ? CoreAPI.updateSubmission({
           datastore: true,
-          formSlug: this.props.formSlug,
+          formSlug: this.state.formSlug,
           values: head.values,
         })
       : CoreAPI.createSubmission({
           datastore: true,
-          formSlug: this.props.formSlug,
+          formSlug: this.state.formSlug,
           values: head.values,
         });
 
@@ -51,7 +59,7 @@ export class DatastoreImport extends Component {
 
     CoreAPI.searchSubmissions({
       datastore: true,
-      form: this.props.formSlug,
+      form: this.state.formSlug,
       search,
     }).then(res => {
       this.setState({ submissions: res.submissions });
@@ -76,33 +84,63 @@ export class DatastoreImport extends Component {
   fetchForm = () => {
     CoreAPI.fetchForm({
       datastore: true,
-      formSlug: this.props.formSlug,
+      formSlug: this.state.formSlug,
       include: 'fields',
-    }).then(response => this.setState({ form: response.form }));
+    }).then(response => {
+      if (response.serverError || response.errors) {
+      } else {
+        this.form = response.form;
+        this.formFields = response.form.fields.reduce((acc, field) => {
+          acc.push(field.name);
+          return acc;
+        }, []);
+      }
+    });
   };
 
-  handleDelete = event => {
-    this.delete(this.state.submissions);
+  handleDelete = () => this.delete(this.state.submissions);
+
+  handleImport = () => {
+    let arr = [];
+    csv({ noheader: false })
+      .fromString(this.readFile.result)
+      .on('json', csvRow => {
+        let obj = {};
+        if (csvRow['Datastore Record ID'] !== '') {
+          obj.id = csvRow['Datastore Record ID'];
+        }
+        delete csvRow['Datastore Record ID'];
+        obj.values = csvRow;
+        arr.push(obj);
+      })
+      .on('end', () => {
+        this.post(arr);
+      });
   };
 
   handleChange = event => {
-    let arr = [];
+    const classThis = this;
     const reader = new FileReader();
     reader.readAsText(this.fileEl.files[0]);
+    this.readFile = reader;
     reader.onload = event => {
       csv({ noheader: false })
         .fromString(event.target.result)
-        .on('json', csvRow => {
-          let obj = {};
-          if (csvRow['Datastore Record ID'] !== '') {
-            obj.id = csvRow['Datastore Record ID'];
+        .on('header', headers => {
+          let acc = [];
+          const allHeadersFound = headers.every(header => {
+            if (
+              classThis.formFields.includes(header) ||
+              header === 'Datastore Record ID'
+            ) {
+              return true;
+            }
+            acc.push(header);
+            return false;
+          });
+          if (!allHeadersFound) {
+            classThis.setState({ missingFields: acc });
           }
-          delete csvRow['Datastore Record ID'];
-          obj.values = csvRow;
-          arr.push(obj);
-        })
-        .on('end', () => {
-          this.post(arr);
         });
     };
   };
@@ -126,6 +164,15 @@ export class DatastoreImport extends Component {
             >
               Delete Records
             </button>
+            {this.readFile &&
+              this.state.missingFields.length <= 0 && (
+                <button
+                  className="btn btn-secondary btn-sm"
+                  onClick={this.handleImport}
+                >
+                  Import Records
+                </button>
+              )}
             <input
               type="file"
               onChange={this.handleChange}
@@ -135,41 +182,29 @@ export class DatastoreImport extends Component {
             />
           </div>
           <div className="forms-list-wrapper">
+            {this.state.missingFields.length > 0 && (
+              <div>
+                <h3>The CSV has headers that do not exist on the form</h3>
+                {this.state.missingFields.map(fieldName => <p>{fieldName}</p>)}
+              </div>
+            )}
             {this.state.submissions.length > 0 && (
-              <Table>
+              <Table style={{ maxWidth: '80%' }}>
                 <thead>
                   <tr>
-                    <th>Field 1</th>
-                    <th>Field 2</th>
-                    <th>Field 3</th>
-                    <th>Field 4</th>
-                    <th>Field 5</th>
-                    <th>Field 6</th>
-                    <th>Field 7</th>
-                    <th>Field 8</th>
-                    <th>Field 9</th>
-                    <th>Field 10</th>
-                    <th>Field 11</th>
-                    <th>Field 12</th>
+                    {Object.keys(this.state.submissions[0].values)
+                      .sort()
+                      .map(header => <th>{header}</th>)}
                   </tr>
                 </thead>
                 <tbody>
                   {this.state.submissions.map(submission => {
-                    const { values } = submission;
+                    const { values, id } = submission;
                     return (
-                      <tr>
-                        <td>{values['Resource ID']}</td>
-                        <td>{values['History Displayed']}</td>
-                        <td>{values['History']}</td>
-                        <td>{values['Room Name']}</td>
-                        <td>{values['Phone']}</td>
-                        <td>{values['Headline']}</td>
-                        <td>{values['Description']}</td>
-                        <td>{values['Capacity']}</td>
-                        <td>{values['Seating']}</td>
-                        <td>{values['Equipment-Video Conference']}</td>
-                        <td>{values['Equipment-Speakerphone']}</td>
-                        <td>{values['Equipment-White Board']}</td>
+                      <tr key={id}>
+                        {Object.keys(values)
+                          .sort()
+                          .map(fieldName => <td>{values[fieldName]}</td>)}
                       </tr>
                     );
                   })}
