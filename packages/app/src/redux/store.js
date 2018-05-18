@@ -32,12 +32,12 @@ export const configureStore = history => {
   const store = createStore(
     connectRouter(history)(
       combineReducers({
-        ...reducers,
-        ...commonReducers,
-        ...servicesReducers,
-        ...queueReducers,
-        ...spaceReducers,
-        ...discussionReducers,
+        app: combineReducers(reducers),
+        common: combineReducers(commonReducers),
+        services: combineReducers(servicesReducers),
+        queue: combineReducers(queueReducers),
+        space: combineReducers(spaceReducers),
+        discussions: combineReducers(discussionReducers),
       }),
     ),
     composeEnhancers(

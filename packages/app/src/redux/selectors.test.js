@@ -6,9 +6,11 @@ describe('selectors', () => {
   beforeEach(() => {
     state = {
       app: {
-        loading: false,
-        kapps: [{ slug: 'this-kapp' }],
-        kappSlug: 'this-kapp',
+        app: {
+          loading: false,
+          kapps: [{ slug: 'this-kapp' }],
+          kappSlug: 'this-kapp',
+        },
       },
     };
   });
@@ -24,7 +26,7 @@ describe('selectors', () => {
     });
 
     it('returns null when there is no current kapp', () => {
-      state.app.kappSlug = null;
+      state.app.config.kappSlug = null;
       expect(selectCurrentKapp(state)).toBeNull();
     });
   });

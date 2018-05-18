@@ -1,14 +1,23 @@
 import { Record } from 'immutable';
 import { Utils } from 'common';
-const { namespace, noPayload, withPayload } = Utils;
+const { namespace, withPayload } = Utils;
 
 export const types = {
   UPDATE_SPACE_SETTINGS: namespace('spaceSettings', 'UPDATE_SPACE_SETTINGS'),
-  UPDATE_SPACE_SETTINGS_ERROR: namespace('spaceSettings', 'UPDATE_SPACE_SETTINGS_ERROR'),
+  UPDATE_SPACE_SETTINGS_ERROR: namespace(
+    'spaceSettings',
+    'UPDATE_SPACE_SETTINGS_ERROR',
+  ),
   FETCH_SPACE_SETTINGS: namespace('spaceSettings', 'FETCH_SPACE_SETTINGS'),
-  FETCH_SPACE_SETTINGS_TEAMS: namespace('spaceSettings', 'FETCH_SPACE_SETTINGS_TEAMS'),
+  FETCH_SPACE_SETTINGS_TEAMS: namespace(
+    'spaceSettings',
+    'FETCH_SPACE_SETTINGS_TEAMS',
+  ),
   SET_SPACE_SETTINGS: namespace('spaceSettings', 'SET_SPACE_SETTINGS'),
-  SET_SPACE_SETTINGS_TEAMS: namespace('spaceSettings', 'SET_SPACE_SETTINGS_TEAMS'),
+  SET_SPACE_SETTINGS_TEAMS: namespace(
+    'spaceSettings',
+    'SET_SPACE_SETTINGS_TEAMS',
+  ),
 };
 
 export const actions = {

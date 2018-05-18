@@ -2,7 +2,7 @@ import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 import { actions as discussionActions } from 'discussions';
 
-import { commonActions, Utils } from 'common';
+import { modalFormActions, Utils } from 'common';
 
 import { buildHierarchy } from '../../utils';
 
@@ -25,14 +25,14 @@ const mapStateToProps = state => {
   const me = state.app.profile;
 
   const heirarchy = buildHierarchy((team && team.name) || '');
-  const teamsMap = state.teamList.data.reduce((memo, item) => {
+  const teamsMap = state.space.teamList.data.reduce((memo, item) => {
     memo[item.name] = item;
     return memo;
   }, {});
 
   return {
     loading:
-      state.team.loading || state.teamList.loading || state.spaceForms.loading,
+      state.space.team.loading || state.space.teamList.loading || state.space.spaceForms.loading,
     space: state.app.space,
     catalogSlug: Utils.getAttributeValue(
       state.app.space,
@@ -47,7 +47,7 @@ const mapStateToProps = state => {
       'admin',
     ),
     discussionId:
-      !state.team.loading && team
+      !state.space.team.loading && team
         ? Utils.getAttributeValue(team, 'Discussion Id', null)
         : null,
     memberships: selectTeamMemberships(state).map(member => member.user),
@@ -55,7 +55,7 @@ const mapStateToProps = state => {
     parent: heirarchy.parent && teamsMap[heirarchy.parent.name],
     subteams:
       team &&
-      (state.teamList.data || []).filter(
+      (state.space.teamList.data || []).filter(
         item =>
           item.name !== team.name &&
           item.name.replace(/::[^:]+$/, '') === team.name,
@@ -65,7 +65,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  openForm: commonActions.openForm,
+  openForm: modalFormActions.openForm,
   fetchTeam: actions.fetchTeam,
   fetchTeams: teamListActions.fetchTeams,
   fetchForms: spaceFormsActions.fetchForms,

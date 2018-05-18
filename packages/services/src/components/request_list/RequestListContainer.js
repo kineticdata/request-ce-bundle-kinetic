@@ -6,10 +6,10 @@ import { actions as submissionsActions } from '../../redux/modules/submissions';
 import { actions as submissionCountActions } from '../../redux/modules/submissionCounts';
 
 const mapStateToProps = (state, props) => ({
-  submissions: state.submissions.data,
-  hasNextPage: !!state.submissions.next,
-  hasPreviousPage: !state.submissions.previous.isEmpty(),
-  counts: state.submissionCounts.data,
+  submissions: state.services.submissions.data,
+  hasNextPage: !!state.services.submissions.next,
+  hasPreviousPage: !state.services.submissions.previous.isEmpty(),
+  counts: state.services.submissionCounts.data,
   type: props.match.params.type,
 });
 

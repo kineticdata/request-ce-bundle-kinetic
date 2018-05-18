@@ -4,7 +4,7 @@ import { actions } from '../../redux/modules/submission';
 import { RequestShow } from './RequestShow';
 
 export const mapStateToProps = (state, props) => ({
-  submission: state.submission.data,
+  submission: state.services.submission.data,
   listType: props.match.params.type,
   mode: props.match.params.mode,
 });

@@ -35,13 +35,13 @@ export const getFilterByPath = (state, pathname) => {
   const defaultListMatch = matchPath(pathname, DEFAULT_LIST_PATH);
   const customListMatch = matchPath(pathname, CUSTOM_LIST_PATH);
   if (adhocMatch) {
-    return state.queue.adhocFilter;
+    return state.queue.queue.adhocFilter;
   } else if (defaultListMatch) {
-    return state.queueApp.filters.find(
+    return state.queue.queueApp.filters.find(
       findByName(defaultListMatch.params.name),
     );
   } else if (customListMatch) {
-    return state.queueApp.myFilters.find(
+    return state.queue.queueApp.myFilters.find(
       findByName(customListMatch.params.name),
     );
   }
@@ -60,10 +60,10 @@ export const buildFilterPath = filter => {
 };
 
 export const selectMyTeamForms = state =>
-  state.queueApp.forms.filter(f => {
+  state.queue.queueApp.forms.filter(f => {
     const owningTeam = f.attributes['Owning Team'];
     return owningTeam
-      ? state.queueApp.myTeams
+      ? state.queue.queueApp.myTeams
           .map(t => t.name)
           .toSet()
           .intersect(new Set(owningTeam)).size > 0
@@ -71,7 +71,7 @@ export const selectMyTeamForms = state =>
   });
 
 export const selectAssignments = state =>
-  state.queueApp.allTeams
+  state.queue.queueApp.allTeams
     .flatMap(t =>
       t.memberships.map(m => {
         const user = m.user;
@@ -80,7 +80,7 @@ export const selectAssignments = state =>
       }),
     )
     .concat(
-      state.queueApp.allTeams.map(t => ({
+      state.queue.queueApp.allTeams.map(t => ({
         username: null,
         displayName: 'Unassigned',
         team: t.name,

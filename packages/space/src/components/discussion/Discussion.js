@@ -90,10 +90,10 @@ export const DiscussionComponent = ({
 
 const mapStateToProps = (state, props) => {
   const discussionId = props.match.params.id;
-  const discussion = state.discussions.discussions.get(discussionId);
+  const discussion = state.discussions.discussions.discussions.get(discussionId);
 
   return {
-    sidebarOpen: state.app.sidebarOpen,
+    sidebarOpen: state.app.layout.sidebarOpen,
     profile: state.app.profile,
     discussionId: props.match.params.id,
     discussionName:

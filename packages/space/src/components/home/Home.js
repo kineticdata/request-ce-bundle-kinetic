@@ -137,17 +137,17 @@ const HomeComponent = ({
 export const mapStateToProps = state => ({
   spaceName: state.app.space.name,
   discussionGroups: selectGroupedDiscussions(state),
-  discussionsError: state.spaceApp.discussionsError,
-  discussionsLoading: state.spaceApp.discussionsLoading,
-  discussionsLimit: state.spaceApp.discussionsLimit,
-  discussionsOffset: state.spaceApp.discussionsOffset,
-  discussionsSearchInputValue: state.spaceApp.discussionsSearchInputValue,
-  discussionsSearchTerm: state.spaceApp.discussionsSearchTerm,
+  discussionsError: state.space.spaceApp.discussionsError,
+  discussionsLoading: state.space.spaceApp.discussionsLoading,
+  discussionsLimit: state.space.spaceApp.discussionsLimit,
+  discussionsOffset: state.space.spaceApp.discussionsOffset,
+  discussionsSearchInputValue: state.space.spaceApp.discussionsSearchInputValue,
+  discussionsSearchTerm: state.space.spaceApp.discussionsSearchTerm,
   discussionServerUrl: selectServerUrl(state),
   isMoreDiscussions: selectIsMoreDiscussions(state),
   discussionsEnabled: selectDiscussionsEnabled(state),
   me: state.app.profile,
-  teams: state.teamList.data,
+  teams: state.space.teamList.data,
 });
 
 export const mapDispatchToProps = {

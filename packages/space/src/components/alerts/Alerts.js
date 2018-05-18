@@ -72,8 +72,8 @@ const AlertsComponent = ({ alerts, loading, match, error, canEdit }) => {
 };
 
 export const mapStateToProps = state => ({
-  loading: state.alerts.loading,
-  alerts: List(state.alerts.get('data'))
+  loading: state.app.alerts.loading,
+  alerts: List(state.app.alerts.get('data'))
     .filter(
       alert =>
         !alert.values['End Date Time'] ||
@@ -88,7 +88,7 @@ export const mapStateToProps = state => ({
       moment(alert.values['Start Date Time'] || alert.createdAt).unix(),
     )
     .reverse(),
-  error: state.alerts.error,
+  error: state.app.alerts.error,
   canEdit: state.app.profile.spaceAdmin ? true : false,
 });
 
