@@ -40,13 +40,9 @@ export default class AuthInterceptor {
     ) {
       if (!this.authPromise) {
         this.authPromise = this.authenticate();
-        this.authPromise
-          .then(() => {
-            this.authPromise = null;
-          })
-          .catch(() => {
-            this.authPromise = null;
-          });
+        this.authPromise.finally(() => {
+          this.authPromise = null;
+        });
       }
       return new Promise((resolve, reject) => {
         this.authPromise
