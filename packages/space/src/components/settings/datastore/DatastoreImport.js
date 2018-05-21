@@ -1,15 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { CoreAPI } from 'react-kinetic-core';
 import { Table } from 'reactstrap';
-import { Toast } from 'common';
+
 import csv from 'csvtojson';
 
 export class DatastoreImport extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.match.params.slug);
+
     this.state = {
       submissions: [],
+      csvObjects: [],
+      records: [],
+      recordsHeaders: [],
       formSlug: this.props.match.params.slug,
       missingFields: [],
     };
@@ -101,6 +104,12 @@ export class DatastoreImport extends Component {
   handleDelete = () => this.delete(this.state.submissions);
 
   handleImport = () => {
+    this.setState({ records: [], recordsHeaders: [] });
+    this.post(this.state.records);
+  };
+
+  handleCsvToJson = () => {
+    const classThis = this;
     let arr = [];
     csv({ noheader: false })
       .fromString(this.readFile.result)
@@ -114,7 +123,7 @@ export class DatastoreImport extends Component {
         arr.push(obj);
       })
       .on('end', () => {
-        this.post(arr);
+        classThis.setState({ records: arr });
       });
   };
 
@@ -127,7 +136,7 @@ export class DatastoreImport extends Component {
       csv({ noheader: false })
         .fromString(event.target.result)
         .on('header', headers => {
-          let acc = [];
+          const missingFields = [];
           const allHeadersFound = headers.every(header => {
             if (
               classThis.formFields.includes(header) ||
@@ -135,11 +144,14 @@ export class DatastoreImport extends Component {
             ) {
               return true;
             }
-            acc.push(header);
+            missingFields.push(header);
             return false;
           });
           if (!allHeadersFound) {
-            classThis.setState({ missingFields: acc });
+            classThis.setState({ missingFields });
+          } else {
+            classThis.handleCsvToJson();
+            classThis.setState({ recordsHeaders: headers });
           }
         });
     };
@@ -189,28 +201,70 @@ export class DatastoreImport extends Component {
               </div>
             )}
             {this.state.submissions.length > 0 && (
-              <Table style={{ maxWidth: '80%' }}>
-                <thead>
-                  <tr>
-                    {Object.keys(this.state.submissions[0].values)
-                      .sort()
-                      .map(header => <th>{header}</th>)}
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.submissions.map(submission => {
-                    const { values, id } = submission;
-                    return (
-                      <tr key={id}>
-                        {Object.keys(values)
-                          .sort()
-                          .map(fieldName => <td>{values[fieldName]}</td>)}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
+              <Fragment>
+                <Table style={{ maxWidth: '80%' }}>
+                  <thead>
+                    <tr>
+                      {Object.keys(this.state.submissions[0].values)
+                        .sort()
+                        .map((header, idx) => (
+                          <th key={header + idx}>{header}</th>
+                        ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.submissions.map(submission => {
+                      const { values, id } = submission;
+                      return (
+                        <tr key={id}>
+                          {Object.keys(values)
+                            .sort()
+                            .map((fieldName, idx) => (
+                              <td key={fieldName + idx}>{values[fieldName]}</td>
+                            ))}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </Fragment>
             )}
+            {this.state.records.length > 0 &&
+              this.state.recordsHeaders.length > 0 && (
+                <Fragment>
+                  <div>
+                    <p>CSV to Json results for review.</p>
+                    <p>Import Records to save them.</p>
+                  </div>
+                  <Table style={{ maxWidth: '80%' }}>
+                    <thead>
+                      <tr>
+                        {this.state.recordsHeaders
+                          .sort()
+                          .map((header, idx) => (
+                            <th key={header + idx}>{header}</th>
+                          ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.records.map((record, idx) => {
+                        const { values, id } = record;
+                        return (
+                          <tr key={idx}>
+                            {Object.keys(values)
+                              .sort()
+                              .map((fieldName, idx) => (
+                                <td key={fieldName + idx}>
+                                  {values[fieldName]}
+                                </td>
+                              ))}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </Table>
+                </Fragment>
+              )}
           </div>
         </div>
       </div>
