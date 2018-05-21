@@ -23,20 +23,6 @@ export class DatastoreImport extends Component {
     this.readFile = null;
   }
 
-  responseHandler = arr => result => {
-    if (result.serverError || result.errors) {
-      this.failedCalls.push(result);
-    }
-
-    if (arr.length > 0) {
-      this.post(arr);
-    } else {
-      Promise.all(this.calls).then(this.fetch);
-    }
-
-    return result;
-  };
-
   post = ([head, ...tail]) => {
     const promise = head.id
       ? CoreAPI.updateSubmission({
@@ -50,7 +36,17 @@ export class DatastoreImport extends Component {
           values: head.values,
         });
 
-    promise.then(this.responseHandler(tail));
+    promise.then(response => {
+      if (response.serverError || response.errors) {
+        this.failedCalls.push({ response, record: head });
+      }
+
+      if (tail.length > 0) {
+        this.post(tail);
+      } else {
+        Promise.all(this.calls).then(this.fetch);
+      }
+    });
     this.calls.push(promise);
   };
 
@@ -88,7 +84,7 @@ export class DatastoreImport extends Component {
     CoreAPI.fetchForm({
       datastore: true,
       formSlug: this.state.formSlug,
-      include: 'fields',
+      include: 'fields,attributesMap',
     }).then(response => {
       if (response.serverError || response.errors) {
       } else {
@@ -97,6 +93,16 @@ export class DatastoreImport extends Component {
           acc.push(field.name);
           return acc;
         }, []);
+        const datastoreConfiguration = response.form.attributesMap[
+          'Datastore Configuration'
+        ]
+          ? JSON.parse(
+              response.form.attributesMap['Datastore Configuration'][0],
+            )
+          : null;
+        this.setState({
+          datastoreConfiguration,
+        });
       }
     });
   };
@@ -170,13 +176,15 @@ export class DatastoreImport extends Component {
             <h1>Import Datastore</h1>
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button
-              className="btn btn-primary btn-sm"
-              onClick={this.handleDelete}
-            >
-              Delete Records
-            </button>
-            {this.readFile &&
+            {this.state.submissions.length > 0 && (
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={this.handleDelete}
+              >
+                Delete Records
+              </button>
+            )}
+            {this.state.records.length > 0 &&
               this.state.missingFields.length <= 0 && (
                 <button
                   className="btn btn-secondary btn-sm"
@@ -200,34 +208,14 @@ export class DatastoreImport extends Component {
                 {this.state.missingFields.map(fieldName => <p>{fieldName}</p>)}
               </div>
             )}
-            {this.state.submissions.length > 0 && (
-              <Fragment>
-                <Table style={{ maxWidth: '80%' }}>
-                  <thead>
-                    <tr>
-                      {Object.keys(this.state.submissions[0].values)
-                        .sort()
-                        .map((header, idx) => (
-                          <th key={header + idx}>{header}</th>
-                        ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.submissions.map(submission => {
-                      const { values, id } = submission;
-                      return (
-                        <tr key={id}>
-                          {Object.keys(values)
-                            .sort()
-                            .map((fieldName, idx) => (
-                              <td key={fieldName + idx}>{values[fieldName]}</td>
-                            ))}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </Table>
-              </Fragment>
+            {this.state.submissions.length > 0 ? (
+              <div>
+                <p>This datastore currently has records</p>
+              </div>
+            ) : (
+              <div>
+                <p>This datastore currently has no records</p>
+              </div>
             )}
             {this.state.records.length > 0 &&
               this.state.recordsHeaders.length > 0 && (
