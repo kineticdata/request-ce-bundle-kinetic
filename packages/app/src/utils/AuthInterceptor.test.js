@@ -84,11 +84,11 @@ describe('AuthInterceptor', () => {
       expect(store.actions).toEqual([{ type: 'TIMED_OUT' }]);
       expect(store.listeners.length).toBe(1);
       expect(authInterceptor.authPromise).not.toBeNull();
-      // Simulate cancel and call the listener.
+      // Simulate sucessful authentication and call the listener.
       store.state.authenticated = true;
       store.listeners[0]();
-      // The promse should be rejected with the original error object.  Also
-      // ensure that axios is not called and that the listener is unsubscribed.
+      // The promse should be resolved with the axios resolved value.  Also
+      // ensure that axios was called and that the listener is unsubscribed.
       await expect(rejectedCall).resolves.toBe('Hello World');
       expect(axios.mock.calls).toEqual([[{ url: 'foo' }]]);
       expect(store.listeners.length).toBe(0);
