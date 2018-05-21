@@ -157,7 +157,7 @@ const handleNameChange = ({ setNewForm, newForm }) => value => {
 
 export const mapStateToProps = (state, { match: { params } }) => ({
   spaceAdmin: state.app.profile.spaceAdmin,
-  bridges: state.settingsDatastore.bridges,
+  bridges: state.space.settingsDatastore.bridges,
 });
 
 export const mapDispatchToProps = {

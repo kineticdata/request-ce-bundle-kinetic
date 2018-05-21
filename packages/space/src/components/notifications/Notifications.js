@@ -37,7 +37,7 @@ const NotificationsComponent = ({ notifications, dismiss }) => (
 );
 
 const mapStateToProps = state => ({
-  notifications: state.errors.notifications,
+  notifications: state.space.errors.notifications,
 });
 
 const mapDispatchToProps = {

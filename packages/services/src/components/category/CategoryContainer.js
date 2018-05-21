@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { Category } from './Category';
 
 const mapStateToProps = (state, props) => ({
-  category: state.categories.data
+  category: state.services.categories.data
     .filter(category => category.slug === props.match.params.categorySlug)
     .first(),
 });

@@ -132,8 +132,8 @@ const FormListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.settingsDatastore.loading,
-  datastoreForms: state.settingsDatastore.forms.filter(f => !f.isHidden),
+  loading: state.space.settingsDatastore.loading,
+  datastoreForms: state.space.settingsDatastore.forms.filter(f => !f.isHidden),
 });
 
 export const mapDispatchToProps = {

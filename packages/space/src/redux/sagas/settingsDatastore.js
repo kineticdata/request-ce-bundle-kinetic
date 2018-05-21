@@ -4,7 +4,7 @@ import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'connected-react-router';
 
 import { actions as systemErrorActions } from '../modules/errors';
-import { commonActions } from 'common';
+import { toastActions } from 'common';
 import {
   actions,
   types,
@@ -110,7 +110,7 @@ export function* createFormSaga(action) {
     include: FORM_INCLUDES,
   });
   if (serverError || error) {
-    yield put(commonActions.addError(error || serverError.statusText));
+    yield put(toastActions.addError(error || serverError.statusText));
   } else {
     // TODO: Build Initial Bridge Model and Mapping here
     yield put(actions.fetchForms());
@@ -121,13 +121,13 @@ export function* createFormSaga(action) {
 }
 
 export const selectSearchParams = state => ({
-  searchParams: state.settingsDatastore.searchParams,
-  form: state.settingsDatastore.currentForm,
-  pageToken: state.settingsDatastore.nextPageToken,
-  pageTokens: state.settingsDatastore.pageTokens,
-  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
-  simpleSearchParam: state.settingsDatastore.simpleSearchParam,
-  simpleSearchNextPageIndex: state.settingsDatastore.simpleSearchNextPageIndex,
+  searchParams: state.space.settingsDatastore.searchParams,
+  form: state.space.settingsDatastore.currentForm,
+  pageToken: state.space.settingsDatastore.nextPageToken,
+  pageTokens: state.space.settingsDatastore.pageTokens,
+  simpleSearchActive: state.space.settingsDatastore.simpleSearchActive,
+  simpleSearchParam: state.space.settingsDatastore.simpleSearchParam,
+  simpleSearchNextPageIndex: state.space.settingsDatastore.simpleSearchNextPageIndex,
 });
 
 export function* fetchSubmissionsSimpleSaga() {
@@ -205,7 +205,7 @@ export function* fetchSubmissionsSimpleSaga() {
         put(actions.setSubmissions(List())),
         put(actions.setAdvancedSearchOpen(true)),
         put(
-          commonActions.addError(
+          toastActions.addError(
             'There were too many matching results. You will need to use an advanced search to create a better query.',
             'Too many results.',
           ),

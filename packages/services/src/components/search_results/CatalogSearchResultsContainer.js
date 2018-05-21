@@ -11,7 +11,7 @@ const mapStateToProps = (state, props) => {
   const query = props.match.params.query || '';
   return {
     query,
-    forms: state.forms.data
+    forms: state.services.forms.data
       .filter(displayableFormPredicate)
       .filter(form => matches(form, query)),
   };

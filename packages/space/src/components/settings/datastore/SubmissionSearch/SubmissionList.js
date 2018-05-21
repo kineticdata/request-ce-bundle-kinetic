@@ -115,15 +115,15 @@ const SubmissionListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.settingsDatastore.currentFormLoading,
-  form: state.settingsDatastore.currentForm,
-  submissions: state.settingsDatastore.submissions,
-  searching: state.settingsDatastore.searching,
-  nextPageToken: state.settingsDatastore.nextPageToken,
-  columns: state.settingsDatastore.currentForm.columns,
-  hasStartedSearching: state.settingsDatastore.hasStartedSearching,
+  loading: state.space.settingsDatastore.currentFormLoading,
+  form: state.space.settingsDatastore.currentForm,
+  submissions: state.space.settingsDatastore.submissions,
+  searching: state.space.settingsDatastore.searching,
+  nextPageToken: state.space.settingsDatastore.nextPageToken,
+  columns: state.space.settingsDatastore.currentForm.columns,
+  hasStartedSearching: state.space.settingsDatastore.hasStartedSearching,
   path: state.router.location.pathname.replace(/\/$/, ''),
-  isMobile: state.layout.size === 'small',
+  isMobile: state.app.layout.size === 'small',
 });
 
 export const mapDispatchToProps = {

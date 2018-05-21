@@ -66,7 +66,7 @@ export const PopoversPage = () => (
               willChange: 'transform',
               top: '0px',
               left: '0px',
-              transform: 'translate3d(-148px, 23px, 0px)',
+              transform: 'translate3d(0, 0px, 0px)',
             }}
           >
             <a

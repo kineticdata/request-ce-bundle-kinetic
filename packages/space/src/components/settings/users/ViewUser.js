@@ -84,9 +84,9 @@ const getProfilePhone = profile =>
     : 'No phone number';
 
 export const mapStateToProps = state => ({
-  loading: state.settingsUsers.userLoading,
-  profile: state.settingsUsers.user,
-  error: state.settingsUsers.error,
+  loading: state.space.settingsUsers.userLoading,
+  profile: state.space.settingsUsers.user,
+  error: state.space.settingsUsers.error,
 });
 
 export const mapDispatchToProps = {

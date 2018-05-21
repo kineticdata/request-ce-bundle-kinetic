@@ -1,6 +1,5 @@
-import { List, Record } from 'immutable';
+import { Record } from 'immutable';
 import { Utils } from 'common';
-import { Kapp } from '../../records';
 
 const { namespace, noPayload, withPayload } = Utils;
 
@@ -69,26 +68,6 @@ export const actions = {
   ),
   setSaveSuccess: withPayload(types.SET_SAVE_SUCCESS),
   setSaveError: withPayload(types.SET_SAVE_ERROR),
-};
-
-export const selectPrevAndNext = state => {
-  const notifications = state.settingsNotifications.notifications || List();
-  const notification = state.settingsNotifications.notification;
-  if (notification !== null) {
-    const currentItemIndex = notifications.findIndex(
-      item => item.id === notification.id,
-    );
-    const prevItem =
-      currentItemIndex > 0 ? notifications.get(currentItemIndex - 1).id : null;
-    const nextItem =
-      currentItemIndex < notifications.size - 1
-        ? notifications.get(currentItemIndex + 1).id
-        : null;
-    return {
-      prev: prevItem && `/settings/notifications/${prevItem}`,
-      next: nextItem && `/settings/notifications/${nextItem}`,
-    };
-  }
 };
 
 export const State = Record({

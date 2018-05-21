@@ -337,21 +337,21 @@ const SearchbarComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
-  advancedSearchOpen: state.settingsDatastore.advancedSearchOpen,
-  form: state.settingsDatastore.currentForm,
-  indexDefinitions: state.settingsDatastore.currentForm
-    ? List(state.settingsDatastore.currentForm.indexDefinitions)
+  simpleSearchActive: state.space.settingsDatastore.simpleSearchActive,
+  advancedSearchOpen: state.space.settingsDatastore.advancedSearchOpen,
+  form: state.space.settingsDatastore.currentForm,
+  indexDefinitions: state.space.settingsDatastore.currentForm
+    ? List(state.space.settingsDatastore.currentForm.indexDefinitions)
         .filter(d => d.status === 'Built')
         .map(d => {
           d.name = d.name.replace(':UNIQUE', '');
           return d;
         })
     : [],
-  searchParams: state.settingsDatastore.searchParams,
-  indexParts: state.settingsDatastore.searchParams.indexParts,
-  simpleSearchParam: state.settingsDatastore.simpleSearchParam,
-  searching: state.settingsDatastore.searching,
+  searchParams: state.space.settingsDatastore.searchParams,
+  indexParts: state.space.settingsDatastore.searchParams.indexParts,
+  simpleSearchParam: state.space.settingsDatastore.simpleSearchParam,
+  searching: state.space.settingsDatastore.searching,
 });
 
 export const mapDispatchToProps = {

@@ -54,10 +54,10 @@ const PagingComponent = ({
   );
 
 export const mapStateToProps = state => ({
-  submissions: state.settingsDatastore.submissions,
-  pageTokens: state.settingsDatastore.pageTokens,
-  nextPageToken: state.settingsDatastore.nextPageToken,
-  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
+  submissions: state.space.settingsDatastore.submissions,
+  pageTokens: state.space.settingsDatastore.pageTokens,
+  nextPageToken: state.space.settingsDatastore.nextPageToken,
+  simpleSearchActive: state.space.settingsDatastore.simpleSearchActive,
 });
 
 export const mapDispatchToProps = {

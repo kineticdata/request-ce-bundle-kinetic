@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
-import { commonActions, Utils } from 'common';
+import { modalFormActions, Utils } from 'common';
 import { actions } from '../../redux/modules/submission';
 import * as constants from '../../constants';
 import { getCancelFormConfig } from '../../utils';
@@ -23,7 +23,7 @@ export const mapStateToProps = () => ({});
 
 export const mapDispatchToProps = {
   deleteSubmission: actions.deleteSubmission,
-  openForm: commonActions.openForm,
+  openForm: modalFormActions.openForm,
 };
 
 const enhance = compose(

@@ -4,16 +4,18 @@ import { State as QueueState } from './queue';
 import { Filter } from '../../records';
 
 const state = {
-  queueApp: AppState({
-    filters: List([Filter({ name: 'Mine' }), Filter({ name: 'Teammates' })]),
-    myFilters: List([
-      Filter({ name: 'Facilities Teammates' }),
-      Filter({ name: 'Everything' }),
-    ]),
-  }),
-  queue: QueueState({
-    adhocFilter: Filter({ name: 'Adhoc' }),
-  }),
+  queue: {
+    queueApp: AppState({
+      filters: List([Filter({ name: 'Mine' }), Filter({ name: 'Teammates' })]),
+      myFilters: List([
+        Filter({ name: 'Facilities Teammates' }),
+        Filter({ name: 'Everything' }),
+      ]),
+    }),
+    queue: QueueState({
+      adhocFilter: Filter({ name: 'Adhoc' }),
+    }),
+  },
 };
 
 describe('getFilterByPath', () => {
