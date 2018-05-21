@@ -1,4 +1,5 @@
 import { reducer as alerts } from './modules/alerts';
+import { reducer as auth } from './modules/auth';
 import { reducer as config } from './modules/config';
 import { reducer as kapps } from './modules/kapps';
 import { reducer as layout } from './modules/layout';
@@ -8,10 +9,11 @@ import { reducer as space } from './modules/space';
 
 export default {
   alerts,
+  auth,
   config,
   layout,
   loading,
   kapps,
   profile,
-  space
+  space,
 };
