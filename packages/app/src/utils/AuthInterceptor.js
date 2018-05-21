@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-// What happens when you try to re-auth with bad credentials
-
 export default class AuthInterceptor {
   constructor(
     store,
@@ -36,7 +34,10 @@ export default class AuthInterceptor {
   }
 
   handleRejected(error) {
-    if (error.response.status === 401) {
+    if (
+      error.response.status === 401 &&
+      !error.response.config.url.endsWith('login.do')
+    ) {
       if (!this.authPromise) {
         this.authPromise = this.authenticate();
         this.authPromise

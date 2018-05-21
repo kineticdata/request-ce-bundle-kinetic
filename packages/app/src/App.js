@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import Sidebar from 'react-sidebar';
 import { Utils, ToastsContainer, ModalFormContainer } from 'common';
-
+import { LoginModal } from './components/authentication/LoginModal';
 import { HeaderContainer } from './components/HeaderContainer';
 import { actions as loadActions } from './redux/modules/loading';
 import { actions as alertsActions } from './redux/modules/alerts';
@@ -22,6 +22,7 @@ export const AppComponent = props =>
   !props.loading && (
     <Fragment>
       <ToastsContainer />
+      <LoginModal />
       <ModalFormContainer />
       <HeaderContainer hasSidebar toggleSidebarOpen={props.toggleSidebarOpen} />
       <props.AppProvider
