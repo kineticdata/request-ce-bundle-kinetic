@@ -2,23 +2,30 @@ import AuthInterceptor from './AuthInterceptor';
 import axios from 'axios';
 jest.mock('axios');
 
-const store = {
-  state: { authenticated: false, cancelled: false },
-  getState() {
-    return this.state;
-  },
-  dispatch: jest.fn(),
-  subscribe: jest.fn(),
-};
+let store;
 const unauthenticatedAction = () => ({ type: 'TIMED_OUT' });
 const authenticatedSelector = state => state.authenticated;
 const cancelledSelector = state => state.cancelled;
 
 describe('AuthInterceptor', () => {
   beforeEach(() => {
-    store.state = { authenticated: false, cancelled: false };
-    store.dispatch.mockReset();
-    store.subscribe.mockReset();
+    store = {
+      state: { authenticated: false, cancelled: false },
+      getState() {
+        return this.state;
+      },
+      dispatch(action) {
+        this.actions.push(action);
+      },
+      subscribe(listener) {
+        this.listeners.push(listener);
+        return () => {
+          this.listeners = this.listeners.filter(l => l !== listener);
+        };
+      },
+      actions: [],
+      listeners: [],
+    };
     axios.mockReset();
   });
 
@@ -67,33 +74,25 @@ describe('AuthInterceptor', () => {
         authenticatedSelector,
         cancelledSelector,
       );
-      // Define the error that triggers the auth functionality.
-      const error = { response: { status: 401, config: { url: 'foo' } } };
-      // Create a mock unsub function that should be called once once the
-      // authPromise gets resolved.
-      const unsub = jest.fn();
-      // Mock the store subscribe function to return the unsub value above.
-      store.subscribe.mockImplementation(() => unsub);
-      // Call handleRejected with the error object, should return a promise.
-      const rejectedCall = authInterceptor.handleRejected(error);
-      // The authIntercetpor should subscribe to the store to determine when
-      // successful authentication has occurred.
-      expect(store.subscribe.mock.calls.length).toBe(1);
-      // Get the listener from the subscription so we can call it.
-      const listener = store.subscribe.mock.calls[0][0];
-      // Mutate the state so that the authInterceptor continues (given the
-      // selectors defined at the top of the file).
-      store.state.authenticated = true;
-      // Invoke the listener which should trigger the authInterceptor to
-      // continue.
+      // Mock an axios return value.
       axios.mockReturnValue(Promise.resolve('Hello World'));
-      listener();
-      // It should unsubscribe.
-      expect(unsub.mock.calls).toEqual([[]]);
-      // Finally the rejectedCall promise should eventually resolve to the mock
-      // axios value.
+      // Make a call to handleRejected that will trigger the auth functionality.
+      const error = { response: { status: 401, config: { url: 'foo' } } };
+      const rejectedCall = authInterceptor.handleRejected(error);
+      // It should dispatch the redux action using the action creator passed to
+      // the controller and start to listen to the store for success or cancel.
+      expect(store.actions).toEqual([{ type: 'TIMED_OUT' }]);
+      expect(store.listeners.length).toBe(1);
+      expect(authInterceptor.authPromise).not.toBeNull();
+      // Simulate cancel and call the listener.
+      store.state.authenticated = true;
+      store.listeners[0]();
+      // The promse should be rejected with the original error object.  Also
+      // ensure that axios is not called and that the listener is unsubscribed.
       await expect(rejectedCall).resolves.toBe('Hello World');
       expect(axios.mock.calls).toEqual([[{ url: 'foo' }]]);
+      expect(store.listeners.length).toBe(0);
+      expect(authInterceptor.authPromise).toBeNull();
     });
 
     test('performs authentication workflow with cancelled login', async () => {
@@ -103,34 +102,45 @@ describe('AuthInterceptor', () => {
         authenticatedSelector,
         cancelledSelector,
       );
-      // Define the error that triggers the auth functionality.
+      // Make a call to handleRejected that will trigger the auth functionality.
       const error = { response: { status: 401, config: { url: 'foo' } } };
-      // Create a mock unsub function that should be called once once the
-      // authPromise gets resolved.
-      const unsub = jest.fn();
-      // Mock the store subscribe function to return the unsub value above.
-      store.subscribe.mockImplementation(() => unsub);
-      // Call handleRejected with the error object, should return a promise.
       const rejectedCall = authInterceptor.handleRejected(error);
-      // The authIntercetpor should subscribe to the store to determine when
-      // successful authentication has occurred.
-      expect(store.subscribe.mock.calls.length).toBe(1);
-      // Get the listener from the subscription so we can call it.
-      const listener = store.subscribe.mock.calls[0][0];
-      // Mutate the state so that the authInterceptor continues (given the
-      // selectors defined at the top of the file).
+      // It should dispatch the redux action using the action creator passed to
+      // the controller and start to listen to the store for success or cancel.
+      expect(store.actions).toEqual([{ type: 'TIMED_OUT' }]);
+      expect(store.listeners.length).toBe(1);
+      expect(authInterceptor.authPromise).not.toBeNull();
+      // Simulate cancel and call the listener.
       store.state.cancelled = true;
-      // Invoke the listener which should trigger the authInterceptor to
-      // continue.
-      listener();
-      // It should unsubscribe.
-      expect(unsub.mock.calls).toEqual([[]]);
-      // Finally the rejectedCall promise should eventually resolve to the mock
-      // axios value.
-      await expect(rejectedCall).rejects.toEqual({
-        response: { status: 401, config: { url: 'foo' } },
-      });
+      store.listeners[0]();
+      // The promse should be rejected with the original error object.  Also
+      // ensure that axios is not called and that the listener is unsubscribed.
+      await expect(rejectedCall).rejects.toBe(error);
       expect(axios.mock.calls).toEqual([]);
+      expect(store.listeners.length).toBe(0);
+      expect(authInterceptor.authPromise).toBeNull();
+    });
+
+    test('creates one authPromise for multiple calls', async () => {
+      const authInterceptor = new AuthInterceptor(
+        store,
+        unauthenticatedAction,
+        authenticatedSelector,
+        cancelledSelector,
+      );
+      // Should be null initially.
+      expect(authInterceptor.authPromise).toBeNull();
+      // Call handleRejected with the error object, should return a promise.
+      const error = { response: { status: 401, config: { url: 'foo' } } };
+      authInterceptor.handleRejected(error);
+      // Should now be set after a call to handleRejected.
+      const authPromise1 = authInterceptor.authPromise;
+      expect(authPromise1).not.toBeNull();
+      // Second call to handleRejected should not change the value of the
+      // authPromise.
+      authInterceptor.handleRejected(error);
+      const authPromise2 = authInterceptor.authPromise;
+      expect(authPromise1).toBe(authPromise2);
     });
   });
 });
