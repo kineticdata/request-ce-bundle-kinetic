@@ -34,6 +34,7 @@ export const LoginModalComponent = props =>
               placeholder="wally@kineticdata.com"
               value={props.email}
               onChange={props.handleEmail}
+              ref={props.setEmailEl}
             />
           </div>
           <div className="form-group">
@@ -90,12 +91,28 @@ export const LoginModal = compose(
     },
   }),
   withHandlers({ handleLogin }),
+  withHandlers(() => {
+    let emailEl = null;
+    return {
+      setEmailEl: () => el => {
+        emailEl = el;
+      },
+      focusEmailEl: () => () => {
+        emailEl.focus();
+      },
+    };
+  }),
   lifecycle({
     componentWillReceiveProps(nextProps) {
       if (this.props.showing && !nextProps.showing) {
         this.props.setEmail('');
         this.props.setPassword('');
         this.props.setError('');
+      }
+    },
+    componentDidUpdate(prevProps) {
+      if (this.props.showing && !prevProps.showing) {
+        this.props.focusEmailEl();
       }
     },
   }),
