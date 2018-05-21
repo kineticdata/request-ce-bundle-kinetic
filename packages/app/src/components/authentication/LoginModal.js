@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withState, withHandlers } from 'recompose';
+import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import axios from 'axios';
 import { bundle } from 'react-kinetic-core';
@@ -90,4 +90,13 @@ export const LoginModal = compose(
     },
   }),
   withHandlers({ handleLogin }),
+  lifecycle({
+    componentWillReceiveProps(nextProps) {
+      if (this.props.showing && !nextProps.showing) {
+        this.props.setEmail('');
+        this.props.setPassword('');
+        this.props.setError('');
+      }
+    },
+  }),
 )(LoginModalComponent);
