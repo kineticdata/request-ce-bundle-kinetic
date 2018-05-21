@@ -17,6 +17,18 @@ export default class AuthInterceptor {
 
   authenticate() {
     this.store.dispatch(this.unauthenticatedAction());
+    if (
+      this.authenticatedSelector(this.store.getState()) ||
+      this.cancelledSelector(this.store.getState())
+    ) {
+      console.error(
+        'AuthInterceptor found invalid state when handling unauthenticated ' +
+          'response. The selectors given (authenticated and cancelled) should ' +
+          'both return false initially and then return true once the user has ' +
+          'successfully authenticated or cancelled respectively.',
+      );
+      return Promise.reject();
+    }
     return new Promise((resolve, reject) => {
       const unsub = this.store.subscribe(() => {
         if (this.authenticatedSelector(this.store.getState())) {

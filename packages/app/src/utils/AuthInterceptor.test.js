@@ -142,5 +142,31 @@ describe('AuthInterceptor', () => {
       const authPromise2 = authInterceptor.authPromise;
       expect(authPromise1).toBe(authPromise2);
     });
+
+    test('returns original error if authenticated selector returns true initially', async () => {
+      const authInterceptor = new AuthInterceptor(
+        store,
+        unauthenticatedAction,
+        authenticatedSelector,
+        cancelledSelector,
+      );
+      const error = { response: { status: 401, config: { url: 'foo' } } };
+      store.state.authenticated = true;
+      await expect(authInterceptor.handleRejected(error)).rejects.toBe(error);
+      expect(authInterceptor.authPromise).toBeNull();
+    });
+
+    test('returns original error if cancelled selector returns true initially', async () => {
+      const authInterceptor = new AuthInterceptor(
+        store,
+        unauthenticatedAction,
+        authenticatedSelector,
+        cancelledSelector,
+      );
+      const error = { response: { status: 401, config: { url: 'foo' } } };
+      store.state.cancelled = true;
+      await expect(authInterceptor.handleRejected(error)).rejects.toBe(error);
+      expect(authInterceptor.authPromise).toBeNull();
+    });
   });
 });
