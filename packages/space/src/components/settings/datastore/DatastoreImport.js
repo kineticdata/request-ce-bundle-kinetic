@@ -178,15 +178,6 @@ export class DatastoreImport extends Component {
     };
   };
 
-  test = () => {
-    setTimeout(() => {
-      this.setState({ number: this.state.number + 10 });
-      if (this.state.number <= 100) {
-        this.test();
-      }
-    }, 1000);
-  };
-
   componentWillMount() {
     this.fetchForm();
     this.fetch();
