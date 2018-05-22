@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { CoreAPI } from 'react-kinetic-core';
+import { Line } from 'rc-progress';
 import { Table } from 'reactstrap';
 
 import csv from 'csvtojson';
@@ -9,12 +10,15 @@ export class DatastoreImport extends Component {
     super(props);
 
     this.state = {
+      posting: false,
+      postResult: false,
       submissions: [],
       csvObjects: [],
       records: [],
       recordsHeaders: [],
       formSlug: this.props.match.params.slug,
       missingFields: [],
+      percentComplete: 0,
     };
     this.form = {};
     this.formFields = [];
@@ -24,6 +28,10 @@ export class DatastoreImport extends Component {
   }
 
   post = ([head, ...tail]) => {
+    this.setState({
+      percentComplete:
+        100 - Math.round(tail.length / this.state.records.length * 100),
+    });
     const promise = head.id
       ? CoreAPI.updateSubmission({
           datastore: true,
@@ -44,7 +52,14 @@ export class DatastoreImport extends Component {
       if (tail.length > 0) {
         this.post(tail);
       } else {
-        Promise.all(this.calls).then(this.fetch);
+        Promise.all(this.calls).then(() => {
+          this.setState({
+            posting: false,
+            percentComplete: 0,
+            postResult: true,
+          });
+          this.fetch();
+        });
       }
     });
     this.calls.push(promise);
@@ -110,7 +125,7 @@ export class DatastoreImport extends Component {
   handleDelete = () => this.delete(this.state.submissions);
 
   handleImport = () => {
-    this.setState({ records: [], recordsHeaders: [] });
+    this.setState({ posting: true });
     this.post(this.state.records);
   };
 
@@ -163,9 +178,19 @@ export class DatastoreImport extends Component {
     };
   };
 
+  test = () => {
+    setTimeout(() => {
+      this.setState({ number: this.state.number + 10 });
+      if (this.state.number <= 100) {
+        this.test();
+      }
+    }, 1000);
+  };
+
   componentWillMount() {
     this.fetchForm();
     this.fetch();
+    this.test();
   }
 
   render() {
@@ -217,7 +242,24 @@ export class DatastoreImport extends Component {
                 <p>This datastore currently has no records</p>
               </div>
             )}
-            {this.state.records.length > 0 &&
+            {this.state.posting && (
+              <Line
+                percent={this.state.percentComplete}
+                strokeWidth="1"
+                strokeColor="#5fba53"
+              />
+            )}
+            {this.state.postResult && (
+              <div>
+                <h4>Post Results</h4>
+                <p>{this.state.records.length} records were to be posted</p>
+                <p>{this.calls.length} records attempted to be posted</p>
+                <p>{this.failedCalls.length} records failed</p>
+              </div>
+            )}
+            {!this.state.posting &&
+              !this.state.postResult &&
+              this.state.records.length > 0 &&
               this.state.recordsHeaders.length > 0 && (
                 <Fragment>
                   <div>
