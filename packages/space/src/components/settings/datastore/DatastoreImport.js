@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { CoreAPI } from 'react-kinetic-core';
 import { Line } from 'rc-progress';
 import { Table } from 'reactstrap';
-import { Set, List } from 'immutable';
+import { Set } from 'immutable';
 
 import csv from 'csvtojson';
 
@@ -40,6 +40,7 @@ export class DatastoreImport extends Component {
           datastore: true,
           formSlug: this.state.formSlug,
           values: head.values,
+          id: head.id,
         })
       : CoreAPI.createSubmission({
           datastore: true,
@@ -360,7 +361,9 @@ export class DatastoreImport extends Component {
                                 {fieldName}
                               </option>
                             ))}
-                            <option value={'id'}>Submission Id</option>
+                            <option value={'Datastore Record ID'}>
+                              Datastore Record ID
+                            </option>
                           </select>
                         </td>
                       </tr>
@@ -403,25 +406,26 @@ export class DatastoreImport extends Component {
                   <Table style={{ maxWidth: '80%' }}>
                     <thead>
                       <tr>
-                        {this.state.recordsHeaders
-                          .sort()
-                          .map((header, idx) => (
-                            <th key={header + idx}>{header}</th>
-                          ))}
+                        {this.state.headerToFieldMap.map((obj, idx) => (
+                          <th key={obj.header + idx}>{obj.header}</th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody>
                       {this.state.records.map((record, idx) => {
-                        const { values } = record;
+                        const { values, id } = record;
                         return (
                           <tr key={idx}>
-                            {Object.keys(values)
-                              .sort()
-                              .map((fieldName, idx) => (
-                                <td key={fieldName + idx}>
-                                  {values[fieldName]}
+                            {this.state.headerToFieldMap.map((obj, idx) => {
+                              if (obj.field === 'Datastore Record ID') {
+                                return <td key={obj.field + idx}>{id}</td>;
+                              }
+                              return (
+                                <td key={obj.field + idx}>
+                                  {values[obj.field]}
                                 </td>
-                              ))}
+                              );
+                            })}
                           </tr>
                         );
                       })}
