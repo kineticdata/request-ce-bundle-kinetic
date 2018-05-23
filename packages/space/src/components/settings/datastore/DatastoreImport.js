@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { CoreAPI } from 'react-kinetic-core';
 import { Line } from 'rc-progress';
 import { Table } from 'reactstrap';
+import { Set, List } from 'immutable';
 
 import csv from 'csvtojson';
 
@@ -18,6 +19,7 @@ export class DatastoreImport extends Component {
       recordsHeaders: [],
       formSlug: this.props.match.params.slug,
       missingFields: [],
+      mapHeadersShow: false,
       percentComplete: 0,
     };
     this.form = {};
@@ -28,6 +30,7 @@ export class DatastoreImport extends Component {
   }
 
   post = ([head, ...tail]) => {
+    // percentComplete is used to dynamically change the progress bar.
     this.setState({
       percentComplete:
         100 - Math.round(tail.length / this.state.records.length * 100),
@@ -108,17 +111,27 @@ export class DatastoreImport extends Component {
           acc.push(field.name);
           return acc;
         }, []);
-        const datastoreConfiguration = response.form.attributesMap[
-          'Datastore Configuration'
-        ]
-          ? JSON.parse(
-              response.form.attributesMap['Datastore Configuration'][0],
-            )
-          : null;
-        this.setState({
-          datastoreConfiguration,
-        });
+        this.headerToFieldMapFormAttribute =
+          response.form.attributesMap['CSV Header To Form Map'].length > 0
+            ? JSON.parse(
+                response.form.attributesMap['CSV Header To Form Map'][0],
+              )
+            : null;
       }
+    });
+  };
+
+  updateForm = () => {
+    CoreAPI.updateForm({
+      datastore: true,
+      formSlug: this.state.formSlug,
+      form: {
+        attributesMap: {
+          'CSV Header To Form Map': [
+            JSON.stringify(this.state.headerToFieldMap.toJS()),
+          ],
+        },
+      },
     });
   };
 
@@ -130,7 +143,6 @@ export class DatastoreImport extends Component {
   };
 
   handleCsvToJson = () => {
-    const classThis = this;
     let arr = [];
     csv({ noheader: false })
       .fromString(this.readFile.result)
@@ -144,12 +156,11 @@ export class DatastoreImport extends Component {
         arr.push(obj);
       })
       .on('end', () => {
-        classThis.setState({ records: arr });
+        this.setState({ records: arr });
       });
   };
 
   handleChange = event => {
-    const classThis = this;
     const reader = new FileReader();
     reader.readAsText(this.fileEl.files[0]);
     this.readFile = reader;
@@ -157,31 +168,120 @@ export class DatastoreImport extends Component {
       csv({ noheader: false })
         .fromString(event.target.result)
         .on('header', headers => {
-          const missingFields = [];
-          const allHeadersFound = headers.every(header => {
-            if (
-              classThis.formFields.includes(header) ||
-              header === 'Datastore Record ID'
-            ) {
-              return true;
+          // Check to see if headers have changed on the CSV file since the import was last run.
+          let requiresUnion = true;
+          let existingHeadersSet;
+
+          if (this.headerToFieldMapFormAttribute) {
+            existingHeadersSet = Set(
+              this.headerToFieldMapFormAttribute.reduce((acc, obj) => {
+                acc.push(obj.header);
+                return acc;
+              }, []),
+            );
+            if (existingHeadersSet.subtract(headers).size <= 0) {
+              requiresUnion = false;
             }
-            missingFields.push(header);
-            return false;
-          });
-          if (!allHeadersFound) {
-            classThis.setState({ missingFields });
+          }
+
+          if (requiresUnion) {
+            const headersSet = Set(headers);
+            const missingFields = headersSet.subtract(this.formFields);
+
+            const tempSetA = headersSet
+              .intersect(this.formFields)
+              .reduce((acc, val) => {
+                const obj = { header: val, field: val };
+                return acc.add(obj);
+              }, Set([]));
+
+            const tempSetB = missingFields.reduce((acc, val) => {
+              const obj = { header: val, field: '' };
+              return acc.add(obj);
+            }, Set([]));
+
+            const unionSet = tempSetA
+              .union(tempSetB)
+              .sort((a, b) => {
+                if (a.field < b.field) {
+                  return -1;
+                }
+                if (a.field > b.field) {
+                  return 1;
+                }
+                if (a.field === b.field) {
+                  return 0;
+                }
+              })
+              .toList();
+
+            this.setState({ headerToFieldMap: unionSet });
+
+            if (missingFields.size > 0) {
+              this.setState({ missingFields, recordsHeaders: headersSet });
+            } else {
+              this.handleCsvToJson();
+              this.setState({ recordsHeaders: headersSet });
+            }
           } else {
-            classThis.handleCsvToJson();
-            classThis.setState({ recordsHeaders: headers });
+            const missing = Set(
+              this.headerToFieldMapFormAttribute
+                .filter(obj => obj.field === '')
+                .reduce((acc, obj) => {
+                  acc.push(obj.header);
+                  return acc;
+                }, []),
+            );
+            this.setState({
+              headerToFieldMap: Set(this.headerToFieldMapFormAttribute)
+                .sort((a, b) => {
+                  if (a.field < b.field) {
+                    return -1;
+                  }
+                  if (a.field > b.field) {
+                    return 1;
+                  }
+                  if (a.field === b.field) {
+                    return 0;
+                  }
+                })
+                .toList(),
+              missingFields: missing,
+              recordsHeaders: existingHeadersSet,
+            });
+            if (missing.size <= 0) {
+              this.handleCsvToJson();
+            }
           }
         });
     };
   };
 
+  handleShow = () => {
+    this.setState({ mapHeadersShow: !this.state.mapHeadersShow });
+  };
+
+  handleSave = () => {
+    this.updateForm();
+  };
+
+  handleSelect = event => {
+    const missingFields = this.state.missingFields.delete(event.target.name);
+    this.setState({
+      headerToFieldMap: this.state.headerToFieldMap.update(
+        event.target.getAttribute('index'),
+        () => ({ header: event.target.name, field: event.target.value }),
+      ),
+      missingFields,
+    });
+    if (missingFields.size <= 0) {
+      this.handleCsvToJson();
+    }
+  };
+
   componentWillMount() {
     this.fetchForm();
     this.fetch();
-    this.test();
   }
 
   render() {
@@ -191,6 +291,15 @@ export class DatastoreImport extends Component {
           <div className="page-title">
             <h1>Import Datastore</h1>
           </div>
+          {this.state.submissions.length > 0 ? (
+            <div>
+              <p>This datastore currently has records</p>
+            </div>
+          ) : (
+            <div>
+              <p>This datastore currently has no records</p>
+            </div>
+          )}
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             {this.state.submissions.length > 0 && (
               <button
@@ -201,7 +310,7 @@ export class DatastoreImport extends Component {
               </button>
             )}
             {this.state.records.length > 0 &&
-              this.state.missingFields.length <= 0 && (
+              this.state.missingFields.size <= 0 && (
                 <button
                   className="btn btn-secondary btn-sm"
                   onClick={this.handleImport}
@@ -209,6 +318,11 @@ export class DatastoreImport extends Component {
                   Import Records
                 </button>
               )}
+            {this.state.recordsHeaders.size > 0 && (
+              <button className="btn btn-info btn-sm" onClick={this.handleShow}>
+                Map Headers
+              </button>
+            )}
             <input
               type="file"
               onChange={this.handleChange}
@@ -218,20 +332,48 @@ export class DatastoreImport extends Component {
             />
           </div>
           <div className="forms-list-wrapper">
-            {this.state.missingFields.length > 0 && (
+            {this.state.missingFields.size > 0 && (
               <div>
-                <h3>The CSV has headers that do not exist on the form</h3>
-                {this.state.missingFields.map(fieldName => <p>{fieldName}</p>)}
+                <h4>The CSV has headers that do not exist on the form</h4>
+                {this.state.missingFields.map((fieldName, idx) => (
+                  <p key={fieldName + idx}>{fieldName}</p>
+                ))}
               </div>
             )}
-            {this.state.submissions.length > 0 ? (
-              <div>
-                <p>This datastore currently has records</p>
-              </div>
-            ) : (
-              <div>
-                <p>This datastore currently has no records</p>
-              </div>
+            {this.state.mapHeadersShow && (
+              <Fragment>
+                <table>
+                  <tbody>
+                    {this.state.headerToFieldMap.map((obj, idx) => (
+                      <tr key={obj.header + idx}>
+                        <td>{obj.header}</td>
+                        <td>
+                          <select
+                            onChange={this.handleSelect}
+                            name={obj.header}
+                            index={idx}
+                            value={obj.field}
+                          >
+                            <option value={''}>Select Option</option>
+                            {this.formFields.map(fieldName => (
+                              <option key={fieldName} value={fieldName}>
+                                {fieldName}
+                              </option>
+                            ))}
+                            <option value={'id'}>Submission Id</option>
+                          </select>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <button
+                  className="btn btn-success btn-sm"
+                  onClick={this.handleSave}
+                >
+                  Save
+                </button>
+              </Fragment>
             )}
             {this.state.posting && (
               <Line
@@ -250,8 +392,9 @@ export class DatastoreImport extends Component {
             )}
             {!this.state.posting &&
               !this.state.postResult &&
+              !this.state.mapHeadersShow &&
               this.state.records.length > 0 &&
-              this.state.recordsHeaders.length > 0 && (
+              this.state.recordsHeaders.size > 0 && (
                 <Fragment>
                   <div>
                     <p>CSV to Json results for review.</p>
@@ -269,7 +412,7 @@ export class DatastoreImport extends Component {
                     </thead>
                     <tbody>
                       {this.state.records.map((record, idx) => {
-                        const { values, id } = record;
+                        const { values } = record;
                         return (
                           <tr key={idx}>
                             {Object.keys(values)
