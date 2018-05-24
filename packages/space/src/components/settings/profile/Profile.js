@@ -3,7 +3,7 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fromJS } from 'immutable';
-import { commonActions, PageTitle } from 'common';
+import { modalFormActions, PageTitle } from 'common';
 import { actions } from '../../../redux/modules/profiles';
 import { ProfileCard } from '../../shared/ProfileCard';
 import { TeamCard } from '../../shared/TeamCard';
@@ -278,17 +278,17 @@ const openChangeManagerForm = ({ spaceAttributes, openForm }) => config => {
 };
 
 const mapStateToProps = state => ({
-  loading: state.profiles.loading,
-  profile: state.profiles.profile,
-  error: state.profiles.error,
-  editingPassword: state.profiles.isChangePasswordVisible,
+  loading: state.space.profiles.loading,
+  profile: state.space.profiles.profile,
+  error: state.space.profiles.error,
+  editingPassword: state.space.profiles.isChangePasswordVisible,
   location:
-    state.profiles.profile &&
-    state.profiles.profile.profileAttributes['Location'],
-  locationEnabled: state.spaceApp.userProfileAttributeDefinitions['Location'],
+    state.space.profiles.profile &&
+    state.space.profiles.profile.profileAttributes['Location'],
+  locationEnabled: state.space.spaceApp.userProfileAttributeDefinitions['Location'],
   manager:
-    state.profiles.profile && state.profiles.profile.attributes['Manager'],
-  managerEnabled: state.spaceApp.userAttributeDefinitions['Manager'],
+    state.space.profiles.profile && state.space.profiles.profile.attributes['Manager'],
+  managerEnabled: state.space.spaceApp.userAttributeDefinitions['Manager'],
   spaceAttributes:
     state.app.space &&
     state.app.space.attributes.reduce((memo, item) => {
@@ -301,7 +301,7 @@ const mapDispatchToProps = {
   fetchProfile: actions.fetchProfile,
   toggleChangePassword: actions.setChangePasswordVisible,
   updateProfile: actions.updateProfile,
-  openForm: commonActions.openForm,
+  openForm: modalFormActions.openForm,
 };
 
 export const Profile = compose(

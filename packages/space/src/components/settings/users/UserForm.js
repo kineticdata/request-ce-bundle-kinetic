@@ -4,13 +4,12 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fromJS, List } from 'immutable';
-import { commonActions, PageTitle } from 'common';
+import { modalFormActions, PageTitle } from 'common';
 
 import { actions as usersActions } from '../../../redux/modules/settingsUsers';
 import { actions as teamsActions } from '../../../redux/modules/teamList';
 import { ProfileCard } from '../../shared/ProfileCard';
 import { UsersDropdown } from './DropDown';
-import { get } from 'https';
 
 export const UserFormComponent = ({
   editing,
@@ -42,7 +41,7 @@ export const UserFormComponent = ({
                 <h3>
                   <Link to="/">home</Link> /{` `}
                   <Link to="/settings">settings</Link> /{` `}
-                  <Link to={`/settings/users/`}>users</Link> /{` `}
+                  <Link to={`/settings/users`}>users</Link> /{` `}
                 </h3>
                 {editing ? (
                   <h1>Edit: {user.displayName || user.username}</h1>
@@ -229,7 +228,7 @@ export const UserFormComponent = ({
                       disabled={!fieldValuesValid(fieldValues)}
                       className="btn btn-primary"
                     >
-                      Save
+                      {editing ? 'Save User' : 'Create User'}
                     </button>
                     <Link to={`/settings/users`}>Cancel</Link>
                   </div>
@@ -317,7 +316,7 @@ const translateProfileToFieldValues = user => ({
 
 const translateFieldValuesToProfile = (fieldValues, user) => {
   const result = {
-    username: user.username ? user.username : fieldValues.username,
+    username: user ? user.username : fieldValues.username,
     displayName: fieldValues.displayName,
     email: fieldValues.email,
     spaceAdmin: fieldValues.spaceAdmin,
@@ -350,20 +349,21 @@ const translateFieldValuesToProfile = (fieldValues, user) => {
 };
 
 const mapStateToProps = (state, props) => ({
+  mode: props.match.params.mode,
   editing: props.match.params.username !== undefined,
-  loading: state.settingsUsers.loading,
-  userLoading: state.settingsUsers.userLoading,
-  user: state.settingsUsers.user,
-  users: state.settingsUsers.users,
-  error: state.settingsUsers.error,
+  loading: state.space.settingsUsers.loading,
+  userLoading: state.space.settingsUsers.userLoading,
+  user: state.space.settingsUsers.user,
+  users: state.space.settingsUsers.users,
+  error: state.space.settingsUsers.error,
   spaceAttributes:
     state.app.space &&
     state.app.space.attributes.reduce((memo, item) => {
       memo[item.name] = item.value;
       return memo;
     }, {}),
-  roles: state.teamList.roles,
-  teams: state.teamList.data,
+  roles: state.space.teamList.roles,
+  teams: state.space.teamList.data,
 });
 
 const mapDispatchToProps = {
@@ -373,7 +373,7 @@ const mapDispatchToProps = {
   updateUser: usersActions.updateUser,
   createUser: usersActions.createUser,
   deleteUser: usersActions.deleteUser,
-  openForm: commonActions.openForm,
+  openForm: modalFormActions.openForm,
   push,
 };
 
@@ -433,9 +433,7 @@ export const UserForm = compose(
           translateFieldValuesToProfile(props.fieldValues, props.user),
         );
       } else {
-        props.createUser(
-          translateFieldValuesToProfile(props.fieldValues, props.user),
-        );
+        props.createUser(translateFieldValuesToProfile(props.fieldValues));
         props.push(`settings/users`);
       }
     },
@@ -445,6 +443,9 @@ export const UserForm = compose(
       if (this.props.editing) {
         this.props.fetchUser(this.props.match.params.username);
       }
+      if (this.props.mode === 'clone' && this.props.user.username) {
+        this.props.fetchUser(this.props.user.username);
+      }
       if (this.props.users.size <= 0) {
         this.props.fetchUsers();
       }
@@ -452,9 +453,18 @@ export const UserForm = compose(
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.user !== nextProps.user) {
+        let newUser = { ...nextProps.user };
+        if (nextProps.mode === 'clone') {
+          delete newUser.username;
+          delete newUser.displayName;
+          delete newUser.email;
+          newUser.profileAttributes['First Name'] = '';
+          newUser.profileAttributes['Last Name'] = '';
+          newUser.profileAttributes['Phone Number'] = '';
+        }
         this.props.setFieldValues({
           ...this.props.fieldValues,
-          ...translateProfileToFieldValues(nextProps.user),
+          ...translateProfileToFieldValues(newUser),
         });
       }
     },

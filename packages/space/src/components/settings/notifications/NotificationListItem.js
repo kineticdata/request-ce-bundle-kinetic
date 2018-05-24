@@ -53,7 +53,7 @@ const NotificationListItemComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.settingsNotifications.loading,
+  loading: state.space.settingsNotifications.loading,
 });
 
 export const mapDispatchToProps = {

@@ -45,32 +45,31 @@ export const TypographyPage = () => (
 <h6>H6. Streamline everyday work for teams</h6>`}</pre>
           </div>
         </div>
-      </div>
-      <hr />
-      <h2>Paragraphs</h2>
-      <h6>Body Default</h6>
-      <p>
-        In sed mauris montes, ultricies, platea et! Cum auctor placerat hac
-        montes rhoncus quis pulvinar dolor placerat velit? Vut dapibus turpis
-        aliquam lectus phasellus! Lundium mauris lacus duis nunc pellentesque
-        tortor, placerat turpis eros, sagittis scelerisque? Pulvinar dis
-        porttitor, massa sagittis pid, amet a enim enim.
-      </p>
-      <h6>Body Small</h6>
-      <p>
-        <small>
+
+        <hr />
+        <h2>Paragraphs</h2>
+        <h6>Body Default</h6>
+        <p>
           In sed mauris montes, ultricies, platea et! Cum auctor placerat hac
           montes rhoncus quis pulvinar dolor placerat velit? Vut dapibus turpis
           aliquam lectus phasellus! Lundium mauris lacus duis nunc pellentesque
           tortor, placerat turpis eros, sagittis scelerisque? Pulvinar dis
           porttitor, massa sagittis pid, amet a enim enim.
-        </small>
-      </p>
+        </p>
+        <h6>Body Small</h6>
+        <p>
+          <small>
+            In sed mauris montes, ultricies, platea et! Cum auctor placerat hac
+            montes rhoncus quis pulvinar dolor placerat velit? Vut dapibus
+            turpis aliquam lectus phasellus! Lundium mauris lacus duis nunc
+            pellentesque tortor, placerat turpis eros, sagittis scelerisque?
+            Pulvinar dis porttitor, massa sagittis pid, amet a enim enim.
+          </small>
+        </p>
 
-      <div className="flex-row">
-        <div className="highlight">
-          <pre
-          >{`<!-- paragraph -->
+        <div className="flex-row">
+          <div className="highlight">
+            <pre>{`<!-- paragraph -->
 <p>In sed mauris montes, ultricies, platea et! Cum auctor placerat hac montes rhoncus quis pulvinar dolor placerat velit? Vut dapibus turpis aliquam lectus phasellus! Lundium mauris lacus duis nunc pellentesque tortor, placerat turpis eros, sagittis scelerisque? Pulvinar dis porttitor, massa sagittis pid, amet a enim enim.</p>
 
 <!-- paragraph small -->
@@ -83,30 +82,30 @@ export const TypographyPage = () => (
     sagittis pid, amet a enim enim.
   </small>
 </p>`}</pre>
+          </div>
         </div>
-      </div>
-      <hr />
-      <h2>Lists</h2>
-  <ul>
-    <li>list item 1</li>
-    <li>list item 2
-      <ul>
-        <li>list item 2.1</li>
-        <li>list item 2.2</li>
-        <li>list item 2.3</li>
-      </ul>
-    </li>
-    <li>list item 3</li>
-  </ul>
+        <hr />
+        <h2>Lists</h2>
+        <ul>
+          <li>list item 1</li>
+          <li>
+            list item 2
+            <ul>
+              <li>list item 2.1</li>
+              <li>list item 2.2</li>
+              <li>list item 2.3</li>
+            </ul>
+          </li>
+          <li>list item 3</li>
+        </ul>
 
-  <dl>
-    <dt>description list term</dt>
-    <dd>description list description</dd>
-  </dl>
-  <div className="flex-row">
-    <div className="highlight">
-      <pre
-      >{`<!-- unordered list -->
+        <dl>
+          <dt>description list term</dt>
+          <dd>description list description</dd>
+        </dl>
+        <div className="flex-row">
+          <div className="highlight">
+            <pre>{`<!-- unordered list -->
 <ul>
   <li>list item 1</li>
   <li>list item 2
@@ -125,32 +124,65 @@ export const TypographyPage = () => (
   <dd>description list description</dd>
 </dl>
   `}</pre>
-  </div>
-</div>
-      <hr/>
-      {/*<h1> Line Height</h1>
-
-      <p>
-        In the context of an enterprise application, the need for longform text
-        is quite rare. More often, application design involves many small bits
-        of text that all represent the user’s data. This text is spaced
-        intentionally to maintain distinction between different types and rows
-        of data.
-      </p>
-
-      <p>
-        As a result, we take a pragmatic approach to spacing and line height by
-        resetting all margins and paddings to 0, and allowing the line-height
-        property for all text to inherit a globally defined ratio of 1.5 of the
-        text size. This allows designers and developers to easily opt-in to
-        specific text spacing by leveraging our CSS Text and Spacing Utilities.
-      </p>
-
-      <p>
-        We do provide a longform text CSS utility, which will result in our
-        recommended vertical text rhythm for optimizing a balance between
-        readability and space efficiency.
-      </p>*/}
+          </div>
+        </div>
+        <hr />
+        <h2>Typographical Scale</h2>
+        <h5>WHAT IS A TYPOGRAPHIC SCALE?</h5>
+        <p>
+          Typographical scale helps build consistency, rhythm, hierarchy and
+          contrast that are predictable. This scale helps users understand
+          content better, speeds up develomment and reduces technical debt.
+        </p>
+        <p>
+          In other words it creates harmony with the words on the screen. These
+          measurements help text resize correctly, wheter your on a small phone
+          or a large desktop.
+        </p>
+        <p>
+          The scale we chose is major-secondth with a base font of 16px for the
+          typeface Open Sans.
+        </p>
+        <p>
+          To easily account for this we use the sass helper called Modularscale.
+          This allows us to map a scale($modularscale) that can be reused, see
+          the example with the headings.
+        </p>
+        <div className="flex-row">
+          <div className="highlight">
+            <pre>{`$modularscale: (
+base: 12px,
+ratio: 1.125,
+768px: (14px ratio: 1.125),
+1200px: (base: 16px, ratio: 1.125)
+);`}</pre>
+          </div>
+        </div>
+        <div className="flex-row">
+          <div className="highlight">
+            <pre>
+              {`h1 {
+  @include ms-respond(font-size, 6);
+}
+h2 {
+  @include ms-respond(font-size, 5);
+}
+h3 {
+  @include ms-respond(font-size, 4);
+}
+h4 {
+  @include ms-respond(font-size, 3);
+}
+h5 {
+  @include ms-respond(font-size, 2);
+}
+h6 {
+  @include ms-respond(font-size, 1);
+}`}
+            </pre>
+          </div>
+        </div>
+      </div>
     </div>
   </Fragment>
 );

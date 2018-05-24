@@ -107,16 +107,16 @@ const getProfilePhone = profile =>
     : 'No phone number';
 
 export const mapStateToProps = state => ({
-  loading: state.profiles.loading,
-  profile: state.profiles.profile,
-  error: state.profiles.error,
+  loading: state.space.profiles.loading,
+  profile: state.space.profiles.profile,
+  error: state.space.profiles.error,
   location:
-    state.profiles.profile &&
-    state.profiles.profile.profileAttributes['Location'],
-  locationEnabled: state.spaceApp.userProfileAttributeDefinitions['Location'],
+    state.space.profiles.profile &&
+    state.space.profiles.profile.profileAttributes['Location'],
+  locationEnabled: state.space.spaceApp.userProfileAttributeDefinitions['Location'],
   manager:
-    state.profiles.profile && state.profiles.profile.attributes['Manager'],
-  managerEnabled: state.spaceApp.userAttributeDefinitions['Manager'],
+    state.space.profiles.profile && state.space.profiles.profile.attributes['Manager'],
+  managerEnabled: state.space.spaceApp.userAttributeDefinitions['Manager'],
   isMyProfile: selectIsMyProfile(state),
 });
 

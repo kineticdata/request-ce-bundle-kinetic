@@ -6,7 +6,7 @@ import { actions, types } from '../modules/submissions';
 import { actions as systemErrorActions } from '../modules/systemError';
 
 export function* fetchSubmissionsSaga({ payload: { coreState } }) {
-  const pageToken = yield select(state => state.submissions.current);
+  const pageToken = yield select(state => state.services.submissions.current);
   const kapp = constants.SERVICES_KAPP;
   const searchBuilder = new CoreAPI.SubmissionSearch()
     .type(constants.SUBMISSION_FORM_TYPE)

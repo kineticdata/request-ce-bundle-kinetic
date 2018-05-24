@@ -14,11 +14,8 @@ export const types = {
 
 export const actions = {
   setSize: withPayload(types.SET_SIZE),
-  setSidebarOpen: payload => ({ type: types.SET_SIDEBAR_OPEN, payload }),
-  setSuppressedSidebarOpen: payload => ({
-    type: types.SET_SUPPRESSED_SIDEBAR_OPEN,
-    payload,
-  }),
+  setSidebarOpen: withPayload(types.SET_SIDEBAR_OPEN),
+  setSuppressedSidebarOpen: withPayload(types.SET_SUPPRESSED_SIDEBAR_OPEN),
 };
 
 export const State = Record({

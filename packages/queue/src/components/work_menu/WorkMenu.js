@@ -58,8 +58,8 @@ export const WorkMenu = ({
   );
 
 export const mapStateToProps = state => ({
-  queueItem: state.workMenu.queueItem,
-  onWorked: state.workMenu.onWorked,
+  queueItem: state.queue.workMenu.queueItem,
+  onWorked: state.queue.workMenu.onWorked,
 });
 export const mapDispatchToProps = {
   closeWorkMenu: actions.closeWorkMenu,

@@ -2,10 +2,14 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, withProps } from 'recompose';
+import { bundle } from 'react-kinetic-core';
+import { selectHasSharedTaskEngine } from '../../redux/modules/spaceApp';
+
 import { NOTIFICATIONS_FORM_SLUG } from '../../redux/modules/settingsNotifications';
 
 export const SidebarComponent = ({
   settingsBackPath,
+  hasSharedTaskEngine,
   loading,
   spaceAdmin,
   showDatastore,
@@ -70,14 +74,43 @@ export const SidebarComponent = ({
         </li>
       </ul>
     )}
+    {spaceAdmin && (
+      <div className="sidebar-group sidebar-group--settings">
+        <ul className="nav flex-column settings-group">
+          <li>
+            <a
+              href={`${bundle.spaceLocation()}/app`}
+              target="blank"
+              className="nav-link"
+            >
+              Kinetic Request Admin
+              <span className="fa fa-fw fa-external-link" />
+            </a>
+          </li>
+          {!hasSharedTaskEngine && (
+            <li>
+              <a
+                href={`${bundle.spaceLocation()}/kinetic-task`}
+                target="blank"
+                className="nav-link"
+              >
+                Kinetic Task Admin
+                <span className="fa fa-fw fa-external-link" />
+              </a>
+            </li>
+          )}
+        </ul>
+      </div>
+    )}
   </div>
 );
 
 export const mapStateToProps = state => ({
-  loading: state.settingsDatastore.loading,
-  forms: state.settingsDatastore.forms,
+  loading: state.space.settingsDatastore.loading,
+  forms: state.space.settingsDatastore.forms,
   spaceAdmin: state.app.profile.spaceAdmin,
   pathname: state.router.location.pathname,
+  hasSharedTaskEngine: selectHasSharedTaskEngine(state),
 });
 
 export const Sidebar = compose(

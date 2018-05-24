@@ -14,7 +14,7 @@ import {
 } from 'redux-saga/effects';
 import { CoreAPI } from 'react-kinetic-core';
 
-import { commonActions } from 'common';
+import { toastActions } from 'common';
 import { types, actions } from '../modules/discussions';
 import { selectServerUrl } from '../selectors';
 
@@ -125,7 +125,8 @@ export function* presenceKeepAlive(guid, responseUrl) {
 export function* uploadProcessingPoller(guid, responseUrl) {
   while (true) {
     const fileUploads = yield select(
-      state => state.discussions.discussions.get(guid).processingUploads,
+      state =>
+        state.discussions.discussions.discussions.get(guid).processingUploads,
     );
 
     // If there are any file uploads to process.
@@ -208,7 +209,7 @@ export function* createInviteTask({ payload }) {
   );
 
   if (error) {
-    yield put(commonActions.addError('Failed to create invitation!'));
+    yield put(toastActions.addError('Failed to create invitation!'));
   } else {
     yield all([
       put(actions.createInviteDone()),
@@ -274,8 +275,9 @@ export function* createIssueTask({ payload }) {
 export const selectFetchMessageSettings = guid => state => {
   return {
     guid,
-    offset: state.discussions.discussions.get(guid).messages.size,
-    lastReceived: state.discussions.discussions.get(guid).lastReceived,
+    offset: state.discussions.discussions.discussions.get(guid).messages.size,
+    lastReceived: state.discussions.discussions.discussions.get(guid)
+      .lastReceived,
     responseUrl: selectServerUrl(state),
   };
 };
@@ -374,9 +376,11 @@ const toggleNewMessageTitle = () => {
 };
 
 export function* watchUnreadMessages(action) {
-  const isVisible = yield select(state => state.discussions.isVisible);
+  const isVisible = yield select(
+    state => state.discussions.discussions.isVisible,
+  );
   const pageTitleInterval = yield select(
-    state => state.discussions.pageTitleInterval,
+    state => state.discussions.discussions.pageTitleInterval,
   );
   if (!isVisible && pageTitleInterval === null) {
     const newTimer = setInterval(toggleNewMessageTitle, 1000);
@@ -385,9 +389,11 @@ export function* watchUnreadMessages(action) {
 }
 
 export function* watchDiscussionVisibility(action) {
-  const isVisible = yield select(state => state.discussions.isVisible);
+  const isVisible = yield select(
+    state => state.discussions.discussions.isVisible,
+  );
   const pageTitleInterval = yield select(
-    state => state.discussions.pageTitleInterval,
+    state => state.discussions.discussions.pageTitleInterval,
   );
   const currentTitle = document.title;
   if (isVisible && pageTitleInterval !== null) {

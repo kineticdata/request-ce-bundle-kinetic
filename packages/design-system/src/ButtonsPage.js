@@ -32,13 +32,13 @@ export const ButtonsPage = () => (
         <div className="flex-row">
           <div className="highlight">
             <pre>
-              {`<button type="button" class="btn btn-primary">Primary</button>
-<button type="button" class="btn btn-secondary">Secondary</button>
-<button type="button" class="btn btn-inverse ">Inverse</button>
-<button type="button" class="btn btn-link ">Link</button>
-<button type="button" class="btn btn-outline-danger ">Delete</button>
-<button type="button" class="btn btn-subtle ">Subtle</button>
-<button type="button" class="btn btn-sucess ">Add</button>`}
+              {`<button type="button" className="btn btn-primary">Primary</button>
+<button type="button" className="btn btn-secondary">Secondary</button>
+<button type="button" className="btn btn-inverse ">Inverse</button>
+<button type="button" className="btn btn-link ">Link</button>
+<button type="button" className="btn btn-outline-danger ">Delete</button>
+<button type="button" className="btn btn-subtle ">Subtle</button>
+<button type="button" className="btn btn-success ">Add</button>`}
             </pre>
           </div>
         </div>
@@ -58,11 +58,11 @@ export const ButtonsPage = () => (
         <div className="flex-row">
           <div className="highlight">
             <pre>
-              {`<a class="btn btn-primary" href="#" role="button">Link</a>
-<button class="btn btn-primary" type="submit">Button</button>
-<input class="btn btn-primary" type="button" value="Input" />
-<input class="btn btn-primary" type="submit" value="Submit" />
-<input class="btn btn-primary" type="reset" value="Reset" />`}
+              {`<a className="btn btn-primary" href="#" role="button">Link</a>
+<button className="btn btn-primary" type="submit">Button</button>
+<input className="btn btn-primary" type="button" value="Input" />
+<input className="btn btn-primary" type="submit" value="Submit" />
+<input className="btn btn-primary" type="reset" value="Reset" />`}
             </pre>
           </div>
         </div>
@@ -81,8 +81,8 @@ export const ButtonsPage = () => (
         <div className="flex-row">
           <div className="highlight">
             <pre>
-              {`<button type="button" class="btn btn-primary btn-lg">Large button</button>
-<button type="button" class="btn btn-secondary btn-lg">Large button</button>`}
+              {`<button type="button" className="btn btn-primary btn-lg">Large button</button>
+<button type="button" className="btn btn-secondary btn-lg">Large button</button>`}
             </pre>
           </div>
         </div>
@@ -96,8 +96,8 @@ export const ButtonsPage = () => (
           <div className="flex-row">
             <div className="highlight">
               <pre>
-                {`<button type="button" class="btn btn-primary btn-sm">Small button</button>
-<button type="button" class="btn btn-secondary btn-sm">Small button</button>`}
+                {`<button type="button" className="btn btn-primary btn-sm">Small button</button>
+<button type="button" className="btn btn-secondary btn-sm">Small button</button>`}
               </pre>
             </div>
           </div>
@@ -133,9 +133,9 @@ export const ButtonsPage = () => (
         <div className="flex-row">
           <div className="highlight">
             <pre>
-              {`<a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>
-<a href="#" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true" >Link</a>
-<a href="#" class="btn btn-inverse btn-lg active" role="button" aria-pressed="true" > Inverse </a>`}
+              {`<a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>
+<a href="#" className="btn btn-secondary btn-lg active" role="button" aria-pressed="true" >Link</a>
+<a href="#" className="btn btn-inverse btn-lg active" role="button" aria-pressed="true" > Inverse </a>`}
             </pre>
           </div>
         </div>
@@ -181,12 +181,12 @@ export const ButtonsPage = () => (
         <div className="flex-row">
           <div className="highlight">
             <pre>
-              {`<button type="button" class="btn btn-lg btn-primary" disabled>Primary button</button>
-<button type="button" class="btn btn-secondary btn-lg" disabled>Button</button>
-<button type="button" class="btn btn-inverse btn-lg" disabled>Inverse</button>
-<a href="#" class="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Primary link</a>
-<a href="#" class="btn btn-secondary btn-lg disabled" role="button" aria-disabled="true">Link</a>
-<a href="#" class="btn btn-inverse btn-lg disabled" role="button" aria-disabled="true">Inverse</a>`}
+              {`<button type="button" className="btn btn-lg btn-primary" disabled>Primary button</button>
+<button type="button" className="btn btn-secondary btn-lg" disabled>Button</button>
+<button type="button" className="btn btn-inverse btn-lg" disabled>Inverse</button>
+<a href="#" className="btn btn-primary btn-lg disabled" role="button" aria-disabled="true">Primary link</a>
+<a href="#" className="btn btn-secondary btn-lg disabled" role="button" aria-disabled="true">Link</a>
+<a href="#" className="btn btn-inverse btn-lg disabled" role="button" aria-disabled="true">Inverse</a>`}
             </pre>
           </div>
         </div>
@@ -209,9 +209,9 @@ export const ButtonsPage = () => (
         <div className="flex-row">
           <div className="highlight">
             <pre>
-              {`<button class="btn btn-icon"><span className="fa fa-plus" /></button>
-<button class="btn btn-icon"><span class="fa fa-plus" /> Button w/Icon</button>
-<button type="submit" class="btn btn-subtle btn-icon"><span class="fa fa-fw fa-paper-plane" /></button>`}
+              {`<button className="btn btn-icon"><span className="fa fa-plus" /></button>
+<button className="btn btn-icon"><span className="fa fa-plus" /> Button w/Icon</button>
+<button type="submit" className="btn btn-subtle btn-icon"><span className="fa fa-fw fa-paper-plane" /></button>`}
             </pre>
           </div>
         </div>
@@ -234,17 +234,17 @@ export const ButtonsPage = () => (
         <div className="flex-row">
           <div className="highlight">
             <pre>
-              {`<div role="group" class="btn-group btn-group-sm">
-<a disabled="" href="#" class="active btn btn-inverse disabled" >
-<span class="icon">
-<span class="fa fa-fw fa-caret-left" />
-</span>
-</a>
-<a href="#" class="btn btn-inverse">
-<span class="icon">
-<span class="fa fa-fw fa-caret-right" />
-</span>
-</a>
+              {`<div role="group" className="btn-group btn-group-sm">
+  <a disabled="" href="#" className="active btn btn-inverse disabled" >
+    <span className="icon">
+      <span className="fa fa-fw fa-caret-left" />
+    </span>
+  </a>
+  <a href="#" className="btn btn-inverse">
+    <span className="icon">
+      <span className="fa fa-fw fa-caret-right" />
+    </span>
+  </a>
 </div>`}
             </pre>
           </div>
@@ -263,13 +263,13 @@ export const ButtonsPage = () => (
         <div className="flex-row">
           <div className="highlight">
             <pre>
-              {`<div class="btn-group btn-group-sm">
-<button class="btn btn-danger">
-<span class="fa fa-fw fa-close" />
-</button>
-<a class="btn btn-primary" href="">
-<span class="fa fa-fw fa-pencil" />
-</a>
+              {`<div className="btn-group btn-group-sm">
+  <button className="btn btn-danger">
+    <span className="fa fa-fw fa-close" />
+  </button>
+  <a className="btn btn-primary" href="">
+    <span className="fa fa-fw fa-pencil" />
+  </a>
 </div>
         `}
             </pre>

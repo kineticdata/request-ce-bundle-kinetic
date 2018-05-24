@@ -4,7 +4,7 @@ import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
 import { Map, Seq } from 'immutable';
 import { push } from 'connected-react-router';
-import { commonActions } from 'common';
+import { toastActions } from 'common';
 import { actions } from '../../../redux/modules/settingsNotifications';
 import { NotificationMenu } from './NotificationMenu';
 
@@ -190,10 +190,10 @@ export const handleVariableSelection = props => variable => {
 };
 
 export const mapStateToProps = (state, props) => ({
-  submission: state.settingsNotifications.notification,
+  submission: state.space.settingsNotifications.notification,
   type: props.match.params.type,
-  loading: state.settingsNotifications.notificationLoading,
-  saving: state.settingsNotifications.saving,
+  loading: state.space.settingsNotifications.notificationLoading,
+  saving: state.space.settingsNotifications.saving,
 });
 
 export const mapDispatchToProps = {
@@ -201,7 +201,7 @@ export const mapDispatchToProps = {
   resetNotification: actions.resetNotification,
   saveNotification: actions.saveNotification,
   fetchVariables: actions.fetchVariables,
-  addSuccess: commonActions.addSuccess,
+  addSuccess: toastActions.addSuccess,
   push,
 };
 

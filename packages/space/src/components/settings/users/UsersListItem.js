@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers } from 'recompose';
 import {
@@ -94,9 +95,7 @@ const UsersListItemComponent = ({
             >
               Edit
             </DropdownItem>
-            <DropdownItem onClick={handleClone(user.username)}>
-              Clone
-            </DropdownItem>
+            <DropdownItem onClick={handleClone()}>Clone</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </td>
@@ -107,12 +106,17 @@ const UsersListItemComponent = ({
 export const mapStateToProps = state => ({});
 
 export const mapDispatchToProps = {
-  cloneSubmission: actions.cloneSubmission,
-  deleteSubmission: actions.deleteSubmission,
-  fetchSubmissions: actions.fetchSubmissions,
+  setUser: actions.setUser,
+  push,
 };
 
-const handleClone = ({ cloneSubmission }) => id => () => cloneSubmission(id);
+const dontKnowWhy = (setUser, user, push) => {
+  setUser(user);
+  push('users/clone');
+};
+
+const handleClone = ({ setUser, user, push }) => () => () =>
+  dontKnowWhy(setUser, user, push);
 
 const handleDelete = ({ deleteSubmission, fetchSubmissions }) => id => () =>
   deleteSubmission({ id: id, callback: fetchSubmissions });

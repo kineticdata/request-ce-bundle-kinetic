@@ -2,7 +2,7 @@ import { takeEvery, put, all, call, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { CoreAPI } from 'react-kinetic-core';
 import { List } from 'immutable';
-import { commonActions } from 'common';
+import { commonActions, toastActions } from 'common';
 import { actions, types, selectServerUrl } from '../modules/spaceApp';
 import { actions as errorActions } from '../modules/errors';
 
@@ -51,7 +51,7 @@ export function* deleteAlertSaga(action) {
   if (serverError || errors) {
     yield put(errorActions.setSystemError(serverError));
   } else {
-    yield put(commonActions.addSuccess('Deleted alert.'));
+    yield put(toastActions.addSuccess('Deleted alert.'));
     yield put(commonActions.fetchAlerts());
   }
 }
@@ -85,9 +85,9 @@ export function* fetchRecentDiscussionsSaga() {
   }
 
   const { limit, offset, search } = yield select(state => ({
-    limit: state.spaceApp.discussionsLimit,
-    offset: state.spaceApp.discussionsOffset,
-    search: state.spaceApp.discussionsSearchTerm,
+    limit: state.space.spaceApp.discussionsLimit,
+    offset: state.space.spaceApp.discussionsOffset,
+    search: state.space.spaceApp.discussionsSearchTerm,
   }));
 
   const { error, issues } = !!search

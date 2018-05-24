@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
-import { commonActions, Utils } from 'common';
+import { modalFormActions, Utils } from 'common';
 import { getCommentFormConfig } from '../../utils';
 
 const CommentButton = props =>
@@ -18,7 +18,7 @@ const CommentButton = props =>
 export const mapStateToProps = () => ({});
 
 export const mapDispatchToProps = {
-  openForm: commonActions.openForm,
+  openForm: modalFormActions.openForm,
 };
 
 const enhance = compose(

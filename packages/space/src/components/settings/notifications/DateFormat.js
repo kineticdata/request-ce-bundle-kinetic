@@ -4,7 +4,7 @@ import { compose, withHandlers, withProps } from 'recompose';
 import { Link } from 'react-router-dom';
 import { CoreForm } from 'react-kinetic-core';
 import { push } from 'connected-react-router';
-import { commonActions } from 'common';
+import { toastActions } from 'common';
 import { NOTIFICATIONS_DATE_FORMAT_FORM_SLUG } from '../../../redux/modules/settingsNotifications';
 
 export const DateFormatComponent = props => (
@@ -53,7 +53,7 @@ export const handleUpdated = props => (response, actions) => {
 
 export const mapDispatchToProps = {
   push,
-  addSuccess: commonActions.addSuccess,
+  addSuccess: toastActions.addSuccess,
 };
 
 export const DateFormat = compose(

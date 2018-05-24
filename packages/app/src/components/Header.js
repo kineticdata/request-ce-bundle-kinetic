@@ -11,7 +11,6 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { KappLink, Utils } from 'common';
-import { bundle } from 'react-kinetic-core';
 import { AlertsContainer } from './AlertsContainer';
 import { ProfileContainer } from './ProfileContainer';
 
@@ -39,7 +38,7 @@ export const Header = ({
   predefinedKapps,
   additionalKapps,
   kappDropdownOpen,
-  kappDropdownToggle,
+  kappDropdownToggle
 }) => (
   <Navbar color="faded" light fixed="top">
     <Nav className="nav-header">
@@ -89,27 +88,6 @@ export const Header = ({
                 onClick={kappDropdownToggle}
               />
             ))}
-            {(hasAccessToManagement || hasAccessToSupport) && (
-              <DropdownItem divider />
-            )}
-            {hasAccessToManagement && (
-              <DropdownItem
-                tag="a"
-                href={`${bundle.kappLocation(adminKapp.slug)}`}
-              >
-                <span className="fa fa-fw fa-gear" />Admin Console
-              </DropdownItem>
-            )}
-            {hasAccessToSupport && (
-              <DropdownItem
-                tag="a"
-                href={`${bundle.kappLocation(
-                  adminKapp.slug,
-                )}/submission-support`}
-              >
-                <span className="fa fa-fw fa-clipboard" />Submission Support
-              </DropdownItem>
-            )}
           </DropdownMenu>
         </Dropdown>
       )}
