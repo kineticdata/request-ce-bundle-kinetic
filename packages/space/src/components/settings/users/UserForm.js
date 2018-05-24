@@ -41,7 +41,7 @@ export const UserFormComponent = ({
                 <h3>
                   <Link to="/">home</Link> /{` `}
                   <Link to="/settings">settings</Link> /{` `}
-                  <Link to={`/settings/users/`}>users</Link> /{` `}
+                  <Link to={`/settings/users`}>users</Link> /{` `}
                 </h3>
                 {editing ? (
                   <h1>Edit: {user.displayName || user.username}</h1>
