@@ -228,7 +228,7 @@ export const UserFormComponent = ({
                       disabled={!fieldValuesValid(fieldValues)}
                       className="btn btn-primary"
                     >
-                      Save
+                      {editing ? 'Save User' : 'Create User'}
                     </button>
                     <Link to={`/settings/users`}>Cancel</Link>
                   </div>
@@ -316,7 +316,7 @@ const translateProfileToFieldValues = user => ({
 
 const translateFieldValuesToProfile = (fieldValues, user) => {
   const result = {
-    username: user.username ? user.username : fieldValues.username,
+    username: user ? user.username : fieldValues.username,
     displayName: fieldValues.displayName,
     email: fieldValues.email,
     spaceAdmin: fieldValues.spaceAdmin,
@@ -349,6 +349,7 @@ const translateFieldValuesToProfile = (fieldValues, user) => {
 };
 
 const mapStateToProps = (state, props) => ({
+  mode: props.match.params.mode,
   editing: props.match.params.username !== undefined,
   loading: state.space.settingsUsers.loading,
   userLoading: state.space.settingsUsers.userLoading,
@@ -432,9 +433,7 @@ export const UserForm = compose(
           translateFieldValuesToProfile(props.fieldValues, props.user),
         );
       } else {
-        props.createUser(
-          translateFieldValuesToProfile(props.fieldValues, props.user),
-        );
+        props.createUser(translateFieldValuesToProfile(props.fieldValues));
         props.push(`settings/users`);
       }
     },
@@ -444,6 +443,9 @@ export const UserForm = compose(
       if (this.props.editing) {
         this.props.fetchUser(this.props.match.params.username);
       }
+      if (this.props.mode === 'clone' && this.props.user.username) {
+        this.props.fetchUser(this.props.user.username);
+      }
       if (this.props.users.size <= 0) {
         this.props.fetchUsers();
       }
@@ -451,9 +453,18 @@ export const UserForm = compose(
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.user !== nextProps.user) {
+        let newUser = { ...nextProps.user };
+        if (nextProps.mode === 'clone') {
+          delete newUser.username;
+          delete newUser.displayName;
+          delete newUser.email;
+          newUser.profileAttributes['First Name'] = '';
+          newUser.profileAttributes['Last Name'] = '';
+          newUser.profileAttributes['Phone Number'] = '';
+        }
         this.props.setFieldValues({
           ...this.props.fieldValues,
-          ...translateProfileToFieldValues(nextProps.user),
+          ...translateProfileToFieldValues(newUser),
         });
       }
     },
