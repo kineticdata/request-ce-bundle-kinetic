@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Link, Route } from 'react-router-dom';
-import logoName from './assets/images/login-name.png';
+import logoName from './assets/images/KD_logo_159box.png';
 
 export const Sidebar = () => (
   <div className="sidebar">
