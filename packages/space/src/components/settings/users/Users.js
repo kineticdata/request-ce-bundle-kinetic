@@ -8,7 +8,7 @@ const ImportUsers = () => <h1>Import Users</h1>;
 
 export const Users = ({ match }) => (
   <Switch>
-    <Route exact path={`${match.path}/new`} component={UserForm} />
+    <Route exact path={`${match.path}/:mode`} component={UserForm} />
     <Route exact path={`${match.path}/import`} component={ImportUsers} />
     <Route exact path={`${match.path}/error`} component={UsersError} />
     <Route exact path={`${match.path}/:username/edit`} component={UserForm} />
