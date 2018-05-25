@@ -140,7 +140,10 @@ export const fetchParticipants = (guid, responseUrl) =>
 
 export const fetchResponseProfile = responseUrl =>
   axios
-    .get(`${responseUrl}/api/v1/me`, { withCredentials: true })
+    .get(`${responseUrl}/api/v1/me`, {
+      withCredentials: true,
+      __bypassAuthInterceptor: true,
+    })
     .then(response => ({ profile: response.data }))
     .catch(response => ({ error: response }));
 
