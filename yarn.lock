@@ -4655,9 +4655,9 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
 
-kinops-react-scripts@0.9.4:
-  version "0.9.4"
-  resolved "https://registry.yarnpkg.com/kinops-react-scripts/-/kinops-react-scripts-0.9.4.tgz#69034be0952c6be260c40bdefbd804ca046a8856"
+kinops-react-scripts@0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/kinops-react-scripts/-/kinops-react-scripts-0.10.0.tgz#11db0085cd8b5e1616a85fdae40f106cd423ecce"
   dependencies:
     autoprefixer "7.1.6"
     babel-core "6.26.0"
