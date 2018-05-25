@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
-import axios from 'axios';
-import { bundle } from 'react-kinetic-core';
+import { login } from '../../utils/authentication';
 import { actions } from '../../redux/modules/auth';
 
 export const LoginModalComponent = props =>
@@ -68,11 +67,7 @@ const mapDispatchToProps = {
 
 const handleLogin = props => event => {
   event.preventDefault();
-  axios
-    .post(`${bundle.spaceLocation()}/app/login.do`, {
-      j_username: props.email,
-      j_password: props.password,
-    })
+  login(props.email, props.password)
     .then(props.success)
     .catch(props.handleAuthError);
 };

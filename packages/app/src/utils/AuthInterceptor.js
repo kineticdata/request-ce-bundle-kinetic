@@ -48,7 +48,7 @@ export default class AuthInterceptor {
   handleRejected(error) {
     if (
       error.response.status === 401 &&
-      !error.response.config.url.endsWith('login.do')
+      !error.response.config.__bypassAuthInterceptor
     ) {
       if (!this.authPromise) {
         this.authPromise = this.authenticate();
