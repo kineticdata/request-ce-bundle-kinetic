@@ -46,8 +46,8 @@
     border: 1px solid $black-5;
     border-radius: $border-radius-base;
     background-color: $white;
-    padding: 0.5em 1em 0.5em 1em;
-    margin-bottom: 0.75rem;
+    padding: .5em 1em .5em 1em;
+    margin-bottom: .75rem;
 
     .header {
       display: flex;
@@ -56,8 +56,8 @@
       margin-bottom: 1.5rem;
       align-items: center;
 
-      & > a {
-        margin-right: 0.25em;
+      &__title {
+        margin-right: .25em;
         height: 1.5rem;
         font-size: 1rem;
         font-weight: 600;
@@ -65,23 +65,24 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        flex: 1 1 40%;
       }
 
       .participants {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
-        flex-basis: 50%;
+        flex-basis: 40%;
         overflow-x: scroll;
-        & > .avatar {
+        & >.avatar {
           padding: 0;
         }
 
-        & > .related-link {
+        & >.related-link {
           margin-right: 2rem;
           height: auto;
           font-weight: 400;
-          font-size: 0.6125rem;
+          font-size: .6125rem;
         }
       }
     }
