@@ -4,6 +4,7 @@ import { Line } from 'rc-progress';
 import { Table, Modal, ModalBody, ModalFooter } from 'reactstrap';
 
 import csv from 'csvtojson';
+import Papa from 'papaparse';
 
 export const DeleteModal = ({ handleDelete, handleToggle, modal }) => (
   <Fragment>
@@ -29,10 +30,9 @@ export class DatastoreImport extends Component {
     super(props);
 
     this.state = {
-      posting: false,
+      processing: false,
       postResult: false,
       submissions: [],
-      csvObjects: [],
       records: [],
       recordsHeaders: [],
       formSlug: this.props.match.params.slug,
@@ -73,12 +73,7 @@ export class DatastoreImport extends Component {
         this.post(tail);
       } else {
         Promise.all(this.calls).then(() => {
-          this.setState({
-            posting: false,
-            percentComplete: 0,
-            postResult: true,
-          });
-          this.fetch();
+          this.handlePostComplete();
         });
       }
     });
@@ -101,6 +96,10 @@ export class DatastoreImport extends Component {
   };
 
   delete = ([head, ...tail]) => {
+    this.setState({
+      percentComplete:
+        100 - Math.round(tail.length / this.state.submissions.length * 100),
+    });
     if (head.id) {
       CoreAPI.deleteSubmission({
         datastore: true,
@@ -109,6 +108,10 @@ export class DatastoreImport extends Component {
         if (tail.length > 0) {
           this.delete(tail);
         } else {
+          this.setState({
+            processing: false,
+            percentComplete: 0,
+          });
           this.fetch();
         }
       });
@@ -142,6 +145,26 @@ export class DatastoreImport extends Component {
     });
   };
 
+  handleReset = () => {
+    this.readFile = null;
+    this.setState({
+      records: [],
+      recordsHeaders: [],
+      missingFields: [],
+      percentComplete: 0,
+    });
+  };
+
+  handlePostComplete = () => {
+    this.setState({
+      processing: false,
+      percentComplete: 0,
+      postResult: true,
+    });
+    this.fetch();
+    this.handleReset();
+  };
+
   handleToggle = () => {
     this.setState({
       modal: !this.state.modal,
@@ -150,63 +173,76 @@ export class DatastoreImport extends Component {
 
   handleDelete = () => {
     this.setState({
+      processing: true,
       modal: false,
+      postResult: false,
     });
     this.delete(this.state.submissions);
   };
 
   handleImport = () => {
-    this.setState({ posting: true });
+    this.setState({ processing: true });
     this.post(this.state.records);
   };
 
   handleCsvToJson = () => {
-    const classThis = this;
     let arr = [];
-    csv({ noheader: false })
-      .fromString(this.readFile.result)
-      .on('json', csvRow => {
-        let obj = {};
-        if (csvRow['Datastore Record ID'] !== '') {
-          obj.id = csvRow['Datastore Record ID'];
-        }
-        delete csvRow['Datastore Record ID'];
-        obj.values = csvRow;
-        arr.push(obj);
-      })
-      .on('end', () => {
-        classThis.setState({ records: arr });
-      });
+    this.parseResults.data.map(csvRow => {
+      let obj = {};
+      if (csvRow['Datastore Record ID'] !== '') {
+        obj.id = csvRow['Datastore Record ID'];
+      }
+      delete csvRow['Datastore Record ID'];
+      obj.values = csvRow;
+      arr.push(obj);
+    });
+    this.setState({ records: arr });
+  };
+
+  handleFieldCheck = () => {
+    const headers = this.parseResults.meta.fields;
+    const missingFields = [];
+    const allHeadersFound = headers.every(header => {
+      if (
+        this.formFields.includes(header) ||
+        header === 'Datastore Record ID'
+      ) {
+        return true;
+      }
+      missingFields.push(header);
+      return false;
+    });
+    if (!allHeadersFound) {
+      this.setState({ missingFields });
+    } else {
+      this.handleCsvToJson();
+      this.setState({ recordsHeaders: headers });
+    }
   };
 
   handleChange = event => {
-    const classThis = this;
-    const reader = new FileReader();
-    reader.readAsText(this.fileEl.files[0]);
-    this.readFile = reader;
-    reader.onload = event => {
-      csv({ noheader: false })
-        .fromString(event.target.result)
-        .on('header', headers => {
-          const missingFields = [];
-          const allHeadersFound = headers.every(header => {
-            if (
-              classThis.formFields.includes(header) ||
-              header === 'Datastore Record ID'
-            ) {
-              return true;
-            }
-            missingFields.push(header);
-            return false;
-          });
-          if (!allHeadersFound) {
-            classThis.setState({ missingFields });
-          } else {
-            classThis.handleCsvToJson();
-            classThis.setState({ recordsHeaders: headers });
-          }
+    const file = this.fileEl.files[0];
+
+    // If the user chooses to cancel the open.  Avoids an error with file.name and prevents unnecessary behavior.
+    if (file) {
+      this.setState({ fileName: file.name, postResult: false });
+      const reader = new FileReader();
+      reader.readAsText(this.fileEl.files[0]);
+      this.readFile = reader;
+      reader.onload = event => {
+        Papa.parse(event.target.result, {
+          header: true,
+          complete: results => {
+            //When streaming, parse results are not available in this callback.
+            this.parseResults = results;
+            this.handleFieldCheck();
+          },
+          error: errors => {
+            //Test error handleing here.  This might not work if error is called each time a row has an error.
+          },
         });
-    };
+      };
+    }
   };
 
   componentWillMount() {
@@ -222,15 +258,24 @@ export class DatastoreImport extends Component {
             <div className="page-title">
               <h1>Import Datastore</h1>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              {this.state.submissions.length > 0 && (
+            {this.state.submissions.length > 0 ? (
+              <Fragment>
+                <div style={{ display: 'inline-block', marginRight: '1rem' }}>
+                  <p>This datastore currently has records</p>{' '}
+                </div>
                 <button
                   className="btn btn-primary btn-sm"
                   onClick={this.handleToggle}
                 >
                   Delete Records
                 </button>
-              )}
+              </Fragment>
+            ) : (
+              <div>
+                <p>This datastore currently has no records</p>
+              </div>
+            )}
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               {this.state.records.length > 0 &&
                 this.state.missingFields.length <= 0 && (
                   <button
@@ -240,13 +285,29 @@ export class DatastoreImport extends Component {
                     Import Records
                   </button>
                 )}
-              <input
-                type="file"
-                onChange={this.handleChange}
-                ref={element => {
-                  this.fileEl = element;
-                }}
-              />
+              {this.readFile ? (
+                <button
+                  className="btn btn-info btn-sm"
+                  onClick={this.handleReset}
+                >
+                  Reset File
+                </button>
+              ) : (
+                <Fragment>
+                  <input
+                    type="file"
+                    id="file-input"
+                    style={{ display: 'none' }}
+                    onChange={this.handleChange}
+                    ref={element => {
+                      this.fileEl = element;
+                    }}
+                  />
+                  <label htmlFor="file-input" className="btn btn-info btn-sm">
+                    Choose A File
+                  </label>
+                </Fragment>
+              )}
             </div>
             <div className="forms-list-wrapper">
               {this.state.missingFields.length > 0 && (
@@ -257,16 +318,7 @@ export class DatastoreImport extends Component {
                   ))}
                 </div>
               )}
-              {this.state.submissions.length > 0 ? (
-                <div>
-                  <p>This datastore currently has records</p>
-                </div>
-              ) : (
-                <div>
-                  <p>This datastore currently has no records</p>
-                </div>
-              )}
-              {this.state.posting && (
+              {this.state.processing && (
                 <Line
                   percent={this.state.percentComplete}
                   strokeWidth="1"
@@ -276,18 +328,20 @@ export class DatastoreImport extends Component {
               {this.state.postResult && (
                 <div>
                   <h4>Post Results</h4>
-                  <p>{this.state.records.length} records were to be posted</p>
                   <p>{this.calls.length} records attempted to be posted</p>
                   <p>{this.failedCalls.length} records failed</p>
                 </div>
               )}
-              {!this.state.posting &&
+              {!this.state.processing &&
                 !this.state.postResult &&
                 this.state.records.length > 0 &&
                 this.state.recordsHeaders.length > 0 && (
                   <Fragment>
                     <div>
-                      <p>CSV to Json results for review.</p>
+                      <p>
+                        The below table is a preview of{' '}
+                        <b>{this.state.fileName}</b>.
+                      </p>
                       <p>Import Records to save them.</p>
                     </div>
                     <Table style={{ maxWidth: '80%' }}>
