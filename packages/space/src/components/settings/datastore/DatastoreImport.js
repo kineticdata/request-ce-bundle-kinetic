@@ -3,7 +3,6 @@ import { CoreAPI } from 'react-kinetic-core';
 import { Line } from 'rc-progress';
 import { Table, Modal, ModalBody, ModalFooter } from 'reactstrap';
 
-import csv from 'csvtojson';
 import Papa from 'papaparse';
 
 export const DeleteModal = ({ handleDelete, handleToggle, modal }) => (
