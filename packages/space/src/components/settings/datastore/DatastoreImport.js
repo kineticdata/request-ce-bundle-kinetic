@@ -1,9 +1,28 @@
 import React, { Component, Fragment } from 'react';
 import { CoreAPI } from 'react-kinetic-core';
 import { Line } from 'rc-progress';
-import { Table } from 'reactstrap';
+import { Table, Modal, ModalBody, ModalFooter } from 'reactstrap';
 
 import csv from 'csvtojson';
+
+export const DeleteModal = ({ handleDelete, handleToggle, modal }) => (
+  <Fragment>
+    <Modal isOpen={modal} toggle={handleToggle}>
+      <ModalBody>
+        Choosing the delete button will delete all of the records that are
+        currently in memory, this could be upto 1000 records.
+      </ModalBody>
+      <ModalFooter>
+        <button className="btn btn-danger btn-sm" onClick={handleDelete}>
+          Delete
+        </button>
+        <button className="btn btn-link btn-sm" onClick={handleToggle}>
+          Cancel
+        </button>
+      </ModalFooter>
+    </Modal>
+  </Fragment>
+);
 
 export class DatastoreImport extends Component {
   constructor(props) {
@@ -19,6 +38,7 @@ export class DatastoreImport extends Component {
       formSlug: this.props.match.params.slug,
       missingFields: [],
       percentComplete: 0,
+      modal: false,
     };
     this.form = {};
     this.formFields = [];
@@ -122,7 +142,18 @@ export class DatastoreImport extends Component {
     });
   };
 
-  handleDelete = () => this.delete(this.state.submissions);
+  handleToggle = () => {
+    this.setState({
+      modal: !this.state.modal,
+    });
+  };
+
+  handleDelete = () => {
+    this.setState({
+      modal: false,
+    });
+    this.delete(this.state.submissions);
+  };
 
   handleImport = () => {
     this.setState({ posting: true });
@@ -178,126 +209,125 @@ export class DatastoreImport extends Component {
     };
   };
 
-  test = () => {
-    setTimeout(() => {
-      this.setState({ number: this.state.number + 10 });
-      if (this.state.number <= 100) {
-        this.test();
-      }
-    }, 1000);
-  };
-
   componentWillMount() {
     this.fetchForm();
     this.fetch();
-    this.test();
   }
 
   render() {
     return (
-      <div className="page-container page-container--datastore">
-        <div className="page-panel page-panel--scrollable page-panel--datastore-content">
-          <div className="page-title">
-            <h1>Import Datastore</h1>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            {this.state.submissions.length > 0 && (
-              <button
-                className="btn btn-primary btn-sm"
-                onClick={this.handleDelete}
-              >
-                Delete Records
-              </button>
-            )}
-            {this.state.records.length > 0 &&
-              this.state.missingFields.length <= 0 && (
+      <Fragment>
+        <div className="page-container page-container--datastore">
+          <div className="page-panel page-panel--scrollable page-panel--datastore-content">
+            <div className="page-title">
+              <h1>Import Datastore</h1>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              {this.state.submissions.length > 0 && (
                 <button
-                  className="btn btn-secondary btn-sm"
-                  onClick={this.handleImport}
+                  className="btn btn-primary btn-sm"
+                  onClick={this.handleToggle}
                 >
-                  Import Records
+                  Delete Records
                 </button>
               )}
-            <input
-              type="file"
-              onChange={this.handleChange}
-              ref={element => {
-                this.fileEl = element;
-              }}
-            />
-          </div>
-          <div className="forms-list-wrapper">
-            {this.state.missingFields.length > 0 && (
-              <div>
-                <h3>The CSV has headers that do not exist on the form</h3>
-                {this.state.missingFields.map(fieldName => <p>{fieldName}</p>)}
-              </div>
-            )}
-            {this.state.submissions.length > 0 ? (
-              <div>
-                <p>This datastore currently has records</p>
-              </div>
-            ) : (
-              <div>
-                <p>This datastore currently has no records</p>
-              </div>
-            )}
-            {this.state.posting && (
-              <Line
-                percent={this.state.percentComplete}
-                strokeWidth="1"
-                strokeColor="#5fba53"
+              {this.state.records.length > 0 &&
+                this.state.missingFields.length <= 0 && (
+                  <button
+                    className="btn btn-secondary btn-sm"
+                    onClick={this.handleImport}
+                  >
+                    Import Records
+                  </button>
+                )}
+              <input
+                type="file"
+                onChange={this.handleChange}
+                ref={element => {
+                  this.fileEl = element;
+                }}
               />
-            )}
-            {this.state.postResult && (
-              <div>
-                <h4>Post Results</h4>
-                <p>{this.state.records.length} records were to be posted</p>
-                <p>{this.calls.length} records attempted to be posted</p>
-                <p>{this.failedCalls.length} records failed</p>
-              </div>
-            )}
-            {!this.state.posting &&
-              !this.state.postResult &&
-              this.state.records.length > 0 &&
-              this.state.recordsHeaders.length > 0 && (
-                <Fragment>
-                  <div>
-                    <p>CSV to Json results for review.</p>
-                    <p>Import Records to save them.</p>
-                  </div>
-                  <Table style={{ maxWidth: '80%' }}>
-                    <thead>
-                      <tr>
-                        {this.state.recordsHeaders
-                          .sort()
-                          .map((header, idx) => (
-                            <th key={header + idx}>{header}</th>
-                          ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.state.records.map((record, idx) => {
-                        const { values, id } = record;
-                        return (
-                          <tr key={idx}>
-                            {Object.keys(values)
-                              .sort()
-                              .map((fieldName, idx) => (
-                                <td key={fieldName + idx}>
-                                  {values[fieldName]}
-                                </td>
-                              ))}
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </Table>
-                </Fragment>
+            </div>
+            <div className="forms-list-wrapper">
+              {this.state.missingFields.length > 0 && (
+                <div>
+                  <h3>The CSV has headers that do not exist on the form</h3>
+                  {this.state.missingFields.map(fieldName => (
+                    <p>{fieldName}</p>
+                  ))}
+                </div>
               )}
+              {this.state.submissions.length > 0 ? (
+                <div>
+                  <p>This datastore currently has records</p>
+                </div>
+              ) : (
+                <div>
+                  <p>This datastore currently has no records</p>
+                </div>
+              )}
+              {this.state.posting && (
+                <Line
+                  percent={this.state.percentComplete}
+                  strokeWidth="1"
+                  strokeColor="#5fba53"
+                />
+              )}
+              {this.state.postResult && (
+                <div>
+                  <h4>Post Results</h4>
+                  <p>{this.state.records.length} records were to be posted</p>
+                  <p>{this.calls.length} records attempted to be posted</p>
+                  <p>{this.failedCalls.length} records failed</p>
+                </div>
+              )}
+              {!this.state.posting &&
+                !this.state.postResult &&
+                this.state.records.length > 0 &&
+                this.state.recordsHeaders.length > 0 && (
+                  <Fragment>
+                    <div>
+                      <p>CSV to Json results for review.</p>
+                      <p>Import Records to save them.</p>
+                    </div>
+                    <Table style={{ maxWidth: '80%' }}>
+                      <thead>
+                        <tr>
+                          {this.state.recordsHeaders
+                            .sort()
+                            .map((header, idx) => (
+                              <th key={header + idx}>{header}</th>
+                            ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.state.records.map((record, idx) => {
+                          const { values, id } = record;
+                          return (
+                            <tr key={idx}>
+                              {Object.keys(values)
+                                .sort()
+                                .map((fieldName, idx) => (
+                                  <td key={fieldName + idx}>
+                                    {values[fieldName]}
+                                  </td>
+                                ))}
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </Table>
+                  </Fragment>
+                )}
+            </div>
           </div>
         </div>
-      </div>
+        <DeleteModal
+          modal={this.state.modal}
+          handleToggle={this.handleToggle}
+          handleDelete={this.handleDelete}
+        />
+      </Fragment>
     );
   }
 }
