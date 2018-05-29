@@ -1,8 +1,8 @@
 import { delay } from 'redux-saga';
-import { select, put, call, all, race, take } from 'redux-saga/effects';
+import { put, call, all, race, take } from 'redux-saga/effects';
 import { List } from 'immutable';
 import { actions, types } from '../modules/discussions';
-import { commonTypes } from 'common';
+import { toastTypes } from 'common';
 
 global.bundle = {
   apiLocation: () => '/acme/app/api/v1',
@@ -39,8 +39,6 @@ const {
   openWebSocket,
 } = require('./discussions');
 
-const { selectServerUrl } = require('../selectors');
-
 const ISSUE_GUID = 'issue-guid';
 const RESPONSE_URL = 'http://response.url';
 
@@ -70,11 +68,8 @@ describe('discussion saga', () => {
         action.payload.attachment = { name: 'file.txt' };
         // Start the saga with the action.
         const saga = sendMessageTask(action);
-        // First fetch the server config info.
-        expect(saga.next().value).toEqual(select(selectServerUrl));
-
         // Next call the correct function to send.
-        let step = saga.next(responseUrl).value;
+        let step = saga.next().value;
         expect(step.CALL.fn).toBe(sendAttachment);
 
         step = saga.next({ messages: [] }).value;
@@ -84,8 +79,7 @@ describe('discussion saga', () => {
     describe('when sending text', () => {
       test('it calls sendMessage', () => {
         const saga = sendMessageTask(action);
-        expect(saga.next().value).toEqual(select(selectServerUrl));
-        const step = saga.next(responseUrl).value;
+        const step = saga.next().value;
         expect(step.CALL.fn).toBe(sendMessage);
       });
     });
@@ -292,10 +286,7 @@ describe('discussion saga', () => {
 
     test('happy path', () => {
       const saga = watchDiscussionSocket(action);
-      expect(saga.next().value).toEqual(select(selectServerUrl));
-      expect(saga.next(RESPONSE_URL).value).toEqual(
-        call(openWebSocket, ISSUE_GUID, RESPONSE_URL),
-      );
+      expect(saga.next().value).toEqual(call(openWebSocket, ISSUE_GUID));
       expect(saga.next(socket).value).toEqual(call(registerChannel, socket));
 
       // Enter the loop - the first thing that should happen is to kick off the race.
@@ -303,8 +294,8 @@ describe('discussion saga', () => {
         race({
           task: all([
             call(incomingMessages, socketChannel, ISSUE_GUID),
-            call(presenceKeepAlive, ISSUE_GUID, RESPONSE_URL),
-            call(uploadProcessingPoller, ISSUE_GUID, RESPONSE_URL),
+            call(presenceKeepAlive, ISSUE_GUID),
+            call(uploadProcessingPoller, ISSUE_GUID),
           ]),
           reconnect: take(types.RECONNECT),
           disconnect: take(types.DISCONNECT),
@@ -449,12 +440,9 @@ describe('discussion saga', () => {
         const action = { payload: ISSUE_GUID };
 
         const saga = joinDiscussionTask(action);
-        expect(saga.next().value).toEqual(select(selectServerUrl));
-        expect(saga.next(RESPONSE_URL).value).toEqual(
-          call(fetchResponseProfile, RESPONSE_URL),
-        );
+        expect(saga.next().value).toEqual(call(fetchResponseProfile));
         expect(saga.next({ error: 'error message ' }).value).toEqual(
-          call(getResponseAuthentication, RESPONSE_URL),
+          call(getResponseAuthentication),
         );
       });
 
@@ -469,17 +457,14 @@ describe('discussion saga', () => {
         };
 
         const saga = joinDiscussionTask(action);
-        expect(saga.next().value).toEqual(select(selectServerUrl));
-        expect(saga.next(RESPONSE_URL).value).toEqual(
-          call(fetchResponseProfile, RESPONSE_URL),
-        );
+        expect(saga.next().value).toEqual(call(fetchResponseProfile));
         // This is the selectFetchMessageSettings call.
-        expect(saga.next(RESPONSE_URL).value.SELECT).toBeDefined();
+        expect(saga.next({ notAnError: true }).value.SELECT).toBeDefined();
         expect(saga.next(messageParams).value).toEqual(
           all({
-            issue: call(fetchIssue, ISSUE_GUID, RESPONSE_URL),
-            participants: call(fetchParticipants, ISSUE_GUID, RESPONSE_URL),
-            invites: call(fetchInvites, ISSUE_GUID, RESPONSE_URL),
+            issue: call(fetchIssue, ISSUE_GUID),
+            participants: call(fetchParticipants, ISSUE_GUID),
+            invites: call(fetchInvites, ISSUE_GUID),
             messages: call(fetchMessages, messageParams),
           }),
         );
@@ -520,32 +505,22 @@ describe('discussion saga', () => {
     describe('when not authenticated with Response', () => {
       test('it attempts to authenticate with Response', () => {
         const saga = createIssueTask(action);
-        expect(saga.next().value).toEqual(select(selectServerUrl));
-        expect(saga.next(RESPONSE_URL).value).toEqual(
-          call(fetchResponseProfile, RESPONSE_URL),
-        );
+        expect(saga.next().value).toEqual(call(fetchResponseProfile));
 
         expect(saga.next({ error: 'error message ' }).value).toEqual(
-          call(getResponseAuthentication, RESPONSE_URL),
+          call(getResponseAuthentication),
         );
       });
     });
 
     test('it creates an issue', () => {
       const saga = createIssueTask(action);
-      expect(saga.next().value).toEqual(select(selectServerUrl));
-      expect(saga.next(RESPONSE_URL).value).toEqual(
-        call(fetchResponseProfile, RESPONSE_URL),
-      );
+      expect(saga.next().value).toEqual(call(fetchResponseProfile));
       expect(saga.next({}).value).toEqual(
-        call(
-          createIssue,
-          {
-            name: action.payload.name,
-            description: action.payload.description,
-          },
-          RESPONSE_URL,
-        ),
+        call(createIssue, {
+          name: action.payload.name,
+          description: action.payload.description,
+        }),
       );
     });
     describe('when successful', () => {
@@ -554,19 +529,12 @@ describe('discussion saga', () => {
           action.payload.submission = { id: 'submissionId' };
 
           const saga = createIssueTask(action);
-          expect(saga.next().value).toEqual(select(selectServerUrl));
-          expect(saga.next(RESPONSE_URL).value).toEqual(
-            call(fetchResponseProfile, RESPONSE_URL),
-          );
+          expect(saga.next().value).toEqual(call(fetchResponseProfile));
           expect(saga.next({}).value).toEqual(
-            call(
-              createIssue,
-              {
-                name: action.payload.name,
-                description: action.payload.description,
-              },
-              RESPONSE_URL,
-            ),
+            call(createIssue, {
+              name: action.payload.name,
+              description: action.payload.description,
+            }),
           );
 
           expect(saga.next({ issue }).value).toEqual(
@@ -583,19 +551,12 @@ describe('discussion saga', () => {
           action.payload.onSuccess = jest.fn();
 
           const saga = createIssueTask(action);
-          expect(saga.next().value).toEqual(select(selectServerUrl));
-          expect(saga.next(RESPONSE_URL).value).toEqual(
-            call(fetchResponseProfile, RESPONSE_URL),
-          );
+          expect(saga.next().value).toEqual(call(fetchResponseProfile));
           expect(saga.next({}).value).toEqual(
-            call(
-              createIssue,
-              {
-                name: action.payload.name,
-                description: action.payload.description,
-              },
-              RESPONSE_URL,
-            ),
+            call(createIssue, {
+              name: action.payload.name,
+              description: action.payload.description,
+            }),
           );
 
           saga.next({ issue });
@@ -610,19 +571,12 @@ describe('discussion saga', () => {
           action.payload.onSuccess = jest.fn();
 
           const saga = createIssueTask(action);
-          expect(saga.next().value).toEqual(select(selectServerUrl));
-          expect(saga.next(RESPONSE_URL).value).toEqual(
-            call(fetchResponseProfile, RESPONSE_URL),
-          );
+          expect(saga.next().value).toEqual(call(fetchResponseProfile));
           expect(saga.next({}).value).toEqual(
-            call(
-              createIssue,
-              {
-                name: action.payload.name,
-                description: action.payload.description,
-              },
-              RESPONSE_URL,
-            ),
+            call(createIssue, {
+              name: action.payload.name,
+              description: action.payload.description,
+            }),
           );
 
           expect(saga.next({ issue }).value).toEqual(
@@ -658,14 +612,12 @@ describe('discussion saga', () => {
     describe('when successful', () => {
       test('sets the invite creation as done and closes the modal', () => {
         const saga = createInviteTask(action);
-        expect(saga.next().value).toEqual(select(selectServerUrl));
-        expect(saga.next(RESPONSE_URL).value).toEqual(
+        expect(saga.next().value).toEqual(
           call(
             createInvite,
             action.payload.guid,
             action.payload.email,
             action.payload.note,
-            RESPONSE_URL,
           ),
         );
 
@@ -681,20 +633,18 @@ describe('discussion saga', () => {
     describe('when unsuccessful', () => {
       test('it toasts an error notification', () => {
         const saga = createInviteTask(action);
-        expect(saga.next().value).toEqual(select(selectServerUrl));
-        expect(saga.next(RESPONSE_URL).value).toEqual(
+        expect(saga.next().value).toEqual(
           call(
             createInvite,
             action.payload.guid,
             action.payload.email,
             action.payload.note,
-            RESPONSE_URL,
           ),
         );
 
         expect(
           saga.next({ error: 'error message ' }).value.PUT.action.type,
-        ).toEqual(commonTypes.ADD_NOTIFICATION);
+        ).toEqual(toastTypes.ADD_TOAST);
       });
     });
   });

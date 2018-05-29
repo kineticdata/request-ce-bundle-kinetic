@@ -3,7 +3,7 @@ import { push } from 'connected-react-router';
 import { CoreAPI } from 'react-kinetic-core';
 import { List } from 'immutable';
 import { commonActions, toastActions } from 'common';
-import { actions, types, selectServerUrl } from '../modules/spaceApp';
+import { actions, types } from '../modules/spaceApp';
 import { actions as errorActions } from '../modules/errors';
 
 import { DiscussionAPI } from 'discussions';
@@ -57,13 +57,9 @@ export function* deleteAlertSaga(action) {
 }
 
 export function* createDiscussionSaga({ payload }) {
-  const responseUrl = yield select(selectServerUrl);
-
-  const { error, issue } = yield call(
-    DiscussionAPI.createIssue,
-    { name: payload },
-    responseUrl,
-  );
+  const { error, issue } = yield call(DiscussionAPI.createIssue, {
+    name: payload,
+  });
 
   if (error) {
     yield put(actions.setDiscussionsError(error));
@@ -73,15 +69,12 @@ export function* createDiscussionSaga({ payload }) {
 }
 
 export function* fetchRecentDiscussionsSaga() {
-  const responseUrl = yield select(selectServerUrl);
-
   // First we need to determine if the user is authenticated in Response.
   const { error: authenticationError } = yield call(
     DiscussionAPI.fetchResponseProfile,
-    responseUrl,
   );
   if (authenticationError) {
-    yield call(DiscussionAPI.getResponseAuthentication, responseUrl);
+    yield call(DiscussionAPI.getResponseAuthentication);
   }
 
   const { limit, offset, search } = yield select(state => ({
@@ -91,8 +84,8 @@ export function* fetchRecentDiscussionsSaga() {
   }));
 
   const { error, issues } = !!search
-    ? yield call(DiscussionAPI.searchIssues, responseUrl, search, limit, offset)
-    : yield call(DiscussionAPI.fetchMyOpenIssues, responseUrl, limit, offset);
+    ? yield call(DiscussionAPI.searchIssues, search, limit, offset)
+    : yield call(DiscussionAPI.fetchMyOpenIssues, limit, offset);
 
   if (error) {
     yield put(actions.setDiscussionsError(error));

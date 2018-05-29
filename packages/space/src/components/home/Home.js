@@ -4,7 +4,6 @@ import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 import { PageTitle } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
-import { selectServerUrl } from 'discussions/src/redux/selectors';
 import {
   actions,
   selectIsMoreDiscussions,
@@ -14,6 +13,7 @@ import { actions as teamListActions } from '../../redux/modules/teamList';
 import { CreateDiscussionModal } from './CreateDiscussionModal';
 import { Discussion } from './Discussion';
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
+import { bundle } from 'react-kinetic-core';
 
 const HomeComponent = ({
   spaceName,
@@ -143,7 +143,7 @@ export const mapStateToProps = state => ({
   discussionsOffset: state.space.spaceApp.discussionsOffset,
   discussionsSearchInputValue: state.space.spaceApp.discussionsSearchInputValue,
   discussionsSearchTerm: state.space.spaceApp.discussionsSearchTerm,
-  discussionServerUrl: selectServerUrl(state),
+  discussionServerUrl: `${bundle.spaceLocation()}/kinetic-response`,
   isMoreDiscussions: selectIsMoreDiscussions(state),
   discussionsEnabled: selectDiscussionsEnabled(state),
   me: state.app.profile,

@@ -12,11 +12,10 @@ import {
   takeLatest,
   fork,
 } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
+import { CoreAPI, bundle } from 'react-kinetic-core';
 
 import { toastActions } from 'common';
 import { types, actions } from '../modules/discussions';
-import { selectServerUrl } from '../selectors';
 
 import {
   MESSAGE_LIMIT,
@@ -162,25 +161,24 @@ export function* uploadProcessingPoller(guid, responseUrl) {
 //   }
 // }
 
-export const openWebSocket = (guid, responseUrl) =>
+export const openWebSocket = guid =>
   new WebSocket(
     `${window.location.protocol === 'http:' ? 'ws' : 'wss'}://${
       window.location.host
-    }${responseUrl}/api/v1/issues/${guid}/issue_socket`,
+    }${bundle.spaceLocation()}/kinetic-response/api/v1/issues/${guid}/issue_socket`,
   );
 
 export function* watchDiscussionSocket(action) {
-  const responseUrl = yield select(selectServerUrl);
   const guid = action.payload;
-  let socket = yield call(openWebSocket, guid, responseUrl);
+  let socket = yield call(openWebSocket, guid);
   let socketChannel = yield call(registerChannel, socket);
 
   while (true) {
     const { disconnect, reconnect } = yield race({
       task: all([
         call(incomingMessages, socketChannel, guid),
-        call(presenceKeepAlive, guid, responseUrl),
-        call(uploadProcessingPoller, guid, responseUrl),
+        call(presenceKeepAlive, guid),
+        call(uploadProcessingPoller, guid),
         // call(outgoingMessages, socket),
       ]),
       reconnect: take(types.RECONNECT),
@@ -188,7 +186,7 @@ export function* watchDiscussionSocket(action) {
     });
 
     if (reconnect) {
-      socket = openWebSocket(guid, responseUrl);
+      socket = openWebSocket(guid);
       socketChannel = yield call(registerChannel, socket);
     }
 
@@ -199,13 +197,11 @@ export function* watchDiscussionSocket(action) {
 }
 
 export function* createInviteTask({ payload }) {
-  const responseUrl = yield select(selectServerUrl);
   const { error } = yield call(
     createInvite,
     payload.guid,
     payload.email,
     payload.note,
-    responseUrl,
   );
 
   if (error) {
@@ -229,23 +225,15 @@ export const updateSubmissionDiscussionId = ({ id, guid, include }) =>
 // Step 2: Call the API to create the issue.
 // Step 3: If a submission is provided, update its "Discussion Id"
 export function* createIssueTask({ payload }) {
-  const responseUrl = yield select(selectServerUrl);
   const { name, description, submission, onSuccess, include } = payload;
 
   // First we need to determine if the user is authenticated in Response.
-  const { error: authenticationError } = yield call(
-    fetchResponseProfile,
-    responseUrl,
-  );
+  const { error: authenticationError } = yield call(fetchResponseProfile);
   if (authenticationError) {
-    yield call(getResponseAuthentication, responseUrl);
+    yield call(getResponseAuthentication);
   }
 
-  const { issue, error } = yield call(
-    createIssue,
-    { name, description },
-    responseUrl,
-  );
+  const { issue, error } = yield call(createIssue, { name, description });
 
   if (error) {
     // yield a toast
@@ -278,7 +266,6 @@ export const selectFetchMessageSettings = guid => state => {
     offset: state.discussions.discussions.discussions.get(guid).messages.size,
     lastReceived: state.discussions.discussions.discussions.get(guid)
       .lastReceived,
-    responseUrl: selectServerUrl(state),
   };
 };
 
@@ -301,24 +288,21 @@ export function* fetchMoreMessagesTask({ payload }) {
 }
 
 export function* sendMessageTask(action) {
-  const responseUrl = yield select(selectServerUrl);
-
   const { guid, message, attachment } = action.payload;
 
   if (attachment) {
     // Do the sending an attachment part.
-    yield call(sendAttachment, { guid, responseUrl, message, attachment });
+    yield call(sendAttachment, { guid, message, attachment });
   } else {
-    yield call(sendMessage, { guid, responseUrl, body: message });
+    yield call(sendMessage, { guid, body: message });
   }
 }
 
 export function* joinDiscussionTask(action) {
-  const responseUrl = yield select(selectServerUrl);
   // First we need to determine if the user is authenticated in Response.
-  const { error } = yield call(fetchResponseProfile, responseUrl);
-  if (error) {
-    yield call(getResponseAuthentication, responseUrl);
+  const response = yield call(fetchResponseProfile);
+  if (response.error) {
+    yield call(getResponseAuthentication);
   }
 
   const guid = action.payload;
@@ -330,9 +314,9 @@ export function* joinDiscussionTask(action) {
     participants: { participants, error: participantsError },
     invites: { invites, error: invitesErrors },
   } = yield all({
-    issue: call(fetchIssue, guid, responseUrl),
-    participants: call(fetchParticipants, guid, responseUrl),
-    invites: call(fetchInvites, guid, responseUrl),
+    issue: call(fetchIssue, guid),
+    participants: call(fetchParticipants, guid),
+    invites: call(fetchInvites, guid),
     messages: call(fetchMessages, params),
   });
 
