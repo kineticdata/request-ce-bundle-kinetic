@@ -5,12 +5,12 @@ import { actions } from '../../redux/modules/queue';
 import { QueueItemDiscussions } from './QueueItemDiscussions';
 
 const mapStateToProps = state => {
-  const discussionId = state.queue.currentItem
-    ? state.queue.currentItem.values['Discussion Id']
+  const discussionId = state.queue.queue.currentItem
+    ? state.queue.queue.currentItem.values['Discussion Id']
     : null;
 
   return {
-    queueItem: state.queue.currentItem,
+    queueItem: state.queue.queue.currentItem,
     discussionId,
   };
 };

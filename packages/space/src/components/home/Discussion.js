@@ -44,21 +44,19 @@ const RelatedItemBadge = ({ discussion }) => {
     case 'Queue Task':
       return (
         <Link
-          className="btn btn-primary btn-sm related-link"
+          className="btn btn-inverse btn-sm"
           to={`/kapps/queue/submissions/${id}`}
         >
           View Task
         </Link>
       );
-    case 'Team':
-      return (
-        <Link
-          className="btn btn-primary btn-sm related-link"
-          to={`/teams/${id}`}
-        >
-          View Team
-        </Link>
-      );
+    // Removed to differeniate between task and team discussions
+    // case 'Team':
+    //   return (
+    //     <Link className="btn btn-inverse btn-sm" to={`/teams/${id}`}>
+    //       View Team
+    //     </Link>
+    //   );
     default:
       return <span />;
   }
@@ -75,9 +73,11 @@ export const Discussion = ({ discussion, me, discussionServerUrl, teams }) => {
       style={getTeamHeaderStyle(discussion, teams)}
     >
       <div className="header">
-        <Link to={`/discussions/${discussion.guid}`}>{discussion.name}</Link>
+        <Link to={`/discussions/${discussion.guid}`} className="header__title">
+          {discussion.name}
+        </Link>
+        <RelatedItemBadge discussion={discussion} />
         <div className="participants">
-          <RelatedItemBadge discussion={discussion} />
           {discussion.participants.map(participant => (
             <Avatar key={participant.guid} user={participant} size={24} />
           ))}

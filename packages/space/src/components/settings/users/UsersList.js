@@ -78,8 +78,8 @@ const UsersListComponent = ({ users, loading, match }) => {
 };
 
 export const mapStateToProps = state => ({
-  loading: state.settingsUsers.loading,
-  users: state.settingsUsers.users,
+  loading: state.space.settingsUsers.loading,
+  users: state.space.settingsUsers.users,
 });
 
 export const mapDispatchToProps = {

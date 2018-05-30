@@ -1,4 +1,4 @@
-import { call, put, takeEvery, select, all } from 'redux-saga/effects';
+import { call, put, takeEvery } from 'redux-saga/effects';
 import { CoreAPI } from 'react-kinetic-core';
 import { Seq, Map } from 'immutable';
 import { push } from 'connected-react-router';

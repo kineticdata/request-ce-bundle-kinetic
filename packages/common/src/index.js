@@ -15,6 +15,11 @@ import { ErrorUnexpected } from './components/ErrorUnexpected';
 
 import { actions as commonActions } from './redux/modules/common';
 import { types as commonTypes } from './redux/modules/common';
+import {
+  actions as toastActions,
+  types as toastTypes,
+} from './redux/modules/toasts';
+import { actions as modalFormActions } from './redux/modules/modalForm';
 
 import * as Utils from './utils';
 import * as Constants from './constants';
@@ -33,6 +38,9 @@ export {
   PageTitle,
   commonActions,
   commonTypes,
+  toastActions,
+  toastTypes,
+  modalFormActions,
   Utils,
   Constants,
   ErrorNotFound,

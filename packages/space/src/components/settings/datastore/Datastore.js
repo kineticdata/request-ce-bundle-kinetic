@@ -5,6 +5,7 @@ import { DatastoreSubmission } from './Submission';
 import { FormList } from './FormList';
 import { SubmissionSearch } from './SubmissionSearch/SubmissionSearch';
 import { DatastoreSettings } from './DatastoreSettings';
+import { DatastoreImport } from './DatastoreImport';
 import { CreateDatastore } from './CreateDatastore';
 import semver from 'semver';
 const MINIMUM_CE_VERSION = '2.1.0';
@@ -53,6 +54,11 @@ export const DatastoreRouter = ({ match, loading, validVersion, version }) =>
         />
         <Route
           exact
+          path={`${match.path}/:slug/import`}
+          component={DatastoreImport}
+        />
+        <Route
+          exact
           path={`${match.path}/:slug/:id`}
           component={DatastoreSubmission}
         />
@@ -67,10 +73,10 @@ export const DatastoreRouter = ({ match, loading, validVersion, version }) =>
   );
 
 export const mapStateToProps = state => ({
-  loading: state.settingsDatastore.loading,
-  version: state.app.version,
+  loading: state.space.settingsDatastore.loading,
+  version: state.app.config.version,
   validVersion: semver.satisfies(
-    semver.coerce(state.app.version.version),
+    semver.coerce(state.app.config.version),
     `>=${MINIMUM_CE_VERSION}`,
   ),
 });

@@ -18,8 +18,9 @@ export const actions = {
   setChangePasswordVisible: withPayload(types.TOGGLE_PASSWORD),
 };
 
-export const selectIsMyProfile = ({ profiles, app }) =>
-  profiles.profile && profiles.profile.username === app.profile.username;
+export const selectIsMyProfile = state =>
+  state.space.profiles.profile &&
+  state.space.profiles.profile.username === state.app.profile.username;
 
 export const State = Record({
   loading: true,

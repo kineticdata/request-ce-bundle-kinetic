@@ -8,7 +8,7 @@ import { ButtonGroup, Button } from 'reactstrap';
 import { CoreForm } from 'react-kinetic-core';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import { commonActions } from 'common';
+import { toastActions } from 'common';
 
 import {
   selectPrevAndNext,
@@ -118,8 +118,8 @@ export const getRandomKey = () =>
   Math.floor(Math.random() * (100000 - 100 + 1)) + 100;
 
 export const shouldPrevNextShow = state =>
-  state.settingsDatastore.submission !== null &&
-  state.settingsDatastore.submissions.size > 0;
+  state.space.settingsDatastore.submission !== null &&
+  state.space.settingsDatastore.submissions.size > 0;
 
 export const handleUpdated = props => response => {
   if (props.submissionId) {
@@ -145,7 +145,7 @@ export const handleCreated = props => (response, actions) => {
 
 export const mapStateToProps = (state, { match: { params } }) => ({
   submissionId: params.id,
-  submission: state.settingsDatastore.submission,
+  submission: state.space.settingsDatastore.submission,
   showPrevAndNext: shouldPrevNextShow(state),
   prevAndNext: selectPrevAndNext(state),
   form: selectFormBySlug(state, params.slug),
@@ -157,8 +157,8 @@ export const mapDispatchToProps = {
   push,
   fetchSubmission: actions.fetchSubmission,
   resetSubmission: actions.resetSubmission,
-  addSuccess: commonActions.addSuccess,
-  addError: commonActions.addError,
+  addSuccess: toastActions.addSuccess,
+  addError: toastActions.addError,
 };
 
 export const DatastoreSubmission = compose(

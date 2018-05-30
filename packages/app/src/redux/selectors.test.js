@@ -7,8 +7,10 @@ describe('selectors', () => {
     state = {
       app: {
         loading: false,
+        config: {
+          kappSlug: 'this-kapp',
+        },
         kapps: [{ slug: 'this-kapp' }],
-        kappSlug: 'this-kapp',
       },
     };
   });
@@ -24,7 +26,7 @@ describe('selectors', () => {
     });
 
     it('returns null when there is no current kapp', () => {
-      state.app.kappSlug = null;
+      state.app.config.kappSlug = null;
       expect(selectCurrentKapp(state)).toBeNull();
     });
   });

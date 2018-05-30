@@ -30,6 +30,13 @@ const {
 const findQuery = (searcher, value) =>
   searcher.query.find(q => q.lvalue === value);
 
+// Helper that performs the date transformation we expect to be done by the
+// combination of prepareDateRangeFilter and CoreAPI.SubmissionSearch.
+const expectedDateFn = date =>
+  moment(date)
+    .toDate()
+    .toISOString();
+
 describe('queue saga', () => {
   describe('filter assembling functions', () => {
     let filter;
@@ -284,8 +291,8 @@ describe('queue saga', () => {
           .setIn(['dateRange', 'end'], '2017-09-05');
         searcher = prepareDateRangeFilter(searcher, filter, moment());
         expect(searcher.searchMeta.timeline).toBe('updatedAt');
-        expect(searcher.searchMeta.start).toEqual('2017-09-02T04:00:00.000Z');
-        expect(searcher.searchMeta.end).toEqual('2017-09-06T04:00:00.000Z');
+        expect(searcher.searchMeta.start).toEqual(expectedDateFn('2017-09-02'));
+        expect(searcher.searchMeta.end).toEqual(expectedDateFn('2017-09-06'));
       });
 
       test('when using presets', () => {
@@ -295,10 +302,10 @@ describe('queue saga', () => {
         searcher = prepareDateRangeFilter(
           searcher,
           filter,
-          moment('2017-09-08T15:30:00.000'),
+          moment('2017-09-08T19:30:00.000Z'),
         );
         expect(searcher.searchMeta.timeline).toBe('closedAt');
-        expect(searcher.searchMeta.start).toBe('2017-09-05T04:00:00.000Z');
+        expect(searcher.searchMeta.start).toEqual(expectedDateFn('2017-09-05'));
         expect(searcher.searchMeta.end).toBe('2017-09-08T19:30:00.000Z');
       });
 
@@ -309,10 +316,10 @@ describe('queue saga', () => {
         searcher = prepareDateRangeFilter(
           searcher,
           filter,
-          moment('2017-09-08T15:30:00.000'),
+          moment('2017-09-08T19:30:00.000Z'),
         );
         expect(searcher.searchMeta.timeline).toBe('closedAt');
-        expect(searcher.searchMeta.start).toBe('2017-09-01T04:00:00.000Z');
+        expect(searcher.searchMeta.start).toEqual(expectedDateFn('2017-09-01'));
         expect(searcher.searchMeta.end).toBe('2017-09-08T19:30:00.000Z');
       });
     });

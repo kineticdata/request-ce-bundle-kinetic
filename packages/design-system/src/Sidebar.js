@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Link, Route } from 'react-router-dom';
-import logoName from './assets/images/login-name.png';
+import logoName from './assets/images/KD_logo_159box.png';
 
 export const Sidebar = () => (
   <div className="sidebar">
@@ -11,13 +11,16 @@ export const Sidebar = () => (
         alt="Kinops - streamline everyday work for teams"
         style={{ width: '120px', margin: '0 1.5rem ' }}
       />
-      <h1>System Styles</h1>
+      <h1>Kinetic system</h1>
       <ul className="nav flex-column">
         <li className="nav-item">
           <Link to="/" className="nav-link">
             Getting Started
           </Link>
         </li>
+      </ul>
+      <h1>Styles</h1>
+      <ul className="nav flex-column">
         <li className="nav-item">
           <Link to="/breadcrumbs" className="nav-link">
             Breadcrumbs

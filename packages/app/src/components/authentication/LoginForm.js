@@ -1,7 +1,6 @@
 import React from 'react';
-import axios from 'axios';
 import { compose, withHandlers } from 'recompose';
-import { bundle } from 'react-kinetic-core';
+import { login } from '../../utils/authentication';
 
 export const Login = ({
   handleLogin,
@@ -81,10 +80,7 @@ const tryAuthentication = ({
   push,
 }) => async (username, password) => {
   try {
-    await axios.post(`${bundle.spaceLocation()}/app/login.do`, {
-      j_username: username,
-      j_password: password,
-    });
+    await login(username, password);
 
     handleAuthenticated();
 

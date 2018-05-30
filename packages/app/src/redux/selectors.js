@@ -2,19 +2,18 @@ import { Utils } from 'common';
 
 // Find a Kapp by Space Attribute Value
 const kappBySpaceAttribute = (state, slugAttributeName) =>
-  !state.app.loading
-    ? state.app.kapps.find(
+  state.app.loading
+    ? null
+    : state.app.kapps.find(
         kapp =>
           kapp.slug ===
           Utils.getAttributeValue(state.app.space, slugAttributeName),
-      )
-    : null;
+      );
 
 // Kapp Selectors
 export const selectCurrentKapp = state =>
-  !state.app.loading && state.app.kappSlug
-    ? state.app.kapps.find(kapp => kapp.slug === state.app.kappSlug) ||
-      null
+  !state.app.loading && state.app.config.kappSlug
+    ? state.app.kapps.find(kapp => kapp.slug === state.app.config.kappSlug) || null
     : null;
 
 export const selectAdminKapp = state =>

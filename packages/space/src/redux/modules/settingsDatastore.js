@@ -144,34 +144,6 @@ export const actions = {
   setFormChanges: withPayload(types.SET_FORM_CHANGES),
 };
 
-// export const selectFormBridgeModelTemplate = state => {
-//   const form = state.settingsDatastore.currentForm;
-//   const name = `Datastore - ${form.name}`;
-//   const model = selectCurrentFormModel(state);
-//   const activeMappingBridgeName = selectBridgeNameByModel(model);
-//   const activeMappingName = name;
-//   const attributes = form.columns.map(p => p.label);
-//   const mappings = [
-//     Map({
-//       attributes: List(
-//         form.columns.map(p =>
-//           Map({
-//             name: p.label,
-//             structureField: `\${fields('${
-//               p.type === 'system' ? p.name : `values[${p.name}]`
-//             }')}`,
-//           }),
-//         ),
-//       ),
-//       name: activeMappingName,
-//       bridgeName: activeMappingBridgeName,
-//       structure: 'Datastore',
-//       status: 'Active',
-//     }),
-//   ];
-//   return BridgeModel({ name, activeMappingName, attributes, mappings });
-// };
-
 const parseJson = json => {
   try {
     return List(JSON.parse(json));
@@ -219,8 +191,8 @@ export const buildColumns = form => {
 };
 
 export const selectPrevAndNext = state => {
-  const submissions = state.settingsDatastore.submissions || List();
-  const submission = state.settingsDatastore.submission;
+  const submissions = state.space.settingsDatastore.submissions || List();
+  const submission = state.space.settingsDatastore.submission;
   if (submission !== null) {
     const currentItemIndex = submissions.findIndex(
       item => item.id === submission.id,
@@ -252,12 +224,12 @@ export const selectBridgeNameByModel = model => {
   }
 };
 export const selectUpdatedFormActiveBridge = state =>
-  state.settingsDatastore.currentFormChanges.bridgeModelMapping.bridgeName;
-export const selectCurrentForm = state => state.settingsDatastore.currentForm;
+  state.space.settingsDatastore.currentFormChanges.bridgeModelMapping.bridgeName;
+export const selectCurrentForm = state => state.space.settingsDatastore.currentForm;
 export const selectCurrentFormChanges = state =>
-  state.settingsDatastore.currentFormChanges;
+  state.space.settingsDatastore.currentFormChanges;
 export const selectFormBySlug = (state, formSlug) =>
-  state.settingsDatastore.forms.find(form => form.slug === formSlug);
+  state.space.settingsDatastore.forms.find(form => form.slug === formSlug);
 
 export const State = Record({
   loading: true,

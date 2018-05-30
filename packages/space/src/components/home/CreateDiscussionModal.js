@@ -71,7 +71,7 @@ const CreateDiscussionModalComponent = ({
 
 export const mapStateToProps = state => ({
   fieldValues: {},
-  isOpen: state.spaceApp.isCreateDiscussionModalOpen,
+  isOpen: state.space.spaceApp.isCreateDiscussionModalOpen,
 });
 
 export const mapDispatchToProps = {

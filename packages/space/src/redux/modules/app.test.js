@@ -7,14 +7,16 @@ describe('spaceApp redux module', () => {
 
     beforeEach(() => {
       state = {
-        spaceApp: State(),
+        space: {
+          spaceApp: State(),
+        }
       };
     });
 
     describe('#selectIsMoreDiscussions', () => {
       describe('when on first page', () => {
         test('when the list is the same size as the limit', () => {
-          state.spaceApp = state.spaceApp
+          state.space.spaceApp = state.space.spaceApp
             .set('discussions', List([1, 2, 3]))
             .set('discussionsLimit', 3)
             .set('discussionsOffset', 0);
@@ -23,7 +25,7 @@ describe('spaceApp redux module', () => {
         });
 
         test('when the list is smaller than the limit', () => {
-          state.spaceApp = state.spaceApp
+          state.space.spaceApp = state.space.spaceApp
             .set('discussions', List([1, 2, 3]))
             .set('discussionsLimit', 4)
             .set('discussionsOffset', 0);

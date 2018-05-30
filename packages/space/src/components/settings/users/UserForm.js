@@ -4,16 +4,15 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fromJS, List } from 'immutable';
-import { commonActions, PageTitle } from 'common';
+import { modalFormActions, PageTitle } from 'common';
 
 import { actions as usersActions } from '../../../redux/modules/settingsUsers';
 import { actions as teamsActions } from '../../../redux/modules/teamList';
 import { ProfileCard } from '../../shared/ProfileCard';
 import { UsersDropdown } from './DropDown';
-import { get } from 'https';
 
 export const UserFormComponent = ({
-  editing,
+  mode,
   loading,
   userLoading,
   user,
@@ -34,7 +33,7 @@ export const UserFormComponent = ({
   <div className="page-container page-container--panels page-container--space-profile-edit">
     <PageTitle parts={['Users', 'Settings']} />
     {!loading &&
-      (!userLoading || !editing) && (
+      (!userLoading || !mode) && (
         <Fragment>
           <div className="page-panel page-panel--three-fifths page-panel--scrollable page-panel--space-profile-edit">
             <div className="page-title">
@@ -44,7 +43,7 @@ export const UserFormComponent = ({
                   <Link to="/settings">settings</Link> /{` `}
                   <Link to={`/settings/users/`}>users</Link> /{` `}
                 </h3>
-                {editing ? (
+                {mode === 'edit' ? (
                   <h1>Edit: {user.displayName || user.username}</h1>
                 ) : (
                   <h1>Create User</h1>
@@ -74,7 +73,7 @@ export const UserFormComponent = ({
                     />Enabled
                   </label>
                 </div>
-                {!editing && (
+                {mode !== 'edit' && (
                   <div className="form-group required">
                     <label htmlFor="username">Username</label>
                     <input
@@ -219,7 +218,7 @@ export const UserFormComponent = ({
                   </div>
                 </div>
                 <div className="form__footer">
-                  {editing && (
+                  {mode === 'edit' && (
                     <button className="btn btn-link" onClick={handleDelete}>
                       Delete User
                     </button>
@@ -229,7 +228,7 @@ export const UserFormComponent = ({
                       disabled={!fieldValuesValid(fieldValues)}
                       className="btn btn-primary"
                     >
-                      Save
+                      {mode === 'edit' ? 'Save User' : 'Create User'}
                     </button>
                     <Link to={`/settings/users`}>Cancel</Link>
                   </div>
@@ -237,7 +236,7 @@ export const UserFormComponent = ({
               </form>
             </div>
           </div>
-          {editing && (
+          {mode === 'edit' && (
             <div className="page-panel page-panel--two-fifths page-panel--sidebar page-panel--space-profile-edit-sidebar ">
               <ProfileCard
                 user={buildProfile(fieldValues, user)}
@@ -317,7 +316,7 @@ const translateProfileToFieldValues = user => ({
 
 const translateFieldValuesToProfile = (fieldValues, user) => {
   const result = {
-    username: user.username ? user.username : fieldValues.username,
+    username: user ? user.username : fieldValues.username,
     displayName: fieldValues.displayName,
     email: fieldValues.email,
     spaceAdmin: fieldValues.spaceAdmin,
@@ -350,20 +349,20 @@ const translateFieldValuesToProfile = (fieldValues, user) => {
 };
 
 const mapStateToProps = (state, props) => ({
-  editing: props.match.params.username !== undefined,
-  loading: state.settingsUsers.loading,
-  userLoading: state.settingsUsers.userLoading,
-  user: state.settingsUsers.user,
-  users: state.settingsUsers.users,
-  error: state.settingsUsers.error,
+  mode: props.match.params.mode,
+  loading: state.space.settingsUsers.loading,
+  userLoading: state.space.settingsUsers.userLoading,
+  user: state.space.settingsUsers.user,
+  users: state.space.settingsUsers.users,
+  error: state.space.settingsUsers.error,
   spaceAttributes:
     state.app.space &&
     state.app.space.attributes.reduce((memo, item) => {
       memo[item.name] = item.value;
       return memo;
     }, {}),
-  roles: state.teamList.roles,
-  teams: state.teamList.data,
+  roles: state.space.teamList.roles,
+  teams: state.space.teamList.data,
 });
 
 const mapDispatchToProps = {
@@ -373,7 +372,7 @@ const mapDispatchToProps = {
   updateUser: usersActions.updateUser,
   createUser: usersActions.createUser,
   deleteUser: usersActions.deleteUser,
-  openForm: commonActions.openForm,
+  openForm: modalFormActions.openForm,
   push,
 };
 
@@ -428,21 +427,19 @@ export const UserForm = compose(
     },
     handleSubmit: props => event => {
       event.preventDefault();
-      if (props.editing) {
+      if (props.mode === 'edit') {
         props.updateUser(
           translateFieldValuesToProfile(props.fieldValues, props.user),
         );
       } else {
-        props.createUser(
-          translateFieldValuesToProfile(props.fieldValues, props.user),
-        );
-        props.push(`settings/users`);
+        props.createUser(translateFieldValuesToProfile(props.fieldValues));
+        props.push(`/settings/users`);
       }
     },
   }),
   lifecycle({
     componentWillMount() {
-      if (this.props.editing) {
+      if (this.props.mode !== undefined) {
         this.props.fetchUser(this.props.match.params.username);
       }
       if (this.props.users.size <= 0) {
@@ -452,9 +449,18 @@ export const UserForm = compose(
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.user !== nextProps.user) {
+        let newUser = { ...nextProps.user };
+        if (nextProps.mode === 'clone') {
+          delete newUser.username;
+          delete newUser.displayName;
+          delete newUser.email;
+          newUser.profileAttributes['First Name'] = '';
+          newUser.profileAttributes['Last Name'] = '';
+          newUser.profileAttributes['Phone Number'] = '';
+        }
         this.props.setFieldValues({
           ...this.props.fieldValues,
-          ...translateProfileToFieldValues(nextProps.user),
+          ...translateProfileToFieldValues(newUser),
         });
       }
     },

@@ -24,7 +24,7 @@ export const NotificationsComponent = ({ match, showNotifications }) =>
 
 export const mapStateToProps = state => ({
   showNotifications:
-    state.settingsDatastore.forms
+    state.space.settingsDatastore.forms
       .map(form => form.slug)
       .toSet()
       .intersect([NOTIFICATIONS_FORM_SLUG, NOTIFICATIONS_DATE_FORMAT_FORM_SLUG])

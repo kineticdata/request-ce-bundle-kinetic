@@ -1,14 +1,14 @@
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
-import { commonActions, Utils } from 'common';
+import { modalFormActions, Utils } from 'common';
 
 import { actions } from '../../redux/modules/teamList';
 
 import { Teams } from './Teams';
 
 export const mapStateToProps = state => ({
-  loading: state.teamList.loading,
-  teams: state.teamList.data,
+  loading: state.space.teamList.loading,
+  teams: state.space.teamList.data,
   me: state.app.profile,
   adminKappSlug: Utils.getAttributeValue(
     state.app.space,
@@ -18,7 +18,7 @@ export const mapStateToProps = state => ({
 });
 export const mapDispatchToProps = {
   fetchTeams: actions.fetchTeams,
-  openForm: commonActions.openForm,
+  openForm: modalFormActions.openForm,
 };
 
 const openRequestNewTeam = ({

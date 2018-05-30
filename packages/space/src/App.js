@@ -103,7 +103,7 @@ export const AppComponent = props => {
 };
 
 export const mapStateToProps = state => ({
-  loading: state.spaceApp.appLoading,
+  loading: state.space.spaceApp.appLoading,
   kapps: state.app.kapps
     .sort((a, b) => a.name.localeCompare(b.name))
     .filter(kapp => kapp.slug !== 'admin'),
@@ -113,7 +113,7 @@ export const mapStateToProps = state => ({
   isSpaceAdmin: state.app.profile.spaceAdmin,
   isGuest: selectors.selectIsGuest(state),
   pathname: state.router.location.pathname,
-  settingsBackPath: state.spaceApp.settingsBackPath || '/',
+  settingsBackPath: state.space.spaceApp.settingsBackPath || '/',
 });
 const mapDispatchToProps = {
   fetchSettings: actions.fetchAppSettings,

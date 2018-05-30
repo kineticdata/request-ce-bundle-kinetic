@@ -21,12 +21,15 @@ import './assets/styles/master.scss';
 
 const mapStateToProps = (state, props) => {
   return {
-    categories: state.categories.data,
-    forms: state.forms.data,
-    submissionCounts: state.submissionCounts.data,
-    loading: state.categories.loading || state.forms.loading,
-    errors: [...state.categories.errors, ...state.forms.errors],
-    systemError: state.systemError,
+    categories: state.services.categories.data,
+    forms: state.services.forms.data,
+    submissionCounts: state.services.submissionCounts.data,
+    loading: state.services.categories.loading || state.services.forms.loading,
+    errors: [
+      ...state.services.categories.errors,
+      ...state.services.forms.errors,
+    ],
+    systemError: state.services.systemError,
   };
 };
 
@@ -101,7 +104,11 @@ export const AppComponent = props => {
         <Route exact path="/forms" component={FormListContainer} />
         <Route path="/forms/:formSlug" component={FormContainer} />
         <Route exact path="/search" component={CatalogSearchResultsContainer} />
-        <Route exact path="/search/:query" component={CatalogSearchResultsContainer} />
+        <Route
+          exact
+          path="/search/:query"
+          component={CatalogSearchResultsContainer}
+        />
         <Route exact path="/requests/:type?" component={RequestListContainer} />
         <Route
           exact

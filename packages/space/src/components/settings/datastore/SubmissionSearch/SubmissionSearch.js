@@ -43,9 +43,9 @@ const SubmissionSearchComponent = ({
   ) : null;
 
 export const mapStateToProps = state => ({
-  loading: state.settingsDatastore.currentFormLoading,
-  form: state.settingsDatastore.currentForm,
-  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
+  loading: state.space.settingsDatastore.currentFormLoading,
+  form: state.space.settingsDatastore.currentForm,
+  simpleSearchActive: state.space.settingsDatastore.simpleSearchActive,
 });
 
 export const mapDispatchToProps = {
