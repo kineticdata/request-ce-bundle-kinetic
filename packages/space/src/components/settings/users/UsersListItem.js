@@ -13,12 +13,7 @@ import {
 import { Avatar } from '../../shared/Avatar';
 import { actions } from '../../../redux/modules/settingsUsers';
 
-const UsersListItemComponent = ({
-  user,
-  handleClone,
-  openDropdown,
-  toggleDropdown,
-}) => {
+const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
   return (
     <tr key={user.username}>
       <Fragment>
@@ -52,13 +47,12 @@ const UsersListItemComponent = ({
                 >
                   Edit
                 </Link>
-                <button
-                  type="button"
-                  onClick={handleClone(user.username)}
-                  className="btn btn-secondary"
+                <Link
+                  to={`/settings/users/${user.username}/clone`}
+                  className="btn btn-info"
                 >
                   Clone
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -95,7 +89,12 @@ const UsersListItemComponent = ({
             >
               Edit
             </DropdownItem>
-            <DropdownItem onClick={handleClone()}>Clone</DropdownItem>
+            <DropdownItem
+              tag={Link}
+              to={`/settings/users/${user.username}/clone`}
+            >
+              Clone
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </td>
@@ -110,17 +109,6 @@ export const mapDispatchToProps = {
   push,
 };
 
-const dontKnowWhy = (setUser, user, push) => {
-  setUser(user);
-  push('users/clone');
-};
-
-const handleClone = ({ setUser, user, push }) => () => () =>
-  dontKnowWhy(setUser, user, push);
-
-const handleDelete = ({ deleteSubmission, fetchSubmissions }) => id => () =>
-  deleteSubmission({ id: id, callback: fetchSubmissions });
-
 const toggleDropdown = ({
   setOpenDropdown,
   openDropdown,
@@ -130,5 +118,5 @@ const toggleDropdown = ({
 export const UsersListItem = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withState('openDropdown', 'setOpenDropdown', ''),
-  withHandlers({ toggleDropdown, handleClone, handleDelete }),
+  withHandlers({ toggleDropdown }),
 )(UsersListItemComponent);

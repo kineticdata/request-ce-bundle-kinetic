@@ -12,7 +12,7 @@ import { ProfileCard } from '../../shared/ProfileCard';
 import { UsersDropdown } from './DropDown';
 
 export const UserFormComponent = ({
-  editing,
+  mode,
   loading,
   userLoading,
   user,
@@ -33,7 +33,7 @@ export const UserFormComponent = ({
   <div className="page-container page-container--panels page-container--space-profile-edit">
     <PageTitle parts={['Users', 'Settings']} />
     {!loading &&
-      (!userLoading || !editing) && (
+      (!userLoading || !mode) && (
         <Fragment>
           <div className="page-panel page-panel--three-fifths page-panel--scrollable page-panel--space-profile-edit">
             <div className="page-title">
@@ -43,7 +43,7 @@ export const UserFormComponent = ({
                   <Link to="/settings">settings</Link> /{` `}
                   <Link to={`/settings/users/`}>users</Link> /{` `}
                 </h3>
-                {editing ? (
+                {mode === 'edit' ? (
                   <h1>Edit: {user.displayName || user.username}</h1>
                 ) : (
                   <h1>Create User</h1>
@@ -73,7 +73,7 @@ export const UserFormComponent = ({
                     />Enabled
                   </label>
                 </div>
-                {!editing && (
+                {mode !== 'edit' && (
                   <div className="form-group required">
                     <label htmlFor="username">Username</label>
                     <input
@@ -218,7 +218,7 @@ export const UserFormComponent = ({
                   </div>
                 </div>
                 <div className="form__footer">
-                  {editing && (
+                  {mode === 'edit' && (
                     <button className="btn btn-link" onClick={handleDelete}>
                       Delete User
                     </button>
@@ -228,7 +228,7 @@ export const UserFormComponent = ({
                       disabled={!fieldValuesValid(fieldValues)}
                       className="btn btn-primary"
                     >
-                      {editing ? 'Save User' : 'Create User'}
+                      {mode === 'edit' ? 'Save User' : 'Create User'}
                     </button>
                     <Link to={`/settings/users`}>Cancel</Link>
                   </div>
@@ -236,7 +236,7 @@ export const UserFormComponent = ({
               </form>
             </div>
           </div>
-          {editing && (
+          {mode === 'edit' && (
             <div className="page-panel page-panel--two-fifths page-panel--sidebar page-panel--space-profile-edit-sidebar ">
               <ProfileCard
                 user={buildProfile(fieldValues, user)}
@@ -350,7 +350,6 @@ const translateFieldValuesToProfile = (fieldValues, user) => {
 
 const mapStateToProps = (state, props) => ({
   mode: props.match.params.mode,
-  editing: props.match.params.username !== undefined,
   loading: state.space.settingsUsers.loading,
   userLoading: state.space.settingsUsers.userLoading,
   user: state.space.settingsUsers.user,
@@ -428,23 +427,20 @@ export const UserForm = compose(
     },
     handleSubmit: props => event => {
       event.preventDefault();
-      if (props.editing) {
+      if (props.mode === 'edit') {
         props.updateUser(
           translateFieldValuesToProfile(props.fieldValues, props.user),
         );
       } else {
         props.createUser(translateFieldValuesToProfile(props.fieldValues));
-        props.push(`settings/users`);
+        props.push(`/settings/users`);
       }
     },
   }),
   lifecycle({
     componentWillMount() {
-      if (this.props.editing) {
+      if (this.props.mode !== undefined) {
         this.props.fetchUser(this.props.match.params.username);
-      }
-      if (this.props.mode === 'clone' && this.props.user.username) {
-        this.props.fetchUser(this.props.user.username);
       }
       if (this.props.users.size <= 0) {
         this.props.fetchUsers();
