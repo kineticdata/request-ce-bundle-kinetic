@@ -102,14 +102,16 @@ const handlePasswordReset = ({
       url: `${bundle.spaceLocation()}/app/reset-password/token`,
       data,
     });
-
-    handleAuthenticated();
-    push('/');
-  } catch (_) {
-    setError(
-      'There was a problem resetting your password! Please note that password reset links may only be used once.',
-    );
+  } catch (error) {
+    if (error.response.status !== 302) {
+      setError(
+        'There was a problem resetting your password! Please note that password reset links may only be used once.',
+      );
+      return;
+    }
   }
+  handleAuthenticated();
+  push('/');
 };
 
 export const ResetTokenForm = compose(
