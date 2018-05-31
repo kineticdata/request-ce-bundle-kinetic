@@ -8,8 +8,6 @@ import {
   PageTitle,
 } from 'common';
 
-import { SERVICES_KAPP as kappSlug } from '../../constants';
-
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
 // immediately without making the application wait but it will likely be ready
@@ -26,6 +24,7 @@ export const Form = ({
   handleLoaded,
   handleDelete,
   values,
+  kappSlug,
 }) => (
   <Fragment>
     <PageTitle parts={[form ? form.name : '']} />

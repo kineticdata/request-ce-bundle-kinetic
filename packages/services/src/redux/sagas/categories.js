@@ -1,11 +1,12 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { CoreAPI } from 'react-kinetic-core';
 
-import { SERVICES_KAPP as kappSlug } from '../../constants';
 import { actions, types } from '../modules/categories';
 import { actions as systemErrorActions } from '../modules/systemError';
 
 export function* fetchCategoriesSaga() {
+  const kappSlug = yield select(state => state.app.config.kappSlug);
+
   const { categories, errors, serverError } = yield call(
     CoreAPI.fetchCategories,
     { kappSlug, include: 'categorizations,attributes' },
