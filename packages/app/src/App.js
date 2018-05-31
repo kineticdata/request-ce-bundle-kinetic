@@ -37,7 +37,9 @@ export const AppComponent = props =>
               sidebarClassName={`sidebar-container ${
                 true ? 'drawer' : 'overlay'
               }`}
-              contentClassName="main-container"
+              contentClassName={`main-container ${
+                props.sidebarOpen ? 'open' : 'closed'
+              }`}
             >
               {main}
             </Sidebar>

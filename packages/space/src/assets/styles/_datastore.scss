@@ -47,8 +47,8 @@
     margin: 2rem 0 0;
     padding: 1rem;
     background-color: rgba($black-3, .95);
-    border-radius: .5rem;
-    &.open {
+    transition: left .3s ease-out, right .3s ease-out;
+    .closed & {
       left: 0;
     }
   }
