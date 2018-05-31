@@ -65,9 +65,9 @@ export const handleUnauthorized = props => () => {
 };
 
 const Authenticated = props => {
-  const { children, authenticated, attempting } = props;
+  const { children, authenticated, attempting, isPublic } = props;
 
-  return authenticated ? (
+  return authenticated && !isPublic ? (
     children
   ) : attempting ? null : (
     <div>
@@ -171,6 +171,7 @@ const Authenticated = props => {
 
 const mapStateToProps = state => ({
   pathname: state.router.location.pathname,
+  isPublic: state.router.location.search.includes('public'),
 });
 
 export const AuthenticatedContainer = compose(
