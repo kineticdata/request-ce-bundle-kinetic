@@ -54,7 +54,7 @@ const SubmissionListComponent = ({
 }) => {
   const visibleColumns = columns.filter(c => c.visible);
   return (
-    <div className="submissions">
+    <div className="datastore-submissions">
       {loading ? (
         <h3>Loading</h3>
       ) : (

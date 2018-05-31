@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { CoreForm } from 'react-kinetic-core';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
@@ -38,7 +38,7 @@ const UnauthenticatedFormComponent = props => {
           </div>
         )}
         {submissionId ? (
-          <div>
+          <Fragment>
             <CoreForm
               onUnauthorized={handleUnauthorized}
               submission={submissionId}
@@ -46,9 +46,9 @@ const UnauthenticatedFormComponent = props => {
               created={handleCreated}
               loaded={handleLoaded}
             />
-          </div>
+          </Fragment>
         ) : (
-          <div>
+          <Fragment>
             <CoreForm
               onUnauthorized={handleUnauthorized}
               kapp={kappSlug}
@@ -58,7 +58,7 @@ const UnauthenticatedFormComponent = props => {
               loaded={handleLoaded}
               values={values}
             />
-          </div>
+          </Fragment>
         )}
       </div>
     </div>
@@ -96,7 +96,6 @@ export const handleCreated = props => response => {
 export const handleLoaded = props => form => {
   props.setFormName(form.name());
 };
-
 
 export const UnauthenticatedForm = compose(
   connect(mapStateToProps, { push }),

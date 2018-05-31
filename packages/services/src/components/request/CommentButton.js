@@ -15,7 +15,9 @@ const CommentButton = props =>
     </button>
   );
 
-export const mapStateToProps = () => ({});
+export const mapStateToProps = state => ({
+  kappSlug: state.app.config.kappSlug,
+});
 
 export const mapDispatchToProps = {
   openForm: modalFormActions.openForm,
@@ -38,7 +40,7 @@ const enhance = compose(
   }),
   withHandlers({
     handleClick: props => () =>
-      props.openForm(getCommentFormConfig(props.submission.id)),
+      props.openForm(getCommentFormConfig(props.kappSlug, props.submission.id)),
   }),
 );
 

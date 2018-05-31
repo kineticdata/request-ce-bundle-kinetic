@@ -19,7 +19,9 @@ const CancelButton = props =>
     </button>
   );
 
-export const mapStateToProps = () => ({});
+export const mapStateToProps = state => ({
+  kappSlug: state.app.config.kappSlug,
+});
 
 export const mapDispatchToProps = {
   deleteSubmission: actions.deleteSubmission,
@@ -50,7 +52,9 @@ const enhance = compose(
       if (props.submission.coreState === constants.CORE_STATE_DRAFT) {
         props.deleteSubmission(props.submission.id, props.deleteCallback);
       } else {
-        props.openForm(getCancelFormConfig(props.submission.id));
+        props.openForm(
+          getCancelFormConfig(props.kappSlug, props.submission.id),
+        );
       }
     },
   }),
