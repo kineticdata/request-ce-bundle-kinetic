@@ -11,5 +11,8 @@
     "test":
       "cd packages/app && react-app-rewired test --scripts-version kinops-react-scripts --env=jsdom",
     "eject": "cd packages/app && react-scripts eject"
+  },
+  "devDependencies": {
+    "prettier": "^1.13.3"
   }
 }
