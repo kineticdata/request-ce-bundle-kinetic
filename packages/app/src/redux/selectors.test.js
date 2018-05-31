@@ -6,11 +6,11 @@ describe('selectors', () => {
   beforeEach(() => {
     state = {
       app: {
-        app: {
-          loading: false,
-          kapps: [{ slug: 'this-kapp' }],
+        loading: false,
+        config: {
           kappSlug: 'this-kapp',
         },
+        kapps: [{ slug: 'this-kapp' }],
       },
     };
   });

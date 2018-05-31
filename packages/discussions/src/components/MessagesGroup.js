@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import Avatar from 'react-avatar';
 import moment from 'moment';
 import Markdown from 'react-markdown';
-
-import { selectServerUrl } from '../redux/selectors';
+import { bundle } from 'react-kinetic-core';
 
 const AVAILABLE_ICONS = [
   'avi',
@@ -125,7 +124,7 @@ export const MessagesGroup = ({ messages, profile, discussionServerUrl }) => (
 );
 
 const mapStateToProps = state => ({
-  discussionServerUrl: selectServerUrl(state),
+  discussionServerUrl: `${bundle.spaceLocation()}/kinetic-response`,
 });
 
 export const MessagesGroupContainer = compose(

@@ -1,4 +1,4 @@
-import { all, call, put, takeEvery } from 'redux-saga/effects';
+import { all, call, put, takeEvery, select } from 'redux-saga/effects';
 import { bundle, CoreAPI } from 'react-kinetic-core';
 import * as constants from '../../constants';
 import { actions, types } from '../modules/submissionCounts';
@@ -16,18 +16,19 @@ const buildSearch = coreState =>
     .build();
 
 export function* fetchSubmissionCountsSaga() {
+  const kappSlug = yield select(state => state.app.config.kappSlug);
   const [draft, submitted, closed] = yield all([
     call(CoreAPI.searchSubmissions, {
       search: buildSearch(constants.CORE_STATE_DRAFT),
-      kapp: constants.SERVICES_KAPP,
+      kapp: kappSlug,
     }),
     call(CoreAPI.searchSubmissions, {
       search: buildSearch(constants.CORE_STATE_SUBMITTED),
-      kapp: constants.SERVICES_KAPP,
+      kapp: kappSlug,
     }),
     call(CoreAPI.searchSubmissions, {
       search: buildSearch(constants.CORE_STATE_CLOSED),
-      kapp: constants.SERVICES_KAPP,
+      kapp: kappSlug,
     }),
   ]);
 

@@ -60,9 +60,6 @@ export const selectHasSharedTaskEngine = state =>
       ? true
       : false;
 
-export const selectServerUrl = state =>
-  state.app.space && `/${state.app.space.slug}/kinetic-response`;
-
 export const selectIsMoreDiscussions = state =>
   state.space.spaceApp.discussions.size ===
   state.space.spaceApp.discussionsLimit;

@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { Utils } from 'common';
 import * as constants from './constants';
+import { selectCurrentKapp } from 'app/src/redux/selectors';
 
 export const getDueDate = (submission, attrName) => {
   const daysDue = Utils.getConfig({ submission, name: attrName });
@@ -107,18 +108,21 @@ export const getSubmissionPath = (submission, mode, listType) => {
     .join('/');
 };
 
-export const getCommentFormConfig = submissionId => ({
+export const getCommentFormConfig = (kappSlug, submissionId) => ({
   ...constants.COMMENT_FORM_CONFIG,
+  kappSlug,
   values: { [constants.RELATED_SUBMISSION_ID_FIELD]: submissionId },
 });
 
-export const getCancelFormConfig = submissionId => ({
+export const getCancelFormConfig = (kappSlug, submissionId) => ({
   ...constants.CANCEL_FORM_CONFIG,
+  kappSlug,
   values: { [constants.RELATED_SUBMISSION_ID_FIELD]: submissionId },
 });
 
-export const getFeedbackFormConfig = submissionId => ({
+export const getFeedbackFormConfig = (kappSlug, submissionId) => ({
   ...constants.FEEDBACK_FORM_CONFIG,
+  kappSlug,
   values: { [constants.REFERRING_ID_FIELD]: submissionId },
 });
 

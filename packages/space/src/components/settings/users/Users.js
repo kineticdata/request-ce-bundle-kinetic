@@ -11,7 +11,7 @@ export const Users = ({ match }) => (
     <Route exact path={`${match.path}/new`} component={UserForm} />
     <Route exact path={`${match.path}/import`} component={ImportUsers} />
     <Route exact path={`${match.path}/error`} component={UsersError} />
-    <Route exact path={`${match.path}/:username/edit`} component={UserForm} />
+    <Route exact path={`${match.path}/:username/:mode`} component={UserForm} />
     <Route component={UsersList} />
   </Switch>
 );

@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers } from 'recompose';
 import {
@@ -12,12 +13,7 @@ import {
 import { Avatar } from '../../shared/Avatar';
 import { actions } from '../../../redux/modules/settingsUsers';
 
-const UsersListItemComponent = ({
-  user,
-  handleClone,
-  openDropdown,
-  toggleDropdown,
-}) => {
+const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
   return (
     <tr key={user.username}>
       <Fragment>
@@ -51,13 +47,12 @@ const UsersListItemComponent = ({
                 >
                   Edit
                 </Link>
-                <button
-                  type="button"
-                  onClick={handleClone(user.username)}
-                  className="btn btn-secondary"
+                <Link
+                  to={`/settings/users/${user.username}/clone`}
+                  className="btn btn-info"
                 >
                   Clone
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -94,7 +89,10 @@ const UsersListItemComponent = ({
             >
               Edit
             </DropdownItem>
-            <DropdownItem onClick={handleClone(user.username)}>
+            <DropdownItem
+              tag={Link}
+              to={`/settings/users/${user.username}/clone`}
+            >
               Clone
             </DropdownItem>
           </DropdownMenu>
@@ -107,15 +105,9 @@ const UsersListItemComponent = ({
 export const mapStateToProps = state => ({});
 
 export const mapDispatchToProps = {
-  cloneSubmission: actions.cloneSubmission,
-  deleteSubmission: actions.deleteSubmission,
-  fetchSubmissions: actions.fetchSubmissions,
+  setUser: actions.setUser,
+  push,
 };
-
-const handleClone = ({ cloneSubmission }) => id => () => cloneSubmission(id);
-
-const handleDelete = ({ deleteSubmission, fetchSubmissions }) => id => () =>
-  deleteSubmission({ id: id, callback: fetchSubmissions });
 
 const toggleDropdown = ({
   setOpenDropdown,
@@ -126,5 +118,5 @@ const toggleDropdown = ({
 export const UsersListItem = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withState('openDropdown', 'setOpenDropdown', ''),
-  withHandlers({ toggleDropdown, handleClone, handleDelete }),
+  withHandlers({ toggleDropdown }),
 )(UsersListItemComponent);
