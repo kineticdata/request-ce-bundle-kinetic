@@ -2,6 +2,8 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { modalFormActions } from 'common';
+import { selectAdminKapp } from 'app/src/redux/selectors';
+
 import { getFeedbackFormConfig } from '../../utils';
 
 export const RequestShowConfirmation = ({ handleOpenFeedback }) => (
@@ -18,11 +20,24 @@ export const RequestShowConfirmation = ({ handleOpenFeedback }) => (
   </Fragment>
 );
 
+export const mapStateToProps = state => ({
+  adminKappSlug: selectAdminKapp(state).slug,
+});
+
+export const mapDispatchToProps = {
+  openForm: modalFormActions.openForm,
+};
+
 const enhance = compose(
-  connect(null, { openForm: modalFormActions.openForm }),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withHandlers({
     handleOpenFeedback: props => () =>
-      props.openForm(getFeedbackFormConfig(props.submission.id)),
+      props.openForm(
+        getFeedbackFormConfig(props.adminKappSlug, props.submission.id),
+      ),
   }),
 );
 
