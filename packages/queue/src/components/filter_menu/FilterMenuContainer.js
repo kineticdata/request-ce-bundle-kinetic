@@ -69,7 +69,10 @@ const validateDateRange = filter => {
 };
 
 export const FilterMenuContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withProps(({ appliedAssignments, currentFilter }) => ({
     errors: !currentFilter
       ? Map()

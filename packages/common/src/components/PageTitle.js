@@ -19,6 +19,9 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = {};
 
-export const PageTitle = compose(connect(mapStateToProps, mapDispatchToProps))(
-  PageTitleComponent,
-);
+export const PageTitle = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+)(PageTitleComponent);

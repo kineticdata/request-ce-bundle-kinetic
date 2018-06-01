@@ -162,7 +162,10 @@ export const mapDispatchToProps = {
 };
 
 export const Home = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withHandlers({
     handleCreateDiscussionButtonClick: props => event =>
       props.setCreateDiscussionModalOpen(true),

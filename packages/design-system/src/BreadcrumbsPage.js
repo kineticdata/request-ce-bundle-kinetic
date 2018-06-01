@@ -24,26 +24,26 @@ export const BreadcrumbsPage = () => (
           </div>
         </div>
         <hr />
-          <h2>Title with Button</h2>
-          <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3> Example / </h3>
-              <h1> Page Title</h1>
-            </div>
-            <button className="btn btn-primary">Action</button>
+        <h2>Title with Button</h2>
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h3> Example / </h3>
+            <h1> Page Title</h1>
           </div>
-          <div className="flex-row">
-            <div className="highlight">
-              <pre>{`<div className="page-title">
+          <button className="btn btn-primary">Action</button>
+        </div>
+        <div className="flex-row">
+          <div className="highlight">
+            <pre>{`<div className="page-title">
   <div className="page-title__wrapper">
     <h3> Example  / </h3>
     <h1>  Page Title</h1>
   </div>
   <button className="btn btn-primary">Action</button>
 </div>`}</pre>
-            </div>
           </div>
-          <hr />
+        </div>
+        <hr />
       </div>
     </div>
   </Fragment>

@@ -49,7 +49,7 @@ export class DatastoreImport extends Component {
   post = ([head, ...tail]) => {
     this.setState({
       percentComplete:
-        100 - Math.round(tail.length / this.state.records.length * 100),
+        100 - Math.round((tail.length / this.state.records.length) * 100),
     });
     const promise = head.id
       ? CoreAPI.updateSubmission({
@@ -97,7 +97,7 @@ export class DatastoreImport extends Component {
   delete = ([head, ...tail]) => {
     this.setState({
       percentComplete:
-        100 - Math.round(tail.length / this.state.submissions.length * 100),
+        100 - Math.round((tail.length / this.state.submissions.length) * 100),
     });
     if (head.id) {
       CoreAPI.deleteSubmission({

@@ -133,5 +133,8 @@ export const mapDispatchToProps = {
 };
 
 export const SubmissionList = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(SubmissionListComponent);

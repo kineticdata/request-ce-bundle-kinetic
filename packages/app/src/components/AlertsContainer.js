@@ -29,7 +29,10 @@ const mapDispatchToProps = {
 };
 
 export const AlertsContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('isOpen', 'setIsOpen', false),
   withHandlers({
     toggle: props => () => props.setIsOpen(open => !open),

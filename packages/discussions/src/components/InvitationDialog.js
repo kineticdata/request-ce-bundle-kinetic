@@ -39,7 +39,10 @@ export const mapDispatchToProps = {
 };
 
 export const InvitationDialogContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withHandlers({
     setEmail: props => event =>
       props.setInvitationField('email', event.target.value),

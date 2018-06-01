@@ -1,59 +1,139 @@
 // Gradient Background
 // -----------
-@mixin horizontal-gradient ($startColor: #555, $endColor: #333) {
+@mixin horizontal-gradient($startColor: #555, $endColor: #333) {
   background-color: $endColor;
   background-repeat: repeat-x;
-  background: -khtml-gradient(linear, left top, right top, from($startColor), to($endColor)); // Konqueror
+  background: -khtml-gradient(
+    linear,
+    left top,
+    right top,
+    from($startColor),
+    to($endColor)
+  ); // Konqueror
   background: -moz-linear-gradient(left, $startColor, $endColor); // FF 3.6+
   background: -ms-linear-gradient(left, $startColor, $endColor); // IE10
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%, $startColor), color-stop(100%, $endColor)); // Safari 4+, Chrome 2+
-  background: -webkit-linear-gradient(left, $startColor, $endColor); // Safari 5.1+, Chrome 10+
+  background: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    color-stop(0%, $startColor),
+    color-stop(100%, $endColor)
+  ); // Safari 4+, Chrome 2+
+  background: -webkit-linear-gradient(
+    left,
+    $startColor,
+    $endColor
+  ); // Safari 5.1+, Chrome 10+
   background: -o-linear-gradient(left, $startColor, $endColor); // Opera 11.10
   background: linear-gradient(left, $startColor, $endColor); // Le standard
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$startColor}', endColorstr='#{$endColor}', GradientType=1); // IE9 and down
 }
 
-@mixin vertical-gradient ($startColor: #555, $endColor: #333) {
+@mixin vertical-gradient($startColor: #555, $endColor: #333) {
   background-color: $endColor;
   background-repeat: repeat-x;
-  background: -khtml-gradient(linear, left top, left bottom, from($startColor), to($endColor)); // Konqueror
+  background: -khtml-gradient(
+    linear,
+    left top,
+    left bottom,
+    from($startColor),
+    to($endColor)
+  ); // Konqueror
   background: -moz-linear-gradient(top, $startColor, $endColor); // FF 3.6+
   background: -ms-linear-gradient(top, $startColor, $endColor); // IE10
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, $startColor), color-stop(100%, $endColor)); // Safari 4+, Chrome 2+
-  background: -webkit-linear-gradient(top, $startColor, $endColor); // Safari 5.1+, Chrome 10+
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0%, $startColor),
+    color-stop(100%, $endColor)
+  ); // Safari 4+, Chrome 2+
+  background: -webkit-linear-gradient(
+    top,
+    $startColor,
+    $endColor
+  ); // Safari 5.1+, Chrome 10+
   background: -o-linear-gradient(top, $startColor, $endColor); // Opera 11.10
   background: linear-gradient(top, $startColor, $endColor); // The standard
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$startColor}', endColorstr='#{$endColor}', GradientType=0); // IE9 and down
 }
 
-@mixin directional-gradient ($startColor: #555, $endColor: #333, $deg: 45deg) {
+@mixin directional-gradient($startColor: #555, $endColor: #333, $deg: 45deg) {
   background-color: $endColor;
   background-repeat: repeat-x;
   background: -moz-linear-gradient($deg, $startColor, $endColor); // FF 3.6+
   background: -ms-linear-gradient($deg, $startColor, $endColor); // IE10
-  background: -webkit-linear-gradient($deg, $startColor, $endColor); // Safari 5.1+, Chrome 10+
+  background: -webkit-linear-gradient(
+    $deg,
+    $startColor,
+    $endColor
+  ); // Safari 5.1+, Chrome 10+
   background: -o-linear-gradient($deg, $startColor, $endColor); // Opera 11.10
   background: linear-gradient($deg, $startColor, $endColor); // The standard
 }
 
-@mixin ellipsis-gradient ($startColor: rgba(0,0,0,0), $endColor: #ffb200 ){
-  background: -moz-linear-gradient(left,  $startColor 0%, $endColor 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%,$startColor), color-stop(100%,$endColor)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(left,  $startColor 0%,$endColor 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(left,  $startColor 0%,$endColor 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(left,  $startColor 0%,$endColor 100%); /* IE10+ */
-  background: linear-gradient(to right,  $startColor 0%,$endColor 100%); /* W3C */
+@mixin ellipsis-gradient($startColor: rgba(0, 0, 0, 0), $endColor: #ffb200) {
+  background: -moz-linear-gradient(
+    left,
+    $startColor 0%,
+    $endColor 100%
+  ); /* FF3.6+ */
+  background: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    color-stop(0%, $startColor),
+    color-stop(100%, $endColor)
+  ); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(
+    left,
+    $startColor 0%,
+    $endColor 100%
+  ); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(
+    left,
+    $startColor 0%,
+    $endColor 100%
+  ); /* Opera 11.10+ */
+  background: -ms-linear-gradient(
+    left,
+    $startColor 0%,
+    $endColor 100%
+  ); /* IE10+ */
+  background: linear-gradient(
+    to right,
+    $startColor 0%,
+    $endColor 100%
+  ); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$startColor}', endColorstr='#{$endColor}',GradientType=1 ); /* IE6-9 */
-
 }
 
-
-@mixin vertical-three-colors-gradient($startColor: #00b3ee, $midColor: #7a43b6, $colorStop: 50%, $endColor: #c3325f) {
+@mixin vertical-three-colors-gradient(
+  $startColor: #00b3ee,
+  $midColor: #7a43b6,
+  $colorStop: 50%,
+  $endColor: #c3325f
+) {
   background-color: $endColor;
   background-repeat: no-repeat;
-  background: -webkit-gradient(linear, 0 0, 0 100%, from($startColor), color-stop($colorStop, $midColor), to($endColor));
-  background: -webkit-linear-gradient($startColor, $midColor $colorStop, $endColor);
-  background: -moz-linear-gradient($startColor, $midColor $colorStop, $endColor);
+  background: -webkit-gradient(
+    linear,
+    0 0,
+    0 100%,
+    from($startColor),
+    color-stop($colorStop, $midColor),
+    to($endColor)
+  );
+  background: -webkit-linear-gradient(
+    $startColor,
+    $midColor $colorStop,
+    $endColor
+  );
+  background: -moz-linear-gradient(
+    $startColor,
+    $midColor $colorStop,
+    $endColor
+  );
   background: -ms-linear-gradient($startColor, $midColor $colorStop, $endColor);
   background: -o-linear-gradient($startColor, $midColor $colorStop, $endColor);
   background: linear-gradient($startColor, $midColor $colorStop, $endColor);

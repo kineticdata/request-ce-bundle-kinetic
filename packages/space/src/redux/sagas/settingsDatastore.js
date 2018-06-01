@@ -127,7 +127,8 @@ export const selectSearchParams = state => ({
   pageTokens: state.space.settingsDatastore.pageTokens,
   simpleSearchActive: state.space.settingsDatastore.simpleSearchActive,
   simpleSearchParam: state.space.settingsDatastore.simpleSearchParam,
-  simpleSearchNextPageIndex: state.space.settingsDatastore.simpleSearchNextPageIndex,
+  simpleSearchNextPageIndex:
+    state.space.settingsDatastore.simpleSearchNextPageIndex,
 });
 
 export function* fetchSubmissionsSimpleSaga() {

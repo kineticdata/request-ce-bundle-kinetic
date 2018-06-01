@@ -19,7 +19,10 @@ export const RequestShowConfirmation = ({ handleOpenFeedback }) => (
 );
 
 const enhance = compose(
-  connect(null, { openForm: modalFormActions.openForm }),
+  connect(
+    null,
+    { openForm: modalFormActions.openForm },
+  ),
   withHandlers({
     handleOpenFeedback: props => () =>
       props.openForm(getFeedbackFormConfig(props.submission.id)),

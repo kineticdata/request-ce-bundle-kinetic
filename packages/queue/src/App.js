@@ -87,7 +87,10 @@ export const AppComponent = props => {
 };
 
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withHandlers({
     handleOpenNewItemMenu: ({ openNewItemMenu }) => () => openNewItemMenu(),
     handleNewPersonalFilter: ({ openFilterMenu }) => () =>

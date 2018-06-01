@@ -377,7 +377,10 @@ const mapDispatchToProps = {
 };
 
 export const UserForm = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState(
     'fieldValues',
     'setFieldValues',

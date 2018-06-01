@@ -269,7 +269,10 @@ const mapStateToProps = (state, props) => {
 };
 
 export const TeamForm = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('fieldValues', 'setFieldValues', translateTeamToFieldValues({})),
   withHandlers({
     handleAddMemberClick: props => event => {

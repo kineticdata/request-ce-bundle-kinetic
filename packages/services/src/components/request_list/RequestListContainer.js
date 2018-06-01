@@ -22,7 +22,10 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withProps(props => ({
     coreState:
       props.type === 'Open' ? constants.CORE_STATE_SUBMITTED : props.type,

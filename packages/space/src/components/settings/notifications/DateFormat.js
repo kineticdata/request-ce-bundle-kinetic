@@ -57,7 +57,10 @@ export const mapDispatchToProps = {
 };
 
 export const DateFormat = compose(
-  connect(null, mapDispatchToProps),
+  connect(
+    null,
+    mapDispatchToProps,
+  ),
   withProps(props => ({
     submissionId:
       props.match.params.id !== 'new' ? props.match.params.id : null,

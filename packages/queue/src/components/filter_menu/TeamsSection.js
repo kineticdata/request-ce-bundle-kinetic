@@ -23,9 +23,12 @@ export const TeamsSection = ({ teams, filter, toggleTeamHandler }) => (
 );
 
 export const TeamsSectionContainer = compose(
-  connect(null, {
-    toggleTeam: actions.toggleTeam,
-  }),
+  connect(
+    null,
+    {
+      toggleTeam: actions.toggleTeam,
+    },
+  ),
   withHandlers({
     toggleTeamHandler: props => event => props.toggleTeam(event.target.value),
   }),

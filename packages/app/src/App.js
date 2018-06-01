@@ -80,7 +80,10 @@ const getAppProvider = kapp => {
 };
 
 export const App = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withProps(props => {
     const AppProvider = getAppProvider(
       props.kapps.find(kapp => kapp.slug === props.kappSlug),
