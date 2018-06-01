@@ -10,6 +10,7 @@ export const mapStateToProps = state => ({
   kappSlug: state.app.config.kappSlug,
 });
 
-export const KappLinkContainer = connect(mapStateToProps, {})(
-  KappLinkContainerComponent,
-);
+export const KappLinkContainer = connect(
+  mapStateToProps,
+  {},
+)(KappLinkContainerComponent);

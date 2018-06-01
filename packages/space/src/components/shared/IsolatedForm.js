@@ -7,7 +7,6 @@ import { parse } from 'query-string';
 
 import { PageTitle } from 'common';
 
-
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
 // immediately without making the application wait but it will likely be ready
@@ -96,7 +95,10 @@ export const handleLoaded = props => form => {
 };
 
 export const IsolatedForm = compose(
-  connect(mapStateToProps, { push }),
+  connect(
+    mapStateToProps,
+    { push },
+  ),
   withState('formName', 'setFormName', ''),
   withHandlers({ handleCreated, handleLoaded }),
 )(IsolatedFormComponent);

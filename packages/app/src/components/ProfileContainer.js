@@ -5,7 +5,6 @@ import { Profile } from './Profile';
 import { modalFormActions } from 'common';
 import * as selectors from '../redux/selectors';
 
-
 const HELP_FORM_CONFIG = {
   formSlug: 'help',
   kappSlug: 'admin',
@@ -45,7 +44,10 @@ const mapDispatchToProps = {
 };
 
 export const ProfileContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('isOpen', 'setIsOpen', false),
   withHandlers({
     openHelpForm: props => () => {

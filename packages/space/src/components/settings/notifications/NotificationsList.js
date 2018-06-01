@@ -107,7 +107,10 @@ export const mapDispatchToProps = {
 };
 
 export const NotificationsList = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withProps(props => {
     switch (props.match.params.type) {
       case 'templates':

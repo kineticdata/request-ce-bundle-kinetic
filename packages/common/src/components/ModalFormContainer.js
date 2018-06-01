@@ -14,7 +14,10 @@ const mapDispatchToProps = {
 };
 
 export const ModalFormContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withHandlers({
     handleCompleted: props => (submission, actions) => {
       actions.stop();

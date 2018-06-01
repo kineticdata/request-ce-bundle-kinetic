@@ -5,52 +5,53 @@ import { actions as kinopsActions } from 'app/src/redux/modules/app';
 
 import { CoreAPI } from 'react-kinetic-core';
 
-const SPACE_SETTING_INCLUDES =
-  'kapps,kapps.forms,attributesMap';
+const SPACE_SETTING_INCLUDES = 'kapps,kapps.forms,attributesMap';
 
-const TEAMS_SETTING_INCLUDES =
-  'teams';
+const TEAMS_SETTING_INCLUDES = 'teams';
 
 export function* fetchSpaceSaga({ payload }) {
-    const { serverError, space } = yield call(CoreAPI.fetchSpace, {
-      include: SPACE_SETTING_INCLUDES,
-      space: payload,
-    });
+  const { serverError, space } = yield call(CoreAPI.fetchSpace, {
+    include: SPACE_SETTING_INCLUDES,
+    space: payload,
+  });
 
-    if (serverError) {
-      yield put(actions.updateSpaceError(serverError));
-    } else {
-      yield put(actions.setSpaceSettings(space));
-    }
+  if (serverError) {
+    yield put(actions.updateSpaceError(serverError));
+  } else {
+    yield put(actions.setSpaceSettings(space));
+  }
 }
 
 export function* fetchTeamsSaga({ payload }) {
-    const { serverError, teams } = yield call(CoreAPI.fetchTeams, {
-      include: TEAMS_SETTING_INCLUDES,
-      teams: payload,
-    });
+  const { serverError, teams } = yield call(CoreAPI.fetchTeams, {
+    include: TEAMS_SETTING_INCLUDES,
+    teams: payload,
+  });
 
-    if (serverError) {
-      yield put(actions.updateSpaceError(serverError));
-    } else {
-      yield put(actions.setSpaceSettingsTeams(teams));
-    }
+  if (serverError) {
+    yield put(actions.updateSpaceError(serverError));
+  } else {
+    yield put(actions.setSpaceSettingsTeams(teams));
+  }
 }
 
 export function* updateSpaceSaga({ payload }) {
-    const attributes = Map(payload).filter(value => value).map(value => [value]).toJS();
-    const { serverError, space } = yield call(CoreAPI.updateSpace, {
-        include: SPACE_SETTING_INCLUDES,
-        space: {
-            attributesMap: attributes,
-        }
-    });
+  const attributes = Map(payload)
+    .filter(value => value)
+    .map(value => [value])
+    .toJS();
+  const { serverError, space } = yield call(CoreAPI.updateSpace, {
+    include: SPACE_SETTING_INCLUDES,
+    space: {
+      attributesMap: attributes,
+    },
+  });
 
-    if (serverError) {
-        yield put(actions.updateSpaceError(serverError));
-    } else {
-        yield put(kinopsActions.loadApp());
-    }
+  if (serverError) {
+    yield put(actions.updateSpaceError(serverError));
+  } else {
+    yield put(kinopsActions.loadApp());
+  }
 }
 
 export function* watchSettingsSpace() {

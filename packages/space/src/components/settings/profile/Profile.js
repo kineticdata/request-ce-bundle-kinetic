@@ -285,9 +285,11 @@ const mapStateToProps = state => ({
   location:
     state.space.profiles.profile &&
     state.space.profiles.profile.profileAttributes['Location'],
-  locationEnabled: state.space.spaceApp.userProfileAttributeDefinitions['Location'],
+  locationEnabled:
+    state.space.spaceApp.userProfileAttributeDefinitions['Location'],
   manager:
-    state.space.profiles.profile && state.space.profiles.profile.attributes['Manager'],
+    state.space.profiles.profile &&
+    state.space.profiles.profile.attributes['Manager'],
   managerEnabled: state.space.spaceApp.userAttributeDefinitions['Manager'],
   spaceAttributes:
     state.app.space &&
@@ -305,7 +307,10 @@ const mapDispatchToProps = {
 };
 
 export const Profile = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('fieldValues', 'setFieldValues', translateProfileToFieldValues({})),
   withHandlers({
     handleChangeManagerClick: openChangeManagerForm,

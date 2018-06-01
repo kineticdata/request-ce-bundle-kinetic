@@ -64,7 +64,9 @@ const RelatedItemBadge = ({ discussion }) => {
 
 export const Discussion = ({ discussion, me, discussionServerUrl, teams }) => {
   const messages = discussion
-    ? discussion.last_message ? List([discussion.last_message]) : List()
+    ? discussion.last_message
+      ? List([discussion.last_message])
+      : List()
     : List();
 
   return (

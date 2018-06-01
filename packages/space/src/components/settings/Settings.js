@@ -28,7 +28,10 @@ const mapDispatchToProps = {
 };
 
 export const Settings = compose(
-  connect(null, mapDispatchToProps),
+  connect(
+    null,
+    mapDispatchToProps,
+  ),
   lifecycle({
     componentWillMount(prev, next) {
       this.props.fetchForms();
@@ -104,6 +107,9 @@ const mapStateToProps = state => ({
   isSpaceAdmin: state.app.profile.spaceAdmin,
 });
 
-export const SettingsNavigation = compose(connect(mapStateToProps, {}))(
-  SettingsNavigationComponent,
-);
+export const SettingsNavigation = compose(
+  connect(
+    mapStateToProps,
+    {},
+  ),
+)(SettingsNavigationComponent);

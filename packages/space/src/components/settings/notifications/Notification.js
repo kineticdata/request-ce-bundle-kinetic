@@ -206,7 +206,10 @@ export const mapDispatchToProps = {
 };
 
 export const Notification = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('dirty', 'setDirty', false),
   withState('values', 'setValues', Map(fields.map(field => [field, '']))),
   withState('cursorPosition', 'setCursorPosition', null),

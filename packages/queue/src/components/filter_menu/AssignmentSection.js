@@ -53,9 +53,12 @@ export const AssignmentSection = ({
 );
 
 export const AssignmentSectionContainer = compose(
-  connect(null, {
-    toggleAssignment: actions.toggleAssignment,
-  }),
+  connect(
+    null,
+    {
+      toggleAssignment: actions.toggleAssignment,
+    },
+  ),
   withHandlers({
     toggleAssignmentHandler: props => event =>
       props.toggleAssignment(event.target.value),

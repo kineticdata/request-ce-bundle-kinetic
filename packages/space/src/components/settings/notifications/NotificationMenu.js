@@ -360,7 +360,10 @@ const mapDispatchToProps = {
 };
 
 export const NotificationMenu = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('selectedKapp', 'setSelectedKapp', null),
   withState('selectedForm', 'setSelectedForm', null),
   withHandlers({

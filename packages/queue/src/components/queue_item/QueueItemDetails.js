@@ -183,7 +183,10 @@ export const mapDispatchToProps = {
 };
 
 export const QueueItemDetailsContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withProps(({ queueItem }) => {
     const prohibit = getAttr(queueItem.form, 'Prohibit Subtasks');
     const permitted = getAttr(queueItem.form, 'Permitted Subtasks');

@@ -66,7 +66,10 @@ export const mapDispatchToProps = {
 };
 
 export const WorkMenuContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('complete', 'setComplete', false),
   withProps(({ queueItem }) => ({
     mode: queueItem && queueItem.coreState === 'Draft' ? 'Work' : 'Review',

@@ -4,7 +4,7 @@ export const BridgeModelQualification = Record({
   name: '',
   parameters: List(),
   resultType: 'Multiple',
-})
+});
 
 export const BridgeModelMapping = Record({
   attributes: List(),

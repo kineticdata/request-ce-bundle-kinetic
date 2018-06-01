@@ -14,4 +14,7 @@ export const mapStateToProps = state => ({
   pathname: state.router.location.pathname,
 });
 
-export const KappNavLink = connect(mapStateToProps, {})(KappNavLinkComponent);
+export const KappNavLink = connect(
+  mapStateToProps,
+  {},
+)(KappNavLinkComponent);

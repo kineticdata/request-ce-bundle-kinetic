@@ -5,7 +5,9 @@ import { activityData } from '../../RequestActivityList';
 const getStatusColor = status =>
   status === 'In Progress'
     ? 'status-yellow'
-    : status === 'Denied' ? 'status-red' : 'status--green';
+    : status === 'Denied'
+      ? 'status-red'
+      : 'status--green';
 
 export const ApprovalHeader = ({ activity }) => {
   const data = activityData(activity);

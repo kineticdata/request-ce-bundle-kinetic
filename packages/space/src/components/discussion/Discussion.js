@@ -110,7 +110,10 @@ const mapDispatchToProps = {
 };
 
 export const Discussion = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('sidebarWasOpen', '_', true, props => props.sidebarOpen),
   lifecycle({
     componentWillMount() {

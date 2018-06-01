@@ -1,4 +1,9 @@
-@mixin anchor($color: $link-color, $hover-color: tint($link-color, 15%), $text-decoration: none, $hover-text-decoration: underline) {
+@mixin anchor(
+  $color: $link-color,
+  $hover-color: tint($link-color, 15%),
+  $text-decoration: none,
+  $hover-text-decoration: underline
+) {
   a {
     color: $color;
     text-decoration: $text-decoration;

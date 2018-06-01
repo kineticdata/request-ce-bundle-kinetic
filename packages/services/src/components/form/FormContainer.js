@@ -79,7 +79,10 @@ export const mapDispatchToProps = {
 };
 
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('submissionId', 'setSubmissionId', getSubmissionId),
   withState('formSlug', 'setFormSlug', props => props.match.params.formSlug),
   withProps(props => ({

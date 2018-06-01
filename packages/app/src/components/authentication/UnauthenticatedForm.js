@@ -98,7 +98,10 @@ export const handleLoaded = props => form => {
 };
 
 export const UnauthenticatedForm = compose(
-  connect(mapStateToProps, { push }),
+  connect(
+    mapStateToProps,
+    { push },
+  ),
   withState('formName', 'setFormName', ''),
   withHandlers({ handleCreated, handleLoaded }),
 )(UnauthenticatedFormComponent);
