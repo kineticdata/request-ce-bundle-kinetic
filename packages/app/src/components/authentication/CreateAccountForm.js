@@ -134,6 +134,7 @@ const handleSubmit = ({
         'Phone Number': phone,
         Comments: comments,
       },
+      authAssumed: false,
     });
 
     setSubmitted(true);

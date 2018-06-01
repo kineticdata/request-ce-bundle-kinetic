@@ -76,6 +76,7 @@ const handleResetPassword = ({
         'Display Name': null,
         'Password Reset URL': null,
       },
+      authAssumed: false,
     });
 
     setShowConfirmation(true);
