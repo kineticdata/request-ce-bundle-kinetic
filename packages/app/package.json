@@ -11,6 +11,7 @@
   "dependencies": {
     "bootstrap": "4.0.0",
     "connected-react-router": "^4.3.0",
+    "csvtojson": "^2.0.3",
     "font-awesome": "^4.7.0",
     "immutable": "4.0.0-rc.9",
     "kinops-react-scripts": "0.9.4",

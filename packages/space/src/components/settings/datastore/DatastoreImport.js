@@ -6,6 +6,97 @@ import { Set } from 'immutable';
 
 import csv from 'csvtojson';
 
+/**
+ *  This function checks if all of the headers have matching form fields.
+ *
+ * @param {*} context
+ * @param {*} headers - First Row of the csv
+ * @param {*} headerMap - A map of headers to field names that is stored as a attribute on the form.
+ * @param {*} formFields - All the names of the fields on the form.
+ */
+export const checkHeaders = (context, headers, headerMap, formFields) => {
+  let existingHeadersSet = Set();
+
+  // If the form has the attribute "CSV Header To Form Map" the headerMap will be truthy.
+  if (headerMap) {
+    // Filter the headers out of the array returned form the form.
+    existingHeadersSet = Set(
+      headerMap.reduce((acc, obj) => {
+        acc.push(obj.header);
+        return acc;
+      }, []),
+    );
+  }
+
+  console.log(
+    existingHeadersSet.toJS(),
+    headers,
+    existingHeadersSet.subtract(headers).toJS(),
+    existingHeadersSet.subtract(headers).size <= 0,
+  );
+  // Check to see if headers have changed on the CSV file since the import was last run.
+  if (existingHeadersSet.subtract(headers).size <= 0) {
+    const headersSet = Set(headers);
+    const missingFields = headersSet.subtract(formFields);
+
+    const tempSetA = headersSet.intersect(formFields).reduce((acc, val) => {
+      const obj = { header: val, field: val };
+      return acc.add(obj);
+    }, Set([]));
+
+    const tempSetB = missingFields.reduce((acc, val) => {
+      const obj = { header: val, field: '' };
+      return acc.add(obj);
+    }, Set([]));
+
+    const unionSet = tempSetA
+      .union(tempSetB)
+      .sort((a, b) => {
+        if (a.field < b.field) {
+          return -1;
+        }
+        if (a.field > b.field) {
+          return 1;
+        }
+        if (a.field === b.field) {
+          return 0;
+        }
+      })
+      .toList();
+
+    console.log(unionSet.toJS());
+    return {
+      headerToFieldMap: unionSet,
+      missingFields,
+      recordsHeaders: headersSet,
+    };
+  } else {
+    const missing = Set(
+      headerMap.filter(obj => obj.field === '').reduce((acc, obj) => {
+        acc.push(obj.header);
+        return acc;
+      }, []),
+    );
+    return {
+      headerToFieldMap: Set(context.headerToFieldMapFormAttribute)
+        .sort((a, b) => {
+          if (a.field < b.field) {
+            return -1;
+          }
+          if (a.field > b.field) {
+            return 1;
+          }
+          if (a.field === b.field) {
+            return 0;
+          }
+        })
+        .toList(),
+      missingFields: missing,
+      recordsHeaders: existingHeadersSet,
+    };
+  }
+};
+
 export class DatastoreImport extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +124,7 @@ export class DatastoreImport extends Component {
     // percentComplete is used to dynamically change the progress bar.
     this.setState({
       percentComplete:
-        100 - Math.round(tail.length / this.state.records.length * 100),
+        100 - Math.round((tail.length / this.state.records.length) * 100),
     });
     const promise = head.id
       ? CoreAPI.updateSubmission({
@@ -169,90 +260,19 @@ export class DatastoreImport extends Component {
       csv({ noheader: false })
         .fromString(event.target.result)
         .on('header', headers => {
-          // Check to see if headers have changed on the CSV file since the import was last run.
-          let requiresUnion = true;
-          let existingHeadersSet;
-
-          if (this.headerToFieldMapFormAttribute) {
-            existingHeadersSet = Set(
-              this.headerToFieldMapFormAttribute.reduce((acc, obj) => {
-                acc.push(obj.header);
-                return acc;
-              }, []),
-            );
-            if (existingHeadersSet.subtract(headers).size <= 0) {
-              requiresUnion = false;
-            }
-          }
-
-          if (requiresUnion) {
-            const headersSet = Set(headers);
-            const missingFields = headersSet.subtract(this.formFields);
-
-            const tempSetA = headersSet
-              .intersect(this.formFields)
-              .reduce((acc, val) => {
-                const obj = { header: val, field: val };
-                return acc.add(obj);
-              }, Set([]));
-
-            const tempSetB = missingFields.reduce((acc, val) => {
-              const obj = { header: val, field: '' };
-              return acc.add(obj);
-            }, Set([]));
-
-            const unionSet = tempSetA
-              .union(tempSetB)
-              .sort((a, b) => {
-                if (a.field < b.field) {
-                  return -1;
-                }
-                if (a.field > b.field) {
-                  return 1;
-                }
-                if (a.field === b.field) {
-                  return 0;
-                }
-              })
-              .toList();
-
-            this.setState({ headerToFieldMap: unionSet });
-
-            if (missingFields.size > 0) {
-              this.setState({ missingFields, recordsHeaders: headersSet });
-            } else {
-              this.handleCsvToJson();
-              this.setState({ recordsHeaders: headersSet });
-            }
-          } else {
-            const missing = Set(
-              this.headerToFieldMapFormAttribute
-                .filter(obj => obj.field === '')
-                .reduce((acc, obj) => {
-                  acc.push(obj.header);
-                  return acc;
-                }, []),
-            );
-            this.setState({
-              headerToFieldMap: Set(this.headerToFieldMapFormAttribute)
-                .sort((a, b) => {
-                  if (a.field < b.field) {
-                    return -1;
-                  }
-                  if (a.field > b.field) {
-                    return 1;
-                  }
-                  if (a.field === b.field) {
-                    return 0;
-                  }
-                })
-                .toList(),
-              missingFields: missing,
-              recordsHeaders: existingHeadersSet,
-            });
-            if (missing.size <= 0) {
-              this.handleCsvToJson();
-            }
+          const obj = checkHeaders(
+            this,
+            headers,
+            this.headerToFieldMapFormAttribute,
+            this.formFields,
+          );
+          this.setState({
+            headerToFieldMap: obj.headerToFieldMap,
+            missingFields: obj.missingFields,
+            recordsHeaders: obj.recordsHeaders,
+          });
+          if (obj.missingFields.size <= 0) {
+            this.handleCsvToJson();
           }
         });
     };
