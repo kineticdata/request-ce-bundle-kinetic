@@ -363,6 +363,20 @@ export class DatastoreImport extends Component {
     }
   };
 
+  handleOmit = event => {
+    this.setState({
+      headerToFieldMap: this.state.headerToFieldMap.update(
+        event.target.value,
+        () => ({
+          checked: event.target.checked,
+        }),
+      ),
+    });
+    if (this.state.missingFields <= 0) {
+      this.handleCsvToJson();
+    }
+  };
+
   componentWillMount() {
     this.fetchForm();
     this.fetch();
@@ -469,6 +483,18 @@ export class DatastoreImport extends Component {
                                 Datastore Record ID
                               </option>
                             </select>
+                          </td>
+                          <td>
+                            <input
+                              type="checkbox"
+                              id="omit"
+                              value={obj.idx}
+                              checked={obj.checked}
+                              onClick={this.handleOmit}
+                            />
+                            <label htmlFor="omit">
+                              Omit Column from Import
+                            </label>
                           </td>
                         </tr>
                       ))}
