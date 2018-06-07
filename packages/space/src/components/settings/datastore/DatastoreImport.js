@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { CoreAPI } from 'react-kinetic-core';
 import { Line } from 'rc-progress';
 import { Table, Modal, ModalBody, ModalFooter } from 'reactstrap';
-import { Set } from 'immutable';
+import { Set, List } from 'immutable';
 
 import Papa from 'papaparse';
 
@@ -26,85 +26,149 @@ export const DeleteModal = ({ handleDelete, handleToggle, modal }) => (
 );
 
 /**
+ *   This function creates the map that is used to match the csv's headers
+ *  to feilds on the form.
+ *
+ * @param {Array} headers - First Row of the csv
+ * @param {Array} formFields - All the names of the fields on the form.
+ * @return {}
+ */
+export const createHeaderToFieldMap = (headers, formFields) => {
+  const headersSet = Set(headers);
+  const missingFields = headersSet.subtract(formFields);
+
+  const tempSetA = headersSet.intersect(formFields).reduce((acc, val) => {
+    const obj = { header: val, field: val, checked: false };
+    return acc.add(obj);
+  }, Set([]));
+
+  const tempSetB = missingFields.reduce((acc, val) => {
+    const obj = { header: val, field: '', checked: false };
+    return acc.add(obj);
+  }, Set([]));
+
+  const unionSet = tempSetA
+    .union(tempSetB)
+    .sort((a, b) => {
+      if (a.field < b.field) {
+        return -1;
+      }
+      if (a.field > b.field) {
+        return 1;
+      }
+      if (a.field === b.field) {
+        return 0;
+      }
+    })
+    .toList();
+
+  return {
+    headerToFieldMap: unionSet,
+    missingFields,
+    recordsHeaders: headersSet,
+  };
+};
+/**
+ *  This is a support function for checkHeaderToFieldMap
+ *
+ * @param {*} headersSet - First Row of the csv as a Set
+ * @param {*} headerMapList - A map of headers to field names that is stored as a attribute on the form as a List.
+ * @returns {}
+ */
+const buildHeaderToFieldMap = (headersSet, headerMapList) => {
+  const missing = headerMapList
+    .filter(obj => obj.field === '')
+    .reduce((acc, obj) => {
+      return acc.push(obj.header);
+    }, List([]));
+  return {
+    headerToFieldMap: headerMapList.sort((a, b) => {
+      if (a.field < b.field) {
+        return -1;
+      }
+      if (a.field > b.field) {
+        return 1;
+      }
+      if (a.field === b.field) {
+        return 0;
+      }
+    }),
+    missingFields: missing,
+    recordsHeaders: headersSet,
+  };
+};
+
+/**
  *  This function checks if all of the headers have matching form fields.
  *
  * @param {*} headers - First Row of the csv
  * @param {*} headerMap - A map of headers to field names that is stored as a attribute on the form.
  * @param {*} formFields - All the names of the fields on the form.
+ * @returns {}
  */
-export const checkHeaders = (headers, headerMap, formFields) => {
-  let existingHeadersSet = Set();
+export const checkHeaderToFieldMap = (headers, headerMap, formFields) => {
+  const headersSet = Set(headers);
+  const headerMapList = List(headerMap);
 
-  // If the form has the attribute "CSV Header To Form Map" the headerMap will be truthy.
-  if (headerMap) {
-    // Filter the headers out of the array returned form the form.
-    existingHeadersSet = Set(
-      headerMap.reduce((acc, obj) => {
-        acc.push(obj.header);
-        return acc;
-      }, []),
-    );
-  }
+  // Filter the headers out of the array returned form the form.
+  const existingHeadersSet = headerMapList
+    .reduce((acc, obj) => {
+      return acc.push(obj.header);
+    }, List([]))
+    .toSet();
 
-  // Check to see if headers have changed on the CSV file since the import was last run.
-  if (existingHeadersSet.subtract(headers).size <= 0) {
-    const headersSet = Set(headers);
-    const missingFields = headersSet.subtract(formFields);
+  // Filter the fields out of the array returned form the form.
+  const existingFieldsSet = headerMapList
+    .reduce((acc, obj) => {
+      if (obj.field !== 'Datastore Record ID' && obj.field) {
+        return acc.push(obj.field);
+      }
+      return acc;
+    }, List([]))
+    .toSet();
 
-    const tempSetA = headersSet.intersect(formFields).reduce((acc, val) => {
-      const obj = { header: val, field: val };
-      return acc.add(obj);
-    }, Set([]));
+  // There are headers that exist in the csv that do not exist in the headerMap config.
+  const addedHeaders = headersSet.subtract(existingHeadersSet);
+  // There are headers that exist in the headerMap config that do not exist in the csv.
+  const removedHeaders = existingHeadersSet.subtract(headers);
+  // There are fields in the headerMap config that do not exist on the form.
+  const removedFields = existingFieldsSet.subtract(Set(formFields));
 
-    const tempSetB = missingFields.reduce((acc, val) => {
-      const obj = { header: val, field: '' };
-      return acc.add(obj);
-    }, Set([]));
-
-    const unionSet = tempSetA
-      .union(tempSetB)
-      .sort((a, b) => {
-        if (a.field < b.field) {
-          return -1;
-        }
-        if (a.field > b.field) {
-          return 1;
-        }
-        if (a.field === b.field) {
-          return 0;
-        }
-      })
-      .toList();
-
-    return {
-      headerToFieldMap: unionSet,
-      missingFields,
-      recordsHeaders: headersSet,
-    };
+  // Check to see if headers have changed on the CSV or the fields on the form have changed.
+  if (
+    addedHeaders.size > 0 ||
+    removedHeaders.size > 0 ||
+    removedFields.size > 0
+  ) {
+    let modifiedList = headerMapList;
+    if (addedHeaders.size > 0) {
+      addedHeaders.forEach(
+        header =>
+          (modifiedList = modifiedList.push({
+            header,
+            field: formFields.find(field => field === header) || '',
+            checked: false,
+          })),
+      );
+    }
+    if (removedHeaders.size > 0) {
+      removedHeaders.forEach(header => {
+        modifiedList = modifiedList.delete(
+          modifiedList.findIndex(obj => obj.header === header),
+        );
+      });
+    }
+    if (removedFields.size > 0) {
+      removedFields.forEach(field => {
+        modifiedList = modifiedList.update(
+          modifiedList.findIndex(obj => obj.field === field),
+          obj => ({ ...obj, field: '' }),
+        );
+      });
+    }
+    return buildHeaderToFieldMap(headersSet, modifiedList);
   } else {
-    const missing = Set(
-      headerMap.filter(obj => obj.field === '').reduce((acc, obj) => {
-        acc.push(obj.header);
-        return acc;
-      }, []),
-    );
-    return {
-      headerToFieldMap: Set(headerMap)
-        .sort((a, b) => {
-          if (a.field < b.field) {
-            return -1;
-          }
-          if (a.field > b.field) {
-            return 1;
-          }
-          if (a.field === b.field) {
-            return 0;
-          }
-        })
-        .toList(),
-      missingFields: missing,
-      recordsHeaders: existingHeadersSet,
-    };
+    return buildHeaderToFieldMap(headersSet, headerMapList);
   }
 };
 
@@ -300,11 +364,19 @@ export class DatastoreImport extends Component {
 
   handleFieldCheck = () => {
     const headers = this.parseResults.meta.fields;
-    const obj = checkHeaders(
-      headers,
-      this.headerToFieldMapFormAttribute,
-      this.formFields,
-    );
+    let obj;
+
+    /*  If the form has the attribute "CSV Header To Form Map" and it has a value then
+     * check that the values are still valid.  If not create the map.
+    */
+    this.headerToFieldMapFormAttribute
+      ? (obj = checkHeaderToFieldMap(
+          headers,
+          this.headerToFieldMapFormAttribute,
+          this.formFields,
+        ))
+      : (obj = createHeaderToFieldMap(headers, this.formFields));
+
     this.setState({
       headerToFieldMap: obj.headerToFieldMap,
       missingFields: obj.missingFields,
