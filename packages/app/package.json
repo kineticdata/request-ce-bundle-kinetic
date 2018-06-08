@@ -19,7 +19,7 @@
     "react": "^16.2.0",
     "react-app-rewire-yarn-workspaces": "^1.0.2",
     "react-app-rewired": "^1.4.1",
-    "react-avatar": "^2.5.1",
+    "react-avatar": "^3.0.2",
     "react-dom": "^16.2.0",
     "react-helmet": "^5.2.0",
     "react-kinetic-core": "^0.6.1",
