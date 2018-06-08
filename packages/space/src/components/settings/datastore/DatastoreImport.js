@@ -2,8 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { CoreAPI } from 'react-kinetic-core';
 import { Line } from 'rc-progress';
 import { Table, Modal, ModalBody, ModalFooter } from 'reactstrap';
-import { Set, List } from 'immutable';
-
+import { Set, List, fromJS } from 'immutable';
 import Papa from 'papaparse';
 
 export const DeleteModal = ({ handleDelete, handleToggle, modal }) => (
@@ -69,18 +68,35 @@ export const createHeaderToFieldMap = (headers, formFields) => {
   };
 };
 /**
- *  This is a support function for checkHeaderToFieldMap
+ *  This function returns "missing fields" which are any objects in the headerToFieldMap that have an empty string
+ * for a field value or have checked equal to true (which mean to omit on import).  We also ignore the object that
+ * has a header with the value of 'Datastore Record ID' because that object hold the submission id for updating a
+ * record.
  *
- * @param {*} headersSet - First Row of the csv as a Set
- * @param {*} headerMapList - A map of headers to field names that is stored as a attribute on the form as a List.
- * @returns {}
+ * @param {List} headerMapList - A map of headers to field names that is stored as a attribute on the form as a List.
+ * @return {List}
  */
-const buildHeaderToFieldMap = (headersSet, headerMapList) => {
-  const missing = headerMapList
-    .filter(obj => obj.field === '')
+const findMissingFields = headerMapList =>
+  headerMapList
+    .filter(
+      obj =>
+        obj.field === '' &&
+        !obj.checked &&
+        obj.header !== 'Datastore Record ID',
+    )
     .reduce((acc, obj) => {
       return acc.push(obj.header);
     }, List([]));
+
+/**
+ *  This is a support function for checkHeaderToFieldMap
+ *
+ * @param {Set} headersSet - First Row of the csv as a Set
+ * @param {List} headerMapList - A map of headers to field names that is stored as a attribute on the form as a List.
+ * @returns {Object}
+ */
+const buildHeaderToFieldMap = (headersSet, headerMapList) => {
+  const missing = findMissingFields(headerMapList);
   return {
     headerToFieldMap: headerMapList.sort((a, b) => {
       if (a.field < b.field) {
@@ -101,10 +117,10 @@ const buildHeaderToFieldMap = (headersSet, headerMapList) => {
 /**
  *  This function checks if all of the headers have matching form fields.
  *
- * @param {*} headers - First Row of the csv
- * @param {*} headerMap - A map of headers to field names that is stored as a attribute on the form.
- * @param {*} formFields - All the names of the fields on the form.
- * @returns {}
+ * @param {Array} headers - First Row of the csv
+ * @param {Array} headerMap - A map of headers to field names that is stored as a attribute on the form.
+ * @param {Array} formFields - All the names of the fields on the form.
+ * @returns {Object}
  */
 export const checkHeaderToFieldMap = (headers, headerMap, formFields) => {
   const headersSet = Set(headers);
@@ -181,9 +197,9 @@ export class DatastoreImport extends Component {
       postResult: false,
       submissions: [],
       records: [],
-      recordsHeaders: [],
+      recordsHeaders: Set([]),
       formSlug: this.props.match.params.slug,
-      missingFields: [],
+      missingFields: List([]),
       mapHeadersShow: false,
       percentComplete: 0,
       modal: false,
@@ -201,6 +217,11 @@ export class DatastoreImport extends Component {
       percentComplete:
         100 - Math.round((tail.length / this.state.records.length) * 100),
     });
+
+    /*  The below code will to a sequential post/put for all of the records on state. 
+     * It has been written to extend it functionality to batch calls in the future.
+     */
+
     const promise = head.id
       ? CoreAPI.updateSubmission({
           datastore: true,
@@ -223,7 +244,14 @@ export class DatastoreImport extends Component {
         this.post(tail);
       } else {
         Promise.all(this.calls).then(() => {
-          this.handlePostComplete();
+          // This is used to reset the progress bar after the post process completes.
+          this.setState({
+            processing: false,
+            percentComplete: 0,
+            postResult: true,
+          });
+          this.fetch();
+          this.handleReset();
         });
       }
     });
@@ -246,6 +274,7 @@ export class DatastoreImport extends Component {
   };
 
   delete = ([head, ...tail]) => {
+    // percentComplete is used to dynamically change the progress bar.
     this.setState({
       percentComplete:
         100 - Math.round((tail.length / this.state.submissions.length) * 100),
@@ -258,6 +287,7 @@ export class DatastoreImport extends Component {
         if (tail.length > 0) {
           this.delete(tail);
         } else {
+          // This is used to reset the progress bar after the delete process completes.
           this.setState({
             processing: false,
             percentComplete: 0,
@@ -295,20 +325,10 @@ export class DatastoreImport extends Component {
     this.readFile = null;
     this.setState({
       records: [],
-      recordsHeaders: [],
-      missingFields: [],
+      recordsHeaders: Set([]),
+      missingFields: List([]),
       percentComplete: 0,
     });
-  };
-
-  handlePostComplete = () => {
-    this.setState({
-      processing: false,
-      percentComplete: 0,
-      postResult: true,
-    });
-    this.fetch();
-    this.handleReset();
   };
 
   handleToggle = () => {
@@ -344,18 +364,30 @@ export class DatastoreImport extends Component {
       processing: true,
       mapHeadersShow: false,
     });
+    this.calls = [];
     this.post(this.state.records);
   };
 
-  handleCsvToJson = () => {
+  /*  headerToFieldMap must be passed in because handleSelect and handleOmit update headerToFieldMap
+   * in state just before calling handleCsvToJson.  If we used this.state.headerToFieldMap we would
+   * get a stale version of the data.
+  */
+  handleCsvToJson = headerToFieldMap => {
+    const resultsList = fromJS(this.parseResults.data);
     this.setState({
-      records: this.parseResults.data.reduce((arr, csvRow) => {
-        let obj = {};
-        if (csvRow['Datastore Record ID'] !== '') {
-          obj.id = csvRow['Datastore Record ID'];
-        }
-        delete csvRow['Datastore Record ID'];
-        obj.values = csvRow;
+      records: resultsList.reduce((arr, csvRowMap) => {
+        let obj = {
+          values: {},
+        };
+        csvRowMap.forEach((val, header) => {
+          const found = headerToFieldMap.find(obj => obj.header === header);
+          if (found.header === 'Datastore Record ID' && !(val === '')) {
+            obj.id = val;
+          }
+          if (!found.checked) {
+            obj.values = { ...obj.values, [found.field]: val };
+          }
+        });
         arr.push(obj);
         return arr;
       }, []),
@@ -383,7 +415,7 @@ export class DatastoreImport extends Component {
       recordsHeaders: obj.recordsHeaders,
     });
     if (obj.missingFields.size <= 0) {
-      this.handleCsvToJson();
+      this.handleCsvToJson(obj.headerToFieldMap);
     }
   };
 
@@ -398,7 +430,6 @@ export class DatastoreImport extends Component {
 
   handleChange = event => {
     const file = this.fileEl.files[0];
-
     // If the user chooses to cancel the open.  Avoids an error with file.name and prevents unnecessary behavior.
     if (file) {
       this.setState({ fileName: file.name, postResult: false });
@@ -422,30 +453,36 @@ export class DatastoreImport extends Component {
   };
 
   handleSelect = event => {
-    const missingFields = this.state.missingFields.delete(event.target.name);
+    const updatedList = this.state.headerToFieldMap.update(
+      event.target.getAttribute('index'),
+      obj => ({ ...obj, header: event.target.name, field: event.target.value }),
+    );
+    const missingFields = findMissingFields(updatedList);
     this.setState({
-      headerToFieldMap: this.state.headerToFieldMap.update(
-        event.target.getAttribute('index'),
-        () => ({ header: event.target.name, field: event.target.value }),
-      ),
+      headerToFieldMap: updatedList,
       missingFields,
     });
     if (missingFields.size <= 0) {
-      this.handleCsvToJson();
+      this.handleCsvToJson(updatedList);
     }
   };
 
   handleOmit = event => {
+    const updatedList = this.state.headerToFieldMap.update(
+      event.target.getAttribute('index'),
+      () => ({
+        header: event.target.name,
+        field: event.target.value,
+        checked: event.target.checked,
+      }),
+    );
+    const missingFields = findMissingFields(updatedList);
     this.setState({
-      headerToFieldMap: this.state.headerToFieldMap.update(
-        event.target.value,
-        () => ({
-          checked: event.target.checked,
-        }),
-      ),
+      headerToFieldMap: updatedList,
+      missingFields,
     });
-    if (this.state.missingFields <= 0) {
-      this.handleCsvToJson();
+    if (missingFields.size <= 0) {
+      this.handleCsvToJson(updatedList);
     }
   };
 
@@ -523,53 +560,71 @@ export class DatastoreImport extends Component {
               )}
             </div>
             <div className="forms-list-wrapper">
-              {this.state.missingFields.size > 0 && (
+              {this.state.missingFields.length > 0 && (
                 <div>
-                  <h4>The CSV has headers that do not exist on the form</h4>
-                  {this.state.missingFields.map((fieldName, idx) => (
-                    <p key={fieldName + idx}>{fieldName}</p>
+                  <h3>The CSV has headers that do not exist on the form</h3>
+                  {this.state.missingFields.map(fieldName => (
+                    <p>{fieldName}</p>
                   ))}
+                </div>
+              )}
+              {this.state.processing && (
+                <Line
+                  percent={this.state.percentComplete}
+                  strokeWidth="1"
+                  strokeColor="#5fba53"
+                />
+              )}
+              {this.state.postResult && (
+                <div>
+                  <h4>Post Results</h4>
+                  <p>{this.calls.length} records attempted to be posted</p>
+                  <p>{this.failedCalls.length} records failed</p>
                 </div>
               )}
               {this.state.mapHeadersShow && (
                 <Fragment>
                   <table>
                     <tbody>
-                      {this.state.headerToFieldMap.map((obj, idx) => (
-                        <tr key={obj.header + idx}>
-                          <td>{obj.header}</td>
-                          <td>
-                            <select
-                              onChange={this.handleSelect}
-                              name={obj.header}
-                              index={idx}
-                              value={obj.field}
-                            >
-                              <option value={''}>Select Option</option>
-                              {this.formFields.map(fieldName => (
-                                <option key={fieldName} value={fieldName}>
-                                  {fieldName}
-                                </option>
-                              ))}
-                              <option value={'Datastore Record ID'}>
-                                Datastore Record ID
-                              </option>
-                            </select>
-                          </td>
-                          <td>
-                            <input
-                              type="checkbox"
-                              id="omit"
-                              value={obj.idx}
-                              checked={obj.checked}
-                              onClick={this.handleOmit}
-                            />
-                            <label htmlFor="omit">
-                              Omit Column from Import
-                            </label>
-                          </td>
-                        </tr>
-                      ))}
+                      {this.state.headerToFieldMap.map((obj, idx) => {
+                        if (obj.header !== 'Datastore Record ID') {
+                          return (
+                            <tr key={obj.header + idx}>
+                              <td>{obj.header}</td>
+                              <td>
+                                <select
+                                  onChange={this.handleSelect}
+                                  name={obj.header}
+                                  index={idx}
+                                  value={obj.field}
+                                >
+                                  <option value={''}>Select Option</option>
+                                  {this.formFields.map(fieldName => (
+                                    <option key={fieldName} value={fieldName}>
+                                      {fieldName}
+                                    </option>
+                                  ))}
+                                </select>
+                              </td>
+                              <td>
+                                <input
+                                  type="checkbox"
+                                  id="omit"
+                                  name={obj.header}
+                                  index={idx}
+                                  value={obj.field}
+                                  checked={obj.checked}
+                                  onChange={this.handleOmit}
+                                />
+                                <label htmlFor="omit">
+                                  Omit Column from Import
+                                </label>
+                              </td>
+                            </tr>
+                          );
+                        }
+                        return null;
+                      })}
                     </tbody>
                   </table>
                   <button
@@ -621,30 +676,6 @@ export class DatastoreImport extends Component {
                     </Table>
                   </Fragment>
                 )}
-            </div>
-            <div className="forms-list-wrapper">
-              {this.state.missingFields.length > 0 && (
-                <div>
-                  <h3>The CSV has headers that do not exist on the form</h3>
-                  {this.state.missingFields.map(fieldName => (
-                    <p>{fieldName}</p>
-                  ))}
-                </div>
-              )}
-              {this.state.processing && (
-                <Line
-                  percent={this.state.percentComplete}
-                  strokeWidth="1"
-                  strokeColor="#5fba53"
-                />
-              )}
-              {this.state.postResult && (
-                <div>
-                  <h4>Post Results</h4>
-                  <p>{this.calls.length} records attempted to be posted</p>
-                  <p>{this.failedCalls.length} records failed</p>
-                </div>
-              )}
             </div>
           </div>
         </div>
