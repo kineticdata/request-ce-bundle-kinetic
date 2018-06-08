@@ -654,7 +654,7 @@ export class DatastoreImport extends Component {
                       <p>CSV to Json results for review.</p>
                       <p>Import Records to save them.</p>
                     </div>
-                    <Table style={{ maxWidth: '80%' }}>
+                    <Table className="table-responsive table-sm">
                       <thead>
                         <tr>
                           {this.state.headerToFieldMap.map((obj, idx) => (
