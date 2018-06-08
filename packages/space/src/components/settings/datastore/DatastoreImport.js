@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import { CoreAPI } from 'react-kinetic-core';
 import { Line } from 'rc-progress';
 import { Table, Modal, ModalBody, ModalFooter } from 'reactstrap';
@@ -497,7 +498,14 @@ export class DatastoreImport extends Component {
         <div className="page-container page-container--datastore">
           <div className="page-panel page-panel--scrollable page-panel--datastore-content">
             <div className="page-title">
-              <h1>Import Datastore</h1>
+              <div className="page-title__wrapper">
+                <h3>
+                  <Link to="/">home</Link> /{` `}
+                  <Link to="/settings">settings</Link> /{` `}
+                  <Link to={`/settings/datastore/`}>datastore</Link> /{` `}
+                </h3>
+                <h1>Import Datastore</h1>
+              </div>
             </div>
             {this.state.submissions.length > 0 ? (
               <Fragment>

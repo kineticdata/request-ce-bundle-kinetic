@@ -29,6 +29,12 @@ const SubmissionSearchComponent = ({
             <h1>{form.name}</h1>
           </div>
           <Link
+            to={`/settings/datastore/${form.slug}/import`}
+            className="btn btn-secondary"
+          >
+            Import Records
+          </Link>
+          <Link
             to={`/settings/datastore/${form.slug}/new`}
             className="btn btn-primary"
           >
