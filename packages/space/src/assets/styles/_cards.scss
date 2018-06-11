@@ -103,12 +103,20 @@
   .card {
     @media all and (min-width: 0) {
       flex-basis: 100%;
+      @media all and (-ms-high-contrast: none) {
+        width: 100%;
+        flex-basis: auto;
+      }
     }
     @media all and (min-width: 460px) and (max-width: 576px) {
       flex-basis: 48%;
       margin-right: 4%;
       &:nth-child(2n) {
         margin-right: 0;
+      }
+      @media all and (-ms-high-contrast: none) {
+        width: 48%;
+        flex-basis: auto;
       }
     }
     @media all and (min-width: 577px) and (max-width: 768px) {
@@ -117,12 +125,20 @@
       &:nth-child(3n) {
         margin-right: 0;
       }
+      @media all and (-ms-high-contrast: none) {
+        width: 30%;
+        flex-basis: auto;
+      }
     }
     @media all and (min-width: 769px) {
       flex-basis: 22%;
       margin-right: 4%;
       &:nth-child(4n) {
         margin-right: 0;
+      }
+      @media all and (-ms-high-contrast: none) {
+        width: 22%;
+        flex-basis: auto;
       }
     }
   }
