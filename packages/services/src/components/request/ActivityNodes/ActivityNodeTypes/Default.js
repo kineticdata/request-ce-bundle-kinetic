@@ -3,10 +3,10 @@ import { TimeAgo } from 'common';
 import { activityData } from '../../RequestActivityList';
 
 const ActivityDataItem = ({ label, value }) => (
-  <Fragment>
-    {label !== 'STRING' && <span className={'title'}>{label}</span>}
-    <span>{value}</span>
-  </Fragment>
+  <dl>
+    <dt>{label !== 'STRING' && <span className={'title'}>{label}</span>}</dt>
+    <dd>{value}</dd>
+  </dl>
 );
 
 export const DefaultHeader = ({ activity }) => <h1>{activity.label}</h1>;

@@ -35,7 +35,7 @@ const formProperties = [
   'Form Type',
 ];
 const kappProperties = ['Kapp Name', 'Kapp Slug'];
-const spaceProperties = ['Space Slug'];
+const spaceProperties = ['Space Name', 'Space Slug'];
 
 const SubmissionMenu = ({ form, handleClick }) => (
   <ul className="dropdown-menu">
