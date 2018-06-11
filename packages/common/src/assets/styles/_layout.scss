@@ -1,6 +1,10 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Layout ~ Common
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+html {
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
 .main-container {
   display: flex;
   overflow-y: auto !important;

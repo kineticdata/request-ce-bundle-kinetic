@@ -13,7 +13,11 @@
       flex-direction: column;
       height: 100%;
       .modal-body {
-        flex: 1 0 0;
+        // Flexbugs #4: https://github.com/philipwalton/flexbugs#4-flex-shorthand-declarations-with-unitless-flex-basis-values-are-ignored
+        flex: 1 0 0%;
+        flex-grow: 1;
+        flex-shrink: 0;
+        flex-basis: 0;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
       }
@@ -81,7 +85,6 @@
         }
       }
     }
-
     .modal-body {
       display: flex;
       flex-direction: column;
@@ -111,7 +114,6 @@
           }
         }
       }
-
       .button-list .btn-link {
         .validation-error {
           max-width: 200px;
@@ -119,7 +121,6 @@
           white-space: normal;
         }
       }
-
       .save-filter {
         display: flex;
         flex-direction: column;
@@ -129,18 +130,15 @@
           font-size: 0.75rem;
           line-height: 1.5rem;
         }
-
         input {
           min-height: 1.5rem;
           border: 1px solid $black-16;
           border-radius: $border-radius-base;
           background-color: $white;
-
           padding: 0.5em;
           color: $black;
           font-size: 0.75rem;
           line-height: 1.5rem;
-
           &:focus {
             outline: 0;
             box-shadow: 0 0 3px 0 $gray2;
@@ -153,7 +151,6 @@
           }
         }
       }
-
       &.filter-section {
         padding-bottom: 3rem;
         h5 {
@@ -179,7 +176,6 @@
         }
       }
     }
-
     .modal-footer {
       padding: 0;
       .btn.btn-primary {

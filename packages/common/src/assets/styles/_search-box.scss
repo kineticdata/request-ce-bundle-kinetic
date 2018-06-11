@@ -16,7 +16,6 @@
   padding: 0;
   transition: all 0.5s;
   width: auto;
-
   border: 1px solid rgba($black-16, 1);
 
   &:hover,
@@ -44,7 +43,7 @@
     // padding: 0 0.25rem;
   }
   input {
-    flex: 1;
+    flex: 1 0 auto;
   }
   // Search Input
   input[type='text'] {
@@ -61,6 +60,6 @@
     }
   }
   &::placeholder {
-    color: #fff;
+    color: #ffffff;
   }
 }
