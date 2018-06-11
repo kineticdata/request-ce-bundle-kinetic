@@ -14,13 +14,13 @@
       .index-part {
         display: flex;
         flex-direction: row;
-        padding-bottom: .75em;
+        padding-bottom: 0.75em;
       }
 
       .index-part-values-group {
         display: flex;
         flex-direction: row;
-        padding-bottom: .25em;
+        padding-bottom: 0.25em;
 
         &.operation-between {
           justify-content: space-between;
@@ -46,8 +46,8 @@
     align-items: center;
     margin: 2rem 0 0;
     padding: 1rem;
-    background-color: rgba($black-3, .95);
-    transition: left .3s ease-out, right .3s ease-out;
+    background-color: rgba($black-3, 0.95);
+    transition: left 0.3s ease-out, right 0.3s ease-out;
     .closed & {
       left: 0;
     }
@@ -62,19 +62,19 @@
     margin-bottom: 5rem;
   }
   table.table-datastore {
-    font-size: .875rem;
+    font-size: 0.875rem;
     margin-top: 1.5rem;
 
     tbody {
       td {
-         >a {
+        > a {
           font-weight: 600;
         }
-         >small {
+        > small {
           color: $gray;
         }
-         >.list-dropdown {
-          & >button {
+        > .list-dropdown {
+          & > button {
             padding: 0;
             color: $black-50;
             &:hover {
@@ -82,12 +82,12 @@
             }
           }
         }
-         >.dropdown .btn {
+        > .dropdown .btn {
           background-color: transparent;
-          padding: 0rem .25rem;
+          padding: 0rem 0.25rem;
         }
         & .dropdown-item {
-          padding: .25rem 1rem;
+          padding: 0.25rem 1rem;
         }
       }
     }

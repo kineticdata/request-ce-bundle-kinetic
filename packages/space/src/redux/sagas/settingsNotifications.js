@@ -140,7 +140,7 @@ export function* deleteNotificationSaga(action) {
 
 export function* saveNotificationSaga(action) {
   const datastore = true;
-  const completed = false;
+  const completed = true;
   const formSlug = NOTIFICATIONS_FORM_SLUG;
   const {
     payload: { id, values, callback },

@@ -8,7 +8,43 @@ import { toastActions } from 'common';
 import { actions } from '../../../redux/modules/settingsNotifications';
 import { NotificationMenu } from './NotificationMenu';
 
-const fields = ['Name', 'Status', 'Subject', 'HTML Content', 'Text Content'];
+const fields = {
+  Name: {
+    required: true,
+  },
+  Status: {
+    required: true,
+  },
+  Subject: {
+    required: values => values.get('Type') === 'Template',
+    visible: values => values.get('Type') === 'Template',
+  },
+  'HTML Content': {
+    required: true,
+  },
+  'Text Content': {
+    required: values => values.get('Type') === 'Template',
+  },
+  Type: {
+    required: true,
+  },
+};
+
+const evaluate = (condition, values) =>
+  typeof condition === 'boolean'
+    ? condition
+    : typeof condition === 'function'
+      ? condition(values)
+      : false;
+
+const isRequired = (name, values) => evaluate(fields[name].required, values);
+
+const isVisible = (name, values) => evaluate(fields[name].visible, values);
+
+const isValid = values =>
+  !Object.entries(fields).some(
+    ([name, _]) => isRequired(name, values) && !values.get(name),
+  );
 
 const NotificationComponent = ({
   loading,
@@ -51,7 +87,9 @@ const NotificationComponent = ({
               />
             </Fragment>
             <div className="form-group required">
-              <label htmlFor="name">Name</label>
+              <label className="field-label" htmlFor="name">
+                Name
+              </label>
               <input
                 type="text"
                 id="name"
@@ -87,20 +125,25 @@ const NotificationComponent = ({
                 Inactive
               </label>
             </div>
-
+            {isVisible('Subject', values) && (
+              <div className="form-group required">
+                <label className="field-label" htmlFor="subject">
+                  Subject
+                </label>
+                <textarea
+                  id="subject"
+                  name="Subject"
+                  rows="2"
+                  onChange={handleFieldChange}
+                  onBlur={handleFieldBlur}
+                  value={values.get('Subject')}
+                />
+              </div>
+            )}
             <div className="form-group required">
-              <label htmlFor="subject">Subject</label>
-              <textarea
-                id="subject"
-                name="Subject"
-                rows="2"
-                onChange={handleFieldChange}
-                onBlur={handleFieldBlur}
-                value={values.get('Subject')}
-              />
-            </div>
-            <div className="form-group required">
-              <label htmlFor="htmlContent">HTML Content</label>
+              <label className="field-label" htmlFor="htmlContent">
+                HTML Content
+              </label>
               <textarea
                 id="htmlContent"
                 name="HTML Content"
@@ -110,8 +153,14 @@ const NotificationComponent = ({
                 value={values.get('HTML Content')}
               />
             </div>
-            <div className="form-group required">
-              <label htmlFor="textContent">Text Content</label>
+            <div
+              className={`form-group ${
+                isRequired('Text Content', values) ? 'required' : ''
+              }`}
+            >
+              <label className="field-label" htmlFor="textContent">
+                Text Content
+              </label>
               <textarea
                 id="textContent"
                 name="Text Content"
@@ -126,7 +175,7 @@ const NotificationComponent = ({
                 <button
                   type="submit"
                   className="btn btn-primary"
-                  disabled={!dirty || values.valueSeq().some(val => !val)}
+                  disabled={!dirty || !isValid(values)}
                 >
                   Save
                 </button>
@@ -209,7 +258,7 @@ export const Notification = compose(
   ),
   withState('dirty', 'setDirty', false),
   withState('values', 'setValues', props =>
-    Map(fields.map(field => [field, ''])).set('Type', props.title),
+    Map(Object.keys(fields).map(field => [field, ''])).set('Type', props.title),
   ),
   withState('cursorPosition', 'setCursorPosition', null),
   withState('selection', 'setSelection', null),
@@ -229,7 +278,7 @@ export const Notification = compose(
       }
       if (this.props.submission !== nextProps.submission) {
         this.props.setValues(
-          fields.reduce(
+          Object.keys(fields).reduce(
             (values, field) =>
               values.set(field, nextProps.submission.values[field] || ''),
             Map(),
