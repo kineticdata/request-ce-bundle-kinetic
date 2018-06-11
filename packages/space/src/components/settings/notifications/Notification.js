@@ -14,6 +14,7 @@ const NotificationComponent = ({
   loading,
   submission,
   type,
+  title,
   dirty,
   values,
   selection,
@@ -36,11 +37,7 @@ const NotificationComponent = ({
             /
           </h3>
           {!loading && (
-            <h1>
-              {submission
-                ? submission.label
-                : `New ${type === 'templates' ? 'Template' : 'Snippet'}`}
-            </h1>
+            <h1>{submission ? submission.label : `New ${title}`}</h1>
           )}
         </div>
       </div>
@@ -147,14 +144,13 @@ export const handleSubmit = props => event => {
     props.values.toJS(),
     props.submission && props.submission.id,
     submission => {
-      const item = props.type === 'templates' ? 'Template' : 'Snippet';
       const action = props.submission ? 'Updated' : 'Created';
       props.push(`/settings/notifications/${props.type}`);
       props.addSuccess(
-        `Successfully ${action.toLowerCase()} ${item.toLowerCase()} (${
+        `Successfully ${action.toLowerCase()} ${props.title.toLowerCase()} (${
           submission.handle
         })`,
-        `${action} ${item}`,
+        `${action} ${props.title}`,
       );
     },
   );
@@ -192,6 +188,7 @@ export const handleVariableSelection = props => variable => {
 export const mapStateToProps = (state, props) => ({
   submission: state.space.settingsNotifications.notification,
   type: props.match.params.type,
+  title: props.match.params.type === 'templates' ? 'Template' : 'Snippet',
   loading: state.space.settingsNotifications.notificationLoading,
   saving: state.space.settingsNotifications.saving,
 });
@@ -211,7 +208,9 @@ export const Notification = compose(
     mapDispatchToProps,
   ),
   withState('dirty', 'setDirty', false),
-  withState('values', 'setValues', Map(fields.map(field => [field, '']))),
+  withState('values', 'setValues', props =>
+    Map(fields.map(field => [field, ''])).set('Type', props.title),
+  ),
   withState('cursorPosition', 'setCursorPosition', null),
   withState('selection', 'setSelection', null),
   withHandlers({
