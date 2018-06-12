@@ -126,7 +126,10 @@ export const AppComponent = props => {
 };
 
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withProps(props => {
     return props.categories.isEmpty()
       ? {

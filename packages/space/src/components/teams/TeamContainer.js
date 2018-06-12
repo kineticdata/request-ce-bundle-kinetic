@@ -32,7 +32,9 @@ const mapStateToProps = state => {
 
   return {
     loading:
-      state.space.team.loading || state.space.teamList.loading || state.space.spaceForms.loading,
+      state.space.team.loading ||
+      state.space.teamList.loading ||
+      state.space.spaceForms.loading,
     space: state.app.space,
     catalogSlug: Utils.getAttributeValue(
       state.app.space,
@@ -106,7 +108,10 @@ const openRequestToLeaveForm = ({
   });
 
 export const TeamContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   lifecycle({
     componentWillMount() {
       this.props.fetchTeam(this.props.match.params.slug);

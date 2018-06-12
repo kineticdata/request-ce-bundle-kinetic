@@ -91,13 +91,16 @@ export const DateRangeSection = ({
 );
 
 export const DateRangeSectionContainer = compose(
-  connect(null, {
-    setDateRangeTimeline: actions.setDateRangeTimeline,
-    setDateRangePreset: actions.setDateRangePreset,
-    toggleDateRangeCustom: actions.toggleDateRangeCustom,
-    setDateRangeStart: actions.setDateRangeStart,
-    setDateRangeEnd: actions.setDateRangeEnd,
-  }),
+  connect(
+    null,
+    {
+      setDateRangeTimeline: actions.setDateRangeTimeline,
+      setDateRangePreset: actions.setDateRangePreset,
+      toggleDateRangeCustom: actions.toggleDateRangeCustom,
+      setDateRangeStart: actions.setDateRangeStart,
+      setDateRangeEnd: actions.setDateRangeEnd,
+    },
+  ),
   withHandlers({
     setDateRangeTimelineHandler: props => event =>
       props.setDateRangeTimeline(event.target.value),

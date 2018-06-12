@@ -88,7 +88,10 @@ const handlePrevThousandPage = ({
 };
 
 export const Paging = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withHandlers({
     handlePrevThousandPage,
     handleNextThousandPage,

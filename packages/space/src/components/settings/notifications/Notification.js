@@ -8,12 +8,49 @@ import { toastActions } from 'common';
 import { actions } from '../../../redux/modules/settingsNotifications';
 import { NotificationMenu } from './NotificationMenu';
 
-const fields = ['Name', 'Status', 'Subject', 'HTML Content', 'Text Content'];
+const fields = {
+  Name: {
+    required: true,
+  },
+  Status: {
+    required: true,
+  },
+  Subject: {
+    required: values => values.get('Type') === 'Template',
+    visible: values => values.get('Type') === 'Template',
+  },
+  'HTML Content': {
+    required: true,
+  },
+  'Text Content': {
+    required: values => values.get('Type') === 'Template',
+  },
+  Type: {
+    required: true,
+  },
+};
+
+const evaluate = (condition, values) =>
+  typeof condition === 'boolean'
+    ? condition
+    : typeof condition === 'function'
+      ? condition(values)
+      : false;
+
+const isRequired = (name, values) => evaluate(fields[name].required, values);
+
+const isVisible = (name, values) => evaluate(fields[name].visible, values);
+
+const isValid = values =>
+  !Object.entries(fields).some(
+    ([name, _]) => isRequired(name, values) && !values.get(name),
+  );
 
 const NotificationComponent = ({
   loading,
   submission,
   type,
+  title,
   dirty,
   values,
   selection,
@@ -36,11 +73,7 @@ const NotificationComponent = ({
             /
           </h3>
           {!loading && (
-            <h1>
-              {submission
-                ? submission.label
-                : `New ${type === 'templates' ? 'Template' : 'Snippet'}`}
-            </h1>
+            <h1>{submission ? submission.label : `New ${title}`}</h1>
           )}
         </div>
       </div>
@@ -54,7 +87,9 @@ const NotificationComponent = ({
               />
             </Fragment>
             <div className="form-group required">
-              <label htmlFor="name">Name</label>
+              <label className="field-label" htmlFor="name">
+                Name
+              </label>
               <input
                 type="text"
                 id="name"
@@ -90,20 +125,25 @@ const NotificationComponent = ({
                 Inactive
               </label>
             </div>
-
+            {isVisible('Subject', values) && (
+              <div className="form-group required">
+                <label className="field-label" htmlFor="subject">
+                  Subject
+                </label>
+                <textarea
+                  id="subject"
+                  name="Subject"
+                  rows="2"
+                  onChange={handleFieldChange}
+                  onBlur={handleFieldBlur}
+                  value={values.get('Subject')}
+                />
+              </div>
+            )}
             <div className="form-group required">
-              <label htmlFor="subject">Subject</label>
-              <textarea
-                id="subject"
-                name="Subject"
-                rows="2"
-                onChange={handleFieldChange}
-                onBlur={handleFieldBlur}
-                value={values.get('Subject')}
-              />
-            </div>
-            <div className="form-group required">
-              <label htmlFor="htmlContent">HTML Content</label>
+              <label className="field-label" htmlFor="htmlContent">
+                HTML Content
+              </label>
               <textarea
                 id="htmlContent"
                 name="HTML Content"
@@ -113,8 +153,14 @@ const NotificationComponent = ({
                 value={values.get('HTML Content')}
               />
             </div>
-            <div className="form-group required">
-              <label htmlFor="textContent">Text Content</label>
+            <div
+              className={`form-group ${
+                isRequired('Text Content', values) ? 'required' : ''
+              }`}
+            >
+              <label className="field-label" htmlFor="textContent">
+                Text Content
+              </label>
               <textarea
                 id="textContent"
                 name="Text Content"
@@ -129,7 +175,7 @@ const NotificationComponent = ({
                 <button
                   type="submit"
                   className="btn btn-primary"
-                  disabled={!dirty || values.valueSeq().some(val => !val)}
+                  disabled={!dirty || !isValid(values)}
                 >
                   Save
                 </button>
@@ -147,14 +193,13 @@ export const handleSubmit = props => event => {
     props.values.toJS(),
     props.submission && props.submission.id,
     submission => {
-      const item = props.type === 'templates' ? 'Template' : 'Snippet';
       const action = props.submission ? 'Updated' : 'Created';
       props.push(`/settings/notifications/${props.type}`);
       props.addSuccess(
-        `Successfully ${action.toLowerCase()} ${item.toLowerCase()} (${
+        `Successfully ${action.toLowerCase()} ${props.title.toLowerCase()} (${
           submission.handle
         })`,
-        `${action} ${item}`,
+        `${action} ${props.title}`,
       );
     },
   );
@@ -192,6 +237,7 @@ export const handleVariableSelection = props => variable => {
 export const mapStateToProps = (state, props) => ({
   submission: state.space.settingsNotifications.notification,
   type: props.match.params.type,
+  title: props.match.params.type === 'templates' ? 'Template' : 'Snippet',
   loading: state.space.settingsNotifications.notificationLoading,
   saving: state.space.settingsNotifications.saving,
 });
@@ -206,9 +252,14 @@ export const mapDispatchToProps = {
 };
 
 export const Notification = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('dirty', 'setDirty', false),
-  withState('values', 'setValues', Map(fields.map(field => [field, '']))),
+  withState('values', 'setValues', props =>
+    Map(Object.keys(fields).map(field => [field, ''])).set('Type', props.title),
+  ),
   withState('cursorPosition', 'setCursorPosition', null),
   withState('selection', 'setSelection', null),
   withHandlers({
@@ -227,7 +278,7 @@ export const Notification = compose(
       }
       if (this.props.submission !== nextProps.submission) {
         this.props.setValues(
-          fields.reduce(
+          Object.keys(fields).reduce(
             (values, field) =>
               values.set(field, nextProps.submission.values[field] || ''),
             Map(),

@@ -41,7 +41,10 @@ export const mapDispatchToProps = {
 };
 
 export const ParticipantsDialogContainer = compose(
-  connect(null, mapDispatchToProps),
+  connect(
+    null,
+    mapDispatchToProps,
+  ),
   withHandlers({
     openInvitation: props => () =>
       props.openModal(props.discussion.issue.guid, 'invitation'),

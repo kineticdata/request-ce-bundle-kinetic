@@ -46,8 +46,8 @@
     border: 1px solid $black-5;
     border-radius: $border-radius-base;
     background-color: $white;
-    padding: .5em 1em .5em 1em;
-    margin-bottom: .75rem;
+    padding: 0.5em 1em 0.5em 1em;
+    margin-bottom: 0.75rem;
 
     .header {
       display: flex;
@@ -57,7 +57,7 @@
       align-items: center;
 
       &__title {
-        margin-right: .25em;
+        margin-right: 0.25em;
         height: 1.5rem;
         font-size: 1rem;
         font-weight: 600;
@@ -74,15 +74,15 @@
         justify-content: flex-end;
         flex-basis: 40%;
         overflow-x: scroll;
-        & >.avatar {
+        & > .avatar {
           padding: 0;
         }
 
-        & >.related-link {
+        & > .related-link {
           margin-right: 2rem;
           height: auto;
           font-weight: 400;
-          font-size: .6125rem;
+          font-size: 0.6125rem;
         }
       }
     }

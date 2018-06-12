@@ -45,7 +45,10 @@ const mapDispatchToProps = {
 };
 
 export const Notifications = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withHandlers({
     dismiss: ({ removeNotification }) => id => () => removeNotification(id),
   }),

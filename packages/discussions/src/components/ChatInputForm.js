@@ -287,6 +287,9 @@ const mapDispatchToProps = {
   openModal: actions.openModal,
 };
 
-export const ChatInputForm = compose(connect(null, mapDispatchToProps))(
-  ChatInput,
-);
+export const ChatInputForm = compose(
+  connect(
+    null,
+    mapDispatchToProps,
+  ),
+)(ChatInput);

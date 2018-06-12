@@ -9,7 +9,7 @@ describe('spaceApp redux module', () => {
       state = {
         space: {
           spaceApp: State(),
-        }
+        },
       };
     });
 

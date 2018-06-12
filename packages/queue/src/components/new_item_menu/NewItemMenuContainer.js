@@ -69,7 +69,10 @@ const onCreated = ({ options, fetchCurrentItem, closeNewItemMenu }) => (
 };
 
 export const NewItemMenuContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('currentAssignment', 'setAssignment', null),
   withState('currentForm', 'setCurrentForm', null),
   withState('kForm', 'setKForm', null),

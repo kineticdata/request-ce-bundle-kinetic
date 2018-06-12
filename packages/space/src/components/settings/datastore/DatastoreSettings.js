@@ -392,7 +392,10 @@ export const mapDispatchToProps = {
 };
 
 export const DatastoreSettings = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState(
     'newQualification',
     'setNewQualification',

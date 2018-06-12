@@ -35,7 +35,10 @@ const createDiscussion = props => () => {
 };
 
 export const QueueItemDiscussionsContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 
   withHandlers({
     createDiscussion,

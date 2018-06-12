@@ -108,7 +108,10 @@ const handleScrolled = ({
 };
 
 export const DiscussionContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withProps(props => ({
     invitationButtonEnabled:
       !props.invitationPending &&

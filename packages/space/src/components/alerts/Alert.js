@@ -67,7 +67,10 @@ export const mapDispatchToProps = {
 };
 
 export const Alert = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('openDeleteConfirm', 'setOpenDeleteConfirm', null),
   withHandlers({
     toggleDeleteConfirm: ({

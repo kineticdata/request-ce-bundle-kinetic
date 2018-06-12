@@ -496,7 +496,10 @@ const handleResetSearch = ({
 };
 
 export const Searchbar = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('indexLookup', 'setIndexLookup', ''),
   withState('placeholderText', 'setPlaceholderText', DEFAULT_PLACEHOLDER),
   withHandlers({

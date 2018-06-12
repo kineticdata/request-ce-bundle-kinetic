@@ -224,8 +224,10 @@ export const selectBridgeNameByModel = model => {
   }
 };
 export const selectUpdatedFormActiveBridge = state =>
-  state.space.settingsDatastore.currentFormChanges.bridgeModelMapping.bridgeName;
-export const selectCurrentForm = state => state.space.settingsDatastore.currentForm;
+  state.space.settingsDatastore.currentFormChanges.bridgeModelMapping
+    .bridgeName;
+export const selectCurrentForm = state =>
+  state.space.settingsDatastore.currentForm;
 export const selectCurrentFormChanges = state =>
   state.space.settingsDatastore.currentFormChanges;
 export const selectFormBySlug = (state, formSlug) =>
@@ -267,17 +269,16 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('loading', true).set('errors', []);
     case types.SET_FORMS:
       const forms = List(
-        payload.displayableForms
-          .map(form => {
-            const hiddenAttr = Utils.getAttributeValue(
-              form,
-              'Datastore Hidden',
-              'false',
-            ).toLowerCase();
-            const isHidden = hiddenAttr === 'true' || hiddenAttr === 'yes'
-            const canManage = payload.manageableForms.includes(form.slug);
-            return DatastoreForm({ ...form, canManage, isHidden });
-          }),
+        payload.displayableForms.map(form => {
+          const hiddenAttr = Utils.getAttributeValue(
+            form,
+            'Datastore Hidden',
+            'false',
+          ).toLowerCase();
+          const isHidden = hiddenAttr === 'true' || hiddenAttr === 'yes';
+          const canManage = payload.manageableForms.includes(form.slug);
+          return DatastoreForm({ ...form, canManage, isHidden });
+        }),
       );
       const bridges = payload.bridges.map(b => b.name);
       return state

@@ -97,7 +97,10 @@ export const mapDispatchToProps = {
 };
 
 export const Alerts = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   lifecycle({
     componentWillMount() {
       this.props.fetchAlerts();

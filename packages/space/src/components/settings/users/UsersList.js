@@ -37,10 +37,7 @@ const UsersListComponent = ({ users, loading, match }) => {
             >
               Bulk Import Users
             </Link>*/}
-            <Link
-              to={`${match.path}/new`}
-              className="btn btn-primary ml-3"
-            >
+            <Link to={`${match.path}/new`} className="btn btn-primary ml-3">
               Create User
             </Link>
           </div>
@@ -88,7 +85,10 @@ export const mapDispatchToProps = {
 };
 
 export const UsersList = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   lifecycle({
     componentWillMount() {
       this.props.fetchUsers();

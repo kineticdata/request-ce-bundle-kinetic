@@ -30,7 +30,10 @@ const mapDispatchToProps = {
 };
 
 export const QueueListContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withProps(({ sortDirection, queueItems, limit, offset }) => ({
     hasPrevPage: offset !== 0,
     hasNextPage: queueItems.size > limit + offset,

@@ -175,7 +175,10 @@ const mapStateToProps = state => ({
 });
 
 export const AuthenticatedContainer = compose(
-  connect(mapStateToProps, { push }),
+  connect(
+    mapStateToProps,
+    { push },
+  ),
   withState('display', 'setDisplay', 'none'),
   withState('error', 'setError', ''),
   withState('email', 'setEmail', ''),

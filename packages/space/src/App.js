@@ -121,7 +121,10 @@ const mapDispatchToProps = {
 };
 
 export const App = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withHandlers({
     openSettings: props => () => props.setSettingsBackPath(props.pathname),
   }),

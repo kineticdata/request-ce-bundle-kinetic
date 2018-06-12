@@ -113,9 +113,11 @@ export const mapStateToProps = state => ({
   location:
     state.space.profiles.profile &&
     state.space.profiles.profile.profileAttributes['Location'],
-  locationEnabled: state.space.spaceApp.userProfileAttributeDefinitions['Location'],
+  locationEnabled:
+    state.space.spaceApp.userProfileAttributeDefinitions['Location'],
   manager:
-    state.space.profiles.profile && state.space.profiles.profile.attributes['Manager'],
+    state.space.profiles.profile &&
+    state.space.profiles.profile.attributes['Manager'],
   managerEnabled: state.space.spaceApp.userAttributeDefinitions['Manager'],
   isMyProfile: selectIsMyProfile(state),
 });
@@ -125,7 +127,10 @@ export const mapDispatchToProps = {
 };
 
 export const ViewProfile = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   lifecycle({
     componentWillMount() {
       this.props.fetchProfile(this.props.match.params.username);

@@ -94,7 +94,10 @@ export const mapDispatchToProps = {
 };
 
 export const ViewUser = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   lifecycle({
     componentWillMount() {
       this.props.fetchUser(this.props.match.params.username);

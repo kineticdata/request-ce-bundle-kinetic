@@ -24,7 +24,6 @@ const Toast = ({ toast, dismiss }) => (
       </span>
       {toast.msg}
     </div>
-
   </div>
 );
 
@@ -43,7 +42,10 @@ const mapDispatchToProps = {
 };
 
 export const ToastsContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withHandlers({
     dismiss: ({ removeToast }) => id => () => removeToast(id),
   }),
