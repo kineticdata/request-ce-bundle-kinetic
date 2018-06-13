@@ -5,6 +5,7 @@ import { watchForms } from './sagas/forms';
 import { watchSubmissions } from './sagas/submissions';
 import { watchSubmission, watchSubmissionPoller } from './sagas/submission';
 import { watchSubmissionCounts } from './sagas/submissionCounts';
+import { watchSettingsServices } from './sagas/settingsServices';
 
 export default function*() {
   yield all([
@@ -14,5 +15,6 @@ export default function*() {
     watchSubmission(),
     watchSubmissionPoller(),
     watchSubmissionCounts(),
+    watchSettingsServices(),
   ]);
 }

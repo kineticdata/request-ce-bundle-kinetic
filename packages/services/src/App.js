@@ -16,6 +16,7 @@ import { FormContainer } from './components/form/FormContainer';
 import { FormListContainer } from './components/form_list/FormListContainer';
 import { RequestListContainer } from './components/request_list/RequestListContainer';
 import { RequestShowContainer } from './components/request/RequestShowContainer';
+import { Settings } from './components/settings/Settings';
 import { displayableFormPredicate } from './utils';
 import './assets/styles/master.scss';
 
@@ -30,6 +31,8 @@ const mapStateToProps = (state, props) => {
       ...state.services.forms.errors,
     ],
     systemError: state.services.systemError,
+    pathname: state.router.location.pathname,
+    settingsBackPath: state.space.spaceApp.settingsBackPath || '/',
   };
 };
 
@@ -53,6 +56,7 @@ export const AppComponent = props => {
     ),
     main: (
       <main className="package-layout package-layout--services">
+        <Route path="/settings" component={Settings} />
         <Route
           path="/submissions/:id"
           exact
@@ -142,6 +146,9 @@ const enhance = compose(
           homePageMode: 'Categories',
           homePageItems: props.categories,
         };
+  }),
+  withHandlers({
+    openSettings: props => () => props.setSettingsBackPath(props.pathname),
   }),
   lifecycle({
     componentWillMount() {
