@@ -5,8 +5,9 @@ import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { Utils, PageTitle } from 'common';
 import { actions } from '../../../redux/modules/settingsServices';
 
-export const TextInput = ({ value, name, setInputs, inputs }) => (
+export const TextInput = ({ value, name, setInputs, inputs, className }) => (
   <input
+    className={`form-control ${className}`}
     name={name}
     value={value}
     type="text"
@@ -116,6 +117,7 @@ export const SettingsContainer = ({
                     name="Icon"
                     setInputs={setInputs}
                     inputs={inputs}
+                    className="col-8"
                   />
                 </div>
               )}
@@ -127,6 +129,7 @@ export const SettingsContainer = ({
                     name="Kapp Description"
                     setInputs={setInputs}
                     inputs={inputs}
+                    className="col-8"
                   />
                 </div>
               )}
@@ -138,6 +141,7 @@ export const SettingsContainer = ({
                     name="Record Search History"
                     setInputs={setInputs}
                     inputs={inputs}
+                    className="col-8"
                   />
                 </div>
               )}
@@ -161,6 +165,7 @@ export const SettingsContainer = ({
                     name="Shared Bridged Resource Form Slug"
                     setInputs={setInputs}
                     inputs={inputs}
+                    className="col-8"
                   />
                 </div>
               )}
