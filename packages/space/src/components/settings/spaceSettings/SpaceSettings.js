@@ -2,10 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState } from 'recompose';
-import {
-  Utils,
-  PageTitle,
-} from 'common';
+import { Utils, PageTitle } from 'common';
 import { actions } from '../../../redux/modules/settingsSpace';
 
 export const TextInput = ({ value, name, setInputs, inputs }) => (
@@ -256,7 +253,10 @@ export const SettingsContainer = ({
 );
 
 export const SpaceSettings = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('inputs', 'setInputs', props => ({
     'Approval Days Due': Utils.getAttributeValue(
       props.space,

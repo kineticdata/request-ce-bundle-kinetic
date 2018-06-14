@@ -25,9 +25,12 @@ export const StatusSection = ({ filter, toggleStatusHandler }) => (
 );
 
 export const StatusSectionContainer = compose(
-  connect(null, {
-    toggleStatus: actions.toggleStatus,
-  }),
+  connect(
+    null,
+    {
+      toggleStatus: actions.toggleStatus,
+    },
+  ),
   withHandlers({
     toggleStatusHandler: props => event =>
       props.toggleStatus(event.target.value),

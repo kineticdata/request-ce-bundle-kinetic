@@ -166,7 +166,10 @@ export const mapDispatchToProps = {
 };
 
 export const CreateDatastore = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('newForm', 'setNewForm', DatastoreForm()),
   withState('creating', 'setCreating', false),
   withHandlers({

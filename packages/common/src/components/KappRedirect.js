@@ -15,6 +15,9 @@ export const mapStateToProps = state => ({
   pathname: state.router.location.pathname,
 });
 
-export const KappRedirect = compose(connect(mapStateToProps, {}))(
-  KappRedirectComponent,
-);
+export const KappRedirect = compose(
+  connect(
+    mapStateToProps,
+    {},
+  ),
+)(KappRedirectComponent);

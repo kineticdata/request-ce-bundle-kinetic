@@ -29,7 +29,10 @@ export const mapDispatchToProps = {
 };
 
 export const WallyButtonContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withProps(props => ({
     buttonMode: getButtonMode(props.queueItem, props.profile),
   })),

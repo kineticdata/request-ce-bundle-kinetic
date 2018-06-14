@@ -22,7 +22,7 @@ export const State = Record({
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.SET_VERSION:
-      return state.set('version', payload.version)
+      return state.set('version', payload.version);
     case LOCATION_CHANGE:
       const path = '/kapps/:kappSlug';
       const match = matchPath(payload.location.pathname, { path });

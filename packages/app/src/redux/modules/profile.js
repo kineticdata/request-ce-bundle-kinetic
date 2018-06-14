@@ -15,7 +15,7 @@ export const actions = {
 export const reducer = (state = Record(), { type, payload }) => {
   switch (type) {
     case types.SET_PROFILE:
-      return payload
+      return payload;
     default:
       return state;
   }

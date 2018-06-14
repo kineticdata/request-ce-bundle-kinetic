@@ -88,7 +88,10 @@ const mapDispatchToProps = {
 };
 
 export const About = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   lifecycle({
     componentWillMount() {
       this.props.fetchAbout();

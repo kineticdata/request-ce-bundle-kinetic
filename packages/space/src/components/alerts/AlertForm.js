@@ -86,6 +86,9 @@ const mapDispatchToProps = {
 };
 
 export const AlertForm = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withHandlers({ handleCreateOrUpdate }),
 )(AlertFormComponent);

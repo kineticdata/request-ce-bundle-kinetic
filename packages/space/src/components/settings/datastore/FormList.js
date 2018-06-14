@@ -149,7 +149,10 @@ const toggleDropdown = ({
   setOpenDropdown(dropdownSlug === openDropdown ? '' : dropdownSlug);
 
 export const FormList = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('openDropdown', 'setOpenDropdown', ''),
   withHandlers({ toggleDropdown }),
   lifecycle({

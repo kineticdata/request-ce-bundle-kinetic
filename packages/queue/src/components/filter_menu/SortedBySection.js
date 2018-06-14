@@ -32,9 +32,12 @@ export const SortedBySection = ({ filter, setSortedByHandler }) => (
 );
 
 export const SortedBySectionContainer = compose(
-  connect(null, {
-    setSortedBy: actions.setSortedBy,
-  }),
+  connect(
+    null,
+    {
+      setSortedBy: actions.setSortedBy,
+    },
+  ),
   withHandlers({
     setSortedByHandler: props => event => props.setSortedBy(event.target.value),
   }),

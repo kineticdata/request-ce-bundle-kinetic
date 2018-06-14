@@ -6,11 +6,8 @@ import * as Utils from '../../utils';
 // Discussion Server
 export const selectDiscussionsEnabled = state =>
   state.app.space &&
-  Utils.getAttributeValue(
-    state.app.space,
-    'Discussion Server Url',
-    null,
-  ) === null
+  Utils.getAttributeValue(state.app.space, 'Discussion Server Url', null) ===
+    null
     ? false
     : true;
 

@@ -162,7 +162,10 @@ export const mapDispatchToProps = {
 };
 
 export const DatastoreSubmission = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('formKey', 'setFormKey', getRandomKey),
   withHandlers({
     handleUpdated,

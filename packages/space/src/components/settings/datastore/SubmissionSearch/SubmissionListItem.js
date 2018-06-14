@@ -7,6 +7,9 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
+import moment from 'moment';
+
+import { Constants } from 'common';
 
 const MobileSubmissionCard = ({ submission, columns, path }) => (
   <tr>
@@ -142,7 +145,9 @@ const SubmissionListItemComponent = ({
 const getSubmissionData = (submission, column) =>
   column.type === 'value'
     ? submission.values[column.name]
-    : submission[column.name];
+    : column.name.includes('At')
+      ? moment(submission[column.name]).format(Constants.TIME_FORMAT)
+      : submission[column.name];
 
 const handleClone = ({ cloneSubmission }) => id => () => cloneSubmission(id);
 

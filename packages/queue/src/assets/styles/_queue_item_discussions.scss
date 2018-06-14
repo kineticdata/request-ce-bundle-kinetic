@@ -11,7 +11,7 @@
 
   .messages {
     background-color: #f7f7f7;
-    flex: 1;
+    flex: 1 0 auto;
     position: relative;
     .message-wrapper {
       position: absolute;
@@ -35,7 +35,7 @@
         }
       }
       .message-list {
-        flex: 1;
+        flex: 1 0 auto;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -81,9 +81,6 @@
             & + .upload-description {
               margin-top: 0.75rem;
             }
-          }
-
-          .upload-filename {
           }
         }
         .meta {
@@ -132,7 +129,7 @@
       text-align: center;
       hr {
         border: 2px solid $blue3;
-        flex: 1;
+        flex: 1 0 auto;
       }
       span {
         margin: 0 0.75rem;
@@ -181,7 +178,6 @@
     button {
       // height: 48px;
       width: 48px;
-
       border-radius: 0;
 
       &.btn-more {
@@ -246,7 +242,7 @@
     }
 
     .input-container {
-      flex: 1;
+      flex: 1 0 auto;
       padding: 12px;
       background-color: $blue3;
 

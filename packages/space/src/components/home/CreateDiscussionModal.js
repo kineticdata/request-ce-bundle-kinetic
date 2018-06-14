@@ -80,7 +80,10 @@ export const mapDispatchToProps = {
 };
 
 export const CreateDiscussionModal = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   lifecycle({
     /*
      * Do this so that navigating away from the parent page (causing an unmount)

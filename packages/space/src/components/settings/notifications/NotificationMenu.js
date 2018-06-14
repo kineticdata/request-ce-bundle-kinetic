@@ -35,7 +35,7 @@ const formProperties = [
   'Form Type',
 ];
 const kappProperties = ['Kapp Name', 'Kapp Slug'];
-const spaceProperties = ['Space Slug'];
+const spaceProperties = ['Space Name', 'Space Slug'];
 
 const SubmissionMenu = ({ form, handleClick }) => (
   <ul className="dropdown-menu">
@@ -360,7 +360,10 @@ const mapDispatchToProps = {
 };
 
 export const NotificationMenu = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('selectedKapp', 'setSelectedKapp', null),
   withState('selectedForm', 'setSelectedForm', null),
   withHandlers({

@@ -59,7 +59,10 @@ const mapDispatchToProps = {
 };
 
 export const ParticipantsHeaderContainer = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withHandlers({
     openParticipantsModal: props => () =>
       props.openModal(props.discussion.issue.guid, 'participants'),

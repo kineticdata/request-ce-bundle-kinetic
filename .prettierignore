@@ -1,2 +1,10 @@
-.gitignore
-package.json
+# ignore everything that isn't in the `src` directory of a package
+/*
+!/packages
+/packages/*/*
+!/packages/*/src
+
+# ignore file types that prettier does not support
+*.png
+*.snap
+*.svg

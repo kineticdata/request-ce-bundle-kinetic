@@ -33,6 +33,7 @@ const authInterceptor = new AuthInterceptor(
 );
 axios.interceptors.response.use(null, authInterceptor.handleRejected);
 CoreAPI.addResponseInterceptor(null, authInterceptor.handleRejected);
+CoreAPI.setDefaultAuthAssumed(true);
 
 ReactDOM.render(
   <Fragment>
