@@ -23,4 +23,7 @@ body {
 
 body {
   margin: 0;
+  // Fix for modal z-index issue in IE 11 on Windows 10
+  position: relative;
+  z-index: 0;
 }
