@@ -10,7 +10,7 @@
   padding: 0 !important;
   .messages {
     background-color: #f7f7f7;
-    flex: 1 0 auto;
+    flex: 1 0 100%;
     position: relative;
 
     .message-wrapper {
@@ -27,15 +27,19 @@
       margin-bottom: 1.5rem;
       .sb-avatar {
         margin: 0 0.75rem 0 0;
-        img {
+        display: flex;
+        flex: 1 0 auto;
+        img,
+        .sb-avatar__text {
           border: 2px solid transparent;
         }
-        &.present img {
+        &.present img,
+        &.present .sb-avatar__text {
           border-color: $present;
         }
       }
       .message-list {
-        flex: 1 1 auto;
+        flex: 1 1 100%;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
