@@ -6,7 +6,7 @@
   background-color: $black-3;
   border-right: 1px solid $black-16;
   margin-top: $header-height;
-
+  // height: 100%;
   min-height: calc(100vh - 120px);
   @supports not (-webkit-overflow-scrolling: touch) {
     /* CSS for other than iOS devices */
@@ -89,6 +89,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
+      max-width: 252px;
       background-color: $black-5;
       border-right: 1px solid $border-color;
       .nav-link {
