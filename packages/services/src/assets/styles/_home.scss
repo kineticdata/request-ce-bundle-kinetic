@@ -6,13 +6,15 @@
 .search-services-home {
   width: 100%;
   // height: 216px;
-  padding: 0 0 2rem;
+  padding: 0 0 2.25rem;
   display: flex;
   justify-content: center;
   flex-direction: row;
   flex: 0 0 auto;
   background-color: $blue-slate;
-
+  .search-box__form {
+    border: 0;
+  }
   &--green-grass {
     background-color: $green-grass;
   }
@@ -21,7 +23,7 @@
       color: $white;
       font-size: 2.583333333rem;
       font-weight: 300;
-      line-height: 4rem;
+      line-height: 3.75rem;
       margin-top: 1.5rem;
     }
     display: flex;
