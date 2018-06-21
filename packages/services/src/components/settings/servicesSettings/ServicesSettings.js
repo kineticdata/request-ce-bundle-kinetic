@@ -5,13 +5,27 @@ import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { Utils, PageTitle } from 'common';
 import { actions } from '../../../redux/modules/settingsServices';
 
-export const TextInput = ({ value, name, setInputs, inputs, className }) => (
+export const TextInput = ({
+  value,
+  name,
+  setInputs,
+  inputs,
+  className,
+  multiple,
+}) => (
   <input
     className={`form-control ${className}`}
     name={name}
     value={value}
     type="text"
-    onChange={event => setInputs({ ...inputs, [name]: event.target.value })}
+    onChange={event => {
+      let value = event.target.value;
+      if (multiple) {
+        value = event.target.value.split(',');
+      }
+      setInputs({ ...inputs, [name]: value });
+    }}
+    multiple={multiple}
   />
 );
 export const NumberInput = ({ value, name, setInputs, inputs, className }) => (
@@ -133,6 +147,43 @@ export const SettingsContainer = ({
                   />
                 </div>
               )}
+              {kapp.attributesMap['Notification Template Name - Complete'] && (
+                <div className="form-group">
+                  <label>Notification Template Name - Complete</label>
+                  <TextInput
+                    value={inputs['Notification Template Name - Complete']}
+                    name="Notification Template Name - Complete"
+                    setInputs={setInputs}
+                    inputs={inputs}
+                    className="col-8"
+                  />
+                </div>
+              )}
+              {kapp.attributesMap['Notification Template Name - Create'] && (
+                <div className="form-group">
+                  <label>Notification Template Name - Create</label>
+                  <TextInput
+                    value={inputs['Notification Template Name - Create']}
+                    name="Notification Template Name - Create"
+                    setInputs={setInputs}
+                    inputs={inputs}
+                    className="col-8"
+                  />
+                </div>
+              )}
+              {kapp.attributesMap['Statuses - Active'] && (
+                <div className="form-group">
+                  <label>Statuses - Active</label>
+                  <TextInput
+                    value={inputs['Statuses - Active']}
+                    name="Statuses - Active"
+                    setInputs={setInputs}
+                    inputs={inputs}
+                    className="col-8"
+                    multiple="true"
+                  />
+                </div>
+              )}
               {kapp.attributesMap['Record Search History'] && (
                 <div className="form-group">
                   <label>Record Search History</label>
@@ -215,20 +266,49 @@ export const SettingsContainer = ({
   );
 
 export const setInitialInputs = ({
+  inputs,
   setInputs,
   servicesSettings: { servicesSettingsKapp: kapp },
-}) => () =>
+}) => () => {
   setInputs({
-    'Approval Form Slug': kapp.attributesMap['Approval Form Slug'][0],
-    Icon: kapp.attributesMap['Icon'][0],
-    'Kapp Description': kapp.attributesMap['Kapp Description'][0],
-    'Record Search History': kapp.attributesMap['Record Search History'][0],
-    'Service Days Due': kapp.attributesMap['Service Days Due'][0],
-    'Shared Bridged Resource Form Slug':
-      kapp.attributesMap['Shared Bridged Resource Form Slug'][0],
-    'Task Form Slug': kapp.attributesMap['Task Form Slug'][0],
-    'Task Assignee Team': kapp.attributesMap['Task Assignee Team'][0],
+    ...inputs,
+    'Approval Form Slug': kapp.attributesMap['Approval Form Slug']
+      ? kapp.attributesMap['Approval Form Slug'][0]
+      : '',
+    Icon: kapp.attributesMap['Icon'] ? kapp.attributesMap['Icon'][0] : '',
+    'Kapp Description': kapp.attributesMap['Kapp Description']
+      ? kapp.attributesMap['Kapp Description'][0]
+      : '',
+    'Record Search History': kapp.attributesMap['Record Search History']
+      ? kapp.attributesMap['Record Search History'][0]
+      : '',
+    'Service Days Due': kapp.attributesMap['Service Days Due']
+      ? kapp.attributesMap['Service Days Due'][0]
+      : '',
+    'Shared Bridged Resource Form Slug': kapp.attributesMap[
+      'Shared Bridged Resource Form Slug'
+    ]
+      ? kapp.attributesMap['Shared Bridged Resource Form Slug'][0]
+      : '',
+    'Task Form Slug': kapp.attributesMap['Task Form Slug']
+      ? kapp.attributesMap['Task Form Slug'][0]
+      : '',
+    'Task Assignee Team': kapp.attributesMap['Task Assignee Team']
+      ? kapp.attributesMap['Task Assignee Team'][0]
+      : '',
+    'Notification Template Name - Complete': kapp.attributesMap[
+      'Notification Template Name - Complete'
+    ]
+      ? kapp.attributesMap['Notification Template Name - Complete'][0]
+      : '',
+    'Notification Template Name - Create': kapp.attributesMap[
+      'Notification Template Name - Create'
+    ]
+      ? kapp.attributesMap['Notification Template Name - Create'][0]
+      : '',
+    'Statuses - Active': kapp.attributesMap['Statuses - Active'].join(),
   });
+};
 
 const mapStateToProps = state => ({
   servicesSettings: state.services.servicesSettings,

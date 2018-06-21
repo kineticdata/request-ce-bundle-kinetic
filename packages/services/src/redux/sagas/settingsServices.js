@@ -53,8 +53,9 @@ export function* fetchSpaceSaga({ payload }) {
 export function* updateServicesSettingsSaga({ payload }) {
   const attributes = Map(payload)
     .filter(value => value)
-    .map(value => [value])
+    .map(value => (value.constructor === Array ? value : [value]))
     .toJS();
+
   const { serverError, kapp } = yield call(CoreAPI.updateKapp, {
     include: SERVICES_SETTING_INCLUDES,
     kapp: {
