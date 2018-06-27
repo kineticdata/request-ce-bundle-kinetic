@@ -32,6 +32,8 @@ export const types = {
     'servicesSettings',
     'SET_SERVICES_SETTINGS_TEAMS',
   ),
+  FETCH_NOTIFICATIONS: namespace('servicesSettings', 'FETCH_NOTIFICATIONS'),
+  SET_NOTIFICATIONS: namespace('servicesSettings', 'SET_NOTIFICATIONS'),
 };
 
 export const actions = {
@@ -45,6 +47,8 @@ export const actions = {
   setServicesSettings: withPayload(types.SET_SERVICES_SETTINGS),
   setServicesSettingsSpace: withPayload(types.SET_SERVICES_SETTINGS_SPACE),
   setServicesSettingsTeams: withPayload(types.SET_SERVICES_SETTINGS_TEAMS),
+  fetchNotifications: withPayload(types.FETCH_NOTIFICATIONS),
+  setNotifications: withPayload(types.SET_NOTIFICATIONS),
 };
 
 export const State = Record({
@@ -55,6 +59,8 @@ export const State = Record({
   loadingTeams: true,
   loadingSpace: true,
   spaceKapps: null,
+  notifications: null,
+  notificationsLoading: true,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -87,6 +93,12 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('error', payload);
     case types.UPDATE_SERVICES_SETTINGS:
       return state.set('loading', false);
+    case types.FETCH_NOTIFICATIONS:
+      return state.set('notificationsLoading', true);
+    case types.SET_NOTIFICATIONS:
+      return state
+        .set('notificationsLoading', false)
+        .set('notifications', payload);
     default:
       return state;
   }

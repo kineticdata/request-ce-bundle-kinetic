@@ -8,7 +8,7 @@ export const SidebarComponent = ({ settingsBackPath, loading, spaceAdmin }) => (
   <div className="sidebar space-sidebar">
     <Link to="/kapps/services" className="nav-return">
       <span className="fa fa-fw fa-chevron-left" />
-      Return to Home
+      Return to Services
     </Link>
     {!loading && (
       <ul className="nav flex-column settings-group">
@@ -23,6 +23,14 @@ export const SidebarComponent = ({ settingsBackPath, loading, spaceAdmin }) => (
               <span className="fa fa-fw fa-angle-right" />
             </NavLink>
           )}
+          <NavLink
+            to="/kapps/services/settings/forms"
+            className="nav-link"
+            activeClassName="active"
+          >
+            Forms
+            <span className="fa fa-fw fa-angle-right" />
+          </NavLink>
         </li>
       </ul>
     )}

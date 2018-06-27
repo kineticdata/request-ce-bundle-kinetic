@@ -53,6 +53,13 @@ export const Select = ({
       options = data.filter(team => !team.name.includes('Role')).map(team => {
         return { value: team.name, label: team.name };
       });
+    } else if (type === 'notifications') {
+      options = data.map(notification => {
+        return {
+          value: notification.values.Name,
+          label: notification.values.Name,
+        };
+      });
     } else {
       options = data.kapps.find(kapp => kapp.slug === type).forms.map(form => {
         return { value: form.slug, label: form.name };
@@ -74,6 +81,7 @@ export const Select = ({
       value={selected}
       onChange={event => setInputs({ ...inputs, [name]: event.target.value })}
     >
+      <option />
       {optionElements}
     </select>
   );
@@ -89,11 +97,14 @@ export const SettingsContainer = ({
     loadingTeams,
     teams,
     spaceKapps,
+    notificationsLoading,
+    notifications,
   },
   forms,
 }) =>
   !loading &&
-  !loadingTeams && (
+  !loadingTeams &&
+  !notificationsLoading && (
     <div>
       <PageTitle parts={['Services Settings']} />
       <div className="page-container page-container--space-settings">
@@ -109,6 +120,70 @@ export const SettingsContainer = ({
           </div>
           <section>
             <form>
+              <div className="form-group radio">
+                <label className="field-label">Approver</label>
+                <label for="approver-none">
+                  <input
+                    type="radio"
+                    checked={
+                      !inputs['Approver'] ||
+                      inputs['Approver'] === '' ||
+                      inputs['Approver'] === 'None'
+                    }
+                    name="Approver"
+                    id="approver-none"
+                    className="form-control"
+                    value="None"
+                    onChange={event =>
+                      setInputs({ ...inputs, Approver: event.target.value })
+                    }
+                  />
+                  None
+                </label>
+                <label for="approver-manager">
+                  <input
+                    type="radio"
+                    checked={inputs['Approver'] === 'Manager'}
+                    name="Approver"
+                    id="approver-manager"
+                    className="form-control"
+                    value="Manager"
+                    onChange={event =>
+                      setInputs({ ...inputs, Approver: event.target.value })
+                    }
+                  />
+                  Manager
+                </label>
+                <label for="approver-team">
+                  <input
+                    type="radio"
+                    checked={inputs['Approver'] === 'Team'}
+                    name="Approver"
+                    id="approver-team"
+                    className="form-control"
+                    value="Team"
+                    onChange={event =>
+                      setInputs({ ...inputs, Approver: event.target.value })
+                    }
+                  />
+                  Team
+                </label>
+                <label for="approver-individual">
+                  <input
+                    type="radio"
+                    checked={inputs['Approver'] === 'Individual'}
+                    name="Approver"
+                    id="approver-individual"
+                    className="form-control"
+                    value="Individual"
+                    onChange={event =>
+                      setInputs({ ...inputs, Approver: event.target.value })
+                    }
+                  />
+                  Individual
+                </label>
+              </div>
+
               {kapp.attributesMap['Approval Form Slug'] && (
                 <div className="form-group">
                   <label>Approval Form</label>
@@ -135,24 +210,14 @@ export const SettingsContainer = ({
                   />
                 </div>
               )}
-              {kapp.attributesMap['Kapp Description'] && (
-                <div className="form-group">
-                  <label>Kapp Description</label>
-                  <TextInput
-                    value={inputs['Kapp Description']}
-                    name="Kapp Description"
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-8"
-                  />
-                </div>
-              )}
               {kapp.attributesMap['Notification Template Name - Complete'] && (
                 <div className="form-group">
                   <label>Notification Template Name - Complete</label>
-                  <TextInput
-                    value={inputs['Notification Template Name - Complete']}
+                  <Select
+                    selected={inputs['Notification Template Name - Complete']}
                     name="Notification Template Name - Complete"
+                    type="notifications"
+                    data={notifications}
                     setInputs={setInputs}
                     inputs={inputs}
                     className="col-8"
@@ -162,34 +227,11 @@ export const SettingsContainer = ({
               {kapp.attributesMap['Notification Template Name - Create'] && (
                 <div className="form-group">
                   <label>Notification Template Name - Create</label>
-                  <TextInput
-                    value={inputs['Notification Template Name - Create']}
+                  <Select
+                    selected={inputs['Notification Template Name - Create']}
                     name="Notification Template Name - Create"
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-8"
-                  />
-                </div>
-              )}
-              {kapp.attributesMap['Statuses - Active'] && (
-                <div className="form-group">
-                  <label>Statuses - Active</label>
-                  <TextInput
-                    value={inputs['Statuses - Active']}
-                    name="Statuses - Active"
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-8"
-                    multiple="true"
-                  />
-                </div>
-              )}
-              {kapp.attributesMap['Record Search History'] && (
-                <div className="form-group">
-                  <label>Record Search History</label>
-                  <TextInput
-                    value={inputs['Record Search History']}
-                    name="Record Search History"
+                    type="notifications"
+                    data={notifications}
                     setInputs={setInputs}
                     inputs={inputs}
                     className="col-8"
@@ -272,16 +314,13 @@ export const setInitialInputs = ({
 }) => () => {
   setInputs({
     ...inputs,
+    Approver: kapp.attributesMap['Approver']
+      ? kapp.attributesMap['Approver'][0]
+      : '',
     'Approval Form Slug': kapp.attributesMap['Approval Form Slug']
       ? kapp.attributesMap['Approval Form Slug'][0]
       : '',
     Icon: kapp.attributesMap['Icon'] ? kapp.attributesMap['Icon'][0] : '',
-    'Kapp Description': kapp.attributesMap['Kapp Description']
-      ? kapp.attributesMap['Kapp Description'][0]
-      : '',
-    'Record Search History': kapp.attributesMap['Record Search History']
-      ? kapp.attributesMap['Record Search History'][0]
-      : '',
     'Service Days Due': kapp.attributesMap['Service Days Due']
       ? kapp.attributesMap['Service Days Due'][0]
       : '',
@@ -306,7 +345,6 @@ export const setInitialInputs = ({
     ]
       ? kapp.attributesMap['Notification Template Name - Create'][0]
       : '',
-    'Statuses - Active': kapp.attributesMap['Statuses - Active'].join(),
   });
 };
 
@@ -320,6 +358,7 @@ const mapDispatchToProps = {
   fetchServicesSettings: actions.fetchServicesSettings,
   fetchServicesSettingsTeams: actions.fetchServicesSettingsTeams,
   fetchServicesSettingsSpace: actions.fetchServicesSettingsSpace,
+  fetchNotifications: actions.fetchNotifications,
 };
 
 export const ServicesSettings = compose(
@@ -334,6 +373,7 @@ export const ServicesSettings = compose(
       this.props.fetchServicesSettings();
       this.props.fetchServicesSettingsTeams();
       this.props.fetchServicesSettingsSpace();
+      this.props.fetchNotifications();
     },
     componentWillReceiveProps(nextProps) {
       nextProps.servicesSettings.loading === false &&

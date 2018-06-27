@@ -6,6 +6,7 @@ import submissionReducer from './modules/submission';
 import submissionCountsReducer from './modules/submissionCounts';
 import systemErrorReducer from './modules/systemError';
 import servicesSettingsReducer from './modules/settingsServices';
+import settingsFormsReducer from './modules/settingsForms';
 
 export default {
   categories: categoriesReducer,
@@ -16,4 +17,5 @@ export default {
   submissionCounts: submissionCountsReducer,
   systemError: systemErrorReducer,
   servicesSettings: servicesSettingsReducer,
+  settingsForms: settingsFormsReducer,
 };

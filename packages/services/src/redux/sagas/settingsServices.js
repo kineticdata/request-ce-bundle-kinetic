@@ -71,9 +71,29 @@ export function* updateServicesSettingsSaga({ payload }) {
   }
 }
 
+export function* fetchNotificationsSaga() {
+  const search = new CoreAPI.SubmissionSearch(true)
+    .index('values[Name]')
+    .includes(['details', 'values'])
+    .build();
+
+  const { serverError, submissions } = yield call(CoreAPI.searchSubmissions, {
+    search,
+    form: 'notification-data',
+    datastore: true,
+  });
+
+  if (serverError) {
+    yield put(actions.setFormsErrors(serverError));
+  } else {
+    yield put(actions.setNotifications(submissions));
+  }
+}
+
 export function* watchSettingsServices() {
   yield takeEvery(types.FETCH_SERVICES_SETTINGS, fetchServicesSettingsSaga);
   yield takeEvery(types.FETCH_SERVICES_SETTINGS_TEAMS, fetchTeamsSaga);
   yield takeEvery(types.FETCH_SERVICES_SETTINGS_SPACE, fetchSpaceSaga);
   yield takeEvery(types.UPDATE_SERVICES_SETTINGS, updateServicesSettingsSaga);
+  yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
 }

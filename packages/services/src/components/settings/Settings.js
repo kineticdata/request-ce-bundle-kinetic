@@ -7,15 +7,21 @@ import { Icon } from 'common';
 
 import { ServicesSettings } from './servicesSettings/ServicesSettings';
 import { actions } from '../../redux/modules/settingsServices';
-// import { Notifications } from './notifications/Notifications';
-// import { Datastore } from './datastore/Datastore';
+import { FormList } from './forms/FormList';
+import { FormSettings } from './forms/FormSettings';
 // import { Users } from './users/Users';
 // import { Profile } from './profile/Profile';
 // import { actions as datastoreActions } from '../../redux/modules/settingsDatastore';
 
 export const SettingsComponent = () => (
   <Switch>
-    <Route path="/kapps/services/settings" component={ServicesSettings} />
+    <Route exact path="/kapps/services/settings" component={ServicesSettings} />
+    <Route exact path="/kapps/services/settings/forms" component={FormList} />
+    <Route
+      exact
+      path="/kapps/services/settings/forms/:id/settings"
+      component={FormSettings}
+    />
     <Route component={SettingsNavigation} />
   </Switch>
 );
