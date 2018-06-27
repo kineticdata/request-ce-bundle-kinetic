@@ -6,6 +6,7 @@ import { bundle } from 'react-kinetic-core';
 import { selectHasSharedTaskEngine } from '../../redux/modules/spaceApp';
 
 import { NOTIFICATIONS_FORM_SLUG } from '../../redux/modules/settingsNotifications';
+import { ROBOT_DEFINITIONS_FORM_SLUG } from '../../redux/modules/settingsRobots';
 
 export const SidebarComponent = ({
   settingsBackPath,
@@ -14,6 +15,7 @@ export const SidebarComponent = ({
   spaceAdmin,
   showDatastore,
   showNotifications,
+  showRobots,
 }) => (
   <div className="sidebar space-sidebar">
     <Link to={settingsBackPath} className="nav-return">
@@ -58,6 +60,16 @@ export const SidebarComponent = ({
               activeClassName="active"
             >
               Notifications
+              <span className="fa fa-fw fa-angle-right" />
+            </NavLink>
+          )}
+          {showRobots && (
+            <NavLink
+              to="/settings/robots"
+              className="nav-link"
+              activeClassName="active"
+            >
+              Robots
               <span className="fa fa-fw fa-angle-right" />
             </NavLink>
           )}
@@ -119,6 +131,9 @@ export const Sidebar = compose(
     showDatastore: props.spaceAdmin || !props.forms.isEmpty(),
     showNotifications: !!props.forms.find(
       form => form.slug === NOTIFICATIONS_FORM_SLUG,
+    ),
+    showRobots: !!props.forms.find(
+      form => form.slug === ROBOT_DEFINITIONS_FORM_SLUG,
     ),
   })),
 )(SidebarComponent);
