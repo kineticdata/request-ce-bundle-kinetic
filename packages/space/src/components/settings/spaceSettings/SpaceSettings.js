@@ -39,9 +39,12 @@ export const Select = ({
         return { value: team.name, label: team.name };
       });
     } else {
-      options = data.kapps.find(kapp => kapp.slug === type).forms.map(form => {
-        return { value: form.slug, label: form.name };
-      });
+      let selectedKapp = data.kapps.find(kapp => kapp.slug === type);
+      options = !selectedKapp
+        ? []
+        : selectedKapp.forms.map(form => {
+            return { value: form.slug, label: form.name };
+          });
     }
     optionElements = options.map(option => {
       const kappName = type.charAt(0).toUpperCase() + type.slice(1);
