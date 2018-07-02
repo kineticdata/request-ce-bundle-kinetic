@@ -9,14 +9,17 @@ import { ServicesSettings } from './servicesSettings/ServicesSettings';
 import { actions } from '../../redux/modules/settingsServices';
 import { FormList } from './forms/FormList';
 import { FormSettings } from './forms/FormSettings';
-// import { Users } from './users/Users';
-// import { Profile } from './profile/Profile';
-// import { actions as datastoreActions } from '../../redux/modules/settingsDatastore';
+import { CreateForm } from './forms/CreateForm';
 
 export const SettingsComponent = () => (
   <Switch>
     <Route exact path="/kapps/services/settings" component={ServicesSettings} />
     <Route exact path="/kapps/services/settings/forms" component={FormList} />
+    <Route
+      exact
+      path="/kapps/services/settings/forms/new"
+      component={CreateForm}
+    />
     <Route
       exact
       path="/kapps/services/settings/forms/:id/settings"

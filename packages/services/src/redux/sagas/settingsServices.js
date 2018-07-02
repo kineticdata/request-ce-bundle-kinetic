@@ -5,7 +5,7 @@ import { actions as kinopsActions } from 'app/src/redux/modules/app';
 
 import { CoreAPI } from 'react-kinetic-core';
 
-const SERVICES_SETTING_INCLUDES = 'attributesMap';
+const SERVICES_SETTING_INCLUDES = 'formTypes, attributesMap';
 
 const TEAMS_SETTING_INCLUDES = 'teams';
 

@@ -16,7 +16,7 @@ export const TextInput = ({
   <input
     className={`form-control ${className}`}
     name={name}
-    value={value}
+    value={value || ''}
     type="text"
     onChange={event => {
       let value = event.target.value;
@@ -32,7 +32,7 @@ export const NumberInput = ({ value, name, setInputs, inputs, className }) => (
   <input
     className={`form-control ${className}`}
     name={name}
-    value={value}
+    value={value || ''}
     type="number"
     onChange={event => setInputs({ ...inputs, [name]: event.target.value })}
   />
@@ -122,7 +122,7 @@ export const SettingsContainer = ({
             <form>
               <div className="form-group radio">
                 <label className="field-label">Approver</label>
-                <label for="approver-none">
+                <label htmlFor="approver-none">
                   <input
                     type="radio"
                     checked={
@@ -140,7 +140,7 @@ export const SettingsContainer = ({
                   />
                   None
                 </label>
-                <label for="approver-manager">
+                <label htmlFor="approver-manager">
                   <input
                     type="radio"
                     checked={inputs['Approver'] === 'Manager'}
@@ -154,7 +154,7 @@ export const SettingsContainer = ({
                   />
                   Manager
                 </label>
-                <label for="approver-team">
+                <label htmlFor="approver-team">
                   <input
                     type="radio"
                     checked={inputs['Approver'] === 'Team'}
@@ -168,7 +168,7 @@ export const SettingsContainer = ({
                   />
                   Team
                 </label>
-                <label for="approver-individual">
+                <label htmlFor="approver-individual">
                   <input
                     type="radio"
                     checked={inputs['Approver'] === 'Individual'}

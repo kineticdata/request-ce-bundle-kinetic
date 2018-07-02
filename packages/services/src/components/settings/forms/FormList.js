@@ -12,6 +12,7 @@ import {
 import { TimeAgo } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { displayableFormPredicate } from '../../../utils';
+import { actions } from '../../../redux/modules/forms';
 
 const WallyEmptyMessage = ({ filter }) => {
   return (
@@ -126,11 +127,13 @@ const FormListComponent = ({
 
 export const mapStateToProps = state => ({
   loading: state.services.forms.loading,
+  services: state.services.forms,
   servicesForms: state.services.forms.data.filter(displayableFormPredicate),
 });
 
 export const mapDispatchToProps = {
   push,
+  fetchForms: actions.fetchForms,
 };
 
 const toggleDropdown = ({
@@ -147,6 +150,10 @@ export const FormList = compose(
   withState('openDropdown', 'setOpenDropdown', ''),
   withHandlers({ toggleDropdown }),
   lifecycle({
-    componentWillMount() {},
+    componentWillReceiveProps(nextProps) {
+      !nextProps.loading &&
+        nextProps.services !== this.props.services &&
+        nextProps.fetchForms();
+    },
   }),
 )(FormListComponent);

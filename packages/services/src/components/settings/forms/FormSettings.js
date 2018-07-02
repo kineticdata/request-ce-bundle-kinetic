@@ -10,7 +10,7 @@ export const TextInput = ({ value, name, setInputs, inputs, className }) => (
   <input
     className={`form-control ${className}`}
     name={name}
-    value={value}
+    value={value || ''}
     type="text"
     onChange={event => {
       setInputs({ ...inputs, [name]: event.target.value });
@@ -21,7 +21,7 @@ export const NumberInput = ({ value, name, setInputs, inputs, className }) => (
   <input
     className={`form-control ${className}`}
     name={name}
-    value={value}
+    value={value || ''}
     type="number"
     onChange={event => setInputs({ ...inputs, [name]: event.target.value })}
   />
@@ -152,7 +152,9 @@ export const FormContainer = ({
                   }
                 >
                   {settingsForms.servicesKapp.formTypes.map(type => (
-                    <option>{type.name}</option>
+                    <option key={type.name} value={type.name}>
+                      {type.name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -166,10 +168,10 @@ export const FormContainer = ({
                     setInputs({ ...inputs, status: event.target.value })
                   }
                 >
-                  <option>New</option>
-                  <option>Active</option>
-                  <option>Inactive</option>
-                  <option>Delete</option>
+                  <option key="New">New</option>
+                  <option key="Active">Active</option>
+                  <option key="Inactive">Inactive</option>
+                  <option key="Delete">Delete</option>
                 </select>
               </div>
               <div className="form-group">
@@ -337,7 +339,10 @@ export const FormContainer = ({
               <div className="form-group checkbox">
                 <label className="field-label">Categories</label>
                 {settingsForms.servicesKapp.categories.map(val => (
-                  <label htmlFor={`categories-${val.slug}`}>
+                  <label
+                    key={`categories-${val.slug}`}
+                    htmlFor={`categories-${val.slug}`}
+                  >
                     <input
                       type="checkbox"
                       checked={
@@ -346,6 +351,7 @@ export const FormContainer = ({
                           category => category.category.slug === val.slug,
                         ).length > 0
                       }
+                      key={`categories-${val.slug}`}
                       name="categories"
                       id={`categories-${val.slug}`}
                       className="form-control"

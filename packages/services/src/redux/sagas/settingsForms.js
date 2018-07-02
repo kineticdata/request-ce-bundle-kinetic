@@ -109,22 +109,39 @@ export function* fetchNotificationsSaga() {
 }
 
 export function* createFormSaga(action) {
-  const form = action.payload.form;
+  const { serverError, form } = yield call(CoreAPI.fetchForm, {
+    kappSlug: action.payload.kappSlug,
+    formSlug: action.payload.inputs['Template to Clone'],
+    include: FORM_INCLUDES,
+  });
+
+  if (serverError) {
+    yield put(actions.setFormsErrors(serverError));
+  }
+
   const formContent = {
-    slug: form.slug,
-    name: form.name,
-    description: form.description,
+    ...form,
+    slug: action.payload.inputs.Slug,
+    name: action.payload.inputs.Name,
+    description: action.payload.inputs.Description,
+    status: action.payload.inputs.Status,
+    type: action.payload.inputs.Type,
+    attributesMap: {
+      ...form.attributesMap,
+      'Owning Team': action.payload.inputs['Owning Team'],
+    },
   };
-  const { error, serverError } = yield call(CoreAPI.createForm, {
+  const createdForm = yield call(CoreAPI.createForm, {
+    kappSlug: action.payload.kappSlug,
     form: formContent,
     include: FORM_INCLUDES,
   });
-  if (serverError || error) {
+  if (createdForm.serverError || createdForm.error) {
     yield put(toastActions.addError(error || serverError.statusText));
   } else {
     // TODO: Build Initial Bridge Model and Mapping here
     if (typeof action.payload.callback === 'function') {
-      action.payload.callback();
+      action.payload.callback(createdForm.form.slug);
     }
   }
 }
