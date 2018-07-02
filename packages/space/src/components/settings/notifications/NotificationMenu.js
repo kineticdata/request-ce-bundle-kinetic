@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
+import semver from 'semver';
 import {
   UncontrolledButtonDropdown,
   DropdownToggle,
@@ -10,6 +11,7 @@ import {
 import { actions } from '../../../redux/modules/settingsNotifications';
 
 const wrapVar = type => property => `\${${type}('${property}')}`;
+const MINIMUM_CE_VERSION_FOR_DATASTORE = '2.1.0';
 
 const submissionProperties = [
   'handle',
@@ -231,9 +233,12 @@ export const NotificationMenuComponent = ({
   dateFormats,
   selectedKapp,
   selectedForm,
+  hasDatastore,
+  isDatastore,
   handleClick,
   handleKappSelect,
   handleFormSelect,
+  toggleIsDatastore,
 }) => (
   <div className="alert alert-secondary">
     <h2>Dynamic Replacements</h2>
@@ -253,22 +258,38 @@ export const NotificationMenuComponent = ({
       unexpected results. Test your email templates!
     </p>
     <div className="form-row">
-      <div className="form-group col-md-2">
-        <label htmlFor="notification-menu-kapp">Kapp</label>
-        <select
-          id="notification-menu-kapp"
-          className="form-control"
-          value={selectedKapp ? selectedKapp.slug : ''}
-          onChange={handleKappSelect}
-        >
-          <option />
-          {kapps.map(kapp => (
-            <option key={kapp.slug} value={kapp.slug}>
-              {kapp.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      {hasDatastore && (
+        <div className="form-group col-md-1">
+          <label htmlFor="notification-menu-datastore">Is Datastore?</label>
+          <select
+            id="notification-menu-datastore"
+            className="form-control"
+            value={isDatastore}
+            onChange={toggleIsDatastore}
+          >
+            <option value={false}>No</option>
+            <option value={true}>Yes</option>
+          </select>
+        </div>
+      )}
+      {!isDatastore && (
+        <div className="form-group col-md-2">
+          <label htmlFor="notification-menu-kapp">Kapp</label>
+          <select
+            id="notification-menu-kapp"
+            className="form-control"
+            value={selectedKapp ? selectedKapp.slug : ''}
+            onChange={handleKappSelect}
+          >
+            <option />
+            {kapps.map(kapp => (
+              <option key={kapp.slug} value={kapp.slug}>
+                {kapp.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
       <div className="form-group col-md-4">
         <label htmlFor="notification-menu-form">Form</label>
         <select
@@ -288,12 +309,12 @@ export const NotificationMenuComponent = ({
             </Fragment>
           ) : (
             <option value="" disabled>
-              Select a Kapp first
+              Select a Kapp first or Set Is Datastore to Yes
             </option>
           )}
         </select>
       </div>
-      <div className="form-group col-md-6">
+      <div className="form-group col-md-5">
         <label htmlFor="">Dynamic Replacement Value</label>
         <UncontrolledButtonDropdown>
           <DropdownToggle caret>
@@ -312,10 +333,12 @@ export const NotificationMenuComponent = ({
               Form
               <FormMenu form={selectedForm} handleClick={handleClick} />
             </li>
-            <li className="dropdown-item dropdown-submenu">
-              Kapp
-              <KappMenu kapp={selectedKapp} handleClick={handleClick} />
-            </li>
+            {!isDatastore && (
+              <li className="dropdown-item dropdown-submenu">
+                Kapp
+                <KappMenu kapp={selectedKapp} handleClick={handleClick} />
+              </li>
+            )}
             <li className="dropdown-item dropdown-submenu">
               Space
               <SpaceMenu space={space} handleClick={handleClick} />
@@ -351,6 +374,10 @@ export const mapStateToProps = state => ({
   snippets: state.space.settingsNotifications.notificationSnippets.filter(
     submission => submission.values.Status === 'Active',
   ),
+  hasDatastore: semver.satisfies(
+    semver.coerce(state.app.config.version),
+    `>=${MINIMUM_CE_VERSION_FOR_DATASTORE}`,
+  ),
 });
 
 const mapDispatchToProps = {
@@ -366,6 +393,7 @@ export const NotificationMenu = compose(
   ),
   withState('selectedKapp', 'setSelectedKapp', null),
   withState('selectedForm', 'setSelectedForm', null),
+  withState('isDatastore', 'setIsDatastore', false),
   withHandlers({
     handleClick: props => event => props.onSelect(event.target.dataset.value),
     handleKappSelect: props => event => {
@@ -378,6 +406,12 @@ export const NotificationMenu = compose(
       props.setSelectedForm(
         props.forms.find(form => form.slug === event.target.value),
       );
+    },
+    toggleIsDatastore: props => () => {
+      props.setIsDatastore(!props.isDatastore);
+      if (!props.isDatastore) {
+        props.fetchVariables('app/datastore');
+      }
     },
   }),
   lifecycle({
