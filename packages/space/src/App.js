@@ -19,6 +19,7 @@ import { TeamContainer } from './components/teams/TeamContainer';
 import { TeamForm } from './components/teams/TeamForm';
 import { TeamsContainer } from './components/teams/TeamsContainer';
 import { IsolatedForm } from './components/shared/IsolatedForm';
+import { FormList } from './components/default_kapp/FormList';
 import './assets/styles/master.scss';
 
 export const AppComponent = props => {
@@ -62,6 +63,7 @@ export const AppComponent = props => {
             <Route path="/teams/new" exact component={TeamForm} />
             <Route path="/teams/:slug" exact component={TeamContainer} />
             <Route path="/teams/:slug/edit" exact component={TeamForm} />
+            <Route path="/kapps/:kappSlug" exact component={FormList} />
             <Route
               path="/kapps/:kappSlug/forms/:formSlug"
               exact

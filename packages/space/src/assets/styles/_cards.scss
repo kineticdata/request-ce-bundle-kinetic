@@ -1,6 +1,69 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Cards ~ Space
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.card--form {
+  flex: 0 0 auto;
+  border: 1px solid $black-16;
+  margin-bottom: 0.75rem;
+  padding: 0.6875rem 1rem;
+  transition: background-color 0.3s;
+  @include setBgColorAndHover($white);
+
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+
+  h1 {
+    color: $black;
+    display: inline-flex;
+    font-size: 1.4375rem;
+    @include ms-respond(font-size, 3);
+    font-weight: 600;
+    line-height: 2.25rem;
+    margin: 0;
+  }
+
+  p {
+    color: $black-50;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    @include ms-respond(font-size, 1);
+    margin-bottom: 0;
+  }
+
+  @media all and (min-width: 0) {
+    flex-basis: 100%;
+    @media all and (-ms-high-contrast: none) {
+      width: 100%;
+      flex-basis: auto;
+    }
+  }
+  @media all and (min-width: 576px) {
+    flex-basis: 48%;
+    @media all and (-ms-high-contrast: none) {
+      width: 48%;
+      flex-basis: auto;
+    }
+  }
+  @media all and (min-width: 768px) {
+    flex-basis: 48%;
+    @media all and (-ms-high-contrast: none) {
+      width: 48%;
+      flex-basis: auto;
+    }
+  }
+  @media all and (min-width: 992px) {
+    flex-basis: 31%;
+    @media all and (-ms-high-contrast: none) {
+      width: 31%;
+      flex-basis: auto;
+    }
+  }
+  @media all and (min-width: 1200px) {
+  }
+}
+
 .card--team {
   margin: 0 0 1rem 0;
   text-align: center;
@@ -206,8 +269,8 @@
   }
   p {
     color: $black-50;
-    font-size// line-height: 2rem;
-: 1rem;
+    font-size//line-height: 2rem;
+    :1rem ;
     // line-height: 2rem;
   }
 }
