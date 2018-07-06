@@ -6,26 +6,31 @@ import { actions } from '../redux/modules/discussions';
 export const InvitationDialog = props => (
   <div className="discussion-dialog modal-form invitation-dialog">
     <form className="invitation-form" onSubmit={props.createInvitation}>
-      <label htmlFor="invitation-email-address" className="field-label">
-        Invitee's Email
-      </label>
-      <input
-        type="text"
-        placeholder="Email address"
-        id="invitation-email-address"
-        onChange={props.setEmail}
-        value={props.email}
-      />
-      <p className="help-block">Sent to email to new participant</p>
-      <label htmlFor="invitation-note" className="field-label">
-        Add a note
-      </label>
-      <textarea
-        placeholder="Notes for participant"
-        id="invitation-note"
-        onChange={props.setNotes}
-        value={props.notes}
-      />
+      <div className="form-group required">
+        <label htmlFor="invitation-email-address" className="field-label">
+          Invitee's Email
+        </label>
+        <input
+          type="text"
+          placeholder="Email address"
+          id="invitation-email-address"
+          onChange={props.setEmail}
+          value={props.email}
+        />
+      </div>
+      <div className="form-group required">
+        <label htmlFor="invitation-note" className="field-label">
+          Add a note
+        </label>
+        <textarea
+          className="required"
+          placeholder="Notes for participant"
+          id="invitation-note"
+          onChange={props.setNotes}
+          value={props.notes}
+        />
+        <small>This note will be sent as part of the invitation.</small>
+      </div>
     </form>
   </div>
 );
