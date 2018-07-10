@@ -3,6 +3,19 @@ import { CoreAPI, bundle } from 'react-kinetic-core';
 import { toastActions } from 'common';
 import { actions, types } from '../modules/settingsCategories';
 
+export function* fetchCategoriesSaga(action) {
+  const { serverError, categories } = yield call(CoreAPI.fetchCategories, {
+    kappSlug: action.payload,
+    include: 'attributes',
+  });
+
+  if (serverError) {
+    yield put(actions.setCategoriesErrors(serverError));
+  } else {
+    yield put(actions.setCategories(categories));
+  }
+}
+
 export function* updateCategoriesSaga(action) {
   const currentForm = action.payload.form;
   const currentFormChanges = action.payload.inputs;
@@ -62,6 +75,7 @@ export function* updateCategoriesSaga(action) {
   }
 }
 
-export function* watchSettingsForms() {
+export function* watchSettingsCategories() {
   yield takeEvery(types.UPDATE_CATEGORIES, updateCategoriesSaga);
+  yield takeEvery(types.FETCH_CATEGORIES, fetchCategoriesSaga);
 }

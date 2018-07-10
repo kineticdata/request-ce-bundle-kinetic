@@ -10,6 +10,7 @@ import { actions } from '../../redux/modules/settingsServices';
 import { FormList } from './forms/FormList';
 import { FormSettings } from './forms/FormSettings';
 import { CreateForm } from './forms/CreateForm';
+import { CategoriesSettings } from './categories/Categories';
 
 export const SettingsComponent = () => (
   <Switch>
@@ -24,6 +25,11 @@ export const SettingsComponent = () => (
       exact
       path="/kapps/services/settings/forms/:id/settings"
       component={FormSettings}
+    />
+    <Route
+      exact
+      path="/kapps/services/settings/categories"
+      component={CategoriesSettings}
     />
     <Route component={SettingsNavigation} />
   </Switch>
