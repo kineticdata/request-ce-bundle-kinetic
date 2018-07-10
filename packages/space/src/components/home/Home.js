@@ -24,6 +24,7 @@ const HomeComponent = ({
   discussionsError,
   discussionsLoading,
   discussionsSearchTerm,
+  discussionsSearchInputValue,
   discussionServerUrl,
   isMoreDiscussions,
   me,
@@ -31,6 +32,7 @@ const HomeComponent = ({
   handleDiscussionSearchInputChange,
   handleDiscussionSearchInputSubmit,
   handleLoadMoreButtonClick,
+  handleHomeLinkClick,
 }) => (
   <div className="page-container page-container--space-home">
     <PageTitle parts={['Home']} />
@@ -41,8 +43,10 @@ const HomeComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /{' '}
-              {discussionsSearchTerm !== '' ? `search results` : ''}
+              <Link onClick={handleHomeLinkClick} to="/">
+                home
+              </Link>{' '}
+              / {discussionsSearchTerm !== '' ? `search results` : ''}
             </h3>
             <h1>
               {discussionsSearchTerm !== ''
@@ -56,14 +60,20 @@ const HomeComponent = ({
                 onSubmit={handleDiscussionSearchInputSubmit}
                 className="search-box__form"
               >
-                <input
-                  type="text"
-                  placeholder="Search discussions"
-                  onChange={handleDiscussionSearchInputChange}
-                />
-                <button type="submit">
-                  <span className="fa fa-search" />
-                </button>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    placeholder="Search discussions"
+                    onChange={handleDiscussionSearchInputChange}
+                    className="form-control"
+                    value={discussionsSearchInputValue}
+                  />
+                  <div className="input-group-append">
+                    <button className="btn" type="submit">
+                      <span className="fa fa-search" />
+                    </button>
+                  </div>
+                </div>
               </form>
             </div>
             <button
@@ -177,6 +187,12 @@ export const Home = compose(
       props.setDiscussionsOffset(0);
       props.searchDiscussions();
       props.setDiscussionsSearchTerm(props.discussionsSearchInputValue);
+    },
+    handleHomeLinkClick: props => event => {
+      event.preventDefault();
+      props.setDiscussionsSearchTerm('');
+      props.setDiscussionsSearchInputValue('');
+      props.searchDiscussions();
     },
     handleLoadMoreButtonClick: ({
       fetchDiscussions,
