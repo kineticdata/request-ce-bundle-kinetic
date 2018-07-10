@@ -323,12 +323,15 @@ export function* joinDiscussionTask(action) {
   if (issueError || messagesError || participantsError || invitesErrors) {
     window.console.log('there was a problem fetching the issue and messages');
   } else {
+    const invitesNotParticipating = invites.filter(
+      i => !participants.map(p => p.email).includes(i.email),
+    );
     yield all([
       put(actions.setIssue(issue)),
       put(actions.setMessages(guid, messages)),
       put(actions.setHasMoreMessages(guid, messages.length === MESSAGE_LIMIT)),
       put(actions.setParticipants(guid, participants)),
-      put(actions.setInvites(guid, invites)),
+      put(actions.setInvites(guid, invitesNotParticipating)),
       put(actions.startConnection(params.guid)),
     ]);
   }

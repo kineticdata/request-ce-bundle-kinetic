@@ -111,7 +111,6 @@ input[type='button'],
 .btn-icon {
   border: 0;
   background-color: transparent;
-
   color: $gray;
   &:hover {
     color: $primary;
@@ -174,6 +173,10 @@ input[type='button'],
   justify-content: center;
   align-items: center;
   margin-bottom: 1.25rem;
+  @media (max-width: 768px) {
+    width: 100%;
+    display: block;
+  }
 }
 //
 .input-group-addon:not(:first-child):not(:last-child) {

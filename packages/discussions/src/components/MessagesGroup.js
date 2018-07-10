@@ -43,6 +43,17 @@ const getUploadImage = (message, discussionServerUrl) => {
   return `${discussionServerUrl}/assets/images/unknown_128.png`;
 };
 
+const getUploadLink = (message, discussionServerUrl) => {
+  if (
+    message.messageable.file_processing ||
+    message.messageable.file_processing === null
+  ) {
+    return '';
+  }
+
+  return `${discussionServerUrl}${message.url}`;
+};
+
 export const UploadMessage = ({
   message,
   messageOwner,
@@ -51,7 +62,7 @@ export const UploadMessage = ({
   <div className={`message message-upload message-${messageOwner} img-fluid`}>
     <a
       className="upload-image"
-      href={getUploadImage(message, discussionServerUrl)}
+      href={getUploadLink(message, discussionServerUrl)}
       target="_blank"
     >
       <img

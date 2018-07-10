@@ -145,7 +145,7 @@
         // Determine and build bridge url to use
         if (!_.isEmpty(typeaheadConfig['bridgeLocation'])) {
           typeaheadConfig['bridgeUrl'] =
-            bundle.kappLocation() +
+            bundle.kappLocation(K('kapp').slug()) +
             '/' +
             typeaheadConfig['bridgeLocation'] +
             '/bridgedResources/' +
@@ -155,7 +155,7 @@
             ']=%QUERY';
         } else {
           typeaheadConfig['bridgeUrl'] =
-            bundle.kappLocation() +
+            bundle.kappLocation(K('kapp').slug()) +
             '/' +
             typeaheadForm.slug() +
             '/bridgedResources/' +
