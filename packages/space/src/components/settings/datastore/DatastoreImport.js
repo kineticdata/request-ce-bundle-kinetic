@@ -384,8 +384,7 @@ export class DatastoreImport extends Component {
           const found = headerToFieldMap.find(obj => obj.header === header);
           if (found.header === 'Datastore Record ID' && !(val === '')) {
             obj.id = val;
-          }
-          if (!found.checked) {
+          } else if (!found.checked) {
             obj.values = { ...obj.values, [found.field]: val };
           }
         });
