@@ -25,7 +25,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.OPEN_FORM:
       return state.set('form', payload);
     case types.CLOSE_FORM:
-      return state.set('form', null);
+      return state.set('form', null).set('formIsCompleted', false);
     case types.COMPLETE_FORM:
       return state.set('formIsCompleted', true);
     default:
