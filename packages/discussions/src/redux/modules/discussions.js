@@ -219,10 +219,22 @@ export const reducer = (state = State(), { type, payload }) => {
         ),
       );
     case types.ADD_PRESENCE:
-      return state.updateIn(
-        ['discussions', payload.guid, 'participants', payload.participantGuid],
-        participant => ({ ...participant, present: true }),
-      );
+      return state.hasIn([
+        'discussions',
+        payload.guid,
+        'participants',
+        payload.participantGuid,
+      ])
+        ? state.updateIn(
+            [
+              'discussions',
+              payload.guid,
+              'participants',
+              payload.participantGuid,
+            ],
+            participant => ({ ...participant, present: true }),
+          )
+        : state;
     case types.REMOVE_PRESENCE:
       return state.updateIn(
         ['discussions', payload.guid, 'participants', payload.participantGuid],
