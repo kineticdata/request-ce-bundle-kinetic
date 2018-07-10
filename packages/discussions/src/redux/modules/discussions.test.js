@@ -569,14 +569,14 @@ describe('reducer', () => {
       discussions: Map({
         abc123: Discussion({
           participants: Map({
-            '1': { id: '1', name: 'Alex', present: false },
-            '2': { id: '2', name: 'Sam', present: false },
+            '1': { id: '1', name: 'Alex', present: false, guid: '11111' },
+            '2': { id: '2', name: 'Sam', present: false, guid: '22222' },
           }),
         }),
         foobar: Discussion({ participants: Map() }),
       }),
     });
-    const action = actions.addPresence('abc123', '2');
+    const action = actions.addPresence('abc123', '22222');
     expect(
       reducer(state, action).getIn([
         'discussions',
@@ -592,14 +592,14 @@ describe('reducer', () => {
       discussions: Map({
         abc123: Discussion({
           participants: Map({
-            '1': { id: '1', name: 'Alex', present: true },
-            '2': { id: '2', name: 'Sam', present: true },
+            '1': { id: '1', name: 'Alex', present: true, guid: '11111' },
+            '2': { id: '2', name: 'Sam', present: true, guid: '22222' },
           }),
         }),
         foobar: Discussion({ participants: Map() }),
       }),
     });
-    const action = actions.removePresence('abc123', '1');
+    const action = actions.removePresence('abc123', '11111');
     expect(
       reducer(state, action).getIn([
         'discussions',
