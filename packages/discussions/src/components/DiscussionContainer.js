@@ -169,6 +169,9 @@ export const DiscussionContainer = compose(
         clearInterval(this.props.pageTitleInterval);
         this.props.setPageTitleInterval(null);
       }
+      if (this.props.currentOpenModals.size > 0) {
+        this.props.closeAll();
+      }
     },
     componentWillReceiveProps(nextProps) {
       // Join a different discussion if the discussion ID has changed.
