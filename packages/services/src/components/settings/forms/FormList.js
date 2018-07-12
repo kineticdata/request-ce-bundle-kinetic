@@ -38,7 +38,17 @@ const FormListComponent = ({
   match,
   toggleDropdown,
   openDropdown,
+  currentPage,
+  formsPerPage,
+  setCurrentPage,
 }) => {
+  const indexOfLastForm = currentPage * formsPerPage;
+  const indexOfFirstForm = indexOfLastForm - formsPerPage;
+  const currentForms = servicesForms.slice(indexOfFirstForm, indexOfLastForm);
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(servicesForms.size / formsPerPage); i++) {
+    pageNumbers.push(i);
+  }
   return (
     <div className="page-container page-container--datastore">
       <div className="page-panel page-panel--scrollable page-panel--datastore-content">
@@ -59,63 +69,81 @@ const FormListComponent = ({
           {loading ? (
             <h3>Loading</h3>
           ) : servicesForms && servicesForms.size > 0 ? (
-            <table className="table table-sm table-striped table-datastore">
-              <thead className="header">
-                <tr>
-                  <th>Form Name</th>
-                  <th width="40%">Description</th>
-                  <th width="10%">Updated</th>
-                  <th width="10%">Created</th>
-                  <th width="48px">&nbsp;</th>
-                </tr>
-              </thead>
-              <tbody>
-                {servicesForms.map(form => {
-                  return (
-                    <tr key={form.slug}>
-                      <td>
-                        <Link to={`${match.path}/${form.slug}`}>
-                          <span>{form.name}</span>
-                        </Link>
-                        <br />
-                        <small>{form.slug}</small>
-                      </td>
-                      <td>{form.description}</td>
-                      <td>
-                        <Timestamp
-                          value={form.updatedAt ? form.updatedAt : null}
-                          slug={form.slug}
-                        />
-                      </td>
-                      <td>
-                        <Timestamp
-                          value={form.createdAt ? form.createdAt : null}
-                          slug={form.slug}
-                        />
-                      </td>
-                      <td>
-                        <Dropdown
-                          toggle={toggleDropdown(form.slug)}
-                          isOpen={openDropdown === form.slug}
-                        >
-                          <DropdownToggle color="link" className="btn-sm">
-                            <span className="fa fa-ellipsis-h fa-2x" />
-                          </DropdownToggle>
-                          <DropdownMenu right>
-                            <DropdownItem
-                              tag={Link}
-                              to={`${match.path}/${form.slug}/settings`}
-                            >
-                              Configure Form
-                            </DropdownItem>
-                          </DropdownMenu>
-                        </Dropdown>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div>
+              <table className="table table-sm table-striped table-datastore">
+                <thead className="header">
+                  <tr>
+                    <th>Form Name</th>
+                    <th width="40%">Description</th>
+                    <th width="10%">Updated</th>
+                    <th width="10%">Created</th>
+                    <th width="48px">&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentForms.map(form => {
+                    return (
+                      <tr key={form.slug}>
+                        <td>
+                          <Link to={`${match.path}/${form.slug}`}>
+                            <span>{form.name}</span>
+                          </Link>
+                          <br />
+                          <small>{form.slug}</small>
+                        </td>
+                        <td>{form.description}</td>
+                        <td>
+                          <Timestamp
+                            value={form.updatedAt ? form.updatedAt : null}
+                            slug={form.slug}
+                          />
+                        </td>
+                        <td>
+                          <Timestamp
+                            value={form.createdAt ? form.createdAt : null}
+                            slug={form.slug}
+                          />
+                        </td>
+                        <td>
+                          <Dropdown
+                            toggle={toggleDropdown(form.slug)}
+                            isOpen={openDropdown === form.slug}
+                          >
+                            <DropdownToggle color="link" className="btn-sm">
+                              <span className="fa fa-ellipsis-h fa-2x" />
+                            </DropdownToggle>
+                            <DropdownMenu right>
+                              <DropdownItem
+                                tag={Link}
+                                to={`${match.path}/${form.slug}/settings`}
+                              >
+                                Configure Form
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </Dropdown>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <ul className="pull-right">
+                {pageNumbers.map(number => (
+                  <li
+                    key={number}
+                    id={number}
+                    onClick={() => setCurrentPage(number)}
+                    className={
+                      currentPage === number
+                        ? 'btn btn-primary'
+                        : 'btn btn-default'
+                    }
+                  >
+                    {number}
+                  </li>
+                ))}
+              </ul>
+            </div>
           ) : (
             <WallyEmptyMessage />
           )}
@@ -129,6 +157,7 @@ export const mapStateToProps = state => ({
   loading: state.services.forms.loading,
   services: state.services.forms,
   servicesForms: state.services.forms.data.filter(displayableFormPredicate),
+  formsPerPage: 10,
 });
 
 export const mapDispatchToProps = {
@@ -148,6 +177,7 @@ export const FormList = compose(
     mapDispatchToProps,
   ),
   withState('openDropdown', 'setOpenDropdown', ''),
+  withState('currentPage', 'setCurrentPage', 1),
   withHandlers({ toggleDropdown }),
   lifecycle({
     componentWillReceiveProps(nextProps) {

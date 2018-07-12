@@ -17,6 +17,29 @@ export function* fetchFormSaga(action) {
   }
 }
 
+export function* fetchFormSubmissionsSaga(action) {
+  const kappSlug = action.payload.kappSlug;
+  const pageToken = action.payload.pageToken;
+  const formSlug = action.payload.formSlug;
+  const searchBuilder = new CoreAPI.SubmissionSearch()
+    .includes(['details', 'values'])
+    .end();
+  // Add some of the optional parameters to the search
+  if (pageToken) searchBuilder.pageToken(pageToken);
+  const search = searchBuilder.build();
+
+  const { submissions, nextPageToken, serverError } = yield call(
+    CoreAPI.searchSubmissions,
+    { search, kapp: kappSlug, form: formSlug },
+  );
+
+  if (serverError) {
+    yield put(actions.setFormsErrors(serverError));
+  } else {
+    yield put(actions.setFormSubmissions({ submissions, nextPageToken }));
+  }
+}
+
 export function* fetchKappSaga(action) {
   const { serverError, kapp } = yield call(CoreAPI.fetchKapp, {
     kappSlug: action.payload,
@@ -152,4 +175,5 @@ export function* watchSettingsForms() {
   yield takeEvery(types.UPDATE_FORM, updateFormSaga);
   yield takeEvery(types.CREATE_FORM, createFormSaga);
   yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
+  yield takeEvery(types.FETCH_FORM_SUBMISSIONS, fetchFormSubmissionsSaga);
 }

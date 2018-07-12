@@ -12,6 +12,8 @@ export const types = {
   SET_FORM: namespace('settingsForms', 'SET_FORM'),
   UPDATE_FORM: namespace('settingsForms', 'UPDATE_FORM'),
   CREATE_FORM: namespace('settingsForms', 'CREATE_FORM'),
+  FETCH_FORM_SUBMISSIONS: namespace('settingsForms', 'FETCH_FORM_SUBMISSIONS'),
+  SET_FORM_SUBMISSIONS: namespace('settingsForms', 'SET_FORM_SUBMISSIONS'),
   FETCH_KAPP: namespace('settingsForms', 'FETCH_KAPP'),
   SET_KAPP: namespace('settingsForms', 'SET_KAPP'),
   SET_FORMS_ERROR: namespace('settingsForms', 'SET_FORMS_ERROR'),
@@ -24,6 +26,8 @@ export const actions = {
   setForm: withPayload(types.SET_FORM),
   updateForm: withPayload(types.UPDATE_FORM),
   createForm: withPayload(types.CREATE_FORM),
+  fetchFormSubmissions: withPayload(types.FETCH_FORM_SUBMISSIONS),
+  setFormSubmissions: withPayload(types.SET_FORM_SUBMISSIONS),
   fetchKapp: withPayload(types.FETCH_KAPP),
   setKapp: withPayload(types.SET_KAPP),
   setFormsError: withPayload(types.SET_FORMS_ERROR),
@@ -47,6 +51,9 @@ export const State = Record({
   kappLoading: true,
   notificationsLoading: true,
   notifications: null,
+  currentFormSubmissions: null,
+  nextPageToken: null,
+  submissionsLoading: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -55,6 +62,13 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('loading', true);
     case types.SET_FORM:
       return state.set('loading', false).set('currentForm', payload);
+    case types.FETCH_FORM_SUBMISSIONS:
+      return state.set('submissionsLoading', true);
+    case types.SET_FORM_SUBMISSIONS:
+      return state
+        .set('submissionsLoading', false)
+        .set('currentFormSubmissions', List(payload.submissions))
+        .set('nextPageToken', payload.nextPageToken);
     case types.FETCH_KAPP:
       return state.set('kappLoading', true);
     case types.SET_KAPP:
