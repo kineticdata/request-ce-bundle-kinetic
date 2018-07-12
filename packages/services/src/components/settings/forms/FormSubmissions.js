@@ -65,33 +65,34 @@ export const FormSubmissionsContainer = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to="/">home</Link> /{` `}
-                <Link to="/settings">settings</Link> /{` `}
+                <Link to="/kapps/services">services</Link> /{` `}
+                <Link to="/kapps/services/settings">settings</Link> /{` `}
+                <Link to="/kapps/services/settings/forms">forms</Link> /{` `}
               </h3>
               <h1>{form.name}</h1>
             </div>
           </div>
           <section>
             <div className="col-sm-6">
-              <strong>Description</strong>
+              <label>Description</label>
               <p>{form.description}</p>
             </div>
             <div className="col-sm-6">
-              <strong>Form Type</strong>
+              <label>Form Type</label>
               <p>{form.type}</p>
             </div>
             <div className="col-sm-6">
-              <strong>Form Status</strong>
+              <label>Form Status</label>
               <p>{form.status}</p>
             </div>
             <div className="col-sm-6">
-              <strong>Created</strong>
+              <label>Created</label>
               <p>
                 {moment(form.createdAt).fromNow()} by {form.createdBy}
               </p>
             </div>
             <div className="col-sm-6">
-              <strong>Updated</strong>
+              <label>Updated</label>
               <p>
                 {moment(form.updatedAt).fromNow()} by {form.updatedBy}
               </p>

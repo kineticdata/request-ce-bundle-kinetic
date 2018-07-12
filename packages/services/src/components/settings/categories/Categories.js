@@ -67,7 +67,7 @@ export const CategoriesContainer = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /{` `}
+              <Link to="/kapps/services">services</Link> /{` `}
               <Link to="/kapps/services/settings">settings</Link> /{` `}
             </h3>
             <h1>Categories</h1>

@@ -112,8 +112,8 @@ export const SettingsContainer = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to="/">home</Link> /{` `}
-                <Link to="/settings">settings</Link> /{` `}
+                <Link to="/kapps/services">services</Link> /{` `}
+                <Link to="/kapps/services/settings">settings</Link> /{` `}
               </h3>
               <h1>Services Settings</h1>
             </div>
