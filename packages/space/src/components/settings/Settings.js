@@ -8,6 +8,7 @@ import { Icon } from 'common';
 import { SpaceSettings } from './spaceSettings/SpaceSettings';
 import { Notifications } from './notifications/Notifications';
 import { Datastore } from './datastore/Datastore';
+import { Robots } from './robots/Robots';
 import { Users } from './users/Users';
 import { Profile } from './profile/Profile';
 import { actions as datastoreActions } from '../../redux/modules/settingsDatastore';
@@ -17,6 +18,7 @@ export const SettingsComponent = () => (
     <Route path="/settings/profile" component={Profile} />
     <Route path="/settings/space" component={SpaceSettings} />
     <Route path="/settings/datastore" component={Datastore} />
+    <Route path="/settings/robots" component={Robots} />
     <Route path="/settings/users" component={Users} />
     <Route path="/settings/notifications" component={Notifications} />
     <Route component={SettingsNavigation} />
@@ -95,6 +97,12 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
               path={`/settings/notifications`}
               icon="fa-drive"
               description="View, Create and Edit Email Notifications"
+            />
+            <SettingsCard
+              name="Robots"
+              path={`/settings/robots`}
+              icon="fa-tasks"
+              description="View, Create and Edit Robots"
             />
           </Fragment>
         )}

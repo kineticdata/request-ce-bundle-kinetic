@@ -52,6 +52,7 @@ const DiscussionModal = props => {
     // createDiscussion,
     createInvitation,
     invitationButtonEnabled,
+    participantsAndInvites,
     // isSmallLayout,
     isModal,
     renderClose,
@@ -90,7 +91,11 @@ const DiscussionModal = props => {
         </ModalBody>
       ) : currentOpenModals.last() === 'invitation' ? (
         <ModalBody>
-          <InvitationDialogContainer createInvitation={createInvitation} />
+          <InvitationDialogContainer
+            discussion={discussion}
+            createInvitation={createInvitation}
+            participantsAndInvites={participantsAndInvites}
+          />
         </ModalBody>
       ) : currentOpenModals.last() === 'discussion' ? (
         <ModalBody className="kinops-discussions-modal-body">

@@ -4777,9 +4777,9 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
 
-kinops-react-scripts@0.9.5:
-  version "0.9.5"
-  resolved "https://registry.yarnpkg.com/kinops-react-scripts/-/kinops-react-scripts-0.9.5.tgz#7b19559f2fdc246836c914e30f88fb0b83dd1426"
+kinops-react-scripts@0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/kinops-react-scripts/-/kinops-react-scripts-0.11.0.tgz#e4f4491449133ef1086d6adafcee1f8f8be4fcab"
   dependencies:
     autoprefixer "7.1.6"
     babel-core "6.26.0"
@@ -6704,9 +6704,9 @@ react-is@^16.3.2:
   version "16.3.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.3.2.tgz#f4d3d0e2f5fbb6ac46450641eb2e25bf05d36b22"
 
-react-kinetic-core@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/react-kinetic-core/-/react-kinetic-core-0.6.1.tgz#9c392c25551c5918422ed129ee090f1324db1cee"
+react-kinetic-core@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/react-kinetic-core/-/react-kinetic-core-0.6.2.tgz#9f8746b75349a21de13a4e3eb9a70750e4e005df"
   dependencies:
     axios "^0.16.1"
     deepequal "^0.0.1"

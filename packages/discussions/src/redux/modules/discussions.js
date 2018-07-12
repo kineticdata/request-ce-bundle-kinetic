@@ -218,16 +218,28 @@ export const reducer = (state = State(), { type, payload }) => {
           Map(),
         ),
       );
-    case types.ADD_PRESENCE:
-      return state.updateIn(
-        ['discussions', payload.guid, 'participants', payload.participantGuid],
-        participant => ({ ...participant, present: true }),
-      );
-    case types.REMOVE_PRESENCE:
-      return state.updateIn(
-        ['discussions', payload.guid, 'participants', payload.participantGuid],
-        participant => ({ ...participant, present: false }),
-      );
+    case types.ADD_PRESENCE: {
+      const participant = state
+        .getIn(['discussions', payload.guid, 'participants'])
+        .find(p => p.guid === payload.participantGuid);
+      return participant
+        ? state.updateIn(
+            ['discussions', payload.guid, 'participants', participant.id],
+            p => ({ ...p, present: true }),
+          )
+        : state;
+    }
+    case types.REMOVE_PRESENCE: {
+      const participant = state
+        .getIn(['discussions', payload.guid, 'participants'])
+        .find(p => p.guid === payload.participantGuid);
+      return participant
+        ? state.updateIn(
+            ['discussions', payload.guid, 'participants', participant.id],
+            p => ({ ...p, present: false }),
+          )
+        : state;
+    }
     case types.ADD_PARTICIPANT:
       return state.setIn(
         ['discussions', payload.guid, 'participants', payload.participant.id],
@@ -243,9 +255,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_INVITES:
       return state.setIn(
         ['discussions', payload.guid, 'invites'],
-        List(payload.invites).filter(
-          invite => invite.status === 'Unassociated',
-        ),
+        List(payload.invites),
       );
     case types.ADD_INVITE:
       return state.updateIn(['discussions', payload.guid, 'invites'], invites =>

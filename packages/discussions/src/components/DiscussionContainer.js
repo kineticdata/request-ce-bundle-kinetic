@@ -113,10 +113,20 @@ export const DiscussionContainer = compose(
     mapDispatchToProps,
   ),
   withProps(props => ({
+    participantsAndInvites: props.discussion
+      ? props.discussion.invites
+          .map(i => i.email)
+          .concat(props.discussion.participants.toList().map(p => p.email))
+      : List(),
+  })),
+  withProps(props => ({
     invitationButtonEnabled:
       !props.invitationPending &&
       props.invitationFields.get('email') &&
       props.invitationFields.get('email') !== '' &&
+      !props.participantsAndInvites.includes(
+        props.invitationFields.get('email'),
+      ) &&
       props.invitationFields.get('notes') &&
       props.invitationFields.get('notes') !== '',
   })),
@@ -158,6 +168,9 @@ export const DiscussionContainer = compose(
       if (this.props.pageTitleInterval !== null) {
         clearInterval(this.props.pageTitleInterval);
         this.props.setPageTitleInterval(null);
+      }
+      if (this.props.currentOpenModals.size > 0) {
+        this.props.closeAll();
       }
     },
     componentWillReceiveProps(nextProps) {
