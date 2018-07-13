@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { ModalBody } from 'reactstrap';
 import { SORT_OPTIONS } from './SortedBySection';
+import { CreatedByMeContainer } from './CreatedByMe';
 
 const ListSummary = ({ type, list }) =>
   list.size > 0 &&
@@ -23,7 +24,7 @@ const AssignmentSummary = ({ errors, appliedAssignments }) => {
   } else if (appliedAssignments.size === 1) {
     return <span>{appliedAssignments.get(0)}</span>;
   }
-  return <span>{appliedAssignments.size} Presets</span>;
+  return <span>{appliedAssignments.size} Assignments</span>;
 };
 
 const formatTimeline = timeline => {
@@ -133,6 +134,9 @@ export const MainSection = ({
             <span className="fa fa-angle-right" />
           </span>
         </button>
+      </li>
+      <li className="list-group-item">
+        <CreatedByMeContainer filter={filter} />
       </li>
     </ul>
     <div className="save-filter">
