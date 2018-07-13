@@ -54,6 +54,7 @@ export const Filter = Record({
   teams: List(),
   assignments: AssignmentCriteria(),
   dateRange: DateRangeCriteria(),
+  createdByMe: false,
 });
 
 export const filterReviver = filterJSON => {

@@ -169,9 +169,12 @@ export function* saveNotificationSaga(action) {
 
 export function* fetchVariablesSaga(action) {
   if (action.payload.kappSlug) {
+    // When Datastore is selected, we're passing the string 'app/datastore' as the kapp-slug
+    const isDatastore = action.payload.kappSlug === 'app/datastore';
     const { forms, errors, serverError } = yield call(CoreAPI.fetchForms, {
-      kappSlug: action.payload.kappSlug,
       include: 'attributes,fields',
+      datastore: isDatastore,
+      ...(!isDatastore && { kappSlug: action.payload.kappSlug }),
     });
 
     if (serverError) {

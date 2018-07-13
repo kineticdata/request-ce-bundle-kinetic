@@ -115,6 +115,10 @@ export const State = Record({
         unassigned: true,
       }),
     }),
+    Filter({
+      name: 'Created By Me',
+      createdByMe: true,
+    }),
   ]),
   allTeams: List(),
   myTeams: List(),

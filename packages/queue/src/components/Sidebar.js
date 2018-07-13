@@ -62,6 +62,16 @@ export const Sidebar = ({
             </NavLink>
           </NavItem>
         )}
+        <NavItem>
+          <NavLink
+            to="/list/Created By Me"
+            className="nav-link"
+            activeClassName="active"
+          >
+            <span className="fa fa-fw fa-user-circle-o" />
+            Created By Me ({formatCount(counts.get('Created By Me', 0))})
+          </NavLink>
+        </NavItem>
       </Nav>
     </div>
     <div className="sidebar-group sidebar-my-filters">

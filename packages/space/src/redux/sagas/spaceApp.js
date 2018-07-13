@@ -58,12 +58,27 @@ export function* deleteAlertSaga(action) {
 
 export function* createDiscussionSaga({ payload }) {
   const { error, issue } = yield call(DiscussionAPI.createIssue, {
-    name: payload,
+    name: payload.title,
+    description: payload.description || payload.title,
   });
 
   if (error) {
     yield put(actions.setDiscussionsError(error));
   } else {
+    // Invite members to discussion
+    if (payload.members) {
+      const invites = payload.members.split(',').map(i => i.trim());
+      yield all(
+        invites.map(invite =>
+          call(
+            DiscussionAPI.createInvite,
+            issue.guid,
+            invite,
+            payload.description,
+          ),
+        ),
+      );
+    }
     yield put(push(`/discussions/${issue.guid}`));
   }
 }

@@ -10,7 +10,6 @@ import { actions as appActions } from '../../redux/modules/queueApp';
 const selectAppliedAssignments = state => {
   if (state.queue.filterMenu.get('currentFilter')) {
     const assignments = state.queue.filterMenu.get('currentFilter').assignments;
-
     return List([
       assignments.mine && 'Mine',
       assignments.teammates && 'Teammates',
@@ -77,7 +76,10 @@ export const FilterMenuContainer = compose(
     errors: !currentFilter
       ? Map()
       : Map({
-          Assignment: appliedAssignments.isEmpty() && 'No assignments selected',
+          Assignment:
+            appliedAssignments.isEmpty() &&
+            !currentFilter.createdByMe &&
+            'No assignments selected',
           'Date Range': validateDateRange(currentFilter),
         }).filter(value => !!value),
   })),
