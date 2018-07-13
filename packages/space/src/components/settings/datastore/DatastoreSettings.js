@@ -1,12 +1,18 @@
 import React from 'react';
-
+import { Modal } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { lifecycle, compose, withHandlers, withState } from 'recompose';
 import { bundle } from 'react-kinetic-core';
+import { isBlank } from '../../../utils';
 
-import { BridgeModelQualification } from '../../../records';
+import {
+  BridgeQualification,
+  BridgeModelQualification,
+  BridgeModelMappingQualification,
+  BridgeAttribute,
+} from '../../../records';
 
 import { actions } from '../../../redux/modules/settingsDatastore';
 
@@ -20,14 +26,19 @@ const SettingsComponent = ({
   handleBridgeChange,
   newQualification,
   setNewQualification,
-  handleAddNewQualfication,
-  handleRebuildBridges,
+  newAttribute,
+  setNewAttribute,
+  editAttribute,
+  setEditAttribute,
+  canGenerateAttributes,
+  generateAttributes,
   columns,
   handleColumnChange,
   handleFormChange,
   loading,
   hasChanged,
   handleSave,
+  handleReset,
 }) =>
   !loading && (
     <div className="page-container page-container--panels page-container--datastore">
@@ -42,15 +53,6 @@ const SettingsComponent = ({
             <h1>{origForm.name} Configuration</h1>
           </div>
           <div className="page-title__actions">
-            {hasChanged && (
-              <button
-                type="button"
-                onClick={handleSave()}
-                className="btn btn-secondary mr-3"
-              >
-                Save Changes
-              </button>
-            )}
             <a
               href={`${bundle.spaceLocation()}/app/#/admin/datastore/form/${
                 origForm.slug
@@ -73,7 +75,10 @@ const SettingsComponent = ({
                     <input
                       id="name"
                       name="name"
-                      onChange={e => handleFormChange('name', e.target.value)}
+                      onChange={e => {
+                        handleFormChange('name', e.target.value);
+                        handleBridgeChange('formName', e.target.value);
+                      }}
                       value={updatedForm.name}
                       className="form-control"
                     />
@@ -155,32 +160,9 @@ const SettingsComponent = ({
                 </table>
               </div>
             </div>
-            {/*
             <div className="table-settings">
               <h3 className="section__title">Bridge Configuration</h3>
               <div className="settings">
-                {!bridgeName && (
-                  <div>
-                    <p>
-                      No Bridge Model found. Please select a bridge to build
-                      one.
-                    </p>
-                  </div>
-                )}
-                {bridgeName &&
-                  !bridgeModel && (
-                    <div>
-                      <p>
-                        Click Build Bridge to build a bridge model for your form
-                      </p>
-                      <button
-                        onClick={handleRebuildBridges}
-                        className="btn btn-secondary"
-                      >
-                        Build Bridge
-                      </button>
-                    </div>
-                  )}
                 <div className="form-group">
                   <label htmlFor="name">Bridge Name</label>
                   <select
@@ -189,112 +171,72 @@ const SettingsComponent = ({
                     onChange={e =>
                       handleBridgeChange('bridgeName', e.target.value)
                     }
-                    value={bridgeName}
+                    value={updatedForm.bridgeName}
                     className="form-control"
                   >
-                    <option />
+                    {!origForm.bridgeName && <option />}
                     {bridges.map(b => (
                       <option key={b} value={b}>
                         {b}
                       </option>
                     ))}
                   </select>
-                  Bridge Qualifications
-                  <table className="table">
-                    <thead>
-                      <tr className="header">
-                        <th>Name</th>
-                        <th>Result Type</th>
-                        <th>Parameters</th>
-                        <th />
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {updatedForm.bridgeModel.qualifications.map(qual => (
-                        <tr key={qual.name}>
-                          <td>{qual.name}</td>
-                          <td>
-                            <select
-                              className="form-control"
-                              value={qual.resultType}
-                              onChange={handleBridgeChange(
-                                'qual-result-type',
-                                qual,
-                              )}
-                            >
-                              <option value="Single">Single</option>
-                              <option value="Multiple">Multiple</option>
-                            </select>
-                          </td>
-                          <td>
-                            <button
-                              type="link"
-                              className="btn btn-link"
-                              onClick={() => console.log('clicked', qual)}
-                            >
-                              Parameters ({qual.parameters.size})
-                            </button>
-                          </td>
-                          <td>
-                            <div className="btn-group btn-group-sm pull-right">
-                              <button className="btn btn-danger">
-                                <span className="fa fa-fw fa-close" />
-                              </button>
-                              <a className="btn btn-primary" href="">
-                                <span className="fa fa-fw fa-pencil" />
-                              </a>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                      <tr>
-                        <td>
-                          <input
-                            id="qualification-name"
-                            name="qualification-name"
-                            placeholder="Qualification Name"
-                            onChange={e =>
-                              setNewQualification(
-                                newQualification.set('name', e.target.value),
-                              )
-                            }
-                            value={newQualification.name}
-                            className="form-control"
-                          />
-                        </td>
-                        <td>
-                          <select
-                            className="form-control"
-                            onChange={e =>
-                              setNewQualification(
-                                newQualification.set(
-                                  'resultType',
-                                  e.target.value,
-                                ),
-                              )
-                            }
-                            value={newQualification.resultType}
-                          >
-                            <option value="Single">Single</option>
-                            <option value="Multiple">Multiple</option>
-                          </select>
-                        </td>
-                        <td />
-                        <td>
-                          <button
-                            disabled={newQualification.name === ''}
-                            onClick={handleAddNewQualfication}
-                            className="btn btn-primary pull-right"
-                          >
-                            Add Qualification
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
                 </div>
+                {updatedForm.bridgeName && (
+                  <div>
+                    <div className="form-group">
+                      <span>Model & Mapping Name: </span>
+                      <strong>
+                        {updatedForm.bridgeModel.name ||
+                          `Datastore - ${updatedForm.name}`}
+                      </strong>
+                    </div>
+                    <QualificationTable
+                      updatedForm={updatedForm}
+                      handleBridgeChange={handleBridgeChange}
+                      setNewQualification={setNewQualification}
+                    />
+                    <QualificationModal
+                      updatedForm={updatedForm}
+                      handleBridgeChange={handleBridgeChange}
+                      newQualification={newQualification}
+                      setNewQualification={setNewQualification}
+                    />
+                    <AttributeTable
+                      updatedForm={updatedForm}
+                      editAttribute={editAttribute}
+                      setEditAttribute={setEditAttribute}
+                      newAttribute={newAttribute}
+                      setNewAttribute={setNewAttribute}
+                      handleBridgeChange={handleBridgeChange}
+                      canGenerateAttributes={canGenerateAttributes}
+                      generateAttributes={generateAttributes}
+                    />
+                  </div>
+                )}
               </div>
-            </div>*/}
+            </div>
+            <div className="form__footer">
+              <div className="form__footer__right">
+                {hasChanged && (
+                  <button
+                    type="button"
+                    onClick={handleReset()}
+                    className="btn btn-link mr-3"
+                  >
+                    Reset
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={handleSave()}
+                  className="btn btn-primary"
+                  disabled={!hasChanged}
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
           </div>
         ) : (
           <p>You do not have access to configure this datastore.</p>
@@ -303,25 +245,561 @@ const SettingsComponent = ({
       <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
         <h3>Datastore Configuration</h3>
         <p>
-          To update the datastore form fields, click the Builder button, which
-          will open the form builder in a new window. You will need to reload
-          this page after making changes in the form builder, which can be done
-          by clicking the reload button.
+          To update the datastore form fields, click the Form Builder button,
+          which will open the form builder in a new window. You will need to
+          reload this page after making changes in the form builder.
         </p>
-        <h4>Table Display Options</h4>
+        <h4>Table Display Settings</h4>
         <p>
-          The Display Table Options section lists all of the fields that exist
-          in this datastore. The order in this table will determine the order
-          the records appear in the Records table. You may order the table by
-          dragging the rows. Visible: Should this field appear in the records
-          table? Searchable: Should the data in this field be searchable in the
-          records table? Sortable: Should the records table be sortable by this
-          field? Unique: Should the data in this field be required to be unique
-          for all records?
+          The Display Table Settings section lists all of the fields that exist
+          in this datastore. You may select which fields you'd like to be
+          visible in the table when viewing records.
         </p>
       </div>
     </div>
   );
+
+const QualificationTable = ({
+  updatedForm,
+  handleBridgeChange,
+  setNewQualification,
+}) => (
+  <div>
+    <div className="table-title">
+      <div className="table-title__wrapper">
+        <div>Bridge Qualifications</div>
+      </div>
+      <div className="table-title__actions">
+        <button
+          onClick={() => setNewQualification(BridgeQualification())}
+          className="btn btn-primary pull-right"
+        >
+          Add Qualification
+        </button>
+      </div>
+    </div>
+    <table className="table">
+      <thead>
+        <tr className="header">
+          <th>Qualification Name</th>
+          <th>Result Type</th>
+          <th>Parameters</th>
+          <th />
+        </tr>
+      </thead>
+      <tbody>
+        {updatedForm.bridgeModel.qualifications.map((qual, index) => (
+          <tr key={qual.name}>
+            <td>{qual.name}</td>
+            <td>{qual.resultType}</td>
+            <td>{qual.parameters.length} Parameters</td>
+            <td>
+              <div className="btn-group btn-group-sm pull-right">
+                <button
+                  className="btn btn-primary"
+                  onClick={() =>
+                    setNewQualification(
+                      BridgeQualification(qual)
+                        .merge(
+                          updatedForm.bridgeModelMapping.qualifications.get(
+                            index,
+                          ),
+                        )
+                        .set('index', index),
+                    )
+                  }
+                >
+                  <span className="fa fa-fw fa-pencil" />
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() =>
+                    handleBridgeChange('bridgeQualificationDelete', index)
+                  }
+                >
+                  <span className="fa fa-fw fa-close" />
+                </button>
+              </div>
+            </td>
+          </tr>
+        ))}
+        {updatedForm.bridgeModel.qualifications.size === 0 && (
+          <tr>
+            <td colSpan="4" className="text-center">
+              No qualifications.
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  </div>
+);
+
+const QualificationModal = ({
+  updatedForm,
+  handleBridgeChange,
+  newQualification,
+  setNewQualification,
+}) =>
+  !!newQualification && (
+    <Modal
+      size="lg"
+      isOpen={!!newQualification}
+      toggle={() => setNewQualification(null)}
+    >
+      <div className="modal-header">
+        <h4 className="modal-title">
+          <button
+            onClick={() => setNewQualification(null)}
+            type="button"
+            className="btn btn-link"
+          >
+            Cancel
+          </button>
+          <span>
+            {newQualification.index !== null ? 'Edit' : 'Add'} Qualification
+          </span>
+        </h4>
+      </div>
+      <div className="modal-body">
+        <div className="modal-form">
+          <div className="form-group required">
+            <label htmlFor="name">Qualification Name</label>
+            <input
+              id="name"
+              name="name"
+              onChange={e =>
+                setNewQualification(
+                  newQualification.set('name', e.target.value),
+                )
+              }
+              onBlur={e =>
+                setNewQualification(
+                  newQualification.set('name', e.target.value.trim()),
+                )
+              }
+              value={newQualification.name}
+              className="form-control"
+            />
+          </div>
+          <div className="form-group required">
+            <label htmlFor="resultType">Result Type</label>
+            <select
+              id="resultType"
+              name="resultType"
+              onChange={e =>
+                setNewQualification(
+                  newQualification.set('resultType', e.target.value),
+                )
+              }
+              value={newQualification.resultType}
+              className="form-control"
+            >
+              <option value="Multiple">Multiple</option>
+              <option value="Single">Single</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Parameters</label>
+            <table className="table">
+              <thead>
+                <tr className="header">
+                  <th>Name</th>
+                  <th>Notes</th>
+                  <th width="1%" />
+                </tr>
+              </thead>
+              <tbody>
+                {newQualification.parameters.map((parameter, index) => (
+                  <tr key={parameter.name}>
+                    <td>{parameter.name}</td>
+                    <td>{parameter.notes}</td>
+                    <td className="text-right">
+                      <div className="btn-group btn-group-sm pull-right">
+                        <button
+                          className="btn btn-danger"
+                          onClick={e =>
+                            setNewQualification(
+                              newQualification.deleteIn(['parameters', index]),
+                            )
+                          }
+                        >
+                          <span className="fa fa-fw fa-close" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {newQualification.parameters.length === 0 && (
+                  <tr>
+                    <td colSpan="3" className="text-center">
+                      No parameters.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+              <tfoot>
+                {newQualification.newParameterError && (
+                  <tr className="alert alert-danger" role="alert">
+                    <td colSpan="3">{newQualification.newParameterError}</td>
+                  </tr>
+                )}
+                <tr>
+                  <td>
+                    <input
+                      id="newParameterName"
+                      name="newParameterName"
+                      onChange={e =>
+                        setNewQualification(
+                          newQualification.set(
+                            'newParameterName',
+                            e.target.value,
+                          ),
+                        )
+                      }
+                      onBlur={e =>
+                        setNewQualification(
+                          newQualification.set(
+                            'newParameterName',
+                            e.target.value.trim(),
+                          ),
+                        )
+                      }
+                      value={newQualification.newParameterName}
+                      className="form-control"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      id="newParameterNotes"
+                      name="newParameterNotes"
+                      onChange={e =>
+                        setNewQualification(
+                          newQualification.set(
+                            'newParameterNotes',
+                            e.target.value,
+                          ),
+                        )
+                      }
+                      onBlur={e =>
+                        setNewQualification(
+                          newQualification.set(
+                            'newParameterNotes',
+                            e.target.value.trim(),
+                          ),
+                        )
+                      }
+                      value={newQualification.newParameterNotes}
+                      className="form-control"
+                    />
+                  </td>
+                  <td className="text-right">
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => {
+                        if (
+                          newQualification.parameters.find(
+                            param =>
+                              param.name === newQualification.newParameterName,
+                          )
+                        ) {
+                          setNewQualification(
+                            newQualification.set(
+                              'newParameterError',
+                              'A parameter with that name already exists.',
+                            ),
+                          );
+                        } else {
+                          setNewQualification(
+                            newQualification
+                              .update('parameters', parameters => [
+                                ...parameters,
+                                {
+                                  name: newQualification.newParameterName,
+                                  notes: newQualification.newParameterNotes,
+                                },
+                              ])
+                              .set('newParameterName', '')
+                              .set('newParameterNotes', '')
+                              .set('newParameterError', null),
+                          );
+                        }
+                      }}
+                      disabled={isBlank(newQualification.newParameterName)}
+                    >
+                      Add
+                    </button>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div className="form-group">
+            <label htmlFor="name">Query</label>
+            <textarea
+              id="query"
+              name="query"
+              onChange={e =>
+                setNewQualification(
+                  newQualification.set('query', e.target.value),
+                )
+              }
+              value={newQualification.query}
+              className="form-control"
+              rows="3"
+            />
+          </div>
+          {newQualification.error && (
+            <div className="alert alert-danger">{newQualification.error}</div>
+          )}
+        </div>
+        <div className="modal-footer">
+          <button
+            disabled={isBlank(newQualification.name)}
+            onClick={() => {
+              if (
+                updatedForm.bridgeModel.qualifications.find(
+                  (qual, index) =>
+                    qual.name === newQualification.name &&
+                    index !== newQualification.index,
+                )
+              ) {
+                setNewQualification(
+                  newQualification.set(
+                    'error',
+                    'A qualification with that name already exists.',
+                  ),
+                );
+              } else {
+                handleBridgeChange('bridgeQualification', newQualification);
+                setNewQualification(null);
+              }
+            }}
+            type="button"
+            className="btn btn-primary"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </Modal>
+  );
+
+const AttributeTable = ({
+  updatedForm,
+  editAttribute,
+  setEditAttribute,
+  newAttribute,
+  setNewAttribute,
+  handleBridgeChange,
+  generateAttributes,
+  canGenerateAttributes,
+}) => (
+  <div>
+    <div className="table-title">
+      <div className="table-title__wrapper">
+        <div>Bridge Attributes</div>
+      </div>
+      <div className="table-title__actions">
+        {canGenerateAttributes() && (
+          <button
+            onClick={() => generateAttributes()}
+            className="btn btn-primary pull-right"
+          >
+            Generate from Fields
+          </button>
+        )}
+      </div>
+    </div>
+    <table className="table">
+      <thead>
+        <tr className="header">
+          <th>Attribute Name</th>
+          <th>Mapping</th>
+          <th />
+        </tr>
+      </thead>
+      <tbody>
+        {updatedForm.bridgeModel.attributes.map((attr, index) => {
+          const attrMapping =
+            updatedForm.bridgeModelMapping.attributes.find(
+              mapAttr => mapAttr.name === attr.name,
+            ) || {};
+          return (
+            <tr key={attr.name}>
+              <td>
+                {editAttribute.index === index ? (
+                  <input
+                    id="editAttributeName"
+                    name="editAttributeName"
+                    onChange={e =>
+                      setEditAttribute(
+                        editAttribute.set('name', e.target.value),
+                      )
+                    }
+                    onBlur={e =>
+                      setEditAttribute(
+                        editAttribute.set('name', e.target.value.trim()),
+                      )
+                    }
+                    value={editAttribute.name}
+                    className="form-control"
+                  />
+                ) : (
+                  attr.name
+                )}
+              </td>
+              <td>
+                {editAttribute.index === index ? (
+                  <input
+                    id="editAttributeStructureField"
+                    name="editAttributeStructureField"
+                    onChange={e =>
+                      setEditAttribute(
+                        editAttribute.set('structureField', e.target.value),
+                      )
+                    }
+                    onBlur={e =>
+                      setEditAttribute(
+                        editAttribute.set(
+                          'structureField',
+                          e.target.value.trim(),
+                        ),
+                      )
+                    }
+                    value={editAttribute.structureField}
+                    className="form-control"
+                  />
+                ) : (
+                  attrMapping.structureField || (
+                    <em className="text-muted">No Mapping</em>
+                  )
+                )}
+              </td>
+              <td>
+                {editAttribute.index === index ? (
+                  <div className="btn-group btn-group-sm pull-right">
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => setEditAttribute(new BridgeAttribute())}
+                    >
+                      <span className="fa fa-fw fa-close" />
+                    </button>
+                    <button
+                      className="btn btn-success"
+                      onClick={() => {
+                        handleBridgeChange('bridgeAttribute', editAttribute);
+                        setEditAttribute(new BridgeAttribute());
+                      }}
+                    >
+                      <span className="fa fa-fw fa-check" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="btn-group btn-group-sm pull-right">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() =>
+                        setEditAttribute(
+                          BridgeAttribute(attr)
+                            .merge(attrMapping)
+                            .set('index', index),
+                        )
+                      }
+                    >
+                      <span className="fa fa-fw fa-pencil" />
+                    </button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() =>
+                        handleBridgeChange('bridgeAttributeDelete', index)
+                      }
+                    >
+                      <span className="fa fa-fw fa-close" />
+                    </button>
+                  </div>
+                )}
+              </td>
+            </tr>
+          );
+        })}
+        {updatedForm.bridgeModel.attributes.size === 0 && (
+          <tr>
+            <td colSpan="3" className="text-center">
+              No attributes.
+            </td>
+          </tr>
+        )}
+      </tbody>
+      <tfoot>
+        {newAttribute.error && (
+          <tr className="alert alert-danger" role="alert">
+            <td colSpan="3">{newAttribute.error}</td>
+          </tr>
+        )}
+        <tr>
+          <td>
+            <input
+              id="newAttributeName"
+              name="newAttributeName"
+              onChange={e =>
+                setNewAttribute(newAttribute.set('name', e.target.value))
+              }
+              onBlur={e =>
+                setNewAttribute(newAttribute.set('name', e.target.value.trim()))
+              }
+              value={newAttribute.name}
+              className="form-control"
+            />
+          </td>
+          <td>
+            <input
+              id="newAttributeStructureField"
+              name="newAttributeStructureField"
+              onChange={e =>
+                setNewAttribute(
+                  newAttribute.set('structureField', e.target.value),
+                )
+              }
+              onBlur={e =>
+                setNewAttribute(
+                  newAttribute.set('structureField', e.target.value.trim()),
+                )
+              }
+              value={newAttribute.structureField}
+              className="form-control"
+            />
+          </td>
+          <td className="text-right">
+            <button
+              className="btn btn-danger"
+              onClick={() => {
+                if (
+                  updatedForm.bridgeModel.attributes.find(
+                    attr => attr.name === newAttribute.name,
+                  )
+                ) {
+                  setNewAttribute(
+                    newAttribute.set(
+                      'error',
+                      'An attribute with that name already exists.',
+                    ),
+                  );
+                } else {
+                  handleBridgeChange('bridgeAttribute', newAttribute);
+                  setNewAttribute(new BridgeAttribute());
+                }
+              }}
+              disabled={isBlank(newAttribute.name)}
+            >
+              Add
+            </button>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+);
 
 const handleColumnChange = ({ setFormChanges }) => (column, prop) => () => {
   const updated = column.set(prop, !column.get(prop));
@@ -333,22 +811,135 @@ const handleBridgeChange = ({
   updatedForm: { bridgeModel, bridgeModelMapping },
 }) => (type, value) => {
   if (type === 'bridgeName') {
-    const updated = bridgeModelMapping.set('bridgeName', value);
-    setFormChanges({ type: 'bridgeModelMapping', value: updated });
+    setFormChanges({ type: 'bridgeName', value });
+    setFormChanges({
+      type: 'bridgeModelMapping',
+      value: bridgeModelMapping.set('bridgeName', value),
+    });
+  } else if (type === 'formName') {
+    if (bridgeModel.name) {
+      setFormChanges({
+        type: 'bridgeModel',
+        value: bridgeModel.set('name', `Datastore - ${value}`),
+      });
+      setFormChanges({
+        type: 'bridgeModelMapping',
+        value: bridgeModelMapping.set('name', `Datastore - ${value}`),
+      });
+    }
+  } else if (type === 'bridgeQualification') {
+    if (value.index === null) {
+      setFormChanges({
+        type: 'bridgeModel',
+        value: bridgeModel.update('qualifications', quals =>
+          quals.push(BridgeModelQualification(value)),
+        ),
+      });
+      setFormChanges({
+        type: 'bridgeModelMapping',
+        value: bridgeModelMapping.update('qualifications', quals =>
+          quals.push(BridgeModelMappingQualification(value)),
+        ),
+      });
+    } else {
+      setFormChanges({
+        type: 'bridgeModel',
+        value: bridgeModel.setIn(
+          ['qualifications', value.index],
+          BridgeModelQualification(value),
+        ),
+      });
+      setFormChanges({
+        type: 'bridgeModelMapping',
+        value: bridgeModelMapping.setIn(
+          ['qualifications', value.index],
+          BridgeModelMappingQualification(value),
+        ),
+      });
+    }
+  } else if (type === 'bridgeQualificationDelete') {
+    setFormChanges({
+      type: 'bridgeModel',
+      value: bridgeModel.deleteIn(['qualifications', value]),
+    });
+    setFormChanges({
+      type: 'bridgeModelMapping',
+      value: bridgeModelMapping.deleteIn(['qualifications', value]),
+    });
+  } else if (type === 'bridgeAttribute') {
+    if (value.index === null) {
+      setFormChanges({
+        type: 'bridgeModel',
+        value: bridgeModel.update('attributes', quals =>
+          quals.push({ name: value.name }),
+        ),
+      });
+      !isBlank(value.structureField) &&
+        setFormChanges({
+          type: 'bridgeModelMapping',
+          value: bridgeModelMapping.update('attributes', quals =>
+            quals.push({
+              name: value.name,
+              structureField: value.structureField,
+            }),
+          ),
+        });
+    } else {
+      const attr = bridgeModel.getIn(['attributes', value.index]);
+      const attrMapping = bridgeModelMapping.attributes.find(
+        mapAttr => mapAttr.name === attr.name,
+      );
+      setFormChanges({
+        type: 'bridgeModel',
+        value: bridgeModel.setIn(['attributes', value.index], {
+          name: value.name,
+        }),
+      });
+      if (attrMapping) {
+        const index = bridgeModelMapping.attributes.indexOf(attrMapping);
+        if (!isBlank(value.structureField)) {
+          setFormChanges({
+            type: 'bridgeModelMapping',
+            value: bridgeModelMapping.setIn(['attributes', index], {
+              name: value.name,
+              structureField: value.structureField,
+            }),
+          });
+        } else {
+          setFormChanges({
+            type: 'bridgeModelMapping',
+            value: bridgeModelMapping.deleteIn(['attributes', index]),
+          });
+        }
+      } else if (!isBlank(value.structureField)) {
+        setFormChanges({
+          type: 'bridgeModelMapping',
+          value: bridgeModelMapping.update('attributes', quals =>
+            quals.push({
+              name: value.name,
+              structureField: value.structureField,
+            }),
+          ),
+        });
+      }
+    }
+  } else if (type === 'bridgeAttributeDelete') {
+    const attr = bridgeModel.getIn(['attributes', value]);
+    const attrMapping = bridgeModelMapping.attributes.find(
+      mapAttr => mapAttr.name === attr.name,
+    );
+    setFormChanges({
+      type: 'bridgeModel',
+      value: bridgeModel.deleteIn(['attributes', value]),
+    });
+    if (attrMapping) {
+      const index = bridgeModelMapping.attributes.indexOf(attrMapping);
+      setFormChanges({
+        type: 'bridgeModelMapping',
+        value: bridgeModelMapping.deleteIn(['attributes', index]),
+      });
+    }
   }
-};
-
-const handleAddNewQualfication = ({
-  setFormChanges,
-  setNewQualification,
-  newQualification,
-  updatedForm: { bridgeModel },
-}) => () => {
-  const updated = bridgeModel.updateIn(['qualifications'], quals =>
-    quals.push(newQualification),
-  );
-  setFormChanges({ type: 'bridgeModel', value: updated });
-  setNewQualification(BridgeModelQualification());
 };
 
 const handleFormChange = ({ setFormChanges }) => (type, value) => {
@@ -359,15 +950,67 @@ const handleSave = ({ updateForm }) => () => () => {
   updateForm();
 };
 
-const handleRebuildBridges = ({
-  createBridgeModel,
-  updateBridgeModel,
-  bridgeModel,
-  bridgeModelTemplate,
-}) =>
-  bridgeModel
-    ? updateBridgeModel(bridgeModelTemplate)
-    : createBridgeModel(bridgeModelTemplate);
+const handleReset = ({ resetForm }) => () => () => {
+  resetForm();
+};
+
+const generateAttributes = ({
+  updatedForm: { columns, bridgeModel, bridgeModelMapping },
+  setFormChanges,
+}) => () => {
+  let updatedBridgeModel = bridgeModel;
+  let updatedBridgeModelMapping = bridgeModelMapping;
+  columns.forEach(column => {
+    if (
+      column.type === 'value' &&
+      !bridgeModel.attributes.find(a => a.name === column.name)
+    ) {
+      updatedBridgeModel = updatedBridgeModel.update('attributes', quals =>
+        quals.push({ name: column.name }),
+      );
+      updatedBridgeModelMapping = updatedBridgeModelMapping.update(
+        'attributes',
+        quals =>
+          quals.push({
+            name: column.name,
+            structureField: `\${fields('values[${column.name}]')}`,
+          }),
+      );
+    }
+  });
+  if (!bridgeModel.attributes.find(a => a.name === 'Id')) {
+    updatedBridgeModel = updatedBridgeModel.update('attributes', quals =>
+      quals.push({ name: 'Id' }),
+    );
+    updatedBridgeModelMapping = updatedBridgeModelMapping.update(
+      'attributes',
+      quals =>
+        quals.push({
+          name: 'Id',
+          structureField: `\${fields('values[id]')}`,
+        }),
+    );
+  }
+  setFormChanges({
+    type: 'bridgeModel',
+    value: updatedBridgeModel,
+  });
+  setFormChanges({
+    type: 'bridgeModelMapping',
+    value: updatedBridgeModelMapping,
+  });
+};
+
+const canGenerateAttributes = ({
+  updatedForm: { columns, bridgeModel },
+}) => () => {
+  const missing = columns.find(
+    column =>
+      column.type === 'value' &&
+      !bridgeModel.attributes.find(a => a.name === column.name),
+  );
+  return missing || !bridgeModel.attributes.find(a => a.name === 'Id');
+};
 
 export const mapStateToProps = (state, { match: { params } }) => ({
   loading: state.space.settingsDatastore.currentFormLoading,
@@ -387,8 +1030,7 @@ export const mapDispatchToProps = {
   fetchForm: actions.fetchForm,
   setFormChanges: actions.setFormChanges,
   updateForm: actions.updateForm,
-  updateBridgeModel: actions.updateBridgeModel,
-  createBridgeModel: actions.createBridgeModel,
+  resetForm: actions.resetForm,
 };
 
 export const DatastoreSettings = compose(
@@ -396,18 +1038,19 @@ export const DatastoreSettings = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withState(
-    'newQualification',
-    'setNewQualification',
-    BridgeModelQualification(),
-  ),
+  withState('newQualification', 'setNewQualification', null),
+  withState('newAttribute', 'setNewAttribute', new BridgeAttribute()),
+  withState('editAttribute', 'setEditAttribute', new BridgeAttribute()),
   withHandlers({
     handleBridgeChange,
     handleColumnChange,
     handleFormChange,
     handleSave,
-    handleRebuildBridges,
-    handleAddNewQualfication,
+    handleReset,
+  }),
+  withHandlers({
+    canGenerateAttributes,
+    generateAttributes,
   }),
   lifecycle({
     componentWillMount() {

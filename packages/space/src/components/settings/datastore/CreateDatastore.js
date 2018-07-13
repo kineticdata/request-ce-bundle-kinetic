@@ -78,25 +78,6 @@ const CreateDatastoreComponent = ({
               name="description"
             />
           </div>
-          {/*<div className="form-group">
-            <label htmlFor="name">Bridge Name</label>
-            <select
-              id="bridgeName"
-              name="bridgeName"
-              onChange={e =>
-                setNewForm(newForm.set('bridgeName', e.target.value))
-              }
-              value={newForm.bridgeName}
-              className="form-control"
-            >
-              <option />
-              {bridges.map(b => (
-                <option key={b} value={b}>
-                  {b}
-                </option>
-              ))}
-            </select>
-          </div>*/}
           <div className="pull-right">
             <Link to="/datastore" className="btn btn-link">
               Cancel

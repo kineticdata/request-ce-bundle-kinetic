@@ -1,9 +1,33 @@
 import { Record, List } from 'immutable';
 
+export const BridgeQualification = Record({
+  name: '',
+  parameters: [],
+  resultType: 'Multiple',
+  query: '',
+  index: null,
+  error: null,
+  newParameterName: '',
+  newParameterNotes: '',
+  newParameterError: null,
+});
+
+export const BridgeAttribute = Record({
+  name: '',
+  structureField: '',
+  index: null,
+  error: null,
+});
+
 export const BridgeModelQualification = Record({
   name: '',
-  parameters: List(),
+  parameters: [],
   resultType: 'Multiple',
+});
+
+export const BridgeModelMappingQualification = Record({
+  name: '',
+  query: '',
 });
 
 export const BridgeModelMapping = Record({
@@ -12,7 +36,7 @@ export const BridgeModelMapping = Record({
   name: '',
   qualifications: List(),
   status: 'Active',
-  structure: 'Datastore',
+  structure: 'Datastore Submissions',
 });
 
 // Used in datastore to define a bridgemodel associated w/ a datastore form
@@ -35,11 +59,20 @@ export const DatastoreForm = Record({
   canManage: false,
   isHidden: false,
   bridgeModel: BridgeModel(),
+  bridgeModelMapping: BridgeModelMapping(),
   bridgeName: '',
   createdAt: '',
   updatedAt: '',
   createdBy: '',
   updatedBy: '',
+});
+
+// Used in datastore to define a datastore form for saving
+export const DatastoreFormSave = Record({
+  name: '',
+  slug: '',
+  description: '',
+  attributesMap: {},
 });
 
 // Used in datastore to define a single table column

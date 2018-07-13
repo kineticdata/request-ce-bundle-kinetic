@@ -50,6 +50,7 @@ export const types = {
   FETCH_FORM: namespace('datastore', 'FETCH_FORM'),
   SET_FORM: namespace('datastore', 'SET_FORM'),
   UPDATE_FORM: namespace('datastore', 'UPDATE_FORM'),
+  RESET_FORM: namespace('datastore', 'RESET_FORM'),
   CREATE_FORM: namespace('datastore', 'CREATE_FORM'),
   FETCH_SUBMISSIONS_ADVANCED: namespace(
     'datastore',
@@ -100,6 +101,7 @@ export const actions = {
   fetchForm: withPayload(types.FETCH_FORM),
   setForm: withPayload(types.SET_FORM),
   updateForm: withPayload(types.UPDATE_FORM),
+  resetForm: noPayload(types.RESET_FORM),
   createForm: withPayload(types.CREATE_FORM),
   fetchSubmissionsAdvanced: noPayload(types.FETCH_SUBMISSIONS_ADVANCED),
   fetchSubmissionsSimple: noPayload(types.FETCH_SUBMISSIONS_SIMPLE),
@@ -294,16 +296,21 @@ export const reducer = (state = State(), { type, payload }) => {
       const { form } = payload;
       const bridgeModel = BridgeModel(
         payload.bridgeModels.find(m => m.name === `Datastore - ${form.name}`),
-      );
+      )
+        .update('attributes', a => List(a))
+        .update('qualifications', a => List(a));
       const bridgeModelMapping = BridgeModelMapping(
         bridgeModel.mappings.find(m => m.name === `Datastore - ${form.name}`),
-      );
+      )
+        .update('attributes', a => List(a))
+        .update('qualifications', a => List(a));
       const canManage = state.forms.find(f => f.slug === form.slug).canManage;
       const columns = buildColumns(form);
       const dsForm = DatastoreForm({
         ...form,
         canManage,
         columns,
+        bridgeName: bridgeModelMapping.bridgeName,
         bridgeModel,
         bridgeModelMapping,
       });
@@ -311,6 +318,8 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('currentFormLoading', false)
         .set('currentForm', dsForm)
         .set('currentFormChanges', dsForm);
+    case types.RESET_FORM:
+      return state.set('currentFormChanges', state.get('currentForm'));
     case types.FETCH_SUBMISSIONS_ADVANCED:
       return state.set('searching', true);
     case types.FETCH_SUBMISSIONS_SIMPLE:
