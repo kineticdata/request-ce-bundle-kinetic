@@ -17,6 +17,7 @@ import {
   SPACE_INCLUDES,
   BRIDGE_MODEL_INCLUDES,
 } from '../modules/settingsDatastore';
+import { DatastoreFormSave } from '../../records';
 
 export function* fetchFormsSaga() {
   const [displayableForms, manageableForms, space] = yield all([
@@ -72,24 +73,75 @@ export function* fetchFormSaga(action) {
 export function* updateFormSaga() {
   const currentForm = yield select(selectCurrentForm);
   const currentFormChanges = yield select(selectCurrentFormChanges);
-  const formContent = {
-    attributesMap: {
+  let updateError = null;
+  let slug = currentForm.slug;
+
+  const formContent = DatastoreFormSave(currentForm).set('attributesMap', {
+    'Datastore Configuration': [
+      JSON.stringify(currentFormChanges.columns.toJS()),
+    ],
+  });
+  const formContentChanges = DatastoreFormSave(currentFormChanges).set(
+    'attributesMap',
+    {
       'Datastore Configuration': [
         JSON.stringify(currentFormChanges.columns.toJS()),
       ],
     },
-    slug: currentFormChanges.slug,
-    name: currentFormChanges.name,
-    description: currentFormChanges.description,
-  };
-  const { serverError, form } = yield call(CoreAPI.updateForm, {
-    datastore: true,
-    formSlug: currentForm.slug,
-    form: formContent,
-    include: FORM_INCLUDES,
-  });
-  if (!serverError) {
-    yield put(actions.fetchForm(form.slug));
+  );
+
+  // Update form if content has changed
+  if (!formContent.equals(formContentChanges)) {
+    const { serverError, error, form } = yield call(CoreAPI.updateForm, {
+      datastore: true,
+      formSlug: currentForm.slug,
+      form: formContentChanges,
+      include: FORM_INCLUDES,
+    });
+    if (error || serverError) {
+      updateError = error || serverError.statusText;
+    } else {
+      slug = form.slug;
+    }
+  }
+
+  // Update bridge model if bridge info has changed
+  if (
+    !updateError &&
+    (!currentForm.bridgeModel.equals(currentFormChanges.bridgeModel) ||
+      !currentForm.bridgeModelMapping.equals(
+        currentFormChanges.bridgeModelMapping,
+      ))
+  ) {
+    const modelName = currentForm.bridgeModel.name;
+    const bridgeModel = currentFormChanges.bridgeModel
+      .set('name', `Datastore - ${currentFormChanges.name}`)
+      .set('activeMappingName', `Datastore - ${currentFormChanges.name}`)
+      .set('mappings', [
+        currentFormChanges.bridgeModelMapping.set(
+          'name',
+          `Datastore - ${currentFormChanges.name}`,
+        ),
+      ])
+      .toJS();
+    const { error, serverError } = !!modelName
+      ? yield call(CoreAPI.updateBridgeModel, {
+          modelName,
+          bridgeModel,
+        })
+      : yield call(CoreAPI.createBridgeModel, {
+          bridgeModel,
+        });
+    if (error || serverError) {
+      updateError = error || serverError.statusText;
+    }
+  }
+
+  if (updateError) {
+    yield put(toastActions.addError(updateError));
+  } else {
+    yield put(toastActions.addSuccess('Form updated.'));
+    yield put(actions.fetchForm(slug));
     yield put(actions.fetchForms());
   }
 }
@@ -112,7 +164,6 @@ export function* createFormSaga(action) {
   if (serverError || error) {
     yield put(toastActions.addError(error || serverError.statusText));
   } else {
-    // TODO: Build Initial Bridge Model and Mapping here
     yield put(actions.fetchForms());
     if (typeof action.payload.callback === 'function') {
       action.payload.callback();

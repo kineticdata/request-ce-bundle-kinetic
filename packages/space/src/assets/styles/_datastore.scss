@@ -93,6 +93,12 @@
     }
   }
 
+  div.table-title {
+    justify-content: space-between;
+    display: flex;
+    flex: 1 1 100%;
+  }
+
   @media (min-width: 768px) {
     .d-md-table-header-group {
       display: table-header-group !important;
