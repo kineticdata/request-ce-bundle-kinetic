@@ -2,10 +2,9 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { getTeamColor, getTeamIcon } from '../../utils';
 import { Discussion as KinopsDiscussion } from 'discussions';
-import { PageTitle } from 'common';
+import { PageTitle, Hoverable } from 'common';
 import { ServiceCard } from '../shared/ServiceCard';
 import { TeamMemberAvatar } from './TeamMemberAvatar';
-import { Hoverable } from '../shared/Hoverable';
 import { ProfileCard } from '../shared/ProfileCard';
 
 export const Team = ({
