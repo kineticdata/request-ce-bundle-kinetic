@@ -1,10 +1,13 @@
 import React from 'react';
+import axios from 'axios';
 import { Modal } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { lifecycle, compose, withHandlers, withState } from 'recompose';
 import { bundle } from 'react-kinetic-core';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { List } from 'immutable';
 import { isBlank } from '../../../utils';
 
 import {
@@ -34,11 +37,15 @@ const SettingsComponent = ({
   generateAttributes,
   columns,
   handleColumnChange,
+  handleColumnOrderChange,
   handleFormChange,
   loading,
   hasChanged,
   handleSave,
   handleReset,
+  staleFields,
+  setStaleFields,
+  fetchForm,
 }) =>
   !loading && (
     <div className="page-container page-container--panels page-container--datastore">
@@ -116,47 +123,63 @@ const SettingsComponent = ({
             <div className="table-settings">
               <h3 className="section__title">Table Display Settings</h3>
               <div className="settings">
-                <table className="table">
+                <table className="table table-datastore table-draggable">
                   <thead>
                     <tr className="header">
                       <th>Field</th>
                       <th>Visible in Table</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {updatedForm.columns
-                      .filter(col => col.type === 'value')
-                      .map(col => (
-                        <tr key={col.name}>
-                          <td>{col.label}</td>
-                          <td>
-                            <input
-                              onChange={handleColumnChange(col, 'visible')}
-                              type="checkbox"
-                              checked={col.visible}
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    {updatedForm.columns
-                      .filter(col => col.type !== 'value')
-                      .map(col => (
-                        <tr key={col.name}>
-                          <td>
-                            <i>
-                              {col.label} <small>(system field)</small>
-                            </i>
-                          </td>
-                          <td>
-                            <input
-                              onChange={handleColumnChange(col, 'visible')}
-                              type="checkbox"
-                              checked={col.visible}
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
+                  <DragDropContext onDragEnd={handleColumnOrderChange}>
+                    <Droppable droppableId="columns">
+                      {provided => (
+                        <tbody ref={provided.innerRef}>
+                          {updatedForm.columns.map((col, index) => (
+                            <Draggable
+                              key={col.name}
+                              draggableId={col.name}
+                              index={index}
+                            >
+                              {(provided, snapshot) => (
+                                <tr
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  className={`${
+                                    snapshot.isDragging ? 'dragging' : ''
+                                  }`}
+                                >
+                                  <td>
+                                    {col.type === 'value' ? (
+                                      col.label
+                                    ) : (
+                                      <i>
+                                        {col.label}{' '}
+                                        <small>(system field)</small>
+                                      </i>
+                                    )}
+                                  </td>
+                                  <td>
+                                    <input
+                                      onChange={e =>
+                                        handleColumnChange(
+                                          index,
+                                          'visible',
+                                          e.target.checked,
+                                        )
+                                      }
+                                      type="checkbox"
+                                      checked={col.visible}
+                                    />
+                                  </td>
+                                </tr>
+                              )}
+                            </Draggable>
+                          ))}
+                        </tbody>
+                      )}
+                    </Droppable>
+                  </DragDropContext>
                 </table>
               </div>
             </div>
@@ -256,6 +279,51 @@ const SettingsComponent = ({
           visible in the table when viewing records.
         </p>
       </div>
+      <Modal
+        isOpen={staleFields}
+        toggle={() => setStaleFields(false)}
+        size="lg"
+      >
+        <div className="modal-header">
+          <h4 className="modal-title">
+            <button
+              onClick={() => setStaleFields(false)}
+              type="button"
+              className="btn btn-link"
+            >
+              Cancel
+            </button>
+            <span>Form Has Changed</span>
+          </h4>
+        </div>
+        <div className="modal-body">
+          <div className="modal-form">
+            <p>
+              This datastore's form has been updated. Click reload in order to
+              see the latest fields.
+            </p>
+            {hasChanged && (
+              <p className="text-danger">
+                <span className="fa fa-exclamation-triangle" />
+                &nbsp; You have unsaved changes that will be lost if you reload
+                now.
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="modal-footer">
+          <button
+            onClick={() => {
+              fetchForm(origForm.slug);
+              setStaleFields(false);
+            }}
+            type="button"
+            className="btn btn-primary"
+          >
+            Reload
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 
@@ -278,7 +346,7 @@ const QualificationTable = ({
         </button>
       </div>
     </div>
-    <table className="table">
+    <table className="table table-datastore">
       <thead>
         <tr className="header">
           <th>Qualification Name</th>
@@ -401,7 +469,7 @@ const QualificationModal = ({
           </div>
           <div className="form-group">
             <label>Parameters</label>
-            <table className="table">
+            <table className="table table-datastore">
               <thead>
                 <tr className="header">
                   <th>Name</th>
@@ -611,7 +679,7 @@ const AttributeTable = ({
         )}
       </div>
     </div>
-    <table className="table">
+    <table className="table table-datastore">
       <thead>
         <tr className="header">
           <th>Attribute Name</th>
@@ -801,9 +869,26 @@ const AttributeTable = ({
   </div>
 );
 
-const handleColumnChange = ({ setFormChanges }) => (column, prop) => () => {
-  const updated = column.set(prop, !column.get(prop));
-  setFormChanges({ type: 'column', original: column, updated });
+const handleColumnChange = ({ setFormChanges, updatedForm: { columns } }) => (
+  index,
+  prop,
+  value,
+) => {
+  const updated = columns.setIn([index, prop], value);
+  setFormChanges({ type: 'columns', value: updated });
+};
+
+const handleColumnOrderChange = ({
+  setFormChanges,
+  updatedForm: { columns },
+}) => ({ source, destination }) => {
+  if (destination && source.index !== destination.index) {
+    const updated = columns.update(cols => {
+      const col = cols.get(source.index);
+      return cols.delete(source.index).insert(destination.index, col);
+    });
+    setFormChanges({ type: 'columns', value: updated });
+  }
 };
 
 const handleBridgeChange = ({
@@ -1012,6 +1097,32 @@ const canGenerateAttributes = ({
   return missing || !bridgeModel.attributes.find(a => a.name === 'Id');
 };
 
+const windowFocusListener = ({ setStaleFields, origForm }) => () => {
+  // Check if form fields are stale, and if yes, allow user to reload form
+  axios
+    .get(`${bundle.apiLocation()}/datastore/forms/${origForm.slug}`, {
+      params: { include: 'fields' },
+    })
+    .then(response => ({ form: response.data.form }))
+    .then(({ form }) => {
+      if (
+        !List(origForm.fields)
+          .map(({ name }) => name)
+          .sort()
+          .equals(
+            List(form.fields)
+              .map(({ name }) => name)
+              .sort(),
+          )
+      ) {
+        setStaleFields(true);
+      }
+    })
+    .catch(() => {
+      /* Do nothing if form fetch errors */
+    });
+};
+
 export const mapStateToProps = (state, { match: { params } }) => ({
   loading: state.space.settingsDatastore.currentFormLoading,
   canManage: state.space.settingsDatastore.currentForm.canManage,
@@ -1041,12 +1152,15 @@ export const DatastoreSettings = compose(
   withState('newQualification', 'setNewQualification', null),
   withState('newAttribute', 'setNewAttribute', new BridgeAttribute()),
   withState('editAttribute', 'setEditAttribute', new BridgeAttribute()),
+  withState('staleFields', 'setStaleFields', false),
   withHandlers({
     handleBridgeChange,
     handleColumnChange,
+    handleColumnOrderChange,
     handleFormChange,
     handleSave,
     handleReset,
+    windowFocusListener,
   }),
   withHandlers({
     canGenerateAttributes,
@@ -1055,6 +1169,10 @@ export const DatastoreSettings = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchForm(this.props.formSlug);
+      window.addEventListener('focus', this.props.windowFocusListener);
+    },
+    componentWillUnmount() {
+      window.removeEventListener('focus', this.props.windowFocusListener);
     },
   }),
 )(SettingsComponent);

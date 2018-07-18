@@ -56,6 +56,7 @@ export const DatastoreForm = Record({
   description: '',
   indexDefinitions: List(),
   columns: List(),
+  fields: [],
   canManage: false,
   isHidden: false,
   bridgeModel: BridgeModel(),
@@ -85,8 +86,6 @@ export const ColumnConfig = Record({
   type: '',
   // if the column is displayable in the table
   visible: false,
-  // if the column is filterable in the table
-  filterable: false,
 });
 
 export const SearchParams = Record({
