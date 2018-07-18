@@ -41,9 +41,11 @@ export const getFilterByPath = (state, pathname) => {
       findByName(defaultListMatch.params.name),
     );
   } else if (customListMatch) {
-    return state.queue.queueApp.myFilters.find(
-      findByName(customListMatch.params.name),
-    );
+    let filterName = customListMatch.params.name;
+    try {
+      filterName = decodeURIComponent(customListMatch.params.name);
+    } catch (e) {}
+    return state.queue.queueApp.myFilters.find(findByName(filterName));
   }
 };
 
@@ -53,7 +55,7 @@ export const buildFilterPath = filter => {
   } else if (filter.type === 'default') {
     return `/list/${filter.name}`;
   } else if (filter.type === 'custom') {
-    return `/custom/${filter.name}`;
+    return `/custom/${encodeURIComponent(filter.name)}`;
   } else {
     return '/adhoc';
   }

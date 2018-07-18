@@ -85,7 +85,7 @@ export const Sidebar = ({
         {myFilters.map(filter => (
           <NavItem key={filter.name}>
             <NavLink
-              to={`/custom/${filter.name}`}
+              to={`/custom/${encodeURIComponent(filter.name)}`}
               className="nav-link"
               activeClassName="active"
             >

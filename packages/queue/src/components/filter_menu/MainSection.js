@@ -55,6 +55,13 @@ const DateRangeSummary = ({ errors, filter }) =>
     </span>
   ) : null;
 
+const FilterNameSummary = ({ errors }) =>
+  errors.get('Filter Name') ? (
+    <span className="validation-error text-danger">
+      {errors.get('Filter Name')}
+    </span>
+  ) : null;
+
 export const MainSection = ({
   filter,
   showSection,
@@ -141,6 +148,7 @@ export const MainSection = ({
     </ul>
     <div className="save-filter">
       <label>Filter Name</label>
+      <FilterNameSummary errors={errors} />
       <input
         type="text"
         placeholder="New Filter Name"

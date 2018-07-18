@@ -67,12 +67,18 @@ const validateDateRange = filter => {
   }
 };
 
+const validateFilterName = filterName => {
+  if (filterName && filterName.indexOf('%') >= 0) {
+    return 'Percentage signs are not allowed in filter names.';
+  }
+};
+
 export const FilterMenuContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withProps(({ appliedAssignments, currentFilter }) => ({
+  withProps(({ appliedAssignments, currentFilter, filterName }) => ({
     errors: !currentFilter
       ? Map()
       : Map({
@@ -81,6 +87,7 @@ export const FilterMenuContainer = compose(
             !currentFilter.createdByMe &&
             'No assignments selected',
           'Date Range': validateDateRange(currentFilter),
+          'Filter Name': validateFilterName(filterName),
         }).filter(value => !!value),
   })),
   withHandlers({
@@ -112,7 +119,7 @@ export const FilterMenuContainer = compose(
         addPersonalFilter(
           currentFilter.set('name', filterName).set('type', 'custom'),
         );
-        push(`/kapps/${kappSlug}/custom/${filterName}`);
+        push(`/kapps/${kappSlug}/custom/${encodeURIComponent(filterName)}`);
       }
 
       close();
