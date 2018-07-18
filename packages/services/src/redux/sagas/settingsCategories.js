@@ -1,6 +1,7 @@
 import { call, put, takeEvery, select, all } from 'redux-saga/effects';
 import { CoreAPI, bundle } from 'react-kinetic-core';
 import { toastActions } from 'common';
+import axios from 'axios';
 import { actions, types } from '../modules/settingsCategories';
 
 export function* fetchCategoriesSaga(action) {
@@ -16,66 +17,47 @@ export function* fetchCategoriesSaga(action) {
   }
 }
 
-export function* updateCategoriesSaga(action) {
-  const currentForm = action.payload.form;
-  const currentFormChanges = action.payload.inputs;
-  const formContent = {
+export function* updateCategorySaga(action) {
+  const data = {
+    name: action.payload.name,
+    slug: action.payload.slug,
     attributesMap: {
-      Icon: [currentFormChanges.icon],
-      'Task Form Slug': currentFormChanges['Task Form Slug']
-        ? [currentFormChanges['Task Form Slug']]
-        : [],
-      'Service Days Due': currentFormChanges['Service Days Due']
-        ? [currentFormChanges['Service Days Due']]
-        : [],
-      'Approval Form Slug': currentFormChanges['Approval Form Slug']
-        ? [currentFormChanges['Approval Form Slug']]
-        : [],
-      'Task Form Slug': currentFormChanges['Task Form Slug']
-        ? [currentFormChanges['Task Form Slug']]
-        : [],
-      Approver: currentFormChanges.Approver
-        ? [currentFormChanges.Approver]
-        : [],
-      'Task Assignee Team': currentFormChanges['Task Assignee Team']
-        ? [currentFormChanges['Task Assignee Team']]
-        : [],
-      'Notification Template Name - Create': currentFormChanges[
-        'Notification Template Name - Create'
-      ]
-        ? [currentFormChanges['Notification Template Name - Create']]
-        : [],
-      'Notification Template Name - Complete': currentFormChanges[
-        'Notification Template Name - Complete'
-      ]
-        ? [currentFormChanges['Notification Template Name - Complete']]
-        : [],
-      'Owning Team': currentFormChanges['Owning Team']
-        ? currentFormChanges['Owning Team']
-        : [],
+      'Sort Order': [action.payload.sort],
+      Parent: [action.payload.parent],
     },
-    status: currentFormChanges.status,
-    type: currentFormChanges.type,
-    description: currentFormChanges.description,
-    categorizations: currentFormChanges.categories,
   };
-  const { serverError, form } = yield call(CoreAPI.updateForm, {
-    kappSlug: action.payload.kappSlug,
-    formSlug: currentForm.slug,
-    form: formContent,
-    include: FORM_INCLUDES,
+
+  axios.request({
+    method: 'put',
+    url: `${bundle.apiLocation()}/kapps/services/categories/${
+      action.payload.slug
+    }`,
+    data: JSON.stringify(data),
   });
-  if (!serverError) {
-    yield put(
-      actions.fetchForm({
-        kappSlug: action.payload.kappSlug,
-        formSlug: currentForm.slug,
-      }),
-    );
-  }
+}
+
+export function* addCategorySaga(action) {
+  const data = {
+    name: action.payload.name,
+    slug: action.payload.slug,
+    attributesMap: {
+      'Sort Order': [action.payload.sort],
+      Parent: [action.payload.parent],
+    },
+  };
+
+  console.log(JSON.stringify(data));
+
+  axios.request({
+    method: 'post',
+    url: `${bundle.apiLocation()}/kapps/services/categories/`,
+    data: JSON.stringify(data),
+    contentType: 'application/json; charset=utf-8',
+  });
 }
 
 export function* watchSettingsCategories() {
-  yield takeEvery(types.UPDATE_CATEGORIES, updateCategoriesSaga);
+  yield takeEvery(types.UPDATE_CATEGORY, updateCategorySaga);
+  yield takeEvery(types.ADD_CATEGORY, addCategorySaga);
   yield takeEvery(types.FETCH_CATEGORIES, fetchCategoriesSaga);
 }
