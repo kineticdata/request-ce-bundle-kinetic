@@ -49,3 +49,5 @@ export const buildHierarchy = name => {
   });
   return parent;
 };
+
+export const isBlank = string => !string || string.trim().length === 0;

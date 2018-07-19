@@ -42,7 +42,7 @@ export const DateRangeSection = ({
       None
     </label>
     {[7, 14, 30, 60, 90].map(numberOfDays => (
-      <label htmlFor={`date-range-${numberOfDays}days`}>
+      <label key={numberOfDays} htmlFor={`date-range-${numberOfDays}days`}>
         <input
           type="radio"
           id={`date-range-${numberOfDays}days`}

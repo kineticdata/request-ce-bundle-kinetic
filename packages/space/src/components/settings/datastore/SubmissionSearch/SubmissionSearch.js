@@ -28,18 +28,20 @@ const SubmissionSearchComponent = ({
             </h3>
             <h1>{form.name}</h1>
           </div>
-          <Link
-            to={`/settings/datastore/${form.slug}/import`}
-            className="btn btn-secondary"
-          >
-            Import Records
-          </Link>
-          <Link
-            to={`/settings/datastore/${form.slug}/new`}
-            className="btn btn-primary"
-          >
-            New
-          </Link>
+          <div className="page-title__actions">
+            <Link
+              to={`/settings/datastore/${form.slug}/import`}
+              className="btn btn-secondary ml-3"
+            >
+              Import Records
+            </Link>
+            <Link
+              to={`/settings/datastore/${form.slug}/new`}
+              className="btn btn-primary ml-3"
+            >
+              New
+            </Link>
+          </div>
         </div>
         <Searchbar />
         <Paging />

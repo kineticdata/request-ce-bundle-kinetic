@@ -1,9 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import Avatar from 'react-avatar';
 import { bundle } from 'react-kinetic-core';
+import { Hoverable } from 'common';
 import { actions } from '../redux/modules/discussions';
+import Avatar from 'react-avatar';
+
+import { ParticipantCard } from './ParticipantCard';
 
 const participantComparator = (p1, p2) =>
   p1.message_count !== p2.message_count
@@ -22,9 +25,14 @@ export const ParticipantsHeader = ({
         .toList()
         .sort(participantComparator)
         .map(p => (
-          <div className={`${p.present ? 'present' : ''}`} key={p.id}>
-            <Avatar size={26} src={p.avatar_url} name={p.name} round />
-          </div>
+          <Hoverable
+            key={p.id}
+            render={() => <ParticipantCard participant={p} />}
+          >
+            <div className={`${p.present ? 'present' : ''}`}>
+              <Avatar size={26} src={p.avatar_url} name={p.name} round />
+            </div>
+          </Hoverable>
         ))}
       <div className="view-all">
         {!isFullScreen && (

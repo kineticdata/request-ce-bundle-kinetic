@@ -26,31 +26,33 @@ const CreateDiscussionModalComponent = ({
         <form>
           <div className="discussions-input-container">
             <div className="form-group required">
-              <label>Name</label>
+              <label className="field-label">Name</label>
               <input
                 name="title"
                 type="text"
                 onChange={handleFieldChange}
                 value={fieldValues.title}
-                placeholder="Short simple name"
+                placeholder="Name of the discussion"
               />
             </div>
           </div>
-          <div className="form-group required">
-            <label>Description</label>
+          <div className="form-group">
+            <label className="field-label">Description</label>
             <textarea
               name="description"
               value={fieldValues.description}
-              placeholder="Long description for easier searching"
+              onChange={handleFieldChange}
+              placeholder="Description for easier searching"
             />
           </div>
           <h1 className="section__title">Invite Members</h1>
-          <div className="form-group required">
-            <label>Invite member(s) </label>
+          <div className="form-group">
+            <label className="field-label">Invite member(s) </label>
             <textarea
-              name="invite-members"
+              name="members"
               value={fieldValues.members}
-              placeholder="Search for a user to add by Name, Username, or Email"
+              onChange={handleFieldChange}
+              placeholder="Comma separated list of email addresses"
             />
           </div>
         </form>
@@ -100,7 +102,11 @@ export const CreateDiscussionModal = compose(
       props.setFieldValues({ ...props.fieldValues, [name]: value });
     },
     handleSubmit: props => event => {
-      props.createDiscussion(props.fieldValues.title);
+      props.createDiscussion({
+        title: props.fieldValues.title,
+        description: props.fieldValues.description,
+        members: props.fieldValues.members,
+      });
     },
     handleToggle: props => event => {
       props.setModalOpen(!props.isOpen);
