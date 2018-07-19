@@ -3,6 +3,7 @@ import { CoreAPI, bundle } from 'react-kinetic-core';
 import { toastActions } from 'common';
 import axios from 'axios';
 import { actions, types } from '../modules/settingsCategories';
+import { Promise } from 'core-js';
 
 export function* fetchCategoriesSaga(action) {
   const { serverError, categories } = yield call(CoreAPI.fetchCategories, {
@@ -27,37 +28,31 @@ export function* updateCategorySaga(action) {
     },
   };
 
-  axios.request({
+  const response = yield call(updateCategory, {
     method: 'put',
     url: `${bundle.apiLocation()}/kapps/services/categories/${
       action.payload.slug
     }`,
     data: JSON.stringify(data),
   });
-}
 
-export function* addCategorySaga(action) {
-  const data = {
-    name: action.payload.name,
-    slug: action.payload.slug,
-    attributesMap: {
-      'Sort Order': [action.payload.sort],
-      Parent: [action.payload.parent],
-    },
-  };
+  if (response.category) {
+  } else {
+  }
 
-  console.log(JSON.stringify(data));
-
-  axios.request({
-    method: 'post',
-    url: `${bundle.apiLocation()}/kapps/services/categories/`,
+  let promise = axios.request({
+    method: 'put',
+    url: `${bundle.apiLocation()}/kapps/services/categories/${
+      action.payload.slug
+    }`,
     data: JSON.stringify(data),
-    contentType: 'application/json; charset=utf-8',
   });
+  promise = promise.then(response => ({ category: response.data.category }));
+  promise = promise.catch(response => ({ error: response }));
+  return promise;
 }
 
 export function* watchSettingsCategories() {
   yield takeEvery(types.UPDATE_CATEGORY, updateCategorySaga);
-  yield takeEvery(types.ADD_CATEGORY, addCategorySaga);
   yield takeEvery(types.FETCH_CATEGORIES, fetchCategoriesSaga);
 }

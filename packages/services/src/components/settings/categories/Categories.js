@@ -11,11 +11,74 @@ import SortableTree, {
   addNodeUnderParent,
   getFlatDataFromTree,
 } from 'react-sortable-tree';
+import axios from 'axios';
 import 'react-sortable-tree/style.css';
 import { actions } from '../../../redux/modules/settingsCategories';
 import { setInitialInputs } from '../forms/FormSettings';
 
-// Map categories for tree
+/**
+ * AXIOS Calls
+ * */
+const addCategory = ({ name, slug, sort, parent }) => {
+  const data = {
+    name,
+    slug,
+    attributes: [
+      {
+        name: 'Sort Order',
+        values: [sort],
+      },
+    ],
+  };
+
+  if (parent != null) {
+    data.attributes.push({
+      name: 'Parent',
+      values: [parent],
+    });
+  }
+
+  return axios.request({
+    method: 'post',
+    url: `${bundle.apiLocation()}/kapps/services/categories/`,
+    data,
+    contentType: 'application/json; charset=utf-8',
+  });
+};
+
+// Delete Category
+export const deleteCategory = ({ slug }) => {
+  return axios.request({
+    method: 'delete',
+    url: `${bundle.apiLocation()}/kapps/services/categories/${slug}`,
+    contentType: 'application/json; charset=utf-8',
+  });
+};
+
+// Update Category
+export const updateCategory = ({ name, slug, sort, parent, originalSlug }) => {
+  const data = {
+    name: name,
+    slug: slug,
+    attributesMap: {
+      'Sort Order': [sort],
+      Parent: [parent],
+    },
+  };
+  return axios.request({
+    method: 'put',
+    url: `${bundle.apiLocation()}/kapps/services/categories/${
+      originalSlug ? originalSlug : slug
+    }`,
+    data: JSON.stringify(data),
+  });
+};
+
+/**
+ * Functions for tree
+ * */
+
+// Map categories
 export const mapCatgories = ({ rawCategories, setCatgories }) => () => {
   rawCategories.sort(function(a, b) {
     a.attributes = a.attributes || {};
@@ -73,29 +136,34 @@ export const removeCategory = ({ categories, setCatgories }) => rowInfo => {
       },
       ignoreCollapsed: true,
     });
-    const flatTree = getFlatDataFromTree({
-      treeData: categories,
-      getNodeKey: ({ node: TreeNode, treeIndex: number }) => {
-        return number;
-      },
-      ignoreCollapsed: false,
-    });
+    deleteCategory({ slug: rowInfo.node.slug })
+      .then(response => {
+        const flatTree = getFlatDataFromTree({
+          treeData: categories,
+          getNodeKey: ({ node: TreeNode, treeIndex: number }) => {
+            return number;
+          },
+          ignoreCollapsed: false,
+        });
 
-    // Remove node and all nested children
-    const parents = [];
-    parents.push(node.slug);
-    for (let i = 0; i < flatTree.length; i++) {
-      const currentNode = flatTree[i];
-      if (
-        currentNode.parentNode &&
-        parents.includes(currentNode.parentNode.slug)
-      ) {
-        console.log(currentNode.node.slug);
-        parents.push(currentNode.node.slug);
-        //deleteCategory(currentNode.node.slug);
-      }
-    }
-    setCatgories(newTree);
+        // Remove node and all nested children
+        const parents = [];
+        parents.push(node.slug);
+        for (let i = 0; i < flatTree.length; i++) {
+          const currentNode = flatTree[i];
+          if (
+            currentNode.parentNode &&
+            parents.includes(currentNode.parentNode.slug)
+          ) {
+            parents.push(currentNode.node.slug);
+            deleteCategory({ slug: currentNode.node.slug }).catch(response =>
+              console.log(response),
+            );
+          }
+        }
+        setCatgories(newTree);
+      })
+      .catch(response => console.log(response));
   }
 };
 
@@ -105,8 +173,12 @@ export const addSubCategory = ({
   setCatgories,
   subcategory,
   setSubcategory,
-  addCategory,
 }) => rowInfo => {
+  // Check for inputs
+  if (!subcategory.name || !subcategory.slug) {
+    setInputs({ ...subcategory, error: 'All fields are required.' });
+    return false;
+  }
   // Check for preexisting slug
   const flatTree = getFlatDataFromTree({
     treeData: categories,
@@ -125,7 +197,7 @@ export const addSubCategory = ({
     return false;
   }
 
-  // Add subcategory to tree
+  // Get new node with tree info
   let NEW_NODE = { title: subcategory.name, slug: subcategory.slug };
   let { node, treeIndex, path } = rowInfo;
   let parentNode = getNodeAtPath({
@@ -150,17 +222,23 @@ export const addSubCategory = ({
     getNodeKey: ({ treeIndex }) => treeIndex,
   });
 
+  // Add subcategory
   addCategory({
     name: subcategory.name,
     slug: subcategory.slug,
     sort: rowInfo.treeIndex,
     parent: parentNode.node.slug,
-  });
-
-  setCatgories(newTree.treeData);
-  setSubcategory({});
+  })
+    .then(response => {
+      setCatgories(newTree.treeData);
+      setSubcategory({});
+    })
+    .catch(response => {
+      setSubcategory({ ...subcategory, error: 'There was an error ' });
+    });
 };
 
+// Add New Category
 export const addNewCategory = ({
   categories,
   setCatgories,
@@ -168,6 +246,13 @@ export const addNewCategory = ({
   setSlugEntered,
   setInputs,
 }) => () => {
+  // Set loading
+  setInputs({ ...inputs, loading: true });
+  // Check for inputs
+  if (!inputs.category || !inputs.slug) {
+    setInputs({ ...inputs, error: 'All fields are required.', loading: false });
+    return false;
+  }
   // Check for preexisting slug
   const flatTree = getFlatDataFromTree({
     treeData: categories,
@@ -182,10 +267,15 @@ export const addNewCategory = ({
   });
 
   if (matches.length > 0) {
-    setInputs({ ...inputs, error: 'Category slug already exists.' });
+    setInputs({
+      ...inputs,
+      error: 'Category slug already exists.',
+      loading: false,
+    });
     return false;
   }
 
+  //
   let NEW_NODE = { title: inputs.category, slug: inputs.slug };
   let parentKey = null;
 
@@ -195,17 +285,26 @@ export const addNewCategory = ({
     expandParent: true,
     parentKey: parentKey,
     getNodeKey: ({ treeIndex }) => treeIndex,
+    ignoreCollapsed: false,
   });
-  // addCategory();
-  setCatgories(newTree.treeData);
-  setSlugEntered(false);
-  setInputs({});
+
+  addCategory({
+    name: inputs.category,
+    slug: inputs.slug,
+    sort: categories.length + 1,
+  })
+    .then(response => {
+      setCatgories(newTree.treeData);
+      setSlugEntered(false);
+      setInputs({ loading: false });
+    })
+    .catch(response => {
+      setInputs({ ...inputs, error: 'There was an error ' });
+      console.log('error: ' + response);
+    });
 };
 
-export const updateCategoryOrder = ({
-  setCatgories,
-  updateCategory,
-}) => args => {
+export const updateCategoryOrder = ({ setCatgories }) => args => {
   // get flat tree
   const flatTree = getFlatDataFromTree({
     treeData: args.treeData,
@@ -224,10 +323,10 @@ export const updateCategoryOrder = ({
       slug: currentNode.node.slug,
       sort: i,
       parent: currentNode.parentNode ? currentNode.parentNode.slug : null,
-    });
+    })
+      .then(response => setCatgories(args.treeData))
+      .catch(response => console.log(response));
   }
-
-  setCatgories(args.treeData);
 };
 
 export const isBlank = string => !string || string.trim().length === 0;
@@ -336,7 +435,11 @@ export const CategoriesContainer = ({
               {inputs.error && (
                 <div className="alert alert-danger">{inputs.error}</div>
               )}
-              <div className="btn btn-primary" onClick={addNewCategory}>
+              <div
+                className="btn btn-primary"
+                onClick={addNewCategory}
+                disabled={inputs.loading}
+              >
                 Add
               </div>
             </form>
@@ -434,8 +537,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   fetchCategories: actions.fetchCategories,
-  updateCategory: actions.updateCategory,
-  addCategory: actions.addCategory,
 };
 
 export const CategoriesSettings = compose(
