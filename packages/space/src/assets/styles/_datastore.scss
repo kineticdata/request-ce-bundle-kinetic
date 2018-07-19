@@ -63,31 +63,51 @@
   }
   table.table-datastore {
     font-size: 0.875rem;
-    margin-top: 1.5rem;
 
     tbody {
-      td {
-        > a {
-          font-weight: 600;
-        }
-        > small {
-          color: $gray;
-        }
-        > .list-dropdown {
-          & > button {
-            padding: 0;
-            color: $black-50;
-            &:hover {
-              color: darken($black-50, 5%);
+      tr {
+        td {
+          > a {
+            font-weight: 600;
+          }
+          > small {
+            color: $gray;
+          }
+          > .list-dropdown {
+            & > button {
+              padding: 0;
+              color: $black-50;
+              &:hover {
+                color: darken($black-50, 5%);
+              }
             }
           }
+          > .dropdown .btn {
+            background-color: transparent;
+            padding: 0rem 0.25rem;
+          }
+          & .dropdown-item {
+            padding: 0.25rem 1rem;
+          }
         }
-        > .dropdown .btn {
-          background-color: transparent;
-          padding: 0rem 0.25rem;
-        }
-        & .dropdown-item {
-          padding: 0.25rem 1rem;
+      }
+    }
+
+    &.table-draggable {
+      border-collapse: separate;
+      border-spacing: 0px;
+
+      tbody {
+        tr {
+          &.dragging {
+            background-color: $blue3;
+            td {
+              border: none;
+            }
+            td + td {
+              display: none;
+            }
+          }
         }
       }
     }
@@ -97,6 +117,11 @@
     justify-content: space-between;
     display: flex;
     flex: 1 1 100%;
+    margin: 0 0 0.5rem 0;
+
+    .table-title__wrapper {
+      line-height: 2.25rem;
+    }
   }
 
   @media (min-width: 768px) {

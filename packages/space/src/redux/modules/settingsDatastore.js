@@ -156,19 +156,33 @@ const parseJson = json => {
 
 export const buildColumns = form => {
   // Parse Form Attribute for Configuration Values
-  const savedColumnConfig = parseJson(
-    form.attributesMap['Datastore Configuration']
-      ? form.attributesMap['Datastore Configuration'][0]
-      : [],
-  );
-  // Build a list of all current column properties
-  const defaultColumnConfig = List(
-    SUBMISSION_SYSTEM_PROPS.concat(
-      form.fields.map(f =>
-        ColumnConfig({ name: f.name, label: f.name, type: 'value' }),
-      ),
+  const savedColumnConfig = List(
+    parseJson(
+      form.attributesMap['Datastore Configuration']
+        ? form.attributesMap['Datastore Configuration'][0]
+        : [],
     ),
   );
+  // Build a list of all current column properties
+  let defaultColumnConfig = List(
+    form.fields
+      .map(f => ColumnConfig({ name: f.name, label: f.name, type: 'value' }))
+      .concat(SUBMISSION_SYSTEM_PROPS),
+  ).sort((a, b) => {
+    var indexA = savedColumnConfig.findIndex(
+      sc => sc.name === a.name && sc.type === a.type,
+    );
+    var indexB = savedColumnConfig.findIndex(
+      sc => sc.name === b.name && sc.type === b.type,
+    );
+    if (indexA === indexB) {
+      return 0;
+    } else if (indexA >= 0 && (indexA < indexB || indexB === -1)) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
   // If there are saved column configs, apply them
   if (savedColumnConfig.size > 0) {
     return defaultColumnConfig.map(dc => {
@@ -177,11 +191,10 @@ export const buildColumns = form => {
       );
       if (saved) {
         return ColumnConfig({
+          ...saved,
           name: dc.name,
           type: dc.type,
           label: dc.label,
-          visible: saved.visible,
-          filterable: saved.filterable,
         });
       } else {
         return dc;
@@ -453,14 +466,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.RESET_SUBMISSION:
       return state.set('submissionLoading', true).set('submission', null);
     case types.SET_FORM_CHANGES:
-      return payload.type === 'column'
-        ? state.updateIn(['currentFormChanges', 'columns'], columns =>
-            columns.set(
-              columns.findIndex(c => c === payload.original),
-              payload.updated,
-            ),
-          )
-        : state.setIn(['currentFormChanges', payload.type], payload.value);
+      return state.setIn(['currentFormChanges', payload.type], payload.value);
     default:
       return state;
   }
