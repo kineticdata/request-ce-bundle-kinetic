@@ -83,5 +83,13 @@ export const Sidebar = props => (
         ))}
       </Nav>
     </div>
+    <div className="sidebar-group sidebar-group--settings">
+      <ul className="nav flex-column settings-group">
+        <Link to="/settings/" onClick={props.openSettings} className="nav-link">
+          Settings
+          <span className="fa fa-fw fa-angle-right" />
+        </Link>
+      </ul>
+    </div>
   </div>
 );

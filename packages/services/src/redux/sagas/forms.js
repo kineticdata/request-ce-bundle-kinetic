@@ -8,7 +8,7 @@ export function* fetchFormsSaga() {
   const kappSlug = yield select(state => state.app.config.kappSlug);
   const { forms, errors, serverError } = yield call(CoreAPI.fetchForms, {
     kappSlug,
-    include: 'categorizations,attributes',
+    include: 'details,categorizations,attributes',
   });
 
   if (serverError) {

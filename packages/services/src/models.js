@@ -14,6 +14,8 @@ export const Form = object => ({
     object.categorizations && object.categorizations.map(c => c.category.slug),
   type: object.type,
   status: object.status,
+  createdAt: object.createdAt,
+  updatedAt: object.updatedAt,
 });
 
 export const Category = object => ({
