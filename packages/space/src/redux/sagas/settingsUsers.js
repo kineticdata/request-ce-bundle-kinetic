@@ -52,7 +52,9 @@ export function* createUserSaga({ payload }) {
 }
 
 export function* fetchUsersSaga() {
-  const { users, serverError } = yield call(CoreAPI.fetchUsers);
+  const { users, serverError } = yield call(CoreAPI.fetchUsers, {
+    include: 'attributesMap,memberships,profileAttributesMap',
+  });
 
   if (serverError) {
     yield put(errorActions.setSystemError(serverError));
