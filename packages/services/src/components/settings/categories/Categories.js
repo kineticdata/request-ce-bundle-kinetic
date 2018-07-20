@@ -10,6 +10,7 @@ import SortableTree, {
   getNodeAtPath,
   addNodeUnderParent,
   getFlatDataFromTree,
+  changeNodeAtPath,
 } from 'react-sortable-tree';
 import axios from 'axios';
 import 'react-sortable-tree/style.css';
@@ -79,7 +80,7 @@ export const updateCategory = ({ name, slug, sort, parent, originalSlug }) => {
  * */
 
 // Map categories
-export const mapCatgories = ({ rawCategories, setCatgories }) => () => {
+export const mapCatgories = ({ rawCategories, setCategories }) => () => {
   rawCategories.sort(function(a, b) {
     a.attributes = a.attributes || {};
     a.attributes['Sort Order'] = a.attributes['Sort Order'] || [0];
@@ -117,11 +118,11 @@ export const mapCatgories = ({ rawCategories, setCatgories }) => () => {
     }
   }
   const treeData = Object.values(mapped);
-  setCatgories(treeData);
+  setCategories(treeData);
 };
 
 // Remove category
-export const removeCategory = ({ categories, setCatgories }) => rowInfo => {
+export const removeCategory = ({ categories, setCategories }) => rowInfo => {
   if (
     confirm(
       'Are you sure you want to remove this category and all subcategories?',
@@ -161,7 +162,7 @@ export const removeCategory = ({ categories, setCatgories }) => rowInfo => {
             );
           }
         }
-        setCatgories(newTree);
+        setCategories(newTree);
       })
       .catch(response => console.log(response));
   }
@@ -170,7 +171,7 @@ export const removeCategory = ({ categories, setCatgories }) => rowInfo => {
 // Add subcategory
 export const addSubCategory = ({
   categories,
-  setCatgories,
+  setCategories,
   subcategory,
   setSubcategory,
 }) => rowInfo => {
@@ -230,7 +231,7 @@ export const addSubCategory = ({
     parent: parentNode.node.slug,
   })
     .then(response => {
-      setCatgories(newTree.treeData);
+      setCategories(newTree.treeData);
       setSubcategory({});
     })
     .catch(response => {
@@ -241,7 +242,7 @@ export const addSubCategory = ({
 // Add New Category
 export const addNewCategory = ({
   categories,
-  setCatgories,
+  setCategories,
   inputs,
   setSlugEntered,
   setInputs,
@@ -275,7 +276,7 @@ export const addNewCategory = ({
     return false;
   }
 
-  //
+  // Get new node info
   let NEW_NODE = { title: inputs.category, slug: inputs.slug };
   let parentKey = null;
 
@@ -294,7 +295,7 @@ export const addNewCategory = ({
     sort: categories.length + 1,
   })
     .then(response => {
-      setCatgories(newTree.treeData);
+      setCategories(newTree.treeData);
       setSlugEntered(false);
       setInputs({ loading: false });
     })
@@ -304,7 +305,44 @@ export const addNewCategory = ({
     });
 };
 
-export const updateCategoryOrder = ({ setCatgories }) => args => {
+// Edit name / slug of category
+export const editCategory = ({
+  categories,
+  subcategory,
+  setSubcategory,
+  setCategories,
+}) => rowInfo => {
+  let { node, treeIndex, path } = rowInfo;
+  console.log(node);
+
+  const name = subcategory.name;
+  const title = subcategory.name;
+  const slug = subcategory.slug;
+
+  updateCategory({
+    name: name,
+    slug: slug,
+    sort: treeIndex,
+    parent: null,
+    originalSlug: node.slug,
+  })
+    .then(response => {
+      const newTree = changeNodeAtPath({
+        treeData: categories,
+        path,
+        getNodeKey: ({ treeIndex }) => treeIndex,
+        newNode: { ...node, title, name, slug },
+      });
+      setCategories(newTree);
+      setSubcategory({});
+    })
+    .catch(response =>
+      setSubcategory({ ...subcategory, error: 'There was an error ' }),
+    );
+};
+
+// Update the order of categories
+export const updateCategoryOrder = ({ setCategories }) => args => {
   // get flat tree
   const flatTree = getFlatDataFromTree({
     treeData: args.treeData,
@@ -324,18 +362,22 @@ export const updateCategoryOrder = ({ setCatgories }) => args => {
       sort: i,
       parent: currentNode.parentNode ? currentNode.parentNode.slug : null,
     })
-      .then(response => setCatgories(args.treeData))
+      .then(response => setCategories(args.treeData))
       .catch(response => console.log(response));
   }
 };
 
 export const isBlank = string => !string || string.trim().length === 0;
 
+/**
+ * Render
+ * */
+
 export const CategoriesContainer = ({
   updateCategoryOrder,
   categories,
   catLoading,
-  setCatgories,
+  setCategories,
   removeCategory,
   addNewCategory,
   addSubCategory,
@@ -345,6 +387,7 @@ export const CategoriesContainer = ({
   setSlugEntered,
   subcategory,
   setSubcategory,
+  editCategory,
 }) => (
   <div>
     <PageTitle parts={['Space Settings']} />
@@ -363,12 +406,26 @@ export const CategoriesContainer = ({
           <div className="col-sm-6 sortable-categories">
             <SortableTree
               treeData={categories}
-              onChange={treeData => setCatgories(treeData)}
+              onChange={treeData => setCategories(treeData)}
               getNodeKey={categories.slug}
               onMoveNode={args => updateCategoryOrder(args)}
               generateNodeProps={rowInfo => ({
                 buttons: [
                   <div>
+                    <span
+                      className="fa fa-pencil fa-lg"
+                      label="Edit"
+                      onClick={event =>
+                        setSubcategory({
+                          ...subcategory,
+                          rowInfo: rowInfo,
+                          name: rowInfo.node.name,
+                          slug: rowInfo.node.slug,
+                          action: 'edit',
+                        })
+                      }
+                    />
+
                     <span
                       className="fa fa-plus-circle fa-lg"
                       label="Add Subcategory"
@@ -514,7 +571,11 @@ export const CategoriesContainer = ({
               <div className="modal-footer">
                 <button
                   disabled={isBlank(subcategory.name)}
-                  onClick={() => addSubCategory(subcategory.rowInfo)}
+                  onClick={
+                    subcategory.action === 'edit'
+                      ? () => editCategory(subcategory.rowInfo)
+                      : () => addSubCategory(subcategory.rowInfo)
+                  }
                   type="button"
                   className="btn btn-primary"
                 >
@@ -544,8 +605,9 @@ export const CategoriesSettings = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withState('categories', 'setCatgories', []),
+  withState('categories', 'setCategories', []),
   withState('inputs', 'setInputs', {}),
+  withState('subcategory', 'setSubcategory', {}),
   withState('subcategory', 'setSubcategory', {}),
   withState('slugEntered', 'setSlugEntered', false),
   withHandlers({
@@ -554,6 +616,7 @@ export const CategoriesSettings = compose(
     addNewCategory,
     addSubCategory,
     updateCategoryOrder,
+    editCategory,
   }),
   lifecycle({
     componentWillMount() {

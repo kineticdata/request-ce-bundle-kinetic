@@ -3,4 +3,17 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .sortable-categories {
   height: 40rem;
+  .fa {
+    cursor: pointer;
+    margin-left: 0.3rem;
+    &.fa-times-circle {
+      color: $red;
+    }
+    &.fa-plus-circle {
+      color: $green-grass;
+    }
+    &.fa-pencil {
+      color: $blue-lake;
+    }
+  }
 }
