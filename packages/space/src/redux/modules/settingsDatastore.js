@@ -92,6 +92,10 @@ export const types = {
   ),
   DELETE_SUBMISSION_ERROR: namespace('datastore', 'DELETE_SUBMISSION_ERROR'),
   SET_FORM_CHANGES: namespace('datastore', 'SET_FORM_CHANGES'),
+  UPDATE_FORM_ATTRIBUTES_MAP: namespace(
+    'datastore',
+    'UPDATE_FORM_ATTRIBUTES_MAP',
+  ),
 };
 
 export const actions = {
@@ -144,6 +148,7 @@ export const actions = {
   deleteSubmissionSuccess: noPayload(types.DELETE_SUBMISSION_SUCCESS),
   deleteSubmissionErrors: withPayload(types.DELETE_SUBMISSION_ERROR),
   setFormChanges: withPayload(types.SET_FORM_CHANGES),
+  updateFormAttributesMap: withPayload(types.UPDATE_FORM_ATTRIBUTES_MAP),
 };
 
 const parseJson = json => {

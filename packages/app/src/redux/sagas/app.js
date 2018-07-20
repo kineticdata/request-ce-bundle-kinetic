@@ -24,7 +24,7 @@ export function* fetchAppTask() {
   ) {
     const { profile } = yield call(CoreAPI.fetchProfile, {
       include:
-        'attributes,profileAttributes,memberships,memberships.team,memberships.team.attributes,memberships.team.memberships,memberships.team.memberships.user,attributes,space,space.details,space.attributes,space.kapps,space.kapps.attributes',
+        'attributes,profileAttributes,memberships,memberships.team,memberships.team.attributes,memberships.team.memberships,memberships.team.memberships.user,attributes,space,space.details,space.attributes,space.datastoreFormAttributeDefinitions,space.kapps,space.kapps.attributes',
     });
 
     const space = Map(profile.space)
