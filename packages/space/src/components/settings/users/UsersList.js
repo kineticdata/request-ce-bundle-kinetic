@@ -52,7 +52,11 @@ const UsersListComponent = ({ users, loading, match, handleChange, data }) => {
                 this.fileEl = element;
               }}
             />
-            <label htmlFor="file-input" className="btn btn-info">
+            <label
+              htmlFor="file-input"
+              className="btn btn-info"
+              style={{ marginBottom: '0px', marginRight: '.5rem' }}
+            >
               Import Users
             </label>
             <a className="btn btn-secondary" href={data} download="users.csv">
@@ -129,7 +133,6 @@ const handleChange = props => () => {
         dynamicTyping: true,
         complete: results => {
           // When streaming, parse results are not available in this callback.
-
           const { users, updateUser, createUser } = props;
           const importedUsers = fromJS(results.data)
             .map(user => {
@@ -160,7 +163,7 @@ const handleChange = props => () => {
             })),
           ).toSet();
           const userdiff = importedUsers.subtract(existingUsers);
-          console.log(existingUsers.toJS(), userdiff.toJS());
+
           userdiff.forEach(user => {
             const found = existingUsers.find(
               existingUser =>

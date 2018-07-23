@@ -35,6 +35,7 @@ export function* updateUserSaga({ payload }) {
       yield put(kinopsActions.loadApp());
     }
     yield put(actions.setUser(user));
+    yield put(actions.fetchUsers());
   }
 }
 
@@ -48,6 +49,7 @@ export function* createUserSaga({ payload }) {
     yield put(actions.setUserError(serverError));
   } else {
     yield put(actions.setUser(user));
+    yield put(actions.fetchUsers());
   }
 }
 
@@ -68,7 +70,13 @@ export function* fetchUsersSaga() {
 }
 
 export function* deleteUserSaga({ payload }) {
-  yield call(CoreAPI.deleteUser, { username: payload });
+  const { serverError } = yield call(CoreAPI.deleteUser, { username: payload });
+
+  if (serverError) {
+    yield put(errorActions.setSystemError(serverError));
+  } else {
+    yield put(actions.fetchUsers());
+  }
 }
 
 export function* watchSettingsUsers() {
