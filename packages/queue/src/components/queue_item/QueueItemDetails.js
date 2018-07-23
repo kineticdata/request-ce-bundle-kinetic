@@ -166,6 +166,7 @@ const getAttr = (form, attrName) => {
 };
 
 export const mapStateToProps = (state, props) => ({
+  filter: props.filter,
   queueItem: state.queue.queue.currentItem,
   assignments: selectAssignments(state).toJS(),
   prevAndNext: selectPrevAndNext(state, props.filter),
@@ -180,6 +181,8 @@ export const mapDispatchToProps = {
   fetchCurrentItem: actions.fetchCurrentItem,
   openModal: discussionActions.openModal,
   createDiscussion: discussionActions.createIssue,
+  setOffset: actions.setOffset,
+  fetchList: actions.fetchList,
 };
 
 export const QueueItemDetailsContainer = compose(
@@ -228,7 +231,19 @@ export const QueueItemDetailsContainer = compose(
         originId: queueItem.origin ? queueItem.origin.id : queueItem.id,
       });
     },
-    refreshQueueItem: props => () => props.fetchCurrentItem(props.queueItem.id),
+    refreshQueueItem: ({
+      filter,
+      fetchList,
+      setOffset,
+      fetchCurrentItem,
+      queueItem,
+    }) => () => {
+      if (filter && filter !== null) {
+        fetchList(filter);
+        setOffset(0);
+      }
+      fetchCurrentItem(queueItem.id);
+    },
     openDiscussion: props => () =>
       props.openModal(props.queueItem.values['Discussion Id'], 'discussion'),
     createDiscussion: props => () =>
