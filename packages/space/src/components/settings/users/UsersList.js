@@ -124,7 +124,9 @@ const createCSV = users => {
 
 const handleChange = props => () => {
   const file = this.fileEl.files[0];
-  if (file) {
+  const extention = file.name.split('.')[file.name.split('.').length - 1];
+
+  if (file && extention === 'csv') {
     const reader = new FileReader();
     reader.readAsText(this.fileEl.files[0]);
     reader.onload = event => {
