@@ -163,7 +163,6 @@ const handleChange = props => () => {
             })),
           ).toSet();
           const userdiff = importedUsers.subtract(existingUsers);
-
           userdiff.forEach(user => {
             const found = existingUsers.find(
               existingUser =>
