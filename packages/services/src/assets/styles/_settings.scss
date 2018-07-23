@@ -17,3 +17,20 @@
     }
   }
 }
+
+/* form view */
+.settings-flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  label {
+    font-weight: bold;
+  }
+}
+
+table.table-submissions {
+  .hidden {
+    display: none;
+  }
+}

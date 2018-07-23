@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { PageTitle } from 'common';
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
 import { actions } from '../../../redux/modules/settingsForms';
 
 const nextPage = (
@@ -43,6 +49,13 @@ const previousPage = (
   });
   setCurrentPage(currentPage - 1);
 };
+
+const toggleDropdown = ({
+  setOpenDropdown,
+  openDropdown,
+}) => dropdownSlug => () =>
+  setOpenDropdown(dropdownSlug === openDropdown ? '' : dropdownSlug);
+
 export const FormSubmissionsContainer = ({
   loading,
   form,
@@ -56,12 +69,16 @@ export const FormSubmissionsContainer = ({
   kappSlug,
   formSlug,
   setCurrentPage,
+  openDropdown,
+  toggleDropdown,
+  visibleFields,
+  setVisibleFields,
 }) =>
   !loading && (
     <div>
       <PageTitle parts={['Services Settings']} />
-      <div className="page-container page-container--space-settings">
-        <div className="page-panel page-panel--scrollable page-panel--space-profile-edit">
+      <div className="page-container">
+        <div className="page-panel">
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
@@ -73,39 +90,80 @@ export const FormSubmissionsContainer = ({
             </div>
           </div>
           <section>
-            <div className="col-sm-6">
-              <label>Description</label>
-              <p>{form.description}</p>
-            </div>
-            <div className="col-sm-6">
-              <label>Form Type</label>
-              <p>{form.type}</p>
-            </div>
-            <div className="col-sm-6">
-              <label>Form Status</label>
-              <p>{form.status}</p>
-            </div>
-            <div className="col-sm-6">
-              <label>Created</label>
-              <p>
-                {moment(form.createdAt).fromNow()} by {form.createdBy}
-              </p>
-            </div>
-            <div className="col-sm-6">
-              <label>Updated</label>
-              <p>
-                {moment(form.updatedAt).fromNow()} by {form.updatedBy}
-              </p>
+            <div>
+              <div className="settings-flex">
+                <div className="col-sm-12">
+                  <label>Description</label>
+                  <p>{form.description}</p>
+                </div>
+                <div className="col-sm-6">
+                  <label>Form Type</label>
+                  <p>{form.type}</p>
+                </div>
+                <div className="col-sm-6">
+                  <label>Form Status</label>
+                  <p>{form.status}</p>
+                </div>
+                <div className="col-sm-6">
+                  <label>Created</label>
+                  <p>
+                    {moment(form.createdAt).fromNow()} by {form.createdBy}
+                  </p>
+                </div>
+                <div className="col-sm-6">
+                  <label>Updated</label>
+                  <p>
+                    {moment(form.updatedAt).fromNow()} by {form.updatedBy}
+                  </p>
+                </div>
+              </div>
             </div>
 
+            <Dropdown
+              toggle={toggleDropdown(form.slug)}
+              isOpen={openDropdown === form.slug}
+            >
+              <DropdownToggle color="link" className="btn-sm">
+                Toggle Value Columns <span className="fa fa-caret-down fa-2x" />
+              </DropdownToggle>
+              <DropdownMenu>
+                {form.fields.map((field, idx) => (
+                  <DropdownItem>
+                    <input
+                      type="checkbox"
+                      name="view-fields"
+                      id={`view-fields-${idx}`}
+                      value={field.name}
+                      checked={visibleFields[field.name]}
+                      onChange={event =>
+                        setVisibleFields({
+                          ...visibleFields,
+                          [field.name]: !visibleFields[field.name]
+                            ? true
+                            : false,
+                        })
+                      }
+                    />{' '}
+                    <label for={`view-fields-${idx}`}>{field.name}</label>
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
             <div>
-              <table className="table table-sm table-striped table-datastore">
+              <table className="table table-sm table-striped table-datastore table-submissions">
                 <thead className="header">
                   <tr>
                     <th width="15%">Confirmation #</th>
                     <th width="35%">Submission Label</th>
                     <th width="10%">Status</th>
                     <th width="40%">Submitted</th>
+                    {form.fields.map(field => (
+                      <th
+                        className={!visibleFields[field.name] ? 'hidden' : ''}
+                      >
+                        {field.name}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 {!submissionsLoading && (
@@ -120,6 +178,15 @@ export const FormSubmissionsContainer = ({
                             {moment(submission.submittedAt).fromNow()} by{' '}
                             {submission.submittedBy}
                           </td>
+                          {form.fields.map(field => (
+                            <td
+                              className={
+                                !visibleFields[field.name] ? 'hidden' : ''
+                              }
+                            >
+                              {submission.values[field.name]}
+                            </td>
+                          ))}
                         </tr>
                       );
                     })}
@@ -198,7 +265,9 @@ export const FormSubmissions = compose(
   withState('inputs', 'setInputs', {}),
   withState('previousPageTokens', 'setPreviousPageToken', []),
   withState('currentPage', 'setCurrentPage', 1),
-  withHandlers('setPagination'),
+  withState('openDropdown', 'setOpenDropdown', ''),
+  withState('visibleFields', 'setVisibleFields', {}),
+  withHandlers({ toggleDropdown }),
   lifecycle({
     componentWillMount() {
       this.props.fetchFormSettings({
