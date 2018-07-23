@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { CoreAPI } from 'react-kinetic-core';
+import axios from 'axios';
+import { actions as appActions } from 'app/src/redux/modules/space';
 import { Line } from 'rc-progress';
 import { Table, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { Set, List, fromJS } from 'immutable';
@@ -205,8 +207,6 @@ export class DatastoreImport extends Component {
       percentComplete: 0,
       modal: false,
     };
-    this.form = {};
-    this.formFields = [];
     this.calls = [];
     this.failedCalls = [];
     this.readFile = null;
@@ -299,29 +299,6 @@ export class DatastoreImport extends Component {
     }
   };
 
-  fetchForm = () => {
-    CoreAPI.fetchForm({
-      datastore: true,
-      formSlug: this.state.formSlug,
-      include: 'fields,attributesMap',
-    }).then(response => {
-      if (response.serverError || response.errors) {
-      } else {
-        this.form = response.form;
-        this.formFields = response.form.fields.reduce((acc, field) => {
-          acc.push(field.name);
-          return acc;
-        }, []);
-        this.headerToFieldMapFormAttribute =
-          response.form.attributesMap['CSV Header To Form Map'].length > 0
-            ? JSON.parse(
-                response.form.attributesMap['CSV Header To Form Map'][0],
-              )
-            : null;
-      }
-    });
-  };
-
   handleReset = () => {
     this.readFile = null;
     this.setState({
@@ -345,19 +322,6 @@ export class DatastoreImport extends Component {
       postResult: false,
     });
     this.delete(this.state.submissions);
-  };
-  updateForm = () => {
-    CoreAPI.updateForm({
-      datastore: true,
-      formSlug: this.state.formSlug,
-      form: {
-        attributesMap: {
-          'CSV Header To Form Map': [
-            JSON.stringify(this.state.headerToFieldMap.toJS()),
-          ],
-        },
-      },
-    });
   };
 
   handleImport = () => {
@@ -401,13 +365,13 @@ export class DatastoreImport extends Component {
     /*  If the form has the attribute "CSV Header To Form Map" and it has a value then
      * check that the values are still valid.  If not create the map.
     */
-    this.headerToFieldMapFormAttribute
+    this.props.headerToFieldMapFormAttribute
       ? (obj = checkHeaderToFieldMap(
           headers,
-          this.headerToFieldMapFormAttribute,
-          this.formFields,
+          this.props.headerToFieldMapFormAttribute,
+          this.props.formFields,
         ))
-      : (obj = createHeaderToFieldMap(headers, this.formFields));
+      : (obj = createHeaderToFieldMap(headers, this.props.formFields));
 
     this.setState({
       headerToFieldMap: obj.headerToFieldMap,
@@ -424,7 +388,42 @@ export class DatastoreImport extends Component {
   };
 
   handleSave = () => {
-    this.updateForm();
+    if (!this.props.headerToFieldMapDefinitionExists && this.props.spaceAdmin) {
+      axios
+        .post('/app/api/v1/datastoreFormAttributeDefinitions', {
+          allowsMultiple: false,
+          name: 'CSV Header To Form Map',
+          description:
+            'This attribute is used in the datastore import view. The Map is used by the importer take the headers from the CSV file and Map them to fields and properties on the form.',
+        })
+        .then(() => {
+          appActions.fetchSpace();
+          this.props.updateForm({
+            datastore: true,
+            formSlug: this.state.formSlug,
+            form: {
+              attributesMap: {
+                'CSV Header To Form Map': [
+                  JSON.stringify(this.state.headerToFieldMap.toJS()),
+                ],
+              },
+            },
+          });
+        });
+    } else {
+      this.props.updateForm({
+        datastore: true,
+        formSlug: this.state.formSlug,
+        form: {
+          attributesMap: {
+            'CSV Header To Form Map': [
+              JSON.stringify(this.state.headerToFieldMap.toJS()),
+            ],
+          },
+        },
+      });
+    }
+
     this.setState({ mapHeadersShow: false });
   };
 
@@ -487,7 +486,7 @@ export class DatastoreImport extends Component {
   };
 
   componentWillMount() {
-    this.fetchForm();
+    this.props.fetchForm(this.props.match.params.slug);
     this.fetch();
   }
 
@@ -606,7 +605,7 @@ export class DatastoreImport extends Component {
                                   value={obj.field}
                                 >
                                   <option value={''}>Select Option</option>
-                                  {this.formFields.map(fieldName => (
+                                  {this.props.formFields.map(fieldName => (
                                     <option key={fieldName} value={fieldName}>
                                       {fieldName}
                                     </option>
@@ -634,12 +633,17 @@ export class DatastoreImport extends Component {
                       })}
                     </tbody>
                   </table>
-                  <button
-                    className="btn btn-success btn-sm"
-                    onClick={this.handleSave}
-                  >
-                    Save
-                  </button>
+                  {(this.props.headerToFieldMapDefinitionExists ||
+                    this.props.spaceAdmin) &&
+                    (this.props.headerToFieldMapFormAttributeExists ||
+                      this.props.canManage) && (
+                      <button
+                        className="btn btn-success btn-sm"
+                        onClick={this.handleSave}
+                      >
+                        Save
+                      </button>
+                    )}
                 </Fragment>
               )}
 

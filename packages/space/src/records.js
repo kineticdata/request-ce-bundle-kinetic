@@ -61,6 +61,7 @@ export const DatastoreForm = Record({
   isHidden: false,
   bridgeModel: BridgeModel(),
   bridgeModelMapping: BridgeModelMapping(),
+  attributesMap: {},
   bridgeName: '',
   createdAt: '',
   updatedAt: '',

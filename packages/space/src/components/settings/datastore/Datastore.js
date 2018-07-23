@@ -5,9 +5,9 @@ import { DatastoreSubmission } from './Submission';
 import { FormList } from './FormList';
 import { SubmissionSearch } from './SubmissionSearch/SubmissionSearch';
 import { DatastoreSettings } from './DatastoreSettings';
-import { DatastoreImport } from './DatastoreImport';
 import { CreateDatastore } from './CreateDatastore';
 import semver from 'semver';
+import { DatastoreImportContianer } from './DatastoreImportContainer';
 const MINIMUM_CE_VERSION = '2.1.0';
 
 const DatastoreError = () => <h1>Error loading Datastore</h1>;
@@ -55,7 +55,7 @@ export const DatastoreRouter = ({ match, loading, validVersion, version }) =>
         <Route
           exact
           path={`${match.path}/:slug/import`}
-          component={DatastoreImport}
+          component={DatastoreImportContianer}
         />
         <Route
           exact

@@ -70,6 +70,23 @@ export function* fetchFormSaga(action) {
   }
 }
 
+export function* updateFormAttributesMapSaga({ payload }) {
+  const { serverError, error } = yield call(CoreAPI.updateForm, {
+    datastore: true,
+    formSlug: payload.formSlug,
+    form: payload.form,
+    include: FORM_INCLUDES,
+  });
+
+  if (error || serverError) {
+    yield put(toastActions.addError(error || serverError.statusText));
+  } else {
+    yield put(toastActions.addSuccess('Form updated.'));
+    yield put(actions.fetchForm(payload.formSlug));
+    yield put(actions.fetchForms());
+  }
+}
+
 export function* updateFormSaga() {
   const currentForm = yield select(selectCurrentForm);
   const currentFormChanges = yield select(selectCurrentFormChanges);
@@ -481,4 +498,8 @@ export function* watchSettingsDatastore() {
   yield takeEvery(types.DELETE_SUBMISSION, deleteSubmissionSaga);
   yield takeEvery(types.UPDATE_FORM, updateFormSaga);
   yield takeEvery(types.CREATE_FORM, createFormSaga);
+  yield takeEvery(
+    types.UPDATE_FORM_ATTRIBUTES_MAP,
+    updateFormAttributesMapSaga,
+  );
 }
