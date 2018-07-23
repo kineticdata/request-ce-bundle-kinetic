@@ -2,11 +2,23 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { compose, lifecycle } from 'recompose';
+import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
+import papaparse from 'papaparse';
+import { fromJS } from 'immutable';
+
 import { actions } from '../../../redux/modules/settingsUsers';
 
 import { UsersListItem } from './UsersListItem';
+
+const IsJsonString = str => {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+};
 
 const WallyEmptyMessage = ({ filter }) => {
   return (
@@ -18,7 +30,7 @@ const WallyEmptyMessage = ({ filter }) => {
   );
 };
 
-const UsersListComponent = ({ users, loading, match }) => {
+const UsersListComponent = ({ users, loading, match, handleChange, data }) => {
   return (
     <div className="page-container page-container--settings-users">
       <div className="page-panel page-panel--scrollable">
@@ -31,12 +43,25 @@ const UsersListComponent = ({ users, loading, match }) => {
             <h1>Users</h1>
           </div>
           <div className="page-title__actions">
-            {/*<Link
-              to={`${match.path}/import`}
-              className="btn btn-secondary"
+            <input
+              type="file"
+              id="file-input"
+              style={{ display: 'none' }}
+              onChange={handleChange}
+              ref={element => {
+                this.fileEl = element;
+              }}
+            />
+            <label
+              htmlFor="file-input"
+              className="btn btn-info"
+              style={{ marginBottom: '0px', marginRight: '.5rem' }}
             >
-              Bulk Import Users
-            </Link>*/}
+              Import Users
+            </label>
+            <a className="btn btn-secondary" href={data} download="users.csv">
+              Export Users
+            </a>
             <Link to={`${match.path}/new`} className="btn btn-primary ml-3">
               Create User
             </Link>
@@ -74,6 +99,91 @@ const UsersListComponent = ({ users, loading, match }) => {
   );
 };
 
+const createCSV = users => {
+  let csv = papaparse.unparse(
+    users.reduce((acc, user) => {
+      acc.push({
+        ...user,
+        attributesMap: JSON.stringify(user.attributesMap),
+        memberships: JSON.stringify(
+          // Remove the slugs from the teams prior to export.
+          user.memberships.reduce((acc, membership) => {
+            const team = { team: { name: membership.team.name } };
+            acc.push(team);
+            return acc;
+          }, []),
+        ),
+        profileAttributesMap: JSON.stringify(user.profileAttributesMap),
+      });
+      return acc;
+    }, []),
+  );
+  csv = 'data:text/csv;charset=utf-8,' + csv;
+  return encodeURI(csv);
+};
+
+const handleChange = props => () => {
+  const file = this.fileEl.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.readAsText(this.fileEl.files[0]);
+    reader.onload = event => {
+      papaparse.parse(event.target.result, {
+        header: true,
+        dynamicTyping: true,
+        complete: results => {
+          // When streaming, parse results are not available in this callback.
+          const { users, updateUser, createUser } = props;
+          const importedUsers = fromJS(results.data)
+            .map(user => {
+              return user
+                .update('allowedIps', val => (val ? val : ''))
+                .update(
+                  'attributesMap',
+                  val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                )
+                .update(
+                  'profileAttributesMap',
+                  val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                )
+                .update(
+                  'memberships',
+                  val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                );
+            })
+            .toSet();
+          const existingUsers = fromJS(
+            users.map(user => ({
+              ...user,
+              memberships: user.memberships.reduce((acc, membership) => {
+                const team = { team: { name: membership.team.name } };
+                acc.push(team);
+                return acc;
+              }, []),
+            })),
+          ).toSet();
+          const userdiff = importedUsers.subtract(existingUsers);
+          userdiff.forEach(user => {
+            const found = existingUsers.find(
+              existingUser =>
+                user.get('username') === existingUser.get('username'),
+            );
+            if (found) {
+              updateUser(user.toJS());
+            } else {
+              createUser(user.toJS());
+            }
+          });
+        },
+        error: errors => {
+          // Test error handleing here.  This might not work if error is called each time a row has an error.
+          console.log(errors);
+        },
+      });
+    };
+  }
+};
+
 export const mapStateToProps = state => ({
   loading: state.space.settingsUsers.loading,
   users: state.space.settingsUsers.users,
@@ -82,6 +192,8 @@ export const mapStateToProps = state => ({
 export const mapDispatchToProps = {
   push,
   fetchUsers: actions.fetchUsers,
+  updateUser: actions.updateUser,
+  createUser: actions.createUser,
 };
 
 export const UsersList = compose(
@@ -89,9 +201,16 @@ export const UsersList = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withState('data', 'setData', ''),
+  withHandlers({ handleChange }),
   lifecycle({
     componentWillMount() {
       this.props.fetchUsers();
+    },
+    componentWillReceiveProps(nextProps) {
+      if (this.props.users !== nextProps.users) {
+        nextProps.setData(createCSV(nextProps.users));
+      }
     },
   }),
 )(UsersListComponent);
