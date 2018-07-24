@@ -3,6 +3,11 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 .package-layout--space {
+  .page-container--datastore {
+    .kinops-discussions {
+      flex: 1 1 40%;
+    }
+  }
   .datastore-searchbar {
     .btn.btn-none.advanced-dropdown-caret {
       border-top: 1px solid $border-color;

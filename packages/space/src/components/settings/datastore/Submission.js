@@ -8,13 +8,16 @@ import { ButtonGroup, Button } from 'reactstrap';
 import { CoreForm } from 'react-kinetic-core';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import { toastActions } from 'common';
+import { PageTitle, toastActions } from 'common';
+import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 
 import {
   selectPrevAndNext,
   selectFormBySlug,
   actions,
 } from '../../../redux/modules/settingsDatastore';
+
+import { DatastoreDiscussions } from './DatastoreDiscussions';
 
 const globals = import('common/globals');
 
@@ -23,7 +26,6 @@ const DatastoreSubmissionComponent = ({
   showPrevAndNext,
   prevAndNext,
   submissionId,
-  submissionLabel,
   handleCreated,
   handleUpdated,
   handleError,
@@ -31,9 +33,16 @@ const DatastoreSubmissionComponent = ({
   submission,
   isEditing,
   formKey,
+  discussionsEnabled,
 }) => (
-  <div className="page-container page-container--datastore">
-    <div className="page-panel page-panel--scrollable page-panel--space-datastore-submission">
+  <div className="page-container page-container--panels page-container--datastore">
+    <PageTitle
+      parts={[
+        submissionId ? (submission ? submission.label : '') : ' New',
+        'Datastore',
+      ]}
+    />
+    <div className="page-panel page-panel--three-fifths page-panel--space-datastore-submission page-panel--scrollable">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
@@ -100,6 +109,13 @@ const DatastoreSubmissionComponent = ({
         )}
       </div>
     </div>
+    {discussionsEnabled &&
+      submission &&
+      submission.form &&
+      submission.form.fields &&
+      submission.form.fields.find(f => f.name === 'Discussion Id') && (
+        <DatastoreDiscussions />
+      )}
   </div>
 );
 
@@ -151,6 +167,7 @@ export const mapStateToProps = (state, { match: { params } }) => ({
   form: selectFormBySlug(state, params.slug),
   values: valuesFromQueryParams(state.router.location.search),
   isEditing: params.mode && params.mode === 'edit' ? true : false,
+  discussionsEnabled: selectDiscussionsEnabled(state),
 });
 
 export const mapDispatchToProps = {

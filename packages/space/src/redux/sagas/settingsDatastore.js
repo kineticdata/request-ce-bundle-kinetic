@@ -378,7 +378,7 @@ export function* fetchSubmissionsAdvancedSaga() {
 
 export function* fetchSubmissionSaga(action) {
   const include =
-    'details,values,form,form.attributes,activities,activities.details';
+    'details,values,form,form.attributes,form.fields,activities,activities.details';
   const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
     id: action.payload,
     include,
