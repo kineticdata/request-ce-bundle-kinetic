@@ -34,11 +34,11 @@ const SubmissionSearchComponent = ({
           <div className="page-title__actions">
             {submissions.size > 0 && (
               <a
-                className="btn btn-secondary"
+                className="btn btn-info"
                 href={data}
                 download={`${form.name}.csv`}
               >
-                Export Users
+                Export Records
               </a>
             )}
             <Link
