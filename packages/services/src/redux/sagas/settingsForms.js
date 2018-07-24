@@ -21,11 +21,20 @@ export function* fetchFormSubmissionsSaga(action) {
   const kappSlug = action.payload.kappSlug;
   const pageToken = action.payload.pageToken;
   const formSlug = action.payload.formSlug;
-  const searchBuilder = new CoreAPI.SubmissionSearch()
-    .includes(['details', 'values'])
-    .end();
+  const q = action.payload.q;
+  const searchBuilder = new CoreAPI.SubmissionSearch().includes([
+    'details',
+    'values',
+  ]);
   // Add some of the optional parameters to the search
   if (pageToken) searchBuilder.pageToken(pageToken);
+  if (q) {
+    for (const key in q) {
+      console.log(key, q[key]);
+      searchBuilder.eq(key, q[key]);
+    }
+  }
+  searchBuilder.end();
   const search = searchBuilder.build();
 
   const { submissions, nextPageToken, serverError } = yield call(
