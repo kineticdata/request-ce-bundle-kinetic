@@ -30,14 +30,14 @@ export const DeleteModal = ({ handleDelete, handleToggle, modal }) => (
  *  to feilds on the form.
  *
  * @param {Array} headers - First Row of the csv
- * @param {Array} formFields - All the names of the fields on the form.
+ * @param {Array} formFieldNames - All the names of the fields on the form.
  * @return {}
  */
-export const createHeaderToFieldMap = (headers, formFields) => {
+export const createHeaderToFieldMap = (headers, formFieldNames) => {
   const headersSet = Set(headers);
-  const missingFields = headersSet.subtract(formFields);
+  const missingFields = headersSet.subtract(formFieldNames);
 
-  const tempSetA = headersSet.intersect(formFields).reduce((acc, val) => {
+  const tempSetA = headersSet.intersect(formFieldNames).reduce((acc, val) => {
     const obj = { header: val, field: val, checked: false };
     return acc.add(obj);
   }, Set([]));
@@ -120,10 +120,10 @@ const buildHeaderToFieldMap = (headersSet, headerMapList) => {
  *
  * @param {Array} headers - First Row of the csv
  * @param {Array} headerMap - A map of headers to field names that is stored as a attribute on the form.
- * @param {Array} formFields - All the names of the fields on the form.
+ * @param {Array} formFieldNames - All the names of the fields on the form.
  * @returns {Object}
  */
-export const checkHeaderToFieldMap = (headers, headerMap, formFields) => {
+export const checkHeaderToFieldMap = (headers, headerMap, formFieldNames) => {
   const headersSet = Set(headers);
   const headerMapList = List(headerMap);
 
@@ -149,7 +149,7 @@ export const checkHeaderToFieldMap = (headers, headerMap, formFields) => {
   // There are headers that exist in the headerMap config that do not exist in the csv.
   const removedHeaders = existingHeadersSet.subtract(headers);
   // There are fields in the headerMap config that do not exist on the form.
-  const removedFields = existingFieldsSet.subtract(Set(formFields));
+  const removedFields = existingFieldsSet.subtract(Set(formFieldNames));
 
   // Check to see if headers have changed on the CSV or the fields on the form have changed.
   if (
@@ -163,7 +163,7 @@ export const checkHeaderToFieldMap = (headers, headerMap, formFields) => {
         header =>
           (modifiedList = modifiedList.push({
             header,
-            field: formFields.find(field => field === header) || '',
+            field: formFieldNames.find(field => field === header) || '',
             checked: false,
           })),
       );
@@ -206,7 +206,7 @@ export class DatastoreImport extends Component {
       modal: false,
     };
     this.form = {};
-    this.formFields = [];
+    this.formFieldNames = [];
     this.calls = [];
     this.failedCalls = [];
     this.readFile = null;
@@ -303,15 +303,16 @@ export class DatastoreImport extends Component {
     CoreAPI.fetchForm({
       datastore: true,
       formSlug: this.state.formSlug,
-      include: 'fields,attributesMap',
+      include: 'fields.details,attributesMap',
     }).then(response => {
       if (response.serverError || response.errors) {
       } else {
         this.form = response.form;
-        this.formFields = response.form.fields.reduce((acc, field) => {
+        this.formFieldNames = response.form.fields.reduce((acc, field) => {
           acc.push(field.name);
           return acc;
         }, []);
+        this.formFields = response.form.fields;
         this.headerToFieldMapFormAttribute =
           response.form.attributesMap['CSV Header To Form Map'].length > 0
             ? JSON.parse(
@@ -385,7 +386,17 @@ export class DatastoreImport extends Component {
           if (found.header === 'Datastore Record ID' && !(val === '')) {
             obj.id = val;
           } else if (!found.checked) {
-            obj.values = { ...obj.values, [found.field]: val };
+            const fieldObject = this.formFields.find(
+              field => field.name === header,
+            );
+            if (fieldObject && fieldObject.dataType === 'json') {
+              obj.values = {
+                ...obj.values,
+                [found.field]: val ? JSON.parse(val) : [],
+              };
+            } else {
+              obj.values = { ...obj.values, [found.field]: val ? val : null };
+            }
           }
         });
         arr.push(obj);
@@ -405,9 +416,9 @@ export class DatastoreImport extends Component {
       ? (obj = checkHeaderToFieldMap(
           headers,
           this.headerToFieldMapFormAttribute,
-          this.formFields,
+          this.formFieldNames,
         ))
-      : (obj = createHeaderToFieldMap(headers, this.formFields));
+      : (obj = createHeaderToFieldMap(headers, this.formFieldNames));
 
     this.setState({
       headerToFieldMap: obj.headerToFieldMap,
@@ -606,7 +617,7 @@ export class DatastoreImport extends Component {
                                   value={obj.field}
                                 >
                                   <option value={''}>Select Option</option>
-                                  {this.formFields.map(fieldName => (
+                                  {this.formFieldNames.map(fieldName => (
                                     <option key={fieldName} value={fieldName}>
                                       {fieldName}
                                     </option>
