@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { lifecycle, compose, withState } from 'recompose';
 import papaparse from 'papaparse';
+import { PageTitle } from 'common';
 
 import { actions } from '../../../../redux/modules/settingsDatastore';
-
 import { Searchbar } from './Searchbar';
 import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
@@ -21,6 +21,7 @@ const SubmissionSearchComponent = ({
 }) =>
   !loading ? (
     <div className="page-container page-container--datastore">
+      <PageTitle parts={['Search', form.name, 'Datastore']} />
       <div className="page-panel page-panel--scrollable page-panel--datastore-content">
         <div className="page-title">
           <div className="page-title__wrapper">

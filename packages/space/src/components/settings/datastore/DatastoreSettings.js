@@ -8,6 +8,7 @@ import { lifecycle, compose, withHandlers, withState } from 'recompose';
 import { bundle } from 'react-kinetic-core';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { List } from 'immutable';
+import { PageTitle } from 'common';
 import { isBlank } from '../../../utils';
 
 import {
@@ -49,6 +50,7 @@ const SettingsComponent = ({
 }) =>
   !loading && (
     <div className="page-container page-container--panels page-container--datastore">
+      <PageTitle parts={['Settings', origForm.name, 'Datastore']} />
       <div className="page-panel page-panel--two-thirds page-panel--scrollable page-panel--datastore-content">
         <div className="page-title">
           <div className="page-title__wrapper">
