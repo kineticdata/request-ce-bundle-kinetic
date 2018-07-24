@@ -9,6 +9,7 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import classNames from 'classnames';
+import ContentEditable from './ContentEditable';
 
 import { actions } from '../redux/modules/discussions';
 
@@ -37,15 +38,11 @@ class ChatInput extends Component {
 
     this.handleSendChatMessage = this.handleSendChatMessage.bind(this);
     this.handleChatHotKey = this.handleChatHotKey.bind(this);
-    this.handleInputRef = this.handleInputRef.bind(this);
     this.handleChatInput = this.handleChatInput.bind(this);
     this.handleAttachmentDrop = this.handleAttachmentDrop.bind(this);
     this.handleAttachmentClick = this.handleAttachmentClick.bind(this);
     this.handleAttachmentCancel = this.handleAttachmentCancel.bind(this);
     this.handleDropzoneRef = this.handleDropzoneRef.bind(this);
-    this.handlePaste = this.handlePaste.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
-    this.handleBlur = this.handleBlur.bind(this);
     this.isChatInputInvalid = this.isChatInputInvalid.bind(this);
     this.toggleActionsOpen = this.toggleActionsOpen.bind(this);
     this.setActionsOpen = this.setActionsOpen.bind(this);
@@ -55,14 +52,13 @@ class ChatInput extends Component {
     e.preventDefault();
     this.props.sendMessage(
       this.props.discussion.issue.guid,
-      this.htmlElement.innerText,
+      this.state.chatInput,
       this.state.fileAttachment,
     );
-    this.htmlElement.innerText = '';
-    this.setState({ fileAttachment: null });
+    this.setState({ chatInput: '', fileAttachment: null });
   }
 
-  handleChatHotKey(e) {
+  handleChatHotKey({ nativeEvent: e }) {
     if (e.keyCode === 13 && !e.shiftKey) {
       // Handle enter (but not shift enter.)
       this.handleSendChatMessage(e);
@@ -72,17 +68,13 @@ class ChatInput extends Component {
     }
   }
 
-  handleChatInput() {
-    this.setState({ chatInput: this.htmlElement.innerText.trim() });
+  handleChatInput(event, value) {
+    this.setState({ chatInput: value });
   }
 
   handleAttachmentDrop(files) {
     // Store the dropped/selected file.
     this.setState({ fileAttachment: files[0] });
-
-    // Focus the chat input and hide the placeholder text.
-    this.htmlElement.focus();
-    this.handleFocus();
 
     // And in case the action menu was open, close it.
     this.setActionsOpen(false);
@@ -100,18 +92,6 @@ class ChatInput extends Component {
     this.dropzone = dropzone;
   }
 
-  handleInputRef(e) {
-    this.htmlElement = e;
-  }
-
-  handleFocus() {
-    this.setState({ hasFocus: true });
-  }
-
-  handleBlur() {
-    this.setState({ hasFocus: false });
-  }
-
   toggleActionsOpen() {
     this.setState(state => ({ actionsOpen: !state.actionsOpen }));
   }
@@ -120,57 +100,8 @@ class ChatInput extends Component {
     this.setState({ actionsOpen });
   }
 
-  handlePaste(e) {
-    // Prevent the default paste behavior
-    e.preventDefault();
-
-    // Fetch the unformatted pasted text.
-    const pastedText = e.clipboardData.getData('Text');
-
-    // Get the selection range in order to determine where to paste.
-    const range = window.getSelection().getRangeAt(0);
-    const { startOffset, endOffset } = range;
-
-    // Fetch the existing text.
-    const existingText = this.htmlElement.innerText;
-
-    // Replace the element content with the spliced together text.
-    this.htmlElement.innerText =
-      existingText.slice(0, startOffset) +
-      pastedText +
-      existingText.slice(endOffset);
-
-    // Set the new character position.
-    const caretInfo = Array.from(this.htmlElement.childNodes).reduce(
-      (ci, node, index) => {
-        let pos = ci.pos;
-        // If the line represents a line break, just decrement the position.
-        if (node instanceof HTMLBRElement) {
-          pos = ci.pos - 1;
-        }
-
-        // If the position is past the end of this line adjust the relative position.
-        if (node.length < ci.pos) {
-          pos = ci.pos - node.length;
-        }
-
-        return { line: index, pos: pos };
-      },
-      { line: 0, pos: startOffset + pastedText.length },
-    );
-
-    range.setStart(this.htmlElement.childNodes[caretInfo.line], caretInfo.pos);
-  }
-
-  showInputPlaceholder() {
-    return !this.isChatInputInvalid() || this.state.hasFocus;
-  }
-
   isChatInputInvalid() {
-    const valid =
-      (this.htmlElement && this.htmlElement.innerText.trim() !== '') ||
-      this.state.fileAttachment !== null;
-    return !valid;
+    return !this.state.chatInput && !this.state.fileAttachment;
   }
 
   render() {
@@ -253,20 +184,18 @@ class ChatInput extends Component {
             )}
             <div
               className={classNames('placeholder', {
-                hidden: this.showInputPlaceholder(),
+                hidden: this.state.chatInput !== '',
               })}
             >
               Type your message here&hellip;
             </div>
-            <div
+            <ContentEditable
+              tagName="div"
               className="message-input"
-              contentEditable
-              ref={this.handleInputRef}
-              onInput={this.handleChatInput}
-              onKeyDown={this.handleChatHotKey}
-              onPaste={this.handlePaste}
-              onFocus={this.handleFocus}
-              onBlur={this.handleBlur}
+              contentEditable="plaintext-only"
+              html={this.state.chatInput}
+              onChange={this.handleChatInput}
+              onKeyPress={this.handleChatHotKey}
             />
           </div>
           <button
