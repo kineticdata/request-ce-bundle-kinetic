@@ -83,7 +83,7 @@ const findMissingFields = headerMapList =>
       obj =>
         obj.field === '' &&
         !obj.checked &&
-        obj.header !== 'Datastore Record ID',
+        obj.header.toLocaleLowerCase() !== 'datastore record id',
     )
     .reduce((acc, obj) => {
       return acc.push(obj.header);
@@ -137,7 +137,10 @@ export const checkHeaderToFieldMap = (headers, headerMap, formFieldNames) => {
   // Filter the fields out of the array returned form the form.
   const existingFieldsSet = headerMapList
     .reduce((acc, obj) => {
-      if (obj.field !== 'Datastore Record ID' && obj.field) {
+      if (
+        obj.field.toLocaleLowerCase() !== 'datastore record id' &&
+        obj.field
+      ) {
         return acc.push(obj.field);
       }
       return acc;
@@ -383,7 +386,10 @@ export class DatastoreImport extends Component {
         };
         csvRowMap.forEach((val, header) => {
           const found = headerToFieldMap.find(obj => obj.header === header);
-          if (found.header === 'Datastore Record ID' && !(val === '')) {
+          if (
+            found.header.toLocaleLowerCase() === 'datastore record id' &&
+            !(val === '')
+          ) {
             obj.id = val;
           } else if (!found.checked) {
             const fieldObject = this.formFields.find(
@@ -605,7 +611,11 @@ export class DatastoreImport extends Component {
                   <table>
                     <tbody>
                       {this.state.headerToFieldMap.map((obj, idx) => {
-                        if (obj.header !== 'Datastore Record ID') {
+                        console.log(obj.header);
+                        if (
+                          obj.header.toLocaleLowerCase() !==
+                          'datastore record id'
+                        ) {
                           return (
                             <tr key={obj.header + idx}>
                               <td>{obj.header}</td>
@@ -678,7 +688,10 @@ export class DatastoreImport extends Component {
                           return (
                             <tr key={idx}>
                               {this.state.headerToFieldMap.map((obj, idx) => {
-                                if (obj.field === 'Datastore Record ID') {
+                                if (
+                                  obj.field.toLocaleLowerCase() ===
+                                  'datastore record id'
+                                ) {
                                   return <td key={obj.field + idx}>{id}</td>;
                                 }
                                 return (
