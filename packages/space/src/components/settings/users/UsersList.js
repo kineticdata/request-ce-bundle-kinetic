@@ -45,6 +45,7 @@ const UsersListComponent = ({ users, loading, match, handleChange, data }) => {
           <div className="page-title__actions">
             <input
               type="file"
+              accept=".csv"
               id="file-input"
               style={{ display: 'none' }}
               onChange={handleChange}
@@ -135,51 +136,51 @@ const handleChange = props => () => {
         dynamicTyping: true,
         complete: results => {
           // When streaming, parse results are not available in this callback.
-          const { users, updateUser, createUser } = props;
-          const importedUsers = fromJS(results.data)
-            .map(user => {
-              return user
-                .update('allowedIps', val => (val ? val : ''))
-                .update(
-                  'attributesMap',
-                  val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
-                )
-                .update(
-                  'profileAttributesMap',
-                  val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
-                )
-                .update(
-                  'memberships',
-                  val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
-                );
-            })
-            .toSet();
-          const existingUsers = fromJS(
-            users.map(user => ({
-              ...user,
-              memberships: user.memberships.reduce((acc, membership) => {
-                const team = { team: { name: membership.team.name } };
-                acc.push(team);
-                return acc;
-              }, []),
-            })),
-          ).toSet();
-          const userdiff = importedUsers.subtract(existingUsers);
-          userdiff.forEach(user => {
-            const found = existingUsers.find(
-              existingUser =>
-                user.get('username') === existingUser.get('username'),
-            );
-            if (found) {
-              updateUser(user.toJS());
-            } else {
-              createUser(user.toJS());
-            }
-          });
-        },
-        error: errors => {
-          // Test error handleing here.  This might not work if error is called each time a row has an error.
-          console.log(errors);
+          if (results.errors.length <= 0) {
+            const { users, updateUser, createUser } = props;
+            const importedUsers = fromJS(results.data)
+              .map(user => {
+                return user
+                  .update('allowedIps', val => (val ? val : ''))
+                  .update(
+                    'attributesMap',
+                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                  )
+                  .update(
+                    'profileAttributesMap',
+                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                  )
+                  .update(
+                    'memberships',
+                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                  );
+              })
+              .toSet();
+            const existingUsers = fromJS(
+              users.map(user => ({
+                ...user,
+                memberships: user.memberships.reduce((acc, membership) => {
+                  const team = { team: { name: membership.team.name } };
+                  acc.push(team);
+                  return acc;
+                }, []),
+              })),
+            ).toSet();
+            const userdiff = importedUsers.subtract(existingUsers);
+            userdiff.forEach(user => {
+              const found = existingUsers.find(
+                existingUser =>
+                  user.get('username') === existingUser.get('username'),
+              );
+              if (found) {
+                updateUser(user.toJS());
+              } else {
+                createUser(user.toJS());
+              }
+            });
+          } else {
+            console.log(results.errors);
+          }
         },
       });
     };
