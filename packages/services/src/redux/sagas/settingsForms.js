@@ -30,7 +30,6 @@ export function* fetchFormSubmissionsSaga(action) {
   if (pageToken) searchBuilder.pageToken(pageToken);
   if (q) {
     for (const key in q) {
-      console.log(key, q[key]);
       searchBuilder.eq(key, q[key]);
     }
   }
