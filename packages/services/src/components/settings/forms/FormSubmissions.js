@@ -11,49 +11,67 @@ import {
   Modal,
 } from 'reactstrap';
 import { actions } from '../../../redux/modules/settingsForms';
-import { sortSubmissions } from '../../../../../queue/src/redux/sagas/queue';
 
-export const isBlank = string => !string || string.trim().length === 0;
+// Create q for search from filter object
+const createSearchQuery = filter => {
+  const q = {};
+  for (const property in filter.properties) {
+    q[property] = filter.properties[property].value;
+  }
 
-const nextPage = (
+  for (const value in filter.values) {
+    q[`values[${value}]`] = filter.values[value].value;
+  }
+
+  return q;
+};
+
+// Next page search
+const nextPage = ({
   nextPageToken,
   currentPage,
   previousPageTokens,
   setPreviousPageToken,
   fetchFormSubmissions,
-  formSlug,
   kappSlug,
   setCurrentPage,
-) => {
+  filter,
+}) => formSlug => {
   !previousPageTokens.includes(nextPageToken) &&
     setPreviousPageToken([...previousPageTokens, nextPageToken]);
+
+  const q = createSearchQuery(filter);
 
   fetchFormSubmissions({
     formSlug: formSlug,
     kappSlug: kappSlug,
     pageToken: nextPageToken,
+    q: q,
   });
 
   setCurrentPage(currentPage + 1);
 };
 
-const previousPage = (
-  nextPageToken,
+// Previous page search
+const previousPage = ({
   currentPage,
   previousPageTokens,
   fetchFormSubmissions,
-  formSlug,
   kappSlug,
   setCurrentPage,
-) => {
+  filter,
+}) => formSlug => {
+  const q = createSearchQuery(filter);
   fetchFormSubmissions({
     formSlug: formSlug,
     kappSlug: kappSlug,
     pageToken: previousPageTokens[currentPage],
+    q: q,
   });
   setCurrentPage(currentPage - 1);
 };
 
+// Used to apply filter to submission results
 const filterColumns = ({
   fetchFormSubmissions,
   kappSlug,
@@ -61,16 +79,7 @@ const filterColumns = ({
   filter,
   setFilter,
 }) => formSlug => {
-  const q = {};
-  for (const property in filter.properties) {
-    //const string = `${property} = "${filter.properties[property].value}"`;
-    q[property] = filter.properties[property].value;
-  }
-
-  for (const value in filter.values) {
-    //const string = `values[${value}] = "${filter.values[value].value}"`;
-    q[`values[${value}]`] = filter.values[value].value;
-  }
+  const q = createSearchQuery(filter);
 
   fetchFormSubmissions({
     formSlug: formSlug,
@@ -81,6 +90,7 @@ const filterColumns = ({
   setFilter({ ...filter, visible: false });
 };
 
+// Removes a single filter from the object
 const removeFilter = ({ filter, setFilter }) => (type, remove) => {
   const newFilters = {};
   for (const key in filter[type]) {
@@ -122,11 +132,13 @@ export const FormSubmissionsContainer = ({
   fieldValue,
   setFieldValue,
   removeFilter,
+  nextPage,
+  previousPage,
 }) =>
   !loading && (
     <div>
       <PageTitle parts={['Services Settings']} />
-      <div className="page-container">
+      <div className="page-container  page-container--space-settings">
         <div className="page-panel">
           <div className="page-title">
             <div className="page-title__wrapper">
@@ -169,7 +181,7 @@ export const FormSubmissionsContainer = ({
                 isOpen={openDropdown === form.slug}
                 className="col-sm-6"
               >
-                <DropdownToggle color="link" className="btn-sm">
+                <DropdownToggle color="primary">
                   Toggle Value Columns <span className="fa fa-caret-down" />
                 </DropdownToggle>
                 <DropdownMenu>
@@ -252,17 +264,7 @@ export const FormSubmissionsContainer = ({
                 {currentPage >= 2 && (
                   <li
                     className="btn btn-primary"
-                    onClick={() =>
-                      previousPage(
-                        nextPageToken,
-                        currentPage,
-                        previousPageTokens,
-                        fetchFormSubmissions,
-                        formSlug,
-                        kappSlug,
-                        setCurrentPage,
-                      )
-                    }
+                    onClick={() => previousPage(form.slug)}
                   >
                     Previous
                   </li>
@@ -273,18 +275,7 @@ export const FormSubmissionsContainer = ({
                 {nextPageToken && (
                   <li
                     className="btn btn-primary"
-                    onClick={() =>
-                      nextPage(
-                        nextPageToken,
-                        currentPage,
-                        previousPageTokens,
-                        setPreviousPageToken,
-                        fetchFormSubmissions,
-                        formSlug,
-                        kappSlug,
-                        setCurrentPage,
-                      )
-                    }
+                    onClick={() => nextPage(form.slug)}
                   >
                     Next
                   </li>
@@ -552,7 +543,13 @@ export const FormSubmissions = compose(
   }),
   withState('property', 'setProperty', {}),
   withState('fieldValue', 'setFieldValue', {}),
-  withHandlers({ toggleDropdown, filterColumns, removeFilter }),
+  withHandlers({
+    toggleDropdown,
+    filterColumns,
+    removeFilter,
+    nextPage,
+    previousPage,
+  }),
   lifecycle({
     componentWillMount() {
       this.props.fetchFormSettings({
