@@ -14,7 +14,7 @@ import { NavLink } from 'react-router-dom';
 import { actions } from '../../../redux/modules/settingsRobots';
 import { CoreForm } from 'react-kinetic-core';
 import { Button } from 'reactstrap';
-import { toastActions, Loading } from 'common';
+import { toastActions, Loading, PageTitle } from 'common';
 import { RobotExecutionsList } from './RobotExecutionsList';
 import { PopConfirm } from '../../shared/PopConfirm';
 
@@ -48,6 +48,9 @@ const RobotScheduleComponent = ({
     moment(robotSchedule.values['End Date']).isBefore(moment());
   return (
     <div className="page-container page-container--robots">
+      <PageTitle
+        parts={['Schedules', robot.values['Name'], 'Robots', 'Settings']}
+      />
       <div className="page-panel page-panel--scrollable page-panel--robots-content">
         <div className="page-title">
           <div className="page-title__wrapper">

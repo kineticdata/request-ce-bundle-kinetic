@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, withHandlers, withState } from 'recompose';
+import { PageTitle } from 'common';
 
 import { DatastoreForm } from '../../../records';
-
 import { actions } from '../../../redux/modules/settingsDatastore';
 
 const CreateDatastoreComponent = ({
@@ -21,6 +21,7 @@ const CreateDatastoreComponent = ({
   match,
 }) => (
   <div className="page-container page-container--panels page-container--datastore">
+    <PageTitle parts={['New Form', 'Datastore']} />
     <div className="page-panel page-panel--two-thirds page-panel--scrollable page-panel--datastore-content">
       <div className="page-title">
         <div className="page-title__wrapper">
@@ -78,25 +79,6 @@ const CreateDatastoreComponent = ({
               name="description"
             />
           </div>
-          {/*<div className="form-group">
-            <label htmlFor="name">Bridge Name</label>
-            <select
-              id="bridgeName"
-              name="bridgeName"
-              onChange={e =>
-                setNewForm(newForm.set('bridgeName', e.target.value))
-              }
-              value={newForm.bridgeName}
-              className="form-control"
-            >
-              <option />
-              {bridges.map(b => (
-                <option key={b} value={b}>
-                  {b}
-                </option>
-              ))}
-            </select>
-          </div>*/}
           <div className="pull-right">
             <Link to="/datastore" className="btn btn-link">
               Cancel

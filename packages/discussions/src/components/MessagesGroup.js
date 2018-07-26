@@ -5,6 +5,8 @@ import Avatar from 'react-avatar';
 import moment from 'moment';
 import Markdown from 'react-markdown';
 import { bundle } from 'react-kinetic-core';
+import { ParticipantCard } from './ParticipantCard';
+import { Hoverable } from 'common';
 
 const AVAILABLE_ICONS = [
   'avi',
@@ -97,13 +99,19 @@ export const MessagesGroup = ({ messages, profile, discussionServerUrl }) => (
     }`}
   >
     {messages.first().user.email !== profile.email && (
-      <Avatar
-        size={36}
-        email={messages.first().user.email}
-        name={messages.first().user.name}
-        round
-      />
+      <Hoverable
+        key={messages.first().user.id}
+        render={() => <ParticipantCard participant={messages.first().user} />}
+      >
+        <Avatar
+          size={36}
+          email={messages.first().user.email}
+          name={messages.first().user.name}
+          round
+        />
+      </Hoverable>
     )}
+
     <div className="message-list">
       {messages.map(
         message =>

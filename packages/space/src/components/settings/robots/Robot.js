@@ -16,7 +16,7 @@ import {
 } from '../../../redux/modules/settingsRobots';
 import { CoreForm } from 'react-kinetic-core';
 import { Button } from 'reactstrap';
-import { toastActions } from 'common';
+import { toastActions, PageTitle } from 'common';
 import { RobotSchedulesList } from './RobotSchedulesList';
 import { RobotExecutionsList } from './RobotExecutionsList';
 import { PopConfirm } from '../../shared/PopConfirm';
@@ -35,6 +35,7 @@ const RobotComponent = ({
   processDelete,
 }) => (
   <div className="page-container page-container--robots">
+    <PageTitle parts={[robot && robot.values['Name'], 'Robots', 'Settings']} />
     <div className="page-panel page-panel--scrollable page-panel--robots-content">
       <div className="page-title">
         <div className="page-title__wrapper">

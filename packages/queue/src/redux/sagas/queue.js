@@ -33,7 +33,11 @@ export const prepareStatusFilter = (searcher, filter) => {
 
 export const prepareDateRangeFilter = (searcher, filter, now) => {
   if (filter.dateRange.custom) {
-    searcher.sortBy(filter.dateRange.timeline);
+    searcher.sortBy(
+      filter.dateRange.timeline === 'completedAt'
+        ? 'updatedAt'
+        : filter.dateRange.timeline,
+    );
     searcher.startDate(moment(filter.dateRange.start).toDate());
     searcher.endDate(
       moment(filter.dateRange.end)
@@ -51,7 +55,11 @@ export const prepareDateRangeFilter = (searcher, filter, now) => {
         `Invalid date range filter preset: ${filter.dateRange.preset}`,
       );
     }
-    searcher.sortBy(filter.dateRange.timeline);
+    searcher.sortBy(
+      filter.dateRange.timeline === 'completedAt'
+        ? 'updatedAt'
+        : filter.dateRange.timeline,
+    );
     searcher.startDate(
       now
         .clone()
@@ -107,6 +115,14 @@ export const prepareTeammatesFilter = (searcher, filter, appSettings) => {
   }
 };
 
+export const prepareCreatedByMeFilter = (searcher, filter, appSettings) => {
+  if (filter.createdByMe) {
+    searcher.and();
+    searcher.eq('createdBy', appSettings.profile.username);
+    searcher.end();
+  }
+};
+
 export const buildSearch = (filter, appSettings) => {
   let searcher = new CoreAPI.SubmissionSearch();
 
@@ -123,6 +139,7 @@ export const buildSearch = (filter, appSettings) => {
   prepareMineFilter(searcher, filter, appSettings);
   prepareTeammatesFilter(searcher, filter, appSettings);
   prepareUnassignedFilter(searcher, filter, appSettings);
+  prepareCreatedByMeFilter(searcher, filter, appSettings);
 
   searcher.end();
 

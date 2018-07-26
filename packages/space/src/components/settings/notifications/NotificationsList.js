@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withProps, withState } from 'recompose';
 import { NavLink } from 'react-router-dom';
+import { PageTitle } from 'common';
 import { NotificationListItem } from './NotificationListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/settingsNotifications';
@@ -19,6 +20,7 @@ const WallyNoResultsFoundMessage = ({ type }) => {
 
 const NotificationsListComponent = ({ submissions, type, match }) => (
   <div className="page-container page-container--notifications">
+    <PageTitle parts={[`${type}s`, 'Notifications', 'Settings']} />
     <div className="page-panel page-panel--scrollable">
       <div className="page-title">
         <div className="page-title__wrapper">

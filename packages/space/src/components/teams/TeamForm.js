@@ -5,13 +5,12 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
 import md5 from 'md5';
 import { fromJS } from 'immutable';
-import { Utils, PageTitle } from 'common';
+import { Utils, PageTitle, Hoverable } from 'common';
 import { AddMemberModal } from './AddMemberModal';
 import { buildHierarchy } from '../../utils';
 import { IconPicker } from '../shared/IconPicker';
 import { ProfileCard } from '../shared/ProfileCard';
 import { TeamCard } from '../shared/TeamCard';
-import { Hoverable } from '../shared/Hoverable';
 import { TeamMemberAvatar } from './TeamMemberAvatar';
 
 import {

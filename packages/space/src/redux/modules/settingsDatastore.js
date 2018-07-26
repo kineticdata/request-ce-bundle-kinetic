@@ -50,6 +50,7 @@ export const types = {
   FETCH_FORM: namespace('datastore', 'FETCH_FORM'),
   SET_FORM: namespace('datastore', 'SET_FORM'),
   UPDATE_FORM: namespace('datastore', 'UPDATE_FORM'),
+  RESET_FORM: namespace('datastore', 'RESET_FORM'),
   CREATE_FORM: namespace('datastore', 'CREATE_FORM'),
   FETCH_SUBMISSIONS_ADVANCED: namespace(
     'datastore',
@@ -100,6 +101,7 @@ export const actions = {
   fetchForm: withPayload(types.FETCH_FORM),
   setForm: withPayload(types.SET_FORM),
   updateForm: withPayload(types.UPDATE_FORM),
+  resetForm: noPayload(types.RESET_FORM),
   createForm: withPayload(types.CREATE_FORM),
   fetchSubmissionsAdvanced: noPayload(types.FETCH_SUBMISSIONS_ADVANCED),
   fetchSubmissionsSimple: noPayload(types.FETCH_SUBMISSIONS_SIMPLE),
@@ -154,19 +156,33 @@ const parseJson = json => {
 
 export const buildColumns = form => {
   // Parse Form Attribute for Configuration Values
-  const savedColumnConfig = parseJson(
-    form.attributesMap['Datastore Configuration']
-      ? form.attributesMap['Datastore Configuration'][0]
-      : [],
-  );
-  // Build a list of all current column properties
-  const defaultColumnConfig = List(
-    SUBMISSION_SYSTEM_PROPS.concat(
-      form.fields.map(f =>
-        ColumnConfig({ name: f.name, label: f.name, type: 'value' }),
-      ),
+  const savedColumnConfig = List(
+    parseJson(
+      form.attributesMap['Datastore Configuration']
+        ? form.attributesMap['Datastore Configuration'][0]
+        : [],
     ),
   );
+  // Build a list of all current column properties
+  let defaultColumnConfig = List(
+    form.fields
+      .map(f => ColumnConfig({ name: f.name, label: f.name, type: 'value' }))
+      .concat(SUBMISSION_SYSTEM_PROPS),
+  ).sort((a, b) => {
+    var indexA = savedColumnConfig.findIndex(
+      sc => sc.name === a.name && sc.type === a.type,
+    );
+    var indexB = savedColumnConfig.findIndex(
+      sc => sc.name === b.name && sc.type === b.type,
+    );
+    if (indexA === indexB) {
+      return 0;
+    } else if (indexA >= 0 && (indexA < indexB || indexB === -1)) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
   // If there are saved column configs, apply them
   if (savedColumnConfig.size > 0) {
     return defaultColumnConfig.map(dc => {
@@ -175,11 +191,10 @@ export const buildColumns = form => {
       );
       if (saved) {
         return ColumnConfig({
+          ...saved,
           name: dc.name,
           type: dc.type,
           label: dc.label,
-          visible: saved.visible,
-          filterable: saved.filterable,
         });
       } else {
         return dc;
@@ -294,16 +309,21 @@ export const reducer = (state = State(), { type, payload }) => {
       const { form } = payload;
       const bridgeModel = BridgeModel(
         payload.bridgeModels.find(m => m.name === `Datastore - ${form.name}`),
-      );
+      )
+        .update('attributes', a => List(a))
+        .update('qualifications', a => List(a));
       const bridgeModelMapping = BridgeModelMapping(
         bridgeModel.mappings.find(m => m.name === `Datastore - ${form.name}`),
-      );
+      )
+        .update('attributes', a => List(a))
+        .update('qualifications', a => List(a));
       const canManage = state.forms.find(f => f.slug === form.slug).canManage;
       const columns = buildColumns(form);
       const dsForm = DatastoreForm({
         ...form,
         canManage,
         columns,
+        bridgeName: bridgeModelMapping.bridgeName,
         bridgeModel,
         bridgeModelMapping,
       });
@@ -311,6 +331,8 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('currentFormLoading', false)
         .set('currentForm', dsForm)
         .set('currentFormChanges', dsForm);
+    case types.RESET_FORM:
+      return state.set('currentFormChanges', state.get('currentForm'));
     case types.FETCH_SUBMISSIONS_ADVANCED:
       return state.set('searching', true);
     case types.FETCH_SUBMISSIONS_SIMPLE:
@@ -444,14 +466,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.RESET_SUBMISSION:
       return state.set('submissionLoading', true).set('submission', null);
     case types.SET_FORM_CHANGES:
-      return payload.type === 'column'
-        ? state.updateIn(['currentFormChanges', 'columns'], columns =>
-            columns.set(
-              columns.findIndex(c => c === payload.original),
-              payload.updated,
-            ),
-          )
-        : state.setIn(['currentFormChanges', payload.type], payload.value);
+      return state.setIn(['currentFormChanges', payload.type], payload.value);
     default:
       return state;
   }

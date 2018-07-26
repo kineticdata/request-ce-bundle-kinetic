@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import { Icon } from 'common';
+import { Icon, PageTitle } from 'common';
 
 import { SpaceSettings } from './spaceSettings/SpaceSettings';
 import { Notifications } from './notifications/Notifications';
@@ -53,6 +53,7 @@ const SettingsCard = ({ path, icon, name, description }) => (
 
 const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
   <div className="page-container page-container--space-settings">
+    <PageTitle parts={['Settings']} />
     <div className="page-panel page-panel--datastore-content">
       <div className="page-title">
         <div className="page-title__wrapper">

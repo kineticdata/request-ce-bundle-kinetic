@@ -7,6 +7,7 @@ export const types = {
   SET_FILTER_NAME: '@kd/queue/filterMenu/SET_FILTER_NAME',
   SHOW_SECTION: '@kd/queue/filterMenu/SHOW_SECTION',
   TOGGLE_ASSIGNMENT: '@kd/queue/filterMenu/TOGGLE_ASSIGNMENT',
+  TOGGLE_CREATED_BY_ME: '@kd/queue/filterMenu/TOGGLE_CREATED_BY_ME',
   TOGGLE_TEAM: '@kd/queue/filterMenu/TOGGLE_TEAM',
   TOGGLE_STATUS: '@kd/queue/filterMenu/TOGGLE_STATUS',
   SET_DATE_RANGE_TIMELINE: '@kd/queue/filterMenu/SET_DATE_RANGE_TIMELINE',
@@ -27,6 +28,7 @@ export const actions = {
   }),
   showSection: section => ({ type: types.SHOW_SECTION, payload: section }),
   toggleAssignment: payload => ({ type: types.TOGGLE_ASSIGNMENT, payload }),
+  toggleCreatedByMe: payload => ({ type: types.TOGGLE_CREATED_BY_ME, payload }),
   toggleTeam: payload => ({ type: types.TOGGLE_TEAM, payload }),
   toggleStatus: payload => ({ type: types.TOGGLE_STATUS, payload }),
   setDateRangeTimeline: payload => ({
@@ -72,6 +74,8 @@ export const reducer = (state = defaultState, { type, payload }) => {
         ['currentFilter', 'assignments', payload],
         bool => !bool,
       );
+    case types.TOGGLE_CREATED_BY_ME:
+      return state.setIn(['currentFilter', 'createdByMe'], payload);
     case types.TOGGLE_TEAM:
       return state.getIn(['currentFilter', 'teams']).includes(payload)
         ? state.updateIn(['currentFilter', 'teams'], teams =>

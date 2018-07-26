@@ -1,0 +1,37 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Settings ~ Services
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.sortable-categories {
+  height: 40rem;
+  .fa {
+    cursor: pointer;
+    margin-left: 0.3rem;
+    &.fa-times-circle {
+      color: $red;
+    }
+    &.fa-plus-circle {
+      color: $green-grass;
+    }
+    &.fa-pencil {
+      color: $blue-lake;
+    }
+  }
+}
+
+/* form view */
+.settings-flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  label {
+    font-weight: bold;
+  }
+}
+
+table.table-submissions {
+  margin-top: 0.5rem;
+  .hidden {
+    display: none;
+  }
+}

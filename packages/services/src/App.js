@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { matchPath } from 'react-router-dom';
+import { matchPath, Switch } from 'react-router-dom';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { KappRoute as Route, KappRedirect as Redirect, Loading } from 'common';
 import { actions as categoriesActions } from './redux/modules/categories';
@@ -12,11 +12,14 @@ import { CategoryListContainer } from './components/category_list/CategoryListCo
 import { CategoryContainer } from './components/category/CategoryContainer';
 import { CatalogSearchResultsContainer } from './components/search_results/CatalogSearchResultsContainer';
 import { Sidebar } from './components/Sidebar';
+import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { FormContainer } from './components/form/FormContainer';
 import { FormListContainer } from './components/form_list/FormListContainer';
 import { RequestListContainer } from './components/request_list/RequestListContainer';
 import { RequestShowContainer } from './components/request/RequestShowContainer';
+import { Settings } from './components/settings/Settings';
 import { displayableFormPredicate } from './utils';
+
 import './assets/styles/master.scss';
 
 const mapStateToProps = (state, props) => {
@@ -30,6 +33,8 @@ const mapStateToProps = (state, props) => {
       ...state.services.forms.errors,
     ],
     systemError: state.services.systemError,
+    pathname: state.router.location.pathname,
+    settingsBackPath: state.space.spaceApp.settingsBackPath || '/',
   };
 };
 
@@ -45,14 +50,27 @@ export const AppComponent = props => {
   }
   return props.render({
     sidebar: (
-      <Sidebar
-        counts={props.submissionCounts}
-        homePageMode={props.homePageMode}
-        homePageItems={props.homePageItems}
-      />
+      <Switch>
+        <Route
+          path="/kapps/services/settings"
+          render={() => (
+            <SettingsSidebar settingsBackPath={props.settingsBackPath} />
+          )}
+        />
+        <Route
+          render={() => (
+            <Sidebar
+              counts={props.submissionCounts}
+              homePageMode={props.homePageMode}
+              homePageItems={props.homePageItems}
+            />
+          )}
+        />
+      </Switch>
     ),
     main: (
       <main className="package-layout package-layout--services">
+        <Route path="/settings" component={Settings} />
         <Route
           path="/submissions/:id"
           exact
@@ -142,6 +160,9 @@ const enhance = compose(
           homePageMode: 'Categories',
           homePageItems: props.categories,
         };
+  }),
+  withHandlers({
+    openSettings: props => () => props.setSettingsBackPath(props.pathname),
   }),
   lifecycle({
     componentWillMount() {

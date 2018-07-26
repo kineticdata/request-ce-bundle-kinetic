@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { ModalBody } from 'reactstrap';
 import { SORT_OPTIONS } from './SortedBySection';
+import { CreatedByMeContainer } from './CreatedByMe';
 
 const ListSummary = ({ type, list }) =>
   list.size > 0 &&
@@ -23,7 +24,7 @@ const AssignmentSummary = ({ errors, appliedAssignments }) => {
   } else if (appliedAssignments.size === 1) {
     return <span>{appliedAssignments.get(0)}</span>;
   }
-  return <span>{appliedAssignments.size} Presets</span>;
+  return <span>{appliedAssignments.size} Assignments</span>;
 };
 
 const formatTimeline = timeline => {
@@ -51,6 +52,13 @@ const DateRangeSummary = ({ errors, filter }) =>
       {formatTimeline(filter.dateRange.timeline)} between<br />
       {moment(filter.dateRange.start).format('l')} and&nbsp;
       {moment(filter.dateRange.end).format('l')}
+    </span>
+  ) : null;
+
+const FilterNameSummary = ({ errors }) =>
+  errors.get('Filter Name') ? (
+    <span className="validation-error text-danger">
+      {errors.get('Filter Name')}
     </span>
   ) : null;
 
@@ -134,9 +142,13 @@ export const MainSection = ({
           </span>
         </button>
       </li>
+      <li className="list-group-item">
+        <CreatedByMeContainer filter={filter} />
+      </li>
     </ul>
     <div className="save-filter">
       <label>Filter Name</label>
+      <FilterNameSummary errors={errors} />
       <input
         type="text"
         placeholder="New Filter Name"
