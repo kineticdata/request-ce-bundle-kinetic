@@ -1,33 +1,34 @@
 import { all, call, put, takeEvery, select } from 'redux-saga/effects';
-import { bundle, CoreAPI } from 'react-kinetic-core';
+import { CoreAPI } from 'react-kinetic-core';
 import * as constants from '../../constants';
 import { actions, types } from '../modules/submissionCounts';
 import { actions as systemErrorActions } from '../modules/systemError';
 
-const buildSearch = coreState =>
+const buildSearch = (coreState, username) =>
   new CoreAPI.SubmissionSearch()
     .coreState(coreState)
     .type(constants.SUBMISSION_FORM_TYPE)
     .limit(constants.SUBMISSION_COUNT_LIMIT)
     .or()
-    .eq(`values[${constants.REQUESTED_FOR_FIELD}]`, bundle.identity())
-    .eq('submittedBy', bundle.identity())
+    .eq(`values[${constants.REQUESTED_FOR_FIELD}]`, username)
+    .eq('submittedBy', username)
     .end()
     .build();
 
 export function* fetchSubmissionCountsSaga() {
   const kappSlug = yield select(state => state.app.config.kappSlug);
+  const username = yield select(state => state.app.profile.username);
   const [draft, submitted, closed] = yield all([
     call(CoreAPI.searchSubmissions, {
-      search: buildSearch(constants.CORE_STATE_DRAFT),
+      search: buildSearch(constants.CORE_STATE_DRAFT, username),
       kapp: kappSlug,
     }),
     call(CoreAPI.searchSubmissions, {
-      search: buildSearch(constants.CORE_STATE_SUBMITTED),
+      search: buildSearch(constants.CORE_STATE_SUBMITTED, username),
       kapp: kappSlug,
     }),
     call(CoreAPI.searchSubmissions, {
-      search: buildSearch(constants.CORE_STATE_CLOSED),
+      search: buildSearch(constants.CORE_STATE_CLOSED, username),
       kapp: kappSlug,
     }),
   ]);
