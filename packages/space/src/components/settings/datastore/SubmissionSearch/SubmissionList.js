@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 import { actions } from '../../../../redux/modules/settingsDatastore';
 import { SubmissionListItem } from './SubmissionListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
@@ -38,6 +38,25 @@ const WallySearching = () => {
   );
 };
 
+const sortTable = ({ clientSortInfo, setClientSortInfo }) => column => {
+  if (
+    clientSortInfo &&
+    clientSortInfo.type === column.type &&
+    clientSortInfo.name === column.name
+  ) {
+    setClientSortInfo({
+      ...clientSortInfo,
+      order: clientSortInfo.order === 'DESC' ? 'ASC' : 'DESC',
+    });
+  } else {
+    setClientSortInfo({
+      type: column.type,
+      name: column.name,
+      order: 'ASC',
+    });
+  }
+};
+
 const SubmissionListComponent = ({
   form,
   submissions,
@@ -45,14 +64,18 @@ const SubmissionListComponent = ({
   columns,
   hasStartedSearching,
   nextPageToken,
+  pageTokens,
   searching,
   path,
   isMobile,
   cloneSubmission,
   deleteSubmission,
   fetchSubmissions,
+  clientSortInfo,
+  sortTable,
 }) => {
   const visibleColumns = columns.filter(c => c.visible);
+  console.log(visibleColumns.toJS());
   return (
     <div className="datastore-submissions">
       {loading ? (
@@ -61,23 +84,107 @@ const SubmissionListComponent = ({
         <div>
           {submissions.size > 0 && (
             <div>
-              {nextPageToken === null && (
-                <div className="alert alert-success mt-3">
-                  <strong>{submissions.size}</strong> results found
-                </div>
-              )}
+              {nextPageToken === null &&
+                pageTokens.size === 0 &&
+                !searching && (
+                  <div className="alert alert-success mt-3">
+                    <strong>{submissions.size}</strong> results found
+                  </div>
+                )}
+              {clientSortInfo &&
+                (nextPageToken !== null || pageTokens.size > 0) && (
+                  <div className="text-info mb-2">
+                    <small>
+                      <em>
+                        Sorting the table columns will only sort the visible
+                        records on the current page.
+                      </em>
+                    </small>
+                  </div>
+                )}
               <table className="table table-sm table-striped table-datastore">
-                <thead className="d-none d-md-table-header-group">
+                <thead className="d-none d-md-table-header-group sortable">
                   <tr>
-                    {visibleColumns.map(c => (
-                      <th
-                        key={`thead-${c.type}-${c.name}`}
-                        className="d-sm-none d-md-table-cell"
-                      >
-                        {c.label}
-                      </th>
-                    ))}
-                    <th />
+                    {visibleColumns.map(c => {
+                      const sortClass =
+                        (clientSortInfo &&
+                          clientSortInfo.type === c.type &&
+                          clientSortInfo.name === c.name &&
+                          (clientSortInfo.order === 'DESC'
+                            ? 'sort-desc'
+                            : 'sort-asc')) ||
+                        '';
+                      return (
+                        <th
+                          key={`thead-${c.type}-${c.name}`}
+                          className={`d-sm-none d-md-table-cell ${sortClass}`}
+                          onClick={e => sortTable(c)}
+                        >
+                          {c.label}
+                        </th>
+                      );
+                    })}
+                    <th className="sort-disabled" />
+                  </tr>
+                </thead>
+                <thead className="d-md-none">
+                  <tr>
+                    <th>
+                      <div className="input-group">
+                        <div className="input-group-prepend">
+                          <span className="input-group-text">Sort By</span>
+                        </div>
+                        <select
+                          className="form-control"
+                          value={
+                            (clientSortInfo &&
+                              `${clientSortInfo.name}::${
+                                clientSortInfo.type
+                              }`) ||
+                            ''
+                          }
+                          onChange={e => {
+                            const sortInfo = e.target.value.split('::');
+                            sortTable(
+                              sortInfo.length === 2
+                                ? visibleColumns.find(
+                                    c =>
+                                      c.name === sortInfo[0] &&
+                                      c.type === sortInfo[1],
+                                  )
+                                : null,
+                            );
+                          }}
+                        >
+                          {!clientSortInfo && <option />}
+                          {visibleColumns.map(c => (
+                            <option
+                              key={`${c.name}::${c.type}`}
+                              value={`${c.name}::${c.type}`}
+                            >
+                              {c.label}
+                            </option>
+                          ))}
+                        </select>
+                        {clientSortInfo && (
+                          <select
+                            className="form-control"
+                            value={
+                              (clientSortInfo && clientSortInfo.order) || ''
+                            }
+                            onChange={e => {
+                              sortTable({
+                                ...clientSortInfo,
+                                order: e.target.value,
+                              });
+                            }}
+                          >
+                            <option value="ASC">Asc</option>
+                            <option value="DESC">Desc</option>
+                          </select>
+                        )}
+                      </div>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -118,8 +225,10 @@ export const mapStateToProps = state => ({
   loading: state.space.settingsDatastore.currentFormLoading,
   form: state.space.settingsDatastore.currentForm,
   submissions: state.space.settingsDatastore.submissions,
+  clientSortInfo: state.space.settingsDatastore.clientSortInfo,
   searching: state.space.settingsDatastore.searching,
   nextPageToken: state.space.settingsDatastore.nextPageToken,
+  pageTokens: state.space.settingsDatastore.pageTokens,
   columns: state.space.settingsDatastore.currentForm.columns,
   hasStartedSearching: state.space.settingsDatastore.hasStartedSearching,
   path: state.router.location.pathname.replace(/\/$/, ''),
@@ -130,6 +239,7 @@ export const mapDispatchToProps = {
   cloneSubmission: actions.cloneSubmission,
   deleteSubmission: actions.deleteSubmission,
   fetchSubmissions: actions.fetchSubmissions,
+  setClientSortInfo: actions.setClientSortInfo,
 };
 
 export const SubmissionList = compose(
@@ -137,4 +247,7 @@ export const SubmissionList = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withHandlers({
+    sortTable,
+  }),
 )(SubmissionListComponent);
