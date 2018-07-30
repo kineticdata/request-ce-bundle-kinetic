@@ -92,6 +92,7 @@ export const types = {
   ),
   DELETE_SUBMISSION_ERROR: namespace('datastore', 'DELETE_SUBMISSION_ERROR'),
   SET_FORM_CHANGES: namespace('datastore', 'SET_FORM_CHANGES'),
+  SET_CLIENT_SORT_INFO: namespace('datastore', 'SET_CLIENT_SORT_INFO'),
 };
 
 export const actions = {
@@ -144,6 +145,7 @@ export const actions = {
   deleteSubmissionSuccess: noPayload(types.DELETE_SUBMISSION_SUCCESS),
   deleteSubmissionErrors: withPayload(types.DELETE_SUBMISSION_ERROR),
   setFormChanges: withPayload(types.SET_FORM_CHANGES),
+  setClientSortInfo: withPayload(types.SET_CLIENT_SORT_INFO),
 };
 
 const parseJson = json => {
@@ -202,6 +204,20 @@ export const buildColumns = form => {
     });
   } else {
     return defaultColumnConfig;
+  }
+};
+
+const sortSubmissions = (submissions, sortInfo) => {
+  if (sortInfo) {
+    return submissions.sortBy(
+      submission =>
+        (sortInfo.type === 'value'
+          ? submission.values[sortInfo.name]
+          : submission[sortInfo.name]) || '',
+      (a, b) => a.localeCompare(b) * (sortInfo.order === 'DESC' ? -1 : 1),
+    );
+  } else {
+    return submissions;
   }
 };
 
@@ -276,6 +292,8 @@ export const State = Record({
   // Single Submission
   submission: null,
   submissionLoading: true,
+  // Client Side Sorting
+  clientSortInfo: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -340,7 +358,10 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_SUBMISSIONS:
       return state
         .set('searching', false)
-        .set('submissions', List(payload))
+        .set(
+          'submissions',
+          sortSubmissions(List(payload), state.clientSortInfo),
+        )
         .set('hasStartedSearching', true);
     case types.SET_INDEX:
       return state.setIn(['searchParams', 'index'], payload);
@@ -419,7 +440,8 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('nextPageToken', null)
         .set('pageTokens', List())
         .set('submissions', List())
-        .set('hasStartedSearching', false);
+        .set('hasStartedSearching', false)
+        .set('clientSortInfo', null);
     case types.PUSH_PAGE_TOKEN:
       return state.update('pageTokens', pageTokens => pageTokens.push(payload));
     case types.POP_PAGE_TOKEN:
@@ -467,6 +489,10 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('submissionLoading', true).set('submission', null);
     case types.SET_FORM_CHANGES:
       return state.setIn(['currentFormChanges', payload.type], payload.value);
+    case types.SET_CLIENT_SORT_INFO:
+      return state
+        .set('clientSortInfo', payload)
+        .set('submissions', sortSubmissions(state.submissions, payload));
     default:
       return state;
   }

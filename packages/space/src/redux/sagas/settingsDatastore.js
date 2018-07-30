@@ -191,10 +191,9 @@ export function* fetchSubmissionsSimpleSaga() {
   } = yield select(selectSearchParams);
 
   if (pageToken) {
-    const index = form.indexDefinitions.find(definition => {
-      console.log(index);
-      return definition.name === simpleSearchNextPageIndex;
-    });
+    const index = form.indexDefinitions.find(
+      definition => definition.name === simpleSearchNextPageIndex,
+    );
     const query = new CoreAPI.SubmissionSearch(true);
     query.include(SUBMISSION_INCLUDES);
     query.limit(DATASTORE_LIMIT);
