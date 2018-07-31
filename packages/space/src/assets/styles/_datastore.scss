@@ -4,6 +4,14 @@
 
 .package-layout--space {
   .page-container--datastore {
+    .page-title__actions {
+      @media (max-width: 768px) {
+        .btn-import,
+        .btn-export {
+          display: none;
+        }
+      }
+    }
     .kinops-discussions {
       flex: 1 1 40%;
     }
