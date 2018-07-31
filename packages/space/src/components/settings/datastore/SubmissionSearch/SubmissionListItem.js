@@ -11,23 +11,45 @@ import moment from 'moment';
 
 import { Constants } from 'common';
 
+const DiscussionIcon = () => (
+  <span className="icon">
+    <span
+      className="fa fa-fw fa-comments"
+      style={{
+        color: 'rgb(9, 84, 130)',
+        fontSize: '16px',
+      }}
+    />
+  </span>
+);
+
 const MobileSubmissionCard = ({ submission, columns, path }) => (
   <tr>
     <td className="d-md-none d-table-cell" key={`tcol-0-${submission.id}`}>
       <div className="card">
         <div className="card-body">
           <strong className="card-title">
-            {getSubmissionData(submission, columns.first())}
+            {showDiscussionIcon(submission, columns.first()) ? (
+              <DiscussionIcon />
+            ) : (
+              getSubmissionData(submission, columns.first())
+            )}
           </strong>
           <p className="card-text">
             {columns.map((innerColumn, innerIndex) => {
               const innerRowData = getSubmissionData(submission, innerColumn);
+              const isDiscussionIdField =
+                innerColumn.name === 'Discussion Id' ? true : false;
               return (
                 innerIndex !== 0 && (
                   <Fragment key={`tcol-mobile-${innerIndex}`}>
-                    <span>
-                      <strong>{innerColumn.label}:</strong> {innerRowData}
-                    </span>
+                    {isDiscussionIdField ? (
+                      <DiscussionIcon />
+                    ) : (
+                      <span>
+                        <strong>{innerColumn.label}:</strong> {innerRowData}
+                      </span>
+                    )}
                     <br />
                   </Fragment>
                 )
@@ -62,9 +84,15 @@ const MobileSubmissionCard = ({ submission, columns, path }) => (
   </tr>
 );
 
-const TableSubmissionColumn = ({ shouldLink, submission, to, label }) => (
+const TableSubmissionColumn = ({ shouldLink, to, label, discussionIcon }) => (
   <td className="d-none d-md-table-cell">
-    {shouldLink ? <Link to={to}>{label}</Link> : <span>{label}</span>}
+    {shouldLink ? (
+      <Link to={to}>{discussionIcon ? <DiscussionIcon /> : label}</Link>
+    ) : discussionIcon ? (
+      <DiscussionIcon />
+    ) : (
+      <span>{label}</span>
+    )}
   </td>
 );
 
@@ -74,25 +102,34 @@ const TableSubmissionRow = ({
   path,
   openDropdown,
   toggleDropdown,
+  openActionMenu,
+  toggleActionMenu,
   handleClone,
   handleDelete,
 }) => (
-  <tr>
+  <tr
+    onMouseEnter={toggleActionMenu(submission.id)}
+    onMouseLeave={toggleActionMenu(submission.id)}
+  >
     {columns.map((column, index) => (
       <TableSubmissionColumn
         key={`tcol-${index}-${submission.id}`}
         shouldLink={index === 0}
         to={`${path}/${submission.id}`}
         label={getSubmissionData(submission, column)}
+        discussionIcon={showDiscussionIcon(submission, column)}
       />
     ))}
-    <td>
+    <td className={openActionMenu === submission.id ? '' : ''}>
       <Dropdown
         toggle={toggleDropdown(submission.id)}
         isOpen={openDropdown === submission.id}
       >
         <DropdownToggle color="link" className="btn-sm">
-          <span className="fa fa-ellipsis-h fa-2x" />
+          <span
+            className={` fa fa-ellipsis-h fa-2x ${openActionMenu !==
+              submission.id && 'invisible'}`}
+          />
         </DropdownToggle>
         <DropdownMenu right>
           <DropdownItem tag={Link} to={`${path}/${submission.id}`}>
@@ -121,6 +158,8 @@ const SubmissionListItemComponent = ({
   handleDelete,
   openDropdown,
   toggleDropdown,
+  openActionMenu,
+  toggleActionMenu,
   path,
   isMobile,
 }) =>
@@ -137,10 +176,19 @@ const SubmissionListItemComponent = ({
       path={path}
       openDropdown={openDropdown}
       toggleDropdown={toggleDropdown}
+      openActionMenu={openActionMenu}
+      toggleActionMenu={toggleActionMenu}
       handleClone={handleClone}
       handleDelete={handleDelete}
     />
   );
+
+const showDiscussionIcon = (submission, column) =>
+  column.type === 'value' &&
+  column.name === 'Discussion Id' &&
+  submission.values['Discussion Id']
+    ? true
+    : false;
 
 const getSubmissionData = (submission, column) =>
   column.type === 'value'
@@ -160,9 +208,18 @@ const toggleDropdown = ({
 }) => dropdownSlug => () =>
   setOpenDropdown(dropdownSlug === openDropdown ? '' : dropdownSlug);
 
+const toggleActionMenu = ({
+  setActionMenu,
+  openActionMenu,
+}) => actionMenuId => () => {
+  setActionMenu(actionMenuId === openActionMenu ? '' : actionMenuId);
+};
+
 export const SubmissionListItem = compose(
   withState('openDropdown', 'setOpenDropdown', ''),
+  withState('openActionMenu', 'setActionMenu', ''),
   withHandlers({
+    toggleActionMenu,
     toggleDropdown,
     handleClone,
     handleDelete,

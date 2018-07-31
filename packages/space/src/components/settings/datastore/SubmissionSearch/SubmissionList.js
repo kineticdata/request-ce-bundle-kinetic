@@ -5,6 +5,18 @@ import { actions } from '../../../../redux/modules/settingsDatastore';
 import { SubmissionListItem } from './SubmissionListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 
+const DiscussionIcon = () => (
+  <span className="icon">
+    <span
+      className="fa fa-fw fa-comments"
+      style={{
+        color: 'rgb(9, 84, 130)',
+        fontSize: '16px',
+      }}
+    />
+  </span>
+);
+
 const WallyNoResultsFoundMessage = ({ form }) => {
   return (
     <div className="empty-state empty-state--wally">
@@ -75,7 +87,6 @@ const SubmissionListComponent = ({
   sortTable,
 }) => {
   const visibleColumns = columns.filter(c => c.visible);
-  console.log(visibleColumns.toJS());
   return (
     <div className="datastore-submissions">
       {loading ? (
@@ -106,6 +117,8 @@ const SubmissionListComponent = ({
                 <thead className="d-none d-md-table-header-group sortable">
                   <tr>
                     {visibleColumns.map(c => {
+                      const isDiscussionIdField =
+                        c.name === 'Discussion Id' ? true : false;
                       const sortClass =
                         (clientSortInfo &&
                           clientSortInfo.type === c.type &&
@@ -120,7 +133,7 @@ const SubmissionListComponent = ({
                           className={`d-sm-none d-md-table-cell ${sortClass}`}
                           onClick={e => sortTable(c)}
                         >
-                          {c.label}
+                          {isDiscussionIdField ? <DiscussionIcon /> : c.label}
                         </th>
                       );
                     })}
