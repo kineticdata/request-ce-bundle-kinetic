@@ -7,7 +7,7 @@ import { RequestCard } from '../shared/RequestCard';
 import { getSubmissionPath } from '../../utils';
 
 export const Catalog = ({
-  profile,
+  kapp,
   forms,
   submissions,
   homePageMode,
@@ -19,7 +19,7 @@ export const Catalog = ({
       <PageTitle parts={[]} />
       <div className="search-services-home">
         <div className="search-services-home__wrapper">
-          <h1 className="text-truncate">Services from the team</h1>
+          <h1 className="text-truncate">Welcome, how can we help?</h1>
           <div className="search-box">
             <CatalogSearchContainer />
           </div>
@@ -29,7 +29,7 @@ export const Catalog = ({
         <div className="page-panel page-panel--transparent page-panel--one-thirds page-panel--auto-height page-panel--my-requests">
           <div className="page-title">
             <div className="page-title__wrapper">
-              <h3>services /</h3>
+              <h3 className="text-lowercase">{kapp.name} /</h3>
               <h1>Recent Requests</h1>
             </div>
             <Link to="/requests">View All</Link>
@@ -58,7 +58,7 @@ export const Catalog = ({
         <div className="page-panel page-panel--transparent page-panel--two-thirds page-panel--services">
           <div className="page-title">
             <div className="page-title__wrapper">
-              <h3>services /</h3>
+              <h3 className="text-lowercase">{kapp.name} /</h3>
               <h1>{homePageMode}</h1>
             </div>
           </div>
