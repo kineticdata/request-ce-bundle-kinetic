@@ -90,7 +90,7 @@ export const NewItemMenu = ({
           className="btn btn-link"
           onClick={closeNewItemMenu}
         >
-          Cancel
+          Close
         </button>
         <span>New {currentForm ? currentForm.name : 'Task'}</span>
         <span>&nbsp;</span>
