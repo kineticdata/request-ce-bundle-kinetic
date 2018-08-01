@@ -102,15 +102,10 @@ const TableSubmissionRow = ({
   path,
   openDropdown,
   toggleDropdown,
-  openActionMenu,
-  toggleActionMenu,
   handleClone,
   handleDelete,
 }) => (
-  <tr
-    onMouseEnter={toggleActionMenu(submission.id)}
-    onMouseLeave={toggleActionMenu(submission.id)}
-  >
+  <tr>
     {columns.map((column, index) => (
       <TableSubmissionColumn
         key={`tcol-${index}-${submission.id}`}
@@ -120,16 +115,13 @@ const TableSubmissionRow = ({
         discussionIcon={showDiscussionIcon(submission, column)}
       />
     ))}
-    <td className={openActionMenu === submission.id ? '' : ''}>
+    <td>
       <Dropdown
         toggle={toggleDropdown(submission.id)}
         isOpen={openDropdown === submission.id}
       >
         <DropdownToggle color="link" className="btn-sm">
-          <span
-            className={` fa fa-ellipsis-h fa-2x ${openActionMenu !==
-              submission.id && 'invisible'}`}
-          />
+          <span className="fa fa-ellipsis-h fa-2x" />
         </DropdownToggle>
         <DropdownMenu right>
           <DropdownItem tag={Link} to={`${path}/${submission.id}`}>
@@ -158,8 +150,6 @@ const SubmissionListItemComponent = ({
   handleDelete,
   openDropdown,
   toggleDropdown,
-  openActionMenu,
-  toggleActionMenu,
   path,
   isMobile,
 }) =>
@@ -176,8 +166,6 @@ const SubmissionListItemComponent = ({
       path={path}
       openDropdown={openDropdown}
       toggleDropdown={toggleDropdown}
-      openActionMenu={openActionMenu}
-      toggleActionMenu={toggleActionMenu}
       handleClone={handleClone}
       handleDelete={handleDelete}
     />
@@ -208,18 +196,9 @@ const toggleDropdown = ({
 }) => dropdownSlug => () =>
   setOpenDropdown(dropdownSlug === openDropdown ? '' : dropdownSlug);
 
-const toggleActionMenu = ({
-  setActionMenu,
-  openActionMenu,
-}) => actionMenuId => () => {
-  setActionMenu(actionMenuId === openActionMenu ? '' : actionMenuId);
-};
-
 export const SubmissionListItem = compose(
   withState('openDropdown', 'setOpenDropdown', ''),
-  withState('openActionMenu', 'setActionMenu', ''),
   withHandlers({
-    toggleActionMenu,
     toggleDropdown,
     handleClone,
     handleDelete,
