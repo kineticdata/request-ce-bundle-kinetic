@@ -25,6 +25,12 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                 <Link to="/kapps/services">services</Link> /{` `}
                 <Link to="/kapps/services/settings">settings</Link> /{` `}
                 <Link to="/kapps/services/settings/forms">forms</Link> /{` `}
+                <Link
+                  to={`/kapps/services/settings/forms/${submission.form.slug}`}
+                >
+                  {submission.form.name}
+                </Link>{' '}
+                /{` `}
               </h3>
               <h1>
                 {submission.form.name} ({submission.handle})
