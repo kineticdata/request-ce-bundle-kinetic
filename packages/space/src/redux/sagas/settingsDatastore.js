@@ -191,10 +191,9 @@ export function* fetchSubmissionsSimpleSaga() {
   } = yield select(selectSearchParams);
 
   if (pageToken) {
-    const index = form.indexDefinitions.find(definition => {
-      console.log(index);
-      return definition.name === simpleSearchNextPageIndex;
-    });
+    const index = form.indexDefinitions.find(
+      definition => definition.name === simpleSearchNextPageIndex,
+    );
     const query = new CoreAPI.SubmissionSearch(true);
     query.include(SUBMISSION_INCLUDES);
     query.limit(DATASTORE_LIMIT);
@@ -378,7 +377,7 @@ export function* fetchSubmissionsAdvancedSaga() {
 
 export function* fetchSubmissionSaga(action) {
   const include =
-    'details,values,form,form.attributes,activities,activities.details';
+    'details,values,form,form.attributes,form.fields,activities,activities.details';
   const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
     id: action.payload,
     include,

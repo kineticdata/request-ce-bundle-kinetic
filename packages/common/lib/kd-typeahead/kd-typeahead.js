@@ -173,11 +173,9 @@
             if (value.split('::')[0].toLowerCase() === 'string') {
               addtlParam = '&values[' + name + ']=' + valToSet;
             } else if (value.split('::')[0].toLowerCase() === 'field') {
-              var field = typeaheadConfig['typeaheadForm'].select(
-                'field[' + valToSet + ']',
-              );
+              var field = typeaheadConfig['typeaheadForm'].getFieldByName(valToSet);
               if (field != null) {
-                addtlParam = '&values[' + name + ']=' + field.value();
+                addtlParam = '&values[' + name + ']=' + 'field[' + valToSet + ']';
               } else {
                 console.log(
                   'KD Typeahead Error! When adding additional bridge parameters (typeahead-additional-params), could not find field with the name: ' +
@@ -224,7 +222,22 @@
           queryTokenizer: Bloodhound.tokenizers.whitespace,
           remote: {
             url: typeaheadConfig['bridgeUrl'],
-            wildcard: '%QUERY',
+            prepare: function(query, settings) {
+              // Replace %query string with search value
+              settings.url = settings.url.replace('%QUERY', encodeURIComponent(query));
+              // Build regexp for finding additional params that need to be replaced
+              var re = RegExp("(&values\\\[.+?\\\]=)field\\\[(.+?)\\\]");
+              var reMatch = settings.url.match(re);
+              // While additional params need to be replaced
+              while (reMatch) {
+                // Replace the param with the value from the appropriate field
+                settings.url = settings.url.replace(re, reMatch[1] +
+                  encodeURIComponent(typeaheadConfig['typeaheadForm']
+                    .getFieldByName(reMatch[2]).value()));
+                reMatch = settings.url.match(re);
+              }
+              return settings;
+            },
             filter: function(data) {
               var dataArrayObjects = _.map(data.records.records, function(
                 record,
@@ -285,6 +298,7 @@
         });
         $(input).bind('typeahead:change', function(ev) {
           // Change Event on Typeahead goes here
+
         });
         // Prevent Submitting of form when hitting enter
         $(input).keydown(function(event) {

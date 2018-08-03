@@ -25,6 +25,9 @@
       font-weight: 300;
       line-height: 3.75rem;
       margin-top: 1.5rem;
+      @media all and (max-width: 768px) {
+        max-width: 210px;
+      }
     }
     display: flex;
     justify-content: center;

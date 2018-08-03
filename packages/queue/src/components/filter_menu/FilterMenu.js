@@ -28,7 +28,7 @@ export const FilterMenu = ({
     <div className="modal-header">
       <h4 className="modal-title">
         <button type="button" className="btn btn-link" onClick={close}>
-          Cancel
+          Close
         </button>
         <span>Filters</span>
         <button

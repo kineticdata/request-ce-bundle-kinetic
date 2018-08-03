@@ -4,7 +4,7 @@ import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
 import { Map, Seq } from 'immutable';
 import { push } from 'connected-react-router';
-import { toastActions } from 'common';
+import { toastActions, PageTitle } from 'common';
 import { actions } from '../../../redux/modules/settingsNotifications';
 import { NotificationMenu } from './NotificationMenu';
 
@@ -60,6 +60,13 @@ const NotificationComponent = ({
   handleVariableSelection,
 }) => (
   <div className="page-container page-container--notifications">
+    <PageTitle
+      parts={[
+        submission ? submission.label : `New ${title}`,
+        'Notifications',
+        'Settings',
+      ]}
+    />
     <div className="page-panel page-panel--scrollable">
       <div className="page-title">
         <div className="page-title__wrapper">

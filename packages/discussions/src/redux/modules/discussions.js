@@ -57,9 +57,16 @@ export const actions = {
   leaveDiscussion: withPayload(types.LEAVE_DISCUSSION),
   // API-bsased actions.
   setIssue: withPayload(types.SET_ISSUE),
-  createIssue: (name, description = '', submission, include, onSuccess) => ({
+  createIssue: (
+    name,
+    description = '',
+    submission,
+    include,
+    onSuccess,
+    datastore = false,
+  ) => ({
     type: types.CREATE_ISSUE,
-    payload: { name, description, submission, include, onSuccess },
+    payload: { name, description, submission, include, onSuccess, datastore },
   }),
   fetchMoreMessages: withPayload(types.FETCH_MORE_MESSAGES),
   setMessages: withPayload(types.SET_MESSAGES, 'guid', 'messages'),

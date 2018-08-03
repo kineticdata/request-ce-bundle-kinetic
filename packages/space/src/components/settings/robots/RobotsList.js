@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, lifecycle } from 'recompose';
+import { PageTitle } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/settingsRobots';
 
@@ -22,6 +23,7 @@ const WallyEmptyMessage = ({ filter }) => {
 const RobotsListComponent = ({ robots, loading, match }) => {
   return (
     <div className="page-container page-container--robots">
+      <PageTitle parts={[' Robots', 'Settings']} />
       <div className="page-panel page-panel--scrollable page-panel--robots-content">
         <div className="page-title">
           <div className="page-title__wrapper">
