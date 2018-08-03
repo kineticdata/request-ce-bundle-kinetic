@@ -6,6 +6,8 @@ const { namespace, noPayload, withPayload } = Utils;
 export const FORMS_INCLUDES = 'details,attributes';
 export const FORM_INCLUDES =
   'details,fields,indexDefinitions,attributesMap,categorizations';
+export const SUBMISSION_INCLUDES =
+  'details,values,form,form.fields,activities,activities.details';
 
 export const types = {
   FETCH_FORM: namespace('settingsForms', 'FETCH_FORM'),
@@ -14,6 +16,8 @@ export const types = {
   CREATE_FORM: namespace('settingsForms', 'CREATE_FORM'),
   FETCH_FORM_SUBMISSIONS: namespace('settingsForms', 'FETCH_FORM_SUBMISSIONS'),
   SET_FORM_SUBMISSIONS: namespace('settingsForms', 'SET_FORM_SUBMISSIONS'),
+  FETCH_FORM_SUBMISSION: namespace('settingsForms', 'FETCH_FORM_SUBMISSION'),
+  SET_FORM_SUBMISSION: namespace('settingsForms', 'SET_FORM_SUBMISSION'),
   FETCH_KAPP: namespace('settingsForms', 'FETCH_KAPP'),
   SET_KAPP: namespace('settingsForms', 'SET_KAPP'),
   SET_FORMS_ERROR: namespace('settingsForms', 'SET_FORMS_ERROR'),
@@ -28,6 +32,8 @@ export const actions = {
   createForm: withPayload(types.CREATE_FORM),
   fetchFormSubmissions: withPayload(types.FETCH_FORM_SUBMISSIONS),
   setFormSubmissions: withPayload(types.SET_FORM_SUBMISSIONS),
+  fetchFormSubmission: withPayload(types.FETCH_FORM_SUBMISSION),
+  setFormSubmission: withPayload(types.SET_FORM_SUBMISSION),
   fetchKapp: withPayload(types.FETCH_KAPP),
   setKapp: withPayload(types.SET_KAPP),
   setFormsError: withPayload(types.SET_FORMS_ERROR),
@@ -53,7 +59,9 @@ export const State = Record({
   notifications: null,
   currentFormSubmissions: null,
   nextPageToken: null,
-  submissionsLoading: null,
+  submissionsLoading: true,
+  submissionLoading: true,
+  formSubmission: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -69,6 +77,12 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('submissionsLoading', false)
         .set('currentFormSubmissions', List(payload.submissions))
         .set('nextPageToken', payload.nextPageToken);
+    case types.FETCH_FORM_SUBMISSION:
+      return state.set('submissionLoading', true);
+    case types.SET_FORM_SUBMISSION:
+      return state
+        .set('submissionLoading', false)
+        .set('formSubmission', payload);
     case types.FETCH_KAPP:
       return state.set('kappLoading', true);
     case types.SET_KAPP:
