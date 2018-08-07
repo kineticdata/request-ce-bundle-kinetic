@@ -9,6 +9,7 @@ import { ServicesSettings } from './servicesSettings/ServicesSettings';
 import { actions } from '../../redux/modules/settingsServices';
 import { FormList } from './forms/FormList';
 import { FormSettings } from './forms/FormSettings';
+import { FormActivity } from './forms/FormActivity';
 import { CreateForm } from './forms/CreateForm';
 import { CategoriesSettings } from './categories/Categories';
 import { FormSubmissions } from './forms/FormSubmissions';
@@ -31,6 +32,11 @@ export const SettingsComponent = () => (
       exact
       path="/kapps/services/settings/forms/:id/"
       component={FormSubmissions}
+    />
+    <Route
+      exact
+      path="/kapps/services/settings/forms/:id/activity"
+      component={FormActivity}
     />
     <Route
       exact

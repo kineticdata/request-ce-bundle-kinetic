@@ -1,7 +1,13 @@
 import { call, put, takeEvery, select, all } from 'redux-saga/effects';
 import { CoreAPI, bundle } from 'react-kinetic-core';
 import { toastActions } from 'common';
-import { actions, types, FORM_INCLUDES } from '../modules/settingsForms';
+import axios from 'axios';
+import {
+  actions,
+  types,
+  FORM_INCLUDES,
+  SUBMISSION_INCLUDES,
+} from '../modules/settingsForms';
 
 export function* fetchFormSaga(action) {
   const { serverError, form } = yield call(CoreAPI.fetchForm, {
@@ -28,6 +34,8 @@ export function* fetchFormSubmissionsSaga(action) {
   ]);
   // Add some of the optional parameters to the search
   if (pageToken) searchBuilder.pageToken(pageToken);
+  // Loop over items in q and append them as "eq"
+  // to search build
   if (q) {
     for (const key in q) {
       searchBuilder.eq(key, q[key]);
@@ -45,6 +53,19 @@ export function* fetchFormSubmissionsSaga(action) {
     yield put(actions.setFormsErrors(serverError));
   } else {
     yield put(actions.setFormSubmissions({ submissions, nextPageToken }));
+  }
+}
+
+export function* fetchFormSubmissionSaga(action) {
+  const id = action.payload.id;
+  const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
+    id,
+    include: SUBMISSION_INCLUDES,
+  });
+  if (serverError) {
+    yield put(actions.setFormsErrors(serverError));
+  } else {
+    yield put(actions.setFormSubmission(submission));
   }
 }
 
@@ -184,4 +205,5 @@ export function* watchSettingsForms() {
   yield takeEvery(types.CREATE_FORM, createFormSaga);
   yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
   yield takeEvery(types.FETCH_FORM_SUBMISSIONS, fetchFormSubmissionsSaga);
+  yield takeEvery(types.FETCH_FORM_SUBMISSION, fetchFormSubmissionSaga);
 }
