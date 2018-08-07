@@ -24,6 +24,7 @@ const PagingComponent = ({
   pageTokens,
   handleNextThousandPage,
   handlePrevThousandPage,
+  searching,
 }) =>
   (nextPageToken !== null || pageTokens.size > 0) && (
     <Fragment>
@@ -37,7 +38,7 @@ const PagingComponent = ({
           Previous {DATASTORE_LIMIT}
         </button>
         <span>
-          {submissions.size > 0
+          {!searching && submissions.size > 0
             ? getPageText(pageTokens, nextPageToken, submissions)
             : ''}
         </span>
@@ -58,6 +59,7 @@ export const mapStateToProps = state => ({
   pageTokens: state.space.settingsDatastore.pageTokens,
   nextPageToken: state.space.settingsDatastore.nextPageToken,
   simpleSearchActive: state.space.settingsDatastore.simpleSearchActive,
+  searching: state.space.settingsDatastore.searching,
 });
 
 export const mapDispatchToProps = {

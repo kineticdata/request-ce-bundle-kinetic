@@ -239,7 +239,6 @@ const SearchbarComponent = ({
   simpleSearchParam,
   setSimpleSearchParam,
   handleSearchSubmissions,
-  handleApplySearchSubmissions,
   handleInputKeypress,
   dropdownOpen,
   handleOpenDropdown,
@@ -359,7 +358,7 @@ const SearchbarComponent = ({
           <Button
             disabled={searching}
             color="primary"
-            onClick={handleApplySearchSubmissions}
+            onClick={handleSearchSubmissions}
           >
             Apply
           </Button>
@@ -409,19 +408,6 @@ export const mapDispatchToProps = {
 };
 
 const handleSearchSubmissions = ({
-  fetchSubmissionsSimple,
-  fetchSubmissionsAdvanced,
-  simpleSearchActive,
-}) => e => {
-  e.preventDefault();
-  if (simpleSearchActive) {
-    fetchSubmissionsSimple();
-  } else {
-    fetchSubmissionsAdvanced();
-  }
-};
-
-const handleApplySearchSubmissions = ({
   fetchSubmissionsSimple,
   fetchSubmissionsAdvanced,
   simpleSearchActive,
@@ -540,7 +526,6 @@ export const Searchbar = compose(
   withState('placeholderText', 'setPlaceholderText', DEFAULT_PLACEHOLDER),
   withHandlers({
     handleSearchSubmissions,
-    handleApplySearchSubmissions,
     handleResetSearch,
     handleInputKeypress,
     toggleAdvancedSearchOpen,
