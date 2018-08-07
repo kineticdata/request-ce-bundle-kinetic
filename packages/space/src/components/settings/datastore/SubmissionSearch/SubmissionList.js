@@ -58,13 +58,13 @@ const sortTable = ({ clientSortInfo, setClientSortInfo }) => column => {
   ) {
     setClientSortInfo({
       ...clientSortInfo,
-      order: clientSortInfo.order === 'DESC' ? 'ASC' : 'DESC',
+      direction: clientSortInfo.direction === 'DESC' ? 'ASC' : 'DESC',
     });
   } else {
     setClientSortInfo({
       type: column.type,
       name: column.name,
-      order: 'ASC',
+      direction: 'ASC',
     });
   }
 };
@@ -123,7 +123,7 @@ const SubmissionListComponent = ({
                         (clientSortInfo &&
                           clientSortInfo.type === c.type &&
                           clientSortInfo.name === c.name &&
-                          (clientSortInfo.order === 'DESC'
+                          (clientSortInfo.direction === 'DESC'
                             ? 'sort-desc'
                             : 'sort-asc')) ||
                         '';
@@ -183,12 +183,12 @@ const SubmissionListComponent = ({
                           <select
                             className="form-control"
                             value={
-                              (clientSortInfo && clientSortInfo.order) || ''
+                              (clientSortInfo && clientSortInfo.direction) || ''
                             }
                             onChange={e => {
                               sortTable({
                                 ...clientSortInfo,
-                                order: e.target.value,
+                                direction: e.target.value,
                               });
                             }}
                           >
