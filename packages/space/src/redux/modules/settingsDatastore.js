@@ -471,7 +471,9 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.PUSH_PAGE_TOKEN:
       return state.update('pageTokens', pageTokens => pageTokens.push(payload));
     case types.POP_PAGE_TOKEN:
-      return state.update('pageTokens', pageTokens => pageTokens.pop());
+      return state
+        .set('nextPageToken', state.pageTokens.get(-2))
+        .update('pageTokens', pageTokens => pageTokens.pop().pop());
     case types.CLEAR_PAGE_TOKENS:
       return state.set('pageTokens', List()).set('nextPageToken', null);
     case types.SET_NEXT_PAGE_TOKEN:
