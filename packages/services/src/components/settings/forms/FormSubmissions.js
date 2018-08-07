@@ -238,7 +238,15 @@ export const FormSubmissionsContainer = ({
                     {submissions.map(submission => {
                       return (
                         <tr key={submission.id}>
-                          <td>{submission.handle}</td>
+                          <td>
+                            <Link
+                              to={`/kapps/${kappSlug}/settings/forms/${
+                                submission.id
+                              }/activity`}
+                            >
+                              <span>{submission.handle}</span>
+                            </Link>
+                          </td>
                           <td>{submission.label}</td>
                           <td>{submission.values.Status}</td>
                           <td>

@@ -297,11 +297,10 @@ export const addNewCategory = ({
     .then(response => {
       setCategories(newTree.treeData);
       setSlugEntered(false);
-      setInputs({ loading: false });
+      setInputs({ category: '', slug: '', loading: false });
     })
     .catch(response => {
-      setInputs({ ...inputs, error: 'There was an error ' });
-      console.log('error: ' + response);
+      setInputs({ ...inputs, error: 'There was an error: ' + response });
     });
 };
 
@@ -313,7 +312,6 @@ export const editCategory = ({
   setCategories,
 }) => rowInfo => {
   let { node, treeIndex, path } = rowInfo;
-  console.log(node);
 
   const name = subcategory.name;
   const title = subcategory.name;
