@@ -56,6 +56,7 @@ export const DatastoreForm = Record({
   description: '',
   indexDefinitions: List(),
   columns: List(),
+  defaultSearchIndex: null,
   fields: [],
   canManage: false,
   isHidden: false,
@@ -74,6 +75,14 @@ export const DatastoreFormSave = Record({
   slug: '',
   description: '',
   attributesMap: {},
+});
+
+// Used in datastore to define configurations
+export const DatastoreConfig = Record({
+  // columns config
+  columns: List(),
+  // index for use in initial search
+  defaultSearchIndex: null,
 });
 
 // Used in datastore to define a single table column

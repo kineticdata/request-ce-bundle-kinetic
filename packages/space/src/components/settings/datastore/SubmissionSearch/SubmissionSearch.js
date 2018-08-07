@@ -56,7 +56,7 @@ const SubmissionSearchComponent = ({
             </Link>
           </div>
         </div>
-        <Searchbar />
+        <Searchbar formSlug={match.params.slug} />
         <Paging />
         <SubmissionList />
       </div>
@@ -72,6 +72,7 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = {
   fetchForm: actions.fetchForm,
+  clearForm: actions.clearForm,
   resetSearch: actions.resetSearchParams,
 };
 
@@ -122,6 +123,9 @@ export const SubmissionSearch = compose(
         csv = 'data:text/csv;charset=utf-8,' + csv;
         nextProps.setData(encodeURI(csv));
       }
+    },
+    componentWillUnmount() {
+      this.props.clearForm();
     },
   }),
 )(SubmissionSearchComponent);

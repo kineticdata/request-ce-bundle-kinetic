@@ -1,7 +1,10 @@
 import { List, Record } from 'immutable';
 import { Utils } from 'common';
+import isarray from 'isarray';
+import isobject from 'isobject';
 import {
   ColumnConfig,
+  DatastoreConfig,
   DatastoreForm,
   SearchParams,
   IndexValues,
@@ -49,6 +52,7 @@ export const types = {
   SET_FORMS_ERRORS: namespace('datastore', 'SET_FORMS_ERRORS'),
   FETCH_FORM: namespace('datastore', 'FETCH_FORM'),
   SET_FORM: namespace('datastore', 'SET_FORM'),
+  CLEAR_FORM: namespace('datastore', 'CLEAR_FORM'),
   UPDATE_FORM: namespace('datastore', 'UPDATE_FORM'),
   RESET_FORM: namespace('datastore', 'RESET_FORM'),
   CREATE_FORM: namespace('datastore', 'CREATE_FORM'),
@@ -82,6 +86,7 @@ export const types = {
     'datastore',
     'SET_SIMPLE_SEARCH_NEXT_PAGE_INDEX',
   ),
+  SET_SORT_DIRECTION: namespace('datastore', 'SET_SORT_DIRECTION'),
   CLONE_SUBMISSION: namespace('datastore', 'CLONE_SUBMISSION'),
   CLONE_SUBMISSION_SUCCESS: namespace('datastore', 'CLONE_SUBMISSION_SUCCESS'),
   CLONE_SUBMISSION_ERROR: namespace('datastore', 'CLONE_SUBMISSION_ERROR'),
@@ -101,6 +106,7 @@ export const actions = {
   setFormsErrors: withPayload(types.SET_FORMS_ERRORS),
   fetchForm: withPayload(types.FETCH_FORM),
   setForm: withPayload(types.SET_FORM),
+  clearForm: withPayload(types.CLEAR_FORM),
   updateForm: withPayload(types.UPDATE_FORM),
   resetForm: noPayload(types.RESET_FORM),
   createForm: withPayload(types.CREATE_FORM),
@@ -138,6 +144,7 @@ export const actions = {
   setSimpleSearchNextPageIndex: withPayload(
     types.SET_SIMPLE_SEARCH_NEXT_PAGE_INDEX,
   ),
+  setSortDirection: withPayload(types.SET_SORT_DIRECTION),
   cloneSubmission: withPayload(types.CLONE_SUBMISSION),
   cloneSubmissionSuccess: noPayload(types.CLONE_SUBMISSION_SUCCESS),
   cloneSubmissionErrors: withPayload(types.CLONE_SUBMISSION_ERROR),
@@ -148,22 +155,26 @@ export const actions = {
   setClientSortInfo: withPayload(types.SET_CLIENT_SORT_INFO),
 };
 
-const parseJson = json => {
+const parseConfigJson = json => {
   try {
-    return List(JSON.parse(json));
+    const parsed = JSON.parse(json);
+    if (isobject(parsed)) {
+      return DatastoreConfig(parsed).update('columns', c => List(c));
+    } else if (isarray(parsed)) {
+      return DatastoreConfig({ columns: List(parsed) });
+    } else {
+      return DatastoreConfig();
+    }
   } catch (e) {
-    return List();
+    return DatastoreConfig();
   }
 };
 
-export const buildColumns = form => {
+export const buildConfig = form => {
   // Parse Form Attribute for Configuration Values
-  const savedColumnConfig = List(
-    parseJson(
-      form.attributesMap['Datastore Configuration']
-        ? form.attributesMap['Datastore Configuration'][0]
-        : [],
-    ),
+  const parsedConfig = parseConfigJson(
+    form.attributesMap['Datastore Configuration'] &&
+      form.attributesMap['Datastore Configuration'][0],
   );
   // Build a list of all current column properties
   let defaultColumnConfig = List(
@@ -171,10 +182,10 @@ export const buildColumns = form => {
       .map(f => ColumnConfig({ name: f.name, label: f.name, type: 'value' }))
       .concat(SUBMISSION_SYSTEM_PROPS),
   ).sort((a, b) => {
-    var indexA = savedColumnConfig.findIndex(
+    var indexA = parsedConfig.columns.findIndex(
       sc => sc.name === a.name && sc.type === a.type,
     );
-    var indexB = savedColumnConfig.findIndex(
+    var indexB = parsedConfig.columns.findIndex(
       sc => sc.name === b.name && sc.type === b.type,
     );
     if (indexA === indexB) {
@@ -186,24 +197,30 @@ export const buildColumns = form => {
     }
   });
   // If there are saved column configs, apply them
-  if (savedColumnConfig.size > 0) {
-    return defaultColumnConfig.map(dc => {
-      const saved = savedColumnConfig.find(
-        sc => sc.name === dc.name && sc.type === dc.type,
-      );
-      if (saved) {
-        return ColumnConfig({
-          ...saved,
-          name: dc.name,
-          type: dc.type,
-          label: dc.label,
-        });
-      } else {
-        return dc;
-      }
+  if (parsedConfig.columns.size > 0) {
+    return parsedConfig.merge({
+      columns: List(
+        defaultColumnConfig.map(dc => {
+          const saved = parsedConfig.columns.find(
+            sc => sc.name === dc.name && sc.type === dc.type,
+          );
+          if (saved) {
+            return ColumnConfig({
+              ...saved,
+              name: dc.name,
+              type: dc.type,
+              label: dc.label,
+            });
+          } else {
+            return dc;
+          }
+        }),
+      ),
     });
   } else {
-    return defaultColumnConfig;
+    return parsedConfig.merge({
+      columns: List(defaultColumnConfig),
+    });
   }
 };
 
@@ -214,7 +231,7 @@ const sortSubmissions = (submissions, sortInfo) => {
         (sortInfo.type === 'value'
           ? submission.values[sortInfo.name]
           : submission[sortInfo.name]) || '',
-      (a, b) => a.localeCompare(b) * (sortInfo.order === 'DESC' ? -1 : 1),
+      (a, b) => a.localeCompare(b) * (sortInfo.direction === 'DESC' ? -1 : 1),
     );
   } else {
     return submissions;
@@ -285,6 +302,7 @@ export const State = Record({
   advancedSearchOpen: false,
   simpleSearchParam: '',
   simpleSearchNextPageIndex: null,
+  sortDirection: 'ASC',
   // Submission List Actions
   submissionActionErrors: [],
   cloning: false,
@@ -336,11 +354,14 @@ export const reducer = (state = State(), { type, payload }) => {
         .update('attributes', a => List(a))
         .update('qualifications', a => List(a));
       const canManage = state.forms.find(f => f.slug === form.slug).canManage;
-      const columns = buildColumns(form);
+      const savedConfig = buildConfig(form);
+      const columns = savedConfig.columns;
+      const defaultSearchIndex = savedConfig.defaultSearchIndex;
       const dsForm = DatastoreForm({
         ...form,
         canManage,
         columns,
+        defaultSearchIndex,
         bridgeName: bridgeModelMapping.bridgeName,
         bridgeModel,
         bridgeModelMapping,
@@ -349,6 +370,10 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('currentFormLoading', false)
         .set('currentForm', dsForm)
         .set('currentFormChanges', dsForm);
+    case types.CLEAR_FORM:
+      return state
+        .set('currentForm', DatastoreForm())
+        .set('currentFormChanges', DatastoreForm());
     case types.RESET_FORM:
       return state.set('currentFormChanges', state.get('currentForm'));
     case types.FETCH_SUBMISSIONS_ADVANCED:
@@ -437,6 +462,7 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('searchParams', SearchParams())
         .set('simpleSearchParam', '')
         .set('simpleSearchNextPageIndex', null)
+        .set('sortDirection', 'ASC')
         .set('nextPageToken', null)
         .set('pageTokens', List())
         .set('submissions', List())
@@ -467,6 +493,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('simpleSearchNextPageIndex', payload);
     case types.SET_SIMPLE_SEARCH_PARAM:
       return state.set('simpleSearchParam', payload);
+    case types.SET_SORT_DIRECTION:
+      return state.set('sortDirection', payload === 'DESC' ? payload : 'ASC');
     case types.CLONE_SUBMISSION:
       return state.set('cloning', true);
     case types.CLONE_SUBMISSION_SUCCESS:
