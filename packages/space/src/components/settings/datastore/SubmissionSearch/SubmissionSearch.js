@@ -35,7 +35,7 @@ const SubmissionSearchComponent = ({
           <div className="page-title__actions">
             {submissions.size > 0 && (
               <a
-                className="btn btn-info"
+                className="btn btn-info btn-export"
                 href={data}
                 download={`${form.name}.csv`}
               >
@@ -44,7 +44,7 @@ const SubmissionSearchComponent = ({
             )}
             <Link
               to={`/settings/datastore/${form.slug}/import`}
-              className="btn btn-secondary ml-3"
+              className="btn btn-secondary btn-import ml-3"
             >
               Import Records
             </Link>

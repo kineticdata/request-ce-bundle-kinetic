@@ -611,7 +611,6 @@ export class DatastoreImport extends Component {
                   <table>
                     <tbody>
                       {this.state.headerToFieldMap.map((obj, idx) => {
-                        console.log(obj.header);
                         if (
                           obj.header.toLocaleLowerCase() !==
                           'datastore record id'
