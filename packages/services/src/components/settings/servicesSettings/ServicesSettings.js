@@ -132,7 +132,6 @@ export const SettingsContainer = ({
                     }
                     name="Approver"
                     id="approver-none"
-                    className="form-control"
                     value="None"
                     onChange={event =>
                       setInputs({ ...inputs, Approver: event.target.value })
@@ -146,7 +145,6 @@ export const SettingsContainer = ({
                     checked={inputs['Approver'] === 'Manager'}
                     name="Approver"
                     id="approver-manager"
-                    className="form-control"
                     value="Manager"
                     onChange={event =>
                       setInputs({ ...inputs, Approver: event.target.value })
@@ -160,7 +158,6 @@ export const SettingsContainer = ({
                     checked={inputs['Approver'] === 'Team'}
                     name="Approver"
                     id="approver-team"
-                    className="form-control"
                     value="Team"
                     onChange={event =>
                       setInputs({ ...inputs, Approver: event.target.value })
@@ -174,7 +171,6 @@ export const SettingsContainer = ({
                     checked={inputs['Approver'] === 'Individual'}
                     name="Approver"
                     id="approver-individual"
-                    className="form-control"
                     value="Individual"
                     onChange={event =>
                       setInputs({ ...inputs, Approver: event.target.value })
