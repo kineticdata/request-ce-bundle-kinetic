@@ -8,7 +8,11 @@ export const SubmissionCompletedHeader = ({ activity }) => {
     <Fragment>
       <h1>
         {activity.label}
-        <span className="status status--green">
+        <span
+          className={`status anotherClass ${
+            data.Status ? 'status--green' : 'status--gray'
+          }`}
+        >
           {data.Status || 'Complete'}
         </span>
       </h1>
