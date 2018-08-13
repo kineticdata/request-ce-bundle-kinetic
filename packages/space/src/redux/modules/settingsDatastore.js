@@ -92,6 +92,8 @@ export const types = {
   ),
   DELETE_SUBMISSION_ERROR: namespace('datastore', 'DELETE_SUBMISSION_ERROR'),
   SET_FORM_CHANGES: namespace('datastore', 'SET_FORM_CHANGES'),
+  OPEN_MODAL: namespace('datastore', 'OPEN_MODAL'),
+  CLOSE_MODAL: namespace('datastore', 'CLOSE_MODAL'),
 };
 
 export const actions = {
@@ -144,6 +146,8 @@ export const actions = {
   deleteSubmissionSuccess: noPayload(types.DELETE_SUBMISSION_SUCCESS),
   deleteSubmissionErrors: withPayload(types.DELETE_SUBMISSION_ERROR),
   setFormChanges: withPayload(types.SET_FORM_CHANGES),
+  openModal: noPayload(types.OPEN_MODAL),
+  closeModal: noPayload(types.CLOSE_MODAL),
 };
 
 const parseJson = json => {
@@ -276,6 +280,7 @@ export const State = Record({
   // Single Submission
   submission: null,
   submissionLoading: true,
+  modalIsOpen: false,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -467,6 +472,10 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('submissionLoading', true).set('submission', null);
     case types.SET_FORM_CHANGES:
       return state.setIn(['currentFormChanges', payload.type], payload.value);
+    case types.OPEN_MODAL:
+      return state.set('modalIsOpen', true);
+    case types.CLOSE_MODAL:
+      return state.set('modalIsOpen', false);
     default:
       return state;
   }
