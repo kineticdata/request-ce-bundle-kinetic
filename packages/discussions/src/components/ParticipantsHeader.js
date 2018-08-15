@@ -26,7 +26,7 @@ export const ParticipantsHeader = ({
         .sort(participantComparator)
         .map(p => (
           <Hoverable
-            key={p.id}
+            key={p.user.username}
             render={() => <ParticipantCard participant={p} />}
           >
             <div className={`${p.present ? 'present' : ''}`}>

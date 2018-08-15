@@ -88,25 +88,32 @@ export const UploadMessage = ({
   </div>
 );
 
+const produceContent = message =>
+  message.content.reduce((content, token) => (content += token.value), '');
+
 export const TextMessage = ({ message }) => (
-  <Markdown className="message" source={message.body} skipHtml />
+  <Markdown className="message" source={produceContent(message)} skipHtml />
 );
 
 export const MessagesGroup = ({ messages, profile, discussionServerUrl }) => (
   <div
     className={`messages-group ${
-      messages.first().user.email === profile.email ? 'mine' : 'other'
+      messages.first().createdBy.username === profile.username
+        ? 'mine'
+        : 'other'
     }`}
   >
-    {messages.first().user.email !== profile.email && (
+    {messages.first().createdBy.username !== profile.username && (
       <Hoverable
-        key={messages.first().user.id}
-        render={() => <ParticipantCard participant={messages.first().user} />}
+        key={messages.first().createdBy.id}
+        render={() => (
+          <ParticipantCard participant={messages.first().createdBy} />
+        )}
       >
         <Avatar
           size={36}
-          email={messages.first().user.email}
-          name={messages.first().user.name}
+          email={messages.first().createdBy.email}
+          name={messages.first().createdBy.displayName}
           round
         />
       </Hoverable>
@@ -121,7 +128,9 @@ export const MessagesGroup = ({ messages, profile, discussionServerUrl }) => (
               message={message}
               discussionServerUrl={discussionServerUrl}
               messageOwner={
-                messages.first().user.email === profile.email ? 'mine' : 'other'
+                messages.first().createdBy.username === profile.username
+                  ? 'mine'
+                  : 'other'
               }
             />
           ) : (
@@ -130,9 +139,9 @@ export const MessagesGroup = ({ messages, profile, discussionServerUrl }) => (
       )}
       <div className="meta">
         <span className="author">
-          {messages.last().user.email === profile.email
+          {messages.last().createdBy.username === profile.username
             ? 'You'
-            : messages.last().user.name}
+            : messages.last().createdBy.displayName}
         </span>
         <span className="timestamp">
           {moment(messages.last().created_at).format('h:mma')}

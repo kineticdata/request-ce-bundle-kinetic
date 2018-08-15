@@ -51,7 +51,7 @@ class ChatInput extends Component {
   handleSendChatMessage(e) {
     e.preventDefault();
     this.props.sendMessage(
-      this.props.discussion.issue.guid,
+      this.props.discussion.id,
       this.state.chatInput,
       this.state.fileAttachment,
     );

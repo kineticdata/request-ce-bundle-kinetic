@@ -78,8 +78,8 @@ const DiscussionsListComponent = ({
   </div>
 );
 
-const handleDiscussionJoin = ({ joinDiscussion }) => discussion => () => {
-  joinDiscussion(discussion.id);
+const handleDiscussionJoin = ({ addDiscussionTab }) => discussion => () => {
+  addDiscussionTab(discussion.id);
 };
 
 const handleShowCreateDiscussion = ({ setShowCreateDiscussion }) => () => {

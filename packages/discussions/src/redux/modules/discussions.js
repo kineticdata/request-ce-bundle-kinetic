@@ -42,7 +42,7 @@ export const types = {
   DISCONNECT: namespace('discussions', 'DISCONNECT'),
   RECONNECT: namespace('discussions', 'RECONNECT'),
   // SET_CONNECTED: namespace('discussions', 'SET_CONNECTED'),
-  MESSAGE_RX: namespace('discussions', 'MESSAGE_RX'),
+  ADD_MESSAGE: namespace('discussions', 'ADD_MESSAGE'),
   MESSAGE_UPDATE: namespace('discussions', 'MESSAGE_UPDATE'),
   SEND_MESSAGE: namespace('discussions', 'SEND_MESSAGE'),
   MESSAGE_BAD_RX: namespace('discussions', 'MESSAGE_BAD_RX'),
@@ -119,10 +119,10 @@ export const actions = {
 
   reconnect: withPayload(types.RECONNECT),
   // setConnected: withPayload(types.SET_CONNECTED, 'guid', 'connected'),
-  receiveMessage: withPayload(types.MESSAGE_RX, 'guid', 'message'),
+  addMessage: withPayload(types.ADD_MESSAGE, 'id', 'message'),
   updateMessage: withPayload(types.MESSAGE_UPDATE, 'guid', 'message'),
   receiveBadMessage: withPayload(types.MESSAGE_BAD_RX, 'guid', 'badMessage'),
-  sendMessage: withPayload(types.SEND_MESSAGE, 'guid', 'message', 'attachment'),
+  sendMessage: withPayload(types.SEND_MESSAGE, 'id', 'message', 'attachment'),
 
   // Modal dialog state.
   openModal: withPayload(types.OPEN_MODAL, 'guid', 'modalType'),
@@ -242,9 +242,10 @@ const isSystemMessage = message => {
 };
 
 const getMessageDate = message =>
-  moment(message.created_at).format('YYYY-MM-DD');
+  moment(message.createdAt).format('YYYY-MM-DD');
 const differentDate = (m1, m2) => getMessageDate(m1) !== getMessageDate(m2);
-const differentAuthor = (m1, m2) => m1.user.email !== m2.user.email;
+const differentAuthor = (m1, m2) =>
+  m1.createdBy.username !== m2.createdBy.username;
 
 export const formatMessages = messages =>
   partitionListBy(
@@ -252,10 +253,15 @@ export const formatMessages = messages =>
     messages.reverse().filterNot(isSystemMessage),
   ).map(dateList => partitionListBy(differentAuthor, dateList));
 
+export const selectToken = state => state.discussions.discussions.token;
+
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.JOIN_DISCUSSION:
-      return state.setIn(['discussions', payload], Discussion());
+      console.log('joining!', state.hasIn(['discussions', payload]));
+      return state.hasIn(['discussions', payload])
+        ? state
+        : state.setIn(['discussions', payload], Discussion());
     case types.ADD_DISCUSSION:
       return state.updateIn(['discussions', payload.id], discussion =>
         discussion.mergeWith(
@@ -369,10 +375,10 @@ export const reducer = (state = State(), { type, payload }) => {
       );
     case types.MESSAGE_UPDATE:
       return state;
-    case types.MESSAGE_RX:
+    case types.ADD_MESSAGE:
       return state.updateIn(
-        ['discussions', payload.guid, 'messages'],
-        messages => messages.unshift(payload.message),
+        ['discussions', payload.id, 'messages', 'items'],
+        items => items.unshift(payload.message),
       );
     case types.MESSAGE_BAD_RX:
       return state.updateIn(['discussions', payload.guid, 'badMessages'], m =>

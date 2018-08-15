@@ -1,24 +1,32 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * kinops design system v0.1
+ * kinops v0.1
  * Copyright (c) 2017 - 2018 Kinetic Data, Inc.
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 @import '~common/src/assets/styles/variables';
 @import '~common/src/assets/styles/mixins';
+
 @import '~modularscale-sass/stylesheets/modularscale';
 
-// Core variables and mixins
-@import 'variables';
-
-// Design System componenets
-@import 'breadcrumbs';
-@import 'buttons';
-@import 'cards';
-@import 'forms';
 @import 'layout';
-@import 'markup';
-@import 'modals';
-@import 'navigations';
-@import 'popovers';
-@import 'typography';
-@import 'temp';
+@import 'sidebar';
+@import 'authentication';
+@import 'navbar';
+@import 'alerts';
+@import 'profile';
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Queue Item ~ Queue
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.discussion-container {
+  .discussion-content {
+    display: flex;
+    flex: 1 1 auto;
+    height: 1100px;
+    // Make the discussion box fit in the right sidebar.
+    .kinops-discussions {
+      border-left: 2px solid $gray4;
+      flex: 1 1 100%;
+    }
+  }
+}

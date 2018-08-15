@@ -14,6 +14,7 @@ const isPresent = (username, presences) =>
   presences.find(p => p.user === username) !== undefined;
 
 export const DiscussionsContainerComponent = ({
+  discussionTabs,
   discussions,
   activeTab,
   messageInput,
@@ -26,7 +27,37 @@ export const DiscussionsContainerComponent = ({
   return (
     <Fragment>
       <Nav tabs>
-        {discussions
+        {discussionTabs.map(discussionId => {
+          const discussion = discussions.find(d2 => d2.id === discussionId);
+
+          if (discussion) {
+            return (
+              <NavItem key={discussionId}>
+                <NavLink
+                  className={classnames({
+                    active: activeTab === discussionId,
+                  })}
+                  onClick={handleTopicTab(discussionId)}
+                >
+                  {discussion.title || 'Unknown'}
+                </NavLink>
+              </NavItem>
+            );
+          } else {
+            return (
+              <NavItem key={discussionId}>
+                <NavLink
+                  className={classnames({
+                    active: activeTab === discussionId,
+                  })}
+                >
+                  Joining...
+                </NavLink>
+              </NavItem>
+            );
+          }
+        })}
+        {/* {discussions
           .map(
             discussion =>
               discussion.topic.topicStatus === TOPIC_STATUS.subscribed ? (
@@ -55,20 +86,21 @@ export const DiscussionsContainerComponent = ({
                 </NavItem>
               ),
           )
-          .toList()}
+          .toList()} */}
       </Nav>
       <TabContent activeTab={activeTab}>
-        {discussions
-          .map(
-            discussion =>
-              discussion.topic.topicStatus === TOPIC_STATUS.subscribed ? (
-                <TabPane tabId={discussion.topic.topicId} key={discussion.id}>
-                  <Discussion
-                    discussionId={discussion.id}
-                    isMobileModal
-                    renderClose={() => null}
-                  />
-                  {/* <div className="row">
+        {discussionTabs.map(discussionId => (
+          <TabPane tabId={discussionId} key={discussionId}>
+            <div className="discussion-container">
+              <div className="discussion-content">
+                <Discussion
+                  discussionId={discussionId}
+                  isMobileModal
+                  renderClose={() => null}
+                />
+              </div>
+            </div>
+            {/* <div className="row">
                     <div className="col-2">
                       <strong>Participants</strong>
                       {discussion.participants.map(p => (
@@ -126,10 +158,8 @@ export const DiscussionsContainerComponent = ({
                       </ListGroup>
                     </div>
                       </div>*/}
-                </TabPane>
-              ) : null,
-          )
-          .toList()}
+          </TabPane>
+        ))}
       </TabContent>
     </Fragment>
   );

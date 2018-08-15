@@ -23,7 +23,7 @@ const Messages = ({
       <LoadMoreMessages discussion={discussion} />
       {formattedMessages.map(messagesForDate => (
         <MessagesDateContainer
-          key={messagesForDate.first().first().created_at}
+          key={messagesForDate.first().first().createdAt}
           messages={messagesForDate}
           profile={profile}
         />

@@ -1,0 +1,99 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Navbar ~ kinops
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.navbar {
+  padding: 0;
+  background-color: $white;
+  border-bottom: 1px solid $gray2;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.nav.nav-header {
+  justify-content: space-between;
+  padding-right: 5px;
+  .dropdown {
+    display: flex;
+  }
+}
+
+.nav.nav-header > .nav-item-right {
+  margin-left: auto;
+  display: flex;
+}
+
+.navbar .nav-item {
+  display: flex;
+}
+
+.nav.nav-header .dropdown-menu {
+  border-radius: 0;
+  border: none;
+  filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 3px 4px);
+  margin-top: 0;
+  &:after {
+    content: '';
+    border: 10px solid;
+    border-color: transparent transparent white;
+    content: '';
+    left: 10%;
+    margin-left: -10px;
+    position: absolute;
+    top: -20px;
+    z-index: 9998;
+  }
+  &.alerts-menu:after {
+    left: 93%;
+  }
+  &.profile-menu:after {
+    left: 88%;
+  }
+  .dropdown-item {
+    padding: 1rem;
+    line-height: 1;
+    .fa {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+.navbar .nav-link {
+  font-size: 1rem;
+  color: $gray;
+  padding: 1rem;
+  line-height: 1;
+  &:hover {
+    color: $blue-lake;
+  }
+
+  .badge {
+    background-color: $orange-kinops;
+    border-radius: 50%;
+    font-size: 0.625rem;
+    height: 1.25rem;
+    width: 1.25rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    padding: 0;
+  }
+}
+
+.navbar .drawer-button {
+  border-right: 1px solid $gray2;
+  .fa {
+    color: $gray;
+  }
+  &:hover .fa {
+    color: $blue-lake;
+  }
+}
+
+.dropdown-toggle::after {
+  border-top: 0.4em solid $black;
+  border-right: 0.19em solid transparent;
+  border-left: 0.19em solid transparent;
+}

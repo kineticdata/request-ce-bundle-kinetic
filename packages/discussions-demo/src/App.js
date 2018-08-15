@@ -1,3 +1,9 @@
+import 'bootstrap/scss/bootstrap.scss';
+import 'font-awesome/css/font-awesome.css';
+import 'typeface-open-sans/index.css';
+import 'common/src/assets/styles/master.scss';
+import './assets/styles/master.scss';
+import 'discussions/src/assets/styles/master.scss';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -10,15 +16,17 @@ import { ConnectionForm } from './components/ConnectionForm';
 import { DiscussionsList } from './components/DiscussionsList';
 import { DiscussionsContainer } from './components/DiscussionsContainer';
 
-import 'bootstrap/scss/bootstrap.scss';
-import 'font-awesome/css/font-awesome.css';
-import 'typeface-open-sans/index.css';
-import 'common/src/assets/styles/master.scss';
-import 'app/src/assets/styles/master.scss';
-import 'services/src/assets/styles/master.scss';
-import './assets/styles/master.scss';
-
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { discussionTabs: [] };
+  }
+
+  addDiscussionTab = discussionId =>
+    this.setState({
+      discussionTabs: [discussionId, ...this.state.discussionTabs],
+    });
+
   componentWillMount() {
     const token = localStorage.getItem('jwt');
     const host = 'localhost';
@@ -84,11 +92,11 @@ class App extends Component {
           {connected &&
             identified && (
               <div className="col-3">
-                <DiscussionsList />
+                <DiscussionsList addDiscussionTab={this.addDiscussionTab} />
               </div>
             )}
           <div className="col">
-            <DiscussionsContainer />
+            <DiscussionsContainer discussionTabs={this.state.discussionTabs} />
           </div>
         </div>
       </div>

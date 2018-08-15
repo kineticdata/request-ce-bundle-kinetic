@@ -1,0 +1,92 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Alerts ~ kinops
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+.alerts-menu {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  color: $blue-lake;
+  padding: 0;
+  min-width: 22.5rem;
+  a {
+    text-decoration: none;
+  }
+  .alerts-header {
+    align-items: center;
+    background-color: $white;
+    border-bottom: 1px solid $gray3;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1.5rem;
+    .title {
+      @include ms-respond(font-size, 0);
+    }
+    .actions {
+      align-items: center;
+      display: flex;
+      a {
+        @include ms-respond(font-size, -1);
+        padding: 0.5rem;
+        line-height: 0.5;
+      }
+    }
+  }
+  .alerts-list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0;
+    overflow: scroll;
+    max-height: 50vh;
+    -webkit-overflow-scrolling: touch;
+    .alert-item {
+      @include ms-respond(font-size, -2);
+      padding: 0.5rem 1.5rem;
+      &:hover {
+        background-color: lighten($gray4, 5%);
+      }
+      h1 {
+        @include ms-respond(font-size, -1);
+        margin: 0;
+        padding: 0;
+        a {
+          color: $black;
+          &:hover {
+            color: $blue-lake;
+          }
+        }
+        font-weight: bold;
+        line-height: 1.5;
+        width: 100%;
+        .source {
+          color: $orange-kinops;
+          font-weight: bold;
+          margin-right: 0.25rem;
+        }
+      }
+      p {
+        @include ms-respond(font-size, -1);
+
+        margin: 0.25rem 0;
+        line-height: 1.5;
+        color: $gray;
+        a {
+          text-decoration: underline;
+        }
+      }
+      &:last-of-type {
+        border-bottom-left-radius: $border-radius-base;
+        border-bottom-right-radius: $border-radius-base;
+      }
+    }
+  }
+  .empty-alerts {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0.5rem;
+    color: $blue2;
+    @include ms-respond(font-size, -1);
+    line-height: 1.5rem;
+  }
+}
