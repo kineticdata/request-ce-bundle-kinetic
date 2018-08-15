@@ -70,7 +70,7 @@ const FormListComponent = ({
             <h3>Loading</h3>
           ) : servicesForms && servicesForms.size > 0 ? (
             <div>
-              <table className="table table-sm table-striped table-datastore">
+              <table className="table table-sm table-striped settings-table">
                 <thead className="header">
                   <tr>
                     <th>Form Name</th>
