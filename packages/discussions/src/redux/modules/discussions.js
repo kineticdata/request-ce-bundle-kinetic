@@ -6,6 +6,7 @@ const { namespace, noPayload, withPayload } = Utils;
 export const types = {
   // API-based actions.
   JOIN_DISCUSSION: namespace('discussions', 'JOIN_DISCUSSION'),
+  ADD_DISCUSSION: namespace('discussions', 'ADD_DISCUSSION'),
   LEAVE_DISCUSSION: namespace('discussions', 'LEAVE_DISCUSSION'),
   SET_ISSUE: namespace('discussions', 'SET_ISSUE'),
   CREATE_ISSUE: namespace('discussion', 'CREATE_ISSUE'),
@@ -30,13 +31,20 @@ export const types = {
   QUEUE_UPLOADS: namespace('discussions', 'QUEUE_UPLOAD'),
 
   // Socket-based actions.
+  SET_TOKEN: namespace('discussions', 'SET_TOKEN'),
+  SET_CONNECTED: namespace('discussions', 'SET_CONNECTED'),
+  SET_IDENTIFIED: namespace('discussions', 'SET_IDENTIFIED'),
+  ADD_TOPIC: namespace('discussions', 'ADD_TOPIC'),
+  SET_TOPIC_STATUS: namespace('discussions', 'SET_TOPIC_STATUS'),
+  UPDATE_PRESENCE: namespace('discussions', 'UPDATE_PRESENCE'),
+
   CONNECT: namespace('discussions', 'CONNECT'),
   DISCONNECT: namespace('discussions', 'DISCONNECT'),
   RECONNECT: namespace('discussions', 'RECONNECT'),
-  SET_CONNECTED: namespace('discussions', 'SET_CONNECTED'),
+  // SET_CONNECTED: namespace('discussions', 'SET_CONNECTED'),
   MESSAGE_RX: namespace('discussions', 'MESSAGE_RX'),
   MESSAGE_UPDATE: namespace('discussions', 'MESSAGE_UPDATE'),
-  MESSAGE_TX: namespace('discussions', 'MESSAGE_TX'),
+  SEND_MESSAGE: namespace('discussions', 'SEND_MESSAGE'),
   MESSAGE_BAD_RX: namespace('discussions', 'MESSAGE_BAD_RX'),
 
   // Modal dialog state.
@@ -53,7 +61,13 @@ export const types = {
 };
 
 export const actions = {
+  setToken: withPayload(types.SET_TOKEN),
+  setConnected: withPayload(types.SET_CONNECTED),
+  setIdentified: withPayload(types.SET_IDENTIFIED),
+
   joinDiscussion: withPayload(types.JOIN_DISCUSSION),
+  addDiscussion: withPayload(types.ADD_DISCUSSION),
+
   leaveDiscussion: withPayload(types.LEAVE_DISCUSSION),
   // API-bsased actions.
   setIssue: withPayload(types.SET_ISSUE),
@@ -96,14 +110,19 @@ export const actions = {
   queueUploads: withPayload(types.QUEUE_UPLOADS, 'guid', 'uploads'),
 
   // Socket-based actions.
+  connect: withPayload(types.CONNECT),
   startConnection: withPayload(types.CONNECT),
   stopConnection: withPayload(types.DISCONNECT),
+  updatePresence: withPayload(types.UPDATE_PRESENCE, 'id', 'presences'),
+  addTopic: withPayload(types.ADD_TOPIC),
+  setTopicStatus: withPayload(types.SET_TOPIC_STATUS, 'id', 'status'),
+
   reconnect: withPayload(types.RECONNECT),
-  setConnected: withPayload(types.SET_CONNECTED, 'guid', 'connected'),
+  // setConnected: withPayload(types.SET_CONNECTED, 'guid', 'connected'),
   receiveMessage: withPayload(types.MESSAGE_RX, 'guid', 'message'),
   updateMessage: withPayload(types.MESSAGE_UPDATE, 'guid', 'message'),
   receiveBadMessage: withPayload(types.MESSAGE_BAD_RX, 'guid', 'badMessage'),
-  sendMessage: withPayload(types.MESSAGE_TX, 'guid', 'message', 'attachment'),
+  sendMessage: withPayload(types.SEND_MESSAGE, 'guid', 'message', 'attachment'),
 
   // Modal dialog state.
   openModal: withPayload(types.OPEN_MODAL, 'guid', 'modalType'),
@@ -115,9 +134,58 @@ export const actions = {
   setPageTitleInterval: withPayload(types.SET_PAGE_TITLE_INTERVAL),
 };
 
+const Topic = Record({
+  topicId: null,
+  topicStatus: 'closed',
+});
+
+const Messages = Record({
+  empty: false,
+  items: List(),
+  pageToken: null,
+  milestone: 0,
+});
+
+const newDiscussion = discussion =>
+  Discussion({
+    ...discussion,
+    messages: Messages({
+      ...discussion.messages,
+      items: List(discussion.messages.items),
+    }),
+    owningTeams: List(discussion.owningTeams),
+    owningUsers: List(discussion.owningUsers),
+    participants: List(discussion.participants),
+    invitations: List(discussion.invitations),
+    relatedItems: List(discussion.relatedItems),
+  });
+
+// const KEEP_KEYS = ['topic', 'presences'];
 export const Discussion = Record({
+  // NEW STUFF
+  topic: Topic(),
+  presences: List(),
+  archived: false,
+  createdAt: new Date(),
+  createdBy: {},
+  description: '',
+  id: '',
+  invitations: List(),
+  isPrivate: false,
+  messages: Messages(),
+  milestone: 0,
+  owningTeams: List(),
+  owningUsers: List(),
+  participants: List(),
+  relatedItems: List(),
+  title: '',
+  updatedAt: new Date(),
+  updateBy: {},
+  versionId: '',
+
+  // OLD STUFF
   issue: null,
-  messages: List(),
+  // messages: List(),
   badMessages: List(),
   processingUploads: List(),
   messagesLoading: true,
@@ -127,11 +195,14 @@ export const Discussion = Record({
   joinError: '',
   connected: false,
   reconnecting: false,
-  participants: Map(),
-  invites: List(),
+  // participants: Map(), this changed from a Map to a List
+  invites: List(), // This is changing to 'invitations'
 });
 
 export const State = Record({
+  connected: false,
+  identified: false,
+  token: '',
   discussions: Map(),
   activeDiscussion: null,
   currentOpenModals: List(),
@@ -185,6 +256,14 @@ export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.JOIN_DISCUSSION:
       return state.setIn(['discussions', payload], Discussion());
+    case types.ADD_DISCUSSION:
+      return state.updateIn(['discussions', payload.id], discussion =>
+        discussion.mergeWith(
+          (prev, next, key) =>
+            ['topic', 'presences'].includes(key) ? prev : next,
+          newDiscussion(payload),
+        ),
+      );
     case types.LEAVE_DISCUSSION:
       return state.update('discussions', map => map.delete(payload));
     case types.FETCH_MORE_MESSAGES:
@@ -299,15 +378,21 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.updateIn(['discussions', payload.guid, 'badMessages'], m =>
         m.push(payload.badMessage),
       );
+    case types.SET_TOKEN:
+      return state.set('token', payload);
+    case types.SET_CONNECTED:
+      return state.set('connected', payload);
+    case types.SET_IDENTIFIED:
+      return state.set('identified', payload);
     case types.RECONNECT:
       return state.updateIn(['discussions', payload], discussion =>
         discussion.set('reconnecting', true).set('connected', false),
       );
-    case types.SET_CONNECTED:
-      return state.setIn(
-        ['discussions', payload.guid, 'connected'],
-        payload.connected,
-      );
+    // case types.SET_CONNECTED:
+    //   return state.setIn(
+    //     ['discussions', payload.guid, 'connected'],
+    //     payload.connected,
+    //   );
     case types.OPEN_MODAL:
       return state
         .set('activeDiscussion', payload.guid)
@@ -330,6 +415,17 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('isVisible', payload === 'visible' ? true : false);
     case types.SET_PAGE_TITLE_INTERVAL:
       return state.set('pageTitleInterval', payload);
+
+    // NEW STUFF
+    case types.UPDATE_PRESENCE:
+      return state.updateIn(['discussions', payload.id, 'presences'], () =>
+        List(payload.presences),
+      );
+    case types.SET_TOPIC_STATUS:
+      console.log(payload, state.discussions.toJS());
+      return state.updateIn(['discussions', payload.id], discussion =>
+        discussion.setIn(['topic', 'topicStatus'], payload.status),
+      );
     default:
       return state;
   }

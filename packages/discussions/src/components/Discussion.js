@@ -130,13 +130,16 @@ export const Discussion = props => {
     setDiscussionVisibility,
   } = props;
 
+  console.log(discussion);
   if (discussion && isModal) {
+    console.log('rendering is modal');
     return (
       <div className="kinops-discussions d-none d-md-flex">
         <DiscussionModal {...props} />
       </div>
     );
   } else if (discussion && isMobileModal) {
+    console.log('rendering is mobile modal');
     return (
       <div className="kinops-discussions d-none d-md-flex">
         {!isSmallLayout && <Messages {...props} />}

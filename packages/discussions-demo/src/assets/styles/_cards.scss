@@ -1,0 +1,64 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Cards Overrides ~ Design System
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// Card
+.cards__wrapper--design-system {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .card {
+    flex: 0 0 auto;
+    flex-basis: 33%;
+  }
+}
+
+.card--design-system {
+  border: 1px solid $black-16;
+  padding: 1rem;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
+  @include setBgColorAndHover($white);
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+
+  h1 {
+    color: $black;
+    font-size: 1.4375rem;
+    font-weight: 600;
+    line-height: 2.25rem;
+    margin: 0;
+    display: inline-flex;
+  }
+  p {
+    color: $black-50;
+    font-size: 1rem;
+    line-height: 1.1428571429rem;
+    margin-bottom: 0;
+  }
+}
+
+.card--color {
+  margin: 0 0 1rem 0;
+  text-align: center;
+  border: 1px solid $black-16;
+  &__header {
+    height: 3rem;
+    width: 100%;
+    padding: 0 1rem;
+    justify-content: center;
+    border: none;
+    align-items: baseline;
+    position: relative;
+    display: flex;
+  }
+  &__body {
+    padding: 1rem;
+    text-align: center;
+  }
+  p {
+    margin: 0;
+  }
+}

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { matchPath } from 'react-router';
 import { Route } from 'react-router-dom';
@@ -6,18 +6,20 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { createHashHistory } from 'history';
 import { configureStore } from './redux/store';
-import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import { CoreAPI } from 'react-kinetic-core';
-import AuthInterceptor from './utils/AuthInterceptor';
-import { actions as layoutActions } from './redux/modules/layout';
-import { actions as configActions } from './redux/modules/config';
+import AuthInterceptor from 'app/src/utils/AuthInterceptor';
+
+import { actions as layoutActions } from 'app/src/redux/modules/layout';
+import { actions as configActions } from 'app/src/redux/modules/config';
 import {
   actions as authActions,
   selectors as authSelectors,
-} from './redux/modules/auth';
-import { AuthenticatedContainer } from 'app/src/components/AuthenticatedContainer';
-import { App } from './App';
+} from 'app/src/redux/modules/auth';
+
+import { AuthenticatedContainer } from 'app/src/AuthenticatedContainer';
+
+import { AppContainer } from './App';
 
 // Create the history instance that enables client-side application routing.
 const history = createHashHistory();
@@ -36,21 +38,13 @@ CoreAPI.addResponseInterceptor(null, authInterceptor.handleRejected);
 CoreAPI.setDefaultAuthAssumed(true);
 
 ReactDOM.render(
-  <Fragment>
-    <Helmet>
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-      />
-    </Helmet>
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <AuthenticatedContainer>
-          <Route path="/" component={App} />
-        </AuthenticatedContainer>
-      </ConnectedRouter>
-    </Provider>
-  </Fragment>,
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <AuthenticatedContainer>
+        <Route path="/" component={AppContainer} />
+      </AuthenticatedContainer>
+    </ConnectedRouter>
+  </Provider>,
   document.getElementById('root'),
 );
 

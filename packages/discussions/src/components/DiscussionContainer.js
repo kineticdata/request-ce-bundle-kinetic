@@ -21,7 +21,7 @@ const mapStateToProps = (state, props) => {
   return {
     profile: state.app.profile,
     discussion,
-    messages: discussion ? discussion.messages : List(),
+    messages: discussion ? discussion.messages.items : List(),
     hasMoreMessages: discussion && discussion.hasMoreMessages,
     loadingMoreMessages: discussion && discussion.loadingMoreMessages,
     currentOpenModals: state.discussions.discussions.currentOpenModals,
