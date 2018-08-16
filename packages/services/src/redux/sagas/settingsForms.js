@@ -203,6 +203,7 @@ export function* createFormSaga(action) {
       'Owning Team': action.payload.inputs['Owning Team'],
     },
   };
+
   const createdForm = yield call(CoreAPI.createForm, {
     kappSlug: action.payload.kappSlug,
     form: formContent,
