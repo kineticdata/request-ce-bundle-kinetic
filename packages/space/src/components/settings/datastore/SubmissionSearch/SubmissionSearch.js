@@ -9,7 +9,7 @@ import { actions } from '../../../../redux/modules/settingsDatastore';
 import { Searchbar } from './Searchbar';
 import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
-import { ImportExportModal } from '../ImportExportModal';
+import { ExportModal } from '../ExportModal';
 
 const SubmissionSearchComponent = ({
   form,
@@ -57,7 +57,7 @@ const SubmissionSearchComponent = ({
         </div>
       </div>
     ) : null}
-    <ImportExportModal />
+    <ExportModal />
   </Fragment>
 );
 

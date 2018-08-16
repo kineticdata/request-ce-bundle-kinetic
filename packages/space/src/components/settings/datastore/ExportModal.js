@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Modal, ModalBody } from 'reactstrap';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, withHandlers, withState, lifecycle } from 'recompose';
 
 import { connect } from 'react-redux';
 import papaparse from 'papaparse';
 
 import { actions } from '../../../redux/modules/settingsDatastore';
 
-const ImportExportModalComponent = ({
+const ExportModalComponent = ({
   modalIsOpen,
   submissions,
+  exportStatus,
+  submissionsCount,
   closeModal,
   handleDownload,
+  form,
 }) => (
   <Modal isOpen={modalIsOpen} toggle={closeModal}>
     <div className="modal-header">
@@ -24,14 +27,40 @@ const ImportExportModalComponent = ({
       </h4>
     </div>
     <ModalBody>
-      {submissions.size > 0 && (
-        <div style={{ padding: '1rem' }}>
-          <p>There are {submissions.size} records in memory</p>
+      <div style={{ padding: '1rem' }}>
+        {exportStatus === 'NOT_STARTED' ? (
           <button className="btn btn-info" onClick={handleDownload}>
-            Export {submissions.size} Records
+            {1 === 2 ? (
+              <span>Export Records for Query</span>
+            ) : (
+              <span>Export All Records</span>
+            )}
           </button>
-        </div>
-      )}
+        ) : (
+          <Fragment>
+            <p>{submissionsCount} Records retrieved</p>
+            {/* TODO: Warp user feedback in a conditional if exportStatus === Failed */}
+            {exportStatus === 'CONVERT' && (
+              <p>Converting Records to CSV format</p>
+            )}
+            {exportStatus === 'DOWNLOAD' && (
+              <p>
+                {`Downloading ${submissionsCount} Records to ${form.name}.csv`}
+              </p>
+            )}
+            {exportStatus === 'COMPLETE' && (
+              <Fragment>
+                <p>
+                  {`${submissionsCount} Records exported to ${
+                    form.name
+                  }.csv.  `}
+                </p>
+                <p>Click Cancel to close the modal</p>
+              </Fragment>
+            )}
+          </Fragment>
+        )}
+      </div>
     </ModalBody>
   </Modal>
 );
@@ -84,27 +113,41 @@ function createCSV(submissions, form) {
 }
 
 const handleDownload = props => () => {
-  const data = createCSV(props.submissions, props.form);
-  download(props.form.name, data);
+  props.fetchAllSubmissions({ formSlug: props.form.slug, accumulator: [] });
+  props.setExportStatus('FETCHING_RECORDS');
 };
 
 const mapStateToProps = state => ({
   modalIsOpen: state.space.settingsDatastore.modalIsOpen,
-  submissions: state.space.settingsDatastore.submissions,
   form: state.space.settingsDatastore.currentForm,
+  submissions: state.space.settingsDatastore.exportSubmissions,
+  submissionsCount: state.space.settingsDatastore.exportCount,
 });
 
 const mapDispatchToProps = {
   closeModal: actions.closeModal,
+  fetchAllSubmissions: actions.fetchAllSubmissions,
 };
 
-export const ImportExportModal = compose(
+export const ExportModal = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withState('data', 'setData', null),
+  withState('exportStatus', 'setExportStatus', 'NOT_STARTED'),
   withHandlers({
     handleDownload,
   }),
-)(ImportExportModalComponent);
+  lifecycle({
+    componentWillReceiveProps(nextProps) {
+      if (this.props.submissions.length !== nextProps.submissions.length) {
+        nextProps.setExportStatus('CONVERT');
+        const csv = createCSV(nextProps.submissions, nextProps.form);
+        // TODO: If CSV fails setExportStatus to FAILD
+        nextProps.setExportStatus('DOWNLOAD');
+        download(nextProps.form.name, csv);
+        nextProps.setExportStatus('COMPLETE');
+      }
+    },
+  }),
+)(ExportModalComponent);

@@ -94,6 +94,9 @@ export const types = {
   SET_FORM_CHANGES: namespace('datastore', 'SET_FORM_CHANGES'),
   OPEN_MODAL: namespace('datastore', 'OPEN_MODAL'),
   CLOSE_MODAL: namespace('datastore', 'CLOSE_MODAL'),
+  FETCH_ALL_SUBMISSIONS: namespace('datastore', 'FETCH_ALL_SUBMISSIONS'),
+  SET_EXPORT_SUBMISSIONS: namespace('datastore', 'SET_EXPORT_SUBMISSIONS'),
+  SET_EXPORT_COUNT: namespace('datastore', 'SET_EXPORT_COUNT'),
 };
 
 export const actions = {
@@ -148,6 +151,9 @@ export const actions = {
   setFormChanges: withPayload(types.SET_FORM_CHANGES),
   openModal: noPayload(types.OPEN_MODAL),
   closeModal: noPayload(types.CLOSE_MODAL),
+  fetchAllSubmissions: withPayload(types.FETCH_ALL_SUBMISSIONS),
+  setExportSubmissions: withPayload(types.SET_EXPORT_SUBMISSIONS),
+  setExportCount: withPayload(types.SET_EXPORT_COUNT),
 };
 
 const parseJson = json => {
@@ -281,6 +287,9 @@ export const State = Record({
   submission: null,
   submissionLoading: true,
   modalIsOpen: false,
+  fetchingAll: false,
+  exportSubmissions: [],
+  exportCount: 0,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -476,6 +485,12 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('modalIsOpen', true);
     case types.CLOSE_MODAL:
       return state.set('modalIsOpen', false);
+    case types.FETCH_ALL_SUBMISSIONS:
+      return state.set('fetchingAll', true);
+    case types.SET_EXPORT_SUBMISSIONS:
+      return state.set('exportSubmissions', payload).set('fetchingAll', false);
+    case types.SET_EXPORT_COUNT:
+      return state.set('exportCount', payload);
     default:
       return state;
   }
