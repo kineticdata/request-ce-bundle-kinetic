@@ -97,6 +97,11 @@ export const types = {
   ),
   DELETE_SUBMISSION_ERROR: namespace('datastore', 'DELETE_SUBMISSION_ERROR'),
   SET_FORM_CHANGES: namespace('datastore', 'SET_FORM_CHANGES'),
+  OPEN_MODAL: namespace('datastore', 'OPEN_MODAL'),
+  CLOSE_MODAL: namespace('datastore', 'CLOSE_MODAL'),
+  FETCH_ALL_SUBMISSIONS: namespace('datastore', 'FETCH_ALL_SUBMISSIONS'),
+  SET_EXPORT_SUBMISSIONS: namespace('datastore', 'SET_EXPORT_SUBMISSIONS'),
+  SET_EXPORT_COUNT: namespace('datastore', 'SET_EXPORT_COUNT'),
   SET_CLIENT_SORT_INFO: namespace('datastore', 'SET_CLIENT_SORT_INFO'),
 };
 
@@ -152,6 +157,11 @@ export const actions = {
   deleteSubmissionSuccess: noPayload(types.DELETE_SUBMISSION_SUCCESS),
   deleteSubmissionErrors: withPayload(types.DELETE_SUBMISSION_ERROR),
   setFormChanges: withPayload(types.SET_FORM_CHANGES),
+  openModal: noPayload(types.OPEN_MODAL),
+  closeModal: noPayload(types.CLOSE_MODAL),
+  fetchAllSubmissions: withPayload(types.FETCH_ALL_SUBMISSIONS),
+  setExportSubmissions: withPayload(types.SET_EXPORT_SUBMISSIONS),
+  setExportCount: withPayload(types.SET_EXPORT_COUNT),
   setClientSortInfo: withPayload(types.SET_CLIENT_SORT_INFO),
 };
 
@@ -310,6 +320,10 @@ export const State = Record({
   // Single Submission
   submission: null,
   submissionLoading: true,
+  modalIsOpen: false,
+  fetchingAll: false,
+  exportSubmissions: [],
+  exportCount: 0,
   // Client Side Sorting
   clientSortInfo: null,
 });
@@ -519,6 +533,16 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('submissionLoading', true).set('submission', null);
     case types.SET_FORM_CHANGES:
       return state.setIn(['currentFormChanges', payload.type], payload.value);
+    case types.OPEN_MODAL:
+      return state.set('modalIsOpen', true);
+    case types.CLOSE_MODAL:
+      return state.set('modalIsOpen', false);
+    case types.FETCH_ALL_SUBMISSIONS:
+      return state.set('fetchingAll', true);
+    case types.SET_EXPORT_SUBMISSIONS:
+      return state.set('exportSubmissions', payload).set('fetchingAll', false);
+    case types.SET_EXPORT_COUNT:
+      return state.set('exportCount', payload);
     case types.SET_CLIENT_SORT_INFO:
       return state
         .set('clientSortInfo', payload)

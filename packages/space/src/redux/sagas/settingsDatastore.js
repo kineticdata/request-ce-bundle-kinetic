@@ -480,6 +480,48 @@ export function* deleteSubmissionSaga(action) {
   }
 }
 
+export function* fetchAllSubmissionsSaga(action) {
+  const { pageToken, accumulator, formSlug } = action.payload;
+  const searcher = new CoreAPI.SubmissionSearch(true);
+
+  searcher.include('values');
+  searcher.limit(1000);
+  if (pageToken) {
+    searcher.pageToken(pageToken);
+  }
+
+  const { submissions, nextPageToken = null, serverError } = yield call(
+    CoreAPI.searchSubmissions,
+    {
+      search: searcher.build(),
+      datastore: true,
+      form: formSlug,
+    },
+  );
+
+  // Update the action with the new results
+  action = {
+    ...action,
+    payload: {
+      ...action.payload,
+      accumulator: [...accumulator, ...submissions],
+      pageToken: nextPageToken,
+    },
+  };
+
+  yield put(actions.setExportCount(action.payload.accumulator.length));
+
+  if (nextPageToken) {
+    yield call(fetchAllSubmissionsSaga, action);
+  } else {
+    if (serverError) {
+      // What should we do?
+    } else {
+      yield put(actions.setExportSubmissions(action.payload.accumulator));
+    }
+  }
+}
+
 export function* watchSettingsDatastore() {
   yield takeEvery(types.FETCH_FORMS, fetchFormsSaga);
   yield takeEvery(types.FETCH_FORM, fetchFormSaga);
@@ -493,4 +535,5 @@ export function* watchSettingsDatastore() {
   yield takeEvery(types.DELETE_SUBMISSION, deleteSubmissionSaga);
   yield takeEvery(types.UPDATE_FORM, updateFormSaga);
   yield takeEvery(types.CREATE_FORM, createFormSaga);
+  yield takeEvery(types.FETCH_ALL_SUBMISSIONS, fetchAllSubmissionsSaga);
 }
