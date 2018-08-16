@@ -13,7 +13,7 @@ export const QueueItemDiscussions = props => {
   ) : (
     <div className="kinops-discussions d-none d-md-flex">
       <div className="empty-discussion">
-        <h6>No discussion to display</h6>
+        <h5>No discussion to display</h5>
         <p>
           <button onClick={createDiscussion} className="btn btn-link">
             Create a new discussion

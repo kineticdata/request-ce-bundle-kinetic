@@ -36,3 +36,90 @@
 .file-container {
   display: table-row-group;
 }
+
+table.settings-table {
+  font-size: 0.875rem;
+
+  tbody {
+    tr {
+      td {
+        > a {
+          font-weight: 600;
+        }
+        > small {
+          color: $gray;
+        }
+        > .list-dropdown {
+          & > button {
+            padding: 0;
+            color: $black-50;
+            &:hover {
+              color: darken($black-50, 5%);
+            }
+          }
+        }
+        > .dropdown .btn {
+          background-color: transparent;
+          padding: 0rem 0.25rem;
+        }
+        & .dropdown-item {
+          padding: 0.25rem 1rem;
+        }
+      }
+    }
+  }
+
+  &.table-draggable {
+    border-collapse: separate;
+    border-spacing: 0px;
+
+    tbody {
+      tr {
+        &.dragging {
+          background-color: $blue3;
+          td {
+            border: none;
+          }
+          td + td {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+thead.sortable {
+  th:not(.sort-disabled) {
+    cursor: pointer;
+    position: relative;
+    padding-right: 1.1rem;
+
+    &:before {
+      font-family: 'FontAwesome';
+      font-weight: 400;
+      content: '\f0dc';
+      position: absolute;
+      right: 0.3rem;
+      opacity: 0.3;
+    }
+
+    &.sort-asc:before,
+    &.sort-desc:before {
+      opacity: 0.8;
+      color: $link-color;
+    }
+    &.sort-asc:before {
+      content: '\f0de';
+    }
+    &.sort-desc:before {
+      content: '\f0dd';
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .d-md-table-header-group {
+    display: table-header-group !important;
+  }
+}

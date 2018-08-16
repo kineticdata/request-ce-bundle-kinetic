@@ -197,7 +197,7 @@ export const EditProfileComponent = ({
 );
 
 const UserTeams = ({ teams }) => (
-  <div className="cards__wrapper cards__wrapper--team">
+  <div className="cards__wrapper">
     {Object.keys(teams).length > 0 ? (
       teams.map(item => <TeamCard key={item.team.name} team={item.team} />)
     ) : (

@@ -3,6 +3,19 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 .package-layout--space {
+  .page-container--datastore {
+    .page-title__actions {
+      @media (max-width: 768px) {
+        .btn-import,
+        .btn-export {
+          display: none;
+        }
+      }
+    }
+    .kinops-discussions {
+      flex: 1 1 40%;
+    }
+  }
   .datastore-searchbar {
     .btn.btn-none.advanced-dropdown-caret {
       border-top: 1px solid $border-color;
@@ -11,6 +24,7 @@
 
     .advanced-dropdown-wrapper {
       .index-selector,
+      .direction-selector,
       .index-part {
         display: flex;
         flex-direction: row;
@@ -59,6 +73,7 @@
     justify-content: flex-end;
   }
   .datastore-submissions {
+    margin-top: 1rem;
     margin-bottom: 5rem;
   }
   table.table-datastore {

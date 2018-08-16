@@ -16,6 +16,7 @@ import { ErrorUnexpected } from './components/ErrorUnexpected';
 
 import { actions as commonActions } from './redux/modules/common';
 import { types as commonTypes } from './redux/modules/common';
+import { selectCurrentKapp } from './redux/modules/common';
 import {
   actions as toastActions,
   types as toastTypes,
@@ -43,6 +44,7 @@ export {
   toastActions,
   toastTypes,
   modalFormActions,
+  selectCurrentKapp,
   Utils,
   Constants,
   ErrorNotFound,

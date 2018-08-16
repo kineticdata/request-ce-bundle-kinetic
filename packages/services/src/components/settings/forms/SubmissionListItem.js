@@ -23,7 +23,7 @@ const DiscussionIcon = () => (
   </span>
 );
 
-const MobileSubmissionCard = ({ submission, columns, path }) => (
+const MobileSubmissionCard = ({ submission, columns, to }) => (
   <tr>
     <td className="d-md-none d-table-cell" key={`tcol-0-${submission.id}`}>
       <div className="card">
@@ -57,26 +57,9 @@ const MobileSubmissionCard = ({ submission, columns, path }) => (
             })}
           </p>
           <div className="btn-group" role="group" aria-label="Actions">
-            <Link to={`${path}/${submission.id}`} className="btn btn-primary">
+            <Link to={to} className="btn btn-primary">
               View
             </Link>
-            <Link to={`${path}/${submission.id}/edit`} className="btn btn-info">
-              Edit
-            </Link>
-            <button
-              type="button"
-              onClick={handleClone(submission.id)}
-              className="btn btn-success"
-            >
-              Clone
-            </button>
-            <button
-              type="button"
-              onClick={handleDelete(submission.id)}
-              className="btn btn-danger"
-            >
-              Delete
-            </button>
           </div>
         </div>
       </div>
@@ -99,18 +82,16 @@ const TableSubmissionColumn = ({ shouldLink, to, label, discussionIcon }) => (
 const TableSubmissionRow = ({
   columns,
   submission,
-  path,
+  to,
   openDropdown,
   toggleDropdown,
-  handleClone,
-  handleDelete,
 }) => (
   <tr>
     {columns.map((column, index) => (
       <TableSubmissionColumn
         key={`tcol-${index}-${submission.id}`}
         shouldLink={index === 0}
-        to={`${path}/${submission.id}`}
+        to={to}
         label={getSubmissionData(submission, column)}
         discussionIcon={showDiscussionIcon(submission, column)}
       />
@@ -124,17 +105,8 @@ const TableSubmissionRow = ({
           <span className="fa fa-ellipsis-h fa-2x" />
         </DropdownToggle>
         <DropdownMenu right>
-          <DropdownItem tag={Link} to={`${path}/${submission.id}`}>
+          <DropdownItem tag={Link} to={to}>
             View
-          </DropdownItem>
-          <DropdownItem tag={Link} to={`${path}/${submission.id}/edit`}>
-            Edit
-          </DropdownItem>
-          <DropdownItem onClick={handleClone(submission.id)}>
-            Clone
-          </DropdownItem>
-          <DropdownItem onClick={handleDelete(submission.id)}>
-            Delete
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
@@ -150,24 +122,18 @@ const SubmissionListItemComponent = ({
   handleDelete,
   openDropdown,
   toggleDropdown,
-  path,
   isMobile,
+  to,
 }) =>
   isMobile ? (
-    <MobileSubmissionCard
-      submission={submission}
-      columns={columns}
-      path={path}
-    />
+    <MobileSubmissionCard submission={submission} columns={columns} to={to} />
   ) : (
     <TableSubmissionRow
       columns={columns}
       submission={submission}
-      path={path}
+      to={to}
       openDropdown={openDropdown}
       toggleDropdown={toggleDropdown}
-      handleClone={handleClone}
-      handleDelete={handleDelete}
     />
   );
 
@@ -185,11 +151,6 @@ const getSubmissionData = (submission, column) =>
       ? moment(submission[column.name]).format(Constants.TIME_FORMAT)
       : submission[column.name];
 
-const handleClone = ({ cloneSubmission }) => id => () => cloneSubmission(id);
-
-const handleDelete = ({ deleteSubmission, fetchSubmissions }) => id => () =>
-  deleteSubmission({ id: id, callback: fetchSubmissions });
-
 const toggleDropdown = ({
   setOpenDropdown,
   openDropdown,
@@ -198,9 +159,5 @@ const toggleDropdown = ({
 
 export const SubmissionListItem = compose(
   withState('openDropdown', 'setOpenDropdown', ''),
-  withHandlers({
-    toggleDropdown,
-    handleClone,
-    handleDelete,
-  }),
+  withHandlers({ toggleDropdown }),
 )(SubmissionListItemComponent);

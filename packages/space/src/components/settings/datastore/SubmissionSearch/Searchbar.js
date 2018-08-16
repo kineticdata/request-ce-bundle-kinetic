@@ -1,14 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers, withState } from 'recompose';
-import {
-  Button,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  Row,
-  Col,
-} from 'reactstrap';
+import { compose, lifecycle, withHandlers, withState } from 'recompose';
+import { Button, Input, InputGroup, InputGroupAddon, Col } from 'reactstrap';
 
 import { List } from 'immutable';
 
@@ -217,6 +210,27 @@ const IndexPartSelector = ({
   </div>
 );
 
+const DirectionSelector = ({ sortDirection, setSortDirection }) => (
+  <div className="direction-selector">
+    <Col sm={2}>
+      <strong>Sort Direction:</strong>
+    </Col>
+    <Col sm={10}>
+      <Input
+        className="sort-direction-select"
+        onChange={e => setSortDirection(e.target.value)}
+        value={sortDirection}
+        type="select"
+        name="Sort Direction"
+        id="sort-direction-chooser"
+      >
+        <option value="ASC">Ascending</option>
+        <option value="DESC">Descending</option>
+      </Input>
+    </Col>
+  </div>
+);
+
 const SearchbarComponent = ({
   indexDefinitions,
   setIndexHandler,
@@ -225,7 +239,6 @@ const SearchbarComponent = ({
   simpleSearchParam,
   setSimpleSearchParam,
   handleSearchSubmissions,
-  handleApplySearchSubmissions,
   handleInputKeypress,
   dropdownOpen,
   handleOpenDropdown,
@@ -240,7 +253,10 @@ const SearchbarComponent = ({
   handleRemoveIndexPartInput,
   toggleAdvancedSearchOpen,
   simpleSearchActive,
+  hasStartedSearching,
   placeholderText,
+  sortDirection,
+  setSortDirection,
 }) => (
   <div className="datastore-searchbar">
     <InputGroup size="lg" className="simple-search-input-group">
@@ -259,6 +275,15 @@ const SearchbarComponent = ({
         style={{ display: advancedSearchOpen ? 'none' : '' }}
         addonType="append"
       >
+        {(!simpleSearchActive || hasStartedSearching) && (
+          <Button
+            color="none"
+            className="advanced-dropdown-caret"
+            onClick={handleResetSearch}
+          >
+            <i className="fa fa-fw fa-times text-danger" />
+          </Button>
+        )}
         <Button
           color="none"
           className="advanced-dropdown-caret"
@@ -287,7 +312,9 @@ const SearchbarComponent = ({
             className="close"
             aria-label="Close"
           >
-            <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true">
+              <i className="fa fa-caret-up" />
+            </span>
           </button>
         </div>
         <IndexSelector
@@ -319,6 +346,11 @@ const SearchbarComponent = ({
               />
             );
           })}
+        {!simpleSearchActive && <hr />}
+        <DirectionSelector
+          sortDirection={sortDirection}
+          setSortDirection={setSortDirection}
+        />
         <div className="row justify-content-end">
           <button className="btn btn-link" onClick={handleResetSearch}>
             Reset
@@ -326,7 +358,7 @@ const SearchbarComponent = ({
           <Button
             disabled={searching}
             color="primary"
-            onClick={handleApplySearchSubmissions}
+            onClick={handleSearchSubmissions}
           >
             Apply
           </Button>
@@ -352,6 +384,8 @@ export const mapStateToProps = state => ({
   indexParts: state.space.settingsDatastore.searchParams.indexParts,
   simpleSearchParam: state.space.settingsDatastore.simpleSearchParam,
   searching: state.space.settingsDatastore.searching,
+  hasStartedSearching: state.space.settingsDatastore.hasStartedSearching,
+  sortDirection: state.space.settingsDatastore.sortDirection,
 });
 
 export const mapDispatchToProps = {
@@ -369,23 +403,11 @@ export const mapDispatchToProps = {
   setIndexPartInput: actions.setIndexPartInput,
   addIndexPartInput: actions.addIndexPartInput,
   removeIndexPartInput: actions.removeIndexPartInput,
+  setSortDirection: actions.setSortDirection,
   clearPageTokens: actions.clearPageTokens,
 };
 
 const handleSearchSubmissions = ({
-  fetchSubmissionsSimple,
-  fetchSubmissionsAdvanced,
-  simpleSearchActive,
-}) => e => {
-  e.preventDefault();
-  if (simpleSearchActive) {
-    fetchSubmissionsSimple();
-  } else {
-    fetchSubmissionsAdvanced();
-  }
-};
-
-const handleApplySearchSubmissions = ({
   fetchSubmissionsSimple,
   fetchSubmissionsAdvanced,
   simpleSearchActive,
@@ -504,7 +526,6 @@ export const Searchbar = compose(
   withState('placeholderText', 'setPlaceholderText', DEFAULT_PLACEHOLDER),
   withHandlers({
     handleSearchSubmissions,
-    handleApplySearchSubmissions,
     handleResetSearch,
     handleInputKeypress,
     toggleAdvancedSearchOpen,
@@ -515,5 +536,38 @@ export const Searchbar = compose(
     handleAddIndexPartInput,
     handleAddIndexPartEnter,
     handleRemoveIndexPartInput,
+  }),
+  lifecycle({
+    componentWillMount() {
+      if (this.props.searchParams.index) {
+        this.props.setPlaceholderText(
+          `Searching by ${this.props.searchParams.index.name}...`,
+        );
+      }
+      if (
+        !this.props.hasStartedSearching &&
+        this.props.formSlug === (this.props.form && this.props.form.slug) &&
+        this.props.form.defaultSearchIndex
+      ) {
+        this.props.setSimpleSearch(false);
+        const index = this.props.form.indexDefinitions.find(
+          indexDef =>
+            indexDef.name === this.props.form.defaultSearchIndex.index,
+        );
+        const parts = List(
+          index.parts.map((part, i) =>
+            IndexPart({ name: part, operation: 'All' }),
+          ),
+        );
+        this.props.setPlaceholderText(`Searching by ${index.name}...`);
+        this.props.setIndex(index);
+        this.props.setIndexLookup(index.name);
+        this.props.setIndexParts(parts);
+        this.props.setSortDirection(
+          this.props.form.defaultSearchIndex.direction,
+        );
+        this.props.fetchSubmissionsAdvanced();
+      }
+    },
   }),
 )(SearchbarComponent);

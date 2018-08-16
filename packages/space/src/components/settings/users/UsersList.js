@@ -6,6 +6,7 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import papaparse from 'papaparse';
 import { fromJS } from 'immutable';
+import { PageTitle } from 'common';
 
 import { actions } from '../../../redux/modules/settingsUsers';
 
@@ -33,6 +34,7 @@ const WallyEmptyMessage = ({ filter }) => {
 const UsersListComponent = ({ users, loading, match, handleChange, data }) => {
   return (
     <div className="page-container page-container--settings-users">
+      <PageTitle parts={['Users', 'Settings']} />
       <div className="page-panel page-panel--scrollable">
         <div className="page-title">
           <div className="page-title__wrapper">

@@ -40,6 +40,17 @@
     @media all and (min-width: 1200px) {
       max-width: 1140px;
     }
+    // Layout width fix for settings views only
+    &--space-settings,
+    &--kapp-settings,
+    &--datastore {
+      padding: 0;
+      margin: 0;
+      max-width: 100%;
+    }
+    &--kapp-settings form {
+      padding: 0;
+    }
   }
   // Services Card Wrapper
   .cards__wrapper {

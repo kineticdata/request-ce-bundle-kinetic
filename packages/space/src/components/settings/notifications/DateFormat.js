@@ -4,11 +4,12 @@ import { compose, withHandlers, withProps } from 'recompose';
 import { Link } from 'react-router-dom';
 import { CoreForm } from 'react-kinetic-core';
 import { push } from 'connected-react-router';
-import { toastActions } from 'common';
+import { toastActions, PageTitle } from 'common';
 import { NOTIFICATIONS_DATE_FORMAT_FORM_SLUG } from '../../../redux/modules/settingsNotifications';
 
 export const DateFormatComponent = props => (
   <div className="page-container page-container--notifications">
+    <PageTitle parts={['Date Formats', 'Notifications', 'Settings']} />
     <div className="page-panel page-panel--scrollable">
       <div className="page-title">
         <div className="page-title__wrapper">

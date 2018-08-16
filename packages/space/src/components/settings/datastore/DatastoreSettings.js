@@ -8,6 +8,7 @@ import { lifecycle, compose, withHandlers, withState } from 'recompose';
 import { bundle } from 'react-kinetic-core';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { List } from 'immutable';
+import { PageTitle } from 'common';
 import { isBlank } from '../../../utils';
 
 import {
@@ -49,6 +50,7 @@ const SettingsComponent = ({
 }) =>
   !loading && (
     <div className="page-container page-container--panels page-container--datastore">
+      <PageTitle parts={['Settings', origForm.name, 'Datastore']} />
       <div className="page-panel page-panel--two-thirds page-panel--scrollable page-panel--datastore-content">
         <div className="page-title">
           <div className="page-title__wrapper">
@@ -123,6 +125,74 @@ const SettingsComponent = ({
             <div className="table-settings">
               <h3 className="section__title">Table Display Settings</h3>
               <div className="settings">
+                <div className="form-group">
+                  <label htmlFor="default-search-index">
+                    Default Search Index
+                  </label>
+                  <select
+                    id="default-search-index"
+                    name="default-search-index"
+                    onChange={e => {
+                      handleFormChange(
+                        'defaultSearchIndex',
+                        e.target.value
+                          ? {
+                              index: e.target.value,
+                              direction: 'ASC',
+                            }
+                          : null,
+                      );
+                    }}
+                    value={
+                      (updatedForm.defaultSearchIndex &&
+                        updatedForm.defaultSearchIndex.index) ||
+                      ''
+                    }
+                    className="form-control"
+                  >
+                    <option value="">Don't perform default search</option>
+                    <optgroup label="Search by Index:">
+                      {List(origForm.indexDefinitions)
+                        .filter(d => d.status === 'Built')
+                        .map(({ name }) => (
+                          <option value={name} key={name}>
+                            {name.replace(':UNIQUE', '')}
+                          </option>
+                        ))}
+                    </optgroup>
+                  </select>
+                </div>
+                {updatedForm.defaultSearchIndex && (
+                  <div className="form-group">
+                    <label htmlFor="default-search-direction">
+                      Default Search Sort Direction
+                    </label>
+                    <select
+                      id="default-search-direction"
+                      name="default-search-direction"
+                      onChange={e => {
+                        handleFormChange(
+                          'defaultSearchIndex',
+                          e.target.value
+                            ? {
+                                index: updatedForm.defaultSearchIndex.index,
+                                direction: e.target.value,
+                              }
+                            : null,
+                        );
+                      }}
+                      value={
+                        (updatedForm.defaultSearchIndex &&
+                          updatedForm.defaultSearchIndex.direction) ||
+                        'ASC'
+                      }
+                      className="form-control"
+                    >
+                      <option value="ASC">Ascending</option>
+                      <option value="DESC">Descending</option>
+                    </select>
+                  </div>
+                )}
                 <table className="table table-datastore table-draggable">
                   <thead>
                     <tr className="header">

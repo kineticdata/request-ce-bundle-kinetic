@@ -1,5 +1,5 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects';
-import { bundle, CoreAPI } from 'react-kinetic-core';
+import { CoreAPI } from 'react-kinetic-core';
 
 import * as constants from '../../constants';
 import { actions, types } from '../modules/submissions';
@@ -7,6 +7,7 @@ import { actions as systemErrorActions } from '../modules/systemError';
 
 export function* fetchSubmissionsSaga({ payload: { coreState } }) {
   const kappSlug = yield select(state => state.app.config.kappSlug);
+  const username = yield select(state => state.app.profile.username);
   const pageToken = yield select(state => state.services.submissions.current);
   const searchBuilder = new CoreAPI.SubmissionSearch()
     .type(constants.SUBMISSION_FORM_TYPE)
@@ -21,8 +22,8 @@ export function* fetchSubmissionsSaga({ payload: { coreState } }) {
       'form.kapp.space.attributes',
     ])
     .or()
-    .eq(`values[${constants.REQUESTED_FOR_FIELD}]`, bundle.identity())
-    .eq('submittedBy', bundle.identity())
+    .eq(`values[${constants.REQUESTED_FOR_FIELD}]`, username)
+    .eq('submittedBy', username)
     .end();
   // Add some of the optional parameters to the search
   if (coreState) searchBuilder.coreState(coreState);

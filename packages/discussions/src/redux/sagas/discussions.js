@@ -214,18 +214,31 @@ export function* createInviteTask({ payload }) {
   }
 }
 
-export const updateSubmissionDiscussionId = ({ id, guid, include }) =>
+export const updateSubmissionDiscussionId = ({
+  id,
+  guid,
+  include,
+  datastore,
+}) =>
   CoreAPI.updateSubmission({
     id,
     values: { 'Discussion Id': guid },
     include: include || SUBMISSION_INCLUDES,
+    datastore,
   });
 
 // Step 1: Fetch the settings (response server URL)
 // Step 2: Call the API to create the issue.
 // Step 3: If a submission is provided, update its "Discussion Id"
 export function* createIssueTask({ payload }) {
-  const { name, description, submission, onSuccess, include } = payload;
+  const {
+    name,
+    description,
+    submission,
+    onSuccess,
+    include,
+    datastore,
+  } = payload;
 
   // First we need to determine if the user is authenticated in Response.
   const { error: authenticationError } = yield call(fetchResponseProfile);
@@ -248,6 +261,7 @@ export function* createIssueTask({ payload }) {
         id: submission.id,
         guid: issue.guid,
         include,
+        datastore,
       });
 
       error = response.serverError;

@@ -22,7 +22,7 @@ export const ModalForm = ({
       <div className="modal-header">
         <h4 className="modal-title">
           <button type="button" className="btn btn-link" onClick={handleClosed}>
-            Cancel
+            Close
           </button>
           <span>{form.title}</span>
           <span />

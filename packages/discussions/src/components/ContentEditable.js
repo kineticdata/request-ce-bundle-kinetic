@@ -42,9 +42,14 @@ export default class ContentEditable extends Component {
     const { onPaste, contentEditable } = this.props;
 
     if (contentEditable === 'plaintext-only') {
-      ev.preventDefault();
       var text = ev.clipboardData.getData('text');
-      document.execCommand('insertText', false, text);
+      const commandExecuted = document.execCommand('insertText', false, text);
+      // The command above does not work in IE11 so in that case we do not want
+      // to prevent the default pasting, which fortunately seems to paste as
+      // plaintext only anyways.
+      if (commandExecuted) {
+        ev.preventDefault();
+      }
     }
 
     if (onPaste) {

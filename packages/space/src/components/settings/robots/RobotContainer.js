@@ -4,7 +4,7 @@ import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { actions } from '../../../redux/modules/settingsRobots';
-import { toastActions, Loading } from 'common';
+import { toastActions, Loading, PageTitle } from 'common';
 import { Robot } from './Robot';
 import { CreateRobotSchedule } from './CreateRobotSchedule';
 import { RobotSchedule } from './RobotSchedule';
@@ -27,6 +27,7 @@ const RobotContainerComponent = ({
       {robot === null &&
         robotErrors.length > 0 && (
           <div className="page-container page-container--robots">
+            <PageTitle parts={['Robots', 'Settings']} />
             <div className="page-panel page-panel--scrollable page-panel--robots-content">
               <div className="page-title">
                 <div className="page-title__wrapper">

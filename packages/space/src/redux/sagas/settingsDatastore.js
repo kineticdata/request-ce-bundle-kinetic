@@ -78,14 +78,20 @@ export function* updateFormSaga() {
 
   const formContent = DatastoreFormSave(currentForm).set('attributesMap', {
     'Datastore Configuration': [
-      JSON.stringify(currentFormChanges.columns.toJS()),
+      JSON.stringify({
+        columns: currentForm.columns.toJS(),
+        defaultSearchIndex: currentForm.defaultSearchIndex,
+      }),
     ],
   });
   const formContentChanges = DatastoreFormSave(currentFormChanges).set(
     'attributesMap',
     {
       'Datastore Configuration': [
-        JSON.stringify(currentFormChanges.columns.toJS()),
+        JSON.stringify({
+          columns: currentFormChanges.columns.toJS(),
+          defaultSearchIndex: currentFormChanges.defaultSearchIndex,
+        }),
       ],
     },
   );
@@ -180,6 +186,7 @@ export const selectSearchParams = state => ({
   simpleSearchParam: state.space.settingsDatastore.simpleSearchParam,
   simpleSearchNextPageIndex:
     state.space.settingsDatastore.simpleSearchNextPageIndex,
+  sortDirection: state.space.settingsDatastore.sortDirection,
 });
 
 export function* fetchSubmissionsSimpleSaga() {
@@ -187,17 +194,18 @@ export function* fetchSubmissionsSimpleSaga() {
     form,
     pageToken,
     simpleSearchParam,
+    sortDirection,
     simpleSearchNextPageIndex,
   } = yield select(selectSearchParams);
 
   if (pageToken) {
-    const index = form.indexDefinitions.find(definition => {
-      console.log(index);
-      return definition.name === simpleSearchNextPageIndex;
-    });
+    const index = form.indexDefinitions.find(
+      definition => definition.name === simpleSearchNextPageIndex,
+    );
     const query = new CoreAPI.SubmissionSearch(true);
     query.include(SUBMISSION_INCLUDES);
     query.limit(DATASTORE_LIMIT);
+    query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
     query.index(index.name);
     query.sw(index.parts[0], simpleSearchParam);
     query.pageToken(pageToken);
@@ -230,6 +238,7 @@ export function* fetchSubmissionsSimpleSaga() {
         const query = new CoreAPI.SubmissionSearch(true);
         query.include(SUBMISSION_INCLUDES);
         query.limit(DATASTORE_LIMIT);
+        query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
         query.index(index.name);
         query.sw(index.parts[0], simpleSearchParam);
         return query;
@@ -301,12 +310,15 @@ export function* fetchSubmissionsSimpleSaga() {
 }
 
 export function* fetchSubmissionsAdvancedSaga() {
-  const { searchParams, form, pageToken } = yield select(selectSearchParams);
+  const { searchParams, sortDirection, form, pageToken } = yield select(
+    selectSearchParams,
+  );
 
   const searcher = new CoreAPI.SubmissionSearch(true);
 
   searcher.include(SUBMISSION_INCLUDES);
   searcher.limit(DATASTORE_LIMIT);
+  searcher.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
   if (pageToken) {
     searcher.pageToken(pageToken);
   }
@@ -378,7 +390,7 @@ export function* fetchSubmissionsAdvancedSaga() {
 
 export function* fetchSubmissionSaga(action) {
   const include =
-    'details,values,form,form.attributes,activities,activities.details';
+    'details,values,form,form.attributes,form.fields,activities,activities.details';
   const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
     id: action.payload,
     include,
