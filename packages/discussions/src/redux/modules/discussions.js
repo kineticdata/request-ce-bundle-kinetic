@@ -19,7 +19,7 @@ export const types = {
   FETCH_MORE_MESSAGES: namespace('discussions', 'FETCH_MORE_MESSAGES'),
   SET_MESSAGES: namespace('discussions', 'SET_MESSAGES'),
   SET_MORE_MESSAGES: namespace('discussions', 'SET_MORE_MESSAGES'),
-  SET_HAS_MORE_MESSAGES: namespace('discussions', 'SET_HAS_MORE_MESSAGES'),
+  // SET_HAS_MORE_MESSAGES: namespace('discussions', 'SET_HAS_MORE_MESSAGES'),
   SET_JOIN_ERROR: namespace('discussions', 'SET_JOIN_ERROR'),
   SET_PARTICIPANTS: namespace('discussions', 'SET_PARTICIPANTS'),
   ADD_PRESENCE: namespace('discissons', 'ADD_PRESENCE'),
@@ -83,9 +83,13 @@ export const actions = {
     payload: { name, description, submission, include, onSuccess, datastore },
   }),
   fetchMoreMessages: withPayload(types.FETCH_MORE_MESSAGES),
-  setMessages: withPayload(types.SET_MESSAGES, 'guid', 'messages'),
-  setMoreMessages: withPayload(types.SET_MORE_MESSAGES, 'guid', 'messages'),
-  setHasMoreMessages: withPayload(types.SET_HAS_MORE_MESSAGES, 'guid', 'more'),
+  setMessages: withPayload(types.SET_MESSAGES, 'id', 'messages'),
+  setMoreMessages: withPayload(
+    types.SET_MORE_MESSAGES,
+    'id',
+    'messages',
+    'pageToken',
+  ),
   setJoinError: withPayload(types.SET_JOIN_ERROR, 'guid', 'joinError'),
   setParticipants: withPayload(types.SET_PARTICIPANTS, 'guid', 'participants'),
   addPresence: withPayload(types.ADD_PRESENCE, 'guid', 'participantGuid'),
@@ -190,7 +194,6 @@ export const Discussion = Record({
   processingUploads: List(),
   messagesLoading: true,
   lastReceived: '2014-01-01',
-  hasMoreMessages: true,
   loadingMoreMessages: false,
   joinError: '',
   connected: false,
@@ -285,16 +288,14 @@ export const reducer = (state = State(), { type, payload }) => {
           .set('messages', List(payload.messages)),
       );
     case types.SET_MORE_MESSAGES:
-      return state.updateIn(['discussions', payload.guid], discussion =>
+      return state.updateIn(['discussions', payload.id], discussion =>
         discussion
           .set('messagesLoading', false)
           .set('loadingMoreMessages', false)
-          .update('messages', list => list.concat(payload.messages)),
-      );
-    case types.SET_HAS_MORE_MESSAGES:
-      return state.setIn(
-        ['discussions', payload.guid, 'hasMoreMessages'],
-        payload.more,
+          .updateIn(['messages', 'items'], items =>
+            items.concat(List(payload.messages)),
+          )
+          .setIn(['messages', 'pageToken'], payload.pageToken),
       );
     case types.SET_JOIN_ERROR:
       return state.setIn(

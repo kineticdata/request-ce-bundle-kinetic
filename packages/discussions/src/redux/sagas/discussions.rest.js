@@ -4,8 +4,34 @@ import axios from 'axios';
 
 const DISCUSSION_BASE_URL = 'http://localhost:7071/acme/app/api/v1/discussions';
 
-const discussionIdFromTopic = topicId =>
-  topicId.replace('discussions/discussion/', '');
+const selectMessageToken = discussionId => state => {
+  const discussion = state.discussions.discussions.discussions.get(
+    discussionId,
+  );
+  return discussion.messages.pageToken;
+};
+
+const DEFAULT_MESSAGE_LIMIT = 10;
+export function* fetchMoreMessagesTask(action) {
+  console.log(action);
+  const token = yield select(selectToken);
+  const pageToken = yield select(selectMessageToken(action.payload));
+
+  const { data } = yield call(axios.request, {
+    url: `${DISCUSSION_BASE_URL}/${action.payload}/messages`,
+    method: 'get',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      pageToken,
+      limit: DEFAULT_MESSAGE_LIMIT,
+    },
+  });
+
+  const { nextPageToken, messages } = data;
+  yield put(actions.setMoreMessages(action.payload, messages, nextPageToken));
+}
 
 export function* sendMessageTask(action) {
   const token = yield select(selectToken);
@@ -45,5 +71,6 @@ export function* watchDiscussionRest() {
   yield all([
     takeEvery(types.SEND_MESSAGE, sendMessageTask),
     takeEvery(types.JOIN_DISCUSSION, joinDiscussionTask),
+    takeEvery(types.FETCH_MORE_MESSAGES, fetchMoreMessagesTask),
   ]);
 }

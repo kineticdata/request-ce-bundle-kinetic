@@ -22,7 +22,7 @@ const mapStateToProps = (state, props) => {
     profile: state.app.profile,
     discussion,
     messages: discussion ? discussion.messages.items : List(),
-    hasMoreMessages: discussion && discussion.hasMoreMessages,
+    hasMoreMessages: discussion && discussion.messages.pageToken !== null,
     loadingMoreMessages: discussion && discussion.loadingMoreMessages,
     currentOpenModals: state.discussions.discussions.currentOpenModals,
     invitationFields: state.discussions.discussions.invitationFields,
@@ -58,7 +58,7 @@ const closeAll = props => () => {
 
 const createInvitation = props => () => {
   props.createInvite(
-    props.discussion.issue.guid,
+    props.discussion.id,
     props.invitationFields.get('email'),
     props.invitationFields.get('notes'),
   );
@@ -73,7 +73,7 @@ const handleScrollToTop = ({
   // If there are more messages to retrieve and a message fetch
   // is not currently in progress.
   if (hasMoreMessages && !loadingMoreMessages) {
-    fetchMoreMessages(discussion.issue.guid);
+    fetchMoreMessages(discussion.id);
   }
 };
 
