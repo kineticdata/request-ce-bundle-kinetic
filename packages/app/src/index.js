@@ -16,7 +16,7 @@ import {
   actions as authActions,
   selectors as authSelectors,
 } from './redux/modules/auth';
-import { AuthenticatedContainer } from 'app/src/components/AuthenticatedContainer';
+import { AuthenticatedContainer } from './AuthenticatedContainer';
 import { App } from './App';
 
 // Create the history instance that enables client-side application routing.
