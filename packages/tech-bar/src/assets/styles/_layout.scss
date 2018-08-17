@@ -1,0 +1,30 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Layout ~ Tech Bar
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.package-layout--tech-bar {
+  // Tech Bar Page Container
+  .page-container {
+    width: 100%;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    margin-right: auto;
+    margin-left: auto;
+    &--no-padding {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    @media all and (min-width: 576px) {
+      max-width: 540px;
+    }
+    @media all and (min-width: 768px) {
+      max-width: 720px;
+    }
+    @media all and (min-width: 992px) {
+      max-width: 960px;
+    }
+    @media all and (min-width: 1200px) {
+      max-width: 1140px;
+    }
+  }
+}
