@@ -42,10 +42,7 @@ export function registerTopicChannel(topic) {
       .onPresence((op, presenceData) => {
         emit({ event: 'presence', payload: { op, presenceData } });
       })
-      .onStatus(status => {
-        console.log('status changed.');
-        emit({ event: 'status', payload: status });
-      })
+      .onStatus(status => emit({ event: 'status', payload: status }))
       .on('message:created', m => emit(m))
       .on('participant:created', m => emit(m))
       .on('participant:deleted', m => emit(m))
@@ -82,21 +79,12 @@ export function* incomingSocketEvents(socketChannel, socket) {
 }
 
 export function* handleTopicChannel(channel, id, socket, topic) {
-  console.log('Starting topicSocketEvents loop');
   try {
     while (true) {
-      console.log('waiting for channels to do something');
       const topicEvent = yield take(channel);
-      console.log('channels did something');
-
-      // yield all(
-      // Object.keys(results).map(id => {
-      // const topicEvent = results[id];
-      // const topic = discussionTasks.find(d => d.id === id).topic;
 
       switch (topicEvent.event) {
         case 'status':
-          console.log('status!', id);
           yield put(actions.setTopicStatus(id, topicEvent.payload));
           break;
         case 'presence':
@@ -129,10 +117,6 @@ export function* handleTopicChannel(channel, id, socket, topic) {
             topicEvent,
           );
       }
-      // }),
-      // );
-
-      console.log('message received', topicEvent);
     }
   } finally {
     if (yield cancelled()) {
@@ -142,90 +126,14 @@ export function* handleTopicChannel(channel, id, socket, topic) {
   }
 }
 
-// export function* watchJoinDiscussion() {
-//   const discussionTasks = {};
-//   while (true) {
-//     const { joinAction, leaveAction } = yield race({
-//       joinAction: take(types.JOIN_DISCUSSION),
-//       leaveAction: take(types.LEAVE_DISCUSSION),
-//     });
-//     const discussionId = joinAction ? joinAction.payload : leaveAction.payload;
-//     const discussionTask = discussionTasks[discussionId];
-//     if (joinAction) {
-//       if (!discussionTask) {
-//         discussionTasks[discussionId] = yield fork(
-//           joinDiscussionTask,
-//           joinAction,
-//         );
-//       }
-//     } else {
-//       if (discussionTask) {
-//         delete discussionTasks[discussionId];
-//         if (discussionTask.isRunning()) {
-//           yield cancel(discussionTask);
-//         }
-//       }
-//     }
-//   }
-// }
-
 export function* outgoingSocketActions(socket) {
   let discussionTasks = [];
-  // console.log('outgoing socket actions.');
-  // let handleTopicsTask = fork(topicSocketEvents, discussionTasks, socket);
-  // console.log('handling topic task', handleTopicsTask);
-
-  // const channels = discussionTasks.reduce(
-  //   (calls, task) => ({ ...calls, [task.id]: take(task.channel) }),
-  //   {},
-  // );
-  // console.log('waiting for channels to do something');
-  // const results = yield race(channels);
-  // console.log('channels did something');
-
-  // yield all(
-  //   Object.keys(results).map(id => {
-  //     const topicEvent = results[id];
-  //     const topic = discussionTasks.find(d => d.id === id).topic;
-
-  //     switch (topicEvent.event) {
-  //       case 'status':
-  //         console.log('status!');
-  //         return put(actions.setTopicStatus(id, topicEvent.payload));
-  //       case 'presence':
-  //         return put(actions.updatePresence(id, topic.presence()));
-  //       case 'message:created':
-  //         return put(actions.addMessage(id, topicEvent.payload));
-  //       case 'participant:created':
-  //         return put(actions.addParticipant(id, topicEvent.payload));
-  //       case 'participant:deleted':
-  //         return put(actions.removeParticipant(id, topicEvent.payload));
-  //       case 'invitation:created':
-  //         return put(actions.addInvitation(id, topicEvent.payload));
-  //       case 'invitation:deleted':
-  //         return put(actions.removeInvitation(id, topicEvent.payload));
-  //       case 'relatedItem:created':
-  //         return put(actions.addRelatedItem(id, topicEvent.payload));
-  //       case 'relatedItem:deleted':
-  //         return put(actions.removeRelatedItem(id, topicEvent.payload));
-  //       default:
-  //         console.log(
-  //           `Unhandled socket action '${topicEvent.event}' for ${id}: `,
-  //           topicEvent,
-  //         );
-  //     }
-  //   }),
-  // );
 
   while (true) {
-    console.log('TOP OF LOOP');
-    console.log(discussionTasks);
-    const { joinTopic, leaveTopic, results } = yield race({
+    const { joinTopic, leaveTopic } = yield race({
       joinTopic: take(types.JOIN_DISCUSSION),
       leaveTopic: take(types.LEAVE_DISCUSSION),
     });
-
-    console.log('outgoing sockets happened: ', joinTopic, leaveTopic, results);
 
     // The UI requested to join a topic.
     if (joinTopic) {
@@ -260,7 +168,6 @@ export function* outgoingSocketActions(socket) {
       // Remove the discussion from the active discussions list.
       yield put(actions.removeDiscussion(leaveTopic.payload));
     }
-    console.log('END OF LOOP');
   }
 }
 

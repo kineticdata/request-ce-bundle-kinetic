@@ -261,7 +261,6 @@ export const selectToken = state => state.discussions.discussions.token;
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.JOIN_DISCUSSION:
-      console.log('joining!', state.hasIn(['discussions', payload]));
       return state.hasIn(['discussions', payload])
         ? state
         : state.setIn(['discussions', payload], Discussion());
@@ -429,7 +428,6 @@ export const reducer = (state = State(), { type, payload }) => {
         List(payload.presences),
       );
     case types.SET_TOPIC_STATUS:
-      console.log(payload, state.discussions.toJS());
       return state.updateIn(['discussions', payload.id], discussion =>
         discussion.setIn(['topic', 'topicStatus'], payload.status),
       );

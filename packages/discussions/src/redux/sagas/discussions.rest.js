@@ -11,7 +11,7 @@ const selectMessageToken = discussionId => state => {
   return discussion.messages.pageToken;
 };
 
-const DEFAULT_MESSAGE_LIMIT = 10;
+const DEFAULT_MESSAGE_LIMIT = 25;
 export function* fetchMoreMessagesTask(action) {
   console.log(action);
   const token = yield select(selectToken);
