@@ -522,6 +522,53 @@ export function* fetchAllSubmissionsSaga(action) {
   }
 }
 
+export function* deleteAllSubmissionsSaga(action) {
+  const { form } = yield select(selectSearchParams);
+  const searcher = new CoreAPI.SubmissionSearch(true);
+
+  searcher.limit(1000);
+
+  const { submissions, nextPageToken = null } = yield call(
+    CoreAPI.searchSubmissions,
+    {
+      search: searcher.build(),
+      datastore: true,
+      form: form.slug,
+    },
+  );
+
+  submissions.forEach(submission =>
+    CoreAPI.deleteSubmission({
+      datastore: true,
+      id: submission.id,
+    }),
+  );
+
+  if (nextPageToken) {
+    yield call(deleteAllSubmissionsSaga);
+  }
+}
+
+export function* postSubmissionSaga(action) {
+  const { form } = yield select(selectSearchParams);
+  const x = yield call(CoreAPI.createSubmission, {
+    datastore: true,
+    formSlug: form.slug,
+    values: action.payload.values,
+  });
+  console.log(x);
+}
+
+export function* updateSubmissionSaga(action) {
+  const { form } = yield select(selectSearchParams);
+  const { submission, serverError } = yield call(CoreAPI.updateSubmission, {
+    datastore: true,
+    formSlug: form.slug,
+    values: action.payload.values,
+    id: action.payload.id,
+  });
+}
+
 export function* watchSettingsDatastore() {
   yield takeEvery(types.FETCH_FORMS, fetchFormsSaga);
   yield takeEvery(types.FETCH_FORM, fetchFormSaga);
@@ -536,4 +583,7 @@ export function* watchSettingsDatastore() {
   yield takeEvery(types.UPDATE_FORM, updateFormSaga);
   yield takeEvery(types.CREATE_FORM, createFormSaga);
   yield takeEvery(types.FETCH_ALL_SUBMISSIONS, fetchAllSubmissionsSaga);
+  yield takeEvery(types.DELETE_ALL_SUBMISSIONS, deleteAllSubmissionsSaga);
+  yield takeEvery(types.POST_SUBMISSION, postSubmissionSaga);
+  yield takeEvery(types.UPDATE_SUBMISSION, updateSubmissionSaga);
 }

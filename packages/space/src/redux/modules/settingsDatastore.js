@@ -103,6 +103,9 @@ export const types = {
   SET_EXPORT_SUBMISSIONS: namespace('datastore', 'SET_EXPORT_SUBMISSIONS'),
   SET_EXPORT_COUNT: namespace('datastore', 'SET_EXPORT_COUNT'),
   SET_CLIENT_SORT_INFO: namespace('datastore', 'SET_CLIENT_SORT_INFO'),
+  DELETE_ALL_SUBMISSIONS: namespace('datastore', 'DELETE_ALL_SUBMISSIONS'),
+  POST_SUBMISSION: namespace('datastore', 'POST_SUBMISSION'),
+  UPDATE_SUBMISSION: namespace('datastore', 'UPDATE_SUBMISSION'),
 };
 
 export const actions = {
@@ -157,12 +160,15 @@ export const actions = {
   deleteSubmissionSuccess: noPayload(types.DELETE_SUBMISSION_SUCCESS),
   deleteSubmissionErrors: withPayload(types.DELETE_SUBMISSION_ERROR),
   setFormChanges: withPayload(types.SET_FORM_CHANGES),
-  openModal: noPayload(types.OPEN_MODAL),
+  openModal: withPayload(types.OPEN_MODAL),
   closeModal: noPayload(types.CLOSE_MODAL),
   fetchAllSubmissions: withPayload(types.FETCH_ALL_SUBMISSIONS),
   setExportSubmissions: withPayload(types.SET_EXPORT_SUBMISSIONS),
   setExportCount: withPayload(types.SET_EXPORT_COUNT),
   setClientSortInfo: withPayload(types.SET_CLIENT_SORT_INFO),
+  deleteAllSubmissions: noPayload(types.DELETE_ALL_SUBMISSIONS),
+  postSubmission: withPayload(types.POST_SUBMISSION),
+  updateSubmission: withPayload(types.UPDATE_SUBMISSION),
 };
 
 const parseConfigJson = json => {
@@ -320,12 +326,13 @@ export const State = Record({
   // Single Submission
   submission: null,
   submissionLoading: true,
+  // Client Side Sorting
+  clientSortInfo: null,
   modalIsOpen: false,
+  modalName: '',
   fetchingAll: false,
   exportSubmissions: [],
   exportCount: 0,
-  // Client Side Sorting
-  clientSortInfo: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -534,9 +541,9 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_FORM_CHANGES:
       return state.setIn(['currentFormChanges', payload.type], payload.value);
     case types.OPEN_MODAL:
-      return state.set('modalIsOpen', true);
+      return state.set('modalIsOpen', true).set('modalName', payload);
     case types.CLOSE_MODAL:
-      return state.set('modalIsOpen', false);
+      return state.set('modalIsOpen', false).set('modalName', '');
     case types.FETCH_ALL_SUBMISSIONS:
       return state.set('fetchingAll', true);
     case types.SET_EXPORT_SUBMISSIONS:
