@@ -128,10 +128,7 @@ class ChatInput extends Component {
               </DropdownItem>
               <DropdownItem
                 onClick={() =>
-                  this.props.openModal(
-                    this.props.discussion.issue.guid,
-                    'invitation',
-                  )
+                  this.props.openModal(this.props.discussion.id, 'invitation')
                 }
               >
                 <i className="fa fa-fw fa-plus" /> Invite Person
