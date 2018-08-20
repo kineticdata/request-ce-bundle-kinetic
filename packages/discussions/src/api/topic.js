@@ -116,7 +116,7 @@ export class Topic {
         break;
       case PRESENCE_REMOVE_OP:
         this.presences = this.presences.filter(
-          p => data.connectionId === p.connectionId,
+          p => data.connection !== p.connection,
         );
         break;
       default:

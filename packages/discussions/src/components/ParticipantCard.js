@@ -1,11 +1,16 @@
 import React from 'react';
 import Avatar from 'react-avatar';
 import moment from 'moment';
+import { isPresent } from '../helpers';
 
-export const ParticipantCard = ({ participant, button }) => {
+export const ParticipantCard = ({ discussion, participant, button }) => {
   return (
     <div className="card card--profile">
-      <div className={`${true ? 'present' : ''}`}>
+      <div
+        className={
+          isPresent(discussion, participant.user.username) ? 'present' : ''
+        }
+      >
         <Avatar
           size={96}
           email={participant.user.email}

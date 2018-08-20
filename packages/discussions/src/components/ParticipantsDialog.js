@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import Avatar from 'react-avatar';
 import { actions } from '../redux/modules/discussions';
+import { isPresent } from '../helpers';
 
 export const ParticipantsDialog = props => (
   <div className="discussion-dialog modal-form participants-dialog">
@@ -21,7 +22,10 @@ export const ParticipantsDialog = props => (
         .map(p => p.user)
         .sortBy(p => p.name)
         .map(p => (
-          <li className={`${p.present ? 'present' : ''}`} key={p.email}>
+          <li
+            className={isPresent(props.discussion, p.username) ? 'present' : ''}
+            key={p.email}
+          >
             <Avatar size={26} email={p.email} name={p.displayName} round />
             {p.displayName}
           </li>

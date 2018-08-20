@@ -116,6 +116,7 @@ export const MessagesGroup = ({
         key={messages.first().createdBy.id}
         render={() => (
           <ParticipantCard
+            discussion={discussion}
             participant={getParticipant(discussion, messages.first().createdBy)}
           />
         )}

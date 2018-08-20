@@ -5,13 +5,13 @@ import { bundle } from 'react-kinetic-core';
 import { Hoverable } from 'common';
 import { actions } from '../redux/modules/discussions';
 import Avatar from 'react-avatar';
-
+import { isPresent } from '../helpers';
 import { ParticipantCard } from './ParticipantCard';
 
 const participantComparator = (p1, p2) =>
   p1.message_count !== p2.message_count
     ? p2.message_count - p1.message_count
-    : p1.name.localeCompare(p2.name);
+    : p1.user.displayName.localeCompare(p2.user.displayName);
 
 export const ParticipantsHeader = ({
   discussion,
@@ -27,9 +27,15 @@ export const ParticipantsHeader = ({
         .map(p => (
           <Hoverable
             key={p.user.username}
-            render={() => <ParticipantCard participant={p} />}
+            render={() => (
+              <ParticipantCard discussion={discussion} participant={p} />
+            )}
           >
-            <div className={`${p.present ? 'present' : ''}`}>
+            <div
+              className={
+                isPresent(discussion, p.user.username) ? 'present' : ''
+              }
+            >
               <Avatar
                 size={26}
                 email={p.user.email}
