@@ -27,7 +27,8 @@ import {
   BRIDGE_MODEL_INCLUDES,
 } from '../modules/settingsDatastore';
 import { DatastoreFormSave } from '../../records';
-import { timingSafeEqual } from 'crypto';
+
+import { chunkList } from '../../utils';
 
 export function* fetchFormsSaga() {
   const [displayableForms, manageableForms, space] = yield all([
@@ -560,38 +561,56 @@ export function* deleteAllSubmissionsSaga(action) {
 }
 
 export function* executeImportSaga(action) {
-  const {
-    form,
-    records: [head, ...tail],
-    recordsLength,
-  } = action.payload;
+  const { form, records, recordsLength } = action.payload;
+  let recordsChunk = null;
+  const CHUNK_SIZE = 10;
 
-  yield put(actions.debouncePercentComplete({ tail, recordsLength }));
+  // abstract chunking requirement from function call.
+  if (!action.beenChunked) {
+    recordsChunk = chunkList(records, CHUNK_SIZE);
+  } else {
+    recordsChunk = records;
+  }
 
-  const { serverError } = head.id
-    ? yield call(CoreAPI.updateSubmission, {
-        datastore: true,
-        formSlug: form.slug,
-        values: head.values,
-        id: head.id,
-      })
-    : yield call(CoreAPI.createSubmission, {
-        datastore: true,
-        formSlug: form.slug,
-        values: head.values,
-      });
+  const chunk = recordsChunk.last();
+  const chunks = recordsChunk.pop();
+
+  yield put(
+    actions.debouncePercentComplete({ chunks, CHUNK_SIZE, recordsLength }),
+  );
+
+  const { serverError } = yield all(
+    chunk
+      .map(
+        record =>
+          record.id
+            ? call(CoreAPI.updateSubmission, {
+                datastore: true,
+                formSlug: form.slug,
+                values: record.values,
+                id: record.id,
+              })
+            : call(CoreAPI.createSubmission, {
+                datastore: true,
+                formSlug: form.slug,
+                values: record.values,
+              }),
+      )
+      .toJS(),
+  );
 
   if (serverError) {
     yield put(actions.setImportFailedCall(serverError));
   }
 
-  if (tail.length > 0) {
+  if (chunks.size > 0) {
     yield call(executeImportSaga, {
       ...action,
       payload: {
         ...action.payload,
-        records: tail,
+        records: chunks,
       },
+      beenChunked: true,
     });
   } else {
     yield put(actions.setImportComplete());
@@ -599,11 +618,11 @@ export function* executeImportSaga(action) {
 }
 
 export function* debouncePrecentCompleteSaga(action) {
-  const { tail, recordsLength } = action.payload;
+  const { chunks, CHUNK_SIZE, recordsLength } = action.payload;
 
   yield put(
     actions.setImportPercentComplete(
-      100 - Math.round((tail.length / recordsLength) * 100),
+      100 - Math.round(((chunks.size * CHUNK_SIZE) / recordsLength) * 100),
     ),
   );
 }
@@ -625,7 +644,7 @@ export function* watchSettingsDatastore() {
   yield takeEvery(types.DELETE_ALL_SUBMISSIONS, deleteAllSubmissionsSaga);
   yield takeEvery(types.EXECUTE_IMPORT, executeImportSaga);
   yield throttle(
-    250,
+    1500,
     types.DEBOUNCE_PERCENT_COMPLETE,
     debouncePrecentCompleteSaga,
   );

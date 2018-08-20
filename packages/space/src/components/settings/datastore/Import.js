@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { CoreAPI } from 'react-kinetic-core';
 import { Line } from 'rc-progress';
 import { Table } from 'reactstrap';
 import { Set, List, fromJS } from 'immutable';
@@ -77,7 +76,7 @@ export class ImportComponent extends Component {
     this.state = {
       postResult: false,
       submissions: [],
-      records: [],
+      records: List(),
       recordsHeaders: Set([]),
       formSlug: props.form.slug,
       missingFields: List([]),
@@ -98,7 +97,7 @@ export class ImportComponent extends Component {
   handleReset = () => {
     this.readFile = null;
     this.setState({
-      records: [],
+      records: List(),
       recordsHeaders: Set([]),
       missingFields: List([]),
       percentComplete: 0,
@@ -108,13 +107,13 @@ export class ImportComponent extends Component {
   handleImport = () => {
     this.setState({
       mapHeadersShow: false,
-      attemptedRecords: this.state.records.length,
+      attemptedRecords: this.state.records.size,
     });
 
     this.props.executeImport({
       form: this.props.form,
       records: this.state.records,
-      recordsLength: this.state.records.length,
+      recordsLength: this.state.records.size,
     });
   };
 
@@ -150,9 +149,8 @@ export class ImportComponent extends Component {
             }
           }
         });
-        arr.push(obj);
-        return arr;
-      }, []),
+        return arr.push(obj);
+      }, List([])),
     });
   };
 
@@ -250,7 +248,7 @@ export class ImportComponent extends Component {
     return (
       <Fragment>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          {this.state.records.length > 0 &&
+          {this.state.records.size > 0 &&
             this.state.missingFields.size <= 0 && (
               <button
                 className="btn btn-secondary btn-sm"
@@ -401,7 +399,7 @@ export class ImportComponent extends Component {
           {!this.props.processing &&
             !this.state.postResult &&
             !this.state.mapHeadersShow &&
-            this.state.records.length > 0 &&
+            this.state.records.size > 0 &&
             this.state.recordsHeaders.size > 0 && (
               <Fragment>
                 <div>
