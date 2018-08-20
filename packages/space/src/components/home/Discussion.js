@@ -89,6 +89,7 @@ export const Discussion = ({ discussion, me, discussionServerUrl, teams }) => {
       <div className="messages">
         {messages.size > 0 && (
           <MessagesGroup
+            discussion={discussion}
             messages={messages}
             profile={me}
             discussionServerUrl={discussionServerUrl}

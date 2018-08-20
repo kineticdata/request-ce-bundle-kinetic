@@ -12,6 +12,7 @@ export const types = {
   CREATE_ISSUE: namespace('discussion', 'CREATE_ISSUE'),
   CREATE_INVITE: namespace('discussions', 'CREATE_INVITE'),
   CREATE_INVITE_DONE: namespace('discussions', 'CREATE_INVITE_DONE'),
+  CREATE_INVITE_ERROR: namespace('discussions', 'CREATE_INVITE_ERROR'),
   ADD_INVITE: namespace('discussions', 'ADD_INVITE'),
   SET_INVITES: namespace('discussions', 'SET_INVITES'),
   REMOVE_INVITE: namespace('discussions', 'REMOVE_INVITE'),
@@ -102,8 +103,14 @@ export const actions = {
   ),
 
   // Invitation API calls
-  createInvite: withPayload(types.CREATE_INVITE, 'guid', 'email', 'note'),
+  createInvite: withPayload(
+    types.CREATE_INVITE,
+    'discussionId',
+    'type',
+    'value',
+  ),
   createInviteDone: noPayload(types.CREATE_INVITE_DONE),
+  createInviteError: withPayload(types.CREATE_INVITE_ERROR),
 
   // Invitation data management.
   setInvites: withPayload(types.SET_INVITES, 'guid', 'invites'),
@@ -209,8 +216,12 @@ export const State = Record({
   discussions: Map(),
   activeDiscussion: null,
   currentOpenModals: List(),
-  invitationFields: Map({}),
+  invitationFields: Map({
+    type: 'username',
+    value: '',
+  }),
   invitationPending: false,
+  invitationError: null,
   isVisible: true,
   pageTitleInterval: null,
 });
@@ -412,7 +423,11 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.CREATE_INVITE:
       return state.set('invitationPending', true);
     case types.CREATE_INVITE_DONE:
-      return state.set('invitationPending', false);
+      return state.set('invitationPending', false).set('invitationError', null);
+    case types.CREATE_INVITE_ERROR:
+      return state
+        .set('invitationPending', false)
+        .set('invitationError', payload);
     case types.SET_INVITATION_FIELD:
       return state.setIn(['invitationFields', payload.field], payload.value);
     case commonTypes.SET_SIZE:

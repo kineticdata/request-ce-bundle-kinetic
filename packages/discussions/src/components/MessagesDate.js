@@ -3,7 +3,7 @@ import { compose, shouldUpdate } from 'recompose';
 import moment from 'moment';
 import { MessagesGroupContainer } from './MessagesGroup';
 
-export const MessagesDate = ({ messages, profile }) => (
+export const MessagesDate = ({ discussion, messages, profile }) => (
   <div className="messages-date">
     <div className="date">
       <hr />
@@ -14,6 +14,7 @@ export const MessagesDate = ({ messages, profile }) => (
     </div>
     {messages.map(messagesGroup => (
       <MessagesGroupContainer
+        discussion={discussion}
         key={messagesGroup.first().id}
         messages={messagesGroup}
         profile={profile}

@@ -30,7 +30,12 @@ export const ParticipantsHeader = ({
             render={() => <ParticipantCard participant={p} />}
           >
             <div className={`${p.present ? 'present' : ''}`}>
-              <Avatar size={26} src={p.avatar_url} name={p.name} round />
+              <Avatar
+                size={26}
+                email={p.user.email}
+                name={p.user.displayName}
+                round
+              />
             </div>
           </Hoverable>
         ))}
@@ -73,12 +78,10 @@ export const ParticipantsHeaderContainer = compose(
   ),
   withHandlers({
     openParticipantsModal: props => () =>
-      props.openModal(props.discussion.issue.guid, 'participants'),
+      props.openModal(props.discussion.id, 'participants'),
     openInNewTab: props => () =>
       window.open(
-        `${bundle.spaceLocation()}/#/discussions/${
-          props.discussion.issue.guid
-        }`,
+        `${bundle.spaceLocation()}/#/discussions/${props.discussion.id}`,
         '_blank',
       ),
   }),

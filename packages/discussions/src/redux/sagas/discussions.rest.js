@@ -67,10 +67,37 @@ export function* joinDiscussionTask(action) {
   yield put(actions.addTopic(data.discussion.id));
 }
 
+export function* createInvitationTask({
+  payload: { discussionId, type, value },
+}) {
+  const token = yield select(selectToken);
+  try {
+    yield call(axios.request, {
+      url: `${DISCUSSION_BASE_URL}/${discussionId}/invitations`,
+      method: 'post',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: { [type]: value },
+    });
+    yield all([
+      put(actions.createInviteDone()),
+      put(actions.closeModal('invitation')),
+    ]);
+  } catch (error) {
+    const message =
+      error.response.status === 400
+        ? error.response.data.message
+        : `Failed creating the invitation: ${error.response.statusText}`;
+    yield put(actions.createInviteError(message));
+  }
+}
+
 export function* watchDiscussionRest() {
   yield all([
     takeEvery(types.SEND_MESSAGE, sendMessageTask),
     takeEvery(types.JOIN_DISCUSSION, joinDiscussionTask),
     takeEvery(types.FETCH_MORE_MESSAGES, fetchMoreMessagesTask),
+    takeEvery(types.CREATE_INVITE, createInvitationTask),
   ]);
 }

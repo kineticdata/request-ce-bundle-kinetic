@@ -5,19 +5,19 @@ import moment from 'moment';
 export const ParticipantCard = ({ participant, button }) => {
   return (
     <div className="card card--profile">
-      <div className={`${participant.present ? 'present' : ''}`}>
+      <div className={`${true ? 'present' : ''}`}>
         <Avatar
           size={96}
-          src={participant.avatar_url}
-          name={participant.name}
+          email={participant.user.email}
+          name={participant.user.displayName}
           round
         />
       </div>
-      <h1>{participant.name}</h1>
-      <p>{participant.email}</p>
+      <h1>{participant.user.displayName}</h1>
+      <p>{participant.user.email}</p>
       <p>
-        {participant.last_logged_in !== null
-          ? `Last In: ${moment(participant.last_logged_in).fromNow()}`
+        {participant.lastSeen !== null
+          ? `Last In: ${moment(participant.lastSeen).fromNow()}`
           : 'Online Now'}
       </p>
       {button ? button : null}
