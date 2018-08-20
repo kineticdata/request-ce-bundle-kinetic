@@ -104,8 +104,17 @@ export const types = {
   SET_EXPORT_COUNT: namespace('datastore', 'SET_EXPORT_COUNT'),
   SET_CLIENT_SORT_INFO: namespace('datastore', 'SET_CLIENT_SORT_INFO'),
   DELETE_ALL_SUBMISSIONS: namespace('datastore', 'DELETE_ALL_SUBMISSIONS'),
-  POST_SUBMISSION: namespace('datastore', 'POST_SUBMISSION'),
-  UPDATE_SUBMISSION: namespace('datastore', 'UPDATE_SUBMISSION'),
+  EXECUTE_IMPORT: namespace('datastore', 'EXECUTE_IMPORT'),
+  SET_IMPORT_PERCENT_COMPLETE: namespace(
+    'datastore',
+    'SET_IMPORT_PERCENT_COMPLETE',
+  ),
+  DEBOUNCE_PERCENT_COMPLETE: namespace(
+    'datastore',
+    'DEBOUNCE_PERCENT_COMPLETE',
+  ),
+  SET_IMPORT_FAILED_CALL: namespace('datastore', 'SET_IMPORT_FAILED_CALL'),
+  SET_IMPORT_COMPLETE: namespace('datastore', 'SET_IMPORT_COMPLETE'),
 };
 
 export const actions = {
@@ -167,8 +176,11 @@ export const actions = {
   setExportCount: withPayload(types.SET_EXPORT_COUNT),
   setClientSortInfo: withPayload(types.SET_CLIENT_SORT_INFO),
   deleteAllSubmissions: noPayload(types.DELETE_ALL_SUBMISSIONS),
-  postSubmission: withPayload(types.POST_SUBMISSION),
-  updateSubmission: withPayload(types.UPDATE_SUBMISSION),
+  executeImport: withPayload(types.EXECUTE_IMPORT),
+  setImportPercentComplete: withPayload(types.SET_IMPORT_PERCENT_COMPLETE),
+  debouncePercentComplete: withPayload(types.DEBOUNCE_PERCENT_COMPLETE),
+  setImportFailedcall: withPayload(types.SET_IMPORT_FAILED_CALL),
+  setImportComplete: noPayload(types.SET_IMPORT_COMPLETE),
 };
 
 const parseConfigJson = json => {
@@ -333,6 +345,10 @@ export const State = Record({
   fetchingAll: false,
   exportSubmissions: [],
   exportCount: 0,
+  importProcessing: false,
+  importPercentComplete: 0,
+  importFailedCalls: List(),
+  importResults: false,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -554,6 +570,17 @@ export const reducer = (state = State(), { type, payload }) => {
       return state
         .set('clientSortInfo', payload)
         .set('submissions', sortSubmissions(state.submissions, payload));
+    case types.EXECUTE_IMPORT:
+      return state.set('importProcessing', true);
+    case types.SET_IMPORT_PERCENT_COMPLETE:
+      return state.set('importPercentComplete', payload);
+    case types.SET_IMPORT_FAILED_CALL:
+      return state.update('importFailedCalls', acc => acc.push(payload));
+    case types.SET_IMPORT_COMPLETE:
+      return state
+        .set('importProcessing', false)
+        .set('importPercentComplete', 0)
+        .set('importResults', true);
     default:
       return state;
   }

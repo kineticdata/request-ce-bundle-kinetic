@@ -75,7 +75,6 @@ export class ImportComponent extends Component {
     super(props);
 
     this.state = {
-      processing: false,
       postResult: false,
       submissions: [],
       records: [],
@@ -88,8 +87,6 @@ export class ImportComponent extends Component {
     };
     this.form = {};
     this.formFieldNames = [];
-    this.calls = [];
-    this.failedCalls = [];
     this.readFile = null;
     this.formFieldNames = props.form.fields.reduce((acc, field) => {
       acc.push(field.name);
@@ -97,52 +94,6 @@ export class ImportComponent extends Component {
     }, []);
     this.formFields = props.form.fields;
   }
-
-  post = ([head, ...tail]) => {
-    // percentComplete is used to dynamically change the progress bar.
-    this.setState({
-      percentComplete:
-        100 - Math.round((tail.length / this.state.records.length) * 100),
-    });
-
-    /*  The below code will to a sequential post/put for all of the records on state. 
-     * It has been written to extend it functionality to batch calls in the future.
-     */
-
-    const promise = head.id
-      ? CoreAPI.updateSubmission({
-          datastore: true,
-          formSlug: this.state.formSlug,
-          values: head.values,
-          id: head.id,
-        })
-      : CoreAPI.createSubmission({
-          datastore: true,
-          formSlug: this.state.formSlug,
-          values: head.values,
-        });
-
-    promise.then(response => {
-      if (response.serverError || response.errors) {
-        this.failedCalls.push({ response, record: head });
-      }
-
-      if (tail.length > 0) {
-        this.post(tail);
-      } else {
-        Promise.all(this.calls).then(() => {
-          // This is used to reset the progress bar after the post process completes.
-          this.setState({
-            processing: false,
-            percentComplete: 0,
-            postResult: true,
-          });
-          this.handleReset();
-        });
-      }
-    });
-    this.calls.push(promise);
-  };
 
   handleReset = () => {
     this.readFile = null;
@@ -156,11 +107,15 @@ export class ImportComponent extends Component {
 
   handleImport = () => {
     this.setState({
-      processing: true,
       mapHeadersShow: false,
+      attemptedRecords: this.state.records.length,
     });
-    this.calls = [];
-    this.post(this.state.records);
+
+    this.props.executeImport({
+      form: this.props.form,
+      records: this.state.records,
+      recordsLength: this.state.records.length,
+    });
   };
 
   /*  headerToFieldMap must be passed in because handleSelect and handleOmit update headerToFieldMap
@@ -221,16 +176,16 @@ export class ImportComponent extends Component {
     this.setState({ mapHeadersShow: !this.state.mapHeadersShow });
   };
 
-  // handleSave = () => {
-  //   this.updateForm();
-  //   this.setState({ mapHeadersShow: false });
-  // };
-
   handleChange = event => {
     const file = this.fileEl.files[0];
     // If the user chooses to cancel the open.  Avoids an error with file.name and prevents unnecessary behavior.
     if (file) {
-      this.setState({ fileName: file.name, postResult: false });
+      this.setState({
+        fileName: file.name,
+        postResult: false,
+        attemptedRecords: 0,
+        failedCalls: List(),
+      });
       const reader = new FileReader();
       reader.readAsText(this.fileEl.files[0]);
       this.readFile = reader;
@@ -284,6 +239,13 @@ export class ImportComponent extends Component {
     }
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.results && this.props.results !== nextProps.results) {
+      this.setState({ postResult: true });
+      this.handleReset();
+    }
+  }
+
   render() {
     return (
       <Fragment>
@@ -330,12 +292,14 @@ export class ImportComponent extends Component {
           {this.state.missingFields.size > 0 && (
             <div>
               <h5>The CSV has headers that do not exist on the form</h5>
-              {this.state.missingFields.map(fieldName => <p>{fieldName}</p>)}
+              {this.state.missingFields.map((fieldName, idx) => (
+                <p key={idx}>{fieldName}</p>
+              ))}
             </div>
           )}
-          {this.state.processing && (
+          {this.props.processing && (
             <Line
-              percent={this.state.percentComplete}
+              percent={this.props.percentComplete}
               strokeWidth="1"
               strokeColor="#5fba53"
             />
@@ -343,8 +307,22 @@ export class ImportComponent extends Component {
           {this.state.postResult && (
             <div>
               <h4>Post Results</h4>
-              <p>{this.calls.length} records attempted to be posted</p>
-              <p>{this.failedCalls.length} records failed</p>
+              {this.state.attemptedRecords > 0 ? (
+                <Fragment>
+                  <p>
+                    {this.state.attemptedRecords} record{this.state
+                      .attemptedRecords > 1 && 's'}{' '}
+                    attempted to be posted
+                  </p>
+                  <p>
+                    {this.props.failedCalls.size} record{this.props.failedCalls
+                      .size > 1 && 's'}{' '}
+                    failed
+                  </p>
+                </Fragment>
+              ) : (
+                <p>No records found to post</p>
+              )}
             </div>
           )}
           {this.state.mapHeadersShow && (
@@ -417,16 +395,10 @@ export class ImportComponent extends Component {
                   })}
                 </tbody>
               </table>
-              {/* <button
-                className="btn btn-success btn-sm"
-                onClick={this.handleSave}
-              >
-                Save
-              </button> */}
             </Fragment>
           )}
 
-          {!this.state.processing &&
+          {!this.props.processing &&
             !this.state.postResult &&
             !this.state.mapHeadersShow &&
             this.state.records.length > 0 &&
@@ -474,10 +446,15 @@ export class ImportComponent extends Component {
 
 export const mapStateToProps = state => ({
   form: state.space.settingsDatastore.currentForm,
+  percentComplete: state.space.settingsDatastore.importPercentComplete,
+  results: state.space.settingsDatastore.importResults,
+  failedCalls: state.space.settingsDatastore.importFailedCalls,
+  processing: state.space.settingsDatastore.importProcessing,
 });
 
 export const mapDispatchToProps = {
   deleteAllSubmissions: actions.deleteAllSubmissions,
+  executeImport: actions.executeImport,
 };
 
 export const Import = connect(

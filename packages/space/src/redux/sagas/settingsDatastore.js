@@ -1,4 +1,13 @@
-import { call, put, takeEvery, select, all } from 'redux-saga/effects';
+import {
+  call,
+  put,
+  takeEvery,
+  select,
+  all,
+  takeLatest,
+  throttle,
+} from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 import { CoreAPI } from 'react-kinetic-core';
 import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'connected-react-router';
@@ -18,6 +27,7 @@ import {
   BRIDGE_MODEL_INCLUDES,
 } from '../modules/settingsDatastore';
 import { DatastoreFormSave } from '../../records';
+import { timingSafeEqual } from 'crypto';
 
 export function* fetchFormsSaga() {
   const [displayableForms, manageableForms, space] = yield all([
@@ -549,24 +559,53 @@ export function* deleteAllSubmissionsSaga(action) {
   }
 }
 
-export function* postSubmissionSaga(action) {
-  const { form } = yield select(selectSearchParams);
-  const x = yield call(CoreAPI.createSubmission, {
-    datastore: true,
-    formSlug: form.slug,
-    values: action.payload.values,
-  });
-  console.log(x);
+export function* executeImportSaga(action) {
+  const {
+    form,
+    records: [head, ...tail],
+    recordsLength,
+  } = action.payload;
+
+  yield put(actions.debouncePercentComplete({ tail, recordsLength }));
+
+  const { serverError } = head.id
+    ? yield call(CoreAPI.updateSubmission, {
+        datastore: true,
+        formSlug: form.slug,
+        values: head.values,
+        id: head.id,
+      })
+    : yield call(CoreAPI.createSubmission, {
+        datastore: true,
+        formSlug: form.slug,
+        values: head.values,
+      });
+
+  if (serverError) {
+    yield put(actions.setImportFailedCall(serverError));
+  }
+
+  if (tail.length > 0) {
+    yield call(executeImportSaga, {
+      ...action,
+      payload: {
+        ...action.payload,
+        records: tail,
+      },
+    });
+  } else {
+    yield put(actions.setImportComplete());
+  }
 }
 
-export function* updateSubmissionSaga(action) {
-  const { form } = yield select(selectSearchParams);
-  const { submission, serverError } = yield call(CoreAPI.updateSubmission, {
-    datastore: true,
-    formSlug: form.slug,
-    values: action.payload.values,
-    id: action.payload.id,
-  });
+export function* debouncePrecentCompleteSaga(action) {
+  const { tail, recordsLength } = action.payload;
+
+  yield put(
+    actions.setImportPercentComplete(
+      100 - Math.round((tail.length / recordsLength) * 100),
+    ),
+  );
 }
 
 export function* watchSettingsDatastore() {
@@ -584,6 +623,10 @@ export function* watchSettingsDatastore() {
   yield takeEvery(types.CREATE_FORM, createFormSaga);
   yield takeEvery(types.FETCH_ALL_SUBMISSIONS, fetchAllSubmissionsSaga);
   yield takeEvery(types.DELETE_ALL_SUBMISSIONS, deleteAllSubmissionsSaga);
-  yield takeEvery(types.POST_SUBMISSION, postSubmissionSaga);
-  yield takeEvery(types.UPDATE_SUBMISSION, updateSubmissionSaga);
+  yield takeEvery(types.EXECUTE_IMPORT, executeImportSaga);
+  yield throttle(
+    250,
+    types.DEBOUNCE_PERCENT_COMPLETE,
+    debouncePrecentCompleteSaga,
+  );
 }
