@@ -179,7 +179,7 @@ export const actions = {
   executeImport: withPayload(types.EXECUTE_IMPORT),
   setImportPercentComplete: withPayload(types.SET_IMPORT_PERCENT_COMPLETE),
   debouncePercentComplete: withPayload(types.DEBOUNCE_PERCENT_COMPLETE),
-  setImportFailedcall: withPayload(types.SET_IMPORT_FAILED_CALL),
+  setImportFailedCall: withPayload(types.SET_IMPORT_FAILED_CALL),
   setImportComplete: noPayload(types.SET_IMPORT_COMPLETE),
 };
 
@@ -348,7 +348,7 @@ export const State = Record({
   importProcessing: false,
   importPercentComplete: 0,
   importFailedCalls: List(),
-  importResults: false,
+  importComplete: false,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -571,7 +571,7 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('clientSortInfo', payload)
         .set('submissions', sortSubmissions(state.submissions, payload));
     case types.EXECUTE_IMPORT:
-      return state.set('importProcessing', true);
+      return state.set('importProcessing', true).set('importComplete', false);
     case types.SET_IMPORT_PERCENT_COMPLETE:
       return state.set('importPercentComplete', payload);
     case types.SET_IMPORT_FAILED_CALL:
@@ -580,7 +580,7 @@ export const reducer = (state = State(), { type, payload }) => {
       return state
         .set('importProcessing', false)
         .set('importPercentComplete', 0)
-        .set('importResults', true);
+        .set('importComplete', true);
     default:
       return state;
   }

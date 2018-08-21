@@ -17,7 +17,7 @@ import { actions } from '../../../redux/modules/settingsDatastore';
  */
 export const createHeaderToFieldMap = (headers, formFieldNames) => {
   const headersSet = Set(headers);
-  const missingFields = headersSet.subtract(formFieldNames);
+  let missingFields = headersSet.subtract(formFieldNames);
 
   const tempSetA = headersSet.intersect(formFieldNames).reduce((acc, val) => {
     const obj = { header: val, field: val, checked: false };
@@ -63,7 +63,7 @@ const findMissingFields = headerMapList =>
       obj =>
         obj.field === '' &&
         !obj.checked &&
-        obj.header.toLocaleLowerCase() !== 'datastore record id',
+        obj.header.toLowerCase() !== 'datastore record id',
     )
     .reduce((acc, obj) => {
       return acc.push(obj.header);
@@ -131,7 +131,7 @@ export class ImportComponent extends Component {
         csvRowMap.forEach((val, header) => {
           const found = headerToFieldMap.find(obj => obj.header === header);
           if (
-            found.header.toLocaleLowerCase() === 'datastore record id' &&
+            found.header.toLowerCase() === 'datastore record id' &&
             !(val === '')
           ) {
             obj.id = val;
@@ -160,12 +160,14 @@ export class ImportComponent extends Component {
 
     obj = createHeaderToFieldMap(headers, this.formFieldNames);
 
+    const missingFields = findMissingFields(obj.headerToFieldMap);
+
     this.setState({
       headerToFieldMap: obj.headerToFieldMap,
-      missingFields: obj.missingFields,
+      missingFields: missingFields,
       recordsHeaders: obj.recordsHeaders,
     });
-    if (obj.missingFields.size <= 0) {
+    if (missingFields.size <= 0) {
       this.handleCsvToJson(obj.headerToFieldMap);
     }
   };
@@ -174,10 +176,12 @@ export class ImportComponent extends Component {
     this.setState({ mapHeadersShow: !this.state.mapHeadersShow });
   };
 
+  // Read file and parse results when user makes a selection.
   handleChange = event => {
     const file = this.fileEl.files[0];
     // If the user chooses to cancel the open.  Avoids an error with file.name and prevents unnecessary behavior.
     if (file) {
+      // Add file name to state and reset if another file has already been chossen.
       this.setState({
         fileName: file.name,
         postResult: false,
@@ -238,7 +242,10 @@ export class ImportComponent extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.results && this.props.results !== nextProps.results) {
+    if (
+      nextProps.importComplete &&
+      this.props.importComplete !== nextProps.importComplete
+    ) {
       this.setState({ postResult: true });
       this.handleReset();
     }
@@ -329,8 +336,7 @@ export class ImportComponent extends Component {
                 <tbody>
                   {this.state.headerToFieldMap
                     .filter(
-                      obj =>
-                        obj.header.toLocaleLowerCase === 'datastore record id',
+                      obj => obj.header.toLowerCase === 'datastore record id',
                     )
                     .map((obj, idx) => (
                       <tr key={obj.header + idx}>
@@ -351,9 +357,7 @@ export class ImportComponent extends Component {
                       </tr>
                     ))}
                   {this.state.headerToFieldMap.map((obj, idx) => {
-                    if (
-                      obj.header.toLocaleLowerCase() !== 'datastore record id'
-                    ) {
+                    if (obj.header.toLowerCase() !== 'datastore record id') {
                       return (
                         <tr key={obj.header + idx}>
                           <td>{obj.header}</td>
@@ -420,8 +424,7 @@ export class ImportComponent extends Component {
                         <tr key={idx}>
                           {this.state.headerToFieldMap.map((obj, idx) => {
                             if (
-                              obj.field.toLocaleLowerCase() ===
-                              'datastore record id'
+                              obj.field.toLowerCase() === 'datastore record id'
                             ) {
                               return <td key={obj.field + idx}>{id}</td>;
                             }
@@ -445,7 +448,7 @@ export class ImportComponent extends Component {
 export const mapStateToProps = state => ({
   form: state.space.settingsDatastore.currentForm,
   percentComplete: state.space.settingsDatastore.importPercentComplete,
-  results: state.space.settingsDatastore.importResults,
+  importComplete: state.space.settingsDatastore.importComplete,
   failedCalls: state.space.settingsDatastore.importFailedCalls,
   processing: state.space.settingsDatastore.importProcessing,
 });

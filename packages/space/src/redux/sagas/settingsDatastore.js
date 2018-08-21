@@ -572,15 +572,16 @@ export function* executeImportSaga(action) {
     recordsChunk = records;
   }
 
-  const chunk = recordsChunk.last();
-  const chunks = recordsChunk.pop();
+  // head is the first element in the List, tail is the rest fo the List.
+  const head = recordsChunk.first();
+  const tail = recordsChunk.shift();
 
   yield put(
-    actions.debouncePercentComplete({ chunks, CHUNK_SIZE, recordsLength }),
+    actions.debouncePercentComplete({ tail, CHUNK_SIZE, recordsLength }),
   );
 
-  const { serverError } = yield all(
-    chunk
+  const responses = yield all(
+    head
       .map(
         record =>
           record.id
@@ -599,16 +600,19 @@ export function* executeImportSaga(action) {
       .toJS(),
   );
 
-  if (serverError) {
-    yield put(actions.setImportFailedCall(serverError));
+  for (let x = 0; x < responses.length; x++) {
+    const { serverError, errors } = responses[x];
+    if (serverError || errors) {
+      yield put(actions.setImportFailedCall(errors ? errors : serverError));
+    }
   }
 
-  if (chunks.size > 0) {
+  if (tail.size > 0) {
     yield call(executeImportSaga, {
       ...action,
       payload: {
         ...action.payload,
-        records: chunks,
+        records: tail,
       },
       beenChunked: true,
     });
@@ -618,11 +622,13 @@ export function* executeImportSaga(action) {
 }
 
 export function* debouncePrecentCompleteSaga(action) {
-  const { chunks, CHUNK_SIZE, recordsLength } = action.payload;
+  const { tail, CHUNK_SIZE, recordsLength } = action.payload;
 
+  // TODO: There is a bug in the progress bar.
+  // That last chunk in the List may be smaller than the CHUNK_SIZE.
   yield put(
     actions.setImportPercentComplete(
-      100 - Math.round(((chunks.size * CHUNK_SIZE) / recordsLength) * 100),
+      100 - Math.round(((tail.size * CHUNK_SIZE) / recordsLength) * 100),
     ),
   );
 }
