@@ -9,7 +9,7 @@ import { actions } from '../../../../redux/modules/settingsDatastore';
 import { Searchbar } from './Searchbar';
 import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
-import { ExportModal } from '../ExportModal';
+import { DatastoreModal } from '../DatastoreModal';
 
 const SubmissionSearchComponent = ({ form, loading, match, openModal }) => (
   <Fragment>
@@ -27,15 +27,20 @@ const SubmissionSearchComponent = ({ form, loading, match, openModal }) => (
               <h1>{form.name}</h1>
             </div>
             <div className="page-title__actions">
-              <button onClick={openModal} className="btn btn-info">
+              <button
+                onClick={() => openModal('export')}
+                value="export"
+                className="btn btn-info"
+              >
                 Export
               </button>
-              <Link
-                to={`/settings/datastore/${form.slug}/import`}
+              <button
+                onClick={() => openModal('import')}
+                value="import"
                 className="btn btn-secondary ml-3"
               >
-                Import Records
-              </Link>
+                Import
+              </button>
               <Link
                 to={`/settings/datastore/${form.slug}/new`}
                 className="btn btn-primary ml-3"
@@ -50,7 +55,7 @@ const SubmissionSearchComponent = ({ form, loading, match, openModal }) => (
         </div>
       </div>
     ) : null}
-    <ExportModal />
+    <DatastoreModal />
   </Fragment>
 );
 
