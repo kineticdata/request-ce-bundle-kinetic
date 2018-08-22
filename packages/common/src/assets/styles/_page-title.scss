@@ -2,6 +2,7 @@
  *   Page Title ~ Common
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .page-title {
+  flex-direction: row;
   justify-content: space-between;
   display: flex;
   flex: 1 1 100%;
@@ -32,14 +33,25 @@
   > .btn-group,
   > .page-title__actions {
     margin-bottom: 1.875rem;
-    align-self: flex-end;
     // line-height: normal;
+    @media all and (min-width: 0) {
+      align-self: flex-start;
+    }
+    @media all and (min-width: 768px) {
+      align-self: flex-end;
+    }
   }
   > a:not(.btn) {
     color: $gray;
     &:hover {
       color: $blue-lake;
     }
+  }
+  @media all and (min-width: 0) {
+    flex-direction: column;
+  }
+  @media all and (min-width: 768px) {
+    flex-direction: row;
   }
 }
 
