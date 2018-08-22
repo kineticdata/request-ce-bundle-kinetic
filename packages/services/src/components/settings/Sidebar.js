@@ -15,7 +15,7 @@ export const SidebarComponent = ({ settingsBackPath, loading, spaceAdmin }) => (
         <li className="nav-item">
           {spaceAdmin && (
             <NavLink
-              to="/kapps/services/settings"
+              to="/kapps/services/settings/kapp"
               className="nav-link"
               activeClassName="active"
             >
@@ -31,14 +31,16 @@ export const SidebarComponent = ({ settingsBackPath, loading, spaceAdmin }) => (
             Forms
             <span className="fa fa-fw fa-angle-right" />
           </NavLink>
-          <NavLink
-            to="/kapps/services/settings/categories"
-            className="nav-link"
-            activeClassName="active"
-          >
-            Categories
-            <span className="fa fa-fw fa-angle-right" />
-          </NavLink>
+          {spaceAdmin && (
+            <NavLink
+              to="/kapps/services/settings/categories"
+              className="nav-link"
+              activeClassName="active"
+            >
+              Categories
+              <span className="fa fa-fw fa-angle-right" />
+            </NavLink>
+          )}
         </li>
       </ul>
     )}

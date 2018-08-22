@@ -5,8 +5,9 @@ import isobject from 'isobject';
 const { namespace, noPayload, withPayload } = Utils;
 
 export const FORMS_INCLUDES = 'details,attributes';
-export const FORM_INCLUDES =
-  'details, fields, indexDefinitions, bridgedResources, customHeadContent, pages, securityPolicies, attributesMap, categorizations';
+export const FORM_INCLUDES = 'details,fields,attributesMap,categorizations';
+export const FORM_FULL_INCLUDES =
+  'details,fields,bridgedResources,customHeadContent,pages,securityPolicies,attributesMap,categorizations';
 export const SUBMISSION_INCLUDES =
   'details,values,form,form.fields,activities,activities.details';
 

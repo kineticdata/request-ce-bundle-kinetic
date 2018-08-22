@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { compose, withState, withHandlers, lifecycle } from 'recompose';
+import { compose, withState, withHandlers } from 'recompose';
 import {
   Dropdown,
   DropdownToggle,
@@ -11,7 +11,6 @@ import {
 } from 'reactstrap';
 import { TimeAgo } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
-import { displayableFormPredicate } from '../../../utils';
 import { actions } from '../../../redux/modules/forms';
 
 const WallyEmptyMessage = ({ filter }) => {
@@ -33,20 +32,22 @@ const Timestamp = ({ slug, label, value }) =>
   );
 
 const FormListComponent = ({
-  servicesForms,
   loading,
+  kapp,
   match,
   toggleDropdown,
   openDropdown,
   currentPage,
   formsPerPage,
   setCurrentPage,
+  isSpaceAdmin,
 }) => {
+  const forms = (kapp && kapp.forms) || [];
   const indexOfLastForm = currentPage * formsPerPage;
   const indexOfFirstForm = indexOfLastForm - formsPerPage;
-  const currentForms = servicesForms.slice(indexOfFirstForm, indexOfLastForm);
+  const currentForms = forms.slice(indexOfFirstForm, indexOfLastForm);
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(servicesForms.size / formsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(forms.length / formsPerPage); i++) {
     pageNumbers.push(i);
   }
   return (
@@ -60,23 +61,27 @@ const FormListComponent = ({
             </h3>
             <h1>Services Forms</h1>
           </div>
-          <Link to={`${match.path}/new`} className="btn btn-primary">
-            Create Form
-          </Link>
+          {isSpaceAdmin && (
+            <Link to={`${match.path}/new`} className="btn btn-primary">
+              Create Form
+            </Link>
+          )}
         </div>
 
         <div className="forms-list-wrapper">
           {loading ? (
             <h3>Loading</h3>
-          ) : servicesForms && servicesForms.size > 0 ? (
+          ) : forms && forms.length > 0 ? (
             <div>
               <table className="table table-sm table-striped settings-table">
                 <thead className="header">
                   <tr>
                     <th>Form Name</th>
-                    <th width="40%">Description</th>
+                    <th width="30%">Description</th>
+                    <th width="10%">Type</th>
                     <th width="10%">Updated</th>
                     <th width="10%">Created</th>
+                    <th width="10%">Status</th>
                     <th width="48px">&nbsp;</th>
                   </tr>
                 </thead>
@@ -92,6 +97,7 @@ const FormListComponent = ({
                           <small>{form.slug}</small>
                         </td>
                         <td>{form.description}</td>
+                        <td>{form.type}</td>
                         <td>
                           <Timestamp
                             value={form.updatedAt ? form.updatedAt : null}
@@ -104,23 +110,26 @@ const FormListComponent = ({
                             slug={form.slug}
                           />
                         </td>
+                        <td>{form.status}</td>
                         <td>
-                          <Dropdown
-                            toggle={toggleDropdown(form.slug)}
-                            isOpen={openDropdown === form.slug}
-                          >
-                            <DropdownToggle color="link" className="btn-sm">
-                              <span className="fa fa-ellipsis-h fa-2x" />
-                            </DropdownToggle>
-                            <DropdownMenu right>
-                              <DropdownItem
-                                tag={Link}
-                                to={`${match.path}/${form.slug}/settings`}
-                              >
-                                Configure Form
-                              </DropdownItem>
-                            </DropdownMenu>
-                          </Dropdown>
+                          {form.canManage && (
+                            <Dropdown
+                              toggle={toggleDropdown(form.slug)}
+                              isOpen={openDropdown === form.slug}
+                            >
+                              <DropdownToggle color="link" className="btn-sm">
+                                <span className="fa fa-ellipsis-h fa-2x" />
+                              </DropdownToggle>
+                              <DropdownMenu right>
+                                <DropdownItem
+                                  tag={Link}
+                                  to={`${match.path}/${form.slug}/settings`}
+                                >
+                                  Configure Form
+                                </DropdownItem>
+                              </DropdownMenu>
+                            </Dropdown>
+                          )}
                         </td>
                       </tr>
                     );
@@ -154,10 +163,10 @@ const FormListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.services.forms.loading,
-  services: state.services.forms,
-  servicesForms: state.services.forms.data.filter(displayableFormPredicate),
+  loading: state.services.servicesSettings.loading,
+  kapp: state.services.servicesSettings.servicesSettingsKapp,
   formsPerPage: 10,
+  isSpaceAdmin: state.app.profile.spaceAdmin,
 });
 
 export const mapDispatchToProps = {
@@ -179,11 +188,4 @@ export const FormList = compose(
   withState('openDropdown', 'setOpenDropdown', ''),
   withState('currentPage', 'setCurrentPage', 1),
   withHandlers({ toggleDropdown }),
-  lifecycle({
-    componentWillReceiveProps(nextProps) {
-      !nextProps.loading &&
-        nextProps.services !== this.props.services &&
-        nextProps.fetchForms();
-    },
-  }),
 )(FormListComponent);

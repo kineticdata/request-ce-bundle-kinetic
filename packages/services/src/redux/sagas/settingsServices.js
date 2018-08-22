@@ -1,26 +1,41 @@
 import { Map } from 'immutable';
-import { takeEvery, call, put } from 'redux-saga/effects';
+import { all, takeEvery, call, put } from 'redux-saga/effects';
 import { actions, types } from '../modules/settingsServices';
 import { actions as kinopsActions } from 'app/src/redux/modules/app';
 
 import { CoreAPI } from 'react-kinetic-core';
 
-const SERVICES_SETTING_INCLUDES = 'formTypes, attributesMap';
-
+const SERVICES_SETTING_INCLUDES = 'formTypes,attributesMap,forms,forms.details';
 const TEAMS_SETTING_INCLUDES = 'teams';
-
 const SPACE_SETTING_INCLUDES = 'kapps,kapps.forms,attributesMap';
 
 export function* fetchServicesSettingsSaga({ payload }) {
-  const { serverError, kapp } = yield call(CoreAPI.fetchKapp, {
-    include: SERVICES_SETTING_INCLUDES,
-    kappSlug: 'services',
-  });
+  const [{ serverError, kapp }, manageableForms] = yield all([
+    call(CoreAPI.fetchKapp, {
+      include: SERVICES_SETTING_INCLUDES,
+      kappSlug: 'services',
+    }),
+    call(CoreAPI.fetchForms, {
+      kappSlug: 'services',
+      manage: 'true',
+    }),
+  ]);
 
   if (serverError) {
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
-    yield put(actions.setServicesSettings(kapp));
+    const manageableFormsSlugs = (manageableForms.forms || []).map(
+      form => form.slug,
+    );
+    yield put(
+      actions.setServicesSettings({
+        ...kapp,
+        forms: (kapp.forms || []).map(form => ({
+          ...form,
+          canManage: manageableFormsSlugs.includes(form.slug),
+        })),
+      }),
+    );
   }
 }
 

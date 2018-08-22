@@ -6,6 +6,7 @@ import {
   actions,
   types,
   FORM_INCLUDES,
+  FORM_FULL_INCLUDES,
   SUBMISSION_INCLUDES,
 } from '../modules/settingsForms';
 
@@ -184,7 +185,7 @@ export function* createFormSaga(action) {
   const { serverError, form } = yield call(CoreAPI.fetchForm, {
     kappSlug: action.payload.kappSlug,
     formSlug: action.payload.inputs['Template to Clone'],
-    include: FORM_INCLUDES,
+    include: FORM_FULL_INCLUDES,
   });
 
   if (serverError) {
@@ -207,7 +208,7 @@ export function* createFormSaga(action) {
   const createdForm = yield call(CoreAPI.createForm, {
     kappSlug: action.payload.kappSlug,
     form: formContent,
-    include: FORM_INCLUDES,
+    include: FORM_FULL_INCLUDES,
   });
   if (createdForm.serverError || createdForm.error) {
     yield put(

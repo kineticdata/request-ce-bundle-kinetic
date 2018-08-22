@@ -169,7 +169,8 @@ export const FormSubmissionsContainer = ({
 }) => {
   const visibleColumns = submissionColumns.filter(c => c.visible);
   return (
-    !loading && (
+    !loading &&
+    form && (
       <div>
         <PageTitle parts={['Services Settings']} />
         <div className="page-container  page-container--space-settings">
@@ -327,22 +328,23 @@ export const FormSubmissionsContainer = ({
                       </th>
                     </tr>
                   </thead>
-                  {!submissionsLoading && (
-                    <tbody>
-                      {submissions.map(s => (
-                        <SubmissionListItem
-                          key={`trow-${s.id}`}
-                          submission={s}
-                          form={form}
-                          columns={visibleColumns}
-                          to={`/kapps/${kappSlug}/settings/forms/${
-                            s.id
-                          }/activity`}
-                          isMobile={isMobile}
-                        />
-                      ))}
-                    </tbody>
-                  )}
+                  {!submissionsLoading &&
+                    submissions.size > 0 && (
+                      <tbody>
+                        {submissions.map(s => (
+                          <SubmissionListItem
+                            key={`trow-${s.id}`}
+                            submission={s}
+                            form={form}
+                            columns={visibleColumns}
+                            to={`/kapps/${kappSlug}/settings/forms/${
+                              s.id
+                            }/activity`}
+                            isMobile={isMobile}
+                          />
+                        ))}
+                      </tbody>
+                    )}
                 </table>
                 <ul className="pull-right">
                   {currentPage >= 2 && (

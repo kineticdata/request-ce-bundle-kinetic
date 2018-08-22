@@ -105,7 +105,7 @@ const FormListComponent = ({
                               tag={Link}
                               to={`${match.path}/${form.slug}/new`}
                             >
-                              Create Submission
+                              New Record
                             </DropdownItem>
                             {canManage && (
                               <DropdownItem
