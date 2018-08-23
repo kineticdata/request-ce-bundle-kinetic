@@ -45,6 +45,7 @@ export const types = {
   // SET_CONNECTED: namespace('discussions', 'SET_CONNECTED'),
   ADD_MESSAGE: namespace('discussions', 'ADD_MESSAGE'),
   MESSAGE_UPDATE: namespace('discussions', 'MESSAGE_UPDATE'),
+  MESSAGE_DELETE: namespace('discussions', 'MESSAGE_DELETE'),
   SEND_MESSAGE: namespace('discussions', 'SEND_MESSAGE'),
   MESSAGE_BAD_RX: namespace('discussions', 'MESSAGE_BAD_RX'),
 
@@ -131,7 +132,8 @@ export const actions = {
   reconnect: withPayload(types.RECONNECT),
   // setConnected: withPayload(types.SET_CONNECTED, 'guid', 'connected'),
   addMessage: withPayload(types.ADD_MESSAGE, 'id', 'message'),
-  updateMessage: withPayload(types.MESSAGE_UPDATE, 'guid', 'message'),
+  updateMessage: withPayload(types.MESSAGE_UPDATE, 'id', 'message'),
+  deleteMessage: withPayload(types.MESSAGE_DELETE, 'id', 'message'),
   receiveBadMessage: withPayload(types.MESSAGE_BAD_RX, 'guid', 'badMessage'),
   sendMessage: withPayload(types.SEND_MESSAGE, 'id', 'message', 'attachment'),
 
@@ -385,7 +387,19 @@ export const reducer = (state = State(), { type, payload }) => {
         uploads => uploads.concat(payload.uploads),
       );
     case types.MESSAGE_UPDATE:
-      return state;
+      return state.updateIn(
+        ['discussions', payload.id, 'messages', 'items'],
+        items =>
+          items.map(
+            message =>
+              message.id === payload.message.id ? payload.message : message,
+          ),
+      );
+    case types.MESSAGE_DELETE:
+      return state.updateIn(
+        ['discussions', payload.id, 'messages', 'items'],
+        items => items.filter(message => message.id !== payload.message.id),
+      );
     case types.ADD_MESSAGE:
       return state.updateIn(
         ['discussions', payload.id, 'messages', 'items'],

@@ -43,13 +43,19 @@ export function registerTopicChannel(topic) {
         emit({ event: 'presence', payload: { op, presenceData } });
       })
       .onStatus(status => emit({ event: 'status', payload: status }))
-      .on('message:created', m => emit(m))
-      .on('participant:created', m => emit(m))
-      .on('participant:deleted', m => emit(m))
-      .on('invitation:created', m => emit(m))
-      .on('invitation:deleted', m => emit(m))
-      .on('relatedItem:created', m => emit(m))
-      .on('relatedItem:deleted', m => emit(m));
+      .on('message:created', emit)
+      .on('message:updated', emit)
+      .on('message:deleted', emit)
+      .on('participant:created', emit)
+      .on('participant:updated', emit)
+      .on('participant:deleted', emit)
+      .on('invitation:created', emit)
+      .on('invitation:updated', emit)
+      .on('invitation:deleted', emit)
+      .on('relatedItem:created', emit)
+      .on('relatedItem:deleted', emit)
+      .on('discussion:updated', emit)
+      .on('discussion:deleted', emit);
 
     return () => topic.unsubscribe();
   });
@@ -92,6 +98,12 @@ export function* handleTopicChannel(channel, id, socket, topic) {
           break;
         case 'message:created':
           yield put(actions.addMessage(id, topicEvent.payload));
+          break;
+        case 'message:updated':
+          yield put(actions.updateMessage(id, topicEvent.payload));
+          break;
+        case 'message:deleted':
+          yield put(actions.deleteMessage(id, topicEvent.payload));
           break;
         case 'participant:created':
           yield put(actions.addParticipant(id, topicEvent.payload));
