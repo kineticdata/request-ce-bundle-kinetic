@@ -468,7 +468,7 @@ export function* cloneSubmissionSaga(action) {
       yield put(actions.cloneSubmissionErrors(postErrors));
     } else {
       yield put(actions.cloneSubmissionSuccess());
-      yield put(push(`/datastore/${form.slug}/${cloneSubmission.id}`));
+      yield put(push(`/settings/datastore/${form.slug}/${cloneSubmission.id}`));
     }
   }
 }
