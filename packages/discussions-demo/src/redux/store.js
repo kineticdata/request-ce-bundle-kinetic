@@ -1,10 +1,12 @@
 import { compose, createStore, combineReducers, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
+import { Record } from 'immutable';
 import { Utils } from 'common';
 import commonReducers from 'common/src/redux/reducers';
 import { sagas } from 'app/src/redux/sagas';
 import reducers from 'app/src/redux/reducers';
+import { actions } from 'app/src/redux/modules/profile';
 import {
   sagas as discussionSagas,
   reducers as discussionReducers,
@@ -39,6 +41,9 @@ export const configureStore = history => {
       applyMiddleware(routerMiddleware(history), sagaMiddleware),
     ),
   );
+
+  const mockProfile = Record({ username: null })({ username: 'user' });
+  store.dispatch(actions.setProfile(mockProfile));
 
   // After we've created the store using the saga middleware we will start
   // the run it and pass it the saga watcher so that it can start watching

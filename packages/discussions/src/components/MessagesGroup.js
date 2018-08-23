@@ -88,7 +88,7 @@ export const UploadMessage = ({
   </div>
 );
 
-const produceContent = message =>
+export const produceContent = message =>
   message.content.reduce((content, token) => (content += token.value), '');
 
 export const TextMessage = ({ message }) => (

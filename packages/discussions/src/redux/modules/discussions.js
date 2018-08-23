@@ -259,7 +259,7 @@ const getMessageDate = message =>
   moment(message.createdAt).format('YYYY-MM-DD');
 const differentDate = (m1, m2) => getMessageDate(m1) !== getMessageDate(m2);
 const differentAuthor = (m1, m2) =>
-  m1.createdBy.username !== m2.createdBy.username;
+  m1.createdBy.username !== m2.createdBy.username || m1.type !== m2.type;
 
 export const formatMessages = messages =>
   partitionListBy(
