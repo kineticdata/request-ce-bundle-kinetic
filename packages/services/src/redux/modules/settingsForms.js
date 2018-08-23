@@ -21,7 +21,7 @@ export const FormConfig = Record({
 export const ColumnConfig = Record({
   // name of the column
   name: '',
-  // lable of the column displayed in table
+  // label of the column displayed in table
   label: '',
   // Valid types are: system, value.
   type: '',

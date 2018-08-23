@@ -10,40 +10,42 @@ export const SidebarComponent = ({ settingsBackPath, loading, spaceAdmin }) => (
       <span className="fa fa-fw fa-chevron-left" />
       Return to Services
     </Link>
-    {!loading && (
-      <ul className="nav flex-column settings-group">
-        <li className="nav-item">
-          {spaceAdmin && (
+    <div className="sidebar-group--content-wrapper">
+      {!loading && (
+        <ul className="nav flex-column settings-group">
+          <li className="nav-item">
+            {spaceAdmin && (
+              <NavLink
+                to="/kapps/services/settings/kapp"
+                className="nav-link"
+                activeClassName="active"
+              >
+                General
+                <span className="fa fa-fw fa-angle-right" />
+              </NavLink>
+            )}
             <NavLink
-              to="/kapps/services/settings/kapp"
+              to="/kapps/services/settings/forms"
               className="nav-link"
               activeClassName="active"
             >
-              General
+              Forms
               <span className="fa fa-fw fa-angle-right" />
             </NavLink>
-          )}
-          <NavLink
-            to="/kapps/services/settings/forms"
-            className="nav-link"
-            activeClassName="active"
-          >
-            Forms
-            <span className="fa fa-fw fa-angle-right" />
-          </NavLink>
-          {spaceAdmin && (
-            <NavLink
-              to="/kapps/services/settings/categories"
-              className="nav-link"
-              activeClassName="active"
-            >
-              Categories
-              <span className="fa fa-fw fa-angle-right" />
-            </NavLink>
-          )}
-        </li>
-      </ul>
-    )}
+            {spaceAdmin && (
+              <NavLink
+                to="/kapps/services/settings/categories"
+                className="nav-link"
+                activeClassName="active"
+              >
+                Categories
+                <span className="fa fa-fw fa-angle-right" />
+              </NavLink>
+            )}
+          </li>
+        </ul>
+      )}
+    </div>
   </div>
 );
 

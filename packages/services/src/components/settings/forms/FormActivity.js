@@ -110,7 +110,7 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                 <thead className="header">
                   <tr>
                     <th>Type</th>
-                    <th>Lable</th>
+                    <th>Label</th>
                     <th>Description</th>
                     <th>Data</th>
                   </tr>
@@ -148,7 +148,7 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                 <thead className="header">
                   <tr>
                     <th>Type</th>
-                    <th>Lable</th>
+                    <th>Label</th>
                     <th>Description</th>
                     <th>Data</th>
                   </tr>
