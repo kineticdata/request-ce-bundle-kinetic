@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import { Modal, ModalBody } from 'reactstrap';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
 
 import { connect } from 'react-redux';
@@ -7,62 +6,41 @@ import papaparse from 'papaparse';
 
 import { actions } from '../../../redux/modules/settingsDatastore';
 
-const ExportModalComponent = ({
-  modalIsOpen,
+const ExportComponent = ({
   submissions,
   exportStatus,
   submissionsCount,
-  closeModal,
   handleDownload,
   form,
 }) => (
-  <Modal isOpen={modalIsOpen} toggle={closeModal}>
-    <div className="modal-header">
-      <h4 className="modal-title">
-        <button onClick={closeModal} type="button" className="btn btn-link">
-          Cancel
-        </button>
-        <span>Export Records</span>
-        <span>&nbsp;</span>
-      </h4>
-    </div>
-    <ModalBody>
-      <div style={{ padding: '1rem' }}>
-        {exportStatus === 'NOT_STARTED' ? (
-          <button className="btn btn-info" onClick={handleDownload}>
-            {1 === 2 ? (
-              <span>Export Records for Query</span>
-            ) : (
-              <span>Export All Records</span>
-            )}
-          </button>
+  <Fragment>
+    {exportStatus === 'NOT_STARTED' ? (
+      <button className="btn btn-info" onClick={handleDownload}>
+        {1 === 2 ? (
+          <span>Export Records for Query</span>
         ) : (
+          <span>Export All Records</span>
+        )}
+      </button>
+    ) : (
+      <Fragment>
+        <p>{submissionsCount} Records retrieved</p>
+        {/* TODO: Warp user feedback in a conditional if exportStatus === Failed */}
+        {exportStatus === 'CONVERT' && <p>Converting Records to CSV format</p>}
+        {exportStatus === 'DOWNLOAD' && (
+          <p>{`Downloading ${submissionsCount} Records to ${form.name}.csv`}</p>
+        )}
+        {exportStatus === 'COMPLETE' && (
           <Fragment>
-            <p>{submissionsCount} Records retrieved</p>
-            {/* TODO: Warp user feedback in a conditional if exportStatus === Failed */}
-            {exportStatus === 'CONVERT' && (
-              <p>Converting Records to CSV format</p>
-            )}
-            {exportStatus === 'DOWNLOAD' && (
-              <p>
-                {`Downloading ${submissionsCount} Records to ${form.name}.csv`}
-              </p>
-            )}
-            {exportStatus === 'COMPLETE' && (
-              <Fragment>
-                <p>
-                  {`${submissionsCount} Records exported to ${
-                    form.name
-                  }.csv.  `}
-                </p>
-                <p>Click Cancel to close the modal</p>
-              </Fragment>
-            )}
+            <p>
+              {`${submissionsCount} Records exported to ${form.name}.csv.  `}
+            </p>
+            <p>Click Cancel to close the modal</p>
           </Fragment>
         )}
-      </div>
-    </ModalBody>
-  </Modal>
+      </Fragment>
+    )}
+  </Fragment>
 );
 
 function download(filename, data) {
@@ -118,18 +96,16 @@ const handleDownload = props => () => {
 };
 
 const mapStateToProps = state => ({
-  modalIsOpen: state.space.settingsDatastore.modalIsOpen,
   form: state.space.settingsDatastore.currentForm,
   submissions: state.space.settingsDatastore.exportSubmissions,
   submissionsCount: state.space.settingsDatastore.exportCount,
 });
 
 const mapDispatchToProps = {
-  closeModal: actions.closeModal,
   fetchAllSubmissions: actions.fetchAllSubmissions,
 };
 
-export const ExportModal = compose(
+export const Export = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
@@ -150,4 +126,4 @@ export const ExportModal = compose(
       }
     },
   }),
-)(ExportModalComponent);
+)(ExportComponent);

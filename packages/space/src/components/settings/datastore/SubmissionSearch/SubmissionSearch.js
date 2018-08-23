@@ -16,7 +16,7 @@ import { actions } from '../../../../redux/modules/settingsDatastore';
 import { Searchbar } from './Searchbar';
 import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
-import { ExportModal } from '../ExportModal';
+import { DatastoreModal } from '../DatastoreModal';
 
 const SubmissionSearchComponent = ({
   form,
@@ -40,7 +40,7 @@ const SubmissionSearchComponent = ({
               </h3>
               <h1>{form.name}</h1>
             </div>
-            <div className="page-title__actions ml-3 text-right">
+            <div className="page-title__actions">
               <Link
                 to={`/settings/datastore/${form.slug}/new`}
                 className="btn btn-primary"
@@ -58,15 +58,20 @@ const SubmissionSearchComponent = ({
                   <span className="fa fa-ellipsis-v fa-lg" />
                 </DropdownToggle>
                 <DropdownMenu>
-                  <button onClick={openModal} className="dropdown-item">
+                  <button
+                    onClick={() => openModal('export')}
+                    value="export"
+                    className="dropdown-item"
+                  >
                     Export Records
                   </button>
-                  <Link
-                    to={`/settings/datastore/${form.slug}/import`}
+                  <button
+                    onClick={() => openModal('import')}
+                    value="import"
                     className="dropdown-item"
                   >
                     Import Records
-                  </Link>
+                  </button>
                   {form.canManage && (
                     <Link
                       to={`/settings/datastore/${form.slug}/settings`}
@@ -85,7 +90,7 @@ const SubmissionSearchComponent = ({
         </div>
       </div>
     ) : null}
-    <ExportModal />
+    <DatastoreModal />
   </Fragment>
 );
 
