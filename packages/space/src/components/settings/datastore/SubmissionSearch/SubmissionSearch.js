@@ -2,8 +2,15 @@ import React, { Fragment } from 'react';
 
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { lifecycle, compose } from 'recompose';
+import { lifecycle, compose, withState } from 'recompose';
 import { PageTitle } from 'common';
+import {
+  ButtonGroup,
+  ButtonDropdown,
+  DropdownItem,
+  DropdownToggle,
+  DropdownMenu,
+} from 'reactstrap';
 
 import { actions } from '../../../../redux/modules/settingsDatastore';
 import { Searchbar } from './Searchbar';
@@ -11,7 +18,14 @@ import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
 import { DatastoreModal } from '../DatastoreModal';
 
-const SubmissionSearchComponent = ({ form, loading, match, openModal }) => (
+const SubmissionSearchComponent = ({
+  form,
+  loading,
+  match,
+  openModal,
+  optionsOpen,
+  setOptionsOpen,
+}) => (
   <Fragment>
     {!loading ? (
       <div className="page-container page-container--datastore">
@@ -27,26 +41,47 @@ const SubmissionSearchComponent = ({ form, loading, match, openModal }) => (
               <h1>{form.name}</h1>
             </div>
             <div className="page-title__actions">
-              <button
-                onClick={() => openModal('export')}
-                value="export"
-                className="btn btn-info"
-              >
-                Export
-              </button>
-              <button
-                onClick={() => openModal('import')}
-                value="import"
-                className="btn btn-secondary ml-3"
-              >
-                Import
-              </button>
               <Link
                 to={`/settings/datastore/${form.slug}/new`}
-                className="btn btn-primary ml-3"
+                className="btn btn-primary"
               >
-                New
+                New Record
               </Link>
+              <ButtonDropdown
+                isOpen={optionsOpen}
+                toggle={() => setOptionsOpen(!optionsOpen)}
+              >
+                <DropdownToggle
+                  className="dropdown-toggle hide-caret"
+                  color="link"
+                >
+                  <span className="fa fa-ellipsis-v fa-lg" />
+                </DropdownToggle>
+                <DropdownMenu>
+                  <button
+                    onClick={() => openModal('export')}
+                    value="export"
+                    className="dropdown-item"
+                  >
+                    Export Records
+                  </button>
+                  <button
+                    onClick={() => openModal('import')}
+                    value="import"
+                    className="dropdown-item"
+                  >
+                    Import Records
+                  </button>
+                  {form.canManage && (
+                    <Link
+                      to={`/settings/datastore/${form.slug}/settings`}
+                      className="dropdown-item"
+                    >
+                      Configure Form
+                    </Link>
+                  )}
+                </DropdownMenu>
+              </ButtonDropdown>
             </div>
           </div>
           <Searchbar formSlug={match.params.slug} />
@@ -78,6 +113,7 @@ export const SubmissionSearch = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withState('optionsOpen', 'setOptionsOpen', false),
   lifecycle({
     componentWillMount() {
       this.props.fetchForm(this.props.match.params.slug);
