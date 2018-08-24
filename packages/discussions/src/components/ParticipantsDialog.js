@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import Avatar from 'react-avatar';
 import { actions } from '../redux/modules/discussions';
+import { isPresent } from '../helpers';
 
 export const ParticipantsDialog = props => (
   <div className="discussion-dialog modal-form participants-dialog">
@@ -18,20 +19,31 @@ export const ParticipantsDialog = props => (
     </h1>
     <ul className="participants-list">
       {props.discussion.participants
-        .toList()
+        .map(p => p.user)
         .sortBy(p => p.name)
         .map(p => (
-          <li className={`${p.present ? 'present' : ''}`} key={p.email}>
-            <Avatar size={26} src={p.avatar_url} name={p.name} round />
-            {p.name}
+          <li
+            className={isPresent(props.discussion, p.username) ? 'present' : ''}
+            key={p.email}
+          >
+            <Avatar size={26} email={p.email} name={p.displayName} round />
+            {p.displayName}
           </li>
         ))}
-      {props.discussion.invites.map(invite => (
-        <li key={invite.email}>
-          <Avatar size={26} round name={invite.email} />
-          {invite.email} <span className="subtext">invited</span>
-        </li>
-      ))}
+      {props.discussion.invitations.map(
+        i =>
+          i.user ? (
+            <li key={i.user.username}>
+              <Avatar size={26} round email={i.user.email} />
+              {i.user.displayName} <span className="subtext">invited</span>
+            </li>
+          ) : (
+            <li key={i.email}>
+              <Avatar size={26} round email={i.email} />
+              {i.email} <span className="subtext">invited</span>
+            </li>
+          ),
+      )}
     </ul>
   </div>
 );
@@ -47,6 +59,6 @@ export const ParticipantsDialogContainer = compose(
   ),
   withHandlers({
     openInvitation: props => () =>
-      props.openModal(props.discussion.issue.guid, 'invitation'),
+      props.openModal(props.discussion.id, 'invitation'),
   }),
 )(ParticipantsDialog);

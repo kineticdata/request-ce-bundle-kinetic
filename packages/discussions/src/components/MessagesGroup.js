@@ -88,14 +88,22 @@ export const UploadMessage = ({
   </div>
 );
 
-const produceContent = message =>
+export const produceContent = message =>
   message.content.reduce((content, token) => (content += token.value), '');
 
 export const TextMessage = ({ message }) => (
   <Markdown className="message" source={produceContent(message)} skipHtml />
 );
 
-export const MessagesGroup = ({ messages, profile, discussionServerUrl }) => (
+const getParticipant = (discussion, createdBy) =>
+  discussion.participants.find(p => p.user.username === createdBy.username);
+
+export const MessagesGroup = ({
+  discussion,
+  messages,
+  profile,
+  discussionServerUrl,
+}) => (
   <div
     className={`messages-group ${
       messages.first().createdBy.username === profile.username
@@ -107,7 +115,10 @@ export const MessagesGroup = ({ messages, profile, discussionServerUrl }) => (
       <Hoverable
         key={messages.first().createdBy.id}
         render={() => (
-          <ParticipantCard participant={messages.first().createdBy} />
+          <ParticipantCard
+            discussion={discussion}
+            participant={getParticipant(discussion, messages.first().createdBy)}
+          />
         )}
       >
         <Avatar

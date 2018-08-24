@@ -12,6 +12,7 @@ export const types = {
   CREATE_ISSUE: namespace('discussion', 'CREATE_ISSUE'),
   CREATE_INVITE: namespace('discussions', 'CREATE_INVITE'),
   CREATE_INVITE_DONE: namespace('discussions', 'CREATE_INVITE_DONE'),
+  CREATE_INVITE_ERROR: namespace('discussions', 'CREATE_INVITE_ERROR'),
   ADD_INVITE: namespace('discussions', 'ADD_INVITE'),
   SET_INVITES: namespace('discussions', 'SET_INVITES'),
   REMOVE_INVITE: namespace('discussions', 'REMOVE_INVITE'),
@@ -37,6 +38,7 @@ export const types = {
 
   ADD_MESSAGE: namespace('discussions', 'ADD_MESSAGE'),
   MESSAGE_UPDATE: namespace('discussions', 'MESSAGE_UPDATE'),
+  MESSAGE_DELETE: namespace('discussions', 'MESSAGE_DELETE'),
   SEND_MESSAGE: namespace('discussions', 'SEND_MESSAGE'),
   MESSAGE_BAD_RX: namespace('discussions', 'MESSAGE_BAD_RX'),
 
@@ -87,8 +89,14 @@ export const actions = {
   removeParticipant: withPayload(types.REMOVE_PARTICIPANT, 'id', 'participant'),
 
   // Invitation API calls
-  createInvite: withPayload(types.CREATE_INVITE, 'guid', 'email', 'note'),
+  createInvite: withPayload(
+    types.CREATE_INVITE,
+    'discussionId',
+    'type',
+    'value',
+  ),
   createInviteDone: noPayload(types.CREATE_INVITE_DONE),
+  createInviteError: withPayload(types.CREATE_INVITE_ERROR),
 
   // Invitation data management.
   setInvites: withPayload(types.SET_INVITES, 'guid', 'invites'),
@@ -104,7 +112,8 @@ export const actions = {
   setTopicStatus: withPayload(types.SET_TOPIC_STATUS, 'id', 'status'),
 
   addMessage: withPayload(types.ADD_MESSAGE, 'id', 'message'),
-  updateMessage: withPayload(types.MESSAGE_UPDATE, 'guid', 'message'),
+  updateMessage: withPayload(types.MESSAGE_UPDATE, 'id', 'message'),
+  deleteMessage: withPayload(types.MESSAGE_DELETE, 'id', 'message'),
   receiveBadMessage: withPayload(types.MESSAGE_BAD_RX, 'guid', 'badMessage'),
   sendMessage: withPayload(types.SEND_MESSAGE, 'id', 'message', 'attachment'),
 
@@ -184,8 +193,12 @@ export const State = Record({
   discussions: Map(),
   activeDiscussion: null,
   currentOpenModals: List(),
-  invitationFields: Map({}),
+  invitationFields: Map({
+    type: 'username',
+    value: '',
+  }),
   invitationPending: false,
+  invitationError: null,
   isVisible: true,
   pageTitleInterval: null,
 });
@@ -223,7 +236,7 @@ const getMessageDate = message =>
   moment(message.createdAt).format('YYYY-MM-DD');
 const differentDate = (m1, m2) => getMessageDate(m1) !== getMessageDate(m2);
 const differentAuthor = (m1, m2) =>
-  m1.createdBy.username !== m2.createdBy.username;
+  m1.createdBy.username !== m2.createdBy.username || m1.type !== m2.type;
 
 export const formatMessages = messages =>
   partitionListBy(
@@ -349,7 +362,19 @@ export const reducer = (state = State(), { type, payload }) => {
         uploads => uploads.concat(payload.uploads),
       );
     case types.MESSAGE_UPDATE:
-      return state;
+      return state.updateIn(
+        ['discussions', payload.id, 'messages', 'items'],
+        items =>
+          items.map(
+            message =>
+              message.id === payload.message.id ? payload.message : message,
+          ),
+      );
+    case types.MESSAGE_DELETE:
+      return state.updateIn(
+        ['discussions', payload.id, 'messages', 'items'],
+        items => items.filter(message => message.id !== payload.message.id),
+      );
     case types.ADD_MESSAGE:
       return state.updateIn(
         ['discussions', payload.id, 'messages', 'items'],
@@ -372,7 +397,11 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.CREATE_INVITE:
       return state.set('invitationPending', true);
     case types.CREATE_INVITE_DONE:
-      return state.set('invitationPending', false);
+      return state.set('invitationPending', false).set('invitationError', null);
+    case types.CREATE_INVITE_ERROR:
+      return state
+        .set('invitationPending', false)
+        .set('invitationError', payload);
     case types.SET_INVITATION_FIELD:
       return state.setIn(['invitationFields', payload.field], payload.value);
     case commonTypes.SET_SIZE:

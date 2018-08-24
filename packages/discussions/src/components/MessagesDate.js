@@ -2,8 +2,9 @@ import React from 'react';
 import { compose, shouldUpdate } from 'recompose';
 import moment from 'moment';
 import { MessagesGroupContainer } from './MessagesGroup';
+import { SystemMessagesGroup } from './SystemMessagesGroup';
 
-export const MessagesDate = ({ messages, profile }) => (
+export const MessagesDate = ({ discussion, messages, profile }) => (
   <div className="messages-date">
     <div className="date">
       <hr />
@@ -12,13 +13,22 @@ export const MessagesDate = ({ messages, profile }) => (
       </span>
       <hr />
     </div>
-    {messages.map(messagesGroup => (
-      <MessagesGroupContainer
-        key={messagesGroup.first().id}
-        messages={messagesGroup}
-        profile={profile}
-      />
-    ))}
+    {messages.map(
+      messagesGroup =>
+        messagesGroup.first().type === 'User' ? (
+          <MessagesGroupContainer
+            discussion={discussion}
+            key={messagesGroup.first().id}
+            messages={messagesGroup}
+            profile={profile}
+          />
+        ) : (
+          <SystemMessagesGroup
+            key={messagesGroup.first().id}
+            messages={messagesGroup}
+          />
+        ),
+    )}
   </div>
 );
 

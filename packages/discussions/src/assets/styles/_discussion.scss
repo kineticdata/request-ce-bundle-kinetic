@@ -137,6 +137,18 @@
           }
         }
       }
+      .system-message-list {
+        color: $blue1;
+        .system-message {
+          @include ms-respond(font-size, -1);
+          margin-left: 3rem;
+          margin-bottom: 0.5rem;
+          .timestamp {
+            color: $blue2;
+            margin-left: 1rem;
+          }
+        }
+      }
     }
     .date {
       align-items: center;

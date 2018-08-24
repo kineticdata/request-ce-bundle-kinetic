@@ -59,8 +59,8 @@ const closeAll = props => () => {
 const createInvitation = props => () => {
   props.createInvite(
     props.discussion.id,
-    props.invitationFields.get('email'),
-    props.invitationFields.get('notes'),
+    props.invitationFields.get('type'),
+    props.invitationFields.get('value'),
   );
 };
 
@@ -122,13 +122,11 @@ export const DiscussionContainer = compose(
   withProps(props => ({
     invitationButtonEnabled:
       !props.invitationPending &&
-      props.invitationFields.get('email') &&
-      props.invitationFields.get('email') !== '' &&
+      props.invitationFields.get('value') &&
+      props.invitationFields.get('value') !== '' &&
       !props.participantsAndInvites.includes(
-        props.invitationFields.get('email'),
-      ) &&
-      props.invitationFields.get('notes') &&
-      props.invitationFields.get('notes') !== '',
+        props.invitationFields.get('value'),
+      ),
   })),
   withState('formattedMessages', 'setFormattedMessages', List()),
   withState('unreadMessages', 'setUnreadMessages', false),
