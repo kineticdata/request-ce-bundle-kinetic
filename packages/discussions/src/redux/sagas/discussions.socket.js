@@ -10,31 +10,9 @@ import {
   fork,
 } from 'redux-saga/effects';
 
-import { Socket } from '../../api/socket';
+import { socket } from './socket';
 
 import { types, actions } from '../modules/discussions';
-
-// Connect
-// Identify
-// Wait to join topics.
-
-export function registerSocketChannel(socket) {
-  return eventChannel(emit => {
-    socket
-      .on('connect', () => emit({ action: 'socket:connected' }))
-      .on('identify', message =>
-        emit({ action: 'socket:identified', payload: message }),
-      )
-      .on('disconnect', e => {
-        console.log('disconnected', e);
-        emit({ action: 'socket:closed', payload: e });
-      });
-
-    return () => {
-      socket.close();
-    };
-  });
-}
 
 export function registerTopicChannel(topic) {
   return eventChannel(emit => {
@@ -53,29 +31,6 @@ export function registerTopicChannel(topic) {
 
     return () => topic.unsubscribe();
   });
-}
-
-export function* incomingSocketEvents(socketChannel, socket) {
-  try {
-    while (true) {
-      const data = yield take(socketChannel);
-
-      switch (data.action) {
-        case 'socket:connected':
-          yield put(actions.setConnected(true));
-          break;
-        case 'socket:identified':
-          yield put(actions.setIdentified(socket.isIdentified()));
-          break;
-        default:
-          console.log('data', data);
-      }
-    }
-  } finally {
-    if (yield cancelled()) {
-      socketChannel.close();
-    }
-  }
 }
 
 export function* handleTopicChannel(channel, id, socket, topic) {
@@ -126,7 +81,7 @@ export function* handleTopicChannel(channel, id, socket, topic) {
   }
 }
 
-export function* outgoingSocketActions(socket) {
+export function* watchDiscussionsSocket() {
   let discussionTasks = [];
 
   while (true) {
@@ -159,7 +114,6 @@ export function* outgoingSocketActions(socket) {
         dt => dt.id === leaveTopic.payload,
       );
       // Ask the channel to close the socket.
-      // discussionTask.channel.close();
       yield cancel(discussionTask.handler);
       // Remove the task from the queue.
       discussionTasks = discussionTasks.filter(
@@ -167,43 +121,6 @@ export function* outgoingSocketActions(socket) {
       );
       // Remove the discussion from the active discussions list.
       yield put(actions.removeDiscussion(leaveTopic.payload));
-    }
-  }
-}
-
-export function* watchDiscussions() {
-  let socket;
-  let socketChannel;
-
-  const socketTasks = {
-    connect: take(types.CONNECT),
-    reconnect: take(types.RECONNECT),
-    disconnect: take(types.DISCONNECT),
-  };
-
-  while (true) {
-    const results = yield race(
-      socketChannel
-        ? {
-            ...socketTasks,
-            tasks: all([
-              incomingSocketEvents(socketChannel, socket),
-              outgoingSocketActions(socket),
-            ]),
-          }
-        : socketTasks,
-    );
-
-    const { connect, reconnect, disconnect, tasks } = results;
-
-    // Handle the scenario of when we want to connect to a TopicHub.
-    if (connect) {
-      const { host, port, token } = connect.payload;
-      socket = new Socket(`ws://${host}:${port}/acme/socket`);
-      socketChannel = registerSocketChannel(socket);
-      socket.connect(token);
-
-      window.socket = socket;
     }
   }
 }

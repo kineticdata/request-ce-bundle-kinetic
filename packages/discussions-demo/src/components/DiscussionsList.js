@@ -59,6 +59,9 @@ const DiscussionsListComponent = ({
         </Button>
         {discussionList.map(discussion => {
           const isChatting = chatDiscussions.has(discussion.id);
+          const topicStatus = isChatting
+            ? chatDiscussions.get(discussion.id).topic.topicStatus
+            : 'Unknown';
           return (
             <div key={discussion.id}>
               {discussion.title}
@@ -68,7 +71,7 @@ const DiscussionsListComponent = ({
                 onClick={handleDiscussionJoin(discussion)}
                 disabled={isChatting}
               >
-                {isChatting ? 'Joined' : 'Join'}
+                {isChatting ? topicStatus : 'Join'}
               </Button>
             </div>
           );
@@ -140,7 +143,7 @@ const fetchDiscussions = ({ setDiscussionsList, token }) => async () => {
 };
 
 const mapStateToProps = state => ({
-  token: state.discussions.discussions.token,
+  token: state.discussions.socket.token,
   chatDiscussions: state.discussions.discussions.discussions,
 });
 const mapDispatchToProps = {

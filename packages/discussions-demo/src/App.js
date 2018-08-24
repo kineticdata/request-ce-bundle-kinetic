@@ -9,12 +9,14 @@ import { connect } from 'react-redux';
 
 import axios from 'axios';
 import { actions } from 'discussions/src/redux/modules/discussions';
+import { actions as socketActions } from 'discussions/src/redux/modules/socket';
 
 import { LoginForm } from './components/LoginForm';
 import { ConnectionForm } from './components/ConnectionForm';
 
 import { DiscussionsList } from './components/DiscussionsList';
 import { DiscussionsContainer } from './components/DiscussionsContainer';
+import { SOCKET_STATUS } from 'discussions/src/api/socket';
 
 class App extends Component {
   constructor(props) {
@@ -63,17 +65,16 @@ class App extends Component {
   };
 
   render() {
-    const { connected, identified, token } = this.props;
+    const { token, status } = this.props;
 
     return (
       <div className="App">
         <div className="row">
           <div className="col">
-            <div>Connected: {`${connected}`}</div>
-            <div>Identified: {`${identified}`}</div>
+            <div>{`Socket Status: ${status}`}</div>
           </div>
         </div>
-        {!connected && (
+        {status === SOCKET_STATUS.CLOSED && (
           <div className="row">
             {token === '' && (
               <div className="col">
@@ -89,8 +90,8 @@ class App extends Component {
         )}
 
         <div className="row">
-          {connected &&
-            identified && (
+          {status !== SOCKET_STATUS.CLOSED &&
+            status !== SOCKET_STATUS.CONNECTING && (
               <div className="col-3">
                 <DiscussionsList addDiscussionTab={this.addDiscussionTab} />
               </div>
@@ -105,16 +106,13 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  token: state.discussions.discussions.token,
-  connected: state.discussions.discussions.connected,
-  identified: state.discussions.discussions.identified,
+  token: state.discussions.socket.token,
+  status: state.discussions.socket.status,
 });
 
 const mapDispatchToProps = {
-  setToken: actions.setToken,
-  connect: actions.connect,
-  setConnected: actions.setConnected,
-  setIdentified: actions.setIdentified,
+  setToken: socketActions.setToken,
+  connect: socketActions.connect,
 };
 
 export const AppContainer = connect(

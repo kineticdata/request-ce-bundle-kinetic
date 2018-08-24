@@ -31,17 +31,10 @@ export const types = {
   QUEUE_UPLOADS: namespace('discussions', 'QUEUE_UPLOAD'),
 
   // Socket-based actions.
-  SET_TOKEN: namespace('discussions', 'SET_TOKEN'),
-  SET_CONNECTED: namespace('discussions', 'SET_CONNECTED'),
-  SET_IDENTIFIED: namespace('discussions', 'SET_IDENTIFIED'),
   ADD_TOPIC: namespace('discussions', 'ADD_TOPIC'),
   SET_TOPIC_STATUS: namespace('discussions', 'SET_TOPIC_STATUS'),
   UPDATE_PRESENCE: namespace('discussions', 'UPDATE_PRESENCE'),
 
-  CONNECT: namespace('discussions', 'CONNECT'),
-  DISCONNECT: namespace('discussions', 'DISCONNECT'),
-  RECONNECT: namespace('discussions', 'RECONNECT'),
-  // SET_CONNECTED: namespace('discussions', 'SET_CONNECTED'),
   ADD_MESSAGE: namespace('discussions', 'ADD_MESSAGE'),
   MESSAGE_UPDATE: namespace('discussions', 'MESSAGE_UPDATE'),
   SEND_MESSAGE: namespace('discussions', 'SEND_MESSAGE'),
@@ -61,10 +54,6 @@ export const types = {
 };
 
 export const actions = {
-  setToken: withPayload(types.SET_TOKEN),
-  setConnected: withPayload(types.SET_CONNECTED),
-  setIdentified: withPayload(types.SET_IDENTIFIED),
-
   joinDiscussion: withPayload(types.JOIN_DISCUSSION),
   addDiscussion: withPayload(types.ADD_DISCUSSION),
 
@@ -91,15 +80,11 @@ export const actions = {
     'pageToken',
   ),
   setJoinError: withPayload(types.SET_JOIN_ERROR, 'guid', 'joinError'),
-  setParticipants: withPayload(types.SET_PARTICIPANTS, 'guid', 'participants'),
+  setParticipants: withPayload(types.SET_PARTICIPANTS, 'id', 'participants'),
   addPresence: withPayload(types.ADD_PRESENCE, 'guid', 'participantGuid'),
   removePresence: withPayload(types.REMOVE_PRESENCE, 'guid', 'participantGuid'),
-  addParticipant: withPayload(types.ADD_PARTICIPANT, 'guid', 'participant'),
-  removeParticipant: withPayload(
-    types.REMOVE_PARTICIPANT,
-    'guid',
-    'participant',
-  ),
+  addParticipant: withPayload(types.ADD_PARTICIPANT, 'id', 'participant'),
+  removeParticipant: withPayload(types.REMOVE_PARTICIPANT, 'id', 'participant'),
 
   // Invitation API calls
   createInvite: withPayload(types.CREATE_INVITE, 'guid', 'email', 'note'),
@@ -114,15 +99,10 @@ export const actions = {
   queueUploads: withPayload(types.QUEUE_UPLOADS, 'guid', 'uploads'),
 
   // Socket-based actions.
-  connect: withPayload(types.CONNECT),
-  startConnection: withPayload(types.CONNECT),
-  stopConnection: withPayload(types.DISCONNECT),
   updatePresence: withPayload(types.UPDATE_PRESENCE, 'id', 'presences'),
   addTopic: withPayload(types.ADD_TOPIC),
   setTopicStatus: withPayload(types.SET_TOPIC_STATUS, 'id', 'status'),
 
-  reconnect: withPayload(types.RECONNECT),
-  // setConnected: withPayload(types.SET_CONNECTED, 'guid', 'connected'),
   addMessage: withPayload(types.ADD_MESSAGE, 'id', 'message'),
   updateMessage: withPayload(types.MESSAGE_UPDATE, 'guid', 'message'),
   receiveBadMessage: withPayload(types.MESSAGE_BAD_RX, 'guid', 'badMessage'),
@@ -196,16 +176,11 @@ export const Discussion = Record({
   lastReceived: '2014-01-01',
   loadingMoreMessages: false,
   joinError: '',
-  connected: false,
-  reconnecting: false,
   // participants: Map(), this changed from a Map to a List
   invites: List(), // This is changing to 'invitations'
 });
 
 export const State = Record({
-  connected: false,
-  identified: false,
-  token: '',
   discussions: Map(),
   activeDiscussion: null,
   currentOpenModals: List(),
@@ -256,7 +231,7 @@ export const formatMessages = messages =>
     messages.reverse().filterNot(isSystemMessage),
   ).map(dateList => partitionListBy(differentAuthor, dateList));
 
-export const selectToken = state => state.discussions.discussions.token;
+// export const selectToken = state => state.discussions.discussions.token;
 
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
@@ -303,7 +278,7 @@ export const reducer = (state = State(), { type, payload }) => {
       );
     case types.SET_PARTICIPANTS:
       return state.setIn(
-        ['discussions', payload.guid, 'participants'],
+        ['discussions', payload.id, 'participants'],
         List(payload.participants).reduce(
           (reduction, participant) =>
             reduction.set(participant.id, participant),
@@ -334,13 +309,13 @@ export const reducer = (state = State(), { type, payload }) => {
     }
     case types.ADD_PARTICIPANT:
       return state.setIn(
-        ['discussions', payload.guid, 'participants', payload.participant.id],
+        ['discussions', payload.id, 'participants', payload.participant.id],
         payload.participant,
       );
     case types.REMOVE_PARTICIPANT:
       return state.deleteIn([
         'discussions',
-        payload.guid,
+        payload.id,
         'participants',
         payload.participant.id,
       ]);
@@ -350,11 +325,11 @@ export const reducer = (state = State(), { type, payload }) => {
         List(payload.invites),
       );
     case types.ADD_INVITE:
-      return state.updateIn(['discussions', payload.guid, 'invites'], invites =>
+      return state.updateIn(['discussions', payload.id, 'invites'], invites =>
         invites.push(payload.invite),
       );
     case types.REMOVE_INVITE:
-      return state.updateIn(['discussions', payload.guid, 'invites'], invites =>
+      return state.updateIn(['discussions', payload.id, 'invites'], invites =>
         invites.delete(invites.findIndex(i => i.id === payload.invite.id)),
       );
     case types.APPLY_UPLOAD:
@@ -384,21 +359,6 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.updateIn(['discussions', payload.guid, 'badMessages'], m =>
         m.push(payload.badMessage),
       );
-    case types.SET_TOKEN:
-      return state.set('token', payload);
-    case types.SET_CONNECTED:
-      return state.set('connected', payload);
-    case types.SET_IDENTIFIED:
-      return state.set('identified', payload);
-    case types.RECONNECT:
-      return state.updateIn(['discussions', payload], discussion =>
-        discussion.set('reconnecting', true).set('connected', false),
-      );
-    // case types.SET_CONNECTED:
-    //   return state.setIn(
-    //     ['discussions', payload.guid, 'connected'],
-    //     payload.connected,
-    //   );
     case types.OPEN_MODAL:
       return state
         .set('activeDiscussion', payload.guid)

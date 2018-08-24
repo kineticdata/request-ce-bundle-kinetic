@@ -10,6 +10,7 @@ import {
 
 export const TOPIC_STATUS = {
   closed: 'closed',
+  reconnecting: 'reconnecting',
   subscribing: 'subscribing',
   subscribed: 'subscribed',
   unsubscribing: 'unsubscribing',
@@ -25,6 +26,9 @@ export class Topic {
     this.statusCallbacks = cb ? [cb] : [];
     this.presences = [];
     this.presenceCallbacks = [];
+
+    this.setStatus = this.setStatus.bind(this);
+    this.on = this.on.bind(this);
   }
 
   socket() {

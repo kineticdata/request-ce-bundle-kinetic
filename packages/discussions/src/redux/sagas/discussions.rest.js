@@ -1,5 +1,6 @@
 import { all, call, select, take, put, takeEvery } from 'redux-saga/effects';
-import { types, actions, selectToken } from '../modules/discussions';
+import { types, actions } from '../modules/discussions';
+import { selectToken } from '../modules/socket';
 import axios from 'axios';
 
 const DISCUSSION_BASE_URL = 'http://localhost:7071/acme/app/api/v1/discussions';
@@ -13,7 +14,6 @@ const selectMessageToken = discussionId => state => {
 
 const DEFAULT_MESSAGE_LIMIT = 25;
 export function* fetchMoreMessagesTask(action) {
-  console.log(action);
   const token = yield select(selectToken);
   const pageToken = yield select(selectMessageToken(action.payload));
 
