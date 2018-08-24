@@ -155,7 +155,7 @@ export const MessagesGroup = ({
             : messages.last().createdBy.displayName}
         </span>
         <span className="timestamp">
-          {moment(messages.last().created_at).format('h:mma')}
+          {moment(messages.last().createdAt).format('h:mma')}
         </span>
       </div>
     </div>

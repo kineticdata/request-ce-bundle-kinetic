@@ -9,7 +9,7 @@ export const MessagesDate = ({ discussion, messages, profile }) => (
     <div className="date">
       <hr />
       <span>
-        {moment(messages.first().first().created_at).format('MMMM Do, YYYY')}
+        {moment(messages.first().first().createdAt).format('MMMM Do, YYYY')}
       </span>
       <hr />
     </div>

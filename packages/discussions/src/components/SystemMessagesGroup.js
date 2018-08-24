@@ -11,7 +11,7 @@ export const SystemMessagesGroup = props => (
             <div className="system-message" key={message.id}>
               {produceContent(message)}
               <span className="timestamp">
-                {moment(message.created_at).format('h:mma')}
+                {moment(message.createdAt).format('h:mma')}
               </span>
             </div>
           ),
