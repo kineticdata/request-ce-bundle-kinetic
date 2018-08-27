@@ -1,6 +1,14 @@
 import React from 'react';
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, withState, lifecycle } from 'recompose';
+import { withRouter } from 'react-router';
 import { login } from '../../utils/authentication';
+
+const coreOauthAuthorizeUrl = location => {
+  console.log(location);
+  const clientId = 'kinops';
+  const state = location.pathname;
+  return `/app/oauth/authorize?client_id=${clientId}&response_type=code&state=${state}`;
+};
 
 export const Login = ({
   handleLogin,
@@ -12,12 +20,14 @@ export const Login = ({
   handlePassword,
   error,
   routed,
+  location,
 }) => (
   <form className="login-form-container" onSubmit={handleLogin}>
     <h3>
       Sign In
       <small>
-        {'or '}
+        <a href={coreOauthAuthorizeUrl(location)}>Login with Kinops</a>
+        {' or '}
         <a role="button" tabIndex="0" onClick={toCreateAccount(routed)}>
           Create Account
         </a>
@@ -94,10 +104,36 @@ const tryAuthentication = ({
 };
 
 export const LoginForm = compose(
+  withRouter,
+  withState('windowHandle', 'setWindowHandle', null),
+  withState('popupBlocked', 'setPopupBlocked', false),
   withHandlers({
     tryAuthentication,
   }),
   withHandlers({
     handleLogin,
+  }),
+  lifecycle({
+    componentDidMount() {
+      const windowHandle = window.open(
+        coreOauthAuthorizeUrl(this.props.location),
+        'KINOPS_WindowName',
+        'menubar=no,location=no,resizable=yes,status=yes',
+      );
+
+      if (windowHandle) {
+        window.__OAUTH_CALLBACK__ = token => {
+          window.console.log(token);
+          localStorage.setItem('token', token);
+          windowHandle.close();
+          this.props.setAuthenticated(true);
+          this.props.setToken(token);
+        };
+      } else {
+        this.props.setPopupBlocked(true);
+      }
+
+      console.log(windowHandle);
+    },
   }),
 )(Login);

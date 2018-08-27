@@ -78,6 +78,7 @@ export const Profile = ({
         )}
         <div className="dropdown-divider" />
         <a
+          onClick={() => localStorage.removeItem('token')}
           href={`${bundle.spaceLocation()}/app/logout`}
           className="dropdown-item"
         >
