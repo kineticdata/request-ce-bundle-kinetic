@@ -6814,9 +6814,9 @@ react-is@^16.4.1:
   version "16.4.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.4.1.tgz#d624c4650d2c65dbd52c72622bbf389435d9776e"
 
-react-kinetic-core@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/react-kinetic-core/-/react-kinetic-core-0.6.2.tgz#9f8746b75349a21de13a4e3eb9a70750e4e005df"
+react-kinetic-core@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/react-kinetic-core/-/react-kinetic-core-0.7.0.tgz#dfda4f6ab6b0bee87184e3aa42a40b3745ebe275"
   dependencies:
     axios "^0.16.1"
     deepequal "^0.0.1"

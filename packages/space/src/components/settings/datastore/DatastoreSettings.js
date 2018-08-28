@@ -58,6 +58,9 @@ const SettingsComponent = ({
               <Link to="/">home</Link> /{` `}
               <Link to="/settings">settings</Link> /{` `}
               <Link to={`/settings/datastore/`}>datastore</Link> /{` `}
+              <Link to={`/settings/datastore/${origForm.slug}/`}>
+                {origForm.name}
+              </Link>
             </h3>
             <h1>{origForm.name} Configuration</h1>
           </div>

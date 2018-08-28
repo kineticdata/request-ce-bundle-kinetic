@@ -1,4 +1,13 @@
-import { call, put, takeEvery, select, all } from 'redux-saga/effects';
+import {
+  call,
+  put,
+  takeEvery,
+  select,
+  all,
+  takeLatest,
+  throttle,
+} from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 import { CoreAPI } from 'react-kinetic-core';
 import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'connected-react-router';
@@ -18,6 +27,8 @@ import {
   BRIDGE_MODEL_INCLUDES,
 } from '../modules/settingsDatastore';
 import { DatastoreFormSave } from '../../records';
+
+import { chunkList } from '../../utils';
 
 export function* fetchFormsSaga() {
   const [displayableForms, manageableForms, space] = yield all([
@@ -457,7 +468,7 @@ export function* cloneSubmissionSaga(action) {
       yield put(actions.cloneSubmissionErrors(postErrors));
     } else {
       yield put(actions.cloneSubmissionSuccess());
-      yield put(push(`/datastore/${form.slug}/${cloneSubmission.id}`));
+      yield put(push(`/settings/datastore/${form.slug}/${cloneSubmission.id}`));
     }
   }
 }
@@ -480,6 +491,148 @@ export function* deleteSubmissionSaga(action) {
   }
 }
 
+export function* fetchAllSubmissionsSaga(action) {
+  const { pageToken, accumulator, formSlug } = action.payload;
+  const searcher = new CoreAPI.SubmissionSearch(true);
+
+  searcher.include('values');
+  searcher.limit(1000);
+  if (pageToken) {
+    searcher.pageToken(pageToken);
+  }
+
+  const { submissions, nextPageToken = null, serverError } = yield call(
+    CoreAPI.searchSubmissions,
+    {
+      search: searcher.build(),
+      datastore: true,
+      form: formSlug,
+    },
+  );
+
+  // Update the action with the new results
+  action = {
+    ...action,
+    payload: {
+      ...action.payload,
+      accumulator: [...accumulator, ...submissions],
+      pageToken: nextPageToken,
+    },
+  };
+
+  yield put(actions.setExportCount(action.payload.accumulator.length));
+
+  if (nextPageToken) {
+    yield call(fetchAllSubmissionsSaga, action);
+  } else {
+    if (serverError) {
+      // What should we do?
+    } else {
+      yield put(actions.setExportSubmissions(action.payload.accumulator));
+    }
+  }
+}
+
+export function* deleteAllSubmissionsSaga(action) {
+  const { form } = yield select(selectSearchParams);
+  const searcher = new CoreAPI.SubmissionSearch(true);
+
+  searcher.limit(1000);
+
+  const { submissions, nextPageToken = null } = yield call(
+    CoreAPI.searchSubmissions,
+    {
+      search: searcher.build(),
+      datastore: true,
+      form: form.slug,
+    },
+  );
+
+  submissions.forEach(submission =>
+    CoreAPI.deleteSubmission({
+      datastore: true,
+      id: submission.id,
+    }),
+  );
+
+  if (nextPageToken) {
+    yield call(deleteAllSubmissionsSaga);
+  }
+}
+
+export function* executeImportSaga(action) {
+  const { form, records, recordsLength } = action.payload;
+  let recordsChunk = null;
+  const CHUNK_SIZE = 10;
+
+  // abstract chunking requirement from function call.
+  if (!action.beenChunked) {
+    recordsChunk = chunkList(records, CHUNK_SIZE);
+  } else {
+    recordsChunk = records;
+  }
+
+  // head is the first element in the List, tail is the rest fo the List.
+  const head = recordsChunk.first();
+  const tail = recordsChunk.shift();
+
+  yield put(
+    actions.debouncePercentComplete({ tail, CHUNK_SIZE, recordsLength }),
+  );
+
+  const responses = yield all(
+    head
+      .map(
+        record =>
+          record.id
+            ? call(CoreAPI.updateSubmission, {
+                datastore: true,
+                formSlug: form.slug,
+                values: record.values,
+                id: record.id,
+              })
+            : call(CoreAPI.createSubmission, {
+                datastore: true,
+                formSlug: form.slug,
+                values: record.values,
+              }),
+      )
+      .toJS(),
+  );
+
+  for (let x = 0; x < responses.length; x++) {
+    const { serverError, errors } = responses[x];
+    if (serverError || errors) {
+      yield put(actions.setImportFailedCall(errors ? errors : serverError));
+    }
+  }
+
+  if (tail.size > 0) {
+    yield call(executeImportSaga, {
+      ...action,
+      payload: {
+        ...action.payload,
+        records: tail,
+      },
+      beenChunked: true,
+    });
+  } else {
+    yield put(actions.setImportComplete());
+  }
+}
+
+export function* debouncePrecentCompleteSaga(action) {
+  const { tail, CHUNK_SIZE, recordsLength } = action.payload;
+
+  // TODO: There is a bug in the progress bar.
+  // That last chunk in the List may be smaller than the CHUNK_SIZE.
+  yield put(
+    actions.setImportPercentComplete(
+      100 - Math.round(((tail.size * CHUNK_SIZE) / recordsLength) * 100),
+    ),
+  );
+}
+
 export function* watchSettingsDatastore() {
   yield takeEvery(types.FETCH_FORMS, fetchFormsSaga);
   yield takeEvery(types.FETCH_FORM, fetchFormSaga);
@@ -493,4 +646,12 @@ export function* watchSettingsDatastore() {
   yield takeEvery(types.DELETE_SUBMISSION, deleteSubmissionSaga);
   yield takeEvery(types.UPDATE_FORM, updateFormSaga);
   yield takeEvery(types.CREATE_FORM, createFormSaga);
+  yield takeEvery(types.FETCH_ALL_SUBMISSIONS, fetchAllSubmissionsSaga);
+  yield takeEvery(types.DELETE_ALL_SUBMISSIONS, deleteAllSubmissionsSaga);
+  yield takeEvery(types.EXECUTE_IMPORT, executeImportSaga);
+  yield throttle(
+    1500,
+    types.DEBOUNCE_PERCENT_COMPLETE,
+    debouncePrecentCompleteSaga,
+  );
 }

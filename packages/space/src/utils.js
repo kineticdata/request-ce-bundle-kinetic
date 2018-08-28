@@ -1,5 +1,6 @@
 import md5 from 'md5';
 import { Utils, Constants } from 'common';
+import { Range } from 'immutable';
 
 const COLORS = [
   Constants.COLORS.blue,
@@ -51,3 +52,16 @@ export const buildHierarchy = name => {
 };
 
 export const isBlank = string => !string || string.trim().length === 0;
+
+/**
+ *  Take a large List and return a Sequence of List.  Will spilt List into equal chuncks.
+ * Last chunk may be smaller if split can't be done evenly.
+ *
+ * @param {List} list - List of elements
+ * @param {number} [chunkSize=1] - Desired size of chunks
+ * @returns {List} - List of List elements
+ */
+export const chunkList = (list, chunkSize = 1) =>
+  Range(0, list.count(), chunkSize)
+    .map(chunkStart => list.slice(chunkStart, chunkStart + chunkSize))
+    .toList();

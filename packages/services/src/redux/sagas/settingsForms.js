@@ -1,4 +1,4 @@
-import { call, put, takeEvery, select, all } from 'redux-saga/effects';
+import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { CoreAPI, bundle } from 'react-kinetic-core';
 import { toastActions } from 'common';
 import axios from 'axios';
@@ -6,6 +6,7 @@ import {
   actions,
   types,
   FORM_INCLUDES,
+  FORM_FULL_INCLUDES,
   SUBMISSION_INCLUDES,
 } from '../modules/settingsForms';
 
@@ -17,7 +18,7 @@ export function* fetchFormSaga(action) {
   });
 
   if (serverError) {
-    yield put(actions.setFormsErrors(serverError));
+    yield put(actions.setFormsError(serverError));
   } else {
     yield put(actions.setForm(form));
   }
@@ -50,7 +51,7 @@ export function* fetchFormSubmissionsSaga(action) {
   );
 
   if (serverError) {
-    yield put(actions.setFormsErrors(serverError));
+    yield put(actions.setFormsError(serverError));
   } else {
     yield put(actions.setFormSubmissions({ submissions, nextPageToken }));
   }
@@ -63,7 +64,7 @@ export function* fetchFormSubmissionSaga(action) {
     include: SUBMISSION_INCLUDES,
   });
   if (serverError) {
-    yield put(actions.setFormsErrors(serverError));
+    yield put(actions.setFormsError(serverError));
   } else {
     yield put(actions.setFormSubmission(submission));
   }
@@ -72,12 +73,30 @@ export function* fetchFormSubmissionSaga(action) {
 export function* fetchKappSaga(action) {
   const { serverError, kapp } = yield call(CoreAPI.fetchKapp, {
     kappSlug: action.payload,
-    include: 'formTypes, categories',
+    include: 'formTypes, categories, formAttributeDefinitions',
   });
 
   if (serverError) {
-    yield put(actions.setFormsErrors(serverError));
+    yield put(actions.setFormsError(serverError));
   } else {
+    const me = yield select(state => state.app.profile);
+    if (
+      me.spaceAdmin &&
+      !kapp.formAttributeDefinitions.find(d => d.name === 'Form Configuration')
+    ) {
+      // Create Form Configuration Definition if it doesn't exist
+      yield call(axios.request, {
+        method: 'post',
+        url: `${bundle.apiLocation()}/kapps/${
+          kapp.slug
+        }/formAttributeDefinitions`,
+        data: {
+          name: 'Form Configuration',
+          allowsMultiple: false,
+        },
+      });
+    }
+
     yield put(actions.setKapp(kapp));
   }
 }
@@ -96,9 +115,6 @@ export function* updateFormSaga(action) {
         : [],
       'Approval Form Slug': currentFormChanges['Approval Form Slug']
         ? [currentFormChanges['Approval Form Slug']]
-        : [],
-      'Task Form Slug': currentFormChanges['Task Form Slug']
-        ? [currentFormChanges['Task Form Slug']]
         : [],
       Approver: currentFormChanges.Approver
         ? [currentFormChanges.Approver]
@@ -119,13 +135,18 @@ export function* updateFormSaga(action) {
       'Owning Team': currentFormChanges['Owning Team']
         ? currentFormChanges['Owning Team']
         : [],
+      'Form Configuration': [
+        JSON.stringify({
+          columns: currentFormChanges.columns.toJS(),
+        }),
+      ],
     },
     status: currentFormChanges.status,
     type: currentFormChanges.type,
     description: currentFormChanges.description,
     categorizations: currentFormChanges.categories,
   };
-  const { serverError, form } = yield call(CoreAPI.updateForm, {
+  const { serverError } = yield call(CoreAPI.updateForm, {
     kappSlug: action.payload.kappSlug,
     formSlug: currentForm.slug,
     form: formContent,
@@ -154,7 +175,7 @@ export function* fetchNotificationsSaga() {
   });
 
   if (serverError) {
-    yield put(actions.setFormsErrors(serverError));
+    yield put(actions.setFormsError(serverError));
   } else {
     yield put(actions.setNotifications(submissions));
   }
@@ -164,11 +185,11 @@ export function* createFormSaga(action) {
   const { serverError, form } = yield call(CoreAPI.fetchForm, {
     kappSlug: action.payload.kappSlug,
     formSlug: action.payload.inputs['Template to Clone'],
-    include: FORM_INCLUDES,
+    include: FORM_FULL_INCLUDES,
   });
 
   if (serverError) {
-    yield put(actions.setFormsErrors(serverError));
+    yield put(actions.setFormsError(serverError));
   }
 
   const formContent = {
@@ -183,15 +204,19 @@ export function* createFormSaga(action) {
       'Owning Team': action.payload.inputs['Owning Team'],
     },
   };
+
   const createdForm = yield call(CoreAPI.createForm, {
     kappSlug: action.payload.kappSlug,
     form: formContent,
-    include: FORM_INCLUDES,
+    include: FORM_FULL_INCLUDES,
   });
   if (createdForm.serverError || createdForm.error) {
-    yield put(toastActions.addError(error || serverError.statusText));
+    yield put(
+      toastActions.addError(
+        createdForm.error || createdForm.serverError.statusText,
+      ),
+    );
   } else {
-    // TODO: Build Initial Bridge Model and Mapping here
     if (typeof action.payload.callback === 'function') {
       action.payload.callback(createdForm.form.slug);
     }

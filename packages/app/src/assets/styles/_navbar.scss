@@ -21,9 +21,6 @@
 .nav.nav-header > .nav-item-right {
   margin-left: auto;
   display: flex;
-  .fa {
-    color: $gray;
-  }
 }
 
 .navbar .nav-item {
@@ -63,9 +60,12 @@
 
 .navbar .nav-link {
   font-size: 1rem;
-  color: $black;
+  color: $gray;
   padding: 1rem;
   line-height: 1;
+  &:hover {
+    color: $blue-lake;
+  }
 
   .badge {
     background-color: $orange-kinops;
@@ -85,15 +85,20 @@
 .navbar .drawer-button {
   border-right: 1px solid $gray2;
   .fa {
-    color: $black;
-    &:hover {
-      color: $blue-lake;
-    }
+    color: $gray;
+  }
+  &:hover .fa {
+    color: $blue-lake;
   }
 }
 
-.dropdown-toggle::after {
-  border-top: 0.4em solid $black;
-  border-right: 0.19em solid transparent;
-  border-left: 0.19em solid transparent;
+.dropdown-toggle {
+  &::after {
+    border-top: 0.4em solid $black;
+    border-right: 0.19em solid transparent;
+    border-left: 0.19em solid transparent;
+  }
+  &.hide-caret::after {
+    display: none;
+  }
 }

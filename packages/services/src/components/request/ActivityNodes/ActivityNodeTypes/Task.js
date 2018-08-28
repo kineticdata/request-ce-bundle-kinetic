@@ -8,7 +8,13 @@ export const TaskHeader = ({ activity }) => {
     <Fragment>
       <h1>
         {activity.label}
-        <span className="status status--green">{data.Status}</span>
+        <span
+          className={`status ${
+            data.Status === 'Complete' ? 'status--gray' : 'status--green'
+          }`}
+        >
+          {data.Status}
+        </span>
       </h1>
     </Fragment>
   );
