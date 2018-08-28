@@ -48,6 +48,8 @@ const buildRelatedItemLink = (relatedItem, profile) => {
     }
   } else if ('Team' === relatedItem.TYPE) {
     link = '#/teams/' + relatedItem.ID;
+  } else if ('Datastore Submission' === relatedItem.TYPE) {
+    link = `#/settings/datastore/${relatedItem.FORMSLUG}/${relatedItem.ID}`;
   }
 
   return (
