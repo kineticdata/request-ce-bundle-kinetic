@@ -16,6 +16,7 @@ export const types = {
   ADD_INVITATION: namespace('discussions', 'ADD_INVITATION'),
   SET_INVITES: namespace('discussions', 'SET_INVITES'),
   REMOVE_INVITATION: namespace('discussions', 'REMOVE_INVITATION'),
+  UPDATE_INVITATION: namespace('discussions', 'UPDATE_INVITATION'),
   RESEND_INVITE: namespace('discussions', 'RESEND_INVITE'),
   FETCH_MORE_MESSAGES: namespace('discussions', 'FETCH_MORE_MESSAGES'),
   SET_MESSAGES: namespace('discussions', 'SET_MESSAGES'),
@@ -27,6 +28,7 @@ export const types = {
   REMOVE_PRESENCE: namespace('discissons', 'REMOVE_PRESENCE'),
   ADD_PARTICIPANT: namespace('discussions', 'ADD_PARTICIPANT'),
   REMOVE_PARTICIPANT: namespace('discussions', 'REMOVE_PARTICIPANT'),
+  UPDATE_PARTICIPANT: namespace('discussions', 'UPDATE_PARTICIPANT'),
 
   APPLY_UPLOAD: namespace('discussions', 'APPLY_UPLOAD'),
   QUEUE_UPLOADS: namespace('discussions', 'QUEUE_UPLOAD'),
@@ -87,6 +89,7 @@ export const actions = {
   removePresence: withPayload(types.REMOVE_PRESENCE, 'guid', 'participantGuid'),
   addParticipant: withPayload(types.ADD_PARTICIPANT, 'id', 'participant'),
   removeParticipant: withPayload(types.REMOVE_PARTICIPANT, 'id', 'participant'),
+  updateParticipant: withPayload(types.UPDATE_PARTICIPANT, 'id', 'participant'),
 
   // Invitation API calls
   createInvite: withPayload(
@@ -102,6 +105,7 @@ export const actions = {
   setInvites: withPayload(types.SET_INVITES, 'guid', 'invites'),
   addInvitation: withPayload(types.ADD_INVITATION, 'id', 'invitation'),
   removeInvitation: withPayload(types.REMOVE_INVITATION, 'id', 'invitation'),
+  updateInvitation: withPayload(types.UPDATE_INVITATION, 'id', 'invitation'),
 
   applyUpload: withPayload(types.APPLY_UPLOAD, 'guid', 'messageGuid', 'upload'),
   queueUploads: withPayload(types.QUEUE_UPLOADS, 'guid', 'uploads'),
@@ -338,6 +342,17 @@ export const reducer = (state = State(), { type, payload }) => {
               participant.user.username !== payload.participant.user.username,
           ),
       );
+    case types.UPDATE_PARTICIPANT:
+      return state.updateIn(
+        ['discussions', payload.id, 'participants'],
+        participants =>
+          participants.map(
+            participant =>
+              participant.user.username === payload.participant.user.username
+                ? payload.participant
+                : participant,
+          ),
+      );
     case types.SET_INVITES:
       return state.setIn(
         ['discussions', payload.guid, 'invites'],
@@ -354,6 +369,17 @@ export const reducer = (state = State(), { type, payload }) => {
         invitations =>
           invitations.delete(
             invitations.findIndex(i => invitationsMatch(i, payload.invitation)),
+          ),
+      );
+    case types.UPDATE_INVITATION:
+      return state.updateIn(
+        ['discussions', payload.id, 'invitations'],
+        invitations =>
+          invitations.map(
+            invitation =>
+              invitationsMatch(invitation, payload.invitation)
+                ? payload.invitation
+                : invitation,
           ),
       );
     case types.APPLY_UPLOAD:

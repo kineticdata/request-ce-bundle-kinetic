@@ -21,8 +21,8 @@ export const ParticipantCard = ({ discussion, participant, button }) => {
       <h1>{participant.user.displayName}</h1>
       <p>{participant.user.email}</p>
       <p>
-        {participant.lastSeen !== null
-          ? `Last In: ${moment(participant.lastSeen).fromNow()}`
+        {participant.lastSeenAt !== null
+          ? `Last In: ${moment(participant.lastSeenAt).fromNow()}`
           : 'Online Now'}
       </p>
       {button ? button : null}
