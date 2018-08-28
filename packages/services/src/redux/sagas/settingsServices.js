@@ -52,6 +52,18 @@ export function* fetchTeamsSaga({ payload }) {
   }
 }
 
+export function* fetchUsersSaga({ payload }) {
+  const { serverError, users } = yield call(CoreAPI.fetchUsers, {
+    include: 'details',
+  });
+
+  if (serverError) {
+    yield put(actions.updateServicesSettingsError(serverError));
+  } else {
+    yield put(actions.setServicesSettingsUsers(users));
+  }
+}
+
 export function* fetchSpaceSaga({ payload }) {
   const { serverError, space } = yield call(CoreAPI.fetchSpace, {
     include: SPACE_SETTING_INCLUDES,
@@ -108,6 +120,7 @@ export function* fetchNotificationsSaga() {
 export function* watchSettingsServices() {
   yield takeEvery(types.FETCH_SERVICES_SETTINGS, fetchServicesSettingsSaga);
   yield takeEvery(types.FETCH_SERVICES_SETTINGS_TEAMS, fetchTeamsSaga);
+  yield takeEvery(types.FETCH_SERVICES_SETTINGS_USERS, fetchUsersSaga);
   yield takeEvery(types.FETCH_SERVICES_SETTINGS_SPACE, fetchSpaceSaga);
   yield takeEvery(types.UPDATE_SERVICES_SETTINGS, updateServicesSettingsSaga);
   yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
