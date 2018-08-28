@@ -16,6 +16,7 @@ export const types = {
   ADD_INVITATION: namespace('discussions', 'ADD_INVITATION'),
   SET_INVITES: namespace('discussions', 'SET_INVITES'),
   REMOVE_INVITATION: namespace('discussions', 'REMOVE_INVITATION'),
+  UPDATE_INVITATION: namespace('discussions', 'UPDATE_INVITATION'),
   RESEND_INVITE: namespace('discussions', 'RESEND_INVITE'),
   FETCH_MORE_MESSAGES: namespace('discussions', 'FETCH_MORE_MESSAGES'),
   SET_MESSAGES: namespace('discussions', 'SET_MESSAGES'),
@@ -104,6 +105,7 @@ export const actions = {
   setInvites: withPayload(types.SET_INVITES, 'guid', 'invites'),
   addInvitation: withPayload(types.ADD_INVITATION, 'id', 'invitation'),
   removeInvitation: withPayload(types.REMOVE_INVITATION, 'id', 'invitation'),
+  updateInvitation: withPayload(types.UPDATE_INVITATION, 'id', 'invitation'),
 
   applyUpload: withPayload(types.APPLY_UPLOAD, 'guid', 'messageGuid', 'upload'),
   queueUploads: withPayload(types.QUEUE_UPLOADS, 'guid', 'uploads'),
@@ -367,6 +369,17 @@ export const reducer = (state = State(), { type, payload }) => {
         invitations =>
           invitations.delete(
             invitations.findIndex(i => invitationsMatch(i, payload.invitation)),
+          ),
+      );
+    case types.UPDATE_INVITATION:
+      return state.updateIn(
+        ['discussions', payload.id, 'invitations'],
+        invitations =>
+          invitations.map(
+            invitation =>
+              invitationsMatch(invitation, payload.invitation)
+                ? payload.invitation
+                : invitation,
           ),
       );
     case types.APPLY_UPLOAD:
