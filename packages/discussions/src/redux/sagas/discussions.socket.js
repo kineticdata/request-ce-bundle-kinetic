@@ -51,6 +51,9 @@ export function* handleTopicChannel(channel, id, socket, topic) {
         case 'presence':
           yield put(actions.updatePresence(id, topic.presence()));
           break;
+        case 'discussion:updated':
+          yield put(actions.addDiscussion(topicEvent.payload));
+          break;
         case 'message:created':
           yield put(actions.addMessage(id, topicEvent.payload));
           break;
