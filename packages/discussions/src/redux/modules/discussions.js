@@ -13,9 +13,9 @@ export const types = {
   CREATE_INVITE: namespace('discussions', 'CREATE_INVITE'),
   CREATE_INVITE_DONE: namespace('discussions', 'CREATE_INVITE_DONE'),
   CREATE_INVITE_ERROR: namespace('discussions', 'CREATE_INVITE_ERROR'),
-  ADD_INVITE: namespace('discussions', 'ADD_INVITE'),
+  ADD_INVITATION: namespace('discussions', 'ADD_INVITATION'),
   SET_INVITES: namespace('discussions', 'SET_INVITES'),
-  REMOVE_INVITE: namespace('discussions', 'REMOVE_INVITE'),
+  REMOVE_INVITATION: namespace('discussions', 'REMOVE_INVITATION'),
   RESEND_INVITE: namespace('discussions', 'RESEND_INVITE'),
   FETCH_MORE_MESSAGES: namespace('discussions', 'FETCH_MORE_MESSAGES'),
   SET_MESSAGES: namespace('discussions', 'SET_MESSAGES'),
@@ -100,8 +100,8 @@ export const actions = {
 
   // Invitation data management.
   setInvites: withPayload(types.SET_INVITES, 'guid', 'invites'),
-  addInvite: withPayload(types.ADD_INVITE, 'guid', 'invite'),
-  removeInvite: withPayload(types.REMOVE_INVITE, 'guid', 'invite'),
+  addInvitation: withPayload(types.ADD_INVITATION, 'id', 'invitation'),
+  removeInvitation: withPayload(types.REMOVE_INVITATION, 'id', 'invitation'),
 
   applyUpload: withPayload(types.APPLY_UPLOAD, 'guid', 'messageGuid', 'upload'),
   queueUploads: withPayload(types.QUEUE_UPLOADS, 'guid', 'uploads'),
@@ -238,6 +238,10 @@ const differentDate = (m1, m2) => getMessageDate(m1) !== getMessageDate(m2);
 const differentAuthor = (m1, m2) =>
   m1.createdBy.username !== m2.createdBy.username || m1.type !== m2.type;
 
+const invitationsMatch = (i1, i2) =>
+  (i1.user && i2.user && i1.user.username === i2.user.username) ||
+  (i1.email && i2.email && i1.email === i2.email);
+
 export const formatMessages = messages =>
   partitionListBy(
     differentDate,
@@ -337,13 +341,18 @@ export const reducer = (state = State(), { type, payload }) => {
         ['discussions', payload.guid, 'invites'],
         List(payload.invites),
       );
-    case types.ADD_INVITE:
-      return state.updateIn(['discussions', payload.id, 'invites'], invites =>
-        invites.push(payload.invite),
+    case types.ADD_INVITATION:
+      return state.updateIn(
+        ['discussions', payload.id, 'invitations'],
+        invitations => invitations.push(payload.invitation),
       );
-    case types.REMOVE_INVITE:
-      return state.updateIn(['discussions', payload.id, 'invites'], invites =>
-        invites.delete(invites.findIndex(i => i.id === payload.invite.id)),
+    case types.REMOVE_INVITATION:
+      return state.updateIn(
+        ['discussions', payload.id, 'invitations'],
+        invitations =>
+          invitations.delete(
+            invitations.findIndex(i => invitationsMatch(i, payload.invitation)),
+          ),
       );
     case types.APPLY_UPLOAD:
       return state
