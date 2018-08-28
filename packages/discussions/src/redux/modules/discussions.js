@@ -27,6 +27,7 @@ export const types = {
   REMOVE_PRESENCE: namespace('discissons', 'REMOVE_PRESENCE'),
   ADD_PARTICIPANT: namespace('discussions', 'ADD_PARTICIPANT'),
   REMOVE_PARTICIPANT: namespace('discussions', 'REMOVE_PARTICIPANT'),
+  UPDATE_PARTICIPANT: namespace('discussions', 'UPDATE_PARTICIPANT'),
 
   APPLY_UPLOAD: namespace('discussions', 'APPLY_UPLOAD'),
   QUEUE_UPLOADS: namespace('discussions', 'QUEUE_UPLOAD'),
@@ -87,6 +88,7 @@ export const actions = {
   removePresence: withPayload(types.REMOVE_PRESENCE, 'guid', 'participantGuid'),
   addParticipant: withPayload(types.ADD_PARTICIPANT, 'id', 'participant'),
   removeParticipant: withPayload(types.REMOVE_PARTICIPANT, 'id', 'participant'),
+  updateParticipant: withPayload(types.UPDATE_PARTICIPANT, 'id', 'participant'),
 
   // Invitation API calls
   createInvite: withPayload(
@@ -336,6 +338,17 @@ export const reducer = (state = State(), { type, payload }) => {
           participants.filter(
             participant =>
               participant.user.username !== payload.participant.user.username,
+          ),
+      );
+    case types.UPDATE_PARTICIPANT:
+      return state.updateIn(
+        ['discussions', payload.id, 'participants'],
+        participants =>
+          participants.map(
+            participant =>
+              participant.user.username === payload.participant.user.username
+                ? payload.participant
+                : participant,
           ),
       );
     case types.SET_INVITES:

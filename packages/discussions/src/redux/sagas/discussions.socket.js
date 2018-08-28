@@ -66,6 +66,9 @@ export function* handleTopicChannel(channel, id, socket, topic) {
         case 'participant:deleted':
           yield put(actions.removeParticipant(id, topicEvent.payload));
           break;
+        case 'participant:updated':
+          yield put(actions.updateParticipant(id, topicEvent.payload));
+          break;
         case 'invitation:created':
           yield put(actions.addInvitation(id, topicEvent.payload));
           break;
