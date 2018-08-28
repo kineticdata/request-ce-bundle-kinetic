@@ -325,17 +325,19 @@ export const reducer = (state = State(), { type, payload }) => {
         : state;
     }
     case types.ADD_PARTICIPANT:
-      return state.setIn(
-        ['discussions', payload.id, 'participants', payload.participant.id],
-        payload.participant,
+      return state.updateIn(
+        ['discussions', payload.id, 'participants'],
+        participants => participants.push(payload.participant),
       );
     case types.REMOVE_PARTICIPANT:
-      return state.deleteIn([
-        'discussions',
-        payload.id,
-        'participants',
-        payload.participant.id,
-      ]);
+      return state.updateIn(
+        ['discussions', payload.id, 'participants'],
+        participants =>
+          participants.filter(
+            participant =>
+              participant.user.username !== payload.participant.user.username,
+          ),
+      );
     case types.SET_INVITES:
       return state.setIn(
         ['discussions', payload.guid, 'invites'],
