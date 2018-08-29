@@ -41,7 +41,7 @@ export const TeamsListContainer = compose(
   ),
   lifecycle({
     componentWillMount() {
-      this.props.fetchTeams();
+      //this.props.fetchTeams();
     },
   }),
   withHandlers({

@@ -326,7 +326,6 @@ export const TeamForm = compose(
           parentName: parentParameter,
         });
       }
-      this.props.fetchTeams();
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.match.params.slug !== nextProps.match.params.slug) {

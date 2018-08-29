@@ -13,6 +13,7 @@ import { Users } from './users/Users';
 import { Profile } from './profile/Profile';
 import { Teams } from './teams/Teams';
 import { actions as datastoreActions } from '../../redux/modules/settingsDatastore';
+import { actions as teamActions } from '../../redux/modules/teamList';
 
 export const SettingsComponent = () => (
   <Switch>
@@ -29,6 +30,7 @@ export const SettingsComponent = () => (
 
 const mapDispatchToProps = {
   fetchForms: datastoreActions.fetchForms,
+  fetchTeams: teamActions.fetchTeams,
 };
 
 export const Settings = compose(
@@ -39,6 +41,7 @@ export const Settings = compose(
   lifecycle({
     componentWillMount(prev, next) {
       this.props.fetchForms();
+      this.props.fetchTeams();
     },
   }),
 )(SettingsComponent);

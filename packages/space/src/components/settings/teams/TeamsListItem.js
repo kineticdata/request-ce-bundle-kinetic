@@ -30,12 +30,6 @@ const TeamsListItemComponent = ({ team, openDropdown, toggleDropdown }) => {
 
               <div className="btn-group" role="group" aria-label="Actions">
                 <Link
-                  to={`/settings/teams/${team.slug}`}
-                  className="btn btn-primary"
-                >
-                  View
-                </Link>
-                <Link
                   to={`/settings/teams/${team.slug}/edit`}
                   className="btn btn-info"
                 >
@@ -47,27 +41,9 @@ const TeamsListItemComponent = ({ team, openDropdown, toggleDropdown }) => {
         </td>
       </Fragment>
       <td>
-        <Link to={`/settings/teams/${team.slug}`}>{team.name}</Link>
+        <Link to={`/settings/teams/${team.slug}/edit`}>{team.name}</Link>
       </td>
       <td className="d-none d-md-table-cell">{team.description}</td>
-      <td className="d-none d-md-table-cell">
-        <Dropdown
-          toggle={toggleDropdown(team.slug)}
-          isOpen={openDropdown === team.slug}
-        >
-          <DropdownToggle color="link">
-            <span className="fa fa-ellipsis-h fa-2x" />
-          </DropdownToggle>
-          <DropdownMenu right>
-            <DropdownItem tag={Link} to={`/settings/teams/${team.slug}`}>
-              View
-            </DropdownItem>
-            <DropdownItem tag={Link} to={`/settings/teams/${team.slug}/edit`}>
-              Edit
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </td>
     </tr>
   );
 };
