@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { getTeamColor, getTeamIcon } from '../../utils';
+import { getTeamColor, getTeamIcon } from '../../../utils';
 import { Discussion as KinopsDiscussion } from 'discussions';
 import { PageTitle, Hoverable } from 'common';
-import { ServiceCard } from '../shared/ServiceCard';
+import { ServiceCard } from '../../shared/ServiceCard';
 import { TeamMemberAvatar } from './TeamMemberAvatar';
-import { ProfileCard } from '../shared/ProfileCard';
+import { ProfileCard } from '../../shared/ProfileCard';
 
 export const Team = ({
   loading,
@@ -32,7 +32,8 @@ export const Team = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to="/">home</Link> / <Link to="/teams">teams</Link> /
+                <Link to="/">home</Link> / <Link to="/settings">settings</Link>{' '}
+                / <Link to="/settings/teams">teams</Link> /
               </h3>
               <h1>Team Profile</h1>
             </div>
