@@ -11,7 +11,9 @@ import { Datastore } from './datastore/Datastore';
 import { Robots } from './robots/Robots';
 import { Users } from './users/Users';
 import { Profile } from './profile/Profile';
+import { Teams } from './teams/Teams';
 import { actions as datastoreActions } from '../../redux/modules/settingsDatastore';
+import { actions as teamActions } from '../../redux/modules/teamList';
 
 export const SettingsComponent = () => (
   <Switch>
@@ -21,12 +23,14 @@ export const SettingsComponent = () => (
     <Route path="/settings/robots" component={Robots} />
     <Route path="/settings/users" component={Users} />
     <Route path="/settings/notifications" component={Notifications} />
+    <Route path="/settings/teams" component={Teams} />
     <Route component={SettingsNavigation} />
   </Switch>
 );
 
 const mapDispatchToProps = {
   fetchForms: datastoreActions.fetchForms,
+  fetchTeams: teamActions.fetchTeams,
 };
 
 export const Settings = compose(
@@ -37,6 +41,7 @@ export const Settings = compose(
   lifecycle({
     componentWillMount(prev, next) {
       this.props.fetchForms();
+      this.props.fetchTeams();
     },
   }),
 )(SettingsComponent);
@@ -78,6 +83,13 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
               path={`/settings/users`}
               icon="fa-users"
               description="Create, Edit and Import Users"
+            />
+
+            <SettingsCard
+              name="Team Management"
+              path={`/settings/teams`}
+              icon="fa-users"
+              description="Create and Edit Teams"
             />
 
             <SettingsCard

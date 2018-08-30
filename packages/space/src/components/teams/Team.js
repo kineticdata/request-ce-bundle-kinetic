@@ -38,7 +38,7 @@ export const Team = ({
             </div>
             {me.spaceAdmin && (
               <Link
-                to={`/teams/${team.slug}/edit`}
+                to={`/settings/teams/${team.slug}/edit`}
                 className="btn btn-secondary"
               >
                 Edit Team
