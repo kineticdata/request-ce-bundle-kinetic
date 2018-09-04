@@ -6,6 +6,7 @@ import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { PageTitle } from 'common';
 import { Modal } from 'reactstrap';
 import { SubmissionListItem } from './SubmissionListItem';
+import { ExportModal } from './ExportModal';
 import { actions } from '../../../redux/modules/settingsForms';
 
 const DiscussionIcon = () => (
@@ -166,6 +167,9 @@ export const FormSubmissionsContainer = ({
   path,
   isMobile,
   sortTable,
+  openModal,
+  optionsOpen,
+  setOptionsOpen,
 }) => {
   const visibleColumns = submissionColumns.filter(c => c.visible);
   return (
@@ -217,6 +221,14 @@ export const FormSubmissionsContainer = ({
                     onClick={() => setFilter({ ...filter, visible: true })}
                   >
                     <i className="fa fa-filter fa-lg" />
+                  </button>
+
+                  <button
+                    onClick={() => openModal('export')}
+                    value="export"
+                    className="btn btn-primary pull-left"
+                  >
+                    Export Records
                   </button>
                 </div>
               </div>
@@ -597,6 +609,7 @@ export const FormSubmissionsContainer = ({
             </section>
           </div>
         </div>
+        <ExportModal />
       </div>
     )
   );
@@ -620,6 +633,7 @@ const mapDispatchToProps = {
   fetchFormSubmissions: actions.fetchFormSubmissions,
   fetchKapp: actions.fetchKapp,
   setClientSortInfo: actions.setClientSortInfo,
+  openModal: actions.openModal,
 };
 
 export const FormSubmissions = compose(
@@ -638,6 +652,7 @@ export const FormSubmissions = compose(
   }),
   withState('property', 'setProperty', {}),
   withState('fieldValue', 'setFieldValue', {}),
+  withState('optionsOpen', 'setOptionsOpen', false),
   withHandlers({
     toggleDropdown,
     filterColumns,
