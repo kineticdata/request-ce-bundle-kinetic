@@ -6,7 +6,13 @@ import { actions } from '../../../redux/modules/settingsForms';
 
 import { Export } from './Export';
 
-const ExportModalComponent = ({ modalIsOpen, closeModal, modalName }) => (
+const ExportModalComponent = ({
+  modalIsOpen,
+  closeModal,
+  modalName,
+  filter,
+  createSearchQuery,
+}) => (
   <Modal isOpen={modalIsOpen} toggle={closeModal}>
     <div className="modal-header">
       <h4 className="modal-title">
@@ -19,7 +25,7 @@ const ExportModalComponent = ({ modalIsOpen, closeModal, modalName }) => (
     </div>
     <ModalBody>
       <div style={{ padding: '1rem' }}>
-        <Export />
+        <Export filter={filter} createSearchQuery={createSearchQuery} />
       </div>
     </ModalBody>
   </Modal>

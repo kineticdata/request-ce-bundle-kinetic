@@ -16,11 +16,7 @@ const ExportComponent = ({
   <Fragment>
     {exportStatus === 'NOT_STARTED' ? (
       <button className="btn btn-info" onClick={handleDownload}>
-        {1 === 2 ? (
-          <span>Export Records for Query</span>
-        ) : (
-          <span>Export All Records</span>
-        )}
+        <span>Export Records</span>
       </button>
     ) : (
       <Fragment>
@@ -91,10 +87,13 @@ function createCSV(submissions, form) {
 }
 
 const handleDownload = props => () => {
+  const q = props.createSearchQuery(props.filter);
+
   props.fetchAllSubmissions({
     kappSlug: props.kappSlug,
     formSlug: props.form.slug,
     accumulator: [],
+    q: q,
   });
   props.setExportStatus('FETCHING_RECORDS');
 };

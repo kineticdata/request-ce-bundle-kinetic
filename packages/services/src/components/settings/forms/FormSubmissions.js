@@ -22,7 +22,7 @@ const DiscussionIcon = () => (
 );
 
 // Create q for search from filter object
-const createSearchQuery = filter => {
+export const createSearchQuery = filter => {
   const q = {};
   for (const property in filter.properties) {
     q[property] = filter.properties[property].value;
@@ -609,7 +609,7 @@ export const FormSubmissionsContainer = ({
             </section>
           </div>
         </div>
-        <ExportModal />
+        <ExportModal filter={filter} createSearchQuery={createSearchQuery} />
       </div>
     )
   );

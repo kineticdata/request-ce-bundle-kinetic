@@ -224,9 +224,14 @@ export function* createFormSaga(action) {
 }
 
 export function* fetchAllSubmissionsSaga(action) {
-  const { pageToken, accumulator, formSlug, kappSlug } = action.payload;
+  const { pageToken, accumulator, formSlug, kappSlug, q } = action.payload;
   const searcher = new CoreAPI.SubmissionSearch(true);
 
+  if (q) {
+    for (const key in q) {
+      searcher.eq(key, q[key]);
+    }
+  }
   searcher.include('values');
   searcher.limit(1000);
   if (pageToken) {
