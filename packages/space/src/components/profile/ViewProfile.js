@@ -88,7 +88,7 @@ const UserTeams = ({ teams }) => {
     item => !item.team.name.startsWith('Role::'),
   );
   return filteredTeams.length > 0 ? (
-    <div className="cards__wrapper">
+    <div className="cards__wrapper cards__wrapper--team">
       {filteredTeams.map(item => (
         <TeamCard key={item.team.name} team={item.team} />
       ))}
