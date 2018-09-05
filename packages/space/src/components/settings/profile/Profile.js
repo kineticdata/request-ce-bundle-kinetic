@@ -14,8 +14,12 @@ export const EditProfileComponent = ({
   error,
   editingPassword,
   fieldValues,
-  location,
-  locationEnabled,
+  department,
+  departmentEnabled,
+  organization,
+  organizationEnabled,
+  site,
+  siteEnabled,
   manager,
   managerEnabled,
   handleChangeManagerClick,
@@ -132,17 +136,20 @@ export const EditProfileComponent = ({
               </div>
             </form>
           </section>
-          {(managerEnabled || locationEnabled) && (
+          {(managerEnabled ||
+            siteEnabled ||
+            departmentEnabled ||
+            organizationEnabled) && (
             <section>
               <h2 className="section__title">User Attributes</h2>
               <div className="user-attributes-wrapper">
-                <table className="user-attributes table">
+                <table className="table table--user-attributes">
                   <tbody>
                     {managerEnabled && (
                       <tr>
                         <td className="name">Manager</td>
                         <td>
-                          {manager || <i>No Manager</i>}
+                          {manager || <em>No Manager</em>}
                           <button
                             className="btn btn-link btn-sm"
                             onClick={handleChangeManagerClick}
@@ -152,10 +159,22 @@ export const EditProfileComponent = ({
                         </td>
                       </tr>
                     )}
-                    {locationEnabled && (
+                    {departmentEnabled && (
                       <tr>
-                        <td className="name">Location</td>
-                        <td>{location || <i>No Location</i>}</td>
+                        <td className="name"> Department </td>
+                        <td> {department || <em> No Department </em>}</td>
+                      </tr>
+                    )}
+                    {organizationEnabled && (
+                      <tr>
+                        <td className="name"> Organization </td>
+                        <td> {organization || <em> No Organization </em>}</td>
+                      </tr>
+                    )}
+                    {siteEnabled && (
+                      <tr>
+                        <td className="name">Site</td>
+                        <td>{site || <em>No Site</em>}</td>
                       </tr>
                     )}
                   </tbody>
@@ -283,15 +302,24 @@ const mapStateToProps = state => ({
   profile: state.space.profiles.profile,
   error: state.space.profiles.error,
   editingPassword: state.space.profiles.isChangePasswordVisible,
-  location:
+  department:
     state.space.profiles.profile &&
-    state.space.profiles.profile.profileAttributes['Location'],
-  locationEnabled:
-    state.space.spaceApp.userProfileAttributeDefinitions['Location'],
+    state.space.profiles.profile.attributes['Department'],
+  departmentEnabled:
+    state.space.spaceApp.userAttributeDefinitions['Department'],
   manager:
     state.space.profiles.profile &&
     state.space.profiles.profile.attributes['Manager'],
   managerEnabled: state.space.spaceApp.userAttributeDefinitions['Manager'],
+  organization:
+    state.space.profiles.profile &&
+    state.space.profiles.profile.attributes['Organization'],
+  organizationEnabled:
+    state.space.spaceApp.userAttributeDefinitions['Organization'],
+  site:
+    state.space.profiles.profile &&
+    state.space.profiles.profile.attributes['Site'],
+  siteEnabled: state.space.spaceApp.userAttributeDefinitions['Site'],
   spaceAttributes:
     state.app.space &&
     state.app.space.attributes.reduce((memo, item) => {

@@ -11,12 +11,14 @@
   }
 }
 
-.profile-content {
+.page-container--space-profile-edit {
   overflow-y: auto;
   border-right: 1px solid $border-color;
-  table.user-attributes {
+  .table--user-attributes {
     color: $black-50;
-
+    margin: 1rem;
+    width: auto;
+    font-size: 0.875rem;
     tbody > tr:not(:last-child) {
       border-bottom: 1px solid $border-color;
       padding-bottom: 0.5rem;
