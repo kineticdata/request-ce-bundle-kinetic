@@ -110,6 +110,7 @@ export const EditProfileComponent = ({
                       Cancel Password Change
                     </button>
                   </div>
+                  <hr />
                 </div>
               ) : (
                 <button
