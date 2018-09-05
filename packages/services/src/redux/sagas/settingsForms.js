@@ -223,6 +223,53 @@ export function* createFormSaga(action) {
   }
 }
 
+export function* fetchAllSubmissionsSaga(action) {
+  const { pageToken, accumulator, formSlug, kappSlug, q } = action.payload;
+  const searcher = new CoreAPI.SubmissionSearch(true);
+
+  if (q) {
+    for (const key in q) {
+      searcher.eq(key, q[key]);
+    }
+  }
+  searcher.include('values');
+  searcher.limit(1000);
+  if (pageToken) {
+    searcher.pageToken(pageToken);
+  }
+
+  const { submissions, nextPageToken = null, serverError } = yield call(
+    CoreAPI.searchSubmissions,
+    {
+      search: searcher.build(),
+      form: formSlug,
+      kapp: kappSlug,
+    },
+  );
+
+  // Update the action with the new results
+  action = {
+    ...action,
+    payload: {
+      ...action.payload,
+      accumulator: [...accumulator, ...submissions],
+      pageToken: nextPageToken,
+    },
+  };
+
+  yield put(actions.setExportCount(action.payload.accumulator.length));
+
+  if (nextPageToken) {
+    yield call(fetchAllSubmissionsSaga, action);
+  } else {
+    if (serverError) {
+      // What should we do?
+    } else {
+      yield put(actions.setExportSubmissions(action.payload.accumulator));
+    }
+  }
+}
+
 export function* watchSettingsForms() {
   yield takeEvery(types.FETCH_FORM, fetchFormSaga);
   yield takeEvery(types.FETCH_KAPP, fetchKappSaga);
@@ -231,4 +278,5 @@ export function* watchSettingsForms() {
   yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
   yield takeEvery(types.FETCH_FORM_SUBMISSIONS, fetchFormSubmissionsSaga);
   yield takeEvery(types.FETCH_FORM_SUBMISSION, fetchFormSubmissionSaga);
+  yield takeEvery(types.FETCH_ALL_SUBMISSIONS, fetchAllSubmissionsSaga);
 }
