@@ -264,6 +264,7 @@ export function* fetchAllSubmissionsSaga(action) {
   } else {
     if (serverError) {
       // What should we do?
+      console.log(serverError);
     } else {
       yield put(actions.setExportSubmissions(action.payload.accumulator));
     }
