@@ -66,7 +66,7 @@ export const EditProfileComponent = ({
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="phoneNumber">Phone number</label>
+                  <label htmlFor="phoneNumber">Phone Number</label>
                   <input
                     type="text"
                     id="phoneNumber"
