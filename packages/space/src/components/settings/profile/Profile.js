@@ -54,8 +54,8 @@ export const EditProfileComponent = ({
                   value={fieldValues.displayName}
                 />
               </div>
-              <div className="profile-input-container">
-                <div className="form-group required">
+              <div className="profile-input-container row">
+                <div className="form-group required col">
                   <label htmlFor="email">Email</label>
                   <input
                     type="text"
@@ -65,7 +65,7 @@ export const EditProfileComponent = ({
                     value={fieldValues.email}
                   />
                 </div>
-                <div className="form-group">
+                <div className="form-group col">
                   <label htmlFor="phoneNumber">Phone Number</label>
                   <input
                     type="text"
@@ -79,9 +79,11 @@ export const EditProfileComponent = ({
               {editingPassword ? (
                 <div>
                   <hr />
-                  <div className="profile-input-container">
-                    <div className="form-group required two-columns first-column">
-                      <label htmlFor="newPassword">New Password</label>
+                  <div className="profile-input-container row">
+                    <div className="form-group col">
+                      <label htmlFor="newPassword" className="required">
+                        New Password
+                      </label>
                       <input
                         type="password"
                         id="newPassword"
@@ -90,8 +92,8 @@ export const EditProfileComponent = ({
                         value={fieldValues.newPassword}
                       />
                     </div>
-                    <div className="form-group required two-columns second-column">
-                      <label htmlFor="confirmPassword">
+                    <div className="form-group col">
+                      <label htmlFor="confirmPassword" className="required">
                         Password Confirmation
                       </label>
                       <input
@@ -129,8 +131,9 @@ export const EditProfileComponent = ({
                   <button
                     disabled={!fieldValuesValid(fieldValues)}
                     className="btn btn-primary"
+                    // TODO: Disable until a change is made. Save Changes
                   >
-                    Save
+                    Save Changes
                   </button>
                 </div>
               </div>
