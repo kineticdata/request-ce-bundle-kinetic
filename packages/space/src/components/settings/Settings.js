@@ -18,7 +18,7 @@ import { actions as teamActions } from '../../redux/modules/teamList';
 export const SettingsComponent = () => (
   <Switch>
     <Route path="/settings/profile" component={Profile} />
-    <Route path="/settings/space" component={SpaceSettings} />
+    <Route path="/settings/system" component={SpaceSettings} />
     <Route path="/settings/datastore" component={Datastore} />
     <Route path="/settings/robots" component={Robots} />
     <Route path="/settings/users" component={Users} />

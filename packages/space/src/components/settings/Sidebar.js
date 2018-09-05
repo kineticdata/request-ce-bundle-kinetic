@@ -36,11 +36,11 @@ export const SidebarComponent = ({
             </NavLink>
             {spaceAdmin && (
               <NavLink
-                to="/settings/space"
+                to="/settings/system"
                 className="nav-link"
                 activeClassName="active"
               >
-                General
+                System
                 <span className="fa fa-fw fa-angle-right" />
               </NavLink>
             )}
