@@ -87,6 +87,7 @@ const filterColumns = ({
   setCurrentPage,
   filter,
   setFilter,
+  setDownloaded,
 }) => formSlug => {
   const q = createSearchQuery(filter);
 
@@ -97,10 +98,14 @@ const filterColumns = ({
   });
   setCurrentPage(1);
   setFilter({ ...filter, visible: false });
+  setDownloaded(false);
 };
 
 // Removes a single filter from the object
-const removeFilter = ({ filter, setFilter }) => (type, remove) => {
+const removeFilter = ({ filter, setFilter, setDownloaded }) => (
+  type,
+  remove,
+) => {
   const newFilters = {};
   for (const key in filter[type]) {
     if (key !== remove) {
@@ -108,6 +113,7 @@ const removeFilter = ({ filter, setFilter }) => (type, remove) => {
     }
   }
   setFilter({ ...filter, [type]: { ...newFilters } });
+  setDownloaded(false);
 };
 
 const toggleDropdown = ({
@@ -626,6 +632,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   clientSortInfo: state.services.settingsForms.clientSortInfo,
   path: state.router.location.pathname.replace(/\/$/, ''),
   isMobile: state.app.layout.size === 'small',
+  downloaded: state.services.settingsForms.downloaded,
 });
 
 const mapDispatchToProps = {
@@ -634,6 +641,7 @@ const mapDispatchToProps = {
   fetchKapp: actions.fetchKapp,
   setClientSortInfo: actions.setClientSortInfo,
   openModal: actions.openModal,
+  setDownloaded: actions.setDownloaded,
 };
 
 export const FormSubmissions = compose(

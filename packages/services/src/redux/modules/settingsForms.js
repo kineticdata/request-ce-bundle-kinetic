@@ -71,6 +71,7 @@ export const types = {
   SET_EXPORT_COUNT: namespace('settingsForms', 'SET_EXPORT_COUNT'),
   OPEN_MODAL: namespace('settingsForms', 'OPEN_MODAL'),
   CLOSE_MODAL: namespace('settingsForms', 'CLOSE_MODAL'),
+  SET_DOWNLOADED: namespace('settingsForms', 'SET_DOWNLOADED'),
 };
 
 export const actions = {
@@ -93,6 +94,7 @@ export const actions = {
   setExportCount: withPayload(types.SET_EXPORT_COUNT),
   openModal: withPayload(types.OPEN_MODAL),
   closeModal: noPayload(types.CLOSE_MODAL),
+  setDownloaded: withPayload(types.SET_DOWNLOADED),
 };
 
 export const parseFormConfigurationJson = json => {
@@ -205,6 +207,7 @@ export const State = Record({
   modalName: '',
   exportSubmissions: [],
   exportCount: 0,
+  downloaded: false,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -265,6 +268,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('modalIsOpen', true).set('modalName', payload);
     case types.CLOSE_MODAL:
       return state.set('modalIsOpen', false).set('modalName', '');
+    case types.SET_DOWNLOADED:
+      return state.set('downloaded', payload);
     default:
       return state;
   }

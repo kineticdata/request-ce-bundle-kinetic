@@ -88,13 +88,14 @@ function createCSV(submissions, form) {
 
 const handleDownload = props => () => {
   const q = props.createSearchQuery(props.filter);
-
-  props.fetchAllSubmissions({
-    kappSlug: props.kappSlug,
-    formSlug: props.form.slug,
-    accumulator: [],
-    q: q,
-  });
+  if (!props.downloaded) {
+    props.fetchAllSubmissions({
+      kappSlug: props.kappSlug,
+      formSlug: props.form.slug,
+      accumulator: [],
+      q: q,
+    });
+  }
   props.setExportStatus('FETCHING_RECORDS');
 };
 
@@ -103,10 +104,12 @@ const mapStateToProps = state => ({
   kappSlug: state.app.config.kappSlug,
   submissions: state.services.settingsForms.exportSubmissions,
   submissionsCount: state.services.settingsForms.exportCount,
+  downloaded: state.services.settingsForms.downloaded,
 });
 
 const mapDispatchToProps = {
   fetchAllSubmissions: actions.fetchAllSubmissions,
+  setDownloaded: actions.setDownloaded,
 };
 
 export const Export = compose(
@@ -120,13 +123,14 @@ export const Export = compose(
   }),
   lifecycle({
     componentWillReceiveProps(nextProps) {
-      if (this.props.submissions.length !== nextProps.submissions.length) {
+      if (nextProps.exportStatus === 'FETCHING_RECORDS') {
         nextProps.setExportStatus('CONVERT');
         const csv = createCSV(nextProps.submissions, nextProps.form);
         // TODO: If CSV fails setExportStatus to FAILED
         nextProps.setExportStatus('DOWNLOAD');
         download(nextProps.form.name, csv);
         nextProps.setExportStatus('COMPLETE');
+        nextProps.setDownloaded(true);
       }
     },
   }),
