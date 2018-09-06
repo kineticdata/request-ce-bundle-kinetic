@@ -72,7 +72,7 @@ const SettingsComponent = ({
               className="btn btn-primary"
               target="blank"
             >
-              Form Builder
+              Form Builder <i className="fa fa-fw fa-external-link" />
             </a>
           </div>
         </div>
