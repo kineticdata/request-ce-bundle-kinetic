@@ -11,22 +11,26 @@ import { Datastore } from './datastore/Datastore';
 import { Robots } from './robots/Robots';
 import { Users } from './users/Users';
 import { Profile } from './profile/Profile';
+import { Teams } from './teams/Teams';
 import { actions as datastoreActions } from '../../redux/modules/settingsDatastore';
+import { actions as teamActions } from '../../redux/modules/teamList';
 
 export const SettingsComponent = () => (
   <Switch>
     <Route path="/settings/profile" component={Profile} />
-    <Route path="/settings/space" component={SpaceSettings} />
+    <Route path="/settings/system" component={SpaceSettings} />
     <Route path="/settings/datastore" component={Datastore} />
     <Route path="/settings/robots" component={Robots} />
     <Route path="/settings/users" component={Users} />
     <Route path="/settings/notifications" component={Notifications} />
+    <Route path="/settings/teams" component={Teams} />
     <Route component={SettingsNavigation} />
   </Switch>
 );
 
 const mapDispatchToProps = {
   fetchForms: datastoreActions.fetchForms,
+  fetchTeams: teamActions.fetchTeams,
 };
 
 export const Settings = compose(
@@ -37,6 +41,7 @@ export const Settings = compose(
   lifecycle({
     componentWillMount(prev, next) {
       this.props.fetchForms();
+      this.props.fetchTeams();
     },
   }),
 )(SettingsComponent);
@@ -66,7 +71,7 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
 
       <div className="cards__wrapper cards__wrapper--services">
         <SettingsCard
-          name="Edit My Profile"
+          name="Edit Profile"
           path={`/settings/profile`}
           icon="fa-user"
           description="Edit your profile"
@@ -81,22 +86,29 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
             />
 
             <SettingsCard
+              name="Team Management"
+              path={`/settings/teams`}
+              icon="fa-users"
+              description="Create and Edit Teams"
+            />
+
+            <SettingsCard
               name="System Settings"
-              path={`/settings/space`}
+              path={`/settings/system`}
               icon="fa-gear"
               description="View and Modify all System Settings"
             />
 
             <SettingsCard
-              name="Datastore"
+              name="Datastore Forms"
               path={`/settings/datastore`}
-              icon="fa-drive"
+              icon="fa-hdd-o"
               description="View, Create and Edit Reference Data"
             />
             <SettingsCard
               name="Notifications"
               path={`/settings/notifications`}
-              icon="fa-drive"
+              icon="fa-envelope-o"
               description="View, Create and Edit Email Notifications"
             />
             <SettingsCard

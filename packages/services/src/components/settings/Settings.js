@@ -16,7 +16,11 @@ import { FormSubmissions } from './forms/FormSubmissions';
 
 export const SettingsComponent = () => (
   <Switch>
-    <Route exact path="/kapps/services/settings" component={ServicesSettings} />
+    <Route
+      exact
+      path="/kapps/services/settings/kapp"
+      component={ServicesSettings}
+    />
     <Route exact path="/kapps/services/settings/forms" component={FormList} />
     <Route
       exact
@@ -48,7 +52,6 @@ export const SettingsComponent = () => (
 );
 
 const mapDispatchToProps = {
-  updateServicesSettings: actions.updateServicesSettings,
   fetchServicesSettings: actions.fetchServicesSettings,
 };
 
@@ -80,7 +83,7 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">home</Link> /{` `}
+            <Link to="/">services</Link> /{` `}
           </h3>
           <h1>Settings</h1>
         </div>
@@ -88,14 +91,26 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
 
       <div className="cards__wrapper cards__wrapper--services">
         {isSpaceAdmin && (
-          <Fragment>
-            <SettingsCard
-              name="Services Settings"
-              path={`/settings/services`}
-              icon="fa-gear"
-              description="View and Modify all Services Settings"
-            />
-          </Fragment>
+          <SettingsCard
+            name="Services Settings"
+            path={`/kapps/services/settings/kapp`}
+            icon="fa-gear"
+            description="View and Modify all Services Settings"
+          />
+        )}
+        <SettingsCard
+          name="Forms"
+          path={`/kapps/services/settings/forms`}
+          icon="fa-gear"
+          description="View Forms and their Submissions."
+        />
+        {isSpaceAdmin && (
+          <SettingsCard
+            name="Categories"
+            path={`/kapps/services/settings/categories`}
+            icon="fa-gear"
+            description="View and Modify Categories"
+          />
         )}
       </div>
     </div>

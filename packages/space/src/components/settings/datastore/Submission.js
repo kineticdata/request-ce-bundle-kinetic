@@ -38,7 +38,7 @@ const DatastoreSubmissionComponent = ({
   <div className="page-container page-container--panels page-container--datastore">
     <PageTitle
       parts={[
-        submissionId ? (submission ? submission.label : '') : ' New',
+        submissionId ? (submission ? submission.label : '') : ' New Record',
         'Datastore',
       ]}
     />
@@ -52,7 +52,11 @@ const DatastoreSubmissionComponent = ({
             <Link to={`/settings/datastore/${form.slug}/`}>{form.name}</Link> /
           </h3>
           <h1>
-            {submissionId ? (submission ? submission.label : '') : ' New'}
+            {submissionId
+              ? submission
+                ? submission.label
+                : ''
+              : ' New Record'}
           </h1>
         </div>
         <div className="page-title__actions">
@@ -81,7 +85,7 @@ const DatastoreSubmissionComponent = ({
                 to={`/settings/datastore/${form.slug}/${submissionId}/edit`}
                 className="btn btn-primary ml-3 datastore-edit"
               >
-                Edit
+                Edit Record
               </Link>
             )}
         </div>

@@ -119,7 +119,8 @@ export const FormContainer = ({
   !kappLoading &&
   !loadingTeams &&
   !loadingServices &&
-  !notificationsLoading && (
+  !notificationsLoading &&
+  form && (
     <div>
       <PageTitle parts={['Services Settings']} />
       <div className="page-container page-container--kapp-settings">

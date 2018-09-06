@@ -7,20 +7,20 @@ import md5 from 'md5';
 import { fromJS } from 'immutable';
 import { Utils, PageTitle, Hoverable } from 'common';
 import { AddMemberModal } from './AddMemberModal';
-import { buildHierarchy } from '../../utils';
-import { IconPicker } from '../shared/IconPicker';
-import { ProfileCard } from '../shared/ProfileCard';
-import { TeamCard } from '../shared/TeamCard';
+import { buildHierarchy } from '../../../utils';
+import { IconPicker } from '../../shared/IconPicker';
+import { ProfileCard } from '../../shared/ProfileCard';
+import { TeamCard } from '../../shared/TeamCard';
 import { TeamMemberAvatar } from './TeamMemberAvatar';
 
 import {
   actions as teamListActions,
   selectSubTeams,
-} from '../../redux/modules/teamList';
+} from '../../../redux/modules/teamList';
 import {
   actions as teamActions,
   selectTeamMemberships,
-} from '../../redux/modules/team';
+} from '../../../redux/modules/team';
 
 const TeamFormComponent = ({
   editing,
@@ -49,7 +49,8 @@ const TeamFormComponent = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to="/">home</Link> / <Link to="/teams">teams</Link> /
+                <Link to="/">home</Link> / <Link to="/settings">settings</Link>{' '}
+                / <Link to="/settings/teams">teams</Link> /
               </h3>
               <h1>{editing ? 'Edit' : 'New'} Team</h1>
             </div>
@@ -189,7 +190,7 @@ const TeamFormComponent = ({
             <section className="team-subteams-wrapper">
               <h3 className="section__title">
                 Subteams
-                <Link to={`/teams/new?parent=${team.name}`}>
+                <Link to={`/settings/teams/new?parent=${team.name}`}>
                   <i className={'fa fa-plus control'} />
                 </Link>
               </h3>
@@ -325,7 +326,6 @@ export const TeamForm = compose(
           parentName: parentParameter,
         });
       }
-      this.props.fetchTeams();
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.match.params.slug !== nextProps.match.params.slug) {

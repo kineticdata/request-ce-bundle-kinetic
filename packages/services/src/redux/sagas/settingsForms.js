@@ -6,6 +6,7 @@ import {
   actions,
   types,
   FORM_INCLUDES,
+  FORM_FULL_INCLUDES,
   SUBMISSION_INCLUDES,
 } from '../modules/settingsForms';
 
@@ -184,7 +185,7 @@ export function* createFormSaga(action) {
   const { serverError, form } = yield call(CoreAPI.fetchForm, {
     kappSlug: action.payload.kappSlug,
     formSlug: action.payload.inputs['Template to Clone'],
-    include: FORM_INCLUDES,
+    include: FORM_FULL_INCLUDES,
   });
 
   if (serverError) {
@@ -207,7 +208,7 @@ export function* createFormSaga(action) {
   const createdForm = yield call(CoreAPI.createForm, {
     kappSlug: action.payload.kappSlug,
     form: formContent,
-    include: FORM_INCLUDES,
+    include: FORM_FULL_INCLUDES,
   });
   if (createdForm.serverError || createdForm.error) {
     yield put(
@@ -222,6 +223,54 @@ export function* createFormSaga(action) {
   }
 }
 
+export function* fetchAllSubmissionsSaga(action) {
+  const { pageToken, accumulator, formSlug, kappSlug, q } = action.payload;
+  const searcher = new CoreAPI.SubmissionSearch(true);
+
+  if (q) {
+    for (const key in q) {
+      searcher.eq(key, q[key]);
+    }
+  }
+  searcher.include('values');
+  searcher.limit(1000);
+  if (pageToken) {
+    searcher.pageToken(pageToken);
+  }
+
+  const { submissions, nextPageToken = null, serverError } = yield call(
+    CoreAPI.searchSubmissions,
+    {
+      search: searcher.build(),
+      form: formSlug,
+      kapp: kappSlug,
+    },
+  );
+
+  // Update the action with the new results
+  action = {
+    ...action,
+    payload: {
+      ...action.payload,
+      accumulator: [...accumulator, ...submissions],
+      pageToken: nextPageToken,
+    },
+  };
+
+  yield put(actions.setExportCount(action.payload.accumulator.length));
+
+  if (nextPageToken) {
+    yield call(fetchAllSubmissionsSaga, action);
+  } else {
+    if (serverError) {
+      // What should we do?
+      console.log(serverError);
+    } else {
+      yield put(actions.setExportSubmissions(action.payload.accumulator));
+    }
+  }
+}
+
 export function* watchSettingsForms() {
   yield takeEvery(types.FETCH_FORM, fetchFormSaga);
   yield takeEvery(types.FETCH_KAPP, fetchKappSaga);
@@ -230,4 +279,5 @@ export function* watchSettingsForms() {
   yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
   yield takeEvery(types.FETCH_FORM_SUBMISSIONS, fetchFormSubmissionsSaga);
   yield takeEvery(types.FETCH_FORM_SUBMISSION, fetchFormSubmissionSaga);
+  yield takeEvery(types.FETCH_ALL_SUBMISSIONS, fetchAllSubmissionsSaga);
 }

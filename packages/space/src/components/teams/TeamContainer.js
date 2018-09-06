@@ -115,7 +115,6 @@ export const TeamContainer = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchTeam(this.props.match.params.slug);
-      this.props.fetchTeams();
       this.props.fetchForms(this.props.catalogSlug);
     },
     componentWillReceiveProps(nextProps) {

@@ -1,22 +1,22 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Profile ~ Space
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.package-space {
-  .form-alert {
-    border: 1px solid $red;
-    color: $red;
-    background: $red-rose;
-    padding: 1rem;
-    border-radius: $border-radius-base;
-  }
-}
 
-.profile-content {
+.page-container--space-profile-edit {
   overflow-y: auto;
   border-right: 1px solid $border-color;
-  table.user-attributes {
+  .form-alert {
+    // border: 1px solid $red;
+    color: $red;
+    // background: $red-rose;
+    // padding: 1rem;
+    // border-radius: $border-radius-base;
+  }
+  .table--user-attributes {
     color: $black-50;
-
+    margin: 1rem;
+    width: auto;
+    font-size: 0.875rem;
     tbody > tr:not(:last-child) {
       border-bottom: 1px solid $border-color;
       padding-bottom: 0.5rem;
@@ -47,6 +47,14 @@
     flex-direction: row;
     justify-content: space-between;
     flex-basis: 50%;
+    .form-group {
+      label {
+        &.required:after {
+          content: '*';
+          color: $red;
+        }
+      }
+    }
   }
 
   .form__footer {
@@ -60,7 +68,7 @@
   .profile-role {
     background-color: $blue;
     padding: 0.25rem 0.5rem;
-    margin: 0.25rem;
+    margin-right: 0.25rem;
     color: $white;
     font-size: 0.625rem;
     border-radius: 2px;

@@ -95,15 +95,20 @@ export const SettingsContainer = ({
     servicesSettingsKapp: kapp,
     loading,
     loadingTeams,
+    loadingUsers,
     teams,
+    users,
     spaceKapps,
     notificationsLoading,
     notifications,
   },
   forms,
+  approver,
+  setApprover,
 }) =>
   !loading &&
   !loadingTeams &&
+  !loadingUsers &&
   !notificationsLoading && (
     <div>
       <PageTitle parts={['Services Settings']} />
@@ -133,9 +138,10 @@ export const SettingsContainer = ({
                     name="Approver"
                     id="approver-none"
                     value="None"
-                    onChange={event =>
-                      setInputs({ ...inputs, Approver: event.target.value })
-                    }
+                    onChange={event => {
+                      setInputs({ ...inputs, Approver: event.target.value });
+                      setApprover('none');
+                    }}
                   />
                   None
                 </label>
@@ -146,39 +152,97 @@ export const SettingsContainer = ({
                     name="Approver"
                     id="approver-manager"
                     value="Manager"
-                    onChange={event =>
-                      setInputs({ ...inputs, Approver: event.target.value })
-                    }
+                    onChange={event => {
+                      setInputs({ ...inputs, Approver: event.target.value });
+                      setApprover('manager');
+                    }}
                   />
                   Manager
                 </label>
                 <label htmlFor="approver-team">
                   <input
                     type="radio"
-                    checked={inputs['Approver'] === 'Team'}
+                    checked={
+                      approver === 'team' ||
+                      teams.filter(team => team.name === inputs['Approver'])
+                        .length > 0
+                    }
                     name="Approver"
                     id="approver-team"
                     value="Team"
-                    onChange={event =>
-                      setInputs({ ...inputs, Approver: event.target.value })
-                    }
+                    onChange={event => {
+                      setApprover('team');
+                      setInputs({ ...inputs, Approver: event.target.value });
+                    }}
                   />
                   Team
                 </label>
                 <label htmlFor="approver-individual">
                   <input
                     type="radio"
-                    checked={inputs['Approver'] === 'Individual'}
+                    checked={
+                      approver === 'individual' ||
+                      users.filter(user => user.username === inputs['Approver'])
+                        .length > 0
+                    }
                     name="Approver"
                     id="approver-individual"
                     value="Individual"
-                    onChange={event =>
-                      setInputs({ ...inputs, Approver: event.target.value })
-                    }
+                    onChange={event => {
+                      setApprover('individual');
+                      setInputs({ ...inputs, Approver: event.target.value });
+                    }}
                   />
                   Individual
                 </label>
               </div>
+              {(approver === 'team' ||
+                teams.filter(team => team.name === inputs['Approver']).length >
+                  0) && (
+                <div className="form-group">
+                  <select
+                    className="form-control col-8"
+                    name="team-approver"
+                    id="team-approver"
+                    value={inputs['Approver']}
+                    onChange={event =>
+                      setInputs({ ...inputs, Approver: event.target.value })
+                    }
+                  >
+                    <option />
+                    {teams
+                      .filter(team => !team.name.includes('Role'))
+                      .map(team => (
+                        <option key={team.name} value={team.name}>
+                          {team.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              )}
+
+              {(approver === 'individual' ||
+                users.filter(user => user.username === inputs['Approver'])
+                  .length > 0) && (
+                <div className="form-group">
+                  <select
+                    className="form-control col-8"
+                    name="user-approver"
+                    id="user-approver"
+                    value={inputs['Approver']}
+                    onChange={event =>
+                      setInputs({ ...inputs, Approver: event.target.value })
+                    }
+                  >
+                    <option />
+                    {users.map(user => (
+                      <option key={user.username} value={user.username}>
+                        {user.displayName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {kapp.attributesMap['Approval Form Slug'] && (
                 <div className="form-group">
@@ -353,6 +417,7 @@ const mapDispatchToProps = {
   updateServicesSettings: actions.updateServicesSettings,
   fetchServicesSettings: actions.fetchServicesSettings,
   fetchServicesSettingsTeams: actions.fetchServicesSettingsTeams,
+  fetchServicesSettingsUsers: actions.fetchServicesSettingsUsers,
   fetchServicesSettingsSpace: actions.fetchServicesSettingsSpace,
   fetchNotifications: actions.fetchNotifications,
 };
@@ -363,11 +428,13 @@ export const ServicesSettings = compose(
     mapDispatchToProps,
   ),
   withState('inputs', 'setInputs', {}),
+  withState('approver', 'setApprover', null),
   withHandlers({ setInitialInputs }),
   lifecycle({
     componentWillMount() {
       this.props.fetchServicesSettings();
       this.props.fetchServicesSettingsTeams();
+      this.props.fetchServicesSettingsUsers();
       this.props.fetchServicesSettingsSpace();
       this.props.fetchNotifications();
     },

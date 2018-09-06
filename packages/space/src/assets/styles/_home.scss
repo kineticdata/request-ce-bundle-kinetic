@@ -14,7 +14,6 @@
       line-height: 3rem;
     }
     .page-title {
-      flex-direction: row;
       .search-form--discussion {
         justify-content: space-between;
         display: flex;
@@ -24,14 +23,12 @@
         margin-bottom: 1.875rem;
       }
       @media all and (min-width: 0) {
-        flex-direction: column;
         .search-form--discussion {
           align-items: center;
           align-self: stretch;
         }
       }
       @media all and (min-width: 768px) {
-        flex-direction: row;
         .search-form--discussion {
           align-items: flex-end;
         }

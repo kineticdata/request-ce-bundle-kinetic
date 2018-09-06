@@ -11,8 +11,12 @@ const ViewProfileComponent = ({
   loading,
   profile,
   isMyProfile,
-  location,
-  locationEnabled,
+  department,
+  departmentEnabled,
+  organization,
+  organizationEnabled,
+  site,
+  siteEnabled,
   manager,
   managerEnabled,
 }) => (
@@ -39,18 +43,33 @@ const ViewProfileComponent = ({
           <p>{getEmail(profile)}</p>
           <p>{getProfilePhone(profile)}</p>
           <UserRoles roles={profile.memberships} />
-          {(managerEnabled || locationEnabled) && (
+          {(managerEnabled ||
+            siteEnabled ||
+            departmentEnabled ||
+            organizationEnabled) && (
             <dl>
               {managerEnabled && (
                 <span>
                   <dt>Manager</dt>
-                  <dd>{manager || <i>No Manager</i>}</dd>
+                  <dd>{manager || <em>No Manager</em>}</dd>
                 </span>
               )}
-              {locationEnabled && (
+              {departmentEnabled && (
                 <span>
-                  <dt>Location</dt>
-                  <dd>{location || <i>No Location</i>}</dd>
+                  <dt>Department</dt>
+                  <dd>{department || <em>No Department</em>}</dd>
+                </span>
+              )}
+              {organizationEnabled && (
+                <span>
+                  <dt>Organization</dt>
+                  <dd>{organization || <em>No Organization</em>}</dd>
+                </span>
+              )}
+              {siteEnabled && (
+                <span>
+                  <dt>Site</dt>
+                  <dd>{site || <em>No Site</em>}</dd>
                 </span>
               )}
             </dl>
@@ -71,13 +90,13 @@ const UserRoles = ({ roles }) => {
   );
 
   return filteredTeams.length > 0 ? (
-    <p>
+    <div className="profile-roles-wrapper">
       {filteredTeams.map(item => (
         <span className="profile-role" key={item.team.name}>
           {item.team.name.replace(/^Role::(.*?)/, '$1')}
         </span>
       ))}
-    </p>
+    </div>
   ) : (
     <p>No user roles assigned</p>
   );
@@ -88,7 +107,7 @@ const UserTeams = ({ teams }) => {
     item => !item.team.name.startsWith('Role::'),
   );
   return filteredTeams.length > 0 ? (
-    <div className="cards__wrapper">
+    <div className="cards__wrapper cards__wrapper--team">
       {filteredTeams.map(item => (
         <TeamCard key={item.team.name} team={item.team} />
       ))}
@@ -110,15 +129,24 @@ export const mapStateToProps = state => ({
   loading: state.space.profiles.loading,
   profile: state.space.profiles.profile,
   error: state.space.profiles.error,
-  location:
+  department:
     state.space.profiles.profile &&
-    state.space.profiles.profile.profileAttributes['Location'],
-  locationEnabled:
-    state.space.spaceApp.userProfileAttributeDefinitions['Location'],
+    state.space.profiles.profile.attributes['Department'],
+  departmentEnabled:
+    state.space.spaceApp.userAttributeDefinitions['Department'],
   manager:
     state.space.profiles.profile &&
     state.space.profiles.profile.attributes['Manager'],
   managerEnabled: state.space.spaceApp.userAttributeDefinitions['Manager'],
+  organization:
+    state.space.profiles.profile &&
+    state.space.profiles.profile.attributes['Organization'],
+  organizationEnabled:
+    state.space.spaceApp.userAttributeDefinitions['Organization'],
+  site:
+    state.space.profiles.profile &&
+    state.space.profiles.profile.attributes['Site'],
+  siteEnabled: state.space.spaceApp.userAttributeDefinitions['Site'],
   isMyProfile: selectIsMyProfile(state),
 });
 

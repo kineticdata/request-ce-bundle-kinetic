@@ -244,8 +244,9 @@ export const SettingsContainer = ({
               <button
                 className="btn btn-primary"
                 onClick={() => updateSpace(inputs)}
+                // TODO: Disable until a change is made.
               >
-                Save
+                Save Changes
               </button>
             </span>
           </div>

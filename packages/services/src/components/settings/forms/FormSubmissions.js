@@ -6,6 +6,7 @@ import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { PageTitle } from 'common';
 import { Modal } from 'reactstrap';
 import { SubmissionListItem } from './SubmissionListItem';
+import { ExportModal } from './ExportModal';
 import { actions } from '../../../redux/modules/settingsForms';
 
 const DiscussionIcon = () => (
@@ -21,7 +22,7 @@ const DiscussionIcon = () => (
 );
 
 // Create q for search from filter object
-const createSearchQuery = filter => {
+export const createSearchQuery = filter => {
   const q = {};
   for (const property in filter.properties) {
     q[property] = filter.properties[property].value;
@@ -86,6 +87,7 @@ const filterColumns = ({
   setCurrentPage,
   filter,
   setFilter,
+  setDownloaded,
 }) => formSlug => {
   const q = createSearchQuery(filter);
 
@@ -96,10 +98,14 @@ const filterColumns = ({
   });
   setCurrentPage(1);
   setFilter({ ...filter, visible: false });
+  setDownloaded(false);
 };
 
 // Removes a single filter from the object
-const removeFilter = ({ filter, setFilter }) => (type, remove) => {
+const removeFilter = ({ filter, setFilter, setDownloaded }) => (
+  type,
+  remove,
+) => {
   const newFilters = {};
   for (const key in filter[type]) {
     if (key !== remove) {
@@ -107,6 +113,7 @@ const removeFilter = ({ filter, setFilter }) => (type, remove) => {
     }
   }
   setFilter({ ...filter, [type]: { ...newFilters } });
+  setDownloaded(false);
 };
 
 const toggleDropdown = ({
@@ -166,10 +173,14 @@ export const FormSubmissionsContainer = ({
   path,
   isMobile,
   sortTable,
+  openModal,
+  optionsOpen,
+  setOptionsOpen,
 }) => {
   const visibleColumns = submissionColumns.filter(c => c.visible);
   return (
-    !loading && (
+    !loading &&
+    form && (
       <div>
         <PageTitle parts={['Services Settings']} />
         <div className="page-container  page-container--space-settings">
@@ -216,6 +227,14 @@ export const FormSubmissionsContainer = ({
                     onClick={() => setFilter({ ...filter, visible: true })}
                   >
                     <i className="fa fa-filter fa-lg" />
+                  </button>
+
+                  <button
+                    onClick={() => openModal('export')}
+                    value="export"
+                    className="btn btn-primary pull-left"
+                  >
+                    Export Records
                   </button>
                 </div>
               </div>
@@ -327,22 +346,23 @@ export const FormSubmissionsContainer = ({
                       </th>
                     </tr>
                   </thead>
-                  {!submissionsLoading && (
-                    <tbody>
-                      {submissions.map(s => (
-                        <SubmissionListItem
-                          key={`trow-${s.id}`}
-                          submission={s}
-                          form={form}
-                          columns={visibleColumns}
-                          to={`/kapps/${kappSlug}/settings/forms/${
-                            s.id
-                          }/activity`}
-                          isMobile={isMobile}
-                        />
-                      ))}
-                    </tbody>
-                  )}
+                  {!submissionsLoading &&
+                    submissions.size > 0 && (
+                      <tbody>
+                        {submissions.map(s => (
+                          <SubmissionListItem
+                            key={`trow-${s.id}`}
+                            submission={s}
+                            form={form}
+                            columns={visibleColumns}
+                            to={`/kapps/${kappSlug}/settings/forms/${
+                              s.id
+                            }/activity`}
+                            isMobile={isMobile}
+                          />
+                        ))}
+                      </tbody>
+                    )}
                 </table>
                 <ul className="pull-right">
                   {currentPage >= 2 && (
@@ -595,6 +615,7 @@ export const FormSubmissionsContainer = ({
             </section>
           </div>
         </div>
+        <ExportModal filter={filter} createSearchQuery={createSearchQuery} />
       </div>
     )
   );
@@ -611,6 +632,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   clientSortInfo: state.services.settingsForms.clientSortInfo,
   path: state.router.location.pathname.replace(/\/$/, ''),
   isMobile: state.app.layout.size === 'small',
+  downloaded: state.services.settingsForms.downloaded,
 });
 
 const mapDispatchToProps = {
@@ -618,6 +640,8 @@ const mapDispatchToProps = {
   fetchFormSubmissions: actions.fetchFormSubmissions,
   fetchKapp: actions.fetchKapp,
   setClientSortInfo: actions.setClientSortInfo,
+  openModal: actions.openModal,
+  setDownloaded: actions.setDownloaded,
 };
 
 export const FormSubmissions = compose(
@@ -636,6 +660,7 @@ export const FormSubmissions = compose(
   }),
   withState('property', 'setProperty', {}),
   withState('fieldValue', 'setFieldValue', {}),
+  withState('optionsOpen', 'setOptionsOpen', false),
   withHandlers({
     toggleDropdown,
     filterColumns,

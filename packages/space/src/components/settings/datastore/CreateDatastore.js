@@ -30,12 +30,12 @@ const CreateDatastoreComponent = ({
             <Link to="/settings">settings</Link> /{` `}
             <Link to={`/settings/datastore/`}>datastore</Link> /{` `}
           </h3>
-          <h1>New Datastore</h1>
+          <h1>New Datastore Form</h1>
         </div>
       </div>
       <div className="datastore-settings">
         <h3 className="section__title">General Settings</h3>
-        <div className="settings">
+        <div className="settings form">
           <div className="form-row">
             <div className="col">
               <div className="form-group required">
@@ -80,7 +80,7 @@ const CreateDatastoreComponent = ({
             />
           </div>
           <div className="pull-right">
-            <Link to="/datastore" className="btn btn-link">
+            <Link to="/settings/datastore" className="btn btn-link">
               Cancel
             </Link>
             <button
@@ -89,14 +89,14 @@ const CreateDatastoreComponent = ({
               onClick={handleSave()}
               className="btn btn-secondary ml-3"
             >
-              Create Form
+              Create Datastore Form
             </button>
           </div>
         </div>
       </div>
     </div>
     <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
-      <h3>New Datastore</h3>
+      <h3>New Datastore Form</h3>
       <p>
         Creating a new Datastore will create a new Kinetic Request datastore
         form to be used for storing data.

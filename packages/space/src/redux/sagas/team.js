@@ -66,6 +66,7 @@ export function* updateTeamSaga(action) {
     yield put(currentActions.setSubmitError(serverError));
   } else {
     yield put(currentActions.setTeam(team));
+    yield put(listActions.fetchTeams());
     yield put(push(`/teams/${team.slug}`));
   }
 }
@@ -96,7 +97,7 @@ export function* deleteTeamSaga(action) {
     yield put(currentActions.setDeleteError(serverError));
   } else {
     yield put(listActions.removeTeam(teamSlug));
-    yield put(push('/teams'));
+    yield put(push('/settings/teams'));
     yield put(currentActions.resetTeam());
   }
 }
@@ -106,7 +107,7 @@ export function* cancelSaveTeamSaga(action) {
   if (teamSlug) {
     yield put(push(`/teams/${teamSlug}`));
   } else {
-    yield put(push('/teams'));
+    yield put(push('/settings/teams'));
   }
   yield put(currentActions.resetTeam());
 }

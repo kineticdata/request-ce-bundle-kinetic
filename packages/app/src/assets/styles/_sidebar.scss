@@ -6,7 +6,6 @@
   background-color: $black-3;
   border-right: 1px solid $black-16;
   // margin-top: $header-height;
-  height: 100%;
   min-height: calc(100vh - 120px);
   @supports not (-webkit-overflow-scrolling: touch) {
     /* CSS for other than iOS devices */
@@ -16,10 +15,11 @@
 
   display: flex;
   flex-direction: column;
-  padding: 3rem 0;
+  justify-content: flex-start;
+  // padding: 0 0 3rem 0;
   width: 252px;
-  overflow-y: scroll;
-  height: 100vh;
+  overflow: hidden;
+  height: $page-height;
   position: relative;
   // Major action button for kapp
   .btn {
@@ -36,8 +36,7 @@
     // display: flex;
     // flex-direction: column;
     // flex-wrap: wrap;
-    padding-left: 0;
-    margin: 0.75rem 0 0 0;
+    padding: 0.75rem 0 0 0;
     list-style: none;
     z-index: 0;
     // Group Title
@@ -90,14 +89,18 @@
         color: $blue-lake;
       }
     }
+    &--content-wrapper {
+      overflow: auto;
+    }
     &--settings {
-      position: fixed;
-      bottom: 0;
-      left: 0;
+      // position: fixed;
+      // bottom: 0;
+      // left: 0;
       width: 100%;
       max-width: 252px;
+      padding: 0;
+      margin-top: auto;
       background-color: $black-5;
-      border-right: 1px solid $border-color;
       z-index: 10;
       .nav-link {
         display: flex;
