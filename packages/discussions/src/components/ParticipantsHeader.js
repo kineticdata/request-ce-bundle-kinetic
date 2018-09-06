@@ -38,7 +38,7 @@ export const ParticipantsHeader = ({
         {!isFullScreen && (
           <button
             type="button"
-            className="btn btn-icon d-sm-none d-md-inline-flex"
+            className="btn btn-icon btn-expand d-sm-none d-md-inline-flex"
             onClick={openInNewTab}
             title="Expand Discussion"
           >
