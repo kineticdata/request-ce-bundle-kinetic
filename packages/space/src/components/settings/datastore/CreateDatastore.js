@@ -35,7 +35,7 @@ const CreateDatastoreComponent = ({
       </div>
       <div className="datastore-settings">
         <h3 className="section__title">General Settings</h3>
-        <div className="settings">
+        <div className="settings form">
           <div className="form-row">
             <div className="col">
               <div className="form-group required">

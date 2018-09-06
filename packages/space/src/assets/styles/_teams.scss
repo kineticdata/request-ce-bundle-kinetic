@@ -22,18 +22,3 @@
   margin-left: 1rem;
   justify-content: flex-start;
 }
-
-.form__footer {
-  display: flex;
-  justify-content: space-between;
-  &__left {
-  }
-  &__right {
-    align-self: flex-end;
-    margin-left: auto;
-  }
-  a {
-    margin-bottom: 1.875rem;
-    line-height: normal;
-  }
-}
