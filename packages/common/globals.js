@@ -14,6 +14,9 @@ import underscore from 'underscore';
 import 'bootstrap-select/dist/css/bootstrap-select.css';
 import './lib/kd-typeahead/kd-typeahead.css';
 import 'font-awesome/css/font-awesome.css';
+import 'mdn-polyfills/Element.prototype.matches';
+import 'mdn-polyfills/Element.prototype.closest';
+import 'mdn-polyfills/Node.prototype.remove';
 
 window.$ = jquery;
 window.jQuery = jquery;
@@ -30,3 +33,4 @@ require('datatables.net-responsive-bs/css/responsive.bootstrap.css');
 require('bootstrap-select/dist/js/bootstrap-select');
 require('./lib/kd-typeahead/kd-typeahead');
 require('./lib/kd-dataviewer/kd-dataviewer');
+require('./lib/bundle/helpers');
