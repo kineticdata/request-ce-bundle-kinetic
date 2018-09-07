@@ -4,8 +4,8 @@ import {
   validateNotificationOptions,
   processNotificationExits,
 } from './notifications';
-import { Alert } from './Alert';
-import { Confirm } from './Confirm';
+import { Alert } from '../../../src/components/Notifications/Alert';
+import { Confirm } from '../../../src/components/Notifications/Confirm';
 
 // Ensure the bundle global object exists
 const bundle = typeof window.bundle !== "undefined" ? window.bundle : {};
@@ -81,7 +81,11 @@ bundle.helpers.alert = (options = {}) => {
   // Insert the wrapper div into the DOM
   opts.anchor.parentElement.insertBefore(div, opts.anchor);
   // Initialize the Alert component
-  ReactDOM.render(<Alert {...opts} domWrapper={div} />, div);
+  ReactDOM.render(<Alert
+    {...opts}
+    domWrapper={div}
+    handleClose={() => ReactDOM.unmountComponentAtNode(div)}
+  />, div);
   // Add exitEvents to the element
   if (opts.exitEvents && typeof opts.exitEvents === 'string' && typeof alert.closeAlert === 'function') {
     opts.element.addEventListener(opts.exitEvents, e => {
@@ -135,7 +139,7 @@ bundle.helpers.alert = (options = {}) => {
  *        If true and if notification already exists for this anchor, it will be
  *        closed and a new one will not be opened.
  *
- *    allowMultiple:  boolean [Default: false]
+ *    allowMultiple:    boolean [Default: false]
  *        If true, will allow multiple notifications to be opened for the same
  *        anchor.
  *
@@ -173,8 +177,12 @@ bundle.helpers.confirm = (options = {}) => {
   div.classList.add("notification-wrapper");
   // Insert the wrapper div into the DOM
   opts.anchor.parentElement.insertBefore(div, opts.anchor);
-  // Initialize the Alert component
-  ReactDOM.render(<Confirm {...opts} domWrapper={div} />, div);
-  // Disable element is disable option is true
+  // Initialize the Confirm component
+  ReactDOM.render(<Confirm
+    {...opts}
+    domWrapper={div}
+    handleClose={() => ReactDOM.unmountComponentAtNode(div)}
+  />, div);
+  // Disable element if disable option is true
   if (opts.disable) { opts.element.disabled = true; }
 };

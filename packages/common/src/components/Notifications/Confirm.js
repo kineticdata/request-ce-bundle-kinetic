@@ -1,6 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { compose, lifecycle, withHandlers, withProps } from 'recompose';
+import { compose, lifecycle, withHandlers } from 'recompose';
 import { Alert, Button } from 'reactstrap';
 
 const ConfirmComponent = ({
@@ -12,23 +11,14 @@ const ConfirmComponent = ({
   handleAccept,
   handleReject,
 }) => (
-  <Alert
-    color={color}
-    style={style}
-  >
-    <div dangerouslySetInnerHTML={{__html: message}}></div>
+  <Alert color={color} style={style}>
+    <div dangerouslySetInnerHTML={{ __html: message }} />
     <hr />
     <div>
-      <Button
-        color="success"
-        onClick={handleAccept}
-      >
+      <Button color="success" onClick={handleAccept}>
         {acceptButtonText}
       </Button>
-      <Button
-        color="link"
-        onClick={handleReject}
-      >
+      <Button color="link" onClick={handleReject}>
         {rejectButtonText}
       </Button>
     </div>
@@ -36,41 +26,32 @@ const ConfirmComponent = ({
 );
 
 export const Confirm = compose(
-  // Add closeConfirm prop with correct function to call in order to close the
-  // notification. Throws an error is no valid close option exists.
-  withProps(({ handleClose, domWrapper}) => {
-    if (typeof handleClose === 'function') {
-      // If handleClose function is passed as a prop, use it to close confirm
-      return { closeConfirm: handleClose };
-    } else if (document.body.contains(domWrapper)) {
-      // Else if domWrapper is passed as a prop, unmount its child component
-      // to close the confirm
-      return { closeConfirm: () => ReactDOM.unmountComponentAtNode(domWrapper) };
-    } else {
-      // Otherwise, throw error because this component must be closable
-      throw new Error("Confirm component is missing the handleClose prop.");
-    }
-  }),
   withHandlers({
-    handleAccept: ({ onAccept, element, domWrapper, closeConfirm }) => () => {
+    handleAccept: ({ onAccept, element, domWrapper, handleClose }) => () => {
       // If accepted and onAccept prop is provided and is a function, call it
       if (typeof onAccept === 'function') {
         onAccept(element, domWrapper);
       }
       // Close the confirm
-      closeConfirm();
+      handleClose();
     },
-    handleReject: ({ onReject, element, domWrapper, closeConfirm }) => () => {
+    handleReject: ({ onReject, element, domWrapper, handleClose }) => () => {
       // If Rejected and onReject prop is provided and is a function, call it
       if (typeof onReject === 'function') {
         onReject(element, domWrapper);
       }
       // Close the confirm
-      closeConfirm();
+      handleClose();
     },
   }),
   lifecycle({
     componentWillMount() {
+      // If handleClose prop is not a function, throw error
+      if (typeof this.props.handleClose !== 'function') {
+        throw new Error(
+          "Invalid prop 'handleClose' supplied to the 'Confirm' component. It is required and must be a function.",
+        );
+      }
       // If onShow prop is provided and is a function, call it
       if (typeof this.props.onShow === 'function') {
         this.props.onShow(this.props.element, this.props.domWrapper);
