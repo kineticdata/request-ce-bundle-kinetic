@@ -8,6 +8,7 @@ import { CoreAPI } from 'react-kinetic-core';
 const SERVICES_SETTING_INCLUDES = 'formTypes,attributesMap,forms,forms.details';
 const TEAMS_SETTING_INCLUDES = 'teams';
 const SPACE_SETTING_INCLUDES = 'kapps,kapps.forms,attributesMap';
+const FORM_INCLUDES = 'details,fields,attributesMap,categorizations';
 
 export function* fetchServicesSettingsSaga({ payload }) {
   const [{ serverError, kapp }, manageableForms] = yield all([
@@ -111,9 +112,23 @@ export function* fetchNotificationsSaga() {
   });
 
   if (serverError) {
-    yield put(actions.setFormsErrors(serverError));
+    yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setNotifications(submissions));
+  }
+}
+
+export function* fetchFormSaga(action) {
+  const { serverError, form } = yield call(CoreAPI.fetchForm, {
+    kappSlug: action.payload.kappSlug,
+    formSlug: action.payload.formSlug,
+    include: FORM_INCLUDES,
+  });
+
+  if (serverError) {
+    yield put(actions.updateServicesSettingsError(serverError));
+  } else {
+    yield put(actions.setForm(form));
   }
 }
 
@@ -124,4 +139,5 @@ export function* watchSettingsServices() {
   yield takeEvery(types.FETCH_SERVICES_SETTINGS_SPACE, fetchSpaceSaga);
   yield takeEvery(types.UPDATE_SERVICES_SETTINGS, updateServicesSettingsSaga);
   yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
+  yield takeEvery(types.FETCH_FORM, fetchFormSaga);
 }

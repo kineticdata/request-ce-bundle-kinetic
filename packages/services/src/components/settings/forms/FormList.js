@@ -127,6 +127,12 @@ const FormListComponent = ({
                                 >
                                   Configure Form
                                 </DropdownItem>
+                                <DropdownItem
+                                  tag={Link}
+                                  to={`${match.path}/clone/${form.slug}/`}
+                                >
+                                  Clone Form
+                                </DropdownItem>
                               </DropdownMenu>
                             </Dropdown>
                           )}
