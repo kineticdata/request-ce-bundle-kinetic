@@ -69,6 +69,20 @@ const sortTable = ({ clientSortInfo, setClientSortInfo }) => column => {
   }
 };
 
+const fetchSubmissions = ({
+  fetchSubmissionsSimple,
+  fetchSubmissionsAdvanced,
+  simpleSearchActive,
+  clearPageTokens,
+}) => () => {
+  clearPageTokens();
+  if (simpleSearchActive) {
+    fetchSubmissionsSimple();
+  } else {
+    fetchSubmissionsAdvanced();
+  }
+};
+
 const SubmissionListComponent = ({
   form,
   submissions,
@@ -246,13 +260,16 @@ export const mapStateToProps = state => ({
   hasStartedSearching: state.space.settingsDatastore.hasStartedSearching,
   path: state.router.location.pathname.replace(/\/$/, ''),
   isMobile: state.app.layout.size === 'small',
+  simpleSearchActive: state.space.settingsDatastore.simpleSearchActive,
 });
 
 export const mapDispatchToProps = {
   cloneSubmission: actions.cloneSubmission,
   deleteSubmission: actions.deleteSubmission,
-  fetchSubmissions: actions.fetchSubmissions,
   setClientSortInfo: actions.setClientSortInfo,
+  fetchSubmissionsSimple: actions.fetchSubmissionsSimple,
+  fetchSubmissionsAdvanced: actions.fetchSubmissionsAdvanced,
+  clearPageTokens: actions.clearPageTokens,
 };
 
 export const SubmissionList = compose(
@@ -262,5 +279,6 @@ export const SubmissionList = compose(
   ),
   withHandlers({
     sortTable,
+    fetchSubmissions,
   }),
 )(SubmissionListComponent);

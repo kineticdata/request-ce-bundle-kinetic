@@ -419,7 +419,7 @@ export function* cloneSubmissionSaga(action) {
   const include = 'details,values,form,form.fields.details';
   const { submission, errors, serverError } = yield call(
     CoreAPI.fetchSubmission,
-    { id: action.payload, include, datastore: true },
+    { id: action.payload.id, include, datastore: true },
   );
 
   if (serverError) {
@@ -468,6 +468,10 @@ export function* cloneSubmissionSaga(action) {
       yield put(actions.cloneSubmissionErrors(postErrors));
     } else {
       yield put(actions.cloneSubmissionSuccess());
+      yield put(toastActions.addSuccess('Submission Cloned'));
+      if (typeof action.payload.callback === 'function') {
+        action.payload.callback();
+      }
       yield put(push(`/settings/datastore/${form.slug}/${cloneSubmission.id}`));
     }
   }
@@ -485,6 +489,7 @@ export function* deleteSubmissionSaga(action) {
     yield put(actions.deleteSubmissionErrors(errors));
   } else {
     yield put(actions.deleteSubmissionSuccess());
+    yield put(toastActions.addSuccess('Submission Deleted'));
     if (typeof action.payload.callback === 'function') {
       action.payload.callback();
     }

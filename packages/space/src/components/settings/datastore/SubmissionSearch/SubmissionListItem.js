@@ -185,7 +185,8 @@ const getSubmissionData = (submission, column) =>
       ? moment(submission[column.name]).format(Constants.TIME_FORMAT)
       : submission[column.name];
 
-const handleClone = ({ cloneSubmission }) => id => () => cloneSubmission(id);
+const handleClone = ({ cloneSubmission, fetchSubmissions }) => id => () =>
+  cloneSubmission({ id: id, callback: fetchSubmissions });
 
 const handleDelete = ({ deleteSubmission, fetchSubmissions }) => id => () =>
   deleteSubmission({ id: id, callback: fetchSubmissions });
