@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { bundle } from 'react-kinetic-core';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -121,354 +122,384 @@ export const FormContainer = ({
   !loadingServices &&
   !notificationsLoading &&
   form && (
-    <div>
-      <PageTitle parts={['Services Settings']} />
-      <div className="page-container page-container--kapp-settings">
-        <div className="page-panel page-panel--scrollable page-panel--space-profile-edit">
-          <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
-                <Link to="/kapps/services">services</Link> /{` `}
-                <Link to="/kapps/services/settings">settings</Link> /{` `}
-                <Link to="/kapps/services/settings/forms">forms</Link> /{` `}
-              </h3>
-              <h1>{form.name} Settings</h1>
+    <div className="page-container page-container--panels page-container--datastore">
+      <PageTitle parts={['Settings', form.name]} />
+      <div className="page-panel page-panel--two-thirds page-panel--scrollable">
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h3>
+              <Link to={`/kapps/${kappSlug}`}>services</Link> /{` `}
+              <Link to={`/kapps/${kappSlug}/settings`}>settings</Link> /{` `}
+              <Link to={`/kapps/${kappSlug}/settings/forms`}>forms</Link> /{` `}
+            </h3>
+            <h1>{form.name} Settings</h1>
+          </div>
+          <div className="page-title__actions">
+            <a
+              href={`${bundle.spaceLocation()}/app/#/${kappSlug}/author/form/${
+                form.slug
+              }/builder`}
+              className="btn btn-primary"
+              target="blank"
+            >
+              Form Builder <i className="fa fa-fw fa-external-link" />
+            </a>
+          </div>
+        </div>
+        <div className="general-settings">
+          <h3 className="section__title">General Settings</h3>
+          <div className="form settings">
+            <div className="form-group">
+              <label>Description</label>
+              <textarea
+                className="form-control col-8"
+                name="description"
+                value={inputs.description}
+                type="text"
+                onChange={event =>
+                  setInputs({ ...inputs, description: event.target.value })
+                }
+              />
+            </div>
+            <div className="form-group">
+              <label>Form Type</label>
+              <select
+                className="form-control col-8"
+                name="type"
+                value={inputs.type}
+                onChange={event =>
+                  setInputs({ ...inputs, type: event.target.value })
+                }
+              >
+                {settingsForms.servicesKapp.formTypes.map(type => (
+                  <option key={type.name} value={type.name}>
+                    {type.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Form Status</label>
+              <select
+                className="form-control col-8"
+                name="status"
+                value={inputs.status}
+                onChange={event =>
+                  setInputs({ ...inputs, status: event.target.value })
+                }
+              >
+                <option key="New">New</option>
+                <option key="Active">Active</option>
+                <option key="Inactive">Inactive</option>
+                <option key="Delete">Delete</option>
+              </select>
             </div>
           </div>
-          <section>
-            <form>
-              <div className="general-settings">
-                <h3 className="section__title">General Settings</h3>
-                <div className="form-group">
-                  <label>Description</label>
-                  <textarea
-                    className="form-control col-8"
-                    name="description"
-                    value={inputs.description}
-                    type="text"
-                    onChange={event =>
-                      setInputs({ ...inputs, description: event.target.value })
-                    }
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Form Type</label>
-                  <select
-                    className="form-control col-8"
-                    name="type"
-                    value={inputs.type}
-                    onChange={event =>
-                      setInputs({ ...inputs, type: event.target.value })
-                    }
-                  >
-                    {settingsForms.servicesKapp.formTypes.map(type => (
-                      <option key={type.name} value={type.name}>
-                        {type.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Form Status</label>
-                  <select
-                    className="form-control col-8"
-                    name="status"
-                    value={inputs.status}
-                    onChange={event =>
-                      setInputs({ ...inputs, status: event.target.value })
-                    }
-                  >
-                    <option key="New">New</option>
-                    <option key="Active">Active</option>
-                    <option key="Inactive">Inactive</option>
-                    <option key="Delete">Delete</option>
-                  </select>
-                </div>
-              </div>
-              <div className="table-display-settings">
-                <h3 className="section__title">Table Display Settings</h3>
-                <div className="col-8">
-                  <table className="table table-datastore table-draggable">
-                    <thead>
-                      <tr className="header">
-                        <th>Field</th>
-                        <th>Visible in Table</th>
-                      </tr>
-                    </thead>
-                    {inputs.columns && (
-                      <DragDropContext onDragEnd={handleColumnOrderChange}>
-                        <Droppable droppableId="columns">
-                          {provided => (
-                            <tbody ref={provided.innerRef}>
-                              {inputs.columns.map((col, index) => (
-                                <Draggable
-                                  key={col.name}
-                                  draggableId={col.name}
-                                  index={index}
-                                >
-                                  {(provided, snapshot) => (
-                                    <tr
-                                      ref={provided.innerRef}
-                                      {...provided.draggableProps}
-                                      {...provided.dragHandleProps}
-                                      className={`${
-                                        snapshot.isDragging ? 'dragging' : ''
-                                      }`}
-                                    >
-                                      <td>
-                                        {col.type === 'value' ? (
-                                          col.label
-                                        ) : (
-                                          <i>
-                                            {col.label}{' '}
-                                            <small>(system field)</small>
-                                          </i>
-                                        )}
-                                      </td>
-                                      <td>
-                                        <input
-                                          onChange={e =>
-                                            handleColumnChange(
-                                              index,
-                                              'visible',
-                                              e.target.checked,
-                                            )
-                                          }
-                                          type="checkbox"
-                                          checked={col.visible}
-                                        />
-                                      </td>
-                                    </tr>
-                                  )}
-                                </Draggable>
-                              ))}
-                            </tbody>
-                          )}
-                        </Droppable>
-                      </DragDropContext>
-                    )}
-                  </table>
-                </div>
-              </div>
-              <div className="attribute-settings">
-                <h3 className="section__title">Attributes</h3>
-                <div className="form-group">
-                  <label>Icon</label>
-                  <TextInput
-                    value={inputs.icon}
-                    name="icon"
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-8"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Owning Team</label>
-                  <Select
-                    selected={inputs['Owning Team']}
-                    name="Owning Team"
-                    type="teams"
-                    data={teams}
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-8"
-                    multiple="true"
-                  />
-                </div>
-                <div className="form-group radio">
-                  <label className="field-label">Approver</label>
-                  <label htmlFor="approver-none">
-                    <input
-                      type="radio"
-                      checked={
-                        !inputs['Approver'] ||
-                        inputs['Approver'] === '' ||
-                        inputs['Approver'] === 'None'
-                      }
-                      name="Approver"
-                      id="approver-none"
-                      value="None"
-                      onChange={event =>
-                        setInputs({ ...inputs, Approver: event.target.value })
-                      }
-                    />
-                    None
-                  </label>
-                  <label htmlFor="approver-manager">
-                    <input
-                      type="radio"
-                      checked={inputs['Approver'] === 'Manager'}
-                      name="Approver"
-                      id="approver-manager"
-                      value="Manager"
-                      onChange={event =>
-                        setInputs({ ...inputs, Approver: event.target.value })
-                      }
-                    />
-                    Manager
-                  </label>
-                  <label htmlFor="approver-team">
-                    <input
-                      type="radio"
-                      checked={inputs['Approver'] === 'Team'}
-                      name="Approver"
-                      id="approver-team"
-                      value="Team"
-                      onChange={event =>
-                        setInputs({ ...inputs, Approver: event.target.value })
-                      }
-                    />
-                    Team
-                  </label>
-                  <label htmlFor="approver-individual">
-                    <input
-                      type="radio"
-                      checked={inputs['Approver'] === 'Individual'}
-                      name="Approver"
-                      id="approver-individual"
-                      value="Individual"
-                      onChange={event =>
-                        setInputs({ ...inputs, Approver: event.target.value })
-                      }
-                    />
-                    Individual
-                  </label>
-                </div>
-
-                <div className="form-group">
-                  <label>Approval Form</label>
-                  <Select
-                    selected={inputs['Approval Form Slug']}
-                    name="Approval Form Slug"
-                    type="queue"
-                    data={spaceKapps}
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-8"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Notification Template Name - Complete</label>
-                  <Select
-                    selected={inputs['Notification Template Name - Complete']}
-                    name="Notification Template Name - Complete"
-                    type="notifications"
-                    data={notifications}
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-8"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Notification Template Name - Create</label>
-                  <Select
-                    selected={inputs['Notification Template Name - Create']}
-                    name="Notification Template Name - Create"
-                    type="notifications"
-                    data={notifications}
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-8"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Service Days Due</label>
-                  <NumberInput
-                    value={inputs['Service Days Due']}
-                    name="Service Days Due"
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-8"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Task Assignee Team</label>
-                  <Select
-                    selected={inputs['Task Assignee Team']}
-                    name="Task Assignee Team"
-                    type="teams"
-                    data={teams}
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-8"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Task Form</label>
-                  <Select
-                    selected={inputs['Task Form Slug']}
-                    name="Task Form Slug"
-                    type="queue"
-                    data={spaceKapps}
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-8"
-                  />
-                </div>
-              </div>
-              <div className="category-settings">
-                <h3 className="section__title">Categories</h3>
-                <div className="form-group checkbox">
-                  <label className="field-label" />
-                  {settingsForms.servicesKapp.categories.map(val => (
-                    <label
-                      key={`categories-${val.slug}`}
-                      htmlFor={`categories-${val.slug}`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={
-                          (inputs.categories &&
-                            inputs.categories.find(
-                              c => c.category.slug === val.slug,
-                            )) ||
-                          false
-                        }
-                        name="categories"
-                        id={`categories-${val.slug}`}
-                        value={val.slug}
-                        onChange={event => {
-                          let categories = inputs.categories;
-                          event.target.checked
-                            ? categories.push({
-                                category: { slug: event.target.value },
-                              })
-                            : (categories = categories.filter(
-                                category =>
-                                  category.category.slug !== event.target.value,
-                              ));
-                          setInputs({
-                            ...inputs,
-                            categories: categories,
-                          });
-                        }}
-                      />
-                      {val.name}
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </form>
-            <div className="form__footer">
-              <span className="form__footer__right">
-                <button
-                  className="btn btn-primary"
-                  onClick={() => {
-                    const newObj = { form, inputs, kappSlug };
-                    updateFormSettings(newObj);
-                  }}
-                >
-                  Save
-                </button>
-              </span>
-            </div>
-          </section>
         </div>
+        <div className="table-display-settings">
+          <h3 className="section__title">Table Display Settings</h3>
+          <div className="form settings">
+            <table className="table table-datastore table-draggable">
+              <thead>
+                <tr className="header">
+                  <th>Field</th>
+                  <th>Visible in Table</th>
+                </tr>
+              </thead>
+              {inputs.columns && (
+                <DragDropContext onDragEnd={handleColumnOrderChange}>
+                  <Droppable droppableId="columns">
+                    {provided => (
+                      <tbody ref={provided.innerRef}>
+                        {inputs.columns.map((col, index) => (
+                          <Draggable
+                            key={col.name}
+                            draggableId={col.name}
+                            index={index}
+                          >
+                            {(provided, snapshot) => (
+                              <tr
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className={`${
+                                  snapshot.isDragging ? 'dragging' : ''
+                                }`}
+                              >
+                                <td>
+                                  {col.type === 'value' ? (
+                                    col.label
+                                  ) : (
+                                    <i>
+                                      {col.label} <small>(system field)</small>
+                                    </i>
+                                  )}
+                                </td>
+                                <td>
+                                  <input
+                                    onChange={e =>
+                                      handleColumnChange(
+                                        index,
+                                        'visible',
+                                        e.target.checked,
+                                      )
+                                    }
+                                    type="checkbox"
+                                    checked={col.visible}
+                                  />
+                                </td>
+                              </tr>
+                            )}
+                          </Draggable>
+                        ))}
+                      </tbody>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              )}
+            </table>
+          </div>
+        </div>
+        <div className="attribute-settings">
+          <h3 className="section__title">Attributes</h3>
+          <div className="form settings">
+            <div className="form-group">
+              <label>Icon</label>
+              <TextInput
+                value={inputs.icon}
+                name="icon"
+                setInputs={setInputs}
+                inputs={inputs}
+                className="col-8"
+              />
+            </div>
+            <div className="form-group">
+              <label>Owning Team</label>
+              <Select
+                selected={inputs['Owning Team']}
+                name="Owning Team"
+                type="teams"
+                data={teams}
+                setInputs={setInputs}
+                inputs={inputs}
+                className="col-8"
+                multiple="true"
+              />
+            </div>
+            <div className="form-group radio">
+              <label className="field-label">Approver</label>
+              <label htmlFor="approver-none">
+                <input
+                  type="radio"
+                  checked={
+                    !inputs['Approver'] ||
+                    inputs['Approver'] === '' ||
+                    inputs['Approver'] === 'None'
+                  }
+                  name="Approver"
+                  id="approver-none"
+                  value="None"
+                  onChange={event =>
+                    setInputs({ ...inputs, Approver: event.target.value })
+                  }
+                />
+                None
+              </label>
+              <label htmlFor="approver-manager">
+                <input
+                  type="radio"
+                  checked={inputs['Approver'] === 'Manager'}
+                  name="Approver"
+                  id="approver-manager"
+                  value="Manager"
+                  onChange={event =>
+                    setInputs({ ...inputs, Approver: event.target.value })
+                  }
+                />
+                Manager
+              </label>
+              <label htmlFor="approver-team">
+                <input
+                  type="radio"
+                  checked={inputs['Approver'] === 'Team'}
+                  name="Approver"
+                  id="approver-team"
+                  value="Team"
+                  onChange={event =>
+                    setInputs({ ...inputs, Approver: event.target.value })
+                  }
+                />
+                Team
+              </label>
+              <label htmlFor="approver-individual">
+                <input
+                  type="radio"
+                  checked={inputs['Approver'] === 'Individual'}
+                  name="Approver"
+                  id="approver-individual"
+                  value="Individual"
+                  onChange={event =>
+                    setInputs({ ...inputs, Approver: event.target.value })
+                  }
+                />
+                Individual
+              </label>
+            </div>
+
+            <div className="form-group">
+              <label>Approval Form</label>
+              <Select
+                selected={inputs['Approval Form Slug']}
+                name="Approval Form Slug"
+                type="queue"
+                data={spaceKapps}
+                setInputs={setInputs}
+                inputs={inputs}
+                className="col-8"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Notification Template Name - Complete</label>
+              <Select
+                selected={inputs['Notification Template Name - Complete']}
+                name="Notification Template Name - Complete"
+                type="notifications"
+                data={notifications}
+                setInputs={setInputs}
+                inputs={inputs}
+                className="col-8"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Notification Template Name - Create</label>
+              <Select
+                selected={inputs['Notification Template Name - Create']}
+                name="Notification Template Name - Create"
+                type="notifications"
+                data={notifications}
+                setInputs={setInputs}
+                inputs={inputs}
+                className="col-8"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Service Days Due</label>
+              <NumberInput
+                value={inputs['Service Days Due']}
+                name="Service Days Due"
+                setInputs={setInputs}
+                inputs={inputs}
+                className="col-8"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Task Assignee Team</label>
+              <Select
+                selected={inputs['Task Assignee Team']}
+                name="Task Assignee Team"
+                type="teams"
+                data={teams}
+                setInputs={setInputs}
+                inputs={inputs}
+                className="col-8"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Task Form</label>
+              <Select
+                selected={inputs['Task Form Slug']}
+                name="Task Form Slug"
+                type="queue"
+                data={spaceKapps}
+                setInputs={setInputs}
+                inputs={inputs}
+                className="col-8"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="category-settings">
+          <h3 className="section__title">Categories</h3>
+          <div className="form settings">
+            <div className="form-group checkbox">
+              <label className="field-label" />
+              {settingsForms.servicesKapp.categories.map(val => (
+                <label
+                  key={`categories-${val.slug}`}
+                  htmlFor={`categories-${val.slug}`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={
+                      (inputs.categories &&
+                        inputs.categories.find(
+                          c => c.category.slug === val.slug,
+                        )) ||
+                      false
+                    }
+                    name="categories"
+                    id={`categories-${val.slug}`}
+                    value={val.slug}
+                    onChange={event => {
+                      let categories = inputs.categories;
+                      event.target.checked
+                        ? categories.push({
+                            category: { slug: event.target.value },
+                          })
+                        : (categories = categories.filter(
+                            category =>
+                              category.category.slug !== event.target.value,
+                          ));
+                      setInputs({
+                        ...inputs,
+                        categories: categories,
+                      });
+                    }}
+                  />
+                  {val.name}
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="form__footer">
+          <span className="form__footer__right">
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                const newObj = { form, inputs, kappSlug };
+                updateFormSettings(newObj);
+              }}
+            >
+              Save Changes
+            </button>
+          </span>
+        </div>
+      </div>
+      <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
+        <h3>Form Settings</h3>
+        <h4>General Settings</h4>
+        <p>
+          To update the form fields, click the Form Builder button, which will
+          open the form builder in a new window. You will need to reload this
+          page after making changes in the form builder.
+        </p>
+        <h4>Table Display Settings</h4>
+        <p>
+          The Display Table Settings section lists all of the fields that exist
+          on this form. You may select which fields you'd like to be visible in
+          the table when viewing records.
+        </p>
+        <h4>Categories</h4>
+        <p>
+          You can update the categories associated with this form by checking
+          them off in the Category Settings area.
+        </p>
       </div>
     </div>
   );

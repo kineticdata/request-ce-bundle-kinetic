@@ -67,6 +67,10 @@
   padding: 0 0.75rem;
   margin: 0 0 1rem 0;
   border-top: 2px solid $black-16;
+  form &,
+  .form & {
+    margin-left: -15px;
+  }
   a,
   .fa {
     color: $gray;
