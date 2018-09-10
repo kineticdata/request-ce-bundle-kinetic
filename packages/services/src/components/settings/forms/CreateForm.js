@@ -40,15 +40,19 @@ export const CreateFormComponent = ({
     loadingTeams,
     teams,
     servicesSettingsKapp,
+    loadingForm,
+    form,
   },
   inputs,
   kappSlug,
   createForm,
   push,
+  clone,
 }) =>
   !loading &&
   !loadingTeams &&
-  !loadingServices && (
+  !loadingServices &&
+  (!clone || !loadingForm) && (
     <div className="page-container page-container--datastore">
       <div className="page-panel page-panel--scrollable page-panel--datastore-content">
         <div className="page-title">
@@ -57,33 +61,37 @@ export const CreateFormComponent = ({
               <Link to="/kapps/services">services</Link> /{` `}
               <Link to="/kapps/services/settings">settings</Link> /{` `}
             </h3>
-            <h1>Create Form</h1>
+            <h1>{clone ? 'Clone' : 'Create'} Form</h1>
           </div>
         </div>
 
         <section>
           <form>
             <div className="form-group">
-              <label>Template to Clone</label>
-              <select
-                className="form-control col-8"
-                name="Template to Clone"
-                value={inputs['Template to Clone'] || ''}
-                onChange={event =>
-                  setInputs({
-                    ...inputs,
-                    'Template to Clone': event.target.value,
-                  })
-                }
-                required="true"
-              >
-                <option />
-                {templateForms.map(form => (
-                  <option key={form.slug} value={form.slug}>
-                    {form.name}
-                  </option>
-                ))}
-              </select>
+              <label>{clone ? 'Form' : 'Template'} to Clone</label>
+              {clone ? (
+                form.name
+              ) : (
+                <select
+                  className="form-control col-8"
+                  name="Template to Clone"
+                  value={inputs['Template to Clone'] || ''}
+                  onChange={event =>
+                    setInputs({
+                      ...inputs,
+                      'Template to Clone': event.target.value,
+                    })
+                  }
+                  required="true"
+                >
+                  <option />
+                  {templateForms.map(form => (
+                    <option key={form.slug} value={form.slug}>
+                      {form.name}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
             <div className="form-group">
               <label>Name</label>
@@ -218,13 +226,14 @@ export const CreateFormComponent = ({
     </div>
   );
 
-export const mapStateToProps = state => ({
+export const mapStateToProps = (state, { match: { params } }) => ({
   loading: state.services.forms.loading,
   templateForms: state.services.forms.data.filter(
     form => form.type === 'Template',
   ),
   servicesSettings: state.services.servicesSettings,
   kappSlug: state.app.config.kappSlug,
+  clone: params.id,
 });
 
 export const mapDispatchToProps = {
@@ -232,6 +241,7 @@ export const mapDispatchToProps = {
   createForm: actions.createForm,
   fetchServicesSettings: servicesActions.fetchServicesSettings,
   fetchServicesSettingsTeams: servicesActions.fetchServicesSettingsTeams,
+  fetchForm: servicesActions.fetchForm,
 };
 
 export const CreateForm = compose(
@@ -244,6 +254,15 @@ export const CreateForm = compose(
   withHandlers({ teamOptions, validateForm }),
   lifecycle({
     componentWillMount() {
+      this.props.clone &&
+        this.props.fetchForm({
+          kappSlug: 'services',
+          formSlug: 'aa',
+        }) &&
+        this.props.setInputs({
+          ...this.props.inputs,
+          'Template to Clone': this.props.clone,
+        });
       this.props.fetchServicesSettings();
       this.props.fetchServicesSettingsTeams();
     },
