@@ -43,9 +43,9 @@ const FormListComponent = ({
   openDropdown,
 }) => {
   return (
-    <div className="page-container page-container--datastore">
+    <div className="page-container page-container--panels page-container--datastore">
       <PageTitle parts={['Datastore Forms']} />
-      <div className="page-panel page-panel--scrollable page-panel--datastore-content">
+      <div className="page-panel page-panel--two-thirds page-panel--scrollable page-panel--datastore-content">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -55,7 +55,7 @@ const FormListComponent = ({
             <h1>Datastore Forms</h1>
           </div>
           <Link to={`${match.path}/new`} className="btn btn-primary">
-            Create Datastore
+            New Datastore Form
           </Link>
         </div>
 
@@ -127,6 +127,20 @@ const FormListComponent = ({
             <WallyEmptyMessage />
           )}
         </div>
+      </div>
+      <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
+        <h3>Datastore Forms</h3>
+        {/* TODO: Update tone of copy */}
+        <p>
+          Datastore Forms allow administrators to define and build referential
+          datasets. These forms can be configured with compound
+          (multi-field/property) indexes and unique indexes, which provide
+          efficient query support for large datasets.
+        </p>
+        <p>
+          Example datasets: Assets, People, Locations, Vendors, or Cities and
+          States
+        </p>
       </div>
     </div>
   );

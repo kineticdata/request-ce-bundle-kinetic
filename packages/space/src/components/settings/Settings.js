@@ -18,7 +18,7 @@ import { actions as teamActions } from '../../redux/modules/teamList';
 export const SettingsComponent = () => (
   <Switch>
     <Route path="/settings/profile" component={Profile} />
-    <Route path="/settings/space" component={SpaceSettings} />
+    <Route path="/settings/system" component={SpaceSettings} />
     <Route path="/settings/datastore" component={Datastore} />
     <Route path="/settings/robots" component={Robots} />
     <Route path="/settings/users" component={Users} />
@@ -71,7 +71,7 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
 
       <div className="cards__wrapper cards__wrapper--services">
         <SettingsCard
-          name="Edit My Profile"
+          name="Edit Profile"
           path={`/settings/profile`}
           icon="fa-user"
           description="Edit your profile"
@@ -94,21 +94,21 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
 
             <SettingsCard
               name="System Settings"
-              path={`/settings/space`}
+              path={`/settings/system`}
               icon="fa-gear"
               description="View and Modify all System Settings"
             />
 
             <SettingsCard
-              name="Datastore"
+              name="Datastore Forms"
               path={`/settings/datastore`}
-              icon="fa-drive"
+              icon="fa-hdd-o"
               description="View, Create and Edit Reference Data"
             />
             <SettingsCard
               name="Notifications"
               path={`/settings/notifications`}
-              icon="fa-drive"
+              icon="fa-envelope-o"
               description="View, Create and Edit Email Notifications"
             />
             <SettingsCard

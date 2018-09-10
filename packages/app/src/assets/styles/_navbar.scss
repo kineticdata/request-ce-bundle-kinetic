@@ -94,9 +94,9 @@
 
 .dropdown-toggle {
   &::after {
-    border-top: 0.4em solid $black;
-    border-right: 0.19em solid transparent;
-    border-left: 0.19em solid transparent;
+    border-top-color: $black;
+    border-right-color: transparent;
+    border-left-color: transparent;
   }
   &.hide-caret::after {
     display: none;

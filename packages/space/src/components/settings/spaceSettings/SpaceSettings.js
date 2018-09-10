@@ -102,8 +102,8 @@ export const SettingsContainer = ({
           </div>
         </div>
         <section>
-          <h2 className="section__title">Workflow Options</h2>
           <form>
+            <h2 className="section__title">Workflow Options</h2>
             {Utils.getAttributeValue(space, 'Approval Days Due') && (
               <div className="form-group">
                 <label>Approval Days Due</label>
@@ -112,7 +112,7 @@ export const SettingsContainer = ({
                   name="Approval Days Due"
                   setInputs={setInputs}
                   inputs={inputs}
-                  className="col-3"
+                  className="col-2"
                 />
               </div>
             )}
@@ -124,7 +124,7 @@ export const SettingsContainer = ({
                   name="Service Days Due"
                   setInputs={setInputs}
                   inputs={inputs}
-                  className="col-3"
+                  className="col-2"
                 />
               </div>
             )}
@@ -136,10 +136,11 @@ export const SettingsContainer = ({
                   name="Task Days Due"
                   setInputs={setInputs}
                   inputs={inputs}
-                  className="col-3"
+                  className="col-2"
                 />
               </div>
             )}
+            <h2 className="section__title">Default Task Team</h2>
             {Utils.getAttributeValue(space, 'Task Assignee Team') && (
               <div className="form-group">
                 <label>Task Assignee Team</label>
@@ -154,6 +155,7 @@ export const SettingsContainer = ({
                 />
               </div>
             )}
+            <h2 className="section__title">Form Mapping</h2>
             {Utils.getAttributeValue(space, 'Approval Form Slug') && (
               <div className="form-group">
                 <label>Approval Form</label>
@@ -244,8 +246,9 @@ export const SettingsContainer = ({
               <button
                 className="btn btn-primary"
                 onClick={() => updateSpace(inputs)}
+                // TODO: Disable until a change is made.
               >
-                Save
+                Save Changes
               </button>
             </span>
           </div>

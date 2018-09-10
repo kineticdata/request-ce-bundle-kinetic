@@ -72,14 +72,14 @@ const SettingsComponent = ({
               className="btn btn-primary"
               target="blank"
             >
-              Form Builder
+              Form Builder <i className="fa fa-fw fa-external-link" />
             </a>
           </div>
         </div>
         {canManage ? (
           <div className="datastore-settings">
             <h3 className="section__title">General Settings</h3>
-            <div className="settings">
+            <div className="form settings">
               <div className="form-row">
                 <div className="col">
                   <div className="form-group required">
@@ -127,7 +127,7 @@ const SettingsComponent = ({
             </div>
             <div className="table-settings">
               <h3 className="section__title">Table Display Settings</h3>
-              <div className="settings">
+              <div className="form settings">
                 <div className="form-group">
                   <label htmlFor="default-search-index">
                     Default Search Index
@@ -258,7 +258,7 @@ const SettingsComponent = ({
             </div>
             <div className="table-settings">
               <h3 className="section__title">Bridge Configuration</h3>
-              <div className="settings">
+              <div className="form settings">
                 <div className="form-group">
                   <label htmlFor="name">Bridge Name</label>
                   <select

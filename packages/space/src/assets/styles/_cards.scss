@@ -1,6 +1,7 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Cards ~ Space
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 .card--form {
   flex: 0 0 auto;
   border: 1px solid $black-16;
@@ -8,12 +9,10 @@
   padding: 0.6875rem 1rem;
   transition: background-color 0.3s;
   @include setBgColorAndHover($white);
-
   &:focus,
   &:hover {
     text-decoration: none;
   }
-
   h1 {
     color: $black;
     display: inline-flex;
@@ -23,7 +22,6 @@
     line-height: 2.25rem;
     margin: 0;
   }
-
   p {
     color: $black-50;
     font-size: 1rem;
@@ -31,7 +29,6 @@
     @include ms-respond(font-size, 1);
     margin-bottom: 0;
   }
-
   @media all and (min-width: 0) {
     flex-basis: 100%;
     @media all and (-ms-high-contrast: none) {
@@ -113,7 +110,6 @@
     .btn {
       margin: 1rem 0;
     }
-
     img {
       flex-shrink: 0;
       border-radius: 50%;
@@ -129,7 +125,6 @@
       line-height: 1.125rem;
     }
   }
-
   &__footer {
     border-top: 1px solid $black-16;
     text-align: left;
@@ -172,10 +167,10 @@
         flex-basis: auto;
       }
     }
-    @media all and (min-width: 460px) and (max-width: 576px) {
+    @media all and (min-width: 576px) and (max-width: 991px) {
       flex-basis: 48%;
-      margin-right: 4%;
-      &:nth-child(2n) {
+      margin-right: 2%;
+      &:nth-child(even) {
         margin-right: 0;
       }
       @media all and (-ms-high-contrast: none) {
@@ -183,9 +178,9 @@
         flex-basis: auto;
       }
     }
-    @media all and (min-width: 577px) and (max-width: 768px) {
-      flex-basis: 30%;
-      margin-right: 5%;
+    @media all and (min-width: 992px) {
+      flex-basis: 31%;
+      margin-right: 3%;
       &:nth-child(3n) {
         margin-right: 0;
       }
@@ -194,19 +189,9 @@
         flex-basis: auto;
       }
     }
-    @media all and (min-width: 769px) {
-      flex-basis: 22%;
-      margin-right: 4%;
-      &:nth-child(4n) {
-        margin-right: 0;
-      }
-      @media all and (-ms-high-contrast: none) {
-        width: 22%;
-        flex-basis: auto;
-      }
-    }
   }
 }
+
 .cards__wrapper--services {
   padding: 0 0 3rem;
   margin: 0;
@@ -216,14 +201,12 @@
   flex-wrap: wrap;
   justify-content: space-between;
   width: 100%;
-
   .card--service {
     border: 1px solid $border-color;
     border-radius: $border-radius-base;
     padding: 1rem;
-    margin-top: 1rem;
-    transition: background-color 0.3s;
-    // display: flow-root;
+    margin-bottom: 1rem;
+    transition: background-color 0.3s; // display: flow-root;
     &:focus,
     &:hover {
       background-color: $white;
@@ -266,6 +249,7 @@
     }
   }
 }
+
 .card--service {
   border: 1px solid $border-color;
   border-radius: $border-radius-base;
