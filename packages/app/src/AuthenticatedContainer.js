@@ -84,10 +84,9 @@ const fetchCode = ({
     setProcessing(false);
   }
 };
-const processOAuthToken = async (code, state, push) => {
+const processOAuthCode = async (code, state, push) => {
   const clientId = 'kinops';
   const clientSecret = 'kinops';
-  const redirectUri = 'http%3A%2F%2Flocalhost%3A3000';
 
   const results = await axios.request({
     method: 'post',
@@ -97,7 +96,6 @@ const processOAuthToken = async (code, state, push) => {
       password: clientSecret,
     },
     params: {
-      // redirect_uri: 'http://localhost:3000',
       response_type: 'code',
       grant_type: 'authorization_code',
       code,
@@ -106,8 +104,13 @@ const processOAuthToken = async (code, state, push) => {
   });
 
   window.opener.__OAUTH_CALLBACK__(results.data);
+};
+
+const processOAuthToken = (token, state, push) => {
+  // window.opener.__OAUTH_CALLBACK__(results.data);
   // setProcessing(false);
-  // push(state);
+  window.localStorage.setItem('token', token);
+  push(state);
 };
 
 const CatchAllRoute = props => (
@@ -139,11 +142,11 @@ const Authenticated = props => {
     push,
   } = props;
 
-  const params = qs.parse(location.search);
+  const params = qs.parse(window.location.hash);
 
-  if (params['?code']) {
+  if (params['#/access_token']) {
     // oauth
-    processOAuthToken(params['?code'], params.state, push);
+    processOAuthToken(params['#/access_token'], params.state, push);
     return null;
   }
 

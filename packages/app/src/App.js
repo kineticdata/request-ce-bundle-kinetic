@@ -16,7 +16,6 @@ import {
 import { withRouter } from 'react-router';
 import { push } from 'connected-react-router';
 import qs from 'qs';
-import axios from 'axios';
 import Sidebar from 'react-sidebar';
 import { Utils, ToastsContainer, ModalFormContainer } from 'common';
 import { LoginModal } from './components/authentication/LoginModal';
@@ -28,65 +27,17 @@ import { App as ServicesApp } from 'services/src/App';
 import { App as QueueApp } from 'queue/src/App';
 import { App as SpaceApp } from 'space/src/App';
 
-// const coreOauthTokenUrl = state => {};
-
-// const coreOauthAuthorizeUrl = state => {
-//   const clientId = 'kinops';
-//   const clientSecret = 'kinops';
-//   const redirectUri = 'http%3A%2F%2Flocalhost%3A3000';
-//   return `/app/oauth/token?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&state=${state}`;
-// };
-
 export const OAuthAppWrapper = props => {
   return props.processing ? null : <AppView {...props} />;
 };
 
-const fetchCode = ({
-  location,
-  setCode,
-  setProcessing,
-  processOAuthToken,
-}) => () => {
-  const params = qs.parse(location.search);
-
-  if (params['?code']) {
-    // setCode(params['?code']);
-    // console.log('got oauth code', params['?code']);
-    // props.push(params.state);
-
-    processOAuthToken(params['?code'], params.state);
+const fetchToken = ({ location, setProcessing }) => () => {
+  const params = qs.parse(location.pathname);
+  if (params['access_token']) {
+    window.opener.__OAUTH_CALLBACK__(params['access_token']);
   } else {
     setProcessing(false);
   }
-};
-const processOAuthToken = ({ setProcessing, push }) => async (code, state) => {
-  const clientId = 'kinops';
-  const clientSecret = 'kinops';
-
-  const results = await axios.request({
-    method: 'post',
-    url: '/app/oauth/token',
-    auth: {
-      username: clientId,
-      password: clientSecret,
-    },
-    params: {
-      response_type: 'code',
-      grant_type: 'authorization_code',
-      code,
-    },
-    config: { headers: { 'Content-Type': 'application/json' } },
-  });
-
-  console.log('results', results.data);
-  // if (window.opener) {
-  window.opener.__OAUTH_CALLBACK__(results.data);
-  // } else if (state) {
-  // push(state);
-  // }
-
-  // setProcessing(false);
-  // push(state);
 };
 
 const wrapperDispatch = {
@@ -99,16 +50,12 @@ export const App = compose(
     wrapperDispatch,
   ),
   withState('processing', 'setProcessing', true),
-  withState('code', 'setCode', null),
   withHandlers({
-    processOAuthToken,
-  }),
-  withHandlers({
-    fetchCode,
+    fetchToken,
   }),
   lifecycle({
     componentDidMount() {
-      this.props.fetchCode();
+      this.props.fetchToken();
     },
   }),
 )(OAuthAppWrapper);
