@@ -1,171 +1,156 @@
 import axios from 'axios';
 import { bundle } from 'react-kinetic-core';
 
-export const MESSAGE_LIMIT = 25;
+const DEFAULT_MESSAGE_LIMIT = 25;
 
-export const sendMessage = params => {
-  const { body, guid } = params;
-  return axios.post(
-    `${bundle.spaceLocation()}/kinetic-response/api/v1/issues/${guid}/messages`,
-    { body },
-    { withCredentials: true },
-  );
-};
+const baseUrl = () =>
+  true ? 'http://localhost:7071/acme' : bundle.spaceLocation();
 
-export const sendAttachment = params => {
-  const { message, attachment, guid } = params;
-  const formData = new FormData();
-  formData.append('upload[description]', message);
-  formData.append('upload[file]', attachment);
-
-  return axios.post(
-    `${bundle.spaceLocation()}/kinetic-response/api/v1/issues/${guid}/uploads`,
-    formData,
-    {
-      withCredentials: true,
-      headers: { 'Content-Type': 'multipart/form-data' },
+export const sendMessage = (params, token) =>
+  axios.request({
+    url: `${baseUrl()}/app/api/v1/discussions/${params.id}/messages`,
+    method: 'post',
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  );
-};
-
-export const fetchMessages = ({ guid, lastReceived, offset }) =>
-  axios
-    .get(
-      `${bundle.spaceLocation()}/kinetic-response/api/v1/issues/${guid}/messages`,
-      {
-        withCredentials: true,
-        params: {
-          last_received: lastReceived || '2014-01-01',
-          limit: MESSAGE_LIMIT,
-          offset: offset ? offset : 0,
+    data: {
+      content: [
+        {
+          type: 'text',
+          value: params.message,
         },
-      },
-    )
-    .then(response => ({ messages: response.data }))
-    .catch(response => ({ error: response }));
-
-export const fetchIssue = guid =>
-  axios
-    .get(`${bundle.spaceLocation()}/kinetic-response/api/v1/issues/${guid}`, {
-      withCredentials: true,
-    })
-    .then(response => ({ issue: response.data }))
-    .catch(response => ({ error: response }));
-
-export const fetchMyOpenIssues = (limit = 10, offset = 0) =>
-  axios
-    .get(
-      `${bundle.spaceLocation()}/kinetic-response/api/v1/issues/my_open_issues`,
-      {
-        withCredentials: true,
-        params: { limit, offset },
-      },
-    )
-    .then(response => ({ issues: response.data }))
-    .catch(response => ({ error: response }));
-
-export const searchIssues = (search, limit = 10, offset = 0) =>
-  axios
-    .post(
-      `${bundle.spaceLocation()}/kinetic-response/api/v1/issues/search`,
-      {
-        query: {
-          name_or_description_or_tags_name_cont: search,
-          limit,
-          offset,
-        },
-      },
-      { withCredentials: true },
-    )
-    .then(response => ({
-      issues: response.data.issues,
-      totalCount: response.data.total_count,
-    }))
-    .catch(response => ({ error: response }));
-
-export const createIssue = issue =>
-  axios
-    .post(`${bundle.spaceLocation()}/kinetic-response/api/v1/issues`, issue, {
-      withCredentials: true,
-    })
-    .then(response => ({ issue: response.data }))
-    .catch(response => ({ error: response }));
-
-export const touchIssuePresence = guid =>
-  axios.request({
-    url: `${bundle.spaceLocation()}/kinetic-response/api/v1/issues/${guid}/present`,
-    withCredentials: true,
+      ],
+    },
   });
 
-export const fetchUploads = guid =>
-  axios.request({
-    url: `${bundle.spaceLocation()}/kinetic-response/api/v1/issues/${guid}/uploads`,
-    withCredentials: true,
-  });
-
-export const fetchInvites = guid =>
+export const fetchMessages = (id, token, pageToken) =>
   axios
     .request({
-      url: `${bundle.spaceLocation()}/kinetic-response/api/v1/issues/${guid}/invites`,
+      url: `${baseUrl()}/app/api/v1/discussions/${id}/messages`,
       method: 'get',
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        pageToken,
+        limit: DEFAULT_MESSAGE_LIMIT,
+      },
     })
-    .then(response => ({ invites: response.data }))
+    .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const createInvite = (guid, email, note) =>
+export const fetchDiscussion = ({ id, token }) =>
   axios
     .request({
-      url: `${bundle.spaceLocation()}/kinetic-response/api/v1/issues/${guid}/invites`,
+      url: `${baseUrl()}/app/api/v1/discussions/${id}`,
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => response.data)
+    .catch(response => ({ error: response }));
+
+export const fetchDiscussions = ({ token, pageToken, user, title }) =>
+  axios
+    .get(`${baseUrl()}/app/api/v1/discussions`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        // user,
+        title: title.length > 0 ? title : null,
+        limit: DEFAULT_MESSAGE_LIMIT,
+        pageToken,
+      },
+    })
+    .then(response => response.data)
+    .catch(response => ({ error: response }));
+
+export const createDiscussion = ({
+  title,
+  description,
+  token,
+  isPrivate = false,
+  owningUsers,
+  owningTeams,
+}) =>
+  axios
+    .request({
       method: 'post',
-      withCredentials: true,
-      data: { email, note, group_invite: false },
+      url: `${baseUrl()}/app/api/v1/discussions`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        title,
+        description,
+        archived: false,
+        owningUsers,
+        owningTeams,
+        is_private: isPrivate,
+      },
     })
-    .then(response => ({ invite: response.data }))
+    .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const resendInvite = (guid, inviteId, note) =>
+export const fetchInvites = (id, token) =>
   axios
     .request({
-      url: `${bundle.spaceLocation()}/kinetic-response/api/v1/issues/${guid}/invites/${inviteId}`,
+      url: `${baseUrl()}/app/api/v1/discussions/${id}/invitations`,
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => response.data)
+    .catch(response => ({ error: response }));
+
+export const createInvite = ({ id, type, value, token }) =>
+  axios
+    .request({
+      url: `${baseUrl()}/app/api/v1/discussions/${id}/invitations`,
       method: 'post',
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: { [type]: value },
     })
-    .then(response => ({ invite: response.data }))
+    .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const removeInvite = (guid, inviteId, note) =>
+export const resendInvite = (id, inviteId, token) =>
   axios
     .request({
-      url: `${bundle.spaceLocation()}/kinetic-response/api/v1/issues/${guid}/invites/${inviteId}`,
+      url: `${baseUrl()}/app/api/v1/discussions/${id}/invitations/${inviteId}`,
+      method: 'post',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => response.data)
+    .catch(response => ({ error: response }));
+
+export const removeInvite = (id, inviteId, token) =>
+  axios
+    .request({
+      url: `${baseUrl()}/app/api/v1/discussions/${id}/invitations/${inviteId}`,
       method: 'delete',
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .then(response => ({ invite: response.data }))
+    .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const fetchParticipants = guid =>
+export const fetchParticipants = (id, token) =>
   axios
     .request({
-      url: `${bundle.spaceLocation()}/kinetic-response/api/v1/issues/${guid}/participants`,
-      withCredentials: true,
+      url: `${baseUrl()}/app/api/v1/discussions/${id}/participants`,
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .then(response => ({ participants: response.data }))
-    .catch(response => ({ error: response }));
-
-export const fetchResponseProfile = () =>
-  axios
-    .get(`${bundle.spaceLocation()}/kinetic-response/api/v1/me`, {
-      withCredentials: true,
-      __bypassAuthInterceptor: true,
-    })
-    .then(response => ({ profile: response.data }))
-    .catch(response => ({ error: response }));
-
-export const getResponseAuthentication = () =>
-  axios
-    .get(`${bundle.spaceLocation()}/kinetic-response/users/auth/kinetic_core`, {
-      withCredentials: true,
-    })
-    .then(response => ({ profile: response.data }))
+    .then(response => response.data)
     .catch(response => ({ error: response }));
