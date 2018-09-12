@@ -20,10 +20,12 @@ export const Login = ({
   retrieveIframeJwt,
 }) => (
   <form className="login-form-container" onSubmit={handleLogin}>
-    <RetrieveJwtIframe
-      handleJwt={handleIframeJwt}
-      retrieveJwt={retrieveIframeJwt}
-    />
+    {retrieveIframeJwt ? (
+      <RetrieveJwtIframe
+        handleJwt={handleIframeJwt}
+        retrieveJwt={retrieveIframeJwt}
+      />
+    ) : null}
     <h3>
       Sign In
       <small>
