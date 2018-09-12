@@ -7,6 +7,11 @@ import { Route, Switch } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { bundle } from 'react-kinetic-core';
 
+import {
+  actions as socketActions,
+  TOKEN_KEY,
+} from 'discussions/src/redux/modules/socket';
+
 import logoImage from './assets/images/login-background.png';
 import logoName from './assets/images/login-name.png';
 
@@ -66,50 +71,48 @@ export const handleUnauthorized = props => () => {
   props.setDisplay('login');
 };
 
-const fetchCode = ({
-  location,
-  setCode,
-  setProcessing,
-  processOAuthToken,
-}) => () => {
-  const params = qs.parse(location.search);
+// const fetchCode = ({
+//   location,
+//   setCode,
+//   setProcessing,
+//   processOAuthToken,
+// }) => () => {
+//   const params = qs.parse(location.search);
 
-  if (params['?code']) {
-    // setCode(params['?code']);
-    // console.log('got oauth code', params['?code']);
-    // props.push(params.state);
+//   if (params['?code']) {
+//     // setCode(params['?code']);
+//     // console.log('got oauth code', params['?code']);
+//     // props.push(params.state);
 
-    processOAuthToken(params['?code'], params.state);
-  } else {
-    setProcessing(false);
-  }
-};
-const processOAuthCode = async (code, state, push) => {
-  const clientId = 'kinops';
-  const clientSecret = 'kinops';
+//     processOAuthToken(params['?code'], params.state);
+//   } else {
+//     setProcessing(false);
+//   }
+// };
+// const processOAuthCode = async (code, state, push) => {
+//   const clientId = 'kinops';
+//   const clientSecret = 'kinops';
 
-  const results = await axios.request({
-    method: 'post',
-    url: '/app/oauth/token',
-    auth: {
-      username: clientId,
-      password: clientSecret,
-    },
-    params: {
-      response_type: 'code',
-      grant_type: 'authorization_code',
-      code,
-    },
-    config: { headers: { 'Content-Type': 'application/json' } },
-  });
+//   const results = await axios.request({
+//     method: 'post',
+//     url: '/app/oauth/token',
+//     auth: {
+//       username: clientId,
+//       password: clientSecret,
+//     },
+//     params: {
+//       response_type: 'code',
+//       grant_type: 'authorization_code',
+//       code,
+//     },
+//     config: { headers: { 'Content-Type': 'application/json' } },
+//   });
 
-  window.opener.__OAUTH_CALLBACK__(results.data);
-};
+//   window.opener.__OAUTH_CALLBACK__(results.data);
+// };
 
-const processOAuthToken = (token, state, push) => {
-  // window.opener.__OAUTH_CALLBACK__(results.data);
-  // setProcessing(false);
-  window.localStorage.setItem('token', token);
+const processOAuthToken = (token, state, push, setToken) => {
+  setToken(token);
   push(state);
 };
 
@@ -138,15 +141,16 @@ const Authenticated = props => {
     authenticated,
     attempting,
     isPublic,
-    location,
+    setToken,
     push,
   } = props;
 
   const params = qs.parse(window.location.hash);
 
-  if (params['#/access_token']) {
+  if (params['access_token']) {
+    console.log('access token!!!', params['access_token']);
     // oauth
-    processOAuthToken(params['#/access_token'], params.state, push);
+    processOAuthToken(params['access_token'], params.state, push, setToken);
     return null;
   }
 
@@ -228,12 +232,17 @@ const mapStateToProps = state => ({
   isPublic: state.router.location.search.includes('public'),
 });
 
+const mapDispatchToProps = {
+  push,
+  setToken: socketActions.setToken,
+};
+
 export const AuthenticatedContainer = compose(
   connect(
     mapStateToProps,
-    { push },
+    mapDispatchToProps,
   ),
-  withState('token', 'setToken', null),
+  // withState('token', 'setToken', null),
   withState('display', 'setDisplay', 'none'),
   withState('error', 'setError', ''),
   withState('email', 'setEmail', ''),
@@ -253,14 +262,19 @@ export const AuthenticatedContainer = compose(
 
   lifecycle({
     componentWillMount() {
-      const token = localStorage.getItem('token');
-      console.log(token);
-      this.props.setToken(token);
-      if (bundle.identity() !== 'anonymous') {
-        this.props.setAuthenticated(true);
-      } else if (token) {
+      const token = localStorage.getItem(TOKEN_KEY);
+
+      // If there's a valid token, go ahead and set it.
+      if (token) {
+        this.props.setToken(token);
+      }
+
+      // If the bundle says we're anonymous on our initial visit then assume unauthenticated.
+      // Otherwise we're authenticated with Core.
+      if (bundle.identity() !== 'anonymous' && token) {
         this.props.setAuthenticated(true);
       }
+
       this.props.setAttempting(false);
     },
   }),

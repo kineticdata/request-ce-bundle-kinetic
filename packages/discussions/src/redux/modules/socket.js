@@ -4,6 +4,8 @@ import { commonTypes, Utils } from 'common';
 import { SOCKET_STATUS } from '../../api/socket';
 const { namespace, noPayload, withPayload } = Utils;
 
+export const TOKEN_KEY = 'kd-auth-token';
+
 export const types = {
   // Socket-based actions.
   SET_TOKEN: namespace('socket', 'SET_TOKEN'),

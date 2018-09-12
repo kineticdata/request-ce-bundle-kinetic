@@ -131,11 +131,9 @@ export const LoginForm = compose(
 
       if (windowHandle) {
         window.__OAUTH_CALLBACK__ = token => {
-          window.console.log(token);
-          localStorage.setItem('token', token);
           windowHandle.close();
-          this.props.setAuthenticated(true);
           this.props.setToken(token);
+          this.props.setAuthenticated(true);
         };
       } else {
         this.props.setPopupBlocked(true);

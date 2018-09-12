@@ -1,9 +1,10 @@
 import { eventChannel } from 'redux-saga';
 import { cancelled, race, take, put } from 'redux-saga/effects';
+import { bundle } from 'react-kinetic-core';
 
-import { types, actions } from '../modules/socket';
+import { types, actions, TOKEN_KEY } from '../modules/socket';
 
-import { Socket } from '../../api/socket';
+import { Socket, SOCKET_STATUS } from '../../api/socket';
 
 export const socket = new Socket();
 
@@ -41,6 +42,7 @@ export function* watchSocket() {
   let socketChannel;
 
   const socketTasks = {
+    token: take(types.SET_TOKEN),
     connect: take(types.CONNECT),
     reconnect: take(types.RECONNECT),
     disconnect: take(types.DISCONNECT),
@@ -56,12 +58,20 @@ export function* watchSocket() {
         : socketTasks,
     );
 
-    const { connect, reconnect, disconnect, tasks } = results;
+    const { connect, reconnect, disconnect, tasks, token } = results;
 
+    if (token) {
+      console.log('token received', token, socket, bundle.spaceLocation());
+      window.localStorage.setItem(TOKEN_KEY, token.payload);
+
+      // if(socket.status === SOCKET_STATUS.CLOSED) {
+      //   yield put()
+      // }
+    }
     // Handle the scenario of when we want to connect to a TopicHub.
     if (connect) {
-      const { host, port, token } = connect.payload;
-      const uri = `ws://${host}:${port}/acme/socket`;
+      const { host, port, token, url } = connect.payload;
+      const uri = url ? url : `ws://${host}:${port}/acme/socket`;
       socketChannel = registerSocketChannel(socket);
       socket.connect(
         token,
