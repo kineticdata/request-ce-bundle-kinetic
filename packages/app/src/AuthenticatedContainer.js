@@ -111,8 +111,10 @@ export const handleUnauthorized = props => () => {
 //   window.opener.__OAUTH_CALLBACK__(results.data);
 // };
 
-const processOAuthToken = (token, state, push, setToken) => {
-  setToken(token);
+const processOAuthToken = (token, state, push) => {
+  if (window.opener.__OAUTH_CALLBACK__) {
+    window.opener.__OAUTH_CALLBACK__(token);
+  }
   push(state);
 };
 
@@ -136,21 +138,12 @@ const CatchAllRoute = props => (
 );
 
 const Authenticated = props => {
-  const {
-    children,
-    authenticated,
-    attempting,
-    isPublic,
-    setToken,
-    push,
-  } = props;
+  const { children, authenticated, attempting, isPublic, push } = props;
 
   const params = qs.parse(window.location.hash);
 
   if (params['access_token']) {
-    console.log('access token!!!', params['access_token']);
-    // oauth
-    processOAuthToken(params['access_token'], params.state, push, setToken);
+    processOAuthToken(params['access_token'], params.state, push);
     return null;
   }
 
@@ -242,7 +235,6 @@ export const AuthenticatedContainer = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  // withState('token', 'setToken', null),
   withState('display', 'setDisplay', 'none'),
   withState('error', 'setError', ''),
   withState('email', 'setEmail', ''),
