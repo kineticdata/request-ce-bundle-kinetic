@@ -2,16 +2,14 @@ import React from 'react';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { coreOauthAuthorizeUrl } from '../../utils/authentication';
 
-const RetrieveJwt = ({ retrieveJwt, frameRef }) => {
-  return retrieveJwt ? (
-    <iframe
-      title="oauth-jwt iframe"
-      src={coreOauthAuthorizeUrl()}
-      style={{ display: 'none' }}
-      ref={frameRef}
-    />
-  ) : null;
-};
+const RetrieveJwt = ({ frameRef }) => (
+  <iframe
+    title="oauth-jwt iframe"
+    src={coreOauthAuthorizeUrl()}
+    style={{ display: 'none' }}
+    ref={frameRef}
+  />
+);
 
 export const RetrieveJwtIframe = compose(
   withHandlers(() => {
@@ -19,8 +17,8 @@ export const RetrieveJwtIframe = compose(
     return {
       frameRef: () => ref => (frameRef = ref),
       getFrameRef: () => () => frameRef,
-      handleFrameLoad: ({ retrieveJwt, handleJwt }) => () => {
-        if (retrieveJwt && handleJwt) {
+      handleFrameLoad: ({ handleJwt }) => () => {
+        if (handleJwt) {
           handleJwt(frameRef);
         }
       },

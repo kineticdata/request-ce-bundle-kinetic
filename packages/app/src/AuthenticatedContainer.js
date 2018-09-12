@@ -71,46 +71,6 @@ export const handleUnauthorized = props => () => {
   props.setDisplay('login');
 };
 
-// const fetchCode = ({
-//   location,
-//   setCode,
-//   setProcessing,
-//   processOAuthToken,
-// }) => () => {
-//   const params = qs.parse(location.search);
-
-//   if (params['?code']) {
-//     // setCode(params['?code']);
-//     // console.log('got oauth code', params['?code']);
-//     // props.push(params.state);
-
-//     processOAuthToken(params['?code'], params.state);
-//   } else {
-//     setProcessing(false);
-//   }
-// };
-// const processOAuthCode = async (code, state, push) => {
-//   const clientId = 'kinops';
-//   const clientSecret = 'kinops';
-
-//   const results = await axios.request({
-//     method: 'post',
-//     url: '/app/oauth/token',
-//     auth: {
-//       username: clientId,
-//       password: clientSecret,
-//     },
-//     params: {
-//       response_type: 'code',
-//       grant_type: 'authorization_code',
-//       code,
-//     },
-//     config: { headers: { 'Content-Type': 'application/json' } },
-//   });
-
-//   window.opener.__OAUTH_CALLBACK__(results.data);
-// };
-
 const processOAuthToken = (token, state, push, setToken) => {
   setToken(token);
   push(state);
@@ -148,8 +108,6 @@ const Authenticated = props => {
   const params = qs.parse(window.location.hash);
 
   if (params['access_token']) {
-    console.log('access token!!!', params['access_token']);
-    // oauth
     processOAuthToken(params['access_token'], params.state, push, setToken);
     return null;
   }
