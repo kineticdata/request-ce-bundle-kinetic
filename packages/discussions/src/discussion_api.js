@@ -3,12 +3,11 @@ import { bundle } from 'react-kinetic-core';
 
 const DEFAULT_MESSAGE_LIMIT = 25;
 
-const baseUrl = () =>
-  true ? 'http://localhost:7071/acme' : bundle.spaceLocation();
+const baseUrl = () => `${bundle.spaceLocation()}/app/discussions`;
 
 export const sendMessage = (params, token) =>
   axios.request({
-    url: `${baseUrl()}/app/api/v1/discussions/${params.id}/messages`,
+    url: `${baseUrl()}/api/v1/discussions/${params.id}/messages`,
     method: 'post',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -26,7 +25,7 @@ export const sendMessage = (params, token) =>
 export const fetchMessages = (id, token, pageToken) =>
   axios
     .request({
-      url: `${baseUrl()}/app/api/v1/discussions/${id}/messages`,
+      url: `${baseUrl()}/api/v1/discussions/${id}/messages`,
       method: 'get',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -42,7 +41,7 @@ export const fetchMessages = (id, token, pageToken) =>
 export const fetchDiscussion = ({ id, token }) =>
   axios
     .request({
-      url: `${baseUrl()}/app/api/v1/discussions/${id}`,
+      url: `${baseUrl()}/api/v1/discussions/${id}`,
       method: 'get',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -53,7 +52,7 @@ export const fetchDiscussion = ({ id, token }) =>
 
 export const fetchDiscussions = ({ token, pageToken, user, title }) =>
   axios
-    .get(`${baseUrl()}/app/api/v1/discussions`, {
+    .get(`${baseUrl()}/api/v1/discussions`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -78,7 +77,7 @@ export const createDiscussion = ({
   axios
     .request({
       method: 'post',
-      url: `${baseUrl()}/app/api/v1/discussions`,
+      url: `${baseUrl()}/api/v1/discussions`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -97,7 +96,7 @@ export const createDiscussion = ({
 export const fetchInvites = (id, token) =>
   axios
     .request({
-      url: `${baseUrl()}/app/api/v1/discussions/${id}/invitations`,
+      url: `${baseUrl()}/api/v1/discussions/${id}/invitations`,
       method: 'get',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -109,7 +108,7 @@ export const fetchInvites = (id, token) =>
 export const createInvite = ({ id, type, value, token }) =>
   axios
     .request({
-      url: `${baseUrl()}/app/api/v1/discussions/${id}/invitations`,
+      url: `${baseUrl()}/api/v1/discussions/${id}/invitations`,
       method: 'post',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -122,7 +121,7 @@ export const createInvite = ({ id, type, value, token }) =>
 export const resendInvite = (id, inviteId, token) =>
   axios
     .request({
-      url: `${baseUrl()}/app/api/v1/discussions/${id}/invitations/${inviteId}`,
+      url: `${baseUrl()}/api/v1/discussions/${id}/invitations/${inviteId}`,
       method: 'post',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -134,7 +133,7 @@ export const resendInvite = (id, inviteId, token) =>
 export const removeInvite = (id, inviteId, token) =>
   axios
     .request({
-      url: `${baseUrl()}/app/api/v1/discussions/${id}/invitations/${inviteId}`,
+      url: `${baseUrl()}/api/v1/discussions/${id}/invitations/${inviteId}`,
       method: 'delete',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -146,7 +145,7 @@ export const removeInvite = (id, inviteId, token) =>
 export const fetchParticipants = (id, token) =>
   axios
     .request({
-      url: `${baseUrl()}/app/api/v1/discussions/${id}/participants`,
+      url: `${baseUrl()}/api/v1/discussions/${id}/participants`,
       method: 'get',
       headers: {
         Authorization: `Bearer ${token}`,
