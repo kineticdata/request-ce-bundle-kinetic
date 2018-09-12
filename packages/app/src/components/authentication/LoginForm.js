@@ -1,6 +1,8 @@
 import React from 'react';
-import { compose, withHandlers } from 'recompose';
-import { login } from '../../utils/authentication';
+import { compose, withHandlers, withState, lifecycle } from 'recompose';
+import { withRouter } from 'react-router';
+import { login, coreOauthAuthorizeUrl } from '../../utils/authentication';
+import { RetrieveJwtIframe } from './RetrieveJwtIframe';
 
 export const Login = ({
   handleLogin,
@@ -12,17 +14,31 @@ export const Login = ({
   handlePassword,
   error,
   routed,
+  location,
+  popupBlocked,
+  handleIframeJwt,
+  retrieveIframeJwt,
 }) => (
   <form className="login-form-container" onSubmit={handleLogin}>
+    <RetrieveJwtIframe
+      handleJwt={handleIframeJwt}
+      retrieveJwt={retrieveIframeJwt}
+    />
     <h3>
       Sign In
       <small>
-        {'or '}
+        <a href={coreOauthAuthorizeUrl()}>Login with Kinops</a>
+        {' or '}
         <a role="button" tabIndex="0" onClick={toCreateAccount(routed)}>
           Create Account
         </a>
       </small>
     </h3>
+    {popupBlocked ? (
+      <h3>
+        <span className="text-danger">Our pop-up window was blocked.</span>
+      </h3>
+    ) : null}
     <div
       style={{
         display: 'flex',
@@ -94,10 +110,34 @@ const tryAuthentication = ({
 };
 
 export const LoginForm = compose(
+  withRouter,
+  withState('windowHandle', 'setWindowHandle', null),
+  withState('popupBlocked', 'setPopupBlocked', false),
   withHandlers({
     tryAuthentication,
   }),
   withHandlers({
     handleLogin,
+  }),
+  lifecycle({
+    componentDidMount() {
+      const windowHandle = window.open(
+        coreOauthAuthorizeUrl(),
+        'KINOPS_WindowName',
+        'menubar=no,location=no,resizable=yes,status=yes',
+      );
+
+      if (windowHandle) {
+        window.__OAUTH_CALLBACK__ = token => {
+          window.console.log(token);
+          localStorage.setItem('token', token);
+          windowHandle.close();
+          this.props.setAuthenticated(true);
+          this.props.setToken(token);
+        };
+      } else {
+        this.props.setPopupBlocked(true);
+      }
+    },
   }),
 )(Login);

@@ -5,13 +5,20 @@ html {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+.sidebar-layout-wrapper {
+  top: $header-height !important;
+
+  .sidebar-container {
+    z-index: 4 !important;
+  }
+}
+
 .main-container {
   display: flex;
   overflow-y: auto !important;
 }
 
 .package-layout {
-  margin-top: $header-height;
   display: flex;
   flex: 1 1 100%;
   flex-direction: column;
@@ -30,7 +37,7 @@ html {
   position: relative;
   background: rgb(255, 255, 255);
   padding: 0 1.5rem;
-  min-height: 100vh;
+  min-height: $page-height;
   // height: 100%;
   width: 100%;
   &--sidebar {

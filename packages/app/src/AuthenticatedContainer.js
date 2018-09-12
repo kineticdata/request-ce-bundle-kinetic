@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
+import qs from 'qs';
+import axios from 'axios';
 import { Route, Switch } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { bundle } from 'react-kinetic-core';
@@ -64,8 +66,89 @@ export const handleUnauthorized = props => () => {
   props.setDisplay('login');
 };
 
+const fetchCode = ({
+  location,
+  setCode,
+  setProcessing,
+  processOAuthToken,
+}) => () => {
+  const params = qs.parse(location.search);
+
+  if (params['?code']) {
+    // setCode(params['?code']);
+    // console.log('got oauth code', params['?code']);
+    // props.push(params.state);
+
+    processOAuthToken(params['?code'], params.state);
+  } else {
+    setProcessing(false);
+  }
+};
+const processOAuthCode = async (code, state, push) => {
+  const clientId = 'kinops';
+  const clientSecret = 'kinops';
+
+  const results = await axios.request({
+    method: 'post',
+    url: '/app/oauth/token',
+    auth: {
+      username: clientId,
+      password: clientSecret,
+    },
+    params: {
+      response_type: 'code',
+      grant_type: 'authorization_code',
+      code,
+    },
+    config: { headers: { 'Content-Type': 'application/json' } },
+  });
+
+  window.opener.__OAUTH_CALLBACK__(results.data);
+};
+
+const processOAuthToken = (token, state, push) => {
+  // window.opener.__OAUTH_CALLBACK__(results.data);
+  // setProcessing(false);
+  window.localStorage.setItem('token', token);
+  push(state);
+};
+
+const CatchAllRoute = props => (
+  <Route
+    path="/"
+    render={route => (
+      <LoginScreen>
+        {props.display === 'reset' ? (
+          <ResetPasswordForm {...props} />
+        ) : props.display === 'reset-token' ? (
+          <ResetTokenForm {...props} />
+        ) : props.display === 'create-account' ? (
+          <CreateAccountForm {...props} />
+        ) : (
+          <LoginForm {...props} />
+        )}
+      </LoginScreen>
+    )}
+  />
+);
+
 const Authenticated = props => {
-  const { children, authenticated, attempting, isPublic } = props;
+  const {
+    children,
+    authenticated,
+    attempting,
+    isPublic,
+    location,
+    push,
+  } = props;
+
+  const params = qs.parse(window.location.hash);
+
+  if (params['#/access_token']) {
+    // oauth
+    processOAuthToken(params['#/access_token'], params.state, push);
+    return null;
+  }
 
   return authenticated && !isPublic ? (
     children
@@ -130,46 +213,17 @@ const Authenticated = props => {
               <UnauthenticatedForm {...props} {...route} routed />
             )}
           />
-          <Route
-            path="/"
-            render={route => (
-              <LoginScreen>
-                {props.display === 'reset' ? (
-                  <ResetPasswordForm {...props} />
-                ) : props.display === 'reset-token' ? (
-                  <ResetTokenForm {...props} />
-                ) : props.display === 'create-account' ? (
-                  <CreateAccountForm {...props} />
-                ) : (
-                  <LoginForm {...props} />
-                )}
-              </LoginScreen>
-            )}
-          />
+          <CatchAllRoute {...props} />
         </Switch>
       ) : (
-        <Route
-          path="/"
-          render={route => (
-            <LoginScreen>
-              {props.display === 'reset' ? (
-                <ResetPasswordForm {...props} />
-              ) : props.display === 'reset-token' ? (
-                <ResetTokenForm {...props} />
-              ) : props.display === 'create-account' ? (
-                <CreateAccountForm {...props} />
-              ) : (
-                <LoginForm {...props} />
-              )}
-            </LoginScreen>
-          )}
-        />
+        <CatchAllRoute {...props} />
       )}
     </div>
   );
 };
 
 const mapStateToProps = state => ({
+  location: state.router.location,
   pathname: state.router.location.pathname,
   isPublic: state.router.location.search.includes('public'),
 });
@@ -179,11 +233,12 @@ export const AuthenticatedContainer = compose(
     mapStateToProps,
     { push },
   ),
+  withState('token', 'setToken', null),
   withState('display', 'setDisplay', 'none'),
   withState('error', 'setError', ''),
   withState('email', 'setEmail', ''),
   withState('password', 'setPassword', ''),
-  withState('attempting', 'setAttempting', false),
+  withState('attempting', 'setAttempting', true),
   withState('authenticated', 'setAuthenticated', false),
 
   withHandlers({
@@ -198,10 +253,15 @@ export const AuthenticatedContainer = compose(
 
   lifecycle({
     componentWillMount() {
+      const token = localStorage.getItem('token');
+      console.log(token);
+      this.props.setToken(token);
       if (bundle.identity() !== 'anonymous') {
-        this.props.setAttempting(false);
+        this.props.setAuthenticated(true);
+      } else if (token) {
         this.props.setAuthenticated(true);
       }
+      this.props.setAttempting(false);
     },
   }),
 )(Authenticated);

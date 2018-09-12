@@ -1,21 +1,14 @@
 import React from 'react';
+import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { compose, lifecycle, withState, withHandlers } from 'recompose';
+import { compose, lifecycle } from 'recompose';
 import { PageTitle } from 'common';
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Modal,
-} from 'reactstrap';
 import { actions } from '../../../redux/modules/settingsForms';
 
 export const FormActivityContainer = ({ loading, submission, space }) =>
   !loading && (
     <div>
-      {console.log(submission)}
       <PageTitle parts={['Services Settings']} />
       <div className="page-container  page-container--space-settings">
         <div className="page-panel">
@@ -40,6 +33,7 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
               .filter(attribute => attribute.name === 'Task Server Url')
               .map(attribute => (
                 <a
+                  key={attribute.name}
                   href={`${attribute.values[0]}/app/runs?sourceId=${
                     submission.id
                   }`}
@@ -52,7 +46,7 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
               ))}
           </div>
           <section>
-            <div className="settings-flex">
+            <div className="settings-flex row">
               <div className="col-sm-6">
                 <label>Submission Label</label>
                 <p>{submission.label}</p>
@@ -108,15 +102,15 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                 </p>
               </div>
             </div>
-
-            <h3>Fulfillment Process</h3>
+            <br />
+            <h3 className="section__title">Fulfillment Process</h3>
             {submission.activities.filter(activity => activity.type === 'Task')
               .length > 0 ? (
-              <table className="table table-sm table-striped table-datastore table-submissions">
+              <table className="table table-sm table-striped settings-table">
                 <thead className="header">
                   <tr>
                     <th>Type</th>
-                    <th>Lable</th>
+                    <th>Label</th>
                     <th>Description</th>
                     <th>Data</th>
                   </tr>
@@ -124,16 +118,16 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                 <tbody>
                   {submission.activities
                     .filter(activity => activity.type === 'Task')
-                    .map(activity => {
+                    .map((activity, index) => {
                       const data = JSON.parse(activity.data);
                       return (
-                        <tr>
+                        <tr key={`task-activity-${index}`}>
                           <td>{activity.type}</td>
                           <td>{activity.label}</td>
                           <td>{activity.description}</td>
                           <td>
                             {Object.keys(data).map(key => (
-                              <div>
+                              <div key={key}>
                                 {key}: {data[key]}
                               </div>
                             ))}
@@ -146,15 +140,15 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
             ) : (
               'There are no fulfillment steps'
             )}
-
-            <h3>Submission Activity</h3>
+            <br />
+            <h3 className="section__title">Submission Activity</h3>
             {submission.activities.filter(activity => activity.type !== 'Task')
               .length > 0 ? (
-              <table className="table table-sm table-striped table-datastore table-submissions">
+              <table className="table table-sm table-striped settings-table">
                 <thead className="header">
                   <tr>
                     <th>Type</th>
-                    <th>Lable</th>
+                    <th>Label</th>
                     <th>Description</th>
                     <th>Data</th>
                   </tr>
@@ -162,16 +156,16 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                 <tbody>
                   {submission.activities
                     .filter(activity => activity.type !== 'Task')
-                    .map(activity => {
+                    .map((activity, index) => {
                       const data = JSON.parse(activity.data);
                       return (
-                        <tr>
+                        <tr key={`activity-${index}`}>
                           <td>{activity.type}</td>
                           <td>{activity.label}</td>
                           <td>{activity.description}</td>
                           <td>
                             {Object.keys(data).map(key => (
-                              <div>
+                              <div key={key}>
                                 {key}: {data[key]}
                               </div>
                             ))}
@@ -184,9 +178,9 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
             ) : (
               'There is no submission activity'
             )}
-
-            <h3>Values</h3>
-            <table className="table table-sm table-striped table-datastore table-submissions">
+            <br />
+            <h3 className="section__title">Values</h3>
+            <table className="table table-sm table-striped settings-table">
               <thead className="header">
                 <tr>
                   <th>Field</th>
@@ -195,7 +189,7 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
               </thead>
               <tbody>
                 {submission.form.fields.map(field => (
-                  <tr>
+                  <tr key={field.name}>
                     <td>{field.name}</td>
                     <td>{submission.values[field.name]}</td>
                   </tr>

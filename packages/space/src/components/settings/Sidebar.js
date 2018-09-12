@@ -22,70 +22,72 @@ export const SidebarComponent = ({
       <span className="fa fa-fw fa-chevron-left" />
       Return to Home
     </Link>
-    {!loading && (
-      <ul className="nav flex-column settings-group">
-        <li className="nav-item">
-          <NavLink
-            to="/settings/profile"
-            className="nav-link"
-            activeClassName="active"
-          >
-            Profile
-            <span className="fa fa-fw fa-angle-right" />
-          </NavLink>
-          {spaceAdmin && (
+    <div className="sidebar-group--content-wrapper">
+      {!loading && (
+        <ul className="nav flex-column sidebar-group">
+          <li className="nav-item">
             <NavLink
-              to="/settings/space"
+              to="/settings/profile"
               className="nav-link"
               activeClassName="active"
             >
-              General
+              Profile
               <span className="fa fa-fw fa-angle-right" />
             </NavLink>
-          )}
-          {showDatastore && (
-            <NavLink
-              to="/settings/datastore"
-              className="nav-link"
-              activeClassName="active"
-            >
-              Datastore
-              <span className="fa fa-fw fa-angle-right" />
-            </NavLink>
-          )}
-          {showNotifications && (
-            <NavLink
-              to="/settings/notifications"
-              className="nav-link"
-              activeClassName="active"
-            >
-              Notifications
-              <span className="fa fa-fw fa-angle-right" />
-            </NavLink>
-          )}
-          {showRobots && (
-            <NavLink
-              to="/settings/robots"
-              className="nav-link"
-              activeClassName="active"
-            >
-              Robots
-              <span className="fa fa-fw fa-angle-right" />
-            </NavLink>
-          )}
-          {spaceAdmin && (
-            <NavLink
-              to="/settings/users"
-              className="nav-link"
-              activeClassName="active"
-            >
-              Users
-              <span className="fa fa-fw fa-angle-right" />
-            </NavLink>
-          )}
-        </li>
-      </ul>
-    )}
+            {spaceAdmin && (
+              <NavLink
+                to="/settings/space"
+                className="nav-link"
+                activeClassName="active"
+              >
+                General
+                <span className="fa fa-fw fa-angle-right" />
+              </NavLink>
+            )}
+            {showDatastore && (
+              <NavLink
+                to="/settings/datastore"
+                className="nav-link"
+                activeClassName="active"
+              >
+                Datastore
+                <span className="fa fa-fw fa-angle-right" />
+              </NavLink>
+            )}
+            {showNotifications && (
+              <NavLink
+                to="/settings/notifications"
+                className="nav-link"
+                activeClassName="active"
+              >
+                Notifications
+                <span className="fa fa-fw fa-angle-right" />
+              </NavLink>
+            )}
+            {showRobots && (
+              <NavLink
+                to="/settings/robots"
+                className="nav-link"
+                activeClassName="active"
+              >
+                Robots
+                <span className="fa fa-fw fa-angle-right" />
+              </NavLink>
+            )}
+            {spaceAdmin && (
+              <NavLink
+                to="/settings/users"
+                className="nav-link"
+                activeClassName="active"
+              >
+                Users
+                <span className="fa fa-fw fa-angle-right" />
+              </NavLink>
+            )}
+          </li>
+        </ul>
+      )}
+    </div>
     {spaceAdmin && (
       <div className="sidebar-group sidebar-group--settings">
         <ul className="nav flex-column settings-group">
@@ -93,7 +95,7 @@ export const SidebarComponent = ({
             <a
               href={`${bundle.spaceLocation()}/app`}
               target="blank"
-              className="nav-link"
+              className="nav-link nav-link--admin"
             >
               Kinetic Request Admin
               <span className="fa fa-fw fa-external-link" />
@@ -104,7 +106,7 @@ export const SidebarComponent = ({
               <a
                 href={`${bundle.spaceLocation()}/kinetic-task`}
                 target="blank"
-                className="nav-link"
+                className="nav-link nav-link--admin"
               >
                 Kinetic Task Admin
                 <span className="fa fa-fw fa-external-link" />

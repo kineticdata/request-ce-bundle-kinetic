@@ -97,7 +97,24 @@ export const types = {
   ),
   DELETE_SUBMISSION_ERROR: namespace('datastore', 'DELETE_SUBMISSION_ERROR'),
   SET_FORM_CHANGES: namespace('datastore', 'SET_FORM_CHANGES'),
+  OPEN_MODAL: namespace('datastore', 'OPEN_MODAL'),
+  CLOSE_MODAL: namespace('datastore', 'CLOSE_MODAL'),
+  FETCH_ALL_SUBMISSIONS: namespace('datastore', 'FETCH_ALL_SUBMISSIONS'),
+  SET_EXPORT_SUBMISSIONS: namespace('datastore', 'SET_EXPORT_SUBMISSIONS'),
+  SET_EXPORT_COUNT: namespace('datastore', 'SET_EXPORT_COUNT'),
   SET_CLIENT_SORT_INFO: namespace('datastore', 'SET_CLIENT_SORT_INFO'),
+  DELETE_ALL_SUBMISSIONS: namespace('datastore', 'DELETE_ALL_SUBMISSIONS'),
+  EXECUTE_IMPORT: namespace('datastore', 'EXECUTE_IMPORT'),
+  SET_IMPORT_PERCENT_COMPLETE: namespace(
+    'datastore',
+    'SET_IMPORT_PERCENT_COMPLETE',
+  ),
+  DEBOUNCE_PERCENT_COMPLETE: namespace(
+    'datastore',
+    'DEBOUNCE_PERCENT_COMPLETE',
+  ),
+  SET_IMPORT_FAILED_CALL: namespace('datastore', 'SET_IMPORT_FAILED_CALL'),
+  SET_IMPORT_COMPLETE: namespace('datastore', 'SET_IMPORT_COMPLETE'),
 };
 
 export const actions = {
@@ -152,7 +169,18 @@ export const actions = {
   deleteSubmissionSuccess: noPayload(types.DELETE_SUBMISSION_SUCCESS),
   deleteSubmissionErrors: withPayload(types.DELETE_SUBMISSION_ERROR),
   setFormChanges: withPayload(types.SET_FORM_CHANGES),
+  openModal: withPayload(types.OPEN_MODAL),
+  closeModal: noPayload(types.CLOSE_MODAL),
+  fetchAllSubmissions: withPayload(types.FETCH_ALL_SUBMISSIONS),
+  setExportSubmissions: withPayload(types.SET_EXPORT_SUBMISSIONS),
+  setExportCount: withPayload(types.SET_EXPORT_COUNT),
   setClientSortInfo: withPayload(types.SET_CLIENT_SORT_INFO),
+  deleteAllSubmissions: noPayload(types.DELETE_ALL_SUBMISSIONS),
+  executeImport: withPayload(types.EXECUTE_IMPORT),
+  setImportPercentComplete: withPayload(types.SET_IMPORT_PERCENT_COMPLETE),
+  debouncePercentComplete: withPayload(types.DEBOUNCE_PERCENT_COMPLETE),
+  setImportFailedCall: withPayload(types.SET_IMPORT_FAILED_CALL),
+  setImportComplete: noPayload(types.SET_IMPORT_COMPLETE),
 };
 
 const parseConfigJson = json => {
@@ -312,6 +340,15 @@ export const State = Record({
   submissionLoading: true,
   // Client Side Sorting
   clientSortInfo: null,
+  modalIsOpen: false,
+  modalName: '',
+  fetchingAll: false,
+  exportSubmissions: [],
+  exportCount: 0,
+  importProcessing: false,
+  importPercentComplete: 0,
+  importFailedCalls: List(),
+  importComplete: false,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -519,10 +556,31 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('submissionLoading', true).set('submission', null);
     case types.SET_FORM_CHANGES:
       return state.setIn(['currentFormChanges', payload.type], payload.value);
+    case types.OPEN_MODAL:
+      return state.set('modalIsOpen', true).set('modalName', payload);
+    case types.CLOSE_MODAL:
+      return state.set('modalIsOpen', false).set('modalName', '');
+    case types.FETCH_ALL_SUBMISSIONS:
+      return state.set('fetchingAll', true);
+    case types.SET_EXPORT_SUBMISSIONS:
+      return state.set('exportSubmissions', payload).set('fetchingAll', false);
+    case types.SET_EXPORT_COUNT:
+      return state.set('exportCount', payload);
     case types.SET_CLIENT_SORT_INFO:
       return state
         .set('clientSortInfo', payload)
         .set('submissions', sortSubmissions(state.submissions, payload));
+    case types.EXECUTE_IMPORT:
+      return state.set('importProcessing', true).set('importComplete', false);
+    case types.SET_IMPORT_PERCENT_COMPLETE:
+      return state.set('importPercentComplete', payload);
+    case types.SET_IMPORT_FAILED_CALL:
+      return state.update('importFailedCalls', acc => acc.push(payload));
+    case types.SET_IMPORT_COMPLETE:
+      return state
+        .set('importProcessing', false)
+        .set('importPercentComplete', 0)
+        .set('importComplete', true);
     default:
       return state;
   }
