@@ -15,7 +15,6 @@ export function* incomingSocketEvents(socketChannel, socket) {
 
       switch (data.action) {
         case 'status':
-          console.log('setting status', data.payload);
           yield put(actions.setStatus(data.payload));
           break;
         default:
@@ -31,10 +30,9 @@ export function* incomingSocketEvents(socketChannel, socket) {
 
 export function registerSocketChannel(socket) {
   return eventChannel(emit => {
-    socket.on('status', (status, e) => {
-      console.log(e);
-      emit({ action: 'status', payload: status });
-    });
+    socket.on('status', (status, _e) =>
+      emit({ action: 'status', payload: status }),
+    );
 
     return () => {
       socket.close();
@@ -54,12 +52,12 @@ export function* watchToken() {
   yield takeEvery(types.SET_TOKEN, setTokenTask);
 }
 
-export function* setTokenTask(action) {
-  window.localStorage.setItem(TOKEN_KEY, action.payload);
+export function* setTokenTask({ payload }) {
+  window.localStorage.setItem(TOKEN_KEY, payload);
 
   if (socket.status === SOCKET_STATUS.CLOSED) {
     const url = createWsUri();
-    yield put(actions.connect({ action, url }));
+    yield put(actions.connect({ token: payload, url }));
   }
 }
 
@@ -89,12 +87,10 @@ export function* watchSocket() {
       const { host, port, token, url } = connect.payload;
       const uri = url ? url : `ws://${host}:${port}/acme/socket`;
       socketChannel = registerSocketChannel(socket);
-      console.log(`connecting to ${uri} and `, token);
-      const f = socket.connect(
+      socket.connect(
         token,
         uri,
       );
-      console.log(f);
 
       window.socket = socket;
     }

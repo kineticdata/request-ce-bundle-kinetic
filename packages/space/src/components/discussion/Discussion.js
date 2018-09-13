@@ -6,6 +6,7 @@ import { Utils, PageTitle } from 'common';
 import { bundle } from 'react-kinetic-core';
 import { Discussion as KinopsDiscussion } from 'discussions';
 import { commonActions } from 'common';
+import { SOCKET_STATUS } from 'discussions/src/api/socket';
 
 const buildRelatedItem = issue => {
   const tagList = issue.tag_list;
@@ -64,6 +65,7 @@ export const DiscussionComponent = ({
   discussionName,
   relatedItem,
   profile,
+  socketStatus,
 }) => (
   <div className="discussion-wrapper">
     <PageTitle parts={[discussionName, 'Discussions']} />
@@ -72,14 +74,23 @@ export const DiscussionComponent = ({
       {relatedItem && buildRelatedItemLink(relatedItem, profile)}
     </div>
     {discussionId ? (
-      <KinopsDiscussion
-        discussionId={discussionId}
-        renderClose={() => (
-          <Link to={`/`} className="btn btn-link">
-            Close
-          </Link>
-        )}
-      />
+      socketStatus === SOCKET_STATUS.IDENTIFIED ? (
+        <KinopsDiscussion
+          discussionId={discussionId}
+          renderClose={() => (
+            <Link to={`/`} className="btn btn-link">
+              Close
+            </Link>
+          )}
+        />
+      ) : (
+        <div className="empty-discussion">
+          <h6>
+            Real-time connection to server has been interrupted. Please refresh
+            and try again.
+          </h6>
+        </div>
+      )
     ) : (
       <div className="empty-discussion">
         <h6>No discussion to display</h6>
@@ -95,6 +106,7 @@ const mapStateToProps = (state, props) => {
   );
 
   return {
+    socketStatus: state.discussions.socket.status,
     sidebarOpen: state.app.layout.sidebarOpen,
     profile: state.app.profile,
     discussionId: props.match.params.id,
