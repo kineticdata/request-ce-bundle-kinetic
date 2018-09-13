@@ -81,7 +81,7 @@ export const State = Record({
   discussionServerUrl: '',
   discussions: List(),
   discussionsLimit: 10,
-  discussionsOffset: 0,
+  discussionsOffset: null,
   discussionsError: null,
   discussionsLoading: true,
   discussionsSearchTerm: '',

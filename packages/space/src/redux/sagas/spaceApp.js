@@ -5,7 +5,7 @@ import { List } from 'immutable';
 import { commonActions, toastActions } from 'common';
 import { actions, types } from '../modules/spaceApp';
 import { actions as errorActions } from '../modules/errors';
-
+import { selectToken } from 'discussions/src/redux/modules/socket';
 import { DiscussionAPI } from 'discussions';
 
 export function* fetchAppSettingsSaga() {
@@ -57,9 +57,11 @@ export function* deleteAlertSaga(action) {
 }
 
 export function* createDiscussionSaga({ payload }) {
-  const { error, issue } = yield call(DiscussionAPI.createIssue, {
-    name: payload.title,
+  const token = yield select(selectToken);
+  const { error, discussion } = yield call(DiscussionAPI.createDiscussion, {
+    title: payload.title,
     description: payload.description || payload.title,
+    token,
   });
 
   if (error) {
@@ -72,25 +74,19 @@ export function* createDiscussionSaga({ payload }) {
         invites.map(invite =>
           call(
             DiscussionAPI.createInvite,
-            issue.guid,
+            discussion.id,
             invite,
             payload.description,
           ),
         ),
       );
     }
-    yield put(push(`/discussions/${issue.guid}`));
+    yield put(push(`/discussions/${discussion.id}`));
   }
 }
 
 export function* fetchRecentDiscussionsSaga() {
-  // First we need to determine if the user is authenticated in Response.
-  const { error: authenticationError } = yield call(
-    DiscussionAPI.fetchResponseProfile,
-  );
-  if (authenticationError) {
-    yield call(DiscussionAPI.getResponseAuthentication);
-  }
+  const token = yield select(selectToken);
 
   const { limit, offset, search } = yield select(state => ({
     limit: state.space.spaceApp.discussionsLimit,
@@ -98,14 +94,19 @@ export function* fetchRecentDiscussionsSaga() {
     search: state.space.spaceApp.discussionsSearchTerm,
   }));
 
-  const { error, issues } = !!search
-    ? yield call(DiscussionAPI.searchIssues, search, limit, offset)
-    : yield call(DiscussionAPI.fetchMyOpenIssues, limit, offset);
+  const user = yield select(state => state.app.profile.username);
+
+  const { error, discussions } = yield call(DiscussionAPI.fetchDiscussions, {
+    token,
+    pageToken: offset,
+    user,
+    title: search,
+  });
 
   if (error) {
     yield put(actions.setDiscussionsError(error));
   } else {
-    yield put(actions.setDiscussions(issues));
+    yield put(actions.setDiscussions(discussions));
   }
 }
 

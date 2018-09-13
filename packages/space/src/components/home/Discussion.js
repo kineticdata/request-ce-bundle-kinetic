@@ -8,11 +8,9 @@ import { getTeamColor } from '../../utils';
 import { Avatar } from '../shared/Avatar';
 
 const getTeamHeaderStyle = (discussion, teams) => {
-  const teamSlug = discussion.tag_list.find(t => t === 'META:TYPE:Team')
-    ? discussion.tag_list
-        .find(t => t.startsWith('META:ID:'))
-        .replace('META:ID:', '')
-    : null;
+  console.log(discussion);
+  const teamRI = discussion.relatedItems.find(ri => ri.type === 'Team');
+  const teamSlug = teamRI ? teamRI.key : null;
 
   if (teamSlug) {
     const team = teams.find(t => t.slug === teamSlug);
@@ -28,44 +26,25 @@ const getTeamHeaderStyle = (discussion, teams) => {
 };
 
 const RelatedItemBadge = ({ discussion }) => {
-  const type = discussion.tag_list.find(t => t.startsWith('META:TYPE:'))
-    ? discussion.tag_list
-        .find(t => t.startsWith('META:TYPE:'))
-        .replace('META:TYPE:', '')
-    : null;
+  const relatedItem = discussion.relatedItems[0] || null;
 
-  const id = discussion.tag_list.find(t => t.startsWith('META:ID:'))
-    ? discussion.tag_list
-        .find(t => t.startsWith('META:ID:'))
-        .replace('META:ID:', '')
-    : null;
-
-  switch (type) {
-    case 'Queue Task':
-      return (
-        <Link
-          className="btn btn-inverse btn-sm"
-          to={`/kapps/queue/submissions/${id}`}
-        >
-          View Task
-        </Link>
-      );
-    // Removed to differeniate between task and team discussions
-    // case 'Team':
-    //   return (
-    //     <Link className="btn btn-inverse btn-sm" to={`/teams/${id}`}>
-    //       View Team
-    //     </Link>
-    //   );
-    default:
-      return <span />;
+  if (relatedItem && relatedItem.type === 'Queue Task') {
+    return (
+      <Link
+        className="btn btn-inverse btn-sm"
+        to={`/kapps/queue/submissions/${relatedItem.key}`}
+      >
+        View Task
+      </Link>
+    );
   }
+  return <span />;
 };
 
 export const Discussion = ({ discussion, me, discussionServerUrl, teams }) => {
   const messages = discussion
-    ? discussion.last_message
-      ? List([discussion.last_message])
+    ? discussion.messages.items.length > 0
+      ? List(discussion.messages[discussion.messages.items.length - 1])
       : List()
     : List();
 
@@ -75,13 +54,17 @@ export const Discussion = ({ discussion, me, discussionServerUrl, teams }) => {
       style={getTeamHeaderStyle(discussion, teams)}
     >
       <div className="header">
-        <Link to={`/discussions/${discussion.guid}`} className="header__title">
-          {discussion.name}
+        <Link to={`/discussions/${discussion.id}`} className="header__title">
+          {discussion.title}
         </Link>
         <RelatedItemBadge discussion={discussion} />
         <div className="participants">
           {discussion.participants.map(participant => (
-            <Avatar key={participant.guid} user={participant} size={24} />
+            <Avatar
+              key={participant.user.username}
+              user={participant.user}
+              size={24}
+            />
           ))}
         </div>
       </div>
