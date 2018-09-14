@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import qs from 'qs';
-import axios from 'axios';
 import { Route, Switch } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { bundle } from 'react-kinetic-core';
