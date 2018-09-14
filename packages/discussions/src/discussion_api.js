@@ -105,10 +105,10 @@ export const fetchInvites = (id, token) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const createInvite = ({ id, type, value, token }) =>
+export const createInvite = ({ discussionId, type, value, token }) =>
   axios
     .request({
-      url: `${baseUrl()}/api/v1/discussions/${id}/invitations`,
+      url: `${baseUrl()}/api/v1/discussions/${discussionId}/invitations`,
       method: 'post',
       headers: {
         Authorization: `Bearer ${token}`,
