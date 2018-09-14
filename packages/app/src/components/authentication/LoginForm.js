@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { compose, withHandlers, withState } from 'recompose';
 import { withRouter } from 'react-router';
-import { login, coreOauthAuthorizeUrl } from '../../utils/authentication';
+import { login } from '../../utils/authentication';
 import { RetrieveJwtIframe } from './RetrieveJwtIframe';
 import { OAuthPopup } from './OAuthPopup';
 
@@ -20,16 +20,18 @@ export const Login = ({
   popupBlocked,
   handleIframeJwt,
   retrieveIframeJwt,
+  handleAuthenticated,
 }) => (
   <Fragment>
-    <OAuthPopup onSuccess={handleIframeJwt} setPopupBlocked={setPopupBlocked} />
+    <OAuthPopup
+      onSuccess={handleAuthenticated}
+      setPopupBlocked={setPopupBlocked}
+    />
     <form className="login-form-container" onSubmit={handleLogin}>
       {retrieveIframeJwt && <RetrieveJwtIframe handleJwt={handleIframeJwt} />}
       <h3>
         Sign In
         <small>
-          <a href={coreOauthAuthorizeUrl()}>Login with Kinops</a>
-          {' or '}
           <a role="button" tabIndex="0" onClick={toCreateAccount(routed)}>
             Create Account
           </a>

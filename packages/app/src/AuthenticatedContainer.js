@@ -58,13 +58,18 @@ const handleAuthenticated = ({
   setPassword,
   setAttempting,
   setAuthenticated,
-}) => () => {
+  setToken,
+}) => token => {
   setError('');
   setDisplay('none');
   setEmail('');
   setPassword('');
   setAttempting(false);
   setAuthenticated(true);
+
+  if (token) {
+    setToken(token);
+  }
 };
 
 export const handleUnauthorized = props => () => {
