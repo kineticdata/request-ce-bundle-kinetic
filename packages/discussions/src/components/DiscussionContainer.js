@@ -35,7 +35,6 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = {
   joinDiscussion: actions.joinDiscussion,
   leaveDiscussion: actions.leaveDiscussion,
-  stopConnection: actions.stopConnection,
   fetchMoreMessages: actions.fetchMoreMessages,
   addWarn: toastActions.addWarn,
   createDiscussion: actions.createIssue,
@@ -160,7 +159,6 @@ export const DiscussionContainer = compose(
     },
     componentWillUnmount() {
       if (this.props.discussionId) {
-        this.props.stopConnection(this.props.discussionId);
         this.props.leaveDiscussion(this.props.discussionId);
       }
       if (this.props.pageTitleInterval !== null) {
@@ -175,7 +173,6 @@ export const DiscussionContainer = compose(
       // Join a different discussion if the discussion ID has changed.
       if (this.props.discussionId !== nextProps.discussionId) {
         if (this.props.discussionId) {
-          this.props.stopConnection(this.props.discussionId);
           this.props.leaveDiscussion(this.props.discussionId);
         }
         if (nextProps.discussionId) {

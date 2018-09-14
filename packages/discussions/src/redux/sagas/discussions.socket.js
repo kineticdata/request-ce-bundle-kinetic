@@ -140,8 +140,6 @@ export function* watchDiscussionsSocket() {
       discussionTasks = discussionTasks.filter(
         dt => dt.id !== discussionTask.id,
       );
-      // Remove the discussion from the active discussions list.
-      yield put(actions.removeDiscussion(leaveTopic.payload));
     }
   }
 }

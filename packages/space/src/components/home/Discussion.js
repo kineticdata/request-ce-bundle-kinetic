@@ -8,7 +8,6 @@ import { getTeamColor } from '../../utils';
 import { Avatar } from '../shared/Avatar';
 
 const getTeamHeaderStyle = (discussion, teams) => {
-  console.log(discussion);
   const teamRI = discussion.relatedItems.find(ri => ri.type === 'Team');
   const teamSlug = teamRI ? teamRI.key : null;
 
