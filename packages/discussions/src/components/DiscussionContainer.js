@@ -81,7 +81,7 @@ const handleScrollToBottom = props => () => {
 };
 
 const handleScrollToMiddle = () => () => {
-  console.log('scrolled to middle');
+  // nothing to do right now.
 };
 
 const handleScrolled = ({
