@@ -89,7 +89,7 @@ export class Topic {
     const action = this.socket.createMessage(
       TOPIC_HUB_TOPIC,
       TOPIC_HUB_ACTION_UNSUBSCRIBE,
-      { content: this.topicId },
+      { topic: this.topicId },
     );
 
     // Send the message.
