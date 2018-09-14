@@ -31,7 +31,6 @@ class ChatInput extends Component {
 
     this.state = {
       chatInput: '',
-      hasFocus: false,
       actionsOpen: false,
       fileAttachment: null,
     };
@@ -59,12 +58,15 @@ class ChatInput extends Component {
   }
 
   handleChatHotKey({ nativeEvent: e }) {
-    if (e.keyCode === 13 && !e.shiftKey) {
+    if (
+      e.keyCode === 13 &&
+      !e.shiftKey &&
+      this.state.chatInput.trim().length > 0
+    ) {
       // Handle enter (but not shift enter.)
       this.handleSendChatMessage(e);
-    } else if (e.keyCode === 27) {
-      // Blur the input box if escape is pressed.
-      this.htmlElement.blur();
+    } else if (e.keyCode === 13 && !e.shiftKey) {
+      e.preventDefault();
     }
   }
 
@@ -187,6 +189,7 @@ class ChatInput extends Component {
               Type your message here&hellip;
             </div>
             <ContentEditable
+              tabIndex={0}
               tagName="div"
               className="message-input"
               contentEditable="plaintext-only"

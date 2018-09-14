@@ -75,6 +75,19 @@ export default class ContentEditable extends Component {
     return nextProps.html !== this.elem[method];
   }
 
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    // Chat to see if it had focus.
+    return {
+      hadFocus: this.elem === document.activeElement,
+    };
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (snapshot.hadFocus) {
+      this.elem.focus();
+    }
+  }
+
   render() {
     const { tagName, html, contentEditable, ...props } = this.props;
 
