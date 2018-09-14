@@ -191,7 +191,9 @@ export const DiscussionContainer = compose(
             .slice(0, nextProps.messages.indexOf(this.props.messages.first()))
             // if any of the new messages were not sent by the current user we
             // consider them to be unread
-            .some(message => message.user.email !== this.props.profile.email)
+            .some(
+              message => message.createdBy.email !== this.props.profile.email,
+            )
         ) {
           this.props.setUnreadMessages(true);
         }
