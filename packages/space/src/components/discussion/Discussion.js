@@ -8,36 +8,20 @@ import { Discussion as KinopsDiscussion } from 'discussions';
 import { commonActions } from 'common';
 import { SOCKET_STATUS } from 'discussions/src/api/socket';
 
-const buildRelatedItem = issue => {
-  const tagList = issue.tag_list;
-  return tagList.reduce((obj, tag) => {
-    const key = tag.split(':').splice(1)[0];
-    obj[key] = tag.split(':').splice(1)[1];
-    return obj;
-  }, {});
-};
-
 const buildRelatedItemLink = (relatedItem, profile) => {
-  let label = relatedItem.LABEL;
+  let label = relatedItem.type;
   let link;
-  if ('Form' === relatedItem.TYPE) {
+  if ('Form' === relatedItem.type) {
     label = 'Manage Form';
-  } else if ('Queue Task' === relatedItem.TYPE) {
+  } else if ('Queue Task' === relatedItem.type) {
     label = 'Open Task';
-  } else if ('Team' === relatedItem.TYPE) {
+  } else if ('Team' === relatedItem.type) {
     label = 'Team Home';
   }
-  if ('Form' === relatedItem.TYPE) {
-    let idSegments = relatedItem.ID.split('/');
-    link =
-      bundle.spaceLocation() +
-      '/admin' +
-      '/management' +
-      '?page=management/form' +
-      '&kapp=' +
-      idSegments[0] +
-      '&form=' +
-      idSegments[1];
+
+  if ('Form' === relatedItem.type) {
+    let idSegments = relatedItem.key.split('/');
+    link = `/kapps/${idSegments[0]}/settings/forms/${idSegments[1]}`;
   } else if ('Queue Task' === relatedItem.TYPE) {
     let assignedIndividual = relatedItem['Assigned Individual'];
     let assignedTeam = relatedItem['Assigned Team'];
@@ -45,17 +29,21 @@ const buildRelatedItemLink = (relatedItem, profile) => {
       assignedIndividual === profile.username ||
       Utils.isMemberOf(profile, assignedTeam)
     ) {
-      link = '#/kapps/queue/submissions/' + relatedItem.ID;
+      link = '/kapps/queue/submissions/' + relatedItem.ID;
     }
-  } else if ('Team' === relatedItem.TYPE) {
-    link = '#/teams/' + relatedItem.ID;
+  } else if ('Team' === relatedItem.type) {
+    link = '/teams/' + relatedItem.key;
   }
 
   return (
     link && (
-      <a className="btn btn-inverse btn-sm related-link ml-3" href={link}>
+      <Link
+        className="btn btn-inverse btn-sm related-link ml-3"
+        to={link}
+        key={`${relatedItem.type}/${relatedItem.key}`}
+      >
         {label}
-      </a>
+      </Link>
     )
   );
 };
@@ -63,7 +51,7 @@ const buildRelatedItemLink = (relatedItem, profile) => {
 export const DiscussionComponent = ({
   discussionId,
   discussionName,
-  relatedItem,
+  relatedItems,
   profile,
   socketStatus,
 }) => (
@@ -71,7 +59,10 @@ export const DiscussionComponent = ({
     <PageTitle parts={[discussionName, 'Discussions']} />
     <div className="subheader">
       <Link to={'/'}>home</Link> / {discussionName}
-      {relatedItem && buildRelatedItemLink(relatedItem, profile)}
+      {relatedItems &&
+        relatedItems.map(relatedItem =>
+          buildRelatedItemLink(relatedItem, profile),
+        )}
     </div>
     {discussionId ? (
       socketStatus === SOCKET_STATUS.IDENTIFIED ? (
@@ -111,9 +102,8 @@ const mapStateToProps = (state, props) => {
     profile: state.app.profile,
     discussionId: props.match.params.id,
     discussionName:
-      discussion && discussion.issue ? discussion.issue.name : 'Loading...',
-    relatedItem:
-      discussion && discussion.issue ? buildRelatedItem(discussion.issue) : {},
+      discussion && discussion.title ? discussion.title : 'Loading...',
+    relatedItems: discussion ? discussion.relatedItems : [],
   };
 };
 
