@@ -9,6 +9,10 @@ import {
 import { List } from 'immutable';
 
 import { actions, formatMessages } from '../redux/modules/discussions';
+import {
+  selectors,
+  actions as invitationFormActions,
+} from '../redux/modules/invitationForm';
 import { toastActions } from 'common';
 
 import { Discussion } from './Discussion';
@@ -25,10 +29,10 @@ const mapStateToProps = (state, props) => {
     hasMoreMessages: discussion && discussion.messages.pageToken !== null,
     loadingMoreMessages: discussion && discussion.loadingMoreMessages,
     currentOpenModals: state.discussions.discussions.currentOpenModals,
-    invitationFields: state.discussions.discussions.invitationFields,
-    invitationPending: state.discussions.discussions.invitationPending,
     isSmallLayout: state.app.layout.get('size') === 'small',
     pageTitleInterval: state.discussions.discussions.pageTitleInterval,
+    invitationValue: state.discussions.invitationForm.value,
+    invitationButtonEnabled: selectors.submittable(state),
   };
 };
 
@@ -40,10 +44,10 @@ const mapDispatchToProps = {
   createDiscussion: actions.createIssue,
   openModal: actions.openModal,
   closeModal: actions.closeModal,
-  createInvite: actions.createInvite,
   createInviteDone: actions.createInviteDone,
   setDiscussionVisibility: actions.setDiscussionVisibility,
   setPageTitleInterval: actions.setPageTitleInterval,
+  send: invitationFormActions.send,
 };
 
 const closeCurrent = props => () => {
@@ -55,12 +59,8 @@ const closeAll = props => () => {
   props.createInviteDone();
 };
 
-const createInvitation = props => () => {
-  props.createInvite(
-    props.discussion.id,
-    props.invitationFields.get('type'),
-    props.invitationFields.get('value'),
-  );
+const send = props => () => {
+  props.send(props.discussion, props.invitationValue);
 };
 
 const handleScrollToTop = ({
@@ -118,15 +118,6 @@ export const DiscussionContainer = compose(
           .concat(props.discussion.participants.toList().map(p => p.email))
       : List(),
   })),
-  withProps(props => ({
-    invitationButtonEnabled:
-      !props.invitationPending &&
-      props.invitationFields.get('value') &&
-      props.invitationFields.get('value') !== '' &&
-      !props.participantsAndInvites.includes(
-        props.invitationFields.get('value'),
-      ),
-  })),
   withState('formattedMessages', 'setFormattedMessages', List()),
   withState('unreadMessages', 'setUnreadMessages', false),
   withState('scrollPosition', 'setScrollPosition', 'bottom'),
@@ -144,7 +135,7 @@ export const DiscussionContainer = compose(
     handleScrollToTop,
     closeCurrent,
     closeAll,
-    createInvitation,
+    send,
   }),
   withHandlers({
     handleScrolled,
