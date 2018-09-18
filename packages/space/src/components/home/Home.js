@@ -189,7 +189,6 @@ export const Home = compose(
       props.setDiscussionsSearchInputValue(event.target.value),
     handleDiscussionSearchInputSubmit: props => event => {
       event.preventDefault();
-      props.setDiscussionsLimit(10);
       props.setDiscussionsPageToken(null);
       props.clearDiscussionPageTokens();
       props.searchDiscussions();
