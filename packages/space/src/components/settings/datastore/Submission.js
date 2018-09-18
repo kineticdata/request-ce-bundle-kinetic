@@ -109,13 +109,7 @@ const DatastoreSubmissionComponent = ({
         )}
       </div>
     </div>
-    {discussionsEnabled &&
-      submission &&
-      submission.form &&
-      submission.form.fields &&
-      submission.form.fields.find(f => f.name === 'Discussion Id') && (
-        <DatastoreDiscussions />
-      )}
+    {discussionsEnabled && <DatastoreDiscussions />}
   </div>
 );
 

@@ -29,8 +29,8 @@ export const DatastoreDiscussionsComponent = props => {
 };
 
 const mapStateToProps = state => {
-  const discussionId = state.space.settingsDatastore.submission
-    ? state.space.settingsDatastore.submission.values['Discussion Id']
+  const discussionId = state.space.settingsDatastore.currentDiscussion
+    ? state.space.settingsDatastore.currentDiscussion.id
     : null;
 
   return {
@@ -40,23 +40,23 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  createDiscussion: discussionsActions.createIssue,
-  joinDiscussion: discussionsActions.joinDiscussion,
+  createDiscussion: discussionsActions.createDiscussion,
+  setCurrentDiscussion: actions.setCurrentDiscussion,
   fetchSubmission: actions.fetchSubmission,
 };
 
 const createDiscussion = props => () => {
-  props.createDiscussion(
-    props.submission.label || 'Datastore Discussion',
-    props.submission.form.name || '',
-    props.submission,
-    null,
-    (issue, submission) => {
-      props.fetchSubmission(submission.id);
-      props.joinDiscussion(issue.guid);
+  props.createDiscussion({
+    title: props.submission.label || 'Datastore Discussion',
+    description: props.submission.form.name || '',
+    relatedItem: {
+      type: 'Datastore Submission',
+      key: `${props.submission.form.slug}/${props.submission.id}`,
     },
-    true,
-  );
+    onSuccess: (discussion, _relatedItem) => {
+      props.setCurrentDiscussion(discussion);
+    },
+  });
 };
 
 export const DatastoreDiscussions = compose(

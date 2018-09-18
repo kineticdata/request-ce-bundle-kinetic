@@ -19,7 +19,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   createDiscussion: discussionsActions.createDiscussion,
-  joinDiscussion: discussionsActions.joinDiscussion,
   setCurrentItem: actions.setCurrentItem,
   setCurrentDiscussion: actions.setCurrentDiscussion,
 };

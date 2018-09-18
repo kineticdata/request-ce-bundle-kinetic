@@ -4,13 +4,13 @@ import {
   takeEvery,
   select,
   all,
-  takeLatest,
   throttle,
 } from 'redux-saga/effects';
-import { delay } from 'redux-saga';
 import { CoreAPI } from 'react-kinetic-core';
 import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'connected-react-router';
+import { selectToken } from 'discussions/src/redux/modules/socket';
+import { DiscussionAPI } from 'discussions';
 
 import { actions as systemErrorActions } from '../modules/errors';
 import { toastActions } from 'common';
@@ -400,6 +400,7 @@ export function* fetchSubmissionsAdvancedSaga() {
 }
 
 export function* fetchSubmissionSaga(action) {
+  const token = yield select(selectToken);
   const include =
     'details,values,form,form.attributes,form.fields,activities,activities.details';
   const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
@@ -412,6 +413,18 @@ export function* fetchSubmissionSaga(action) {
     yield put(systemErrorActions.setSystemError(serverError));
   } else {
     yield put(actions.setSubmission(submission));
+
+    const { discussions } = yield call(DiscussionAPI.fetchDiscussions, {
+      token,
+      relatedItem: {
+        type: 'Datastore Submission',
+        key: `${submission.form.slug}/${submission.id}`,
+      },
+    });
+
+    if (discussions && discussions.length > 0) {
+      yield put(actions.setCurrentDiscussion(discussions[0]));
+    }
   }
 }
 
