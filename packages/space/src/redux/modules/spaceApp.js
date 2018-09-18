@@ -15,8 +15,13 @@ export const types = {
   ),
   SET_DISCUSSIONS: namespace('app', 'SET_DISCUSSIONS'),
   SET_DISCUSSIONS_ERROR: namespace('app', 'SET_DISCUSSIONS_ERROR'),
-  SET_DISCUSSIONS_LIMIT: namespace('app', 'SET_DISCUSSIONS_LIMIT'),
-  SET_DISCUSSIONS_OFFSET: namespace('app', 'SET_DISCUSSIONS_OFFSET'),
+  CLEAR_DISCUSSION_PAGE_TOKENS: namespace(
+    'app',
+    'CLEAR_DISCUSSION_PAGE_TOKENS',
+  ),
+  PUSH_DISCUSSION_PAGE_TOKEN: namespace('app', 'PUSH_DISCUSSION_PAGE_TOKEN'),
+  POP_DISCUSSION_PAGE_TOKEN: namespace('app', 'POP_DISCUSSION_PAGE_TOKEN'),
+  SET_DISCUSSIONS_PAGE_TOKEN: namespace('app', 'SET_DISCUSSIONS_PAGE_TOKEN'),
   SET_DISCUSSIONS_SEARCH_TERM: namespace('app', 'SET_DISCUSSIONS_SEARCH_TERM'),
   SET_DISCUSSIONS_SEARCH_INPUT_VALUE: namespace(
     'app',
@@ -38,8 +43,10 @@ export const actions = {
   ),
   setDiscussions: withPayload(types.SET_DISCUSSIONS),
   setDiscussionsError: withPayload(types.SET_DISCUSSIONS_ERROR),
-  setDiscussionsLimit: withPayload(types.SET_DISCUSSIONS_LIMIT),
-  setDiscussionsOffset: withPayload(types.SET_DISCUSSIONS_OFFSET),
+  setDiscussionsPageToken: withPayload(types.SET_DISCUSSIONS_PAGE_TOKEN),
+  clearDiscussionPageTokens: noPayload(types.CLEAR_DISCUSSION_PAGE_TOKENS),
+  pushDiscussionPageToken: withPayload(types.PUSH_DISCUSSION_PAGE_TOKEN),
+  popDiscussionPageToken: withPayload(types.POP_DISCUSSION_PAGE_TOKEN),
   setDiscussionsSearchTerm: withPayload(types.SET_DISCUSSIONS_SEARCH_TERM),
   setDiscussionsSearchInputValue: withPayload(
     types.SET_DISCUSSIONS_SEARCH_INPUT_VALUE,
@@ -60,10 +67,6 @@ export const selectHasSharedTaskEngine = state =>
       ? true
       : false;
 
-export const selectIsMoreDiscussions = state =>
-  state.space.spaceApp.discussions.size ===
-  state.space.spaceApp.discussionsLimit;
-
 export const selectGroupedDiscussions = state =>
   state.space.spaceApp.discussions
     .sort(
@@ -80,8 +83,8 @@ export const State = Record({
   appLoading: true,
   discussionServerUrl: '',
   discussions: List(),
-  discussionsLimit: 10,
-  discussionsOffset: null,
+  discussionsPageToken: null,
+  discussionsPageTokens: List(),
   discussionsError: null,
   discussionsLoading: true,
   discussionsSearchTerm: '',
@@ -123,10 +126,22 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('discussions', List())
         .set('discussionsError', payload)
         .set('discussionsLoading', false);
-    case types.SET_DISCUSSIONS_LIMIT:
-      return state.set('discussionsLimit', payload);
-    case types.SET_DISCUSSIONS_OFFSET:
-      return state.set('discussionsOffset', payload);
+    case types.SET_DISCUSSIONS_PAGE_TOKEN:
+      return state.set('discussionsPageToken', payload);
+    case types.CLEAR_DISCUSSIONS_PAGE_TOKENS:
+      return state.set('discussionsPageTokens', List());
+    case types.PUSH_DISCUSSION_PAGE_TOKEN:
+      return state.update('discussionsPageTokens', pt => pt.push(payload));
+    case types.POP_DISCUSSION_PAGE_TOKEN: {
+      return state.update('discussionsPageTokens', pt => {
+        const target = pt.indexOf(payload);
+        if (target === -1) {
+          return List();
+        }
+
+        return pt.slice(0, pt.indexOf(payload) + 1);
+      });
+    }
     case types.SET_DISCUSSIONS_SEARCH_INPUT_VALUE:
       return state.set('discussionsSearchInputValue', payload);
     case types.SET_DISCUSSIONS_SEARCH_TERM:

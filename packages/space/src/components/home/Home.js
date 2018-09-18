@@ -6,7 +6,6 @@ import { PageTitle } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import {
   actions,
-  selectIsMoreDiscussions,
   selectGroupedDiscussions,
 } from '../../redux/modules/spaceApp';
 import { actions as teamListActions } from '../../redux/modules/teamList';
@@ -22,16 +21,18 @@ const HomeComponent = ({
   discussionsEnabled,
   discussionGroups,
   discussionsError,
+  discussionsPageTokens,
   discussionsLoading,
   discussionsSearchTerm,
   discussionsSearchInputValue,
   discussionServerUrl,
-  isMoreDiscussions,
   me,
   handleCreateDiscussionButtonClick,
   handleDiscussionSearchInputChange,
   handleDiscussionSearchInputSubmit,
   handleLoadMoreButtonClick,
+  handlePrevPage,
+  handleNextPage,
   handleHomeLinkClick,
 }) => (
   <div className="page-container page-container--space-home">
@@ -119,16 +120,21 @@ const HomeComponent = ({
                 </div>
               ))
               .toList()}
-            {isMoreDiscussions && (
-              <div className="recent-discussion-actions">
-                <button
-                  className="btn btn-primary"
-                  onClick={handleLoadMoreButtonClick}
-                >
-                  Load More
+
+            <div className="recent-discussion-actions">
+              {discussionsPageTokens.size > 1 && (
+                <button className="btn btn-primary" onClick={handlePrevPage}>
+                  Prev
                 </button>
-              </div>
-            )}
+              )}
+              &nbsp;
+              {discussionsPageTokens.size > 0 &&
+                discussionsPageTokens.last() !== null && (
+                  <button className="btn btn-primary" onClick={handleNextPage}>
+                    Next
+                  </button>
+                )}
+            </div>
           </div>
         )}
       {!discussionsError &&
@@ -149,12 +155,11 @@ export const mapStateToProps = state => ({
   discussionGroups: selectGroupedDiscussions(state),
   discussionsError: state.space.spaceApp.discussionsError,
   discussionsLoading: state.space.spaceApp.discussionsLoading,
-  discussionsLimit: state.space.spaceApp.discussionsLimit,
-  discussionsOffset: state.space.spaceApp.discussionsOffset,
+  discussionsPageToken: state.space.spaceApp.discussionsPageToken,
+  discussionsPageTokens: state.space.spaceApp.discussionsPageTokens,
   discussionsSearchInputValue: state.space.spaceApp.discussionsSearchInputValue,
   discussionsSearchTerm: state.space.spaceApp.discussionsSearchTerm,
   discussionServerUrl: `${bundle.spaceLocation()}/kinetic-response`,
-  isMoreDiscussions: selectIsMoreDiscussions(state),
   discussionsEnabled: selectDiscussionsEnabled(state),
   me: state.app.profile,
   teams: state.space.teamList.data,
@@ -165,10 +170,11 @@ export const mapDispatchToProps = {
   fetchTeams: teamListActions.fetchTeams,
   searchDiscussions: actions.searchDiscussions,
   setCreateDiscussionModalOpen: actions.setCreateDiscussionModalOpen,
-  setDiscussionsLimit: actions.setDiscussionsLimit,
-  setDiscussionsOffset: actions.setDiscussionsOffset,
+  setDiscussionsPageToken: actions.setDiscussionsPageToken,
   setDiscussionsSearchInputValue: actions.setDiscussionsSearchInputValue,
   setDiscussionsSearchTerm: actions.setDiscussionsSearchTerm,
+  popDiscussionPageToken: actions.popDiscussionPageToken,
+  clearDiscussionPageTokens: actions.clearDiscussionPageTokens,
 };
 
 export const Home = compose(
@@ -184,7 +190,8 @@ export const Home = compose(
     handleDiscussionSearchInputSubmit: props => event => {
       event.preventDefault();
       props.setDiscussionsLimit(10);
-      props.setDiscussionsOffset(0);
+      props.setDiscussionsPageToken(null);
+      props.clearDiscussionPageTokens();
       props.searchDiscussions();
       props.setDiscussionsSearchTerm(props.discussionsSearchInputValue);
     },
@@ -192,14 +199,30 @@ export const Home = compose(
       event.preventDefault();
       props.setDiscussionsSearchTerm('');
       props.setDiscussionsSearchInputValue('');
+      props.setDiscussionsPageToken(null);
+      props.clearDiscussionPageTokens();
       props.searchDiscussions();
     },
-    handleLoadMoreButtonClick: ({
+    handleNextPage: ({
+      discussionsPageTokens,
+      setDiscussionsPageToken,
       fetchDiscussions,
-      discussionsLimit,
-      setDiscussionsLimit,
-    }) => event => {
-      setDiscussionsLimit(discussionsLimit + 10);
+    }) => _event => {
+      const nextToken = discussionsPageTokens.last();
+      setDiscussionsPageToken(nextToken);
+      fetchDiscussions();
+    },
+    handlePrevPage: ({
+      discussionsPageTokens,
+      setDiscussionsPageToken,
+      popDiscussionPageToken,
+      fetchDiscussions,
+    }) => _event => {
+      // The last token is the next page, the one before that is the current page,
+      // and one more is the previous page.
+      const prevToken = discussionsPageTokens.get(-3) || null;
+      popDiscussionPageToken(prevToken);
+      setDiscussionsPageToken(prevToken);
       fetchDiscussions();
     },
   }),

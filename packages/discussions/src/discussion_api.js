@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { bundle } from 'react-kinetic-core';
 
-const DEFAULT_MESSAGE_LIMIT = 25;
+export const DEFAULT_MESSAGE_LIMIT = 25;
+export const DEFAULT_DISCUSSION_LIMIT = 10;
 
 const baseUrl = () => `${bundle.spaceLocation()}/app/discussions`;
 
@@ -59,7 +60,7 @@ export const fetchDiscussions = ({ token, pageToken, user, title }) =>
       params: {
         // user,
         title: title.length > 0 ? title : null,
-        limit: DEFAULT_MESSAGE_LIMIT,
+        limit: DEFAULT_DISCUSSION_LIMIT,
         pageToken,
       },
     })

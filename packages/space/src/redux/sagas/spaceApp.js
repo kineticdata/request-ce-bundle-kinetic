@@ -88,25 +88,28 @@ export function* createDiscussionSaga({ payload }) {
 export function* fetchRecentDiscussionsSaga() {
   const token = yield select(selectToken);
 
-  const { limit, offset, search } = yield select(state => ({
-    limit: state.space.spaceApp.discussionsLimit,
-    offset: state.space.spaceApp.discussionsOffset,
+  const { pageToken, search } = yield select(state => ({
+    pageToken: state.space.spaceApp.discussionsPageToken,
     search: state.space.spaceApp.discussionsSearchTerm,
   }));
 
   const user = yield select(state => state.app.profile.username);
 
-  const { error, discussions } = yield call(DiscussionAPI.fetchDiscussions, {
-    token,
-    pageToken: offset,
-    user,
-    title: search,
-  });
+  const { error, discussions, nextPageToken } = yield call(
+    DiscussionAPI.fetchDiscussions,
+    {
+      token,
+      pageToken,
+      user,
+      title: search,
+    },
+  );
 
   if (error) {
     yield put(actions.setDiscussionsError(error));
   } else {
     yield put(actions.setDiscussions(discussions));
+    yield put(actions.pushDiscussionPageToken(nextPageToken || null));
   }
 }
 

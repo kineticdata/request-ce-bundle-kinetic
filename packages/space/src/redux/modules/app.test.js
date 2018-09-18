@@ -1,41 +1,7 @@
 import { List } from 'immutable';
-import { State, actions, reducer, selectIsMoreDiscussions } from './spaceApp';
+import { State, actions, reducer } from './spaceApp';
 
 describe('spaceApp redux module', () => {
-  describe('selectors', () => {
-    let state;
-
-    beforeEach(() => {
-      state = {
-        space: {
-          spaceApp: State(),
-        },
-      };
-    });
-
-    describe('#selectIsMoreDiscussions', () => {
-      describe('when on first page', () => {
-        test('when the list is the same size as the limit', () => {
-          state.space.spaceApp = state.space.spaceApp
-            .set('discussions', List([1, 2, 3]))
-            .set('discussionsLimit', 3)
-            .set('discussionsOffset', 0);
-
-          expect(selectIsMoreDiscussions(state)).toBeTruthy();
-        });
-
-        test('when the list is smaller than the limit', () => {
-          state.space.spaceApp = state.space.spaceApp
-            .set('discussions', List([1, 2, 3]))
-            .set('discussionsLimit', 4)
-            .set('discussionsOffset', 0);
-
-          expect(selectIsMoreDiscussions(state)).toBeFalsy();
-        });
-      });
-    });
-  });
-
   describe('reducers', () => {
     test('sets default state on init', () => {
       expect(reducer(undefined, { type: 'invalid' })).toEqual(State());
