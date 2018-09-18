@@ -51,22 +51,31 @@ export const fetchDiscussion = ({ id, token }) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const fetchDiscussions = ({ token, pageToken, user, title }) =>
-  axios
+export const fetchDiscussions = ({
+  token,
+  pageToken,
+  user,
+  title,
+  relatedItem = {},
+}) => {
+  const { type, key } = relatedItem;
+  return axios
     .get(`${baseUrl()}/api/v1/discussions`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       params: {
         // user,
-        title: title.length > 0 ? title : null,
+        title: title && title.length > 0 ? title : null,
         limit: DEFAULT_DISCUSSION_LIMIT,
+        type,
+        key,
         pageToken,
       },
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
-
+};
 export const createDiscussion = ({
   title,
   description,
@@ -151,6 +160,19 @@ export const fetchParticipants = (id, token) =>
       headers: {
         Authorization: `Bearer ${token}`,
       },
+    })
+    .then(response => response.data)
+    .catch(response => ({ error: response }));
+
+export const createRelatedItem = (id, relatedItem, token) =>
+  axios
+    .request({
+      url: `${baseUrl()}/api/v1/discussions/${id}/relatedItems`,
+      method: 'post',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: relatedItem,
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));

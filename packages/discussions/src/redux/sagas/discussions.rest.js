@@ -7,6 +7,8 @@ import {
   fetchMessages,
   fetchDiscussion,
   createInvite,
+  createDiscussion,
+  createRelatedItem,
 } from '../../discussion_api';
 
 const selectMessageToken = discussionId => state => {
@@ -75,11 +77,57 @@ export function* createInvitationTask({
   }
 }
 
+export function* createDiscussionTask({ payload }) {
+  const {
+    title,
+    description,
+    isPrivate,
+    relatedItem,
+    owningUsers,
+    owningTeams,
+    onSuccess,
+  } = payload;
+  const token = yield select(selectToken);
+
+  const { discussion, error } = yield call(createDiscussion, {
+    title,
+    description,
+    isPrivate,
+    owningUsers,
+    owningTeams,
+    token,
+  });
+
+  if (error) {
+    // yield a toast
+  } else {
+    let error;
+    let createdRealtedItem;
+    // In a successful scenario we should toast a success, join the discussion
+    // and if a submission was passed we should update its "Discussion Id" value.
+    if (relatedItem) {
+      const result = yield call(
+        createRelatedItem,
+        discussion.id,
+        relatedItem,
+        token,
+      );
+
+      createdRealtedItem = result.relatedItem;
+    }
+
+    if (!error && typeof onSuccess === 'function') {
+      onSuccess(discussion, createdRealtedItem);
+    }
+  }
+}
+
 export function* watchDiscussionRest() {
   yield all([
     takeEvery(types.SEND_MESSAGE, sendMessageTask),
     takeEvery(types.JOIN_DISCUSSION, joinDiscussionTask),
     takeEvery(types.FETCH_MORE_MESSAGES, fetchMoreMessagesTask),
     takeEvery(types.CREATE_INVITE, createInvitationTask),
+    takeEvery(types.CREATE_DISCUSSION, createDiscussionTask),
   ]);
 }

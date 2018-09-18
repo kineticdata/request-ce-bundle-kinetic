@@ -9,7 +9,7 @@ export const types = {
   ADD_DISCUSSION: namespace('discussions', 'ADD_DISCUSSION'),
   LEAVE_DISCUSSION: namespace('discussions', 'LEAVE_DISCUSSION'),
   SET_ISSUE: namespace('discussions', 'SET_ISSUE'),
-  CREATE_ISSUE: namespace('discussion', 'CREATE_ISSUE'),
+  CREATE_DISCUSSION: namespace('discussion', 'CREATE_DISCUSSION'),
   CREATE_INVITE: namespace('discussions', 'CREATE_INVITE'),
   CREATE_INVITE_DONE: namespace('discussions', 'CREATE_INVITE_DONE'),
   CREATE_INVITE_ERROR: namespace('discussions', 'CREATE_INVITE_ERROR'),
@@ -64,16 +64,25 @@ export const actions = {
   leaveDiscussion: withPayload(types.LEAVE_DISCUSSION),
   // API-bsased actions.
   setIssue: withPayload(types.SET_ISSUE),
-  createIssue: (
-    name,
+  createDiscussion: ({
+    title,
     description = '',
-    submission,
-    include,
+    relatedItem = null,
+    isPrivate = false,
+    owningUsers,
+    owningTeams,
     onSuccess,
-    datastore = false,
-  ) => ({
-    type: types.CREATE_ISSUE,
-    payload: { name, description, submission, include, onSuccess, datastore },
+  }) => ({
+    type: types.CREATE_DISCUSSION,
+    payload: {
+      title,
+      description,
+      isPrivate,
+      relatedItem,
+      owningUsers,
+      owningTeams,
+      onSuccess,
+    },
   }),
   fetchMoreMessages: withPayload(types.FETCH_MORE_MESSAGES),
   setMessages: withPayload(types.SET_MESSAGES, 'id', 'messages'),
