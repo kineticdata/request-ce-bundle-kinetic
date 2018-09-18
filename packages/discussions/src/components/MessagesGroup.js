@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { compose, shouldUpdate } from 'recompose';
 import { connect } from 'react-redux';
 import Avatar from 'react-avatar';
@@ -129,23 +129,44 @@ export const MessagesGroup = ({
         />
       </Hoverable>
     )}
-
     <div className="message-list">
       {messages.map(
         message =>
           message.messageable_type === 'Upload' ? (
-            <UploadMessage
-              key={message.id}
-              message={message}
-              discussionServerUrl={discussionServerUrl}
-              messageOwner={
-                messages.first().createdBy.username === profile.username
-                  ? 'mine'
-                  : 'other'
-              }
-            />
+            <div key={message.id} className="message-list-item">
+              <UploadMessage
+                message={message}
+                discussionServerUrl={discussionServerUrl}
+                messageOwner={
+                  messages.first().createdBy.username === profile.username
+                    ? 'mine'
+                    : 'other'
+                }
+              />
+            </div>
           ) : (
-            <TextMessage key={message.id} message={message} />
+            <div key={message.id} className="message-list-item">
+              {messages.first().createdBy.username === profile.username ? (
+                <ul className="actions meta">
+                  <li>
+                    <a href="#">Reply</a>
+                  </li>
+                  <li>
+                    <a href="#">Edit</a>
+                  </li>
+                  <li>
+                    <a href="#">Delete</a>
+                  </li>
+                </ul>
+              ) : (
+                <ul className="actions meta">
+                  <li>
+                    <a href="#">Reply</a>
+                  </li>
+                </ul>
+              )}
+              <TextMessage message={message} />
+            </div>
           ),
       )}
       <div className="meta">

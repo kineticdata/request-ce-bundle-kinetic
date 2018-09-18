@@ -51,7 +51,7 @@ const DiscussionModal = props => {
     closeCurrent,
     closeAll,
     // createDiscussion,
-    createInvitation,
+    send,
     invitationButtonEnabled,
     participantsAndInvites,
     // isSmallLayout,
@@ -94,7 +94,7 @@ const DiscussionModal = props => {
         <ModalBody>
           <InvitationDialogContainer
             discussion={discussion}
-            createInvitation={createInvitation}
+            send={send}
             participantsAndInvites={participantsAndInvites}
           />
         </ModalBody>
@@ -111,7 +111,7 @@ const DiscussionModal = props => {
           <button
             type="button"
             className="btn btn-primary"
-            onClick={createInvitation}
+            onClick={send}
             disabled={!invitationButtonEnabled}
           >
             Send Invite

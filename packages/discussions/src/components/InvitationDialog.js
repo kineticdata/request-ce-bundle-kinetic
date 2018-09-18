@@ -1,50 +1,102 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
-import { actions } from '../redux/modules/discussions';
+import {
+  Highlighter,
+  Menu,
+  MenuItem,
+  Token,
+  Typeahead,
+} from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
+import { actions } from '../redux/modules/invitationForm';
+
+const EMAIL_PATTERN = /^.+@.+\..+$/;
+
+const UserMenuItem = props => (
+  <MenuItem option={props.option} position={props.position}>
+    <Highlighter search={props.text}>{props.option.label}</Highlighter>
+    <div>
+      <small>{props.option.user.username}</small>
+    </div>
+  </MenuItem>
+);
+
+const TeamMenuItem = props => (
+  <MenuItem option={props.option} position={props.position}>
+    <Highlighter search={props.text}>{props.option.label}</Highlighter>
+    <div>
+      <small>Team</small>
+    </div>
+  </MenuItem>
+);
+
+const EmailMenuItem = props => {
+  const validEmail = props.text.match(EMAIL_PATTERN);
+  return (
+    <MenuItem
+      option={props.option}
+      position={props.position}
+      disabled={!validEmail}
+    >
+      {validEmail
+        ? `Invite new user by email address: ${props.text}`
+        : `Enter a valid email address to invite a new user: ${props.text}`}
+      Add a new email? {props.text}
+    </MenuItem>
+  );
+};
+
+const renderMenu = (results, props) => (
+  <Menu {...props}>
+    {results.map((option, i) => {
+      const CurrentMenuItem = option.user
+        ? UserMenuItem
+        : option.team
+          ? TeamMenuItem
+          : EmailMenuItem;
+      return (
+        <CurrentMenuItem
+          key={i}
+          option={option}
+          position={i}
+          text={props.text}
+        />
+      );
+    })}
+  </Menu>
+);
+
+const renderToken = (option, props, index) => (
+  <Token
+    key={index}
+    onRemove={props.onRemove}
+    className={option.user ? 'user' : option.team ? 'team' : 'new'}
+  >
+    {option.label}
+  </Token>
+);
 
 export const InvitationDialog = props => (
   <div className="discussion-dialog modal-form invitation-dialog">
-    <form className="invitation-form" onSubmit={props.createInvitation}>
+    <form
+      className="invitation-form"
+      onSubmit={props.send}
+      style={{ minHeight: '350px' }}
+    >
       {props.error && <p className="alert alert-danger">{props.error}</p>}
-      <div className="form-check form-check-inline">
-        <input
-          className="form-check-input"
-          type="radio"
-          name="invitation-type"
-          id="invitation-type-username"
-          value="username"
-          onChange={props.setType}
-          checked={props.type === 'username'}
-        />
-        <label className="form-check-label" htmlFor="invitation-type-username">
-          By Username
-        </label>
-      </div>
-      <div className="form-check form-check-inline">
-        <input
-          className="form-check-input"
-          type="radio"
-          name="invitation-type"
-          id="invitation-type-email"
-          value="email"
-          onChange={props.setType}
-          checked={props.type === 'email'}
-        />
-        <label className="form-check-label" htmlFor="invitation-type-email">
-          By Email
-        </label>
-      </div>
-
       <div className="form-group required">
-        <label htmlFor="invitation-value" className="field-label">
-          Invitee's {props.type === 'username' ? 'Username' : 'Email'}
-        </label>
-        <input
-          type="text"
-          id="invitation-value"
-          onChange={props.setValue}
-          value={props.value}
+        <Typeahead
+          labelKey="label"
+          allowNew
+          multiple
+          newSelectionPrefix="Invite new user by email: "
+          options={props.list}
+          onChange={props.handleChange}
+          selected={props.value}
+          renderMenu={renderMenu}
+          renderToken={renderToken}
         />
       </div>
     </form>
@@ -52,12 +104,23 @@ export const InvitationDialog = props => (
 );
 
 export const mapStateToProps = state => ({
-  type: state.discussions.discussions.invitationFields.get('type'),
-  value: state.discussions.discussions.invitationFields.get('value'),
-  error: state.discussions.discussions.invitationError,
+  error: state.discussions.invitationForm.error,
+  list: state.discussions.invitationForm.users
+    .map(user => ({ label: user.displayName || user.username, user }))
+    .concat(
+      state.discussions.invitationForm.teams.map(team => ({
+        label: team.name,
+        team,
+      })),
+    )
+    .sortBy(item => item.label)
+    .toJS(),
+  value: state.discussions.invitationForm.value,
 });
 export const mapDispatchToProps = {
-  setInvitationField: actions.setInvitationField,
+  clear: actions.clear,
+  loadUsersTeams: actions.loadUsersTeams,
+  setValue: actions.setValue,
 };
 
 export const InvitationDialogContainer = compose(
@@ -67,19 +130,14 @@ export const InvitationDialogContainer = compose(
   ),
   withState('inviteExists', 'setInviteExists', false),
   withHandlers({
-    setType: props => event =>
-      props.setInvitationField('type', event.target.value),
-    setValue: props => event => {
-      props.participantsAndInvites.includes(event.target.value)
-        ? props.setInviteExists(true)
-        : props.setInviteExists(false);
-      props.setInvitationField('value', event.target.value);
-    },
+    handleChange: props => props.setValue,
   }),
   lifecycle({
+    componentWillMount() {
+      this.props.loadUsersTeams();
+    },
     componentWillUnmount() {
-      this.props.setInvitationField('type', 'username');
-      this.props.setInvitationField('value', '');
+      this.props.clear();
     },
   }),
 )(InvitationDialog);
