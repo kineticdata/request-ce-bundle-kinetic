@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { compose, withState, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
 import { Utils, PageTitle } from 'common';
-import { bundle } from 'react-kinetic-core';
 import { Discussion as KinopsDiscussion } from 'discussions';
 import { commonActions } from 'common';
 import { SOCKET_STATUS } from 'discussions/src/api/socket';
@@ -11,28 +10,19 @@ import { SOCKET_STATUS } from 'discussions/src/api/socket';
 const buildRelatedItemLink = (relatedItem, profile) => {
   let label = relatedItem.type;
   let link;
-  if ('Form' === relatedItem.type) {
-    label = 'Manage Form';
-  } else if ('Queue Task' === relatedItem.type) {
-    label = 'Open Task';
-  } else if ('Team' === relatedItem.type) {
-    label = 'Team Home';
-  }
 
   if ('Form' === relatedItem.type) {
-    let idSegments = relatedItem.key.split('/');
+    const idSegments = relatedItem.key.split('/');
     link = `/kapps/${idSegments[0]}/settings/forms/${idSegments[1]}`;
-  } else if ('Queue Task' === relatedItem.TYPE) {
-    let assignedIndividual = relatedItem['Assigned Individual'];
-    let assignedTeam = relatedItem['Assigned Team'];
-    if (
-      assignedIndividual === profile.username ||
-      Utils.isMemberOf(profile, assignedTeam)
-    ) {
-      link = '/kapps/queue/submissions/' + relatedItem.ID;
-    }
+    label = 'Manage Form';
+  } else if ('Submission' === relatedItem.type) {
+    const idSegments = relatedItem.key.split('/');
+
+    link = `/kapps/${idSegments[0]}/submissions/${idSegments[1]}`;
+    label = 'Open Item';
   } else if ('Team' === relatedItem.type) {
     link = '/teams/' + relatedItem.key;
+    label = 'Team Home';
   }
 
   return (
