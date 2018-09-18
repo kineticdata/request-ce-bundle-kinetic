@@ -230,5 +230,9 @@ export const Home = compose(
       this.props.fetchTeams();
       this.props.discussionsEnabled && this.props.fetchDiscussions();
     },
+    componentWillUnmount() {
+      this.props.clearDiscussionPageTokens();
+      this.props.setDiscussionsPageToken(null);
+    },
   }),
 )(HomeComponent);

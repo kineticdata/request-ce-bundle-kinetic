@@ -128,7 +128,7 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('discussionsLoading', false);
     case types.SET_DISCUSSIONS_PAGE_TOKEN:
       return state.set('discussionsPageToken', payload);
-    case types.CLEAR_DISCUSSIONS_PAGE_TOKENS:
+    case types.CLEAR_DISCUSSION_PAGE_TOKENS:
       return state.set('discussionsPageTokens', List());
     case types.PUSH_DISCUSSION_PAGE_TOKEN:
       return state.update('discussionsPageTokens', pt => pt.push(payload));
