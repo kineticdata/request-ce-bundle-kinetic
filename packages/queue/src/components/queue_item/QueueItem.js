@@ -42,6 +42,7 @@ export const mapStateToProps = (state, props) => ({
 export const mapDispatchToProps = {
   fetchCurrentItem: actions.fetchCurrentItem,
   setCurrentItem: actions.setCurrentItem,
+  setCurrentDiscussion: actions.setCurrentDiscussion,
 };
 
 export const QueueItemContainer = compose(
@@ -60,6 +61,7 @@ export const QueueItemContainer = compose(
     },
     componentWillUnmount() {
       this.props.setCurrentItem(null);
+      this.props.setCurrentDiscussion(null);
     },
   }),
 )(QueueItem);

@@ -2,6 +2,8 @@ import { select, call, put, takeEvery } from 'redux-saga/effects';
 import moment from 'moment';
 import { CoreAPI } from 'react-kinetic-core';
 import isFunction from 'is-function';
+import { selectToken } from 'discussions/src/redux/modules/socket';
+import { DiscussionAPI } from 'discussions';
 
 import { types, actions } from '../modules/queue';
 import { actions as errorActions } from '../modules/errors';
@@ -228,6 +230,9 @@ export function* fetchListTask(action) {
 }
 
 export function* fetchCurrentItemTask(action) {
+  const token = yield select(selectToken);
+  const kappSlug = yield select(getKappSlug);
+
   const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
     id: action.payload,
     include: SUBMISSION_INCLUDES,
@@ -235,6 +240,18 @@ export function* fetchCurrentItemTask(action) {
 
   if (!serverError) {
     yield put(actions.setCurrentItem(submission));
+
+    const { discussions } = yield call(DiscussionAPI.fetchDiscussions, {
+      token,
+      relatedItem: {
+        type: 'Submission',
+        key: `${kappSlug}/${submission.id}`,
+      },
+    });
+
+    if (discussions && discussions.length > 0) {
+      yield put(actions.setCurrentDiscussion(discussions[0]));
+    }
   } else {
     yield put(errorActions.addError('Failed to retrieve item!'));
   }
