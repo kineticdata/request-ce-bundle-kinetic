@@ -49,8 +49,8 @@ const mapStateToProps = state => {
       'admin',
     ),
     discussionId:
-      !state.space.team.loading && team
-        ? Utils.getAttributeValue(team, 'Discussion Id', null)
+      !state.space.team.loading && state.space.team.currentDiscussion
+        ? state.space.team.currentDiscussion.id
         : null,
     memberships: selectTeamMemberships(state).map(member => member.user),
     userIsMember: selectIsTeamMember(state, me),

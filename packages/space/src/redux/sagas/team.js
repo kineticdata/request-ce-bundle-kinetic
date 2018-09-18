@@ -1,6 +1,9 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
+import { takeEvery, call, put, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
+import md5 from 'md5';
 import { CoreAPI } from 'react-kinetic-core';
+import { selectToken } from 'discussions/src/redux/modules/socket';
+import { DiscussionAPI } from 'discussions';
 
 import {
   actions as listActions,
@@ -41,6 +44,7 @@ export function* fetchTeamsSaga() {
 }
 
 export function* fetchTeamSaga(action) {
+  const token = yield select(selectToken);
   const { team, serverError } = yield call(CoreAPI.fetchTeam, {
     teamSlug: action.payload,
     include:
@@ -51,6 +55,18 @@ export function* fetchTeamSaga(action) {
     yield put(errorActions.setSystemError(serverError));
   } else {
     yield put(currentActions.setTeam(team));
+
+    const { discussions } = yield call(DiscussionAPI.fetchDiscussions, {
+      token,
+      relatedItem: {
+        type: 'Team',
+        key: md5(team.name),
+      },
+    });
+
+    if (discussions && discussions.length > 0) {
+      yield put(currentActions.setCurrentDiscussion(discussions[0]));
+    }
   }
 }
 

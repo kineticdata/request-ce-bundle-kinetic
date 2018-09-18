@@ -5,6 +5,7 @@ const { namespace, noPayload, withPayload } = Utils;
 export const State = Record({
   loading: true,
   data: null,
+  currentDiscussion: null,
 
   isAddMemberModalOpen: false,
   deleteError: null,
@@ -19,6 +20,7 @@ export const types = {
   DELETE_TEAM: namespace('teams', 'DELETE_TEAM'),
   FETCH_TEAM: namespace('teams', 'FETCH_TEAM'),
   SET_TEAM: namespace('teams', 'SET_TEAM'),
+  SET_CURRENT_DISCUSSION: namespace('teams', 'SET_CURRENT_DISCUSSION'),
   UPDATE_TEAM: namespace('teams', 'UPDATE_TEAM'),
 
   SET_SUBMIT_ERROR: namespace('teams', 'SET_SUBMIT_ERROR'),
@@ -37,6 +39,7 @@ export const actions = {
   createTeam: withPayload(types.CREATE_TEAM),
   fetchTeam: withPayload(types.FETCH_TEAM),
   setTeam: withPayload(types.SET_TEAM),
+  setCurrentDiscussion: withPayload(types.SET_CURRENT_DISCUSSION),
   updateTeam: withPayload(types.UPDATE_TEAM),
   deleteTeam: withPayload(types.DELETE_TEAM),
   setSubmitError: withPayload(types.SET_SUBMIT_ERROR),
@@ -68,6 +71,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('loading', true);
     case types.SET_TEAM:
       return state.set('loading', false).set('data', payload);
+    case types.SET_CURRENT_DISCUSSION:
+      return state.set('currentDiscussion', payload);
     case types.UPDATE_TEAM:
       return state.set('loading', false).set('submitError', null);
     case types.RESET_DELETE_ERROR:
