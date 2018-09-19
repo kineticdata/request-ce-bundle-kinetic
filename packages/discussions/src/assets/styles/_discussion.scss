@@ -301,6 +301,7 @@
       max-height: 25vh;
       overflow-y: auto;
       overflow-wrap: break-word;
+      white-space: pre-wrap;
       color: #54698d;
 
       &:focus {
