@@ -40,9 +40,10 @@ export const types = {
 
   ADD_MESSAGE: namespace('discussions', 'ADD_MESSAGE'),
   MESSAGE_UPDATE: namespace('discussions', 'MESSAGE_UPDATE'),
-  MESSAGE_DELETE: namespace('discussions', 'MESSAGE_DELETE'),
+  REMOVE_MESSAGE: namespace('discussions', 'REMOVE_MESSAGE'),
   SEND_MESSAGE: namespace('discussions', 'SEND_MESSAGE'),
   SEND_MESSAGE_UPDATE: namespace('discussions', 'SEND_MESSAGE_UPDATE'),
+  DELETE_MESSAGE: namespace('discussions', 'DELETE_MESSAGE'),
   MESSAGE_BAD_RX: namespace('discussions', 'MESSAGE_BAD_RX'),
 
   // Modal dialog state.
@@ -127,7 +128,7 @@ export const actions = {
 
   addMessage: withPayload(types.ADD_MESSAGE, 'id', 'message'),
   updateMessage: withPayload(types.MESSAGE_UPDATE, 'id', 'message'),
-  deleteMessage: withPayload(types.MESSAGE_DELETE, 'id', 'message'),
+  removeMessage: withPayload(types.REMOVE_MESSAGE, 'id', 'message'),
   receiveBadMessage: withPayload(types.MESSAGE_BAD_RX, 'guid', 'badMessage'),
   sendMessage: withPayload(types.SEND_MESSAGE, 'id', 'message', 'attachment'),
   sendMessageUpdate: withPayload(
@@ -137,6 +138,7 @@ export const actions = {
     'message',
     'attachment',
   ),
+  deleteMessage: withPayload(types.DELETE_MESSAGE, 'discussionId', 'id'),
   // Modal dialog state.
   openModal: withPayload(types.OPEN_MODAL, 'guid', 'modalType'),
   closeModal: withPayload(types.CLOSE_MODAL),
@@ -423,7 +425,7 @@ export const reducer = (state = State(), { type, payload }) => {
               message.id === payload.message.id ? payload.message : message,
           ),
       );
-    case types.MESSAGE_DELETE:
+    case types.REMOVE_MESSAGE:
       return state.updateIn(
         ['discussions', payload.id, 'messages', 'items'],
         items => items.filter(message => message.id !== payload.message.id),

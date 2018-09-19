@@ -20,10 +20,13 @@ const Messages = ({
   unreadMessages,
   registerScrollHelper,
   scrollToBottom,
+  deleteMessage,
   editMessage,
   editMessageId,
 }) => (
-  <MessageActionsContext.Provider value={{ editMessage, editMessageId }}>
+  <MessageActionsContext.Provider
+    value={{ deleteMessage, editMessage, editMessageId }}
+  >
     <div className="messages">
       <ScrollHelper ref={registerScrollHelper} onScrollTo={handleScrolled}>
         <LoadMoreMessages discussion={discussion} />

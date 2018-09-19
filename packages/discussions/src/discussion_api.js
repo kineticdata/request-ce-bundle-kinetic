@@ -42,6 +42,17 @@ export const updateMessage = (params, token) =>
     },
   });
 
+export const deleteMessage = (params, token) =>
+  axios.request({
+    url: `${baseUrl()}/api/v1/discussions/${params.discussionId}/messages/${
+      params.id
+    }`,
+    method: 'delete',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
 export const fetchMessages = (id, token, pageToken) =>
   axios
     .request({

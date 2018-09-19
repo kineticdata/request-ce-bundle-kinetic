@@ -48,6 +48,7 @@ const mapDispatchToProps = {
   setDiscussionVisibility: actions.setDiscussionVisibility,
   setPageTitleInterval: actions.setPageTitleInterval,
   send: invitationFormActions.send,
+  deleteMessage: actions.deleteMessage,
 };
 
 const closeCurrent = props => () => {
@@ -106,6 +107,10 @@ const handleScrolled = ({
   }
 };
 
+const deleteMessage = props => message => {
+  props.deleteMessage(props.discussion.id, message.id);
+};
+
 export const DiscussionContainer = compose(
   connect(
     mapStateToProps,
@@ -143,6 +148,7 @@ export const DiscussionContainer = compose(
     closeCurrent,
     closeAll,
     send,
+    deleteMessage,
   }),
   withHandlers({
     handleScrolled,

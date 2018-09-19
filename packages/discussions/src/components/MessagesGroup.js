@@ -175,7 +175,12 @@ export const MessagesGroup = ({
                           </a>
                         </li>
                         <li>
-                          <a href="#">Delete</a>
+                          <a
+                            role="button"
+                            onClick={() => actions.deleteMessage(message)}
+                          >
+                            Delete
+                          </a>
                         </li>
                       </ul>
                     ) : (
