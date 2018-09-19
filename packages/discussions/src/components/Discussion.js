@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { LoadMoreMessages } from './LoadMoreMessagesContainer';
 import { MessagesDateContainer } from './MessagesDate';
@@ -7,6 +7,7 @@ import { ScrollHelper } from './ScrollHelper';
 import { ParticipantsHeaderContainer } from './ParticipantsHeader';
 import { ParticipantsDialogContainer } from './ParticipantsDialog';
 import { InvitationDialogContainer } from './InvitationDialog';
+import { DiscussionEditForm } from './DiscussionEditForm';
 import { VisibilityHelper } from './VisibilityHelper';
 
 const Messages = ({
@@ -44,6 +45,24 @@ const Messages = ({
   </div>
 );
 
+const getModalTitle = modalName => {
+  switch (modalName) {
+    case 'discussion':
+      return 'Discussion';
+    case 'participants':
+      return 'All Participants';
+    case 'invitation':
+      return 'Invite Participants';
+    case 'edit':
+      return 'Edit Discussion';
+    default:
+      return null;
+  }
+};
+
+const isModalSubmittable = modalName =>
+  ['invitation', 'edit'].indexOf(modalName) !== -1;
+
 const DiscussionModal = props => {
   const {
     discussion,
@@ -74,16 +93,12 @@ const DiscussionModal = props => {
               className="btn btn-link"
               onClick={closeCurrent}
             >
-              {currentOpenModals.last() === 'invitation' ? 'Cancel' : 'Close'}
+              {isModalSubmittable(currentOpenModals.last())
+                ? 'Cancel'
+                : 'Close'}
             </button>
           )}
-          <span>
-            {currentOpenModals.last() === 'discussion'
-              ? 'Discussion'
-              : currentOpenModals.last() === 'participants'
-                ? 'All Participants'
-                : 'Invite Participants'}
-          </span>
+          <span>{getModalTitle(currentOpenModals.last())}</span>
         </h4>
       </div>
       {currentOpenModals.last() === 'participants' ? (
@@ -91,32 +106,34 @@ const DiscussionModal = props => {
           <ParticipantsDialogContainer discussion={discussion} />
         </ModalBody>
       ) : currentOpenModals.last() === 'invitation' ? (
-        <ModalBody>
-          <InvitationDialogContainer
-            discussion={discussion}
-            send={send}
-            participantsAndInvites={participantsAndInvites}
-          />
-        </ModalBody>
+        <Fragment>
+          <ModalBody>
+            <InvitationDialogContainer
+              discussion={discussion}
+              send={send}
+              participantsAndInvites={participantsAndInvites}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={send}
+              disabled={!invitationButtonEnabled}
+            >
+              Send Invite
+            </button>
+          </ModalFooter>
+        </Fragment>
       ) : currentOpenModals.last() === 'discussion' ? (
         <ModalBody className="kinops-discussions-modal-body">
           <Messages {...props} />
           <ChatInputForm discussion={discussion} />
         </ModalBody>
+      ) : currentOpenModals.last() === 'edit' ? (
+        <DiscussionEditForm discussion={discussion} />
       ) : (
-        <div>Nothing to display</div>
-      )}
-      {currentOpenModals.last() === 'invitation' && (
-        <ModalFooter>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={send}
-            disabled={!invitationButtonEnabled}
-          >
-            Send Invite
-          </button>
-        </ModalFooter>
+        <div />
       )}
     </Modal>
   );

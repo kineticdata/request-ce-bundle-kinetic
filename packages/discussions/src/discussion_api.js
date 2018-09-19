@@ -103,6 +103,19 @@ export const createDiscussion = ({
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
+export const updateDiscussion = (id, data, token) =>
+  axios
+    .request({
+      method: 'put',
+      url: `${baseUrl()}/api/v1/discussions/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data,
+    })
+    .then(response => response.data)
+    .catch(response => ({ error: response }));
+
 export const fetchInvites = (id, token) =>
   axios
     .request({
