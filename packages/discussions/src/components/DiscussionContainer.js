@@ -121,11 +121,18 @@ export const DiscussionContainer = compose(
   withState('formattedMessages', 'setFormattedMessages', List()),
   withState('unreadMessages', 'setUnreadMessages', false),
   withState('scrollPosition', 'setScrollPosition', 'bottom'),
+  withState('editMessageId', 'setEditMessageId', null),
   withHandlers(() => {
     let ref;
+    let chatInput;
     return {
       registerScrollHelper: () => element => (ref = element),
       scrollToBottom: () => () => ref.scrollToBottom(),
+      registerChatInput: () => element => (chatInput = element),
+      editMessage: props => message => {
+        props.setEditMessageId(message.id);
+        chatInput.editMessage(message);
+      },
     };
   }),
   withHandlers({

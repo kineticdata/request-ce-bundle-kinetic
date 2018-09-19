@@ -10,6 +10,8 @@ import { InvitationDialogContainer } from './InvitationDialog';
 import { DiscussionEditForm } from './DiscussionEditForm';
 import { VisibilityHelper } from './VisibilityHelper';
 
+export const MessageActionsContext = React.createContext();
+
 const Messages = ({
   discussion,
   handleScrolled,
@@ -18,31 +20,35 @@ const Messages = ({
   unreadMessages,
   registerScrollHelper,
   scrollToBottom,
+  editMessage,
+  editMessageId,
 }) => (
-  <div className="messages">
-    <ScrollHelper ref={registerScrollHelper} onScrollTo={handleScrolled}>
-      <LoadMoreMessages discussion={discussion} />
-      {formattedMessages.map(messagesForDate => (
-        <MessagesDateContainer
-          discussion={discussion}
-          key={messagesForDate.first().first().createdAt}
-          messages={messagesForDate}
-          profile={profile}
-        />
-      ))}
-    </ScrollHelper>
-    <ParticipantsHeaderContainer discussion={discussion} />
-    {unreadMessages && (
-      <button
-        type="button"
-        className="btn btn-primary more-messages"
-        onClick={scrollToBottom}
-      >
-        New messages
-        <i className="fa fa-fw fa-arrow-down" />
-      </button>
-    )}
-  </div>
+  <MessageActionsContext.Provider value={{ editMessage, editMessageId }}>
+    <div className="messages">
+      <ScrollHelper ref={registerScrollHelper} onScrollTo={handleScrolled}>
+        <LoadMoreMessages discussion={discussion} />
+        {formattedMessages.map(messagesForDate => (
+          <MessagesDateContainer
+            discussion={discussion}
+            key={messagesForDate.first().first().createdAt}
+            messages={messagesForDate}
+            profile={profile}
+          />
+        ))}
+      </ScrollHelper>
+      <ParticipantsHeaderContainer discussion={discussion} />
+      {unreadMessages && (
+        <button
+          type="button"
+          className="btn btn-primary more-messages"
+          onClick={scrollToBottom}
+        >
+          New messages
+          <i className="fa fa-fw fa-arrow-down" />
+        </button>
+      )}
+    </div>
+  </MessageActionsContext.Provider>
 );
 
 const getModalTitle = modalName => {
@@ -76,6 +82,9 @@ const DiscussionModal = props => {
     // isSmallLayout,
     isModal,
     renderClose,
+    registerChatInput,
+    editMessageId,
+    setEditMessageId,
   } = props;
   return (
     <Modal
@@ -128,7 +137,12 @@ const DiscussionModal = props => {
       ) : currentOpenModals.last() === 'discussion' ? (
         <ModalBody className="kinops-discussions-modal-body">
           <Messages {...props} />
-          <ChatInputForm discussion={discussion} />
+          <ChatInputForm
+            discussion={discussion}
+            registerChatInput={registerChatInput}
+            editMessageId={editMessageId}
+            setEditMessageId={setEditMessageId}
+          />
         </ModalBody>
       ) : currentOpenModals.last() === 'edit' ? (
         <DiscussionEditForm discussion={discussion} />
@@ -146,6 +160,9 @@ export const Discussion = props => {
     isMobileModal,
     isSmallLayout,
     setDiscussionVisibility,
+    registerChatInput,
+    editMessageId,
+    setEditMessageId,
   } = props;
 
   if (discussion && isModal) {
@@ -158,7 +175,14 @@ export const Discussion = props => {
     return (
       <div className="kinops-discussions d-none d-md-flex">
         {!isSmallLayout && <Messages {...props} />}
-        {!isSmallLayout && <ChatInputForm discussion={discussion} />}
+        {!isSmallLayout && (
+          <ChatInputForm
+            discussion={discussion}
+            registerChatInput={registerChatInput}
+            editMessageId={editMessageId}
+            setEditMessageId={setEditMessageId}
+          />
+        )}
         <DiscussionModal {...props} />
       </div>
     );
@@ -169,7 +193,12 @@ export const Discussion = props => {
       <VisibilityHelper onChange={setDiscussionVisibility}>
         <Messages {...props} />
       </VisibilityHelper>
-      <ChatInputForm discussion={discussion} />
+      <ChatInputForm
+        discussion={discussion}
+        registerChatInput={registerChatInput}
+        editMessageId={editMessageId}
+        setEditMessageId={setEditMessageId}
+      />
       <DiscussionModal {...props} />
     </div>
   ) : null;

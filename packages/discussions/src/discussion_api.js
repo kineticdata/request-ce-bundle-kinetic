@@ -23,6 +23,25 @@ export const sendMessage = (params, token) =>
     },
   });
 
+export const updateMessage = (params, token) =>
+  axios.request({
+    url: `${baseUrl()}/api/v1/discussions/${params.discussionId}/messages/${
+      params.id
+    }`,
+    method: 'put',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: {
+      content: [
+        {
+          type: 'text',
+          value: params.message,
+        },
+      ],
+    },
+  });
+
 export const fetchMessages = (id, token, pageToken) =>
   axios
     .request({

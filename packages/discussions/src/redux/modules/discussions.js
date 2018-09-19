@@ -42,6 +42,7 @@ export const types = {
   MESSAGE_UPDATE: namespace('discussions', 'MESSAGE_UPDATE'),
   MESSAGE_DELETE: namespace('discussions', 'MESSAGE_DELETE'),
   SEND_MESSAGE: namespace('discussions', 'SEND_MESSAGE'),
+  SEND_MESSAGE_UPDATE: namespace('discussions', 'SEND_MESSAGE_UPDATE'),
   MESSAGE_BAD_RX: namespace('discussions', 'MESSAGE_BAD_RX'),
 
   // Modal dialog state.
@@ -129,7 +130,13 @@ export const actions = {
   deleteMessage: withPayload(types.MESSAGE_DELETE, 'id', 'message'),
   receiveBadMessage: withPayload(types.MESSAGE_BAD_RX, 'guid', 'badMessage'),
   sendMessage: withPayload(types.SEND_MESSAGE, 'id', 'message', 'attachment'),
-
+  sendMessageUpdate: withPayload(
+    types.SEND_MESSAGE_UPDATE,
+    'discussionId',
+    'id',
+    'message',
+    'attachment',
+  ),
   // Modal dialog state.
   openModal: withPayload(types.OPEN_MODAL, 'guid', 'modalType'),
   closeModal: withPayload(types.CLOSE_MODAL),

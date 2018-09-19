@@ -7,6 +7,7 @@ import Markdown from 'react-markdown';
 import { bundle } from 'react-kinetic-core';
 import { ParticipantCard } from './ParticipantCard';
 import { Hoverable } from 'common';
+import { MessageActionsContext } from './Discussion';
 
 const AVAILABLE_ICONS = [
   'avi',
@@ -104,83 +105,100 @@ export const MessagesGroup = ({
   profile,
   discussionServerUrl,
 }) => (
-  <div
-    className={`messages-group ${
-      messages.first().createdBy.username === profile.username
-        ? 'mine'
-        : 'other'
-    }`}
-  >
-    {messages.first().createdBy.username !== profile.username && (
-      <Hoverable
-        key={messages.first().createdBy.id}
-        render={() => (
-          <ParticipantCard
-            discussion={discussion}
-            participant={getParticipant(discussion, messages.first().createdBy)}
-          />
-        )}
+  <MessageActionsContext.Consumer>
+    {actions => (
+      <div
+        className={`messages-group ${
+          messages.first().createdBy.username === profile.username
+            ? 'mine'
+            : 'other'
+        }`}
       >
-        <Avatar
-          size={36}
-          email={messages.first().createdBy.email}
-          name={messages.first().createdBy.displayName}
-          round
-        />
-      </Hoverable>
-    )}
-    <div className="message-list">
-      {messages.map(
-        message =>
-          message.messageable_type === 'Upload' ? (
-            <div key={message.id} className="message-list-item">
-              <UploadMessage
-                message={message}
-                discussionServerUrl={discussionServerUrl}
-                messageOwner={
-                  messages.first().createdBy.username === profile.username
-                    ? 'mine'
-                    : 'other'
-                }
+        {messages.first().createdBy.username !== profile.username && (
+          <Hoverable
+            key={messages.first().createdBy.id}
+            render={() => (
+              <ParticipantCard
+                discussion={discussion}
+                participant={getParticipant(
+                  discussion,
+                  messages.first().createdBy,
+                )}
               />
-            </div>
-          ) : (
-            <div key={message.id} className="message-list-item">
-              {messages.first().createdBy.username === profile.username ? (
-                <ul className="actions meta">
-                  <li>
-                    <a href="#">Reply</a>
-                  </li>
-                  <li>
-                    <a href="#">Edit</a>
-                  </li>
-                  <li>
-                    <a href="#">Delete</a>
-                  </li>
-                </ul>
+            )}
+          >
+            <Avatar
+              size={36}
+              email={messages.first().createdBy.email}
+              name={messages.first().createdBy.displayName}
+              round
+            />
+          </Hoverable>
+        )}
+        <div className="message-list">
+          {messages.map(
+            message =>
+              message.messageable_type === 'Upload' ? (
+                <div key={message.id} className="message-list-item">
+                  <UploadMessage
+                    message={message}
+                    discussionServerUrl={discussionServerUrl}
+                    messageOwner={
+                      messages.first().createdBy.username === profile.username
+                        ? 'mine'
+                        : 'other'
+                    }
+                  />
+                </div>
               ) : (
-                <ul className="actions meta">
-                  <li>
-                    <a href="#">Reply</a>
-                  </li>
-                </ul>
-              )}
-              <TextMessage message={message} />
-            </div>
-          ),
-      )}
-      <div className="meta">
-        <span className="author">
-          {messages.last().createdBy.username === profile.username
-            ? 'You'
-            : messages.last().createdBy.displayName}
-        </span>
-        <span className="timestamp">
-          {moment(messages.last().createdAt).format('h:mma')}
-        </span>
+                <div
+                  key={message.id}
+                  className={`message-list-item ${
+                    actions.editMessageId === message.id ? 'editing' : ''
+                  }`}
+                >
+                  {messages.first().createdBy.username === profile.username ? (
+                    <ul className="actions meta">
+                      <li>
+                        <a href="#">Reply</a>
+                      </li>
+                      <li>
+                        <a
+                          role="button"
+                          onClick={() => actions.editMessage(message)}
+                        >
+                          Edit
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">Delete</a>
+                      </li>
+                    </ul>
+                  ) : (
+                    <ul className="actions meta">
+                      <li>
+                        <a href="#">Reply</a>
+                      </li>
+                    </ul>
+                  )}
+                  <TextMessage message={message} />
+                </div>
+              ),
+          )}
+          <div className="meta">
+            <span className="author">
+              {messages.last().createdBy.username === profile.username
+                ? 'You'
+                : messages.last().createdBy.displayName}
+            </span>
+            <span className="timestamp">
+              {moment(messages.last().createdAt).format('h:mma')}
+            </span>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    )}
+  </MessageActionsContext.Consumer>
 );
 
 const mapStateToProps = state => ({

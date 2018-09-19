@@ -45,15 +45,30 @@ class ChatInput extends Component {
     this.isChatInputInvalid = this.isChatInputInvalid.bind(this);
     this.toggleActionsOpen = this.toggleActionsOpen.bind(this);
     this.setActionsOpen = this.setActionsOpen.bind(this);
+    this.cancelAction = this.cancelAction.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.registerChatInput(this);
   }
 
   handleSendChatMessage(e) {
     e.preventDefault();
-    this.props.sendMessage(
-      this.props.discussion.id,
-      this.state.chatInput,
-      this.state.fileAttachment,
-    );
+    if (this.props.editMessageId) {
+      this.props.setEditMessageId(null);
+      this.props.sendMessageUpdate(
+        this.props.discussion.id,
+        this.props.editMessageId,
+        this.state.chatInput,
+        this.state.fileAttachment,
+      );
+    } else {
+      this.props.sendMessage(
+        this.props.discussion.id,
+        this.state.chatInput,
+        this.state.fileAttachment,
+      );
+    }
     this.setState({ chatInput: '', fileAttachment: null });
   }
 
@@ -72,6 +87,18 @@ class ChatInput extends Component {
 
   handleChatInput(event, value) {
     this.setState({ chatInput: value });
+  }
+
+  editMessage(message) {
+    this.setState({
+      chatInput: message.content[0].value,
+    });
+    this.contentEditable.focus();
+  }
+
+  cancelAction() {
+    this.props.setEditMessageId(null);
+    this.setState({ chatInput: '', fileAttachment: null });
   }
 
   handleAttachmentDrop(files) {
@@ -115,7 +142,10 @@ class ChatInput extends Component {
         multiple={false}
         style={{}}
       >
-        <form onSubmit={this.handleSendChatMessage} className="new-message">
+        <form
+          onSubmit={this.handleSendChatMessage}
+          className={`new-message ${this.props.editMessageId ? 'editing' : ''}`}
+        >
           <ButtonDropdown
             isOpen={this.state.actionsOpen}
             toggle={this.toggleActionsOpen}
@@ -189,6 +219,7 @@ class ChatInput extends Component {
               Type your message here&hellip;
             </div>
             <ContentEditable
+              ref={element => (this.contentEditable = element)}
               tabIndex={0}
               tagName="div"
               className="message-input"
@@ -198,12 +229,25 @@ class ChatInput extends Component {
               onKeyPress={this.handleChatHotKey}
             />
           </div>
+          {this.props.editMessageId && (
+            <button
+              type="button"
+              className="btn btn-subtle btn-cancel"
+              onClick={this.cancelAction}
+            >
+              <i className="fa fa-fw fa-times" />
+            </button>
+          )}
           <button
             type="submit"
             className="btn btn-subtle btn-send"
             disabled={this.isChatInputInvalid()}
           >
-            <i className="fa fa-fw fa-paper-plane" />
+            {this.props.editMessageId ? (
+              <i className="fa fa-fw fa-check" />
+            ) : (
+              <i className="fa fa-fw fa-paper-plane" />
+            )}
           </button>
         </form>
       </Dropzone>
@@ -213,6 +257,7 @@ class ChatInput extends Component {
 
 const mapDispatchToProps = {
   sendMessage: actions.sendMessage,
+  sendMessageUpdate: actions.sendMessageUpdate,
   openModal: actions.openModal,
 };
 

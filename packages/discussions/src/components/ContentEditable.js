@@ -88,6 +88,10 @@ export default class ContentEditable extends Component {
     }
   }
 
+  focus() {
+    this.elem.focus();
+  }
+
   render() {
     const { tagName, html, contentEditable, ...props } = this.props;
 
