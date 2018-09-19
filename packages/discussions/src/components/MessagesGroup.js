@@ -154,33 +154,37 @@ export const MessagesGroup = ({
                 <div
                   key={message.id}
                   className={`message-list-item ${
-                    actions.editMessageId === message.id ? 'editing' : ''
+                    actions && actions.editMessageId === message.id
+                      ? 'editing'
+                      : ''
                   }`}
                 >
-                  {messages.first().createdBy.username === profile.username ? (
-                    <ul className="actions meta">
-                      <li>
-                        <a href="#">Reply</a>
-                      </li>
-                      <li>
-                        <a
-                          role="button"
-                          onClick={() => actions.editMessage(message)}
-                        >
-                          Edit
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">Delete</a>
-                      </li>
-                    </ul>
-                  ) : (
-                    <ul className="actions meta">
-                      <li>
-                        <a href="#">Reply</a>
-                      </li>
-                    </ul>
-                  )}
+                  {actions &&
+                    (messages.first().createdBy.username ===
+                    profile.username ? (
+                      <ul className="actions meta">
+                        <li>
+                          <a href="#">Reply</a>
+                        </li>
+                        <li>
+                          <a
+                            role="button"
+                            onClick={() => actions.editMessage(message)}
+                          >
+                            Edit
+                          </a>
+                        </li>
+                        <li>
+                          <a href="#">Delete</a>
+                        </li>
+                      </ul>
+                    ) : (
+                      <ul className="actions meta">
+                        <li>
+                          <a href="#">Reply</a>
+                        </li>
+                      </ul>
+                    ))}
                   <TextMessage message={message} />
                 </div>
               ),
