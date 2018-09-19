@@ -23,7 +23,6 @@
   &:hover {
     background-color: $white;
     border-radius: 3px;
-
     ul.actions {
       visibility: visible;
       opacity: 1;
@@ -57,6 +56,7 @@ ul.actions {
     padding: 0 0.5rem;
   }
 }
+// Mine Message List
 .kinops-discussions
   .messages
   .messages-group.mine
@@ -80,4 +80,14 @@ ul.actions {
       justify-content: flex-start;
     }
   }
+  &.editing {
+    background-color: rgba(245, 166, 35, 0.15);
+    &:hover {
+      background-color: rgba(245, 166, 35, 0.15);
+    }
+  }
+}
+
+.message.edited > *:last-child:after {
+  content: ' (edited)';
 }

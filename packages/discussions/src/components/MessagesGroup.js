@@ -93,7 +93,13 @@ export const produceContent = message =>
   message.content.reduce((content, token) => (content += token.value), '');
 
 export const TextMessage = ({ message }) => (
-  <Markdown className="message" source={produceContent(message)} skipHtml />
+  <Markdown
+    className={`message ${
+      message.createdAt !== message.updatedAt ? 'edited' : ''
+    }`}
+    source={produceContent(message)}
+    skipHtml
+  />
 );
 
 const getParticipant = (discussion, createdBy) =>

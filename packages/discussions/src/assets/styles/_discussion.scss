@@ -124,6 +124,9 @@
               border-color: $blue3 transparent transparent $blue3;
             }
           }
+          .meta {
+            align-self: flex-end;
+          }
         }
       }
       &.other {
@@ -207,6 +210,16 @@
     display: flex;
     padding: 0;
     overflow: visible;
+    &.editing {
+      background-color: rgba(245, 166, 35, 0.15);
+      .input-container {
+        background-color: rgba(245, 166, 35, 0.15);
+      }
+      .btn-subtle,
+      .btn-send {
+        background-color: rgba(245, 166, 35, 0.05);
+      }
+    }
     button {
       border-radius: 0;
       &.btn-subtle {
