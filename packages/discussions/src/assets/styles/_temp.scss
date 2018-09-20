@@ -3,3 +3,10 @@
  *     -Used for development
  *     -Move css into appropriate sass files when ready
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.user-menu-item,
+.team-menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
