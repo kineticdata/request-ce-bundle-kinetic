@@ -23,6 +23,36 @@ export const sendMessage = (params, token) =>
     },
   });
 
+export const updateMessage = (params, token) =>
+  axios.request({
+    url: `${baseUrl()}/api/v1/discussions/${params.discussionId}/messages/${
+      params.id
+    }`,
+    method: 'put',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: {
+      content: [
+        {
+          type: 'text',
+          value: params.message,
+        },
+      ],
+    },
+  });
+
+export const deleteMessage = (params, token) =>
+  axios.request({
+    url: `${baseUrl()}/api/v1/discussions/${params.discussionId}/messages/${
+      params.id
+    }`,
+    method: 'delete',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
 export const fetchMessages = (id, token, pageToken) =>
   axios
     .request({
@@ -99,6 +129,19 @@ export const createDiscussion = ({
         owningTeams,
         is_private: isPrivate,
       },
+    })
+    .then(response => response.data)
+    .catch(response => ({ error: response }));
+
+export const updateDiscussion = (id, data, token) =>
+  axios
+    .request({
+      method: 'put',
+      url: `${baseUrl()}/api/v1/discussions/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data,
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));

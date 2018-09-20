@@ -4,6 +4,8 @@ import { selectToken } from '../modules/socket';
 import { toastActions } from 'common';
 import {
   sendMessage,
+  updateMessage,
+  deleteMessage,
   fetchMessages,
   fetchDiscussion,
   createInvite,
@@ -37,6 +39,18 @@ export function* sendMessageTask(action) {
   const token = yield select(selectToken);
 
   yield call(sendMessage, action.payload, token);
+}
+
+export function* sendMessageUpdateTask(action) {
+  const token = yield select(selectToken);
+
+  yield call(updateMessage, action.payload, token);
+}
+
+export function* deleteMessageTask(action) {
+  const token = yield select(selectToken);
+
+  yield call(deleteMessage, action.payload, token);
 }
 
 export function* joinDiscussionTask(action) {
@@ -138,6 +152,8 @@ export function* createDiscussionTask({ payload }) {
 export function* watchDiscussionRest() {
   yield all([
     takeEvery(types.SEND_MESSAGE, sendMessageTask),
+    takeEvery(types.SEND_MESSAGE_UPDATE, sendMessageUpdateTask),
+    takeEvery(types.DELETE_MESSAGE, deleteMessageTask),
     takeEvery(types.JOIN_DISCUSSION, joinDiscussionTask),
     takeEvery(types.FETCH_MORE_MESSAGES, fetchMoreMessagesTask),
     takeEvery(types.CREATE_INVITE, createInvitationTask),

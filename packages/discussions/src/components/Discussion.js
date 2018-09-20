@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { LoadMoreMessages } from './LoadMoreMessagesContainer';
 import { MessagesDateContainer } from './MessagesDate';
@@ -7,7 +7,10 @@ import { ScrollHelper } from './ScrollHelper';
 import { ParticipantsHeaderContainer } from './ParticipantsHeader';
 import { ParticipantsDialogContainer } from './ParticipantsDialog';
 import { InvitationDialogContainer } from './InvitationDialog';
+import { DiscussionEditForm } from './DiscussionEditForm';
 import { VisibilityHelper } from './VisibilityHelper';
+
+export const MessageActionsContext = React.createContext();
 
 const Messages = ({
   discussion,
@@ -17,32 +20,57 @@ const Messages = ({
   unreadMessages,
   registerScrollHelper,
   scrollToBottom,
+  deleteMessage,
+  editMessage,
+  editMessageId,
 }) => (
-  <div className="messages">
-    <ScrollHelper ref={registerScrollHelper} onScrollTo={handleScrolled}>
-      <LoadMoreMessages discussion={discussion} />
-      {formattedMessages.map(messagesForDate => (
-        <MessagesDateContainer
-          discussion={discussion}
-          key={messagesForDate.first().first().createdAt}
-          messages={messagesForDate}
-          profile={profile}
-        />
-      ))}
-    </ScrollHelper>
-    <ParticipantsHeaderContainer discussion={discussion} />
-    {unreadMessages && (
-      <button
-        type="button"
-        className="btn btn-primary more-messages"
-        onClick={scrollToBottom}
-      >
-        New messages
-        <i className="fa fa-fw fa-arrow-down" />
-      </button>
-    )}
-  </div>
+  <MessageActionsContext.Provider
+    value={{ deleteMessage, editMessage, editMessageId }}
+  >
+    <div className="messages">
+      <ScrollHelper ref={registerScrollHelper} onScrollTo={handleScrolled}>
+        <LoadMoreMessages discussion={discussion} />
+        {formattedMessages.map(messagesForDate => (
+          <MessagesDateContainer
+            discussion={discussion}
+            key={messagesForDate.first().first().createdAt}
+            messages={messagesForDate}
+            profile={profile}
+          />
+        ))}
+      </ScrollHelper>
+      <ParticipantsHeaderContainer discussion={discussion} />
+      {unreadMessages && (
+        <button
+          type="button"
+          className="btn btn-primary more-messages"
+          onClick={scrollToBottom}
+        >
+          New messages
+          <i className="fa fa-fw fa-arrow-down" />
+        </button>
+      )}
+    </div>
+  </MessageActionsContext.Provider>
 );
+
+const getModalTitle = modalName => {
+  switch (modalName) {
+    case 'discussion':
+      return 'Discussion';
+    case 'participants':
+      return 'All Participants';
+    case 'invitation':
+      return 'Invite Participants';
+    case 'edit':
+      return 'Edit Discussion';
+    default:
+      return null;
+  }
+};
+
+const isModalSubmittable = modalName =>
+  ['invitation', 'edit'].indexOf(modalName) !== -1;
 
 const DiscussionModal = props => {
   const {
@@ -59,6 +87,9 @@ const DiscussionModal = props => {
     renderClose,
     handleLeave,
     leavable,
+    registerChatInput,
+    editMessageId,
+    setEditMessageId,
   } = props;
   return (
     <Modal
@@ -76,16 +107,12 @@ const DiscussionModal = props => {
               className="btn btn-link"
               onClick={closeCurrent}
             >
-              {currentOpenModals.last() === 'invitation' ? 'Cancel' : 'Close'}
+              {isModalSubmittable(currentOpenModals.last())
+                ? 'Cancel'
+                : 'Close'}
             </button>
           )}
-          <span>
-            {currentOpenModals.last() === 'discussion'
-              ? 'Discussion'
-              : currentOpenModals.last() === 'participants'
-                ? 'All Participants'
-                : 'Invite Participants'}
-          </span>
+          <span>{getModalTitle(currentOpenModals.last())}</span>
           {leavable &&
             currentOpenModals.last() === 'participants' && (
               <button
@@ -103,32 +130,39 @@ const DiscussionModal = props => {
           <ParticipantsDialogContainer discussion={discussion} />
         </ModalBody>
       ) : currentOpenModals.last() === 'invitation' ? (
-        <ModalBody>
-          <InvitationDialogContainer
-            discussion={discussion}
-            send={send}
-            participantsAndInvites={participantsAndInvites}
-          />
-        </ModalBody>
+        <Fragment>
+          <ModalBody>
+            <InvitationDialogContainer
+              discussion={discussion}
+              send={send}
+              participantsAndInvites={participantsAndInvites}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={send}
+              disabled={!invitationButtonEnabled}
+            >
+              Send Invite
+            </button>
+          </ModalFooter>
+        </Fragment>
       ) : currentOpenModals.last() === 'discussion' ? (
         <ModalBody className="kinops-discussions-modal-body">
           <Messages {...props} />
-          <ChatInputForm discussion={discussion} />
+          <ChatInputForm
+            discussion={discussion}
+            registerChatInput={registerChatInput}
+            editMessageId={editMessageId}
+            setEditMessageId={setEditMessageId}
+          />
         </ModalBody>
+      ) : currentOpenModals.last() === 'edit' ? (
+        <DiscussionEditForm discussion={discussion} />
       ) : (
-        <div>Nothing to display</div>
-      )}
-      {currentOpenModals.last() === 'invitation' && (
-        <ModalFooter>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={send}
-            disabled={!invitationButtonEnabled}
-          >
-            Send Invite
-          </button>
-        </ModalFooter>
+        <div />
       )}
     </Modal>
   );
@@ -141,6 +175,9 @@ export const Discussion = props => {
     isMobileModal,
     isSmallLayout,
     setDiscussionVisibility,
+    registerChatInput,
+    editMessageId,
+    setEditMessageId,
   } = props;
 
   if (discussion && isModal) {
@@ -153,7 +190,14 @@ export const Discussion = props => {
     return (
       <div className="kinops-discussions d-none d-md-flex">
         {!isSmallLayout && <Messages {...props} />}
-        {!isSmallLayout && <ChatInputForm discussion={discussion} />}
+        {!isSmallLayout && (
+          <ChatInputForm
+            discussion={discussion}
+            registerChatInput={registerChatInput}
+            editMessageId={editMessageId}
+            setEditMessageId={setEditMessageId}
+          />
+        )}
         <DiscussionModal {...props} />
       </div>
     );
@@ -164,7 +208,12 @@ export const Discussion = props => {
       <VisibilityHelper onChange={setDiscussionVisibility}>
         <Messages {...props} />
       </VisibilityHelper>
-      <ChatInputForm discussion={discussion} />
+      <ChatInputForm
+        discussion={discussion}
+        registerChatInput={registerChatInput}
+        editMessageId={editMessageId}
+        setEditMessageId={setEditMessageId}
+      />
       <DiscussionModal {...props} />
     </div>
   ) : null;

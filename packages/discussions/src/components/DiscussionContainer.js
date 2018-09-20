@@ -49,6 +49,7 @@ const mapDispatchToProps = {
   setDiscussionVisibility: actions.setDiscussionVisibility,
   setPageTitleInterval: actions.setPageTitleInterval,
   send: invitationFormActions.send,
+  deleteMessage: actions.deleteMessage,
 };
 
 const closeCurrent = props => () => {
@@ -115,6 +116,10 @@ const handleScrolled = ({
   }
 };
 
+const deleteMessage = props => message => {
+  props.deleteMessage(props.discussion.id, message.id);
+};
+
 export const DiscussionContainer = compose(
   connect(
     mapStateToProps,
@@ -130,11 +135,18 @@ export const DiscussionContainer = compose(
   withState('formattedMessages', 'setFormattedMessages', List()),
   withState('unreadMessages', 'setUnreadMessages', false),
   withState('scrollPosition', 'setScrollPosition', 'bottom'),
+  withState('editMessageId', 'setEditMessageId', null),
   withHandlers(() => {
     let ref;
+    let chatInput;
     return {
       registerScrollHelper: () => element => (ref = element),
       scrollToBottom: () => () => ref.scrollToBottom(),
+      registerChatInput: () => element => (chatInput = element),
+      editMessage: props => message => {
+        props.setEditMessageId(message.id);
+        chatInput.editMessage(message);
+      },
     };
   }),
   withHandlers({
@@ -146,6 +158,7 @@ export const DiscussionContainer = compose(
     closeAll,
     send,
     handleLeave,
+    deleteMessage,
   }),
   withHandlers({
     handleScrolled,

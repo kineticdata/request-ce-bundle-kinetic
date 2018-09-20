@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import {
@@ -40,10 +40,13 @@ const EmailMenuItem = props => {
       position={props.position}
       disabled={!validEmail}
     >
-      {validEmail
-        ? `Invite new user by email address: ${props.text}`
-        : `Enter a valid email address to invite a new user: ${props.text}`}
-      Add a new email? {props.text}
+      {validEmail ? (
+        <Fragment>
+          <strong>Add email</strong>: {props.text}
+        </Fragment>
+      ) : (
+        `Invalid email address: ${props.text}`
+      )}
     </MenuItem>
   );
 };
@@ -83,7 +86,7 @@ export const InvitationDialog = props => (
     <form
       className="invitation-form"
       onSubmit={props.send}
-      style={{ minHeight: '350px' }}
+      // style={{ minHeight: '350px' }}
     >
       {props.error && <p className="alert alert-danger">{props.error}</p>}
       <div className="form-group required">
@@ -97,7 +100,11 @@ export const InvitationDialog = props => (
           selected={props.value}
           renderMenu={renderMenu}
           renderToken={renderToken}
+          placeholder="Search Users…"
         />
+        <p className="form-text text-muted">
+          Enter a valid email address to invite a new user
+        </p>
       </div>
     </form>
   </div>

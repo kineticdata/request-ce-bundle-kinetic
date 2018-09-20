@@ -16,6 +16,7 @@ const participantComparator = (p1, p2) =>
 export const ParticipantsHeader = ({
   discussion,
   openParticipantsModal,
+  openEditDiscussionModal,
   openInNewTab,
   isFullScreen,
 }) =>
@@ -63,6 +64,13 @@ export const ParticipantsHeader = ({
         >
           View All
         </button>
+        <button
+          type="button"
+          className="btn btn-link"
+          onClick={openEditDiscussionModal}
+        >
+          Edit
+        </button>
       </div>
     </div>
   );
@@ -85,6 +93,8 @@ export const ParticipantsHeaderContainer = compose(
   withHandlers({
     openParticipantsModal: props => () =>
       props.openModal(props.discussion.id, 'participants'),
+    openEditDiscussionModal: props => () =>
+      props.openModal(props.discussion.id, 'edit'),
     openInNewTab: props => () =>
       window.open(
         `${bundle.spaceLocation()}/#/discussions/${props.discussion.id}`,
