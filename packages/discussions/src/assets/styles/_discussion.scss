@@ -42,9 +42,50 @@
         flex: 1 1 100%;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         color: $blue1;
         @include ms-respond(font-size, 0);
+        .message-list-item {
+          // border: 1px solid green;
+          display: flex;
+          flex: 0 1 auto;
+          position: relative;
+          &:hover {
+            background-color: $white;
+            border-radius: 3px;
+            ul.actions {
+              visibility: visible;
+              opacity: 1;
+              transition: opacity 0.3s;
+              justify-content: flex-end;
+            }
+          }
+        }
+        ul.actions {
+          list-style: none;
+          display: inline-flex;
+          padding: 0 1rem;
+          margin: 0;
+
+          position: absolute;
+          top: -1rem;
+          right: 1rem;
+          min-height: 16px;
+          padding: 1px 4px;
+          background: rgb(255, 255, 255);
+          z-index: 30;
+          border: 1px solid rgb(222, 222, 222);
+          border-radius: 6px;
+          transition: all 0.3s;
+          // Show on hover
+          visibility: hidden;
+          opacity: 0;
+          align-items: center;
+          li + li:before {
+            content: '• ';
+            padding: 0 0.5rem;
+          }
+        }
         .message {
           background-color: $gray4;
           border-radius: 0.5rem;
@@ -56,6 +97,12 @@
           // in the message never wrapping and scrolling horizontally
           max-width: 100%;
           // line-height: 0.75rem;
+
+          // Message Edited content
+          &.edited > *:last-child:after {
+            content: ' (edited)';
+          }
+
           &:after {
             content: ' ';
             position: absolute;
@@ -115,7 +162,26 @@
       }
       &.mine {
         .message-list {
-          align-items: flex-end;
+          .message-list-item {
+            justify-content: flex-end;
+            &:hover {
+              background-color: $white;
+              border-radius: 3px;
+
+              ul.actions {
+                visibility: visible;
+                opacity: 1;
+                transition: opacity 0.3s;
+                justify-content: flex-start;
+              }
+            }
+            &.editing {
+              background-color: rgba(245, 166, 35, 0.15);
+              &:hover {
+                background-color: rgba(245, 166, 35, 0.15);
+              }
+            }
+          }
           .message {
             background-color: $blue3;
             &:after {
