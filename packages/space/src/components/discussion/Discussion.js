@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withState, lifecycle } from 'recompose';
+import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import { Utils, PageTitle } from 'common';
 import { Discussion as KinopsDiscussion } from 'discussions';
 import { commonActions } from 'common';
@@ -44,6 +45,7 @@ export const DiscussionComponent = ({
   relatedItems,
   profile,
   socketStatus,
+  handleLeave,
 }) => (
   <div className="discussion-wrapper">
     <PageTitle parts={[discussionName, 'Discussions']} />
@@ -58,6 +60,8 @@ export const DiscussionComponent = ({
       socketStatus === SOCKET_STATUS.IDENTIFIED ? (
         <KinopsDiscussion
           discussionId={discussionId}
+          leavable
+          onLeave={handleLeave}
           renderClose={() => (
             <Link to={`/`} className="btn btn-link">
               Close
@@ -80,6 +84,10 @@ export const DiscussionComponent = ({
   </div>
 );
 
+const handleLeave = ({ push }) => () => {
+  push('/');
+};
+
 const mapStateToProps = (state, props) => {
   const discussionId = props.match.params.id;
   const discussion = state.discussions.discussions.discussions.get(
@@ -98,6 +106,7 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = {
+  push,
   setSidebarOpen: commonActions.setSidebarOpen,
 };
 
@@ -107,6 +116,9 @@ export const Discussion = compose(
     mapDispatchToProps,
   ),
   withState('sidebarWasOpen', '_', true, props => props.sidebarOpen),
+  withHandlers({
+    handleLeave,
+  }),
   lifecycle({
     componentWillMount() {
       if (this.props.sidebarWasOpen) {

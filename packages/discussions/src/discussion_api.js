@@ -164,6 +164,18 @@ export const fetchParticipants = (id, token) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
+export const removeParticipant = (id, username, token) =>
+  axios
+    .request({
+      url: `${baseUrl()}/api/v1/discussions/${id}/participants/${username}`,
+      method: 'delete',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => response.data)
+    .catch(response => ({ error: response }));
+
 export const createRelatedItem = (id, relatedItem, token) =>
   axios
     .request({

@@ -39,6 +39,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = {
   joinDiscussion: actions.joinDiscussion,
   leaveDiscussion: actions.leaveDiscussion,
+  revokeParticipant: actions.revokeParticipant,
   fetchMoreMessages: actions.fetchMoreMessages,
   addWarn: toastActions.addWarn,
   createDiscussion: actions.createIssue,
@@ -59,6 +60,14 @@ const closeAll = props => () => {
   props.createInviteDone();
 };
 
+const handleLeave = ({
+  discussionId,
+  profile,
+  revokeParticipant,
+  onLeave,
+}) => () => {
+  revokeParticipant(discussionId, profile.username, onLeave);
+};
 const send = props => () => {
   props.send(props.discussion, props.invitationValue);
 };
@@ -136,6 +145,7 @@ export const DiscussionContainer = compose(
     closeCurrent,
     closeAll,
     send,
+    handleLeave,
   }),
   withHandlers({
     handleScrolled,

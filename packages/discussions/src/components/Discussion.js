@@ -57,6 +57,8 @@ const DiscussionModal = props => {
     // isSmallLayout,
     isModal,
     renderClose,
+    handleLeave,
+    leavable,
   } = props;
   return (
     <Modal
@@ -84,6 +86,16 @@ const DiscussionModal = props => {
                 ? 'All Participants'
                 : 'Invite Participants'}
           </span>
+          {leavable &&
+            currentOpenModals.last() === 'participants' && (
+              <button
+                type="button"
+                className="btn btn-link text-danger"
+                onClick={handleLeave}
+              >
+                Leave
+              </button>
+            )}
         </h4>
       </div>
       {currentOpenModals.last() === 'participants' ? (

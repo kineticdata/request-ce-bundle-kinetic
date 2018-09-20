@@ -8,7 +8,6 @@ export const types = {
   JOIN_DISCUSSION: namespace('discussions', 'JOIN_DISCUSSION'),
   ADD_DISCUSSION: namespace('discussions', 'ADD_DISCUSSION'),
   LEAVE_DISCUSSION: namespace('discussions', 'LEAVE_DISCUSSION'),
-  SET_ISSUE: namespace('discussions', 'SET_ISSUE'),
   CREATE_DISCUSSION: namespace('discussion', 'CREATE_DISCUSSION'),
   CREATE_INVITE: namespace('discussions', 'CREATE_INVITE'),
   CREATE_INVITE_DONE: namespace('discussions', 'CREATE_INVITE_DONE'),
@@ -29,6 +28,7 @@ export const types = {
   ADD_PARTICIPANT: namespace('discussions', 'ADD_PARTICIPANT'),
   REMOVE_PARTICIPANT: namespace('discussions', 'REMOVE_PARTICIPANT'),
   UPDATE_PARTICIPANT: namespace('discussions', 'UPDATE_PARTICIPANT'),
+  REVOKE_PARTICIPANT: namespace('discussions', 'REVOKE_PARTICIPANT'),
 
   APPLY_UPLOAD: namespace('discussions', 'APPLY_UPLOAD'),
   QUEUE_UPLOADS: namespace('discussions', 'QUEUE_UPLOAD'),
@@ -63,7 +63,6 @@ export const actions = {
 
   leaveDiscussion: withPayload(types.LEAVE_DISCUSSION),
   // API-bsased actions.
-  setIssue: withPayload(types.SET_ISSUE),
   createDiscussion: ({
     title,
     description = '',
@@ -98,6 +97,12 @@ export const actions = {
   removePresence: withPayload(types.REMOVE_PRESENCE, 'guid', 'participantGuid'),
   addParticipant: withPayload(types.ADD_PARTICIPANT, 'id', 'participant'),
   removeParticipant: withPayload(types.REMOVE_PARTICIPANT, 'id', 'participant'),
+  revokeParticipant: withPayload(
+    types.REVOKE_PARTICIPANT,
+    'id',
+    'username',
+    'onLeave',
+  ),
   updateParticipant: withPayload(types.UPDATE_PARTICIPANT, 'id', 'participant'),
 
   // Invitation API calls
@@ -190,8 +195,6 @@ export const Discussion = Record({
   versionId: '',
 
   // OLD STUFF
-  issue: null,
-  // messages: List(),
   badMessages: List(),
   processingUploads: List(),
   messagesLoading: true,
@@ -281,10 +284,6 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.update('discussions', map => map.delete(payload));
     case types.FETCH_MORE_MESSAGES:
       return state.setIn(['discussions', payload, 'loadingMoreMessages'], true);
-    case types.SET_ISSUE:
-      return state.updateIn(['discussions', payload.guid], discussion =>
-        discussion.set('issue', payload),
-      );
     case types.SET_MESSAGES:
       return state.updateIn(['discussions', payload.guid], discussion =>
         discussion

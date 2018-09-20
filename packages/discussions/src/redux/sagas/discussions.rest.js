@@ -7,6 +7,7 @@ import {
   fetchMessages,
   fetchDiscussion,
   createInvite,
+  removeParticipant,
   createDiscussion,
   createRelatedItem,
 } from '../../discussion_api';
@@ -77,6 +78,18 @@ export function* createInvitationTask({
   }
 }
 
+export function* revokeParticipantTask({ payload }) {
+  const { id, username, onLeave } = payload;
+  const token = yield select(selectToken);
+
+  const { error } = yield call(removeParticipant, id, username, token);
+
+  if (error) {
+    // What to do?
+  } else if (typeof onLeave === 'function') {
+    onLeave();
+  }
+}
 export function* createDiscussionTask({ payload }) {
   const {
     title,
@@ -128,6 +141,7 @@ export function* watchDiscussionRest() {
     takeEvery(types.JOIN_DISCUSSION, joinDiscussionTask),
     takeEvery(types.FETCH_MORE_MESSAGES, fetchMoreMessagesTask),
     takeEvery(types.CREATE_INVITE, createInvitationTask),
+    takeEvery(types.REVOKE_PARTICIPANT, revokeParticipantTask),
     takeEvery(types.CREATE_DISCUSSION, createDiscussionTask),
   ]);
 }
