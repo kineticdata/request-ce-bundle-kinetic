@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
+import { parse } from 'query-string';
 import { Utils, PageTitle } from 'common';
 import { Discussion as KinopsDiscussion } from 'discussions';
 import { commonActions } from 'common';
@@ -46,6 +47,7 @@ export const DiscussionComponent = ({
   profile,
   socketStatus,
   handleLeave,
+  invitationToken,
 }) => (
   <div className="discussion-wrapper">
     <PageTitle parts={[discussionName, 'Discussions']} />
@@ -60,6 +62,7 @@ export const DiscussionComponent = ({
       socketStatus === SOCKET_STATUS.IDENTIFIED ? (
         <KinopsDiscussion
           discussionId={discussionId}
+          invitationToken={invitationToken}
           leavable
           onLeave={handleLeave}
           renderClose={() => (
@@ -102,6 +105,7 @@ const mapStateToProps = (state, props) => {
     discussionName:
       discussion && discussion.title ? discussion.title : 'Loading...',
     relatedItems: discussion ? discussion.relatedItems : [],
+    invitationToken: parse(props.location.search).invitationToken,
   };
 };
 
