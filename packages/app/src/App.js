@@ -111,7 +111,7 @@ export const App = compose(
   }),
   lifecycle({
     componentDidMount() {
-      this.props.loadApp();
+      this.props.loadApp(true);
       this.props.fetchAlerts();
     },
   }),

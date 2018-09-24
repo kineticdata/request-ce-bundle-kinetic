@@ -5,7 +5,8 @@ import { actions as kinopsActions } from 'app/src/redux/modules/app';
 
 import { CoreAPI } from 'react-kinetic-core';
 
-const SPACE_SETTING_INCLUDES = 'kapps,kapps.forms,attributesMap';
+const SPACE_SETTING_INCLUDES =
+  'kapps,kapps.forms,attributesMap,spaceAttributeDefinitions';
 
 const TEAMS_SETTING_INCLUDES = 'teams';
 
@@ -40,7 +41,7 @@ export function* updateSpaceSaga({ payload }) {
     .filter(value => value)
     .map(value => [value])
     .toJS();
-  const { serverError, space } = yield call(CoreAPI.updateSpace, {
+  const { serverError } = yield call(CoreAPI.updateSpace, {
     include: SPACE_SETTING_INCLUDES,
     space: {
       attributesMap: attributes,
