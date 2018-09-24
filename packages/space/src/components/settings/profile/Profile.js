@@ -88,6 +88,7 @@ export const EditProfileComponent = ({
                       onChange={handleFieldChange}
                       value={fieldValues.defaultKappDisplay}
                     >
+                      <option value="">--Home--</option>
                       {kapps.map(k => (
                         <option key={k.slug} value={k.slug}>
                           {k.name}
@@ -287,11 +288,7 @@ const buildProfile = (fieldValues, profile) => {
   if (fieldValues.phoneNumber !== '') {
     profileAttributes['Phone Number'] = [fieldValues.phoneNumber];
   }
-  if (fieldValues.defaultKappDisplay !== '') {
-    profileAttributes['Default Kapp Display'] = [
-      fieldValues.defaultKappDisplay,
-    ];
-  }
+  profileAttributes['Default Kapp Display'] = [fieldValues.defaultKappDisplay];
   return {
     ...profile,
     displayName: fieldValues.displayName,

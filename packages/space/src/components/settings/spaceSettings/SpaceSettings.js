@@ -35,8 +35,13 @@ export const Select = ({
   setInputs,
   inputs,
   className,
+  emptyOptionName,
 }) => {
-  const option = <option key="blank" value="" />;
+  const option = (
+    <option key="blank" value="">
+      {emptyOptionName}
+    </option>
+  );
   let options;
   if (data) {
     if (type === 'teams') {
@@ -155,20 +160,6 @@ export const SettingsContainer = ({
             <form>
               <h2 className="section__title">Workflow Options</h2>
               {spaceAttributeDefinitions.find(
-                sA => sA.name === 'Approval Days Due',
-              ) && (
-                <div className="form-group">
-                  <label>Approval Days Due</label>
-                  <NumberInput
-                    value={inputs['Approval Days Due']}
-                    name="Approval Days Due"
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-2"
-                  />
-                </div>
-              )}
-              {spaceAttributeDefinitions.find(
                 sA => sA.name === 'Service Days Due',
               ) && (
                 <div className="form-group">
@@ -183,27 +174,13 @@ export const SettingsContainer = ({
                 </div>
               )}
               {spaceAttributeDefinitions.find(
-                sA => sA.name === 'Task Days Due',
-              ) && (
-                <div className="form-group">
-                  <label>Task Days Due</label>
-                  <NumberInput
-                    value={inputs['Task Days Due']}
-                    name="Task Days Due"
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-2"
-                  />
-                </div>
-              )}
-              {spaceAttributeDefinitions.find(
                 sA => sA.name === 'Task Assignee Team',
               ) && (
                 <div className="form-group">
                   <label>Task Assignee Team</label>
                   <Select
                     selected={inputs['Task Assignee Team']}
-                    name="Task Days Due"
+                    name="Task Assignee Team"
                     type="teams"
                     data={teams}
                     setInputs={setInputs}
@@ -226,6 +203,7 @@ export const SettingsContainer = ({
                     setInputs={setInputs}
                     inputs={inputs}
                     className="col-8"
+                    emptyOptionName="--Home--"
                   />
                 </div>
               )}
@@ -357,18 +335,9 @@ export const SpaceSettings = compose(
     mapDispatchToProps,
   ),
   withState('inputs', 'setInputs', props => ({
-    'Approval Days Due': Utils.getAttributeValue(
-      props.space,
-      'Approval Days Due',
-    ),
     'Service Days Due': Utils.getAttributeValue(
       props.space,
       'Service Days Due',
-    ),
-    'Task Days Due': Utils.getAttributeValue(props.space, 'Task Days Due'),
-    'Task Assignee Team': Utils.getAttributeValue(
-      props.space,
-      'Task Assignee Team',
     ),
     'Approval Form Slug': Utils.getAttributeValue(
       props.space,
@@ -388,6 +357,10 @@ export const SpaceSettings = compose(
       'Suggest a Service Form Slug',
     ),
     'Task Form Slug': Utils.getAttributeValue(props.space, 'Task Form Slug'),
+    'Task Assignee Team': Utils.getAttributeValue(
+      props.space,
+      'Task Assignee Team',
+    ),
     'Default Kapp Display': Utils.getAttributeValue(
       props.space,
       'Default Kapp Display',

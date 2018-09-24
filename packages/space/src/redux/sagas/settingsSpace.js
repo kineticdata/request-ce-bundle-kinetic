@@ -38,7 +38,7 @@ export function* fetchTeamsSaga({ payload }) {
 
 export function* updateSpaceSaga({ payload }) {
   const attributes = Map(payload)
-    .filter(value => value)
+    //.filter(value => value)
     .map(value => [value])
     .toJS();
   const { serverError } = yield call(CoreAPI.updateSpace, {
