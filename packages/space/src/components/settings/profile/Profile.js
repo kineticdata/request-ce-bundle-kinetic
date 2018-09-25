@@ -20,12 +20,14 @@ export const EditProfileComponent = ({
   organizationEnabled,
   site,
   siteEnabled,
+  defaultKappDisplayEnabled,
   manager,
   managerEnabled,
   handleChangeManagerClick,
   handleFieldChange,
   handleSubmit,
   handleTogglePassword,
+  kapps,
 }) => (
   <div className="page-container page-container--panels page-container--space-profile-edit">
     <PageTitle parts={['Edit Profile']} />
@@ -75,6 +77,26 @@ export const EditProfileComponent = ({
                     value={fieldValues.phoneNumber}
                   />
                 </div>
+                {defaultKappDisplayEnabled && (
+                  <div className="form-group col">
+                    <label htmlFor="phoneNumber">Default Kapp Display</label>
+                    <select
+                      className="form-control"
+                      type="kapp"
+                      id="defaultKappDisplay"
+                      name="defaultKappDisplay"
+                      onChange={handleFieldChange}
+                      value={fieldValues.defaultKappDisplay}
+                    >
+                      <option value="">--Home--</option>
+                      {kapps.map(k => (
+                        <option key={k.slug} value={k.slug}>
+                          {k.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
               {editingPassword ? (
                 <div>
@@ -253,6 +275,11 @@ const getProfilePhone = profile =>
     ? profile.profileAttributes['Phone Number'].join(', ')
     : '';
 
+const getDefaultKappDisplay = profile =>
+  profile.profileAttributes && profile.profileAttributes['Default Kapp Display']
+    ? profile.profileAttributes['Default Kapp Display'][0]
+    : '';
+
 const buildProfile = (fieldValues, profile) => {
   const profileAttributes =
     profile && profile.profileAttributes
@@ -261,6 +288,7 @@ const buildProfile = (fieldValues, profile) => {
   if (fieldValues.phoneNumber !== '') {
     profileAttributes['Phone Number'] = [fieldValues.phoneNumber];
   }
+  profileAttributes['Default Kapp Display'] = [fieldValues.defaultKappDisplay];
   return {
     ...profile,
     displayName: fieldValues.displayName,
@@ -275,6 +303,7 @@ const translateProfileToFieldValues = profile => ({
   newPassword: '',
   confirmPassword: '',
   phoneNumber: getProfilePhone(profile) || '',
+  defaultKappDisplay: getDefaultKappDisplay(profile) || '',
 });
 
 const translateFieldValuesToProfile = (fieldValues, profile) => {
@@ -323,12 +352,20 @@ const mapStateToProps = state => ({
     state.space.profiles.profile &&
     state.space.profiles.profile.attributes['Site'],
   siteEnabled: state.space.spaceApp.userAttributeDefinitions['Site'],
+  defaultKappDisplay:
+    state.space.profiles.profile &&
+    state.space.profiles.profile.profileAttributes['Default Kapp Display'],
+  defaultKappDisplayEnabled:
+    state.space.spaceApp.userProfileAttributeDefinitions[
+      'Default Kapp Display'
+    ],
   spaceAttributes:
     state.app.space &&
     state.app.space.attributes.reduce((memo, item) => {
       memo[item.name] = item.value;
       return memo;
     }, {}),
+  kapps: state.app.kapps,
 });
 
 const mapDispatchToProps = {

@@ -29,6 +29,11 @@ export const SettingsComponent = () => (
     />
     <Route
       exact
+      path="/kapps/services/settings/forms/clone/:id"
+      component={CreateForm}
+    />
+    <Route
+      exact
       path="/kapps/services/settings/forms/:id/settings"
       component={FormSettings}
     />

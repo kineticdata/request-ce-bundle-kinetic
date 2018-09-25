@@ -31,7 +31,9 @@ export const actions = {
 
 export const State = Record({
   loading: true,
-  spaceKappsForms: null,
+  kapps: [],
+  spaceAttributesMap: {},
+  spaceAttributeDefinitions: [],
   teams: null,
   error: null,
 });
@@ -44,7 +46,9 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('loading', true);
     case types.SET_SPACE_SETTINGS:
       return state
-        .set('spaceKappsForms', payload)
+        .set('kapps', payload.kapps)
+        .set('spaceAttributeDefinitions', payload.spaceAttributeDefinitions)
+        .set('spaceAttributesMap', payload.attributesMap)
         .set('loading', false)
         .set('error', null);
     case types.SET_SPACE_SETTINGS_TEAMS:

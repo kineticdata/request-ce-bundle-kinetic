@@ -42,6 +42,8 @@ export const types = {
   ),
   FETCH_NOTIFICATIONS: namespace('servicesSettings', 'FETCH_NOTIFICATIONS'),
   SET_NOTIFICATIONS: namespace('servicesSettings', 'SET_NOTIFICATIONS'),
+  FETCH_FORM: namespace('servicesSettings', 'FETCH_FORM'),
+  SET_FORM: namespace('servicesSettings', 'SET_FORM'),
 };
 
 export const actions = {
@@ -59,6 +61,8 @@ export const actions = {
   setServicesSettingsUsers: withPayload(types.SET_SERVICES_SETTINGS_USERS),
   fetchNotifications: withPayload(types.FETCH_NOTIFICATIONS),
   setNotifications: withPayload(types.SET_NOTIFICATIONS),
+  fetchForm: withPayload(types.FETCH_FORM),
+  setForm: withPayload(types.SET_FORM),
 };
 
 export const State = Record({
@@ -70,9 +74,11 @@ export const State = Record({
   loadingTeams: true,
   loadingUsers: true,
   loadingSpace: true,
+  loadingForm: true,
   spaceKapps: null,
   notifications: null,
   notificationsLoading: true,
+  form: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -118,6 +124,10 @@ export const reducer = (state = State(), { type, payload }) => {
       return state
         .set('notificationsLoading', false)
         .set('notifications', payload);
+    case types.FETCH_FORM:
+      return state.set('loadingForm', true);
+    case types.SET_FORM:
+      return state.set('loadingForm', false).set('form', payload);
     default:
       return state;
   }
