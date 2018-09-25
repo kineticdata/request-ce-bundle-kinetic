@@ -17,7 +17,11 @@ export class DiscussionEditFormComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      values: Values(props.discussion),
+      values: Values({
+        ...props.discussion,
+        owningUsers: props.discussion.owningUsers.toJS(),
+        owningTeams: props.discussion.owningTeams.toJS(),
+      }),
       dirty: false,
       saving: false,
       error: null,

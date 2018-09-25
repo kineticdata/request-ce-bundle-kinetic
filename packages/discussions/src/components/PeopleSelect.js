@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   Highlighter,
   Menu,
@@ -6,47 +6,80 @@ import {
   Token,
   Typeahead,
 } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import isMatch from 'lodash.ismatch';
+import memoize from 'memoize-one';
 import { CoreAPI } from 'react-kinetic-core';
 import { Cache } from './Cache';
 
 const EMAIL_PATTERN = /^.+@.+\..+$/;
 
-const UserMenuItem = props => (
-  <MenuItem option={props.option} position={props.position}>
-    <Highlighter search={props.text}>{props.option.label}</Highlighter>
-    <div>
-      <small>{props.option.user.username}</small>
-    </div>
-  </MenuItem>
-);
-
-const TeamMenuItem = props => (
-  <MenuItem option={props.option} position={props.position}>
-    <Highlighter search={props.text}>{props.option.label}</Highlighter>
-    <div>
-      <small>Team</small>
-    </div>
-  </MenuItem>
-);
-
-const EmailMenuItem = props => {
-  const validEmail = props.text.match(EMAIL_PATTERN);
+const UserMenuItem = props => {
+  const disabledReason = props.disabledFn && props.disabledFn(props.option);
   return (
     <MenuItem
       option={props.option}
       position={props.position}
-      disabled={!validEmail}
+      disabled={!!disabledReason}
     >
-      {validEmail
-        ? `Invite new user by email address: ${props.text}`
-        : `Enter a valid email address to invite a new user: ${props.text}`}
-      Add a new email? {props.text}
+      <div className="user-menu-item">
+        <div>
+          <Highlighter search={props.text}>{props.option.label}</Highlighter>
+          <div>
+            <small>{props.option.user.username}</small>
+          </div>
+        </div>
+        {disabledReason && <small>{disabledReason}</small>}
+      </div>
     </MenuItem>
   );
 };
 
-const renderMenu = (results, props) => (
+const TeamMenuItem = props => {
+  const disabledReason = props.disabledFn && props.disabledFn(props.option);
+  return (
+    <MenuItem
+      option={props.option}
+      position={props.position}
+      disabled={!!disabledReason}
+    >
+      <div className="team-menu-item">
+        <div>
+          <Highlighter search={props.text}>{props.option.label}</Highlighter>
+          <div>
+            <small>Team</small>
+          </div>
+        </div>
+        {disabledReason && <small>{disabledReason}</small>}
+      </div>
+    </MenuItem>
+  );
+};
+
+const EmailMenuItem = props => {
+  const disabledReason = props.disabledFn && props.disabledFn(props.option);
+  const isValidEmail = props.text.match(EMAIL_PATTERN);
+  return (
+    <MenuItem
+      option={props.option}
+      position={props.position}
+      disabled={!isValidEmail || !!disabledReason}
+    >
+      {disabledReason ? (
+        `${disabledReason}: ${props.text}`
+      ) : isValidEmail ? (
+        <Fragment>
+          <strong>Add email</strong>: {props.text}
+        </Fragment>
+      ) : (
+        `Invalid email address: ${props.text}`
+      )}
+    </MenuItem>
+  );
+};
+
+const renderMenu = memoize(disabledFn => (results, props) => (
   <Menu {...props}>
     {results.map((option, i) => {
       const CurrentMenuItem = option.user
@@ -60,11 +93,12 @@ const renderMenu = (results, props) => (
           option={option}
           position={i}
           text={props.text}
+          disabledFn={disabledFn}
         />
       );
     })}
   </Menu>
-);
+));
 
 const renderToken = (option, props, index) => (
   <Token
@@ -97,10 +131,18 @@ const anyMatch = (array, source) =>
   !!array.find(entry => isMatch(entry, source));
 
 const getSelected = (value, valueMapper, options) =>
-  options.filter(option => anyMatch(value, valueMapper(option)));
+  options
+    .filter(option =>
+      anyMatch(value, valueMapper ? valueMapper(option) : option),
+    )
+    .concat(value.filter(v => v.customOption));
 
 export class PeopleSelect extends React.Component {
   state = { options: null };
+
+  static getDerivedStateFromProps(props) {
+    return { renderMenu: renderMenu(props.disabledFn) };
+  }
 
   componentDidMount() {
     Promise.all([
@@ -116,7 +158,12 @@ export class PeopleSelect extends React.Component {
 
   handleChange = value => {
     this.props.onChange({
-      target: { id: this.props.id, value: value.map(this.props.valueMapper) },
+      target: {
+        id: this.props.id,
+        value: this.props.valueMapper
+          ? value.map(this.props.valueMapper)
+          : value,
+      },
     });
   };
 
@@ -125,8 +172,9 @@ export class PeopleSelect extends React.Component {
       this.state.options && (
         <Typeahead
           multiple
+          allowNew={this.props.emails}
           options={this.state.options}
-          renderMenu={renderMenu}
+          renderMenu={this.state.renderMenu}
           renderToken={renderToken}
           selected={getSelected(
             this.props.value,
@@ -134,6 +182,7 @@ export class PeopleSelect extends React.Component {
             this.state.options,
           )}
           onChange={this.handleChange}
+          placeholder={this.props.placeholder}
         />
       )
     );
