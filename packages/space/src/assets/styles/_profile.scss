@@ -81,7 +81,10 @@
 
 .card--profile {
   padding: 1.4375rem;
-  margin: 1.5rem 0;
+  margin: 0 0 1.5rem 0;
+  .page-container--space-profile-edit & {
+    margin-top: 1.5rem;
+  }
   display: flex;
   align-items: center;
   flex-direction: column;
