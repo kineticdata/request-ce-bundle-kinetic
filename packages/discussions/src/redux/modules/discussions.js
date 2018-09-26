@@ -60,7 +60,7 @@ export const types = {
 };
 
 export const actions = {
-  joinDiscussion: withPayload(types.JOIN_DISCUSSION),
+  joinDiscussion: withPayload(types.JOIN_DISCUSSION, 'id', 'invitationToken'),
   addDiscussion: withPayload(types.ADD_DISCUSSION),
 
   leaveDiscussion: withPayload(types.LEAVE_DISCUSSION),
@@ -278,9 +278,9 @@ export const formatMessages = messages =>
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.JOIN_DISCUSSION:
-      return state.hasIn(['discussions', payload])
+      return state.hasIn(['discussions', payload.id])
         ? state
-        : state.setIn(['discussions', payload], Discussion());
+        : state.setIn(['discussions', payload.id], Discussion());
     case types.ADD_DISCUSSION:
       return state.updateIn(['discussions', payload.id], discussion =>
         discussion.mergeWith(

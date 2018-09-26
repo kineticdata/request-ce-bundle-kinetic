@@ -167,7 +167,10 @@ export const DiscussionContainer = compose(
     componentWillMount() {
       this.props.setFormattedMessages(formatMessages(this.props.messages));
       if (this.props.discussionId) {
-        this.props.joinDiscussion(this.props.discussionId);
+        this.props.joinDiscussion(
+          this.props.discussionId,
+          this.props.invitationToken,
+        );
         this.props.setDiscussionVisibility('visible');
       }
     },
@@ -190,7 +193,10 @@ export const DiscussionContainer = compose(
           this.props.leaveDiscussion(this.props.discussionId);
         }
         if (nextProps.discussionId) {
-          this.props.joinDiscussion(nextProps.discussionId);
+          this.props.joinDiscussion(
+            nextProps.discussionId,
+            nextProps.invitationToken,
+          );
         }
       }
       // Process the messages if the contents have changed.

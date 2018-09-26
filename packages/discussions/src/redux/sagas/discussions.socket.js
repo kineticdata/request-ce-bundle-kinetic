@@ -113,19 +113,24 @@ export function* watchDiscussionsSocket() {
 
     // The UI requested to join a topic.
     if (joinTopic) {
-      const topicId = `discussions/discussion/${joinTopic.payload}`;
+      const topicId = `discussions/discussion/${joinTopic.payload.id}`;
 
       const topic = socket.topic(topicId);
       const channel = registerTopicChannel(topic);
       const handler = yield fork(
         handleTopicChannel,
         channel,
-        joinTopic.payload,
+        joinTopic.payload.id,
         socket,
         topic,
       );
-      discussionTasks.push({ id: joinTopic.payload, topic, channel, handler });
-      topic.subscribe();
+      discussionTasks.push({
+        id: joinTopic.payload.id,
+        topic,
+        channel,
+        handler,
+      });
+      topic.subscribe(joinTopic.payload.invitationToken);
     }
 
     // The UI requested to leave a topic.

@@ -52,7 +52,7 @@ export class Topic {
     return this;
   }
 
-  subscribe() {
+  subscribe(userInvitationToken) {
     this.setStatus(TOPIC_STATUS.subscribing);
 
     // Wrap the user's callback with our own.
@@ -67,7 +67,7 @@ export class Topic {
     const action = this.socket.createMessage(
       TOPIC_HUB_TOPIC,
       TOPIC_HUB_ACTION_SUBSCRIBE,
-      { topic: this.topicId },
+      { topic: this.topicId, userInvitationToken },
     );
     // Send the message.
     this.socket.send(action, handleSubscribe);

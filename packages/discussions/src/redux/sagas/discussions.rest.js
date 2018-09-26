@@ -56,7 +56,7 @@ export function* deleteMessageTask(action) {
 export function* joinDiscussionTask(action) {
   const token = yield select(selectToken);
   const { discussion, error } = yield call(fetchDiscussion, {
-    id: action.payload,
+    id: action.payload.id,
     token,
   });
 
