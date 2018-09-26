@@ -7,6 +7,10 @@
   color: $white;
   background-color: $blue-lake;
   border-color: $blue-lake;
+  &:hover {
+    color: $white;
+    background-color: $blue-lake;
+  }
 }
 .page-link {
   color: $blue-lake;
