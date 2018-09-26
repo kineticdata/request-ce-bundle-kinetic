@@ -53,8 +53,6 @@ export function* watchToken() {
 }
 
 export function* setTokenTask({ payload }) {
-  window.localStorage.setItem(TOKEN_KEY, payload);
-
   if (socket.status === SOCKET_STATUS.CLOSED) {
     const url = createWsUri();
     yield put(actions.connect({ token: payload, url }));
