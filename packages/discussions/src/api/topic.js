@@ -83,6 +83,9 @@ export class Topic {
       } else if (message.event === TOPIC_HUB_EVENT_ACK_ERROR) {
         this.setStatus(TOPIC_STATUS.error, message);
       }
+
+      // Remove this topic from the socket.
+      this.socket.topics = this.socket.topics.filter(t => t !== this);
     };
 
     // Craft the message to be sent to the server.
