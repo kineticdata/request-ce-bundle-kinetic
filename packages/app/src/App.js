@@ -6,16 +6,7 @@ import './assets/styles/master.scss';
 import 'discussions/src/assets/styles/master.scss';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import {
-  compose,
-  lifecycle,
-  withHandlers,
-  withProps,
-  withState,
-} from 'recompose';
-import { withRouter } from 'react-router';
-import { push } from 'connected-react-router';
-import qs from 'qs';
+import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import Sidebar from 'react-sidebar';
 import { Utils, ToastsContainer, ModalFormContainer } from 'common';
 import { LoginModal } from './components/authentication/LoginModal';
@@ -26,39 +17,6 @@ import { actions as layoutActions } from './redux/modules/layout';
 import { App as ServicesApp } from 'services/src/App';
 import { App as QueueApp } from 'queue/src/App';
 import { App as SpaceApp } from 'space/src/App';
-
-export const OAuthAppWrapper = props => {
-  return props.processing ? null : <AppView {...props} />;
-};
-
-const fetchToken = ({ location, setProcessing }) => () => {
-  const params = qs.parse(location.pathname);
-  if (params['access_token']) {
-    window.opener.__OAUTH_CALLBACK__(params['access_token']);
-  } else {
-    setProcessing(false);
-  }
-};
-
-const wrapperDispatch = {
-  push,
-};
-export const App = compose(
-  withRouter,
-  connect(
-    null,
-    wrapperDispatch,
-  ),
-  withState('processing', 'setProcessing', true),
-  withHandlers({
-    fetchToken,
-  }),
-  lifecycle({
-    componentDidMount() {
-      this.props.fetchToken();
-    },
-  }),
-)(OAuthAppWrapper);
 
 export const AppComponent = props =>
   !props.loading && (
@@ -124,7 +82,7 @@ const getAppProvider = kapp => {
   }
 };
 
-export const AppView = compose(
+export const App = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,

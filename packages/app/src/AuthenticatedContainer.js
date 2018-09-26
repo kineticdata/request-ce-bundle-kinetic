@@ -6,10 +6,7 @@ import { Route, Switch } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { bundle } from 'react-kinetic-core';
 
-import {
-  actions as socketActions,
-  TOKEN_KEY,
-} from 'discussions/src/redux/modules/socket';
+import { actions as socketActions } from 'discussions/src/redux/modules/socket';
 
 import logoImage from './assets/images/login-background.png';
 import logoName from './assets/images/login-name.png';
@@ -19,27 +16,33 @@ import { ResetPasswordForm } from './components/authentication/ResetPasswordForm
 import { LoginForm } from './components/authentication/LoginForm';
 import { CreateAccountForm } from './components/authentication/CreateAccountForm';
 import { UnauthenticatedForm } from './components/authentication/UnauthenticatedForm';
+import { RetrieveJwtIframe } from './components/authentication/RetrieveJwtIframe';
 
-export const LoginScreen = props => (
-  <div className="login-container">
-    <div className="login-wrapper">
-      {props.children}
-      <div
-        className="login-image-container"
-        style={{ backgroundImage: `url(${logoImage})` }}
-      >
-        <div className="kinops-text">
-          <img
-            src={logoName}
-            alt="Kinops - streamline everyday work for teams"
-          />
-          <h3>Welcome to kinops</h3>
-          <p>Streamline everyday work for teams.</p>
+export const LoginScreen = props =>
+  props.authenticated ? (
+    props.token ? null : (
+      <RetrieveJwtIframe onSuccess={props.setToken} />
+    )
+  ) : (
+    <div className="login-container">
+      <div className="login-wrapper">
+        {props.children}
+        <div
+          className="login-image-container"
+          style={{ backgroundImage: `url(${logoImage})` }}
+        >
+          <div className="kinops-text">
+            <img
+              src={logoName}
+              alt="Kinops - streamline everyday work for teams"
+            />
+            <h3>Welcome to kinops</h3>
+            <p>Streamline everyday work for teams.</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
 
 const toResetPassword = ({ push, setDisplay }) => routed => () =>
   routed ? push('/reset-password') : setDisplay('reset');
@@ -75,58 +78,24 @@ export const handleUnauthorized = props => () => {
   props.setDisplay('login');
 };
 
-// const fetchCode = ({
-//   location,
-//   setCode,
-//   setProcessing,
-//   processOAuthToken,
-// }) => () => {
-//   const params = qs.parse(location.search);
-
-//   if (params['?code']) {
-//     // setCode(params['?code']);
-//     // console.log('got oauth code', params['?code']);
-//     // props.push(params.state);
-
-//     processOAuthToken(params['?code'], params.state);
-//   } else {
-//     setProcessing(false);
-//   }
-// };
-// const processOAuthCode = async (code, state, push) => {
-//   const clientId = 'kinops';
-//   const clientSecret = 'kinops';
-
-//   const results = await axios.request({
-//     method: 'post',
-//     url: '/app/oauth/token',
-//     auth: {
-//       username: clientId,
-//       password: clientSecret,
-//     },
-//     params: {
-//       response_type: 'code',
-//       grant_type: 'authorization_code',
-//       code,
-//     },
-//     config: { headers: { 'Content-Type': 'application/json' } },
-//   });
-
-//   window.opener.__OAUTH_CALLBACK__(results.data);
-// };
-
-const processOAuthToken = (token, state, push) => {
-  if (window.opener.__OAUTH_CALLBACK__) {
+const processOAuthToken = (token, state, push, setToken) => {
+  if (window.opener && window.opener.__OAUTH_CALLBACK__) {
+    // If it was opened in a popup, this is being executed in another window so we
+    // needed to store the callback to the full React app on `window.opener`.
     window.opener.__OAUTH_CALLBACK__(token);
+  } else if (window.parent && window.parent.__OAUTH_CALLBACK__) {
+    // This was performed in an iframe. Similar to the popup - the React app being
+    // executed right now is now the full React app. The full app set a callback on
+    // itself and we'll inform it of our token.
+    window.parent.__OAUTH_CALLBACK__(token);
   }
-  push(state);
 };
 
 const CatchAllRoute = props => (
   <Route
     path="/"
     render={route => (
-      <LoginScreen>
+      <LoginScreen {...props}>
         {props.display === 'reset' ? (
           <ResetPasswordForm {...props} />
         ) : props.display === 'reset-token' ? (
@@ -142,16 +111,18 @@ const CatchAllRoute = props => (
 );
 
 const Authenticated = props => {
-  const { children, authenticated, attempting, isPublic, push } = props;
+  const { children, authenticated, attempting, isPublic, push, token } = props;
 
+  // First we need to check to see if this is a redirect with an OAuth token.
+  // If it is we need to process the token and save it in Redux. Since this
+  // is actually rendered in a popup or iframe, we will block further rendering.
   const params = qs.parse(window.location.hash);
-
   if (params['access_token']) {
     processOAuthToken(params['access_token'], params.state, push);
     return null;
   }
 
-  return authenticated && !isPublic ? (
+  return authenticated && token && !isPublic ? (
     children
   ) : attempting ? null : (
     <div>
@@ -227,6 +198,7 @@ const mapStateToProps = state => ({
   location: state.router.location,
   pathname: state.router.location.pathname,
   isPublic: state.router.location.search.includes('public'),
+  token: state.discussions.socket.token,
 });
 
 const mapDispatchToProps = {
@@ -258,16 +230,9 @@ export const AuthenticatedContainer = compose(
 
   lifecycle({
     componentWillMount() {
-      const token = localStorage.getItem(TOKEN_KEY);
-
-      // If there's a valid token, go ahead and set it.
-      if (token) {
-        this.props.setToken(token);
-      }
-
       // If the bundle says we're anonymous on our initial visit then assume unauthenticated.
       // Otherwise we're authenticated with Core.
-      if (bundle.identity() !== 'anonymous' && token) {
+      if (bundle.identity() !== 'anonymous') {
         this.props.setAuthenticated(true);
       }
 

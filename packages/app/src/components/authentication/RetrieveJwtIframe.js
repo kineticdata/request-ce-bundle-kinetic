@@ -25,6 +25,13 @@ export const RetrieveJwtIframe = compose(
     };
   }),
   lifecycle({
+    componentWillMount() {
+      window.__OAUTH_CALLBACK__ = token => {
+        if (typeof this.props.onSuccess === 'function') {
+          this.props.onSuccess(token);
+        }
+      };
+    },
     componentDidMount() {
       this.props.getFrameRef().onload = this.props.handleFrameLoad;
     },

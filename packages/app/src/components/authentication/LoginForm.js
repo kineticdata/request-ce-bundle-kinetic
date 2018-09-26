@@ -2,8 +2,6 @@ import React, { Fragment } from 'react';
 import { compose, withHandlers, withState } from 'recompose';
 import { withRouter } from 'react-router';
 import { login } from '../../utils/authentication';
-import { RetrieveJwtIframe } from './RetrieveJwtIframe';
-import { OAuthPopup } from './OAuthPopup';
 
 export const Login = ({
   handleLogin,
@@ -15,20 +13,10 @@ export const Login = ({
   handlePassword,
   error,
   routed,
-  location,
-  setPopupBlocked,
   popupBlocked,
-  handleIframeJwt,
-  retrieveIframeJwt,
-  handleAuthenticated,
 }) => (
   <Fragment>
-    <OAuthPopup
-      onSuccess={handleAuthenticated}
-      setPopupBlocked={setPopupBlocked}
-    />
     <form className="login-form-container" onSubmit={handleLogin}>
-      {retrieveIframeJwt && <RetrieveJwtIframe handleJwt={handleIframeJwt} />}
       <h3>
         Sign In
         <small>
@@ -85,6 +73,7 @@ export const Login = ({
         </button>
       </div>
     </form>
+    )}
   </Fragment>
 );
 
