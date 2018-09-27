@@ -48,9 +48,7 @@ const RobotScheduleComponent = ({
     moment(robotSchedule.values['End Date']).isBefore(moment());
   return (
     <div className="page-container page-container--robots">
-      <PageTitle
-        parts={['Schedules', robot.values['Name'], 'Robots', 'Settings']}
-      />
+      <PageTitle parts={['Robots', 'Settings']} />
       <div className="page-panel page-panel--scrollable page-panel--robots-content">
         <div className="page-title">
           <div className="page-title__wrapper">
@@ -58,10 +56,6 @@ const RobotScheduleComponent = ({
               <Link to="/">home</Link> /{` `}
               <Link to="/settings">settings</Link> /{` `}
               <Link to="/settings/robots">robots</Link> /{` `}
-              <Link to={`/settings/robots/${robot.id}/schedules`}>
-                {robot.values['Name']}
-              </Link>{' '}
-              /{` `}
             </h3>
             <h1>
               {!loading &&
@@ -92,9 +86,7 @@ const RobotScheduleComponent = ({
                     <li role="presentation">
                       <NavLink
                         exact
-                        to={`/settings/robots/${robot.id}/schedules/${
-                          match.params.scheduleId
-                        }`}
+                        to={`/settings/robots/${match.params.scheduleId}`}
                         activeClassName="active"
                       >
                         Details
@@ -102,7 +94,7 @@ const RobotScheduleComponent = ({
                     </li>
                     <li role="presentation">
                       <NavLink
-                        to={`/settings/robots/${robot.id}/schedules/${
+                        to={`/settings/robots/${
                           match.params.scheduleId
                         }/executions`}
                         activeClassName="active"
