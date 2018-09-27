@@ -17,10 +17,16 @@ import { CreateAccountForm } from './components/authentication/CreateAccountForm
 import { RequestAccountForm } from './components/authentication/RequestAccountForm';
 import { UnauthenticatedForm } from './components/authentication/UnauthenticatedForm';
 import { RetrieveJwtIframe } from './components/authentication/RetrieveJwtIframe';
+import { OAuthPopup } from './components/authentication/OAuthPopup';
 
 export const LoginScreen = props =>
   props.authenticated ? (
-    props.token ? null : (
+    props.token ? null : bundle.config.loginPopup ? (
+      <OAuthPopup
+        onSuccess={props.setToken}
+        onPopupBlocked={props.setPopupBlocked}
+      />
+    ) : (
       <RetrieveJwtIframe onSuccess={props.setToken} />
     )
   ) : (
@@ -245,6 +251,7 @@ export const AuthenticatedContainer = compose(
   withState('password', 'setPassword', ''),
   withState('attempting', 'setAttempting', true),
   withState('authenticated', 'setAuthenticated', false),
+  withState('popupBlocked', 'setPopupBlocked', false),
   withHandlers({ handleAuthenticated }),
   withHandlers({
     toResetPassword,

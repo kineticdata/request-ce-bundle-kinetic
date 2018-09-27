@@ -79,5 +79,4 @@ export const Login = ({
 export const LoginForm = compose(
   withRouter,
   withState('windowHandle', 'setWindowHandle', null),
-  withState('popupBlocked', 'setPopupBlocked', false),
 )(Login);
