@@ -2,19 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import qs from 'qs';
+import { parse } from 'query-string';
 import { Route, Switch } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { bundle } from 'react-kinetic-core';
-
+import { login } from './utils/authentication';
 import { actions as socketActions } from 'discussions/src/redux/modules/socket';
-
 import logoImage from './assets/images/login-background.png';
 import logoName from './assets/images/login-name.png';
-
 import { ResetTokenForm } from './components/authentication/ResetTokenForm';
 import { ResetPasswordForm } from './components/authentication/ResetPasswordForm';
 import { LoginForm } from './components/authentication/LoginForm';
 import { CreateAccountForm } from './components/authentication/CreateAccountForm';
+import { RequestAccountForm } from './components/authentication/RequestAccountForm';
 import { UnauthenticatedForm } from './components/authentication/UnauthenticatedForm';
 import { RetrieveJwtIframe } from './components/authentication/RetrieveJwtIframe';
 
@@ -53,6 +53,31 @@ const toCreateAccount = ({ push, setDisplay }) => routed => () =>
 
 const handleEmail = ({ setEmail }) => e => setEmail(e.target.value);
 const handlePassword = ({ setPassword }) => e => setPassword(e.target.value);
+
+const handleLogin = ({
+  tryAuthentication,
+  email,
+  password,
+  setError,
+  setPassword,
+  handleAuthenticated,
+  routed,
+  push,
+}) => async e => {
+  e && e.preventDefault();
+  try {
+    await login(email, password);
+    handleAuthenticated();
+    if (routed) {
+      push('/');
+    }
+  } catch (error) {
+    console.log(error);
+    setError('Invalid username or password.');
+    setPassword('');
+  }
+};
+
 const handleAuthenticated = ({
   setError,
   setDisplay,
@@ -101,6 +126,8 @@ const CatchAllRoute = props => (
         ) : props.display === 'reset-token' ? (
           <ResetTokenForm {...props} />
         ) : props.display === 'create-account' ? (
+          <RequestAccountForm {...props} />
+        ) : props.invitationToken ? (
           <CreateAccountForm {...props} />
         ) : (
           <LoginForm {...props} />
@@ -160,7 +187,7 @@ const Authenticated = props => {
             exact
             render={route => (
               <LoginScreen>
-                <CreateAccountForm {...props} {...route} routed />
+                <RequestAccountForm {...props} {...route} routed />
               </LoginScreen>
             )}
           />
@@ -199,6 +226,7 @@ const mapStateToProps = state => ({
   pathname: state.router.location.pathname,
   isPublic: state.router.location.search.includes('public'),
   token: state.discussions.socket.token,
+  invitationToken: parse(state.router.location.search).invitationToken,
 });
 
 const mapDispatchToProps = {
@@ -217,17 +245,16 @@ export const AuthenticatedContainer = compose(
   withState('password', 'setPassword', ''),
   withState('attempting', 'setAttempting', true),
   withState('authenticated', 'setAuthenticated', false),
-
+  withHandlers({ handleAuthenticated }),
   withHandlers({
     toResetPassword,
     toSignIn,
     toCreateAccount,
     handleEmail,
     handlePassword,
-    handleAuthenticated,
+    handleLogin,
     handleUnauthorized,
   }),
-
   lifecycle({
     componentWillMount() {
       // If the bundle says we're anonymous on our initial visit then assume unauthenticated.

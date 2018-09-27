@@ -8,11 +8,15 @@ import {
   call,
   cancel,
   fork,
+  select,
 } from 'redux-saga/effects';
 
 import { socket } from './socket';
 
 import { types, actions } from '../modules/discussions';
+import { fetchDiscussion } from '../../discussion_api';
+import { selectToken } from '../modules/socket';
+import { toastActions } from 'common';
 
 export function registerTopicChannel(topic) {
   return eventChannel(emit => {
@@ -130,7 +134,22 @@ export function* watchDiscussionsSocket() {
         channel,
         handler,
       });
-      topic.subscribe(joinTopic.payload.invitationToken);
+      try {
+        const token = yield select(selectToken);
+        yield call(
+          topic.subscribe.bind(topic),
+          joinTopic.payload.invitationToken,
+        );
+        const { discussion, error } = yield call(fetchDiscussion, {
+          id: joinTopic.payload.id,
+          token,
+        });
+        yield put(
+          error
+            ? toastActions.addError('Failed to join discussion!')
+            : actions.addDiscussion(discussion),
+        );
+      } catch (e) {}
     }
 
     // The UI requested to leave a topic.

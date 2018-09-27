@@ -9,9 +9,7 @@ import { isPresent } from '../helpers';
 import { ParticipantCard } from './ParticipantCard';
 
 const participantComparator = (p1, p2) =>
-  p1.message_count !== p2.message_count
-    ? p2.message_count - p1.message_count
-    : p1.user.displayName.localeCompare(p2.user.displayName);
+  p1.user.username.localeCompare(p2.user.username);
 
 export const ParticipantsHeader = ({
   discussion,
@@ -24,6 +22,7 @@ export const ParticipantsHeader = ({
     <div className="participants-preview">
       {discussion.participants
         .toList()
+        .filter(p => !p.user.unknown)
         .sort(participantComparator)
         .map(p => (
           <Hoverable

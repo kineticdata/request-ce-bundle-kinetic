@@ -53,7 +53,7 @@ export function* deleteMessageTask(action) {
   yield call(deleteMessage, action.payload, token);
 }
 
-export function* joinDiscussionTask(action) {
+export function* fetchDiscussionTask(action) {
   const token = yield select(selectToken);
   const { discussion, error } = yield call(fetchDiscussion, {
     id: action.payload.id,
@@ -61,10 +61,9 @@ export function* joinDiscussionTask(action) {
   });
 
   if (error) {
-    yield put(toastActions.addError('Failed to join discussion!'));
+    yield put(toastActions.addError('Failed to fetch discussion!'));
   }
   yield put(actions.addDiscussion(discussion));
-  yield put(actions.addTopic(discussion.id));
 }
 
 export function* createInvitationTask({
@@ -154,7 +153,6 @@ export function* watchDiscussionRest() {
     takeEvery(types.SEND_MESSAGE, sendMessageTask),
     takeEvery(types.SEND_MESSAGE_UPDATE, sendMessageUpdateTask),
     takeEvery(types.DELETE_MESSAGE, deleteMessageTask),
-    takeEvery(types.JOIN_DISCUSSION, joinDiscussionTask),
     takeEvery(types.FETCH_MORE_MESSAGES, fetchMoreMessagesTask),
     takeEvery(types.CREATE_INVITE, createInvitationTask),
     takeEvery(types.REVOKE_PARTICIPANT, revokeParticipantTask),

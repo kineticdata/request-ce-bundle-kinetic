@@ -46,7 +46,7 @@
     .login-form-container {
       order: 1;
       width: 40%;
-      height: 540px;
+      min-height: 540px;
     }
   }
   @media all and (min-width: 992px) {

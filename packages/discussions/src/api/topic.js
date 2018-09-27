@@ -53,25 +53,28 @@ export class Topic {
   }
 
   subscribe(userInvitationToken) {
-    this.setStatus(TOPIC_STATUS.subscribing);
+    return new Promise((resolve, reject) => {
+      this.setStatus(TOPIC_STATUS.subscribing);
 
-    // Wrap the user's callback with our own.
-    const handleSubscribe = message => {
-      if (message.event === TOPIC_HUB_EVENT_ACK_OK) {
-        this.setStatus(TOPIC_STATUS.subscribed, message);
-      } else if (message.event === TOPIC_HUB_EVENT_ACK_ERROR) {
-        this.setStatus(TOPIC_STATUS.error, message);
-      }
-    };
-    // Craft the message to be sent to the server.
-    const action = this.socket.createMessage(
-      TOPIC_HUB_TOPIC,
-      TOPIC_HUB_ACTION_SUBSCRIBE,
-      { topic: this.topicId, userInvitationToken },
-    );
-    // Send the message.
-    this.socket.send(action, handleSubscribe);
-    return this;
+      // Wrap the user's callback with our own.
+      const handleSubscribe = message => {
+        if (message.event === TOPIC_HUB_EVENT_ACK_OK) {
+          this.setStatus(TOPIC_STATUS.subscribed, message);
+          resolve(message);
+        } else if (message.event === TOPIC_HUB_EVENT_ACK_ERROR) {
+          this.setStatus(TOPIC_STATUS.error, message);
+          reject(message);
+        }
+      };
+      // Craft the message to be sent to the server.
+      const action = this.socket.createMessage(
+        TOPIC_HUB_TOPIC,
+        TOPIC_HUB_ACTION_SUBSCRIBE,
+        { topic: this.topicId, userInvitationToken },
+      );
+      // Send the message.
+      this.socket.send(action, handleSubscribe);
+    });
   }
 
   unsubscribe() {

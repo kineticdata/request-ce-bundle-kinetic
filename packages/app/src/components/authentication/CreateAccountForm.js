@@ -1,167 +1,171 @@
 import React from 'react';
-import { compose, withState, withHandlers } from 'recompose';
-
-import { CoreAPI } from 'react-kinetic-core';
+import { compose, withProps, withState, withHandlers } from 'recompose';
+import { Map } from 'immutable';
+import axios from 'axios';
+import { CoreAPI, bundle } from 'react-kinetic-core';
 
 const CreateAccount = ({
+  error,
   submitted,
   toSignIn,
   routed,
   email,
   handleEmail,
-  firstName,
-  handleFirstName,
-  lastName,
-  handleLastName,
-  phone,
-  handlePhone,
-  comments,
-  handleComments,
+  password,
+  handlePassword,
+  values,
+  handleChange,
   formValid,
   handleSubmit,
-}) =>
-  submitted ? (
-    <div className="login-form-container">
-      <div className="submitted">
-        <h3 className="form-title">Create Account</h3>
-        <p className="subtitle">
-          Your request for a new account has been received.
-        </p>
-        <p className="explaination">
-          Your request for a new account is being reviewed by the team. Once
-          approved you will receive an email with further instructions.
-        </p>
-      </div>
-    </div>
-  ) : (
-    <form className="login-form-container" onSubmit={handleSubmit}>
-      <div>
-        <h3 className="form-title">Create Account</h3>
-
-        <div className="name-section">
-          <div className="form-group">
-            <label className="required">First Name</label>
-            <input
-              autoFocus
-              className="form-control"
-              type="text"
-              value={firstName}
-              onChange={handleFirstName}
-            />
-          </div>
-          <div className="form-group">
-            <label className="required">Last Name</label>
-            <input
-              className="form-control"
-              type="text"
-              value={lastName}
-              onChange={handleLastName}
-            />
-          </div>
-        </div>
+}) => (
+  <form className="login-form-container" onSubmit={handleSubmit}>
+    <div>
+      <h3 className="form-title">Get Started</h3>
+      {error && <p className="alert alert-danger">{error}</p>}
+      <div className="name-section">
         <div className="form-group">
-          <label className="required">Email</label>
+          <label htmlFor="firstName" className="required">
+            First Name
+          </label>
           <input
+            autoFocus
             className="form-control"
+            id="firstName"
             type="text"
-            value={email}
-            onChange={handleEmail}
+            value={values.get('firstName')}
+            onChange={handleChange}
           />
         </div>
         <div className="form-group">
-          <label>Phone Number</label>
-          <input className="form-control" type="text" />
-        </div>
-        <div className="form-group">
-          <label>Comments</label>
-          <input className="form-control" type="text" />
+          <label htmlFor="lastName" className="required">
+            Last Name
+          </label>
+          <input
+            className="form-control"
+            id="lastName"
+            type="text"
+            value={values.get('lastName')}
+            onChange={handleChange}
+          />
         </div>
       </div>
-      <div className="button-group">
-        <button className="btn btn-primary" type="submit" disabled={!formValid}>
-          Request Account
-        </button>
-        <hr />
-        <button
-          className="btn btn-link"
-          type="button"
-          onClick={toSignIn(routed)}
-        >
-          &larr; Back to Sign In
-        </button>
+      <div className="form-group">
+        <label htmlFor="email" className="required">
+          Email
+        </label>
+        <input
+          className="form-control"
+          id="email"
+          type="text"
+          value={email}
+          onChange={handleEmail}
+        />
       </div>
-    </form>
-  );
+      <div className="form-group">
+        <label htmlFor="password" className="required">
+          Password
+        </label>
+        <input
+          className="form-control"
+          id="password"
+          type="password"
+          value={password}
+          onChange={handlePassword}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="passwordConfirmation" className="required">
+          Password Confirmation
+        </label>
+        <input
+          className="form-control"
+          id="passwordConfirmation"
+          type="password"
+          value={values.get('passwordConfirmation')}
+          onChange={handleChange}
+        />
+      </div>
+    </div>
+    <div className="button-group">
+      <button
+        className="btn btn-primary"
+        type="submit"
+        disabled={!formValid || submitted}
+      >
+        Accept Invitation
+      </button>
+      <hr />
+      <button className="btn btn-link" type="button" onClick={toSignIn(routed)}>
+        Already have an account? Login
+      </button>
+    </div>
+  </form>
+);
 
-const validateForm = ({ setFormValid, firstName, lastName, email }) => () =>
-  setFormValid(firstName.length > 0 && lastName.length > 0 && email.length > 0);
+const validateForm = props =>
+  props.values.get('firstName').length > 0 &&
+  props.values.get('lastName').length > 0 &&
+  props.email.length > 0 &&
+  props.password.length > 0 &&
+  props.values.get('passwordConfirmation').length > 0 &&
+  props.password === props.values.get('passwordConfirmation');
 
-const handleFirstName = ({ setFirstName, validateForm }) => e => {
-  setFirstName(e.target.value);
-  validateForm();
+const handleChange = props => event => {
+  const field = event.target.id;
+  const value = event.target.value;
+  props.setSubmitted(false);
+  props.setValues(values => values.set(field, value));
 };
-const handleLastName = ({ setLastName, validateForm }) => e => {
-  setLastName(e.target.value);
-  validateForm();
-};
-const handlePhone = ({ setPhone, validateForm }) => e => {
-  setPhone(e.target.value);
-};
-const handleComments = ({ setComments }) => e => setComments(e.target.value);
-const handleEmail = ({ setEmail, validateForm }) => e => {
-  setEmail(e.target.value);
-  validateForm();
-};
+
 const handleSubmit = ({
-  firstName,
-  lastName,
+  values,
   email,
-  phone,
-  comments,
+  password,
+  invitationToken,
   setSubmitted,
   setError,
-}) => async e => {
-  e.preventDefault();
-
+  handleLogin,
+}) => async event => {
+  event.preventDefault();
+  setSubmitted(true);
   try {
-    await CoreAPI.createSubmission({
-      kappSlug: 'admin',
-      formSlug: 'kinops-account-request',
-      values: {
-        'First Name': firstName,
-        'Last Name': lastName,
-        Email: email,
-        'Phone Number': phone,
-        Comments: comments,
-      },
-      authAssumed: false,
+    await axios.post(`${bundle.apiLocation()}/users?token=${invitationToken}`, {
+      username: email,
+      email,
+      password,
+      displayName: `${values.get('firstName')} ${values.get('lastName')}`,
+      invitationToken,
     });
-
-    setSubmitted(true);
-  } catch (e) {
-    setError(
-      'There was a problem requesting your new account. Please verify the information you entered.',
-    );
+    handleLogin();
+  } catch (error) {
+    const errorMessage =
+      error.response.status === 404
+        ? 'Invitation expired.'
+        : error.response.status === 400
+          ? error.response.data.error
+          : '';
+    setError(`There was a problem creating your new account. ${errorMessage}`);
   }
 };
 
 export const CreateAccountForm = compose(
   withState('submitted', 'setSubmitted', false),
   withState('error', 'setError', ''),
-  withState('firstName', 'setFirstName', ''),
-  withState('lastName', 'setLastName', ''),
-  withState('phone', 'setPhone', ''),
-  withState('comments', 'setComments', ''),
-  withState('formValid', 'setFormValid', false),
+  withState(
+    'values',
+    'setValues',
+    Map({
+      firstName: '',
+      lastName: '',
+      phone: '',
+      passwordConfirmation: '',
+    }),
+  ),
+  withProps(props => ({
+    formValid: validateForm(props),
+  })),
   withHandlers({
-    validateForm,
-  }),
-  withHandlers({
-    handleFirstName,
-    handleLastName,
-    handlePhone,
-    handleComments,
-    handleEmail,
+    handleChange,
     handleSubmit,
   }),
 )(CreateAccount);

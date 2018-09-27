@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, withState } from 'recompose';
 import { withRouter } from 'react-router';
-import { login } from '../../utils/authentication';
 
 export const Login = ({
   handleLogin,
@@ -77,39 +76,8 @@ export const Login = ({
   </Fragment>
 );
 
-const handleLogin = ({ tryAuthentication, email, password }) => e => {
-  e.preventDefault();
-  tryAuthentication(email, password);
-};
-const tryAuthentication = ({
-  setError,
-  setPassword,
-  handleAuthenticated,
-  routed,
-  push,
-}) => async (username, password) => {
-  try {
-    await login(username, password);
-
-    handleAuthenticated();
-
-    if (routed) {
-      push('/');
-    }
-  } catch (error) {
-    setError('Invalid username or password.');
-    setPassword('');
-  }
-};
-
 export const LoginForm = compose(
   withRouter,
   withState('windowHandle', 'setWindowHandle', null),
   withState('popupBlocked', 'setPopupBlocked', false),
-  withHandlers({
-    tryAuthentication,
-  }),
-  withHandlers({
-    handleLogin,
-  }),
 )(Login);
