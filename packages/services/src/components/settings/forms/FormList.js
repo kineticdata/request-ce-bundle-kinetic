@@ -142,22 +142,46 @@ const FormListComponent = ({
                   })}
                 </tbody>
               </table>
-              <ul className="pull-right">
-                {pageNumbers.map(number => (
-                  <li
-                    key={number}
-                    id={number}
-                    onClick={() => setCurrentPage(number)}
-                    className={
-                      currentPage === number
-                        ? 'btn btn-primary'
-                        : 'btn btn-default'
-                    }
-                  >
-                    {number}
+              <nav aria-label="Page navigation">
+                <ul className="pagination">
+                  <li class="page-item disabled">
+                    <a class="page-link" aria-label="Previous">
+                      <span class="icon">
+                        <span
+                          class="fa fa-fw fa-caret-left"
+                          aria-hidden="true"
+                        />
+                      </span>
+                      <span class="sr-only">Previous</span>
+                    </a>
                   </li>
-                ))}
-              </ul>
+                  {pageNumbers.map(number => (
+                    <li
+                      key={number}
+                      id={number}
+                      onClick={() => setCurrentPage(number)}
+                      className={
+                        currentPage === number
+                          ? 'page-item active'
+                          : 'page-item'
+                      }
+                    >
+                      <a className="page-link">{number}</a>
+                    </li>
+                  ))}
+                  <li class="page-item disabled">
+                    <a class="page-link" aria-label="next">
+                      <span class="icon">
+                        <span
+                          class="fa fa-fw fa-caret-right"
+                          aria-hidden="true"
+                        />
+                      </span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
             </div>
           ) : (
             <WallyEmptyMessage />

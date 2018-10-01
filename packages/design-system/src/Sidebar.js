@@ -68,6 +68,11 @@ export const Sidebar = () => (
             </Link>
           </li>
           <li className="nav-item">
+            <Link to="/pagination" className="nav-link">
+              Pagination
+            </Link>
+          </li>
+          <li className="nav-item">
             <Link to="/popovers" className="nav-link">
               Popovers
             </Link>

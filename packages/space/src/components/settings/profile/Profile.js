@@ -57,7 +57,7 @@ export const EditProfileComponent = ({
                 />
               </div>
               <div className="profile-input-container row">
-                <div className="form-group required col">
+                <div className="form-group required col-md-6">
                   <label htmlFor="email">Email</label>
                   <input
                     type="text"
@@ -67,7 +67,7 @@ export const EditProfileComponent = ({
                     value={fieldValues.email}
                   />
                 </div>
-                <div className="form-group col">
+                <div className="form-group col-md-6">
                   <label htmlFor="phoneNumber">Phone Number</label>
                   <input
                     type="text"
@@ -78,7 +78,7 @@ export const EditProfileComponent = ({
                   />
                 </div>
                 {defaultKappDisplayEnabled && (
-                  <div className="form-group col">
+                  <div className="form-group col-md-6">
                     <label htmlFor="phoneNumber">Default Kapp Display</label>
                     <select
                       className="form-control"

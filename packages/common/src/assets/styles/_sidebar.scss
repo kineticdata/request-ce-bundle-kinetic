@@ -1,2 +1,13 @@
 .page-panel--sidebar {
+  // Reducted sidebar typography
+  h3 {
+    @include ms-respond(font-size, 1);
+  }
+  h4 {
+    @include ms-respond(font-size, 0);
+    margin-bottom: 0.25rem;
+  }
+  p {
+    @include ms-respond(font-size, -1);
+  }
 }

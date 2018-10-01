@@ -12,6 +12,7 @@ import { FormsPage } from './FormsPage';
 import { ModalsPage } from './ModalsPage';
 import { MarkupStylesPage } from './MarkupStylesPage';
 import { NavigationsPage } from './NavigationsPage';
+import { PaginationPage } from './PaginationPage';
 import { PopoversPage } from './PopoversPage';
 import { TypographyPage } from './TypographyPage';
 import { Sidebar } from './Sidebar';
@@ -38,6 +39,7 @@ class App extends Component {
             <Route path="/modals" exact component={ModalsPage} />
             <Route path="/markupstyles" exact component={MarkupStylesPage} />
             <Route path="/navigations" exact component={NavigationsPage} />
+            <Route path="/pagination" exact component={PaginationPage} />
             <Route path="/popovers" exact component={PopoversPage} />
             <Route path="/toasts" exact component={ToastsPage} />
             <Route path="/typography" exact component={TypographyPage} />
