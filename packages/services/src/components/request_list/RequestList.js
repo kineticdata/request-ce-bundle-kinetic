@@ -7,7 +7,7 @@ import { getSubmissionPath } from '../../utils';
 const emptyStateMessage = type => {
   switch (type) {
     case 'Draft': {
-      return 'You have no draft requests. Draft services are forms you started but haven\t submitted yet.';
+      return "You have no draft requests. Draft services are forms you started but haven't submitted yet.";
     }
     case 'Open': {
       return 'You have no open requests. If you request something, it will show up here.';
