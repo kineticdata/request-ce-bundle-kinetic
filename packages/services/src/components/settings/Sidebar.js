@@ -12,7 +12,7 @@ export const SidebarComponent = ({ settingsBackPath, loading, spaceAdmin }) => (
     </Link>
     <div className="sidebar-group--content-wrapper">
       {!loading && (
-        <ul className="nav flex-column settings-group">
+        <ul className="nav flex-column sidebar-group">
           <li className="nav-item">
             {spaceAdmin && (
               <NavLink
