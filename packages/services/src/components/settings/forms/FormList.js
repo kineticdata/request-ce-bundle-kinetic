@@ -144,15 +144,15 @@ const FormListComponent = ({
               </table>
               <nav aria-label="Page navigation">
                 <ul className="pagination">
-                  <li class="page-item disabled">
-                    <a class="page-link" aria-label="Previous">
-                      <span class="icon">
+                  <li className="page-item disabled">
+                    <a className="page-link" aria-label="Previous">
+                      <span className="icon">
                         <span
-                          class="fa fa-fw fa-caret-left"
+                          className="fa fa-fw fa-caret-left"
                           aria-hidden="true"
                         />
                       </span>
-                      <span class="sr-only">Previous</span>
+                      <span className="sr-only">Previous</span>
                     </a>
                   </li>
                   {pageNumbers.map(number => (
@@ -169,15 +169,15 @@ const FormListComponent = ({
                       <a className="page-link">{number}</a>
                     </li>
                   ))}
-                  <li class="page-item disabled">
-                    <a class="page-link" aria-label="next">
-                      <span class="icon">
+                  <li className="page-item disabled">
+                    <a className="page-link" aria-label="next">
+                      <span className="icon">
                         <span
-                          class="fa fa-fw fa-caret-right"
+                          className="fa fa-fw fa-caret-right"
                           aria-hidden="true"
                         />
                       </span>
-                      <span class="sr-only">Next</span>
+                      <span className="sr-only">Next</span>
                     </a>
                   </li>
                 </ul>
