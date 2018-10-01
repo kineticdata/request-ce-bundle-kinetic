@@ -120,7 +120,7 @@ export const SettingsContainer = ({
                 <Link to="/kapps/services">services</Link> /{` `}
                 <Link to="/kapps/services/settings">settings</Link> /{` `}
               </h3>
-              <h1>Services Settings</h1>
+              <h1>General</h1>
             </div>
           </div>
           <section>

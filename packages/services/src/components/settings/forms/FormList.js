@@ -59,7 +59,7 @@ const FormListComponent = ({
               <Link to="/kapps/services">services</Link> /{` `}
               <Link to="/kapps/services/settings">settings</Link> /{` `}
             </h3>
-            <h1>Services Forms</h1>
+            <h1>Forms</h1>
           </div>
           {isSpaceAdmin && (
             <Link to={`${match.path}/new`} className="btn btn-primary">

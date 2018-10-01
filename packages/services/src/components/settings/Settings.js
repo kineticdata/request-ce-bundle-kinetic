@@ -18,7 +18,7 @@ export const SettingsComponent = () => (
   <Switch>
     <Route
       exact
-      path="/kapps/services/settings/kapp"
+      path="/kapps/services/settings/general"
       component={ServicesSettings}
     />
     <Route exact path="/kapps/services/settings/forms" component={FormList} />
@@ -98,7 +98,7 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
         {isSpaceAdmin && (
           <SettingsCard
             name="Services Settings"
-            path={`/kapps/services/settings/kapp`}
+            path={`/kapps/services/settings/general`}
             icon="fa-gear"
             description="View and Modify all Services Settings"
           />

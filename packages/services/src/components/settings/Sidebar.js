@@ -16,7 +16,7 @@ export const SidebarComponent = ({ settingsBackPath, loading, spaceAdmin }) => (
           <li className="nav-item">
             {spaceAdmin && (
               <NavLink
-                to="/kapps/services/settings/kapp"
+                to="/kapps/services/settings/general"
                 className="nav-link"
                 activeClassName="active"
               >
