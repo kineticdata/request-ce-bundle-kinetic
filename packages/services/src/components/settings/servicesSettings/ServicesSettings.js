@@ -357,7 +357,7 @@ export const SettingsContainer = ({
                   className="btn btn-primary"
                   onClick={() => updateServicesSettings(inputs)}
                 >
-                  Save
+                  Save Changes
                 </button>
               </span>
             </div>
