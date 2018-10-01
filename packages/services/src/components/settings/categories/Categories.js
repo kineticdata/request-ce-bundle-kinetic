@@ -516,6 +516,7 @@ export const CategoriesContainer = ({
                 >
                   Cancel
                 </button>
+                <span>Subcategory</span>
               </h4>
             </div>
             <div className="modal-body">
