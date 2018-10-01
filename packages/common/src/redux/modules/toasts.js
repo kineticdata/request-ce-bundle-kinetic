@@ -17,25 +17,70 @@ export const types = {
 };
 
 export const actions = {
-  addSuccess: (msg, title) => ({
+  addSuccess: (msg, title, keep, size, dismissable, delay) => ({
     type: types.ADD_TOAST,
-    payload: { id: Date.now(), type: NOTICE_TYPES.SUCCESS, title, msg },
+    payload: {
+      id: Date.now(),
+      type: NOTICE_TYPES.SUCCESS,
+      title,
+      msg,
+      keep,
+      size,
+      dismissable,
+      delay,
+    },
   }),
-  addInfo: (msg, title) => ({
+  addInfo: (msg, title, keep, size, dismissable, delay) => ({
     type: types.ADD_TOAST,
-    payload: { id: Date.now(), type: NOTICE_TYPES.INFO, title, msg },
+    payload: {
+      id: Date.now(),
+      type: NOTICE_TYPES.INFO,
+      title,
+      msg,
+      keep,
+      size,
+      dismissable,
+      delay,
+    },
   }),
-  addWarn: (msg, title) => ({
+  addWarn: (msg, title, keep, size, dismissable, delay) => ({
     type: types.ADD_TOAST,
-    payload: { id: Date.now(), type: NOTICE_TYPES.WARN, title, msg },
+    payload: {
+      id: Date.now(),
+      type: NOTICE_TYPES.WARN,
+      title,
+      msg,
+      keep,
+      size,
+      dismissable,
+      delay,
+    },
   }),
-  addError: (msg, title) => ({
+  addError: (msg, title, keep, size, dismissable, delay) => ({
     type: types.ADD_TOAST,
-    payload: { id: Date.now(), type: NOTICE_TYPES.ERROR, title, msg },
+    payload: {
+      id: Date.now(),
+      type: NOTICE_TYPES.ERROR,
+      title,
+      msg,
+      keep,
+      size,
+      dismissable,
+      delay,
+    },
   }),
-  addNormal: (msg, title) => ({
+  addNormal: (msg, title, keep, size, dismissable, delay) => ({
     type: types.ADD_TOAST,
-    payload: { id: Date.now(), type: NOTICE_TYPES.NORMAL, title, msg },
+    payload: {
+      id: Date.now(),
+      type: NOTICE_TYPES.NORMAL,
+      title,
+      msg,
+      keep,
+      size,
+      dismissable,
+      delay,
+    },
   }),
   removeToast: withPayload(types.REMOVE_TOAST),
 };
