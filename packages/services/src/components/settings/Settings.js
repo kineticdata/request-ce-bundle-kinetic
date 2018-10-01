@@ -97,7 +97,7 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
       <div className="cards__wrapper cards__wrapper--services">
         {isSpaceAdmin && (
           <SettingsCard
-            name="Services Settings"
+            name="General Settings"
             path={`/kapps/services/settings/general`}
             icon="fa-gear"
             description="View and Modify all Services Settings"

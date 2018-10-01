@@ -401,6 +401,7 @@ export const FormSubmissionsContainer = ({
                       >
                         Cancel
                       </button>
+                      <span>Filter Records</span>
                     </h4>
                   </div>
                   <div className="modal-body">
