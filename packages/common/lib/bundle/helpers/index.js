@@ -6,6 +6,7 @@ import {
 } from './notifications';
 import { Alert } from '../../../src/components/Notifications/Alert';
 import { Confirm } from '../../../src/components/Notifications/Confirm';
+import { SchedulerWidget } from '../../../src/components/Scheduler/SchedulerWidget';
 
 // Ensure the bundle global object exists
 const bundle = typeof window.bundle !== "undefined" ? window.bundle : {};
@@ -186,3 +187,17 @@ bundle.helpers.confirm = (options = {}) => {
   // Disable element if disable option is true
   if (opts.disable) { opts.element.disabled = true; }
 };
+
+bundle.helpers.test = () => {
+  const div = document.createElement('div');
+  div.classList.add("notification-wrapper");
+  // Insert the wrapper div into the DOM
+  document.getElementsByClassName("content-wrapper")[0].appendChild(div);
+  ReactDOM.render(
+    <SchedulerWidget
+    schedulerId="abc-test"
+    scheduledEventId="f18cb827-c27a-11e8-aff8-a7b1dbc1236c"
+    // eventType="Laptop"
+    // eventDate
+  />, div);
+}

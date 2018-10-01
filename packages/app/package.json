@@ -33,7 +33,7 @@
     "react-sortable-tree": "^2.2.0",
     "react-transition-group": "^2.2.1",
     "reactstrap": "^5.0.0",
-    "recompose": "^0.26.0",
+    "recompose": "^0.30.0",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
     "semver": "^5.5.0",

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import { Icon, PageTitle } from 'common';
+import { Icon, PageTitle, Schedulers } from 'common';
 
 import { SpaceSettings } from './spaceSettings/SpaceSettings';
 import { Notifications } from './notifications/Notifications';
@@ -24,6 +24,20 @@ export const SettingsComponent = () => (
     <Route path="/settings/users" component={Users} />
     <Route path="/settings/notifications" component={Notifications} />
     <Route path="/settings/teams" component={Teams} />
+    <Route
+      path="/settings/schedulers"
+      render={props => (
+        <Schedulers
+          {...props}
+          breadcrumbs={
+            <Fragment>
+              <Link to="/">home</Link> /{` `}
+              <Link to="/settings">settings</Link> /{` `}
+            </Fragment>
+          }
+        />
+      )}
+    />
     <Route component={SettingsNavigation} />
   </Switch>
 );
