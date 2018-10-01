@@ -147,7 +147,7 @@ export const ToastsPage = () => (
       <div className="toast toast--normal toast--large">
         <div className="toast__wrapper">
           <div className="toast__title">
-            Toast Title--Large--Not Dismissable
+            Toast Title--Large--Not dismissible
           </div>
         </div>
       </div>

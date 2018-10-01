@@ -17,7 +17,7 @@ export const types = {
 };
 
 export const actions = {
-  addSuccess: (msg, title, keep, size, dismissable, delay) => ({
+  addSuccess: (msg, title, keep, size, dismissible, delay) => ({
     type: types.ADD_TOAST,
     payload: {
       id: Date.now(),
@@ -26,11 +26,11 @@ export const actions = {
       msg,
       keep,
       size,
-      dismissable,
+      dismissible,
       delay,
     },
   }),
-  addInfo: (msg, title, keep, size, dismissable, delay) => ({
+  addInfo: (msg, title, keep, size, dismissible, delay) => ({
     type: types.ADD_TOAST,
     payload: {
       id: Date.now(),
@@ -39,11 +39,11 @@ export const actions = {
       msg,
       keep,
       size,
-      dismissable,
+      dismissible,
       delay,
     },
   }),
-  addWarn: (msg, title, keep, size, dismissable, delay) => ({
+  addWarn: (msg, title, keep, size, dismissible, delay) => ({
     type: types.ADD_TOAST,
     payload: {
       id: Date.now(),
@@ -52,11 +52,11 @@ export const actions = {
       msg,
       keep,
       size,
-      dismissable,
+      dismissible,
       delay,
     },
   }),
-  addError: (msg, title, keep, size, dismissable, delay) => ({
+  addError: (msg, title, keep, size, dismissible, delay) => ({
     type: types.ADD_TOAST,
     payload: {
       id: Date.now(),
@@ -65,11 +65,11 @@ export const actions = {
       msg,
       keep,
       size,
-      dismissable,
+      dismissible,
       delay,
     },
   }),
-  addNormal: (msg, title, keep, size, dismissable, delay) => ({
+  addNormal: (msg, title, keep, size, dismissible, delay) => ({
     type: types.ADD_TOAST,
     payload: {
       id: Date.now(),
@@ -78,7 +78,7 @@ export const actions = {
       msg,
       keep,
       size,
-      dismissable,
+      dismissible,
       delay,
     },
   }),

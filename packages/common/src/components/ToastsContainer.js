@@ -16,7 +16,7 @@ const Toast = ({ toast, dismiss }) => (
     <div className="toast__wrapper">
       <span className="toast__title">
         {toast.title || defaultTitle[toast.type]}
-        {toast.dismissable && (
+        {toast.dismissible && (
           <div className="toast__actions">
             <button className="btn btn-link" onClick={dismiss}>
               <i className="fa fa-fw fa-times" />
