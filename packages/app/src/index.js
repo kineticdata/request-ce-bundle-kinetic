@@ -18,6 +18,7 @@ import {
 } from './redux/modules/auth';
 import { AuthenticatedContainer } from './AuthenticatedContainer';
 import { App } from './App';
+import { I18nProvider } from './I18nProvider';
 
 // Create the history instance that enables client-side application routing.
 const history = createHashHistory();
@@ -44,11 +45,13 @@ ReactDOM.render(
       />
     </Helmet>
     <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <AuthenticatedContainer>
-          <Route path="/" component={App} />
-        </AuthenticatedContainer>
-      </ConnectedRouter>
+      <I18nProvider locale="en_US">
+        <ConnectedRouter history={history}>
+          <AuthenticatedContainer>
+            <Route path="/" component={App} />
+          </AuthenticatedContainer>
+        </ConnectedRouter>
+      </I18nProvider>
     </Provider>
   </Fragment>,
   document.getElementById('root'),

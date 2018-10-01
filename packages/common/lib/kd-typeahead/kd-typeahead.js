@@ -315,8 +315,8 @@
 typeaheadConfigurations = {
   defaultConfiguration: {
     faClass: 'fa-search', // Font awesom icon to append to typeahead search and results
-    placeholder: K.translate('bundle', 'Start typing to begin your search...'), // Placholder text to put into the search field
-    emptyMessage: K.translate('bundle', 'No results found'), // Message to display if no results are found
+    placeholder: K.translate('shared', 'Start typing to begin your search...'), // Placholder text to put into the search field
+    emptyMessage: K.translate('shared', 'No results found'), // Message to display if no results are found
     userIdAttribute: null, // If filtering results to not include logged in user (for person searching) bridge attribute for the user's Id
     queryField: null, // Name field the Bridged Resource is expecting to be passed as a parameter - Defaults to the typeahead search field
     additionalParams: null, // JS Object with name value pairs of additinal parameters to be provided to the bridge
