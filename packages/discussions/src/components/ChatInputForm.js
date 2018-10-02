@@ -7,6 +7,8 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  Popover,
+  PopoverBody,
 } from 'reactstrap';
 import classNames from 'classnames';
 import ContentEditable from './ContentEditable';
@@ -67,7 +69,11 @@ class ChatInput extends Component {
         this.props.discussion.id,
         this.state.chatInput,
         this.state.fileAttachment,
+        this.props.replyMessage && this.props.replyMessage.id,
       );
+      if (this.props.replyMessage) {
+        this.props.setReplyMessage(null);
+      }
     }
     this.setState({ chatInput: '', fileAttachment: null });
   }
@@ -96,8 +102,13 @@ class ChatInput extends Component {
     this.contentEditable.focus();
   }
 
+  focus() {
+    this.contentEditable.focus();
+  }
+
   cancelAction() {
     this.props.setEditMessageId(null);
+    this.props.setReplyMessage(null);
     this.setState({ chatInput: '', fileAttachment: null });
   }
 
@@ -144,7 +155,9 @@ class ChatInput extends Component {
       >
         <form
           onSubmit={this.handleSendChatMessage}
-          className={`new-message ${this.props.editMessageId ? 'editing' : ''}`}
+          className={`new-message ${
+            this.props.editMessageId ? 'editing' : ''
+          } ${this.props.replyMessage ? 'replying' : ''}`}
         >
           <ButtonDropdown
             isOpen={this.state.actionsOpen}
@@ -167,7 +180,21 @@ class ChatInput extends Component {
               </DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
-          <div className="input-container">
+          <Popover
+            className="reply-popover"
+            placement="top-start"
+            hideArrow
+            isOpen={!!this.props.replyMessage}
+            target="chatInput"
+          >
+            {this.props.replyMessage && (
+              <PopoverBody>
+                <i className="fa fa-fw fa-reply" />
+                In reply to {this.props.replyMessage.createdBy.displayName}
+              </PopoverBody>
+            )}
+          </Popover>
+          <div className="input-container" id="chatInput">
             {this.state.fileAttachment !== null && (
               <div
                 className="icon-wrapper"
@@ -229,7 +256,7 @@ class ChatInput extends Component {
               onKeyPress={this.handleChatHotKey}
             />
           </div>
-          {this.props.editMessageId && (
+          {(this.props.editMessageId || this.props.replyMessage) && (
             <button
               type="button"
               className="btn btn-subtle btn-cancel"

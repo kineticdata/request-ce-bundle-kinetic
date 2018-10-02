@@ -135,7 +135,13 @@ export const actions = {
   updateMessage: withPayload(types.MESSAGE_UPDATE, 'id', 'message'),
   removeMessage: withPayload(types.REMOVE_MESSAGE, 'id', 'message'),
   receiveBadMessage: withPayload(types.MESSAGE_BAD_RX, 'guid', 'badMessage'),
-  sendMessage: withPayload(types.SEND_MESSAGE, 'id', 'message', 'attachment'),
+  sendMessage: withPayload(
+    types.SEND_MESSAGE,
+    'id',
+    'message',
+    'attachment',
+    'parentId',
+  ),
   sendMessageUpdate: withPayload(
     types.SEND_MESSAGE_UPDATE,
     'discussionId',

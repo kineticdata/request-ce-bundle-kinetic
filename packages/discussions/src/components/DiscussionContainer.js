@@ -136,6 +136,7 @@ export const DiscussionContainer = compose(
   withState('unreadMessages', 'setUnreadMessages', false),
   withState('scrollPosition', 'setScrollPosition', 'bottom'),
   withState('editMessageId', 'setEditMessageId', null),
+  withState('replyMessage', 'setReplyMessage', null),
   withHandlers(() => {
     let ref;
     let chatInput;
@@ -145,7 +146,13 @@ export const DiscussionContainer = compose(
       registerChatInput: () => element => (chatInput = element),
       editMessage: props => message => {
         props.setEditMessageId(message.id);
+        props.setReplyMessage(null);
         chatInput.editMessage(message);
+      },
+      reply: props => message => {
+        props.setEditMessageId(null);
+        props.setReplyMessage(message);
+        chatInput.focus();
       },
     };
   }),

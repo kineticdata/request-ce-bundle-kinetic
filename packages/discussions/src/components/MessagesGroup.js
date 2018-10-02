@@ -163,6 +163,12 @@ export const MessagesGroup = ({
                     actions && actions.editMessageId === message.id
                       ? 'editing'
                       : ''
+                  } ${
+                    actions &&
+                    actions.replyMessage &&
+                    actions.replyMessage.id === message.id
+                      ? 'replying'
+                      : ''
                   }`}
                 >
                   {actions &&
@@ -170,7 +176,12 @@ export const MessagesGroup = ({
                     profile.username ? (
                       <ul className="actions meta">
                         <li>
-                          <a href="#">Reply</a>
+                          <a
+                            role="button"
+                            onClick={() => actions.reply(message)}
+                          >
+                            Reply
+                          </a>
                         </li>
                         <li>
                           <a
@@ -192,7 +203,12 @@ export const MessagesGroup = ({
                     ) : (
                       <ul className="actions meta">
                         <li>
-                          <a href="#">Reply</a>
+                          <a
+                            role="button"
+                            onClick={() => actions.reply(message)}
+                          >
+                            Reply
+                          </a>
                         </li>
                       </ul>
                     ))}

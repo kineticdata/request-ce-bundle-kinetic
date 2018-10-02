@@ -23,9 +23,17 @@ const Messages = ({
   deleteMessage,
   editMessage,
   editMessageId,
+  reply,
+  replyMessage,
 }) => (
   <MessageActionsContext.Provider
-    value={{ deleteMessage, editMessage, editMessageId }}
+    value={{
+      deleteMessage,
+      editMessage,
+      editMessageId,
+      reply,
+      replyMessage,
+    }}
   >
     <div className="messages">
       <ScrollHelper ref={registerScrollHelper} onScrollTo={handleScrolled}>
@@ -90,6 +98,8 @@ const DiscussionModal = props => {
     registerChatInput,
     editMessageId,
     setEditMessageId,
+    replyMessage,
+    setReplyMessage,
   } = props;
   return (
     <Modal
@@ -157,6 +167,8 @@ const DiscussionModal = props => {
             registerChatInput={registerChatInput}
             editMessageId={editMessageId}
             setEditMessageId={setEditMessageId}
+            replyMessage={replyMessage}
+            setReplyMessage={setReplyMessage}
           />
         </ModalBody>
       ) : currentOpenModals.last() === 'edit' ? (
@@ -178,6 +190,8 @@ export const Discussion = props => {
     registerChatInput,
     editMessageId,
     setEditMessageId,
+    replyMessage,
+    setReplyMessage,
   } = props;
 
   if (discussion && isModal) {
@@ -213,6 +227,8 @@ export const Discussion = props => {
         registerChatInput={registerChatInput}
         editMessageId={editMessageId}
         setEditMessageId={setEditMessageId}
+        replyMessage={replyMessage}
+        setReplyMessage={setReplyMessage}
       />
       <DiscussionModal {...props} />
     </div>

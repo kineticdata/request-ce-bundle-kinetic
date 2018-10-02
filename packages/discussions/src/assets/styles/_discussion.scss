@@ -175,12 +175,6 @@
                 justify-content: flex-start;
               }
             }
-            &.editing {
-              background-color: rgba(245, 166, 35, 0.15);
-              &:hover {
-                background-color: rgba(245, 166, 35, 0.15);
-              }
-            }
           }
           .message {
             background-color: $blue3;
@@ -202,6 +196,17 @@
               left: -8px;
               right: auto;
               border-color: $gray4 $gray4 transparent transparent;
+            }
+          }
+        }
+      }
+      .message-list {
+        .message-list-item {
+          &.editing,
+          &.replying {
+            background-color: rgba(245, 166, 35, 0.15);
+            &:hover {
+              background-color: rgba(245, 166, 35, 0.15);
             }
           }
         }
@@ -276,7 +281,8 @@
     display: flex;
     padding: 0;
     overflow: visible;
-    &.editing {
+    &.editing,
+    &.replying {
       background-color: rgba(245, 166, 35, 0.15);
       .input-container {
         background-color: rgba(245, 166, 35, 0.15);
@@ -420,6 +426,17 @@
     button {
       color: $blue2;
       font-size: 14px;
+    }
+  }
+}
+
+.popover.reply-popover {
+  max-width: none;
+  .popover-body {
+    color: $blue-lake;
+    font-family: 'Open Sans';
+    i {
+      margin-right: 0.75rem;
     }
   }
 }

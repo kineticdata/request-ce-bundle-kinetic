@@ -20,6 +20,7 @@ export const sendMessage = (params, token) =>
           value: params.message,
         },
       ],
+      ...(params.parentId ? { parent: { id: params.parentId } } : {}),
     },
   });
 
