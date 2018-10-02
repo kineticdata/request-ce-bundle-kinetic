@@ -92,14 +92,29 @@ export const UploadMessage = ({
 export const produceContent = message =>
   message.content.reduce((content, token) => (content += token.value), '');
 
+const editedClass = message =>
+  message.createdAt !== message.updatedAt ? 'edited' : '';
+
 export const TextMessage = ({ message }) => (
-  <Markdown
-    className={`message ${
-      message.createdAt !== message.updatedAt ? 'edited' : ''
-    }`}
-    source={produceContent(message)}
-    skipHtml
-  />
+  <Markdown source={produceContent(message)} skipHtml />
+);
+
+export const Message = ({ message }) => (
+  <div className={`message ${editedClass(message)}`}>
+    <TextMessage message={message} />
+    {message.parent && (
+      <div className="parent-message">
+        <Message message={message.parent} />
+        <small>&mdash; {message.parent.createdBy.displayName}</small>
+      </div>
+    )}
+  </div>
+);
+
+export const MessageBubble = ({ message }) => (
+  <div className="message-bubble">
+    <Message message={message} />
+  </div>
 );
 
 const getParticipant = (discussion, createdBy) =>
@@ -212,7 +227,7 @@ export const MessagesGroup = ({
                         </li>
                       </ul>
                     ))}
-                  <TextMessage message={message} />
+                  <MessageBubble message={message} />
                 </div>
               ),
           )}
