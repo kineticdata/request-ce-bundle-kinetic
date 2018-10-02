@@ -1,8 +1,8 @@
-import { Record, List, Map } from 'immutable';
-import moment from 'moment';
-import { commonTypes, Utils } from 'common';
+import { Record } from 'immutable';
+import { Utils } from 'common';
 import { SOCKET_STATUS } from '../../api/socket';
-const { namespace, noPayload, withPayload } = Utils;
+import { types as authTypes } from 'app/src/redux/modules/auth';
+const { namespace, withPayload } = Utils;
 
 export const TOKEN_KEY = 'kd-auth-token';
 
@@ -26,7 +26,7 @@ export const actions = {
 
 export const State = Record({
   status: SOCKET_STATUS.CLOSED,
-  token: '',
+  token: null,
 });
 
 export const selectToken = state => state.discussions.socket.token;

@@ -2,7 +2,7 @@ import { eventChannel } from 'redux-saga';
 import { cancelled, race, take, put, takeEvery } from 'redux-saga/effects';
 import { bundle } from 'react-kinetic-core';
 
-import { types, actions, TOKEN_KEY } from '../modules/socket';
+import { types, actions } from '../modules/socket';
 
 import { Socket, SOCKET_STATUS } from '../../api/socket';
 

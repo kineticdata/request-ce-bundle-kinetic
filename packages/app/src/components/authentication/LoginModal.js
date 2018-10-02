@@ -2,85 +2,145 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
+import { bundle } from 'react-kinetic-core';
+import { actions as socketActions } from 'discussions/src/redux/modules/socket';
+
 import { OAuthPopup } from './OAuthPopup';
+import { RetrieveJwtIframe } from './RetrieveJwtIframe';
+
 import { login } from '../../utils/authentication';
 import { actions } from '../../redux/modules/auth';
+
+const PopupForm = props => (
+  <Fragment>
+    <div className="modal-header">
+      <h4 className="modal-title">
+        <button
+          type="button"
+          className="btn btn-link"
+          onClick={props.cancelled}
+        >
+          Cancel
+        </button>
+        <span>Sign In</span>
+        <span />
+      </h4>
+    </div>
+    <div className="login-form-container">
+      <ModalBody>
+        {props.popupBlocked && (
+          <h3>
+            <span className="text-danger">Our pop-up window was blocked.</span>
+          </h3>
+        )}
+        <h3>
+          <span>Authenticate with your provider.</span>
+        </h3>
+      </ModalBody>
+    </div>
+    <ModalFooter>
+      <button
+        type="button"
+        className="btn btn-primary"
+        onClick={props.openPopup}
+      >
+        Open Login Popup
+      </button>
+    </ModalFooter>
+    <OAuthPopup
+      ref={props.setPopupRef}
+      onSuccess={props.handleAuthSuccess}
+      onPopupBlocked={props.setPopupBlocked}
+    />
+  </Fragment>
+);
+
+const LoginForm = props => (
+  <Fragment>
+    <div className="modal-header">
+      <h4 className="modal-title">
+        <button
+          type="button"
+          className="btn btn-link"
+          onClick={props.cancelled}
+        >
+          Cancel
+        </button>
+        <span>Sign In</span>
+        <span />
+      </h4>
+    </div>
+    {props.popupBlocked ? (
+      <h3>
+        <span className="text-danger">Our pop-up window was blocked.</span>
+      </h3>
+    ) : null}
+    <form className="login-form-container" onSubmit={props.handleLogin}>
+      <ModalBody>
+        <div className="form-group">
+          <label htmlFor="email">Email Address</label>
+          <input
+            type="text"
+            autoFocus
+            className="form-control"
+            id="email"
+            placeholder="wally@kineticdata.com"
+            value={props.email}
+            onChange={props.handleEmail}
+            ref={props.setEmailEl}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            placeholder="password"
+            value={props.password}
+            onChange={props.handlePassword}
+          />
+        </div>
+        <span className="text-danger">{props.error || ' '}</span>
+      </ModalBody>
+      <ModalFooter>
+        <button className="btn btn-primary">Sign In</button>
+      </ModalFooter>
+    </form>
+  </Fragment>
+);
 
 export const LoginModalComponent = props =>
   props.showing && (
     <Fragment>
-      <OAuthPopup
-        onSuccess={props.success}
-        setPopupBlocked={props.setPopupBlocked}
-      />
       <Modal isOpen toggle={props.cancelled} size="lg">
-        <div className="modal-header">
-          <h4 className="modal-title">
-            <button
-              type="button"
-              className="btn btn-link"
-              onClick={props.cancelled}
-            >
-              Cancel
-            </button>
-            <span>Sign In</span>
-            <span />
-          </h4>
-        </div>
-        {props.popupBlocked ? (
-          <h3>
-            <span className="text-danger">Our pop-up window was blocked.</span>
-          </h3>
-        ) : null}
-        <form className="login-form-container" onSubmit={props.handleLogin}>
-          <ModalBody>
-            <div className="form-group">
-              <label htmlFor="email">Email Address</label>
-              <input
-                type="text"
-                autoFocus
-                className="form-control"
-                id="email"
-                placeholder="wally@kineticdata.com"
-                value={props.email}
-                onChange={props.handleEmail}
-                ref={props.setEmailEl}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                placeholder="password"
-                value={props.password}
-                onChange={props.handlePassword}
-              />
-            </div>
-            <span className="text-danger">{props.error || ' '}</span>
-          </ModalBody>
-          <ModalFooter>
-            <button className="btn btn-primary">Sign In</button>
-          </ModalFooter>
-        </form>
+        {props.authenticated && !props.receivedToken ? (
+          <RetrieveJwtIframe onSuccess={props.handleAuthSuccess} />
+        ) : bundle.config.loginPopup ? (
+          <PopupForm {...props} />
+        ) : (
+          <LoginForm {...props} />
+        )}
       </Modal>
+      )}
     </Fragment>
   );
 
 export const mapStateToProps = state => ({
   showing: state.app.auth.modalLogin,
+  // token: state.discussions.socket.token,
 });
 
 const mapDispatchToProps = {
   cancelled: actions.modalLoginCancelled,
   success: actions.modalLoginSuccess,
+  setToken: socketActions.setToken,
 };
 
 const handleLogin = props => event => {
   event.preventDefault();
   login(props.email, props.password)
-    .then(props.success)
+    .then(() => props.setAuthenticated(true))
     .catch(props.handleAuthError);
 };
 
@@ -89,10 +149,12 @@ export const LoginModal = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withState('authenticated', 'setAuthenticated', false),
   withState('email', 'setEmail', ''),
   withState('password', 'setPassword', ''),
   withState('error', 'setError', ''),
   withState('popupBlocked', 'setPopupBlocked', false),
+  withState('receivedToken', 'setReceivedToken', false),
   withHandlers({
     handleEmail: props => event => props.setEmail(event.target.value),
     handlePassword: props => event => props.setPassword(event.target.value),
@@ -100,16 +162,33 @@ export const LoginModal = compose(
       props.setError(error.response.data.error);
       props.setPassword('');
     },
+    handleAuthSuccess: props => token => {
+      if (token) {
+        props.setToken(token);
+        props.setReceivedToken(true);
+      }
+      props.success();
+    },
   }),
   withHandlers({ handleLogin }),
   withHandlers(() => {
     let emailEl = null;
+    let popupEl = null;
     return {
       setEmailEl: () => el => {
         emailEl = el;
       },
       focusEmailEl: () => () => {
-        emailEl.focus();
+        if (emailEl) {
+          emailEl.focus();
+        }
+      },
+      setPopupRef: () => el => {
+        popupEl = el;
+      },
+      popupRef: () => () => popupEl,
+      openPopup: () => () => {
+        popupEl.openPopup();
       },
     };
   }),

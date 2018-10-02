@@ -19,36 +19,55 @@ import { UnauthenticatedForm } from './components/authentication/Unauthenticated
 import { RetrieveJwtIframe } from './components/authentication/RetrieveJwtIframe';
 import { OAuthPopup } from './components/authentication/OAuthPopup';
 
-export const LoginScreen = props =>
-  props.authenticated ? (
-    props.token ? null : bundle.config.loginPopup ? (
-      <OAuthPopup
-        onSuccess={props.setToken}
-        onPopupBlocked={props.setPopupBlocked}
-      />
-    ) : (
-      <RetrieveJwtIframe onSuccess={props.setToken} />
-    )
-  ) : (
-    <div className="login-container">
-      <div className="login-wrapper">
-        {props.children}
-        <div
-          className="login-image-container"
-          style={{ backgroundImage: `url(${logoImage})` }}
-        >
-          <div className="kinops-text">
-            <img
-              src={logoName}
-              alt="Kinops - streamline everyday work for teams"
-            />
-            <h3>Welcome to kinops</h3>
-            <p>Streamline everyday work for teams.</p>
-          </div>
+export const LoginScreen = props => (
+  <div className="login-container">
+    <div className="login-wrapper">
+      {bundle.config.loginPopup && !props.token ? (
+        <div className="login-form-container">
+          <h3 className="form-title">Authenticate with your provider</h3>
+          {props.popupBlocked && (
+            <h3>
+              <span className="text-danger">
+                Our pop-up window was blocked.
+              </span>
+            </h3>
+          )}
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={props.openPopup}
+          >
+            Open Login Popup
+          </button>
+          <OAuthPopup
+            ref={props.setPopupRef}
+            onSuccess={props.handleAuthenticated}
+            onPopupBlocked={props.setPopupBlocked}
+          />
+        </div>
+      ) : props.authenticated ? (
+        props.token ? null : (
+          <RetrieveJwtIframe onSuccess={props.setToken} />
+        )
+      ) : (
+        props.children
+      )}
+      <div
+        className="login-image-container"
+        style={{ backgroundImage: `url(${logoImage})` }}
+      >
+        <div className="kinops-text">
+          <img
+            src={logoName}
+            alt="Kinops - streamline everyday work for teams"
+          />
+          <h3>Welcome to kinops</h3>
+          <p>Streamline everyday work for teams.</p>
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 
 const toResetPassword = ({ push, setDisplay }) => routed => () =>
   routed ? push('/reset-password') : setDisplay('reset');
@@ -261,6 +280,18 @@ export const AuthenticatedContainer = compose(
     handlePassword,
     handleLogin,
     handleUnauthorized,
+  }),
+  withHandlers(() => {
+    let popupEl = null;
+    return {
+      setPopupRef: () => el => {
+        popupEl = el;
+      },
+      popupRef: () => () => popupEl,
+      openPopup: () => () => {
+        popupEl.openPopup();
+      },
+    };
   }),
   lifecycle({
     componentWillMount() {

@@ -72,7 +72,6 @@ export const Login = ({
         </button>
       </div>
     </form>
-    )}
   </Fragment>
 );
 
