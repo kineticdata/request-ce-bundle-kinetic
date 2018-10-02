@@ -153,6 +153,7 @@ export function* updateFormSaga(action) {
     include: FORM_INCLUDES,
   });
   if (!serverError) {
+    yield put(toastActions.addSuccess('Message', 'Title'));
     yield put(
       actions.fetchForm({
         kappSlug: action.payload.kappSlug,
@@ -175,8 +176,10 @@ export function* fetchNotificationsSaga() {
   });
 
   if (serverError) {
+    yield put(toastActions.addError('Title', 'Message Error'));
     yield put(actions.setFormsError(serverError));
   } else {
+    yield put(toastActions.addSuccess('Title', 'Message Success'));
     yield put(actions.setNotifications(submissions));
   }
 }
