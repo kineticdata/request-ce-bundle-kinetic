@@ -131,20 +131,21 @@ export const FormContainer = ({
               <Link to={`/kapps/${kappSlug}`}>services</Link> /{` `}
               <Link to={`/kapps/${kappSlug}/settings`}>settings</Link> /{` `}
               <Link to={`/kapps/${kappSlug}/settings/forms`}>forms</Link> /{` `}
+              <Link to={`/kapps/${kappSlug}/settings/forms/${form.slug}`}>
+                {form.name}
+              </Link>{' '}
             </h3>
-            <h1>{form.name} Settings</h1>
+            <h1>Form Settings</h1>
           </div>
-          <div className="page-title__actions">
-            <a
-              href={`${bundle.spaceLocation()}/app/#/${kappSlug}/author/form/${
-                form.slug
-              }/builder`}
-              className="btn btn-primary"
-              target="blank"
-            >
-              Form Builder <i className="fa fa-fw fa-external-link" />
-            </a>
-          </div>
+          <a
+            href={`${bundle.spaceLocation()}/app/#/${kappSlug}/author/form/${
+              form.slug
+            }/builder`}
+            className="btn btn-primary"
+            target="blank"
+          >
+            Form Builder <i className="fa fa-fw fa-external-link" />
+          </a>
         </div>
         <div className="general-settings">
           <h3 className="section__title">General Settings</h3>
@@ -152,19 +153,22 @@ export const FormContainer = ({
             <div className="form-group">
               <label>Description</label>
               <textarea
-                className="form-control col-8"
+                className="form-control col-12"
                 name="description"
                 value={inputs.description}
                 type="text"
                 onChange={event =>
-                  setInputs({ ...inputs, description: event.target.value })
+                  setInputs({
+                    ...inputs,
+                    description: event.target.value,
+                  })
                 }
               />
             </div>
             <div className="form-group">
               <label>Form Type</label>
               <select
-                className="form-control col-8"
+                className="form-control col-6"
                 name="type"
                 value={inputs.type}
                 onChange={event =>
@@ -181,7 +185,7 @@ export const FormContainer = ({
             <div className="form-group">
               <label>Form Status</label>
               <select
-                className="form-control col-8"
+                className="form-control col-6"
                 name="status"
                 value={inputs.status}
                 onChange={event =>
@@ -449,7 +453,9 @@ export const FormContainer = ({
                       let categories = inputs.categories;
                       event.target.checked
                         ? categories.push({
-                            category: { slug: event.target.value },
+                            category: {
+                              slug: event.target.value,
+                            },
                           })
                         : (categories = categories.filter(
                             category =>
