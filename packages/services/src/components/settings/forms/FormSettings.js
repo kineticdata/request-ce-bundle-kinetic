@@ -450,7 +450,7 @@ export const FormContainer = ({
                   </tr>
                 ))}
                 <tr>
-                  <td colspan="2">
+                  <td colSpan="2">
                     <select className="form-control form-control-sm">
                       <option value="?" selected="selected" />
                       {settingsForms.servicesKapp.categories.map(val => (
@@ -475,7 +475,10 @@ export const FormContainer = ({
                 </tr>
               </tbody>
             </table>
-            {/* <div className="form-group checkbox">
+            <div className="form-group">
+              {JSON.stringify(inputs.categories)}
+            </div>
+            <div className="form-group checkbox">
               <label className="field-label" />
               {settingsForms.servicesKapp.categories.map(val => (
                 <label
@@ -515,7 +518,7 @@ export const FormContainer = ({
                   {val.name}
                 </label>
               ))}
-            </div> */}
+            </div>
           </div>
         </div>
         <div className="form__footer">
