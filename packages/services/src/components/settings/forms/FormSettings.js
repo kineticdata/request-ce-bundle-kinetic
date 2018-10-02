@@ -430,7 +430,52 @@ export const FormContainer = ({
         <div className="category-settings">
           <h3 className="section__title">Categories</h3>
           <div className="form settings">
-            <div className="form-group checkbox">
+            <table className="table table-hover table-striped">
+              <thead>
+                <th>Category</th>
+                <th>slug</th>
+                <th />
+              </thead>
+
+              <tbody>
+                {settingsForms.servicesKapp.categories.map(val => (
+                  <tr>
+                    <td>{val.name}</td>
+                    <td>{val.slug}</td>
+                    <td>
+                      <button className="btn btn-sm btn-danger pull-right">
+                        <span className="fa fa-times fa-fw" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                <tr>
+                  <td colspan="2">
+                    <select className="form-control form-control-sm">
+                      <option value="?" selected="selected" />
+                      {settingsForms.servicesKapp.categories.map(val => (
+                        <option
+                          label={val.name}
+                          value={`categories-${val.slug}`}
+                        >
+                          {val.name}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-sm btn-success pull-right"
+                      disabled="disabled"
+                    >
+                      <span className="fa fa-plus fa-fw fa-inverse" />Add
+                      Category
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            {/* <div className="form-group checkbox">
               <label className="field-label" />
               {settingsForms.servicesKapp.categories.map(val => (
                 <label
@@ -470,7 +515,7 @@ export const FormContainer = ({
                   {val.name}
                 </label>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="form__footer">
