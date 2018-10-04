@@ -2,6 +2,7 @@ import { Map } from 'immutable';
 import { all, takeEvery, call, put } from 'redux-saga/effects';
 import { actions, types } from '../modules/settingsServices';
 import { actions as kinopsActions } from 'app/src/redux/modules/app';
+import { toastActions } from 'common';
 
 import { CoreAPI } from 'react-kinetic-core';
 
@@ -23,6 +24,12 @@ export function* fetchServicesSettingsSaga({ payload }) {
   ]);
 
   if (serverError) {
+    yield put(
+      toastActions.addError(
+        'Fetch Settings',
+        'Failed to fetch Services settings.',
+      ),
+    );
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     const manageableFormsSlugs = (manageableForms.forms || []).map(
@@ -47,6 +54,7 @@ export function* fetchTeamsSaga({ payload }) {
   });
 
   if (serverError) {
+    yield put(toastActions.addError('Fetch Teams', 'Failed to fetch teams.'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setServicesSettingsTeams(teams));
@@ -59,6 +67,7 @@ export function* fetchUsersSaga({ payload }) {
   });
 
   if (serverError) {
+    yield put(toastActions.addError('Fetch Users', 'Failed to fetch users.'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setServicesSettingsUsers(users));
@@ -72,6 +81,7 @@ export function* fetchSpaceSaga({ payload }) {
   });
 
   if (serverError) {
+    yield put(toastActions.addError('Fetch Space', 'Failed to fetch space.'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setServicesSettingsSpace(space));
@@ -93,8 +103,17 @@ export function* updateServicesSettingsSaga({ payload }) {
   });
 
   if (serverError) {
+    yield put(
+      toastActions.addError('Update Settings', 'Failed to update settings.'),
+    );
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
+    yield put(
+      toastActions.addSuccess(
+        'Update Settings',
+        'Updated settings successfully.',
+      ),
+    );
     yield put(kinopsActions.loadApp());
   }
 }
@@ -112,6 +131,12 @@ export function* fetchNotificationsSaga() {
   });
 
   if (serverError) {
+    yield put(
+      toastActions.addError(
+        'Fetch Notifications',
+        'Failed to fetch notifications.',
+      ),
+    );
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setNotifications(submissions));
@@ -126,6 +151,7 @@ export function* fetchFormSaga(action) {
   });
 
   if (serverError) {
+    yield put(toastActions.addError('Fetch Form', 'Failed to fetch form.'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setForm(form));

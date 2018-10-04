@@ -12,6 +12,9 @@ export function* fetchCategoriesSaga(action) {
   });
 
   if (serverError) {
+    yield put(
+      toastActions.addError('Fetch Categories', 'Failed to fetch categories.'),
+    );
     yield put(actions.setCategoriesErrors(serverError));
   } else {
     yield put(actions.setCategories(categories));
