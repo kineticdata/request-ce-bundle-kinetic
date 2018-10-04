@@ -257,7 +257,7 @@ export const CreateForm = compose(
       this.props.clone &&
         this.props.fetchForm({
           kappSlug: 'services',
-          formSlug: 'aa',
+          formSlug: this.props.clone,
         }) &&
         this.props.setInputs({
           ...this.props.inputs,
