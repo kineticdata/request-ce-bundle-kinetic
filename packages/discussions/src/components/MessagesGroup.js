@@ -90,7 +90,18 @@ export const UploadMessage = ({
 );
 
 export const produceContent = message =>
-  message.content.reduce((content, token) => (content += token.value), '');
+  message.content.reduce((content, token) => {
+    switch (token.type) {
+      case 'team':
+        return `${content}${token.value.name}`;
+      case 'user':
+        return `${content}${token.value.displayName}`;
+      case 'unknownUser':
+        return 'an unknown user';
+      default:
+        return `${content}${token.value}`;
+    }
+  }, '');
 
 const editedClass = message =>
   message.createdAt !== message.updatedAt ? 'edited' : '';

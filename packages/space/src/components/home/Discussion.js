@@ -57,13 +57,15 @@ export const Discussion = ({ discussion, me, discussionServerUrl, teams }) => {
         </Link>
         <RelatedItemBadge discussion={discussion} />
         <div className="participants">
-          {discussion.participants.map(participant => (
-            <Avatar
-              key={participant.user.username}
-              user={participant.user}
-              size={24}
-            />
-          ))}
+          {discussion.participants
+            .filter(p => p.user.unknown !== true)
+            .map(participant => (
+              <Avatar
+                key={participant.user.username}
+                user={participant.user}
+                size={24}
+              />
+            ))}
         </div>
       </div>
 
