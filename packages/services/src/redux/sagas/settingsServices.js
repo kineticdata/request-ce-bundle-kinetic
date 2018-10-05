@@ -26,8 +26,8 @@ export function* fetchServicesSettingsSaga({ payload }) {
   if (serverError) {
     yield put(
       toastActions.addError(
-        'Fetch Settings',
         'Failed to fetch Services settings.',
+        'Fetch Settings',
       ),
     );
     yield put(actions.updateServicesSettingsError(serverError));
@@ -54,7 +54,7 @@ export function* fetchTeamsSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Fetch Teams', 'Failed to fetch teams.'));
+    yield put(toastActions.addError('Failed to fetch teams.', 'Fetch Teams'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setServicesSettingsTeams(teams));
@@ -67,7 +67,7 @@ export function* fetchUsersSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Fetch Users', 'Failed to fetch users.'));
+    yield put(toastActions.addError('Failed to fetch users.', 'Fetch Users'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setServicesSettingsUsers(users));
@@ -81,7 +81,7 @@ export function* fetchSpaceSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Fetch Space', 'Failed to fetch space.'));
+    yield put(toastActions.addError('Failed to fetch space.', 'Fetch Space'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setServicesSettingsSpace(space));
@@ -104,14 +104,14 @@ export function* updateServicesSettingsSaga({ payload }) {
 
   if (serverError) {
     yield put(
-      toastActions.addError('Update Settings', 'Failed to update settings.'),
+      toastActions.addError('Failed to update settings.', 'Update Settings'),
     );
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(
       toastActions.addSuccess(
-        'Update Settings',
         'Updated settings successfully.',
+        'Update Settings',
       ),
     );
     yield put(kinopsActions.loadApp());
@@ -133,8 +133,8 @@ export function* fetchNotificationsSaga() {
   if (serverError) {
     yield put(
       toastActions.addError(
-        'Fetch Notifications',
         'Failed to fetch notifications.',
+        'Fetch Notifications',
       ),
     );
     yield put(actions.updateServicesSettingsError(serverError));
@@ -151,7 +151,7 @@ export function* fetchFormSaga(action) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Fetch Form', 'Failed to fetch form.'));
+    yield put(toastActions.addError('Failed to fetch form.', 'Fetch Form'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setForm(form));
