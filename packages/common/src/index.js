@@ -14,9 +14,11 @@ import { ErrorNotFound } from './components/ErrorNotFound';
 import { ErrorUnauthorized } from './components/ErrorUnauthorized';
 import { ErrorUnexpected } from './components/ErrorUnexpected';
 
-import { actions as commonActions } from './redux/modules/common';
-import { types as commonTypes } from './redux/modules/common';
 import { selectCurrentKapp } from './redux/modules/common';
+import {
+  types as commonTypes,
+  actions as commonActions,
+} from './redux/modules/common';
 import {
   actions as toastActions,
   types as toastTypes,
@@ -25,6 +27,7 @@ import { actions as modalFormActions } from './redux/modules/modalForm';
 
 import * as Utils from './utils';
 import * as Constants from './constants';
+import * as AttributeSelectors from './components/AttributeSelectors';
 
 export {
   KappLink,
@@ -50,4 +53,5 @@ export {
   ErrorNotFound,
   ErrorUnauthorized,
   ErrorUnexpected,
+  AttributeSelectors,
 };

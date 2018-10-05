@@ -8,7 +8,6 @@ import { watchSpaceApp } from './sagas/spaceApp';
 import { watchSettingsUsers } from './sagas/settingsUsers';
 import { watchSettingsNotifications } from './sagas/settingsNotifications';
 import { watchSettingsRobots } from './sagas/settingsRobots';
-import { watchSettingsSpace } from './sagas/settingsSpace';
 
 export default function* sagas() {
   yield all([
@@ -21,6 +20,5 @@ export default function* sagas() {
     watchTeams(),
     watchForms(),
     watchSettingsUsers(),
-    watchSettingsSpace(),
   ]);
 }

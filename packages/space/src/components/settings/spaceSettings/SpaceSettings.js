@@ -1,375 +1,367 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { compose, lifecycle, withState } from 'recompose';
-import { Utils, PageTitle } from 'common';
-import { actions } from '../../../redux/modules/settingsSpace';
+import { Map, List, fromJS } from 'immutable';
+import { compose, lifecycle, withState, withHandlers } from 'recompose';
+import { CoreAPI } from 'react-kinetic-core';
 
-const getAttributeFromMap = (attributesMap, key, backupValue) =>
-  attributesMap[key] && attributesMap[key][0]
-    ? attributesMap[key][0]
-    : backupValue;
+import {
+  commonActions,
+  toastActions,
+  PageTitle,
+  AttributeSelectors,
+} from 'common';
 
-export const TextInput = ({ value, name, setInputs, inputs }) => (
-  <input
-    name={name}
-    value={value}
-    type="text"
-    onChange={event => setInputs({ ...inputs, [name]: event.target.value })}
-  />
-);
-export const NumberInput = ({ value, name, setInputs, inputs, className }) => (
-  <input
-    className={`form-control ${className}`}
-    name={name}
-    value={value}
-    type="number"
-    onChange={event => setInputs({ ...inputs, [name]: event.target.value })}
-  />
-);
-export const Select = ({
-  selected,
-  name,
-  type,
-  data,
-  setInputs,
-  inputs,
-  className,
-  emptyOptionName,
+export const SettingsComponent = ({
+  attributesMap,
+  handleAttributeChange,
+  attributesMapDifferences,
+  requiredKapps,
+  spaceName,
+  previousSpaceName,
+  handleNameChange,
+  updateSettings,
 }) => {
-  const option = (
-    <option key="blank" value="">
-      {emptyOptionName}
-    </option>
-  );
-  let options;
-  if (data) {
-    if (type === 'teams') {
-      options = data.filter(team => !team.name.includes('Role')).map(team => {
-        return (
-          <option key={team.name} value={team.name}>
-            {team.name}
-          </option>
-        );
-      });
-      options.unshift(option);
-    } else if (type === 'kapps') {
-      options = data.map(kapp => {
-        return (
-          <option key={kapp.slug} value={kapp.slug}>
-            {kapp.name}
-          </option>
-        );
-      });
-      options.unshift(option);
-    } else if (type === 'kappForms') {
-      options = data.map(form => {
-        return (
-          <option key={form.slug} value={form.slug}>
-            {form.name}
-          </option>
-        );
-      });
-      options.unshift(option);
-    } else if (type === 'allForms') {
-      options = data.reduce((acc, kapp) => {
-        const forms = kapp.forms.map(form => {
-          return (
-            <option
-              key={`${kapp.name} > ${form.name}`}
-              value={`${kapp.name} > ${form.name}`}
-            >
-              ${kapp.name} > ${form.name}
-            </option>
-          );
-        });
-        return acc.concat(forms);
-      }, []);
-      options.unshift(option);
-    } else {
-      return <option value={''}>None Found</option>;
-    }
-  }
   return (
-    <select
-      className={`form-control ${className}`}
-      name={name}
-      value={selected}
-      onChange={event => setInputs({ ...inputs, [name]: event.target.value })}
-    >
-      {options}
-    </select>
-  );
-};
-
-const mapStateToProps = state => ({
-  space: state.app.space,
-  spaceSettings: state.space.settingsSpace,
-  teams: state.space.settingsSpace.teams,
-  kapps: state.space.settingsSpace.kapps,
-  spaceAttributesMap: state.space.settingsSpace.spaceAttributesMap,
-  spaceAttributeDefinitions:
-    state.space.settingsSpace.spaceAttributeDefinitions,
-});
-
-const mapDispatchToProps = {
-  updateSpace: actions.updateSpace,
-  fetchSpaceSettings: actions.fetchSpaceSettings,
-  fetchSpaceSettingsTeams: actions.fetchSpaceSettingsTeams,
-};
-
-export const SettingsContainer = ({
-  updateSpace,
-  spaceAttributesMap,
-  teams,
-  inputs,
-  setInputs,
-  kapps,
-  spaceAttributeDefinitions,
-}) => {
-  const queueKapp = kapps.find(
-    kapp =>
-      kapp.slug ===
-      getAttributeFromMap(spaceAttributesMap, 'Queue Kapp Slug', 'queue'),
-  );
-  const adminKapp = kapps.find(
-    kapp =>
-      kapp.slug ===
-      getAttributeFromMap(spaceAttributesMap, 'Admin Kapp Slug', 'admin'),
-  );
-  const servicesKapp = kapps.find(
-    kapp =>
-      kapp.slug ===
-      getAttributeFromMap(spaceAttributesMap, 'Services Kapp Slug', 'services'),
-  );
-  return (
-    <div>
-      <PageTitle parts={['Space Settings']} />
-      <div className="page-container page-container--space-settings">
-        <div className="page-panel page-panel--scrollable page-panel--space-profile-edit">
-          <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
-                <Link to="/">home</Link> /{` `}
-                <Link to="/settings">settings</Link> /{` `}
-              </h3>
-              <h1>System Settings</h1>
-            </div>
+    <div className="page-container page-container--space-settings">
+      <PageTitle parts={['System Settings']} />
+      <div className="page-panel page-panel--scrollable page-panel--space-profile-edit">
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h3>
+              <Link to="/">home</Link> /{` `}
+              <Link to="/settings">settings</Link> /{` `}
+            </h3>
+            <h1>System Settings</h1>
           </div>
-          <section>
-            <form>
-              <h2 className="section__title">Workflow Options</h2>
-              {spaceAttributeDefinitions.find(
-                sA => sA.name === 'Service Days Due',
-              ) && (
-                <div className="form-group">
-                  <label>Service Days Due</label>
-                  <NumberInput
-                    value={inputs['Service Days Due']}
-                    name="Service Days Due"
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-2"
-                  />
-                </div>
-              )}
-              {spaceAttributeDefinitions.find(
-                sA => sA.name === 'Task Assignee Team',
-              ) && (
-                <div className="form-group">
-                  <label>Task Assignee Team</label>
-                  <Select
-                    selected={inputs['Task Assignee Team']}
-                    name="Task Assignee Team"
-                    type="teams"
-                    data={teams}
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-8"
-                  />
-                </div>
-              )}
-              <h2 className="section__title">Display Options</h2>
-              {spaceAttributeDefinitions.find(
-                sA => sA.name === 'Default Kapp Display',
-              ) && (
-                <div className="form-group">
-                  <label>Default Kapp Display</label>
-                  <Select
-                    selected={inputs['Default Kapp Display']}
-                    name="Default Kapp Display"
-                    type="kapps"
-                    data={kapps}
-                    setInputs={setInputs}
-                    inputs={inputs}
-                    className="col-8"
-                    emptyOptionName="--Home--"
-                  />
-                </div>
-              )}
-              <h2 className="section__title">Form Mapping</h2>
-              {queueKapp &&
-                spaceAttributeDefinitions.find(
-                  sA => sA.name === 'Approval Form Slug',
-                ) && (
-                  <div className="form-group">
-                    <label>Approval Form</label>
-                    <Select
-                      selected={inputs['Approval Form Slug']}
-                      name="Approval Form Slug"
-                      type="kappForms"
-                      data={queueKapp.forms}
-                      setInputs={setInputs}
-                      inputs={inputs}
-                      className="col-8"
-                    />
-                  </div>
-                )}
-              {adminKapp &&
-                spaceAttributeDefinitions.find(
-                  sA => sA.name === 'Feedback Form Slug',
-                ) && (
-                  <div className="form-group">
-                    <label>Feedback Form</label>
-                    <Select
-                      selected={inputs['Feedback Form Slug']}
-                      name="Feedback Form Slug"
-                      type="kappForms"
-                      data={adminKapp.forms}
-                      setInputs={setInputs}
-                      inputs={inputs}
-                      className="col-8"
-                    />
-                  </div>
-                )}
-              {adminKapp &&
-                spaceAttributeDefinitions.find(
-                  sA => sA.name === 'Help Form Slug',
-                ) && (
-                  <div className="form-group">
-                    <label>Help Form</label>
-                    <Select
-                      selected={inputs['Help Form Slug']}
-                      name="Help Form Slug"
-                      type="kappForms"
-                      data={adminKapp.forms}
-                      setInputs={setInputs}
-                      inputs={inputs}
-                      className="col-8"
-                    />
-                  </div>
-                )}
-              {adminKapp &&
-                spaceAttributeDefinitions.find(
-                  sA => sA.name === 'Request Alert Form Slug',
-                ) && (
-                  <div className="form-group">
-                    <label>Request Alert Form</label>
-                    <Select
-                      selected={inputs['Request Alert Form Slug']}
-                      name="Request Alert Form Slug"
-                      type="kappForms"
-                      data={adminKapp.forms}
-                      setInputs={setInputs}
-                      inputs={inputs}
-                      className="col-8"
-                    />
-                  </div>
-                )}
-              {servicesKapp &&
-                spaceAttributeDefinitions.find(
-                  sA => sA.name === 'Suggest a Service Form Slug',
-                ) && (
-                  <div className="form-group">
-                    <label>Suggest a Service Form</label>
-                    <Select
-                      selected={inputs['Suggest a Service Form Slug']}
-                      name="Suggest a Service Form Slug"
-                      type="kappForms"
-                      data={servicesKapp.forms}
-                      setInputs={setInputs}
-                      inputs={inputs}
-                      className="col-8"
-                    />
-                  </div>
-                )}
-              {queueKapp &&
-                spaceAttributeDefinitions.find(
-                  sA => sA.name === 'Task Form Slug',
-                ) && (
-                  <div className="form-group">
-                    <label>Task Form</label>
-                    <Select
-                      selected={inputs['Task Form Slug']}
-                      name="Task Form Slug"
-                      type="kappForms"
-                      data={queueKapp.forms}
-                      setInputs={setInputs}
-                      inputs={inputs}
-                      className="col-8"
-                    />
-                  </div>
-                )}
-            </form>
-            <div className="form__footer">
-              <span className="form__footer__right">
-                <button
-                  className="btn btn-primary"
-                  onClick={() => updateSpace(inputs)}
-                  // TODO: Disable until a change is made.
-                >
-                  Save Changes
-                </button>
-              </span>
-            </div>
-          </section>
         </div>
+        <section>
+          <form>
+            <h2 className="section__title">Display Options</h2>
+            <div className="form-group">
+              <label>Space Name</label>
+              <small>
+                The Name of the Space Referenced Throughout the System
+              </small>
+              <input
+                type="text"
+                className="form-control"
+                value={spaceName}
+                onChange={handleNameChange}
+              />
+            </div>
+            {attributesMap.has('Default Kapp Display') && (
+              <AttributeSelectors.KappSelect
+                id="Default Kapp Display"
+                value={attributesMap.getIn(['Default Kapp Display', 'value'])}
+                onChange={handleAttributeChange}
+                valueMapper={value => value.kapp.slug}
+                placeholder="--Home--"
+                label="Default Kapp Display"
+                description={attributesMap.getIn([
+                  'Default Kapp Display',
+                  'description',
+                ])}
+              />
+            )}
+            <h2 className="section__title">Workflow Options</h2>
+            {attributesMap.has('Service Days Due') && (
+              <AttributeSelectors.IntegerSelect
+                id="Service Days Due"
+                value={attributesMap.getIn(['Service Days Due', 'value'])}
+                onChange={handleAttributeChange}
+                label="Default Service Days Due"
+                description={attributesMap.getIn([
+                  'Service Days Due',
+                  'description',
+                ])}
+              />
+            )}
+            {attributesMap.has('Task Assignee Team') && (
+              <AttributeSelectors.TeamSelect
+                id="Task Assignee Team"
+                value={attributesMap.getIn(['Task Assignee Team', 'value'])}
+                onChange={handleAttributeChange}
+                valueMapper={value => value.team.name}
+                label="Task Assignee Team"
+                description={attributesMap.getIn([
+                  'Task Assignee Team',
+                  'description',
+                ])}
+              />
+            )}
+            <h2 className="section__title">Form Mapping</h2>
+            {requiredKapps.queue &&
+              attributesMap.has('Approval Form Slug') && (
+                <AttributeSelectors.FormSelect
+                  id="Approval Form Slug"
+                  value={attributesMap.getIn(['Approval Form Slug', 'value'])}
+                  onChange={handleAttributeChange}
+                  valueMapper={value => value.slug}
+                  kappSlug={requiredKapps.queue.slug}
+                  label="Default Approval Form"
+                  description={attributesMap.getIn([
+                    'Approval Form Slug',
+                    'description',
+                  ])}
+                />
+              )}
+            {requiredKapps.admin &&
+              attributesMap.has('Feedback Form Slug') && (
+                <AttributeSelectors.FormSelect
+                  id="Feedback Form Slug"
+                  value={attributesMap.getIn(['Feedback Form Slug', 'value'])}
+                  onChange={handleAttributeChange}
+                  valueMapper={value => value.slug}
+                  kappSlug={requiredKapps.admin.slug}
+                  label="Feedback Form Slug"
+                  description={attributesMap.getIn([
+                    'Feedback Form Slug',
+                    'description',
+                  ])}
+                />
+              )}
+            {requiredKapps.admin &&
+              attributesMap.has('Help Form Slug') && (
+                <AttributeSelectors.FormSelect
+                  id="Help Form Slug"
+                  value={attributesMap.getIn(['Help Form Slug', 'value'])}
+                  onChange={handleAttributeChange}
+                  valueMapper={value => value.slug}
+                  kappSlug={requiredKapps.admin.slug}
+                  label="Help Form Slug"
+                  description={attributesMap.getIn([
+                    'Help Form Slug',
+                    'description',
+                  ])}
+                />
+              )}
+            {requiredKapps.admin &&
+              attributesMap.has('Request Alert Form Slug') && (
+                <AttributeSelectors.FormSelect
+                  id="Request Alert Form Slug"
+                  value={attributesMap.getIn([
+                    'Request Alert Form Slug',
+                    'value',
+                  ])}
+                  onChange={handleAttributeChange}
+                  valueMapper={value => value.slug}
+                  kappSlug={requiredKapps.admin.slug}
+                  label="Request Alert Form Slug"
+                  description={attributesMap.getIn([
+                    'Request Alert Form Slug',
+                    'description',
+                  ])}
+                />
+              )}
+            {requiredKapps.services &&
+              attributesMap.has('Suggest a Service Form Slug') && (
+                <AttributeSelectors.FormSelect
+                  id="Suggest a Service Form Slug"
+                  value={attributesMap.getIn([
+                    'Suggest a Service Form Slug',
+                    'value',
+                  ])}
+                  onChange={handleAttributeChange}
+                  valueMapper={value => value.slug}
+                  kappSlug={requiredKapps.services.slug}
+                  label="Suggest a Service Form Slug"
+                  description={attributesMap.getIn([
+                    'Suggest a Service Form Slug',
+                    'description',
+                  ])}
+                />
+              )}
+            {requiredKapps.queue &&
+              attributesMap.has('Task Form Slug') && (
+                <AttributeSelectors.FormSelect
+                  id="Task Form Slug"
+                  value={attributesMap.getIn(['Task Form Slug', 'value'])}
+                  onChange={handleAttributeChange}
+                  valueMapper={value => value.slug}
+                  kappSlug={requiredKapps.queue.slug}
+                  label="Default Task Form Slug"
+                  description={attributesMap.getIn([
+                    'Task Form Slug',
+                    'description',
+                  ])}
+                />
+              )}
+          </form>
+          <div className="form__footer">
+            <span className="form__footer__right">
+              <button
+                className="btn btn-primary"
+                onClick={updateSettings}
+                disabled={
+                  !(
+                    attributesMapDifferences.size !== 0 ||
+                    spaceName !== previousSpaceName
+                  )
+                }
+              >
+                Save Changes
+              </button>
+            </span>
+          </div>
+        </section>
       </div>
     </div>
   );
 };
 
+const SPACE_INCLUDES = 'attributesMap,spaceAttributeDefinitions,kapps';
+const settingsAttribute = (definition, attributesMap) => ({
+  name: definition.name,
+  description: definition.description,
+  value: attributesMap[definition.name],
+});
+const settingsAttributes = (attributeDefinitions, attributesMap) =>
+  fromJS(
+    attributeDefinitions.reduce(
+      (acc, def) => ({
+        ...acc,
+        [def.name]: settingsAttribute(def, attributesMap),
+      }),
+      {},
+    ),
+  );
+const spaceMapping = space => {
+  const attributes = settingsAttributes(
+    space.spaceAttributeDefinitions,
+    space.attributesMap,
+  );
+  const kapps = List(space.kapps);
+  const requiredKapps = {
+    queue: kapps.find(
+      kapp =>
+        kapp.slug ===
+        attributes.getIn(['Queue Kapp Slug', 'value', 0], 'queue'),
+    ),
+    admin: kapps.find(
+      kapp =>
+        kapp.slug ===
+        attributes.getIn(['Admin Kapp Slug', 'value', 0], 'admin'),
+    ),
+    services: kapps.find(
+      kapp =>
+        kapp.slug ===
+        attributes.getIn(['Services Kapp Slug', 'value', 0], 'services'),
+    ),
+  };
+  return {
+    attributes,
+    kapps,
+    requiredKapps,
+  };
+};
+
+// Fetches the Settings Required for this component
+const fetchSettings = ({
+  setAttributesMap,
+  setKapps,
+  setRequiredKapps,
+  setPreviousAttributesMap,
+  setSpaceName,
+  setPreviousSpaceName,
+}) => async () => {
+  const { space } = await CoreAPI.fetchSpace({
+    include: SPACE_INCLUDES,
+  });
+  const { attributes, kapps, requiredKapps } = spaceMapping(space);
+  setAttributesMap(attributes);
+  setPreviousAttributesMap(attributes);
+  setKapps(kapps);
+  setRequiredKapps(requiredKapps);
+  setSpaceName(space.name);
+  setPreviousSpaceName(space.name);
+};
+
+// Updates the Settings and Re
+const updateSettings = ({
+  addSuccess,
+  addError,
+  attributesMapDifferences,
+  setAttributesMapDifferences,
+  spaceName,
+  setAttributesMap,
+  setKapps,
+  setRequiredKapps,
+  setPreviousAttributesMap,
+  setSpaceName,
+  setPreviousSpaceName,
+  reloadApp,
+}) => async () => {
+  const { space, serverError } = await CoreAPI.updateSpace({
+    include: SPACE_INCLUDES,
+    space: {
+      name: spaceName,
+      attributesMap: attributesMapDifferences,
+    },
+  });
+  if (space) {
+    const { attributes, kapps, requiredKapps } = spaceMapping(space);
+    addSuccess('Settings were successfully updated', 'Space Updated');
+    setAttributesMap(attributes);
+    setPreviousAttributesMap(attributes);
+    setKapps(kapps);
+    setRequiredKapps(requiredKapps);
+    setSpaceName(space.name);
+    setPreviousSpaceName(space.name);
+    setAttributesMapDifferences(Map());
+    reloadApp();
+  } else {
+    addError(
+      serverError.error || 'Error Updating Space',
+      serverError.statusText || 'Please contact your system administrator',
+    );
+  }
+};
+
+// Handler that is called when an attribute value is changed.
+const handleAttributeChange = ({
+  attributesMap,
+  setAttributesMap,
+  previousAttributesMap,
+  setAttributesMapDifferences,
+}) => event => {
+  const field = event.target.id;
+  const value = List(event.target.value);
+  const updatedAttributesMap = attributesMap.setIn([field, 'value'], value);
+  const diff = updatedAttributesMap
+    .filter((v, k) => !previousAttributesMap.get(k).equals(v))
+    .map(v => v.get('value'));
+  setAttributesMap(updatedAttributesMap);
+  setAttributesMapDifferences(diff);
+};
+
+// Handler that is called when the space name changes
+const handleNameChange = ({ setSpaceName }) => event => {
+  setSpaceName(event.target.value);
+};
+
+// Settings Container
 export const SpaceSettings = compose(
   connect(
-    mapStateToProps,
-    mapDispatchToProps,
+    null,
+    { reloadApp: commonActions.loadApp, ...toastActions },
   ),
-  withState('inputs', 'setInputs', props => ({
-    'Service Days Due': Utils.getAttributeValue(
-      props.space,
-      'Service Days Due',
-    ),
-    'Approval Form Slug': Utils.getAttributeValue(
-      props.space,
-      'Approval Form Slug',
-    ),
-    'Feedback Form Slug': Utils.getAttributeValue(
-      props.space,
-      'Feedback Form Slug',
-    ),
-    'Help Form Slug': Utils.getAttributeValue(props.space, 'Help Form Slug'),
-    'Request Alert Form Slug': Utils.getAttributeValue(
-      props.space,
-      'Request Alert Form Slug',
-    ),
-    'Suggest a Service Form Slug': Utils.getAttributeValue(
-      props.space,
-      'Suggest a Service Form Slug',
-    ),
-    'Task Form Slug': Utils.getAttributeValue(props.space, 'Task Form Slug'),
-    'Task Assignee Team': Utils.getAttributeValue(
-      props.space,
-      'Task Assignee Team',
-    ),
-    'Default Kapp Display': Utils.getAttributeValue(
-      props.space,
-      'Default Kapp Display',
-    ),
-  })),
+  withState('attributesMap', 'setAttributesMap', Map()),
+  withState('previousAttributesMap', 'setPreviousAttributesMap', Map()),
+  withState('attributesMapDifferences', 'setAttributesMapDifferences', Map()),
+  withState('requiredKapps', 'setRequiredKapps', List()),
+  withState('kapps', 'setKapps', List()),
+  withState('spaceName', 'setSpaceName', ''),
+  withState('previousSpaceName', 'setPreviousSpaceName', ''),
+  withHandlers({
+    handleNameChange,
+    handleAttributeChange,
+    fetchSettings,
+    updateSettings,
+  }),
   lifecycle({
     componentWillMount() {
-      this.props.fetchSpaceSettings();
-      this.props.fetchSpaceSettingsTeams();
+      this.props.fetchSettings();
     },
   }),
-)(SettingsContainer);
+)(SettingsComponent);

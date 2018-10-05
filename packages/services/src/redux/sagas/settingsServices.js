@@ -1,8 +1,7 @@
 import { Map } from 'immutable';
 import { all, takeEvery, call, put } from 'redux-saga/effects';
 import { actions, types } from '../modules/settingsServices';
-import { actions as kinopsActions } from 'app/src/redux/modules/app';
-import { toastActions } from 'common';
+import { toastActions, commonActions } from 'common';
 
 import { CoreAPI } from 'react-kinetic-core';
 
@@ -114,7 +113,7 @@ export function* updateServicesSettingsSaga({ payload }) {
         'Update Settings',
       ),
     );
-    yield put(kinopsActions.loadApp());
+    yield put(commonActions.loadApp());
   }
 }
 
