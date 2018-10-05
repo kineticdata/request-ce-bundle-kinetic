@@ -99,6 +99,12 @@ export const FormContainer = ({
   updateFormSettings,
   inputs,
   setInputs,
+  categoryInput,
+  handleCategoryInput,
+  handleAddCategory,
+  handleRemoveCategory,
+  categoryDefinitions,
+  availableCategories,
   loading,
   form,
   kappLoading,
@@ -432,41 +438,65 @@ export const FormContainer = ({
           <div className="form settings">
             <table className="table table-hover table-striped">
               <thead>
-                <th>Category</th>
-                <th>slug</th>
-                <th />
+                <tr>
+                  <th>Category</th>
+                  <th>slug</th>
+                  <th />
+                </tr>
               </thead>
 
               <tbody>
-                {settingsForms.servicesKapp.categories.map(val => (
-                  <tr>
-                    <td>{val.name}</td>
-                    <td>{val.slug}</td>
-                    <td>
-                      <button className="btn btn-sm btn-danger pull-right">
-                        <span className="fa fa-times fa-fw" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {categoryDefinitions
+                  .filter(c =>
+                    inputs.categories.find(fc => fc.category.slug === c.slug),
+                  )
+                  .map(val => (
+                    <tr key={val.slug}>
+                      <td>{val.name}</td>
+                      <td>{val.slug}</td>
+                      <td>
+                        <button
+                          className="btn btn-sm btn-danger pull-right"
+                          type="button"
+                          onClick={handleRemoveCategory(val)}
+                        >
+                          <span className="fa fa-times fa-fw" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 <tr>
                   <td colSpan="2">
-                    <select className="form-control form-control-sm">
-                      <option value="?" selected="selected" />
-                      {settingsForms.servicesKapp.categories.map(val => (
-                        <option
-                          label={val.name}
-                          value={`categories-${val.slug}`}
-                        >
-                          {val.name}
-                        </option>
-                      ))}
+                    <select
+                      className="form-control form-control-sm"
+                      onChange={handleCategoryInput}
+                      value={categoryInput}
+                    >
+                      <option label="" value="" />
+                      {categoryDefinitions
+                        .filter(
+                          c =>
+                            !inputs.categories.find(
+                              fc => fc.category.slug === c.slug,
+                            ),
+                        )
+                        .map(val => (
+                          <option
+                            key={val.slug}
+                            label={val.name}
+                            value={val.slug}
+                          >
+                            {val.name}
+                          </option>
+                        ))}
                     </select>
                   </td>
                   <td>
                     <button
+                      type="button"
                       className="btn btn-sm btn-success pull-right"
-                      disabled="disabled"
+                      disabled={categoryInput === null || categoryInput === ''}
+                      onClick={handleAddCategory}
                     >
                       <span className="fa fa-plus fa-fw fa-inverse" />Add
                       Category
@@ -475,50 +505,6 @@ export const FormContainer = ({
                 </tr>
               </tbody>
             </table>
-            <div className="form-group">
-              {JSON.stringify(inputs.categories)}
-            </div>
-            <div className="form-group checkbox">
-              <label className="field-label" />
-              {settingsForms.servicesKapp.categories.map(val => (
-                <label
-                  key={`categories-${val.slug}`}
-                  htmlFor={`categories-${val.slug}`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={
-                      (inputs.categories &&
-                        inputs.categories.find(
-                          c => c.category.slug === val.slug,
-                        )) ||
-                      false
-                    }
-                    name="categories"
-                    id={`categories-${val.slug}`}
-                    value={val.slug}
-                    onChange={event => {
-                      let categories = inputs.categories;
-                      event.target.checked
-                        ? categories.push({
-                            category: {
-                              slug: event.target.value,
-                            },
-                          })
-                        : (categories = categories.filter(
-                            category =>
-                              category.category.slug !== event.target.value,
-                          ));
-                      setInputs({
-                        ...inputs,
-                        categories: categories,
-                      });
-                    }}
-                  />
-                  {val.name}
-                </label>
-              ))}
-            </div>
           </div>
         </div>
         <div className="form__footer">
@@ -598,6 +584,33 @@ export const setInitialInputs = ({ setInputs, form }) => () => {
   });
 };
 
+const handleCategoryInput = ({ setCategoryInput }) => e =>
+  setCategoryInput(e.target.value);
+
+const handleAddCategory = ({
+  setCategoryInput,
+  categoryInput,
+  inputs,
+  setInputs,
+}) => () => {
+  const categorization = { category: { slug: categoryInput } };
+  const categorizations = [categorization, ...inputs.categories];
+  setInputs({
+    ...inputs,
+    categories: categorizations,
+  });
+  setCategoryInput('');
+};
+
+const handleRemoveCategory = ({ inputs, setInputs }) => category => () => {
+  setInputs({
+    ...inputs,
+    categories: inputs.categories.filter(
+      c => c.category.slug !== category.slug,
+    ),
+  });
+};
+
 const handleColumnOrderChange = ({ setInputs, inputs }) => ({
   source,
   destination,
@@ -616,18 +629,29 @@ const handleColumnChange = ({ setInputs, inputs }) => (index, prop, value) => {
   setInputs({ ...inputs, columns: updated });
 };
 
-const mapStateToProps = (state, { match: { params } }) => ({
-  form: state.services.settingsForms.currentForm,
-  formChanges: state.services.settingsForms.currentFormChanges,
-  loading: state.services.settingsForms.loading,
-  kappLoading: state.services.settingsForms.kappLoading,
-  notificationsLoading: state.services.settingsForms.notificationsLoading,
-  notifications: state.services.settingsForms.notifications,
-  settingsForms: state.services.settingsForms,
-  servicesSettings: state.services.servicesSettings,
-  kappSlug: state.app.config.kappSlug,
-});
+const mapStateToProps = (state, { match: { params } }) => {
+  const formCategorizations = state.services.settingsForms.currentForm
+    ? state.services.settingsForms.currentForm.categorizations
+    : [];
 
+  const categoryDefinitions = state.services.settingsForms.servicesKapp
+    ? state.services.settingsForms.servicesKapp.categories
+    : [];
+
+  return {
+    form: state.services.settingsForms.currentForm,
+    formChanges: state.services.settingsForms.currentFormChanges,
+    loading: state.services.settingsForms.loading,
+    kappLoading: state.services.settingsForms.kappLoading,
+    notificationsLoading: state.services.settingsForms.notificationsLoading,
+    notifications: state.services.settingsForms.notifications,
+    settingsForms: state.services.settingsForms,
+    servicesSettings: state.services.servicesSettings,
+    kappSlug: state.app.config.kappSlug,
+
+    categoryDefinitions,
+  };
+};
 const mapDispatchToProps = {
   updateFormSettings: actions.updateForm,
   fetchFormSettings: actions.fetchForm,
@@ -644,8 +668,12 @@ export const FormSettings = compose(
     mapDispatchToProps,
   ),
   withState('inputs', 'setInputs', {}),
+  withState('categoryInput', 'setCategoryInput', ''),
   withHandlers({
     setInitialInputs,
+    handleCategoryInput,
+    handleAddCategory,
+    handleRemoveCategory,
     handleColumnOrderChange,
     handleColumnChange,
   }),
