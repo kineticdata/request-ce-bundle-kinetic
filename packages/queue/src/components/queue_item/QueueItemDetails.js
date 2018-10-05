@@ -58,7 +58,7 @@ export const QueueItemDetails = ({
               style={{ fontSize: '16px' }}
             />
             {queueItem.values['Discussion Id'] === null
-              ? 'Create Discussion'
+              ? 'New Discussion'
               : 'View Discussion'}
           </button>
         )}

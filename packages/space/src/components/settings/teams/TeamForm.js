@@ -140,9 +140,11 @@ const TeamFormComponent = ({
                   )}
                 </span>
                 <span className="form__footer__right">
-                  <button className="btn btn-primary">Save</button>
                   <button className="btn btn-link" onClick={handleCancel}>
                     Cancel
+                  </button>
+                  <button className="btn btn-primary">
+                    {editing ? 'Save Changes' : 'Create Team'}
                   </button>
                 </span>
               </div>

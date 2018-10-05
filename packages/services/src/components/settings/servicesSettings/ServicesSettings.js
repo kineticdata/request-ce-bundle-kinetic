@@ -353,6 +353,12 @@ export const SettingsContainer = ({
             </form>
             <div className="form__footer">
               <span className="form__footer__right">
+                <Link
+                  to="/kapps/services/settings"
+                  className="btn btn-link mb-0"
+                >
+                  Cancel
+                </Link>
                 <button
                   className="btn btn-primary"
                   onClick={() => updateServicesSettings(inputs)}
