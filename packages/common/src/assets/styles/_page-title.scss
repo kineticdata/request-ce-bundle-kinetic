@@ -41,6 +41,21 @@
       align-self: flex-end;
     }
   }
+  .page-title__actions {
+    @media all and (min-width: 0) {
+      display: flex;
+      justify-content: space-between;
+      .btn {
+        margin-left: 0;
+      }
+    }
+    @media all and (min-width: 768px) {
+      align-self: flex-end;
+      .btn {
+        margin-left: 0.5rem;
+      }
+    }
+  }
   > a:not(.btn) {
     color: $gray;
     &:hover {

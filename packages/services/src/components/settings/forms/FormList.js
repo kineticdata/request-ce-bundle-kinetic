@@ -63,7 +63,7 @@ const FormListComponent = ({
           </div>
           {isSpaceAdmin && (
             <Link to={`${match.path}/new`} className="btn btn-primary">
-              Create Form
+              New Form
             </Link>
           )}
         </div>
