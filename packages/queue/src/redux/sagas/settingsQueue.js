@@ -1,7 +1,7 @@
 import { Map } from 'immutable';
 import { all, takeEvery, call, put } from 'redux-saga/effects';
 import { actions, types } from '../modules/settingsQueue';
-import { actions as kinopsActions } from 'app/src/redux/modules/app';
+import { toastActions, commonActions } from 'common';
 
 import { CoreAPI } from 'react-kinetic-core';
 
@@ -93,9 +93,18 @@ export function* updateQueueSettingsSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(actions.updateQueueSettingsError(serverError));
+    yield put(
+      toastActions.addError('Failed to update settings.', 'Update Settings'),
+    );
+    yield put(actions.updateServicesSettingsError(serverError));
   } else {
-    yield put(kinopsActions.loadApp());
+    yield put(
+      toastActions.addSuccess(
+        'Updated settings successfully.',
+        'Update Settings',
+      ),
+    );
+    yield put(commonActions.loadApp());
   }
 }
 
