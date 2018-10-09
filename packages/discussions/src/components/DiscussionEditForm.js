@@ -1,31 +1,39 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { ModalBody, ModalFooter } from 'reactstrap';
-import { Record } from 'immutable';
+import axios from 'axios';
+import { CoreAPI, bundle } from 'react-kinetic-core';
 import { PeopleSelect } from './PeopleSelect';
 import { updateDiscussion } from '../discussion_api';
-
-const Values = Record({
-  title: '',
-  description: '',
-  isPrivate: false,
-  owningUsers: [],
-  owningTeams: [],
-});
+import { actions } from '../redux/modules/discussions';
 
 export class DiscussionEditFormComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      values: Values({
-        ...props.discussion,
+      values: {
+        title: props.discussion.title,
+        description: props.discussion.description,
+        isPrivate: props.discussion.isPrivate,
+        joinPolicy: props.discussion.joinPolicy,
         owningUsers: props.discussion.owningUsers.toJS(),
         owningTeams: props.discussion.owningTeams.toJS(),
-      }),
+      },
       dirty: false,
       saving: false,
       error: null,
+      securityPolicyDefinitions: [],
     };
+  }
+
+  componentDidMount() {
+    axios
+      .get(`${bundle.apiLocation()}/securityPolicyDefinitions`)
+      .then(response =>
+        this.setState({
+          securityPolicyDefinitions: response.data.securityPolicyDefinitions,
+        }),
+      );
   }
 
   handleSubmit = event => {
@@ -35,11 +43,15 @@ export class DiscussionEditFormComponent extends React.Component {
       this.state.values,
       this.props.token,
     ).then(response => {
-      this.setState({
-        saving: false,
-        dirty: false,
-        error: response.error ? response.error.response.data.message : null,
-      });
+      if (response.error) {
+        this.setState({
+          saving: false,
+          dirty: false,
+          error: response.error.response.data.message,
+        });
+      } else {
+        this.props.closeModal();
+      }
     });
   };
 
@@ -51,7 +63,16 @@ export class DiscussionEditFormComponent extends React.Component {
         : event.target.value;
     this.setState(state => ({
       ...state,
-      values: state.values.set(field, value),
+      values: { ...state.values, [field]: value },
+      dirty: true,
+    }));
+  };
+
+  handleJoinPolicyChange = event => {
+    const name = event.target.value;
+    this.setState(state => ({
+      ...state,
+      values: { ...state.values, joinPolicy: name ? { name } : null },
       dirty: true,
     }));
   };
@@ -95,6 +116,25 @@ export class DiscussionEditFormComponent extends React.Component {
                 </label>
               </div>
               <div className="form-group">
+                <label htmlFor="joinPolicy">Join Policy</label>
+                <select
+                  id="joinPolicy"
+                  value={
+                    this.state.values.joinPolicy
+                      ? this.state.values.joinPolicy.name
+                      : ''
+                  }
+                  onChange={this.handleJoinPolicyChange}
+                >
+                  <option />
+                  {this.state.securityPolicyDefinitions.map(definition => (
+                    <option value={definition.name} key={definition.name}>
+                      {definition.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
                 <label htmlFor="owningUsers">Owning Users</label>
                 <PeopleSelect
                   id="owningUsers"
@@ -136,6 +176,11 @@ const mapStateToProps = state => ({
   token: state.discussions.socket.token,
 });
 
-export const DiscussionEditForm = connect(mapStateToProps)(
-  DiscussionEditFormComponent,
-);
+const mapDispatchToProps = {
+  closeModal: actions.closeModal,
+};
+
+export const DiscussionEditForm = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DiscussionEditFormComponent);
