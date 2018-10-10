@@ -159,7 +159,7 @@ export const fetchInvites = (id, token) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const createInvite = ({ discussionId, type, value, token }) =>
+export const createInvite = ({ discussionId, type, value, token, message }) =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${discussionId}/invitations`,
@@ -167,7 +167,7 @@ export const createInvite = ({ discussionId, type, value, token }) =>
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      data: { [type]: value },
+      data: { [type]: value, message },
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
@@ -233,7 +233,7 @@ export const createRelatedItem = (id, relatedItem, token) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const sendInvites = (token, discussion, invitees) => {
+export const sendInvites = (token, discussion, values) => {
   const existingUsernames = discussion.participants
     .concat(discussion.invitations)
     .filter(involvement => involvement.user)
@@ -243,13 +243,14 @@ export const sendInvites = (token, discussion, invitees) => {
   );
 
   return Promise.all(
-    invitees
+    values.invitees
       .flatMap(item => (item.team ? item.team.memberships : [item]))
       .map(item => ({
         token,
         discussionId: discussion.id,
         type: item.user ? 'username' : 'email',
         value: item.user ? item.user.username : item.label,
+        message: values.message,
       }))
       .filter(
         args =>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { compose, withHandlers, withProps, withState } from 'recompose';
+import { Map } from 'immutable';
 import { PeopleSelect } from './PeopleSelect';
 
 export const InvitationFormComponent = props =>
@@ -7,9 +8,11 @@ export const InvitationFormComponent = props =>
     formElement: (
       <form className="invitation-form" onSubmit={props.handleSubmit}>
         <div className="form-group required">
+          <label>Invitees</label>
           <PeopleSelect
+            id="invitees"
             onChange={props.handleChange}
-            value={props.value}
+            value={props.values.get('invitees')}
             users
             teams
             emails
@@ -20,11 +23,23 @@ export const InvitationFormComponent = props =>
             Enter a valid email address to invite a new user
           </p>
         </div>
+        <div className="form-group">
+          <label htmlFor="message">Message for Invitees</label>
+          <textarea
+            name="message"
+            id="message"
+            onChange={props.handleChange}
+            value={props.values.get('message')}
+          />
+        </div>
       </form>
     ),
     buttonProps: {
       onClick: props.handleSubmit,
-      disabled: !props.dirty || props.saving,
+      disabled:
+        !props.dirty ||
+        props.saving ||
+        props.values.get('invitees').length === 0,
     },
   });
 
@@ -38,20 +53,21 @@ const mapProps = props => ({
 });
 
 const handleChange = props => event => {
+  const field = event.target.id;
+  const value = event.target.value;
   props.setDirty(true);
-  props.setValue(event.target.value);
+  props.setValues(values => values.set(field, value));
 };
 
 const handleSubmit = props => event => {
   event.preventDefault();
   props.setSaving(true);
   if (typeof props.onSubmit === 'function') {
-    props.onSubmit(props.value, () => props.setSaving(false));
+    props.onSubmit(props.values.toJS(), () => props.setSaving(false));
   }
 };
 
 const disabledFn = props => option => {
-  return false;
   if (option.user) {
     return (
       props.associatedUsers.contains(option.user.username) && 'Already involved'
@@ -59,12 +75,13 @@ const disabledFn = props => option => {
   } else if (option.customOption) {
     return props.associatedEmails.contains(option.label) && 'Already invited';
   }
+  return false;
 };
 
 export const InvitationForm = compose(
   withProps(mapProps),
   withState('dirty', 'setDirty', false),
   withState('saving', 'setSaving', false),
-  withState('value', 'setValue', []),
+  withState('values', 'setValues', Map({ invitees: [], message: '' })),
   withHandlers({ handleChange, handleSubmit, disabledFn }),
 )(InvitationFormComponent);
