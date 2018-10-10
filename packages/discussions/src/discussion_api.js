@@ -232,3 +232,31 @@ export const createRelatedItem = (id, relatedItem, token) =>
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
+
+export const sendInvites = (token, discussion, invitees) => {
+  const existingUsernames = discussion.participants
+    .concat(discussion.invitations)
+    .filter(involvement => involvement.user)
+    .map(involvement => involvement.user.username);
+  const existingEmails = discussion.invitations.map(
+    invitation => invitation.email,
+  );
+
+  return Promise.all(
+    invitees
+      .flatMap(item => (item.team ? item.team.memberships : [item]))
+      .map(item => ({
+        token,
+        discussionId: discussion.id,
+        type: item.user ? 'username' : 'email',
+        value: item.user ? item.user.username : item.label,
+      }))
+      .filter(
+        args =>
+          args.type === 'username'
+            ? !existingUsernames.contains(args.value)
+            : !existingEmails.contains(args.value),
+      )
+      .map(createInvite),
+  );
+};

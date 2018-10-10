@@ -9,10 +9,6 @@ import {
 import { List } from 'immutable';
 
 import { actions, formatMessages } from '../redux/modules/discussions';
-import {
-  selectors,
-  actions as invitationFormActions,
-} from '../redux/modules/invitationForm';
 import { toastActions } from 'common';
 
 import { Discussion } from './Discussion';
@@ -31,8 +27,6 @@ const mapStateToProps = (state, props) => {
     currentOpenModals: state.discussions.discussions.currentOpenModals,
     isSmallLayout: state.app.layout.get('size') === 'small',
     pageTitleInterval: state.discussions.discussions.pageTitleInterval,
-    invitationValue: state.discussions.invitationForm.value,
-    invitationButtonEnabled: selectors.submittable(state),
   };
 };
 
@@ -48,7 +42,6 @@ const mapDispatchToProps = {
   createInviteDone: actions.createInviteDone,
   setDiscussionVisibility: actions.setDiscussionVisibility,
   setPageTitleInterval: actions.setPageTitleInterval,
-  send: invitationFormActions.send,
   deleteMessage: actions.deleteMessage,
 };
 
@@ -68,9 +61,6 @@ const handleLeave = ({
   onLeave,
 }) => () => {
   revokeParticipant(discussionId, profile.username, onLeave);
-};
-const send = props => () => {
-  props.send(props.discussion, props.invitationValue);
 };
 
 const handleScrollToTop = ({
@@ -163,7 +153,6 @@ export const DiscussionContainer = compose(
     handleScrollToTop,
     closeCurrent,
     closeAll,
-    send,
     handleLeave,
     deleteMessage,
   }),
