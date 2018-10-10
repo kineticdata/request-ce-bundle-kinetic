@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "./src/index.js",
   "dependencies": {
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.1.3",
     "font-awesome": "^4.7.0",
     "immutable": "4.0.0-rc.9",
     "isarray": "^2.0.2",
