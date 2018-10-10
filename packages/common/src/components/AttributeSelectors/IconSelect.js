@@ -92,6 +92,17 @@ const getSelected = (value, valueMapper, options) =>
     anyMatch(value, valueMapper ? valueMapper(option) : option),
   );
 
+const getIconClass = (value, valueMapper, options) => {
+  if (options) {
+    const selectedOptions = options.filter(option =>
+      anyMatch(value, valueMapper ? valueMapper(option) : option),
+    );
+    return selectedOptions.length > 0 ? selectedOptions[0].icon.id : undefined;
+  } else {
+    return undefined;
+  }
+};
+
 const valueMapper = value => value.icon.id;
 
 export class IconSelect extends React.Component {
@@ -118,6 +129,11 @@ export class IconSelect extends React.Component {
   };
 
   render() {
+    const icon = getIconClass(
+      this.props.value,
+      valueMapper,
+      this.state.options,
+    );
     return (
       this.state.options && (
         <div className="form-group">
@@ -125,21 +141,30 @@ export class IconSelect extends React.Component {
           <small className="form-text text-muted">
             {this.props.description}
           </small>
-          <Typeahead
-            filterBy={filterByCallback}
-            className={this.props.className}
-            multiple={this.props.multiple}
-            options={this.state.options}
-            renderMenu={this.state.renderMenu}
-            renderToken={renderToken}
-            selected={getSelected(
-              this.props.value,
-              valueMapper,
-              this.state.options,
+          <div className="input-group">
+            {icon && (
+              <span className="input-group-addon input-group-prepend">
+                <span className="input-group-text">
+                  <i className={`fa ${icon}`} />
+                </span>
+              </span>
             )}
-            onChange={this.handleChange}
-            placeholder={this.props.placeholder || 'Select an Icon'}
-          />
+            <Typeahead
+              filterBy={filterByCallback}
+              className={this.props.className}
+              multiple={this.props.multiple}
+              options={this.state.options}
+              renderMenu={this.state.renderMenu}
+              renderToken={renderToken}
+              selected={getSelected(
+                this.props.value,
+                valueMapper,
+                this.state.options,
+              )}
+              onChange={this.handleChange}
+              placeholder={this.props.placeholder || 'Select an Icon'}
+            />
+          </div>
         </div>
       )
     );

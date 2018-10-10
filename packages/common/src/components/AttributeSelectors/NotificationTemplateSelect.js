@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Menu,
   Token,
@@ -110,6 +111,24 @@ export class NotificationTemplateSelect extends React.Component {
     });
   };
 
+  templateLocation = () => {
+    if (this.props.value) {
+      const selectedOptions = this.state.options.filter(option =>
+        anyMatch(
+          this.props.value,
+          this.props.valueMapper ? this.props.valueMapper(option) : option,
+        ),
+      );
+      return selectedOptions.length > 0
+        ? `/settings/notifications/templates/${
+            selectedOptions[0].submission.id
+          }`
+        : undefined;
+    } else {
+      return undefined;
+    }
+  };
+
   render() {
     return (
       this.state.options && (
@@ -118,20 +137,29 @@ export class NotificationTemplateSelect extends React.Component {
           <small className="form-text text-muted">
             {this.props.description}
           </small>
-          <Typeahead
-            className={this.props.className}
-            multiple={this.props.multiple}
-            options={this.state.options}
-            renderMenu={this.state.renderMenu}
-            renderToken={renderToken}
-            selected={getSelected(
-              this.props.value,
-              this.props.valueMapper,
-              this.state.options,
+          <div className="input-group">
+            {this.templateLocation() && (
+              <span className="input-group-addon input-group-prepend">
+                <Link className="input-group-text" to={this.templateLocation()}>
+                  View Template
+                </Link>
+              </span>
             )}
-            onChange={this.handleChange}
-            placeholder={this.props.placeholder || 'Select a Team'}
-          />
+            <Typeahead
+              className={this.props.className}
+              multiple={this.props.multiple}
+              options={this.state.options}
+              renderMenu={this.state.renderMenu}
+              renderToken={renderToken}
+              selected={getSelected(
+                this.props.value,
+                this.props.valueMapper,
+                this.state.options,
+              )}
+              onChange={this.handleChange}
+              placeholder={this.props.placeholder || 'Select a Team'}
+            />
+          </div>
         </div>
       )
     );
