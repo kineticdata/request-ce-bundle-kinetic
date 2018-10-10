@@ -7,7 +7,7 @@ import { ScrollHelper } from './ScrollHelper';
 import { ParticipantsHeaderContainer } from './ParticipantsHeader';
 import { ParticipantsDialogContainer } from './ParticipantsDialog';
 import { InvitationDialogContainer } from './InvitationDialog';
-import { DiscussionEditForm } from './DiscussionEditForm';
+import { DiscussionEditDialog } from './DiscussionEditDialog';
 import { VisibilityHelper } from './VisibilityHelper';
 
 export const MessageActionsContext = React.createContext();
@@ -172,7 +172,7 @@ const DiscussionModal = props => {
           />
         </ModalBody>
       ) : currentOpenModals.last() === 'edit' ? (
-        <DiscussionEditForm discussion={discussion} />
+        <DiscussionEditDialog discussion={discussion} />
       ) : (
         <div />
       )}
