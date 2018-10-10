@@ -14,7 +14,10 @@ import { ErrorNotFound } from './components/ErrorNotFound';
 import { ErrorUnauthorized } from './components/ErrorUnauthorized';
 import { ErrorUnexpected } from './components/ErrorUnexpected';
 
-import { selectCurrentKapp } from './redux/modules/common';
+import {
+  selectCurrentKapp,
+  selectCurrentKappSlug,
+} from './redux/modules/common';
 import {
   types as commonTypes,
   actions as commonActions,
@@ -48,6 +51,7 @@ export {
   toastTypes,
   modalFormActions,
   selectCurrentKapp,
+  selectCurrentKappSlug,
   Utils,
   Constants,
   ErrorNotFound,

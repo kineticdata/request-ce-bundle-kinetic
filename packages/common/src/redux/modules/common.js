@@ -19,6 +19,9 @@ export const selectCurrentKapp = state =>
       null
     : null;
 
+// Get Current Kapp Slug
+export const selectCurrentKappSlug = state => state.app.config.kappSlug;
+
 export const types = {
   ...layoutTypes,
 };
