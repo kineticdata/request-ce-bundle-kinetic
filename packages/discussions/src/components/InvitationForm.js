@@ -2,6 +2,7 @@ import React from 'react';
 import { compose, withHandlers, withProps, withState } from 'recompose';
 import { List, Map } from 'immutable';
 import { PeopleSelect } from './PeopleSelect';
+import { connect } from 'react-redux';
 
 export const InvitationFormComponent = props =>
   props.render({
@@ -43,6 +44,8 @@ export const InvitationFormComponent = props =>
     },
   });
 
+const mapStateToProps = state => ({ profile: state.app.profile });
+
 const mapProps = props => ({
   associatedUsers: props.discussions
     ? props.discussion.participants
@@ -50,7 +53,7 @@ const mapProps = props => ({
           props.discussion.invitations.filter(invitation => invitation.user),
         )
         .map(involvement => involvement.user.username)
-    : List(),
+    : List([props.profile.username]),
   associatedEmails: props.discussions
     ? props.discussion.invitations
         .filter(invitation => invitation.email)
@@ -85,6 +88,7 @@ const disabledFn = props => option => {
 };
 
 export const InvitationForm = compose(
+  connect(mapStateToProps),
   withProps(mapProps),
   withState('dirty', 'setDirty', false),
   withState('saving', 'setSaving', false),
