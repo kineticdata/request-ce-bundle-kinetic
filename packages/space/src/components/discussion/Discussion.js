@@ -4,10 +4,10 @@ import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { parse } from 'query-string';
-import { Utils, PageTitle } from 'common';
+import { PageTitle } from 'common';
 import { Discussion as KinopsDiscussion } from 'discussions';
 import { commonActions } from 'common';
-import { SOCKET_STATUS } from 'discussions/src/api/socket';
+import { SOCKET_STAGE } from 'discussions/src/api/socket';
 
 const buildRelatedItemLink = (relatedItem, profile) => {
   let label = relatedItem.type;
@@ -45,7 +45,7 @@ export const DiscussionComponent = ({
   discussionName,
   relatedItems,
   profile,
-  socketStatus,
+  socketStage,
   handleLeave,
   invitationToken,
 }) => (
@@ -59,7 +59,8 @@ export const DiscussionComponent = ({
         )}
     </div>
     {discussionId ? (
-      socketStatus === SOCKET_STATUS.IDENTIFIED ? (
+      socketStage === SOCKET_STAGE.IDENTIFIED ||
+      socketStage === SOCKET_STAGE.RECONNECTING ? (
         <KinopsDiscussion
           discussionId={discussionId}
           invitationToken={invitationToken}
@@ -76,6 +77,8 @@ export const DiscussionComponent = ({
           <h6>
             Real-time connection to server has been interrupted. Please refresh
             and try again.
+            <br />
+            {socketStage}
           </h6>
         </div>
       )
@@ -98,7 +101,7 @@ const mapStateToProps = (state, props) => {
   );
 
   return {
-    socketStatus: state.discussions.socket.status,
+    socketStage: state.discussions.socket.status.stage,
     sidebarOpen: state.app.layout.sidebarOpen,
     profile: state.app.profile,
     discussionId: props.match.params.id,
