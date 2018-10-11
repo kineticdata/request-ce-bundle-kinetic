@@ -22,15 +22,22 @@ export const SOCKET_STATUS = {
   UNIDENTIFIED: 'unidentified',
   IDENTIFIED: 'identified',
 };
+export const SOCKET_STAGE = {
+  CLOSED: 'closed',
+  CONNECTING: 'connecting',
+  RECONNECTING: 'reconnecting',
+  IDENTIFIED: 'connected',
+};
 
 export class Socket {
   constructor(uri) {
     this.uri = uri;
     this.status = SOCKET_STATUS.CLOSED;
+    this.stage = SOCKET_STAGE.CLOSED;
     this.socket = null;
     this.token = '';
     this.ref = 0;
-    this.topics = [];
+    this.topics = {};
     this.eventCallbacks = VALID_EVENTS.reduce((ec, e) => {
       ec[e] = [];
       return ec;
@@ -85,13 +92,20 @@ export class Socket {
   }
 
   topic(topicId, cb) {
+    if (this.topics.hasOwnProperty(topicId)) {
+      console.warn(
+        'The client code attempted to join an already active topic.',
+      );
+      return this.topics[topicId];
+    }
+
     const topic = new Topic(topicId, this, cb);
-    this.topics.push(topic);
+    this.topics[topicId] = topic;
     return topic;
   }
 
   handleReconnect() {
-    console.log('trying to reconnect');
+    console.log('Trying to reconnect...');
     delete this.socket;
     this.doConnect();
   }
@@ -104,7 +118,11 @@ export class Socket {
       this.eventCallbacks.identify.forEach(cb => cb(message));
       // If we were reconnecting...
       if (previousStatus === SOCKET_STATUS.RECONNECTING) {
-        this.topics.forEach(t => t.subscribe());
+        console.log(
+          'Reconnected and identified. Attempting to re-subscribe to topics.',
+          this.topics,
+        );
+        this.forAllTopics(t => t.subscribe());
       }
     };
     // If I've just connected I am connected but not identified.
@@ -139,8 +157,7 @@ export class Socket {
       // If we were connected (e.g. the close isn't due to explicitly requesting
       // the socket to be closed) we should begin the reconnect process.
       this.setStatus(SOCKET_STATUS.RECONNECTING, e);
-      console.log('calling set status');
-      this.topics.forEach(t => t.setStatus(TOPIC_STATUS.reconnecting));
+      this.forAllTopics(t => t.setStatus(TOPIC_STATUS.reconnecting));
       this.reconnectTimer.execute();
     } else if (this.status === SOCKET_STATUS.RECONNECTING) {
       // If we're getting a close event and we're reconnecting that indicates that a
@@ -219,7 +236,7 @@ export class Socket {
         this.receivePresence(message);
       }
       // Delegate it to the relevant topic.
-      const topic = this.topics.find(t => t.id() === message.topic);
+      const topic = this.topics[message.topic];
       if (topic) {
         topic.receive(message);
       }
@@ -240,7 +257,7 @@ export class Socket {
 
   processPresence(op, presenceData) {
     // If it's a standard delta message, fetch the topic
-    const topic = this.topics.find(t => t.id() === presenceData.topic);
+    const topic = this.topics[presenceData.topic];
     if (topic) {
       topic.receivePresence(op, presenceData);
     }
@@ -261,7 +278,23 @@ export class Socket {
   }
 
   setStatus(status, event) {
+    let stage = this.stage;
+    if (status === SOCKET_STATUS.CLOSED) {
+      stage = SOCKET_STAGE.CLOSED;
+    } else if (status === SOCKET_STATUS.CONNECTING) {
+      stage = SOCKET_STAGE.CONNECTING;
+    } else if (status === SOCKET_STATUS.RECONNECTING) {
+      stage = SOCKET_STAGE.RECONNECTING;
+    } else if (status === SOCKET_STATUS.IDENTIFIED) {
+      stage = SOCKET_STAGE.IDENTIFIED;
+    }
+
+    this.stage = stage;
     this.status = status;
-    this.eventCallbacks.status.forEach(cb => cb(status, event));
+    this.eventCallbacks.status.forEach(cb => cb(status, stage, event));
+  }
+
+  forAllTopics(fn) {
+    Object.entries(this.topics).forEach(([_topicId, topic]) => fn(topic));
   }
 }
