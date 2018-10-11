@@ -77,8 +77,6 @@ export const DiscussionComponent = ({
           <h6>
             Real-time connection to server has been interrupted. Please refresh
             and try again.
-            <br />
-            {socketStage}
           </h6>
         </div>
       )
