@@ -30,7 +30,7 @@ import { actions as modalFormActions } from './redux/modules/modalForm';
 
 import * as Utils from './utils';
 import * as Constants from './constants';
-import * as AttributeSelectors from './components/AttributeSelectors';
+import * as AttributeSelectors from './components/attribute_selectors';
 
 export {
   KappLink,

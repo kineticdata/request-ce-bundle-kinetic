@@ -4,7 +4,7 @@ import { KappLink as Link, Icon, selectCurrentKappSlug } from 'common';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 
-import { ServicesSettings } from './servicesSettings/ServicesSettings';
+import { ServicesSettings } from './services_settings/ServicesSettings';
 import { actions } from '../../redux/modules/settingsServices';
 import { FormList } from './forms/FormList';
 import { FormSettings } from './forms/FormSettings';

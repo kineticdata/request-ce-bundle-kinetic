@@ -4,8 +4,8 @@ import {
   validateNotificationOptions,
   processNotificationExits,
 } from './notifications';
-import { Alert } from '../../../src/components/Notifications/Alert';
-import { Confirm } from '../../../src/components/Notifications/Confirm';
+import { Alert } from '../../../src/components/notifications/Alert';
+import { Confirm } from '../../../src/components/notifications/Confirm';
 
 // Ensure the bundle global object exists
 const bundle = typeof window.bundle !== "undefined" ? window.bundle : {};

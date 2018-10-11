@@ -21,7 +21,7 @@ const {
   fetchResponseProfile,
   getResponseAuthentication,
   touchIssuePresence,
-} = require('../../discussion_api');
+} = require('../../discussionApi');
 
 const {
   updateSubmissionDiscussionId,
