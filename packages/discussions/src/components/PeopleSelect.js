@@ -119,7 +119,7 @@ const userCache = new Cache(() =>
   ),
 );
 const teamCache = new Cache(() =>
-  CoreAPI.fetchTeams().then(response =>
+  CoreAPI.fetchTeams({ include: 'memberships' }).then(response =>
     response.teams.map(team => ({
       label: team.name,
       team,

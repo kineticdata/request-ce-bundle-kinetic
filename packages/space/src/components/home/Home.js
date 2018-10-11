@@ -26,6 +26,7 @@ const HomeComponent = ({
   discussionsSearchTerm,
   discussionsSearchInputValue,
   discussionServerUrl,
+  createModalOpen,
   me,
   handleCreateDiscussionButtonClick,
   handleDiscussionSearchInputChange,
@@ -37,7 +38,7 @@ const HomeComponent = ({
 }) => (
   <div className="page-container page-container--space-home">
     <PageTitle parts={['Home']} />
-    <CreateDiscussionModal />
+    {createModalOpen && <CreateDiscussionModal />}
     <div className="page-panel page-panel--space-home">
       <h4 className="space-home-title">Welcome to kinops for {spaceName}</h4>
       {discussionsEnabled ? (
@@ -161,6 +162,7 @@ export const mapStateToProps = state => ({
   discussionsSearchTerm: state.space.spaceApp.discussionsSearchTerm,
   discussionServerUrl: `${bundle.spaceLocation()}/kinetic-response`,
   discussionsEnabled: selectDiscussionsEnabled(state),
+  createModalOpen: state.space.spaceApp.isCreateDiscussionModalOpen,
   me: state.app.profile,
   teams: state.space.teamList.data,
 });

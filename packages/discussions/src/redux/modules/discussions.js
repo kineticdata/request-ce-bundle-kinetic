@@ -9,6 +9,7 @@ export const types = {
   ADD_DISCUSSION: namespace('discussions', 'ADD_DISCUSSION'),
   LEAVE_DISCUSSION: namespace('discussions', 'LEAVE_DISCUSSION'),
   CREATE_DISCUSSION: namespace('discussion', 'CREATE_DISCUSSION'),
+  UPDATE_DISCUSSION: namespace('discussion', 'UPDATE_DISCUSSION'),
   CREATE_INVITE: namespace('discussions', 'CREATE_INVITE'),
   CREATE_INVITE_DONE: namespace('discussions', 'CREATE_INVITE_DONE'),
   CREATE_INVITE_ERROR: namespace('discussions', 'CREATE_INVITE_ERROR'),
@@ -62,7 +63,7 @@ export const types = {
 export const actions = {
   joinDiscussion: withPayload(types.JOIN_DISCUSSION, 'id', 'invitationToken'),
   addDiscussion: withPayload(types.ADD_DISCUSSION),
-
+  updateDiscussion: withPayload(types.UPDATE_DISCUSSION),
   leaveDiscussion: withPayload(types.LEAVE_DISCUSSION),
   // API-bsased actions.
   createDiscussion: ({
@@ -198,6 +199,7 @@ export const Discussion = Record({
   id: '',
   invitations: List(),
   isPrivate: false,
+  joinPolicy: null,
   messages: Messages(),
   milestone: 0,
   owningTeams: List(),
@@ -288,10 +290,14 @@ export const reducer = (state = State(), { type, payload }) => {
         ? state
         : state.setIn(['discussions', payload.id], Discussion());
     case types.ADD_DISCUSSION:
+    case types.UPDATE_DISCUSSION:
       return state.updateIn(['discussions', payload.id], discussion =>
         discussion.mergeWith(
           (prev, next, key) =>
-            ['topic', 'presences'].includes(key) ? prev : next,
+            ['topic', 'presences'].includes(key) ||
+            (type === types.UPDATE_DISCUSSION && key === 'messages')
+              ? prev
+              : next,
           newDiscussion(payload),
         ),
       );

@@ -56,35 +56,6 @@ export function* deleteAlertSaga(action) {
   }
 }
 
-export function* createDiscussionSaga({ payload }) {
-  const token = yield select(selectToken);
-  const { error, discussion } = yield call(DiscussionAPI.createDiscussion, {
-    title: payload.title,
-    description: payload.description || payload.title,
-    token,
-  });
-
-  if (error) {
-    yield put(actions.setDiscussionsError(error));
-  } else {
-    // Invite members to discussion
-    if (payload.members) {
-      const invites = payload.members.split(',').map(i => i.trim());
-      yield all(
-        invites.map(invite =>
-          call(
-            DiscussionAPI.createInvite,
-            discussion.id,
-            invite,
-            payload.description,
-          ),
-        ),
-      );
-    }
-    yield put(push(`/discussions/${discussion.id}`));
-  }
-}
-
 export function* fetchRecentDiscussionsSaga() {
   const token = yield select(selectToken);
 
@@ -119,6 +90,5 @@ export function* watchSpaceApp() {
     [types.FETCH_DISCUSSIONS, types.SET_DISCUSSIONS_SEARCH_TERM],
     fetchRecentDiscussionsSaga,
   );
-  yield takeEvery(types.CREATE_DISCUSSION, createDiscussionSaga);
   yield takeEvery(types.DELETE_ALERT, deleteAlertSaga);
 }

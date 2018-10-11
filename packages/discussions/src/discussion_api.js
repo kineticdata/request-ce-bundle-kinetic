@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { bundle } from 'react-kinetic-core';
+import { List } from 'immutable';
 
 export const DEFAULT_MESSAGE_LIMIT = 25;
 export const DEFAULT_DISCUSSION_LIMIT = 10;
@@ -159,7 +160,7 @@ export const fetchInvites = (id, token) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const createInvite = ({ discussionId, type, value, token }) =>
+export const createInvite = ({ discussionId, type, value, token, message }) =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${discussionId}/invitations`,
@@ -167,7 +168,7 @@ export const createInvite = ({ discussionId, type, value, token }) =>
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      data: { [type]: value },
+      data: { [type]: value, message },
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
@@ -232,3 +233,32 @@ export const createRelatedItem = (id, relatedItem, token) =>
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
+
+export const sendInvites = (token, discussion, values) => {
+  const participants = discussion.participants || List();
+  const invitations = discussion.invitations || List();
+  const existingUsernames = participants
+    .concat(invitations)
+    .filter(involvement => involvement.user)
+    .map(involvement => involvement.user.username);
+  const existingEmails = invitations.map(invitation => invitation.email);
+
+  return Promise.all(
+    values.invitees
+      .flatMap(item => (item.team ? item.team.memberships : [item]))
+      .map(item => ({
+        token,
+        discussionId: discussion.id,
+        type: item.user ? 'username' : 'email',
+        value: item.user ? item.user.username : item.label,
+        message: values.message,
+      }))
+      .filter(
+        args =>
+          args.type === 'username'
+            ? !existingUsernames.contains(args.value)
+            : !existingEmails.contains(args.value),
+      )
+      .map(createInvite),
+  );
+};

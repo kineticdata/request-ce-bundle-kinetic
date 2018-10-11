@@ -1,13 +1,13 @@
-import React, { Fragment } from 'react';
-import { Modal, ModalBody, ModalFooter } from 'reactstrap';
+import React from 'react';
+import { Modal, ModalBody } from 'reactstrap';
 import { LoadMoreMessages } from './LoadMoreMessagesContainer';
 import { MessagesDateContainer } from './MessagesDate';
 import { ChatInputForm } from './ChatInputForm';
 import { ScrollHelper } from './ScrollHelper';
 import { ParticipantsHeaderContainer } from './ParticipantsHeader';
 import { ParticipantsDialogContainer } from './ParticipantsDialog';
-import { InvitationDialogContainer } from './InvitationDialog';
-import { DiscussionEditForm } from './DiscussionEditForm';
+import { InvitationDialog } from './InvitationDialog';
+import { DiscussionEditDialog } from './DiscussionEditDialog';
 import { VisibilityHelper } from './VisibilityHelper';
 
 export const MessageActionsContext = React.createContext();
@@ -87,8 +87,6 @@ const DiscussionModal = props => {
     closeCurrent,
     closeAll,
     // createDiscussion,
-    send,
-    invitationButtonEnabled,
     participantsAndInvites,
     // isSmallLayout,
     isModal,
@@ -140,25 +138,10 @@ const DiscussionModal = props => {
           <ParticipantsDialogContainer discussion={discussion} />
         </ModalBody>
       ) : currentOpenModals.last() === 'invitation' ? (
-        <Fragment>
-          <ModalBody>
-            <InvitationDialogContainer
-              discussion={discussion}
-              send={send}
-              participantsAndInvites={participantsAndInvites}
-            />
-          </ModalBody>
-          <ModalFooter>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={send}
-              disabled={!invitationButtonEnabled}
-            >
-              Send Invite
-            </button>
-          </ModalFooter>
-        </Fragment>
+        <InvitationDialog
+          discussion={discussion}
+          participantsAndInvites={participantsAndInvites}
+        />
       ) : currentOpenModals.last() === 'discussion' ? (
         <ModalBody className="kinops-discussions-modal-body">
           <Messages {...props} />
@@ -172,7 +155,7 @@ const DiscussionModal = props => {
           />
         </ModalBody>
       ) : currentOpenModals.last() === 'edit' ? (
-        <DiscussionEditForm discussion={discussion} />
+        <DiscussionEditDialog discussion={discussion} />
       ) : (
         <div />
       )}

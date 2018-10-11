@@ -27,7 +27,6 @@ export const types = {
     'app',
     'SET_DISCUSSIONS_SEARCH_INPUT_VALUE',
   ),
-  CREATE_DISCUSSION: namespace('app', 'CREATE_DISCUSSION'),
   DELETE_ALERT: namespace('app', 'DELETE_ALERT'),
   SET_SETTINGS_BACK_PATH: namespace('app', 'SET_SETTINGS_BACK_PATH'),
 };
@@ -51,7 +50,6 @@ export const actions = {
   setDiscussionsSearchInputValue: withPayload(
     types.SET_DISCUSSIONS_SEARCH_INPUT_VALUE,
   ),
-  createDiscussion: withPayload(types.CREATE_DISCUSSION),
   deleteAlert: withPayload(types.DELETE_ALERT),
   setSettingsBackPath: withPayload(types.SET_SETTINGS_BACK_PATH),
 };
