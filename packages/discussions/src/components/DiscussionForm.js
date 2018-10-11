@@ -24,6 +24,7 @@ export class DiscussionForm extends React.Component {
             owningUsers: [],
             owningTeams: [],
           },
+      touched: {},
       dirty: false,
       saving: false,
       securityPolicyDefinitions: [],
@@ -75,6 +76,14 @@ export class DiscussionForm extends React.Component {
     }));
   };
 
+  handleBlur = event => {
+    const field = event.target.id;
+    this.setState(state => ({
+      ...state,
+      touched: { ...state.touched, [field]: true },
+    }));
+  };
+
   handleJoinPolicyChange = event => {
     const name = event.target.value;
     this.setState(state => ({
@@ -91,7 +100,7 @@ export class DiscussionForm extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <div
             className={`form-group required ${
-              validations.title ? 'has-error' : ''
+              validations.title && this.state.touched.title ? 'has-error' : ''
             }`}
           >
             <label htmlFor="title">Title</label>
@@ -100,10 +109,12 @@ export class DiscussionForm extends React.Component {
               type="text"
               value={this.state.values.title}
               onChange={this.handleChange}
+              onBlur={this.handleBlur}
             />
-            {validations.title && (
-              <p className="text-danger">{validations.title}</p>
-            )}
+            {validations.title &&
+              this.state.touched.title && (
+                <p className="text-danger">{validations.title}</p>
+              )}
           </div>
           <div className="form-group">
             <label htmlFor="description">Description</label>
