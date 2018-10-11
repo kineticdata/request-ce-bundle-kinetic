@@ -189,8 +189,8 @@ class ChatInput extends Component {
           >
             {this.props.replyMessage && (
               <PopoverBody>
-                <i className="fa fa-fw fa-reply" />
-                In reply to {this.props.replyMessage.createdBy.displayName}
+                &#x21AA; In reply to{' '}
+                {this.props.replyMessage.createdBy.displayName}
               </PopoverBody>
             )}
           </Popover>
@@ -214,10 +214,7 @@ class ChatInput extends Component {
                   <img
                     src={this.state.fileAttachment.preview}
                     alt={this.state.fileAttachment.name}
-                    style={{
-                      width: '24px',
-                      height: '24px',
-                    }}
+                    style={{ width: '24px', height: '24px' }}
                   />
                 )}
                 <span style={{ flex: '1', marginLeft: '0.5em' }}>
