@@ -1,6 +1,6 @@
 import { Record } from 'immutable';
 import { Utils } from 'common';
-import { SOCKET_STATUS } from '../../api/socket';
+import { SOCKET_STATUS, SOCKET_STAGE } from '../../api/socket';
 import { types as authTypes } from 'app/src/redux/modules/auth';
 const { namespace, withPayload } = Utils;
 
@@ -25,7 +25,7 @@ export const actions = {
 };
 
 export const State = Record({
-  status: SOCKET_STATUS.CLOSED,
+  status: { status: SOCKET_STATUS.CLOSED, stage: SOCKET_STAGE.CLOSED },
   token: null,
 });
 

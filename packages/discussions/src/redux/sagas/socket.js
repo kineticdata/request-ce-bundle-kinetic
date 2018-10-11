@@ -30,8 +30,8 @@ export function* incomingSocketEvents(socketChannel, socket) {
 
 export function registerSocketChannel(socket) {
   return eventChannel(emit => {
-    socket.on('status', (status, _e) =>
-      emit({ action: 'status', payload: status }),
+    socket.on('status', (status, stage, _e) =>
+      emit({ action: 'status', payload: { status, stage } }),
     );
 
     return () => {
