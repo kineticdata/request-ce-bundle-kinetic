@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { bundle } from 'react-kinetic-core';
+import { List } from 'immutable';
 
 export const DEFAULT_MESSAGE_LIMIT = 25;
 export const DEFAULT_DISCUSSION_LIMIT = 10;
@@ -234,13 +235,13 @@ export const createRelatedItem = (id, relatedItem, token) =>
     .catch(response => ({ error: response }));
 
 export const sendInvites = (token, discussion, values) => {
-  const existingUsernames = discussion.participants
-    .concat(discussion.invitations)
+  const participants = discussion.participants || List();
+  const invitations = discussion.invitations || List();
+  const existingUsernames = participants
+    .concat(invitations)
     .filter(involvement => involvement.user)
     .map(involvement => involvement.user.username);
-  const existingEmails = discussion.invitations.map(
-    invitation => invitation.email,
-  );
+  const existingEmails = invitations.map(invitation => invitation.email);
 
   return Promise.all(
     values.invitees

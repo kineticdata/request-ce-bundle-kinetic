@@ -1,6 +1,6 @@
 import React from 'react';
 import { compose, withHandlers, withProps, withState } from 'recompose';
-import { Map } from 'immutable';
+import { List, Map } from 'immutable';
 import { PeopleSelect } from './PeopleSelect';
 
 export const InvitationFormComponent = props =>
@@ -44,12 +44,18 @@ export const InvitationFormComponent = props =>
   });
 
 const mapProps = props => ({
-  associatedUsers: props.discussion.participants
-    .concat(props.discussion.invitations.filter(invitation => invitation.user))
-    .map(involvement => involvement.user.username),
-  associatedEmails: props.discussion.invitations
-    .filter(invitation => invitation.email)
-    .map(invitation => invitation.email),
+  associatedUsers: props.discussions
+    ? props.discussion.participants
+        .concat(
+          props.discussion.invitations.filter(invitation => invitation.user),
+        )
+        .map(involvement => involvement.user.username)
+    : List(),
+  associatedEmails: props.discussions
+    ? props.discussion.invitations
+        .filter(invitation => invitation.email)
+        .map(invitation => invitation.email)
+    : List(),
 });
 
 const handleChange = props => event => {

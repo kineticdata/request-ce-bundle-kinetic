@@ -7,14 +7,23 @@ export class DiscussionForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      values: {
-        title: props.discussion.title,
-        description: props.discussion.description,
-        isPrivate: props.discussion.isPrivate,
-        joinPolicy: props.discussion.joinPolicy,
-        owningUsers: props.discussion.owningUsers.toJS(),
-        owningTeams: props.discussion.owningTeams.toJS(),
-      },
+      values: props.discussion
+        ? {
+            title: props.discussion.title,
+            description: props.discussion.description,
+            isPrivate: props.discussion.isPrivate,
+            joinPolicy: props.discussion.joinPolicy,
+            owningUsers: props.discussion.owningUsers.toJS(),
+            owningTeams: props.discussion.owningTeams.toJS(),
+          }
+        : {
+            title: '',
+            description: '',
+            isPrivate: false,
+            joinPolicy: '',
+            owningUsers: [],
+            owningTeams: [],
+          },
       dirty: false,
       saving: false,
       securityPolicyDefinitions: [],
