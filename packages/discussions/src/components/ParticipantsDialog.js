@@ -36,11 +36,17 @@ export const ParticipantsDialog = props => (
             <li key={i.user.username}>
               <Avatar size={26} round email={i.user.email} />
               {i.user.displayName} <span className="subtext">invited</span>
+              <span className="subtext">
+                (<span className="text-danger">send a reminder?</span>)
+              </span>
             </li>
           ) : (
             <li key={i.email}>
               <Avatar size={26} round email={i.email} />
               {i.email} <span className="subtext">invited</span>
+              <span className="subtext">
+                (<span className="text-danger">send a reminder?</span>)
+              </span>
             </li>
           ),
       )}
