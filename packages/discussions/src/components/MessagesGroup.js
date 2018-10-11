@@ -113,12 +113,13 @@ export const TextMessage = ({ message }) => (
 export const Message = ({ message }) => (
   <div className={`message ${editedClass(message)}`}>
     <TextMessage message={message} />
-    {message.parent && (
-      <div className="parent-message">
-        <Message message={message.parent} />
-        <small>&mdash; {message.parent.createdBy.displayName}</small>
-      </div>
-    )}
+    {message.parent &&
+      message.parent.unknown !== true && (
+        <div className="parent-message">
+          <Message message={message.parent} />
+          <small>&mdash; {message.parent.createdBy.displayName}</small>
+        </div>
+      )}
   </div>
 );
 
