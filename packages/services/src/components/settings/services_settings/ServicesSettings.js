@@ -42,13 +42,13 @@ export const SettingsComponent = ({
           <h2 className="section__title">Display Options</h2>
           <div className="form-group">
             <label>Kapp Name</label>
-            <small>The Name of the Kapp Referenced Throughout the Kapp</small>
             <input
               type="text"
               className="form-control"
               value={kappName}
               onChange={handleNameChange}
             />
+            <small>The Name of the Kapp Referenced Throughout the Kapp</small>
           </div>
           {attributesMap.has('Icon') && (
             <AttributeSelectors.IconSelect

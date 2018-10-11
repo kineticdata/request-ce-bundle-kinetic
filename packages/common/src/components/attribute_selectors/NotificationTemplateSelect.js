@@ -134,9 +134,6 @@ export class NotificationTemplateSelect extends React.Component {
       this.state.options && (
         <div className="form-group">
           <label>{this.props.label}</label>
-          <small className="form-text text-muted">
-            {this.props.description}
-          </small>
           <div className="input-group">
             {this.templateLocation() && (
               <span className="input-group-addon input-group-prepend">
@@ -160,6 +157,9 @@ export class NotificationTemplateSelect extends React.Component {
               placeholder={this.props.placeholder || 'Select a Team'}
             />
           </div>
+          <small className="form-text text-muted">
+            {this.props.description}
+          </small>
         </div>
       )
     );

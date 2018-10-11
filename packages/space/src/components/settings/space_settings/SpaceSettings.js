@@ -40,15 +40,15 @@ export const SettingsComponent = ({
             <h2 className="section__title">Display Options</h2>
             <div className="form-group">
               <label>Space Name</label>
-              <small>
-                The Name of the Space Referenced Throughout the System
-              </small>
               <input
                 type="text"
                 className="form-control"
                 value={spaceName}
                 onChange={handleNameChange}
               />
+              <small>
+                The Name of the Space Referenced Throughout the System
+              </small>
             </div>
             {attributesMap.has('Default Kapp Display') && (
               <AttributeSelectors.KappSelect

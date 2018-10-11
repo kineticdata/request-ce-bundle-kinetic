@@ -106,9 +106,7 @@ export class TeamSelect extends React.Component {
       this.state.options && (
         <div className="form-group">
           <label>{this.props.label}</label>
-          <small className="form-text text-muted">
-            {this.props.description}
-          </small>
+
           <Typeahead
             className={this.props.className}
             multiple={this.props.multiple}
@@ -123,6 +121,9 @@ export class TeamSelect extends React.Component {
             onChange={this.handleChange}
             placeholder={this.props.placeholder || 'Select a Team'}
           />
+          <small className="form-text text-muted">
+            {this.props.description}
+          </small>
         </div>
       )
     );

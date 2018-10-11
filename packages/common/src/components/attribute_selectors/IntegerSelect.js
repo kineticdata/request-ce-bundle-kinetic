@@ -19,7 +19,6 @@ export class IntegerSelect extends React.Component {
     return (
       <div className="form-group">
         <label>{this.props.label}</label>
-        <small className="form-text text-muted">{this.props.description}</small>
         <input
           className={this.props.className || 'form-control'}
           name={this.props.name}
@@ -28,6 +27,7 @@ export class IntegerSelect extends React.Component {
           onChange={this.handleChange}
           placeholder={this.props.placeholder || 'Select a Number'}
         />
+        <small className="form-text text-muted">{this.props.description}</small>
       </div>
     );
   }

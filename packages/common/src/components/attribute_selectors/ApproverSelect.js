@@ -248,9 +248,7 @@ export class ApproverSelect extends React.Component {
       this.state.options && (
         <div className="form-group">
           <label>{this.props.label}</label>
-          <small className="form-text text-muted">
-            {this.props.description}
-          </small>
+
           <Typeahead
             options={this.state.options}
             renderMenu={this.state.renderMenu}
@@ -263,6 +261,9 @@ export class ApproverSelect extends React.Component {
             onChange={this.handleChange}
             placeholder={this.props.placeholder}
           />
+          <small className="form-text text-muted">
+            {this.props.description}
+          </small>
         </div>
       )
     );
