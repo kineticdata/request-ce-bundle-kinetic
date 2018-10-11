@@ -431,10 +431,19 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.updateIn(
         ['discussions', payload.id, 'messages', 'items'],
         items =>
-          items.map(
-            message =>
-              message.id === payload.message.id ? payload.message : message,
-          ),
+          // If the update is for a message we have, update it.
+          items
+            .map(
+              message =>
+                message.id === payload.message.id ? payload.message : message,
+            )
+            // If the update is for a parent of a message we have, update the parent.
+            .map(message => {
+              if (message.parent && message.parent.id === payload.message.id) {
+                message.parent = payload.message;
+              }
+              return message;
+            }),
       );
     case types.REMOVE_MESSAGE:
       return state.updateIn(
