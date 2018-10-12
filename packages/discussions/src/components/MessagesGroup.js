@@ -115,8 +115,16 @@ export const Message = ({ message }) => (
     <TextMessage message={message} />
     {message.parent && (
       <div className="parent-message">
-        <Message message={message.parent} />
-        <small>&mdash; {message.parent.createdBy.displayName}</small>
+        {message.parent.unknown ? (
+          <div className="message message-missing">(Message missing)</div>
+        ) : (
+          <Fragment>
+            <Message message={message.parent} />
+            <small>
+              &mdash; {message.parent.createdBy.displayName || 'Unknown'}
+            </small>
+          </Fragment>
+        )}
       </div>
     )}
   </div>
