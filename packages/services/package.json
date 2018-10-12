@@ -16,7 +16,7 @@
     "react-popper": "^0.8.2",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
-    "reactstrap": "^5.0.0",
+    "reactstrap": "^6.5.0",
     "recompose": "^0.24.0",
     "redux": "^3.7.2",
     "redux-saga": "^0.15.6",
