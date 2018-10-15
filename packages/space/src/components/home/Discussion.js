@@ -40,7 +40,7 @@ const RelatedItemBadge = ({ discussion }) => {
   return <span />;
 };
 
-export const Discussion = ({ discussion, me, discussionServerUrl, teams }) => {
+export const Discussion = ({ discussion, me, teams }) => {
   const displayableMessages = discussion
     ? discussion.messages.items.filter(m => m.type !== 'System').slice(-1)
     : [];
@@ -75,7 +75,6 @@ export const Discussion = ({ discussion, me, discussionServerUrl, teams }) => {
             discussion={discussion}
             messages={messages}
             profile={me}
-            discussionServerUrl={discussionServerUrl}
           />
         )}
       </div>

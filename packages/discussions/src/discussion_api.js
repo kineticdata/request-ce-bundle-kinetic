@@ -7,23 +7,45 @@ export const DEFAULT_DISCUSSION_LIMIT = 10;
 
 const baseUrl = () => `${bundle.spaceLocation()}/app/discussions`;
 
-export const sendMessage = (params, token) =>
-  axios.request({
-    url: `${baseUrl()}/api/v1/discussions/${params.id}/messages`,
-    method: 'post',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    data: {
-      content: [
-        {
-          type: 'text',
-          value: params.message,
-        },
-      ],
-      ...(params.parentId ? { parent: { id: params.parentId } } : {}),
-    },
-  });
+export const sendMessage = (params, token) => {
+  const message = {
+    content: [
+      {
+        type: 'text',
+        value: params.message,
+      },
+    ],
+    ...(params.parentId ? { parent: { id: params.parentId } } : {}),
+  };
+
+  if (params.attachment) {
+    const formData = new FormData();
+    formData.append('message', JSON.stringify(message));
+    params.attachment.forEach(attachment => {
+      formData.append('attachments', attachment);
+    });
+    // formData.append('attachments', params.attachment);
+
+    axios.request({
+      url: `${baseUrl()}/api/v1/discussions/${params.id}/messages`,
+      method: 'post',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+      data: formData,
+    });
+  } else {
+    return axios.request({
+      url: `${baseUrl()}/api/v1/discussions/${params.id}/messages`,
+      method: 'post',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: message,
+    });
+  }
+};
 
 export const updateMessage = (params, token) =>
   axios.request({

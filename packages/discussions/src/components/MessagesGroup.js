@@ -9,86 +9,6 @@ import { ParticipantCard } from './ParticipantCard';
 import { Hoverable } from 'common';
 import { MessageActionsContext } from './Discussion';
 
-const AVAILABLE_ICONS = [
-  'avi',
-  'excel',
-  'html',
-  'illustrator',
-  'movie',
-  'indesign',
-  'mpeg',
-  'pdf',
-  'photoshop',
-  'powerpoint',
-  'txt',
-  'unknown',
-  'word',
-];
-
-const getUploadImage = (message, discussionServerUrl) => {
-  if (
-    message.messageable.file_processing ||
-    message.messageable.file_processing === null
-  ) {
-    return `${discussionServerUrl}/assets/images/loader.gif`;
-  }
-
-  if (message.messageable.file_content_type.startsWith('image')) {
-    return `${discussionServerUrl}${message.url}`;
-  }
-
-  let iconType = message.messageable.file_content_type.split('/')[1];
-
-  if (AVAILABLE_ICONS.indexOf(iconType) !== -1) {
-    return `${discussionServerUrl}/assets/images/${iconType}_128.png`;
-  }
-
-  return `${discussionServerUrl}/assets/images/unknown_128.png`;
-};
-
-const getUploadLink = (message, discussionServerUrl) => {
-  if (
-    message.messageable.file_processing ||
-    message.messageable.file_processing === null
-  ) {
-    return '';
-  }
-
-  return `${discussionServerUrl}${message.url}`;
-};
-
-export const UploadMessage = ({
-  message,
-  messageOwner,
-  discussionServerUrl,
-}) => (
-  <div className={`message message-upload message-${messageOwner} img-fluid`}>
-    <a
-      className="upload-image"
-      href={getUploadLink(message, discussionServerUrl)}
-      target="_blank"
-    >
-      <img
-        src={getUploadImage(message, discussionServerUrl)}
-        alt={
-          message.messageable.description || message.messageable.file_file_name
-        }
-      />
-    </a>
-    {!message.messageable.file_content_type.startsWith('image') && (
-      <div className="upload-filename">
-        <small>{message.messageable.file_file_name}</small>
-      </div>
-    )}
-    {message.messageable.description !== null &&
-      message.messageable.description !== '' && (
-        <div className="upload-description">
-          {message.messageable.description}
-        </div>
-      )}
-  </div>
-);
-
 export const produceContent = message =>
   message.content.reduce((content, token) => {
     switch (token.type) {
@@ -96,6 +16,8 @@ export const produceContent = message =>
         return `${content}${token.value.name}`;
       case 'user':
         return `${content}${token.value.displayName}`;
+      case 'attachment':
+        return content;
       case 'unknownUser':
         return 'an unknown user';
       default:
@@ -106,38 +28,96 @@ export const produceContent = message =>
 const editedClass = message =>
   message.createdAt !== message.updatedAt ? 'edited' : '';
 
-export const TextMessage = ({ message }) => (
-  <Markdown source={produceContent(message)} skipHtml />
+const SUPPORTED_IMAGE_MIMES = [
+  'image/gif',
+  'image/png',
+  'image/jpeg',
+  'image/bmp',
+  'image/webp',
+  'image/x-icon',
+  'image/vnd.microsoft.icon',
+];
+
+const attachmentUrl = (discussion, message, attachment, thumbnail = false) =>
+  `${bundle.spaceLocation()}/app/discussions/api/v1/discussions/${
+    discussion.id
+  }/messages/${message.id}/files/${
+    thumbnail ? attachment.thumbnailId : attachment.documentId
+  }/${encodeURIComponent(attachment.filename.replace(/ /g, '_'))}`;
+
+const formatFileSize = fileSize => {
+  if (fileSize < 1024) return fileSize + ' bytes';
+  else if (fileSize < 1048576) return (fileSize / 1024).toFixed(2) + ' kb';
+  else if (fileSize < 1073741824)
+    return (fileSize / 1048576).toFixed(2) + ' mb';
+  else return (fileSize / 1073741824).toFixed(2) + ' gb';
+};
+
+export const TextMessage = ({ discussion, message }) => (
+  <Fragment>
+    <Markdown source={produceContent(message)} skipHtml />
+    {message.content.filter(c => c.type === 'attachment').map(attachment => (
+      <div
+        key={attachment.value.documentId}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          paddingBottom: '0.5em',
+        }}
+      >
+        <a
+          href={attachmentUrl(discussion, message, attachment.value)}
+          target="_blank"
+        >
+          {SUPPORTED_IMAGE_MIMES.includes(attachment.value.contentType) ? (
+            <img
+              src={attachmentUrl(discussion, message, attachment.value, true)}
+              alt={attachment.value.filename}
+            />
+          ) : (
+            <span>
+              {attachment.value.filename}{' '}
+              <small>
+                (<em>{formatFileSize(attachment.value.size)}</em>)
+              </small>
+            </span>
+          )}
+        </a>
+        {SUPPORTED_IMAGE_MIMES.includes(attachment.value.contentType) && (
+          <small>
+            {attachment.value.filename} (<em>
+              {formatFileSize(attachment.value.size)}
+            </em>)
+          </small>
+        )}
+      </div>
+    ))}
+  </Fragment>
 );
 
-export const Message = ({ message }) => (
+export const Message = ({ discussion, message }) => (
   <div className={`message ${editedClass(message)}`}>
-    <TextMessage message={message} />
+    <TextMessage discussion={discussion} message={message} />
     {message.parent &&
       message.parent.unknown !== true && (
         <div className="parent-message">
-          <Message message={message.parent} />
+          <Message discussion={discussion} message={message.parent} />
           <small>&mdash; {message.parent.createdBy.displayName}</small>
         </div>
       )}
   </div>
 );
 
-export const MessageBubble = ({ message }) => (
+export const MessageBubble = ({ discussion, message }) => (
   <div className="message-bubble">
-    <Message message={message} />
+    <Message discussion={discussion} message={message} />
   </div>
 );
 
 const getParticipant = (discussion, createdBy) =>
   discussion.participants.find(p => p.user.username === createdBy.username);
 
-export const MessagesGroup = ({
-  discussion,
-  messages,
-  profile,
-  discussionServerUrl,
-}) => (
+export const MessagesGroup = ({ discussion, messages, profile }) => (
   <MessageActionsContext.Consumer>
     {actions => (
       <div
@@ -169,80 +149,56 @@ export const MessagesGroup = ({
           </Hoverable>
         )}
         <div className="message-list">
-          {messages.map(
-            message =>
-              message.messageable_type === 'Upload' ? (
-                <div key={message.id} className="message-list-item">
-                  <UploadMessage
-                    message={message}
-                    discussionServerUrl={discussionServerUrl}
-                    messageOwner={
-                      messages.first().createdBy.username === profile.username
-                        ? 'mine'
-                        : 'other'
-                    }
-                  />
-                </div>
-              ) : (
-                <div
-                  key={message.id}
-                  className={`message-list-item ${
-                    actions && actions.editMessageId === message.id
-                      ? 'editing'
-                      : ''
-                  } ${
-                    actions &&
-                    actions.replyMessage &&
-                    actions.replyMessage.id === message.id
-                      ? 'replying'
-                      : ''
-                  }`}
-                >
-                  {actions &&
-                    (messages.first().createdBy.username ===
-                    profile.username ? (
-                      <ul className="actions meta">
-                        <li>
-                          <a
-                            role="button"
-                            onClick={() => actions.reply(message)}
-                          >
-                            Reply
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            role="button"
-                            onClick={() => actions.editMessage(message)}
-                          >
-                            Edit
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            role="button"
-                            onClick={() => actions.deleteMessage(message)}
-                          >
-                            Delete
-                          </a>
-                        </li>
-                      </ul>
-                    ) : (
-                      <ul className="actions meta">
-                        <li>
-                          <a
-                            role="button"
-                            onClick={() => actions.reply(message)}
-                          >
-                            Reply
-                          </a>
-                        </li>
-                      </ul>
-                    ))}
-                  <MessageBubble message={message} />
-                </div>
-              ),
-          )}
+          {messages.map(message => (
+            <div
+              key={message.id}
+              className={`message-list-item ${
+                actions && actions.editMessageId === message.id ? 'editing' : ''
+              } ${
+                actions &&
+                actions.replyMessage &&
+                actions.replyMessage.id === message.id
+                  ? 'replying'
+                  : ''
+              }`}
+            >
+              {actions &&
+                (messages.first().createdBy.username === profile.username ? (
+                  <ul className="actions meta">
+                    <li>
+                      <a role="button" onClick={() => actions.reply(message)}>
+                        Reply
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        role="button"
+                        onClick={() => actions.editMessage(message)}
+                      >
+                        Edit
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        role="button"
+                        onClick={() => actions.deleteMessage(message)}
+                      >
+                        Delete
+                      </a>
+                    </li>
+                  </ul>
+                ) : (
+                  <ul className="actions meta">
+                    <li>
+                      <a role="button" onClick={() => actions.reply(message)}>
+                        Reply
+                      </a>
+                    </li>
+                  </ul>
+                ))}
+              <MessageBubble discussion={discussion} message={message} />
+            </div>
+          ))}
           <div className="meta">
             <span className="author">
               {messages.last().createdBy.username === profile.username

@@ -27,6 +27,49 @@ const VALID_IMG_TYPES = [
 const canShowPreview = file =>
   file.preview && VALID_IMG_TYPES.includes(file.type);
 
+const UploadCard = ({ attachment, handleAttachmentCancel }) => (
+  <div
+    className="icon-wrapper"
+    style={{
+      display: 'flex',
+      backgroundColor: '#fff',
+      height: '24px',
+      minWidth: '96px',
+      maxWidth: '182px',
+      color: '#54698D',
+      fontSize: '10px',
+      lineHeight: '12px',
+      marginBottom: '0.5em',
+      marginRight: '0.5em',
+    }}
+  >
+    {canShowPreview(attachment) && (
+      <img
+        src={attachment.preview}
+        alt={attachment.name}
+        style={{
+          width: '24px',
+          height: '24px',
+        }}
+      />
+    )}
+    <span style={{ flex: '1', marginLeft: '0.5em' }}>{attachment.name}</span>
+    <button
+      className="btn btn-icon"
+      type="button"
+      style={{
+        width: '24px',
+        height: '24px',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+      onClick={handleAttachmentCancel(attachment)}
+    >
+      <i className="fa fa-fw fa-times" />
+    </button>
+  </div>
+);
+
 class ChatInput extends Component {
   constructor(props) {
     super(props);
@@ -34,7 +77,7 @@ class ChatInput extends Component {
     this.state = {
       chatInput: '',
       actionsOpen: false,
-      fileAttachment: null,
+      fileAttachments: [],
     };
 
     this.handleSendChatMessage = this.handleSendChatMessage.bind(this);
@@ -42,7 +85,6 @@ class ChatInput extends Component {
     this.handleChatInput = this.handleChatInput.bind(this);
     this.handleAttachmentDrop = this.handleAttachmentDrop.bind(this);
     this.handleAttachmentClick = this.handleAttachmentClick.bind(this);
-    this.handleAttachmentCancel = this.handleAttachmentCancel.bind(this);
     this.handleDropzoneRef = this.handleDropzoneRef.bind(this);
     this.isChatInputInvalid = this.isChatInputInvalid.bind(this);
     this.toggleActionsOpen = this.toggleActionsOpen.bind(this);
@@ -62,20 +104,20 @@ class ChatInput extends Component {
         this.props.discussion.id,
         this.props.editMessageId,
         this.state.chatInput,
-        this.state.fileAttachment,
+        this.state.fileAttachments,
       );
     } else {
       this.props.sendMessage(
         this.props.discussion.id,
         this.state.chatInput,
-        this.state.fileAttachment,
+        this.state.fileAttachments,
         this.props.replyMessage && this.props.replyMessage.id,
       );
       if (this.props.replyMessage) {
         this.props.setReplyMessage(null);
       }
     }
-    this.setState({ chatInput: '', fileAttachment: null });
+    this.setState({ chatInput: '', fileAttachments: [] });
   }
 
   handleChatHotKey({ nativeEvent: e }) {
@@ -109,12 +151,18 @@ class ChatInput extends Component {
   cancelAction() {
     this.props.setEditMessageId(null);
     this.props.setReplyMessage(null);
-    this.setState({ chatInput: '', fileAttachment: null });
+    this.setState({ chatInput: '', fileAttachments: [] });
   }
 
   handleAttachmentDrop(files) {
+    const notAlreadyAttached = files.filter(
+      file => !this.state.fileAttachments.find(fa => fa.name === file.name),
+    );
+
     // Store the dropped/selected file.
-    this.setState({ fileAttachment: files[0] });
+    this.setState({
+      fileAttachments: this.state.fileAttachments.concat(notAlreadyAttached),
+    });
 
     // And in case the action menu was open, close it.
     this.setActionsOpen(false);
@@ -124,9 +172,11 @@ class ChatInput extends Component {
     this.dropzone.open();
   }
 
-  handleAttachmentCancel() {
-    this.setState({ fileAttachment: null });
-  }
+  handleAttachmentCancel = attachment => _e => {
+    this.setState({
+      fileAttachments: this.state.fileAttachments.filter(a => a !== attachment),
+    });
+  };
 
   handleDropzoneRef(dropzone) {
     this.dropzone = dropzone;
@@ -141,7 +191,7 @@ class ChatInput extends Component {
   }
 
   isChatInputInvalid() {
-    return !this.state.chatInput && !this.state.fileAttachment;
+    return !this.state.chatInput && this.state.fileAttachments.length === 0;
   }
 
   render() {
@@ -150,7 +200,7 @@ class ChatInput extends Component {
         disableClick
         ref={this.handleDropzoneRef}
         onDrop={this.handleAttachmentDrop}
-        multiple={false}
+        multiple
         style={{}}
       >
         <form
@@ -195,49 +245,16 @@ class ChatInput extends Component {
             )}
           </Popover>
           <div className="input-container" id="chatInput">
-            {this.state.fileAttachment !== null && (
-              <div
-                className="icon-wrapper"
-                style={{
-                  display: 'flex',
-                  backgroundColor: '#fff',
-                  height: '24px',
-                  minWidth: '96px',
-                  maxWidth: '182px',
-                  color: '#54698D',
-                  fontSize: '10px',
-                  lineHeight: '12px',
-                  marginBottom: '0.5em',
-                }}
-              >
-                {canShowPreview(this.state.fileAttachment) && (
-                  <img
-                    src={this.state.fileAttachment.preview}
-                    alt={this.state.fileAttachment.name}
-                    style={{
-                      width: '24px',
-                      height: '24px',
-                    }}
-                  />
-                )}
-                <span style={{ flex: '1', marginLeft: '0.5em' }}>
-                  {this.state.fileAttachment.name}
-                </span>
-                <button
-                  className="btn btn-icon"
-                  type="button"
-                  style={{
-                    width: '24px',
-                    height: '24px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                  }}
-                  onClick={this.handleAttachmentCancel}
-                >
-                  <i className="fa fa-fw fa-times" />
-                </button>
-              </div>
-            )}
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              {this.state.fileAttachments.map(attachment => (
+                <UploadCard
+                  key={attachment.name}
+                  attachment={attachment}
+                  handleAttachmentCancel={this.handleAttachmentCancel}
+                />
+              ))}
+            </div>
+
             <div
               className={classNames('placeholder', {
                 hidden: this.state.chatInput !== '',
