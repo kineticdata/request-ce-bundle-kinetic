@@ -20,12 +20,19 @@ export function* fetchSubmissionsSaga({ payload: { coreState } }) {
       'form.kapp',
       'form.kapp.attributes',
       'form.kapp.space.attributes',
-    ])
-    .or()
-    .eq(`values[${constants.REQUESTED_FOR_FIELD}]`, username)
-    .eq('submittedBy', username)
-    .end();
-  // Add some of the optional parameters to the search
+    ]);
+
+  //Add some of the optional parameters to the search
+  if (coreState && coreState === 'Draft') {
+    searchBuilder.eq('createdBy', username);
+  } else {
+    searchBuilder
+      .or()
+      .eq(`values[${constants.REQUESTED_FOR_FIELD}]`, username)
+      .eq('submittedBy', username)
+      .eq('createdBy', username)
+      .end();
+  }
   if (coreState) searchBuilder.coreState(coreState);
   if (pageToken) searchBuilder.pageToken(pageToken);
   const search = searchBuilder.build();
@@ -38,11 +45,19 @@ export function* fetchSubmissionsSaga({ payload: { coreState } }) {
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
   } else {
-    yield put(
-      pageToken && submissions.length === 0
-        ? actions.fetchPreviousPage(coreState)
-        : actions.setSubmissions(submissions, nextPageToken),
-    );
+    if (pageToken && submissions.length === 0) {
+      yield put(actions.fetchPreviousPage(coreState));
+    } else if (coreState) {
+      yield put(actions.setSubmissions(submissions, nextPageToken));
+    } else {
+      // This is needed because we need to filter out Draft Submissions that were Requested For Someone Else
+      const filterDraftNotCreator = submissions.filter(
+        s =>
+          ['Submitted', 'Closed'].includes(s.coreState) ||
+          (s.coreState === 'Draft' && s.createdBy === username),
+      );
+      yield put(actions.setSubmissions(filterDraftNotCreator, nextPageToken));
+    }
   }
 }
 

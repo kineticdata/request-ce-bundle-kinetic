@@ -26,7 +26,7 @@ const TeamsListItemComponent = ({ team, openDropdown, toggleDropdown }) => {
             </div>
             <div className="card--team__body">
               <h1>{team.name}</h1>
-              <pre>{team.description}</pre>
+              <pre className="text-truncate">{team.description}</pre>
 
               <div className="btn-group" role="group" aria-label="Actions">
                 <Link

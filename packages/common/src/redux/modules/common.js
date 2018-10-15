@@ -1,5 +1,6 @@
 import { actions as alertsActions } from 'app/src/redux/modules/alerts';
 import { actions as layoutActions } from 'app/src/redux/modules/layout';
+import { actions as loadingActions } from 'app/src/redux/modules/loading';
 import { types as layoutTypes } from 'app/src/redux/modules/layout';
 import * as Utils from '../../utils';
 
@@ -18,6 +19,9 @@ export const selectCurrentKapp = state =>
       null
     : null;
 
+// Get Current Kapp Slug
+export const selectCurrentKappSlug = state => state.app.config.kappSlug;
+
 export const types = {
   ...layoutTypes,
 };
@@ -25,4 +29,5 @@ export const types = {
 export const actions = {
   ...alertsActions,
   ...layoutActions,
+  ...loadingActions,
 };
