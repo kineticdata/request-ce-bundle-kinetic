@@ -16,6 +16,7 @@ const NotificationListItemComponent = ({
   path,
   handleClone,
   handleDelete,
+  handlePreview,
   openDropdown,
   toggleDropdown,
 }) => {
@@ -39,6 +40,9 @@ const NotificationListItemComponent = ({
             <span className="fa fa-ellipsis-h fa-2x" />
           </DropdownToggle>
           <DropdownMenu right>
+            <DropdownItem onClick={handlePreview(notification)}>
+              Preview
+            </DropdownItem>
             <DropdownItem onClick={handleClone(notification.id)}>
               Clone
             </DropdownItem>
@@ -54,6 +58,14 @@ const NotificationListItemComponent = ({
 
 export const mapStateToProps = state => ({
   loading: state.space.settingsNotifications.loading,
+  snippets: state.space.settingsNotifications.notificationSnippets.reduce(
+    (obj, item) => {
+      obj[item.label] = item;
+      return obj;
+    },
+    {},
+  ),
+  space: state.app.space,
 });
 
 export const mapDispatchToProps = {
@@ -61,6 +73,7 @@ export const mapDispatchToProps = {
   deleteNotification: actions.deleteNotification,
   fetchNotifications: actions.fetchNotifications,
   fetchDateFormats: actions.fetchDateFormats,
+  fetchNotification: actions.fetchNotification,
 };
 
 const handleClone = ({ cloneNotification }) => id => () =>
@@ -75,6 +88,20 @@ const handleDelete = props => id => () =>
         : props.fetchNotifications,
   });
 
+const handlePreview = props => notification => () => {
+  let values = notification.values;
+
+  values['HTML Content'] = values['HTML Content'].replace(
+    /\$\{snippet\(\'.*?\'\)\}/gi,
+    snippet => {
+      const label = snippet.match(/\$\{snippet\(\'(.*?)\'\)\}/);
+      return props.snippets[label[1]].values['HTML Content'];
+    },
+  );
+
+  props.setPreviewModal({ ...notification, values });
+};
+
 const toggleDropdown = ({
   setOpenDropdown,
   openDropdown,
@@ -87,9 +114,11 @@ export const NotificationListItem = compose(
     mapDispatchToProps,
   ),
   withState('openDropdown', 'setOpenDropdown', ''),
+  withState('modalIsOpen', 'setModalVisible', true),
   withHandlers({
     toggleDropdown,
     handleClone,
     handleDelete,
+    handlePreview,
   }),
 )(NotificationListItemComponent);

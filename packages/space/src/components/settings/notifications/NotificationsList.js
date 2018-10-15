@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { compose, lifecycle, withProps, withState } from 'recompose';
 import { NavLink } from 'react-router-dom';
 import { PageTitle } from 'common';
+import { Modal, ModalBody } from 'reactstrap';
 import { NotificationListItem } from './NotificationListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/settingsNotifications';
@@ -18,7 +19,13 @@ const WallyNoResultsFoundMessage = ({ type }) => {
   );
 };
 
-const NotificationsListComponent = ({ submissions, type, match }) => (
+const NotificationsListComponent = ({
+  submissions,
+  type,
+  match,
+  previewModal,
+  setPreviewModal,
+}) => (
   <div className="page-container page-container--notifications">
     <PageTitle parts={[`${type}s`, 'Notifications', 'Settings']} />
     <div className="page-panel page-panel--scrollable">
@@ -82,6 +89,8 @@ const NotificationsListComponent = ({ submissions, type, match }) => (
                   notification={s}
                   path={`${match.url}/${s.id}`}
                   type={type}
+                  previewModal={previewModal}
+                  setPreviewModal={setPreviewModal}
                 />
               ))}
             </tbody>
@@ -90,6 +99,30 @@ const NotificationsListComponent = ({ submissions, type, match }) => (
           <WallyNoResultsFoundMessage type={type} />
         )}
       </div>
+      {previewModal && (
+        <Modal isOpen={!!previewModal} toggle={() => setPreviewModal(null)}>
+          <div className="modal-header">
+            <h4 className="modal-title">
+              <button
+                onClick={() => setPreviewModal(null)}
+                type="button"
+                className="btn btn-link"
+              >
+                Cancel
+              </button>
+              <span>Template Preview</span>
+              <span>&nbsp;</span>
+            </h4>
+          </div>
+          <ModalBody>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: previewModal.values['HTML Content'],
+              }}
+            />
+          </ModalBody>
+        </Modal>
+      )}
     </div>
   </div>
 );
@@ -113,6 +146,7 @@ export const NotificationsList = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withState('previewModal', 'setPreviewModal', null),
   withProps(props => {
     switch (props.match.params.type) {
       case 'templates':
