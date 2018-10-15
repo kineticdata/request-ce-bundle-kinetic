@@ -27,7 +27,7 @@ export class I18nProvider extends React.Component {
   }
 
   loadTranslations = (locale, context) => {
-    const url = `${bundle.apiLocation()}/translations/contexts/${context}/entries?tag&locale=${locale}`;
+    const url = `${bundle.apiLocation()}/translations/entries?cache&context=${context}&locale=${locale}`;
     axios.get(url).then(response => {
       this.setState(state => ({
         translations: state.translations.setIn(

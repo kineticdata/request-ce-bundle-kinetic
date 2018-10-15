@@ -13,6 +13,7 @@ import { PageTitle } from './components/PageTitle';
 import { ErrorNotFound } from './components/ErrorNotFound';
 import { ErrorUnauthorized } from './components/ErrorUnauthorized';
 import { ErrorUnexpected } from './components/ErrorUnexpected';
+import { Table, PaginationControl, FilterControl } from './components/Table';
 
 import { actions as commonActions } from './redux/modules/common';
 import { types as commonTypes } from './redux/modules/common';
@@ -50,4 +51,7 @@ export {
   ErrorNotFound,
   ErrorUnauthorized,
   ErrorUnexpected,
+  Table,
+  PaginationControl,
+  FilterControl,
 };
