@@ -129,7 +129,7 @@ const RobotSchedulesListComponent = ({
                     <td>{schedule.values['Task Tree']}</td>
                     <td>{schedule.values['Description']}</td>
                     <td>
-                      {moment(nextExecution).isVaid
+                      {moment(nextExecution).isValid()
                         ? moment(nextExecution).format(Constants.TIME_FORMAT)
                         : nextExecution}
                     </td>
