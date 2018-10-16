@@ -15,9 +15,14 @@ import { ErrorUnauthorized } from './components/ErrorUnauthorized';
 import { ErrorUnexpected } from './components/ErrorUnexpected';
 import { Table, PaginationControl, FilterControl } from './components/Table';
 
-import { actions as commonActions } from './redux/modules/common';
-import { types as commonTypes } from './redux/modules/common';
-import { selectCurrentKapp } from './redux/modules/common';
+import {
+  selectCurrentKapp,
+  selectCurrentKappSlug,
+} from './redux/modules/common';
+import {
+  types as commonTypes,
+  actions as commonActions,
+} from './redux/modules/common';
 import {
   actions as toastActions,
   types as toastTypes,
@@ -26,6 +31,7 @@ import { actions as modalFormActions } from './redux/modules/modalForm';
 
 import * as Utils from './utils';
 import * as Constants from './constants';
+import * as AttributeSelectors from './components/attribute_selectors';
 
 export {
   KappLink,
@@ -46,11 +52,13 @@ export {
   toastTypes,
   modalFormActions,
   selectCurrentKapp,
+  selectCurrentKappSlug,
   Utils,
   Constants,
   ErrorNotFound,
   ErrorUnauthorized,
   ErrorUnexpected,
+  AttributeSelectors,
   Table,
   PaginationControl,
   FilterControl,

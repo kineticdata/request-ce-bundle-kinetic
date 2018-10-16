@@ -5,7 +5,7 @@ import { CoreAPI } from 'react-kinetic-core';
 const { namespace, noPayload, withPayload } = Utils;
 
 export const ROBOT_DEFINITIONS_FORM_SLUG = 'robot-definitions';
-export const ROBOT_SCHEDULES_FORM_SLUG = 'robot-schedules';
+export const ROBOT_SCHEDULES_FORM_SLUG = 'robot-definitions';
 export const ROBOT_EXECUTIONS_FORM_SLUG = 'robot-executions';
 export const ROBOT_EXECUTIONS_PAGE_SIZE = 25;
 
@@ -62,6 +62,8 @@ export const types = {
     'settingsRobots',
     'SET_ROBOT_EXECUTION_ERROR',
   ),
+  FETCH_NEXT_EXECUTIONS: namespace('settingsRobots', 'FETCH_NEXT_EXECUTIONS'),
+  SET_NEXT_EXECUTIONS: namespace('settingsRobots', 'SET_NEXT_EXECUTIONS'),
 };
 
 export const actions = {
@@ -78,7 +80,7 @@ export const actions = {
   setDeleteSuccess: noPayload(types.SET_DELETE_SUCCESS),
   setDeleteError: withPayload(types.SET_DELETE_ERROR),
   // Robot Schedules List
-  fetchRobotSchedules: withPayload(types.FETCH_ROBOT_SCHEDULES),
+  fetchRobotSchedules: noPayload(types.FETCH_ROBOT_SCHEDULES),
   setRobotSchedules: withPayload(types.SET_ROBOT_SCHEDULES),
   setFetchRobotSchedulesError: withPayload(
     types.SET_FETCH_ROBOT_SCHEDULES_ERROR,
@@ -91,19 +93,13 @@ export const actions = {
   setDeleteScheduleSuccess: noPayload(types.SET_DELETE_SCHEDULE_SUCCESS),
   setDeleteScheduleError: withPayload(types.SET_DELETE_SCHEDULE_ERROR),
   // Robot Executions List
-  fetchRobotExecutions: withPayload(
-    types.FETCH_ROBOT_EXECUTIONS,
-    'robotId',
-    'scheduleId',
-  ),
+  fetchRobotExecutions: withPayload(types.FETCH_ROBOT_EXECUTIONS, 'scheduleId'),
   fetchRobotExecutionsNextPage: withPayload(
     types.FETCH_ROBOT_EXECUTIONS_NEXT_PAGE,
-    'robotId',
     'scheduleId',
   ),
   fetchRobotExecutionsPreviousPage: withPayload(
     types.FETCH_ROBOT_EXECUTIONS_PREVIOUS_PAGE,
-    'robotId',
     'scheduleId',
   ),
   setRobotExecutions: withPayload(types.SET_ROBOT_EXECUTIONS),
@@ -114,6 +110,8 @@ export const actions = {
   fetchRobotExecution: withPayload(types.FETCH_ROBOT_EXECUTION),
   setRobotExecution: withPayload(types.SET_ROBOT_EXECUTION),
   setRobotExecutionError: withPayload(types.SET_ROBOT_EXECUTION_ERROR),
+  fetchNextExecutions: withPayload(types.FETCH_NEXT_EXECUTIONS),
+  setNextExecutions: withPayload(types.SET_NEXT_EXECUTIONS),
 };
 
 export function hasRobotSchedules(id, callback) {
@@ -160,6 +158,9 @@ export const State = Record({
   robotExecution: null,
   robotExecutionLoading: true,
   robotExecutionErrors: [],
+  // Next Executions
+  nextExecutions: null,
+  nextExecutionsLoading: true,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -274,6 +275,13 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('robotExecutionLoading', false)
         .set('robotExecutionErrors', payload)
         .set('robotExecution', null);
+
+    case types.FETCH_NEXT_EXECUTIONS:
+      return state.set('nextExecutionsLoading', true);
+    case types.SET_NEXT_EXECUTIONS:
+      return state
+        .set('nextExecutionsLoading', false)
+        .set('nextExecutions', payload);
 
     default:
       return state;

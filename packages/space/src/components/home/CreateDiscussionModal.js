@@ -18,7 +18,7 @@ const CreateDiscussionModalComponent = ({
         <button onClick={handleToggle} type="button" className="btn btn-link">
           Close
         </button>
-        <span>Create Discussion</span>
+        <span>New Discussion</span>
       </h4>
     </div>
     <div className="modal-body">

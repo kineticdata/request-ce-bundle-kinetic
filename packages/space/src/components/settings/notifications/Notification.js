@@ -178,13 +178,19 @@ const NotificationComponent = ({
               />
             </div>
             <div className="form__footer">
-              <div className="form_footer__right">
+              <div className="form__footer__right">
+                <Link
+                  to="/settings/notifications"
+                  className="btn btn-link mb-0"
+                >
+                  Cancel
+                </Link>
                 <button
                   type="submit"
                   className="btn btn-primary"
                   disabled={!dirty || !isValid(values)}
                 >
-                  Save
+                  {submission ? 'Save Changes' : `Create ${title}`}
                 </button>
               </div>
             </div>

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { Icon, PageTitle } from 'common';
 
-import { SpaceSettings } from './spaceSettings/SpaceSettings';
+import { SpaceSettings } from './space_settings/SpaceSettings';
 import { Notifications } from './notifications/Notifications';
 import { Datastore } from './datastore/Datastore';
 import { Robots } from './robots/Robots';

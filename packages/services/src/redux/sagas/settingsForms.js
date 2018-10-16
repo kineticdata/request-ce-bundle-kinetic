@@ -154,6 +154,9 @@ export function* updateFormSaga(action) {
   });
   if (!serverError) {
     yield put(
+      toastActions.addSuccess('Updated the form successfully.', 'Updated Form'),
+    );
+    yield put(
       actions.fetchForm({
         kappSlug: action.payload.kappSlug,
         formSlug: currentForm.slug,
@@ -175,6 +178,12 @@ export function* fetchNotificationsSaga() {
   });
 
   if (serverError) {
+    yield put(
+      toastActions.addError(
+        'There was a problem retrieving notifications.',
+        'Retrieving Notifications',
+      ),
+    );
     yield put(actions.setFormsError(serverError));
   } else {
     yield put(actions.setNotifications(submissions));
@@ -217,6 +226,12 @@ export function* createFormSaga(action) {
       ),
     );
   } else {
+    yield put(
+      toastActions.addSuccess(
+        `Form "${action.payload.inputs.Name}" was successfully created.`,
+        'Created Form',
+      ),
+    );
     if (typeof action.payload.callback === 'function') {
       action.payload.callback(createdForm.form.slug);
     }

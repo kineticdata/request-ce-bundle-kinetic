@@ -443,7 +443,7 @@ export const CategoriesContainer = ({
             />
           </div>
           <div className="col-sm-6">
-            <h3>Add Category</h3>
+            <h3>New Category</h3>
             <form>
               <div className="form-group">
                 <label>Category Name</label>
@@ -495,7 +495,7 @@ export const CategoriesContainer = ({
                 onClick={addNewCategory}
                 disabled={inputs.loading}
               >
-                Add
+                Create Category
               </div>
             </form>
           </div>
@@ -516,6 +516,7 @@ export const CategoriesContainer = ({
                 >
                   Cancel
                 </button>
+                <span>Subcategory</span>
               </h4>
             </div>
             <div className="modal-body">

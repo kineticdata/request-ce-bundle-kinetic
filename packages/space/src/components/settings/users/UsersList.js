@@ -58,15 +58,15 @@ const UsersListComponent = ({ users, loading, match, handleChange, data }) => {
             <label
               htmlFor="file-input"
               className="btn btn-info"
-              style={{ marginBottom: '0px', marginRight: '.5rem' }}
+              style={{ marginBottom: '0px' }}
             >
               Import Users
             </label>
             <a className="btn btn-secondary" href={data} download="users.csv">
               Export Users
             </a>
-            <Link to={`${match.path}/new`} className="btn btn-primary ml-3">
-              Create User
+            <Link to={`${match.path}/new`} className="btn btn-primary">
+              New User
             </Link>
           </div>
         </div>

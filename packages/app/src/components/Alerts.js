@@ -31,7 +31,7 @@ export const Alerts = ({
             <Fragment>
               <span className="divider">&bull;</span>
               <Link to="/alerts/new" onClick={toggle}>
-                Create Alert
+                New Alert
               </Link>
             </Fragment>
           )}
