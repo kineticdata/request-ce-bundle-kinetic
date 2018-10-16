@@ -24,12 +24,8 @@ const CreateRobotScheduleComponent = ({
             <Link to="/">home</Link> /{` `}
             <Link to="/settings">settings</Link> /{` `}
             <Link to="/settings/robots">robots</Link> /{` `}
-            <Link to={`/settings/robots/${robot.id}`}>
-              {robot.values['Name']}
-            </Link>{' '}
-            /{` `}
           </h3>
-          <h1>New Schedule</h1>
+          <h1>New Robot</h1>
         </div>
       </div>
 
@@ -41,7 +37,6 @@ const CreateRobotScheduleComponent = ({
           created={handleCreated}
           error={handleError}
           globals={globals}
-          values={{ 'Robot ID': robot.values['Robot ID'] }}
         />
       </div>
     </div>
@@ -52,7 +47,7 @@ export const handleLoaded = props => form => {
   const cancelButton = form.find('button.cancel-schedule')[0];
   if (cancelButton) {
     cancelButton.addEventListener('click', () => {
-      props.push(`/settings/robots/${props.robot.id}/schedules`);
+      props.push(`/settings/robots`);
     });
   }
   const deleteButton = form.find('button.delete-schedule')[0];
@@ -66,9 +61,7 @@ export const handleCreated = props => response => {
     `Successfully created schedule (${response.submission.values['Name']})`,
     'Schedule Created!',
   );
-  props.push(
-    `/settings/robots/${props.robot.id}/schedules/${response.submission.id}`,
-  );
+  props.push(`/settings/robots/${response.submission.id}`);
 };
 
 export const handleError = props => response => {

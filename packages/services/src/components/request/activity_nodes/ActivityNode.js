@@ -1,15 +1,15 @@
 import React from 'react';
-import { ApprovalHeader, ApprovalBody } from './ActivityNodeTypes/Approval';
-import { DefaultHeader, DefaultBody } from './ActivityNodeTypes/Default';
+import { ApprovalHeader, ApprovalBody } from './activity_node_types/Approval';
+import { DefaultHeader, DefaultBody } from './activity_node_types/Default';
 import {
   SubmissionCompletedHeader,
   SubmissionCompletedBody,
-} from './ActivityNodeTypes/SubmissionCompleted';
+} from './activity_node_types/SubmissionCompleted';
 import {
   SubmissionSubmittedHeader,
   SubmissionSubmittedBody,
-} from './ActivityNodeTypes/SubmissionSubmitted';
-import { TaskHeader, TaskBody } from './ActivityNodeTypes/Task';
+} from './activity_node_types/SubmissionSubmitted';
+import { TaskHeader, TaskBody } from './activity_node_types/Task';
 
 // Helper to get the correct header component given the activity type.
 export const getActivityNodeHeader = activityType => {

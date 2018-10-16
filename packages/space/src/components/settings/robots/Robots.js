@@ -1,8 +1,6 @@
 import React from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { RobotsList } from './RobotsList';
-import { CreateRobot } from './CreateRobot';
 import { RobotContainer } from './RobotContainer';
 import semver from 'semver';
 const MINIMUM_CE_VERSION = '2.1.0';
@@ -32,9 +30,7 @@ export const RobotsRouter = ({ match, loading, validVersion, version }) =>
   ) : (
     <Switch>
       <Route exact path={`${match.path}/error`} component={RobotsError} />
-      <Route exact path={`${match.path}/new`} component={CreateRobot} />
-      <Route path={`${match.path}/:id`} component={RobotContainer} />
-      <Route component={RobotsList} />
+      <Route path={`${match.path}`} component={RobotContainer} />
     </Switch>
   );
 

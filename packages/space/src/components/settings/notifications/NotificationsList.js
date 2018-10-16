@@ -38,7 +38,7 @@ const NotificationsListComponent = ({
           <h1>Notifications</h1>
         </div>
         <Link to={`${match.url}/new`} className="btn btn-primary">
-          Create New {type}
+          New {type}
         </Link>
       </div>
       <div className="notifications-tabs">

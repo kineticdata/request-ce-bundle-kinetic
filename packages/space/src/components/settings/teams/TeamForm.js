@@ -9,7 +9,6 @@ import { Utils, PageTitle, Hoverable } from 'common';
 import { AddMemberModal } from './AddMemberModal';
 import { buildHierarchy } from '../../../utils';
 import { IconPicker } from '../../shared/IconPicker';
-import { ProfileCard } from '../../shared/ProfileCard';
 import { TeamCard } from '../../shared/TeamCard';
 import { TeamMemberAvatar } from './TeamMemberAvatar';
 
@@ -140,9 +139,11 @@ const TeamFormComponent = ({
                   )}
                 </span>
                 <span className="form__footer__right">
-                  <button className="btn btn-primary">Save</button>
                   <button className="btn btn-link" onClick={handleCancel}>
                     Cancel
+                  </button>
+                  <button className="btn btn-primary">
+                    {editing ? 'Save Changes' : 'Create Team'}
                   </button>
                 </span>
               </div>
@@ -162,26 +163,39 @@ const TeamFormComponent = ({
               </h3>
 
               <div className="cards__wrapper cards__wrapper--members">
-                {memberships.map(user => (
-                  <Hoverable
-                    key={user.username}
-                    render={() => (
-                      <ProfileCard
-                        user={user}
-                        button={
+                <table className="table table-striped table-sm table-responsive">
+                  <thead>
+                    <tr>
+                      <th>&nbsp;</th>
+                      <th>Name</th>
+                      <th>Username</th>
+                      <th>&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {memberships.map(user => (
+                      <tr key={user.username}>
+                        <td>
+                          <TeamMemberAvatar user={user} />
+                        </td>
+                        <td>
+                          <Link to={`/profile/${user.username}`}>
+                            {user.displayName}
+                          </Link>
+                        </td>
+                        <td>{user.username}</td>
+                        <td>
                           <button
                             onClick={handleRemoveMember(user.username)}
-                            className="btn btn-primary"
+                            className="btn btn-danger btn-sm"
                           >
-                            Remove Member
+                            <span className="fa fa-remove" />
                           </button>
-                        }
-                      />
-                    )}
-                  >
-                    <TeamMemberAvatar user={user} />
-                  </Hoverable>
-                ))}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </section>
           )}
