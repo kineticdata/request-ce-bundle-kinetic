@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
@@ -26,7 +26,7 @@ const NotificationListItemComponent = ({
         <Link to={path}>{notification.values['Name']}</Link>
       </td>
       <td>{notification.values['Status']}</td>
-      <td className="d-none d-md-block">
+      <td className="hidden-md-down">
         {type === 'Date Format'
           ? notification.values['Format']
           : notification.values['Subject']}

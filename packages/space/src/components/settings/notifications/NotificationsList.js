@@ -69,36 +69,34 @@ const NotificationsListComponent = ({
           </li>
         </ul>
       </div>
-      <div>
-        {submissions.length > 0 ? (
-          <table className="table table-sm">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Status</th>
-                <th className="d-none d-md-block">
-                  {type === 'Date Format' ? 'Format' : 'Subject'}
-                </th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {submissions.map(s => (
-                <NotificationListItem
-                  key={`trow-${s.id}`}
-                  notification={s}
-                  path={`${match.url}/${s.id}`}
-                  type={type}
-                  previewModal={previewModal}
-                  setPreviewModal={setPreviewModal}
-                />
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <WallyNoResultsFoundMessage type={type} />
-        )}
-      </div>
+      {submissions.length > 0 ? (
+        <table className="table table-sm">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Status</th>
+              <th className="hidden-md-down">
+                {type === 'Date Format' ? 'Format' : 'Subject'}
+              </th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {submissions.map(s => (
+              <NotificationListItem
+                key={`trow-${s.id}`}
+                notification={s}
+                path={`${match.url}/${s.id}`}
+                type={type}
+                previewModal={previewModal}
+                setPreviewModal={setPreviewModal}
+              />
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <WallyNoResultsFoundMessage type={type} />
+      )}
       {previewModal && (
         <Modal isOpen={!!previewModal} toggle={() => setPreviewModal(null)}>
           <div className="modal-header">
@@ -108,7 +106,7 @@ const NotificationsListComponent = ({
                 type="button"
                 className="btn btn-link"
               >
-                Cancel
+                Close
               </button>
               <span>Template Preview</span>
               <span>&nbsp;</span>
