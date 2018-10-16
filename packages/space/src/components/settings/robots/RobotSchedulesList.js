@@ -128,7 +128,11 @@ const RobotSchedulesListComponent = ({
                     <td>{schedule.values['Category']}</td>
                     <td>{schedule.values['Task Tree']}</td>
                     <td>{schedule.values['Description']}</td>
-                    <td>{nextExecution}</td>
+                    <td>
+                      {moment(nextExecution).isVaid
+                        ? moment(nextExecution).format(Constants.TIME_FORMAT)
+                        : nextExecution}
+                    </td>
                   </tr>
                 );
               })}
