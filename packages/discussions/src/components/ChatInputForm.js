@@ -35,6 +35,7 @@ class ChatInput extends Component {
       chatInput: '',
       actionsOpen: false,
       fileAttachment: null,
+      hasFocus: false,
     };
 
     this.handleSendChatMessage = this.handleSendChatMessage.bind(this);
@@ -144,6 +145,14 @@ class ChatInput extends Component {
     return !this.state.chatInput && !this.state.fileAttachment;
   }
 
+  handleFocus = () => {
+    this.setState({ hasFocus: true });
+  };
+
+  handleBlur = () => {
+    this.setState({ hasFocus: false });
+  };
+
   render() {
     return (
       <Dropzone
@@ -251,6 +260,8 @@ class ChatInput extends Component {
               html={this.state.chatInput}
               onChange={this.handleChatInput}
               onKeyPress={this.handleChatHotKey}
+              onFocus={this.handleFocus}
+              onBlur={this.handleBlur}
             />
           </div>
           {(this.props.editMessageId || this.props.replyMessage) && (
@@ -274,6 +285,14 @@ class ChatInput extends Component {
             )}
           </button>
         </form>
+        {this.state.hasFocus && (
+          <div className="markdown-help">
+            <strong className="markdown-sample">*Bold*</strong>
+            <em className="markdown-sample">_Italics</em>
+            <strike className="markdown-sample">Strike</strike>
+            <span className="markdown-sample">!Blockquote</span>
+          </div>
+        )}
       </Dropzone>
     );
   }

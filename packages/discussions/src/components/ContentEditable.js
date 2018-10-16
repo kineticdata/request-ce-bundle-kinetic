@@ -38,6 +38,18 @@ export default class ContentEditable extends Component {
     this.props.onChange(ev, value);
   }
 
+  _onFocus = ev => {
+    if (typeof this.props.onFocus === 'function') {
+      this.props.onFocus(ev);
+    }
+  };
+
+  _onBlur = ev => {
+    if (typeof this.props.onBlur === 'function') {
+      this.props.onBlur(ev);
+    }
+  };
+
   _onPaste(ev) {
     const { onPaste, contentEditable } = this.props;
 
@@ -108,6 +120,8 @@ export default class ContentEditable extends Component {
         onInput={this._onChange}
         onPaste={this._onPaste}
         onKeyPress={this._onKeyPress}
+        onFocus={this._onFocus}
+        onBlur={this._onBlur}
         // New key each render forces react to re-create this element, see the
         // stackoverflow issue for more details.
         // https://stackoverflow.com/questions/30242530/dangerouslysetinnerhtml-doesnt-update-during-render
