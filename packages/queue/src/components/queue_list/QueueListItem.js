@@ -1,5 +1,5 @@
 import React from 'react';
-import { KappLink as Link, TimeAgo } from 'common';
+import { KappLink as Link, TimeAgo, Avatar } from 'common';
 import { StatusParagraph } from '../shared/StatusParagraph';
 import { buildFilterPath } from '../../redux/modules/queueApp';
 
@@ -14,9 +14,10 @@ const AssignmentParagraph = ({ values }) => (
   </p>
 );
 
-const Timestamp = ({ id, label, value }) =>
+const Timestamp = ({ id, label, value, username }) =>
   value && (
     <li className="list-group-item">
+      <Avatar username={username} hoverable />
       {label}
       &nbsp;
       <TimeAgo timestamp={value} id={`${id}-${label}`} />
@@ -42,7 +43,7 @@ const DueOrCloseDate = ({ queueItem }) => {
 };
 
 export const QueueListItemSmall = ({ queueItem, filter }) => {
-  const { createdAt, updatedAt, id, values } = queueItem;
+  const { createdAt, createdBy, updatedAt, updatedBy, id, values } = queueItem;
   return (
     <li className="submission list-group-item">
       <Link
@@ -65,8 +66,18 @@ export const QueueListItemSmall = ({ queueItem, filter }) => {
         <AssignmentParagraph values={values} />
         <ul className="timestamps list-group">
           <DueOrCloseDate queueItem={queueItem} />
-          <Timestamp label="Updated" value={updatedAt} id={id} />
-          <Timestamp label="Created" value={createdAt} id={id} />
+          <Timestamp
+            label="Updated"
+            value={updatedAt}
+            id={id}
+            username={updatedBy}
+          />
+          <Timestamp
+            label="Created"
+            value={createdAt}
+            id={id}
+            username={createdBy}
+          />
         </ul>
       </Link>
     </li>

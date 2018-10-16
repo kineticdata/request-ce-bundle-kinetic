@@ -1,3 +1,4 @@
+import { Avatar } from './components/Avatar';
 import { ToastsContainer } from './components/ToastsContainer';
 import { ModalFormContainer } from './components/ModalFormContainer';
 import { KappLink } from './components/KappLink';
@@ -33,6 +34,7 @@ import * as Constants from './constants';
 import * as AttributeSelectors from './components/attribute_selectors';
 
 export {
+  Avatar,
   KappLink,
   KappLinkContainer,
   KappNavLink,
