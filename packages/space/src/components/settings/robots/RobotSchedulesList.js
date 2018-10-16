@@ -26,7 +26,7 @@ const getNextExecution = (nextExecutions, scheduleId) => {
       ? found.values['Next Scheduled Execution']
       : 'No upcoming executions scheduled';
   } else {
-    nextExecution = 'Unknowen';
+    nextExecution = 'Unknown';
   }
 
   return nextExecution;
