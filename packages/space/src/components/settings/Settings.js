@@ -5,13 +5,14 @@ import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { Icon, PageTitle } from 'common';
 
-import { SpaceSettings } from './spaceSettings/SpaceSettings';
+import { SpaceSettings } from './space_settings/SpaceSettings';
 import { Notifications } from './notifications/Notifications';
 import { Datastore } from './datastore/Datastore';
 import { Robots } from './robots/Robots';
 import { Users } from './users/Users';
 import { Profile } from './profile/Profile';
 import { Teams } from './teams/Teams';
+import { Translations } from './translations/Translations';
 import { actions as datastoreActions } from '../../redux/modules/settingsDatastore';
 import { actions as teamActions } from '../../redux/modules/teamList';
 
@@ -24,6 +25,7 @@ export const SettingsComponent = () => (
     <Route path="/settings/users" component={Users} />
     <Route path="/settings/notifications" component={Notifications} />
     <Route path="/settings/teams" component={Teams} />
+    <Route path="/settings/translations" component={Translations} />
     <Route component={SettingsNavigation} />
   </Switch>
 );
@@ -116,6 +118,12 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
               path={`/settings/robots`}
               icon="fa-tasks"
               description="View, Create and Edit Robots"
+            />
+            <SettingsCard
+              name="Translations"
+              path={`/settings/translations`}
+              icon="fa-globe"
+              description="View, Create and Edit Translations"
             />
           </Fragment>
         )}

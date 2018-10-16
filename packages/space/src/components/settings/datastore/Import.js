@@ -132,7 +132,8 @@ export class ImportComponent extends Component {
           const found = headerToFieldMap.find(obj => obj.header === header);
           if (
             found.header.toLowerCase() === 'datastore record id' &&
-            !(val === '')
+            !(val === '') &&
+            !found.checked
           ) {
             obj.id = val;
           } else if (!found.checked) {
@@ -336,7 +337,7 @@ export class ImportComponent extends Component {
                 <tbody>
                   {this.state.headerToFieldMap
                     .filter(
-                      obj => obj.header.toLowerCase === 'datastore record id',
+                      obj => obj.header.toLowerCase() === 'datastore record id',
                     )
                     .map((obj, idx) => (
                       <tr key={obj.header + idx}>

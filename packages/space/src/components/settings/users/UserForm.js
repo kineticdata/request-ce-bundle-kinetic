@@ -46,7 +46,7 @@ export const UserFormComponent = ({
                 {mode === 'edit' ? (
                   <h1>Edit: {user.displayName || user.username}</h1>
                 ) : (
-                  <h1>Create User</h1>
+                  <h1>New User</h1>
                 )}
               </div>
             </div>
@@ -219,18 +219,23 @@ export const UserFormComponent = ({
                 </div>
                 <div className="form__footer">
                   {mode === 'edit' && (
-                    <button className="btn btn-link" onClick={handleDelete}>
+                    <button
+                      className="btn btn-link text-danger"
+                      onClick={handleDelete}
+                    >
                       Delete User
                     </button>
                   )}
                   <div className="form__footer__right">
+                    <Link to={`/settings/users`} className="btn btn-link mb-0">
+                      Cancel
+                    </Link>
                     <button
                       disabled={!fieldValuesValid(fieldValues)}
                       className="btn btn-primary"
                     >
                       {mode === 'edit' ? 'Save User' : 'Create User'}
                     </button>
-                    <Link to={`/settings/users`}>Cancel</Link>
                   </div>
                 </div>
               </form>

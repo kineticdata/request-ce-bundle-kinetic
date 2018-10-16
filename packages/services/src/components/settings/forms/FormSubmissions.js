@@ -195,33 +195,54 @@ export const FormSubmissionsContainer = ({
                 <h1>{form.name}</h1>
               </div>
             </div>
+            <div className="submission-meta">
+              <div className="page-container">
+                <div className="data-list-row">
+                  <div className="data-list-row__col">
+                    <dl>
+                      <dt>Form Type</dt>
+                      <dd className="text-truncate">{form.type}</dd>
+                    </dl>
+                  </div>
+                  <div className="data-list-row__col">
+                    <dl>
+                      <dt>Form Status</dt>
+                      <dd className="text-truncate">{form.status}</dd>
+                    </dl>
+                  </div>
+                  <div className="data-list-row__col">
+                    <dl>
+                      <dt>Created</dt>
+                      <dd className="text-truncate">
+                        <span className="time-ago">
+                          {moment(form.createdAt).fromNow()}
+                        </span>
+                        <br />
+                        <small>by {form.createdBy}</small>
+                      </dd>
+                    </dl>
+                  </div>
+                  <div className="data-list-row__col">
+                    <dl>
+                      <dt>Updated</dt>
+                      <dd className="text-truncate">
+                        <span className="time-ago">
+                          {moment(form.updatedAt).fromNow()}
+                        </span>
+                        <br />
+                        <small>by {form.updatedBy}</small>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
             <section>
               <div className="settings-flex row">
-                <div className="col-sm-12">
-                  <label>Description</label>
-                  <p>{form.description}</p>
-                </div>
-                <div className="col-sm-6">
-                  <label>Form Type</label>
-                  <p>{form.type}</p>
-                </div>
-                <div className="col-sm-6">
-                  <label>Form Status</label>
-                  <p>{form.status}</p>
-                </div>
-                <div className="col-sm-6">
-                  <label>Created</label>
-                  <p>
-                    {moment(form.createdAt).fromNow()} by {form.createdBy}
-                  </p>
-                </div>
-                <div className="col-sm-6">
-                  <label>Updated</label>
-                  <p>
-                    {moment(form.updatedAt).fromNow()} by {form.updatedBy}
-                  </p>
-                </div>
-                <div className="col-sm-12">
+                <div className="col-md-12">
+                  {form.description && (
+                    <p className="text-truncate">{form.description}</p>
+                  )}
                   <button
                     className="btn btn-primary pull-right"
                     onClick={() => setFilter({ ...filter, visible: true })}
@@ -238,7 +259,8 @@ export const FormSubmissionsContainer = ({
                   </button>
                 </div>
               </div>
-              <div>
+
+              <div className="mt-3">
                 {clientSortInfo &&
                   (nextPageToken || currentPage >= 2) && (
                     <div className="text-info mb-2">
@@ -364,21 +386,21 @@ export const FormSubmissionsContainer = ({
                       </tbody>
                     )}
                 </table>
-                <ul className="pull-right">
+                <ul className="pagination">
                   {currentPage >= 2 && (
                     <li
-                      className="btn btn-primary"
+                      className="page-item disabled"
                       onClick={() => previousPage(form.slug)}
                     >
                       Previous
                     </li>
                   )}
-                  <li className="btn btn-default">
+                  <li className="page-item disabled">
                     {nextPageToken || currentPage >= 2 ? currentPage : ''}
                   </li>
                   {nextPageToken && (
                     <li
-                      className="btn btn-primary"
+                      className="page-item disabled"
                       onClick={() => nextPage(form.slug)}
                     >
                       Next
@@ -395,12 +417,18 @@ export const FormSubmissionsContainer = ({
                   <div className="modal-header">
                     <h4 className="modal-title">
                       <button
-                        onClick={() => setFilter({ ...filter, visible: false })}
+                        onClick={() =>
+                          setFilter({
+                            ...filter,
+                            visible: false,
+                          })
+                        }
                         type="button"
                         className="btn btn-link"
                       >
                         Cancel
                       </button>
+                      <span>Filter Records</span>
                     </h4>
                   </div>
                   <div className="modal-body">

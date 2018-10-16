@@ -12,6 +12,11 @@
     font-size: 2rem;
     font-weight: 300;
     line-height: 3rem;
+    small,
+    .small {
+      font-size: 1.6rem;
+      font-weight: 300;
+    }
   }
   h3 {
     color: $orange-kinops;
@@ -39,6 +44,24 @@
     }
     @media all and (min-width: 768px) {
       align-self: flex-end;
+    }
+  }
+  .page-title__actions {
+    @media all and (min-width: 0) {
+      display: flex;
+      justify-content: space-between;
+      .btn {
+        margin-left: 0;
+      }
+    }
+    @media all and (min-width: 768px) {
+      align-self: flex-end;
+      .btn {
+        margin-left: 0.5rem;
+      }
+      .btn-group .btn {
+        margin-left: 0;
+      }
     }
   }
   > a:not(.btn) {

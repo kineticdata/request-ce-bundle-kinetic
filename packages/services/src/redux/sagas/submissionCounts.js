@@ -4,16 +4,24 @@ import * as constants from '../../constants';
 import { actions, types } from '../modules/submissionCounts';
 import { actions as systemErrorActions } from '../modules/systemError';
 
-const buildSearch = (coreState, username) =>
-  new CoreAPI.SubmissionSearch()
+const buildSearch = (coreState, username) => {
+  const searchBuilder = new CoreAPI.SubmissionSearch()
     .coreState(coreState)
     .type(constants.SUBMISSION_FORM_TYPE)
-    .limit(constants.SUBMISSION_COUNT_LIMIT)
-    .or()
-    .eq(`values[${constants.REQUESTED_FOR_FIELD}]`, username)
-    .eq('submittedBy', username)
-    .end()
-    .build();
+    .limit(constants.SUBMISSION_COUNT_LIMIT);
+
+  //Add some of the optional parameters to the search based on core state
+  if (coreState && coreState === 'Draft') {
+    searchBuilder.eq('createdBy', username);
+  } else {
+    searchBuilder
+      .or()
+      .eq(`values[${constants.REQUESTED_FOR_FIELD}]`, username)
+      .eq('submittedBy', username)
+      .end();
+  }
+  return searchBuilder.build();
+};
 
 export function* fetchSubmissionCountsSaga() {
   const kappSlug = yield select(state => state.app.config.kappSlug);
