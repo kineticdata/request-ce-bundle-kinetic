@@ -18,7 +18,7 @@ const getStatusColor = status =>
 const getNextExecution = (nextExecutions, scheduleId) => {
   let nextExecution;
   const found = nextExecutions.find(
-    execution => execution.values['Schedule ID'] === scheduleId,
+    execution => execution.values['Robot ID'] === scheduleId,
   );
 
   if (found) {
@@ -26,7 +26,7 @@ const getNextExecution = (nextExecutions, scheduleId) => {
       ? found.values['Next Scheduled Execution']
       : 'No upcoming executions scheduled';
   } else {
-    nextExecution = 'Unknowen';
+    nextExecution = 'Unknown';
   }
 
   return nextExecution;
@@ -108,7 +108,7 @@ const RobotSchedulesListComponent = ({
                   <tr key={schedule.id}>
                     <td>
                       <Link to={`/settings/robots/${schedule.id}`}>
-                        <span>{schedule.values['Schedule Name']}</span>
+                        <span>{schedule.values['Robot Name']}</span>
                       </Link>
                     </td>
                     <td>
@@ -128,7 +128,11 @@ const RobotSchedulesListComponent = ({
                     <td>{schedule.values['Category']}</td>
                     <td>{schedule.values['Task Tree']}</td>
                     <td>{schedule.values['Description']}</td>
-                    <td>{nextExecution}</td>
+                    <td>
+                      {moment(nextExecution).isVaid
+                        ? moment(nextExecution).format(Constants.TIME_FORMAT)
+                        : nextExecution}
+                    </td>
                   </tr>
                 );
               })}

@@ -58,9 +58,7 @@ const RobotScheduleComponent = ({
               <Link to="/settings/robots">robots</Link> /{` `}
             </h3>
             <h1>
-              {!loading &&
-                robotSchedule &&
-                robotSchedule.values['Schedule Name']}
+              {!loading && robotSchedule && robotSchedule.values['Robot Name']}
             </h1>
           </div>
         </div>
@@ -135,7 +133,7 @@ const RobotScheduleComponent = ({
                     >
                       <p>
                         Delete robot schedule{' '}
-                        {robotSchedule.values['Schedule Name']}?
+                        {robotSchedule.values['Robot Name']}?
                       </p>
                       <Button color="danger" onClick={processDelete}>
                         Yes
@@ -176,7 +174,7 @@ export const handleUpdated = props => response => {
   props.fetchRobotSchedule(response.submission.id);
   props.addSuccess(
     `Successfully updated robot schedule (${
-      response.submission.values['Schedule Name']
+      response.submission.values['Robot Name']
     })`,
     'Robot Schedule Updated!',
   );
@@ -191,7 +189,7 @@ export const handleDelete = props => () => {
 };
 
 export const processDelete = props => () => {
-  const robotScheduleName = props.robotSchedule.values['Schedule Name'];
+  const robotScheduleName = props.robotSchedule.values['Robot Name'];
   props.deleteRobotSchedule({
     id: props.robotSchedule.id,
     callback: () => {
