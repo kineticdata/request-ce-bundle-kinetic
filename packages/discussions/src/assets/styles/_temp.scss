@@ -10,3 +10,16 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.markdown-help {
+  background-color: white;
+  color: $blue-lake;
+  padding: 0.5rem 0.5rem;
+  position: absolute;
+  top: -2.5rem;
+  width: 100%;
+
+  .markdown-sample + .markdown-sample {
+    margin-left: 0.5rem;
+  }
+}

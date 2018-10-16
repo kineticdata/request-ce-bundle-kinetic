@@ -137,13 +137,20 @@ export const TextMessage = ({ discussion, message }) => (
 export const Message = ({ discussion, message }) => (
   <div className={`message ${editedClass(message)}`}>
     <TextMessage discussion={discussion} message={message} />
-    {message.parent &&
-      message.parent.unknown !== true && (
-        <div className="parent-message">
-          <Message discussion={discussion} message={message.parent} />
-          <small>&mdash; {message.parent.createdBy.displayName}</small>
-        </div>
-      )}
+    {message.parent && (
+      <div className="parent-message">
+        {message.parent.unknown ? (
+          <div className="message message-missing">(Message missing)</div>
+        ) : (
+          <Fragment>
+            <Message discussion={discussion} message={message.parent} />
+            <small>
+              &mdash; {message.parent.createdBy.displayName || 'Unknown'}
+            </small>
+          </Fragment>
+        )}
+      </div>
+    )}
   </div>
 );
 

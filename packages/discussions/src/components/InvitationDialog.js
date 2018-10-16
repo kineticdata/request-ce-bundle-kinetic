@@ -10,6 +10,7 @@ import { InvitationForm } from './InvitationForm';
 export const InvitationDialogComponent = props => (
   <InvitationForm
     discussion={props.discussion}
+    required
     onSubmit={props.handleSubmit}
     render={({ formElement, buttonProps }) => (
       <Fragment>

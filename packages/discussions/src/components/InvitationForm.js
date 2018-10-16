@@ -38,9 +38,8 @@ export const InvitationFormComponent = props =>
     buttonProps: {
       onClick: props.handleSubmit,
       disabled:
-        !props.dirty ||
         props.saving ||
-        props.values.get('invitees').length === 0,
+        (props.required && props.values.get('invitees').length === 0),
     },
   });
 
@@ -64,7 +63,6 @@ const mapProps = props => ({
 const handleChange = props => event => {
   const field = event.target.id;
   const value = event.target.value;
-  props.setDirty(true);
   props.setValues(values => values.set(field, value));
 };
 
@@ -90,7 +88,6 @@ const disabledFn = props => option => {
 export const InvitationForm = compose(
   connect(mapStateToProps),
   withProps(mapProps),
-  withState('dirty', 'setDirty', false),
   withState('saving', 'setSaving', false),
   withState('values', 'setValues', Map({ invitees: [], message: '' })),
   withHandlers({ handleChange, handleSubmit, disabledFn }),
