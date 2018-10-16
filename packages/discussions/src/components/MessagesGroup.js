@@ -9,6 +9,37 @@ import { ParticipantCard } from './ParticipantCard';
 import { Hoverable } from 'common';
 import { MessageActionsContext } from './Discussion';
 
+import aviIcon from '../assets/images/avi_128.png';
+import excelIcon from '../assets/images/excel_128.png';
+import htmlIcon from '../assets/images/html_128.png';
+import illustratorIcon from '../assets/images/illustrator_128.png';
+import indesignIcon from '../assets/images/indesign_128.png';
+import movieIcon from '../assets/images/movie_128.png';
+import mpegIcon from '../assets/images/mpeg_128.png';
+import pdfIcon from '../assets/images/pdf_128.png';
+import photoshopIcon from '../assets/images/photoshop_128.png';
+import powerpointIcon from '../assets/images/powerpoint_128.png';
+import txtIcon from '../assets/images/txt_128.png';
+import unknownIcon from '../assets/images/unknown_128.png';
+import wordIcon from '../assets/images/word_128.png';
+
+// Import images used.
+const AVAILABLE_ICONS = {
+  avi: aviIcon,
+  excel: excelIcon,
+  html: htmlIcon,
+  illustrator: illustratorIcon,
+  movie: movieIcon,
+  indesign: indesignIcon,
+  mpeg: mpegIcon,
+  pdf: pdfIcon,
+  photoshop: photoshopIcon,
+  powerpoint: powerpointIcon,
+  txt: txtIcon,
+  unknown: unknownIcon,
+  word: wordIcon,
+};
+
 export const produceContent = message =>
   message.content.reduce((content, token) => {
     switch (token.type) {
@@ -38,12 +69,30 @@ const SUPPORTED_IMAGE_MIMES = [
   'image/vnd.microsoft.icon',
 ];
 
-const attachmentUrl = (discussion, message, attachment, thumbnail = false) =>
+const thumbnailUrl = (discussion, message, attachment) =>
+  SUPPORTED_IMAGE_MIMES.includes(attachment.contentType)
+    ? `${bundle.spaceLocation()}/app/discussions/api/v1/discussions/${
+        discussion.id
+      }/messages/${message.id}/files/${
+        attachment.thumbnailId
+      }/${encodeURIComponent(attachment.filename.replace(/ /g, '_'))}`
+    : attachmentIcon(attachment);
+
+const attachmentUrl = (discussion, message, attachment) =>
   `${bundle.spaceLocation()}/app/discussions/api/v1/discussions/${
     discussion.id
-  }/messages/${message.id}/files/${
-    thumbnail ? attachment.thumbnailId : attachment.documentId
-  }/${encodeURIComponent(attachment.filename.replace(/ /g, '_'))}`;
+  }/messages/${message.id}/files/${attachment.documentId}/${encodeURIComponent(
+    attachment.filename.replace(/ /g, '_'),
+  )}`;
+
+const attachmentIcon = attachment => {
+  const iconType = attachment.contentType.split('/')[1];
+
+  if (Object.keys(AVAILABLE_ICONS).includes(iconType)) {
+    return AVAILABLE_ICONS[iconType];
+  }
+  return AVAILABLE_ICONS['unknown'];
+};
 
 const formatFileSize = fileSize => {
   if (fileSize < 1024) return fileSize + ' bytes';
@@ -69,27 +118,17 @@ export const TextMessage = ({ discussion, message }) => (
           href={attachmentUrl(discussion, message, attachment.value)}
           target="_blank"
         >
-          {SUPPORTED_IMAGE_MIMES.includes(attachment.value.contentType) ? (
-            <img
-              src={attachmentUrl(discussion, message, attachment.value, true)}
-              alt={attachment.value.filename}
-            />
-          ) : (
-            <span>
-              {attachment.value.filename}{' '}
-              <small>
-                (<em>{formatFileSize(attachment.value.size)}</em>)
-              </small>
-            </span>
-          )}
+          <img
+            src={thumbnailUrl(discussion, message, attachment.value)}
+            alt={attachment.value.filename}
+          />
         </a>
-        {SUPPORTED_IMAGE_MIMES.includes(attachment.value.contentType) && (
-          <small>
-            {attachment.value.filename} (<em>
-              {formatFileSize(attachment.value.size)}
-            </em>)
-          </small>
-        )}
+
+        <small>
+          {attachment.value.filename} (<em>
+            {formatFileSize(attachment.value.size)}
+          </em>)
+        </small>
       </div>
     ))}
   </Fragment>
