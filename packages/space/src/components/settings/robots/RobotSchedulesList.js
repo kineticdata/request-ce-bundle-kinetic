@@ -18,7 +18,7 @@ const getStatusColor = status =>
 const getNextExecution = (nextExecutions, scheduleId) => {
   let nextExecution;
   const found = nextExecutions.find(
-    execution => execution.values['Schedule ID'] === scheduleId,
+    execution => execution.values['Robot ID'] === scheduleId,
   );
 
   if (found) {
