@@ -88,6 +88,7 @@ export const mapStateToProps = state => ({
   localeErrors: state.space.settingsTranslations.locales.errors,
   contextsLoading: state.space.settingsTranslations.contexts.loading,
   contextErrors: state.space.settingsTranslations.contexts.errors,
+  preferredLocale: state.app.profile.preferredLocale,
 });
 
 export const mapDispatchToProps = {
@@ -107,7 +108,7 @@ export const Translations = compose(
         unexpected: true,
         form: true,
       });
-      this.props.fetchLocales();
+      this.props.fetchLocales({ localeCode: this.props.preferredLocale });
     },
   }),
 )(TranslationsRouter);

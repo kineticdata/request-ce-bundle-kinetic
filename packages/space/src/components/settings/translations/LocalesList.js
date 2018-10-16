@@ -134,7 +134,6 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = {
   push,
-  fetchLocales: actions.fetchLocales,
   enableLocale: actions.enableLocale,
   disableLocale: actions.disableLocale,
   setDefaultLocale: actions.setDefaultLocale,

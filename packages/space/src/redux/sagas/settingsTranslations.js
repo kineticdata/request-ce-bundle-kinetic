@@ -1,15 +1,17 @@
 import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 import { CoreAPI } from 'react-kinetic-core';
-import { List, OrderedMap } from 'immutable';
+import { List } from 'immutable';
 import { toastActions } from 'common';
 
 import { types, actions } from '../modules/settingsTranslations';
 
-export function* fetchLocalesSaga({ payload: { exclude = {} } = {} }) {
+export function* fetchLocalesSaga({
+  payload: { exclude = {}, localeCode } = {},
+}) {
   const [defaultLocale, enabled, available] = yield all([
     !exclude.default && call(CoreAPI.fetchDefaultLocale, {}),
     !exclude.enabled && call(CoreAPI.fetchEnabledLocales, {}),
-    !exclude.available && call(CoreAPI.fetchAvailableLocales, {}),
+    !exclude.available && call(CoreAPI.fetchAvailableLocales, { localeCode }),
   ]);
 
   const errors = new List();
@@ -339,7 +341,7 @@ export function* updateContextKeySaga({ payload }) {
 export function* fetchTranslationsSaga({ payload = {} }) {
   const [{ entries, errors, serverError }, keys, locales] = yield all([
     call(CoreAPI.fetchTranslations, {
-      cached: !!payload.cached,
+      cache: !!payload.cache,
       contextName: payload.contextName,
       localeCode: payload.localeCode,
       keyHash: payload.keyHash,
