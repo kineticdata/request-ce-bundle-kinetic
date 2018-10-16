@@ -94,7 +94,7 @@ const RobotExecutionsListComponent = ({
           <table className="table table-sm table-striped table-robots">
             <thead className="header">
               <tr>
-                <th>Schedule Name</th>
+                <th>Robot Name</th>
                 <th width="10%">Status</th>
                 <th>Start</th>
                 <th>End</th>
@@ -105,7 +105,7 @@ const RobotExecutionsListComponent = ({
               {robotExecutions.map(execution => {
                 return (
                   <tr key={execution.id}>
-                    <td>{execution.values['Schedule Name']}</td>
+                    <td>{execution.values['Robot Name']}</td>
                     <td>
                       <span
                         className={`status ${getStatusColor(

@@ -108,7 +108,7 @@ const RobotSchedulesListComponent = ({
                   <tr key={schedule.id}>
                     <td>
                       <Link to={`/settings/robots/${schedule.id}`}>
-                        <span>{schedule.values['Schedule Name']}</span>
+                        <span>{schedule.values['Robot Name']}</span>
                       </Link>
                     </td>
                     <td>
