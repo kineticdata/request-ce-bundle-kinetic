@@ -18,7 +18,7 @@ const getStatusColor = status =>
 const getNextExecution = (nextExecutions, scheduleId) => {
   let nextExecution;
   const found = nextExecutions.find(
-    execution => execution.values['Schedule ID'] === scheduleId,
+    execution => execution.values['Robot ID'] === scheduleId,
   );
 
   if (found) {
@@ -129,7 +129,7 @@ const RobotSchedulesListComponent = ({
                     <td>{schedule.values['Task Tree']}</td>
                     <td>{schedule.values['Description']}</td>
                     <td>
-                      {moment(nextExecution).isVaid
+                      {moment(nextExecution).isValid()
                         ? moment(nextExecution).format(Constants.TIME_FORMAT)
                         : nextExecution}
                     </td>

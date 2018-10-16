@@ -42,7 +42,7 @@ const RobotExecutionsListComponent = ({
     robotExecutionsLoading &&
     (robotExecutions.size <= 0 ||
       (scheduleId !== undefined &&
-        robotExecutions.get(0).values['Schedule ID'] !== scheduleId));
+        robotExecutions.get(0).values['Robot ID'] !== scheduleId));
   return loading ? (
     <Loading />
   ) : (
@@ -128,7 +128,7 @@ const RobotExecutionsListComponent = ({
                     <td>
                       <Link
                         to={`/settings/robots/${
-                          execution.values['Schedule ID']
+                          execution.values['Robot ID']
                         }/executions/${execution.id}`}
                       >
                         <span>View&nbsp;</span>
