@@ -1,22 +1,28 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { compose, withProps } from 'recompose';
-import { bundle } from 'react-kinetic-core';
+import { compose } from 'recompose';
 
-export const SidebarComponent = ({ settingsBackPath, loading, spaceAdmin }) => (
+import { KappNavLink as NavLink, selectCurrentKapp } from 'common';
+
+export const SidebarComponent = ({
+  settingsBackPath,
+  loading,
+  spaceAdmin,
+  kapp,
+}) => (
   <div className="sidebar space-sidebar">
-    <Link to="/kapps/services" className="nav-return">
+    <Link to={settingsBackPath} className="nav-return">
       <span className="fa fa-fw fa-chevron-left" />
-      Return to Services
+      {`Return to ${kapp.name}`}
     </Link>
     <div className="sidebar-group--content-wrapper">
       {!loading && (
-        <ul className="nav flex-column settings-group">
+        <ul className="nav flex-column sidebar-group">
           <li className="nav-item">
             {spaceAdmin && (
               <NavLink
-                to="/kapps/services/settings/kapp"
+                to="/settings/general"
                 className="nav-link"
                 activeClassName="active"
               >
@@ -25,7 +31,7 @@ export const SidebarComponent = ({ settingsBackPath, loading, spaceAdmin }) => (
               </NavLink>
             )}
             <NavLink
-              to="/kapps/services/settings/forms"
+              to="/settings/forms"
               className="nav-link"
               activeClassName="active"
             >
@@ -34,7 +40,7 @@ export const SidebarComponent = ({ settingsBackPath, loading, spaceAdmin }) => (
             </NavLink>
             {spaceAdmin && (
               <NavLink
-                to="/kapps/services/settings/categories"
+                to="/settings/categories"
                 className="nav-link"
                 activeClassName="active"
               >
@@ -54,6 +60,7 @@ export const mapStateToProps = state => ({
   forms: state.services.forms.data,
   spaceAdmin: state.app.profile.spaceAdmin,
   pathname: state.router.location.pathname,
+  kapp: selectCurrentKapp(state),
 });
 
 export const Sidebar = compose(connect(mapStateToProps))(SidebarComponent);

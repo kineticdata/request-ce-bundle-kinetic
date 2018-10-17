@@ -62,19 +62,18 @@ const SettingsComponent = ({
                 {origForm.name}
               </Link>
             </h3>
-            <h1>{origForm.name} Configuration</h1>
+            <h1>Configuration</h1>
           </div>
-          <div className="page-title__actions">
-            <a
-              href={`${bundle.spaceLocation()}/app/#/admin/datastore/form/${
-                origForm.slug
-              }/builder`}
-              className="btn btn-primary"
-              target="blank"
-            >
-              Form Builder <i className="fa fa-fw fa-external-link" />
-            </a>
-          </div>
+
+          <a
+            href={`${bundle.spaceLocation()}/app/#/admin/datastore/form/${
+              origForm.slug
+            }/builder`}
+            className="btn btn-primary"
+            target="blank"
+          >
+            Form Builder <i className="fa fa-fw fa-external-link" />
+          </a>
         </div>
         {canManage ? (
           <div className="datastore-settings">

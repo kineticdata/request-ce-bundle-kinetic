@@ -81,8 +81,6 @@ export function* fetchRobotSchedulesSaga(action) {
   const query = new CoreAPI.SubmissionSearch(true);
   query.include('details,values');
   query.limit('1000');
-  query.index('values[Robot ID],values[Schedule Name]:UNIQUE');
-  query.eq('values[Robot ID]', action.payload);
 
   const { submissions, errors, serverError } = yield call(
     CoreAPI.searchSubmissions,
@@ -140,24 +138,19 @@ export function* deleteRobotScheduleSaga(action) {
   }
 }
 
-export function* fetchRobotExecutionsSaga({
-  payload: { robotId, scheduleId },
-}) {
+export function* fetchRobotExecutionsSaga({ payload: { scheduleId } }) {
   const pageToken = yield select(
     state => state.space.settingsRobots.robotExecutionsCurrentPageToken,
   );
   const query = new CoreAPI.SubmissionSearch(true);
-  if (pageToken) query.pageToken(pageToken);
+  if (pageToken) {
+    query.pageToken(pageToken);
+  }
   query.include('details,values');
   query.limit(ROBOT_EXECUTIONS_PAGE_SIZE);
   query.sortDirection('DESC');
-  query.eq('values[Robot ID]', robotId);
-  if (scheduleId) {
-    query.eq('values[Schedule ID]', scheduleId);
-    query.index('values[Robot ID],values[Schedule ID],values[Start]');
-  } else {
-    query.index('values[Robot ID],values[Start]');
-  }
+  query.eq('values[Schedule ID]', scheduleId);
+  query.index('values[Schedule ID],values[Start]');
 
   const { submissions, nextPageToken, errors, serverError } = yield call(
     CoreAPI.searchSubmissions,
@@ -197,6 +190,28 @@ export function* fetchRobotExecutionSaga(action) {
   }
 }
 
+export function* fetchNextExecutionsSaga(action) {
+  const query = new CoreAPI.SubmissionSearch(true);
+
+  query.include('details,values');
+  query.limit('1000');
+
+  const { submissions, errors, serverError } = yield call(
+    CoreAPI.searchSubmissions,
+    {
+      search: query.build(),
+      datastore: true,
+      form: 'robot-schedule-next-execution',
+    },
+  );
+
+  if (serverError) {
+  } else if (errors) {
+  } else {
+    yield put(actions.setNextExecutions(submissions));
+  }
+}
+
 export function* watchSettingsRobots() {
   yield takeEvery(types.FETCH_ROBOTS, fetchRobotsSaga);
   yield takeEvery(types.FETCH_ROBOT, fetchRobotSaga);
@@ -213,4 +228,5 @@ export function* watchSettingsRobots() {
     fetchRobotExecutionsSaga,
   );
   yield takeEvery(types.FETCH_ROBOT_EXECUTION, fetchRobotExecutionSaga);
+  yield takeEvery(types.FETCH_NEXT_EXECUTIONS, fetchNextExecutionsSaga);
 }

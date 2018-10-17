@@ -9,7 +9,6 @@ import { reducer as settingsDatastore } from './modules/settingsDatastore';
 import { reducer as settingsNotifications } from './modules/settingsNotifications';
 import { reducer as settingsRobots } from './modules/settingsRobots';
 import { reducer as settingsUsers } from './modules/settingsUsers';
-import { reducer as settingsSpace } from './modules/settingsSpace';
 
 export default {
   errors,
@@ -23,5 +22,4 @@ export default {
   team,
   teamList,
   spaceForms,
-  settingsSpace,
 };

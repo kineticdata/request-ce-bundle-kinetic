@@ -4,9 +4,9 @@ import {
   validateNotificationOptions,
   processNotificationExits,
 } from './notifications';
-import { Alert } from '../../../src/components/Notifications/Alert';
-import { Confirm } from '../../../src/components/Notifications/Confirm';
-import { SchedulerWidget } from '../../../src/components/Scheduler/SchedulerWidget';
+import { Alert } from '../../../src/components/notifications/Alert';
+import { Confirm } from '../../../src/components/notifications/Confirm';
+import { SchedulerWidget } from '../../../src/components/scheduler/SchedulerWidget';
 
 // Ensure the bundle global object exists
 const bundle = typeof window.bundle !== "undefined" ? window.bundle : {};

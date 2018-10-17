@@ -22,7 +22,7 @@ export const Sidebar = ({
             className="btn btn-secondary btn-sidebar-action"
             onClick={handleOpenNewItemMenu}
           >
-            Create New Task
+            New Task
           </button>
         </div>
       )}

@@ -33,8 +33,13 @@
     margin-bottom: 0;
   }
 }
+.card--category {
+  p {
+    margin-left: 1.875rem;
+    @include ms-respond(font-size, 0);
+  }
+}
 // Request Card
-
 .card--request {
   h1 {
     align-items: center;

@@ -29,7 +29,7 @@ export const TeamsList = ({ loading, teams, me }) => (
           </div>
 
           <Link to="/settings/teams/new" className="btn btn-secondary">
-            Create New Team
+            New Team
           </Link>
         </div>
         {teams.size > 0 ? (

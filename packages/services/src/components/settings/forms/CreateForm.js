@@ -61,7 +61,7 @@ export const CreateFormComponent = ({
               <Link to="/kapps/services">services</Link> /{` `}
               <Link to="/kapps/services/settings">settings</Link> /{` `}
             </h3>
-            <h1>{clone ? 'Clone' : 'Create'} Form</h1>
+            <h1>{clone ? 'Clone' : 'New'} Form</h1>
           </div>
         </div>
 
@@ -102,7 +102,10 @@ export const CreateFormComponent = ({
                 type="text"
                 onChange={event => {
                   if (slugEntered) {
-                    setInputs({ ...inputs, Name: event.target.value });
+                    setInputs({
+                      ...inputs,
+                      Name: event.target.value,
+                    });
                   } else {
                     setInputs({
                       ...inputs,
@@ -139,7 +142,10 @@ export const CreateFormComponent = ({
                 value={inputs.Description || ''}
                 type="text"
                 onChange={event =>
-                  setInputs({ ...inputs, Description: event.target.value })
+                  setInputs({
+                    ...inputs,
+                    Description: event.target.value,
+                  })
                 }
               />
             </div>
@@ -201,6 +207,12 @@ export const CreateFormComponent = ({
           </form>
           <div className="form__footer">
             <span className="form__footer__right">
+              <Link
+                to="/kapps/services/settings/forms"
+                className="btn btn-link mb-0"
+              >
+                Cancel
+              </Link>
               <button
                 className="btn btn-primary"
                 onClick={() => {
@@ -217,7 +229,7 @@ export const CreateFormComponent = ({
                       });
                 }}
               >
-                Save
+                {clone ? 'Clone Form' : 'Create Form'}
               </button>
             </span>
           </div>
@@ -257,7 +269,7 @@ export const CreateForm = compose(
       this.props.clone &&
         this.props.fetchForm({
           kappSlug: 'services',
-          formSlug: 'aa',
+          formSlug: this.props.clone,
         }) &&
         this.props.setInputs({
           ...this.props.inputs,
