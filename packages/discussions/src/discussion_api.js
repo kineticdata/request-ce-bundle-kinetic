@@ -93,6 +93,30 @@ export const fetchMessages = (id, token, pageToken) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
+export const fetchMessage = ({ discussionId, id, token }) =>
+  axios
+    .request({
+      url: `${baseUrl()}/api/v1/discussions/${discussionId}/messages/${id}`,
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => response.data)
+    .catch(response => ({ error: response }));
+
+export const fetchMessageHistory = ({ discussionId, id, token }) =>
+  axios
+    .request({
+      url: `${baseUrl()}/api/v1/discussions/${discussionId}/messages/${id}/versions`,
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => response.data)
+    .catch(response => ({ error: response }));
+
 export const fetchDiscussion = ({ id, token }) =>
   axios
     .request({

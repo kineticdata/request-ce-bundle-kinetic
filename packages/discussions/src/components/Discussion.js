@@ -9,6 +9,7 @@ import { ParticipantsDialogContainer } from './ParticipantsDialog';
 import { InvitationDialog } from './InvitationDialog';
 import { DiscussionEditDialog } from './DiscussionEditDialog';
 import { VisibilityHelper } from './VisibilityHelper';
+import { MessageVersionsModal } from './message_history/MessageVersionsModal';
 
 export const MessageActionsContext = React.createContext();
 
@@ -25,6 +26,7 @@ const Messages = ({
   editMessageId,
   reply,
   replyMessage,
+  viewMessageVersions,
 }) => (
   <MessageActionsContext.Provider
     value={{
@@ -33,6 +35,7 @@ const Messages = ({
       editMessageId,
       reply,
       replyMessage,
+      viewMessageVersions,
     }}
   >
     <div className="messages">
@@ -175,6 +178,8 @@ export const Discussion = props => {
     setEditMessageId,
     replyMessage,
     setReplyMessage,
+    viewMessageVersions,
+    viewingMessageVersions,
   } = props;
 
   if (discussion && isModal) {
@@ -196,6 +201,11 @@ export const Discussion = props => {
           />
         )}
         <DiscussionModal {...props} />
+        <MessageVersionsModal
+          discussion={discussion}
+          message={viewingMessageVersions}
+          close={() => viewMessageVersions(null)}
+        />
       </div>
     );
   }
@@ -214,6 +224,11 @@ export const Discussion = props => {
         setReplyMessage={setReplyMessage}
       />
       <DiscussionModal {...props} />
+      <MessageVersionsModal
+        discussion={discussion}
+        message={viewingMessageVersions}
+        close={() => viewMessageVersions(null)}
+      />
     </div>
   ) : null;
 };

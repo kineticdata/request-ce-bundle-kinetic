@@ -127,6 +127,7 @@ export const DiscussionContainer = compose(
   withState('scrollPosition', 'setScrollPosition', 'bottom'),
   withState('editMessageId', 'setEditMessageId', null),
   withState('replyMessage', 'setReplyMessage', null),
+  withState('viewingMessageVersions', 'viewMessageVersions', null),
   withHandlers(() => {
     let ref;
     let chatInput;
