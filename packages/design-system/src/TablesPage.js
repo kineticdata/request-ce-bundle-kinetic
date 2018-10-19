@@ -77,7 +77,7 @@ export const TablesPage = () => (
             </tr>
             <tr>
               <td>
-                Body Title 1{' '}
+                Body Title 2{' '}
                 <span className="badge badge-pill badge-primary">Active</span>
               </td>
               <td>Description goes here</td>
@@ -93,7 +93,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td>Body Title 1</td>
+              <td>Body Title 3</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -107,7 +107,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr className="table-active">
-              <td>Body Title 2</td>
+              <td>Body Title 4</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -121,7 +121,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td>Body Title 1</td>
+              <td>Body Title 5</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -135,7 +135,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td>Body Title 1</td>
+              <td>Body Title 6</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -149,7 +149,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td>Body Title 1</td>
+              <td>Body Title 7</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -216,15 +216,19 @@ export const TablesPage = () => (
         <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col">Header Col 1</th>
-              <th scope="col">Header Col 2</th>
-              <th scope="col"> </th>
+              <th>Header</th>
+              <th scope="col"> Col 1</th>
+              <th scope="col"> Col 2</th>
+              <th scope="col" width="10%">
+                {' '}
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Body Row 1, Col 1</td>
-              <td>Body Row 1, Col 2</td>{' '}
+              <th>Body</th>
+              <td> Row 1, Col 1</td>
+              <td> Row 1, Col 2</td>{' '}
               <td>
                 <Dropdown>
                   <DropdownToggle color="link" className="btn-sm">
@@ -239,8 +243,9 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td>Body Row 2, Col 1</td>
-              <td>Body Row 2,Col 2</td>{' '}
+              <th>Body</th>
+              <td>Row 2, Col 1</td>
+              <td>Row 2,Col 2</td>{' '}
               <td>
                 <Dropdown>
                   <DropdownToggle color="link" className="btn-sm">
@@ -255,8 +260,9 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td>Body Row 3, Col 1</td>
-              <td>Body Row 3, Col 2</td>
+              <th>Body</th>
+              <td>Row 3, Col 1</td>
+              <td>Row 3, Col 2</td>
               <td>
                 <Dropdown>
                   <DropdownToggle color="link" className="btn-sm">
@@ -271,8 +277,9 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td>Body Row 4, Col 1</td>
-              <td>Body Row 4,Col 2</td>{' '}
+              <th>Body</th>
+              <td>Row 4, Col 1</td>
+              <td>Row 4,Col 2</td>{' '}
               <td>
                 <Dropdown>
                   <DropdownToggle color="link" className="btn-sm">
@@ -289,7 +296,7 @@ export const TablesPage = () => (
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan="3">Footer</td>
+              <td colSpan="4">Footer</td>
             </tr>
           </tfoot>
         </table>
@@ -309,31 +316,36 @@ export const TablesPage = () => (
           <caption>Captioned Table</caption>
           <thead>
             <tr>
-              <th scope="col">Header Col 1</th>
-              <th scope="col">Header Col 2</th>
+              <th>Header</th>
+              <th scope="col">Col 1</th>
+              <th scope="col">Col 2</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Body Row 1, Col 1</td>
-              <td>Body Row 1, Col 2</td>
+              <th>Body</th>
+              <td>Row 1, Col 1</td>
+              <td>Row 1, Col 2</td>
             </tr>
             <tr>
-              <td>Body Row 2, Col 1</td>
-              <td>Body Row 2,Col 2</td>
+              <th>Body</th>
+              <td>Row 2, Col 1</td>
+              <td>Row 2,Col 2</td>
             </tr>
             <tr>
-              <td>Body Row 3, Col 1</td>
-              <td>Body Row 3, Col 2</td>
+              <th>Body</th>
+              <td>Row 3, Col 1</td>
+              <td>Row 3, Col 2</td>
             </tr>
             <tr>
-              <td>Body Row 4, Col 1</td>
-              <td>Body Row 4,Col 2</td>
+              <th>Body</th>
+              <td>Row 4, Col 1</td>
+              <td>Row 4,Col 2</td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan="2">Footer</td>
+              <td colSpan="3">Footer</td>
             </tr>
           </tfoot>
         </table>
@@ -343,56 +355,63 @@ export const TablesPage = () => (
           <table className="table">
             <thead>
               <tr>
-                <th scope="col">Header Col 1</th>
-                <th scope="col">Header Col 2</th>
-                <th scope="col">Header Col 3</th>
-                <th scope="col">Header Col 4</th>
-                <th scope="col">Header Col 5</th>
-                <th scope="col">Header Col 6</th>
-                <th scope="col">Header Col 7</th>
+                <th>Header</th>
+                <th scope="col">Col 1</th>
+                <th scope="col">Col 2</th>
+                <th scope="col">Col 3</th>
+                <th scope="col">Col 4</th>
+                <th scope="col">Col 5</th>
+                <th scope="col">Col 6</th>
+                <th scope="col">Col 7</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Body Row 1, Col 1</td>
-                <td>Body Row 1, Col 2</td>
-                <td>Body Row 1, Col 3</td>
-                <td>Body Row 1, Col 4</td>
-                <td>Body Row 1, Col 5</td>
-                <td>Body Row 1, Col 6</td>
-                <td>Body Row 1, Col 7</td>
+                <th>Body</th>
+                <td>Row 1, Col 1</td>
+                <td>Row 1, Col 2</td>
+                <td>Row 1, Col 3</td>
+                <td>Row 1, Col 4</td>
+                <td>Row 1, Col 5</td>
+                <td>Row 1, Col 6</td>
+                <td>Row 1, Col 7</td>
               </tr>
               <tr>
-                <td>Body Row 2, Col 1</td>
-                <td>Body Row 2,Col 2</td>
-                <td>Body Row 2,Col 3</td>
-                <td>Body Row 2,Col 4</td>
-                <td>Body Row 2,Col 5</td>
-                <td>Body Row 2,Col 6</td>
-                <td>Body Row 2,Col 7</td>
+                <th>Body</th>
+                <td>Row 2, Col 1</td>
+                <td>Row 2,Col 2</td>
+                <td>Row 2,Col 3</td>
+                <td>Row 2,Col 4</td>
+                <td>Row 2,Col 5</td>
+                <td>Row 2,Col 6</td>
+                <td>Row 2,Col 7</td>
               </tr>
               <tr>
-                <td>Body Row 3, Col 1</td>
-                <td>Body Row 3, Col 2</td>
-                <td>Body Row 3, Col 3</td>
-                <td>Body Row 3, Col 4</td>
-                <td>Body Row 3, Col 5</td>
-                <td>Body Row 3, Col 6</td>
-                <td>Body Row 3, Col 7</td>
+                <th>Body</th>
+                <td>Row 3, Col 1</td>
+                <td>Row 3, Col 2</td>
+                <td>Row 3, Col 3</td>
+                <td>Row 3, Col 4</td>
+                <td>Row 3, Col 5</td>
+                <td>Row 3, Col 6</td>
+                <td>Row 3, Col 7</td>
               </tr>
               <tr>
-                <td>Body Row 4, Col 1</td>
-                <td>Body Row 4,Col 2</td>
-                <td>Body Row 4,Col 3</td>
-                <td>Body Row 4,Col 4</td>
-                <td>Body Row 4,Col 5</td>
-                <td>Body Row 4,Col 6</td>
-                <td>Body Row 4,Col 7</td>
+                <th>Body</th>
+                <td>Row 4, Col 1</td>
+                <td>Row 4,Col 2</td>
+                <td>Row 4,Col 3</td>
+                <td>Row 4,Col 4</td>
+                <td>Row 4,Col 5</td>
+                <td>Row 4,Col 6</td>
+                <td>Row 4,Col 7</td>
               </tr>
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan="7">Footer</td>
+                <td colSpan="8" className="text-center">
+                  Footer
+                </td>
               </tr>
             </tfoot>
           </table>
