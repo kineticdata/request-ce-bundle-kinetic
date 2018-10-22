@@ -12,6 +12,73 @@ export const TablesPage = () => (
       <div className="col-12">
         <h1>Tables</h1>
         <hr />
+        <h2>Best practices</h2>
+        <p>Data tables should:</p>
+        <ul>
+          <li>Show values across multiple categories and measures.</li>
+          <li>
+            Allow for filtering and ordering when comparison is not a priority.
+          </li>
+          <li>
+            Help users visualize and scan many values from an entire data set.
+          </li>
+          <li>
+            Help users find other values in the data hierarchy through use of
+            links.
+          </li>
+          <li>
+            Minimize clutter by only including values that supports the data’s
+            purpose.
+          </li>
+          <li>Include a summary row to surface the column totals.</li>
+          <li>Not include calculations within the summary row.</li>
+          <li>
+            Wrap instead of truncate content. This is because if row titles
+            start with the same word, they’ll all appear the same when
+            truncated.
+          </li>
+          <li>
+            Not to be used for an actionable list of items that link to details
+            pages.
+          </li>
+        </ul>
+        <h3>Alignment</h3>
+        <p>The following alignment rules are followed:</p>
+        <ul>
+          <li>Numerical = Right aligned</li>
+          <li>Textual data = Left aligned</li>
+          <li>Align headers with their related data</li>
+          <li>Don’t center align</li>
+        </ul>
+
+        <h3>Headers</h3>
+        <p>Headers should:</p>
+        <ul>
+          <li>Be informative and descriptive</li>
+          <li>Concise and scannable</li>
+          <li>
+            Include units of measurement symbols so they aren’t repeated
+            throughout the columns
+          </li>
+          <li>Use sentence case (first word capitalized, rest lowercase)</li>
+          <li>Do: 'Temperature °C'; Don't: 'Temperature'</li>
+        </ul>
+
+        <p>Column content should:</p>
+        <ul>
+          <li>Be concise and scannable</li>
+          <li>
+            Not include units of measurement symbols (put those symbols in the
+            headers)
+          </li>
+          <li>Use sentence case (first word capitalized, rest lowercase)</li>
+        </ul>
+        <h3>Decimals</h3>
+        <p>
+          Keep decimals consistent. For example, don’t use 3 decimals in one row
+          and 2 in others.
+        </p>
+        <hr />
         <h2>Basic Table</h2>
 
         <table className="table">
@@ -478,76 +545,6 @@ export const TablesPage = () => (
           </tfoot>
         </table>
         <hr />
-
-        <h2>Best practices</h2>
-        <p>Data tables should:</p>
-        <ul>
-          <li>Show values across multiple categories and measures.</li>
-          <li>
-            Allow for filtering and ordering when comparison is not a priority.
-          </li>
-          <li>
-            Help users visualize and scan many values from an entire data set.
-          </li>
-          <li>
-            Help users find other values in the data hierarchy through use of
-            links.
-          </li>
-          <li>
-            Minimize clutter by only including values that supports the data’s
-            purpose.
-          </li>
-          <li>Include a summary row to surface the column totals.</li>
-          <li>Not include calculations within the summary row.</li>
-          <li>
-            Wrap instead of truncate content. This is because if row titles
-            start with the same word, they’ll all appear the same when
-            truncated.
-          </li>
-          <li>
-            Not to be used for an actionable list of items that link to details
-            pages.
-          </li>
-        </ul>
-        <h3>Alignment</h3>
-        <p>
-          Column content types are built into the component props so the
-          following alignment rules are followed:
-        </p>
-        <ul>
-          <li>Numerical = Right aligned</li>
-          <li>Textual data = Left aligned</li>
-          <li>Align headers with their related data</li>
-          <li>Don’t center align</li>
-        </ul>
-
-        <h3>Headers</h3>
-        <p>Headers should:</p>
-        <ul>
-          <li>Be informative and descriptive</li>
-          <li>Concise and scannable</li>
-          <li>
-            Include units of measurement symbols so they aren’t repeated
-            throughout the columns
-          </li>
-          <li>Use sentence case (first word capitalized, rest lowercase)</li>
-          <li>Do: 'Temperature °C'; Don't: 'Temperature'</li>
-        </ul>
-
-        <p>Column content should:</p>
-        <ul>
-          <li>Be concise and scannable</li>
-          <li>
-            Not include units of measurement symbols (put those symbols in the
-            headers)
-          </li>
-          <li>Use sentence case (first word capitalized, rest lowercase)</li>
-        </ul>
-        <h3>Decimals</h3>
-        <p>
-          Keep decimals consistent. For example, don’t use 3 decimals in one row
-          and 2 in others.
-        </p>
       </div>
     </div>
   </Fragment>
