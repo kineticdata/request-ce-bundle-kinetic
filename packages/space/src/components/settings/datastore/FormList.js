@@ -113,7 +113,7 @@ const FormListComponent = ({
                               tag={Link}
                               to={`${match.path}/${form.slug}`}
                             >
-                              View Datastore
+                              View
                             </DropdownItem>
                             <DropdownItem
                               tag={Link}
@@ -126,7 +126,7 @@ const FormListComponent = ({
                                 tag={Link}
                                 to={`${match.path}/${form.slug}/settings`}
                               >
-                                Configure Form
+                                Configure
                               </DropdownItem>
                             )}
                           </DropdownMenu>
