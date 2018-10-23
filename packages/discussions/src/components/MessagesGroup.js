@@ -155,7 +155,7 @@ export const Message = ({ discussion, message }) => (
       <div className="parent-message">
         {message.parent.unknown ? (
           <div className="message message-missing">(Message missing)</div>
-        ) : (
+        ) : message.parent.omitted ? null : (
           <Fragment>
             <Message discussion={discussion} message={message.parent} />
             <small>
