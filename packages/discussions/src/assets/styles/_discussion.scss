@@ -451,6 +451,19 @@
         color: $blue2;
         margin-left: 1rem;
       }
+      .text-token {
+        font-style: italic;
+      }
+      .user-token {
+        font-weight: bold;
+      }
+      .message-token {
+        cursor: pointer;
+        &:hover {
+          color: $blue-lake;
+          text-decoration: underline;
+        }
+      }
     }
   }
 }
