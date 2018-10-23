@@ -64,13 +64,22 @@ const FormListComponent = ({
             <h3>Loading</h3>
           ) : datastoreForms && datastoreForms.size > 0 ? (
             <table className="table table-sm table-striped table-datastore">
-              <thead className="header">
+              <thead className="header sortable">
                 <tr>
-                  <th>Form Name</th>
-                  <th width="40%">Description</th>
-                  <th width="10%">Updated</th>
-                  <th width="10%">Created</th>
-                  <th width="48px">&nbsp;</th>
+                  <th scope="col" width="10%">
+                    Form Name
+                  </th>
+                  <th scope="col">Slug</th>
+                  <th scope="col" width="50%">
+                    Description
+                  </th>
+                  <th scope="col" width="10%">
+                    Updated
+                  </th>
+                  <th scope="col" width="10%">
+                    Created
+                  </th>
+                  <th scope="col" width="48px" className="sort-disabled" />
                 </tr>
               </thead>
               <tbody>
@@ -82,9 +91,8 @@ const FormListComponent = ({
                         <Link to={`${match.path}/${form.slug}`}>
                           <span>{form.name}</span>
                         </Link>
-                        <br />
-                        <small>{form.slug}</small>
                       </td>
+                      <td>{form.slug}</td>
                       <td>{form.description}</td>
                       <td>
                         <Timestamp value={form.updatedAt} slug={form.slug} />
@@ -101,6 +109,12 @@ const FormListComponent = ({
                             <span className="fa fa-ellipsis-h fa-2x" />
                           </DropdownToggle>
                           <DropdownMenu right>
+                            <DropdownItem
+                              tag={Link}
+                              to={`${match.path}/${form.slug}`}
+                            >
+                              View Datastore
+                            </DropdownItem>
                             <DropdownItem
                               tag={Link}
                               to={`${match.path}/${form.slug}/new`}

@@ -70,6 +70,7 @@ const MobileSubmissionCard = ({ submission, columns, path }) => (
             >
               Clone
             </button>
+            <div className="dropdown-divider" />
             <button
               type="button"
               onClick={handleDelete(submission.id)}
@@ -133,7 +134,11 @@ const TableSubmissionRow = ({
           <DropdownItem onClick={handleClone(submission.id)}>
             Clone
           </DropdownItem>
-          <DropdownItem onClick={handleDelete(submission.id)}>
+          <DropdownItem divider />
+          <DropdownItem
+            onClick={handleDelete(submission.id)}
+            className="text-danger"
+          >
             Delete
           </DropdownItem>
         </DropdownMenu>

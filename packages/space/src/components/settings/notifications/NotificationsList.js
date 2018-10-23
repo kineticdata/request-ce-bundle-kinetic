@@ -70,15 +70,13 @@ const NotificationsListComponent = ({
         </ul>
       </div>
       {submissions.length > 0 ? (
-        <table className="table table-sm">
-          <thead>
+        <table className="table table-sm table-striped table-datastore">
+          <thead className="sortable">
             <tr>
               <th>Name</th>
               <th>Status</th>
-              <th className="hidden-md-down">
-                {type === 'Date Format' ? 'Format' : 'Subject'}
-              </th>
-              <th />
+              <th>{type === 'Date Format' ? 'Format' : 'Subject'}</th>
+              <th className="sort-disabled" />
             </tr>
           </thead>
           <tbody>

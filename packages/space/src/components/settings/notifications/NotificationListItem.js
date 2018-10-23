@@ -46,7 +46,11 @@ const NotificationListItemComponent = ({
             <DropdownItem onClick={handleClone(notification.id)}>
               Clone
             </DropdownItem>
-            <DropdownItem onClick={handleDelete(notification.id)}>
+            <DropdownItem divider />
+            <DropdownItem
+              onClick={handleDelete(notification.id)}
+              className="text-danger"
+            >
               Delete
             </DropdownItem>
           </DropdownMenu>

@@ -34,12 +34,14 @@ export const TeamsList = ({ loading, teams, me }) => (
         </div>
         {teams.size > 0 ? (
           <div className="space-admin-wrapper">
-            <table className="table">
-              <thead className="d-none d-md-table-header-group">
+            <table className="table table-sm table-datastore">
+              <thead className="d-none d-md-table-header-group sortable">
                 <tr className="header">
-                  <th>Team</th>
-                  <th>Description</th>
-                  <th />
+                  <th scope="col" width="33%">
+                    Team
+                  </th>
+                  <th scope="col">Description</th>
+                  <th className="sort-disabled" />
                 </tr>
               </thead>
               <tbody>

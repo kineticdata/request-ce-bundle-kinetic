@@ -76,14 +76,14 @@ const UsersListComponent = ({ users, loading, match, handleChange, data }) => {
             <h3>Loading</h3>
           ) : users.length > 0 ? (
             <div className="space-admin-wrapper">
-              <table className="table">
-                <thead className="d-none d-md-table-header-group">
+              <table className="table table-datastore table-sm">
+                <thead className="d-none d-md-table-header-group sortable">
                   <tr className="header">
-                    <th />
+                    <th className="sort-disabled" />
                     <th>Username</th>
                     <th>Display Name</th>
                     <th>Email</th>
-                    <th />
+                    <th className="sort-disabled" />
                   </tr>
                 </thead>
                 <tbody>

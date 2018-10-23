@@ -58,7 +58,7 @@ const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
           </div>
         </td>
         <td className="d-none d-md-table-cell">
-          <Avatar user={user} />
+          <Avatar user={user} size="18px" />
         </td>
       </Fragment>
       <td>
@@ -76,7 +76,7 @@ const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
           toggle={toggleDropdown(user.username)}
           isOpen={openDropdown === user.username}
         >
-          <DropdownToggle color="link">
+          <DropdownToggle color="link" className="btn-sm">
             <span className="fa fa-ellipsis-h fa-2x" />
           </DropdownToggle>
           <DropdownMenu right>
