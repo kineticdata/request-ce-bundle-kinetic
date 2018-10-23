@@ -5,11 +5,14 @@ import { compose, lifecycle, withHandlers } from 'recompose';
 import { List } from 'immutable';
 import { Filter } from './records';
 import { KappRoute as Route, KappRedirect as Redirect, Loading } from 'common';
-import { Sidebar } from './components/Sidebar';
-import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
+
 import { actions, selectMyTeamForms } from './redux/modules/queueApp';
 import { actions as queueActions } from './redux/modules/queue';
 import { actions as filterMenuActions } from './redux/modules/filterMenu';
+import { actions as formsActions } from './redux/modules/forms';
+
+import { Sidebar } from './components/Sidebar';
+import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { QueueItemContainer } from './components/queue_item/QueueItem';
 import { QueueListContainer } from './components/queue_list/QueueListContainer';
 import { FilterMenuContainer } from './components/filter_menu/FilterMenuContainer';
@@ -98,6 +101,7 @@ const mapDispatchToProps = {
   fetchList: queueActions.fetchList,
   openNewItemMenu: queueActions.openNewItemMenu,
   openFilterMenu: filterMenuActions.open,
+  fetchForms: formsActions.fetchForms,
 };
 
 const enhance = compose(
@@ -113,6 +117,7 @@ const enhance = compose(
   lifecycle({
     componentWillMount() {
       this.props.loadAppSettings();
+      this.props.fetchForms();
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.loading && !nextProps.loading) {
