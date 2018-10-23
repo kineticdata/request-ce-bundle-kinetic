@@ -35,6 +35,9 @@
         .subtext {
           color: $blue-lake;
           margin-left: 0.5rem;
+          &.btn.btn-link {
+            padding: 0;
+          }
         }
       }
       li.present .sb-avatar img {

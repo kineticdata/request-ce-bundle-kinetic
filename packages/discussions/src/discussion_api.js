@@ -93,6 +93,30 @@ export const fetchMessages = (id, token, pageToken) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
+export const fetchMessage = ({ discussionId, id, token }) =>
+  axios
+    .request({
+      url: `${baseUrl()}/api/v1/discussions/${discussionId}/messages/${id}`,
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => response.data)
+    .catch(response => ({ error: response }));
+
+export const fetchMessageHistory = ({ discussionId, id, token }) =>
+  axios
+    .request({
+      url: `${baseUrl()}/api/v1/discussions/${discussionId}/messages/${id}/versions`,
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => response.data)
+    .catch(response => ({ error: response }));
+
 export const fetchDiscussion = ({ id, token }) =>
   axios
     .request({
@@ -195,14 +219,20 @@ export const createInvite = ({ discussionId, type, value, token, message }) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const resendInvite = (id, inviteId, token) =>
+export const resendInvite = ({ discussionId, email, username, token }) =>
   axios
     .request({
-      url: `${baseUrl()}/api/v1/discussions/${id}/invitations/${inviteId}`,
-      method: 'post',
+      url: `${baseUrl()}/api/v1/discussions/${discussionId}/invitations/${email ||
+        username}`,
+      method: 'put',
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      params: {
+        // If we are looking up by email add an email parameter to the object
+        ...(email ? { email: '' } : {}),
+      },
+      data: {},
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));

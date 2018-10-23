@@ -137,6 +137,20 @@ export const TextMessage = ({ discussion, message }) => (
 export const Message = ({ discussion, message }) => (
   <div className={`message ${editedClass(message)}`}>
     <TextMessage discussion={discussion} message={message} />
+    {message.createdAt !== message.updatedAt && (
+      <MessageActionsContext.Consumer>
+        {actions =>
+          actions && (
+            <button
+              className="btn btn-link"
+              onClick={() => actions.viewMessageVersions(message)}
+            >
+              <em>(Edited)</em>
+            </button>
+          )
+        }
+      </MessageActionsContext.Consumer>
+    )}
     {message.parent && (
       <div className="parent-message">
         {message.parent.unknown ? (
