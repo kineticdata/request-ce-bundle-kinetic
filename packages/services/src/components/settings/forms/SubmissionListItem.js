@@ -25,7 +25,11 @@ const DiscussionIcon = () => (
 
 const MobileSubmissionCard = ({ submission, columns, to }) => (
   <tr>
-    <td className="d-md-none d-table-cell" key={`tcol-0-${submission.id}`}>
+    <td
+      scope="row"
+      className="d-md-none d-table-cell"
+      key={`tcol-0-${submission.id}`}
+    >
       <div className="card">
         <div className="card-body">
           <strong className="card-title">

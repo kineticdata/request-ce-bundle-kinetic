@@ -76,21 +76,25 @@ const FormListComponent = ({
               <table className="table table-sm table-striped table--settings">
                 <thead className="header sortable">
                   <tr>
-                    <th width="20%">Form Name</th>
-                    <th>Slug</th>
-                    <th width="20%">Description</th>
-                    <th>Type</th>
-                    <th>Updated</th>
-                    <th>Created</th>
-                    <th>Status</th>
-                    <th width="48px" className="sort-disabled" />
+                    <th scope="col" width="20%">
+                      Form Name
+                    </th>
+                    <th scope="col">Slug</th>
+                    <th scope="col" width="20%">
+                      Description
+                    </th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Updated</th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" width="48px" className="sort-disabled" />
                   </tr>
                 </thead>
                 <tbody>
                   {currentForms.map(form => {
                     return (
                       <tr key={form.slug}>
-                        <td>
+                        <td scope="row">
                           <Link to={`${match.path}/${form.slug}`}>
                             <span>{form.name}</span>
                           </Link>

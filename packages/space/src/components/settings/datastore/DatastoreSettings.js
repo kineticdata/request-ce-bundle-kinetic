@@ -198,8 +198,8 @@ const SettingsComponent = ({
                 <table className="table table--settings table-draggable">
                   <thead>
                     <tr className="header">
-                      <th>Field</th>
-                      <th>Visible in Table</th>
+                      <th scope="col">Field</th>
+                      <th scope="col">Visible in Table</th>
                     </tr>
                   </thead>
                   <DragDropContext onDragEnd={handleColumnOrderChange}>
@@ -221,7 +221,7 @@ const SettingsComponent = ({
                                     snapshot.isDragging ? 'dragging' : ''
                                   }`}
                                 >
-                                  <td>
+                                  <td scope="row">
                                     {col.type === 'value' ? (
                                       col.label
                                     ) : (
@@ -421,16 +421,16 @@ const QualificationTable = ({
     <table className="table table--settings">
       <thead>
         <tr className="header">
-          <th>Qualification Name</th>
-          <th>Result Type</th>
-          <th>Parameters</th>
+          <th scope="col">Qualification Name</th>
+          <th scope="col">Result Type</th>
+          <th scope="col">Parameters</th>
           <th />
         </tr>
       </thead>
       <tbody>
         {updatedForm.bridgeModel.qualifications.map((qual, index) => (
           <tr key={qual.name}>
-            <td>{qual.name}</td>
+            <td scope="row">{qual.name}</td>
             <td>{qual.resultType}</td>
             <td>{qual.parameters.length} Parameters</td>
             <td>
@@ -465,7 +465,7 @@ const QualificationTable = ({
         ))}
         {updatedForm.bridgeModel.qualifications.size === 0 && (
           <tr>
-            <td colSpan="4" className="text-center">
+            <td scope="row" colSpan="4" className="text-center">
               No qualifications.
             </td>
           </tr>
@@ -544,15 +544,15 @@ const QualificationModal = ({
             <table className="table table--settings">
               <thead>
                 <tr className="header">
-                  <th>Name</th>
-                  <th>Notes</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Notes</th>
                   <th width="1%" />
                 </tr>
               </thead>
               <tbody>
                 {newQualification.parameters.map((parameter, index) => (
                   <tr key={parameter.name}>
-                    <td>{parameter.name}</td>
+                    <td scope="row">{parameter.name}</td>
                     <td>{parameter.notes}</td>
                     <td className="text-right">
                       <div className="btn-group btn-group-sm pull-right">
@@ -754,8 +754,8 @@ const AttributeTable = ({
     <table className="table table--settings">
       <thead>
         <tr className="header">
-          <th>Attribute Name</th>
-          <th>Mapping</th>
+          <th scope="col">Attribute Name</th>
+          <th scope="col">Mapping</th>
           <th />
         </tr>
       </thead>
@@ -767,7 +767,7 @@ const AttributeTable = ({
             ) || {};
           return (
             <tr key={attr.name}>
-              <td>
+              <td scope="row">
                 {editAttribute.index === index ? (
                   <input
                     id="editAttributeName"
@@ -865,7 +865,7 @@ const AttributeTable = ({
         })}
         {updatedForm.bridgeModel.attributes.size === 0 && (
           <tr>
-            <td colSpan="3" className="text-center">
+            <td scope="row" colSpan="3" className="text-center">
               No attributes.
             </td>
           </tr>
@@ -874,11 +874,13 @@ const AttributeTable = ({
       <tfoot>
         {newAttribute.error && (
           <tr className="alert alert-danger" role="alert">
-            <td colSpan="3">{newAttribute.error}</td>
+            <td scope="row" colSpan="3">
+              {newAttribute.error}
+            </td>
           </tr>
         )}
         <tr>
-          <td>
+          <td scope="row">
             <input
               id="newAttributeName"
               name="newAttributeName"

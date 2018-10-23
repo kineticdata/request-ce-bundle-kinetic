@@ -146,6 +146,7 @@ const SubmissionListComponent = ({
                           key={`thead-${c.type}-${c.name}`}
                           className={`d-sm-none d-md-table-cell ${sortClass}`}
                           onClick={e => sortTable(c)}
+                          scope="col"
                         >
                           {isDiscussionIdField ? <DiscussionIcon /> : c.label}
                         </th>
@@ -156,7 +157,7 @@ const SubmissionListComponent = ({
                 </thead>
                 <thead className="d-md-none">
                   <tr>
-                    <th>
+                    <th scope="col">
                       <div className="input-group">
                         <div className="input-group-prepend">
                           <span className="input-group-text">Sort By</span>

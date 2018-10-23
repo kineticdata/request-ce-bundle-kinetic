@@ -341,7 +341,7 @@ export class ImportComponent extends Component {
                     )
                     .map((obj, idx) => (
                       <tr key={obj.header + idx}>
-                        <td>{obj.header}</td>
+                        <td scope="row">{obj.header}</td>
                         <td />
                         <td>
                           <input
@@ -361,7 +361,7 @@ export class ImportComponent extends Component {
                     if (obj.header.toLowerCase() !== 'datastore record id') {
                       return (
                         <tr key={obj.header + idx}>
-                          <td>{obj.header}</td>
+                          <td scope="row">{obj.header}</td>
                           <td>
                             <select
                               onChange={this.handleSelect}
@@ -414,7 +414,9 @@ export class ImportComponent extends Component {
                   <thead>
                     <tr>
                       {this.state.headerToFieldMap.map((obj, idx) => (
-                        <th key={obj.header + idx}>{obj.header}</th>
+                        <th scope="col" key={obj.header + idx}>
+                          {obj.header}
+                        </th>
                       ))}
                     </tr>
                   </thead>
@@ -427,10 +429,16 @@ export class ImportComponent extends Component {
                             if (
                               obj.field.toLowerCase() === 'datastore record id'
                             ) {
-                              return <td key={obj.field + idx}>{id}</td>;
+                              return (
+                                <td scope="row" key={obj.field + idx}>
+                                  {id}
+                                </td>
+                              );
                             }
                             return (
-                              <td key={obj.field + idx}>{values[obj.field]}</td>
+                              <td scope="row" key={obj.field + idx}>
+                                {values[obj.field]}
+                              </td>
                             );
                           })}
                         </tr>

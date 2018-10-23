@@ -80,9 +80,9 @@ const UsersListComponent = ({ users, loading, match, handleChange, data }) => {
                 <thead className="d-none d-md-table-header-group sortable">
                   <tr className="header">
                     <th className="sort-disabled" />
-                    <th>Username</th>
-                    <th>Display Name</th>
-                    <th>Email</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Display Name</th>
+                    <th scope="col">Email</th>
                     <th className="sort-disabled" />
                   </tr>
                 </thead>

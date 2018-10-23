@@ -92,13 +92,13 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <th>Body</th>
+              <th scope="row">Body</th>
               <td>Row 1, Col 1</td>
               <td>Row 1, Col 2</td>
               <td>Row 1, Col 3</td>
             </tr>
             <tr>
-              <th>Body</th>
+              <th scope="row">Body</th>
               <td>Row 2, Col 1</td>
               <td>Row 2, Col 2</td>
               <td>Row 2, Col 3</td>
@@ -129,7 +129,7 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <td>Body Title 1</td>
+              <td scope="row">Body Title 1</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -143,7 +143,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td>
+              <td scope="row">
                 Body Title 2{' '}
                 <span className="badge badge-pill badge-primary">Active</span>
               </td>
@@ -160,7 +160,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td>Body Title 3</td>
+              <td scope="row">Body Title 3</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -174,7 +174,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr className="table-active">
-              <td>Body Title 4</td>
+              <td scope="row">Body Title 4</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -188,7 +188,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td>Body Title 5</td>
+              <td scope="row">Body Title 5</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -202,7 +202,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td>Body Title 6</td>
+              <td scope="row">Body Title 6</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -216,7 +216,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td>Body Title 7</td>
+              <td scope="row">Body Title 7</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -293,7 +293,7 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <th>Body</th>
+              <th scope="row">Body</th>
               <td> Row 1, Col 1</td>
               <td> Row 1, Col 2</td>{' '}
               <td>
@@ -310,7 +310,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <th>Body</th>
+              <th scope="row">Body</th>
               <td>Row 2, Col 1</td>
               <td>Row 2,Col 2</td>{' '}
               <td>
@@ -327,7 +327,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <th>Body</th>
+              <th scope="row">Body</th>
               <td>Row 3, Col 1</td>
               <td>Row 3, Col 2</td>
               <td>
@@ -344,7 +344,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <th>Body</th>
+              <th scope="row">Body</th>
               <td>Row 4, Col 1</td>
               <td>Row 4,Col 2</td>{' '}
               <td>
@@ -390,22 +390,22 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <th>Body</th>
+              <th scope="row">Body</th>
               <td>Row 1, Col 1</td>
               <td>Row 1, Col 2</td>
             </tr>
             <tr>
-              <th>Body</th>
+              <th scope="row">Body</th>
               <td>Row 2, Col 1</td>
               <td>Row 2,Col 2</td>
             </tr>
             <tr>
-              <th>Body</th>
+              <th scope="row">Body</th>
               <td>Row 3, Col 1</td>
               <td>Row 3, Col 2</td>
             </tr>
             <tr>
-              <th>Body</th>
+              <th scope="row">Body</th>
               <td>Row 4, Col 1</td>
               <td>Row 4,Col 2</td>
             </tr>
@@ -434,7 +434,7 @@ export const TablesPage = () => (
             </thead>
             <tbody>
               <tr>
-                <th>Body</th>
+                <th scope="row">Body</th>
                 <td>Row 1, Col 1</td>
                 <td>Row 1, Col 2</td>
                 <td>Row 1, Col 3</td>
@@ -444,7 +444,7 @@ export const TablesPage = () => (
                 <td>Row 1, Col 7</td>
               </tr>
               <tr>
-                <th>Body</th>
+                <th scope="row">Body</th>
                 <td>Row 2, Col 1</td>
                 <td>Row 2,Col 2</td>
                 <td>Row 2,Col 3</td>
@@ -454,7 +454,7 @@ export const TablesPage = () => (
                 <td>Row 2,Col 7</td>
               </tr>
               <tr>
-                <th>Body</th>
+                <th scope="row">Body</th>
                 <td>Row 3, Col 1</td>
                 <td>Row 3, Col 2</td>
                 <td>Row 3, Col 3</td>
@@ -464,7 +464,7 @@ export const TablesPage = () => (
                 <td>Row 3, Col 7</td>
               </tr>
               <tr>
-                <th>Body</th>
+                <th scope="row">Body</th>
                 <td>Row 4, Col 1</td>
                 <td>Row 4,Col 2</td>
                 <td>Row 4,Col 3</td>
@@ -494,19 +494,19 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <td>Body Row 1, Col 1</td>
+              <td scope="row">Body Row 1, Col 1</td>
               <td>Body Row 1, Col 2</td>
             </tr>
             <tr>
-              <td>Body Row 2, Col 1</td>
+              <td scope="row">Body Row 2, Col 1</td>
               <td>Body Row 2,Col 2</td>
             </tr>
             <tr>
-              <td>Body Row 3, Col 1</td>
+              <td scope="row">Body Row 3, Col 1</td>
               <td>Body Row 3, Col 2</td>
             </tr>
             <tr>
-              <td>Body Row 4, Col 1</td>
+              <td scope="row">Body Row 4, Col 1</td>
               <td>Body Row 4,Col 2</td>
             </tr>
           </tbody>
@@ -529,17 +529,19 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <td>January</td>
+              <td scope="row">January</td>
               <td className="text-right">$100</td>
             </tr>
             <tr>
-              <td>February</td>
+              <td scope="row">February</td>
               <td className="text-right">$80</td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
-              <td className="font-weight-bold">Sum</td>
+              <td scope="row" className="font-weight-bold">
+                Sum
+              </td>
               <td className="text-right text-danger font-weight-bold">$180</td>
             </tr>
           </tfoot>

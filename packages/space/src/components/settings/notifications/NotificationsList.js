@@ -73,9 +73,11 @@ const NotificationsListComponent = ({
         <table className="table table-sm table-striped table--settings">
           <thead className="sortable">
             <tr>
-              <th>Name</th>
-              <th>Status</th>
-              <th>{type === 'Date Format' ? 'Format' : 'Subject'}</th>
+              <th scope="col">Name</th>
+              <th scope="col">Status</th>
+              <th scope="col">
+                {type === 'Date Format' ? 'Format' : 'Subject'}
+              </th>
               <th className="sort-disabled" />
             </tr>
           </thead>

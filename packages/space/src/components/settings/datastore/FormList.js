@@ -87,7 +87,7 @@ const FormListComponent = ({
                   const canManage = form.canManage;
                   return (
                     <tr key={form.slug}>
-                      <td>
+                      <td scope="row">
                         <Link to={`${match.path}/${form.slug}`}>
                           <span>{form.name}</span>
                         </Link>

@@ -288,6 +288,7 @@ export const FormSubmissionsContainer = ({
                           '';
                         return (
                           <th
+                            scope="col"
                             key={`thead-${c.type}-${c.name}`}
                             className={`d-sm-none d-md-table-cell
                               ${sortClass}
@@ -303,7 +304,7 @@ export const FormSubmissionsContainer = ({
                   </thead>
                   <thead className="d-md-none">
                     <tr>
-                      <th>
+                      <th scope="col">
                         <div className="input-group">
                           <div className="input-group-prepend">
                             <span className="input-group-text">Sort By</span>
