@@ -9,6 +9,8 @@
   justify-content: space-between;
   flex-direction: column;
 }
+
+// Add padding to the list of discussions but not the actual discussion.
 .queue-item-container
   .queue-item-content
   .kinops-discussions.recent-discussions-wrapper {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { List } from 'immutable';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
 import { parse } from 'query-string';
@@ -168,6 +169,9 @@ export const mapDispatchToProps = {
   push,
   fetchSubmission: actions.fetchSubmission,
   resetSubmission: actions.resetSubmission,
+  fetchRelatedDiscussions: actions.fetchRelatedDiscussions,
+  setCurrentDiscussion: actions.setCurrentDiscussion,
+  setRelatedDiscussions: actions.setRelatedDiscussions,
   addSuccess: toastActions.addSuccess,
   addError: toastActions.addError,
 };
@@ -196,9 +200,15 @@ export const DatastoreSubmission = compose(
       ) {
         this.props.fetchSubmission(nextProps.match.params.id);
       }
+
+      if (this.props.currentDiscussion !== nextProps.currentDiscussion) {
+        this.props.fetchRelatedDiscussions(nextProps.id);
+      }
     },
     componentWillUnmount() {
       this.props.resetSubmission();
+      this.props.setCurrentDiscussion(null);
+      this.props.setRelatedDiscussions(List());
     },
   }),
 )(DatastoreSubmissionComponent);

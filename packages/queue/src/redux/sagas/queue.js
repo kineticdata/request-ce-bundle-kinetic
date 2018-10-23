@@ -261,7 +261,7 @@ export function* fetchCurrentItemTask(action) {
         );
 
         if (participating) {
-          // yield put(actions.setCurrentDiscussion(discussions[0]));
+          yield put(actions.setCurrentDiscussion(discussions[0]));
         }
       }
     }

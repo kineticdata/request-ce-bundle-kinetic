@@ -401,6 +401,7 @@ export function* fetchSubmissionsAdvancedSaga() {
 
 export function* fetchSubmissionSaga(action) {
   const token = yield select(selectToken);
+  const profile = yield select(state => state.app.profile);
   const include =
     'details,values,form,form.attributes,form.fields,activities,activities.details';
   const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
@@ -423,9 +424,36 @@ export function* fetchSubmissionSaga(action) {
     });
 
     if (discussions && discussions.length > 0) {
-      yield put(actions.setCurrentDiscussion(discussions[0]));
+      // Save all of the related discussions.
+      yield put(actions.setRelatedDiscussions(discussions));
+
+      // If there is only 1 and the user is already a participant, auto-subscribe.
+      if (discussions.length === 1) {
+        const participating = discussions[0].participants.find(
+          p => p.user.username === profile.username,
+        );
+
+        if (participating) {
+          yield put(actions.setCurrentDiscussion(discussions[0]));
+        }
+      }
     }
   }
+}
+
+export function* fetchRelatedDiscussions(action) {
+  const token = yield select(selectToken);
+  const submission = action.payload;
+
+  const { discussions } = yield call(DiscussionAPI.fetchDiscussions, {
+    token,
+    relatedItem: {
+      type: 'Datastore Submission',
+      key: `${submission.form.slug}/${submission.id}`,
+    },
+  });
+
+  yield put(actions.setRelatedDiscussions(discussions));
 }
 
 export function* cloneSubmissionSaga(action) {
