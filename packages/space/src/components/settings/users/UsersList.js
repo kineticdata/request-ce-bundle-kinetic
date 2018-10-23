@@ -76,7 +76,7 @@ const UsersListComponent = ({ users, loading, match, handleChange, data }) => {
             <h3>Loading</h3>
           ) : users.length > 0 ? (
             <div className="space-admin-wrapper">
-              <table className="table table-datastore table-sm">
+              <table className="table table--settings table-sm">
                 <thead className="d-none d-md-table-header-group sortable">
                   <tr className="header">
                     <th className="sort-disabled" />

@@ -70,7 +70,7 @@ const NotificationsListComponent = ({
         </ul>
       </div>
       {submissions.length > 0 ? (
-        <table className="table table-sm table-striped table-datastore">
+        <table className="table table-sm table-striped table--settings">
           <thead className="sortable">
             <tr>
               <th>Name</th>

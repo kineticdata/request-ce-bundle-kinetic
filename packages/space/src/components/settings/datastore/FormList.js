@@ -63,7 +63,7 @@ const FormListComponent = ({
           {loading ? (
             <h3>Loading</h3>
           ) : datastoreForms && datastoreForms.size > 0 ? (
-            <table className="table table-sm table-striped table-datastore">
+            <table className="table table-sm table-striped table--settings">
               <thead className="header sortable">
                 <tr>
                   <th scope="col" width="10%">

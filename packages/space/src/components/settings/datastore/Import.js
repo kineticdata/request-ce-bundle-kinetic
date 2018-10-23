@@ -333,7 +333,7 @@ export class ImportComponent extends Component {
           )}
           {this.state.mapHeadersShow && (
             <Fragment>
-              <table className="settings-table">
+              <table className="table--settings">
                 <tbody>
                   {this.state.headerToFieldMap
                     .filter(

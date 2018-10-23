@@ -127,7 +127,7 @@ const SubmissionListComponent = ({
                     </small>
                   </div>
                 )}
-              <table className="table table-sm table-striped table-datastore">
+              <table className="table table-sm table-striped table--settings">
                 <thead className="d-none d-md-table-header-group sortable">
                   <tr>
                     {visibleColumns.map(c => {

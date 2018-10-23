@@ -163,7 +163,7 @@ const TeamFormComponent = ({
               </h3>
 
               <div className="col-12">
-                <table className="table table-striped table-sm table-responsive table-datastore">
+                <table className="table table-striped table-sm table-responsive table--settings">
                   <thead>
                     <tr>
                       <th>&nbsp;</th>

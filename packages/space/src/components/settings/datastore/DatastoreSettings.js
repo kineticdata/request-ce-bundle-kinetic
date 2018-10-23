@@ -195,7 +195,7 @@ const SettingsComponent = ({
                     </select>
                   </div>
                 )}
-                <table className="table table-datastore table-draggable">
+                <table className="table table--settings table-draggable">
                   <thead>
                     <tr className="header">
                       <th>Field</th>
@@ -418,7 +418,7 @@ const QualificationTable = ({
         </button>
       </div>
     </div>
-    <table className="table table-datastore">
+    <table className="table table--settings">
       <thead>
         <tr className="header">
           <th>Qualification Name</th>
@@ -541,7 +541,7 @@ const QualificationModal = ({
           </div>
           <div className="form-group">
             <label>Parameters</label>
-            <table className="table table-datastore">
+            <table className="table table--settings">
               <thead>
                 <tr className="header">
                   <th>Name</th>
@@ -751,7 +751,7 @@ const AttributeTable = ({
         )}
       </div>
     </div>
-    <table className="table table-datastore">
+    <table className="table table--settings">
       <thead>
         <tr className="header">
           <th>Attribute Name</th>
