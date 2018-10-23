@@ -97,19 +97,9 @@ const TableSubmissionRow = ({
       />
     ))}
     <td>
-      <Dropdown
-        toggle={toggleDropdown(submission.id)}
-        isOpen={openDropdown === submission.id}
-      >
-        <DropdownToggle color="link" className="btn-sm">
-          <span className="fa fa-ellipsis-h fa-2x" />
-        </DropdownToggle>
-        <DropdownMenu right>
-          <DropdownItem tag={Link} to={to}>
-            View
-          </DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
+      <Link to={to} title="View submission">
+        View
+      </Link>
     </td>
   </tr>
 );

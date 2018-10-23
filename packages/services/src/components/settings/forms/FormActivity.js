@@ -106,7 +106,7 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
             <h3 className="section__title">Fulfillment Process</h3>
             {submission.activities.filter(activity => activity.type === 'Task')
               .length > 0 ? (
-              <table className="table table-sm table-striped settings-table">
+              <table className="table table-sm table-striped table--settings">
                 <thead className="header">
                   <tr>
                     <th>Type</th>
@@ -144,7 +144,7 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
             <h3 className="section__title">Submission Activity</h3>
             {submission.activities.filter(activity => activity.type !== 'Task')
               .length > 0 ? (
-              <table className="table table-sm table-striped settings-table">
+              <table className="table table-sm table-striped table--settings">
                 <thead className="header">
                   <tr>
                     <th>Type</th>
@@ -180,7 +180,7 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
             )}
             <br />
             <h3 className="section__title">Values</h3>
-            <table className="table table-sm table-striped settings-table">
+            <table className="table table-sm table-striped table--settings">
               <thead className="header">
                 <tr>
                   <th>Field</th>

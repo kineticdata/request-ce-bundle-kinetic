@@ -73,16 +73,17 @@ const FormListComponent = ({
             <h3>Loading</h3>
           ) : forms && forms.length > 0 ? (
             <div>
-              <table className="table table-sm table-striped settings-table">
-                <thead className="header">
+              <table className="table table-sm table-striped table--settings">
+                <thead className="header sortable">
                   <tr>
-                    <th>Form Name</th>
-                    <th width="30%">Description</th>
-                    <th width="10%">Type</th>
-                    <th width="10%">Updated</th>
-                    <th width="10%">Created</th>
-                    <th width="10%">Status</th>
-                    <th width="48px">&nbsp;</th>
+                    <th width="20%">Form Name</th>
+                    <th>Slug</th>
+                    <th width="20%">Description</th>
+                    <th>Type</th>
+                    <th>Updated</th>
+                    <th>Created</th>
+                    <th>Status</th>
+                    <th width="48px" className="sort-disabled" />
                   </tr>
                 </thead>
                 <tbody>
@@ -93,9 +94,8 @@ const FormListComponent = ({
                           <Link to={`${match.path}/${form.slug}`}>
                             <span>{form.name}</span>
                           </Link>
-                          <br />
-                          <small>{form.slug}</small>
                         </td>
+                        <td>{form.slug}</td>
                         <td>{form.description}</td>
                         <td>{form.type}</td>
                         <td>
@@ -123,15 +123,21 @@ const FormListComponent = ({
                               <DropdownMenu right>
                                 <DropdownItem
                                   tag={Link}
+                                  to={`${match.path}/${form.slug}`}
+                                >
+                                  View
+                                </DropdownItem>
+                                <DropdownItem
+                                  tag={Link}
                                   to={`${match.path}/${form.slug}/settings`}
                                 >
-                                  Configure Form
+                                  Configure
                                 </DropdownItem>
                                 <DropdownItem
                                   tag={Link}
                                   to={`${match.path}/clone/${form.slug}/`}
                                 >
-                                  Clone Form
+                                  Clone
                                 </DropdownItem>
                               </DropdownMenu>
                             </Dropdown>

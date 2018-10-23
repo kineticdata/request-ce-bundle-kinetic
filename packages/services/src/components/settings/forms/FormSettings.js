@@ -209,7 +209,7 @@ export const FormContainer = ({
         <div className="table-display-settings">
           <h3 className="section__title">Table Display Settings</h3>
           <div className="form settings">
-            <table className="table table-datastore table-draggable">
+            <table className="table table--settings table-draggable">
               <thead>
                 <tr className="header">
                   <th>Field</th>
