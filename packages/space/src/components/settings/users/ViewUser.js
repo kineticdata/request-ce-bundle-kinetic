@@ -5,7 +5,7 @@ import { compose, lifecycle } from 'recompose';
 import { PageTitle } from 'common';
 import { actions } from '../../../redux/modules/settingsUsers';
 import { TeamCard } from '../../shared/TeamCard';
-import { Avatar } from '../../shared/Avatar';
+import { Avatar } from 'common';
 
 const ViewUserComponent = ({ loading, profile }) => (
   <div className="page-container page-container--users">

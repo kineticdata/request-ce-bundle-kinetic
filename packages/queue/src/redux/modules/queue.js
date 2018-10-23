@@ -7,8 +7,10 @@ const { namespace, withPayload, noPayload } = Utils;
 export const types = {
   SET_ADHOC_FILTER: namespace('queue', 'SET_ADHOC_FILTER'),
   FETCH_CURRENT_ITEM: namespace('queue', 'FETCH_CURRENT_ITEM'),
+  FETCH_RELATED_DISCUSSIONS: namespace('queue', 'FETCH_RELATED_DISCUSSIONS'),
   SET_CURRENT_ITEM: namespace('queue', 'SET_CURRENT_ITEM'),
   SET_CURRENT_DISCUSSION: namespace('queue', 'SET_CURRENT_DISCUSSION'),
+  SET_RELATED_DISCUSSIONS: namespace('queue', 'SET_RELATED_DISCUSSIONS'),
   UPDATE_QUEUE_ITEM: namespace('queue', 'UPDATE_QUEUE_ITEM'),
   FETCH_LIST: namespace('queue', 'FETCH_LIST'),
   SET_LIST_ITEMS: namespace('queue', 'SET_LIST_ITEMS'),
@@ -24,8 +26,10 @@ export const types = {
 export const actions = {
   setAdhocFilter: withPayload(types.SET_ADHOC_FILTER),
   fetchCurrentItem: withPayload(types.FETCH_CURRENT_ITEM),
+  fetchRelatedDiscussions: withPayload(types.FETCH_RELATED_DISCUSSIONS),
   setCurrentItem: withPayload(types.SET_CURRENT_ITEM),
   setCurrentDiscussion: withPayload(types.SET_CURRENT_DISCUSSION),
+  setRelatedDiscussions: withPayload(types.SET_RELATED_DISCUSSIONS),
   updateQueueItem: withPayload(types.UPDATE_QUEUE_ITEM),
   fetchList: withPayload(types.FETCH_LIST),
   setListItems: (filter, list) => ({
@@ -67,6 +71,7 @@ export const State = Record({
   currentItem: null,
   currentItemLoading: false,
   currentDiscussion: null,
+  relatedDiscussions: List(),
   adhocFilter: Filter({
     type: 'adhoc',
     assignments: AssignmentCriteria({ mine: true }),
@@ -97,6 +102,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('currentItemLoading', false).set('currentItem', payload);
     case types.SET_CURRENT_DISCUSSION:
       return state.set('currentDiscussion', payload);
+    case types.SET_RELATED_DISCUSSIONS:
+      return state.set('relatedDiscussions', List(payload));
     case types.SET_SORT_DIRECTION:
       return state.set('sortDirection', payload);
     case types.OPEN_NEW_MENU:

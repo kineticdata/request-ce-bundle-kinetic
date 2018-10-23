@@ -170,6 +170,7 @@ input[type='button'],
 // Discussion Button
 .btn-discussion {
   display: flex;
+  flex: 1 0 auto;
   justify-content: center;
   align-items: center;
   margin-bottom: 1.25rem;

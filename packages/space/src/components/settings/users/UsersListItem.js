@@ -10,7 +10,7 @@ import {
   DropdownItem,
 } from 'reactstrap';
 
-import { Avatar } from '../../shared/Avatar';
+import { Avatar } from 'common';
 import { actions } from '../../../redux/modules/settingsUsers';
 
 const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {

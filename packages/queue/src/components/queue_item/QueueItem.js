@@ -36,11 +36,13 @@ export const mapStateToProps = (state, props) => ({
   id: props.match.params.id,
   filter: getFilterByPath(state, props.location.pathname),
   queueItem: state.queue.queue.currentItem,
+  currentDiscussion: state.queue.queue.currentDiscussion,
   discussionsEnabled: selectDiscussionsEnabled(state),
 });
 
 export const mapDispatchToProps = {
   fetchCurrentItem: actions.fetchCurrentItem,
+  fetchRelatedDiscussions: actions.fetchRelatedDiscussions,
   setCurrentItem: actions.setCurrentItem,
   setCurrentDiscussion: actions.setCurrentDiscussion,
 };
@@ -57,6 +59,10 @@ export const QueueItemContainer = compose(
     componentWillReceiveProps(nextProps) {
       if (this.props.id !== nextProps.id) {
         this.props.fetchCurrentItem(nextProps.id);
+      }
+
+      if (this.props.currentDiscussion !== nextProps.currentDiscussion) {
+        this.props.fetchRelatedDiscussions(nextProps.id);
       }
     },
     componentWillUnmount() {

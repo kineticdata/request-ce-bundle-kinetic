@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Avatar } from './Avatar';
+import { Avatar } from 'common';
 
 const getProfilePhone = profile =>
   profile.profileAttributes['Phone Number']

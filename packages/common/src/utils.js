@@ -1,5 +1,6 @@
 import isarray from 'isarray';
 import { all, fork } from 'redux-saga/effects';
+import moment from 'moment';
 
 export const zip = (array1, array2) =>
   array1.reduce(
@@ -177,3 +178,15 @@ export const getConfig = ({
     );
   }
 };
+
+export const getGroupedDiscussions = discussions =>
+  discussions
+    .sort(
+      (s1, s2) =>
+        moment(s1.lastMessageAt).isBefore(s2.lastMessageAt)
+          ? 1
+          : moment(s1.lastMessageAt).isAfter(s2.lastMessageAt)
+            ? -1
+            : 0,
+    )
+    .groupBy(discussion => moment(discussion.lastMessageAt).fromNow());

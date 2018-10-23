@@ -3,3 +3,25 @@
  *     -Used for development
  *     -Move css into appropriate sass files when ready
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.queue-item-container .queue-item-content .kinops-discussions {
+  overflow-y: scroll;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.queue-item-container
+  .queue-item-content
+  .kinops-discussions.recent-discussions-wrapper {
+  padding: 0.5em 1em !important;
+}
+.queue-item-container .queue-item-content .kinops-discussions .messages {
+  background-color: #fff;
+}
+
+.queue-item-details .kinops-discussions {
+  justify-content: space-between;
+}
+
+.queue-item-details .messages {
+  background-color: #fff;
+}

@@ -3,7 +3,7 @@ import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { TimeAgo, PageTitle } from 'common';
-import { Avatar } from '../shared/Avatar';
+import { Avatar } from 'common';
 import { actions } from '../../redux/modules/about';
 
 const AboutComponent = ({ space, about, loading }) => (

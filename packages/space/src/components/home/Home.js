@@ -2,12 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
-import { PageTitle } from 'common';
+import { PageTitle, Utils } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
-import {
-  actions,
-  selectGroupedDiscussions,
-} from '../../redux/modules/spaceApp';
+import { actions } from '../../redux/modules/spaceApp';
 import { actions as teamListActions } from '../../redux/modules/teamList';
 import { CreateDiscussionModal } from './CreateDiscussionModal';
 import { Discussion } from './Discussion';
@@ -153,7 +150,9 @@ const HomeComponent = ({
 
 export const mapStateToProps = state => ({
   spaceName: state.app.space.name,
-  discussionGroups: selectGroupedDiscussions(state),
+  discussionGroups: Utils.getGroupedDiscussions(
+    state.space.spaceApp.discussions,
+  ),
   discussionsError: state.space.spaceApp.discussionsError,
   discussionsLoading: state.space.spaceApp.discussionsLoading,
   discussionsPageToken: state.space.spaceApp.discussionsPageToken,

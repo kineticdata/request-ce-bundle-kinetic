@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-import { Avatar } from '../shared/Avatar';
+import { Avatar } from 'common';
 
 export const TeamMemberAvatar = ({ user }) => (
   <Fragment>

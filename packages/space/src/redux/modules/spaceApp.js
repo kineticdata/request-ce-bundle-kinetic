@@ -65,18 +65,6 @@ export const selectHasSharedTaskEngine = state =>
       ? true
       : false;
 
-export const selectGroupedDiscussions = state =>
-  state.space.spaceApp.discussions
-    .sort(
-      (s1, s2) =>
-        moment(s1.messages_updated_at).isBefore(s2.messages_updated_at)
-          ? 1
-          : moment(s1.messages_updated_at).isAfter(s2.messages_updated_at)
-            ? -1
-            : 0,
-    )
-    .groupBy(discussion => moment(discussion.messages_updated_at).fromNow());
-
 export const State = Record({
   appLoading: true,
   discussionServerUrl: '',

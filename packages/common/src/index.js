@@ -13,6 +13,7 @@ import { PageTitle } from './components/PageTitle';
 import { ErrorNotFound } from './components/ErrorNotFound';
 import { ErrorUnauthorized } from './components/ErrorUnauthorized';
 import { ErrorUnexpected } from './components/ErrorUnexpected';
+import { Avatar } from './components/Avatar';
 
 import { actions as commonActions } from './redux/modules/common';
 import { types as commonTypes } from './redux/modules/common';
@@ -50,4 +51,8 @@ export {
   ErrorNotFound,
   ErrorUnauthorized,
   ErrorUnexpected,
+  Avatar,
+  DiscussionCard,
+  DiscussionsList,
+  ViewDiscussionsModal,
 };

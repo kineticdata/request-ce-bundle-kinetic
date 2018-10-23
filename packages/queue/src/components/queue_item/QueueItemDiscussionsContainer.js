@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import md5 from 'md5';
 import { actions as discussionsActions } from 'discussions';
 import { actions } from '../../redux/modules/queue';
 import { QueueItemDiscussions } from './QueueItemDiscussions';
@@ -11,9 +10,11 @@ const mapStateToProps = state => {
     : null;
 
   return {
+    profile: state.app.profile,
     queueItem: state.queue.queue.currentItem,
     kappSlug: state.app.config.kappSlug,
     discussionId,
+    relatedDiscussions: state.queue.queue.relatedDiscussions,
   };
 };
 
@@ -44,6 +45,14 @@ const createDiscussion = props => () => {
   });
 };
 
+const handleDiscussionClick = props => discussion => () =>
+  props.setCurrentDiscussion(discussion);
+
+const handleDiscussionClear = props => () => {
+  console.log('clearing discussion');
+  props.setCurrentDiscussion(null);
+};
+
 export const QueueItemDiscussionsContainer = compose(
   connect(
     mapStateToProps,
@@ -52,5 +61,7 @@ export const QueueItemDiscussionsContainer = compose(
 
   withHandlers({
     createDiscussion,
+    handleDiscussionClick,
+    handleDiscussionClear,
   }),
 )(QueueItemDiscussions);

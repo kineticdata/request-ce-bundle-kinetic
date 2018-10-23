@@ -1,15 +1,39 @@
 import React from 'react';
-import { Discussion } from 'discussions';
+import { Discussion, DiscussionsList } from 'discussions';
 
 export const QueueItemDiscussions = props => {
-  const { discussionId, createDiscussion } = props;
+  const {
+    discussionId,
+    profile,
+    createDiscussion,
+    relatedDiscussions,
+    handleDiscussionClick,
+    handleDiscussionClear,
+  } = props;
 
   return discussionId ? (
-    <Discussion
-      discussionId={discussionId}
-      isMobileModal
-      renderClose={() => null}
-    />
+    <div className="kinops-discussions d-none d-md-flex">
+      <button onClick={handleDiscussionClear} className="btn btn-inverse">
+        <span className="icon">
+          <span className="fa fa-fw fa-chevron-left" />
+        </span>
+        Back to Discussions
+      </button>
+      <Discussion
+        discussionId={discussionId}
+        isMobileModal
+        renderClose={() => null}
+      />
+    </div>
+  ) : relatedDiscussions.size > 0 ? (
+    <div className="recent-discussions-wrapper kinops-discussions d-none d-md-flex">
+      <DiscussionsList
+        handleCreateDiscussion={createDiscussion}
+        handleDiscussionClick={handleDiscussionClick}
+        discussions={relatedDiscussions}
+        me={profile}
+      />
+    </div>
   ) : (
     <div className="kinops-discussions d-none d-md-flex">
       <div className="empty-discussion">

@@ -232,6 +232,7 @@ export function* fetchListTask(action) {
 export function* fetchCurrentItemTask(action) {
   const token = yield select(selectToken);
   const kappSlug = yield select(getKappSlug);
+  const appSettings = yield select(getAppSettings);
 
   const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
     id: action.payload,
@@ -250,11 +251,38 @@ export function* fetchCurrentItemTask(action) {
     });
 
     if (discussions && discussions.length > 0) {
-      yield put(actions.setCurrentDiscussion(discussions[0]));
+      // Save all of the related discussions.
+      yield put(actions.setRelatedDiscussions(discussions));
+
+      // If there is only 1 and the user is already a participant, auto-subscribe.
+      if (discussions.length === 1) {
+        const participating = discussions[0].participants.find(
+          p => p.user.username === appSettings.profile.username,
+        );
+
+        if (participating) {
+          // yield put(actions.setCurrentDiscussion(discussions[0]));
+        }
+      }
     }
   } else {
     yield put(errorActions.addError('Failed to retrieve item!'));
   }
+}
+
+export function* fetchRelatedDiscussions(action) {
+  const token = yield select(selectToken);
+  const kappSlug = yield select(getKappSlug);
+
+  const { discussions } = yield call(DiscussionAPI.fetchDiscussions, {
+    token,
+    relatedItem: {
+      type: 'Submission',
+      key: `${kappSlug}/${action.payload}`,
+    },
+  });
+
+  yield put(actions.setRelatedDiscussions(discussions));
 }
 
 export function* updateQueueItemTask(action) {
@@ -276,5 +304,6 @@ export function* updateQueueItemTask(action) {
 export function* watchQueue() {
   yield takeEvery(types.FETCH_LIST, fetchListTask);
   yield takeEvery(types.FETCH_CURRENT_ITEM, fetchCurrentItemTask);
+  yield takeEvery(types.FETCH_RELATED_DISCUSSIONS, fetchRelatedDiscussions);
   yield takeEvery(types.UPDATE_QUEUE_ITEM, updateQueueItemTask);
 }

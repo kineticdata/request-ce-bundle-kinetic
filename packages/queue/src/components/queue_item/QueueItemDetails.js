@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import { compose, withState, withHandlers, withProps } from 'recompose';
 import { KappLink as Link, TimeAgo } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
-import { actions as discussionActions } from 'discussions';
+import {
+  actions as discussionActions,
+  ViewDiscussionsModal,
+} from 'discussions';
 import { selectAssignments } from '../../redux/modules/queueApp';
 import { actions, selectPrevAndNext } from '../../redux/modules/queue';
 import { ViewOriginalRequest } from './ViewOriginalRequest';
@@ -33,33 +36,43 @@ export const QueueItemDetails = ({
   setAssignment,
   assignments,
   openNewItemMenu,
+  viewDiscussionsModal,
   prohibitSubtasks,
   refreshQueueItem,
+  openDiscussions,
   openDiscussion,
   createDiscussion,
+  closeDiscussions,
+  relatedDiscussions,
   prevAndNext,
   kappSlug,
   discussionsEnabled,
+  profile,
+  isSmallLayout,
 }) => (
   <div className="queue-item-details">
+    {viewDiscussionsModal &&
+      isSmallLayout && (
+        <ViewDiscussionsModal
+          handleCreateDiscussion={createDiscussion}
+          handleDiscussionClick={openDiscussion}
+          close={closeDiscussions}
+          discussions={relatedDiscussions}
+          me={profile}
+        />
+      )}
     <div className="scroll-wrapper">
       <div className="general">
         {discussionsEnabled && (
           <button
-            onClick={
-              queueItem.values['Discussion Id'] === null
-                ? createDiscussion
-                : openDiscussion
-            }
+            onClick={openDiscussions}
             className="btn btn-inverse btn-discussion d-md-none d-lg-none d-xl-none"
           >
             <span
               className="fa fa-fw fa-comments"
               style={{ fontSize: '16px' }}
             />
-            {queueItem.values['Discussion Id'] === null
-              ? 'Create Discussion'
-              : 'View Discussion'}
+            View Discussions
           </button>
         )}
         <StatusParagraph queueItem={queueItem} prevAndNext={prevAndNext} />
@@ -168,10 +181,13 @@ const getAttr = (form, attrName) => {
 export const mapStateToProps = (state, props) => ({
   filter: props.filter,
   queueItem: state.queue.queue.currentItem,
+  relatedDiscussions: state.queue.queue.relatedDiscussions,
   assignments: selectAssignments(state).toJS(),
   prevAndNext: selectPrevAndNext(state, props.filter),
   kappSlug: state.app.config.kappSlug,
   discussionsEnabled: selectDiscussionsEnabled(state),
+  profile: state.app.profile,
+  isSmallLayout: state.app.layout.get('size') === 'small',
 });
 
 export const mapDispatchToProps = {
@@ -181,6 +197,7 @@ export const mapDispatchToProps = {
   fetchCurrentItem: actions.fetchCurrentItem,
   openModal: discussionActions.openModal,
   createDiscussion: discussionActions.createIssue,
+  setCurrentDiscussion: actions.setCurrentDiscussion,
   setOffset: actions.setOffset,
   fetchList: actions.fetchList,
 };
@@ -199,6 +216,7 @@ export const QueueItemDetailsContainer = compose(
     };
   }),
   withState('isAssigning', 'setIsAssigning', false),
+  withState('viewDiscussionsModal', 'setViewDiscussionsModal', false),
   withHandlers({
     toggleAssigning: ({ setIsAssigning, isAssigning }) => () =>
       setIsAssigning(!isAssigning),
@@ -244,8 +262,14 @@ export const QueueItemDetailsContainer = compose(
       }
       fetchCurrentItem(queueItem.id);
     },
-    openDiscussion: props => () =>
-      props.openModal(props.queueItem.values['Discussion Id'], 'discussion'),
+    openDiscussion: props => discussion => () => {
+      // Close the discussion list modal and open the discussion modal.
+      props.setViewDiscussionsModal(false);
+      props.setCurrentDiscussion(discussion);
+      props.openModal(discussion.id, 'discussion');
+    },
+    openDiscussions: props => () => props.setViewDiscussionsModal(true),
+    closeDiscussions: props => () => props.setViewDiscussionsModal(false),
     createDiscussion: props => () =>
       props.createDiscussion(
         props.queueItem.label || 'Queue Discussion',

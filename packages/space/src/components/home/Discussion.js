@@ -5,7 +5,7 @@ import { MessagesGroup } from 'discussions';
 
 import { getTeamColor } from '../../utils';
 
-import { Avatar } from '../shared/Avatar';
+import { Avatar } from 'common';
 
 const getTeamHeaderStyle = (discussion, teams) => {
   const teamRI = discussion.relatedItems.find(ri => ri.type === 'Team');
