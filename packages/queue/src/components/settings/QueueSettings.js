@@ -59,6 +59,41 @@ export const SettingsComponent = ({
               description={attributesMap.getIn(['Icon', 'description'])}
             />
           )}
+          <h2 className="section__title">Form Mapping</h2>
+          {attributesMap.has('Notification Template Name - Complete') && (
+            <AttributeSelectors.NotificationTemplateSelect
+              id="Notification Template Name - Complete"
+              value={attributesMap.getIn([
+                'Notification Template Name - Complete',
+                'value',
+              ])}
+              placeholder="None Found"
+              onChange={handleAttributeChange}
+              valueMapper={value => value.submission.values['Name']}
+              label="Default Request Submitted Notification Template"
+              description={attributesMap.getIn([
+                'Notification Template Name - Complete',
+                'description',
+              ])}
+            />
+          )}
+          {attributesMap.has('Notification Template Name - Create') && (
+            <AttributeSelectors.NotificationTemplateSelect
+              id="Notification Template Name - Create"
+              value={attributesMap.getIn([
+                'Notification Template Name - Create',
+                'value',
+              ])}
+              placeholder="None Found"
+              onChange={handleAttributeChange}
+              valueMapper={value => value.submission.values['Name']}
+              label="Default Request Created Notification Template"
+              description={attributesMap.getIn([
+                'Notification Template Name - Create',
+                'description',
+              ])}
+            />
+          )}
         </form>
         <div className="form__footer">
           <span className="form__footer__right">

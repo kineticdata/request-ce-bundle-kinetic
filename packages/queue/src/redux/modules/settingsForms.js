@@ -53,8 +53,8 @@ export const SUBMISSION_SYSTEM_PROPS = [
 
 export const types = {
   FETCH_FORM: namespace('settingsForms', 'FETCH_FORM'),
-  SET_FORM: namespace('settingsForms', 'SET_FORM'),
-  UPDATE_FORM: namespace('settingsForms', 'UPDATE_FORM'),
+  SET_QUEUE_FORM: namespace('settingsForms', 'SET_QUEUE_FORM'),
+  UPDATE_QUEUE_FORM: namespace('settingsForms', 'UPDATE_QUEUE_FORM'),
   CREATE_FORM: namespace('settingsForms', 'CREATE_FORM'),
   FETCH_FORM_SUBMISSIONS: namespace('settingsForms', 'FETCH_FORM_SUBMISSIONS'),
   SET_FORM_SUBMISSIONS: namespace('settingsForms', 'SET_FORM_SUBMISSIONS'),
@@ -76,8 +76,8 @@ export const types = {
 
 export const actions = {
   fetchForm: withPayload(types.FETCH_FORM),
-  setForm: withPayload(types.SET_FORM),
-  updateForm: withPayload(types.UPDATE_FORM),
+  setForm: withPayload(types.SET_QUEUE_FORM),
+  updateForm: withPayload(types.UPDATE_QUEUE_FORM),
   createForm: withPayload(types.CREATE_FORM),
   fetchFormSubmissions: withPayload(types.FETCH_FORM_SUBMISSIONS),
   setFormSubmissions: withPayload(types.SET_FORM_SUBMISSIONS),
@@ -213,7 +213,7 @@ export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.FETCH_FORM:
       return state.set('loading', true);
-    case types.SET_FORM:
+    case types.SET_QUEUE_FORM:
       const config = buildFormConfigurationObject(payload);
       const newForm =
         state.currentForm && state.currentForm.slug !== payload.slug;

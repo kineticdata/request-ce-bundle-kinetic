@@ -44,27 +44,31 @@ export const Select = ({
   let optionElements = '<option></option>';
   let options;
   if (data) {
+    const kappName = type.charAt(0).toUpperCase() + type.slice(1);
     if (type === 'teams') {
       options = data.filter(team => !team.name.includes('Role')).map(team => {
-        return { value: team.name, label: team.name };
+        return { value: team.name, label: `${kappName} > ${team.name}` };
       });
     } else if (type === 'notifications') {
       options = data.map(notification => {
         return {
           value: notification.values.Name,
-          label: notification.values.Name,
+          label: `${kappName} > ${notification.values.Name}`,
         };
       });
+    } else if (type === 'subtasks') {
+      options = data.forms
+        .filter(form => form.type === 'Task' || form.type === 'Subtask')
+        .map(form => ({ value: form.slug, label: form.name }));
     } else {
       options = data.kapps.find(kapp => kapp.slug === type).forms.map(form => {
-        return { value: form.slug, label: form.name };
+        return { value: form.slug, label: `${kappName} > ${form.label}` };
       });
     }
     optionElements = options.map(option => {
-      const kappName = type.charAt(0).toUpperCase() + type.slice(1);
       return (
         <option key={option.value} value={option.value}>
-          {kappName} > {option.label}
+          {option.label}
         </option>
       );
     });
@@ -267,16 +271,44 @@ export const FormContainer = ({
         <div className="attribute-settings">
           <h3 className="section__title">Attributes</h3>
           <div className="form settings">
-            <div className="form-group">
-              <label>Icon</label>
-              <TextInput
-                value={inputs.icon}
-                name="icon"
-                setInputs={setInputs}
-                inputs={inputs}
-                className="col-8"
-              />
-            </div>
+            {inputs['Permitted Subtasks'] && (
+              <div className="form-group">
+                <label>Permitted Subtasks</label>
+                <Select
+                  selected={inputs['Permitted Subtasks']}
+                  name="Permitted Subtasks"
+                  type="subtasks"
+                  data={kapp}
+                  setInputs={setInputs}
+                  inputs={inputs}
+                  className="col-8"
+                  multiple="true"
+                />
+              </div>
+            )}
+            {inputs['Prohibit Subtasks'] && (
+              <div className="form-group">
+                <label>Prohibit Subtasks</label>
+                <select
+                  value={
+                    inputs['Prohibit Subtasks'] === 'Yes' ||
+                    inputs['Prohibit Subtasks'] === 'True'
+                      ? 'Yes'
+                      : 'No'
+                  }
+                  onChange={event =>
+                    setInputs({
+                      ...inputs,
+                      'Prohibit Subtasks': event.target.value,
+                    })
+                  }
+                  className="form-control col-8"
+                >
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+            )}
             <div className="form-group">
               <label>Owning Team</label>
               <Select
@@ -288,78 +320,6 @@ export const FormContainer = ({
                 inputs={inputs}
                 className="col-8"
                 multiple="true"
-              />
-            </div>
-            <div className="form-group radio">
-              <label className="field-label">Approver</label>
-              <label htmlFor="approver-none">
-                <input
-                  type="radio"
-                  checked={
-                    !inputs['Approver'] ||
-                    inputs['Approver'] === '' ||
-                    inputs['Approver'] === 'None'
-                  }
-                  name="Approver"
-                  id="approver-none"
-                  value="None"
-                  onChange={event =>
-                    setInputs({ ...inputs, Approver: event.target.value })
-                  }
-                />
-                None
-              </label>
-              <label htmlFor="approver-manager">
-                <input
-                  type="radio"
-                  checked={inputs['Approver'] === 'Manager'}
-                  name="Approver"
-                  id="approver-manager"
-                  value="Manager"
-                  onChange={event =>
-                    setInputs({ ...inputs, Approver: event.target.value })
-                  }
-                />
-                Manager
-              </label>
-              <label htmlFor="approver-team">
-                <input
-                  type="radio"
-                  checked={inputs['Approver'] === 'Team'}
-                  name="Approver"
-                  id="approver-team"
-                  value="Team"
-                  onChange={event =>
-                    setInputs({ ...inputs, Approver: event.target.value })
-                  }
-                />
-                Team
-              </label>
-              <label htmlFor="approver-individual">
-                <input
-                  type="radio"
-                  checked={inputs['Approver'] === 'Individual'}
-                  name="Approver"
-                  id="approver-individual"
-                  value="Individual"
-                  onChange={event =>
-                    setInputs({ ...inputs, Approver: event.target.value })
-                  }
-                />
-                Individual
-              </label>
-            </div>
-
-            <div className="form-group">
-              <label>Approval Form</label>
-              <Select
-                selected={inputs['Approval Form Slug']}
-                name="Approval Form Slug"
-                type="queue"
-                data={spaceKapps}
-                setInputs={setInputs}
-                inputs={inputs}
-                className="col-8"
               />
             </div>
 
@@ -388,91 +348,9 @@ export const FormContainer = ({
                 className="col-8"
               />
             </div>
-
-            <div className="form-group">
-              <label>Service Days Due</label>
-              <NumberInput
-                value={inputs['Service Days Due']}
-                name="Service Days Due"
-                setInputs={setInputs}
-                inputs={inputs}
-                className="col-8"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Task Assignee Team</label>
-              <Select
-                selected={inputs['Task Assignee Team']}
-                name="Task Assignee Team"
-                type="teams"
-                data={teams}
-                setInputs={setInputs}
-                inputs={inputs}
-                className="col-8"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Task Form</label>
-              <Select
-                selected={inputs['Task Form Slug']}
-                name="Task Form Slug"
-                type="queue"
-                data={spaceKapps}
-                setInputs={setInputs}
-                inputs={inputs}
-                className="col-8"
-              />
-            </div>
           </div>
         </div>
-        <div className="category-settings">
-          <h3 className="section__title">Categories</h3>
-          <div className="form settings">
-            <div className="form-group checkbox">
-              <label className="field-label" />
-              {settingsForms.queueKapp.categories.map(val => (
-                <label
-                  key={`categories-${val.slug}`}
-                  htmlFor={`categories-${val.slug}`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={
-                      (inputs.categories &&
-                        inputs.categories.find(
-                          c => c.category.slug === val.slug,
-                        )) ||
-                      false
-                    }
-                    name="categories"
-                    id={`categories-${val.slug}`}
-                    value={val.slug}
-                    onChange={event => {
-                      let categories = inputs.categories;
-                      event.target.checked
-                        ? categories.push({
-                            category: {
-                              slug: event.target.value,
-                            },
-                          })
-                        : (categories = categories.filter(
-                            category =>
-                              category.category.slug !== event.target.value,
-                          ));
-                      setInputs({
-                        ...inputs,
-                        categories: categories,
-                      });
-                    }}
-                  />
-                  {val.name}
-                </label>
-              ))}
-            </div>
-          </div>
-        </div>
+
         <div className="form__footer">
           <span className="form__footer__right">
             <button
@@ -516,28 +394,18 @@ export const setInitialInputs = ({ setInputs, form }) => () => {
     description: form.description,
     type: form.type,
     status: form.status,
-    icon:
-      form.attributesMap.Icon && form.attributesMap.Icon[0]
-        ? form.attributesMap.Icon[0]
-        : '',
-    categories: form.categorizations ? form.categorizations : [],
+    'Permitted Subtasks': form.attributesMap['Permitted Subtasks']
+      ? form.attributesMap['Permitted Subtasks'][0]
+        ? form.attributesMap['Permitted Subtasks'][0].split(',')
+        : []
+      : '',
+    'Prohibit Subtasks': form.attributesMap['Prohibit Subtasks']
+      ? form.attributesMap['Prohibit Subtasks'][0]
+        ? form.attributesMap['Prohibit Subtasks'][0]
+        : 'No'
+      : '',
     'Owning Team': form.attributesMap['Owning Team']
       ? form.attributesMap['Owning Team']
-      : '',
-    Approver: form.attributesMap['Approver']
-      ? form.attributesMap['Approver'][0]
-      : '',
-    'Approval Form Slug': form.attributesMap['Approval Form Slug']
-      ? form.attributesMap['Approval Form Slug'][0]
-      : '',
-    'Service Days Due': form.attributesMap['Service Days Due']
-      ? form.attributesMap['Service Days Due'][0]
-      : '',
-    'Task Form Slug': form.attributesMap['Task Form Slug']
-      ? form.attributesMap['Task Form Slug'][0]
-      : '',
-    'Task Assignee Team': form.attributesMap['Task Assignee Team']
-      ? form.attributesMap['Task Assignee Team'][0]
       : '',
     'Notification Template Name - Complete': form.attributesMap[
       'Notification Template Name - Complete'

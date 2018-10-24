@@ -106,21 +106,11 @@ export function* updateFormSaga(action) {
   const currentFormChanges = action.payload.inputs;
   const formContent = {
     attributesMap: {
-      Icon: [currentFormChanges.icon],
-      'Task Form Slug': currentFormChanges['Task Form Slug']
-        ? [currentFormChanges['Task Form Slug']]
+      'Permitted Subtasks': currentFormChanges['Permitted Subtasks']
+        ? [currentFormChanges['Permitted Subtasks'].join(',')]
         : [],
-      'Service Days Due': currentFormChanges['Service Days Due']
-        ? [currentFormChanges['Service Days Due']]
-        : [],
-      'Approval Form Slug': currentFormChanges['Approval Form Slug']
-        ? [currentFormChanges['Approval Form Slug']]
-        : [],
-      Approver: currentFormChanges.Approver
-        ? [currentFormChanges.Approver]
-        : [],
-      'Task Assignee Team': currentFormChanges['Task Assignee Team']
-        ? [currentFormChanges['Task Assignee Team']]
+      'Prohibit Subtasks': currentFormChanges['Prohibit Subtasks']
+        ? [currentFormChanges['Prohibit Subtasks']]
         : [],
       'Notification Template Name - Create': currentFormChanges[
         'Notification Template Name - Create'
@@ -277,7 +267,7 @@ export function* fetchAllSubmissionsSaga(action) {
 export function* watchSettingsForms() {
   yield takeEvery(types.FETCH_FORM, fetchFormSaga);
   yield takeEvery(types.FETCH_KAPP, fetchKappSaga);
-  yield takeEvery(types.UPDATE_FORM, updateFormSaga);
+  yield takeEvery(types.UPDATE_QUEUE_FORM, updateFormSaga);
   yield takeEvery(types.CREATE_FORM, createFormSaga);
   yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
   yield takeEvery(types.FETCH_FORM_SUBMISSIONS, fetchFormSubmissionsSaga);
