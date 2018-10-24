@@ -48,10 +48,7 @@ const createDiscussion = props => () => {
 const handleDiscussionClick = props => discussion => () =>
   props.setCurrentDiscussion(discussion);
 
-const handleDiscussionClear = props => () => {
-  console.log('clearing discussion');
-  props.setCurrentDiscussion(null);
-};
+const handleDiscussionClear = props => () => props.setCurrentDiscussion(null);
 
 export const QueueItemDiscussionsContainer = compose(
   connect(
