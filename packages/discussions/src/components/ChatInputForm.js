@@ -308,10 +308,12 @@ class ChatInput extends Component {
         </form>
         {this.state.hasFocus && (
           <div className="markdown-help">
-            <strong className="markdown-sample">*Bold*</strong>
-            <em className="markdown-sample">_Italics</em>
-            <strike className="markdown-sample">Strike</strike>
-            <span className="markdown-sample">!Blockquote</span>
+            <strong className="markdown-sample">**Bold**</strong>
+            <em className="markdown-sample">_Italics_</em>
+            <span className="markdown-sample">
+              ~~<strike>Strike</strike>~~
+            </span>
+            <span className="markdown-sample">&gt;Blockquote</span>
           </div>
         )}
       </Dropzone>
