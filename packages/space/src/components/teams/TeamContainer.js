@@ -1,5 +1,7 @@
-import { compose, lifecycle, withHandlers } from 'recompose';
+import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
+import { List } from 'immutable';
+import md5 from 'md5';
 import { actions as discussionActions } from 'discussions';
 
 import { modalFormActions, Utils } from 'common';
@@ -19,6 +21,38 @@ import {
 } from '../../redux/modules/spaceForms';
 
 import { Team } from './Team';
+
+export const openDiscussion = props => discussion => () => {
+  // Close the discussion list modal and open the discussion modal.
+  props.setViewDiscussionsModal(false);
+  props.setCurrentDiscussion(discussion);
+  props.openModal(discussion.id, 'discussion');
+};
+export const openDiscussions = props => () =>
+  props.setViewDiscussionsModal(true);
+
+export const closeDiscussions = props => () =>
+  props.setViewDiscussionsModal(false);
+
+const clearDiscussion = props => () => props.setCurrentDiscussion(null);
+const handleDiscussionClick = props => discussion => () =>
+  props.setCurrentDiscussion(discussion);
+
+export const createDiscussion = props => () => {
+  const teamSlug = md5(props.team.name);
+  props.createDiscussion({
+    title: props.team.name || 'Team Discussion',
+    description: props.team.name || '',
+    relatedItem: {
+      type: 'Team',
+      key: teamSlug,
+    },
+    onSuccess: (discussion, _relatedItem) => {
+      props.setCurrentDiscussion(discussion);
+      props.fetchRelatedDiscussions(teamSlug);
+    },
+  });
+};
 
 const mapStateToProps = state => {
   const team = selectTeam(state);
@@ -48,10 +82,6 @@ const mapStateToProps = state => {
       'Admin Kapp Slug',
       'admin',
     ),
-    discussionId:
-      !state.space.team.loading && state.space.team.currentDiscussion
-        ? state.space.team.currentDiscussion.id
-        : null,
     memberships: selectTeamMemberships(state).map(member => member.user),
     userIsMember: selectIsTeamMember(state, me),
     parent: heirarchy.parent && teamsMap[heirarchy.parent.name],
@@ -63,6 +93,9 @@ const mapStateToProps = state => {
           item.name.replace(/::[^:]+$/, '') === team.name,
       ),
     services: selectFormsForTeam(state),
+    currentDiscussion: state.space.team.currentDiscussion,
+    relatedDiscussions: state.space.team.relatedDiscussions,
+    isSmallLayout: state.app.layout.get('size') === 'small',
   };
 };
 
@@ -72,6 +105,10 @@ const mapDispatchToProps = {
   fetchTeams: teamListActions.fetchTeams,
   fetchForms: spaceFormsActions.fetchForms,
   resetTeam: actions.resetTeam,
+  fetchRelatedDiscussions: actions.fetchRelatedDiscussions,
+  setCurrentDiscussion: actions.setCurrentDiscussion,
+  setRelatedDiscussions: actions.setRelatedDiscussions,
+  createDiscussion: discussionActions.createDiscussion,
   openModal: discussionActions.openModal,
 };
 
@@ -112,6 +149,7 @@ export const TeamContainer = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withState('viewDiscussionsModal', 'setViewDiscussionsModal', false),
   lifecycle({
     componentWillMount() {
       this.props.fetchTeam(this.props.match.params.slug);
@@ -122,16 +160,23 @@ export const TeamContainer = compose(
       if (this.props.match.params.slug !== nextProps.match.params.slug) {
         this.props.fetchTeam(nextProps.match.params.slug);
       }
+      if (this.props.currentDiscussion !== nextProps.currentDiscussion) {
+        this.props.fetchRelatedDiscussions(nextProps.match.params.slug);
+      }
     },
     componentWillUnmount() {
       this.props.resetTeam();
+      this.props.setCurrentDiscussion(null);
+      this.props.setRelatedDiscussions(List());
     },
   }),
   withHandlers({
     openRequestToJoinForm,
     openRequestToLeaveForm,
-    openDiscussion: ({ discussionId, openModal }) => () => {
-      openModal(discussionId, 'discussion');
-    },
+    handleDiscussionClick,
+    openDiscussion,
+    clearDiscussion,
+    openDiscussions,
+    closeDiscussions,
   }),
 )(Team);

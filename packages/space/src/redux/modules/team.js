@@ -6,6 +6,7 @@ export const State = Record({
   loading: true,
   data: null,
   currentDiscussion: null,
+  relatedDiscussions: List(),
 
   isAddMemberModalOpen: false,
   deleteError: null,
@@ -21,6 +22,8 @@ export const types = {
   FETCH_TEAM: namespace('teams', 'FETCH_TEAM'),
   SET_TEAM: namespace('teams', 'SET_TEAM'),
   SET_CURRENT_DISCUSSION: namespace('teams', 'SET_CURRENT_DISCUSSION'),
+  FETCH_RELATED_DISCUSSIONS: namespace('queue', 'FETCH_RELATED_DISCUSSIONS'),
+  SET_RELATED_DISCUSSIONS: namespace('queue', 'SET_RELATED_DISCUSSIONS'),
   UPDATE_TEAM: namespace('teams', 'UPDATE_TEAM'),
 
   SET_SUBMIT_ERROR: namespace('teams', 'SET_SUBMIT_ERROR'),
@@ -40,6 +43,8 @@ export const actions = {
   fetchTeam: withPayload(types.FETCH_TEAM),
   setTeam: withPayload(types.SET_TEAM),
   setCurrentDiscussion: withPayload(types.SET_CURRENT_DISCUSSION),
+  fetchRelatedDiscussions: withPayload(types.FETCH_RELATED_DISCUSSIONS),
+  setRelatedDiscussions: withPayload(types.SET_RELATED_DISCUSSIONS),
   updateTeam: withPayload(types.UPDATE_TEAM),
   deleteTeam: withPayload(types.DELETE_TEAM),
   setSubmitError: withPayload(types.SET_SUBMIT_ERROR),
@@ -73,6 +78,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('loading', false).set('data', payload);
     case types.SET_CURRENT_DISCUSSION:
       return state.set('currentDiscussion', payload);
+    case types.SET_RELATED_DISCUSSIONS:
+      return state.set('relatedDiscussions', List(payload));
     case types.UPDATE_TEAM:
       return state.set('loading', false).set('submitError', null);
     case types.RESET_DELETE_ERROR:

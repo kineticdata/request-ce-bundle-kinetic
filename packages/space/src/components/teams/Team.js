@@ -1,7 +1,11 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { getTeamColor, getTeamIcon } from '../../utils';
-import { Discussion as KinopsDiscussion } from 'discussions';
+import {
+  Discussion as KinopsDiscussion,
+  ViewDiscussionsModal,
+  DiscussionsList,
+} from 'discussions';
 import { PageTitle, Hoverable } from 'common';
 import { ServiceCard } from '../shared/ServiceCard';
 import { TeamMemberAvatar } from './TeamMemberAvatar';
@@ -9,8 +13,16 @@ import { ProfileCard } from '../shared/ProfileCard';
 
 export const Team = ({
   loading,
-  discussionId,
+  currentDiscussion,
+  handleDiscussionClick,
   openDiscussion,
+  clearDiscussion,
+  openDiscussions,
+  closeDiscussions,
+  viewDiscussionsModal,
+  isSmallLayout,
+  createDiscussion,
+  relatedDiscussions,
   parent,
   team,
   subteams,
@@ -41,20 +53,19 @@ export const Team = ({
                 to={`/teams/${team.slug}/edit`}
                 className="btn btn-secondary"
               >
-                Edit Team
+                Team
               </Link>
             )}
           </div>
-          {userIsMember &&
-            discussionId && (
-              <button
-                onClick={openDiscussion}
-                className="btn btn-primary btn-inverse btn-discussion d-md-none d-lg-none d-xl-none"
-              >
-                <span className="fa fa-comments fa-fw icon" />
-                View Discussion
-              </button>
-            )}
+          {userIsMember && (
+            <button
+              onClick={openDiscussions}
+              className="btn btn-primary btn-inverse btn-discussion d-md-none d-lg-none d-xl-none"
+            >
+              <span className="fa fa-comments fa-fw icon" />
+              View Discussions
+            </button>
+          )}
           <div className="card card--team">
             <div
               className="card--team__header"
@@ -137,18 +148,55 @@ export const Team = ({
             </section>
           )}
         </div>
-        {userIsMember &&
-          discussionId && (
-            <KinopsDiscussion
-              discussionId={discussionId}
-              isMobileModal
-              renderClose={() => (
-                <Link to={`/`} className="btn btn-link">
-                  Close
-                </Link>
+        {userIsMember && (
+          <Fragment>
+            {viewDiscussionsModal &&
+              isSmallLayout && (
+                <ViewDiscussionsModal
+                  handleCreateDiscussion={createDiscussion}
+                  handleDiscussionClick={openDiscussion}
+                  close={closeDiscussions}
+                  discussions={relatedDiscussions}
+                  me={me}
+                />
               )}
-            />
-          )}
+            {currentDiscussion && currentDiscussion.id ? (
+              <div className="kinops-discussions d-none d-md-flex">
+                <button onClick={clearDiscussion} className="btn btn-inverse">
+                  <span className="icon">
+                    <span className="fa fa-fw fa-chevron-left" />
+                  </span>
+                  Back to Discussions
+                </button>
+                <KinopsDiscussion
+                  discussionId={currentDiscussion.id}
+                  isMobileModal
+                  renderClose={() => null}
+                />
+              </div>
+            ) : relatedDiscussions.size > 0 ? (
+              <div className="recent-discussions-wrapper kinops-discussions d-none d-md-flex">
+                <DiscussionsList
+                  handleCreateDiscussion={createDiscussion}
+                  handleDiscussionClick={handleDiscussionClick}
+                  discussions={relatedDiscussions}
+                  me={me}
+                />
+              </div>
+            ) : (
+              <div className="kinops-discussions d-none d-md-flex empty">
+                <div className="empty-discussion">
+                  <h5>No discussion to display</h5>
+                  <p>
+                    <button onClick={createDiscussion} className="btn btn-link">
+                      Create a new discussion
+                    </button>
+                  </p>
+                </div>
+              </div>
+            )}
+          </Fragment>
+        )}
       </Fragment>
     )}
   </div>

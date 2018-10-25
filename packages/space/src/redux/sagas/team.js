@@ -45,6 +45,8 @@ export function* fetchTeamsSaga() {
 
 export function* fetchTeamSaga(action) {
   const token = yield select(selectToken);
+  const profile = yield select(state => state.app.profile);
+
   const { team, serverError } = yield call(CoreAPI.fetchTeam, {
     teamSlug: action.payload,
     include:
@@ -65,9 +67,35 @@ export function* fetchTeamSaga(action) {
     });
 
     if (discussions && discussions.length > 0) {
-      yield put(currentActions.setCurrentDiscussion(discussions[0]));
+      // Save all of the related discussions.
+      yield put(currentActions.setRelatedDiscussions(discussions));
+
+      // If there is only 1 and the user is already a participant, auto-subscribe.
+      if (discussions.length === 1) {
+        const participating = discussions[0].participants.find(
+          p => p.user.username === profile.username,
+        );
+
+        if (participating) {
+          yield put(currentActions.setCurrentDiscussion(discussions[0]));
+        }
+      }
     }
   }
+}
+
+export function* fetchRelatedDiscussions(action) {
+  const token = yield select(selectToken);
+
+  const { discussions } = yield call(DiscussionAPI.fetchDiscussions, {
+    token,
+    relatedItem: {
+      type: 'Team',
+      key: action.payload,
+    },
+  });
+
+  yield put(currentActions.setRelatedDiscussions(discussions));
 }
 
 export function* updateTeamSaga(action) {
@@ -135,4 +163,8 @@ export function* watchTeams() {
   yield takeEvery(currentTypes.DELETE_TEAM, deleteTeamSaga);
   yield takeEvery(currentTypes.CANCEL_SAVE_TEAM, cancelSaveTeamSaga);
   yield takeEvery(currentTypes.FETCH_TEAM, fetchUsersSaga);
+  yield takeEvery(
+    currentTypes.FETCH_RELATED_DISCUSSIONS,
+    fetchRelatedDiscussions,
+  );
 }
