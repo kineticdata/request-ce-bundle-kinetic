@@ -21,7 +21,7 @@ export const Team = ({
   closeDiscussions,
   viewDiscussionsModal,
   isSmallLayout,
-  createDiscussion,
+  handleCreateDiscussion,
   relatedDiscussions,
   parent,
   team,
@@ -153,7 +153,7 @@ export const Team = ({
             {viewDiscussionsModal &&
               isSmallLayout && (
                 <ViewDiscussionsModal
-                  handleCreateDiscussion={createDiscussion}
+                  handleCreateDiscussion={handleCreateDiscussion}
                   handleDiscussionClick={openDiscussion}
                   close={closeDiscussions}
                   discussions={relatedDiscussions}
@@ -177,7 +177,7 @@ export const Team = ({
             ) : relatedDiscussions.size > 0 ? (
               <div className="recent-discussions-wrapper kinops-discussions d-none d-md-flex">
                 <DiscussionsList
-                  handleCreateDiscussion={createDiscussion}
+                  handleCreateDiscussion={handleCreateDiscussion}
                   handleDiscussionClick={handleDiscussionClick}
                   discussions={relatedDiscussions}
                   me={me}
@@ -188,7 +188,10 @@ export const Team = ({
                 <div className="empty-discussion">
                   <h5>No discussion to display</h5>
                   <p>
-                    <button onClick={createDiscussion} className="btn btn-link">
+                    <button
+                      onClick={handleCreateDiscussion}
+                      className="btn btn-link"
+                    >
                       Create a new discussion
                     </button>
                   </p>

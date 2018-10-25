@@ -38,7 +38,7 @@ const clearDiscussion = props => () => props.setCurrentDiscussion(null);
 const handleDiscussionClick = props => discussion => () =>
   props.setCurrentDiscussion(discussion);
 
-export const createDiscussion = props => () => {
+export const handleCreateDiscussion = props => () => {
   const teamSlug = md5(props.team.name);
   props.createDiscussion({
     title: props.team.name || 'Team Discussion',
@@ -174,6 +174,7 @@ export const TeamContainer = compose(
     openRequestToJoinForm,
     openRequestToLeaveForm,
     handleDiscussionClick,
+    handleCreateDiscussion,
     openDiscussion,
     clearDiscussion,
     openDiscussions,
