@@ -15,15 +15,15 @@ const getStatusColor = status =>
       ? 'status--yellow'
       : 'status--green';
 
-const getNextExecution = (nextExecutions, scheduleId) => {
+const getNextExecution = (nextExecutions, robotId) => {
   let nextExecution;
   const found = nextExecutions.find(
-    execution => execution.values['Robot ID'] === scheduleId,
+    execution => execution.values['Robot ID'] === robotId,
   );
 
   if (found) {
-    nextExecution = found.values['Next Scheduled Execution']
-      ? found.values['Next Scheduled Execution']
+    nextExecution = found.values['Next Execution']
+      ? found.values['Next Execution']
       : 'No upcoming executions scheduled';
   } else {
     nextExecution = 'Unknown';
@@ -42,17 +42,14 @@ const WallyEmptyMessage = () => {
   );
 };
 
-const RobotSchedulesListComponent = ({
-  robotSchedules,
-  robotSchedulesLoading,
-  robotSchedulesErrors,
+const RobotsListComponent = ({
+  robots,
+  robotsLoading,
+  robotsErrors,
   nextExecutions,
   nextExecutionsLoading,
 }) => {
-  const loading =
-    !nextExecutionsLoading &&
-    !robotSchedulesLoading &&
-    robotSchedules.size <= 0;
+  const loading = !nextExecutionsLoading && !robotsLoading && robots.size <= 0;
   return loading ? (
     <Loading />
   ) : (
@@ -67,24 +64,21 @@ const RobotSchedulesListComponent = ({
             </h3>
             <h1>Robots</h1>
           </div>
-          <Link
-            to={`/settings/robots/schedules/new`}
-            className="btn btn-primary"
-          >
+          <Link to={`/settings/robots/robots/new`} className="btn btn-primary">
             Create Robot
           </Link>
         </div>
-        {robotSchedules.size <= 0 &&
-          robotSchedulesErrors.length > 0 && (
+        {robots.size <= 0 &&
+          robotsErrors.length > 0 && (
             <div className="text-center text-danger">
               <h1>Oops!</h1>
               <h2>Robot Schedules Not Found</h2>
-              {robotSchedulesErrors.map(error => (
+              {robotsErrors.map(error => (
                 <p className="error-details">{error}</p>
               ))}
             </div>
           )}
-        {robotSchedules.size > 0 && (
+        {robots.size > 0 && (
           <table className="table table-sm table-striped table-robots">
             <thead className="header">
               <tr>
@@ -97,7 +91,7 @@ const RobotSchedulesListComponent = ({
               </tr>
             </thead>
             <tbody>
-              {robotSchedules.map(schedule => {
+              {robots.map(schedule => {
                 const nextExecution = nextExecutions
                   ? getNextExecution(nextExecutions, schedule.id)
                   : 'fetching';
@@ -139,8 +133,7 @@ const RobotSchedulesListComponent = ({
             </tbody>
           </table>
         )}
-        {robotSchedulesErrors.length <= 0 &&
-          robotSchedules.size === 0 && <WallyEmptyMessage />}
+        {robotsErrors.length <= 0 && robots.size === 0 && <WallyEmptyMessage />}
       </div>
     </div>
   );
@@ -148,9 +141,9 @@ const RobotSchedulesListComponent = ({
 
 export const mapStateToProps = state => ({
   robot: state.space.settingsRobots.robot,
-  robotSchedules: state.space.settingsRobots.robotSchedules,
-  robotSchedulesLoading: state.space.settingsRobots.robotSchedulesLoading,
-  robotSchedulesErrors: state.space.settingsRobots.robotSchedulesErrors,
+  robots: state.space.settingsRobots.robotSchedules,
+  robotsLoading: state.space.settingsRobots.robotSchedulesLoading,
+  robotsErrors: state.space.settingsRobots.robotSchedulesErrors,
   nextExecutions: state.space.settingsRobots.nextExecutions,
   nextExecutionsLoading: state.space.settingsRobots.nextExecutionsLoading,
 });
@@ -161,7 +154,7 @@ export const mapDispatchToProps = {
   fetchNextExecutions: actions.fetchNextExecutions,
 };
 
-export const RobotSchedulesList = compose(
+export const RobotsList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
@@ -172,4 +165,4 @@ export const RobotSchedulesList = compose(
       this.props.fetchNextExecutions();
     },
   }),
-)(RobotSchedulesListComponent);
+)(RobotsListComponent);
