@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { List, Range } from 'immutable';
 import { MessageActionsContext } from './Discussion';
+import generateSystemMessageContent from '../helpers/generateSystemMessageContent';
 
 export const PlainMessageContent = ({ content }) => {
   const plainContent = content
@@ -72,7 +73,13 @@ export const SystemMessagesGroup = props => (
     <div className="system-message-list">
       {props.messages.map(message => (
         <div className="system-message" key={message.id}>
-          <SystemMessageContent content={message.content} />
+          <SystemMessageContent
+            content={
+              message.action
+                ? generateSystemMessageContent(message.action, message.content)
+                : message.content
+            }
+          />
           <span className="timestamp">
             {moment(message.createdAt).format('h:mma')}
           </span>
