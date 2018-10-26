@@ -30,7 +30,7 @@ const RobotExecutionsListComponent = ({
   robotExecutions,
   robotExecutionsLoading,
   robotExecutionsErrors,
-  scheduleId,
+  robotId,
   match,
   hasNextPage,
   hasPreviousPage,
@@ -41,8 +41,8 @@ const RobotExecutionsListComponent = ({
   const loading =
     robotExecutionsLoading &&
     (robotExecutions.size <= 0 ||
-      (scheduleId !== undefined &&
-        robotExecutions.get(0).values['Robot ID'] !== scheduleId));
+      (robotId !== undefined &&
+        robotExecutions.get(0).values['Robot ID'] !== robotId));
   return loading ? (
     <Loading />
   ) : (
@@ -64,7 +64,7 @@ const RobotExecutionsListComponent = ({
             <li role="presentation">
               <NavLink
                 exact
-                to={`/settings/robots/${match.params.scheduleId}`}
+                to={`/settings/robots/${match.params.robotId}`}
                 activeClassName="active"
               >
                 Details
@@ -72,7 +72,7 @@ const RobotExecutionsListComponent = ({
             </li>
             <li role="presentation">
               <NavLink
-                to={`/settings/robots/${match.params.scheduleId}/executions`}
+                to={`/settings/robots/${match.params.robotId}/executions`}
                 activeClassName="active"
               >
                 Executions
@@ -211,14 +211,14 @@ export const RobotExecutionsList = compose(
   ),
   withHandlers({
     handleNextPage: props => () =>
-      props.fetchRobotExecutionsNextPage(props.scheduleId),
+      props.fetchRobotExecutionsNextPage(props.robotId),
     handlePreviousPage: props => () =>
-      props.fetchRobotExecutionsPreviousPage(props.scheduleId),
-    handleReload: props => () => props.fetchRobotExecutions(props.scheduleId),
+      props.fetchRobotExecutionsPreviousPage(props.robotId),
+    handleReload: props => () => props.fetchRobotExecutions(props.robotId),
   }),
   lifecycle({
     componentWillMount() {
-      this.props.fetchRobotExecutions(this.props.match.params.scheduleId);
+      this.props.fetchRobotExecutions(this.props.match.params.robotId);
     },
   }),
 )(RobotExecutionsListComponent);
