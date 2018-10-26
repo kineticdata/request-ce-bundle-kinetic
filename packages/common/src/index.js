@@ -52,7 +52,4 @@ export {
   ErrorUnauthorized,
   ErrorUnexpected,
   Avatar,
-  DiscussionCard,
-  DiscussionsList,
-  ViewDiscussionsModal,
 };
