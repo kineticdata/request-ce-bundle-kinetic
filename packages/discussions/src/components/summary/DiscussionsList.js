@@ -11,12 +11,8 @@ export const DiscussionsList = ({
   const discussionGroup = Utils.getGroupedDiscussions(discussions);
   return (
     <Fragment>
-      <button
-        onClick={handleCreateDiscussion}
-        className="btn btn-inverse"
-        style={{ flex: '1 0 auto' }}
-      >
-        Create a new discussion
+      <button onClick={handleCreateDiscussion} className="btn btn-inverse">
+        New Discussion
       </button>
 
       {discussionGroup

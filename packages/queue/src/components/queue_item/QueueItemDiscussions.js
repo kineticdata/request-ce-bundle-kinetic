@@ -13,7 +13,7 @@ export const QueueItemDiscussions = props => {
 
   return discussionId ? (
     <div className="kinops-discussions d-none d-md-flex">
-      <button onClick={handleDiscussionClear} className="btn btn-inverse">
+      <button onClick={handleDiscussionClear} className="btn btn-link btn-back">
         <span className="icon">
           <span className="fa fa-fw fa-chevron-left" />
         </span>

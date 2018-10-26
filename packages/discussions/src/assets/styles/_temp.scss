@@ -23,3 +23,34 @@
     margin-left: 0.5rem;
   }
 }
+
+// Discussion container fixes
+// .page-container--panels {
+// }
+.kinops-discussions {
+  overflow-y: scroll;
+  justify-content: space-between;
+  flex-direction: column;
+  .btn {
+    flex-grow: 0;
+  }
+  .btn-link.btn-back {
+    border-bottom: 1px solid rgb(213, 213, 213);
+    border-top: 0;
+    border-radius: 0;
+    padding: 0.9375rem 1rem;
+    text-align: left;
+  }
+  .messages {
+    background-color: #fff;
+  }
+}
+
+// Add padding to the list of discussions but not the actual discussion.
+.kinops-discussions.recent-discussions-wrapper {
+  padding: 0.5em 1em !important;
+}
+
+.kinops-discussions.empty {
+  justify-content: center;
+}

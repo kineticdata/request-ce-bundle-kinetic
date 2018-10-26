@@ -162,7 +162,10 @@ export const Team = ({
               )}
             {currentDiscussion && currentDiscussion.id ? (
               <div className="kinops-discussions d-none d-md-flex">
-                <button onClick={clearDiscussion} className="btn btn-inverse">
+                <button
+                  onClick={clearDiscussion}
+                  className="btn btn-link btn-back"
+                >
                   <span className="icon">
                     <span className="fa fa-fw fa-chevron-left" />
                   </span>

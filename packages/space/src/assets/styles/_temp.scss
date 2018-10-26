@@ -174,24 +174,3 @@ textarea {
 .notifications-tabs .nav-tabs {
   margin-bottom: 1rem;
 }
-
-.page-container.page-container--datastore {
-  .kinops-discussions {
-    overflow-y: scroll;
-    justify-content: space-between;
-    flex-direction: column;
-
-    .messages {
-      background-color: #fff;
-    }
-  }
-
-  // Add padding to the list of discussions but not the actual discussion.
-  .kinops-discussions.recent-discussions-wrapper {
-    padding: 0.5em 1em !important;
-  }
-
-  .kinops-discussions.empty {
-    justify-content: center;
-  }
-}
