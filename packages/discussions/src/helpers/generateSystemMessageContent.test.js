@@ -157,10 +157,29 @@ describe('generateContent', () => {
       ];
       const expected = [
         { type: 'user', value: USER1 },
-        { type: 'text', value: 'updated the discussion from' },
-        { type: 'json', value: JSON.stringify(previousValues) },
-        { type: 'text', value: 'to' },
-        { type: 'json', value: JSON.stringify(values) },
+        { type: 'text', value: 'updated the discussion' },
+        { type: 'text', value: 'title from [Previous Title] to [New Title]' },
+      ];
+      expect(generateContent('Discussion Updated', content)).toEqual(expected);
+    });
+
+    it('returns the discussion updated message with multiple changes', () => {
+      const previousValues = { title: 'Previous Title', description: '..' };
+      const values = { title: 'New Title', description: 'Hello World' };
+      const content = [
+        { type: 'user', name: 'updatedBy', value: USER1 },
+        {
+          type: 'json',
+          name: 'previousValues',
+          value: JSON.stringify(previousValues),
+        },
+        { type: 'json', name: 'values', value: JSON.stringify(values) },
+      ];
+      const expected = [
+        { type: 'user', value: USER1 },
+        { type: 'text', value: 'updated the discussion' },
+        { type: 'text', value: 'title from [Previous Title] to [New Title]' },
+        { type: 'text', value: ', and description from [..] to [Hello World]' },
       ];
       expect(generateContent('Discussion Updated', content)).toEqual(expected);
     });

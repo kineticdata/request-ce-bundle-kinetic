@@ -104,12 +104,15 @@ export default (action, content) => {
           getToken(content, 'message'),
         ];
       case 'Discussion Updated':
+        const previous = JSON.parse(getToken(content, 'previousValues').value);
+        const current = JSON.parse(getToken(content, 'values').value);
         return [
           getToken(content, 'updatedBy'),
-          textToken('updated the discussion from'),
-          getToken(content, 'previousValues'),
-          textToken('to'),
-          getToken(content, 'values'),
+          textToken('updated the discussion'),
+          ...Object.entries(previous).map(([name], i) =>
+            // prettier-ignore
+            textToken(`${i > 0 ? ', and ' : ''}${name} from [${previous[name]}] to [${current[name]}]`,),
+          ),
         ];
     }
   } catch (e) {
