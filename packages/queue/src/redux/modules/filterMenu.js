@@ -11,10 +11,7 @@ export const types = {
   TOGGLE_TEAM: '@kd/queue/filterMenu/TOGGLE_TEAM',
   TOGGLE_STATUS: '@kd/queue/filterMenu/TOGGLE_STATUS',
   SET_DATE_RANGE_TIMELINE: '@kd/queue/filterMenu/SET_DATE_RANGE_TIMELINE',
-  SET_DATE_RANGE_PRESET: '@kd/queue/filterMenu/SET_DATE_RANGE_PRESET',
-  TOGGLE_DATE_RANGE_CUSTOM: '@kd/queue/filterMenu/TOGGLE_DATE_RANGE_CUSTOM',
-  SET_DATE_RANGE_START: '@kd/queue/filterMenu/SET_DATE_RANGE_START',
-  SET_DATE_RANGE_END: '@kd/queue/filterMenu/SET_DATE_RANGE_END',
+  SET_DATE_RANGE: '@kd/queue/filterMenu/SET_DATE_RANGE',
   SET_SORTED_BY: '@kd/queue/filterMenu/SET_SORTED_BY',
 };
 
@@ -35,13 +32,7 @@ export const actions = {
     type: types.SET_DATE_RANGE_TIMELINE,
     payload,
   }),
-  setDateRangePreset: payload => ({
-    type: types.SET_DATE_RANGE_PRESET,
-    payload,
-  }),
-  toggleDateRangeCustom: () => ({ type: types.TOGGLE_DATE_RANGE_CUSTOM }),
-  setDateRangeStart: payload => ({ type: types.SET_DATE_RANGE_START, payload }),
-  setDateRangeEnd: payload => ({ type: types.SET_DATE_RANGE_END, payload }),
+  setDateRange: payload => ({ type: types.SET_DATE_RANGE, payload }),
   setSortedBy: payload => ({ type: types.SET_SORTED_BY, payload }),
 };
 
@@ -111,18 +102,14 @@ export const reducer = (state = defaultState, { type, payload }) => {
       );
     case types.SET_DATE_RANGE_TIMELINE:
       return state.setIn(['currentFilter', 'dateRange', 'timeline'], payload);
-    case types.SET_DATE_RANGE_PRESET:
-      return state
-        .setIn(['currentFilter', 'dateRange', 'preset'], payload)
-        .setIn(['currentFilter', 'dateRange', 'custom'], false);
-    case types.TOGGLE_DATE_RANGE_CUSTOM:
-      return state
-        .updateIn(['currentFilter', 'dateRange', 'custom'], bool => !bool)
-        .setIn(['currentFilter', 'dateRange', 'preset'], '');
-    case types.SET_DATE_RANGE_START:
-      return state.setIn(['currentFilter', 'dateRange', 'start'], payload);
-    case types.SET_DATE_RANGE_END:
-      return state.setIn(['currentFilter', 'dateRange', 'end'], payload);
+    case types.SET_DATE_RANGE:
+      const custom = typeof payload === 'object';
+      return state.mergeIn(['currentFilter', 'dateRange'], {
+        preset: !custom ? payload : '',
+        custom,
+        start: custom ? payload.start : '',
+        end: custom ? payload.end : '',
+      });
     case types.SET_SORTED_BY:
       return state.setIn(['currentFilter', 'sortBy'], payload);
     default:
