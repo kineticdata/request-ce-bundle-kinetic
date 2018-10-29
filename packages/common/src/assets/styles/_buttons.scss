@@ -78,6 +78,23 @@ input[type='button'],
   }
 }
 
+// Button Text
+.btn-text {
+  @extend .btn;
+  font: inherit;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+  @include setButtonColorAndHover(transparent);
+  color: $link-color;
+  &:hover,
+  &:focus,
+  &:active {
+    color: tint($link-color, 10%);
+    text-decoration: none;
+  }
+}
+
 // Button Subtle
 .btn-subtle {
   @extend .btn;

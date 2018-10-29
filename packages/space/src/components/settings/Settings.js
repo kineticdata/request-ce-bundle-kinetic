@@ -3,7 +3,13 @@ import { Link } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import { Icon, PageTitle, Schedulers } from 'common';
+import {
+  Icon,
+  PageTitle,
+  Schedulers,
+  selectHasRoleSchedulerAdmin,
+  selectHasRoleSchedulerManager,
+} from 'common';
 
 import { SpaceSettings } from './space_settings/SpaceSettings';
 import { Notifications } from './notifications/Notifications';
@@ -70,7 +76,11 @@ const SettingsCard = ({ path, icon, name, description }) => (
   </Link>
 );
 
-const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
+const SettingsNavigationComponent = ({
+  isSpaceAdmin,
+  isSchedulerAdmin,
+  isSchedulerManager,
+}) => (
   <div className="page-container page-container--space-settings">
     <PageTitle parts={['Settings']} />
     <div className="page-panel page-panel--datastore-content">
@@ -133,6 +143,14 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
             />
           </Fragment>
         )}
+        {(isSchedulerAdmin || isSchedulerManager) && (
+          <SettingsCard
+            name="Schedulers"
+            path={`/settings/schedulers`}
+            icon="fa-calendar"
+            description="View, Create and Manage Schedulers"
+          />
+        )}
       </div>
     </div>
   </div>
@@ -140,6 +158,8 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
 
 const mapStateToProps = state => ({
   isSpaceAdmin: state.app.profile.spaceAdmin,
+  isSchedulerAdmin: selectHasRoleSchedulerAdmin(state),
+  isSchedulerManager: selectHasRoleSchedulerManager(state),
 });
 
 export const SettingsNavigation = compose(

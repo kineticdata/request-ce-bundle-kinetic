@@ -76,34 +76,39 @@ export function* fetchSchedulerSaga({ payload: { id } }) {
     yield put(actions.setSchedulerErrors(errors));
   } else {
     yield put(actions.setScheduler(submission));
-    yield put(
-      actions.fetchSchedulerTeams({
-        schedulerName: submission.values['Name'],
-      }),
-    );
+    yield all([
+      put(
+        actions.fetchSchedulerManagersTeam({
+          schedulerName: submission.values['Name'],
+        }),
+      ),
+      put(
+        actions.fetchSchedulerAgentsTeam({
+          schedulerName: submission.values['Name'],
+        }),
+      ),
+    ]);
   }
 }
 
-export function* fetchSchedulerTeamsSaga({ payload: { schedulerName } }) {
-  const teams = {};
-  const { team: managerTeam } = yield call(CoreAPI.fetchTeam, {
+export function* fetchSchedulerManagersTeamSaga({
+  payload: { schedulerName },
+}) {
+  const { team } = yield call(CoreAPI.fetchTeam, {
     teamSlug: md5(`Role::Scheduler::${schedulerName}`),
     include:
       'attributes,memberships.user,memberships.user.attributes,memberships.user.profileAttributes',
   });
-  if (managerTeam) {
-    teams.managers = managerTeam;
-  }
-  const { team: agentTeam } = yield call(CoreAPI.fetchTeam, {
+  yield put(actions.setSchedulerTeams({ managers: team }));
+}
+
+export function* fetchSchedulerAgentsTeamSaga({ payload: { schedulerName } }) {
+  const { team } = yield call(CoreAPI.fetchTeam, {
     teamSlug: md5(`Scheduler::${schedulerName}`),
     include:
       'attributes,memberships.user,memberships.user.attributes,memberships.user.profileAttributes',
   });
-  if (agentTeam) {
-    teams.agents = agentTeam;
-  }
-
-  yield put(actions.setSchedulerTeams(teams));
+  yield put(actions.setSchedulerTeams({ agents: team }));
 }
 
 export function* fetchSchedulerConfigSaga() {
@@ -290,7 +295,14 @@ export function* deleteSchedulerOverrideSaga({ payload: { id } }) {
 export function* watchSchedulers() {
   yield takeEvery(types.FETCH_SCHEDULERS, fetchSchedulersSaga);
   yield takeEvery(types.FETCH_SCHEDULER, fetchSchedulerSaga);
-  yield takeEvery(types.FETCH_SCHEDULER_TEAMS, fetchSchedulerTeamsSaga);
+  yield takeEvery(
+    types.FETCH_SCHEDULER_MANAGERS_TEAM,
+    fetchSchedulerManagersTeamSaga,
+  );
+  yield takeEvery(
+    types.FETCH_SCHEDULER_AGENTS_TEAM,
+    fetchSchedulerAgentsTeamSaga,
+  );
   yield takeEvery(types.FETCH_SCHEDULER_CONFIG, fetchSchedulerConfigSaga);
   yield takeEvery(types.DELETE_SCHEDULER_CONFIG, deleteSchedulerConfigSaga);
   yield takeEvery(

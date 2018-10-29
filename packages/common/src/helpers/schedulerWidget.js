@@ -1,5 +1,5 @@
 import { List, Map, Record } from 'immutable';
-import { CoreAPI } from 'react-kinetic-core';
+import { CoreAPI, bundle } from 'react-kinetic-core';
 import moment from 'moment';
 import isarray from 'isarray';
 import { namespace, noPayload, withPayload } from '../utils';
@@ -11,6 +11,7 @@ import {
   SCHEDULER_OVERRIDE_FORM_SLUG,
   SCHEDULED_EVENT_FORM_SLUG,
 } from '../redux/modules/schedulers';
+import axios from 'axios';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
 export const DATE_DISPLAY_FORMAT = 'LL';
@@ -37,8 +38,9 @@ export const fetchSchedulerConfigsBySchedulerId = id => {
   query
     .include('details,values')
     .limit('1000')
-    .index('values[Scheduler Id],values[Event Type]:UNIQUE')
-    .eq('values[Scheduler Id]', id);
+    .index('values[Scheduler Id],values[Status],values[Event Type]')
+    .eq('values[Scheduler Id]', id)
+    .eq('values[Status]', 'Active');
   return CoreAPI.searchSubmissions({
     search: query.build(),
     datastore: true,
@@ -114,7 +116,7 @@ export const fetchScheduledEventsBySchedulerIdAndDate = (id, date, days) => {
     search: query.build(),
     datastore: true,
     form: SCHEDULED_EVENT_FORM_SLUG,
-    include: 'values',
+    include: 'details,values',
   });
 };
 
@@ -122,7 +124,106 @@ export const fetchScheduledEventById = id => {
   return CoreAPI.fetchSubmission({
     id,
     datastore: true,
-    include: 'values',
+    include: 'details,values',
+  });
+};
+
+export const createScheduledEvent = values => {
+  return CoreAPI.createSubmission({
+    datastore: true,
+    formSlug: SCHEDULED_EVENT_FORM_SLUG,
+    values,
+    completed: false,
+    include: 'details,values',
+  });
+};
+
+export const updateScheduledEvent = (id, values = {}, submit) => {
+  return CoreAPI.updateSubmission({
+    id,
+    datastore: true,
+    values,
+    include: 'details,values',
+    ...(submit ? { coreState: 'Submitted' } : {}),
+  });
+};
+
+const handleErrors = error => {
+  if (error instanceof Error && !error.response) {
+    // When the error is an Error object an exception was thrown in the process.
+    // so we'll just 'convert' it to a 400 error to be handled downstream.
+    return { serverError: { status: 400, statusText: error.message } };
+  }
+
+  // Destructure out the information needed.
+  const { data, status, statusText } = error.response;
+  if (status === 400 && typeof data === 'object') {
+    // If the errors returned are from server-side validations or constraints.
+    if (data.errors) {
+      return { errors: data.errors };
+    } else if (data.error) {
+      return { errors: [data.error], ...data };
+    } else {
+      return data;
+    }
+  }
+
+  // For all other server-side errors.
+  return { serverError: { status, statusText, error: data && data.error } };
+};
+
+const paramBuilder = options => {
+  const params = {};
+  if (options.include) {
+    params.include = options.include;
+  }
+  if (options.limit) {
+    params.limit = options.limit;
+  }
+  if (options.manage) {
+    params.manage = options.manage;
+  }
+  if (options.export) {
+    params.export = options.export;
+  }
+  return params;
+};
+
+const submitSubmission = options => {
+  const { id, values, page } = options;
+  return (
+    axios
+      .post(
+        `${bundle.apiLocation()}/datastore/submissions/${id}`,
+        { values },
+        {
+          params: {
+            ...paramBuilder(options),
+            page,
+          },
+        },
+      )
+      // Remove the response envelop and leave us with the submission one.
+      .then(response => ({ submission: response.data.submission }))
+      // Clean up any errors we receive. Make sure this the last thing so that it
+      // cleans up any errors.
+      .catch(handleErrors)
+  );
+};
+
+export const submitScheduledEvent = ({ id, values }, page) => {
+  return submitSubmission({
+    id,
+    values,
+    page,
+    include: 'details,values',
+  });
+};
+
+export const deleteScheduledEvent = id => {
+  return CoreAPI.deleteSubmission({
+    id,
+    datastore: true,
   });
 };
 
@@ -144,15 +245,12 @@ export const types = {
   SET_OVERRIDES: namespace('schedulerWidget', 'SET_OVERRIDES'),
   SET_EVENTS: namespace('schedulerWidget', 'SET_EVENTS'),
   SET_SCHEDULING: namespace('schedulerWidget', 'SET_SCHEDULING'),
+  ADD_SCHEDULING_ERRORS: namespace('schedulerWidget', 'ADD_SCHEDULING_ERRORS'),
   SET_EVENT: namespace('schedulerWidget', 'SET_EVENT'),
-  SET_EVENT_TO_CHANGE: namespace('schedulerWidget', 'SET_EVENT_TO_CHANGE'),
   SET_TIMELINE: namespace('schedulerWidget', 'SET_EVENT'),
   ADD_TIMESLOTS: namespace('schedulerWidget', 'ADD_TIMESLOTS'),
   CALLBACK: namespace('schedulerWidget', 'CALLBACK'),
-  CHANGE_SCHEDULED_EVENT: namespace(
-    'schedulerWidget',
-    'CHANGE_SCHEDULED_EVENT',
-  ),
+  EDIT_EVENT: namespace('schedulerWidget', 'EDIT_EVENT'),
 };
 
 export const actions = {
@@ -170,11 +268,11 @@ export const actions = {
   setOverrides: withPayload(types.SET_OVERRIDES),
   setEvents: withPayload(types.SET_EVENTS),
   setScheduling: withPayload(types.SET_SCHEDULING),
+  addSchedulingErrors: withPayload(types.ADD_SCHEDULING_ERRORS),
   setEvent: withPayload(types.SET_EVENT),
-  setEventToChange: withPayload(types.SET_EVENT_TO_CHANGE),
   addTimeslots: withPayload(types.ADD_TIMESLOTS),
   callback: withPayload(types.CALLBACK),
-  changeScheduledEvent: withPayload(types.CHANGE_SCHEDULED_EVENT),
+  editEvent: withPayload(types.EDIT_EVENT),
 };
 
 export const State = Record({
@@ -193,13 +291,13 @@ export const State = Record({
   overrides: new List(),
   events: new List(),
   scheduling: false,
+  schedulingErrors: new List(),
   event: null,
-  eventToChange: null,
   timeslots: {},
 });
 
 export const reducer = (state = State(), { type, payload }) => {
-  console.log('REDUCER', type, payload);
+  console.log(type);
   switch (type) {
     case types.SET_STATE:
       return Map(payload).reduce(
@@ -231,30 +329,26 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_EVENTS:
       return state.set('events', List(payload));
     case types.SET_SCHEDULING:
-      return state.set('scheduling', payload !== false);
+      return payload !== false
+        ? state.set('scheduling', true).set('schedulingErrors', new List())
+        : state.set('scheduling', false);
+    case types.ADD_SCHEDULING_ERRORS:
+      return state
+        .update('schedulingErrors', errors => errors.push(...payload))
+        .set('scheduling', false);
     case types.SET_EVENT:
       return state.set('event', payload);
-    case types.SET_EVENT_TO_CHANGE:
-      return state.set('eventToChange', payload);
     case types.ADD_TIMESLOTS:
       return state.update('timeslots', slots => ({ ...slots, ...payload }));
     case types.CALLBACK:
       payload(state);
       return state;
-    case types.CHANGE_SCHEDULED_EVENT:
-      if (payload) {
-        return state
-          .set('eventToChange', state.event)
-          .set('schedulerId', state.event.values['Scheduler Id'])
-          .set('type', state.event.values['Event Type'])
-          .set('date', state.event.values['Date'])
-          .set('time', state.event.values['Time'])
-          .set('event', null);
-      } else {
-        return state
-          .set('event', state.eventToChange)
-          .set('eventToChange', null);
-      }
+    case types.EDIT_EVENT:
+      return state
+        .set('schedulerId', state.event.values['Scheduler Id'])
+        .set('type', state.event.values['Event Type'])
+        .set('date', state.event.values['Date'])
+        .set('time', state.event.values['Time']);
     default:
       return state;
   }

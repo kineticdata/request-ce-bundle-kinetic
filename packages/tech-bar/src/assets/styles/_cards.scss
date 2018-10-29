@@ -1,3 +1,81 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Card Overrides ~ Tech Bar
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.cards__wrapper--tech-bar {
+  flex-direction: row;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: flex-start;
+  .card {
+    flex: 0 0 auto;
+    border: 1px solid $black-16;
+    margin: 0 0.75rem 0.75rem 0;
+    @media all and (min-width: 0) {
+      flex-basis: 100%;
+      @media all and (-ms-high-contrast: none) {
+        width: 100%;
+        flex-basis: auto;
+      }
+    }
+    @media all and (min-width: 576px) {
+      flex-basis: 48%;
+      @media all and (-ms-high-contrast: none) {
+        width: 48%;
+        flex-basis: auto;
+      }
+    }
+    @media all and (min-width: 768px) {
+      flex-basis: 48%;
+      @media all and (-ms-high-contrast: none) {
+        width: 48%;
+        flex-basis: auto;
+      }
+    }
+    @media all and (min-width: 992px) {
+      flex-basis: 32%;
+      @media all and (-ms-high-contrast: none) {
+        width: 32%;
+        flex-basis: auto;
+      }
+    }
+    @media all and (min-width: 1200px) {
+    }
+
+    &--tech-bar {
+      .card-body {
+        flex-direction: column;
+        justify-content: flex-start;
+        display: flex;
+        padding: 0.6875rem 1rem;
+        h3.card-title,
+        h5.card-title {
+          margin-top: 0;
+          margin-bottom: 0.5rem;
+        }
+        .card-subtitle {
+          margin-top: -0.25rem;
+          margin-bottom: 0.5rem;
+          opacity: 0.75;
+        }
+        .card-text {
+          margin-bottom: 0.5rem;
+          flex-grow: 1;
+        }
+        .card-button {
+          margin: 0 -1rem -0.6875rem -1rem;
+          border-top-left-radius: 0;
+          border-top-right-radius: 0;
+        }
+      }
+      &.selected {
+        .card-body {
+          background-color: $primary;
+          * {
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}

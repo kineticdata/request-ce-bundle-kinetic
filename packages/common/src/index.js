@@ -28,10 +28,15 @@ import {
   types as toastTypes,
 } from './redux/modules/toasts';
 import { actions as modalFormActions } from './redux/modules/modalForm';
+import {
+  selectHasRoleSchedulerAdmin,
+  selectHasRoleSchedulerManager,
+} from './redux/selectors';
 
 import * as Utils from './utils';
 import * as Constants from './constants';
 import * as AttributeSelectors from './components/attribute_selectors';
+import * as Actions from './helpers/actions';
 
 export {
   KappLink,
@@ -60,4 +65,7 @@ export {
   ErrorUnexpected,
   AttributeSelectors,
   Schedulers,
+  selectHasRoleSchedulerAdmin,
+  selectHasRoleSchedulerManager,
+  Actions,
 };

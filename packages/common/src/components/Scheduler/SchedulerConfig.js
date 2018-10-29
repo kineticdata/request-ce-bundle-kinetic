@@ -69,6 +69,7 @@ const SchedulerConfigComponent = ({
           <tr>
             <th>Event Type</th>
             <th>Duration</th>
+            <th>Status</th>
             <th />
           </tr>
         </thead>
@@ -81,6 +82,7 @@ const SchedulerConfigComponent = ({
                   timeInterval}{' '}
                 minutes
               </td>
+              <td>{config.values['Status']}</td>
               <td className="text-right">
                 <Dropdown
                   toggle={toggleDropdown(config.id)}

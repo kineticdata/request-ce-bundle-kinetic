@@ -6,7 +6,7 @@ export const SCHEDULER_FORM_SLUG = 'scheduler';
 export const SCHEDULER_CONFIG_FORM_SLUG = 'scheduler-config';
 export const SCHEDULER_AVAILABILITY_FORM_SLUG = 'scheduler-availability';
 export const SCHEDULER_OVERRIDE_FORM_SLUG = 'scheduler-override';
-export const SCHEDULER_OVERRIDES_PAGE_SIZE = 2;
+export const SCHEDULER_OVERRIDES_PAGE_SIZE = 10;
 export const SCHEDULED_EVENT_FORM_SLUG = 'scheduled-event';
 
 export const types = {
@@ -18,7 +18,14 @@ export const types = {
   FETCH_SCHEDULER: namespace('schedulers', 'FETCH_SCHEDULER'),
   SET_SCHEDULER: namespace('schedulers', 'SET_SCHEDULER'),
   SET_SCHEDULER_ERRORS: namespace('schedulers', 'SET_SCHEDULER_ERRORS'),
-  FETCH_SCHEDULER_TEAMS: namespace('schedulers', 'FETCH_SCHEDULER_TEAMS'),
+  FETCH_SCHEDULER_MANAGERS_TEAM: namespace(
+    'schedulers',
+    'FETCH_SCHEDULER_MANAGERS_TEAM',
+  ),
+  FETCH_SCHEDULER_AGENTS_TEAM: namespace(
+    'schedulers',
+    'FETCH_SCHEDULER_AGENTS_TEAM',
+  ),
   SET_SCHEDULER_TEAMS: namespace('schedulers', 'SET_SCHEDULER_TEAMS'),
   // Scheduler Config
   FETCH_SCHEDULER_CONFIG: namespace('schedulers', 'FETCH_SCHEDULER_CONFIG'),
@@ -82,7 +89,8 @@ export const actions = {
   fetchScheduler: withPayload(types.FETCH_SCHEDULER),
   setScheduler: withPayload(types.SET_SCHEDULER),
   setSchedulerErrors: withPayload(types.SET_SCHEDULER_ERRORS),
-  fetchSchedulerTeams: withPayload(types.FETCH_SCHEDULER_TEAMS),
+  fetchSchedulerManagersTeam: withPayload(types.FETCH_SCHEDULER_MANAGERS_TEAM),
+  fetchSchedulerAgentsTeam: withPayload(types.FETCH_SCHEDULER_AGENTS_TEAM),
   setSchedulerTeams: withPayload(types.SET_SCHEDULER_TEAMS),
   // Scheduler Config
   fetchSchedulerConfig: noPayload(types.FETCH_SCHEDULER_CONFIG),
@@ -210,12 +218,14 @@ export const reducer = (state = State(), { type, payload }) => {
       return state
         .setIn(['scheduler', 'loading'], false)
         .setIn(['scheduler', 'errors'], payload);
-    case types.FETCH_SCHEDULER_TEAMS:
+    case types.FETCH_SCHEDULER_MANAGERS_TEAM:
+      return state.setIn(['scheduler', 'loading'], true);
+    case types.FETCH_SCHEDULER_AGENTS_TEAM:
       return state.setIn(['scheduler', 'loading'], true);
     case types.SET_SCHEDULER_TEAMS:
       return state
         .setIn(['scheduler', 'loading'], false)
-        .setIn(['scheduler', 'teams'], payload);
+        .updateIn(['scheduler', 'teams'], teams => ({ ...teams, ...payload }));
     // Scheduler Config
     case types.FETCH_SCHEDULER_CONFIG:
       return state
