@@ -100,6 +100,7 @@ export const SettingsComponent = ({
                   valueMapper={value => value.slug}
                   kappSlug={requiredKapps.queue.slug}
                   label="Default Approval Form"
+                  style={{ width: '50%' }}
                   description={attributesMap.getIn([
                     'Approval Form Slug',
                     'description',

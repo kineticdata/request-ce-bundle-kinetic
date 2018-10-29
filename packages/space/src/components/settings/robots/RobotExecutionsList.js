@@ -42,7 +42,7 @@ const RobotExecutionsListComponent = ({
     robotExecutionsLoading &&
     (robotExecutions.size <= 0 ||
       (scheduleId !== undefined &&
-        robotExecutions.get(0).values['Schedule ID'] !== scheduleId));
+        robotExecutions.get(0).values['Robot ID'] !== scheduleId));
   return loading ? (
     <Loading />
   ) : (
@@ -94,10 +94,12 @@ const RobotExecutionsListComponent = ({
           <table className="table table-sm table-striped table-robots">
             <thead className="header">
               <tr>
-                <th>Schedule Name</th>
-                <th width="10%">Status</th>
-                <th>Start</th>
-                <th>End</th>
+                <th scope="col">Robot Name</th>
+                <th scope="col" width="10%">
+                  Status
+                </th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
                 <th width="1%" />
               </tr>
             </thead>
@@ -105,7 +107,7 @@ const RobotExecutionsListComponent = ({
               {robotExecutions.map(execution => {
                 return (
                   <tr key={execution.id}>
-                    <td>{execution.values['Schedule Name']}</td>
+                    <td scope="row">{execution.values['Robot Name']}</td>
                     <td>
                       <span
                         className={`status ${getStatusColor(
@@ -128,7 +130,7 @@ const RobotExecutionsListComponent = ({
                     <td>
                       <Link
                         to={`/settings/robots/${
-                          execution.values['Schedule ID']
+                          execution.values['Robot ID']
                         }/executions/${execution.id}`}
                       >
                         <span>View&nbsp;</span>

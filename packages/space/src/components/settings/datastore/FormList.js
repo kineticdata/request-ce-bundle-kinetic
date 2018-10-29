@@ -63,14 +63,23 @@ const FormListComponent = ({
           {loading ? (
             <h3>Loading</h3>
           ) : datastoreForms && datastoreForms.size > 0 ? (
-            <table className="table table-sm table-striped table-datastore">
-              <thead className="header">
+            <table className="table table-sm table-striped table--settings">
+              <thead className="header sortable">
                 <tr>
-                  <th>Form Name</th>
-                  <th width="40%">Description</th>
-                  <th width="10%">Updated</th>
-                  <th width="10%">Created</th>
-                  <th width="48px">&nbsp;</th>
+                  <th scope="col" width="10%">
+                    Form Name
+                  </th>
+                  <th scope="col">Slug</th>
+                  <th scope="col" width="50%">
+                    Description
+                  </th>
+                  <th scope="col" width="10%">
+                    Updated
+                  </th>
+                  <th scope="col" width="10%">
+                    Created
+                  </th>
+                  <th scope="col" width="48px" className="sort-disabled" />
                 </tr>
               </thead>
               <tbody>
@@ -78,13 +87,12 @@ const FormListComponent = ({
                   const canManage = form.canManage;
                   return (
                     <tr key={form.slug}>
-                      <td>
+                      <td scope="row">
                         <Link to={`${match.path}/${form.slug}`}>
                           <span>{form.name}</span>
                         </Link>
-                        <br />
-                        <small>{form.slug}</small>
                       </td>
+                      <td>{form.slug}</td>
                       <td>{form.description}</td>
                       <td>
                         <Timestamp value={form.updatedAt} slug={form.slug} />
@@ -103,6 +111,12 @@ const FormListComponent = ({
                           <DropdownMenu right>
                             <DropdownItem
                               tag={Link}
+                              to={`${match.path}/${form.slug}`}
+                            >
+                              View
+                            </DropdownItem>
+                            <DropdownItem
+                              tag={Link}
                               to={`${match.path}/${form.slug}/new`}
                             >
                               New Record
@@ -112,7 +126,7 @@ const FormListComponent = ({
                                 tag={Link}
                                 to={`${match.path}/${form.slug}/settings`}
                               >
-                                Configure Form
+                                Configure
                               </DropdownItem>
                             )}
                           </DropdownMenu>

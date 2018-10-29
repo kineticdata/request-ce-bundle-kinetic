@@ -89,7 +89,7 @@ const AddMemberModalComponent = ({
             <tbody>
               {addedMembers.map(memeber => (
                 <tr key={memeber.username}>
-                  <td>
+                  <td scope="row">
                     <Avatar size={30} user={memeber} />
                   </td>
                   <td>{memeber.displayName || memeber.username}</td>

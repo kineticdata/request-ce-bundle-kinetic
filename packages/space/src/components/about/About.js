@@ -50,14 +50,14 @@ const AboutComponent = ({ space, about, loading }) => (
               <thead>
                 <tr>
                   <th />
-                  <th>Email</th>
-                  <th>Display Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Display Name</th>
                 </tr>
               </thead>
               <tbody>
                 {about.spaceAdmins.map(user => (
                   <tr key={user.username}>
-                    <td>
+                    <td scope="row">
                       <Avatar user={user} />
                     </td>
                     <td>

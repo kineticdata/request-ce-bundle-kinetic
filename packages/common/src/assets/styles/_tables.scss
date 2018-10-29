@@ -37,7 +37,7 @@
   display: table-row-group;
 }
 
-table.settings-table {
+table.table--settings {
   font-size: 0.875rem;
 
   tbody {
@@ -122,4 +122,11 @@ thead.sortable {
   .d-md-table-header-group {
     display: table-header-group !important;
   }
+}
+
+tfoot {
+  border-top: 1px solid $black-50;
+  background: $black-3;
+  padding: 1rem;
+  position: relative;
 }
