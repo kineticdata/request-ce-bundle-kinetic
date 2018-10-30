@@ -33,9 +33,9 @@
       }
     }
     @media all and (min-width: 992px) {
-      flex-basis: 32%;
+      flex-basis: 31.5%;
       @media all and (-ms-high-contrast: none) {
-        width: 32%;
+        width: 31.5%;
         flex-basis: auto;
       }
     }
@@ -77,5 +77,22 @@
         }
       }
     }
+  }
+}
+
+.card--appointment {
+  display: flex;
+  flex-direction: row;
+  @include border-radius();
+  background-color: $gray4;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+
+  .details {
+    padding: 0.25rem 0.5rem;
+  }
+
+  button {
+    @include border-left-radius(0);
   }
 }

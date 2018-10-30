@@ -17,6 +17,11 @@ import { Display } from './components/Display';
 import { Form } from './components/Form';
 import './assets/styles/master.scss';
 
+export const DATE_FORMAT = 'YYYY-MM-DD';
+export const DATE_DISPLAY_FORMAT = 'dddd, LL';
+export const TIME_FORMAT = 'HH:mm';
+export const TIME_DISPLAY_FORMAT = 'LT';
+
 export const AppComponent = props => {
   if (props.loading) {
     return <Loading text="App is loading ..." />;
@@ -24,14 +29,20 @@ export const AppComponent = props => {
     return <ErrorUnexpected />;
   } else {
     return props.render({
-      sidebar: <Switch>{/* <Route render={() => <Sidebar />} /> */}</Switch>,
       main: (
-        <main className="package-layout package-layout--tech-bar">
+        <main
+          className={`package-layout package-layout--tech-bar ${
+            props.fullScreen ? 'package-layout--tech-bar__full-screen' : ''
+          }`}
+        >
           <Route path="/" exact component={Home} />
-          <Route path="/forms/:formSlug/submissions/:id" component={Form} />
-          <Route path="/forms/:formSlug/:id?" component={Form} />
+          <Route
+            path="/forms/:formSlug/submissions/:id"
+            exact
+            component={Form}
+          />
+          <Route path="/forms/:formSlug/:id?" exact component={Form} />
           <Route path="/display/:id/:mode?" exact component={Display} />
-          <Route component={ErrorNotFound} />
         </main>
       ),
     });
@@ -46,6 +57,9 @@ const mapStateToProps = (state, props) => {
     settingsBackPath: `/kapps/${currentKapp}`,
     loading: state.techBar.techBarApp.appLoading,
     errors: state.techBar.techBarApp.appErrors,
+    fullScreen: matchPath(state.router.location.pathname, {
+      path: `/kapps/${currentKapp}/display`,
+    }),
   };
 };
 
@@ -71,5 +85,5 @@ const enhance = compose(
 
 export const App = enhance(AppComponent);
 
-App.shouldSuppressSidebar = (pathname, kappSlug) =>
+App.shouldHideSidebar = (pathname, kappSlug) =>
   matchPath(pathname, { path: `/kapps/${kappSlug}` });

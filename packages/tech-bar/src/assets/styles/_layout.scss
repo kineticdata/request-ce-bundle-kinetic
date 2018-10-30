@@ -24,54 +24,86 @@
     }
 
     .tech-bar-display {
-      max-width: 600px;
-      margin: auto;
+      &__small {
+        max-width: 800px;
+        margin: auto;
+      }
 
-      .check-in-card {
+      .check-in-option {
         @include border-radius(1rem);
-        border: 1px solid $gray4;
+        width: 100%;
+        font-size: 1.6rem;
+        line-height: 10rem;
+      }
 
-        > button {
-          width: 100%;
-          @include border-radius(1rem);
-          font-size: 1.6rem;
-          line-height: 8rem;
-        }
+      .experience-options {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
 
-        > .details {
-          @include border-radius(1rem);
-          height: 0;
+        button {
+          @include border-radius(100%);
+          flex-basis: 35%;
           padding: 0;
-        }
-
-        &.open {
-          > button {
-            line-height: 2rem;
-            @include border-bottom-radius(0);
+          font-size: 22.4vw;
+          @media all and (min-width: 849px) {
+            font-size: 190px;
           }
 
-          > .details {
-            height: auto;
-            padding: 1rem;
+          &:before {
+            content: '';
+            display: inline-block;
+            vertical-align: middle;
+            padding-top: 100%;
+          }
 
-            .appt-card {
-              display: flex;
-              flex-direction: row;
-              @include border-radius();
-              background-color: $gray4;
-              justify-content: space-between;
+          span {
+            vertical-align: middle;
+          }
+        }
+      }
 
-              .appt-info {
-                padding: 0.25rem 0.5rem;
-              }
+      .details-container {
+        width: 100%;
 
-              button.appt-action {
-                @include border-left-radius(0);
-              }
-            }
+        .header {
+          @include border-top-radius(1rem);
+          font-size: 1.2rem;
+          line-height: 2.25rem;
+          text-align: center;
+          position: relative;
+
+          button:last-child {
+            position: absolute;
+            top: 0;
+            right: 0;
+          }
+        }
+
+        .body {
+          @include border-bottom-radius(1rem);
+          border: 1px solid $gray3;
+          border-top: none;
+          background-color: $white;
+
+          form,
+          .form {
+            @include border-bottom-radius(1rem);
+            overflow: visible;
           }
         }
       }
     }
+  }
+
+  &__full-screen {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1035;
+    background-color: $black-3;
+    overflow-y: auto;
   }
 }
