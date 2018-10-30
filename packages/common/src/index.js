@@ -36,7 +36,7 @@ import {
 import * as Utils from './utils';
 import * as Constants from './constants';
 import * as AttributeSelectors from './components/attribute_selectors';
-import * as Actions from './helpers/actions';
+import * as TaskActions from './helpers/taskActions';
 
 export {
   KappLink,
@@ -67,5 +67,5 @@ export {
   Schedulers,
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
-  Actions,
+  TaskActions,
 };
