@@ -162,21 +162,21 @@ const TeamFormComponent = ({
                 />
               </h3>
 
-              <div className="cards__wrapper cards__wrapper--members">
-                <table className="table table-striped table-sm table-responsive">
+              <div className="col-12">
+                <table className="table table-striped table-sm table-responsive table--settings">
                   <thead>
                     <tr>
                       <th>&nbsp;</th>
-                      <th>Name</th>
-                      <th>Username</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Username</th>
                       <th>&nbsp;</th>
                     </tr>
                   </thead>
                   <tbody>
                     {memberships.map(user => (
                       <tr key={user.username}>
-                        <td>
-                          <TeamMemberAvatar user={user} />
+                        <td scope="row">
+                          <TeamMemberAvatar user={user} size="18px" />
                         </td>
                         <td>
                           <Link to={`/profile/${user.username}`}>

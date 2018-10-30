@@ -209,11 +209,11 @@ export const FormContainer = ({
         <div className="table-display-settings">
           <h3 className="section__title">Table Display Settings</h3>
           <div className="form settings">
-            <table className="table table-datastore table-draggable">
+            <table className="table table--settings table-draggable">
               <thead>
                 <tr className="header">
-                  <th>Field</th>
-                  <th>Visible in Table</th>
+                  <th scope="col">Field</th>
+                  <th scope="col">Visible in Table</th>
                 </tr>
               </thead>
               {inputs.columns && (
@@ -236,7 +236,7 @@ export const FormContainer = ({
                                   snapshot.isDragging ? 'dragging' : ''
                                 }`}
                               >
-                                <td>
+                                <td scope="row">
                                   {col.type === 'value' ? (
                                     col.label
                                   ) : (
@@ -439,8 +439,8 @@ export const FormContainer = ({
             <table className="table table-hover table-striped">
               <thead>
                 <tr>
-                  <th>Category</th>
-                  <th>slug</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">slug</th>
                   <th />
                 </tr>
               </thead>
@@ -452,7 +452,7 @@ export const FormContainer = ({
                   )
                   .map(val => (
                     <tr key={val.slug}>
-                      <td>{val.name}</td>
+                      <td scope="row">{val.name}</td>
                       <td>{val.slug}</td>
                       <td>
                         <button
@@ -466,7 +466,7 @@ export const FormContainer = ({
                     </tr>
                   ))}
                 <tr>
-                  <td colSpan="2">
+                  <td scope="row" colSpan="2">
                     <select
                       className="form-control form-control-sm"
                       onChange={handleCategoryInput}

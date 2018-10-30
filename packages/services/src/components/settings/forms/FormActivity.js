@@ -106,13 +106,13 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
             <h3 className="section__title">Fulfillment Process</h3>
             {submission.activities.filter(activity => activity.type === 'Task')
               .length > 0 ? (
-              <table className="table table-sm table-striped settings-table">
+              <table className="table table-sm table-striped table--settings">
                 <thead className="header">
                   <tr>
-                    <th>Type</th>
-                    <th>Label</th>
-                    <th>Description</th>
-                    <th>Data</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Label</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Data</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -122,7 +122,7 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                       const data = JSON.parse(activity.data);
                       return (
                         <tr key={`task-activity-${index}`}>
-                          <td>{activity.type}</td>
+                          <td scope="row">{activity.type}</td>
                           <td>{activity.label}</td>
                           <td>{activity.description}</td>
                           <td>
@@ -144,13 +144,13 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
             <h3 className="section__title">Submission Activity</h3>
             {submission.activities.filter(activity => activity.type !== 'Task')
               .length > 0 ? (
-              <table className="table table-sm table-striped settings-table">
+              <table className="table table-sm table-striped table--settings">
                 <thead className="header">
                   <tr>
-                    <th>Type</th>
-                    <th>Label</th>
-                    <th>Description</th>
-                    <th>Data</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Label</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Data</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -160,7 +160,7 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                       const data = JSON.parse(activity.data);
                       return (
                         <tr key={`activity-${index}`}>
-                          <td>{activity.type}</td>
+                          <td scope="row">{activity.type}</td>
                           <td>{activity.label}</td>
                           <td>{activity.description}</td>
                           <td>
@@ -180,17 +180,17 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
             )}
             <br />
             <h3 className="section__title">Values</h3>
-            <table className="table table-sm table-striped settings-table">
+            <table className="table table-sm table-striped table--settings">
               <thead className="header">
                 <tr>
-                  <th>Field</th>
-                  <th>Value</th>
+                  <th scope="col">Field</th>
+                  <th scope="col">Value</th>
                 </tr>
               </thead>
               <tbody>
                 {submission.form.fields.map(field => (
                   <tr key={field.name}>
-                    <td>{field.name}</td>
+                    <td scope="row">{field.name}</td>
                     <td>{submission.values[field.name]}</td>
                   </tr>
                 ))}

@@ -18,7 +18,7 @@ const getStatusColor = status =>
 const getNextExecution = (nextExecutions, scheduleId) => {
   let nextExecution;
   const found = nextExecutions.find(
-    execution => execution.values['Schedule ID'] === scheduleId,
+    execution => execution.values['Robot ID'] === scheduleId,
   );
 
   if (found) {
@@ -26,7 +26,7 @@ const getNextExecution = (nextExecutions, scheduleId) => {
       ? found.values['Next Scheduled Execution']
       : 'No upcoming executions scheduled';
   } else {
-    nextExecution = 'Unknowen';
+    nextExecution = 'Unknown';
   }
 
   return nextExecution;
@@ -88,12 +88,14 @@ const RobotSchedulesListComponent = ({
           <table className="table table-sm table-striped table-robots">
             <thead className="header">
               <tr>
-                <th>Robot Name</th>
-                <th width="25%">Status</th>
-                <th>Category</th>
-                <th>Tree Name</th>
-                <th>Description</th>
-                <th>Next Execution Time</th>
+                <th scope="col">Robot Name</th>
+                <th scope="col" width="25%">
+                  Status
+                </th>
+                <th scope="col">Category</th>
+                <th scope="col">Tree Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Next Execution Time</th>
               </tr>
             </thead>
             <tbody>
@@ -106,9 +108,9 @@ const RobotSchedulesListComponent = ({
                   moment(schedule.values['End Date']).isBefore(moment());
                 return (
                   <tr key={schedule.id}>
-                    <td>
+                    <td scope="row">
                       <Link to={`/settings/robots/${schedule.id}`}>
-                        <span>{schedule.values['Schedule Name']}</span>
+                        <span>{schedule.values['Robot Name']}</span>
                       </Link>
                     </td>
                     <td>
@@ -128,7 +130,11 @@ const RobotSchedulesListComponent = ({
                     <td>{schedule.values['Category']}</td>
                     <td>{schedule.values['Task Tree']}</td>
                     <td>{schedule.values['Description']}</td>
-                    <td>{nextExecution}</td>
+                    <td>
+                      {moment(nextExecution).isValid()
+                        ? moment(nextExecution).format(Constants.TIME_FORMAT)
+                        : nextExecution}
+                    </td>
                   </tr>
                 );
               })}

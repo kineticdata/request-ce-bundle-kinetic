@@ -21,7 +21,7 @@ const RobotExecutionComponent = ({ robotExecution, match, handleError }) => {
               <Link to="/settings/robots">robots</Link> /{` `}
               {robotExecution && (
                 <Link to={`/settings/robots/${match.params.scheduleId}`}>
-                  <span>{robotExecution.values['Schedule Name']}</span>
+                  <span>{robotExecution.values['Robot Name']}</span>
                 </Link>
               )}
             </h3>
