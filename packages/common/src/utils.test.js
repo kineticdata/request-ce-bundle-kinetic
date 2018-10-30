@@ -37,8 +37,8 @@ describe('calculateDateRange', () => {
     it('subtracts the given number of days from the start of the current day', () => {
       const now = moment('2018-10-30T12:30');
       expect(calculateDateRange(now, '7days')).toEqual({
-        start: moment('2018-10-23').toDate(),
-        end: now.toDate(),
+        start: moment('2018-10-23').toISOString(),
+        end: now.toISOString(),
       });
     });
   });
@@ -49,18 +49,18 @@ describe('calculateDateRange', () => {
       expect(
         calculateDateRange(now, { start: '2018-10-24', end: '2018-10-26' }),
       ).toEqual({
-        start: moment('2018-10-24').toDate(),
+        start: moment('2018-10-24').toISOString(),
         end: moment('2018-10-26')
           .add(1, 'day')
-          .toDate(),
+          .toISOString(),
       });
     });
 
     it('defaults the end time to now if one is not specified', () => {
       const now = moment('2018-10-30T12:30');
       expect(calculateDateRange(now, { start: '2018-10-24' })).toEqual({
-        start: moment('2018-10-24').toDate(),
-        end: now.toDate(),
+        start: moment('2018-10-24').toISOString(),
+        end: now.toISOString(),
       });
     });
   });

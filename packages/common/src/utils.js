@@ -198,18 +198,19 @@ export const calculateDateRange = (now, range) => {
     const number = parseInt(range.replace('days', ''));
     return {
       start: now
+        .clone()
         .startOf('day')
         .subtract(number, 'days')
-        .toDate(),
-      end: now.toDate(),
+        .toISOString(),
+      end: now.toISOString(),
     };
   } else if (typeof range === 'object') {
     if (!range.start) {
       throw 'Cannot calculate date range with blank start value';
     }
     return {
-      start: moment(range.start).toDate(),
-      end: (range.end ? moment(range.end).add(1, 'day') : now).toDate(),
+      start: moment(range.start).toISOString(),
+      end: (range.end ? moment(range.end).add(1, 'day') : now).toISOString(),
     };
   } else {
     throw `Invalid range specified ${range}`;
