@@ -15,6 +15,7 @@ export class DiscussionForm extends React.Component {
             joinPolicy: props.discussion.joinPolicy,
             owningUsers: props.discussion.owningUsers.toJS(),
             owningTeams: props.discussion.owningTeams.toJS(),
+            archived: props.discussion.archived,
           }
         : {
             title: '',
@@ -23,10 +24,12 @@ export class DiscussionForm extends React.Component {
             joinPolicy: '',
             owningUsers: [],
             owningTeams: [],
+            archived: false,
           },
       touched: {},
       dirty: false,
       saving: false,
+      editing: !!props.discussion,
       securityPolicyDefinitions: [],
     };
   }
@@ -175,6 +178,25 @@ export class DiscussionForm extends React.Component {
               onChange={this.handleChange}
             />
           </div>
+          {this.state.editing && (
+            <div className="form-group">
+              <div className="form-check-inline">
+                <input
+                  className="form-check-input"
+                  id="archived"
+                  type="checkbox"
+                  checked={this.state.values.archived}
+                  onChange={this.handleChange}
+                />
+                <label className="form-check-label" htmlFor="archived">
+                  Archived?
+                </label>
+              </div>
+              <p className="text-danger">
+                Once archived users will not be able to send any messages
+              </p>
+            </div>
+          )}
         </form>
       ),
       buttonProps: {
