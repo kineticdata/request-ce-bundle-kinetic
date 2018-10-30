@@ -10,6 +10,15 @@ import {
   AttributeSelectors,
   selectCurrentKapp,
 } from 'common';
+import {
+  Menu,
+  Token,
+  Typeahead,
+  Highlighter,
+  MenuItem,
+} from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import { CoreAPI } from 'react-kinetic-core';
 
 export const SettingsComponent = ({
@@ -60,6 +69,57 @@ export const SettingsComponent = ({
             />
           )}
           <h2 className="section__title">Form Mapping</h2>
+          {attributesMap.has('Form Workflow') && (
+            <div className="form-group">
+              <label>Form Workflow Created</label>
+              <small className="form-text text-muted">
+                Vaild prefixs are: Created, Deleted, Updated. Only one of each
+                prefix can be selected
+              </small>
+              <Typeahead
+                options={[
+                  'Created - True',
+                  'Created - False',
+                  'Created - Standard',
+                  'Deleted - True',
+                  'Deleted - False',
+                  'Deleted - Standard',
+                  'Updated - True',
+                  'Updated - False',
+                  'Updated - Standard',
+                ]}
+                allowNew
+                multiple
+                newSelectionPrefix="Click to add:"
+                selected={attributesMap
+                  .getIn(['Form Workflow', 'value'])
+                  .toJS()}
+                onChange={selectedArr => {
+                  const checkedArr = selectedArr.reduce((acc, value) => {
+                    if (typeof value !== 'string') {
+                      value = value['label'];
+                    }
+                    const prefix = value
+                      .trim()
+                      .slice(0, value.search(/(-)/) + 2);
+                    if (
+                      prefix === 'Created - ' ||
+                      prefix === 'Deleted - ' ||
+                      prefix === 'Updated - '
+                    ) {
+                      acc.push(value);
+                    } else {
+                      console.log('must be proceded by a valid prifix');
+                    }
+                    return acc;
+                  }, []);
+                  handleAttributeChange({
+                    target: { id: 'Form Workflow', value: checkedArr },
+                  });
+                }}
+              />
+            </div>
+          )}
           {attributesMap.has('Notification Template Name - Complete') && (
             <AttributeSelectors.NotificationTemplateSelect
               id="Notification Template Name - Complete"
