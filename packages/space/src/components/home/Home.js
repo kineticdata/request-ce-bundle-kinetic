@@ -10,6 +10,8 @@ import { CreateDiscussionModal } from './CreateDiscussionModal';
 import { Discussion } from './Discussion';
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 import { bundle } from 'react-kinetic-core';
+import { Popover } from 'reactstrap';
+import { DateRangeDropdown } from './DateRangeDropdown';
 
 const HomeComponent = ({
   spaceName,
@@ -32,6 +34,10 @@ const HomeComponent = ({
   handlePrevPage,
   handleNextPage,
   handleHomeLinkClick,
+  headerDropdownOpen,
+  toggleHeaderDropdown,
+  showingArchived,
+  toggleShowingArchived,
 }) => (
   <div className="page-container page-container--space-home">
     <PageTitle parts={['Home']} />
@@ -50,9 +56,32 @@ const HomeComponent = ({
             <h1>
               {discussionsSearchTerm !== ''
                 ? `${discussionsSearchTerm}`
-                : 'Recent Discussions'}
+                : showingArchived
+                  ? 'Archived Discussions'
+                  : 'Recent Discussions'}
+              <button
+                className="btn btn-link"
+                id="header-dropdown"
+                onClick={toggleHeaderDropdown}
+              >
+                <i className="fa fa-fw fa-caret-down" />
+              </button>
+              <Popover
+                isOpen={headerDropdownOpen}
+                toggle={toggleHeaderDropdown}
+                target="header-dropdown"
+                placement="bottom-end"
+              >
+                <button
+                  className="btn btn-link"
+                  onClick={toggleShowingArchived}
+                >
+                  {showingArchived ? 'Recent' : 'Archived'} Discussions
+                </button>
+              </Popover>
             </h1>
           </div>
+
           <div className="search-form--discussion">
             <div className="search-box search-box--discussion">
               <form
@@ -75,12 +104,16 @@ const HomeComponent = ({
                 </div>
               </form>
             </div>
-            <button
-              onClick={handleCreateDiscussionButtonClick}
-              className="btn btn-secondary"
-            >
-              Create Discussion
-            </button>
+            {showingArchived ? (
+              <DateRangeDropdown />
+            ) : (
+              <button
+                onClick={handleCreateDiscussionButtonClick}
+                className="btn btn-secondary"
+              >
+                Create Discussion
+              </button>
+            )}
           </div>
         </div>
       ) : (
@@ -164,6 +197,8 @@ export const mapStateToProps = state => ({
   createModalOpen: state.space.spaceApp.isCreateDiscussionModalOpen,
   me: state.app.profile,
   teams: state.space.teamList.data,
+  headerDropdownOpen: state.space.spaceApp.headerDropdownOpen,
+  showingArchived: state.space.spaceApp.showingArchived,
 });
 
 export const mapDispatchToProps = {
@@ -176,6 +211,8 @@ export const mapDispatchToProps = {
   setDiscussionsSearchTerm: actions.setDiscussionsSearchTerm,
   popDiscussionPageToken: actions.popDiscussionPageToken,
   clearDiscussionPageTokens: actions.clearDiscussionPageTokens,
+  toggleHeaderDropdown: actions.toggleHeaderDropdown,
+  toggleShowingArchived: actions.toggleShowingArchived,
 };
 
 export const Home = compose(

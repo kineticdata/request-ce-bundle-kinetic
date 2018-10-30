@@ -12,12 +12,17 @@ const handleDateChange = (props, type) => event => {
   props.onChange({ ...props.value, [type]: event.target.value });
 };
 
+const hasError = (props, field) =>
+  props.validations && props.validations.find(v => v.field === field)
+    ? 'has-error'
+    : '';
+
 export const DateRangeSelector = props => {
   const isCustom = typeof props.value === 'object';
   return (
     <Fragment>
       {props.allowNone && (
-        <label htmlFor="date-range-none">
+        <label className="date-range-radio" htmlFor="date-range-none">
           <input
             type="radio"
             id="date-range-none"
@@ -30,7 +35,11 @@ export const DateRangeSelector = props => {
         </label>
       )}
       {[7, 14, 30, 60, 90].map(numberOfDays => (
-        <label key={numberOfDays} htmlFor={`date-range-${numberOfDays}days`}>
+        <label
+          className="date-range-radio"
+          key={numberOfDays}
+          htmlFor={`date-range-${numberOfDays}days`}
+        >
           <input
             type="radio"
             id={`date-range-${numberOfDays}days`}
@@ -42,7 +51,7 @@ export const DateRangeSelector = props => {
           Last {numberOfDays} Days
         </label>
       ))}
-      <label htmlFor="date-range-custom">
+      <label className="date-range-radio" htmlFor="date-range-custom">
         <input
           type="radio"
           id="date-range-custom"
@@ -54,25 +63,41 @@ export const DateRangeSelector = props => {
         Custom
       </label>
       {isCustom && (
-        <div>
+        <div
+          className={`form-group date-range-date ${hasError(props, 'start')}`}
+        >
           <label htmlFor="date-range-custom-start">Start Date*</label>
           <input
+            className="form-control"
             type="date"
             id="date-range-custom-start"
             value={props.value.start}
             onChange={handleDateChange(props, 'start')}
           />
+          {props.validations &&
+            props.validations.filter(v => v.field === 'start').map((v, i) => (
+              <p key={i} className="text-danger">
+                {v.error}
+              </p>
+            ))}
         </div>
       )}
       {isCustom && (
-        <div>
+        <div className={`form-group date-range-date ${hasError(props, 'end')}`}>
           <label htmlFor="date-range-custom-end">End Date</label>
           <input
+            className="form-control"
             type="date"
             id="date-range-custom-end"
             value={props.value.end}
             onChange={handleDateChange(props, 'end')}
           />
+          {props.validations &&
+            props.validations.filter(v => v.field === 'end').map((v, i) => (
+              <p key={i} className="text-danger">
+                {v.error}
+              </p>
+            ))}
         </div>
       )}
     </Fragment>

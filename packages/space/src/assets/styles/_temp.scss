@@ -174,3 +174,24 @@ textarea {
 .notifications-tabs .nav-tabs {
   margin-bottom: 1rem;
 }
+
+.popover-body.date-range-filter {
+  display: flex;
+  flex-direction: column;
+  min-width: 250px;
+  form {
+    padding: 0.25rem;
+  }
+  .date-range-radio {
+    input {
+      margin-right: 0.5rem;
+    }
+    margin-bottom: 1rem;
+  }
+  .date-range-buttons {
+    display: flex;
+    .btn {
+      flex: 1 0 0;
+    }
+  }
+}

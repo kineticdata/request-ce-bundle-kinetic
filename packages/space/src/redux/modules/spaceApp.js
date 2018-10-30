@@ -29,6 +29,12 @@ export const types = {
   ),
   DELETE_ALERT: namespace('app', 'DELETE_ALERT'),
   SET_SETTINGS_BACK_PATH: namespace('app', 'SET_SETTINGS_BACK_PATH'),
+  TOGGLE_HEADER_DROPDOWN: namespace('app', 'TOGGLE_HEADER_DROPDOWN'),
+  TOGGLE_SHOWING_ARCHIVED: namespace('app', 'TOGGLE_SHOWING_ARCHIVED'),
+  OPEN_DATE_RANGE_DROPDOWN: namespace('app', 'OPEN_DATE_RANGE_DROPDOWN'),
+  RESET_DATE_RANGE_DROPDOWN: namespace('app', 'RESET_DATE_RANGE_DROPDOWN'),
+  SUBMIT_DATE_RANGE_DROPDOWN: namespace('app', 'SUBMIT_DATE_RANGE_DROPDOWN'),
+  SET_SEARCH_DATE_RANGE: namespace('app', 'SET_SEARCH_DATE_RANGE'),
 };
 
 export const actions = {
@@ -52,6 +58,12 @@ export const actions = {
   ),
   deleteAlert: withPayload(types.DELETE_ALERT),
   setSettingsBackPath: withPayload(types.SET_SETTINGS_BACK_PATH),
+  toggleHeaderDropdown: noPayload(types.TOGGLE_HEADER_DROPDOWN),
+  toggleShowingArchived: noPayload(types.TOGGLE_SHOWING_ARCHIVED),
+  openDateRangeDropdown: noPayload(types.OPEN_DATE_RANGE_DROPDOWN),
+  resetDateRangeDropdown: noPayload(types.RESET_DATE_RANGE_DROPDOWN),
+  submitDateRangeDropdown: noPayload(types.SUBMIT_DATE_RANGE_DROPDOWN),
+  setSearchDateRange: withPayload(types.SET_SEARCH_DATE_RANGE),
 };
 
 export const selectHasSharedTaskEngine = state =>
@@ -64,6 +76,22 @@ export const selectHasSharedTaskEngine = state =>
         .downcase === 'true'
       ? true
       : false;
+
+const validateDateRange = dateRange => {
+  const result = [];
+  if (typeof dateRange === 'object') {
+    if (dateRange.start === '') {
+      result.push({ field: 'start', error: 'Start Date is required' });
+    }
+    if (dateRange.end !== '' && dateRange.end <= dateRange.start) {
+      result.push({
+        field: 'end',
+        error: 'End Date must be after Start Date foo bar baz',
+      });
+    }
+  }
+  return result;
+};
 
 export const State = Record({
   appLoading: true,
@@ -81,6 +109,12 @@ export const State = Record({
   userAttributeDefinitions: {},
   userProfileAttributeDefinitions: {},
   settingsBackPath: null,
+  headerDropdownOpen: false,
+  showingArchived: false,
+  dateRangeDropdownOpen: false,
+  searchDateRange: '30days',
+  dirtySearchDateRange: '30days',
+  searchDateRangeValidations: [],
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -134,6 +168,27 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('discussionsSearchTerm', payload);
     case types.SET_SETTINGS_BACK_PATH:
       return state.set('settingsBackPath', payload);
+    case types.TOGGLE_HEADER_DROPDOWN:
+      return state.update('headerDropdownOpen', boolean => !boolean);
+    case types.TOGGLE_SHOWING_ARCHIVED:
+      return state
+        .update('showingArchived', boolean => !boolean)
+        .set('headerDropdownOpen', false);
+    case types.OPEN_DATE_RANGE_DROPDOWN:
+      return state.set('dateRangeDropdownOpen', true);
+    case types.RESET_DATE_RANGE_DROPDOWN:
+      return state
+        .set('dateRangeDropdownOpen', false)
+        .set('dirtySearchDateRange', state.get('searchDateRange'))
+        .set('searchDateRangeValidations', []);
+    case types.SUBMIT_DATE_RANGE_DROPDOWN:
+      return state
+        .set('dateRangeDropdownOpen', false)
+        .set('searchDateRange', state.get('dirtySearchDateRange'));
+    case types.SET_SEARCH_DATE_RANGE:
+      return state
+        .set('dirtySearchDateRange', payload)
+        .set('searchDateRangeValidations', validateDateRange(payload));
     default:
       return state;
   }

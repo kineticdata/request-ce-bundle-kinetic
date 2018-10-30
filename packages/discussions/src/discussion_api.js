@@ -135,6 +135,9 @@ export const fetchDiscussions = ({
   user,
   title,
   relatedItem = {},
+  archived,
+  start,
+  end,
 }) => {
   const { type, key } = relatedItem;
   return axios
@@ -149,6 +152,9 @@ export const fetchDiscussions = ({
         type,
         key,
         pageToken,
+        archived: archived ? true : undefined,
+        start,
+        end,
       },
     })
     .then(response => response.data)

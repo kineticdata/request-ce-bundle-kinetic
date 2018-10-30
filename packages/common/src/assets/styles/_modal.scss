@@ -175,6 +175,17 @@
         select {
           margin: 1rem;
         }
+        .date-range-date {
+          display: flex;
+          align-items: center;
+          padding: 1rem;
+          border-bottom: 1px solid rgba(244, 246, 249, 1);
+          label {
+            border-bottom: none;
+            padding: 0;
+            width: 10rem;
+          }
+        }
       }
     }
     .modal-footer {

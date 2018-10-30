@@ -1,12 +1,14 @@
 import { takeEvery, put, all, call, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { CoreAPI } from 'react-kinetic-core';
+import moment from 'moment';
 import { List } from 'immutable';
 import { commonActions, toastActions } from 'common';
 import { actions, types } from '../modules/spaceApp';
 import { actions as errorActions } from '../modules/errors';
 import { selectToken } from 'discussions/src/redux/modules/socket';
 import { DiscussionAPI } from 'discussions';
+import { calculateDateRange } from 'common/src/utils';
 
 export function* fetchAppSettingsSaga() {
   const [{ users, usersServerError }, { space, spaceServerError }] = yield all([
@@ -59,12 +61,18 @@ export function* deleteAlertSaga(action) {
 export function* fetchRecentDiscussionsSaga() {
   const token = yield select(selectToken);
 
-  const { pageToken, search } = yield select(state => ({
+  const { pageToken, search, archived, dateRange } = yield select(state => ({
     pageToken: state.space.spaceApp.discussionsPageToken,
     search: state.space.spaceApp.discussionsSearchTerm,
+    archived: state.space.spaceApp.showingArchived,
+    dateRange: state.space.spaceApp.searchDateRange,
   }));
 
   const user = yield select(state => state.app.profile.username);
+
+  const dateParams = archived
+    ? calculateDateRange(yield call(() => moment()), dateRange)
+    : {};
 
   const { error, discussions, nextPageToken } = yield call(
     DiscussionAPI.fetchDiscussions,
@@ -73,6 +81,8 @@ export function* fetchRecentDiscussionsSaga() {
       pageToken,
       user,
       title: search,
+      archived,
+      ...dateParams,
     },
   );
 
@@ -87,7 +97,12 @@ export function* fetchRecentDiscussionsSaga() {
 export function* watchSpaceApp() {
   yield takeEvery(types.FETCH_APP_SETTINGS, fetchAppSettingsSaga);
   yield takeEvery(
-    [types.FETCH_DISCUSSIONS, types.SET_DISCUSSIONS_SEARCH_TERM],
+    [
+      types.FETCH_DISCUSSIONS,
+      types.SET_DISCUSSIONS_SEARCH_TERM,
+      types.TOGGLE_SHOWING_ARCHIVED,
+      types.SUBMIT_DATE_RANGE_DROPDOWN,
+    ],
     fetchRecentDiscussionsSaga,
   );
   yield takeEvery(types.DELETE_ALERT, deleteAlertSaga);
