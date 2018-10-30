@@ -190,3 +190,28 @@ export const getGroupedDiscussions = discussions =>
             : 0,
     )
     .groupBy(discussion => moment(discussion.lastMessageAt).fromNow());
+
+export const calculateDateRange = (now, range) => {
+  if (!range) {
+    throw 'Cannot calculate date range for blank value';
+  } else if (typeof range === 'string') {
+    const number = parseInt(range.replace('days', ''));
+    return {
+      start: now
+        .startOf('day')
+        .subtract(number, 'days')
+        .toDate(),
+      end: now.toDate(),
+    };
+  } else if (typeof range === 'object') {
+    if (!range.start) {
+      throw 'Cannot calculate date range with blank start value';
+    }
+    return {
+      start: moment(range.start).toDate(),
+      end: (range.end ? moment(range.end).add(1, 'day') : now).toDate(),
+    };
+  } else {
+    throw `Invalid range specified ${range}`;
+  }
+};
