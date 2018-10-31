@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Line } from 'rc-progress';
 import { Table } from 'reactstrap';
 import { Set, List, fromJS } from 'immutable';
+import Dropzone from 'react-dropzone';
 import Papa from 'papaparse';
 
 import { actions } from '../../../redux/modules/settingsDatastore';
@@ -271,6 +272,10 @@ export class ImportComponent extends Component {
             </button>
           ) : (
             <Fragment>
+              <h2>Only .csv files are permitted to be uploaded.</h2>
+              <h4>
+                Size is limited to xx<small>mb</small>
+              </h4>
               <input
                 type="file"
                 id="file-input"
@@ -280,6 +285,7 @@ export class ImportComponent extends Component {
                   this.fileEl = element;
                 }}
               />
+
               <label htmlFor="file-input" className="btn btn-info btn-sm">
                 Choose A File
               </label>
