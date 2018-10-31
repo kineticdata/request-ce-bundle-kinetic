@@ -86,7 +86,7 @@ const validateDateRange = dateRange => {
     if (dateRange.end !== '' && dateRange.end <= dateRange.start) {
       result.push({
         field: 'end',
-        error: 'End Date must be after Start Date foo bar baz',
+        error: 'End Date must be after Start Date',
       });
     }
   }
