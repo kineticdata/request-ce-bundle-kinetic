@@ -256,58 +256,53 @@ export class ImportComponent extends Component {
   render() {
     return (
       <Fragment>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          {this.state.records.size > 0 &&
-            this.state.missingFields.size <= 0 && (
-              <button
-                className="btn btn-secondary btn-sm"
-                onClick={this.handleImport}
-              >
-                Import Records
-              </button>
-            )}
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           {this.readFile ? (
-            <button className="btn btn-info btn-sm" onClick={this.handleReset}>
-              Reset File
+            <button
+              className="btn btn-link btn-sm"
+              style={{ alignSelf: 'flex-end' }}
+              onClick={this.handleReset}
+            >
+              Upload a new file
             </button>
           ) : (
             <Fragment>
-              <h2>Only .csv files are permitted to be uploaded.</h2>
-              <h4>
-                Size is limited to xx<small>mb</small>
-              </h4>
-              <input
-                type="file"
-                id="file-input"
-                style={{ display: 'none' }}
-                onChange={this.handleChange}
-                ref={element => {
-                  this.fileEl = element;
-                }}
-              />
+              <div className="text-center">
+                <h2>Only .csv files are permitted to be uploaded.</h2>
+                <h4>
+                  Size is limited to xx<small>mb</small>
+                </h4>
 
-              <label htmlFor="file-input" className="btn btn-info btn-sm">
-                Choose A File
-              </label>
+                <input
+                  type="file"
+                  id="file-input"
+                  style={{ display: 'none' }}
+                  onChange={this.handleChange}
+                  ref={element => {
+                    this.fileEl = element;
+                  }}
+                />
+
+                <label htmlFor="file-input" className="btn btn-info btn-sm">
+                  Choose A File
+                </label>
+              </div>
             </Fragment>
-          )}
-          {this.state.recordsHeaders.size > 0 && (
-            <button
-              className="btn btn-success btn-sm"
-              onClick={this.handleShow}
-            >
-              Map Headers
-            </button>
           )}
         </div>
         <div className="forms-list-wrapper">
           {this.state.missingFields.size > 0 && (
-            <div>
-              <h5>The CSV has headers that do not exist on the form</h5>
-              {this.state.missingFields.map((fieldName, idx) => (
-                <p key={idx}>{fieldName}</p>
-              ))}
-            </div>
+            <Fragment>
+              <div className="text-center">
+                <h2>The .csv has headers that do not exist on the form</h2>
+                <h4>Please review the headers to match or omit.</h4>
+              </div>
+              <ul>
+                {this.state.missingFields.map((fieldName, idx) => (
+                  <li key={idx}>{fieldName}</li>
+                ))}
+              </ul>
+            </Fragment>
           )}
           {this.props.processing && (
             <Line
@@ -337,9 +332,16 @@ export class ImportComponent extends Component {
               )}
             </div>
           )}
-          {this.state.mapHeadersShow && (
+          {this.state.recordsHeaders.size > 0 && (
             <Fragment>
-              <table className="table--settings">
+              <table className="table table-sm table--settings">
+                <thead>
+                  <tr>
+                    <th scope="col">Omit</th>
+                    <th scope="col">Header Name</th>
+                    <th scope="col">Form Fields</th>
+                  </tr>
+                </thead>
                 <tbody>
                   {this.state.headerToFieldMap
                     .filter(
@@ -347,9 +349,7 @@ export class ImportComponent extends Component {
                     )
                     .map((obj, idx) => (
                       <tr key={obj.header + idx}>
-                        <td scope="row">{obj.header}</td>
-                        <td />
-                        <td>
+                        <th scope="row">
                           <input
                             type="checkbox"
                             id="omit"
@@ -359,15 +359,27 @@ export class ImportComponent extends Component {
                             checked={obj.checked}
                             onChange={this.handleOmit}
                           />
-                          <label htmlFor="omit">Omit Column from Import</label>
-                        </td>
+                        </th>
+                        <td>{obj.header}</td>
+                        <td />
                       </tr>
                     ))}
                   {this.state.headerToFieldMap.map((obj, idx) => {
                     if (obj.header.toLowerCase() !== 'datastore record id') {
                       return (
                         <tr key={obj.header + idx}>
-                          <td scope="row">{obj.header}</td>
+                          <th scope="row">
+                            <input
+                              type="checkbox"
+                              id="omit"
+                              name={obj.header}
+                              index={idx}
+                              value={obj.field}
+                              checked={obj.checked}
+                              onChange={this.handleOmit}
+                            />
+                          </th>
+                          <td>{obj.header}</td>
                           <td>
                             <select
                               onChange={this.handleSelect}
@@ -382,20 +394,10 @@ export class ImportComponent extends Component {
                                 </option>
                               ))}
                             </select>
-                          </td>
-                          <td>
-                            <input
-                              type="checkbox"
-                              id="omit"
-                              name={obj.header}
-                              index={idx}
-                              value={obj.field}
-                              checked={obj.checked}
-                              onChange={this.handleOmit}
-                            />
-                            <label htmlFor="omit">
-                              Omit Column from Import
-                            </label>
+                            {true && (
+                              <i className="fa fa-fw fa-exclamation-triangle text-warning" />
+                            )}
+                            <i className="fa fa-fw fa-check-circle text-success" />
                           </td>
                         </tr>
                       );
@@ -409,14 +411,14 @@ export class ImportComponent extends Component {
 
           {!this.props.processing &&
             !this.state.postResult &&
-            !this.state.mapHeadersShow &&
             this.state.records.size > 0 &&
             this.state.recordsHeaders.size > 0 && (
               <Fragment>
-                <div>
-                  <p>Review Records below.</p>
+                <div className="text-center">
+                  <h2>Review Records below.</h2>
+                  <h4>The first 5 records are displayed below.</h4>
                 </div>
-                <Table className="table-responsive table-sm">
+                <Table className="table table-sm table--settings">
                   <thead>
                     <tr>
                       {this.state.headerToFieldMap.map((obj, idx) => (
@@ -435,16 +437,10 @@ export class ImportComponent extends Component {
                             if (
                               obj.field.toLowerCase() === 'datastore record id'
                             ) {
-                              return (
-                                <td scope="row" key={obj.field + idx}>
-                                  {id}
-                                </td>
-                              );
+                              return <td key={obj.field + idx}>{id}</td>;
                             }
                             return (
-                              <td scope="row" key={obj.field + idx}>
-                                {values[obj.field]}
-                              </td>
+                              <td key={obj.field + idx}>{values[obj.field]}</td>
                             );
                           })}
                         </tr>
@@ -453,6 +449,12 @@ export class ImportComponent extends Component {
                   </tbody>
                 </Table>
               </Fragment>
+            )}
+          {this.state.records.size > 0 &&
+            this.state.missingFields.size <= 0 && (
+              <button className="btn btn-secondary" onClick={this.handleImport}>
+                Import Records
+              </button>
             )}
         </div>
       </Fragment>
