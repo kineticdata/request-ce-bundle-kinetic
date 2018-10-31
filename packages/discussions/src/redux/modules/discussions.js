@@ -173,7 +173,7 @@ const Messages = Record({
   milestone: 0,
 });
 
-const newDiscussion = discussion =>
+export const newDiscussion = discussion =>
   Discussion({
     ...discussion,
     messages: Messages({
