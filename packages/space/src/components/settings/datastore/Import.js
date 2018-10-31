@@ -140,7 +140,6 @@ export class ImportComponent extends Component {
             found.header.toLowerCase() !== 'datastore record id' &&
             !found.checked
           ) {
-            console.log(val, ' ', header);
             const fieldObject = this.formFields.find(
               field => field.name === header,
             );
@@ -429,7 +428,7 @@ export class ImportComponent extends Component {
                         <tr key={idx}>
                           {this.state.headerToFieldMap.map((obj, idx) => {
                             if (
-                              obj.field.toLowerCase() === 'datastore record id'
+                              obj.header.toLowerCase() === 'datastore record id'
                             ) {
                               return <td key={obj.field + idx}>{id}</td>;
                             }
