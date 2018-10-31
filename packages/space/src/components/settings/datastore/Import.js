@@ -136,7 +136,11 @@ export class ImportComponent extends Component {
             !found.checked
           ) {
             obj.id = val;
-          } else if (!found.checked) {
+          } else if (
+            found.header.toLowerCase() !== 'datastore record id' &&
+            !found.checked
+          ) {
+            console.log(val, ' ', header);
             const fieldObject = this.formFields.find(
               field => field.name === header,
             );
