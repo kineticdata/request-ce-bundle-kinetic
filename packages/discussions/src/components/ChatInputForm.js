@@ -215,31 +215,33 @@ class ChatInput extends Component {
       >
         <form
           onSubmit={this.handleSendChatMessage}
-          className={`new-message ${
+          className={`new-message disabled ${
             this.props.editMessageId ? 'editing' : ''
           } ${this.props.replyMessage ? 'replying' : ''}`}
         >
-          <ButtonDropdown
-            isOpen={this.state.actionsOpen}
-            toggle={this.toggleActionsOpen}
-            direction="up"
-          >
-            <DropdownToggle color="subtle">
-              <i className="fa fa-fw fa-plus" />
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem onClick={this.handleAttachmentClick}>
-                <i className="fa fa-fw fa-paperclip" /> Add File
-              </DropdownItem>
-              <DropdownItem
-                onClick={() =>
-                  this.props.openModal(this.props.discussion.id, 'invitation')
-                }
-              >
-                <i className="fa fa-fw fa-plus" /> Invite Person
-              </DropdownItem>
-            </DropdownMenu>
-          </ButtonDropdown>
+          {!this.props.discussion.archived && (
+            <ButtonDropdown
+              isOpen={this.state.actionsOpen}
+              toggle={this.toggleActionsOpen}
+              direction="up"
+            >
+              <DropdownToggle color="subtle">
+                <i className="fa fa-fw fa-plus" />
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem onClick={this.handleAttachmentClick}>
+                  <i className="fa fa-fw fa-paperclip" /> Add File
+                </DropdownItem>
+                <DropdownItem
+                  onClick={() =>
+                    this.props.openModal(this.props.discussion.id, 'invitation')
+                  }
+                >
+                  <i className="fa fa-fw fa-plus" /> Invite Person
+                </DropdownItem>
+              </DropdownMenu>
+            </ButtonDropdown>
+          )}
           <Popover
             className="reply-popover"
             placement="top-start"
@@ -267,23 +269,30 @@ class ChatInput extends Component {
 
             <div
               className={classNames('placeholder', {
-                hidden: this.state.chatInput !== '',
+                hidden:
+                  this.state.chatInput !== '' || this.props.discussion.archived,
               })}
             >
               Type your message here&hellip;
             </div>
-            <ContentEditable
-              ref={element => (this.contentEditable = element)}
-              tabIndex={0}
-              tagName="div"
-              className="message-input"
-              contentEditable="plaintext-only"
-              html={this.state.chatInput}
-              onChange={this.handleChatInput}
-              onKeyPress={this.handleChatHotKey}
-              onFocus={this.handleFocus}
-              onBlur={this.handleBlur}
-            />
+            {!this.props.discussion.archived ? (
+              <ContentEditable
+                ref={element => (this.contentEditable = element)}
+                tabIndex={0}
+                tagName="div"
+                className="message-input"
+                contentEditable="plaintext-only"
+                html={this.state.chatInput}
+                onChange={this.handleChatInput}
+                onKeyPress={this.handleChatHotKey}
+                onFocus={this.handleFocus}
+                onBlur={this.handleBlur}
+              />
+            ) : (
+              <div className="message-input disabled text-danger">
+                This discussion has been archived and is read-only.
+              </div>
+            )}
           </div>
           {(this.props.editMessageId || this.props.replyMessage) && (
             <button
@@ -294,17 +303,19 @@ class ChatInput extends Component {
               <i className="fa fa-fw fa-times" />
             </button>
           )}
-          <button
-            type="submit"
-            className="btn btn-subtle btn-send"
-            disabled={this.isChatInputInvalid()}
-          >
-            {this.props.editMessageId ? (
-              <i className="fa fa-fw fa-check" />
-            ) : (
-              <i className="fa fa-fw fa-paper-plane" />
-            )}
-          </button>
+          {!this.props.discussion.archived && (
+            <button
+              type="submit"
+              className="btn btn-subtle btn-send"
+              disabled={this.isChatInputInvalid()}
+            >
+              {this.props.editMessageId ? (
+                <i className="fa fa-fw fa-check" />
+              ) : (
+                <i className="fa fa-fw fa-paper-plane" />
+              )}
+            </button>
+          )}
         </form>
         {this.state.hasFocus && (
           <div className="markdown-help">

@@ -17,6 +17,7 @@ export const ParticipantsHeader = ({
   openEditDiscussionModal,
   openInNewTab,
   isFullScreen,
+  canManage,
 }) =>
   !discussion.participants.isEmpty() && (
     <div className="participants-preview">
@@ -63,13 +64,15 @@ export const ParticipantsHeader = ({
         >
           View All
         </button>
-        <button
-          type="button"
-          className="btn btn-link"
-          onClick={openEditDiscussionModal}
-        >
-          Edit
-        </button>
+        {canManage && (
+          <button
+            type="button"
+            className="btn btn-link"
+            onClick={openEditDiscussionModal}
+          >
+            Edit
+          </button>
+        )}
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import { InvitationDialog } from './InvitationDialog';
 import { DiscussionEditDialog } from './DiscussionEditDialog';
 import { VisibilityHelper } from './VisibilityHelper';
 import { MessageVersionsModal } from './message_history/MessageVersionsModal';
+import { ArchivedBanner } from './ArchivedBanner';
 
 export const MessageActionsContext = React.createContext();
 
@@ -27,6 +28,7 @@ const Messages = ({
   reply,
   replyMessage,
   viewMessageVersions,
+  canManage,
 }) => (
   <MessageActionsContext.Provider
     value={{
@@ -50,7 +52,13 @@ const Messages = ({
           />
         ))}
       </ScrollHelper>
-      <ParticipantsHeaderContainer discussion={discussion} />
+      <ParticipantsHeaderContainer
+        discussion={discussion}
+        canManage={canManage}
+      />
+      {discussion.archived && (
+        <ArchivedBanner discussion={discussion} canManage={canManage} />
+      )}
       {unreadMessages && (
         <button
           type="button"

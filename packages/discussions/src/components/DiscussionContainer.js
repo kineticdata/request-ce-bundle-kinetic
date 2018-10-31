@@ -12,6 +12,7 @@ import { actions, formatMessages } from '../redux/modules/discussions';
 import { toastActions } from 'common';
 
 import { Discussion } from './Discussion';
+import { canManage } from '../helpers';
 
 const mapStateToProps = (state, props) => {
   const discussion =
@@ -121,6 +122,7 @@ export const DiscussionContainer = compose(
           .map(i => i.email)
           .concat(props.discussion.participants.toList().map(p => p.email))
       : List(),
+    canManage: canManage(props.discussion, props.profile),
   })),
   withState('formattedMessages', 'setFormattedMessages', List()),
   withState('unreadMessages', 'setUnreadMessages', false),

@@ -90,6 +90,12 @@
         background-color: rgba(245, 166, 35, 0.05);
       }
     }
+    &.disabled {
+      background-color: rgba(240, 240, 240, 0.75);
+      .input-container {
+        background-color: rgba(240, 240, 240, 0.75);
+      }
+    }
     button {
       border-radius: 0;
       &.btn-subtle {
@@ -177,6 +183,12 @@
       &:focus {
         outline: unset;
       }
+
+      &.disabled {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
   }
 
@@ -185,10 +197,11 @@
     top: 0;
     left: 0;
     right: 0;
+    height: 3rem;
     display: flex;
     align-items: center;
     background-color: rgba(255, 255, 255, 0.8);
-    padding: 0.33rem 1.5rem;
+    padding: 0 1.5rem;
     .sb-avatar {
       margin-right: 0.33rem;
       img {
@@ -204,6 +217,29 @@
 
     .view-all {
       margin-left: auto;
+    }
+  }
+
+  .archived-banner {
+    position: absolute;
+    top: 3rem;
+    left: 0;
+    right: 0;
+    height: 3rem;
+    background-color: rgba(240, 240, 240, 0.75);
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .message {
+      margin: 0 0.5rem;
+    }
+    a {
+      text-decoration: underline;
+    }
+    a:hover {
+      cursor: pointer;
+      text-decoration: underline;
     }
   }
 
