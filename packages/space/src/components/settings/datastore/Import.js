@@ -179,34 +179,31 @@ export class ImportComponent extends Component {
   };
 
   // Read file and parse results when user makes a selection.
-  handleChange = event => {
-    const file = this.fileEl.files[0];
-    // If the user chooses to cancel the open.  Avoids an error with file.name and prevents unnecessary behavior.
-    if (file) {
-      // Add file name to state and reset if another file has already been chossen.
-      this.setState({
-        fileName: file.name,
-        postResult: false,
-        attemptedRecords: 0,
-        failedCalls: List(),
+  handleChange = files => {
+    const file = files[0];
+    // Add file name to state and reset if another file has already been chossen.
+    this.setState({
+      fileName: file.name,
+      postResult: false,
+      attemptedRecords: 0,
+      failedCalls: List(),
+    });
+    const reader = new FileReader();
+    reader.readAsText(file);
+    this.readFile = reader;
+    reader.onload = event => {
+      Papa.parse(event.target.result, {
+        header: true,
+        complete: results => {
+          //When streaming, parse results are not available in this callback.
+          this.parseResults = results;
+          this.handleFieldCheck();
+        },
+        error: errors => {
+          //Test error handleing here.  This might not work if error is called each time a row has an error.
+        },
       });
-      const reader = new FileReader();
-      reader.readAsText(this.fileEl.files[0]);
-      this.readFile = reader;
-      reader.onload = event => {
-        Papa.parse(event.target.result, {
-          header: true,
-          complete: results => {
-            //When streaming, parse results are not available in this callback.
-            this.parseResults = results;
-            this.handleFieldCheck();
-          },
-          error: errors => {
-            //Test error handleing here.  This might not work if error is called each time a row has an error.
-          },
-        });
-      };
-    }
+    };
   };
 
   handleSelect = event => {
@@ -272,20 +269,9 @@ export class ImportComponent extends Component {
                 <h4>
                   Size is limited to xx<small>mb</small>
                 </h4>
-
-                <input
-                  type="file"
-                  id="file-input"
-                  style={{ display: 'none' }}
-                  onChange={this.handleChange}
-                  ref={element => {
-                    this.fileEl = element;
-                  }}
-                />
-
-                <label htmlFor="file-input" className="btn btn-info btn-sm">
-                  Choose A File
-                </label>
+                <Dropzone onDrop={this.handleChange}>
+                  <p>Drop File</p>
+                </Dropzone>
               </div>
             </Fragment>
           )}
