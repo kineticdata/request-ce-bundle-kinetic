@@ -254,42 +254,45 @@ export class ImportComponent extends Component {
     return (
       <Fragment>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {this.readFile ? (
-            <button
-              className="btn btn-link btn-sm"
-              style={{ alignSelf: 'flex-end' }}
-              onClick={this.handleReset}
-            >
-              Upload a new file
-            </button>
-          ) : (
-            <Fragment>
-              <div className="text-center">
-                <h2>Only .csv files are permitted to be uploaded.</h2>
-                <h4>
-                  Size is limited to xx<small>mb</small>
-                </h4>
-                <Dropzone onDrop={this.handleChange}>
-                  <p>Drop File</p>
-                </Dropzone>
-              </div>
-            </Fragment>
-          )}
-        </div>
-        <div className="forms-list-wrapper">
+          {/* // Upload CSV */}
+          {!this.readFile &&
+            !this.state.postResult && (
+              <Fragment>
+                <div className="text-center">
+                  <h2>Only .csv files are permitted to be uploaded.</h2>
+                  <h4>
+                    Size is limited to 20<em>mb</em>
+                  </h4>
+                </div>
+                <div className="dropzone">
+                  <Dropzone
+                    onDrop={this.handleChange}
+                    className="dropzone__area"
+                    activeClassName="dropzone__area--active"
+                    disabledClassName="dropzone__area--disabled"
+                  >
+                    <i className="fa fa-upload" />
+                    <h2>Upload a .csv file</h2>
+                    <p>
+                      Drag a file to attach or{' '}
+                      <span className="text-primary">browse</span>
+                    </p>
+                  </Dropzone>
+                </div>
+              </Fragment>
+            )}
+
+          {/* // Missing Fields */}
           {this.state.missingFields.size > 0 && (
             <Fragment>
               <div className="text-center">
                 <h2>The .csv has headers that do not exist on the form</h2>
                 <h4>Please review the headers to match or omit.</h4>
               </div>
-              <ul>
-                {this.state.missingFields.map((fieldName, idx) => (
-                  <li key={idx}>{fieldName}</li>
-                ))}
-              </ul>
             </Fragment>
           )}
+
+          {/* // Processing line */}
           {this.props.processing && (
             <Line
               percent={this.props.percentComplete}
@@ -297,27 +300,40 @@ export class ImportComponent extends Component {
               strokeColor="#5fba53"
             />
           )}
+
+          {/* //Show Results */}
           {this.state.postResult && (
-            <div>
-              <h4>Post Results</h4>
-              {this.state.attemptedRecords > 0 ? (
-                <Fragment>
-                  <p>
-                    {this.state.attemptedRecords} record{this.state
-                      .attemptedRecords > 1 && 's'}{' '}
-                    attempted to be posted
-                  </p>
-                  <p>
-                    {this.props.failedCalls.size} record{this.props.failedCalls
-                      .size > 1 && 's'}{' '}
-                    failed
-                  </p>
-                </Fragment>
-              ) : (
-                <p>No records found to post</p>
-              )}
-            </div>
+            <Fragment>
+              <div className="text-center">
+                <h2>Post Results</h2>
+                {this.state.attemptedRecords > 0 ? (
+                  <Fragment>
+                    <h4>
+                      {this.state.attemptedRecords} record{this.state
+                        .attemptedRecords > 1 && 's'}{' '}
+                      attempted to be posted
+                    </h4>
+                    <h4 className="text-danger">
+                      {this.props.failedCalls.size} record{this.props
+                        .failedCalls.size > 1 && 's'}{' '}
+                      failed
+                    </h4>
+                  </Fragment>
+                ) : (
+                  <h4>No records found to post</h4>
+                )}
+                <button
+                  className="btn btn-link"
+                  style={{ alignSelf: 'flex-end' }}
+                  onClick={this.handleReset}
+                >
+                  Upload a new file?
+                </button>
+              </div>
+            </Fragment>
           )}
+
+          {/* // Table of records to be imported */}
           {this.state.recordsHeaders.size > 0 && (
             <Fragment>
               <table className="table table-sm table--settings">
@@ -380,10 +396,14 @@ export class ImportComponent extends Component {
                                 </option>
                               ))}
                             </select>
-                            {true && (
+
+                            {this.state.missingFields.find(
+                              fieldName => fieldName === obj.header,
+                            ) ? (
                               <i className="fa fa-fw fa-exclamation-triangle text-warning" />
+                            ) : (
+                              <i className="fa fa-fw fa-check-circle text-success" />
                             )}
-                            <i className="fa fa-fw fa-check-circle text-success" />
                           </td>
                         </tr>
                       );
@@ -395,6 +415,18 @@ export class ImportComponent extends Component {
             </Fragment>
           )}
 
+          {/* // Reset or upload a new file */}
+          {this.readFile && (
+            <button
+              className="btn btn-link"
+              style={{ alignSelf: 'flex-end' }}
+              onClick={this.handleReset}
+            >
+              Upload a new file
+            </button>
+          )}
+
+          {/* // Review records that match */}
           {!this.props.processing &&
             !this.state.postResult &&
             this.state.records.size > 0 &&
@@ -436,6 +468,8 @@ export class ImportComponent extends Component {
                 </Table>
               </Fragment>
             )}
+
+          {/* // Import Records Button   */}
           {this.state.records.size > 0 &&
             this.state.missingFields.size <= 0 && (
               <button className="btn btn-secondary" onClick={this.handleImport}>
