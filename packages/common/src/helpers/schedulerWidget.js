@@ -1,7 +1,6 @@
 import { List, Map, Record } from 'immutable';
 import { CoreAPI, bundle } from 'react-kinetic-core';
 import moment from 'moment';
-import isarray from 'isarray';
 import { namespace, noPayload, withPayload } from '../utils';
 import { DatastoreSubmission } from '../../records';
 import {
@@ -281,6 +280,8 @@ export const State = Record({
   type: '',
   date: '',
   time: '',
+  minAvailableDate: moment().startOf('day'),
+  maxAvailableDate: null,
   durationMultiplier: 1,
   loading: true,
   loadingData: false,

@@ -11,12 +11,17 @@ import {
 } from 'recompose';
 import { PageTitle } from 'common';
 import { CoreForm } from 'react-kinetic-core';
+import moment from 'moment';
 import { LoadingMessage, ErrorMessage, InfoMessage } from './Schedulers';
 import { SchedulerConfig } from './SchedulerConfig';
 import { SchedulerAvailability } from './SchedulerAvailability';
 import { SchedulerOverrides } from './SchedulerOverrides';
 import { actions } from '../../redux/modules/schedulers';
 import { actions as toastActions } from '../../redux/modules/toasts';
+import {
+  DATE_FORMAT,
+  DATE_DISPLAY_FORMAT,
+} from '../../helpers/schedulerWidget';
 import {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
@@ -208,12 +213,59 @@ const SchedulerComponent = ({
                       </div>
                     </div>
                   </div>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Timezone</label>
+                        <div>{scheduler.values['Timezone']}</div>
+                      </div>
+                    </div>
+                    {scheduler.values['Scheduling Window'] && (
+                      <div className="col-md-6">
+                        <div className="form-group">
+                          <label>Scheduling Window</label>
+                          <div>{`${
+                            scheduler.values['Scheduling Window']
+                          } days`}</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                   {scheduler.values['Location'] && (
                     <div className="form-group">
                       <label>Location</label>
                       <div>{scheduler.values['Location']}</div>
                     </div>
                   )}
+
+                  <div className="row">
+                    {scheduler.values['Scheduling Range Start Date'] && (
+                      <div className="col-md-6">
+                        <div className="form-group">
+                          <label>Scheduling Range Start Date</label>
+                          <div>
+                            {moment(
+                              scheduler.values['Scheduling Range Start Date'],
+                              DATE_FORMAT,
+                            ).format(DATE_DISPLAY_FORMAT)}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {scheduler.values['Scheduling Range End Date'] && (
+                      <div className="col-md-6">
+                        <div className="form-group">
+                          <label>Scheduling Range End Date</label>
+                          <div>
+                            {moment(
+                              scheduler.values['Scheduling Range End Date'],
+                              DATE_FORMAT,
+                            ).format(DATE_DISPLAY_FORMAT)}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <ul className="nav nav-tabs">

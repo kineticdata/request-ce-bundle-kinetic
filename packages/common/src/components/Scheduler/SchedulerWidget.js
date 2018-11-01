@@ -1,9 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import {
   compose,
   lifecycle,
   withHandlers,
-  withProps,
   withReducer,
   withState,
 } from 'recompose';
@@ -133,8 +132,11 @@ const SchedulerWidgetComponent = ({
       values: {
         'Time Interval': timeInterval,
         'Reservation Timeout': reservationTimeout,
+        Timezone: timezone = moment.tz.guess(),
       },
     },
+    minAvailableDate,
+    maxAvailableDate,
     configs,
     timeslots,
     scheduling,
@@ -154,14 +156,16 @@ const SchedulerWidgetComponent = ({
   setExpired,
   scheduleEvent,
 }) => {
-  const now = moment();
   const interval = parseInt(timeInterval, 10);
   const timeout = parseInt(reservationTimeout, 10);
+  const now = moment.tz(timezone);
   const minIndex =
     now.format(DATE_FORMAT) === date
       ? Math.ceil((now.hours() * 60 + now.minutes()) / interval)
       : 0;
   const dateTimeslots = timeslots[date] || [];
+
+  // Calculate available time options for the selected date
   const timeOptions =
     durationMultiplier > 0
       ? dateTimeslots
@@ -214,13 +218,37 @@ const SchedulerWidgetComponent = ({
           })
           .filter(o => o)
       : [];
+
+  // Calculate date options with respect to min/max dates
+  const selectedDate = moment.tz(date, DATE_FORMAT, timezone);
+  // How many days before the selected date are available
+  const availableBefore = selectedDate.diff(minAvailableDate, 'days');
+  // How many days after the selected date are available
+  const availableAfter = maxAvailableDate
+    ? maxAvailableDate.diff(selectedDate, 'days')
+    : 10; // Default to 10 which is more than needed since we only show a max of 5
+
+  // If at least 2 days available in each direction, show 5 with selected date in the middle
+  const dateOptions = (availableBefore > 1 && availableAfter > 1
+    ? Array(5).fill(selectedDate.add(-2, 'days'))
+    : // If fewer than 5 total days around selected date vailable, show them all
+      availableBefore + availableAfter < 5
+      ? Array(availableBefore + availableAfter + 1).fill(
+          selectedDate.add(-availableBefore, 'days'),
+        )
+      : // Otherwise show range with one endpoint, so date won't be in the middle
+        availableBefore < 2
+        ? Array(5).fill(selectedDate.add(-availableBefore, 'days'))
+        : Array(5).fill(selectedDate.add(-(4 - availableAfter), 'days'))
+  ).map((d, i) => d.clone().add(i, 'days'));
+
   const isScheduled = event && event.coreState !== 'Draft';
   const isReserved = event && event.coreState === 'Draft';
   const dateTimeValue = event
     ? `${moment
-        .utc(event.values['Date'], DATE_FORMAT)
+        .tz(event.values['Date'], DATE_FORMAT, timezone)
         .format(DATE_DISPLAY_FORMAT)} at ${moment
-        .utc(event.values['Time'], TIME_FORMAT)
+        .tz(event.values['Time'], TIME_FORMAT, timezone)
         .format(TIME_DISPLAY_FORMAT)} for ${event.values['Duration']} minutes`
     : '';
 
@@ -335,19 +363,21 @@ const SchedulerWidgetComponent = ({
                 Cancel
               </button>
               <span>Schedule</span>
-              {moment().format(DATE_FORMAT) !== date && (
-                <button
-                  type="button"
-                  className="btn btn-link"
-                  onClick={() =>
-                    handleDateChange({
-                      target: { value: moment().format(DATE_FORMAT) },
-                    })
-                  }
-                >
-                  Today
-                </button>
-              )}
+              {now.format(DATE_FORMAT) !== date &&
+                !now.isBefore(minAvailableDate) && (
+                  <button
+                    type="button"
+                    className="btn btn-link"
+                    onClick={() => {
+                      handleDateChange({
+                        target: { value: now.format(DATE_FORMAT) },
+                      });
+                      setOpenCalendar(false);
+                    }}
+                  >
+                    Today
+                  </button>
+                )}
             </h4>
           </div>
           <ModalBody>
@@ -365,46 +395,37 @@ const SchedulerWidgetComponent = ({
                     }`}
                   />
                 </div>
-                {Array(5)
-                  .fill(
-                    moment(date, 'YYYY-MM-DD')
-                      .add(-2, 'days')
-                      .diff(moment(), 'd') < 0
-                      ? moment()
-                      : moment(date, 'YYYY-MM-DD').add(-2, 'days'),
-                  )
-                  .map((d, i) => {
-                    const dateVal = d.clone().add(i, 'days');
-                    const isSelected = dateVal.format(DATE_FORMAT) === date;
-                    return (
-                      <div
-                        key={dateVal.format(DATE_FORMAT)}
-                        className={`date-box ${isSelected ? 'selected' : ''}`}
-                        onClick={
-                          isSelected
-                            ? () => setOpenCalendar(!openCalendar)
-                            : () => {
-                                handleDateChange({
-                                  target: {
-                                    value: dateVal.format(DATE_FORMAT),
-                                  },
-                                });
-                                setOpenCalendar(false);
-                              }
-                        }
-                      >
-                        <div className="date-month-year">
-                          {dateVal.format('MMM YYYY')}
-                        </div>
-                        <div className="date-day-number">
-                          {dateVal.format('DD')}
-                        </div>
-                        <div className="date-day-name">
-                          {dateVal.format('ddd')}
-                        </div>
+                {dateOptions.map(dateVal => {
+                  const isSelected = dateVal.format(DATE_FORMAT) === date;
+                  return (
+                    <div
+                      key={dateVal.format(DATE_FORMAT)}
+                      className={`date-box ${isSelected ? 'selected' : ''}`}
+                      onClick={
+                        isSelected
+                          ? () => setOpenCalendar(!openCalendar)
+                          : () => {
+                              handleDateChange({
+                                target: {
+                                  value: dateVal.format(DATE_FORMAT),
+                                },
+                              });
+                              setOpenCalendar(false);
+                            }
+                      }
+                    >
+                      <div className="date-month-year">
+                        {dateVal.format('MMM YYYY')}
                       </div>
-                    );
-                  })}
+                      <div className="date-day-number">
+                        {dateVal.format('DD')}
+                      </div>
+                      <div className="date-day-name">
+                        {dateVal.format('ddd')}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
               {openCalendar ? (
                 <div className="date-picker">
@@ -416,7 +437,10 @@ const SchedulerWidgetComponent = ({
                       });
                       setOpenCalendar(false);
                     }}
-                    isOutsideRange={d => d.isBefore(moment().startOf('day'))}
+                    isOutsideRange={d =>
+                      d.startOf('day').isBefore(minAvailableDate) ||
+                      d.startOf('day').isAfter(maxAvailableDate)
+                    }
                     numberOfMonths={1}
                     daySize={36}
                     enableOutsideDays={true}
@@ -532,10 +556,48 @@ const setResultToState = ({ dispatch }) => (result, set) => {
   }
 };
 
-const setScheduler = ({ dispatch }) => ({ submissions }) => {
+const setScheduler = ({ dispatch, stateData: { date } }) => ({
+  submissions,
+}) => {
   if (submissions.length !== 1) {
     dispatch(actions.addErrors(['Scheduler could not be found.']));
   } else {
+    const {
+      values: {
+        Timezone: timezone = moment.tz.guess(),
+        'Scheduling Window': schedulingWindow,
+        'Scheduling Range Start Date': schedulingStartDate,
+        'Scheduling Range End Date': schedulingEndDate,
+      },
+    } = submissions[0];
+    const today = moment.tz(timezone).startOf('day');
+    const minDate = schedulingStartDate
+      ? moment.tz(schedulingStartDate, DATE_FORMAT, timezone)
+      : null;
+    const maxDate = schedulingEndDate
+      ? moment.tz(schedulingEndDate, DATE_FORMAT, timezone)
+      : null;
+    const maxWindowDate = parseInt(schedulingWindow, 10)
+      ? today.clone().add(parseInt(schedulingWindow, 10), 'day')
+      : null;
+    const minAvailableDate =
+      minDate && minDate.isAfter(today) ? minDate : today;
+    const maxAvailableDate =
+      maxDate && maxWindowDate
+        ? maxDate.isBefore(maxWindowDate)
+          ? maxDate
+          : maxWindowDate
+        : maxDate || maxWindowDate;
+
+    const selectedDate = moment.tz(date, DATE_FORMAT, timezone);
+    if (selectedDate.isBefore(minAvailableDate)) {
+      dispatch(actions.setDate(minAvailableDate.format(DATE_FORMAT)));
+      dispatch(actions.setTime(''));
+    } else if (maxAvailableDate && selectedDate.isAfter(maxAvailableDate)) {
+      dispatch(actions.setDate(maxAvailableDate.format(DATE_FORMAT)));
+      dispatch(actions.setTime(''));
+    }
+    dispatch(actions.setState({ minAvailableDate, maxAvailableDate }));
     dispatch(actions.setScheduler(submissions[0]));
   }
 };
@@ -616,12 +678,22 @@ const handleTypeChange = ({ dispatch, stateData: { configs } }) => e => {
   }
 };
 
-const handleDateChange = ({ dispatch }) => e => {
-  if (
-    !moment.utc(e.target.value, DATE_FORMAT).isValid() ||
-    moment.utc().diff(moment.utc(e.target.value), 'days') > 0
-  ) {
-    dispatch(actions.setDate(moment.utc().format(DATE_FORMAT)));
+const handleDateChange = ({
+  dispatch,
+  stateData: {
+    minAvailableDate,
+    maxAvailableDate,
+    scheduler: {
+      values: { Timezone: timezone = moment.tz.guess() },
+    },
+  },
+}) => e => {
+  const selectedDate = moment.tz(e.target.value, DATE_FORMAT, timezone);
+  if (!selectedDate.isValid() || selectedDate.isBefore(minAvailableDate)) {
+    dispatch(actions.setDate(minAvailableDate.format(DATE_FORMAT)));
+    dispatch(actions.setTime(''));
+  } else if (maxAvailableDate && selectedDate.isAfter(maxAvailableDate)) {
+    dispatch(actions.setDate(maxAvailableDate.format(DATE_FORMAT)));
     dispatch(actions.setTime(''));
   } else {
     dispatch(actions.setDate(e.target.value));
@@ -715,7 +787,10 @@ const verifyScheduledEvent = ({
     durationMultiplier,
     event,
     scheduler: {
-      values: { 'Time Interval': timeInterval },
+      values: {
+        'Time Interval': timeInterval,
+        Timezone: timezone = moment.tz.guess(),
+      },
     },
     events,
     timeslots,
@@ -725,7 +800,7 @@ const verifyScheduledEvent = ({
 }) => () => {
   const dateTimeslots = timeslots[event.values['Date']] || [];
   const interval = parseInt(timeInterval, 10);
-  const timeMoment = moment.utc(event.values['Time'], TIME_FORMAT);
+  const timeMoment = moment.tz(event.values['Time'], TIME_FORMAT, timezone);
   const timeInMinutes = timeMoment.hour() * 60 + timeMoment.minute();
   const timeIndex = Math.floor(timeInMinutes / interval);
   const usedTimeslots = dateTimeslots.slice(
@@ -748,7 +823,11 @@ const verifyScheduledEvent = ({
             return (
               currentEvents
                 .filter(e => {
-                  const eventTime = moment.utc(e.values['Time'], TIME_FORMAT);
+                  const eventTime = moment.tz(
+                    e.values['Time'],
+                    TIME_FORMAT,
+                    timezone,
+                  );
                   const eventTimeInMinutes =
                     eventTime.hour() * 60 + eventTime.minute();
                   const eventTimeIndexStart = Math.floor(
@@ -816,7 +895,10 @@ const calculateAvailableTimeslots = ({
   stateData: {
     date,
     scheduler: {
-      values: { 'Time Interval': timeInterval },
+      values: {
+        'Time Interval': timeInterval,
+        Timezone: timezone = moment.tz.guess(),
+      },
     },
     availability,
     overrides,
@@ -833,12 +915,13 @@ const calculateAvailableTimeslots = ({
     e => e.values['Date'] === date && e.id !== currentEventId,
   );
   currentEvents.forEach(e => {
-    const startTime = moment.utc(
+    const startTime = moment.tz(
       `${e.values['Date']}T${e.values['Time']}`,
       `${DATE_FORMAT}T${TIME_FORMAT}`,
+      timezone,
     );
-    const endTime = moment
-      .utc(startTime)
+    const endTime = startTime
+      .clone()
       .add(parseInt(e.values['Duration'], 10), 'minute');
     const startIndex = Math.floor(
       (startTime.hour() * 60 + startTime.minute()) / interval,
@@ -859,7 +942,10 @@ const calculateTotalTimeslots = ({
   stateData: {
     date,
     scheduler: {
-      values: { 'Time Interval': timeInterval },
+      values: {
+        'Time Interval': timeInterval,
+        Timezone: timezone = moment.tz.guess(),
+      },
     },
     availability,
     overrides,
@@ -870,13 +956,15 @@ const calculateTotalTimeslots = ({
   const currentOverrides = overrides.filter(o => o.values['Date'] === date);
   if (currentOverrides.size > 0) {
     currentOverrides.forEach(o => {
-      const startTime = moment.utc(
+      const startTime = moment.tz(
         `${date}T${o.values['Start Time']}`,
         `${DATE_FORMAT}T${TIME_FORMAT}`,
+        timezone,
       );
-      const endTime = moment.utc(
+      const endTime = moment.tz(
         `${date}T${o.values['End Time']}`,
         `${DATE_FORMAT}T${TIME_FORMAT}`,
+        timezone,
       );
       const startIndex = Math.floor(
         (startTime.hour() * 60 + startTime.minute()) / interval,
@@ -891,16 +979,19 @@ const calculateTotalTimeslots = ({
   } else {
     const currentAvailability = availability.filter(
       a =>
-        parseInt(a.values['Day'], 10) === moment.utc(date, DATE_FORMAT).day(),
+        parseInt(a.values['Day'], 10) ===
+        moment.tz(date, DATE_FORMAT, timezone).day(),
     );
     currentAvailability.forEach(a => {
-      const startTime = moment.utc(
+      const startTime = moment.tz(
         `${date}T${a.values['Start Time']}`,
         `${DATE_FORMAT}T${TIME_FORMAT}`,
+        timezone,
       );
-      const endTime = moment.utc(
+      const endTime = moment.tz(
         `${date}T${a.values['End Time']}`,
         `${DATE_FORMAT}T${TIME_FORMAT}`,
+        timezone,
       );
       const startIndex = Math.floor(
         (startTime.hour() * 60 + startTime.minute()) / interval,
@@ -969,9 +1060,9 @@ export const SchedulerWidget = compose(
         schedulerId: schedulerId || null,
         type: eventType || null,
         date:
-          eventDate && moment.utc(eventDate).isValid()
+          eventDate && moment(eventDate, DATE_FORMAT).isValid()
             ? eventDate
-            : moment.utc().format(DATE_FORMAT),
+            : moment().format(DATE_FORMAT),
       }),
   ),
   withHandlers({

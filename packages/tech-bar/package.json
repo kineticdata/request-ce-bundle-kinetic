@@ -8,6 +8,7 @@
     "immutable": "4.0.0-rc.9",
     "isarray": "^2.0.2",
     "moment": "^2.21.0",
+    "moment-timezone": "^0.5.23",
     "query-string": "^5.0.0",
     "react": "^16.2.0",
     "react-document-title": "^2.0.3",

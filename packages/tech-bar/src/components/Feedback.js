@@ -88,7 +88,7 @@ export const FeedbackComponent = ({
               >
                 <label htmlFor="email-input">
                   Email{feedbackIdentityRequired ? (
-                    <span class="text-danger">*</span>
+                    <span className="text-danger">*</span>
                   ) : (
                     ' (Optional)'
                   )}
