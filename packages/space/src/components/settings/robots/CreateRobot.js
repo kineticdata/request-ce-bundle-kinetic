@@ -59,7 +59,7 @@ export const handleLoaded = props => form => {
 export const handleCreated = props => response => {
   props.addSuccess(
     `Successfully created robot (${response.submission.values['Name']})`,
-    'Schedule Created!',
+    'Robot Created!',
   );
   props.push(`/settings/robots/${response.submission.id}`);
 };

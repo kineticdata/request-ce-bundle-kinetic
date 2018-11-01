@@ -34,7 +34,7 @@ const RobotComponent = ({
   processDelete,
 }) => {
   const loading =
-    robotLoading && (robot === null || robot.id !== match.params.scheduleId);
+    robotLoading && (robot === null || robot.id !== match.params.robotId);
   const isInactive =
     !loading && robot && robot.values['Status'].toLowerCase() === 'inactive';
   const isExpired =
@@ -65,7 +65,7 @@ const RobotComponent = ({
               robotErrors.length > 0 && (
                 <div className="text-center text-danger">
                   <h1>Oops!</h1>
-                  <h2>Robot Schedule Not Found</h2>
+                  <h2>Robot Not Found</h2>
                   {robotErrors.map(error => (
                     <p className="error-details">{error}</p>
                   ))}
@@ -78,7 +78,7 @@ const RobotComponent = ({
                     <li role="presentation">
                       <NavLink
                         exact
-                        to={`/settings/robots/${match.params.scheduleId}`}
+                        to={`/settings/robots/${match.params.robotId}`}
                         activeClassName="active"
                       >
                         Details
@@ -87,7 +87,7 @@ const RobotComponent = ({
                     <li role="presentation">
                       <NavLink
                         to={`/settings/robots/${
-                          match.params.scheduleId
+                          match.params.robotId
                         }/executions`}
                         activeClassName="active"
                       >
@@ -100,7 +100,7 @@ const RobotComponent = ({
                   <div>
                     {(isInactive || isExpired) && (
                       <div className="alert alert-warning">
-                        {'This schedule is '}
+                        {'This robot is '}
                         {isInactive && <strong>Inactive</strong>}
                         {isInactive && isExpired && ' and '}
                         {isExpired && <strong>Expired</strong>}
@@ -109,7 +109,7 @@ const RobotComponent = ({
                     )}
                     <CoreForm
                       datastore
-                      submission={match.params.scheduleId}
+                      submission={match.params.robotId}
                       loaded={handleLoaded}
                       updated={handleUpdated}
                       error={handleError}
@@ -125,7 +125,7 @@ const RobotComponent = ({
                       isOpen={confirmDelete}
                       toggle={() => setConfirmDelete(!confirmDelete)}
                     >
-                      <p>Delete robot schedule {robot.values['Robot Name']}?</p>
+                      <p>Delete robot {robot.values['Robot Name']}?</p>
                       <Button color="danger" onClick={processDelete}>
                         Yes
                       </Button>
@@ -139,7 +139,7 @@ const RobotComponent = ({
                   </div>
                 )}
                 {type === 'executions' && (
-                  <RobotExecutionsList scheduleId={match.params.scheduleId} />
+                  <RobotExecutionsList robotId={match.params.robotId} />
                 )}
               </Fragment>
             )}
@@ -162,12 +162,10 @@ export const handleLoaded = props => form => {
 };
 
 export const handleUpdated = props => response => {
-  props.fetchRobotSchedule(response.submission.id);
+  props.fetchRobot(response.submission.id);
   props.addSuccess(
-    `Successfully updated robot schedule (${
-      response.submission.values['Robot Name']
-    })`,
-    'Robot Schedule Updated!',
+    `Successfully updated robot (${response.submission.values['Robot Name']})`,
+    'Robot Updated!',
   );
 };
 
@@ -181,13 +179,13 @@ export const handleDelete = props => () => {
 
 export const processDelete = props => () => {
   const robotName = props.robot.values['Robot Name'];
-  props.deleteRobotSchedule({
+  props.deleteRobot({
     id: props.robot.id,
     callback: () => {
       props.push(`/settings/robots`);
       props.addSuccess(
-        `Successfully deleted robot schedule (${robotName})`,
-        'Robot Schedule Deleted!',
+        `Successfully deleted robot (${robotName})`,
+        'Robot Deleted!',
       );
     },
   });
@@ -201,8 +199,8 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = {
   push,
-  fetchRobotSchedule: actions.fetchRobotSchedule,
-  deleteRobotSchedule: actions.deleteRobotSchedule,
+  fetchRobot: actions.fetchRobotSchedule,
+  deleteRobot: actions.deleteRobotSchedule,
   addSuccess: toastActions.addSuccess,
   addError: toastActions.addError,
 };
@@ -232,7 +230,7 @@ export const Robot = compose(
   }),
   lifecycle({
     componentWillMount() {
-      this.props.fetchRobotSchedule(this.props.match.params.scheduleId);
+      this.props.fetchRobot(this.props.match.params.robotId);
     },
   }),
 )(RobotComponent);

@@ -17,7 +17,7 @@ const RobotContainerComponent = ({ match }) => (
     <Switch>
       <Route exact path={`${match.path}/error`} component={RobotError} />
       <Route exact path={`${match.path}/robots/new`} component={CreateRobot} />
-      <Route exact path={`${match.path}/:scheduleId`} component={Robot} />
+      <Route exact path={`${match.path}/:robotId`} component={Robot} />
       <Route
         exact
         path={`${match.path}/:robotId/executions`}

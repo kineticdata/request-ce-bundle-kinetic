@@ -35,9 +35,8 @@ const getNextExecution = (nextExecutions, robotId) => {
 const WallyEmptyMessage = () => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>No Schedules Found</h5>
+      <h5>No Robots Found</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
-      <h6>Schedules define when robots will execute</h6>
     </div>
   );
 };
@@ -54,7 +53,7 @@ const RobotsListComponent = ({
     <Loading />
   ) : (
     <div className="page-container page-container--robots">
-      <PageTitle parts={['Schedules', 'Robots', 'Settings']} />
+      <PageTitle parts={['Robots', 'Settings']} />
       <div className="page-panel page-panel--scrollable page-panel--robots-content">
         <div className="page-title">
           <div className="page-title__wrapper">
@@ -72,7 +71,7 @@ const RobotsListComponent = ({
           robotsErrors.length > 0 && (
             <div className="text-center text-danger">
               <h1>Oops!</h1>
-              <h2>Robot Schedules Not Found</h2>
+              <h2>Robots Not Found</h2>
               {robotsErrors.map(error => (
                 <p className="error-details">{error}</p>
               ))}
@@ -93,27 +92,27 @@ const RobotsListComponent = ({
               </tr>
             </thead>
             <tbody>
-              {robots.map(schedule => {
+              {robots.map(robot => {
                 const nextExecution = nextExecutions
-                  ? getNextExecution(nextExecutions, schedule.id)
+                  ? getNextExecution(nextExecutions, robot.id)
                   : 'fetching';
                 const isExpired =
-                  schedule.values['End Date'] &&
-                  moment(schedule.values['End Date']).isBefore(moment());
+                  robot.values['End Date'] &&
+                  moment(robot.values['End Date']).isBefore(moment());
                 return (
-                  <tr key={schedule.id}>
+                  <tr key={robot.id}>
                     <td scope="row">
-                      <Link to={`/settings/robots/${schedule.id}`}>
-                        <span>{schedule.values['Robot Name']}</span>
+                      <Link to={`/settings/robots/${robot.id}`}>
+                        <span>{robot.values['Robot Name']}</span>
                       </Link>
                     </td>
                     <td>
                       <span
                         className={`status ${getStatusColor(
-                          schedule.values['Status'],
+                          robot.values['Status'],
                         )}`}
                       >
-                        {schedule.values['Status']}
+                        {robot.values['Status']}
                       </span>
                       {isExpired && (
                         <span className={`status ${getStatusColor('Expired')}`}>
@@ -121,9 +120,9 @@ const RobotsListComponent = ({
                         </span>
                       )}
                     </td>
-                    <td>{schedule.values['Category']}</td>
-                    <td>{schedule.values['Task Tree']}</td>
-                    <td>{schedule.values['Description']}</td>
+                    <td>{robot.values['Category']}</td>
+                    <td>{robot.values['Task Tree']}</td>
+                    <td>{robot.values['Description']}</td>
                     <td>
                       {moment(nextExecution).isValid()
                         ? moment(nextExecution).format(Constants.TIME_FORMAT)
@@ -152,7 +151,7 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = {
   push,
-  fetchRobotSchedules: actions.fetchRobotSchedules,
+  fetchRobots: actions.fetchRobotSchedules,
   fetchNextExecutions: actions.fetchNextExecutions,
 };
 
@@ -163,7 +162,7 @@ export const RobotsList = compose(
   ),
   lifecycle({
     componentWillMount() {
-      this.props.fetchRobotSchedules();
+      this.props.fetchRobots();
       this.props.fetchNextExecutions();
     },
   }),
