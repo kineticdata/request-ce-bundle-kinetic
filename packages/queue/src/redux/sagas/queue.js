@@ -231,7 +231,6 @@ export function* fetchListTask(action) {
 
 export function* fetchCurrentItemTask(action) {
   const token = yield select(selectToken);
-  const kappSlug = yield select(getKappSlug);
   const appSettings = yield select(getAppSettings);
 
   const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
@@ -246,7 +245,7 @@ export function* fetchCurrentItemTask(action) {
       token,
       relatedItem: {
         type: 'Submission',
-        key: `${kappSlug}/${submission.id}`,
+        key: `${submission.id}`,
       },
     });
 
