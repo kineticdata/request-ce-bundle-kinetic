@@ -12,7 +12,7 @@
 }
 
 .markdown-help {
-  background-color: white;
+  background-color: $white;
   color: $blue-lake;
   padding: 0.5rem 0.5rem;
   position: absolute;
@@ -25,14 +25,24 @@
 }
 
 // Discussion container fixes
-// .page-container--panels {
-// }
-.kinops-discussions {
+.recent-discussions-wrapper.kinops-discussions {
   overflow-y: scroll;
   justify-content: space-between;
   flex-direction: column;
+  background-color: transparent;
+  // Add padding to the list of discussions but not the actual discussion.
+  padding: 0.5em 1em !important;
+  .modal-body & {
+    padding: 0 !important;
+    .messages {
+      background-color: $white;
+    }
+  }
+}
+
+.kinops-discussions {
   .btn {
-    flex-grow: 0;
+    flex: 0 0 auto;
   }
   .btn-link.btn-back {
     border-bottom: 1px solid rgb(213, 213, 213);
@@ -41,16 +51,8 @@
     padding: 0.9375rem 1rem;
     text-align: left;
   }
-  .messages {
-    background-color: #fff;
+
+  &.empty {
+    justify-content: center;
   }
-}
-
-// Add padding to the list of discussions but not the actual discussion.
-.kinops-discussions.recent-discussions-wrapper {
-  padding: 0.5em 1em !important;
-}
-
-.kinops-discussions.empty {
-  justify-content: center;
 }
