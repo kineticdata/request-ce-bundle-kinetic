@@ -1,42 +1,25 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { compose, lifecycle, withHandlers, withProps } from 'recompose';
+import { Switch } from 'react-router-dom';
+import { compose, lifecycle, withHandlers } from 'recompose';
 import { List } from 'immutable';
 import { Filter } from './records';
 import { KappRoute as Route, KappRedirect as Redirect, Loading } from 'common';
-import { Sidebar } from './components/Sidebar';
+
 import { actions, selectMyTeamForms } from './redux/modules/queueApp';
 import { actions as queueActions } from './redux/modules/queue';
 import { actions as filterMenuActions } from './redux/modules/filterMenu';
+import { actions as formsActions } from './redux/modules/forms';
+
+import { Sidebar } from './components/Sidebar';
+import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { QueueItemContainer } from './components/queue_item/QueueItem';
 import { QueueListContainer } from './components/queue_list/QueueListContainer';
 import { FilterMenuContainer } from './components/filter_menu/FilterMenuContainer';
 import { NewItemMenuContainer } from './components/new_item_menu/NewItemMenuContainer';
 import { WorkMenuContainer } from './components/work_menu/WorkMenu';
+import { Settings } from './components/settings/Settings';
 import './assets/styles/master.scss';
-
-const mapStateToProps = (state, props) => ({
-  loading: state.queue.queueApp.loading,
-  defaultFilters: state.queue.queueApp.filters,
-  myFilters: state.queue.queueApp.myFilters,
-  counts: state.queue.queueApp.filters
-    .toMap()
-    .mapEntries(([_, filter]) => [
-      filter.name,
-      state.queue.queue.getIn(['lists', filter], List()).size,
-    ]),
-  hasTeammates: state.queue.queueApp.myTeammates.size > 0,
-  hasTeams: state.queue.queueApp.myTeams.size > 0,
-  hasForms:
-    selectMyTeamForms(state).filter(form => form.type === 'Task').length > 0,
-});
-
-const mapDispatchToProps = {
-  loadAppSettings: actions.loadAppSettings,
-  fetchList: queueActions.fetchList,
-  openNewItemMenu: queueActions.openNewItemMenu,
-  openFilterMenu: filterMenuActions.open,
-};
 
 export const AppComponent = props => {
   if (props.loading) {
@@ -44,18 +27,29 @@ export const AppComponent = props => {
   }
   return props.render({
     sidebar: (
-      <Sidebar
-        myFilters={props.myFilters}
-        counts={props.counts}
-        hasTeammates={props.hasTeammates}
-        hasTeams={props.hasTeams}
-        hasForms={props.hasForms}
-        handleOpenNewItemMenu={props.handleOpenNewItemMenu}
-        handleNewPersonalFilter={props.handleNewPersonalFilter}
-      />
+      <Switch>
+        <Route
+          path="/kapps/queue/settings"
+          render={() => <SettingsSidebar />}
+        />
+        <Route
+          render={() => (
+            <Sidebar
+              myFilters={props.myFilters}
+              counts={props.counts}
+              hasTeammates={props.hasTeammates}
+              hasTeams={props.hasTeams}
+              hasForms={props.hasForms}
+              handleOpenNewItemMenu={props.handleOpenNewItemMenu}
+              handleNewPersonalFilter={props.handleNewPersonalFilter}
+            />
+          )}
+        />
+      </Switch>
     ),
     main: (
       <main className="package-layout package-layout--queue">
+        <Route path="/settings" component={Settings} />
         <Route
           path="/submissions/:id"
           exact
@@ -86,6 +80,30 @@ export const AppComponent = props => {
   });
 };
 
+const mapStateToProps = (state, props) => ({
+  loading: state.queue.queueApp.loading,
+  defaultFilters: state.queue.queueApp.filters,
+  myFilters: state.queue.queueApp.myFilters,
+  counts: state.queue.queueApp.filters
+    .toMap()
+    .mapEntries(([_, filter]) => [
+      filter.name,
+      state.queue.queue.getIn(['lists', filter], List()).size,
+    ]),
+  hasTeammates: state.queue.queueApp.myTeammates.size > 0,
+  hasTeams: state.queue.queueApp.myTeams.size > 0,
+  hasForms:
+    selectMyTeamForms(state).filter(form => form.type === 'Task').length > 0,
+});
+
+const mapDispatchToProps = {
+  loadAppSettings: actions.loadAppSettings,
+  fetchList: queueActions.fetchList,
+  openNewItemMenu: queueActions.openNewItemMenu,
+  openFilterMenu: filterMenuActions.open,
+  fetchForms: formsActions.fetchForms,
+};
+
 const enhance = compose(
   connect(
     mapStateToProps,
@@ -99,6 +117,7 @@ const enhance = compose(
   lifecycle({
     componentWillMount() {
       this.props.loadAppSettings();
+      this.props.fetchForms();
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.loading && !nextProps.loading) {
