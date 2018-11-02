@@ -70,6 +70,16 @@ const findMissingFields = headerMapList =>
       return acc.push(obj.header);
     }, List([]));
 
+const DropzoneContent = () => (
+  <Fragment>
+    <i className="fa fa-upload" />
+    <h2>Upload a .csv file</h2>
+    <p>
+      Drag a file to attach or <span className="text-primary">browse</span>
+    </p>
+  </Fragment>
+);
+
 export class ImportComponent extends Component {
   constructor(props) {
     super(props);
@@ -180,30 +190,32 @@ export class ImportComponent extends Component {
 
   // Read file and parse results when user makes a selection.
   handleChange = files => {
-    const file = files[0];
-    // Add file name to state and reset if another file has already been chossen.
-    this.setState({
-      fileName: file.name,
-      postResult: false,
-      attemptedRecords: 0,
-      failedCalls: List(),
-    });
-    const reader = new FileReader();
-    reader.readAsText(file);
-    this.readFile = reader;
-    reader.onload = event => {
-      Papa.parse(event.target.result, {
-        header: true,
-        complete: results => {
-          //When streaming, parse results are not available in this callback.
-          this.parseResults = results;
-          this.handleFieldCheck();
-        },
-        error: errors => {
-          //Test error handleing here.  This might not work if error is called each time a row has an error.
-        },
+    if (files && files.length > 0) {
+      const file = files[0];
+      // Add file name to state and reset if another file has already been chossen.
+      this.setState({
+        fileName: file.name,
+        postResult: false,
+        attemptedRecords: 0,
+        failedCalls: List(),
       });
-    };
+      const reader = new FileReader();
+      reader.readAsText(file);
+      this.readFile = reader;
+      reader.onload = event => {
+        Papa.parse(event.target.result, {
+          header: true,
+          complete: results => {
+            //When streaming, parse results are not available in this callback.
+            this.parseResults = results;
+            this.handleFieldCheck();
+          },
+          error: errors => {
+            //Test error handleing here.  This might not work if error is called each time a row has an error.
+          },
+        });
+      };
+    }
   };
 
   handleSelect = event => {
@@ -267,16 +279,21 @@ export class ImportComponent extends Component {
                 <div className="dropzone">
                   <Dropzone
                     onDrop={this.handleChange}
+                    accept="text/plain, application/vnd.ms-excel, text/csv"
                     className="dropzone__area"
-                    activeClassName="dropzone__area--active"
-                    disabledClassName="dropzone__area--disabled"
+                    acceptClassName="dropzone__area--active"
+                    rejectClassName="dropzone__area--disabled"
                   >
-                    <i className="fa fa-upload" />
-                    <h2>Upload a .csv file</h2>
-                    <p>
-                      Drag a file to attach or{' '}
-                      <span className="text-primary">browse</span>
-                    </p>
+                    {({ isDragActive, isDragReject }) => {
+                      if (isDragReject) {
+                        return 'Only .csv files are vaild';
+                      }
+                      if (isDragActive) {
+                        return <DropzoneContent />;
+                      }
+
+                      return <DropzoneContent />;
+                    }}
                   </Dropzone>
                 </div>
               </Fragment>
@@ -284,12 +301,10 @@ export class ImportComponent extends Component {
 
           {/* // Missing Fields */}
           {this.state.missingFields.size > 0 && (
-            <Fragment>
-              <div className="text-center">
-                <h2>The .csv has headers that do not exist on the form</h2>
-                <h4>Please review the headers to match or omit.</h4>
-              </div>
-            </Fragment>
+            <div className="text-center">
+              <h2>The .csv has headers that do not exist on the form</h2>
+              <h4>Please review the headers to match or omit.</h4>
+            </div>
           )}
 
           {/* // Processing line */}
