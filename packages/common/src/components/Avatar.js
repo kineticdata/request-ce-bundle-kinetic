@@ -9,8 +9,8 @@ import { Cache } from '../cache';
 import { Hoverable } from './Hoverable';
 import { ProfileCard } from './ProfileCard';
 
-const AvatarIcon = ({ user, className, size, onClick }) => (
-  <div className={className || 'avatar'} onClick={onClick(user)}>
+const AvatarIcon = ({ user, className, size }) => (
+  <div className={className || 'avatar'}>
     <img
       alt={user.displayName || user.username || user.name}
       src={`https://www.gravatar.com/avatar/${md5(
@@ -57,40 +57,26 @@ export class AvatarComponent extends React.Component {
     };
   }
 
-  handleClick = user => e => {
-    e.preventDefault();
-    this.props.push(`/profile/${user.username}`);
-  };
-
   render() {
     const user = this.state.user;
     const size = this.props.size || 28;
     const className = this.props.className || 'avatar';
-    const hoverable = this.props.hoverable;
+    const previewable = this.props.previewable === false ? false : true;
+    const hoverable = this.props.hoverable === true ? true : false;
+
     if (user) {
-      if (hoverable) {
+      if (previewable) {
         return (
           <Hoverable
+            hoverable={hoverable}
             key={user.username}
             render={() => <ProfileCard user={user} />}
           >
-            <AvatarIcon
-              user={user}
-              size={size}
-              className={className}
-              onClick={this.handleClick}
-            />
+            <AvatarIcon user={user} size={size} className={className} />
           </Hoverable>
         );
       } else {
-        return (
-          <AvatarIcon
-            user={user}
-            size={size}
-            className={className}
-            onClick={this.handleClick}
-          />
-        );
+        return <AvatarIcon user={user} size={size} className={className} />;
       }
     } else {
       return <span />;

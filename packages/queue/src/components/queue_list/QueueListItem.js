@@ -17,7 +17,7 @@ const AssignmentParagraph = ({ values }) => (
 const Timestamp = ({ id, label, value, username }) =>
   value && (
     <li className="list-group-item">
-      <Avatar username={username} hoverable />
+      <Avatar username={username} previewable={false} size={24} />
       {label}
       &nbsp;
       <TimeAgo timestamp={value} id={`${id}-${label}`} />
