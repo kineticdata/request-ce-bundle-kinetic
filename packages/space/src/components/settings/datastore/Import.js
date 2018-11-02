@@ -328,11 +328,13 @@ export class ImportComponent extends Component {
                         .attemptedRecords > 1 && 's'}{' '}
                       attempted to be posted
                     </h4>
+                    {/* TODO: Display a link to download failed files */}
                     <h4 className="text-danger">
                       {this.props.failedCalls.size} record{this.props
                         .failedCalls.size > 1 && 's'}{' '}
                       failed
                     </h4>
+                    {/* <button className="btn btn-primary">Download failed records</button> */}
                   </Fragment>
                 ) : (
                   <h4>No records found to post</h4>
