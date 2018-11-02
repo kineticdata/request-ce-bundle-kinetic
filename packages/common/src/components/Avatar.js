@@ -4,25 +4,20 @@ import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
 import md5 from 'md5';
 import { CoreAPI } from 'react-kinetic-core';
+import ReactAvatar from 'react-avatar';
 
 import { Cache } from '../cache';
 import { Hoverable } from './Hoverable';
 import { ProfileCard } from './ProfileCard';
 
-const AvatarIcon = ({ user, className, size }) => (
-  <div className={className || 'avatar'}>
-    <img
-      alt={user.displayName || user.username || user.name}
-      src={`https://www.gravatar.com/avatar/${md5(
-        user.username || user.email || '',
-      )}?s=${size}&d=mm`}
-      className={`gravatarimg${size} features`}
-      height={`${size}px`}
-      width={`${size}px`}
-    />
-  </div>
+const AvatarIcon = ({ user, size }) => (
+  <ReactAvatar
+    name={user.displayName || user.username}
+    email={user.email || user.username}
+    round
+    size={size}
+  />
 );
-
 const userCache = new Cache(() =>
   CoreAPI.fetchUsers({ include: 'profileAttributes' }).then(
     ({ users }) => users,
