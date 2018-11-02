@@ -5,7 +5,7 @@ import { compose, lifecycle } from 'recompose';
 import { PageTitle } from 'common';
 import { actions, selectIsMyProfile } from '../../redux/modules/profiles';
 import { TeamCard } from '../shared/TeamCard';
-import { Avatar } from '../shared/Avatar';
+import { Avatar } from 'common';
 
 const ViewProfileComponent = ({
   loading,
@@ -38,7 +38,7 @@ const ViewProfileComponent = ({
           ) : null}
         </div>
         <div className="card card--profile">
-          <Avatar user={profile} size={96} />
+          <Avatar user={profile} size={96} previewable={false} />
           <h3>{profile.displayName}</h3>
           <p>{getEmail(profile)}</p>
           <p>{getProfilePhone(profile)}</p>

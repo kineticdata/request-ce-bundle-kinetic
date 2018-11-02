@@ -1,4 +1,5 @@
 import { Avatar } from './components/Avatar';
+import { ProfileCard } from './components/ProfileCard';
 import { ToastsContainer } from './components/ToastsContainer';
 import { ModalFormContainer } from './components/ModalFormContainer';
 import { KappLink } from './components/KappLink';
@@ -35,6 +36,7 @@ import * as AttributeSelectors from './components/attribute_selectors';
 
 export {
   Avatar,
+  ProfileCard,
   KappLink,
   KappLinkContainer,
   KappNavLink,

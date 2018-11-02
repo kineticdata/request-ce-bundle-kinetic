@@ -2,10 +2,8 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { getTeamColor, getTeamIcon } from '../../utils';
 import { Discussion as KinopsDiscussion } from 'discussions';
-import { PageTitle, Hoverable } from 'common';
+import { PageTitle, Avatar } from 'common';
 import { ServiceCard } from '../shared/ServiceCard';
-import { TeamMemberAvatar } from './TeamMemberAvatar';
-import { ProfileCard } from '../shared/ProfileCard';
 
 export const Team = ({
   loading,
@@ -89,12 +87,7 @@ export const Team = ({
               <h1>Members</h1>
               <div className="card--team__footer__members">
                 {memberships.map(user => (
-                  <Hoverable
-                    key={user.username}
-                    render={() => <ProfileCard user={user} />}
-                  >
-                    <TeamMemberAvatar user={user} />
-                  </Hoverable>
+                  <Avatar user={user} key={user.username} />
                 ))}
               </div>
             </div>

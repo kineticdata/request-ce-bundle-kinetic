@@ -10,7 +10,7 @@ import { AddMemberModal } from './AddMemberModal';
 import { buildHierarchy } from '../../../utils';
 import { IconPicker } from '../../shared/IconPicker';
 import { TeamCard } from '../../shared/TeamCard';
-import { TeamMemberAvatar } from './TeamMemberAvatar';
+import { Avatar } from 'common';
 
 import {
   actions as teamListActions,
@@ -176,7 +176,7 @@ const TeamFormComponent = ({
                     {memberships.map(user => (
                       <tr key={user.username}>
                         <td>
-                          <TeamMemberAvatar user={user} />
+                          <Avatar user={user} />
                         </td>
                         <td>
                           <Link to={`/profile/${user.username}`}>
