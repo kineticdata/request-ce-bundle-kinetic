@@ -88,6 +88,15 @@
   justify-content: space-between;
   margin-bottom: 0.5rem;
 
+  &.selected {
+    background-color: $primary;
+    color: white;
+
+    .text-muted {
+      color: $gray2 !important;
+    }
+  }
+
   .details {
     padding: 0.25rem 0.5rem;
   }

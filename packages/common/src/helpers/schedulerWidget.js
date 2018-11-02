@@ -1,6 +1,6 @@
 import { List, Map, Record } from 'immutable';
 import { CoreAPI, bundle } from 'react-kinetic-core';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { namespace, noPayload, withPayload } from '../utils';
 import { DatastoreSubmission } from '../../records';
 import {

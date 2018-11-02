@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { List } from 'immutable';
 import {
   compose,
   lifecycle,
@@ -11,7 +12,8 @@ import {
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { selectCurrentKapp, toastActions } from 'common';
 import { CoreAPI } from 'react-kinetic-core';
-import { actions } from '../redux/modules/appointments';
+import { actions as appointmentActions } from '../redux/modules/appointments';
+import { actions as walkInActions } from '../redux/modules/walkIns';
 
 const FEEDBACK_IDENTITY_ATTRIBUTE = 'Feedback Identity';
 const FEEDBACK_FORM_SLUG = 'feedback';
@@ -20,18 +22,23 @@ export const FeedbackComponent = ({
   kapp,
   techBarId,
   techBar,
-  appointments,
+  getFilteredAppointments,
   handleExperienceClick,
   experience,
   input,
   setInput,
+  appointmentId,
+  setAppointmentId,
   addSuccess,
   addError,
   disabled,
   feedbackIdentityRequired,
   resetExperience,
+  handleAppointmentSelect,
   handleSubmitFeedback,
 }) => {
+  const filteredAppointments =
+    experience && input.length > 2 ? getFilteredAppointments() : null;
   return (
     <section className="tech-bar-display tech-bar-display__small mb-3">
       <div className="details-container">
@@ -86,8 +93,8 @@ export const FeedbackComponent = ({
                   feedbackIdentityRequired ? 'required' : ''
                 }`}
               >
-                <label htmlFor="email-input">
-                  Email{feedbackIdentityRequired ? (
+                <label htmlFor="appointment-search-input">
+                  Find Your Appointment by Name or Email{feedbackIdentityRequired ? (
                     <span className="text-danger">*</span>
                   ) : (
                     ' (Optional)'
@@ -95,20 +102,54 @@ export const FeedbackComponent = ({
                 </label>
                 <input
                   type="text"
-                  name="email-input"
-                  id="email-input"
+                  name="appointment-search-input"
+                  id="appointment-search-input"
                   className="form-control"
                   value={input}
-                  onChange={e => setInput(e.target.value)}
+                  onChange={e => {
+                    setInput(e.target.value);
+                    setAppointmentId('');
+                  }}
                 />
               </div>
+              {filteredAppointments && (
+                <div className="form-group">
+                  {filteredAppointments.map(appt => (
+                    <div
+                      className={`card--appointment ${
+                        appointmentId === appt.id ? 'selected' : ''
+                      }`}
+                      key={appt.id}
+                    >
+                      <div className="details">
+                        <div>{appt.displayName}</div>
+                        <div className="text-muted">{appt.type}</div>
+                      </div>
+                      {appointmentId !== appt.id && (
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={() => setAppointmentId(appt.id)}
+                        >
+                          Select
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  {filteredAppointments.size === 0 && (
+                    <div className="alert alert-warning text-center">
+                      No appointments found.
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </ModalBody>
           <ModalFooter>
             <button
               type="button"
               className="btn btn-primary"
-              disabled={feedbackIdentityRequired && !/^.+@.+\..+$/.test(input)}
+              disabled={feedbackIdentityRequired && !appointmentId}
               onClick={() => handleSubmitFeedback()}
             >
               Submit Feedback
@@ -122,25 +163,47 @@ export const FeedbackComponent = ({
 
 export const mapStateToProps = (state, props) => ({
   kapp: selectCurrentKapp(state),
-  loading: state.techBar.appointments.today.loading,
-  errors: state.techBar.appointments.today.errors,
+  loading:
+    state.techBar.appointments.today.loading ||
+    state.techBar.walkIns.today.loading,
+  errors: [
+    ...state.techBar.appointments.today.errors,
+    ...state.techBar.walkIns.today.errors,
+  ],
   appointments: state.techBar.appointments.today.data,
+  walkIns: state.techBar.walkIns.today.data,
+  records: state.techBar.appointments.today.data
+    .map(a => ({
+      id: a.id,
+      type: 'Appointment',
+      username: a.values['Requested For'],
+      displayName: a.values['Requested For Display Name'],
+    }))
+    .concat(
+      state.techBar.walkIns.today.data.map(w => ({
+        id: w.id,
+        type: 'Walk-In',
+        username: w.values['Requested For'] || w.values['Email'],
+        displayName:
+          w.values['Requested For Display Name'] ||
+          `${w.values['First Name']} ${w.values['Last Name']}`,
+      })),
+    ),
 });
 
 export const mapDispatchToProps = {
   push,
-  fetchTodayAppointments: actions.fetchTodayAppointments,
+  fetchTodayAppointments: appointmentActions.fetchTodayAppointments,
+  fetchTodayWalkIns: walkInActions.fetchTodayWalkIns,
   addSuccess: toastActions.addSuccess,
   addError: toastActions.addError,
 };
 
-const getFilteredAppointments = ({ input, appointments }) => () =>
-  appointments.filter(
+const getFilteredAppointments = ({ input, records }) => () =>
+  records.filter(
     appt =>
-      appt.values['Requested For Display Name']
-        .toLowerCase()
-        .includes(input.toLowerCase()) ||
-      appt.values['Requested For'].toLowerCase().includes(input.toLowerCase()),
+      appt.username.toLowerCase().includes(input.toLowerCase()) ||
+      appt.displayName.toLowerCase().includes(input.toLowerCase()),
   );
 
 const resetExperience = ({
@@ -168,7 +231,7 @@ const handleExperienceClick = ({
 const handleSubmitFeedback = ({
   kapp,
   experience,
-  input,
+  appointmentId,
   resetExperience,
   addError,
   addSuccess,
@@ -179,7 +242,7 @@ const handleSubmitFeedback = ({
     formSlug: FEEDBACK_FORM_SLUG,
     values: values || {
       Experience: experience,
-      Username: input,
+      'Appointment Id': appointmentId,
     },
     completed: true,
   }).then(({ submission, errors, serverError }) => {
@@ -218,6 +281,7 @@ export const Feedback = compose(
   }),
   withState('experience', 'setExperience', null),
   withState('input', 'setInput', ''),
+  withState('appointmentId', 'setAppointmentId', ''),
   withState('disabled', 'setDisabled', false),
   withHandlers({ resetExperience }),
   withHandlers({
@@ -228,6 +292,7 @@ export const Feedback = compose(
   lifecycle({
     componentDidMount() {
       this.props.fetchTodayAppointments(this.props.techBarId);
+      this.props.fetchTodayWalkIns(this.props.techBarId);
     },
   }),
 )(FeedbackComponent);
