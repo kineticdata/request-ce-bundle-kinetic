@@ -24,10 +24,13 @@ const mapDispatchToProps = {
   setCurrentDiscussion: actions.setCurrentDiscussion,
 };
 
-const createDiscussion = props => () => {
+const handleCreateDiscussion = props => () => {
   const owningTeams = [{ name: props.queueItem.values['Assigned Team'] }];
   const owningUsers = [
-    { username: props.queueItem.values['Assigned Individual'] },
+    {
+      username:
+        props.queueItem.values['Assigned Individual'] || props.profile.username,
+    },
   ];
 
   props.createDiscussion({
@@ -35,7 +38,7 @@ const createDiscussion = props => () => {
     description: props.queueItem.values['Details'] || '',
     relatedItem: {
       type: 'Submission',
-      key: `${props.kappSlug}/${props.queueItem.id}`,
+      key: `${props.queueItem.id}`,
     },
     owningUsers,
     owningTeams,
@@ -57,7 +60,7 @@ export const QueueItemDiscussionsContainer = compose(
   ),
 
   withHandlers({
-    createDiscussion,
+    handleCreateDiscussion,
     handleDiscussionClick,
     handleDiscussionClear,
   }),

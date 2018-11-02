@@ -272,13 +272,12 @@ export function* fetchCurrentItemTask(action) {
 
 export function* fetchRelatedDiscussions(action) {
   const token = yield select(selectToken);
-  const kappSlug = yield select(getKappSlug);
 
   const { discussions } = yield call(DiscussionAPI.fetchDiscussions, {
     token,
     relatedItem: {
       type: 'Submission',
-      key: `${kappSlug}/${action.payload}`,
+      key: `${action.payload}`,
     },
   });
 

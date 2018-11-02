@@ -5,7 +5,7 @@ export const QueueItemDiscussions = props => {
   const {
     discussionId,
     profile,
-    createDiscussion,
+    handleCreateDiscussion,
     relatedDiscussions,
     handleDiscussionClick,
     handleDiscussionClear,
@@ -28,7 +28,7 @@ export const QueueItemDiscussions = props => {
   ) : relatedDiscussions.size > 0 ? (
     <div className="recent-discussions-wrapper kinops-discussions d-none d-md-flex">
       <DiscussionsList
-        handleCreateDiscussion={createDiscussion}
+        handleCreateDiscussion={handleCreateDiscussion}
         handleDiscussionClick={handleDiscussionClick}
         discussions={relatedDiscussions}
         me={profile}
@@ -39,7 +39,7 @@ export const QueueItemDiscussions = props => {
       <div className="empty-discussion">
         <h5>No discussion to display</h5>
         <p>
-          <button onClick={createDiscussion} className="btn btn-link">
+          <button onClick={handleCreateDiscussion} className="btn btn-link">
             Create a new discussion
           </button>
         </p>
