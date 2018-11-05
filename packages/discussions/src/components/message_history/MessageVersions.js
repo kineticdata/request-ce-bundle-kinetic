@@ -3,25 +3,19 @@ import { connect } from 'react-redux';
 import { List } from 'immutable';
 import moment from 'moment';
 import { TIME_FORMAT } from 'common/src/constants';
-import { fetchMessage, fetchMessageHistory } from '../../discussion_api';
+import { fetchMessageHistory } from '../../discussion_api';
 import { MessagesGroup } from '../MessagesGroup';
 
 export class MessageVersionsComponent extends Component {
   state = { versions: null, index: null };
 
   componentDidMount() {
-    const current = fetchMessage({
-      discussionId: this.props.discussion.id,
-      id: this.props.message.id,
-      token: this.props.token,
-    }).then(response => response.message);
     const previous = fetchMessageHistory({
       discussionId: this.props.discussion.id,
       id: this.props.message.id,
       token: this.props.token,
-    }).then(response => response.messages);
-    Promise.all([current, previous]).then(([current, previous]) => {
-      const versions = [...previous.reverse(), current];
+    }).then(response => {
+      const versions = response.messages.reverse();
       const index = versions.findIndex(
         m => m.versionId === this.props.message.versionId,
       );
