@@ -27,15 +27,12 @@ import {
   updateScheduledEvent,
   submitScheduledEvent,
   deleteScheduledEvent,
+  createRescheduleEvent,
 } from '../../helpers/schedulerWidget';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import { DayPickerSingleDateController } from 'react-dates';
 
-/**
- * TODO
- * Create rescheduling functionality.
- */
 const Timer = compose(
   withState('time', 'setTime', 0),
   withState('timer', 'setTimer', null),
@@ -119,6 +116,7 @@ const Timer = compose(
 
 const SchedulerWidgetComponent = ({
   showTypeSelector = false,
+  canReschedule = false,
   stateData: {
     loading,
     loadingData,
@@ -142,6 +140,7 @@ const SchedulerWidgetComponent = ({
     scheduling,
     schedulingErrors,
     event,
+    rescheduleEvent,
   },
   handleTypeChange,
   handleDateChange,
@@ -154,6 +153,7 @@ const SchedulerWidgetComponent = ({
   setOpenCalendar,
   expired,
   setExpired,
+  rescheduled,
   scheduleEvent,
 }) => {
   const interval = parseInt(timeInterval, 10);
@@ -244,13 +244,16 @@ const SchedulerWidgetComponent = ({
 
   const isScheduled = event && event.coreState !== 'Draft';
   const isReserved = event && event.coreState === 'Draft';
-  const dateTimeValue = event
-    ? `${moment
-        .tz(event.values['Date'], DATE_FORMAT, timezone)
-        .format(DATE_DISPLAY_FORMAT)} at ${moment
-        .tz(event.values['Time'], TIME_FORMAT, timezone)
-        .format(TIME_DISPLAY_FORMAT)} for ${event.values['Duration']} minutes`
-    : '';
+  const dateTimeValue =
+    rescheduleEvent || event
+      ? `${moment
+          .tz((rescheduleEvent || event).values['Date'], DATE_FORMAT, timezone)
+          .format(DATE_DISPLAY_FORMAT)} at ${moment
+          .tz((rescheduleEvent || event).values['Time'], TIME_FORMAT, timezone)
+          .format(TIME_DISPLAY_FORMAT)} for ${
+          (rescheduleEvent || event).values['Duration']
+        } minutes`
+      : '';
 
   return (
     <div className="scheduler-widget">
@@ -309,6 +312,15 @@ const SchedulerWidgetComponent = ({
                     Your selected time has expired.
                   </Alert>
                 )}
+                {rescheduled && (
+                  <Alert color="info">
+                    <span>Your event has been successfully rescheduled. </span>
+                    <em>
+                      It may take several minutes for your upcoming appointments
+                      list to reflect the changes.
+                    </em>
+                  </Alert>
+                )}
                 <label className="field-label">Date and Time</label>
                 <div className="input-group">
                   <input
@@ -332,16 +344,31 @@ const SchedulerWidgetComponent = ({
                       </button>
                     </div>
                   )}
+                  {canReschedule &&
+                    isScheduled && (
+                      <div className="input-group-append">
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={() => {
+                            toggleModal(true);
+                          }}
+                        >
+                          Reschedule
+                        </button>
+                      </div>
+                    )}
                 </div>
-                {isReserved && (
-                  <Timer
-                    event={event}
-                    isScheduled={isScheduled}
-                    timeout={timeout}
-                    timeoutCallback={() => setExpired(true)}
-                    handleEventDelete={handleEventDelete}
-                  />
-                )}
+                {!scheduling &&
+                  isReserved && (
+                    <Timer
+                      event={event}
+                      isScheduled={isScheduled}
+                      timeout={timeout}
+                      timeoutCallback={() => setExpired(true)}
+                      handleEventDelete={handleEventDelete}
+                    />
+                  )}
               </div>
             )}
           </div>
@@ -458,11 +485,12 @@ const SchedulerWidgetComponent = ({
                       ))}
                     </div>
                   )}
-                  {loadingData && (
-                    <div className="text-center">
-                      <span className="fa fa-spinner fa-spin fa-lg" />
-                    </div>
-                  )}
+                  {!scheduling &&
+                    loadingData && (
+                      <div className="text-center">
+                        <span className="fa fa-spinner fa-spin fa-lg" />
+                      </div>
+                    )}
                   {!loadingData &&
                     timeOptions.length === 0 && (
                       <div className="text-center text-muted">
@@ -472,7 +500,9 @@ const SchedulerWidgetComponent = ({
                         </strong>
                       </div>
                     )}
-                  {!loadingData && timeOptions.length > 0 && timeOptions}
+                  {(scheduling || !loadingData) &&
+                    timeOptions.length > 0 &&
+                    timeOptions}
                 </div>
               )}
             </div>
@@ -484,7 +514,14 @@ const SchedulerWidgetComponent = ({
               disabled={scheduling || !date || !time}
               onClick={scheduleEvent}
             >
-              Reserve Time
+              {scheduling ? (
+                <span>
+                  <span className="fa fa-spinner fa-spin" />
+                  <span> Reserving</span>
+                </span>
+              ) : (
+                'Reserve Time'
+              )}
             </button>
           </ModalFooter>
         </Modal>
@@ -729,12 +766,13 @@ const scheduleEvent = ({
   },
   fetchSchedulerData,
   verifyScheduledEvent,
+  completeReschedule,
   eventUpdated,
 }) => () => {
   dispatch(actions.setScheduling(true));
   if (false) {
-    // TODO validate values
-    dispatch(actions.addSchedulingErrors(['Test errors']));
+    // TODO perform validations
+    // dispatch(actions.addSchedulingErrors(['Test errors']));
     return;
   }
   const interval = parseInt(timeInterval, 10);
@@ -747,22 +785,49 @@ const scheduleEvent = ({
   };
 
   if (event) {
-    updateScheduledEvent(event.id, values).then(
-      ({ submission, serverError, errors }) => {
-        if (serverError) {
-          dispatch(
-            actions.addSchedulingErrors([
-              serverError.error || serverError.statusText,
-            ]),
-          );
-        } else if (errors) {
-          dispatch(actions.addSchedulingErrors(errors));
-        } else {
-          dispatch(actions.setState({ event: submission }));
-          fetchSchedulerData(verifyScheduledEvent);
-        }
-      },
-    );
+    if (event.coreState === 'Draft') {
+      updateScheduledEvent(event.id, values).then(
+        ({ submission, serverError, errors }) => {
+          if (serverError) {
+            dispatch(
+              actions.addSchedulingErrors([
+                serverError.error || serverError.statusText,
+              ]),
+            );
+          } else if (errors) {
+            dispatch(actions.addSchedulingErrors(errors));
+          } else {
+            dispatch(actions.setState({ event: submission }));
+            fetchSchedulerData(verifyScheduledEvent);
+          }
+        },
+      );
+    } else {
+      console.log('### START RESCHEDULING');
+      // Reschedule event: create new, verify, update existing, delete new
+      createScheduledEvent(values).then(
+        ({ submission, serverError, errors }) => {
+          if (serverError) {
+            dispatch(
+              actions.addSchedulingErrors([
+                serverError.error || serverError.statusText,
+              ]),
+            );
+          } else if (errors) {
+            dispatch(actions.addSchedulingErrors(errors));
+          } else {
+            console.log('### VERIFY RESCHEDULED DRAFT');
+            dispatch(
+              actions.setState({
+                event: submission,
+                rescheduleEvent: event,
+              }),
+            );
+            fetchSchedulerData(() => verifyScheduledEvent(completeReschedule));
+          }
+        },
+      );
+    }
   } else {
     createScheduledEvent(values).then(({ submission, serverError, errors }) => {
       if (serverError) {
@@ -786,6 +851,7 @@ const verifyScheduledEvent = ({
   stateData: {
     durationMultiplier,
     event,
+    rescheduleEvent,
     scheduler: {
       values: {
         'Time Interval': timeInterval,
@@ -797,7 +863,7 @@ const verifyScheduledEvent = ({
   },
   toggleModal,
   eventUpdated,
-}) => () => {
+}) => successCallback => {
   const dateTimeslots = timeslots[event.values['Date']] || [];
   const interval = parseInt(timeInterval, 10);
   const timeMoment = moment.tz(event.values['Time'], TIME_FORMAT, timezone);
@@ -865,7 +931,8 @@ const verifyScheduledEvent = ({
         dispatch(
           actions.setState({
             time: '',
-            event: null,
+            event: rescheduleEvent,
+            rescheduleEvent: null,
           }),
         );
         dispatch(
@@ -875,19 +942,97 @@ const verifyScheduledEvent = ({
         );
       });
     } else {
+      if (typeof successCallback === 'function') {
+        successCallback(event, rescheduleEvent);
+      } else {
+        dispatch(actions.setState({ scheduling: false }));
+        if (typeof eventUpdated === 'function') {
+          eventUpdated(event);
+        }
+        toggleModal(false);
+      }
+    }
+  } else {
+    if (typeof successCallback === 'function') {
+      successCallback(event, rescheduleEvent);
+    } else {
       dispatch(actions.setState({ scheduling: false }));
       if (typeof eventUpdated === 'function') {
         eventUpdated(event);
       }
       toggleModal(false);
     }
-  } else {
-    dispatch(actions.setState({ scheduling: false }));
-    if (typeof eventUpdated === 'function') {
-      eventUpdated(event);
-    }
-    toggleModal(false);
   }
+};
+
+const completeReschedule = ({
+  dispatch,
+  stateData: {
+    durationMultiplier,
+    event,
+    rescheduleEvent,
+    scheduler: {
+      values: {
+        'Time Interval': timeInterval,
+        Timezone: timezone = moment.tz.guess(),
+      },
+    },
+    events,
+    timeslots,
+  },
+  toggleModal,
+  appointmentRequestId,
+  rescheduleDataMap,
+  setRescheduled,
+}) => () => {
+  console.log('### COMPLETE RESCHEDULING');
+  // Update scheduled event, create Reschedule record, and delete temp draft
+  updateScheduledEvent(rescheduleEvent.id, {
+    'Scheduler Id': event.values['Scheduler Id'],
+    'Event Type': event.values['Event Type'],
+    Date: event.values['Date'],
+    Time: event.values['Time'],
+    Duration: event.values['Duration'],
+  }).then(({ submission, serverError, errors }) => {
+    if (serverError || errors) {
+      dispatch(
+        actions.addSchedulingErrors([
+          'Failed to update your current appointment.',
+        ]),
+      );
+      dispatch(
+        actions.setState({
+          event: rescheduleEvent,
+          rescheduleEvent: null,
+        }),
+      );
+    } else {
+      createRescheduleEvent({
+        'Scheduled Event Id': submission.id,
+        'Request Id': appointmentRequestId,
+        'Data Map': JSON.stringify(rescheduleDataMap),
+      }).then(({ serverError: se, errors: e }) => {
+        if (se || e) {
+          dispatch(
+            actions.addSchedulingErrors([
+              'Your appointment was rescheduled, but the details failed to update. Please contact an administrator.',
+            ]),
+          );
+        }
+        deleteScheduledEvent(event.id);
+        dispatch(
+          actions.setState({
+            scheduling: false,
+            event: submission,
+            rescheduleEvent: null,
+          }),
+        );
+        toggleModal(false);
+        setRescheduled(true);
+        console.log('EVERYTHING WORKED YAY');
+      });
+    }
+  });
 };
 
 const calculateAvailableTimeslots = ({
@@ -904,16 +1049,23 @@ const calculateAvailableTimeslots = ({
     overrides,
     events,
     event,
+    rescheduleEvent,
   },
   calculateTotalTimeslots,
 }) => () => {
   const interval = parseInt(timeInterval, 10);
   const timeslots = calculateTotalTimeslots();
-  const currentEventId = (event && event.id) || '';
+  const currentEventIds = [
+    (event && event.id) || null,
+    (rescheduleEvent && rescheduleEvent.id) || null,
+  ].filter(e => e);
 
-  const currentEvents = events.filter(
-    e => e.values['Date'] === date && e.id !== currentEventId,
-  );
+  const currentEvents =
+    currentEventIds.length > 0
+      ? events.filter(
+          e => e.values['Date'] === date && !currentEventIds.includes(e.id),
+        )
+      : events;
   currentEvents.forEach(e => {
     const startTime = moment.tz(
       `${e.values['Date']}T${e.values['Time']}`,
@@ -1019,6 +1171,9 @@ const toggleModal = ({
     if (open && event) {
       dispatch(actions.editEvent());
     }
+    if (!open) {
+      dispatch(actions.clearSchedulingErrors());
+    }
     fetchSchedulerData();
     setOpenModal(open);
     setOpenCalendar(false);
@@ -1048,6 +1203,7 @@ const handleEventDelete = ({
 
 export const SchedulerWidget = compose(
   withState('expired', 'setExpired', false),
+  withState('rescheduled', 'setRescheduled', false),
   withState('openModal', 'setOpenModal', false),
   withState('openCalendar', 'setOpenCalendar', false),
   withReducer(
@@ -1095,6 +1251,7 @@ export const SchedulerWidget = compose(
   }),
   withHandlers({
     verifyScheduledEvent,
+    completeReschedule,
   }),
   withHandlers({
     scheduleEvent,

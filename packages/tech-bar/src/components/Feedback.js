@@ -1,7 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { List } from 'immutable';
 import {
   compose,
   lifecycle,
@@ -22,6 +21,7 @@ export const FeedbackComponent = ({
   kapp,
   techBarId,
   techBar,
+  loading,
   getFilteredAppointments,
   handleExperienceClick,
   experience,
@@ -105,6 +105,7 @@ export const FeedbackComponent = ({
                   name="appointment-search-input"
                   id="appointment-search-input"
                   className="form-control"
+                  autoComplete="off"
                   value={input}
                   onChange={e => {
                     setInput(e.target.value);
@@ -136,11 +137,16 @@ export const FeedbackComponent = ({
                       )}
                     </div>
                   ))}
-                  {filteredAppointments.size === 0 && (
-                    <div className="alert alert-warning text-center">
-                      No appointments found.
-                    </div>
-                  )}
+                  {filteredAppointments.size === 0 &&
+                    (loading ? (
+                      <div className="text-center">
+                        <span className="fa fa-spinner fa-spin" />
+                      </div>
+                    ) : (
+                      <div className="alert alert-warning text-center">
+                        No appointments found.
+                      </div>
+                    ))}
                 </div>
               )}
             </div>
@@ -220,9 +226,14 @@ const handleExperienceClick = ({
   feedbackIdentityAvailable,
   setExperience,
   handleSubmitFeedback,
+  techBarId,
+  fetchTodayAppointments,
+  fetchTodayWalkIns,
 }) => value => {
   if (feedbackIdentityAvailable) {
     setExperience(value);
+    fetchTodayAppointments(techBarId);
+    fetchTodayWalkIns(techBarId);
   } else {
     handleSubmitFeedback({ Experience: value });
   }
@@ -289,10 +300,4 @@ export const Feedback = compose(
     handleSubmitFeedback,
   }),
   withHandlers({ handleExperienceClick }),
-  lifecycle({
-    componentDidMount() {
-      this.props.fetchTodayAppointments(this.props.techBarId);
-      this.props.fetchTodayWalkIns(this.props.techBarId);
-    },
-  }),
 )(FeedbackComponent);

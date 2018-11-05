@@ -5,6 +5,7 @@ import { compose, withProps } from 'recompose';
 import { PageTitle, selectCurrentKapp, ErrorNotFound } from 'common';
 import { CheckIn } from './CheckIn';
 import { Feedback } from './Feedback';
+import { Overhead } from './Overhead';
 
 export const DisplayComponent = ({ kapp, techBar, displayMode }) => (
   <Fragment>
@@ -17,6 +18,7 @@ export const DisplayComponent = ({ kapp, techBar, displayMode }) => (
           </div>
           {displayMode === 'checkin' && <CheckIn techBar={techBar} />}
           {displayMode === 'feedback' && <Feedback techBar={techBar} />}
+          {displayMode === 'overhead' && <Overhead techBar={techBar} />}
         </Fragment>
       )}
       {!techBar && <ErrorNotFound />}

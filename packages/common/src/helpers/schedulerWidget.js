@@ -9,6 +9,7 @@ import {
   SCHEDULER_AVAILABILITY_FORM_SLUG,
   SCHEDULER_OVERRIDE_FORM_SLUG,
   SCHEDULED_EVENT_FORM_SLUG,
+  RESCHEDULE_EVENT_FORM_SLUG,
 } from '../redux/modules/schedulers';
 import axios from 'axios';
 
@@ -147,6 +148,16 @@ export const updateScheduledEvent = (id, values = {}, submit) => {
   });
 };
 
+export const createRescheduleEvent = values => {
+  return CoreAPI.createSubmission({
+    datastore: true,
+    formSlug: RESCHEDULE_EVENT_FORM_SLUG,
+    values,
+    completed: false,
+    include: 'details,values',
+  });
+};
+
 const handleErrors = error => {
   if (error instanceof Error && !error.response) {
     // When the error is an Error object an exception was thrown in the process.
@@ -245,6 +256,10 @@ export const types = {
   SET_EVENTS: namespace('schedulerWidget', 'SET_EVENTS'),
   SET_SCHEDULING: namespace('schedulerWidget', 'SET_SCHEDULING'),
   ADD_SCHEDULING_ERRORS: namespace('schedulerWidget', 'ADD_SCHEDULING_ERRORS'),
+  CLEAR_SCHEDULING_ERRORS: namespace(
+    'schedulerWidget',
+    'CLEAR_SCHEDULING_ERRORS',
+  ),
   SET_EVENT: namespace('schedulerWidget', 'SET_EVENT'),
   SET_TIMELINE: namespace('schedulerWidget', 'SET_EVENT'),
   ADD_TIMESLOTS: namespace('schedulerWidget', 'ADD_TIMESLOTS'),
@@ -268,6 +283,7 @@ export const actions = {
   setEvents: withPayload(types.SET_EVENTS),
   setScheduling: withPayload(types.SET_SCHEDULING),
   addSchedulingErrors: withPayload(types.ADD_SCHEDULING_ERRORS),
+  clearSchedulingErrors: noPayload(types.CLEAR_SCHEDULING_ERRORS),
   setEvent: withPayload(types.SET_EVENT),
   addTimeslots: withPayload(types.ADD_TIMESLOTS),
   callback: withPayload(types.CALLBACK),
@@ -294,6 +310,7 @@ export const State = Record({
   scheduling: false,
   schedulingErrors: new List(),
   event: null,
+  rescheduleEvent: null,
   timeslots: {},
 });
 
@@ -337,6 +354,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state
         .update('schedulingErrors', errors => errors.push(...payload))
         .set('scheduling', false);
+    case types.CLEAR_SCHEDULING_ERRORS:
+      return state.set('schedulingErrors', new List());
     case types.SET_EVENT:
       return state.set('event', payload);
     case types.ADD_TIMESLOTS:

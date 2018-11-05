@@ -1,13 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import {
-  compose,
-  lifecycle,
-  withHandlers,
-  withState,
-  withProps,
-} from 'recompose';
+import { compose, withHandlers, withState, withProps } from 'recompose';
 import {
   selectCurrentKapp,
   ErrorNotFound,
@@ -32,6 +26,7 @@ export const CheckInComponent = ({
   kapp,
   techBarId,
   techBar,
+  loading,
   appointments,
   showDetails,
   toggleShowDetails,
@@ -90,6 +85,7 @@ export const CheckInComponent = ({
                     name="appointment-search-input"
                     id="appointment-search-input"
                     className="form-control"
+                    autoComplete="off"
                     value={input}
                     onChange={e => setInput(e.target.value)}
                   />
@@ -142,11 +138,16 @@ export const CheckInComponent = ({
                         </button>
                       </div>
                     ))}
-                    {filteredAppointments.size === 0 && (
-                      <div className="alert alert-warning text-center">
-                        No appointments found.
-                      </div>
-                    )}
+                    {filteredAppointments.size === 0 &&
+                      (loading ? (
+                        <div className="text-center">
+                          <span className="fa fa-spinner fa-spin" />
+                        </div>
+                      ) : (
+                        <div className="alert alert-warning text-center">
+                          No appointments found.
+                        </div>
+                      ))}
                   </div>
                 )}
               </div>
@@ -237,10 +238,15 @@ const toggleShowDetails = ({
   setShowDetails,
   setInput,
   setWalkInUser,
+  fetchTodayAppointments,
+  techBarId,
 }) => name => {
   setShowDetails(showDetails === name ? null : name);
   setInput('');
   setWalkInUser(null);
+  if (name === 'appointment') {
+    fetchTodayAppointments(techBarId);
+  }
 };
 
 const getFilteredAppointments = ({ input, appointments }) => () =>
@@ -266,10 +272,5 @@ export const CheckIn = compose(
   withHandlers({
     toggleShowDetails,
     getFilteredAppointments,
-  }),
-  lifecycle({
-    componentDidMount() {
-      this.props.fetchTodayAppointments(this.props.techBarId);
-    },
   }),
 )(CheckInComponent);

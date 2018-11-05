@@ -55,21 +55,21 @@ export const actions = {
 };
 
 export const State = Record({
-  loading: false,
+  loading: true,
   errors: [],
   appointment: null,
   upcoming: {
-    loading: false,
+    loading: true,
     errors: [],
     data: new List(),
   },
   past: {
-    loading: false,
+    loading: true,
     errors: [],
     data: new List(),
   },
   today: {
-    loading: false,
+    loading: true,
     errors: [],
     data: new List(),
   },

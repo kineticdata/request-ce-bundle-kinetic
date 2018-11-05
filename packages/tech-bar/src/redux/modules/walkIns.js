@@ -23,11 +23,11 @@ export const actions = {
 };
 
 export const State = Record({
-  loading: false,
+  loading: true,
   errors: [],
   walkIn: null,
   today: {
-    loading: false,
+    loading: true,
     errors: [],
     data: new List(),
   },

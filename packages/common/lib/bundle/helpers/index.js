@@ -200,6 +200,8 @@ bundle.helpers.confirm = (options = {}) => {
  *    eventType               string *required if showTypeSelector != true*
  *    scheduledEventId        string
  *    eventUpdated            string
+ *    canReschedule           boolean [Default: false]
+ *    performSubmit           function action.continue function from submit event
  *  }
  * @param form      Kinetic form object *required*
  * @param fieldMap  Map *required*
@@ -232,6 +234,8 @@ bundle.helpers.schedulerWidget = (div, props = {}, form, fieldMap = {}) => {
     ReactDOM.render(
       <SchedulerWidget
         {...props}
+        appointmentRequestId={form.submission().id()}
+        rescheduleDataMap={fieldMap}
         eventUpdated={event => {
           if (fieldMap.scheduledEventId && form.getFieldByName(fieldMap.scheduledEventId)) {
             form.getFieldByName(fieldMap.scheduledEventId).value(event.id);
