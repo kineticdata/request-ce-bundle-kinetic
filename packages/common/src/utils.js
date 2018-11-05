@@ -179,17 +179,16 @@ export const getConfig = ({
   }
 };
 
-export const getGroupedDiscussions = discussions =>
-  discussions
-    .sort(
-      (s1, s2) =>
-        moment(s1.lastMessageAt).isBefore(s2.lastMessageAt)
-          ? 1
-          : moment(s1.lastMessageAt).isAfter(s2.lastMessageAt)
-            ? -1
-            : 0,
-    )
-    .groupBy(discussion => moment(discussion.lastMessageAt).fromNow());
+const getLastMessageAt = discussion =>
+  discussion.messages.items[0]
+    ? discussion.messages.items[0].createdAt
+    : discussion.createdAt;
+
+export const getGroupedDiscussions = discussions => {
+  return discussions.groupBy(discussion =>
+    moment(getLastMessageAt(discussion)).fromNow(),
+  );
+};
 
 export const calculateDateRange = (now, range) => {
   if (!range) {
