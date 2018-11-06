@@ -24,7 +24,11 @@ export function* fetchSubmissionsSaga({ payload: { coreState } }) {
 
   //Add some of the optional parameters to the search
   if (coreState && coreState === 'Draft') {
-    searchBuilder.eq('createdBy', username);
+    searchBuilder
+      .or()
+      .eq('createdBy', username)
+      .eq(`values[${constants.REQUESTED_BY_FIELD}]`, username)
+      .end();
   } else {
     searchBuilder
       .or()
