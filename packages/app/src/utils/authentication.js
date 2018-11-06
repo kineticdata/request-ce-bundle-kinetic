@@ -16,5 +16,5 @@ export const login = (username, password) =>
   );
 
 export const coreOauthAuthorizeUrl = () => {
-  return `/app/oauth/authorize?grant_type=implicit&client_id=${OAUTH_CLIENT_ID}&response_type=token`;
+  return `${bundle.spaceLocation()}/app/oauth/authorize?grant_type=implicit&client_id=${OAUTH_CLIENT_ID}&response_type=token`;
 };
