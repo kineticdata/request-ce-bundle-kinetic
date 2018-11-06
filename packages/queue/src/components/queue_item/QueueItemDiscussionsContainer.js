@@ -38,7 +38,7 @@ const handleCreateDiscussion = props => () => {
     description: props.queueItem.values['Details'] || '',
     relatedItem: {
       type: 'Submission',
-      key: `${props.queueItem.id}`,
+      key: props.queueItem.id,
     },
     owningUsers,
     owningTeams,

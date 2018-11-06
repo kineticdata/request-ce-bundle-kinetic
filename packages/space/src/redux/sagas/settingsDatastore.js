@@ -419,7 +419,7 @@ export function* fetchSubmissionSaga(action) {
       token,
       relatedItem: {
         type: 'Datastore Submission',
-        key: `${submission.form.slug}/${submission.id}`,
+        key: submission.id,
       },
     });
 

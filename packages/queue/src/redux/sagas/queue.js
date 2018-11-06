@@ -245,7 +245,7 @@ export function* fetchCurrentItemTask(action) {
       token,
       relatedItem: {
         type: 'Submission',
-        key: `${submission.id}`,
+        key: submission.id,
       },
     });
 
@@ -276,7 +276,7 @@ export function* fetchRelatedDiscussions(action) {
     token,
     relatedItem: {
       type: 'Submission',
-      key: `${action.payload}`,
+      key: action.payload,
     },
   });
 

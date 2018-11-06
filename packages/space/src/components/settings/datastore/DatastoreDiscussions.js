@@ -78,7 +78,7 @@ const createDiscussion = props => () => {
     description: props.submission.form.name || '',
     relatedItem: {
       type: 'Datastore Submission',
-      key: `${props.submission.form.slug}/${props.submission.id}`,
+      key: props.submission.id,
     },
     onSuccess: (discussion, _relatedItem) => {
       props.setCurrentDiscussion(discussion);
