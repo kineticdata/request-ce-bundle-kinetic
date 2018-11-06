@@ -272,7 +272,7 @@ export const FormSubmissionsContainer = ({
                       </small>
                     </div>
                   )}
-                <table className="table table-sm table-striped settings-table">
+                <table className="table table-sm table-striped table--settings">
                   <thead className="d-none d-md-table-header-group sortable">
                     <tr>
                       {visibleColumns.map(c => {
@@ -288,6 +288,7 @@ export const FormSubmissionsContainer = ({
                           '';
                         return (
                           <th
+                            scope="col"
                             key={`thead-${c.type}-${c.name}`}
                             className={`d-sm-none d-md-table-cell
                               ${sortClass}
@@ -298,12 +299,12 @@ export const FormSubmissionsContainer = ({
                           </th>
                         );
                       })}
-                      <th className="sort-disabled" />
+                      <th width="10%" className="sort-disabled" />
                     </tr>
                   </thead>
                   <thead className="d-md-none">
                     <tr>
-                      <th>
+                      <th scope="col">
                         <div className="input-group">
                           <div className="input-group-prepend">
                             <span className="input-group-text">Sort By</span>

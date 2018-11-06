@@ -118,7 +118,7 @@ export function hasRobotSchedules(id, callback) {
   const query = new CoreAPI.SubmissionSearch(true);
   query.include('details,values');
   query.limit('1');
-  query.index('values[Robot ID],values[Schedule Name]:UNIQUE');
+  query.index('values[Robot ID],values[Robot Name]:UNIQUE');
   query.eq('values[Robot ID]', id);
 
   CoreAPI.searchSubmissions({

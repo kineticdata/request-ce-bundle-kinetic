@@ -247,7 +247,7 @@ export const NotificationMenuComponent = ({
           <label htmlFor="notification-menu-datastore">Datastore?</label>
           <select
             id="notification-menu-datastore"
-            className="form-control"
+            className="form-control form-control-sm"
             value={isDatastore}
             onChange={toggleIsDatastore}
           >
@@ -261,7 +261,7 @@ export const NotificationMenuComponent = ({
           <label htmlFor="notification-menu-kapp">Kapp</label>
           <select
             id="notification-menu-kapp"
-            className="form-control"
+            className="form-control form-control-sm"
             value={selectedKapp ? selectedKapp.slug : ''}
             onChange={handleKappSelect}
           >
@@ -278,7 +278,7 @@ export const NotificationMenuComponent = ({
         <label htmlFor="notification-menu-form">Form</label>
         <select
           id="notification-menu-form"
-          className="form-control"
+          className="form-control form-control-sm"
           value={selectedForm ? selectedForm.slug : ''}
           onChange={handleFormSelect}
         >
@@ -298,6 +298,8 @@ export const NotificationMenuComponent = ({
           )}
         </select>
       </div>
+    </div>
+    <div className="form-row">
       <div className="form-group col-md-5">
         <label htmlFor="">Dynamic Replacement Value</label>
         <UncontrolledButtonDropdown>

@@ -6,6 +6,7 @@ import {
 } from './notifications';
 import { Alert } from '../../../src/components/notifications/Alert';
 import { Confirm } from '../../../src/components/notifications/Confirm';
+import { SchedulerWidget } from '../../../src/components/scheduler/SchedulerWidget';
 
 // Ensure the bundle global object exists
 const bundle = typeof window.bundle !== "undefined" ? window.bundle : {};
@@ -185,4 +186,84 @@ bundle.helpers.confirm = (options = {}) => {
   />, div);
   // Disable element if disable option is true
   if (opts.disable) { opts.element.disabled = true; }
+};
+
+/**
+ * Displays the sheduler widget to allow users to shcedule a time.
+ *
+ * @param div       DOM element *required*
+ *    The element into which the scheduler should be inserted.
+ * @param props     {
+ *    showSchedulerSelector   boolean [Default: false]
+ *    schedulerId             string *required if showSchedulerSelector != true*
+ *    showTypeSelector        boolean [Default: false]
+ *    eventType               string *required if showTypeSelector != true*
+ *    scheduledEventId        string
+ *    eventUpdated            string
+ *    canReschedule           boolean [Default: false]
+ *    performSubmit           function action.continue function from submit event
+ *  }
+ * @param form      Kinetic form object *required*
+ * @param fieldMap  Map *required*
+ *    A map of scheduled event values to form fields that should be updated on
+ *    event creation, update, or delete.
+ *    Available values:
+ *      scheduledEventId *required*
+ *      eventDate
+ *      eventTime
+ *      duration
+ */
+bundle.helpers.schedulerWidget = (div, props = {}, form, fieldMap = {}) => {
+  /*
+    TODO
+    - Make showSchedulerSelector and showTypeSelector work in widget and update
+    corresponding fields with fieldMap
+  */
+  if (
+    (!props.showSchedulerSelector && !props.schedulerId)
+    || (!props.showTypeSelector && !props.eventType)
+  ) {
+    ReactDOM.unmountComponentAtNode(div);
+  } else {
+    if (typeof props.performSubmit === 'function') {
+      if (Object.keys(form.validate()).length > 0) {
+        props.performSubmit();
+        return;
+      }
+    }
+    ReactDOM.render(
+      <SchedulerWidget
+        {...props}
+        appointmentRequestId={form.submission().id()}
+        rescheduleDataMap={fieldMap}
+        eventUpdated={event => {
+          if (fieldMap.scheduledEventId && form.getFieldByName(fieldMap.scheduledEventId)) {
+            form.getFieldByName(fieldMap.scheduledEventId).value(event.id);
+          }
+          if (fieldMap.eventDate && form.getFieldByName(fieldMap.eventDate)) {
+            form.getFieldByName(fieldMap.eventDate).value(event.values['Date']);
+          }
+          if (fieldMap.eventTime && form.getFieldByName(fieldMap.eventTime)) {
+            form.getFieldByName(fieldMap.eventTime).value(event.values['Time']);
+          }
+          if (fieldMap.duration && form.getFieldByName(fieldMap.duration)) {
+            form.getFieldByName(fieldMap.duration).value(event.values['Duration']);
+          }
+        }}
+        eventDeleted={() => {
+          if (fieldMap.scheduledEventId && form.getFieldByName(fieldMap.scheduledEventId)) {
+            form.getFieldByName(fieldMap.scheduledEventId).value('');
+          }
+          if (fieldMap.eventDate && form.getFieldByName(fieldMap.eventDate)) {
+            form.getFieldByName(fieldMap.eventDate).value('');
+          }
+          if (fieldMap.eventTime && form.getFieldByName(fieldMap.eventTime)) {
+            form.getFieldByName(fieldMap.eventTime).value('');
+          }
+          if (fieldMap.duration && form.getFieldByName(fieldMap.duration)) {
+            form.getFieldByName(fieldMap.duration).value('');
+          }
+        }}
+      />, div);
+    }
 };

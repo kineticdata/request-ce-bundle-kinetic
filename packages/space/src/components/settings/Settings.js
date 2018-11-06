@@ -3,12 +3,18 @@ import { Link } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import { Icon, PageTitle } from 'common';
+import {
+  Icon,
+  PageTitle,
+  Schedulers,
+  selectHasRoleSchedulerAdmin,
+  selectHasRoleSchedulerManager,
+} from 'common';
 
 import { SpaceSettings } from './space_settings/SpaceSettings';
 import { Notifications } from './notifications/Notifications';
 import { Datastore } from './datastore/Datastore';
-import { Robots } from './robots/Robots';
+import { RobotsWrapper } from './robots/RobotsWrapper';
 import { Users } from './users/Users';
 import { Profile } from './profile/Profile';
 import { Teams } from './teams/Teams';
@@ -20,10 +26,24 @@ export const SettingsComponent = () => (
     <Route path="/settings/profile" component={Profile} />
     <Route path="/settings/system" component={SpaceSettings} />
     <Route path="/settings/datastore" component={Datastore} />
-    <Route path="/settings/robots" component={Robots} />
+    <Route path="/settings/robots" component={RobotsWrapper} />
     <Route path="/settings/users" component={Users} />
     <Route path="/settings/notifications" component={Notifications} />
     <Route path="/settings/teams" component={Teams} />
+    <Route
+      path="/settings/schedulers"
+      render={props => (
+        <Schedulers
+          {...props}
+          breadcrumbs={
+            <Fragment>
+              <Link to="/">home</Link> /{` `}
+              <Link to="/settings">settings</Link> /{` `}
+            </Fragment>
+          }
+        />
+      )}
+    />
     <Route component={SettingsNavigation} />
   </Switch>
 );
@@ -56,7 +76,11 @@ const SettingsCard = ({ path, icon, name, description }) => (
   </Link>
 );
 
-const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
+const SettingsNavigationComponent = ({
+  isSpaceAdmin,
+  isSchedulerAdmin,
+  isSchedulerManager,
+}) => (
   <div className="page-container page-container--space-settings">
     <PageTitle parts={['Settings']} />
     <div className="page-panel page-panel--datastore-content">
@@ -119,6 +143,14 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
             />
           </Fragment>
         )}
+        {(isSchedulerAdmin || isSchedulerManager) && (
+          <SettingsCard
+            name="Schedulers"
+            path={`/settings/schedulers`}
+            icon="fa-calendar"
+            description="View, Create and Manage Schedulers"
+          />
+        )}
       </div>
     </div>
   </div>
@@ -126,6 +158,8 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
 
 const mapStateToProps = state => ({
   isSpaceAdmin: state.app.profile.spaceAdmin,
+  isSchedulerAdmin: selectHasRoleSchedulerAdmin(state),
+  isSchedulerManager: selectHasRoleSchedulerManager(state),
 });
 
 export const SettingsNavigation = compose(

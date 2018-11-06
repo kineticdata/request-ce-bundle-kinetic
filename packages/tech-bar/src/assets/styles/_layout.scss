@@ -1,0 +1,124 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Layout ~ Tech Bar
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.package-layout--tech-bar {
+  // Tech Bar Page Container
+  .page-container {
+    width: 100%;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    margin-right: auto;
+    margin-left: auto;
+    &--no-padding {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .home-title {
+      color: #343434;
+      font-size: 1.625rem;
+      font-weight: 600;
+      line-height: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .tech-bar-display {
+      &__small {
+        max-width: 800px;
+        margin: auto;
+      }
+
+      .check-in-option {
+        @include border-radius(1rem);
+        width: 100%;
+        font-size: 1.6rem;
+        line-height: 10rem;
+      }
+
+      .experience-options {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+
+        button {
+          @include border-radius(100%);
+          flex-basis: 35%;
+          padding: 0;
+          font-size: 22.4vw;
+          @media all and (min-width: 849px) {
+            font-size: 190px;
+          }
+
+          &:before {
+            content: '';
+            display: inline-block;
+            vertical-align: middle;
+            padding-top: 100%;
+          }
+
+          span {
+            vertical-align: middle;
+          }
+        }
+      }
+
+      .details-container {
+        width: 100%;
+
+        .header {
+          @include border-top-radius(1rem);
+          font-size: 1.2rem;
+          line-height: 2.25rem;
+          text-align: center;
+          position: relative;
+
+          button:last-child {
+            position: absolute;
+            top: 0;
+            right: 0;
+          }
+        }
+
+        .body {
+          @include border-bottom-radius(1rem);
+          border: 1px solid $gray3;
+          border-top: none;
+          background-color: $white;
+
+          form,
+          .form {
+            @include border-bottom-radius(1rem);
+            overflow: visible;
+          }
+        }
+      }
+
+      .overhead-display {
+        h1 {
+          font-size: 4.4rem;
+          font-weight: bold;
+          color: $primary;
+        }
+
+        ul.overhead-display-list {
+          list-style: none;
+          li {
+            font-size: 2.4rem;
+          }
+        }
+      }
+    }
+  }
+
+  &__full-screen {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1035;
+    background-color: $black-3;
+    overflow-y: auto;
+  }
+}

@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 import { compose, withProps } from 'recompose';
 import { bundle } from 'react-kinetic-core';
 import { selectHasSharedTaskEngine } from '../../redux/modules/spaceApp';
+import {
+  selectHasRoleSchedulerAdmin,
+  selectHasRoleSchedulerManager,
+} from 'common';
 
 import { NOTIFICATIONS_FORM_SLUG } from '../../redux/modules/settingsNotifications';
 import { ROBOT_DEFINITIONS_FORM_SLUG } from '../../redux/modules/settingsRobots';
@@ -16,6 +20,7 @@ export const SidebarComponent = ({
   showDatastore,
   showNotifications,
   showRobots,
+  showSchedulers,
 }) => (
   <div className="sidebar space-sidebar">
     <Link to={settingsBackPath} className="nav-return">
@@ -94,6 +99,16 @@ export const SidebarComponent = ({
                 <span className="fa fa-fw fa-angle-right" />
               </NavLink>
             )}
+            {showSchedulers && (
+              <NavLink
+                to="/settings/schedulers"
+                className="nav-link"
+                activeClassName="active"
+              >
+                Schedulers
+                <span className="fa fa-fw fa-angle-right" />
+              </NavLink>
+            )}
           </li>
         </ul>
       )}
@@ -135,6 +150,8 @@ export const mapStateToProps = state => ({
   spaceAdmin: state.app.profile.spaceAdmin,
   pathname: state.router.location.pathname,
   hasSharedTaskEngine: selectHasSharedTaskEngine(state),
+  isSchedulerAdmin: selectHasRoleSchedulerAdmin(state),
+  isSchedulerManager: selectHasRoleSchedulerManager(state),
 });
 
 export const Sidebar = compose(
@@ -147,5 +164,6 @@ export const Sidebar = compose(
     showRobots: !!props.forms.find(
       form => form.slug === ROBOT_DEFINITIONS_FORM_SLUG,
     ),
+    showSchedulers: props.isSchedulerAdmin || props.isSchedulerManager,
   })),
 )(SidebarComponent);

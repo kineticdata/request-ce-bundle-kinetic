@@ -13,6 +13,7 @@ import { PageTitle } from './components/PageTitle';
 import { ErrorNotFound } from './components/ErrorNotFound';
 import { ErrorUnauthorized } from './components/ErrorUnauthorized';
 import { ErrorUnexpected } from './components/ErrorUnexpected';
+import { Schedulers } from './components/scheduler/Schedulers';
 
 import {
   selectCurrentKapp,
@@ -27,10 +28,15 @@ import {
   types as toastTypes,
 } from './redux/modules/toasts';
 import { actions as modalFormActions } from './redux/modules/modalForm';
+import {
+  selectHasRoleSchedulerAdmin,
+  selectHasRoleSchedulerManager,
+} from './redux/selectors';
 
 import * as Utils from './utils';
 import * as Constants from './constants';
 import * as AttributeSelectors from './components/attribute_selectors';
+import * as TaskActions from './helpers/taskActions';
 
 export {
   KappLink,
@@ -58,4 +64,8 @@ export {
   ErrorUnauthorized,
   ErrorUnexpected,
   AttributeSelectors,
+  Schedulers,
+  selectHasRoleSchedulerAdmin,
+  selectHasRoleSchedulerManager,
+  TaskActions,
 };

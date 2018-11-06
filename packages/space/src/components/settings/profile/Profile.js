@@ -172,7 +172,9 @@ export const EditProfileComponent = ({
                   <tbody>
                     {managerEnabled && (
                       <tr>
-                        <td className="name">Manager</td>
+                        <td scope="row" className="name">
+                          Manager
+                        </td>
                         <td>
                           {manager || <em>No Manager</em>}
                           <button
@@ -186,19 +188,27 @@ export const EditProfileComponent = ({
                     )}
                     {departmentEnabled && (
                       <tr>
-                        <td className="name"> Department </td>
+                        <td scope="row" className="name">
+                          {' '}
+                          Department{' '}
+                        </td>
                         <td> {department || <em> No Department </em>}</td>
                       </tr>
                     )}
                     {organizationEnabled && (
                       <tr>
-                        <td className="name"> Organization </td>
+                        <td scope="row" className="name">
+                          {' '}
+                          Organization{' '}
+                        </td>
                         <td> {organization || <em> No Organization </em>}</td>
                       </tr>
                     )}
                     {siteEnabled && (
                       <tr>
-                        <td className="name">Site</td>
+                        <td scope="row" className="name">
+                          Site
+                        </td>
                         <td>{site || <em>No Site</em>}</td>
                       </tr>
                     )}

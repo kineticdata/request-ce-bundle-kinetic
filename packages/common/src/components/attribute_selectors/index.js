@@ -5,6 +5,7 @@ import { IconSelect } from './IconSelect';
 import { IntegerSelect } from './IntegerSelect';
 import { KappSelect } from './KappSelect';
 import { NotificationTemplateSelect } from './NotificationTemplateSelect';
+import { PeopleSelect } from './PeopleSelect';
 import { TeamSelect } from './TeamSelect';
 
 export {
@@ -15,5 +16,6 @@ export {
   IntegerSelect,
   KappSelect,
   NotificationTemplateSelect,
+  PeopleSelect,
   TeamSelect,
 };

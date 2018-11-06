@@ -30,7 +30,7 @@ const RobotExecutionsListComponent = ({
   robotExecutions,
   robotExecutionsLoading,
   robotExecutionsErrors,
-  scheduleId,
+  robotId,
   match,
   hasNextPage,
   hasPreviousPage,
@@ -41,13 +41,13 @@ const RobotExecutionsListComponent = ({
   const loading =
     robotExecutionsLoading &&
     (robotExecutions.size <= 0 ||
-      (scheduleId !== undefined &&
-        robotExecutions.get(0).values['Schedule ID'] !== scheduleId));
+      (robotId !== undefined &&
+        robotExecutions.get(0).values['Robot ID'] !== robotId));
   return loading ? (
     <Loading />
   ) : (
     <div className="page-container page-container--robots">
-      <PageTitle parts={['Schedules', 'Robots', 'Settings']} />
+      <PageTitle parts={['Robots', 'Settings']} />
       <div className="page-panel page-panel--scrollable page-panel--robots-content">
         <div className="page-title">
           <div className="page-title__wrapper">
@@ -64,7 +64,7 @@ const RobotExecutionsListComponent = ({
             <li role="presentation">
               <NavLink
                 exact
-                to={`/settings/robots/${match.params.scheduleId}`}
+                to={`/settings/robots/${match.params.robotId}`}
                 activeClassName="active"
               >
                 Details
@@ -72,7 +72,7 @@ const RobotExecutionsListComponent = ({
             </li>
             <li role="presentation">
               <NavLink
-                to={`/settings/robots/${match.params.scheduleId}/executions`}
+                to={`/settings/robots/${match.params.robotId}/executions`}
                 activeClassName="active"
               >
                 Executions
@@ -94,10 +94,12 @@ const RobotExecutionsListComponent = ({
           <table className="table table-sm table-striped table-robots">
             <thead className="header">
               <tr>
-                <th>Schedule Name</th>
-                <th width="10%">Status</th>
-                <th>Start</th>
-                <th>End</th>
+                <th scope="col">Robot Name</th>
+                <th scope="col" width="10%">
+                  Status
+                </th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
                 <th width="1%" />
               </tr>
             </thead>
@@ -105,7 +107,7 @@ const RobotExecutionsListComponent = ({
               {robotExecutions.map(execution => {
                 return (
                   <tr key={execution.id}>
-                    <td>{execution.values['Schedule Name']}</td>
+                    <td scope="row">{execution.values['Robot Name']}</td>
                     <td>
                       <span
                         className={`status ${getStatusColor(
@@ -128,7 +130,7 @@ const RobotExecutionsListComponent = ({
                     <td>
                       <Link
                         to={`/settings/robots/${
-                          execution.values['Schedule ID']
+                          execution.values['Robot ID']
                         }/executions/${execution.id}`}
                       >
                         <span>View&nbsp;</span>
@@ -209,14 +211,14 @@ export const RobotExecutionsList = compose(
   ),
   withHandlers({
     handleNextPage: props => () =>
-      props.fetchRobotExecutionsNextPage(props.scheduleId),
+      props.fetchRobotExecutionsNextPage(props.robotId),
     handlePreviousPage: props => () =>
-      props.fetchRobotExecutionsPreviousPage(props.scheduleId),
-    handleReload: props => () => props.fetchRobotExecutions(props.scheduleId),
+      props.fetchRobotExecutionsPreviousPage(props.robotId),
+    handleReload: props => () => props.fetchRobotExecutions(props.robotId),
   }),
   lifecycle({
     componentWillMount() {
-      this.props.fetchRobotExecutions(this.props.match.params.scheduleId);
+      this.props.fetchRobotExecutions(this.props.match.params.robotId);
     },
   }),
 )(RobotExecutionsListComponent);

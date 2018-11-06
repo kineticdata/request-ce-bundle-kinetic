@@ -149,8 +149,8 @@ export function* fetchRobotExecutionsSaga({ payload: { scheduleId } }) {
   query.include('details,values');
   query.limit(ROBOT_EXECUTIONS_PAGE_SIZE);
   query.sortDirection('DESC');
-  query.eq('values[Schedule ID]', scheduleId);
-  query.index('values[Schedule ID],values[Start]');
+  query.eq('values[Robot ID]', scheduleId);
+  query.index('values[Robot ID],values[Start]');
 
   const { submissions, nextPageToken, errors, serverError } = yield call(
     CoreAPI.searchSubmissions,
@@ -201,7 +201,7 @@ export function* fetchNextExecutionsSaga(action) {
     {
       search: query.build(),
       datastore: true,
-      form: 'robot-schedule-next-execution',
+      form: 'robot-next-execution',
     },
   );
 

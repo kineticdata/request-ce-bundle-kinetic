@@ -16,6 +16,14 @@ html {
 .main-container {
   display: flex;
   overflow-y: auto !important;
+
+  &--no-sidebar {
+    position: absolute;
+    top: $header-height;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+  }
 }
 
 .package-layout {

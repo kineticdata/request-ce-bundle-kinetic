@@ -17,6 +17,7 @@ import { actions as layoutActions } from './redux/modules/layout';
 import { App as ServicesApp } from 'services/src/App';
 import { App as QueueApp } from 'queue/src/App';
 import { App as SpaceApp } from 'space/src/App';
+import { App as TechBarApp } from 'tech-bar/src/App';
 
 export const AppComponent = props =>
   !props.loading && (
@@ -24,10 +25,13 @@ export const AppComponent = props =>
       <ToastsContainer />
       <LoginModal />
       <ModalFormContainer />
-      <HeaderContainer hasSidebar toggleSidebarOpen={props.toggleSidebarOpen} />
+      <HeaderContainer
+        hasSidebar={!props.sidebarHidden}
+        toggleSidebarOpen={props.toggleSidebarOpen}
+      />
       <props.AppProvider
         render={({ main, sidebar }) =>
-          sidebar ? (
+          !props.sidebarHidden && sidebar ? (
             <Sidebar
               sidebar={sidebar}
               shadow={false}
@@ -45,7 +49,7 @@ export const AppComponent = props =>
               {main}
             </Sidebar>
           ) : (
-            main
+            <div className="main-container--no-sidebar">{main}</div>
           )
         }
       />
@@ -77,6 +81,8 @@ const getAppProvider = kapp => {
       return ServicesApp;
     case 'queue':
       return QueueApp;
+    case 'tech-bar':
+      return TechBarApp;
     default:
       return SpaceApp;
   }
@@ -97,10 +103,14 @@ export const App = compose(
     const sidebarOpen = shouldSuppressSidebar
       ? props.suppressedSidebarOpen
       : props.sidebarOpen;
+    const sidebarHidden =
+      AppProvider.shouldHideSidebar &&
+      AppProvider.shouldHideSidebar(props.pathname, props.kappSlug);
     return {
       AppProvider,
       shouldSuppressSidebar,
       sidebarOpen,
+      sidebarHidden,
     };
   }),
   withHandlers({
