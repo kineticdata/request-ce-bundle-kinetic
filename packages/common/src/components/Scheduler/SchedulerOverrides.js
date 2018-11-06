@@ -80,20 +80,20 @@ const SchedulerOverridesComponent = ({
         />
       )}
     {overrides.size > 0 && (
-      <table className="table table-sm table-striped table-overrides settings-table">
+      <table className="table table-sm table-striped table-overrides table--settings">
         <thead className="header">
           <tr>
-            <th>Date</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Slots</th>
+            <th scope="col">Date</th>
+            <th scope="col">Start Time</th>
+            <th scope="col">End Time</th>
+            <th scope="col">Slots</th>
             <th />
           </tr>
         </thead>
         <tbody>
           {overrides.map((a, index) => (
             <tr key={`overrides-${index}`}>
-              <td>{formatDate(a.values['Date'])}</td>
+              <td scope="row">{formatDate(a.values['Date'])}</td>
               <td>{formatTime(a.values['Start Time'])}</td>
               <td>{formatTime(a.values['End Time'])}</td>
               <td>{a.values['Slots']}</td>

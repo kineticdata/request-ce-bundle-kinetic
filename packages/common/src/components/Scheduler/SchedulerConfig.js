@@ -64,19 +64,19 @@ const SchedulerConfigComponent = ({
         />
       )}
     {configs.size > 0 && (
-      <table className="table table-sm table-striped table-configs settings-table">
+      <table className="table table-sm table-striped table-configs table--settings">
         <thead className="header">
           <tr>
-            <th>Event Type</th>
-            <th>Duration</th>
-            <th>Status</th>
+            <th scope="col">Event Type</th>
+            <th scope="col">Duration</th>
+            <th scope="col">Status</th>
             <th />
           </tr>
         </thead>
         <tbody>
           {configs.map(config => (
             <tr key={config.values['Event Type']}>
-              <td>{config.values['Event Type']}</td>
+              <td scope="row">{config.values['Event Type']}</td>
               <td>
                 {parseInt(config.values['Duration Multiplier'], 10) *
                   timeInterval}{' '}

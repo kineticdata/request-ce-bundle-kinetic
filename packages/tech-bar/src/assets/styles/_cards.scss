@@ -52,6 +52,8 @@
         h5.card-title {
           margin-top: 0;
           margin-bottom: 0.5rem;
+          display: flex;
+          justify-content: space-between;
         }
         .card-subtitle {
           margin-top: -0.25rem;

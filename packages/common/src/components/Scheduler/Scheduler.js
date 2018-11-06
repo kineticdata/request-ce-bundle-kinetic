@@ -64,17 +64,17 @@ const ManagersTab = ({ loading, managers }) => (
         />
       )}
     {managers && (
-      <table className="table table-sm table-striped table-managers settings-table">
+      <table className="table table-sm table-striped table-managers table--settings">
         <thead className="header">
           <tr>
-            <th>Display Name</th>
-            <th>Username</th>
+            <th scope="col">Display Name</th>
+            <th scope="col">Username</th>
           </tr>
         </thead>
         <tbody>
           {managers.memberships.map(manager => (
             <tr key={manager.user.username}>
-              <td>{manager.user.displayName}</td>
+              <td scope="row">{manager.user.displayName}</td>
               <td>{manager.user.username}</td>
             </tr>
           ))}
@@ -94,17 +94,17 @@ const AgentsTab = ({ loading, agents }) => (
         />
       )}
     {agents && (
-      <table className="table table-sm table-striped table-agents settings-table">
+      <table className="table table-sm table-striped table-agents table--settings">
         <thead className="header">
           <tr>
-            <th>Display Name</th>
-            <th>Username</th>
+            <th scope="col">Display Name</th>
+            <th scope="col">Username</th>
           </tr>
         </thead>
         <tbody>
           {agents.memberships.map(agent => (
             <tr key={agent.user.username}>
-              <td>{agent.user.displayName}</td>
+              <td scope="row">{agent.user.displayName}</td>
               <td>{agent.user.username}</td>
             </tr>
           ))}

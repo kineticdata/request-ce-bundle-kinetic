@@ -42,20 +42,20 @@ const SchedulersListComponent = ({
         <div className="list-wrapper">
           {loading && schedulers.size === 0 && <LoadingMessage />}
           {schedulers.size > 0 && (
-            <table className="table table-sm table-striped table-schedulers settings-table">
+            <table className="table table-sm table-striped table-schedulers table--settings">
               <thead className="header">
                 <tr>
-                  <th>Name</th>
-                  <th>Status</th>
-                  <th>Type</th>
-                  <th>Location</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Location</th>
                 </tr>
               </thead>
               <tbody>
                 {schedulers.map(scheduler => {
                   return (
                     <tr key={scheduler.id}>
-                      <td>
+                      <td scope="row">
                         <Link to={`${match.path}/${scheduler.id}`}>
                           <span>{scheduler.values['Name']}</span>
                         </Link>

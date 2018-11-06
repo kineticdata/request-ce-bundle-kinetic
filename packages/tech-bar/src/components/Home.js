@@ -8,6 +8,12 @@ import {
   withState,
   withProps,
 } from 'recompose';
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
 import { KappLink as Link, PageTitle, selectCurrentKapp } from 'common';
 import { actions } from '../redux/modules/appointments';
 import moment from 'moment';
@@ -26,6 +32,8 @@ export const HomeComponent = ({
   loadingPast,
   pastErrors,
   pastAppointments,
+  openDropdown,
+  toggleDropdown,
 }) => (
   <Fragment>
     <PageTitle parts={[]} />
@@ -39,7 +47,45 @@ export const HomeComponent = ({
           {techBars.map(techBar => (
             <div className="card card--tech-bar" key={techBar.id}>
               <div className="card-body">
-                <h3 className="card-title">{techBar.values['Name']}</h3>
+                <h3 className="card-title">
+                  <span>{techBar.values['Name']}</span>
+                  <span>
+                    <Dropdown
+                      toggle={toggleDropdown(techBar.id)}
+                      isOpen={openDropdown === techBar.id}
+                    >
+                      <DropdownToggle color="link" className="btn-sm">
+                        <span className="fa fa-ellipsis-v fa-2x" />
+                      </DropdownToggle>
+                      <DropdownMenu right>
+                        <Link
+                          to={`/display/${techBar.values['Id']}/checkin`}
+                          className="dropdown-item"
+                          target="_blank"
+                        >
+                          <span className="fa fa-external-link fa-fw mr-2" />
+                          <span>Check In</span>
+                        </Link>
+                        <Link
+                          to={`/display/${techBar.values['Id']}/feedback`}
+                          className="dropdown-item"
+                          target="_blank"
+                        >
+                          <span className="fa fa-external-link fa-fw mr-2" />
+                          <span>Feedback</span>
+                        </Link>
+                        <Link
+                          to={`/display/${techBar.values['Id']}/overhead`}
+                          className="dropdown-item"
+                          target="_blank"
+                        >
+                          <span className="fa fa-external-link fa-fw mr-2" />
+                          <span>Overhead</span>
+                        </Link>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </span>
+                </h3>
                 <div className="card-subtitle">
                   {techBar.values['Location']}
                 </div>
@@ -154,11 +200,19 @@ export const mapDispatchToProps = {
   fetchPastAppointments: actions.fetchPastAppointments,
 };
 
+const toggleDropdown = ({
+  setOpenDropdown,
+  openDropdown,
+}) => dropdownSlug => () =>
+  setOpenDropdown(dropdownSlug === openDropdown ? false : dropdownSlug);
+
 export const Home = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withState('openDropdown', 'setOpenDropdown', false),
+  withHandlers({ toggleDropdown }),
   lifecycle({
     componentDidMount() {
       this.props.fetchUpcomingAppointments();

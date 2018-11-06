@@ -65,20 +65,20 @@ const SchedulerAvailabilityComponent = ({
         />
       )}
     {availability.size > 0 && (
-      <table className="table table-sm table-striped table-availability settings-table">
+      <table className="table table-sm table-striped table-availability table--settings">
         <thead className="header">
           <tr>
-            <th>Day</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Slots</th>
+            <th scope="col">Day</th>
+            <th scope="col">Start Time</th>
+            <th scope="col">End Time</th>
+            <th scope="col">Slots</th>
             <th />
           </tr>
         </thead>
         <tbody>
           {availability.map((a, index) => (
             <tr key={`availability-${index}`}>
-              <td>{formatDayName(a.values['Day'])}</td>
+              <td scope="row">{formatDayName(a.values['Day'])}</td>
               <td>{formatTime(a.values['Start Time'])}</td>
               <td>{formatTime(a.values['End Time'])}</td>
               <td>{a.values['Slots']}</td>
