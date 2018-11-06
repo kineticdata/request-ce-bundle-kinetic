@@ -35,7 +35,7 @@ const LoginLogo = () => (
 const LoginLoading = ({ setToken }) => (
   <div>
     <span>Loading!!!</span>
-    <RetrieveJwtIframe onSuccess={props.setToken} />
+    <RetrieveJwtIframe onSuccess={setToken} />
   </div>
 );
 
