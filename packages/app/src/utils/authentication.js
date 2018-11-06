@@ -1,7 +1,10 @@
 import axios from 'axios';
 import { bundle } from 'react-kinetic-core';
 
-export const OAUTH_CLIENT_ID = encodeURIComponent('kinops');
+export const OAUTH_CLIENT_ID =
+  process.env.NODE_ENV === 'development'
+    ? encodeURIComponent('kinetic-bundle-dev')
+    : encodeURIComponent('kinetic-bundle');
 
 export const login = (username, password) =>
   axios.post(
@@ -16,5 +19,5 @@ export const login = (username, password) =>
   );
 
 export const coreOauthAuthorizeUrl = () => {
-  return `/app/oauth/authorize?grant_type=implicit&client_id=${OAUTH_CLIENT_ID}&response_type=token`;
+  return `${bundle.spaceLocation()}/app/oauth/authorize?grant_type=implicit&client_id=${OAUTH_CLIENT_ID}&response_type=token`;
 };
