@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import qs from 'qs';
@@ -18,6 +18,26 @@ import { RequestAccountForm } from './components/authentication/RequestAccountFo
 import { UnauthenticatedForm } from './components/authentication/UnauthenticatedForm';
 import { RetrieveJwtIframe } from './components/authentication/RetrieveJwtIframe';
 import { OAuthPopup } from './components/authentication/OAuthPopup';
+
+const LoginLogo = () => (
+  <div
+    className="login-image-container"
+    style={{ backgroundImage: `url(${logoImage})` }}
+  >
+    <div className="kinops-text">
+      <img src={logoName} alt="Kinops - streamline everyday work for teams" />
+      <h3>Welcome to kinops</h3>
+      <p>Streamline everyday work for teams.</p>
+    </div>
+  </div>
+);
+
+const LoginLoading = ({ setToken }) => (
+  <div>
+    <span>Loading!!!</span>
+    <RetrieveJwtIframe onSuccess={props.setToken} />
+  </div>
+);
 
 export const LoginScreen = props => (
   <div className="login-container">
@@ -47,24 +67,14 @@ export const LoginScreen = props => (
         </div>
       ) : props.authenticated ? (
         props.token ? null : (
-          <RetrieveJwtIframe onSuccess={props.setToken} />
+          <LoginLoading setToken={props.setToken} />
         )
       ) : (
-        props.children
+        <Fragment>
+          {props.children}
+          <LoginLogo />
+        </Fragment>
       )}
-      <div
-        className="login-image-container"
-        style={{ backgroundImage: `url(${logoImage})` }}
-      >
-        <div className="kinops-text">
-          <img
-            src={logoName}
-            alt="Kinops - streamline everyday work for teams"
-          />
-          <h3>Welcome to kinops</h3>
-          <p>Streamline everyday work for teams.</p>
-        </div>
-      </div>
     </div>
   </div>
 );
