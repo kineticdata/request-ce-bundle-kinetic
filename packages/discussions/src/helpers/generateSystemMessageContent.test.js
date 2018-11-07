@@ -114,6 +114,37 @@ describe('generateContent', () => {
       ];
       expect(generateContent('Participant Joined', content)).toEqual(expected);
     });
+
+    it('returns joined as space admin message', () => {
+      const content = [
+        { name: 'user', type: 'user', value: USER1 },
+        { name: 'joinedAsAdmin', type: 'json', value: 'true' },
+      ];
+      // USER1 joined the discussion after being authorized as a space admin
+      const expected = [
+        { type: 'user', value: USER1 },
+        {
+          type: 'text',
+          value:
+            'joined the discussion after being authorized as a space admin',
+        },
+      ];
+      expect(generateContent('Participant Joined', content)).toEqual(expected);
+    });
+
+    it('returns joined by join policy message', () => {
+      const content = [{ name: 'user', type: 'user', value: USER1 }];
+      // USER1 joined the discussion after being authorized by the join policy
+      const expected = [
+        { type: 'user', value: USER1 },
+        {
+          type: 'text',
+          value:
+            'joined the discussion after being authorized by the join policy',
+        },
+      ];
+      expect(generateContent('Participant Joined', content)).toEqual(expected);
+    });
   });
 
   describe('Participant Left', () => {
