@@ -87,3 +87,99 @@ ins {
     align-items: center;
   }
 }
+
+.wally-loader-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+}
+.wally-loader-container {
+  position: relative;
+  height: 120px;
+  width: 120px;
+}
+
+.wally-loader-container svg {
+  position: absolute;
+}
+
+.wally-loader__spinner {
+  animation: wally-loader__rotator 5s linear infinite;
+}
+
+.loader-wally {
+  left: 10px;
+  bottom: 10px;
+  width: 100px;
+  height: auto;
+}
+
+@keyframes wally-loader__rotator {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(270deg);
+  }
+}
+.wally-loader__circle {
+  stroke-dasharray: 622;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  stroke: #ffffff;
+  animation: wally-loader__dash 1.4s ease-in-out infinite;
+}
+
+@keyframes wally-loader__dash {
+  0% {
+    stroke-dashoffset: 622;
+  }
+  50% {
+    stroke-dashoffset: 155.5;
+    transform: rotate(135deg);
+  }
+  100% {
+    stroke-dashoffset: 622;
+    transform: rotate(450deg);
+  }
+}
+
+/* // Raising loader */
+
+/* Eyebrow raising */
+#wally__eyebrow--left,
+#wally__eyebrow--right {
+  animation: raising--eyebrow 0.65s linear infinite;
+}
+
+/* Nose and hair raising */
+#wally__nose,
+#wally__hair--left,
+#wally__hair--right {
+  animation: raising--nose 0.65s linear infinite;
+}
+
+@keyframes raising--eyebrow {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+@keyframes raising--nose {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-0.5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
