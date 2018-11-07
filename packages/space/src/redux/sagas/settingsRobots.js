@@ -201,7 +201,7 @@ export function* fetchNextExecutionsSaga(action) {
     {
       search: query.build(),
       datastore: true,
-      form: 'robot-schedule-next-execution',
+      form: 'robot-next-execution',
     },
   );
 
