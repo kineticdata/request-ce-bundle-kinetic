@@ -120,7 +120,8 @@ const buildTableHeaderCell = ({
   paginationProps,
 }) => (
   {
-    headerCellProps: { class: addClass = '', ...thProps } = {},
+    cellProps: { class: addClass = '', ...cProps } = {},
+    headerCellProps: { class: addHeaderClass = '', ...thProps } = {},
     width,
     renderHeaderCell,
     title,
@@ -158,10 +159,11 @@ const buildTableHeaderCell = ({
         )
       ) : (
         <th
-          className={`${addClass} ${sortClass}`}
+          className={`${addClass} ${addHeaderClass} ${sortClass}`}
+          {...cProps}
           {...thProps}
           width={width || null}
-          scope="col"
+          {...(title ? { scope: 'col' } : {})}
           onClick={sortClick}
         >
           {title}
@@ -241,7 +243,12 @@ const buildTableBodyCell = ({
   sortProps,
   paginationProps,
 }) => (row, rowIndex) => (
-  { props: { class: addClass = '', ...tdProps } = {}, renderBodyCell, value },
+  {
+    cellProps: { class: addClass = '', ...cProps } = {},
+    bodyCellProps: { class: addBodyClass = '', ...tdProps } = {},
+    renderBodyCell,
+    value,
+  },
   index,
 ) => (
   <KeyWrapper key={`column-${index}`}>
@@ -261,7 +268,12 @@ const buildTableBodyCell = ({
         'renderBodyCell',
       )
     ) : (
-      <td className={`${addClass}`} {...tdProps}>
+      <td
+        className={`${addClass} ${addBodyClass}`}
+        {...cProps}
+        {...tdProps}
+        {...(index === 0 ? { scope: 'row' } : {})}
+      >
         {row[value]}
       </td>
     )}
@@ -334,7 +346,8 @@ const buildTableFooterCell = ({
   paginationProps,
 }) => (
   {
-    footerCellProps: { class: addClass = '', ...tdProps } = {},
+    cellProps: { class: addClass = '', ...cProps } = {},
+    footerCellProps: { class: addFooterClass = '', ...tdProps } = {},
     renderFooterCell,
   },
   index,
@@ -352,7 +365,11 @@ const buildTableFooterCell = ({
         'renderFooterCell',
       )
     ) : (
-      <td className={`${addClass}`} {...tdProps} />
+      <td
+        className={`${addClass} ${addFooterClass}`}
+        {...cProps}
+        {...tdProps}
+      />
     )}
   </KeyWrapper>
 );
@@ -535,9 +552,13 @@ Table.propTypes = {
       title: PropTypes.string,
       value: PropTypes.string,
       width: PropTypes.string,
+      cellProps: PropTypes.object,
       renderBodyCell: PropTypes.func,
+      headerCellProps: PropTypes.object,
       renderHeaderCell: PropTypes.func,
+      bodyCellProps: PropTypes.object,
       renderFooterCell: PropTypes.func,
+      footerCellProps: PropTypes.object,
       filterable: PropTypes.bool,
       sortable: PropTypes.bool,
     }),
@@ -547,11 +568,13 @@ Table.propTypes = {
   renderHeaderRow: PropTypes.func,
   headerRowProps: PropTypes.object,
   renderBody: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
-  renderBodyRow: PropTypes.func,
   bodyProps: PropTypes.object,
+  renderBodyRow: PropTypes.func,
+  bodyRowProps: PropTypes.object,
   renderFooter: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
-  renderFooterRow: PropTypes.func,
   footerProps: PropTypes.object,
+  renderFooterRow: PropTypes.func,
+  footerRowProps: PropTypes.object,
   pagination: PropTypes.bool,
   pageSize: PropTypes.number,
   filtering: PropTypes.bool,

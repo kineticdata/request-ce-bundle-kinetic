@@ -410,42 +410,44 @@ export const EntriesListComponent = ({
                   value: 'locale',
                   title: 'Locale',
                   width: '8%',
-                  renderCell: renderLocaleCell,
+                  renderBodyCell: renderLocaleCell,
                   renderFooterCell: renderLocaleFooterCell,
                 },
                 !context && {
                   value: 'context',
                   title: 'Context',
-                  renderCell: renderContextCell,
+                  renderBodyCell: renderContextCell,
                 },
                 !keyHash && {
                   value: 'key',
                   title: 'Key',
-                  renderCell: renderKeyCell,
+                  renderBodyCell: renderKeyCell,
                   renderFooterCell: renderKeyFooterCell,
                 },
                 {
                   value: 'usages',
                   title: '',
                   renderCell: renderUsageCell,
+                  sortable: false,
                   filterable: false,
                 },
                 {
                   value: 'value',
                   title: 'Translation',
-                  renderCell: renderTranslationCell,
+                  renderBodyCell: renderTranslationCell,
                   renderFooterCell: renderTranslationFooterCell,
                 },
                 {
                   title: '',
                   width: '1%',
-                  renderCell: renderActionsCell,
+                  renderBodyCell: renderActionsCell,
                   renderFooterCell: renderActionsFooterCell,
+                  sortable: false,
                   filterable: false,
                 },
               ].filter(c => c)}
               filtering={!keyHash}
-              footer={!!context}
+              renderFooter={!!context}
               pageSize={20}
               render={({ table, paginationProps, filterProps }) => (
                 <div className="table-wrapper">

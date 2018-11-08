@@ -50,17 +50,17 @@ export const StagedListComponent = ({
                   value: 'locale',
                   title: 'Locale',
                   width: '8%',
-                  renderCell: renderLocaleCell,
+                  renderBodyCell: renderLocaleCell,
                 },
                 {
                   value: 'context',
                   title: 'Context',
-                  renderCell: renderContextCell,
+                  renderBodyCell: renderContextCell,
                 },
                 {
                   value: 'key',
                   title: 'Key',
-                  renderCell: renderKeyCell,
+                  renderBodyCell: renderKeyCell,
                 },
                 {
                   value: 'value',
@@ -73,11 +73,9 @@ export const StagedListComponent = ({
                 {
                   value: 'status',
                   title: 'Status',
-                  renderCell: renderStatusCell,
+                  renderBodyCell: renderStatusCell,
+                  cellProps: { class: 'text-right' },
                   width: '1%',
-                  props: {
-                    class: 'text-right',
-                  },
                 },
               ].filter(c => c)}
               pageSize={20}

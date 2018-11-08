@@ -180,23 +180,21 @@ export const TranslationsListComponent = ({
               {
                 value: 'name',
                 title: 'Context Name',
-                renderCell: renderContextNameCell,
+                renderBodyCell: renderContextNameCell,
                 renderFooterCell: renderContextNameFooterCell,
               },
               mode === 'custom' && {
                 value: 'name',
                 title: '',
-                props: {
-                  class: 'text-right',
-                  width: '1%',
-                },
-                renderCell: renderActionsCell,
+                cellProps: { class: 'text-right' },
+                width: '1%',
+                renderBodyCell: renderActionsCell,
                 renderFooterCell: renderActionsFooterCell,
                 sortable: false,
+                filterable: false,
               },
             ].filter(c => c)}
-            footer={mode === 'custom'}
-            sortOrder={0}
+            renderFooter={mode === 'custom'}
             render={({ table, paginationProps, filterProps }) => (
               <div className="table-wrapper">
                 <FilterControl {...filterProps} />
@@ -301,24 +299,27 @@ const renderContextNameCell = ({
   openUpdate,
   contextToUpdate,
   handleContextToUpdateChange,
-}) => ({ value, row, index }) =>
-  openUpdate === value ? (
-    <div className="input-group">
-      <div className="input-group-prepend">
-        <span className="input-group-text">custom.</span>
+}) => ({ value, row, index }) => (
+  <td>
+    {openUpdate === value ? (
+      <div className="input-group">
+        <div className="input-group-prepend">
+          <span className="input-group-text">custom.</span>
+        </div>
+        <input
+          type="text"
+          name="context-to-update-input"
+          id="context-to-update-input"
+          className="form-control"
+          value={contextToUpdate}
+          onChange={handleContextToUpdateChange}
+        />
       </div>
-      <input
-        type="text"
-        name="context-to-update-input"
-        id="context-to-update-input"
-        className="form-control"
-        value={contextToUpdate}
-        onChange={handleContextToUpdateChange}
-      />
-    </div>
-  ) : (
-    <Link to={`${pathPrefix}/context/${value}`}>{value}</Link>
-  );
+    ) : (
+      <Link to={`${pathPrefix}/context/${value}`}>{value}</Link>
+    )}
+  </td>
+);
 
 const renderActionsCell = ({
   openDropdown,
@@ -360,20 +361,22 @@ const renderContextNameFooterCell = ({
   contextToCreate,
   handleContextToCreateChange,
 }) => () => (
-  <div className="input-group">
-    <div className="input-group-prepend">
-      <span className="input-group-text">custom.</span>
+  <td>
+    <div className="input-group">
+      <div className="input-group-prepend">
+        <span className="input-group-text">custom.</span>
+      </div>
+      <input
+        type="text"
+        name="context-to-create-input"
+        id="context-to-create-input"
+        className="form-control"
+        placeholder="Custom Context Name"
+        value={contextToCreate}
+        onChange={handleContextToCreateChange}
+      />
     </div>
-    <input
-      type="text"
-      name="context-to-create-input"
-      id="context-to-create-input"
-      className="form-control"
-      placeholder="Custom Context Name"
-      value={contextToCreate}
-      onChange={handleContextToCreateChange}
-    />
-  </div>
+  </td>
 );
 
 const renderActionsFooterCell = ({
