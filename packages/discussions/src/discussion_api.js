@@ -220,7 +220,10 @@ export const createInvite = ({ discussionId, type, value, token, message }) =>
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      data: { [type]: value, message },
+      data:
+        type === 'email'
+          ? { email: value, message }
+          : { user: { username: value } },
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
