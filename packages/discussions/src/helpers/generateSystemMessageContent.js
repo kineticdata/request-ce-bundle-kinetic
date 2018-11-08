@@ -55,7 +55,7 @@ export default (action, content) => {
         ];
       case 'Participant Joined': {
         const user = getToken(content, 'user');
-        const invitedBy = getToken(content, 'invitedBy');
+        const invitedBy = getToken(content, 'invitedBy', false);
         const invitationEmail = getToken(content, 'invitationEmail', false);
         const joinedAsAdmin = getToken(content, 'joinedAsAdmin', false);
         if (invitedBy) {

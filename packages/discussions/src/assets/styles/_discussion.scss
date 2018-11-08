@@ -50,12 +50,14 @@
       .icon {
         margin-left: 10px;
         path {
-          fill: white;
+          fill: $white;
         }
       }
     }
   }
-
+  &.empty {
+    justify-content: center;
+  }
   .load-more-messages {
     text-align: center;
     padding-top: 1.5rem;
@@ -260,6 +262,31 @@
     button {
       color: $blue2;
       font-size: 14px;
+    }
+  }
+  .btn {
+    flex: 0 0 auto;
+  }
+  .btn-link.btn-back {
+    border-bottom: 1px solid $black-16;
+    border-top: 0;
+    border-radius: 0;
+    padding: 0.9375rem 1rem;
+    text-align: left;
+  }
+  // Discussion container fixes
+  &.recent-discussions-wrapper {
+    overflow-y: scroll;
+    justify-content: space-between;
+    flex-direction: column;
+    background-color: transparent;
+    // Add padding to the list of discussions but not the actual discussion.
+    padding: 0.5em 1em !important;
+    .modal-body & {
+      padding: 0 !important;
+      .messages {
+        background-color: $white;
+      }
     }
   }
 }
@@ -513,4 +540,26 @@
       margin-right: 0.75rem;
     }
   }
+}
+
+// Markdown Help
+.markdown-help {
+  background-color: $white;
+  color: $blue-lake;
+  padding: 0.5rem 0.5rem;
+  position: absolute;
+  top: -2.5rem;
+  width: 100%;
+
+  .markdown-sample + .markdown-sample {
+    margin-left: 0.5rem;
+  }
+}
+
+// People and Team selectes
+.user-menu-item,
+.team-menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
