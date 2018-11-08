@@ -43,6 +43,7 @@ export const StagedListComponent = ({
         {!loading && (
           <div className="list-wrapper list-wrapper--entries">
             <Table
+              class="table--settings"
               data={stagedEntries.toJS()}
               columns={[
                 {

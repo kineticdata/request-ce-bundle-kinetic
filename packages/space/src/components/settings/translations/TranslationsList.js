@@ -20,6 +20,7 @@ import {
 } from 'reactstrap';
 import { LocalesList } from './LocalesList';
 import { Table, PaginationControl, FilterControl } from 'common';
+import { I18n } from '../../../../../app/src/I18nProvider';
 import { actions } from '../../../redux/modules/settingsTranslations';
 
 export const UnpublishedChanges = ({ stagedEntries, link }) =>
@@ -158,7 +159,7 @@ export const TranslationsListComponent = ({
           <Table
             identifier={mode || 'form'}
             props={{
-              class: '',
+              class: 'table--settings',
               name: 'contexts-table',
               id: 'contexts-table',
             }}
@@ -191,9 +192,11 @@ export const TranslationsListComponent = ({
                 },
                 renderCell: renderActionsCell,
                 renderFooterCell: renderActionsFooterCell,
+                sortable: false,
               },
             ].filter(c => c)}
             footer={mode === 'custom'}
+            sortOrder={0}
             render={({ table, paginationProps, filterProps }) => (
               <div className="table-wrapper">
                 <FilterControl {...filterProps} />

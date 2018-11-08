@@ -372,16 +372,16 @@ export const EntriesListComponent = ({
             )}
             {keyHash &&
               translations.size > 0 && (
-                <table className="table table-sm table-striped settings-table">
+                <table className="table table-sm table-striped table--settings">
                   <thead className="header">
                     <tr>
-                      <th>Key</th>
+                      <th scope="col">Key</th>
                       <th width="1%" />
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>{currentKey}</td>
+                      <td scope="row">{currentKey}</td>
                       <td className="text-right">
                         <ButtonGroup>
                           <button
@@ -403,6 +403,7 @@ export const EntriesListComponent = ({
                 </table>
               )}
             <Table
+              class="table--settings"
               data={translations.toJS()}
               columns={[
                 {
