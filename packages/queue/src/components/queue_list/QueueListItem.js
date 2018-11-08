@@ -50,7 +50,8 @@ export const QueueListItemSmall = ({ queueItem, filter }) => {
         className="summary-group"
       >
         <StatusParagraph queueItem={queueItem} />
-        <h6>
+        <h6>{queueItem.label}</h6>
+        <p className="summary">
           {queueItem.form.name} ({queueItem.handle})
           {queueItem.values['Discussion Id'] && (
             <span className="btn icon">
@@ -60,10 +61,11 @@ export const QueueListItemSmall = ({ queueItem, filter }) => {
               />
             </span>
           )}
-        </h6>
-        <p className="summary">{values.Summary}</p>
+        </p>
+
         <AssignmentParagraph values={values} />
         <ul className="timestamps list-group">
+          <Timestamp label="Scheduled At" value={values['Due Date']} id={id} />
           <DueOrCloseDate queueItem={queueItem} />
           <Timestamp label="Updated" value={updatedAt} id={id} />
           <Timestamp label="Created" value={createdAt} id={id} />

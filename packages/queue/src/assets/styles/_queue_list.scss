@@ -8,6 +8,12 @@
     flex: 0 0 auto;
     padding: 0 1.5rem;
     justify-content: space-between;
+    h4 {
+      font-size: 1.25rem;
+      margin: 0;
+      padding: 1.5625rem 0;
+      font-weight: 700;
+    }
     h6 {
       color: $blue-lake;
       font-size: 0.875rem;

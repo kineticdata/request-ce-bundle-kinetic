@@ -60,6 +60,8 @@ export const QueueList = ({
   sortDirection,
   sortBy,
   toggleSortDirection,
+  groupDirection,
+  toggleGroupDirection,
   refresh,
   hasPrevPage,
   hasNextPage,
@@ -69,6 +71,7 @@ export const QueueList = ({
   count,
   limit,
   offset,
+  isGrouped,
 }) =>
   isExact &&
   (!filter ? (
@@ -78,11 +81,59 @@ export const QueueList = ({
       <PageTitle parts={[filter.name || 'Adhoc']} />
       <div className="controls">
         <h6>
-          {filter.name || 'Adhoc'}
-          <br />
-          <small>by {SORT_NAMES[sortBy]}</small>
+          <button
+            type="button"
+            className="btn btn-link icon-wrapper"
+            onClick={toggleSortDirection}
+          >
+            {sortDirection === 'ASC' ? (
+              <span className="icon">
+                <span
+                  className="fa fa-fw fa-sort-amount-asc"
+                  style={{ fontSize: '16px', color: '#7e8083' }}
+                />
+              </span>
+            ) : (
+              <span className="icon">
+                <span
+                  className="fa fa-fw fa-sort-amount-desc "
+                  style={{ fontSize: '16px', color: '#7e8083' }}
+                />
+              </span>
+            )}
+          </button>
+          Sorted by {SORT_NAMES[sortBy]}
+          {isGrouped && <br />}
+          {isGrouped && (
+            <span>
+              <button
+                type="button"
+                className="btn btn-link icon-wrapper"
+                onClick={toggleGroupDirection}
+              >
+                {groupDirection === 'ASC' ? (
+                  <span className="icon">
+                    <span
+                      className="fa fa-fw fa-sort-amount-asc"
+                      style={{ fontSize: '16px', color: '#7e8083' }}
+                    />
+                  </span>
+                ) : (
+                  <span className="icon">
+                    <span
+                      className="fa fa-fw fa-sort-amount-desc "
+                      style={{ fontSize: '16px', color: '#7e8083' }}
+                    />
+                  </span>
+                )}
+              </button>
+              Grouped by {filter.groupBy}
+            </span>
+          )}
         </h6>
-        {count > 0 ? (
+
+        <h4>{filter.name || 'Adhoc'}</h4>
+        {count > 0 && !isGrouped ? (
           <div className="nav-buttons">
             <button
               type="button"
@@ -126,27 +177,7 @@ export const QueueList = ({
               />
             </span>
           </button>
-          <button
-            type="button"
-            className="btn btn-link icon-wrapper"
-            onClick={toggleSortDirection}
-          >
-            {sortDirection === 'ASC' ? (
-              <span className="icon">
-                <span
-                  className="fa fa-fw fa-sort-amount-asc"
-                  style={{ fontSize: '16px', color: '#7e8083' }}
-                />
-              </span>
-            ) : (
-              <span className="icon">
-                <span
-                  className="fa fa-fw fa-sort-amount-desc "
-                  style={{ fontSize: '16px', color: '#7e8083' }}
-                />
-              </span>
-            )}
-          </button>
+
           <button
             type="button"
             className="btn btn-link icon-wrapper"
@@ -165,15 +196,39 @@ export const QueueList = ({
         {statusMessage ? (
           <WallyErrorMessage message={statusMessage} />
         ) : queueItems && queueItems.size > 0 ? (
-          <ul className="list-group">
-            {queueItems.map(queueItem => (
-              <QueueListItemSmall
-                queueItem={queueItem}
-                key={queueItem.id}
-                filter={filter}
-              />
-            ))}
-          </ul>
+          isGrouped ? (
+            queueItems
+              .map((items, dateGroup) => (
+                <div className="messages" key={dateGroup}>
+                  <div className="date">
+                    <hr />
+                    <span>{dateGroup}</span>
+                    <hr />
+                  </div>
+                  <ul className="list-group">
+                    {items.map(item => (
+                      <QueueListItemSmall
+                        queueItem={item}
+                        key={item.id}
+                        filter={filter}
+                      />
+                    ))}
+                  </ul>
+                </div>
+              ))
+              .toList()
+          ) : (
+            <ul className="list-group">
+              {' '}
+              {queueItems.map(queueItem => (
+                <QueueListItemSmall
+                  queueItem={queueItem}
+                  key={queueItem.id}
+                  filter={filter}
+                />
+              ))}
+            </ul>
+          )
         ) : (
           <WallyEmptyMessage filter={filter} />
         )}

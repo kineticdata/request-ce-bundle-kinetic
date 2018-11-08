@@ -2,6 +2,9 @@ import { Record, Map, List } from 'immutable';
 import { Utils } from 'common';
 import { Filter, AssignmentCriteria } from '../../records';
 import { buildFilterPath } from './queueApp';
+import { getSubmissionDate } from '../sagas/queue';
+import moment from 'moment';
+
 const { namespace, withPayload, noPayload } = Utils;
 
 export const types = {
@@ -13,6 +16,7 @@ export const types = {
   SET_LIST_ITEMS: namespace('queue', 'SET_LIST_ITEMS'),
   SET_LIST_STATUS: namespace('queue', 'SET_LIST_STATUS'),
   SET_SORT_DIRECTION: namespace('queue', 'SET_SORT_DIRECTION'),
+  SET_GROUP_DIRECTION: namespace('queue', 'SET_GROUP_DIRECTION'),
   OPEN_PREVIEW: namespace('queue', 'OPEN_PREVIEW'),
   CLOSE_PREVIEW: namespace('queue', 'CLOSE_PREVIEW'),
   OPEN_NEW_MENU: namespace('queue', 'OPEN_NEW_MENU'),
@@ -35,6 +39,7 @@ export const actions = {
     payload: { filter, status },
   }),
   setSortDirection: withPayload(types.SET_SORT_DIRECTION),
+  setGroupDirection: withPayload(types.SET_GROUP_DIRECTION),
   openPreview: withPayload(types.OPEN_PREVIEW),
   closePreview: noPayload(types.CLOSE_PREVIEW),
   openNewItemMenu: withPayload(types.OPEN_NEW_MENU),
@@ -60,8 +65,31 @@ export const selectPrevAndNext = (state, filter) => {
   };
 };
 
+export const selectGroupedQueueItems = (state, filter) => {
+  const groupedBy = filter.groupBy;
+  const queueItems = state.queue.queue.lists.get(filter) || List();
+  return queueItems
+    .sort(
+      (s1, s2) =>
+        moment(getSubmissionDate(s1, groupedBy)).isBefore(
+          getSubmissionDate(s2, groupedBy),
+        )
+          ? 1
+          : moment(getSubmissionDate(s1, groupedBy)).isAfter(
+              getSubmissionDate(s2, groupedBy),
+            )
+            ? -1
+            : 0,
+    )
+    .reverse()
+    .groupBy(submission =>
+      moment(getSubmissionDate(submission, groupedBy)).calendar(),
+    );
+};
+
 export const State = Record({
   sortDirection: 'ASC',
+  groupDirection: 'ASC',
   currentItem: null,
   currentItemLoading: false,
   adhocFilter: Filter({
@@ -94,6 +122,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('currentItemLoading', false).set('currentItem', payload);
     case types.SET_SORT_DIRECTION:
       return state.set('sortDirection', payload);
+    case types.SET_GROUP_DIRECTION:
+      return state.set('groupDirection', payload);
     case types.OPEN_NEW_MENU:
       return state
         .set('newItemMenuOpen', true)
