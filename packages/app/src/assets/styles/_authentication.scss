@@ -27,6 +27,7 @@
 }
 .login-wrapper {
   display: flex;
+  justify-content: space-around;
   @media all and (min-width: 0) {
     flex-direction: column;
     min-width: 90%;
