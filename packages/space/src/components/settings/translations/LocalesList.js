@@ -27,11 +27,11 @@ export const LocalesListComponent = ({
   handleSetDefaultLocale,
 }) => {
   return (
-    <table className="table table-sm table-striped settings-table">
+    <table className="table table-sm table-striped table--settings">
       <thead className="header">
         <tr>
-          <th>Locale Name</th>
-          <th>Code</th>
+          <th scope="col">Locale Name</th>
+          <th scope="col">Code</th>
           <th />
         </tr>
       </thead>
@@ -40,7 +40,7 @@ export const LocalesListComponent = ({
           const isDefault = locale.code === defaultLocale.code;
           return (
             <tr key={locale.code}>
-              <td>
+              <td scope="row">
                 <Link to={`${pathPrefix}/locale/${locale.code}`}>
                   {availableLocalesMap[locale.code]}
                 </Link>

@@ -15,18 +15,18 @@ const getStatusColor = status =>
       ? 'status--yellow'
       : 'status--green';
 
-const getNextExecution = (nextExecutions, scheduleId) => {
+const getNextExecution = (nextExecutions, robotId) => {
   let nextExecution;
   const found = nextExecutions.find(
-    execution => execution.values['Schedule ID'] === scheduleId,
+    execution => execution.values['Robot ID'] === robotId,
   );
 
   if (found) {
-    nextExecution = found.values['Next Scheduled Execution']
-      ? found.values['Next Scheduled Execution']
+    nextExecution = found.values['Next Execution']
+      ? found.values['Next Execution']
       : 'No upcoming executions scheduled';
   } else {
-    nextExecution = 'Unknowen';
+    nextExecution = 'Unknown';
   }
 
   return nextExecution;
@@ -35,29 +35,25 @@ const getNextExecution = (nextExecutions, scheduleId) => {
 const WallyEmptyMessage = () => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>No Schedules Found</h5>
+      <h5>No Robots Found</h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
-      <h6>Schedules define when robots will execute</h6>
     </div>
   );
 };
 
-const RobotSchedulesListComponent = ({
-  robotSchedules,
-  robotSchedulesLoading,
-  robotSchedulesErrors,
+const RobotsListComponent = ({
+  robots,
+  robotsLoading,
+  robotsErrors,
   nextExecutions,
   nextExecutionsLoading,
 }) => {
-  const loading =
-    !nextExecutionsLoading &&
-    !robotSchedulesLoading &&
-    robotSchedules.size <= 0;
+  const loading = !nextExecutionsLoading && !robotsLoading && robots.size <= 0;
   return loading ? (
     <Loading />
   ) : (
     <div className="page-container page-container--robots">
-      <PageTitle parts={['Schedules', 'Robots', 'Settings']} />
+      <PageTitle parts={['Robots', 'Settings']} />
       <div className="page-panel page-panel--scrollable page-panel--robots-content">
         <div className="page-title">
           <div className="page-title__wrapper">
@@ -67,57 +63,56 @@ const RobotSchedulesListComponent = ({
             </h3>
             <h1>Robots</h1>
           </div>
-          <Link
-            to={`/settings/robots/schedules/new`}
-            className="btn btn-primary"
-          >
+          <Link to={`/settings/robots/robots/new`} className="btn btn-primary">
             Create Robot
           </Link>
         </div>
-        {robotSchedules.size <= 0 &&
-          robotSchedulesErrors.length > 0 && (
+        {robots.size <= 0 &&
+          robotsErrors.length > 0 && (
             <div className="text-center text-danger">
               <h1>Oops!</h1>
-              <h2>Robot Schedules Not Found</h2>
-              {robotSchedulesErrors.map(error => (
+              <h2>Robots Not Found</h2>
+              {robotsErrors.map(error => (
                 <p className="error-details">{error}</p>
               ))}
             </div>
           )}
-        {robotSchedules.size > 0 && (
+        {robots.size > 0 && (
           <table className="table table-sm table-striped table-robots">
             <thead className="header">
               <tr>
-                <th>Robot Name</th>
-                <th width="25%">Status</th>
-                <th>Category</th>
-                <th>Tree Name</th>
-                <th>Description</th>
-                <th>Next Execution Time</th>
+                <th scope="col">Robot Name</th>
+                <th scope="col" width="25%">
+                  Status
+                </th>
+                <th scope="col">Category</th>
+                <th scope="col">Tree Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Next Execution Time</th>
               </tr>
             </thead>
             <tbody>
-              {robotSchedules.map(schedule => {
+              {robots.map(robot => {
                 const nextExecution = nextExecutions
-                  ? getNextExecution(nextExecutions, schedule.id)
+                  ? getNextExecution(nextExecutions, robot.id)
                   : 'fetching';
                 const isExpired =
-                  schedule.values['End Date'] &&
-                  moment(schedule.values['End Date']).isBefore(moment());
+                  robot.values['End Date'] &&
+                  moment(robot.values['End Date']).isBefore(moment());
                 return (
-                  <tr key={schedule.id}>
-                    <td>
-                      <Link to={`/settings/robots/${schedule.id}`}>
-                        <span>{schedule.values['Schedule Name']}</span>
+                  <tr key={robot.id}>
+                    <td scope="row">
+                      <Link to={`/settings/robots/${robot.id}`}>
+                        <span>{robot.values['Robot Name']}</span>
                       </Link>
                     </td>
                     <td>
                       <span
                         className={`status ${getStatusColor(
-                          schedule.values['Status'],
+                          robot.values['Status'],
                         )}`}
                       >
-                        {schedule.values['Status']}
+                        {robot.values['Status']}
                       </span>
                       {isExpired && (
                         <span className={`status ${getStatusColor('Expired')}`}>
@@ -125,18 +120,21 @@ const RobotSchedulesListComponent = ({
                         </span>
                       )}
                     </td>
-                    <td>{schedule.values['Category']}</td>
-                    <td>{schedule.values['Task Tree']}</td>
-                    <td>{schedule.values['Description']}</td>
-                    <td>{nextExecution}</td>
+                    <td>{robot.values['Category']}</td>
+                    <td>{robot.values['Task Tree']}</td>
+                    <td>{robot.values['Description']}</td>
+                    <td>
+                      {moment(nextExecution).isValid()
+                        ? moment(nextExecution).format(Constants.TIME_FORMAT)
+                        : nextExecution}
+                    </td>
                   </tr>
                 );
               })}
             </tbody>
           </table>
         )}
-        {robotSchedulesErrors.length <= 0 &&
-          robotSchedules.size === 0 && <WallyEmptyMessage />}
+        {robotsErrors.length <= 0 && robots.size === 0 && <WallyEmptyMessage />}
       </div>
     </div>
   );
@@ -144,28 +142,28 @@ const RobotSchedulesListComponent = ({
 
 export const mapStateToProps = state => ({
   robot: state.space.settingsRobots.robot,
-  robotSchedules: state.space.settingsRobots.robotSchedules,
-  robotSchedulesLoading: state.space.settingsRobots.robotSchedulesLoading,
-  robotSchedulesErrors: state.space.settingsRobots.robotSchedulesErrors,
+  robots: state.space.settingsRobots.robotSchedules,
+  robotsLoading: state.space.settingsRobots.robotSchedulesLoading,
+  robotsErrors: state.space.settingsRobots.robotSchedulesErrors,
   nextExecutions: state.space.settingsRobots.nextExecutions,
   nextExecutionsLoading: state.space.settingsRobots.nextExecutionsLoading,
 });
 
 export const mapDispatchToProps = {
   push,
-  fetchRobotSchedules: actions.fetchRobotSchedules,
+  fetchRobots: actions.fetchRobotSchedules,
   fetchNextExecutions: actions.fetchNextExecutions,
 };
 
-export const RobotSchedulesList = compose(
+export const RobotsList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
   lifecycle({
     componentWillMount() {
-      this.props.fetchRobotSchedules();
+      this.props.fetchRobots();
       this.props.fetchNextExecutions();
     },
   }),
-)(RobotSchedulesListComponent);
+)(RobotsListComponent);

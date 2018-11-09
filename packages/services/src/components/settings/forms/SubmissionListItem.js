@@ -25,7 +25,11 @@ const DiscussionIcon = () => (
 
 const MobileSubmissionCard = ({ submission, columns, to }) => (
   <tr>
-    <td className="d-md-none d-table-cell" key={`tcol-0-${submission.id}`}>
+    <td
+      scope="row"
+      className="d-md-none d-table-cell"
+      key={`tcol-0-${submission.id}`}
+    >
       <div className="card">
         <div className="card-body">
           <strong className="card-title">
@@ -97,19 +101,9 @@ const TableSubmissionRow = ({
       />
     ))}
     <td>
-      <Dropdown
-        toggle={toggleDropdown(submission.id)}
-        isOpen={openDropdown === submission.id}
-      >
-        <DropdownToggle color="link" className="btn-sm">
-          <span className="fa fa-ellipsis-h fa-2x" />
-        </DropdownToggle>
-        <DropdownMenu right>
-          <DropdownItem tag={Link} to={to}>
-            View
-          </DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
+      <Link to={to} title="View submission">
+        View
+      </Link>
     </td>
   </tr>
 );

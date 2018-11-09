@@ -7,63 +7,41 @@ import {
   withProps,
   withState,
 } from 'recompose';
+import { List } from 'immutable';
+import isarray from 'isarray';
 
 const KeyWrapper = ({ children }) => children;
 
-const verifyTHEAD = content => {
-  if (!content || content.type !== 'thead') {
-    return <thead>{content}</thead>;
+const validateTag = (content, tag, functionName) => {
+  if (!content || content.type !== tag) {
+    throw new Error(
+      `Table failed, ${functionName} must return a ${tag} dom element.`,
+    );
   }
   return content;
 };
 
-const verifyTBODY = content => {
-  if (!content || content.type !== 'tbody') {
-    return <tbody>{content}</tbody>;
-  }
-  return content;
-};
-
-const verifyTFOOT = content => {
-  if (!content || content.type !== 'tfoot') {
-    return <tfoot>{content}</tfoot>;
-  }
-  return content;
-};
-
-const verifyTH = content => {
-  if (!content || content.type !== 'th') {
-    return <th>{content}</th>;
-  }
-  return content;
-};
-
-const verifyTD = content => {
-  if (!content || content.type !== 'td') {
-    return <td>{content}</td>;
-  }
-  return content;
-};
-
-const TableComponent = ({ render, buildTable, filterProps, paginationProps }) =>
+const TableComponent = ({
+  render,
+  buildTable,
+  filterProps,
+  sortProps,
+  paginationProps,
+}) =>
   render({
     table: buildTable(),
     filterProps,
+    sortProps,
     paginationProps,
   });
 
 const buildTable = ({
   props: { class: addClass = '', ...tableProps } = {},
-  rows = [],
-  columns = [],
   buildTableHeader,
   buildTableBody,
   buildTableFooter,
 }) => () => (
-  <table
-    className={`table table-sm table-striped settings-table ${addClass}`}
-    {...tableProps}
-  >
+  <table className={`table table-sm table-striped ${addClass}`} {...tableProps}>
     {buildTableHeader()}
     {buildTableBody()}
     {buildTableFooter()}
@@ -71,108 +49,231 @@ const buildTable = ({
 );
 
 const buildTableHeader = ({
-  header = true,
-  rows = [],
-  columns = [],
+  renderHeader,
+  headerProps: { class: addClass = '', ...theadProps } = {},
+  rows,
+  sorting,
   filterProps,
+  sortProps,
   paginationProps,
-  buildTableHeaderCell,
+  buildTableHeaderRow,
 }) => () =>
-  header ? (
-    typeof header === 'function' ? (
-      verifyTHEAD(
-        header({
-          rows,
+  renderHeader ? (
+    typeof renderHeader === 'function' ? (
+      validateTag(
+        renderHeader({
+          content: buildTableHeaderRow(),
+          rows: rows.toJS(),
           filterProps,
+          sortProps,
           paginationProps,
         }),
+        'thead',
+        'renderHeader',
       )
     ) : (
-      <thead>
-        <tr>{columns.map(buildTableHeaderCell)}</tr>
+      <thead
+        className={`${addClass} ${sorting ? 'sortable' : ''}`}
+        {...theadProps}
+      >
+        {buildTableHeaderRow()}
       </thead>
     )
   ) : (
     undefined
   );
 
-const buildTableHeaderCell = ({ rows = [], filterProps, paginationProps }) => (
+const buildTableHeaderRow = ({
+  renderHeaderRow,
+  headerRowProps: { class: addClass = '', ...trProps } = {},
+  rows,
+  columns,
+  filterProps,
+  sortProps,
+  paginationProps,
+  buildTableHeaderCell,
+}) => () =>
+  typeof renderHeaderRow === 'function' ? (
+    validateTag(
+      renderHeaderRow({
+        content: columns.map(buildTableHeaderCell),
+        rows: rows.toJS(),
+        filterProps,
+        sortProps,
+        paginationProps,
+      }),
+      'tr',
+      'renderHeaderRow',
+    )
+  ) : (
+    <tr className={addClass} {...trProps}>
+      {columns.map(buildTableHeaderCell)}
+    </tr>
+  );
+
+const buildTableHeaderCell = ({
+  sorting,
+  sort,
+  rows,
+  filterProps,
+  sortProps,
+  paginationProps,
+}) => (
   {
-    props: { class: addClass = '', ...cellProps } = {},
+    cellProps: { class: addClass = '', ...cProps } = {},
+    headerCellProps: { class: addHeaderClass = '', ...thProps } = {},
     width,
     renderHeaderCell,
     title,
-    value,
+    sortable = true,
   },
   index,
-) => (
-  <KeyWrapper key={`column-${index}`}>
-    {typeof renderHeaderCell === 'function' ? (
-      verifyTH(
-        renderHeaderCell({
-          rows,
-          filterProps,
-          paginationProps,
-        }),
-      )
-    ) : (
-      <th className={`${addClass}`} {...cellProps} width={width || null}>
-        {title !== undefined ? title : value}
-      </th>
-    )}
-  </KeyWrapper>
-);
+) => {
+  let sortClass = '',
+    sortClick;
+  if (sorting) {
+    if (sortable) {
+      if (sort.column === index) {
+        sortClass = sort.descending ? 'sort-desc' : 'sort-asc';
+        sortClick = () => sortProps.reverse();
+      } else {
+        sortClick = () => sortProps.handleSort(index);
+      }
+    } else {
+      sortClass = 'sort-disabled';
+    }
+  }
+  return (
+    <KeyWrapper key={`column-${index}`}>
+      {typeof renderHeaderCell === 'function' ? (
+        validateTag(
+          renderHeaderCell({
+            content: title,
+            rows: rows.toJS(),
+            filterProps,
+            sortProps,
+            paginationProps,
+          }),
+          'th',
+          'renderHeaderCell',
+        )
+      ) : (
+        <th
+          className={`${addClass} ${addHeaderClass} ${sortClass}`}
+          {...cProps}
+          {...thProps}
+          width={width || null}
+          {...(title ? { scope: 'col' } : {})}
+          onClick={sortClick}
+        >
+          {title}
+        </th>
+      )}
+    </KeyWrapper>
+  );
+};
 
 const buildTableBody = ({
-  body = true,
-  data = [],
-  rows = [],
-  columns = [],
+  renderBody,
+  bodyProps: { class: addClass = '', ...tbodyProps } = {},
+  rows,
   filterProps,
+  sortProps,
   paginationProps,
-  buildTableBodyCell,
+  buildTableBodyRow,
 }) => () =>
-  body ? (
-    typeof body === 'function' ? (
-      verifyTBODY(
-        body({
-          data,
-          rows,
+  renderBody ? (
+    typeof renderBody === 'function' ? (
+      validateTag(
+        renderBody({
+          content: rows.map(buildTableBodyRow),
+          rows: rows.toJS(),
           filterProps,
+          sortProps,
           paginationProps,
         }),
+        'tbody',
+        'renderBody',
       )
     ) : (
-      <tbody>
-        {rows.map((row, index) => (
-          <tr key={`row-${index}`}>
-            {columns.map(buildTableBodyCell(row, index))}
-          </tr>
-        ))}
+      <tbody className={addClass} {...tbodyProps}>
+        {rows.map(buildTableBodyRow)}
       </tbody>
     )
   ) : (
     undefined
   );
 
-const buildTableBodyCell = ({ rows = [], filterProps, paginationProps }) => (
-  row,
-  rowIndex,
-) => (
-  { props: { class: addClass = '', ...cellProps } = {}, renderCell, value },
+const buildTableBodyRow = ({
+  renderBodyRow,
+  bodyRowProps: { class: addClass = '', ...trProps } = {},
+  rows,
+  columns,
+  filterProps,
+  sortProps,
+  paginationProps,
+  buildTableBodyCell,
+}) => (row, index) => (
+  <KeyWrapper key={`row-${index}`}>
+    {typeof renderHeaderRow === 'function' ? (
+      validateTag(
+        renderBodyRow({
+          content: columns.map(buildTableBodyCell(row, index)),
+          row,
+          index,
+          rows: rows.toJS(),
+          filterProps,
+          sortProps,
+          paginationProps,
+        }),
+        'tr',
+        'renderBodyRow',
+      )
+    ) : (
+      <tr className={addClass} {...trProps}>
+        {columns.map(buildTableBodyCell(row, index))}
+      </tr>
+    )}
+  </KeyWrapper>
+);
+
+const buildTableBodyCell = ({
+  rows,
+  filterProps,
+  sortProps,
+  paginationProps,
+}) => (row, rowIndex) => (
+  {
+    cellProps: { class: addClass = '', ...cProps } = {},
+    bodyCellProps: { class: addBodyClass = '', ...tdProps } = {},
+    renderBodyCell,
+    value,
+  },
   index,
 ) => (
   <KeyWrapper key={`column-${index}`}>
-    {typeof renderCell === 'function' ? (
-      verifyTD(
-        renderCell({
+    {typeof renderBodyCell === 'function' ? (
+      validateTag(
+        renderBodyCell({
+          content: row[value],
           value: row[value],
           row,
-          index: rowIndex,
+          index,
+          rows: rows.toJS(),
+          filterProps,
+          sortProps,
+          paginationProps,
         }),
+        'td',
+        'renderBodyCell',
       )
     ) : (
-      <td className={`${addClass}`} {...cellProps}>
+      <td
+        className={`${addClass} ${addBodyClass}`}
+        {...cProps}
+        {...tdProps}
+        {...(index === 0 ? { scope: 'row' } : {})}
+      >
         {row[value]}
       </td>
     )}
@@ -180,93 +281,172 @@ const buildTableBodyCell = ({ rows = [], filterProps, paginationProps }) => (
 );
 
 const buildTableFooter = ({
-  footer = false,
-  data = [],
-  rows = [],
-  columns = [],
+  renderFooter,
+  footerProps: { class: addClass = '', ...tfootProps } = {},
+  rows,
   filterProps,
+  sortProps,
   paginationProps,
-  buildTableFooterCell,
+  buildTableFooterRow,
 }) => () =>
-  footer ? (
-    typeof footer === 'function' ? (
-      verifyTFOOT(
-        footer({
-          data,
-          rows,
+  renderFooter ? (
+    typeof renderFooter === 'function' ? (
+      validateTag(
+        renderFooter({
+          content: buildTableFooterRow(),
+          rows: rows.toJS(),
           filterProps,
+          sortProps,
           paginationProps,
         }),
+        'tfoot',
+        'renderFooter',
       )
     ) : (
-      <tfoot>
-        <tr>{columns.map(buildTableFooterCell)}</tr>
+      <tfoot className={addClass} {...tfootProps}>
+        {buildTableFooterRow()}
       </tfoot>
     )
   ) : (
     undefined
   );
 
-const buildTableFooterCell = ({ rows = [], filterProps, paginationProps }) => (
-  { props: { class: addClass = '', ...cellProps } = {}, renderFooterCell },
+const buildTableFooterRow = ({
+  renderFooterRow,
+  footerRowProps: { class: addClass = '', ...trProps } = {},
+  rows,
+  columns,
+  filterProps,
+  sortProps,
+  paginationProps,
+  buildTableFooterCell,
+}) => () =>
+  typeof renderFooterRow === 'function' ? (
+    validateTag(
+      renderFooterRow({
+        content: columns.map(buildTableFooterCell),
+        rows: rows.toJS(),
+        filterProps,
+        sortProps,
+        paginationProps,
+      }),
+      'tr',
+      'renderFooterRow',
+    )
+  ) : (
+    <tr className={addClass} {...trProps}>
+      {columns.map(buildTableFooterCell)}
+    </tr>
+  );
+
+const buildTableFooterCell = ({
+  rows,
+  filterProps,
+  sortProps,
+  paginationProps,
+}) => (
+  {
+    cellProps: { class: addClass = '', ...cProps } = {},
+    footerCellProps: { class: addFooterClass = '', ...tdProps } = {},
+    renderFooterCell,
+  },
   index,
 ) => (
   <KeyWrapper key={`column-${index}`}>
     {typeof renderFooterCell === 'function' ? (
-      verifyTD(
+      validateTag(
         renderFooterCell({
-          rows,
+          rows: rows.toJS(),
           filterProps,
+          sortProps,
           paginationProps,
         }),
+        'td',
+        'renderFooterCell',
       )
     ) : (
-      <td className={`${addClass}`} {...cellProps} />
+      <td
+        className={`${addClass} ${addFooterClass}`}
+        {...cProps}
+        {...tdProps}
+      />
     )}
   </KeyWrapper>
 );
 
+const buildSortFromProps = ({ sortOrder, columns = [] }) => {
+  if (typeof sortOrder === 'number') {
+    return {
+      column: Math.max(0, Math.min(columns.length, sortOrder)),
+      descending: false,
+    };
+  } else if (isarray(sortOrder) && typeof sortOrder[0] === 'number') {
+    return {
+      column: Math.max(0, Math.min(columns.length, sortOrder[0])),
+      descending:
+        typeof sortOrder[1] === 'string' &&
+        sortOrder[1].toUpperCase() === 'DESC',
+    };
+  } else {
+    return {
+      column: 0,
+      descending: false,
+    };
+  }
+};
+
 export const Table = compose(
   withState('filter', 'setFilter', ''),
-  withState('sort', 'setSort', ''),
-  withState('sortDirection', 'setSortDirection', ''),
+  withState('sort', 'setSort', buildSortFromProps),
   withState('pageNumber', 'setPageNumber', 1),
+  // Set prop defaults
   withProps(
     ({
-      columns = [],
       data = [],
+      columns = [],
+      renderHeader = true,
+      renderBody = true,
+      renderFooter = false,
       filtering = true,
-      filter,
-      setFilter,
+      sorting = true,
       pagination = true,
       pageSize = 10,
-      pageNumber,
-      setPageNumber,
-    }) => {
-      let rows = data;
-      let newProps = {};
-
+    }) => ({
+      rows: List(data),
+      columns,
+      renderHeader,
+      renderBody,
+      renderFooter,
+      filtering,
+      sorting,
+      pagination,
+      pageSize,
+    }),
+  ),
+  // Define filtering props
+  withProps(
+    ({ filtering, columns, rows, filter, setFilter, setPageNumber }) => {
       if (filtering) {
-        if (filter) {
-          const filterableColumns = columns
+        const filterableColumns =
+          filter &&
+          columns
             .map(column => (column.filterable !== false ? column.value : null))
             .filter(c => c);
-          console.log('filterableColumns', filterableColumns);
-          rows = rows.filter(
-            row =>
-              filterableColumns
-                .map(column => row[column])
-                .filter(
-                  value =>
-                    value &&
-                    (typeof value === 'string' ? value : value.toString())
-                      .toLowerCase()
-                      .includes(filter.toLowerCase()),
-                ).length > 0,
-          );
-        }
-        newProps = {
-          ...newProps,
+        return {
+          rows: filter
+            ? rows.filter(
+                row =>
+                  filterableColumns
+                    .map(column => row[column])
+                    .filter(
+                      value =>
+                        value &&
+                        (typeof value === 'string' ? value : value.toString())
+                          .toLowerCase()
+                          .includes(filter.toLowerCase()),
+                    ).length > 0,
+              )
+            : rows,
           filterProps: {
             filter,
             handleFilterChange: e => {
@@ -276,16 +456,47 @@ export const Table = compose(
           },
         };
       }
-
+    },
+  ),
+  // Define sorting props
+  withProps(({ sorting, columns, rows, filter, sort, setSort }) => {
+    if (sorting && columns[sort.column]) {
+      const applyDirection = rows => (sort.descending ? rows.reverse() : rows);
+      return {
+        rows: applyDirection(
+          rows.sortBy(row => row[columns[sort.column].value]),
+        ),
+        sortProps: {
+          column: sort.column,
+          direction: sort.descending ? 'DESC' : 'ASC',
+          handleSort: sortOrder => {
+            setSort(buildSortFromProps({ sortOrder, columns }));
+          },
+          reverse: () => {
+            setSort({ ...sort, descending: !sort.descending });
+          },
+        },
+      };
+    }
+  }),
+  // Define pagination props
+  withProps(
+    ({
+      pagination,
+      columns,
+      rows,
+      pageSize = 10,
+      pageNumber,
+      setPageNumber,
+    }) => {
       if (pagination) {
-        const pageCount = Math.ceil(rows.length / pageSize) || 1;
+        const pageCount = Math.ceil(rows.size / pageSize) || 1;
         const endIndex = pageNumber * pageSize;
         const startIndex = endIndex - pageSize;
         const hasPreviousPage = pageNumber > 1;
         const hasNextPage = pageNumber < pageCount;
-        rows = rows.slice(startIndex, endIndex);
-        newProps = {
-          ...newProps,
+        return {
+          rows: rows.slice(startIndex, endIndex),
           paginationProps: {
             pageCount,
             pageNumber,
@@ -300,17 +511,17 @@ export const Table = compose(
           },
         };
       }
-
-      return {
-        ...newProps,
-        rows,
-      };
     },
   ),
   withHandlers({
     buildTableHeaderCell,
     buildTableBodyCell,
     buildTableFooterCell,
+  }),
+  withHandlers({
+    buildTableHeaderRow,
+    buildTableBodyRow,
+    buildTableFooterRow,
   }),
   withHandlers({
     buildTableHeader,
@@ -325,6 +536,7 @@ export const Table = compose(
       if (this.props.identifier !== prevProps.identifier) {
         this.props.setPageNumber(1);
         this.props.setFilter('');
+        this.props.setSort(buildSortFromProps(this.props));
       }
     },
   }),
@@ -337,23 +549,43 @@ Table.propTypes = {
   columns: PropTypes.arrayOf(
     PropTypes.shape({
       className: PropTypes.string,
-      value: PropTypes.string,
       title: PropTypes.string,
+      value: PropTypes.string,
       width: PropTypes.string,
-      renderCell: PropTypes.func,
+      cellProps: PropTypes.object,
+      renderBodyCell: PropTypes.func,
+      headerCellProps: PropTypes.object,
       renderHeaderCell: PropTypes.func,
+      bodyCellProps: PropTypes.object,
       renderFooterCell: PropTypes.func,
+      footerCellProps: PropTypes.object,
       filterable: PropTypes.bool,
       sortable: PropTypes.bool,
     }),
   ).isRequired,
-  header: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
-  body: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
-  footer: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+  renderHeader: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+  headerProps: PropTypes.object,
+  renderHeaderRow: PropTypes.func,
+  headerRowProps: PropTypes.object,
+  renderBody: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+  bodyProps: PropTypes.object,
+  renderBodyRow: PropTypes.func,
+  bodyRowProps: PropTypes.object,
+  renderFooter: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+  footerProps: PropTypes.object,
+  renderFooterRow: PropTypes.func,
+  footerRowProps: PropTypes.object,
   pagination: PropTypes.bool,
   pageSize: PropTypes.number,
   filtering: PropTypes.bool,
   sorting: PropTypes.bool,
+  sortOrder: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.number,
+      PropTypes.PropTypes.oneOf(['ASC', 'DESC']),
+    ),
+    PropTypes.number,
+  ]),
   render: PropTypes.func.isRequired,
 };
 

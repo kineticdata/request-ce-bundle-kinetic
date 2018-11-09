@@ -372,16 +372,16 @@ export const EntriesListComponent = ({
             )}
             {keyHash &&
               translations.size > 0 && (
-                <table className="table table-sm table-striped settings-table">
+                <table className="table table-sm table-striped table--settings">
                   <thead className="header">
                     <tr>
-                      <th>Key</th>
+                      <th scope="col">Key</th>
                       <th width="1%" />
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>{currentKey}</td>
+                      <td scope="row">{currentKey}</td>
                       <td className="text-right">
                         <ButtonGroup>
                           <button
@@ -403,48 +403,51 @@ export const EntriesListComponent = ({
                 </table>
               )}
             <Table
+              class="table--settings"
               data={translations.toJS()}
               columns={[
                 {
                   value: 'locale',
                   title: 'Locale',
                   width: '8%',
-                  renderCell: renderLocaleCell,
+                  renderBodyCell: renderLocaleCell,
                   renderFooterCell: renderLocaleFooterCell,
                 },
                 !context && {
                   value: 'context',
                   title: 'Context',
-                  renderCell: renderContextCell,
+                  renderBodyCell: renderContextCell,
                 },
                 !keyHash && {
                   value: 'key',
                   title: 'Key',
-                  renderCell: renderKeyCell,
+                  renderBodyCell: renderKeyCell,
                   renderFooterCell: renderKeyFooterCell,
                 },
                 {
                   value: 'usages',
                   title: '',
                   renderCell: renderUsageCell,
+                  sortable: false,
                   filterable: false,
                 },
                 {
                   value: 'value',
                   title: 'Translation',
-                  renderCell: renderTranslationCell,
+                  renderBodyCell: renderTranslationCell,
                   renderFooterCell: renderTranslationFooterCell,
                 },
                 {
                   title: '',
                   width: '1%',
-                  renderCell: renderActionsCell,
+                  renderBodyCell: renderActionsCell,
                   renderFooterCell: renderActionsFooterCell,
+                  sortable: false,
                   filterable: false,
                 },
               ].filter(c => c)}
               filtering={!keyHash}
-              footer={!!context}
+              renderFooter={!!context}
               pageSize={20}
               render={({ table, paginationProps, filterProps }) => (
                 <div className="table-wrapper">

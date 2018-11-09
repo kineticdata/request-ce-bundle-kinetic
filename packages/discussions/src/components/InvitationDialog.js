@@ -35,7 +35,10 @@ export const InvitationDialog = props => (
           onChange={props.setNotes}
           value={props.notes}
         />
-        <small>This note will be sent as part of the invitation.</small>
+        <small>
+          This note will be sent as part of the invitation and visible to all
+          members inside the discussion
+        </small>
       </div>
     </form>
   </div>
