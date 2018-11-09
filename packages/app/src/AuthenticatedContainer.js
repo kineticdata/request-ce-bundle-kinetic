@@ -36,7 +36,7 @@ const LoginLogo = () => (
 const LoginLoading = ({ setToken }) => (
   <div className="wally-loader-wrapper">
     <WallySpinner />
-    {/* <RetrieveJwtIframe onSuccess={setToken} /> */}
+    <RetrieveJwtIframe onSuccess={setToken} />
   </div>
 );
 
