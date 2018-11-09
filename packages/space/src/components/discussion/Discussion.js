@@ -13,19 +13,22 @@ const buildRelatedItemLink = (relatedItem, profile) => {
   let label = relatedItem.type;
   let link;
 
-  if ('Form' === relatedItem.type) {
+  if ('Form' === relatedItem.type && relatedItem.item.slug) {
     const form = relatedItem.item;
     link = `/kapps/${form.kapp.slug}/settings/forms/${form.slug}`;
     label = 'Manage Form';
-  } else if ('Submission' === relatedItem.type) {
+  } else if ('Submission' === relatedItem.type && relatedItem.item.id) {
     const submission = relatedItem.item;
 
-    link = `/kapps/${submission.kapp.slug}/submissions/${submission.id}`;
+    link = `/kapps/${submission.form.kapp.slug}/submissions/${submission.id}`;
     label = 'Open Item';
   } else if ('Team' === relatedItem.type) {
     link = '/teams/' + relatedItem.key;
     label = 'Team Home';
-  } else if ('Datastore Submission' === relatedItem.type) {
+  } else if (
+    'Datastore Submission' === relatedItem.type &&
+    relatedItem.item.id
+  ) {
     const submission = relatedItem.item;
 
     link = `/settings/datastore/${submission.form.slug}/${submission.id}`;
