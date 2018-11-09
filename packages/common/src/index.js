@@ -14,6 +14,7 @@ import { ErrorNotFound } from './components/ErrorNotFound';
 import { ErrorUnauthorized } from './components/ErrorUnauthorized';
 import { ErrorUnexpected } from './components/ErrorUnexpected';
 import { Schedulers } from './components/scheduler/Schedulers';
+import { Table, PaginationControl, FilterControl } from './components/Table';
 
 import {
   selectCurrentKapp,
@@ -68,4 +69,7 @@ export {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
   TaskActions,
+  Table,
+  PaginationControl,
+  FilterControl,
 };

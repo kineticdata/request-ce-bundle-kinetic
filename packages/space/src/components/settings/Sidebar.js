@@ -109,6 +109,16 @@ export const SidebarComponent = ({
                 <span className="fa fa-fw fa-angle-right" />
               </NavLink>
             )}
+            {spaceAdmin && (
+              <NavLink
+                to="/settings/translations"
+                className="nav-link"
+                activeClassName="active"
+              >
+                Translations
+                <span className="fa fa-fw fa-angle-right" />
+              </NavLink>
+            )}
           </li>
         </ul>
       )}
