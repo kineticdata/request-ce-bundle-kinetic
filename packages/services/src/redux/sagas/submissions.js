@@ -33,6 +33,7 @@ export function* fetchSubmissionsSaga({ payload: { coreState } }) {
     searchBuilder
       .or()
       .eq(`values[${constants.REQUESTED_FOR_FIELD}]`, username)
+      .eq(`values[${constants.REQUESTED_BY_FIELD}]`, username)
       .eq('submittedBy', username)
       .eq('createdBy', username)
       .end();
@@ -54,13 +55,20 @@ export function* fetchSubmissionsSaga({ payload: { coreState } }) {
     } else if (coreState) {
       yield put(actions.setSubmissions(submissions, nextPageToken));
     } else {
-      // This is needed because we need to filter out Draft Submissions that were Requested For Someone Else
-      const filterDraftNotCreator = submissions.filter(
+      // This is needed because we need to filter out Draft Submissions that were Requested For Someone Else but Requested By or Created By me
+      const filterDraftNotCreatorOrRequestedBy = submissions.filter(
         s =>
           ['Submitted', 'Closed'].includes(s.coreState) ||
-          (s.coreState === 'Draft' && s.createdBy === username),
+          (s.coreState === 'Draft' &&
+            (s.createdBy === username ||
+              s.values[`${constants.REQUESTED_BY_FIELD}`] === username)),
       );
-      yield put(actions.setSubmissions(filterDraftNotCreator, nextPageToken));
+      yield put(
+        actions.setSubmissions(
+          filterDraftNotCreatorOrRequestedBy,
+          nextPageToken,
+        ),
+      );
     }
   }
 }

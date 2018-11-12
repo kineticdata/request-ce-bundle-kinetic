@@ -12,7 +12,11 @@ const buildSearch = (coreState, username) => {
 
   //Add some of the optional parameters to the search based on core state
   if (coreState && coreState === 'Draft') {
-    searchBuilder.eq('createdBy', username);
+    searchBuilder
+      .or()
+      .eq('createdBy', username)
+      .eq(`values[${constants.REQUESTED_BY_FIELD}]`, username)
+      .end();
   } else {
     searchBuilder
       .or()
