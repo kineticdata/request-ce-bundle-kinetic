@@ -10,48 +10,6 @@ import {
   ROBOT_EXECUTIONS_PAGE_SIZE,
 } from '../modules/settingsRobots';
 
-export function* fetchRobotSaga(action) {
-  const include = 'details,values';
-  if (action.payload === 'new') {
-    yield put(actions.setRobot(null));
-  } else {
-    const { submission, errors, serverError } = yield call(
-      CoreAPI.fetchSubmission,
-      {
-        id: action.payload,
-        include,
-        datastore: true,
-      },
-    );
-
-    if (serverError) {
-      yield put(systemErrorActions.setSystemError(serverError));
-    } else if (errors) {
-      yield put(actions.setRobotError(errors));
-    } else {
-      yield put(actions.setRobot(submission));
-    }
-  }
-}
-
-export function* deleteRobotSaga(action) {
-  const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
-    id: action.payload.id,
-    datastore: true,
-  });
-
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
-  } else if (errors) {
-    yield put(actions.setDeleteError(errors));
-  } else {
-    yield put(actions.setDeleteSuccess());
-    if (typeof action.payload.callback === 'function') {
-      action.payload.callback();
-    }
-  }
-}
-
 export function* fetchRobotSchedulesSaga(action) {
   const query = new CoreAPI.SubmissionSearch(true);
   query.include('details,values');
@@ -188,8 +146,6 @@ export function* fetchNextExecutionsSaga(action) {
 }
 
 export function* watchSettingsRobots() {
-  yield takeEvery(types.FETCH_ROBOT, fetchRobotSaga);
-  yield takeEvery(types.DELETE_ROBOT, deleteRobotSaga);
   yield takeEvery(types.FETCH_ROBOT_SCHEDULES, fetchRobotSchedulesSaga);
   yield takeEvery(types.FETCH_ROBOT_SCHEDULE, fetchRobotScheduleSaga);
   yield takeEvery(types.DELETE_ROBOT_SCHEDULE, deleteRobotScheduleSaga);
