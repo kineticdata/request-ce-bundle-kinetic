@@ -564,7 +564,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_SUBMISSION:
       return state.set('submissionLoading', false).set('submission', payload);
     case types.SET_RELATED_DISCUSSIONS:
-      return state.set('relatedDiscussions', List(payload));
+      return state.set('relatedDiscussions', payload);
     case types.SET_CURRENT_DISCUSSION:
       return state
         .set('submissionLoading', false)

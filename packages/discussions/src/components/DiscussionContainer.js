@@ -22,8 +22,8 @@ const mapStateToProps = (state, props) => {
   return {
     profile: state.app.profile,
     discussion,
-    messages: discussion ? discussion.messages.items : List(),
-    hasMoreMessages: discussion && discussion.messages.pageToken !== null,
+    messages: discussion ? discussion.messages : List(),
+    hasMoreMessages: discussion && discussion.nextPageToken !== null,
     loadingMoreMessages: discussion && discussion.loadingMoreMessages,
     currentOpenModals: state.discussions.discussions.currentOpenModals,
     isSmallLayout: state.app.layout.get('size') === 'small',

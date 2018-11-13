@@ -2,6 +2,7 @@ import { Record, Map, List } from 'immutable';
 import { Utils } from 'common';
 import { Filter, AssignmentCriteria } from '../../records';
 import { buildFilterPath } from './queueApp';
+
 const { namespace, withPayload, noPayload } = Utils;
 
 export const types = {
@@ -103,7 +104,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_CURRENT_DISCUSSION:
       return state.set('currentDiscussion', payload);
     case types.SET_RELATED_DISCUSSIONS:
-      return state.set('relatedDiscussions', List(payload));
+      return state.set('relatedDiscussions', payload);
     case types.SET_SORT_DIRECTION:
       return state.set('sortDirection', payload);
     case types.OPEN_NEW_MENU:

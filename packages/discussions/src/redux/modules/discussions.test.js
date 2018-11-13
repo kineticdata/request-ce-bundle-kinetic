@@ -342,7 +342,7 @@ const messages = {
     message8,
     message9,
   ],
-  pageToken: null,
+  nextPageToken: null,
   empty: false,
 };
 
@@ -383,7 +383,7 @@ describe('partitionListBy', () => {
 
 describe('formatMessages', () => {
   test('paritions them by the date of the message then by the author of each message', () => {
-    expect(formatMessages(List(messages.items))).toEqualImmutable(
+    expect(formatMessages(List(messages))).toEqualImmutable(
       // first list represents groupings by the date of the message
       // second-level lists represent messages sent by the same person in a
       // sequence because we don't want to show avatars for each one

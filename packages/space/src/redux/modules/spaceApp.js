@@ -138,7 +138,7 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('discussionsLoading', true);
     case types.SET_DISCUSSIONS:
       return state
-        .set('discussions', List(payload))
+        .set('discussions', payload)
         .set('discussionsError', null)
         .set('discussionsLoading', false);
     case types.SET_DISCUSSIONS_ERROR:

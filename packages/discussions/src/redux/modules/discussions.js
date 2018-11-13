@@ -21,7 +21,6 @@ export const types = {
   FETCH_MORE_MESSAGES: namespace('discussions', 'FETCH_MORE_MESSAGES'),
   SET_MESSAGES: namespace('discussions', 'SET_MESSAGES'),
   SET_MORE_MESSAGES: namespace('discussions', 'SET_MORE_MESSAGES'),
-  // SET_HAS_MORE_MESSAGES: namespace('discussions', 'SET_HAS_MORE_MESSAGES'),
   SET_JOIN_ERROR: namespace('discussions', 'SET_JOIN_ERROR'),
   SET_PARTICIPANTS: namespace('discussions', 'SET_PARTICIPANTS'),
   ADD_PRESENCE: namespace('discissons', 'ADD_PRESENCE'),
@@ -65,6 +64,7 @@ export const actions = {
   addDiscussion: withPayload(types.ADD_DISCUSSION),
   updateDiscussion: withPayload(types.UPDATE_DISCUSSION),
   leaveDiscussion: withPayload(types.LEAVE_DISCUSSION),
+
   // API-bsased actions.
   createDiscussion: ({
     title,
@@ -92,7 +92,7 @@ export const actions = {
     types.SET_MORE_MESSAGES,
     'id',
     'messages',
-    'pageToken',
+    'nextPageToken',
   ),
   setJoinError: withPayload(types.SET_JOIN_ERROR, 'guid', 'joinError'),
   setParticipants: withPayload(types.SET_PARTICIPANTS, 'id', 'participants'),
@@ -166,26 +166,23 @@ const Topic = Record({
   topicStatus: 'closed',
 });
 
-const Messages = Record({
-  empty: false,
-  items: List(),
-  pageToken: null,
-  milestone: 0,
-});
-
+export const newDiscussionsList = discussions =>
+  List(
+    discussions ? discussions.map(discussion => newDiscussion(discussion)) : [],
+  );
 export const newDiscussion = discussion =>
-  Discussion({
-    ...discussion,
-    messages: Messages({
-      ...discussion.messages,
-      items: List(discussion.messages.items),
-    }),
-    owningTeams: List(discussion.owningTeams),
-    owningUsers: List(discussion.owningUsers),
-    participants: List(discussion.participants),
-    invitations: List(discussion.invitations),
-    relatedItems: List(discussion.relatedItems),
-  });
+  discussion
+    ? Discussion({
+        ...discussion,
+        messages: List(discussion.messagesPage.messages),
+        nextPageToken: discussion.messagesPage.nextPageToken,
+        owningTeams: List(discussion.owningTeams),
+        owningUsers: List(discussion.owningUsers),
+        participants: List(discussion.participants),
+        invitations: List(discussion.invitations),
+        relatedItems: List(discussion.relatedItems),
+      })
+    : null;
 
 // const KEEP_KEYS = ['topic', 'presences'];
 export const Discussion = Record({
@@ -200,7 +197,8 @@ export const Discussion = Record({
   invitations: List(),
   isPrivate: false,
   joinPolicy: null,
-  messages: Messages(),
+  messages: List(),
+  nextPageToken: null,
   milestone: 0,
   owningTeams: List(),
   owningUsers: List(),
@@ -316,10 +314,10 @@ export const reducer = (state = State(), { type, payload }) => {
         discussion
           .set('messagesLoading', false)
           .set('loadingMoreMessages', false)
-          .updateIn(['messages', 'items'], items =>
-            items.concat(List(payload.messages)),
+          .update('messages', messages =>
+            messages.concat(List(payload.messages)),
           )
-          .setIn(['messages', 'pageToken'], payload.pageToken),
+          .set('nextPageToken', payload.nextPageToken),
       );
     case types.SET_JOIN_ERROR:
       return state.setIn(
@@ -428,32 +426,28 @@ export const reducer = (state = State(), { type, payload }) => {
         uploads => uploads.concat(payload.uploads),
       );
     case types.MESSAGE_UPDATE:
-      return state.updateIn(
-        ['discussions', payload.id, 'messages', 'items'],
-        items =>
-          // If the update is for a message we have, update it.
-          items
-            .map(
-              message =>
-                message.id === payload.message.id ? payload.message : message,
-            )
-            // If the update is for a parent of a message we have, update the parent.
-            .map(message => {
-              if (message.parent && message.parent.id === payload.message.id) {
-                message.parent = payload.message;
-              }
-              return message;
-            }),
+      return state.updateIn(['discussions', payload.id, 'messages'], messages =>
+        // If the update is for a message we have, update it.
+        messages
+          .map(
+            message =>
+              message.id === payload.message.id ? payload.message : message,
+          )
+          // If the update is for a parent of a message we have, update the parent.
+          .map(message => {
+            if (message.parent && message.parent.id === payload.message.id) {
+              message.parent = payload.message;
+            }
+            return message;
+          }),
       );
     case types.REMOVE_MESSAGE:
-      return state.updateIn(
-        ['discussions', payload.id, 'messages', 'items'],
-        items => items.filter(message => message.id !== payload.message.id),
+      return state.updateIn(['discussions', payload.id, 'messages'], messages =>
+        messages.filter(message => message.id !== payload.message.id),
       );
     case types.ADD_MESSAGE:
-      return state.updateIn(
-        ['discussions', payload.id, 'messages', 'items'],
-        items => items.unshift(payload.message),
+      return state.updateIn(['discussions', payload.id, 'messages'], messages =>
+        messages.unshift(payload.message),
       );
     case types.MESSAGE_BAD_RX:
       return state.updateIn(['discussions', payload.guid, 'badMessages'], m =>

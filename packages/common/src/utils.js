@@ -180,8 +180,8 @@ export const getConfig = ({
 };
 
 const getLastMessageAt = discussion =>
-  discussion.messages.items[0]
-    ? discussion.messages.items[0].createdAt
+  discussion.messages && discussion.messages.first()
+    ? discussion.messages.first().createdAt
     : discussion.createdAt;
 
 export const getGroupedDiscussions = discussions => {

@@ -41,9 +41,10 @@ const RelatedItemBadge = ({ discussion }) => {
 };
 
 export const Discussion = ({ discussion, me, teams }) => {
-  const displayableMessages = discussion
-    ? discussion.messages.items.filter(m => m.type !== 'System').slice(-1)
-    : [];
+  const displayableMessages =
+    discussion && discussion.messages
+      ? discussion.messages.filter(m => m.type !== 'System').slice(-1)
+      : [];
   const messages = List(displayableMessages);
 
   return (

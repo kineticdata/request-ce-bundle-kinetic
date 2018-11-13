@@ -3,7 +3,7 @@ import { push } from 'connected-react-router';
 import md5 from 'md5';
 import { CoreAPI } from 'react-kinetic-core';
 import { selectToken } from 'discussions/src/redux/modules/socket';
-import { DiscussionAPI } from 'discussions';
+import { DiscussionAPI, newDiscussionsList } from 'discussions';
 
 import {
   actions as listActions,
@@ -66,18 +66,20 @@ export function* fetchTeamSaga(action) {
       },
     });
 
-    if (discussions && discussions.length > 0) {
+    const discussionsList = newDiscussionsList(discussions);
+    if (discussionsList.size > 0) {
       // Save all of the related discussions.
-      yield put(currentActions.setRelatedDiscussions(discussions));
+      yield put(currentActions.setRelatedDiscussions(discussionsList));
 
       // If there is only 1 and the user is already a participant, auto-subscribe.
-      if (discussions.length === 1) {
-        const participating = discussions[0].participants.find(
+      if (discussionsList.size === 1) {
+        const discussion = discussionsList.first();
+        const participating = discussion.participants.find(
           p => p.user.username === profile.username,
         );
 
         if (participating) {
-          yield put(currentActions.setCurrentDiscussion(discussions[0]));
+          yield put(currentActions.setCurrentDiscussion(discussion));
         }
       }
     }
@@ -95,7 +97,9 @@ export function* fetchRelatedDiscussions(action) {
     },
   });
 
-  yield put(currentActions.setRelatedDiscussions(discussions));
+  yield put(
+    currentActions.setRelatedDiscussions(newDiscussionsList(discussions)),
+  );
 }
 
 export function* updateTeamSaga(action) {

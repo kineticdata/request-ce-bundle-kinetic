@@ -4,7 +4,7 @@ import { Avatar } from 'common';
 import { MessagesGroup } from 'discussions';
 export const DiscussionCard = ({ discussion, me, onDiscussionClick }) => {
   const displayableMessages = discussion
-    ? discussion.messages.items.filter(m => m.type !== 'System').slice(-1)
+    ? discussion.messages.filter(m => m.type !== 'System').slice(-1)
     : [];
   const messages = List(displayableMessages);
 

@@ -7,7 +7,7 @@ import { commonActions, toastActions } from 'common';
 import { actions, types } from '../modules/spaceApp';
 import { actions as errorActions } from '../modules/errors';
 import { selectToken } from 'discussions/src/redux/modules/socket';
-import { DiscussionAPI } from 'discussions';
+import { DiscussionAPI, newDiscussionsList } from 'discussions';
 import { calculateDateRange } from 'common/src/utils';
 
 export function* fetchAppSettingsSaga() {
@@ -89,7 +89,7 @@ export function* fetchRecentDiscussionsSaga() {
   if (error) {
     yield put(actions.setDiscussionsError(error));
   } else {
-    yield put(actions.setDiscussions(discussions));
+    yield put(actions.setDiscussions(newDiscussionsList(discussions)));
     yield put(actions.pushDiscussionPageToken(nextPageToken || null));
   }
 }

@@ -88,7 +88,7 @@ export class Topic {
       }
 
       // Remove this topic from the socket.
-      this.socket.topics = this.socket.topics.filter(t => t !== this);
+      delete this.socket.topics[this.topicId];
     };
 
     // Craft the message to be sent to the server.

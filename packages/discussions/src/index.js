@@ -1,5 +1,11 @@
 import reducers from './redux/reducers';
-import { actions, types } from './redux/modules/discussions';
+import {
+  actions,
+  types,
+  Discussion as DiscussionRecord,
+  newDiscussion,
+  newDiscussionsList,
+} from './redux/modules/discussions';
 import { sagas, combineSagas } from './redux/sagas';
 import { DiscussionContainer as Discussion } from './components/DiscussionContainer';
 import {
@@ -23,7 +29,16 @@ export {
   ViewDiscussionsModal,
 };
 // Redux / Saga
-export { reducers, sagas, combineSagas, actions, types };
+export {
+  reducers,
+  sagas,
+  combineSagas,
+  actions,
+  types,
+  newDiscussion,
+  newDiscussionsList,
+  DiscussionRecord,
+};
 
 // APIs
 export { DiscussionAPI };

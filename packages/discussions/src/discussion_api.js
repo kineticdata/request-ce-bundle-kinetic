@@ -77,7 +77,7 @@ export const deleteMessage = (params, token) =>
     },
   });
 
-export const fetchMessages = (id, token, pageToken) =>
+export const fetchMessages = (id, token, nextPageToken) =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${id}/messages`,
@@ -86,7 +86,7 @@ export const fetchMessages = (id, token, pageToken) =>
         Authorization: `Bearer ${token}`,
       },
       params: {
-        pageToken,
+        nextPageToken,
         limit: DEFAULT_MESSAGE_LIMIT,
       },
     })

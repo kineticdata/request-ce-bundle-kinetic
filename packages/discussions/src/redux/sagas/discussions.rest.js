@@ -18,7 +18,7 @@ const selectMessageToken = discussionId => state => {
   const discussion = state.discussions.discussions.discussions.get(
     discussionId,
   );
-  return discussion.messages.pageToken;
+  return discussion.messages.nextPageToken;
 };
 
 export function* fetchMoreMessagesTask(action) {

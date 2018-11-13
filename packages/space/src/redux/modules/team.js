@@ -22,8 +22,8 @@ export const types = {
   FETCH_TEAM: namespace('teams', 'FETCH_TEAM'),
   SET_TEAM: namespace('teams', 'SET_TEAM'),
   SET_CURRENT_DISCUSSION: namespace('teams', 'SET_CURRENT_DISCUSSION'),
-  FETCH_RELATED_DISCUSSIONS: namespace('queue', 'FETCH_RELATED_DISCUSSIONS'),
-  SET_RELATED_DISCUSSIONS: namespace('queue', 'SET_RELATED_DISCUSSIONS'),
+  FETCH_RELATED_DISCUSSIONS: namespace('teams', 'FETCH_RELATED_DISCUSSIONS'),
+  SET_RELATED_DISCUSSIONS: namespace('teams', 'SET_RELATED_DISCUSSIONS'),
   UPDATE_TEAM: namespace('teams', 'UPDATE_TEAM'),
 
   SET_SUBMIT_ERROR: namespace('teams', 'SET_SUBMIT_ERROR'),
@@ -79,7 +79,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_CURRENT_DISCUSSION:
       return state.set('currentDiscussion', payload);
     case types.SET_RELATED_DISCUSSIONS:
-      return state.set('relatedDiscussions', List(payload));
+      return state.set('relatedDiscussions', payload);
     case types.UPDATE_TEAM:
       return state.set('loading', false).set('submitError', null);
     case types.RESET_DELETE_ERROR:

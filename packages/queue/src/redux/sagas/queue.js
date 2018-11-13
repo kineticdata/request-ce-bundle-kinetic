@@ -3,7 +3,7 @@ import moment from 'moment';
 import { CoreAPI } from 'react-kinetic-core';
 import isFunction from 'is-function';
 import { selectToken } from 'discussions/src/redux/modules/socket';
-import { DiscussionAPI } from 'discussions';
+import { DiscussionAPI, newDiscussionsList } from 'discussions';
 
 import { types, actions } from '../modules/queue';
 import { actions as errorActions } from '../modules/errors';
@@ -280,7 +280,7 @@ export function* fetchRelatedDiscussions(action) {
     },
   });
 
-  yield put(actions.setRelatedDiscussions(discussions));
+  yield put(actions.setRelatedDiscussions(newDiscussionsList(discussions)));
 }
 
 export function* updateQueueItemTask(action) {
