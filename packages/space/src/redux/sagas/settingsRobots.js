@@ -5,35 +5,10 @@ import { actions as systemErrorActions } from '../modules/errors';
 import {
   actions,
   types,
-  ROBOT_DEFINITIONS_FORM_SLUG,
   ROBOT_SCHEDULES_FORM_SLUG,
   ROBOT_EXECUTIONS_FORM_SLUG,
   ROBOT_EXECUTIONS_PAGE_SIZE,
 } from '../modules/settingsRobots';
-
-export function* fetchRobotsSaga() {
-  const query = new CoreAPI.SubmissionSearch(true);
-  query.include('details,values');
-  query.limit('1000');
-  query.index('values[Name]:UNIQUE');
-
-  const { submissions, errors, serverError } = yield call(
-    CoreAPI.searchSubmissions,
-    {
-      search: query.build(),
-      datastore: true,
-      form: ROBOT_DEFINITIONS_FORM_SLUG,
-    },
-  );
-
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
-  } else if (errors) {
-    yield put(actions.setFetchRobotsError(errors));
-  } else {
-    yield put(actions.setRobots(submissions));
-  }
-}
 
 export function* fetchRobotSaga(action) {
   const include = 'details,values';
@@ -213,7 +188,6 @@ export function* fetchNextExecutionsSaga(action) {
 }
 
 export function* watchSettingsRobots() {
-  yield takeEvery(types.FETCH_ROBOTS, fetchRobotsSaga);
   yield takeEvery(types.FETCH_ROBOT, fetchRobotSaga);
   yield takeEvery(types.DELETE_ROBOT, deleteRobotSaga);
   yield takeEvery(types.FETCH_ROBOT_SCHEDULES, fetchRobotSchedulesSaga);

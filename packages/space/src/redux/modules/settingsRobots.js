@@ -67,8 +67,6 @@ export const types = {
 };
 
 export const actions = {
-  // Robots List
-  fetchRobots: noPayload(types.FETCH_ROBOTS),
   setRobots: withPayload(types.SET_ROBOTS),
   setFetchRobotsError: withPayload(types.SET_FETCH_ROBOTS_ERROR),
   // Robot
@@ -132,16 +130,15 @@ export const State = Record({
   // Robots List
   loading: true,
   errors: [],
-  robots: new List(),
   // Robot
   robot: null,
   robotLoading: true,
   robotDeleting: false,
   robotErrors: [],
   // Robot Schedules List
-  robotSchedules: new List(),
-  robotSchedulesLoading: false,
-  robotSchedulesErrors: [],
+  robots: new List(),
+  robotsLoading: false,
+  robotsErrors: [],
   // Robot Schedule
   robotSchedule: null,
   robotScheduleLoading: true,
@@ -194,18 +191,14 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.delete('robot');
 
     case types.FETCH_ROBOT_SCHEDULES:
-      return state
-        .set('robotSchedulesLoading', true)
-        .set('robotSchedulesErrors', []);
+      return state.set('robotsLoading', true).set('robotsErrors', []);
     case types.SET_ROBOT_SCHEDULES:
       return state
-        .set('robotSchedulesLoading', false)
-        .set('robotSchedulesErrors', [])
-        .set('robotSchedules', List(payload));
+        .set('robotsLoading', false)
+        .set('robotsErrors', [])
+        .set('robots', List(payload));
     case types.SET_FETCH_ROBOT_SCHEDULES_ERROR:
-      return state
-        .set('robotSchedulesLoading', false)
-        .set('robotSchedulesErrors', payload);
+      return state.set('robotsLoading', false).set('robotsErrors', payload);
 
     case types.FETCH_ROBOT_SCHEDULE:
       return state.set('robotScheduleLoading', true);
