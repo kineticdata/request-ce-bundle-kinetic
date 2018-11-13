@@ -107,11 +107,9 @@ export class ImportComponent extends Component {
 
   handleReset = () => {
     this.readFile = null;
+    this.props.resetImportFailedCall();
     this.setState({
-      records: List(),
-      recordsHeaders: Set([]),
-      missingFields: List([]),
-      percentComplete: 0,
+      postResult: false,
     });
   };
 
@@ -260,8 +258,13 @@ export class ImportComponent extends Component {
       nextProps.importComplete &&
       this.props.importComplete !== nextProps.importComplete
     ) {
-      this.setState({ postResult: true });
-      this.handleReset();
+      this.setState({
+        postResult: true,
+        records: List(),
+        recordsHeaders: Set([]),
+        missingFields: List([]),
+        percentComplete: 0,
+      });
     }
   }
 
@@ -282,7 +285,6 @@ export class ImportComponent extends Component {
                 <div className="dropzone">
                   <Dropzone
                     onDrop={this.handleChange}
-                    accept="text/plain, application/vnd.ms-excel, text/csv"
                     className="dropzone__area"
                     acceptClassName="dropzone__area--active"
                     rejectClassName="dropzone__area--disabled"
@@ -513,6 +515,7 @@ export const mapStateToProps = state => ({
 export const mapDispatchToProps = {
   deleteAllSubmissions: actions.deleteAllSubmissions,
   executeImport: actions.executeImport,
+  resetImportFailedCall: actions.resetImportFailedCall,
 };
 
 export const Import = connect(
