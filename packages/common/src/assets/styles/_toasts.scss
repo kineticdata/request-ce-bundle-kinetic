@@ -13,15 +13,27 @@
   width: 100%;
 }
 .toast {
-  width: 90%;
-  min-height: 4rem;
+  width: 75%;
+  border: 1px solid $border-color;
+  min-height: 1rem;
   background-color: white;
-  margin: 1rem;
+  margin: 1% 0;
   padding: 1rem 1.375rem;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  &__message {
+  box-shadow: inset 0 1px 0 0 rgba($black, 0.05), inset 0 0 0 0 transparent,
+    0 0 0 1px rgba($black, 0.05), 0 1px 3px 0 rgba($black, 0.15);
+  &--large {
+    width: 98%;
+  }
+  &--small {
+    width: 50%;
+  }
+  &--rounded {
+    border-radius: 0.5rem;
+  }
+  &__wrapper {
     flex-grow: 1;
     color: rgba(12, 18, 28, 0.54);
     font-size: 0.875rem;
@@ -45,22 +57,25 @@
 
   &--info {
     background-color: #1094c4;
+    border-color: transparent;
   }
 
   &--warn {
     background-color: #ffcf4a;
+    border-color: transparent;
   }
 
   &--success {
     background-color: #00d46a;
+    border-color: transparent;
   }
 
   &--error {
     background-color: #fa3a37;
+    border-color: transparent;
   }
 
   &--normal {
     background-color: #ffffff;
-    border: 1px solid $border-color;
   }
 }

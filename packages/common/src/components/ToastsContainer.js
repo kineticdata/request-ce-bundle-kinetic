@@ -12,17 +12,19 @@ const defaultTitle = {
 };
 
 const Toast = ({ toast, dismiss }) => (
-  <div className={`toast toast--${toast.type}`}>
-    <div className="toast__message">
+  <div className={`toast toast--${toast.type} toast--${toast.size || 'large'}`}>
+    <div className="toast__wrapper">
       <span className="toast__title">
         {toast.title || defaultTitle[toast.type]}
-        <div className="toast__actions">
-          <button className="btn btn-link" onClick={dismiss}>
-            <i className="fa fa-fw fa-times" />
-          </button>
-        </div>
+        {toast.dismissible && (
+          <div className="toast__actions">
+            <button className="btn btn-link" onClick={dismiss}>
+              <i className="fa fa-fw fa-times" />
+            </button>
+          </div>
+        )}
       </span>
-      {toast.msg}
+      <div className="toast__message"> {toast.msg}</div>
     </div>
   </div>
 );
