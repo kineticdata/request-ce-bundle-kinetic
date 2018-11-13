@@ -219,7 +219,7 @@ class ChatInput extends Component {
             this.props.editMessageId ? 'editing' : ''
           } ${this.props.replyMessage ? 'replying' : ''}`}
         >
-          {!this.props.discussion.archived && (
+          {!this.props.discussion.isArchived && (
             <ButtonDropdown
               isOpen={this.state.actionsOpen}
               toggle={this.toggleActionsOpen}
@@ -270,12 +270,13 @@ class ChatInput extends Component {
             <div
               className={classNames('placeholder', {
                 hidden:
-                  this.state.chatInput !== '' || this.props.discussion.archived,
+                  this.state.chatInput !== '' ||
+                  this.props.discussion.isArchived,
               })}
             >
               Type your message here&hellip;
             </div>
-            {!this.props.discussion.archived ? (
+            {!this.props.discussion.isArchived ? (
               <ContentEditable
                 ref={element => (this.contentEditable = element)}
                 tabIndex={0}
@@ -303,7 +304,7 @@ class ChatInput extends Component {
               <i className="fa fa-fw fa-times" />
             </button>
           )}
-          {!this.props.discussion.archived && (
+          {!this.props.discussion.isArchived && (
             <button
               type="submit"
               className="btn btn-subtle btn-send"

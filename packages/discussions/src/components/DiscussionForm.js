@@ -15,7 +15,7 @@ export class DiscussionForm extends React.Component {
             joinPolicy: props.discussion.joinPolicy,
             owningUsers: props.discussion.owningUsers.toJS(),
             owningTeams: props.discussion.owningTeams.toJS(),
-            archived: props.discussion.archived,
+            isArchived: props.discussion.isArchived,
           }
         : {
             title: '',
@@ -24,7 +24,7 @@ export class DiscussionForm extends React.Component {
             joinPolicy: '',
             owningUsers: [],
             owningTeams: [],
-            archived: false,
+            isArchived: false,
           },
       touched: {},
       dirty: false,
@@ -72,6 +72,8 @@ export class DiscussionForm extends React.Component {
       event.target.type === 'checkbox'
         ? event.target.checked
         : event.target.value;
+    console.log(this.state.values);
+    console.log(value, field);
     this.setState(state => ({
       ...state,
       values: { ...state.values, [field]: value },
@@ -183,12 +185,12 @@ export class DiscussionForm extends React.Component {
               <div className="form-check-inline">
                 <input
                   className="form-check-input"
-                  id="archived"
+                  id="isArchived"
                   type="checkbox"
-                  checked={this.state.values.archived}
+                  checked={this.state.values.isArchived}
                   onChange={this.handleChange}
                 />
-                <label className="form-check-label" htmlFor="archived">
+                <label className="form-check-label" htmlFor="isArchived">
                   Archived?
                 </label>
               </div>

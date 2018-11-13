@@ -56,7 +56,7 @@ const Messages = ({
         discussion={discussion}
         canManage={canManage}
       />
-      {discussion.archived && (
+      {discussion.isArchived && (
         <ArchivedBanner discussion={discussion} canManage={canManage} />
       )}
       {unreadMessages && (

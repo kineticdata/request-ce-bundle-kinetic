@@ -61,16 +61,16 @@ export function* deleteAlertSaga(action) {
 export function* fetchRecentDiscussionsSaga() {
   const token = yield select(selectToken);
 
-  const { pageToken, search, archived, dateRange } = yield select(state => ({
+  const { pageToken, search, isArchived, dateRange } = yield select(state => ({
     pageToken: state.space.spaceApp.discussionsPageToken,
     search: state.space.spaceApp.discussionsSearchTerm,
-    archived: state.space.spaceApp.showingArchived,
+    isArchived: state.space.spaceApp.showingArchived,
     dateRange: state.space.spaceApp.searchDateRange,
   }));
 
   const user = yield select(state => state.app.profile.username);
 
-  const dateParams = archived
+  const dateParams = isArchived
     ? calculateDateRange(yield call(() => moment()), dateRange)
     : {};
 
@@ -81,7 +81,7 @@ export function* fetchRecentDiscussionsSaga() {
       pageToken,
       user,
       title: search,
-      archived,
+      isArchived,
       ...dateParams,
     },
   );

@@ -189,7 +189,7 @@ export const Discussion = Record({
   // NEW STUFF
   topic: Topic(),
   presences: List(),
-  archived: false,
+  isArchived: false,
   createdAt: new Date(),
   createdBy: {},
   description: '',

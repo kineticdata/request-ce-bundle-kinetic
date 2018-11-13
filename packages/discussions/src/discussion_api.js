@@ -135,7 +135,7 @@ export const fetchDiscussions = ({
   user,
   title,
   relatedItem = {},
-  archived,
+  isArchived,
   start,
   end,
 }) => {
@@ -152,7 +152,7 @@ export const fetchDiscussions = ({
         type,
         key,
         pageToken,
-        archived: archived ? true : undefined,
+        archived: isArchived ? true : undefined,
         start,
         end,
       },
@@ -178,10 +178,10 @@ export const createDiscussion = ({
       data: {
         title,
         description,
-        archived: false,
+        isArchived: false,
         owningUsers,
         owningTeams,
-        is_private: isPrivate,
+        isPrivate,
       },
     })
     .then(response => response.data)

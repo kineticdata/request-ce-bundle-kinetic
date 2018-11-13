@@ -119,8 +119,8 @@ const handleDiscussionCreate = ({
     data: {
       title: newDiscussionName,
       description: newDiscussionDesc,
-      archived: false,
-      is_private: false,
+      isArchived: false,
+      isPrivate: false,
     },
   });
 
