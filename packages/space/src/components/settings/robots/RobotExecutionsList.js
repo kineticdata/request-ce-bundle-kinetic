@@ -211,10 +211,11 @@ export const RobotExecutionsList = compose(
   ),
   withHandlers({
     handleNextPage: props => () =>
-      props.fetchRobotExecutionsNextPage(props.robotId),
+      props.fetchRobotExecutionsNextPage(props.match.params.robotId),
     handlePreviousPage: props => () =>
-      props.fetchRobotExecutionsPreviousPage(props.robotId),
-    handleReload: props => () => props.fetchRobotExecutions(props.robotId),
+      props.fetchRobotExecutionsPreviousPage(props.match.params.robotId),
+    handleReload: props => () =>
+      props.fetchRobotExecutions(props.match.params.robotId),
   }),
   lifecycle({
     componentWillMount() {
