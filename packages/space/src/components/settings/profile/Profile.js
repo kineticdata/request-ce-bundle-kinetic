@@ -229,11 +229,7 @@ export const EditProfileComponent = ({
         <div className="page-panel page-panel--two-fifths page-panel--sidebar page-panel--space-profile-edit-sidebar">
           <ProfileCard
             user={buildProfile(fieldValues, profile)}
-            button={
-              <Link to={`/profile/${profile.username}`}>
-                <button className="btn btn-primary btn-sm">View Profile</button>
-              </Link>
-            }
+            hideProfileLink
           />
         </div>
       </Fragment>

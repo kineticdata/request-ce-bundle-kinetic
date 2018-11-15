@@ -2,21 +2,24 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
-import md5 from 'md5';
+import uuid from 'uuid';
 import { CoreAPI } from 'react-kinetic-core';
 import ReactAvatar from 'react-avatar';
+import { Popover } from 'reactstrap';
 
 import { Cache } from '../cache';
-import { Hoverable } from './Hoverable';
 import { ProfileCard } from './ProfileCard';
 
-const AvatarIcon = ({ user, size }) => (
-  <ReactAvatar
-    name={user.displayName || user.username}
-    email={user.email || user.username}
-    round
-    size={size}
-  />
+const AvatarIcon = ({ target, user, size, onClick }) => (
+  <div id={target}>
+    <ReactAvatar
+      name={user.displayName || user.username}
+      email={user.email || user.username}
+      onClick={onClick}
+      round
+      size={size}
+    />
+  </div>
 );
 const userCache = new Cache(() =>
   CoreAPI.fetchUsers({ include: 'profileAttributes' }).then(
@@ -28,7 +31,11 @@ export class AvatarComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.getState(props);
+    this.target = `avatar_${uuid()}`;
   }
+
+  handleToggleVisibility = () =>
+    this.setState({ visible: !this.state.visible });
 
   componentDidMount() {
     this.gettingUsers = true;
@@ -49,6 +56,7 @@ export class AvatarComponent extends React.Component {
     return {
       user: props.user,
       username: props.username,
+      visible: false,
     };
   }
 
@@ -57,18 +65,29 @@ export class AvatarComponent extends React.Component {
     const size = this.props.size || 28;
     const className = this.props.className || 'avatar';
     const previewable = this.props.previewable === false ? false : true;
-    const hoverable = this.props.hoverable === true ? true : false;
 
     if (user) {
       if (previewable) {
         return (
-          <Hoverable
-            hoverable={hoverable}
-            key={user.username}
-            render={() => <ProfileCard user={user} />}
-          >
-            <AvatarIcon user={user} size={size} className={className} />
-          </Hoverable>
+          <div key={user.username}>
+            <AvatarIcon
+              user={user}
+              size={size}
+              className={className}
+              onClick={this.handleToggleVisibility}
+              target={this.target}
+            />
+            <Popover
+              placement="right"
+              isOpen={this.state.visible}
+              toggle={this.handleToggleVisibility}
+              target={this.target}
+              hideArrow
+              className="avatar-popover"
+            >
+              <ProfileCard user={user} />
+            </Popover>
+          </div>
         );
       } else {
         return <AvatarIcon user={user} size={size} className={className} />;

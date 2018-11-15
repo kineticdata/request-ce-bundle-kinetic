@@ -67,7 +67,7 @@ const Members = ({ members }) => (
             }`}
             key={member.user.username}
           >
-            <Avatar user={member.user} size={26} />
+            <Avatar username={member.user.username} size={26} />
           </div>
         );
       })}

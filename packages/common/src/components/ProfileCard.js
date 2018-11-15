@@ -7,7 +7,7 @@ const getProfilePhone = profile =>
     ? profile.profileAttributes['Phone Number'].join(', ')
     : '';
 
-export const ProfileCard = ({ user, button }) => {
+export const ProfileCard = ({ user, button, hideProfileLink = false }) => {
   return (
     <div className="card card--profile">
       <Avatar user={user} size={96} previewable={false} />
@@ -15,9 +15,14 @@ export const ProfileCard = ({ user, button }) => {
       <p>{user.email}</p>
       {getProfilePhone(user) && <p>{getProfilePhone(user)}</p>}
       {button ? button : null}
-      <Link className="btn btn-primary btn-sm" to={`/profile/${user.username}`}>
-        View Profile
-      </Link>
+      {!hideProfileLink && (
+        <Link
+          className="btn btn-primary btn-sm"
+          to={`/profile/${user.username}`}
+        >
+          View Profile
+        </Link>
+      )}
     </div>
   );
 };
