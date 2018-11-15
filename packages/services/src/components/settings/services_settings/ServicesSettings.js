@@ -59,6 +59,15 @@ export const SettingsComponent = ({
               description={attributesMap.getIn(['Icon', 'description'])}
             />
           )}
+          {attributesMap.has('Hidden') && (
+            <AttributeSelectors.TrueFalseSelect
+              id="Hidden"
+              value={attributesMap.getIn(['Hidden', 'value'])}
+              onChange={handleAttributeChange}
+              label="Hide Kapp from Navigation"
+              description={attributesMap.getIn(['Hidden', 'description'])}
+            />
+          )}
           <h2 className="section__title">Workflow Options</h2>
           {attributesMap.has('Approver') && (
             <AttributeSelectors.ApproverSelect
