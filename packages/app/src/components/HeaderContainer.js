@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, withHandlers, withState, withProps } from 'recompose';
 import { Header } from './Header';
+import { Utils } from 'common';
+
 import * as selectors from '../redux/selectors';
 
 export const mapStateToProps = state => ({
@@ -20,6 +22,21 @@ export const mapStateToProps = state => ({
 export const HeaderContainer = compose(
   connect(mapStateToProps),
   withState('kappDropdownOpen', 'setKappDropdownOpen', false),
+  // Filter out Kapps that have an attribute of "Hidden" set to True or Yes
+  withProps(props => ({
+    predefinedKapps: props.predefinedKapps.filter(
+      kapp =>
+        !['yes', 'true'].includes(
+          Utils.getAttributeValue(kapp, 'Hidden', 'false').toLowerCase(),
+        ),
+    ),
+    additionalKapps: props.additionalKapps.filter(
+      kapp =>
+        !['yes', 'true'].includes(
+          Utils.getAttributeValue(kapp, 'Hidden', 'false').toLowerCase(),
+        ),
+    ),
+  })),
   withHandlers({
     kappDropdownToggle: props => () => props.setKappDropdownOpen(open => !open),
   }),
