@@ -6,7 +6,6 @@ import moment from 'moment';
 import Markdown from 'react-markdown';
 import { bundle } from 'react-kinetic-core';
 import { ParticipantCard } from './ParticipantCard';
-import { Hoverable } from 'common';
 
 const AVAILABLE_ICONS = [
   'avi',

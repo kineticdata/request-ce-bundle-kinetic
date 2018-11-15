@@ -2,9 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { bundle } from 'react-kinetic-core';
-// import { Hoverable } from 'common';
 import { actions } from '../redux/modules/discussions';
-// import Avatar from 'react-avatar';
 import { Avatar } from 'common';
 
 import { ParticipantCard } from './ParticipantCard';
