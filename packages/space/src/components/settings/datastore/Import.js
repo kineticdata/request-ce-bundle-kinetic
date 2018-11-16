@@ -110,6 +110,10 @@ export class ImportComponent extends Component {
     this.props.resetImportFailedCall();
     this.setState({
       postResult: false,
+      records: List(),
+      recordsHeaders: Set([]),
+      missingFields: List([]),
+      failedCalls: List([]),
     });
   };
 
@@ -266,6 +270,10 @@ export class ImportComponent extends Component {
         percentComplete: 0,
       });
     }
+  }
+
+  componentWillUnmount() {
+    this.props.resetImportFailedCall();
   }
 
   render() {
@@ -438,15 +446,16 @@ export class ImportComponent extends Component {
           )}
 
           {/* // Reset or upload a new file */}
-          {this.readFile && (
-            <button
-              className="btn btn-link"
-              style={{ alignSelf: 'flex-end' }}
-              onClick={this.handleReset}
-            >
-              Upload a new file
-            </button>
-          )}
+          {this.readFile &&
+            !this.state.postResult && (
+              <button
+                className="btn btn-link"
+                style={{ alignSelf: 'flex-end' }}
+                onClick={this.handleReset}
+              >
+                Upload a new file
+              </button>
+            )}
 
           {/* // Review records that match */}
           {!this.props.processing &&
