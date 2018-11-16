@@ -1,3 +1,5 @@
+import { Avatar } from './components/Avatar';
+import { ProfileCard } from './components/ProfileCard';
 import { ToastsContainer } from './components/ToastsContainer';
 import { ModalFormContainer } from './components/ModalFormContainer';
 import { KappLink } from './components/KappLink';
@@ -6,7 +8,6 @@ import { KappNavLink } from './components/KappNavLink';
 import { KappRedirect } from './components/KappRedirect';
 import { KappRoute } from './components/KappRoute';
 import { TimeAgo } from './components/TimeAgo';
-import { Hoverable } from './components/Hoverable';
 import { Icon } from './components/Icon';
 import { Loading } from './components/Loading';
 import { PageTitle } from './components/PageTitle';
@@ -33,6 +34,8 @@ import * as Constants from './constants';
 import * as AttributeSelectors from './components/attribute_selectors';
 
 export {
+  Avatar,
+  ProfileCard,
   KappLink,
   KappLinkContainer,
   KappNavLink,
@@ -41,7 +44,6 @@ export {
   ToastsContainer,
   ModalFormContainer,
   TimeAgo,
-  Hoverable,
   Icon,
   Loading,
   PageTitle,
