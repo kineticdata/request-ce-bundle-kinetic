@@ -1,11 +1,6 @@
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
-import { List } from 'immutable';
-import md5 from 'md5';
-import { actions as discussionActions } from 'discussions';
-
 import { modalFormActions, Utils } from 'common';
-
 import { buildHierarchy } from '../../utils';
 
 import {

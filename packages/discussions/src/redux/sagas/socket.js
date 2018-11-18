@@ -6,7 +6,7 @@ import { types, actions } from '../modules/socket';
 
 import { Socket, SOCKET_STATUS } from '../../api/socket';
 
-export const socket = new Socket();
+import { socket } from 'app/src/index';
 
 export function* incomingSocketEvents(socketChannel, socket) {
   try {

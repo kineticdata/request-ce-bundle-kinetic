@@ -1,86 +1,18 @@
-import { all, call, select, take, put, takeEvery } from 'redux-saga/effects';
-import { types, actions } from '../modules/discussions';
+import { all, call, select, put, takeEvery } from 'redux-saga/effects';
 import {
   types as listTypes,
   actions as listActions,
 } from '../modules/discussionsList';
-import { newDiscussionsList } from '../modules/discussions';
-import { selectToken } from '../modules/socket';
-import { toastActions } from 'common';
-import {
-  sendMessage,
-  updateMessage,
-  deleteMessage,
-  fetchMessages,
-  fetchDiscussion,
-  fetchDiscussions,
-  createInvite,
-  removeParticipant,
-  createDiscussion,
-  createRelatedItem,
-} from '../../discussionApi';
-
-const selectMessageToken = discussionId => state => {
-  const discussion = state.discussions.discussions.discussions.get(
-    discussionId,
-  );
-  return discussion.messages.nextPageToken;
-};
-
-export function* fetchMoreMessagesTask(action) {
-  const token = yield select(selectToken);
-  const pageToken = yield select(selectMessageToken(action.payload));
-
-  const { messages, nextPageToken, error } = yield call(
-    fetchMessages,
-    action.payload,
-    token,
-    pageToken,
-  );
-
-  yield put(actions.setMoreMessages(action.payload, messages, nextPageToken));
-}
-
-export function* sendMessageTask(action) {
-  const token = yield select(selectToken);
-
-  yield call(sendMessage, action.payload, token);
-}
-
-export function* sendMessageUpdateTask(action) {
-  const token = yield select(selectToken);
-
-  yield call(updateMessage, action.payload, token);
-}
-
-export function* deleteMessageTask(action) {
-  const token = yield select(selectToken);
-
-  yield call(deleteMessage, action.payload, token);
-}
-
-export function* fetchDiscussionTask(action) {
-  const token = yield select(selectToken);
-  const { discussion, error } = yield call(fetchDiscussion, {
-    id: action.payload.id,
-    token,
-  });
-
-  if (error) {
-    yield put(toastActions.addError('Failed to fetch discussion!'));
-  }
-  yield put(actions.addDiscussion(discussion));
-}
+import { types } from '../modules/discussions';
+import { DiscussionAPI, createDiscussionList } from 'discussions-lib';
 
 export function* fetchRelatedDiscussionsTask(action) {
-  const token = yield select(selectToken);
   const isArchived = yield select(
     state => state.discussions.discussionsList.searchArchived,
   );
   const { type, key, loadCallback } = action.payload;
 
-  const { discussions } = yield call(fetchDiscussions, {
-    token,
+  const { discussions } = yield call(DiscussionAPI.fetchDiscussions, {
     relatedItem: {
       type: type,
       key: key,
@@ -88,7 +20,7 @@ export function* fetchRelatedDiscussionsTask(action) {
     isArchived,
   });
 
-  const discussionsList = newDiscussionsList(discussions);
+  const discussionsList = createDiscussionList(discussions);
   yield put(listActions.setRelatedDiscussions(discussionsList));
 
   if (typeof loadCallback === 'function') {
@@ -96,43 +28,6 @@ export function* fetchRelatedDiscussionsTask(action) {
   }
 }
 
-export function* createInvitationTask({
-  payload: { discussionId, type, value },
-}) {
-  const token = yield select(selectToken);
-  const { error } = yield call(createInvite, {
-    discussionId,
-    type,
-    value,
-    token,
-  });
-
-  if (error) {
-    const message =
-      error.response.status === 400
-        ? error.response.data.message
-        : `Failed creating the invitation: ${error.response.statusText}`;
-    yield put(actions.createInviteError(message));
-  } else {
-    yield all([
-      put(actions.createInviteDone()),
-      put(actions.closeModal('invitation')),
-    ]);
-  }
-}
-
-export function* revokeParticipantTask({ payload }) {
-  const { id, username, onLeave } = payload;
-  const token = yield select(selectToken);
-
-  const { error } = yield call(removeParticipant, id, username, token);
-
-  if (error) {
-    // What to do?
-  } else if (typeof onLeave === 'function') {
-    onLeave();
-  }
-}
 export function* createDiscussionTask({ payload }) {
   const {
     title,
@@ -143,15 +38,12 @@ export function* createDiscussionTask({ payload }) {
     owningTeams,
     onSuccess,
   } = payload;
-  const token = yield select(selectToken);
-
-  const { discussion, error } = yield call(createDiscussion, {
+  const { discussion, error } = yield call(DiscussionAPI.createDiscussion, {
     title,
     description,
     isPrivate,
     owningUsers,
     owningTeams,
-    token,
   });
 
   if (error) {
@@ -163,10 +55,9 @@ export function* createDiscussionTask({ payload }) {
     // and if a submission was passed we should update its "Discussion Id" value.
     if (relatedItem) {
       const result = yield call(
-        createRelatedItem,
+        DiscussionAPI.createRelatedItem,
         discussion.id,
         relatedItem,
-        token,
       );
 
       createdRealtedItem = result.relatedItem;
@@ -180,12 +71,6 @@ export function* createDiscussionTask({ payload }) {
 
 export function* watchDiscussionRest() {
   yield all([
-    takeEvery(types.SEND_MESSAGE, sendMessageTask),
-    takeEvery(types.SEND_MESSAGE_UPDATE, sendMessageUpdateTask),
-    takeEvery(types.DELETE_MESSAGE, deleteMessageTask),
-    takeEvery(types.FETCH_MORE_MESSAGES, fetchMoreMessagesTask),
-    takeEvery(types.CREATE_INVITE, createInvitationTask),
-    takeEvery(types.REVOKE_PARTICIPANT, revokeParticipantTask),
     takeEvery(types.CREATE_DISCUSSION, createDiscussionTask),
     takeEvery(listTypes.FETCH_RELATED_DISCUSSIONS, fetchRelatedDiscussionsTask),
   ]);

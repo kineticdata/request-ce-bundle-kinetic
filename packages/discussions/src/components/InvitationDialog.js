@@ -3,15 +3,18 @@ import { compose, withHandlers } from 'recompose';
 import { ModalBody, ModalFooter } from 'reactstrap';
 import { toastActions } from 'common';
 import { connect } from 'react-redux';
-import { actions } from '../redux/modules/discussions';
-import { sendInvites } from '../discussionApi';
-import { InvitationForm } from './InvitationForm';
+import { InvitationForm, DiscussionAPI } from 'discussions-lib';
+import { PeopleSelect } from './PeopleSelect';
 
 export const InvitationDialogComponent = props => (
   <InvitationForm
     discussion={props.discussion}
+    profile={props.profile}
     required
     onSubmit={props.handleSubmit}
+    renderInviteesInput={props => (
+      <PeopleSelect {...props} users teams emails placeholder="Search Users…" />
+    )}
     render={({ formElement, buttonProps }) => (
       <Fragment>
         <ModalBody>
@@ -30,11 +33,10 @@ export const InvitationDialogComponent = props => (
 );
 
 const mapStateToProps = state => ({
-  token: state.discussions.socket.token,
+  profile: state.app.profile,
 });
 
 const mapDispatchToProps = {
-  closeModal: actions.closeModal,
   addError: toastActions.addError,
   addSuccess: toastActions.addSuccess,
 };
@@ -46,8 +48,7 @@ export const InvitationDialog = compose(
   ),
   withHandlers({
     handleSubmit: props => async (values, completeSubmit) => {
-      const responses = await sendInvites(
-        props.token,
+      const responses = await DiscussionAPI.sendInvites(
         props.discussion,
         values,
       );
@@ -56,7 +57,7 @@ export const InvitationDialog = compose(
         completeSubmit();
       } else {
         props.addSuccess('Successfully sent invitations');
-        props.closeModal('invitation');
+        props.close();
       }
     },
   }),

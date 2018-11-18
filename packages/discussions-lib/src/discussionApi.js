@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { axios } from './redux/store';
 import { bundle } from 'react-kinetic-core';
 import { List } from 'immutable';
 
@@ -7,7 +7,7 @@ export const DEFAULT_DISCUSSION_LIMIT = 10;
 
 const baseUrl = () => `${bundle.spaceLocation()}/app/discussions`;
 
-export const sendMessage = (params, token) => {
+export const sendMessage = params => {
   const message = {
     content: [
       {
@@ -30,7 +30,6 @@ export const sendMessage = (params, token) => {
       url: `${baseUrl()}/api/v1/discussions/${params.id}/messages`,
       method: 'post',
       headers: {
-        Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
       },
       data: formData,
@@ -39,23 +38,17 @@ export const sendMessage = (params, token) => {
     return axios.request({
       url: `${baseUrl()}/api/v1/discussions/${params.id}/messages`,
       method: 'post',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       data: message,
     });
   }
 };
 
-export const updateMessage = (params, token) =>
+export const updateMessage = params =>
   axios.request({
     url: `${baseUrl()}/api/v1/discussions/${params.discussionId}/messages/${
       params.id
     }`,
     method: 'put',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
     data: {
       content: [
         {
@@ -66,25 +59,19 @@ export const updateMessage = (params, token) =>
     },
   });
 
-export const deleteMessage = (params, token) =>
+export const deleteMessage = params =>
   axios.request({
     url: `${baseUrl()}/api/v1/discussions/${params.discussionId}/messages/${
       params.id
     }`,
     method: 'delete',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   });
 
-export const fetchMessages = (id, token, pageToken) =>
+export const fetchMessages = (id, pageToken) =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${id}/messages`,
       method: 'get',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       params: {
         pageToken,
         limit: DEFAULT_MESSAGE_LIMIT,
@@ -93,44 +80,34 @@ export const fetchMessages = (id, token, pageToken) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const fetchMessage = ({ discussionId, id, token }) =>
+export const fetchMessage = ({ discussionId, id }) =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${discussionId}/messages/${id}`,
       method: 'get',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const fetchMessageHistory = ({ discussionId, id, token }) =>
+export const fetchMessageHistory = ({ discussionId, id }) =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${discussionId}/messages/${id}/versions`,
       method: 'get',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const fetchDiscussion = ({ id, token }) =>
+export const fetchDiscussion = ({ id }) =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${id}`,
       method: 'get',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
 export const fetchDiscussions = ({
-  token,
   pageToken,
   user,
   title,
@@ -142,9 +119,6 @@ export const fetchDiscussions = ({
   const { type, key } = relatedItem;
   return axios
     .get(`${baseUrl()}/api/v1/discussions`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       params: {
         // user,
         title: title && title.length > 0 ? title : null,
@@ -163,7 +137,6 @@ export const fetchDiscussions = ({
 export const createDiscussion = ({
   title,
   description,
-  token,
   isPrivate = false,
   owningUsers,
   owningTeams,
@@ -172,9 +145,6 @@ export const createDiscussion = ({
     .request({
       method: 'post',
       url: `${baseUrl()}/api/v1/discussions`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       data: {
         title,
         description,
@@ -187,39 +157,30 @@ export const createDiscussion = ({
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const updateDiscussion = (id, data, token) =>
+export const updateDiscussion = (id, data) =>
   axios
     .request({
       method: 'put',
       url: `${baseUrl()}/api/v1/discussions/${id}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       data,
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const fetchInvites = (id, token) =>
+export const fetchInvites = id =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${id}/invitations`,
       method: 'get',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const createInvite = ({ discussionId, type, value, token, message }) =>
+export const createInvite = ({ discussionId, type, value, message }) =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${discussionId}/invitations`,
       method: 'post',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       data:
         type === 'email'
           ? { email: value, message }
@@ -228,15 +189,12 @@ export const createInvite = ({ discussionId, type, value, token, message }) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const resendInvite = ({ discussionId, email, username, token }) =>
+export const resendInvite = ({ discussionId, email, username }) =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${discussionId}/invitations/${email ||
         username}`,
       method: 'put',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       params: {
         // If we are looking up by email add an email parameter to the object
         ...(email ? { email: '' } : {}),
@@ -246,56 +204,44 @@ export const resendInvite = ({ discussionId, email, username, token }) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const removeInvite = (id, inviteId, token) =>
+export const removeInvite = (id, inviteId) =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${id}/invitations/${inviteId}`,
       method: 'delete',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const fetchParticipants = (id, token) =>
+export const fetchParticipants = id =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${id}/participants`,
       method: 'get',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const removeParticipant = (id, username, token) =>
+export const removeParticipant = (id, username) =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${id}/participants/${username}`,
       method: 'delete',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const createRelatedItem = (id, relatedItem, token) =>
+export const createRelatedItem = (id, relatedItem) =>
   axios
     .request({
       url: `${baseUrl()}/api/v1/discussions/${id}/relatedItems`,
       method: 'post',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       data: relatedItem,
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const sendInvites = (token, discussion, values) => {
+export const sendInvites = (discussion, values) => {
   const participants = discussion.participants || List();
   const invitations = discussion.invitations || List();
   const existingUsernames = participants
@@ -308,17 +254,15 @@ export const sendInvites = (token, discussion, values) => {
     values.invitees
       .flatMap(item => (item.team ? item.team.memberships : [item]))
       .map(item => ({
-        token,
         discussionId: discussion.id,
         type: item.user ? 'username' : 'email',
         value: item.user ? item.user.username : item.label,
         message: values.message,
       }))
-      .filter(
-        args =>
-          args.type === 'username'
-            ? !existingUsernames.contains(args.value)
-            : !existingEmails.contains(args.value),
+      .filter(args =>
+        args.type === 'username'
+          ? !existingUsernames.contains(args.value)
+          : !existingEmails.contains(args.value),
       )
       .map(createInvite),
   );

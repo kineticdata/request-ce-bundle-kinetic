@@ -1,8 +1,7 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { Utils } from 'common';
-import { FormGroup, Label, Input } from 'reactstrap';
 import { DiscussionCard } from './DiscussionCard';
 import { actions as listActions } from '../../redux/modules/discussionsList';
 import { actions as discussionsActions } from '../../redux/modules/discussions';

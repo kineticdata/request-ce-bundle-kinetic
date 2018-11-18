@@ -1,242 +1,121 @@
-import React from 'react';
-import { Modal, ModalBody } from 'reactstrap';
-import { LoadMoreMessages } from './LoadMoreMessagesContainer';
-import { MessagesDateContainer } from './MessagesDate';
-import { ChatInputForm } from './ChatInputForm';
-import { ScrollHelper } from './ScrollHelper';
-import { ParticipantsHeaderContainer } from './ParticipantsHeader';
+import React, { Fragment } from 'react';
+import { Modal } from 'reactstrap';
+import { List, Map } from 'immutable';
+import { DiscussionEditDialog } from './DiscussionEditDialog';
 import { ParticipantsDialogContainer } from './ParticipantsDialog';
 import { InvitationDialog } from './InvitationDialog';
-import { DiscussionEditDialog } from './DiscussionEditDialog';
-import { VisibilityHelper } from './VisibilityHelper';
-import { MessageVersionsModal } from './message_history/MessageVersionsModal';
+import {
+  Discussion as KineticDiscussion,
+  MessageHistory,
+  DiscussionAPI,
+} from 'discussions-lib';
+import { ParticipantsHeaderContainer } from './ParticipantsHeader';
 import { ArchivedBanner } from './ArchivedBanner';
+import { connect } from 'react-redux';
 
-export const MessageActionsContext = React.createContext();
+const titles = Map({
+  edit: 'Edit Discussion',
+  participants: 'All Participants',
+  invitations: 'Invite Participants',
+});
 
-const Messages = ({
-  discussion,
-  handleScrolled,
-  profile,
-  formattedMessages,
-  unreadMessages,
-  registerScrollHelper,
-  scrollToBottom,
-  deleteMessage,
-  editMessage,
-  editMessageId,
-  reply,
-  replyMessage,
-  viewMessageVersions,
-  canManage,
-}) => (
-  <MessageActionsContext.Provider
-    value={{
-      deleteMessage,
-      editMessage,
-      editMessageId,
-      reply,
-      replyMessage,
-      viewMessageVersions,
-    }}
-  >
-    <div className="messages">
-      <ScrollHelper ref={registerScrollHelper} onScrollTo={handleScrolled}>
-        <LoadMoreMessages discussion={discussion} />
-        {formattedMessages.map(messagesForDate => (
-          <MessagesDateContainer
-            discussion={discussion}
-            key={messagesForDate.first().first().createdAt}
-            messages={messagesForDate}
-            profile={profile}
-          />
-        ))}
-      </ScrollHelper>
-      <ParticipantsHeaderContainer
-        discussion={discussion}
-        canManage={canManage}
-      />
-      {discussion.isArchived && (
-        <ArchivedBanner discussion={discussion} canManage={canManage} />
-      )}
-      {unreadMessages && (
-        <button
-          type="button"
-          className="btn btn-primary more-messages"
-          onClick={scrollToBottom}
-        >
-          New messages
-          <i className="fa fa-fw fa-arrow-down" />
-        </button>
-      )}
-    </div>
-  </MessageActionsContext.Provider>
+const DiscussionLoader = props => (
+  <div className="discussion is-loading">Loading...</div>
 );
 
-const getModalTitle = modalName => {
-  switch (modalName) {
-    case 'discussion':
-      return 'Discussion';
-    case 'participants':
-      return 'All Participants';
-    case 'invitation':
-      return 'Invite Participants';
-    case 'edit':
-      return 'Edit Discussion';
-    default:
-      return null;
-  }
-};
-
-const isModalSubmittable = modalName =>
-  ['invitation', 'edit'].indexOf(modalName) !== -1;
-
-const DiscussionModal = props => {
-  const {
-    discussion,
-    currentOpenModals,
-    closeCurrent,
-    closeAll,
-    // createDiscussion,
-    participantsAndInvites,
-    // isSmallLayout,
-    isModal,
-    renderClose,
-    handleLeave,
-    leavable,
-    registerChatInput,
-    editMessageId,
-    setEditMessageId,
-    replyMessage,
-    setReplyMessage,
-  } = props;
-  return (
-    <Modal
-      isOpen={isModal || !currentOpenModals.isEmpty()}
-      toggle={closeAll}
-      size="md"
-    >
-      <div className="modal-header">
-        <h4 className="modal-title">
-          {currentOpenModals.isEmpty() ? (
-            renderClose()
-          ) : (
-            <button
-              type="button"
-              className="btn btn-link"
-              onClick={closeCurrent}
-            >
-              {isModalSubmittable(currentOpenModals.last())
-                ? 'Cancel'
-                : 'Close'}
-            </button>
-          )}
-          <span>{getModalTitle(currentOpenModals.last())}</span>
-          {leavable &&
-            currentOpenModals.last() === 'participants' && (
-              <button
-                type="button"
-                className="btn btn-link text-danger"
-                onClick={handleLeave}
-              >
-                Leave
-              </button>
-            )}
-        </h4>
-      </div>
-      {currentOpenModals.last() === 'participants' ? (
-        <ModalBody>
-          <ParticipantsDialogContainer discussion={discussion} />
-        </ModalBody>
-      ) : currentOpenModals.last() === 'invitation' ? (
-        <InvitationDialog
-          discussion={discussion}
-          participantsAndInvites={participantsAndInvites}
-        />
-      ) : currentOpenModals.last() === 'discussion' ? (
-        <ModalBody className="kinops-discussions-modal-body">
-          <Messages {...props} />
-          <ChatInputForm
-            discussion={discussion}
-            registerChatInput={registerChatInput}
-            editMessageId={editMessageId}
-            setEditMessageId={setEditMessageId}
-            replyMessage={replyMessage}
-            setReplyMessage={setReplyMessage}
-          />
-        </ModalBody>
-      ) : currentOpenModals.last() === 'edit' ? (
-        <DiscussionEditDialog discussion={discussion} />
-      ) : (
-        <div />
-      )}
-    </Modal>
-  );
-};
-
-export const Discussion = props => {
-  const {
-    discussion,
-    isModal,
-    isMobileModal,
-    isSmallLayout,
-    setDiscussionVisibility,
-    registerChatInput,
-    editMessageId,
-    setEditMessageId,
-    replyMessage,
-    setReplyMessage,
-    viewMessageVersions,
-    viewingMessageVersions,
-  } = props;
-
-  if (discussion && isModal) {
-    return (
-      <div className="kinops-discussions d-none d-md-flex">
-        <DiscussionModal {...props} />
-      </div>
-    );
-  } else if (discussion && isMobileModal) {
-    return (
-      <div>
-        {!isSmallLayout && <Messages {...props} />}
-        {!isSmallLayout && (
-          <ChatInputForm
-            discussion={discussion}
-            registerChatInput={registerChatInput}
-            editMessageId={editMessageId}
-            setEditMessageId={setEditMessageId}
-          />
+const ModalContent = ({ modal, ...props }) => (
+  <Fragment>
+    <div className="modal-header">
+      <h4 className="modal-title">
+        <button type="button" className="btn btn-link" onClick={props.close}>
+          Close
+        </button>
+        <span>{titles.get(modal.type, 'Discussion')}</span>
+        {props.onLeave && modal.type === 'participants' && (
+          <button
+            type="button"
+            className="btn btn-link text-danger"
+            onClick={props.onLeave}
+          >
+            Leave
+          </button>
         )}
-        <DiscussionModal {...props} />
-        <MessageVersionsModal
-          discussion={discussion}
-          message={viewingMessageVersions}
-          close={() => viewMessageVersions(null)}
-        />
-      </div>
+      </h4>
+    </div>
+    {modal.type === 'edit' ? (
+      <DiscussionEditDialog {...props} />
+    ) : modal.type === 'participants' ? (
+      <ParticipantsDialogContainer {...props} />
+    ) : modal.type === 'invitations' ? (
+      <InvitationDialog {...props} />
+    ) : modal.type === 'history' ? (
+      <MessageHistory {...props} message={modal.data} />
+    ) : null}
+  </Fragment>
+);
+
+export class DiscussionComponent extends React.Component {
+  state = { modals: List() };
+
+  open = type => data => {
+    this.setState(state => ({ modals: state.modals.push({ type, data }) }));
+  };
+
+  close = all => () => {
+    all
+      ? this.setState({ modals: List() })
+      : this.setState(state => ({ modals: state.modals.pop() }));
+  };
+
+  handleLeave = async () => {
+    await DiscussionAPI.removeParticipant(
+      this.props.id,
+      this.props.profile.username,
+    );
+    if (typeof this.props.onLeave === 'function') {
+      this.props.onLeave();
+    }
+  };
+
+  render() {
+    return (
+      <KineticDiscussion
+        id={this.props.id}
+        invitationtoken={this.props.invitationToken}
+        profile={this.props.profile}
+        toggleMessageHistory={this.open('history')}
+        toggleInvitationForm={this.open('invitations')}
+        render={({ elements, discussion, canManage }) => (
+          <div className="kinops-discussions">
+            <div className="messages">{elements.messages}</div>
+            <ParticipantsHeaderContainer
+              discussion={discussion}
+              canManage={canManage}
+              open={this.open}
+            />
+            {discussion.isArchived && (
+              <ArchivedBanner canManage={canManage} open={this.open('edit')} />
+            )}
+            {elements.viewUnreadButton}
+            {elements.chatInput}
+            {!this.state.modals.isEmpty() && (
+              <Modal isOpen toggle={this.close(true)}>
+                <ModalContent
+                  modal={this.state.modals.last()}
+                  discussion={discussion}
+                  open={this.open}
+                  close={this.close(false)}
+                  onLeave={this.props.onLeave && this.handleLeave}
+                />
+              </Modal>
+            )}
+          </div>
+        )}
+      />
     );
   }
+}
 
-  return discussion ? (
-    <div className="kinops-discussions">
-      <VisibilityHelper onChange={setDiscussionVisibility}>
-        <Messages {...props} />
-      </VisibilityHelper>
-      <ChatInputForm
-        discussion={discussion}
-        registerChatInput={registerChatInput}
-        editMessageId={editMessageId}
-        setEditMessageId={setEditMessageId}
-        replyMessage={replyMessage}
-        setReplyMessage={setReplyMessage}
-      />
-      <DiscussionModal {...props} />
-      <MessageVersionsModal
-        discussion={discussion}
-        message={viewingMessageVersions}
-        close={() => viewMessageVersions(null)}
-      />
-    </div>
-  ) : null;
-};
+export const Discussion = connect(state => ({
+  profile: state.app.profile,
+}))(DiscussionComponent);

@@ -2,20 +2,19 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { ModalBody, ModalFooter } from 'reactstrap';
 import { toastActions } from 'common';
-import { DiscussionForm } from './DiscussionForm';
-import { actions } from '../redux/modules/discussions';
-import { updateDiscussion } from '../discussionApi';
+import { DiscussionForm, DiscussionAPI } from 'discussions-lib';
+import { PeopleSelect } from './PeopleSelect';
 
 export class DiscussionEditDialogComponent extends React.Component {
   handleSubmit = (values, completeSubmit) => {
-    updateDiscussion(this.props.discussion.id, values, this.props.token).then(
+    DiscussionAPI.updateDiscussion(this.props.discussion.id, values).then(
       response => {
         if (response.error) {
           const error = response.error.response.data.message;
           this.props.addError(`Error updating discussion. ${error}`);
           completeSubmit();
         } else {
-          this.props.closeModal();
+          this.props.close();
           this.props.addSuccess('Discussion was updated.');
         }
       },
@@ -27,6 +26,8 @@ export class DiscussionEditDialogComponent extends React.Component {
       <DiscussionForm
         discussion={this.props.discussion}
         onSubmit={this.handleSubmit}
+        renderOwningUsersInput={props => <PeopleSelect {...props} users />}
+        renderOwningTeamsInput={props => <PeopleSelect {...props} teams />}
         render={({ formElement, buttonProps }) => (
           <Fragment>
             <ModalBody>
@@ -48,17 +49,12 @@ export class DiscussionEditDialogComponent extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  token: state.discussions.socket.token,
-});
-
 const mapDispatchToProps = {
-  closeModal: actions.closeModal,
   addError: toastActions.addError,
   addSuccess: toastActions.addSuccess,
 };
 
 export const DiscussionEditDialog = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(DiscussionEditDialogComponent);

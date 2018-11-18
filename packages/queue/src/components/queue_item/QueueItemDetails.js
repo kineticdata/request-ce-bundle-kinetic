@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 import { compose, withState, withHandlers, withProps } from 'recompose';
 import { KappLink as Link, TimeAgo } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
-import {
-  actions as discussionActions,
-  ViewDiscussionsModal,
-} from 'discussions';
+import { ViewDiscussionsModal } from 'discussions';
 import { selectAssignments } from '../../redux/modules/queueApp';
 import { actions, selectPrevAndNext } from '../../redux/modules/queue';
 import { ViewOriginalRequest } from './ViewOriginalRequest';
@@ -49,16 +46,15 @@ export const QueueItemDetails = ({
   getCreationParams,
 }) => (
   <div className="queue-item-details">
-    {viewDiscussionsModal &&
-      isSmallLayout && (
-        <ViewDiscussionsModal
-          itemType="Submission"
-          itemKey={queueItem.id}
-          close={closeDiscussions}
-          creationParams={getCreationParams}
-          me={profile}
-        />
-      )}
+    {viewDiscussionsModal && isSmallLayout && (
+      <ViewDiscussionsModal
+        itemType="Submission"
+        itemKey={queueItem.id}
+        close={closeDiscussions}
+        creationParams={getCreationParams}
+        me={profile}
+      />
+    )}
     <div className="scroll-wrapper">
       <div className="general">
         {discussionsEnabled && (

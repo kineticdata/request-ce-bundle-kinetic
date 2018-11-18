@@ -1,13 +1,11 @@
 import { takeEvery, put, all, call, select } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
 import { CoreAPI } from 'react-kinetic-core';
 import moment from 'moment';
 import { List } from 'immutable';
 import { commonActions, toastActions } from 'common';
 import { actions, types } from '../modules/spaceApp';
 import { actions as errorActions } from '../modules/errors';
-import { selectToken } from 'discussions/src/redux/modules/socket';
-import { DiscussionAPI, newDiscussionsList } from 'discussions';
+import { DiscussionAPI, createDiscussionList } from 'discussions-lib';
 import { calculateDateRange } from 'common/src/utils';
 
 export function* fetchAppSettingsSaga() {
@@ -59,8 +57,6 @@ export function* deleteAlertSaga(action) {
 }
 
 export function* fetchRecentDiscussionsSaga() {
-  const token = yield select(selectToken);
-
   const { pageToken, search, isArchived, dateRange } = yield select(state => ({
     pageToken: state.space.spaceApp.discussionsPageToken,
     search: state.space.spaceApp.discussionsSearchTerm,
@@ -77,7 +73,6 @@ export function* fetchRecentDiscussionsSaga() {
   const { error, discussions, nextPageToken } = yield call(
     DiscussionAPI.fetchDiscussions,
     {
-      token,
       pageToken,
       user,
       title: search,
@@ -89,7 +84,7 @@ export function* fetchRecentDiscussionsSaga() {
   if (error) {
     yield put(actions.setDiscussionsError(error));
   } else {
-    yield put(actions.setDiscussions(newDiscussionsList(discussions)));
+    yield put(actions.setDiscussions(createDiscussionList(discussions)));
     yield put(actions.pushDiscussionPageToken(nextPageToken || null));
   }
 }
