@@ -263,6 +263,7 @@ const mapStateToProps = state => ({
   isPublic: state.router.location.search.includes('public'),
   token: state.discussions.socket.token,
   invitationToken: parse(state.router.location.search).invitationToken,
+  invitationEmail: parse(state.router.location.search).email,
 });
 
 const mapDispatchToProps = {
@@ -277,7 +278,7 @@ export const AuthenticatedContainer = compose(
   ),
   withState('display', 'setDisplay', 'none'),
   withState('error', 'setError', ''),
-  withState('email', 'setEmail', ''),
+  withState('email', 'setEmail', props => props.invitationEmail),
   withState('password', 'setPassword', ''),
   withState('attempting', 'setAttempting', true),
   withState('authenticated', 'setAuthenticated', false),
