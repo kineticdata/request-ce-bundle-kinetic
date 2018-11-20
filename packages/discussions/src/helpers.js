@@ -2,6 +2,9 @@ export const isPresent = (discussion, username) =>
   discussion.presences.find(p => p.user === username) !== undefined;
 
 export const canManage = (discussion, profile) => {
+  if (!discussion) {
+    return false;
+  }
   if (profile.spaceAdmin) {
     return true;
   }
