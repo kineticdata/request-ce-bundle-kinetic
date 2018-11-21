@@ -87,10 +87,15 @@ const mapStateToProps = (state, { match: { params } }) => ({
   formSlug: params.formSlug,
   showHeader: showHeader(state.router.location.search),
   values: valuesFromQueryParams(state.router.location.search),
+  isPublic: state.router.location.search.includes('public'),
 });
 
 export const handleCreated = props => response => {
-  props.push(`/kapps/${props.kappSlug}/submissions/${response.submission.id}`);
+  props.push(
+    `/kapps/${props.kappSlug}/submissions/${response.submission.id}${
+      props.isPublic ? '?public' : ''
+    }`,
+  );
 };
 
 export const handleLoaded = props => form => {

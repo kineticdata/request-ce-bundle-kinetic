@@ -4,7 +4,7 @@ import { ModalBody, ModalFooter } from 'reactstrap';
 import { toastActions } from 'common';
 import { connect } from 'react-redux';
 import { actions } from '../redux/modules/discussions';
-import { sendInvites } from '../discussion_api';
+import { sendInvites } from '../discussionApi';
 import { InvitationForm } from './InvitationForm';
 
 export const InvitationDialogComponent = props => (

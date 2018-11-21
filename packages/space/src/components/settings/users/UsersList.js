@@ -58,15 +58,15 @@ const UsersListComponent = ({ users, loading, match, handleChange, data }) => {
             <label
               htmlFor="file-input"
               className="btn btn-info"
-              style={{ marginBottom: '0px', marginRight: '.5rem' }}
+              style={{ marginBottom: '0px' }}
             >
               Import Users
             </label>
             <a className="btn btn-secondary" href={data} download="users.csv">
               Export Users
             </a>
-            <Link to={`${match.path}/new`} className="btn btn-primary ml-3">
-              Create User
+            <Link to={`${match.path}/new`} className="btn btn-primary">
+              New User
             </Link>
           </div>
         </div>
@@ -76,14 +76,14 @@ const UsersListComponent = ({ users, loading, match, handleChange, data }) => {
             <h3>Loading</h3>
           ) : users.length > 0 ? (
             <div className="space-admin-wrapper">
-              <table className="table">
-                <thead className="d-none d-md-table-header-group">
+              <table className="table table--settings table-sm">
+                <thead className="d-none d-md-table-header-group sortable">
                   <tr className="header">
-                    <th />
-                    <th>Username</th>
-                    <th>Display Name</th>
-                    <th>Email</th>
-                    <th />
+                    <th className="sort-disabled" />
+                    <th scope="col">Username</th>
+                    <th scope="col">Display Name</th>
+                    <th scope="col">Email</th>
+                    <th className="sort-disabled" />
                   </tr>
                 </thead>
                 <tbody>

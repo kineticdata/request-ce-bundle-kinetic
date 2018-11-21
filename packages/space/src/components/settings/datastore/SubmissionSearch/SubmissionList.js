@@ -69,6 +69,20 @@ const sortTable = ({ clientSortInfo, setClientSortInfo }) => column => {
   }
 };
 
+const fetchSubmissions = ({
+  fetchSubmissionsSimple,
+  fetchSubmissionsAdvanced,
+  simpleSearchActive,
+  clearPageTokens,
+}) => () => {
+  clearPageTokens();
+  if (simpleSearchActive) {
+    fetchSubmissionsSimple();
+  } else {
+    fetchSubmissionsAdvanced();
+  }
+};
+
 const SubmissionListComponent = ({
   form,
   submissions,
@@ -113,7 +127,7 @@ const SubmissionListComponent = ({
                     </small>
                   </div>
                 )}
-              <table className="table table-sm table-striped table-datastore">
+              <table className="table table-sm table-striped table--settings">
                 <thead className="d-none d-md-table-header-group sortable">
                   <tr>
                     {visibleColumns.map(c => {
@@ -132,6 +146,7 @@ const SubmissionListComponent = ({
                           key={`thead-${c.type}-${c.name}`}
                           className={`d-sm-none d-md-table-cell ${sortClass}`}
                           onClick={e => sortTable(c)}
+                          scope="col"
                         >
                           {isDiscussionIdField ? <DiscussionIcon /> : c.label}
                         </th>
@@ -142,7 +157,7 @@ const SubmissionListComponent = ({
                 </thead>
                 <thead className="d-md-none">
                   <tr>
-                    <th>
+                    <th scope="col">
                       <div className="input-group">
                         <div className="input-group-prepend">
                           <span className="input-group-text">Sort By</span>
@@ -246,13 +261,16 @@ export const mapStateToProps = state => ({
   hasStartedSearching: state.space.settingsDatastore.hasStartedSearching,
   path: state.router.location.pathname.replace(/\/$/, ''),
   isMobile: state.app.layout.size === 'small',
+  simpleSearchActive: state.space.settingsDatastore.simpleSearchActive,
 });
 
 export const mapDispatchToProps = {
   cloneSubmission: actions.cloneSubmission,
   deleteSubmission: actions.deleteSubmission,
-  fetchSubmissions: actions.fetchSubmissions,
   setClientSortInfo: actions.setClientSortInfo,
+  fetchSubmissionsSimple: actions.fetchSubmissionsSimple,
+  fetchSubmissionsAdvanced: actions.fetchSubmissionsAdvanced,
+  clearPageTokens: actions.clearPageTokens,
 };
 
 export const SubmissionList = compose(
@@ -262,5 +280,6 @@ export const SubmissionList = compose(
   ),
   withHandlers({
     sortTable,
+    fetchSubmissions,
   }),
 )(SubmissionListComponent);

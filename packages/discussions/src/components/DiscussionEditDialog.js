@@ -4,7 +4,7 @@ import { ModalBody, ModalFooter } from 'reactstrap';
 import { toastActions } from 'common';
 import { DiscussionForm } from './DiscussionForm';
 import { actions } from '../redux/modules/discussions';
-import { updateDiscussion } from '../discussion_api';
+import { updateDiscussion } from '../discussionApi';
 
 export class DiscussionEditDialogComponent extends React.Component {
   handleSubmit = (values, completeSubmit) => {

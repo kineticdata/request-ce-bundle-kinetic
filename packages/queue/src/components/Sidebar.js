@@ -1,5 +1,5 @@
 import React from 'react';
-import { KappNavLink as NavLink } from 'common';
+import { KappLink as Link, KappNavLink as NavLink } from 'common';
 import { Nav, NavItem } from 'reactstrap';
 
 const formatCount = count => (count >= 1000 ? '999+' : `${count}`);
@@ -22,7 +22,7 @@ export const Sidebar = ({
             className="btn btn-secondary btn-sidebar-action"
             onClick={handleOpenNewItemMenu}
           >
-            Create New Task
+            New Task
           </button>
         </div>
       )}
@@ -106,6 +106,14 @@ export const Sidebar = ({
           )}
         </Nav>
       </div>
+    </div>
+    <div className="sidebar-group sidebar-group--settings">
+      <ul className="nav flex-column settings-group">
+        <Link to="/settings/" className="nav-link">
+          Settings
+          <span className="fa fa-fw fa-angle-right" />
+        </Link>
+      </ul>
     </div>
   </div>
 );

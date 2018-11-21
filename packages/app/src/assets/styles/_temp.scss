@@ -3,3 +3,8 @@
  *     -Used for development
  *     -Move css into appropriate sass files when ready
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// Used for scrollbars in IE11
+// .modal-open .main-container {
+//   -ms-overflow-y: visible !important;
+// }

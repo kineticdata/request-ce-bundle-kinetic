@@ -17,11 +17,11 @@ const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
   return (
     <tr key={user.username}>
       <Fragment>
-        <td className="d-md-none d-table-cell">
+        <td scope="row" className="d-md-none d-table-cell">
           <div className="card">
             <div className="card-body">
               <strong className="card-title">
-                <Avatar user={user} />
+                <Avatar username={user.username} />
                 {user.displayName}
               </strong>
               <p className="card-text">
@@ -57,8 +57,8 @@ const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
             </div>
           </div>
         </td>
-        <td className="d-none d-md-table-cell">
-          <Avatar user={user} />
+        <td scope="row" className="d-none d-md-table-cell">
+          <Avatar username={user.username} size={18} />
         </td>
       </Fragment>
       <td>
@@ -76,7 +76,7 @@ const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
           toggle={toggleDropdown(user.username)}
           isOpen={openDropdown === user.username}
         >
-          <DropdownToggle color="link">
+          <DropdownToggle color="link" className="btn-sm">
             <span className="fa fa-ellipsis-h fa-2x" />
           </DropdownToggle>
           <DropdownMenu right>

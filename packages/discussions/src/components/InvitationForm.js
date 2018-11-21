@@ -32,6 +32,10 @@ export const InvitationFormComponent = props =>
             onChange={props.handleChange}
             value={props.values.get('message')}
           />
+          <small>
+            This note will be sent as part of the invitation and visible to all
+            members inside the discussion
+          </small>
         </div>
       </form>
     ),

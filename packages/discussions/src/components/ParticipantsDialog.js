@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import Avatar from 'react-avatar';
 import { toastActions } from 'common';
+import { Avatar } from 'common';
 import { actions } from '../redux/modules/discussions';
 import { isPresent } from '../helpers';
-import { resendInvite } from '../discussion_api';
+import { resendInvite } from '../discussionApi';
 
 export const ParticipantsDialog = props => (
   <div className="discussion-dialog modal-form participants-dialog">
@@ -28,13 +28,13 @@ export const ParticipantsDialog = props => (
             className={isPresent(props.discussion, p.username) ? 'present' : ''}
             key={p.email}
           >
-            <Avatar size={26} email={p.email} name={p.displayName} round />
+            <Avatar size={26} username={p.username} />
             {p.displayName}
           </li>
         ))}
       {props.discussion.invitations.map(i => (
         <li key={i.user ? i.user.username : i.email}>
-          <Avatar size={26} round email={i.user ? i.user.email : i.email} />
+          <Avatar size={26} username={i.user ? i.user.username : i.email} />
           {i.user ? i.user.displayName : i.email}{' '}
           <span className="subtext">invited</span>
           <button className="subtext btn btn-link" onClick={props.reinvite(i)}>

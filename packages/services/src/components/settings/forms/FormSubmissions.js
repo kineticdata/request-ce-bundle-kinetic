@@ -6,6 +6,7 @@ import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { PageTitle } from 'common';
 import { Modal } from 'reactstrap';
 import { SubmissionListItem } from './SubmissionListItem';
+import { ExportModal } from './ExportModal';
 import { actions } from '../../../redux/modules/settingsForms';
 
 const DiscussionIcon = () => (
@@ -21,7 +22,7 @@ const DiscussionIcon = () => (
 );
 
 // Create q for search from filter object
-const createSearchQuery = filter => {
+export const createSearchQuery = filter => {
   const q = {};
   for (const property in filter.properties) {
     q[property] = filter.properties[property].value;
@@ -86,6 +87,7 @@ const filterColumns = ({
   setCurrentPage,
   filter,
   setFilter,
+  setDownloaded,
 }) => formSlug => {
   const q = createSearchQuery(filter);
 
@@ -96,10 +98,14 @@ const filterColumns = ({
   });
   setCurrentPage(1);
   setFilter({ ...filter, visible: false });
+  setDownloaded(false);
 };
 
 // Removes a single filter from the object
-const removeFilter = ({ filter, setFilter }) => (type, remove) => {
+const removeFilter = ({ filter, setFilter, setDownloaded }) => (
+  type,
+  remove,
+) => {
   const newFilters = {};
   for (const key in filter[type]) {
     if (key !== remove) {
@@ -107,6 +113,7 @@ const removeFilter = ({ filter, setFilter }) => (type, remove) => {
     }
   }
   setFilter({ ...filter, [type]: { ...newFilters } });
+  setDownloaded(false);
 };
 
 const toggleDropdown = ({
@@ -166,6 +173,9 @@ export const FormSubmissionsContainer = ({
   path,
   isMobile,
   sortTable,
+  openModal,
+  optionsOpen,
+  setOptionsOpen,
 }) => {
   const visibleColumns = submissionColumns.filter(c => c.visible);
   return (
@@ -185,42 +195,72 @@ export const FormSubmissionsContainer = ({
                 <h1>{form.name}</h1>
               </div>
             </div>
+            <div className="submission-meta">
+              <div className="page-container">
+                <div className="data-list-row">
+                  <div className="data-list-row__col">
+                    <dl>
+                      <dt>Form Type</dt>
+                      <dd className="text-truncate">{form.type}</dd>
+                    </dl>
+                  </div>
+                  <div className="data-list-row__col">
+                    <dl>
+                      <dt>Form Status</dt>
+                      <dd className="text-truncate">{form.status}</dd>
+                    </dl>
+                  </div>
+                  <div className="data-list-row__col">
+                    <dl>
+                      <dt>Created</dt>
+                      <dd className="text-truncate">
+                        <span className="time-ago">
+                          {moment(form.createdAt).fromNow()}
+                        </span>
+                        <br />
+                        <small>by {form.createdBy}</small>
+                      </dd>
+                    </dl>
+                  </div>
+                  <div className="data-list-row__col">
+                    <dl>
+                      <dt>Updated</dt>
+                      <dd className="text-truncate">
+                        <span className="time-ago">
+                          {moment(form.updatedAt).fromNow()}
+                        </span>
+                        <br />
+                        <small>by {form.updatedBy}</small>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
             <section>
               <div className="settings-flex row">
-                <div className="col-sm-12">
-                  <label>Description</label>
-                  <p>{form.description}</p>
-                </div>
-                <div className="col-sm-6">
-                  <label>Form Type</label>
-                  <p>{form.type}</p>
-                </div>
-                <div className="col-sm-6">
-                  <label>Form Status</label>
-                  <p>{form.status}</p>
-                </div>
-                <div className="col-sm-6">
-                  <label>Created</label>
-                  <p>
-                    {moment(form.createdAt).fromNow()} by {form.createdBy}
-                  </p>
-                </div>
-                <div className="col-sm-6">
-                  <label>Updated</label>
-                  <p>
-                    {moment(form.updatedAt).fromNow()} by {form.updatedBy}
-                  </p>
-                </div>
-                <div className="col-sm-12">
+                <div className="col-md-12">
+                  {form.description && (
+                    <p className="text-truncate">{form.description}</p>
+                  )}
                   <button
                     className="btn btn-primary pull-right"
                     onClick={() => setFilter({ ...filter, visible: true })}
                   >
                     <i className="fa fa-filter fa-lg" />
                   </button>
+
+                  <button
+                    onClick={() => openModal('export')}
+                    value="export"
+                    className="btn btn-primary pull-left"
+                  >
+                    Export Records
+                  </button>
                 </div>
               </div>
-              <div>
+
+              <div className="mt-3">
                 {clientSortInfo &&
                   (nextPageToken || currentPage >= 2) && (
                     <div className="text-info mb-2">
@@ -232,7 +272,7 @@ export const FormSubmissionsContainer = ({
                       </small>
                     </div>
                   )}
-                <table className="table table-sm table-striped settings-table">
+                <table className="table table-sm table-striped table--settings">
                   <thead className="d-none d-md-table-header-group sortable">
                     <tr>
                       {visibleColumns.map(c => {
@@ -248,6 +288,7 @@ export const FormSubmissionsContainer = ({
                           '';
                         return (
                           <th
+                            scope="col"
                             key={`thead-${c.type}-${c.name}`}
                             className={`d-sm-none d-md-table-cell
                               ${sortClass}
@@ -258,12 +299,12 @@ export const FormSubmissionsContainer = ({
                           </th>
                         );
                       })}
-                      <th className="sort-disabled" />
+                      <th width="10%" className="sort-disabled" />
                     </tr>
                   </thead>
                   <thead className="d-md-none">
                     <tr>
-                      <th>
+                      <th scope="col">
                         <div className="input-group">
                           <div className="input-group-prepend">
                             <span className="input-group-text">Sort By</span>
@@ -346,21 +387,21 @@ export const FormSubmissionsContainer = ({
                       </tbody>
                     )}
                 </table>
-                <ul className="pull-right">
+                <ul className="pagination">
                   {currentPage >= 2 && (
                     <li
-                      className="btn btn-primary"
+                      className="page-item disabled"
                       onClick={() => previousPage(form.slug)}
                     >
                       Previous
                     </li>
                   )}
-                  <li className="btn btn-default">
+                  <li className="page-item disabled">
                     {nextPageToken || currentPage >= 2 ? currentPage : ''}
                   </li>
                   {nextPageToken && (
                     <li
-                      className="btn btn-primary"
+                      className="page-item disabled"
                       onClick={() => nextPage(form.slug)}
                     >
                       Next
@@ -377,12 +418,18 @@ export const FormSubmissionsContainer = ({
                   <div className="modal-header">
                     <h4 className="modal-title">
                       <button
-                        onClick={() => setFilter({ ...filter, visible: false })}
+                        onClick={() =>
+                          setFilter({
+                            ...filter,
+                            visible: false,
+                          })
+                        }
                         type="button"
                         className="btn btn-link"
                       >
                         Cancel
                       </button>
+                      <span>Filter Records</span>
                     </h4>
                   </div>
                   <div className="modal-body">
@@ -597,6 +644,7 @@ export const FormSubmissionsContainer = ({
             </section>
           </div>
         </div>
+        <ExportModal filter={filter} createSearchQuery={createSearchQuery} />
       </div>
     )
   );
@@ -613,6 +661,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   clientSortInfo: state.services.settingsForms.clientSortInfo,
   path: state.router.location.pathname.replace(/\/$/, ''),
   isMobile: state.app.layout.size === 'small',
+  downloaded: state.services.settingsForms.downloaded,
 });
 
 const mapDispatchToProps = {
@@ -620,6 +669,8 @@ const mapDispatchToProps = {
   fetchFormSubmissions: actions.fetchFormSubmissions,
   fetchKapp: actions.fetchKapp,
   setClientSortInfo: actions.setClientSortInfo,
+  openModal: actions.openModal,
+  setDownloaded: actions.setDownloaded,
 };
 
 export const FormSubmissions = compose(
@@ -638,6 +689,7 @@ export const FormSubmissions = compose(
   }),
   withState('property', 'setProperty', {}),
   withState('fieldValue', 'setFieldValue', {}),
+  withState('optionsOpen', 'setOptionsOpen', false),
   withHandlers({
     toggleDropdown,
     filterColumns,

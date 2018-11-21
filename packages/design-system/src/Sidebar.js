@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logoName from './assets/images/KD_logo_159box.png';
 
 export const Sidebar = () => (
@@ -68,8 +68,18 @@ export const Sidebar = () => (
             </Link>
           </li>
           <li className="nav-item">
+            <Link to="/pagination" className="nav-link">
+              Pagination
+            </Link>
+          </li>
+          <li className="nav-item">
             <Link to="/popovers" className="nav-link">
               Popovers
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/tables" className="nav-link">
+              Tables
             </Link>
           </li>
           <li className="nav-item">

@@ -59,7 +59,7 @@ const NotificationComponent = ({
   handleSubmit,
   handleVariableSelection,
 }) => (
-  <div className="page-container page-container--notifications">
+  <div className="page-container page-container--panels page-container--notifications">
     <PageTitle
       parts={[
         submission ? submission.label : `New ${title}`,
@@ -67,7 +67,7 @@ const NotificationComponent = ({
         'Settings',
       ]}
     />
-    <div className="page-panel page-panel--scrollable">
+    <div className="page-panel page-panel--two-thirds page-panel--scrollable">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
@@ -178,18 +178,43 @@ const NotificationComponent = ({
               />
             </div>
             <div className="form__footer">
-              <div className="form_footer__right">
+              <div className="form__footer__right">
+                <Link
+                  to="/settings/notifications"
+                  className="btn btn-link mb-0"
+                >
+                  Cancel
+                </Link>
                 <button
                   type="submit"
                   className="btn btn-primary"
                   disabled={!dirty || !isValid(values)}
                 >
-                  Save
+                  {submission ? 'Save Changes' : `Create ${title}`}
                 </button>
               </div>
             </div>
           </form>
         )}
+    </div>
+    <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--settings-sidebar">
+      <h3>Dynamic Replacements</h3>
+      <p>
+        Use the dropdown to insert dynamic elements within the subject and body
+        of your templates. Just put your cursor into one of those fields where
+        you want the element to appear and choose an option from the dropdown
+        list.
+      </p>
+      <p>
+        Selecting a Kapp and Form will populate the dropdown menu with available
+        options.
+      </p>
+      <p>
+        Caution: Email templates can be used by any process. Since not all Kapps
+        have the same attributes and not all forms have the same attributes or
+        fields, relying on attributes or fields that may not exist will yield
+        unexpected results. Test your email templates!
+      </p>
     </div>
   </div>
 );

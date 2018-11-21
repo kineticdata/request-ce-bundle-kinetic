@@ -111,7 +111,7 @@ const HomeComponent = ({
                 onClick={handleCreateDiscussionButtonClick}
                 className="btn btn-secondary"
               >
-                Create Discussion
+                New Discussion
               </button>
             )}
           </div>

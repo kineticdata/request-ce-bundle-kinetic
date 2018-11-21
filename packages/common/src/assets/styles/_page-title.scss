@@ -35,10 +35,28 @@
     margin-bottom: 1.875rem;
     // line-height: normal;
     @media all and (min-width: 0) {
-      align-self: flex-start;
+      // align-self: flex-start;
     }
     @media all and (min-width: 768px) {
       align-self: flex-end;
+    }
+  }
+  .page-title__actions {
+    @media all and (min-width: 0) {
+      display: flex;
+      justify-content: space-between;
+      .btn {
+        margin-left: 0;
+      }
+    }
+    @media all and (min-width: 768px) {
+      align-self: flex-end;
+      .btn {
+        margin-left: 0.5rem;
+      }
+      .btn-group .btn {
+        margin-left: 0;
+      }
     }
   }
   > a:not(.btn) {
@@ -67,6 +85,10 @@
   padding: 0 0.75rem;
   margin: 0 0 1rem 0;
   border-top: 2px solid $black-16;
+  form &,
+  .form & {
+    margin-left: -15px;
+  }
   a,
   .fa {
     color: $gray;

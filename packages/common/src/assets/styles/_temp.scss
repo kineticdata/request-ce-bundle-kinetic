@@ -183,3 +183,10 @@ ins {
     transform: translateY(0px);
   }
 }
+
+.popover.avatar-popover {
+  border: none;
+  .card.card--profile {
+    margin-bottom: 0px;
+  }
+}

@@ -18,7 +18,7 @@ import {
   removeParticipant,
   createDiscussion,
   createRelatedItem,
-} from '../../discussion_api';
+} from '../../discussionApi';
 
 const selectMessageToken = discussionId => state => {
   const discussion = state.discussions.discussions.discussions.get(

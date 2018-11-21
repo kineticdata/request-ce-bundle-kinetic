@@ -1,82 +1,37 @@
 import React, { Fragment } from 'react';
-import { Link, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
-import { actions } from '../../../redux/modules/settingsRobots';
-import { toastActions, Loading, PageTitle } from 'common';
+import { compose } from 'recompose';
+import { toastActions } from 'common';
+import { CreateRobot } from './CreateRobot';
 import { Robot } from './Robot';
-import { CreateRobotSchedule } from './CreateRobotSchedule';
-import { RobotSchedule } from './RobotSchedule';
 import { RobotExecution } from './RobotExecution';
+import { RobotExecutionsList } from './RobotExecutionsList';
+import { RobotsList } from './RobotsList';
 
 const RobotError = () => <h1>Error loading Robot</h1>;
 
-const RobotContainerComponent = ({
-  robot,
-  robotLoading,
-  robotErrors,
-  match,
-}) => {
-  const loading =
-    robotLoading && (robot === null || robot.id !== match.params.id);
-  return loading ? (
-    <Loading />
-  ) : (
-    <Fragment>
-      {robot === null &&
-        robotErrors.length > 0 && (
-          <div className="page-container page-container--robots">
-            <PageTitle parts={['Robots', 'Settings']} />
-            <div className="page-panel page-panel--scrollable page-panel--robots-content">
-              <div className="page-title">
-                <div className="page-title__wrapper">
-                  <h3>
-                    <Link to="/">home</Link> /{` `}
-                    <Link to="/settings">settings</Link> /{` `}
-                    <Link to="/settings/robots">robots</Link> /{` `}
-                  </h3>
-                </div>
-              </div>
-              <div className="text-center text-danger">
-                <h1>Oops!</h1>
-                <h2>Robot Not Found</h2>
-                {robotErrors.map(error => (
-                  <p className="error-details">{error}</p>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-      {robot !== null && (
-        <Switch>
-          <Route exact path={`${match.path}/error`} component={RobotError} />
-          <Route
-            exact
-            path={`${match.path}/schedules/new`}
-            component={CreateRobotSchedule}
-          />
-          <Route
-            exact
-            path={`${match.path}/schedules/:scheduleId/:mode?`}
-            component={RobotSchedule}
-          />
-          <Route
-            exact
-            path={`${match.path}/executions/:executionId`}
-            component={RobotExecution}
-          />
-          <Route
-            exact
-            path={`${match.path}/schedules/:scheduleId/executions/:executionId`}
-            component={RobotExecution}
-          />
-          <Route path={`${match.path}/:mode?`} component={Robot} />
-        </Switch>
-      )}
-    </Fragment>
-  );
-};
+const RobotContainerComponent = ({ match }) => (
+  <Fragment>
+    <Switch>
+      <Route exact path={`${match.path}/error`} component={RobotError} />
+      <Route exact path={`${match.path}/robots/new`} component={CreateRobot} />
+      <Route exact path={`${match.path}/:robotId`} component={Robot} />
+      <Route
+        exact
+        path={`${match.path}/:robotId/executions`}
+        component={RobotExecutionsList}
+      />
+      <Route
+        exact
+        path={`${match.path}/:robotId/executions/:executionId`}
+        component={RobotExecution}
+      />
+      <Route exact path={`${match.path}`} component={RobotsList} />
+    </Switch>
+  </Fragment>
+);
 
 export const mapStateToProps = state => ({
   robot: state.space.settingsRobots.robot,
@@ -86,7 +41,6 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = {
   push,
-  fetchRobot: actions.fetchRobot,
   addSuccess: toastActions.addSuccess,
   addError: toastActions.addError,
 };
@@ -96,9 +50,4 @@ export const RobotContainer = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  lifecycle({
-    componentWillMount() {
-      this.props.fetchRobot(this.props.match.params.id);
-    },
-  }),
 )(RobotContainerComponent);

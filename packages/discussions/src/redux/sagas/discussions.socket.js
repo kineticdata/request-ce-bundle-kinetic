@@ -14,7 +14,7 @@ import {
 import { socket } from './socket';
 
 import { types, actions } from '../modules/discussions';
-import { fetchDiscussion } from '../../discussion_api';
+import { fetchDiscussion } from '../../discussionApi';
 import { selectToken } from '../modules/socket';
 import { toastActions } from 'common';
 

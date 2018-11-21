@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import { GettingStartedPage } from './GettingStartedPage';
 import { ButtonsPage } from './ButtonsPage';
@@ -12,7 +12,9 @@ import { FormsPage } from './FormsPage';
 import { ModalsPage } from './ModalsPage';
 import { MarkupStylesPage } from './MarkupStylesPage';
 import { NavigationsPage } from './NavigationsPage';
+import { PaginationPage } from './PaginationPage';
 import { PopoversPage } from './PopoversPage';
+import { TablesPage } from './TablesPage';
 import { TypographyPage } from './TypographyPage';
 import { Sidebar } from './Sidebar';
 
@@ -38,7 +40,9 @@ class App extends Component {
             <Route path="/modals" exact component={ModalsPage} />
             <Route path="/markupstyles" exact component={MarkupStylesPage} />
             <Route path="/navigations" exact component={NavigationsPage} />
+            <Route path="/pagination" exact component={PaginationPage} />
             <Route path="/popovers" exact component={PopoversPage} />
+            <Route path="/tables" exact component={TablesPage} />
             <Route path="/toasts" exact component={ToastsPage} />
             <Route path="/typography" exact component={TypographyPage} />
             <Route path="/" exact component={GettingStartedPage} />

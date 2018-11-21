@@ -1,9 +1,9 @@
 import React from 'react';
-import { ActivityNode } from './ActivityNodes/ActivityNode';
-import { EmptyNode } from './ActivityNodes/EmptyNode';
-import { EndNode } from './ActivityNodes/EndNode';
-import { InProgressNode } from './ActivityNodes/InProgressNode';
-import { StartNode } from './ActivityNodes/StartNode';
+import { ActivityNode } from './activity_nodes/ActivityNode';
+import { EmptyNode } from './activity_nodes/EmptyNode';
+import { EndNode } from './activity_nodes/EndNode';
+import { InProgressNode } from './activity_nodes/InProgressNode';
+import { StartNode } from './activity_nodes/StartNode';
 
 // Attempts to parse the activities data property as JSON, if successful it
 // returns that otherwise it returns the string value wrapped in an object.

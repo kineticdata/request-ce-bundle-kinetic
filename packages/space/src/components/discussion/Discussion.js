@@ -108,7 +108,6 @@ const mapStateToProps = (state, props) => {
 
   return {
     socketStage: state.discussions.socket.status.stage,
-    sidebarOpen: state.app.layout.sidebarOpen,
     profile: state.app.profile,
     discussionId: props.match.params.id,
     discussionName:
@@ -120,7 +119,6 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = {
   push,
-  setSidebarOpen: commonActions.setSidebarOpen,
 };
 
 export const Discussion = compose(
@@ -128,20 +126,7 @@ export const Discussion = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withState('sidebarWasOpen', '_', true, props => props.sidebarOpen),
   withHandlers({
     handleLeave,
-  }),
-  lifecycle({
-    componentWillMount() {
-      if (this.props.sidebarWasOpen) {
-        this.props.setSidebarOpen(false);
-      }
-    },
-    componentWillUnmount() {
-      if (this.props.sidebarWasOpen) {
-        this.props.setSidebarOpen(true);
-      }
-    },
   }),
 )(DiscussionComponent);

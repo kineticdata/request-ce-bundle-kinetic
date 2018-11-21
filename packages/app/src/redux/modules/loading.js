@@ -1,5 +1,5 @@
 import * as Utils from 'common/src/utils';
-const { namespace, noPayload, withPayload } = Utils;
+const { namespace, withPayload } = Utils;
 
 export const types = {
   LOAD_APP: namespace('loading', 'LOAD_APP'),
@@ -7,7 +7,7 @@ export const types = {
 };
 
 export const actions = {
-  loadApp: noPayload(types.LOAD_APP),
+  loadApp: withPayload(types.LOAD_APP),
   setLoading: withPayload(types.SET_LOADING),
 };
 

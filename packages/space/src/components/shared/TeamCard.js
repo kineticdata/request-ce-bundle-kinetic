@@ -20,7 +20,7 @@ const TeamCardComponent = props => {
       </div>
       <div className="card--team__body">
         <h1>{name}</h1>
-        <pre>{description}</pre>
+        <pre className="text-truncate">{description}</pre>
 
         {slug && (
           <Link to={`/teams/${slug}`} className="btn btn-primary btn-sm">
@@ -67,7 +67,7 @@ const Members = ({ members }) => (
             }`}
             key={member.user.username}
           >
-            <Avatar user={member.user} size={26} />
+            <Avatar username={member.user.username} size={26} />
           </div>
         );
       })}

@@ -1,3 +1,5 @@
+import { Avatar } from './components/Avatar';
+import { ProfileCard } from './components/ProfileCard';
 import { ToastsContainer } from './components/ToastsContainer';
 import { ModalFormContainer } from './components/ModalFormContainer';
 import { KappLink } from './components/KappLink';
@@ -6,19 +8,22 @@ import { KappNavLink } from './components/KappNavLink';
 import { KappRedirect } from './components/KappRedirect';
 import { KappRoute } from './components/KappRoute';
 import { TimeAgo } from './components/TimeAgo';
-import { Hoverable } from './components/Hoverable';
 import { Icon } from './components/Icon';
 import { Loading } from './components/Loading';
 import { PageTitle } from './components/PageTitle';
 import { ErrorNotFound } from './components/ErrorNotFound';
 import { ErrorUnauthorized } from './components/ErrorUnauthorized';
 import { ErrorUnexpected } from './components/ErrorUnexpected';
-import { Avatar } from './components/Avatar';
 import { WallySpinner } from './components/WallySpinner';
 
-import { actions as commonActions } from './redux/modules/common';
-import { types as commonTypes } from './redux/modules/common';
-import { selectCurrentKapp } from './redux/modules/common';
+import {
+  selectCurrentKapp,
+  selectCurrentKappSlug,
+} from './redux/modules/common';
+import {
+  types as commonTypes,
+  actions as commonActions,
+} from './redux/modules/common';
 import {
   actions as toastActions,
   types as toastTypes,
@@ -27,8 +32,11 @@ import { actions as modalFormActions } from './redux/modules/modalForm';
 
 import * as Utils from './utils';
 import * as Constants from './constants';
+import * as AttributeSelectors from './components/attribute_selectors';
 
 export {
+  Avatar,
+  ProfileCard,
   KappLink,
   KappLinkContainer,
   KappNavLink,
@@ -37,7 +45,6 @@ export {
   ToastsContainer,
   ModalFormContainer,
   TimeAgo,
-  Hoverable,
   Icon,
   Loading,
   PageTitle,
@@ -47,11 +54,12 @@ export {
   toastTypes,
   modalFormActions,
   selectCurrentKapp,
+  selectCurrentKappSlug,
   Utils,
   Constants,
   ErrorNotFound,
   ErrorUnauthorized,
   ErrorUnexpected,
-  Avatar,
   WallySpinner,
+  AttributeSelectors,
 };

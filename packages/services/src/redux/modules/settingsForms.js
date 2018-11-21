@@ -66,6 +66,12 @@ export const types = {
   FETCH_NOTIFICATIONS: namespace('settingsForms', 'FETCH_NOTIFICATIONS'),
   SET_NOTIFICATIONS: namespace('settingsForms', 'SET_NOTIFICATIONS'),
   SET_CLIENT_SORT_INFO: namespace('settingsForms', 'SET_CLIENT_SORT_INFO'),
+  FETCH_ALL_SUBMISSIONS: namespace('settingsForms', 'FETCH_ALL_SUBMISSIONS'),
+  SET_EXPORT_SUBMISSIONS: namespace('settingsForms', 'SET_EXPORT_SUBMISSIONS'),
+  SET_EXPORT_COUNT: namespace('settingsForms', 'SET_EXPORT_COUNT'),
+  OPEN_MODAL: namespace('settingsForms', 'OPEN_MODAL'),
+  CLOSE_MODAL: namespace('settingsForms', 'CLOSE_MODAL'),
+  SET_DOWNLOADED: namespace('settingsForms', 'SET_DOWNLOADED'),
 };
 
 export const actions = {
@@ -83,6 +89,12 @@ export const actions = {
   fetchNotifications: withPayload(types.FETCH_NOTIFICATIONS),
   setNotifications: withPayload(types.SET_NOTIFICATIONS),
   setClientSortInfo: withPayload(types.SET_CLIENT_SORT_INFO),
+  fetchAllSubmissions: withPayload(types.FETCH_ALL_SUBMISSIONS),
+  setExportSubmissions: withPayload(types.SET_EXPORT_SUBMISSIONS),
+  setExportCount: withPayload(types.SET_EXPORT_COUNT),
+  openModal: withPayload(types.OPEN_MODAL),
+  closeModal: noPayload(types.CLOSE_MODAL),
+  setDownloaded: withPayload(types.SET_DOWNLOADED),
 };
 
 export const parseFormConfigurationJson = json => {
@@ -191,6 +203,11 @@ export const State = Record({
   submissionColumns: new List(),
   // Client Side Sorting
   clientSortInfo: null,
+  modalIsOpen: false,
+  modalName: '',
+  exportSubmissions: [],
+  exportCount: 0,
+  downloaded: false,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -241,6 +258,18 @@ export const reducer = (state = State(), { type, payload }) => {
           'currentFormSubmissions',
           sortSubmissions(state.currentFormSubmissions, payload),
         );
+    case types.FETCH_ALL_SUBMISSIONS:
+      return state.set('fetchingAll', true);
+    case types.SET_EXPORT_SUBMISSIONS:
+      return state.set('exportSubmissions', payload).set('fetchingAll', false);
+    case types.SET_EXPORT_COUNT:
+      return state.set('exportCount', payload);
+    case types.OPEN_MODAL:
+      return state.set('modalIsOpen', true).set('modalName', payload);
+    case types.CLOSE_MODAL:
+      return state.set('modalIsOpen', false).set('modalName', '');
+    case types.SET_DOWNLOADED:
+      return state.set('downloaded', payload);
     default:
       return state;
   }

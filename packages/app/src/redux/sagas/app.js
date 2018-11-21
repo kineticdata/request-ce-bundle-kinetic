@@ -1,4 +1,5 @@
-import { takeEvery, call, put, all } from 'redux-saga/effects';
+import { takeEvery, call, put, all, select } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
 import { Map } from 'immutable';
 import { CoreAPI } from 'react-kinetic-core';
 import { actions as configActions } from '../modules/config';
@@ -15,16 +16,16 @@ import semver from 'semver';
 const MINIMUM_CE_VERSION = '2.0.2';
 
 // Fetch Entire App
-export function* fetchAppTask() {
+export function* fetchAppTask({ payload }) {
   const { version } = yield call(CoreAPI.fetchVersion);
-
+  const initialLoad = payload;
   // Check to make sure the version is compatible with this bundle.
   if (
     semver.satisfies(semver.coerce(version.version), `>=${MINIMUM_CE_VERSION}`)
   ) {
     const { profile } = yield call(CoreAPI.fetchProfile, {
       include:
-        'attributes,profileAttributes,memberships,memberships.team,memberships.team.attributes,memberships.team.memberships,memberships.team.memberships.user,attributes,space,space.details,space.attributes,space.kapps,space.kapps.attributes',
+        'attributes,profileAttributes,profileAttributesMap,memberships,memberships.team,memberships.team.attributes,memberships.team.memberships,memberships.team.memberships.user,attributes,space,space.details,space.attributes,space.attributesMap,space.kapps,space.kapps.attributes',
     });
 
     const space = Map(profile.space)
@@ -41,6 +42,28 @@ export function* fetchAppTask() {
       put(profileActions.setProfile(me)),
       put(spaceActions.setSpace(space)),
     ]);
+    const defaultKappDisplaySpace =
+      profile.space.attributesMap &&
+      profile.space.attributesMap['Default Kapp Display'] &&
+      profile.space.attributesMap['Default Kapp Display'].length > 0
+        ? profile.space.attributesMap['Default Kapp Display'][0]
+        : undefined;
+    const defaultKappDisplayProfile =
+      profile.space.attributesMap &&
+      profile.profileAttributesMap['Default Kapp Display'] &&
+      profile.profileAttributesMap['Default Kapp Display'].length > 0
+        ? profile.profileAttributesMap['Default Kapp Display'][0]
+        : undefined;
+    const currentRoute = yield select(state => state.router.location.pathname);
+    if (
+      initialLoad &&
+      (defaultKappDisplaySpace || defaultKappDisplayProfile) &&
+      currentRoute === '/'
+    ) {
+      yield put(
+        push(`/kapps/${defaultKappDisplayProfile || defaultKappDisplaySpace}`),
+      );
+    }
     yield put(loadingActions.setLoading(false));
   } else {
     window.alert(

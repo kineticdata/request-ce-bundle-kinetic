@@ -4,7 +4,7 @@ import { Modal, ModalFooter } from 'reactstrap';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { DiscussionForm } from 'discussions/src/components/DiscussionForm';
 import { InvitationForm } from 'discussions/src/components/InvitationForm';
-import { createDiscussion, sendInvites } from 'discussions/src/discussion_api';
+import { createDiscussion, sendInvites } from 'discussions/src/discussionApi';
 import { toastActions } from 'common';
 import { actions } from '../../redux/modules/spaceApp';
 
@@ -19,7 +19,7 @@ const CreateDiscussionModalComponent = props => (
         >
           {props.step === 'discussion' ? 'Cancel' : 'Back'}
         </button>
-        <span>Create Discussion</span>
+        <span>New Discussion</span>
       </h4>
     </div>
     {/* We always render the Discussion/Invitation form components and hide/show

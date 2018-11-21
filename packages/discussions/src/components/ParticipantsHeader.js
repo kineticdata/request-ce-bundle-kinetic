@@ -2,10 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { bundle } from 'react-kinetic-core';
-import { Hoverable } from 'common';
 import { actions } from '../redux/modules/discussions';
-import Avatar from 'react-avatar';
 import { isPresent } from '../helpers';
+import { Avatar } from 'common';
 import { ParticipantCard } from './ParticipantCard';
 
 const participantComparator = (p1, p2) =>
@@ -26,31 +25,18 @@ export const ParticipantsHeader = ({
         .filter(p => !p.user.unknown)
         .sort(participantComparator)
         .map(p => (
-          <Hoverable
+          <div
             key={p.user.username}
-            render={() => (
-              <ParticipantCard discussion={discussion} participant={p} />
-            )}
+            className={isPresent(discussion, p.user.username) ? 'present' : ''}
           >
-            <div
-              className={
-                isPresent(discussion, p.user.username) ? 'present' : ''
-              }
-            >
-              <Avatar
-                size={26}
-                email={p.user.email}
-                name={p.user.displayName}
-                round
-              />
-            </div>
-          </Hoverable>
+            <Avatar size={26} username={p.user.username} />
+          </div>
         ))}
       <div className="view-all">
         {!isFullScreen && (
           <button
             type="button"
-            className="btn btn-icon"
+            className="btn btn-icon btn-expand d-sm-none d-md-inline-flex"
             onClick={openInNewTab}
             title="Expand Discussion"
           >

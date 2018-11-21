@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { fromJS } from 'immutable';
 import { modalFormActions, PageTitle } from 'common';
 import { actions } from '../../../redux/modules/profiles';
-import { ProfileCard } from '../../shared/ProfileCard';
+import { ProfileCard } from 'common';
 import { TeamCard } from '../../shared/TeamCard';
 
 export const EditProfileComponent = ({
@@ -14,14 +14,20 @@ export const EditProfileComponent = ({
   error,
   editingPassword,
   fieldValues,
-  location,
-  locationEnabled,
+  department,
+  departmentEnabled,
+  organization,
+  organizationEnabled,
+  site,
+  siteEnabled,
+  defaultKappDisplayEnabled,
   manager,
   managerEnabled,
   handleChangeManagerClick,
   handleFieldChange,
   handleSubmit,
   handleTogglePassword,
+  kapps,
 }) => (
   <div className="page-container page-container--panels page-container--space-profile-edit">
     <PageTitle parts={['Edit Profile']} />
@@ -50,8 +56,8 @@ export const EditProfileComponent = ({
                   value={fieldValues.displayName}
                 />
               </div>
-              <div className="profile-input-container">
-                <div className="form-group required">
+              <div className="profile-input-container row">
+                <div className="form-group required col-md-6">
                   <label htmlFor="email">Email</label>
                   <input
                     type="text"
@@ -61,8 +67,8 @@ export const EditProfileComponent = ({
                     value={fieldValues.email}
                   />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="phoneNumber">Phone number</label>
+                <div className="form-group col-md-6">
+                  <label htmlFor="phoneNumber">Phone Number</label>
                   <input
                     type="text"
                     id="phoneNumber"
@@ -71,13 +77,35 @@ export const EditProfileComponent = ({
                     value={fieldValues.phoneNumber}
                   />
                 </div>
+                {defaultKappDisplayEnabled && (
+                  <div className="form-group col-md-6">
+                    <label htmlFor="phoneNumber">Default Kapp Display</label>
+                    <select
+                      className="form-control"
+                      type="kapp"
+                      id="defaultKappDisplay"
+                      name="defaultKappDisplay"
+                      onChange={handleFieldChange}
+                      value={fieldValues.defaultKappDisplay}
+                    >
+                      <option value="">--Home--</option>
+                      {kapps.map(k => (
+                        <option key={k.slug} value={k.slug}>
+                          {k.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
               {editingPassword ? (
                 <div>
                   <hr />
-                  <div className="profile-input-container">
-                    <div className="form-group required two-columns first-column">
-                      <label htmlFor="newPassword">New Password</label>
+                  <div className="profile-input-container row">
+                    <div className="form-group col">
+                      <label htmlFor="newPassword" className="required">
+                        New Password
+                      </label>
                       <input
                         type="password"
                         id="newPassword"
@@ -86,8 +114,8 @@ export const EditProfileComponent = ({
                         value={fieldValues.newPassword}
                       />
                     </div>
-                    <div className="form-group required two-columns second-column">
-                      <label htmlFor="confirmPassword">
+                    <div className="form-group col">
+                      <label htmlFor="confirmPassword" className="required">
                         Password Confirmation
                       </label>
                       <input
@@ -110,6 +138,7 @@ export const EditProfileComponent = ({
                       Cancel Password Change
                     </button>
                   </div>
+                  <hr />
                 </div>
               ) : (
                 <button
@@ -124,24 +153,30 @@ export const EditProfileComponent = ({
                   <button
                     disabled={!fieldValuesValid(fieldValues)}
                     className="btn btn-primary"
+                    // TODO: Disable until a change is made. Save Changes
                   >
-                    Save
+                    Save Changes
                   </button>
                 </div>
               </div>
             </form>
           </section>
-          {(managerEnabled || locationEnabled) && (
+          {(managerEnabled ||
+            siteEnabled ||
+            departmentEnabled ||
+            organizationEnabled) && (
             <section>
               <h2 className="section__title">User Attributes</h2>
               <div className="user-attributes-wrapper">
-                <table className="user-attributes table">
+                <table className="table table--user-attributes">
                   <tbody>
                     {managerEnabled && (
                       <tr>
-                        <td className="name">Manager</td>
+                        <td scope="row" className="name">
+                          Manager
+                        </td>
                         <td>
-                          {manager || <i>No Manager</i>}
+                          {manager || <em>No Manager</em>}
                           <button
                             className="btn btn-link btn-sm"
                             onClick={handleChangeManagerClick}
@@ -151,10 +186,30 @@ export const EditProfileComponent = ({
                         </td>
                       </tr>
                     )}
-                    {locationEnabled && (
+                    {departmentEnabled && (
                       <tr>
-                        <td className="name">Location</td>
-                        <td>{location || <i>No Location</i>}</td>
+                        <td scope="row" className="name">
+                          {' '}
+                          Department{' '}
+                        </td>
+                        <td> {department || <em> No Department </em>}</td>
+                      </tr>
+                    )}
+                    {organizationEnabled && (
+                      <tr>
+                        <td scope="row" className="name">
+                          {' '}
+                          Organization{' '}
+                        </td>
+                        <td> {organization || <em> No Organization </em>}</td>
+                      </tr>
+                    )}
+                    {siteEnabled && (
+                      <tr>
+                        <td scope="row" className="name">
+                          Site
+                        </td>
+                        <td>{site || <em>No Site</em>}</td>
                       </tr>
                     )}
                   </tbody>
@@ -184,11 +239,7 @@ export const EditProfileComponent = ({
         <div className="page-panel page-panel--two-fifths page-panel--sidebar page-panel--space-profile-edit-sidebar">
           <ProfileCard
             user={buildProfile(fieldValues, profile)}
-            button={
-              <Link to={`/profile/${profile.username}`}>
-                <button className="btn btn-primary btn-sm">View Profile</button>
-              </Link>
-            }
+            hideProfileLink
           />
         </div>
       </Fragment>
@@ -197,7 +248,7 @@ export const EditProfileComponent = ({
 );
 
 const UserTeams = ({ teams }) => (
-  <div className="cards__wrapper">
+  <div className="cards__wrapper cards__wrapper--team">
     {Object.keys(teams).length > 0 ? (
       teams.map(item => <TeamCard key={item.team.name} team={item.team} />)
     ) : (
@@ -230,6 +281,11 @@ const getProfilePhone = profile =>
     ? profile.profileAttributes['Phone Number'].join(', ')
     : '';
 
+const getDefaultKappDisplay = profile =>
+  profile.profileAttributes && profile.profileAttributes['Default Kapp Display']
+    ? profile.profileAttributes['Default Kapp Display'][0]
+    : '';
+
 const buildProfile = (fieldValues, profile) => {
   const profileAttributes =
     profile && profile.profileAttributes
@@ -238,6 +294,7 @@ const buildProfile = (fieldValues, profile) => {
   if (fieldValues.phoneNumber !== '') {
     profileAttributes['Phone Number'] = [fieldValues.phoneNumber];
   }
+  profileAttributes['Default Kapp Display'] = [fieldValues.defaultKappDisplay];
   return {
     ...profile,
     displayName: fieldValues.displayName,
@@ -252,6 +309,7 @@ const translateProfileToFieldValues = profile => ({
   newPassword: '',
   confirmPassword: '',
   phoneNumber: getProfilePhone(profile) || '',
+  defaultKappDisplay: getDefaultKappDisplay(profile) || '',
 });
 
 const translateFieldValuesToProfile = (fieldValues, profile) => {
@@ -282,21 +340,38 @@ const mapStateToProps = state => ({
   profile: state.space.profiles.profile,
   error: state.space.profiles.error,
   editingPassword: state.space.profiles.isChangePasswordVisible,
-  location:
+  department:
     state.space.profiles.profile &&
-    state.space.profiles.profile.profileAttributes['Location'],
-  locationEnabled:
-    state.space.spaceApp.userProfileAttributeDefinitions['Location'],
+    state.space.profiles.profile.attributes['Department'],
+  departmentEnabled:
+    state.space.spaceApp.userAttributeDefinitions['Department'],
   manager:
     state.space.profiles.profile &&
     state.space.profiles.profile.attributes['Manager'],
   managerEnabled: state.space.spaceApp.userAttributeDefinitions['Manager'],
+  organization:
+    state.space.profiles.profile &&
+    state.space.profiles.profile.attributes['Organization'],
+  organizationEnabled:
+    state.space.spaceApp.userAttributeDefinitions['Organization'],
+  site:
+    state.space.profiles.profile &&
+    state.space.profiles.profile.attributes['Site'],
+  siteEnabled: state.space.spaceApp.userAttributeDefinitions['Site'],
+  defaultKappDisplay:
+    state.space.profiles.profile &&
+    state.space.profiles.profile.profileAttributes['Default Kapp Display'],
+  defaultKappDisplayEnabled:
+    state.space.spaceApp.userProfileAttributeDefinitions[
+      'Default Kapp Display'
+    ],
   spaceAttributes:
     state.app.space &&
     state.app.space.attributes.reduce((memo, item) => {
       memo[item.name] = item.value;
       return memo;
     }, {}),
+  kapps: state.app.kapps,
 });
 
 const mapDispatchToProps = {

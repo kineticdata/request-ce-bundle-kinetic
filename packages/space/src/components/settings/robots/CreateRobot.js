@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { ROBOT_DEFINITIONS_FORM_SLUG } from '../../../redux/modules/settingsRobots';
+import { ROBOT_SCHEDULES_FORM_SLUG } from '../../../redux/modules/settingsRobots';
 import { CoreForm } from 'react-kinetic-core';
 import { toastActions } from 'common';
 
 const globals = import('common/globals');
 
 const CreateRobotComponent = ({
+  robot,
   match,
   handleLoaded,
   handleCreated,
@@ -31,7 +32,7 @@ const CreateRobotComponent = ({
       <div>
         <CoreForm
           datastore
-          form={ROBOT_DEFINITIONS_FORM_SLUG}
+          form={ROBOT_SCHEDULES_FORM_SLUG}
           loaded={handleLoaded}
           created={handleCreated}
           error={handleError}
@@ -43,13 +44,13 @@ const CreateRobotComponent = ({
 );
 
 export const handleLoaded = props => form => {
-  const cancelButton = form.find('button.cancel-robot')[0];
+  const cancelButton = form.find('button.cancel-schedule')[0];
   if (cancelButton) {
     cancelButton.addEventListener('click', () => {
-      props.push('/settings/robots');
+      props.push(`/settings/robots`);
     });
   }
-  const deleteButton = form.find('button.delete-robot')[0];
+  const deleteButton = form.find('button.delete-schedule')[0];
   if (deleteButton) {
     deleteButton.remove();
   }
@@ -67,7 +68,9 @@ export const handleError = props => response => {
   props.addError(response.error, 'Error');
 };
 
-export const mapStateToProps = state => ({});
+export const mapStateToProps = state => ({
+  robot: state.space.settingsRobots.robot,
+});
 
 export const mapDispatchToProps = {
   push,

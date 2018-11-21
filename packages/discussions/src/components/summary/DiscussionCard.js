@@ -20,7 +20,7 @@ export const DiscussionCard = ({ discussion, me, onDiscussionClick }) => {
             .map(participant => (
               <Avatar
                 key={participant.user.username}
-                user={participant.user}
+                username={participant.user.username}
                 size={24}
               />
             ))}

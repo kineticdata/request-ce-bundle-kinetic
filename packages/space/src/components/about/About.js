@@ -50,15 +50,15 @@ const AboutComponent = ({ space, about, loading }) => (
               <thead>
                 <tr>
                   <th />
-                  <th>Email</th>
-                  <th>Display Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Display Name</th>
                 </tr>
               </thead>
               <tbody>
                 {about.spaceAdmins.map(user => (
                   <tr key={user.username}>
-                    <td>
-                      <Avatar user={user} />
+                    <td scope="row">
+                      <Avatar username={user.username} />
                     </td>
                     <td>
                       <Link to={`/profile/${user.username || user.email}`}>

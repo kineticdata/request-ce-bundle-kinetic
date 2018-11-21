@@ -35,7 +35,7 @@ const AlertsComponent = ({ alerts, loading, match, error, canEdit }) => {
             </div>
             {canEdit && (
               <Link to="/alerts/new" className="btn btn-secondary">
-                Create New Alert
+                New Alert
               </Link>
             )}
           </div>
@@ -48,9 +48,11 @@ const AlertsComponent = ({ alerts, loading, match, error, canEdit }) => {
                 <table className="table table--alerts">
                   <thead>
                     <tr>
-                      <th width="25%">Title</th>
-                      <th width="65%">Description</th>
-                      {canEdit && <th width="10%">Actions</th>}
+                      <th scope="col">Title</th>
+                      <th scope="col" width="50%">
+                        Description
+                      </th>
+                      {canEdit && <th width="10%" />}
                     </tr>
                   </thead>
                   <tbody>

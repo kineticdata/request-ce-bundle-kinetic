@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react';
 import { compose, shouldUpdate } from 'recompose';
 import { connect } from 'react-redux';
-import Avatar from 'react-avatar';
+import { Avatar } from 'common';
 import moment from 'moment';
 import Markdown from 'react-markdown';
 import { bundle } from 'react-kinetic-core';
 import { ParticipantCard } from './ParticipantCard';
-import { Hoverable } from 'common';
 import { MessageActionsContext } from './Discussion';
 
 import aviIcon from '../assets/images/avi_128.png';
@@ -174,9 +173,6 @@ export const MessageBubble = ({ discussion, message }) => (
   </div>
 );
 
-const getParticipant = (discussion, createdBy) =>
-  discussion.participants.find(p => p.user.username === createdBy.username);
-
 export const MessagesGroup = ({ discussion, messages, profile }) => (
   <MessageActionsContext.Consumer>
     {actions => (
@@ -188,25 +184,11 @@ export const MessagesGroup = ({ discussion, messages, profile }) => (
         }`}
       >
         {messages.first().createdBy.username !== profile.username && (
-          <Hoverable
-            key={messages.first().createdBy.id}
-            render={() => (
-              <ParticipantCard
-                discussion={discussion}
-                participant={getParticipant(
-                  discussion,
-                  messages.first().createdBy,
-                )}
-              />
-            )}
-          >
-            <Avatar
-              size={36}
-              email={messages.first().createdBy.email}
-              name={messages.first().createdBy.displayName}
-              round
-            />
-          </Hoverable>
+          <Avatar
+            key={messages.first().createdBy.username}
+            size={36}
+            username={messages.first().createdBy.username}
+          />
         )}
         <div className="message-list">
           {messages.map(message => (

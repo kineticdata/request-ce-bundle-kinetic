@@ -87,15 +87,15 @@ const AddMemberModalComponent = ({
         {addedMembers.length > 0 && (
           <table className="table">
             <tbody>
-              {addedMembers.map(memeber => (
-                <tr key={memeber.username}>
-                  <td>
-                    <Avatar size={30} user={memeber} />
+              {addedMembers.map(member => (
+                <tr key={member.username}>
+                  <td scope="row">
+                    <Avatar size={30} username={member.username} />
                   </td>
-                  <td>{memeber.displayName || memeber.username}</td>
+                  <td>{member.displayName || member.username}</td>
                   <td>
                     <button
-                      onClick={() => handleRemoveMemberTemp(memeber)}
+                      onClick={() => handleRemoveMemberTemp(member)}
                       className="btn btn-danger pull-right"
                     >
                       <span className="fa fa-times fa-fw" />

@@ -1,13 +1,14 @@
 import { Map } from 'immutable';
 import { all, takeEvery, call, put } from 'redux-saga/effects';
 import { actions, types } from '../modules/settingsServices';
-import { actions as kinopsActions } from 'app/src/redux/modules/app';
+import { toastActions, commonActions } from 'common';
 
 import { CoreAPI } from 'react-kinetic-core';
 
 const SERVICES_SETTING_INCLUDES = 'formTypes,attributesMap,forms,forms.details';
 const TEAMS_SETTING_INCLUDES = 'teams';
 const SPACE_SETTING_INCLUDES = 'kapps,kapps.forms,attributesMap';
+const FORM_INCLUDES = 'details,fields,attributesMap,categorizations';
 
 export function* fetchServicesSettingsSaga({ payload }) {
   const [{ serverError, kapp }, manageableForms] = yield all([
@@ -22,6 +23,12 @@ export function* fetchServicesSettingsSaga({ payload }) {
   ]);
 
   if (serverError) {
+    yield put(
+      toastActions.addError(
+        'Failed to fetch Services settings.',
+        'Fetch Settings',
+      ),
+    );
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     const manageableFormsSlugs = (manageableForms.forms || []).map(
@@ -46,9 +53,23 @@ export function* fetchTeamsSaga({ payload }) {
   });
 
   if (serverError) {
+    yield put(toastActions.addError('Failed to fetch teams.', 'Fetch Teams'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setServicesSettingsTeams(teams));
+  }
+}
+
+export function* fetchUsersSaga({ payload }) {
+  const { serverError, users } = yield call(CoreAPI.fetchUsers, {
+    include: 'details',
+  });
+
+  if (serverError) {
+    yield put(toastActions.addError('Failed to fetch users.', 'Fetch Users'));
+    yield put(actions.updateServicesSettingsError(serverError));
+  } else {
+    yield put(actions.setServicesSettingsUsers(users));
   }
 }
 
@@ -59,6 +80,7 @@ export function* fetchSpaceSaga({ payload }) {
   });
 
   if (serverError) {
+    yield put(toastActions.addError('Failed to fetch space.', 'Fetch Space'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setServicesSettingsSpace(space));
@@ -80,9 +102,18 @@ export function* updateServicesSettingsSaga({ payload }) {
   });
 
   if (serverError) {
+    yield put(
+      toastActions.addError('Failed to update settings.', 'Update Settings'),
+    );
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
-    yield put(kinopsActions.loadApp());
+    yield put(
+      toastActions.addSuccess(
+        'Updated settings successfully.',
+        'Update Settings',
+      ),
+    );
+    yield put(commonActions.loadApp());
   }
 }
 
@@ -99,16 +130,39 @@ export function* fetchNotificationsSaga() {
   });
 
   if (serverError) {
-    yield put(actions.setFormsErrors(serverError));
+    yield put(
+      toastActions.addError(
+        'Failed to fetch notifications.',
+        'Fetch Notifications',
+      ),
+    );
+    yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setNotifications(submissions));
+  }
+}
+
+export function* fetchFormSaga(action) {
+  const { serverError, form } = yield call(CoreAPI.fetchForm, {
+    kappSlug: action.payload.kappSlug,
+    formSlug: action.payload.formSlug,
+    include: FORM_INCLUDES,
+  });
+
+  if (serverError) {
+    yield put(toastActions.addError('Failed to fetch form.', 'Fetch Form'));
+    yield put(actions.updateServicesSettingsError(serverError));
+  } else {
+    yield put(actions.setForm(form));
   }
 }
 
 export function* watchSettingsServices() {
   yield takeEvery(types.FETCH_SERVICES_SETTINGS, fetchServicesSettingsSaga);
   yield takeEvery(types.FETCH_SERVICES_SETTINGS_TEAMS, fetchTeamsSaga);
+  yield takeEvery(types.FETCH_SERVICES_SETTINGS_USERS, fetchUsersSaga);
   yield takeEvery(types.FETCH_SERVICES_SETTINGS_SPACE, fetchSpaceSaga);
   yield takeEvery(types.UPDATE_SERVICES_SETTINGS, updateServicesSettingsSaga);
   yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
+  yield takeEvery(types.FETCH_FORM, fetchFormSaga);
 }

@@ -21,7 +21,7 @@ import { DiscussionCard } from './components/summary/DiscussionCard';
 import { DiscussionsList } from './components/summary/DiscussionsList';
 import { DiscussionsPanel } from './components/summary/DiscussionsPanel';
 import { ViewDiscussionsModal } from './components/summary/ViewDiscussionsModal';
-import * as DiscussionAPI from './discussion_api';
+import * as DiscussionAPI from './discussionApi';
 
 // Components
 export {

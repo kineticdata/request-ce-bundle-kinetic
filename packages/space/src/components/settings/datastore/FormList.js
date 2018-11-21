@@ -43,9 +43,9 @@ const FormListComponent = ({
   openDropdown,
 }) => {
   return (
-    <div className="page-container page-container--datastore">
+    <div className="page-container page-container--panels page-container--datastore">
       <PageTitle parts={['Datastore Forms']} />
-      <div className="page-panel page-panel--scrollable page-panel--datastore-content">
+      <div className="page-panel page-panel--two-thirds page-panel--scrollable page-panel--datastore-content">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -55,7 +55,7 @@ const FormListComponent = ({
             <h1>Datastore Forms</h1>
           </div>
           <Link to={`${match.path}/new`} className="btn btn-primary">
-            Create Datastore
+            New Datastore Form
           </Link>
         </div>
 
@@ -63,14 +63,23 @@ const FormListComponent = ({
           {loading ? (
             <h3>Loading</h3>
           ) : datastoreForms && datastoreForms.size > 0 ? (
-            <table className="table table-sm table-striped table-datastore">
-              <thead className="header">
+            <table className="table table-sm table-striped table--settings">
+              <thead className="header sortable">
                 <tr>
-                  <th>Form Name</th>
-                  <th width="40%">Description</th>
-                  <th width="10%">Updated</th>
-                  <th width="10%">Created</th>
-                  <th width="48px">&nbsp;</th>
+                  <th scope="col" width="10%">
+                    Form Name
+                  </th>
+                  <th scope="col">Slug</th>
+                  <th scope="col" width="50%">
+                    Description
+                  </th>
+                  <th scope="col" width="10%">
+                    Updated
+                  </th>
+                  <th scope="col" width="10%">
+                    Created
+                  </th>
+                  <th scope="col" width="48px" className="sort-disabled" />
                 </tr>
               </thead>
               <tbody>
@@ -78,13 +87,12 @@ const FormListComponent = ({
                   const canManage = form.canManage;
                   return (
                     <tr key={form.slug}>
-                      <td>
+                      <td scope="row">
                         <Link to={`${match.path}/${form.slug}`}>
                           <span>{form.name}</span>
                         </Link>
-                        <br />
-                        <small>{form.slug}</small>
                       </td>
+                      <td>{form.slug}</td>
                       <td>{form.description}</td>
                       <td>
                         <Timestamp value={form.updatedAt} slug={form.slug} />
@@ -103,6 +111,12 @@ const FormListComponent = ({
                           <DropdownMenu right>
                             <DropdownItem
                               tag={Link}
+                              to={`${match.path}/${form.slug}`}
+                            >
+                              View
+                            </DropdownItem>
+                            <DropdownItem
+                              tag={Link}
                               to={`${match.path}/${form.slug}/new`}
                             >
                               New Record
@@ -112,7 +126,7 @@ const FormListComponent = ({
                                 tag={Link}
                                 to={`${match.path}/${form.slug}/settings`}
                               >
-                                Configure Form
+                                Configure
                               </DropdownItem>
                             )}
                           </DropdownMenu>
@@ -127,6 +141,20 @@ const FormListComponent = ({
             <WallyEmptyMessage />
           )}
         </div>
+      </div>
+      <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
+        <h3>Datastore Forms</h3>
+        {/* TODO: Update tone of copy */}
+        <p>
+          Datastore Forms allow administrators to define and build referential
+          datasets. These forms can be configured with compound
+          (multi-field/property) indexes and unique indexes, which provide
+          efficient query support for large datasets.
+        </p>
+        <p>
+          Example datasets: Assets, People, Locations, Vendors, or Cities and
+          States
+        </p>
       </div>
     </div>
   );

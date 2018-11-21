@@ -241,29 +241,13 @@ export const NotificationMenuComponent = ({
   toggleIsDatastore,
 }) => (
   <div className="alert alert-secondary">
-    <h2>Dynamic Replacements</h2>
-    <p>
-      Use the dropdown to insert dynamic elements within the subject and body of
-      your templates. Just put your cursor into one of those fields where you
-      want the element to appear and choose an option from the dropdown list.
-    </p>
-    <p>
-      Selecting a Kapp and Form will populate the dropdown menu with available
-      options.
-    </p>
-    <p>
-      Caution: Email templates can be used by any process. Since not all Kapps
-      have the same attributes and not all forms have the same attributes or
-      fields, relying on attributes or fields that may not exist will yield
-      unexpected results. Test your email templates!
-    </p>
     <div className="form-row">
       {hasDatastore && (
-        <div className="form-group col-md-1">
-          <label htmlFor="notification-menu-datastore">Is Datastore?</label>
+        <div className="form-group col-2">
+          <label htmlFor="notification-menu-datastore">Datastore?</label>
           <select
             id="notification-menu-datastore"
-            className="form-control"
+            className="form-control form-control-sm"
             value={isDatastore}
             onChange={toggleIsDatastore}
           >
@@ -277,7 +261,7 @@ export const NotificationMenuComponent = ({
           <label htmlFor="notification-menu-kapp">Kapp</label>
           <select
             id="notification-menu-kapp"
-            className="form-control"
+            className="form-control form-control-sm"
             value={selectedKapp ? selectedKapp.slug : ''}
             onChange={handleKappSelect}
           >
@@ -290,11 +274,11 @@ export const NotificationMenuComponent = ({
           </select>
         </div>
       )}
-      <div className="form-group col-md-4">
+      <div className="form-group col">
         <label htmlFor="notification-menu-form">Form</label>
         <select
           id="notification-menu-form"
-          className="form-control"
+          className="form-control form-control-sm"
           value={selectedForm ? selectedForm.slug : ''}
           onChange={handleFormSelect}
         >
@@ -314,6 +298,8 @@ export const NotificationMenuComponent = ({
           )}
         </select>
       </div>
+    </div>
+    <div className="form-row">
       <div className="form-group col-md-5">
         <label htmlFor="">Dynamic Replacement Value</label>
         <UncontrolledButtonDropdown>

@@ -62,24 +62,23 @@ const SettingsComponent = ({
                 {origForm.name}
               </Link>
             </h3>
-            <h1>{origForm.name} Configuration</h1>
+            <h1>Configuration</h1>
           </div>
-          <div className="page-title__actions">
-            <a
-              href={`${bundle.spaceLocation()}/app/#/admin/datastore/form/${
-                origForm.slug
-              }/builder`}
-              className="btn btn-primary"
-              target="blank"
-            >
-              Form Builder
-            </a>
-          </div>
+
+          <a
+            href={`${bundle.spaceLocation()}/app/#/admin/datastore/form/${
+              origForm.slug
+            }/builder`}
+            className="btn btn-primary"
+            target="blank"
+          >
+            Form Builder <i className="fa fa-fw fa-external-link" />
+          </a>
         </div>
         {canManage ? (
           <div className="datastore-settings">
             <h3 className="section__title">General Settings</h3>
-            <div className="settings">
+            <div className="form settings">
               <div className="form-row">
                 <div className="col">
                   <div className="form-group required">
@@ -127,7 +126,7 @@ const SettingsComponent = ({
             </div>
             <div className="table-settings">
               <h3 className="section__title">Table Display Settings</h3>
-              <div className="settings">
+              <div className="form settings">
                 <div className="form-group">
                   <label htmlFor="default-search-index">
                     Default Search Index
@@ -196,11 +195,11 @@ const SettingsComponent = ({
                     </select>
                   </div>
                 )}
-                <table className="table table-datastore table-draggable">
+                <table className="table table--settings table-draggable">
                   <thead>
                     <tr className="header">
-                      <th>Field</th>
-                      <th>Visible in Table</th>
+                      <th scope="col">Field</th>
+                      <th scope="col">Visible in Table</th>
                     </tr>
                   </thead>
                   <DragDropContext onDragEnd={handleColumnOrderChange}>
@@ -222,7 +221,7 @@ const SettingsComponent = ({
                                     snapshot.isDragging ? 'dragging' : ''
                                   }`}
                                 >
-                                  <td>
+                                  <td scope="row">
                                     {col.type === 'value' ? (
                                       col.label
                                     ) : (
@@ -258,7 +257,7 @@ const SettingsComponent = ({
             </div>
             <div className="table-settings">
               <h3 className="section__title">Bridge Configuration</h3>
-              <div className="settings">
+              <div className="form settings">
                 <div className="form-group">
                   <label htmlFor="name">Bridge Name</label>
                   <select
@@ -419,19 +418,19 @@ const QualificationTable = ({
         </button>
       </div>
     </div>
-    <table className="table table-datastore">
+    <table className="table table--settings">
       <thead>
         <tr className="header">
-          <th>Qualification Name</th>
-          <th>Result Type</th>
-          <th>Parameters</th>
+          <th scope="col">Qualification Name</th>
+          <th scope="col">Result Type</th>
+          <th scope="col">Parameters</th>
           <th />
         </tr>
       </thead>
       <tbody>
         {updatedForm.bridgeModel.qualifications.map((qual, index) => (
           <tr key={qual.name}>
-            <td>{qual.name}</td>
+            <td scope="row">{qual.name}</td>
             <td>{qual.resultType}</td>
             <td>{qual.parameters.length} Parameters</td>
             <td>
@@ -466,7 +465,7 @@ const QualificationTable = ({
         ))}
         {updatedForm.bridgeModel.qualifications.size === 0 && (
           <tr>
-            <td colSpan="4" className="text-center">
+            <td scope="row" colSpan="4" className="text-center">
               No qualifications.
             </td>
           </tr>
@@ -542,18 +541,18 @@ const QualificationModal = ({
           </div>
           <div className="form-group">
             <label>Parameters</label>
-            <table className="table table-datastore">
+            <table className="table table--settings">
               <thead>
                 <tr className="header">
-                  <th>Name</th>
-                  <th>Notes</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Notes</th>
                   <th width="1%" />
                 </tr>
               </thead>
               <tbody>
                 {newQualification.parameters.map((parameter, index) => (
                   <tr key={parameter.name}>
-                    <td>{parameter.name}</td>
+                    <td scope="row">{parameter.name}</td>
                     <td>{parameter.notes}</td>
                     <td className="text-right">
                       <div className="btn-group btn-group-sm pull-right">
@@ -752,11 +751,11 @@ const AttributeTable = ({
         )}
       </div>
     </div>
-    <table className="table table-datastore">
+    <table className="table table--settings">
       <thead>
         <tr className="header">
-          <th>Attribute Name</th>
-          <th>Mapping</th>
+          <th scope="col">Attribute Name</th>
+          <th scope="col">Mapping</th>
           <th />
         </tr>
       </thead>
@@ -768,7 +767,7 @@ const AttributeTable = ({
             ) || {};
           return (
             <tr key={attr.name}>
-              <td>
+              <td scope="row">
                 {editAttribute.index === index ? (
                   <input
                     id="editAttributeName"
@@ -866,7 +865,7 @@ const AttributeTable = ({
         })}
         {updatedForm.bridgeModel.attributes.size === 0 && (
           <tr>
-            <td colSpan="3" className="text-center">
+            <td scope="row" colSpan="3" className="text-center">
               No attributes.
             </td>
           </tr>
@@ -875,11 +874,13 @@ const AttributeTable = ({
       <tfoot>
         {newAttribute.error && (
           <tr className="alert alert-danger" role="alert">
-            <td colSpan="3">{newAttribute.error}</td>
+            <td scope="row" colSpan="3">
+              {newAttribute.error}
+            </td>
           </tr>
         )}
         <tr>
-          <td>
+          <td scope="row">
             <input
               id="newAttributeName"
               name="newAttributeName"

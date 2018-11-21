@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { compose, lifecycle, withProps, withState } from 'recompose';
 import { NavLink } from 'react-router-dom';
 import { PageTitle } from 'common';
+import { Modal, ModalBody } from 'reactstrap';
 import { NotificationListItem } from './NotificationListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/settingsNotifications';
@@ -18,7 +19,13 @@ const WallyNoResultsFoundMessage = ({ type }) => {
   );
 };
 
-const NotificationsListComponent = ({ submissions, type, match }) => (
+const NotificationsListComponent = ({
+  submissions,
+  type,
+  match,
+  previewModal,
+  setPreviewModal,
+}) => (
   <div className="page-container page-container--notifications">
     <PageTitle parts={[`${type}s`, 'Notifications', 'Settings']} />
     <div className="page-panel page-panel--scrollable">
@@ -31,7 +38,7 @@ const NotificationsListComponent = ({ submissions, type, match }) => (
           <h1>Notifications</h1>
         </div>
         <Link to={`${match.url}/new`} className="btn btn-primary">
-          Create New {type}
+          New {type}
         </Link>
       </div>
       <div className="notifications-tabs">
@@ -62,34 +69,58 @@ const NotificationsListComponent = ({ submissions, type, match }) => (
           </li>
         </ul>
       </div>
-      <div>
-        {submissions.length > 0 ? (
-          <table className="table table-sm">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Status</th>
-                <th className="d-none d-md-block">
-                  {type === 'Date Format' ? 'Format' : 'Subject'}
-                </th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {submissions.map(s => (
-                <NotificationListItem
-                  key={`trow-${s.id}`}
-                  notification={s}
-                  path={`${match.url}/${s.id}`}
-                  type={type}
-                />
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <WallyNoResultsFoundMessage type={type} />
-        )}
-      </div>
+      {submissions.length > 0 ? (
+        <table className="table table-sm table-striped table--settings">
+          <thead className="sortable">
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Status</th>
+              <th scope="col">
+                {type === 'Date Format' ? 'Format' : 'Subject'}
+              </th>
+              <th className="sort-disabled" />
+            </tr>
+          </thead>
+          <tbody>
+            {submissions.map(s => (
+              <NotificationListItem
+                key={`trow-${s.id}`}
+                notification={s}
+                path={`${match.url}/${s.id}`}
+                type={type}
+                previewModal={previewModal}
+                setPreviewModal={setPreviewModal}
+              />
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <WallyNoResultsFoundMessage type={type} />
+      )}
+      {previewModal && (
+        <Modal isOpen={!!previewModal} toggle={() => setPreviewModal(null)}>
+          <div className="modal-header">
+            <h4 className="modal-title">
+              <button
+                onClick={() => setPreviewModal(null)}
+                type="button"
+                className="btn btn-link"
+              >
+                Close
+              </button>
+              <span>Template Preview</span>
+              <span>&nbsp;</span>
+            </h4>
+          </div>
+          <ModalBody>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: previewModal.values['HTML Content'],
+              }}
+            />
+          </ModalBody>
+        </Modal>
+      )}
     </div>
   </div>
 );
@@ -113,6 +144,7 @@ export const NotificationsList = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withState('previewModal', 'setPreviewModal', null),
   withProps(props => {
     switch (props.match.params.type) {
       case 'templates':
