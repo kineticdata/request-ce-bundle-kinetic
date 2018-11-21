@@ -40,24 +40,22 @@ export const QueueItemDetails = ({
   prohibitSubtasks,
   refreshQueueItem,
   openDiscussions,
-  openDiscussion,
-  createDiscussion,
   closeDiscussions,
-  relatedDiscussions,
   prevAndNext,
   kappSlug,
   discussionsEnabled,
   profile,
   isSmallLayout,
+  getCreationParams,
 }) => (
   <div className="queue-item-details">
     {viewDiscussionsModal &&
       isSmallLayout && (
         <ViewDiscussionsModal
-          handleCreateDiscussion={createDiscussion}
-          handleDiscussionClick={openDiscussion}
+          itemType="Submission"
+          itemKey={queueItem.id}
           close={closeDiscussions}
-          discussions={relatedDiscussions}
+          creationParams={getCreationParams}
           me={profile}
         />
       )}
@@ -181,7 +179,6 @@ const getAttr = (form, attrName) => {
 export const mapStateToProps = (state, props) => ({
   filter: props.filter,
   queueItem: state.queue.queue.currentItem,
-  relatedDiscussions: state.queue.queue.relatedDiscussions,
   assignments: selectAssignments(state).toJS(),
   prevAndNext: selectPrevAndNext(state, props.filter),
   kappSlug: state.app.config.kappSlug,
@@ -195,9 +192,6 @@ export const mapDispatchToProps = {
   setCurrentItem: actions.setCurrentItem,
   openNewItemMenu: actions.openNewItemMenu,
   fetchCurrentItem: actions.fetchCurrentItem,
-  openModal: discussionActions.openModal,
-  createDiscussion: discussionActions.createIssue,
-  setCurrentDiscussion: actions.setCurrentDiscussion,
   setOffset: actions.setOffset,
   fetchList: actions.fetchList,
 };
@@ -262,24 +256,7 @@ export const QueueItemDetailsContainer = compose(
       }
       fetchCurrentItem(queueItem.id);
     },
-    openDiscussion: props => discussion => () => {
-      // Close the discussion list modal and open the discussion modal.
-      props.setViewDiscussionsModal(false);
-      props.setCurrentDiscussion(discussion);
-      props.openModal(discussion.id, 'discussion');
-    },
     openDiscussions: props => () => props.setViewDiscussionsModal(true),
     closeDiscussions: props => () => props.setViewDiscussionsModal(false),
-    createDiscussion: props => () =>
-      props.createDiscussion(
-        props.queueItem.label || 'Queue Discussion',
-        props.queueItem.values['Details'] || '',
-        props.queueItem,
-        null,
-        (issue, submission) => {
-          props.setCurrentItem(submission);
-          props.openModal(issue.guid, 'discussion');
-        },
-      ),
   }),
 )(QueueItemDetails);

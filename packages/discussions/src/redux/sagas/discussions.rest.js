@@ -1,5 +1,10 @@
 import { all, call, select, take, put, takeEvery } from 'redux-saga/effects';
 import { types, actions } from '../modules/discussions';
+import {
+  types as listTypes,
+  actions as listActions,
+} from '../modules/discussionsList';
+import { newDiscussionsList } from '../modules/discussions';
 import { selectToken } from '../modules/socket';
 import { toastActions } from 'common';
 import {
@@ -8,6 +13,7 @@ import {
   deleteMessage,
   fetchMessages,
   fetchDiscussion,
+  fetchDiscussions,
   createInvite,
   removeParticipant,
   createDiscussion,
@@ -64,6 +70,26 @@ export function* fetchDiscussionTask(action) {
     yield put(toastActions.addError('Failed to fetch discussion!'));
   }
   yield put(actions.addDiscussion(discussion));
+}
+
+export function* fetchRelatedDiscussionsTask(action) {
+  const token = yield select(selectToken);
+  const { type, key, loadCallback } = action.payload;
+
+  const { discussions } = yield call(fetchDiscussions, {
+    token,
+    relatedItem: {
+      type: type,
+      key: key,
+    },
+  });
+
+  const discussionsList = newDiscussionsList(discussions);
+  yield put(listActions.setRelatedDiscussions(discussionsList));
+
+  if (typeof loadCallback === 'function') {
+    yield call(loadCallback, discussionsList);
+  }
 }
 
 export function* createInvitationTask({
@@ -157,5 +183,6 @@ export function* watchDiscussionRest() {
     takeEvery(types.CREATE_INVITE, createInvitationTask),
     takeEvery(types.REVOKE_PARTICIPANT, revokeParticipantTask),
     takeEvery(types.CREATE_DISCUSSION, createDiscussionTask),
+    takeEvery(listTypes.FETCH_RELATED_DISCUSSIONS, fetchRelatedDiscussionsTask),
   ]);
 }

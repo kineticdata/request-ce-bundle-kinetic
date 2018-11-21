@@ -18,12 +18,7 @@ import {
   actions,
 } from '../../../redux/modules/settingsDatastore';
 
-import { DatastoreDiscussions } from './DatastoreDiscussions';
-
-import {
-  actions as discussionActions,
-  ViewDiscussionsModal,
-} from 'discussions';
+import { DiscussionsPanel, ViewDiscussionsModal } from 'discussions';
 
 const globals = import('common/globals');
 
@@ -42,12 +37,10 @@ const DatastoreSubmissionComponent = ({
   discussionsEnabled,
   viewDiscussionsModal,
   isSmallLayout,
-  createDiscussion,
-  relatedDiscussions,
   openDiscussions,
-  openDiscussion,
   closeDiscussions,
   profile,
+  getCreationParams,
 }) => (
   <div className="page-container page-container--panels page-container--datastore">
     <PageTitle
@@ -135,14 +128,22 @@ const DatastoreSubmissionComponent = ({
         )}
       </div>
     </div>
-    {discussionsEnabled && <DatastoreDiscussions />}
+    {discussionsEnabled &&
+      submission && (
+        <DiscussionsPanel
+          creationParams={getCreationParams}
+          itemType="Datastore Submission"
+          itemKey={submissionId}
+          me={profile}
+        />
+      )}
     {viewDiscussionsModal &&
       isSmallLayout && (
         <ViewDiscussionsModal
-          handleCreateDiscussion={createDiscussion}
-          handleDiscussionClick={openDiscussion}
+          creationParams={getCreationParams}
           close={closeDiscussions}
-          discussions={relatedDiscussions}
+          itemType="Datastore Submission"
+          itemKey={submissionId}
           me={profile}
         />
       )}
@@ -189,16 +190,15 @@ export const handleCreated = props => (response, actions) => {
   props.setFormKey(getRandomKey());
 };
 
-export const openDiscussion = props => discussion => () => {
-  // Close the discussion list modal and open the discussion modal.
-  props.setViewDiscussionsModal(false);
-  props.setCurrentDiscussion(discussion);
-  props.openModal(discussion.id, 'discussion');
-};
 export const openDiscussions = props => () =>
   props.setViewDiscussionsModal(true);
 export const closeDiscussions = props => () =>
   props.setViewDiscussionsModal(false);
+
+export const getCreationParams = props => () => ({
+  title: props.submission.label || 'Datastore Discussion',
+  description: props.submission.form.name || '',
+});
 
 export const mapStateToProps = (state, { match: { params } }) => ({
   submissionId: params.id,
@@ -209,7 +209,6 @@ export const mapStateToProps = (state, { match: { params } }) => ({
   values: valuesFromQueryParams(state.router.location.search),
   isEditing: params.mode && params.mode === 'edit' ? true : false,
   discussionsEnabled: selectDiscussionsEnabled(state),
-  relatedDiscussions: state.space.settingsDatastore.relatedDiscussions,
   isSmallLayout: state.app.layout.get('size') === 'small',
   profile: state.app.profile,
 });
@@ -218,10 +217,6 @@ export const mapDispatchToProps = {
   push,
   fetchSubmission: actions.fetchSubmission,
   resetSubmission: actions.resetSubmission,
-  fetchRelatedDiscussions: actions.fetchRelatedDiscussions,
-  setCurrentDiscussion: actions.setCurrentDiscussion,
-  setRelatedDiscussions: actions.setRelatedDiscussions,
-  openModal: discussionActions.openModal,
   addSuccess: toastActions.addSuccess,
   addError: toastActions.addError,
 };
@@ -238,8 +233,8 @@ export const DatastoreSubmission = compose(
     handleCreated,
     handleError,
     openDiscussions,
-    openDiscussion,
     closeDiscussions,
+    getCreationParams,
   }),
   lifecycle({
     componentWillMount() {
@@ -254,15 +249,9 @@ export const DatastoreSubmission = compose(
       ) {
         this.props.fetchSubmission(nextProps.match.params.id);
       }
-
-      if (this.props.currentDiscussion !== nextProps.currentDiscussion) {
-        this.props.fetchRelatedDiscussions(nextProps.id);
-      }
     },
     componentWillUnmount() {
       this.props.resetSubmission();
-      this.props.setCurrentDiscussion(null);
-      this.props.setRelatedDiscussions(List());
     },
   }),
 )(DatastoreSubmissionComponent);

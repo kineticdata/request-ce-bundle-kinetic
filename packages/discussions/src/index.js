@@ -6,6 +6,10 @@ import {
   newDiscussion,
   newDiscussionsList,
 } from './redux/modules/discussions';
+import {
+  actions as listActions,
+  types as listTypes,
+} from './redux/modules/discussionsList';
 import { sagas, combineSagas } from './redux/sagas';
 import { DiscussionContainer as Discussion } from './components/DiscussionContainer';
 import {
@@ -15,6 +19,7 @@ import {
 } from './components/MessagesGroup';
 import { DiscussionCard } from './components/summary/DiscussionCard';
 import { DiscussionsList } from './components/summary/DiscussionsList';
+import { DiscussionsPanel } from './components/summary/DiscussionsPanel';
 import { ViewDiscussionsModal } from './components/summary/ViewDiscussionsModal';
 import * as DiscussionAPI from './discussion_api';
 
@@ -25,6 +30,7 @@ export {
   UploadMessage,
   MessagesGroup,
   DiscussionsList,
+  DiscussionsPanel,
   DiscussionCard,
   ViewDiscussionsModal,
 };

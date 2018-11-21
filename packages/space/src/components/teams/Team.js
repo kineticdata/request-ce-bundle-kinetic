@@ -1,11 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { getTeamColor, getTeamIcon } from '../../utils';
-import {
-  Discussion as KinopsDiscussion,
-  ViewDiscussionsModal,
-  DiscussionsList,
-} from 'discussions';
+import { ViewDiscussionsModal, DiscussionsPanel } from 'discussions';
 import { PageTitle, Hoverable } from 'common';
 import { ServiceCard } from '../shared/ServiceCard';
 import { TeamMemberAvatar } from './TeamMemberAvatar';
@@ -13,16 +9,11 @@ import { ProfileCard } from '../shared/ProfileCard';
 
 export const Team = ({
   loading,
-  currentDiscussion,
-  handleDiscussionClick,
-  openDiscussion,
-  clearDiscussion,
+  getCreationParams,
   openDiscussions,
   closeDiscussions,
   viewDiscussionsModal,
   isSmallLayout,
-  handleCreateDiscussion,
-  relatedDiscussions,
   parent,
   team,
   subteams,
@@ -153,54 +144,19 @@ export const Team = ({
             {viewDiscussionsModal &&
               isSmallLayout && (
                 <ViewDiscussionsModal
-                  handleCreateDiscussion={handleCreateDiscussion}
-                  handleDiscussionClick={openDiscussion}
                   close={closeDiscussions}
-                  discussions={relatedDiscussions}
+                  itemType="Team"
+                  itemKey={team.slug}
+                  creationParams={getCreationParams}
                   me={me}
                 />
               )}
-            {currentDiscussion && currentDiscussion.id ? (
-              <div className="kinops-discussions d-none d-md-flex">
-                <button
-                  onClick={clearDiscussion}
-                  className="btn btn-link btn-back"
-                >
-                  <span className="icon">
-                    <span className="fa fa-fw fa-chevron-left" />
-                  </span>
-                  Back to Discussions
-                </button>
-                <KinopsDiscussion
-                  discussionId={currentDiscussion.id}
-                  isMobileModal
-                  renderClose={() => null}
-                />
-              </div>
-            ) : relatedDiscussions.size > 0 ? (
-              <div className="recent-discussions-wrapper kinops-discussions d-none d-md-flex">
-                <DiscussionsList
-                  handleCreateDiscussion={handleCreateDiscussion}
-                  handleDiscussionClick={handleDiscussionClick}
-                  discussions={relatedDiscussions}
-                  me={me}
-                />
-              </div>
-            ) : (
-              <div className="kinops-discussions d-none d-md-flex empty">
-                <div className="empty-discussion">
-                  <h5>No discussion to display</h5>
-                  <p>
-                    <button
-                      onClick={handleCreateDiscussion}
-                      className="btn btn-link"
-                    >
-                      Create a new discussion
-                    </button>
-                  </p>
-                </div>
-              </div>
-            )}
+            <DiscussionsPanel
+              itemType="Team"
+              itemKey={team.slug}
+              creationParams={getCreationParams}
+              me={me}
+            />
           </Fragment>
         )}
       </Fragment>

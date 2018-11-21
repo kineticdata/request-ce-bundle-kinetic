@@ -1,13 +1,16 @@
 import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
-import { Utils } from 'common';
-import { DiscussionCard } from './DiscussionCard';
+import { compose } from 'recompose';
+import { DiscussionsList } from './DiscussionsList';
 import { DiscussionContainer } from '../DiscussionContainer';
-import { actions as listActions } from '../../redux/modules/discussionsList';
 import { actions as discussionsActions } from '../../redux/modules/discussions';
 
-export class DiscussionsPanel extends Component {
+export const getDisplayClasses = props =>
+  props.isModal === true
+    ? 'kinops-discussions d-flex d-md-none d-lg-none d-xl-none'
+    : 'kinops-discussions d-none d-md-flex';
+
+export class DiscussionsPanelComponent extends Component {
   constructor(props) {
     super(props);
 
@@ -42,23 +45,27 @@ export class DiscussionsPanel extends Component {
   handleDiscussionClick = discussion => _e =>
     this.setState({ currentDiscussion: discussion });
   handleDiscussionCreate = () => {
+    const additionalParams =
+      typeof this.props.creationParams === 'function'
+        ? this.props.creationParams()
+        : {};
     const params = {
-      ...this.props.creationParams(),
+      ...additionalParams,
       relatedItem: {
         type: this.props.itemType,
         key: this.props.itemKey,
       },
       onSuccess: (discussion, _relatedItem) => {
-        props.setCurrentDiscussion(discussion);
+        this.setState({ currentDiscussion: discussion });
       },
     };
-    console.log(this.props);
     this.props.createDiscussion(params);
   };
 
   render() {
+    console.log(this.props);
     return this.state.currentDiscussion ? (
-      <div className="kinops-discussions d-none d-md-flex">
+      <div className={getDisplayClasses(this.props)} style={{ flexGrow: '1' }}>
         <button
           onClick={this.handleDiscussionClear}
           className="btn btn-link btn-back"
@@ -70,12 +77,16 @@ export class DiscussionsPanel extends Component {
         </button>
         <DiscussionContainer
           discussionId={this.state.currentDiscussion.id}
-          isMobileModal
           renderClose={() => null}
         />
       </div>
     ) : (
-      <div className="recent-discussions-wrapper kinops-discussions d-none d-md-flex">
+      <div
+        className={`recent-discussions-wrapper ${getDisplayClasses(
+          this.props,
+        )}`}
+        style={{ margin: this.props.isModal === true ? '1em' : undefined }}
+      >
         <DiscussionsList
           itemType={this.props.itemType}
           itemKey={this.props.itemKey}
@@ -89,71 +100,12 @@ export class DiscussionsPanel extends Component {
   }
 }
 
-export const DiscussionsListComponent = ({
-  handleCreateDiscussion,
-  handleDiscussionClick,
-  discussions,
-  me,
-}) => {
-  // const discussionGroup = Utils.getGroupedDiscussions(discussions);
-  return discussions && discussions.size > 0 ? (
-    <Fragment>
-      <button onClick={handleCreateDiscussion} className="btn btn-inverse">
-        New Discussion
-      </button>
-
-      {Utils.getGroupedDiscussions(discussions)
-        .map((discussions, dateGroup) => (
-          <div className="messages" key={dateGroup}>
-            <div className="date">
-              <hr />
-              <span>{dateGroup}</span>
-              <hr />
-            </div>
-            {discussions.map(discussion => (
-              <DiscussionCard
-                key={discussion.id}
-                me={me}
-                discussion={discussion}
-                onDiscussionClick={handleDiscussionClick}
-              />
-            ))}
-          </div>
-        ))
-        .toList()}
-    </Fragment>
-  ) : (
-    <div className="empty-discussion">
-      <h5>No discussion to display</h5>
-      <p>
-        <button onClick={handleCreateDiscussion} className="btn btn-link">
-          Create a new discussion
-        </button>
-      </p>
-    </div>
-  );
-};
-
 const mapDispatchToProps = {
-  fetchRelatedDiscussions: listActions.fetchRelatedDiscussions,
   createDiscussion: discussionsActions.createDiscussion,
 };
-
-const mapStateToProps = state => ({
-  discussions: state.discussions.discussionsList.relatedDiscussions,
-});
-export const DiscussionsList = compose(
+export const DiscussionsPanel = compose(
   connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps,
   ),
-  lifecycle({
-    componentWillMount() {
-      this.props.fetchRelatedDiscussions(
-        this.props.itemType,
-        this.props.itemKey,
-        this.props.onLoad,
-      );
-    },
-  }),
-)(DiscussionsListComponent);
+)(DiscussionsPanelComponent);

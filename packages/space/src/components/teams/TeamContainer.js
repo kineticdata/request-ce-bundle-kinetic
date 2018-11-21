@@ -22,36 +22,20 @@ import {
 
 import { Team } from './Team';
 
-export const openDiscussion = props => discussion => () => {
-  // Close the discussion list modal and open the discussion modal.
-  props.setViewDiscussionsModal(false);
-  props.setCurrentDiscussion(discussion);
-  props.openModal(discussion.id, 'discussion');
-};
 export const openDiscussions = props => () =>
   props.setViewDiscussionsModal(true);
 
 export const closeDiscussions = props => () =>
   props.setViewDiscussionsModal(false);
 
-const clearDiscussion = props => () => props.setCurrentDiscussion(null);
-const handleDiscussionClick = props => discussion => () =>
-  props.setCurrentDiscussion(discussion);
+export const getCreationParams = props => () => {
+  const owningTeams = [{ name: props.team.name }];
 
-export const handleCreateDiscussion = props => () => {
-  const teamSlug = md5(props.team.name);
-  props.createDiscussion({
+  return {
     title: props.team.name || 'Team Discussion',
     description: props.team.name || '',
-    relatedItem: {
-      type: 'Team',
-      key: teamSlug,
-    },
-    onSuccess: (discussion, _relatedItem) => {
-      props.setCurrentDiscussion(discussion);
-      props.fetchRelatedDiscussions(teamSlug);
-    },
-  });
+    owningTeams,
+  };
 };
 
 const mapStateToProps = state => {
@@ -93,8 +77,6 @@ const mapStateToProps = state => {
           item.name.replace(/::[^:]+$/, '') === team.name,
       ),
     services: selectFormsForTeam(state),
-    currentDiscussion: state.space.team.currentDiscussion,
-    relatedDiscussions: state.space.team.relatedDiscussions,
     isSmallLayout: state.app.layout.get('size') === 'small',
   };
 };
@@ -105,11 +87,6 @@ const mapDispatchToProps = {
   fetchTeams: teamListActions.fetchTeams,
   fetchForms: spaceFormsActions.fetchForms,
   resetTeam: actions.resetTeam,
-  fetchRelatedDiscussions: actions.fetchRelatedDiscussions,
-  setCurrentDiscussion: actions.setCurrentDiscussion,
-  setRelatedDiscussions: actions.setRelatedDiscussions,
-  createDiscussion: discussionActions.createDiscussion,
-  openModal: discussionActions.openModal,
 };
 
 const openRequestToJoinForm = ({
@@ -160,24 +137,16 @@ export const TeamContainer = compose(
       if (this.props.match.params.slug !== nextProps.match.params.slug) {
         this.props.fetchTeam(nextProps.match.params.slug);
       }
-      if (this.props.currentDiscussion !== nextProps.currentDiscussion) {
-        this.props.fetchRelatedDiscussions(nextProps.match.params.slug);
-      }
     },
     componentWillUnmount() {
       this.props.resetTeam();
-      this.props.setCurrentDiscussion(null);
-      this.props.setRelatedDiscussions(List());
     },
   }),
   withHandlers({
     openRequestToJoinForm,
     openRequestToLeaveForm,
-    handleDiscussionClick,
-    handleCreateDiscussion,
-    openDiscussion,
-    clearDiscussion,
     openDiscussions,
     closeDiscussions,
+    getCreationParams,
   }),
 )(Team);

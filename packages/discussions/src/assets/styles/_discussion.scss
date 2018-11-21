@@ -8,6 +8,7 @@
   flex-direction: column;
   justify-content: center;
   padding: 0 !important;
+  flex-grow: 1;
   .messages {
     background-color: #f7f7f7;
     flex: 1 0 auto;

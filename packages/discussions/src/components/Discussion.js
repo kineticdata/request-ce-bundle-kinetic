@@ -198,7 +198,7 @@ export const Discussion = props => {
     );
   } else if (discussion && isMobileModal) {
     return (
-      <div className="kinops-discussions d-none d-md-flex">
+      <div>
         {!isSmallLayout && <Messages {...props} />}
         {!isSmallLayout && (
           <ChatInputForm

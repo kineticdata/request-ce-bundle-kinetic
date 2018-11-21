@@ -1,14 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
+import { compose, lifecycle, withHandlers } from 'recompose';
 import { KappLink as Link, PageTitle } from 'common';
+import { DiscussionsPanel } from 'discussions';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { actions } from '../../redux/modules/queue';
 import { QueueItemDetailsContainer } from './QueueItemDetails';
-import { QueueItemDiscussionsContainer } from './QueueItemDiscussionsContainer';
 import { getFilterByPath, buildFilterPath } from '../../redux/modules/queueApp';
 
-export const QueueItem = ({ filter, queueItem, discussionsEnabled }) =>
+export const QueueItem = ({
+  filter,
+  queueItem,
+  discussionsEnabled,
+  getCreationParams,
+  profile,
+}) =>
   queueItem !== null && (
     <div className="queue-item-container">
       {filter && (
@@ -26,25 +32,50 @@ export const QueueItem = ({ filter, queueItem, discussionsEnabled }) =>
             filter ? filter.name || 'Adhoc' : '',
           ]}
         />
-        <QueueItemDetailsContainer filter={filter} />
-        {discussionsEnabled && <QueueItemDiscussionsContainer />}
+        <QueueItemDetailsContainer
+          filter={filter}
+          getCreationParams={getCreationParams}
+        />
+        {discussionsEnabled && (
+          <DiscussionsPanel
+            itemType="Submission"
+            itemKey={queueItem.id}
+            creationParams={getCreationParams}
+            me={profile}
+          />
+        )}
       </div>
     </div>
   );
+
+export const getCreationParams = props => () => {
+  const owningTeams = [{ name: props.queueItem.values['Assigned Team'] }];
+  const owningUsers = [
+    {
+      username:
+        props.queueItem.values['Assigned Individual'] || props.profile.username,
+    },
+  ];
+
+  return {
+    title: props.queueItem.label || 'Queue Discussion',
+    description: props.queueItem.values['Details'] || '',
+    owningTeams,
+    owningUsers,
+  };
+};
 
 export const mapStateToProps = (state, props) => ({
   id: props.match.params.id,
   filter: getFilterByPath(state, props.location.pathname),
   queueItem: state.queue.queue.currentItem,
-  currentDiscussion: state.queue.queue.currentDiscussion,
   discussionsEnabled: selectDiscussionsEnabled(state),
+  profile: state.app.profile,
 });
 
 export const mapDispatchToProps = {
   fetchCurrentItem: actions.fetchCurrentItem,
-  fetchRelatedDiscussions: actions.fetchRelatedDiscussions,
   setCurrentItem: actions.setCurrentItem,
-  setCurrentDiscussion: actions.setCurrentDiscussion,
 };
 
 export const QueueItemContainer = compose(
@@ -52,6 +83,9 @@ export const QueueItemContainer = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withHandlers({
+    getCreationParams,
+  }),
   lifecycle({
     componentWillMount() {
       this.props.fetchCurrentItem(this.props.id);
@@ -60,14 +94,9 @@ export const QueueItemContainer = compose(
       if (this.props.id !== nextProps.id) {
         this.props.fetchCurrentItem(nextProps.id);
       }
-
-      if (this.props.currentDiscussion !== nextProps.currentDiscussion) {
-        this.props.fetchRelatedDiscussions(nextProps.id);
-      }
     },
     componentWillUnmount() {
       this.props.setCurrentItem(null);
-      this.props.setCurrentDiscussion(null);
     },
   }),
 )(QueueItem);

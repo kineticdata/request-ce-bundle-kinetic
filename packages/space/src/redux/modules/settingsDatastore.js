@@ -64,12 +64,6 @@ export const types = {
   SET_SUBMISSIONS: namespace('datastore', 'SET_SUBMISSIONS'),
   FETCH_SUBMISSION: namespace('datastore', 'FETCH_SUBMISSION'),
   SET_SUBMISSION: namespace('datastore', 'SET_SUBMISSION'),
-  SET_CURRENT_DISCUSSION: namespace('datastore', 'SET_CURRENT_DISCUSSION'),
-  SET_RELATED_DISCUSSIONS: namespace('datastore', 'SET_RELATED_DISCUSSIONS'),
-  FETCH_RELATED_DISCUSSIONS: namespace(
-    'datastore',
-    'FETCH_RELATED_DISCUSSIONS',
-  ),
   RESET_SUBMISSION: namespace('datastore', 'RESET_SUBMISSION'),
   SET_INDEX: namespace('datastore', 'SET_INDEX'),
   SET_INDEX_PARTS: namespace('datastore', 'SET_INDEX_PARTS'),
@@ -139,9 +133,6 @@ export const actions = {
   fetchSubmission: withPayload(types.FETCH_SUBMISSION),
   resetSubmission: noPayload(types.RESET_SUBMISSION),
   setSubmission: withPayload(types.SET_SUBMISSION),
-  fetchRelatedDiscussions: withPayload(types.FETCH_RELATED_DISCUSSIONS),
-  setRelatedDiscussions: withPayload(types.SET_RELATED_DISCUSSIONS),
-  setCurrentDiscussion: withPayload(types.SET_CURRENT_DISCUSSION),
   setIndex: withPayload(types.SET_INDEX),
   setIndexParts: withPayload(types.SET_INDEX_PARTS),
   setIndexPartOperation: (part, operation) => ({
@@ -346,8 +337,6 @@ export const State = Record({
   deleting: false,
   // Single Submission
   submission: null,
-  relatedDiscussions: List(),
-  currentDiscussion: null,
   submissionLoading: true,
   // Client Side Sorting
   clientSortInfo: null,
@@ -563,12 +552,6 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('submissionLoading', true);
     case types.SET_SUBMISSION:
       return state.set('submissionLoading', false).set('submission', payload);
-    case types.SET_RELATED_DISCUSSIONS:
-      return state.set('relatedDiscussions', payload);
-    case types.SET_CURRENT_DISCUSSION:
-      return state
-        .set('submissionLoading', false)
-        .set('currentDiscussion', payload);
     case types.RESET_SUBMISSION:
       return state
         .set('submissionLoading', true)

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
-import { DiscussionsList } from './DiscussionsList';
+import { DiscussionsPanel } from './DiscussionsPanel';
 
 export const ViewDiscussionsModal = ({
   close,
-  handleCreateDiscussion,
-  handleDiscussionClick,
-  discussions,
+  itemKey,
+  itemType,
   me,
+  creationParams,
 }) => (
   <Modal isOpen size="lg" toggle={close}>
     <div className="modal-header">
@@ -20,17 +20,13 @@ export const ViewDiscussionsModal = ({
       </h4>
     </div>
     <ModalBody>
-      <div
-        style={{ margin: '1em' }}
-        className="recent-discussions-wrapper kinops-discussions"
-      >
-        <DiscussionsList
-          handleCreateDiscussion={handleCreateDiscussion}
-          handleDiscussionClick={handleDiscussionClick}
-          discussions={discussions}
-          me={me}
-        />
-      </div>
+      <DiscussionsPanel
+        itemKey={itemKey}
+        itemType={itemType}
+        me={me}
+        isModal
+        creationParams={creationParams}
+      />
     </ModalBody>
   </Modal>
 );
