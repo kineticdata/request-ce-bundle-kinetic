@@ -267,7 +267,8 @@ const getMessageDate = message =>
   moment(message.createdAt).format('YYYY-MM-DD');
 const differentDate = (m1, m2) => getMessageDate(m1) !== getMessageDate(m2);
 const differentAuthor = (m1, m2) =>
-  m1.createdBy.username !== m2.createdBy.username || m1.type !== m2.type;
+  m1.type !== m2.type ||
+  (m1.type === 'User' && m1.createdBy.username !== m2.createdBy.username);
 
 const invitationsMatch = (i1, i2) =>
   (i1.user && i2.user && i1.user.username === i2.user.username) ||
