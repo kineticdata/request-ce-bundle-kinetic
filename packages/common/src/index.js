@@ -6,6 +6,7 @@ import { KappNavLink } from './components/KappNavLink';
 import { KappRedirect } from './components/KappRedirect';
 import { KappRoute } from './components/KappRoute';
 import { TimeAgo } from './components/TimeAgo';
+import { Moment, importLocale } from './components/Moment';
 import { Hoverable } from './components/Hoverable';
 import { Icon } from './components/Icon';
 import { Loading } from './components/Loading';
@@ -48,6 +49,8 @@ export {
   ToastsContainer,
   ModalFormContainer,
   TimeAgo,
+  Moment,
+  importLocale,
   Hoverable,
   Icon,
   Loading,

@@ -9,23 +9,21 @@ import {
   withProps,
   withState,
 } from 'recompose';
-import { PageTitle } from 'common';
+import { PageTitle, Constants, Moment } from 'common';
 import { CoreForm } from 'react-kinetic-core';
 import moment from 'moment';
 import { LoadingMessage, ErrorMessage, InfoMessage } from './Schedulers';
 import { SchedulerConfig } from './SchedulerConfig';
 import { SchedulerAvailability } from './SchedulerAvailability';
 import { SchedulerOverrides } from './SchedulerOverrides';
-import { actions } from '../../redux/modules/schedulers';
+import { actions, SCHEDULER_FORM_SLUG } from '../../redux/modules/schedulers';
 import { actions as toastActions } from '../../redux/modules/toasts';
-import {
-  DATE_FORMAT,
-  DATE_DISPLAY_FORMAT,
-} from '../../helpers/schedulerWidget';
+import { DATE_FORMAT } from '../../helpers/schedulerWidget';
 import {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
 } from '../../redux/selectors';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
 
@@ -33,7 +31,7 @@ export const handleUpdated = props => response => {
   props.fetchScheduler({ id: response.submission.id, clear: true });
   props.push(props.match.url.replace('/edit', ''));
   props.addSuccess(
-    `Successfully updated scheduler (${response.submission.values['Name']})`,
+    ['Successfully updated scheduler', response.submission.values['Name']],
     'Scheduler Updated!',
   );
 };
@@ -48,7 +46,7 @@ const TabPill = ({ match, id, name, path }) => (
       to={match.path.replace(/:id\/:mode\?/, `${id}${path}`)}
       activeClassName="active"
     >
-      {name}
+      <I18n>{name}</I18n>
     </NavLink>
   </li>
 );
@@ -67,8 +65,12 @@ const ManagersTab = ({ loading, managers }) => (
       <table className="table table-sm table-striped table-managers table--settings">
         <thead className="header">
           <tr>
-            <th scope="col">Display Name</th>
-            <th scope="col">Username</th>
+            <th scope="col">
+              <I18n>Display Name</I18n>
+            </th>
+            <th scope="col">
+              <I18n>Username</I18n>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -83,6 +85,7 @@ const ManagersTab = ({ loading, managers }) => (
     )}
   </div>
 );
+
 const AgentsTab = ({ loading, agents }) => (
   <div className="list-wrapper list-wrapper--managers">
     {loading && !agents && <LoadingMessage />}
@@ -97,8 +100,12 @@ const AgentsTab = ({ loading, agents }) => (
       <table className="table table-sm table-striped table-agents table--settings">
         <thead className="header">
           <tr>
-            <th scope="col">Display Name</th>
-            <th scope="col">Username</th>
+            <th scope="col">
+              <I18n>Display Name</I18n>
+            </th>
+            <th scope="col">
+              <I18n>Username</I18n>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -140,7 +147,9 @@ const SchedulerComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>{breadcrumbs}</h3>
-            <h1>{pageName}</h1>
+            <h1>
+              <I18n>{pageName}</I18n>
+            </h1>
           </div>
           {currentLoaded &&
             (mode !== 'edit' ? (
@@ -149,14 +158,14 @@ const SchedulerComponent = ({
                 to={match.path.replace(/:id\/:mode\?/, `${id}/edit`)}
                 className="btn btn-primary"
               >
-                Edit Scheduler
+                <I18n>Edit Scheduler</I18n>
               </Link>
             ) : (
               <Link
                 to={match.path.replace(/:id\/:mode\?/, `${id}/${previousMode}`)}
                 className="btn btn-secondary"
               >
-                Cancel Edit
+                <I18n>Cancel Edit</I18n>
               </Link>
             ))}
         </div>
@@ -174,67 +183,102 @@ const SchedulerComponent = ({
             (mode !== 'edit' ? (
               <Fragment>
                 <div className="form">
-                  <h2 className="section__title">General</h2>
+                  <h2 className="section__title">
+                    <I18n>General</I18n>
+                  </h2>
                   {scheduler.values['Description'] && (
                     <div className="form-group">
-                      <label>Description</label>
-                      <div>{scheduler.values['Description']}</div>
+                      <label>
+                        <I18n>Description</I18n>
+                      </label>
+                      <div>
+                        <I18n>{scheduler.values['Description']}</I18n>
+                      </div>
                     </div>
                   )}
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label>Status</label>
-                        <div>{scheduler.values['Status']}</div>
+                        <label>
+                          <I18n>Status</I18n>
+                        </label>
+                        <div>
+                          <I18n>{scheduler.values['Status']}</I18n>
+                        </div>
                       </div>
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label>Type</label>
-                        <div>{scheduler.values['Type']}</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label>Time Interval</label>
-                        <div>{`${
-                          scheduler.values['Time Interval']
-                        } minutes`}</div>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label>Reservation Timeout</label>
-                        <div>{`${
-                          scheduler.values['Reservation Timeout']
-                        } minutes`}</div>
+                        <label>
+                          <I18n>Type</I18n>
+                        </label>
+                        <div>
+                          <I18n>{scheduler.values['Type']}</I18n>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label>Timezone</label>
-                        <div>{scheduler.values['Timezone']}</div>
+                        <label>
+                          <I18n>Time Interval</I18n>
+                        </label>
+                        <div>
+                          <span>{`${scheduler.values['Time Interval']} `}</span>
+                          <I18n>minutes</I18n>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>
+                          <I18n>Reservation Timeout</I18n>
+                        </label>
+                        <div>
+                          <span>{`${
+                            scheduler.values['Reservation Timeout']
+                          } `}</span>
+                          <I18n>minutes</I18n>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>
+                          <I18n>Timezone</I18n>
+                        </label>
+                        <div>
+                          <I18n>{scheduler.values['Timezone']}</I18n>
+                        </div>
                       </div>
                     </div>
                     {scheduler.values['Scheduling Window'] && (
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label>Scheduling Window</label>
-                          <div>{`${
-                            scheduler.values['Scheduling Window']
-                          } days`}</div>
+                          <label>
+                            <I18n>Scheduling Window</I18n>
+                          </label>
+                          <div>
+                            <span>{`${
+                              scheduler.values['Scheduling Window']
+                            } `}</span>
+                            <I18n>days</I18n>
+                          </div>
                         </div>
                       </div>
                     )}
                   </div>
                   {scheduler.values['Location'] && (
                     <div className="form-group">
-                      <label>Location</label>
-                      <div>{scheduler.values['Location']}</div>
+                      <label>
+                        <I18n>Location</I18n>
+                      </label>
+                      <div>
+                        <I18n>{scheduler.values['Location']}</I18n>
+                      </div>
                     </div>
                   )}
 
@@ -242,12 +286,17 @@ const SchedulerComponent = ({
                     {scheduler.values['Scheduling Range Start Date'] && (
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label>Scheduling Range Start Date</label>
+                          <label>
+                            <I18n>Scheduling Range Start Date</I18n>
+                          </label>
                           <div>
-                            {moment(
-                              scheduler.values['Scheduling Range Start Date'],
-                              DATE_FORMAT,
-                            ).format(DATE_DISPLAY_FORMAT)}
+                            <Moment
+                              timestampe={moment(
+                                scheduler.values['Scheduling Range Start Date'],
+                                DATE_FORMAT,
+                              )}
+                              format={Constants.MOMENT_FORMATS.date}
+                            />
                           </div>
                         </div>
                       </div>
@@ -255,12 +304,17 @@ const SchedulerComponent = ({
                     {scheduler.values['Scheduling Range End Date'] && (
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label>Scheduling Range End Date</label>
+                          <label>
+                            <I18n>Scheduling Range End Date</I18n>
+                          </label>
                           <div>
-                            {moment(
-                              scheduler.values['Scheduling Range End Date'],
-                              DATE_FORMAT,
-                            ).format(DATE_DISPLAY_FORMAT)}
+                            <Moment
+                              timestampe={moment(
+                                scheduler.values['Scheduling Range End Date'],
+                                DATE_FORMAT,
+                              )}
+                              format={Constants.MOMENT_FORMATS.date}
+                            />
                           </div>
                         </div>
                       </div>
@@ -318,13 +372,15 @@ const SchedulerComponent = ({
                 </div>
               </Fragment>
             ) : (
-              <CoreForm
-                datastore
-                submission={scheduler.id}
-                updated={handleUpdated}
-                error={handleError}
-                globals={globals}
-              />
+              <I18n context={`datastore.forms.${SCHEDULER_FORM_SLUG}`}>
+                <CoreForm
+                  datastore
+                  submission={scheduler.id}
+                  updated={handleUpdated}
+                  error={handleError}
+                  globals={globals}
+                />
+              </I18n>
             ))}
         </div>
       </div>

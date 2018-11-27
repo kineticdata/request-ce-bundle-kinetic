@@ -3,6 +3,7 @@ import Avatar from 'react-avatar';
 import { Link } from 'react-router-dom';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { bundle } from 'react-kinetic-core';
+import { I18n } from '../I18nProvider';
 
 export const Profile = ({
   profile,
@@ -39,7 +40,7 @@ export const Profile = ({
       <div className="profile-links">
         <div className="dropdown-divider" />
         <Link to="/settings/profile" className="dropdown-item" onClick={toggle}>
-          Profile
+          <I18n>Profile</I18n>
         </Link>
         {profile.spaceAdmin && (
           <a
@@ -48,7 +49,7 @@ export const Profile = ({
             onClick={openInviteOthersForm}
             className="dropdown-item"
           >
-            Invite Others
+            <I18n>Invite Others</I18n>
           </a>
         )}
         {!isGuest && (
@@ -58,7 +59,7 @@ export const Profile = ({
             onClick={openHelpForm}
             className="dropdown-item"
           >
-            Get Help
+            <I18n>Get Help</I18n>
           </a>
         )}
         {!isGuest && (
@@ -68,12 +69,12 @@ export const Profile = ({
             onClick={openFeedbackForm}
             className="dropdown-item"
           >
-            Give Feedback
+            <I18n>Give Feedback</I18n>
           </a>
         )}
         {!isGuest && (
           <Link to="/about" className="dropdown-item" onClick={toggle}>
-            About My Space
+            <I18n>About My Space</I18n>
           </Link>
         )}
         <div className="dropdown-divider" />
@@ -81,7 +82,7 @@ export const Profile = ({
           href={`${bundle.spaceLocation()}/app/logout`}
           className="dropdown-item"
         >
-          Logout
+          <I18n>Logout</I18n>
         </a>
       </div>
     </DropdownMenu>

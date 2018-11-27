@@ -10,6 +10,7 @@ import {
 } from '../modules/loading';
 import { actions as profileActions } from '../modules/profile';
 import { actions as spaceActions } from '../modules/space';
+import { importLocale } from 'common';
 
 import semver from 'semver';
 
@@ -54,6 +55,18 @@ export function* fetchAppTask({ payload }) {
       profile.profileAttributesMap['Default Kapp Display'].length > 0
         ? profile.profileAttributesMap['Default Kapp Display'][0]
         : undefined;
+
+    // Preload locale before displaying the app to get rid of flicker
+    // Set locale in config
+    if (me.preferredLocale) {
+      importLocale(me.preferredLocale);
+      yield put(configActions.setLocale(me.preferredLocale));
+    } else {
+      const { defaultLocale } = yield call(CoreAPI.fetchDefaultLocale);
+      importLocale((defaultLocale && defaultLocale.code) || 'en');
+      yield put(configActions.setLocale(defaultLocale && defaultLocale.code));
+    }
+
     const currentRoute = yield select(state => state.router.location.pathname);
     if (
       initialLoad &&

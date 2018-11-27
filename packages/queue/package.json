@@ -10,7 +10,7 @@
     "immutable": "4.0.0-rc.9",
     "is-function": "^1.0.1",
     "isarray": "^2.0.2",
-    "moment": "^2.21.0",
+    "moment": "^2.22.2",
     "react": "^16.2.0",
     "react-addons-shallow-compare": "^15.6.2",
     "react-autocomplete": "^1.8.1",
@@ -23,7 +23,7 @@
     "react-svg-inline": "^2.0.0",
     "react-transition-group": "^1.1.2",
     "reactstrap": "^6.5.0",
-    "recompose": "^0.26.0",
+    "recompose": "^0.30.0",
     "redux": "^3.7.2",
     "redux-saga": "^0.15.6"
   }

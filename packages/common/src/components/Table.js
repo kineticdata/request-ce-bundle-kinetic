@@ -215,7 +215,7 @@ const buildTableBodyRow = ({
   buildTableBodyCell,
 }) => (row, index) => (
   <KeyWrapper key={`row-${index}`}>
-    {typeof renderHeaderRow === 'function' ? (
+    {typeof renderBodyRow === 'function' ? (
       validateTag(
         renderBodyRow({
           content: columns.map(buildTableBodyCell(row, index)),

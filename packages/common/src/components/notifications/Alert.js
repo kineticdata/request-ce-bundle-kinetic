@@ -1,15 +1,27 @@
 import React from 'react';
 import { compose, lifecycle } from 'recompose';
 import { Alert as BootstrapAlert } from 'reactstrap';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const AlertComponent = ({ color, style, message, closable, handleClose }) => (
-  <BootstrapAlert
-    color={color}
-    style={style}
-    toggle={closable ? handleClose : null}
-  >
-    <div dangerouslySetInnerHTML={{ __html: message }} />
-  </BootstrapAlert>
+  <I18n
+    render={translate => (
+      <BootstrapAlert
+        color={color}
+        style={style}
+        toggle={closable ? handleClose : null}
+      >
+        <div
+          dangerouslySetInnerHTML={{
+            __html:
+              typeof message === 'function'
+                ? message(translate)
+                : translate(message),
+          }}
+        />
+      </BootstrapAlert>
+    )}
+  />
 );
 
 export const Alert = compose(

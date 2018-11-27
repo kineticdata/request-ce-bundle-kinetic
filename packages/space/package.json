@@ -9,7 +9,7 @@
     "font-awesome": "^4.7.0",
     "history": "^4.7.2",
     "immutable": "4.0.0-rc.9",
-    "moment": "^2.21.0",
+    "moment": "^2.22.2",
     "papaparse": "^4.4.0",
     "query-string": "^5.1.0",
     "rc-progress": "^2.2.5",
@@ -24,7 +24,7 @@
     "react-router-dom": "^4.2.2",
     "react-transition-group": "^1.1.2",
     "reactstrap": "^6.5.0",
-    "recompose": "^0.26.0",
+    "recompose": "^0.30.0",
     "redux": "^3.7.2",
     "redux-saga": "^0.15.6"
   }

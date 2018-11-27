@@ -10,11 +10,14 @@ import {
   toastActions,
   TaskActions,
   AttributeSelectors,
+  Moment,
+  Constants,
 } from 'common';
-import { TIME_FORMAT, TIME_DISPLAY_FORMAT } from '../App';
+import { TIME_FORMAT } from '../App';
 import { actions } from '../redux/modules/appointments';
 import moment from 'moment';
 import { CoreForm } from 'react-kinetic-core';
+import { I18n } from '../../../app/src/I18nProvider';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -51,34 +54,36 @@ export const CheckInComponent = ({
             className="check-in-option btn btn-success mb-5"
             onClick={() => toggleShowDetails('appointment')}
           >
-            I have an appointment
+            <I18n>I have an appointment</I18n>
           </button>
-          <button
-            type="button"
-            className="check-in-option btn btn-info"
-            onClick={() => toggleShowDetails('walkin')}
-          >
-            I am a walk-in
-          </button>
+          {techBar.settings.allowWalkIns && (
+            <button
+              type="button"
+              className="check-in-option btn btn-info"
+              onClick={() => toggleShowDetails('walkin')}
+            >
+              <I18n>I am a walk-in</I18n>
+            </button>
+          )}
         </Fragment>
       ) : (
         <Fragment>
           {showDetails === 'appointment' && (
             <div className="details-container">
               <div className="header bg-success text-white">
-                I have an appointment
+                <I18n>I have an appointment</I18n>
                 <button
                   type="button"
                   className="btn btn-link text-white"
                   onClick={() => toggleShowDetails(null)}
                 >
-                  Cancel
+                  <I18n>Cancel</I18n>
                 </button>
               </div>
               <div className="form body">
                 <div className="form-group">
                   <label htmlFor="appointment-search-input">
-                    Find Appointment by Name or Email
+                    <I18n>Find Appointment by Name or Email</I18n>
                   </label>
                   <input
                     type="text"
@@ -97,10 +102,13 @@ export const CheckInComponent = ({
                         <div className="details">
                           <div>{appt.values['Requested For Display Name']}</div>
                           <div className="text-muted">
-                            {moment(
-                              appt.values['Event Time'],
-                              TIME_FORMAT,
-                            ).format(TIME_DISPLAY_FORMAT)}
+                            <Moment
+                              timestamp={moment(
+                                appt.values['Event Time'],
+                                TIME_FORMAT,
+                              )}
+                              format={Constants.MOMENT_FORMATS.time}
+                            />
                           </div>
                         </div>
                         <button
@@ -134,7 +142,7 @@ export const CheckInComponent = ({
                             })
                           }
                         >
-                          Check In
+                          <I18n>Check In</I18n>
                         </button>
                       </div>
                     ))}
@@ -145,7 +153,7 @@ export const CheckInComponent = ({
                         </div>
                       ) : (
                         <div className="alert alert-warning text-center">
-                          No appointments found.
+                          <I18n>No appointments found.</I18n>
                         </div>
                       ))}
                   </div>
@@ -162,7 +170,7 @@ export const CheckInComponent = ({
                   className="btn btn-link text-white"
                   onClick={() => toggleShowDetails(null)}
                 >
-                  Cancel
+                  <I18n>Cancel</I18n>
                 </button>
               </div>
               <div className="body">
@@ -170,7 +178,7 @@ export const CheckInComponent = ({
                   <div className="form">
                     <div className="form-group">
                       <label htmlFor="walkin-account-select">
-                        Find Your Account
+                        <I18n>Find Your Account</I18n>
                       </label>
                       <AttributeSelectors.PeopleSelect
                         id="walkin-account-select"
@@ -186,29 +194,31 @@ export const CheckInComponent = ({
                         className="btn btn-primary"
                         onClick={() => setWalkInUser(true)}
                       >
-                        I do not have an account
+                        <I18n>I do not have an account</I18n>
                       </button>
                     </div>
                   </div>
                 )}
                 {walkInUser && (
-                  <CoreForm
-                    className="body"
-                    kapp={kapp.slug}
-                    form="walk-in"
-                    globals={globals}
-                    values={{
-                      'Scheduler Id': techBarId,
-                      'Requested For': walkInUser !== true ? walkInUser : '',
-                    }}
-                    completed={() => {
-                      toggleShowDetails(null);
-                      addSuccess(`You have successfully checked in.`);
-                    }}
-                    notFoundComponent={ErrorNotFound}
-                    unauthorizedComponent={ErrorUnauthorized}
-                    unexpectedErrorComponent={ErrorUnexpected}
-                  />
+                  <I18n context={`kapps.${kapp.slug}.forms.walk-in`}>
+                    <CoreForm
+                      className="body"
+                      kapp={kapp.slug}
+                      form="walk-in"
+                      globals={globals}
+                      values={{
+                        'Scheduler Id': techBarId,
+                        'Requested For': walkInUser !== true ? walkInUser : '',
+                      }}
+                      completed={() => {
+                        toggleShowDetails(null);
+                        addSuccess(`You have successfully checked in.`);
+                      }}
+                      notFoundComponent={ErrorNotFound}
+                      unauthorizedComponent={ErrorUnauthorized}
+                      unexpectedErrorComponent={ErrorUnexpected}
+                    />
+                  </I18n>
                 )}
               </div>
             </div>

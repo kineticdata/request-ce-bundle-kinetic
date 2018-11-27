@@ -22,3 +22,17 @@ export const COLORS = {
   yellow: 'rgb(254, 233, 78)',
   white: 'rgb(255, 255, 255)',
 };
+
+export const MOMENT_FORMATS = {
+  time: 'LT',
+  timeWithSeconds: 'LTS',
+  date: 'LL',
+  dateWithDay: 'dddd, LL',
+  dateNumeric: 'L',
+  dateShort: 'll',
+  dateWithDayShort: 'ddd, ll',
+  dateTime: 'LLL',
+  dateTimeShort: 'lll',
+  dateTimeWithDay: 'LLLL',
+  dateTimeWithDayShort: 'llll',
+};

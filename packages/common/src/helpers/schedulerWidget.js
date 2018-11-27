@@ -315,7 +315,6 @@ export const State = Record({
 });
 
 export const reducer = (state = State(), { type, payload }) => {
-  console.log(type);
   switch (type) {
     case types.SET_STATE:
       return Map(payload).reduce(

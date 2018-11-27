@@ -59,17 +59,17 @@ export const State = Record({
   errors: [],
   appointment: null,
   upcoming: {
-    loading: true,
+    loading: false,
     errors: [],
     data: new List(),
   },
   past: {
-    loading: true,
+    loading: false,
     errors: [],
     data: new List(),
   },
   today: {
-    loading: true,
+    loading: false,
     errors: [],
     data: new List(),
   },

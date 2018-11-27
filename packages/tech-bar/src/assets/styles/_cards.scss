@@ -82,6 +82,31 @@
   }
 }
 
+.cards__wrapper--tech-bar__settings {
+  justify-content: flex-start;
+  flex-direction: row;
+  .card {
+    @media all and (min-width: 0) {
+      flex-basis: 100%;
+      @media all and (-ms-high-contrast: none) {
+        width: 100%;
+        flex-basis: auto;
+      }
+    }
+    @media all and (min-width: 576px) {
+      flex-basis: 48%;
+      margin-right: 2%;
+      &:nth-child(even) {
+        margin-right: 0;
+      }
+      @media all and (-ms-high-contrast: none) {
+        width: 48%;
+        flex-basis: auto;
+      }
+    }
+  }
+}
+
 .card--appointment {
   display: flex;
   flex-direction: row;

@@ -11,6 +11,7 @@ import {
   selectHasRoleSchedulerManager,
 } from '../../redux/selectors';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
+import { I18n } from '../../../../app/src/I18nProvider';
 import semver from 'semver';
 const MINIMUM_CE_VERSION = '2.1.0';
 
@@ -20,12 +21,21 @@ const SchedulersVersionError = ({ version, breadcrumbs }) => (
     <div className="page-title">
       <div className="page-title__wrapper">
         <h3>{breadcrumbs}</h3>
-        <h1>Invalid CE Version</h1>
+        <h1>
+          <I18n>Invalid CE Version</I18n>
+        </h1>
       </div>
     </div>
     <p>
-      {`You are currently running Kinetic CE ${version}. Schedulers
-      require Kinetic CE ${MINIMUM_CE_VERSION} or greater.`}
+      <I18n
+        render={translate => {
+          return `${translate(
+            'You are currently running Kinetic CE',
+          )} ${version}. ${translate(
+            `Schedulers require Kinetic CE ${MINIMUM_CE_VERSION} or greater.`,
+          )}`;
+        }}
+      />
     </p>
   </div>
 );
@@ -35,34 +45,60 @@ export const LoadingMessage = ({ heading, text }) => {
       <h4>
         <i className="fa fa-spinner fa-spin fa-lg fa-fw" />
       </h4>
-      <h5>{heading || 'Loading'}</h5>
-      {text && <h6>{text}</h6>}
+      <h5>
+        <I18n>{heading || 'Loading'}</I18n>
+      </h5>
+      {text && (
+        <h6>
+          <I18n>{text}</I18n>
+        </h6>
+      )}
     </div>
   );
 };
 export const EmptyMessage = ({ heading, text }) => {
   return (
     <div className="empty-state">
-      <h5>{heading || 'No Results Found'}</h5>
+      <h5>
+        <I18n>{heading || 'No Results Found'}</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
-      {text && <h6>{text}</h6>}
+      {text && (
+        <h6>
+          <I18n>{text}</I18n>
+        </h6>
+      )}
     </div>
   );
 };
 export const ErrorMessage = ({ heading, text }) => {
   return (
     <div className="error-state">
-      <h4>{'Oops!'}</h4>
-      <h5>{heading || 'Error'}</h5>
-      {text && <h6>{text}</h6>}
+      <h4>
+        <I18n>Oops!</I18n>
+      </h4>
+      <h5>
+        <I18n>{heading || 'Error'}</I18n>
+      </h5>
+      {text && (
+        <h6>
+          <I18n>{text}</I18n>
+        </h6>
+      )}
     </div>
   );
 };
 export const InfoMessage = ({ heading, text }) => {
   return (
     <div className="info-state">
-      <h5>{heading}</h5>
-      {text && <h6>{text}</h6>}
+      <h5>
+        <I18n>{heading}</I18n>
+      </h5>
+      {text && (
+        <h6>
+          <I18n>{text}</I18n>
+        </h6>
+      )}
     </div>
   );
 };
@@ -76,6 +112,7 @@ export const SchedulersRouter = ({
   buildBreadcrumbs,
   isSchedulerAdmin,
   isSchedulerManager,
+  type,
 }) =>
   isSchedulerAdmin || isSchedulerManager ? (
     !validVersion ? (
@@ -94,7 +131,10 @@ export const SchedulersRouter = ({
               {...props}
               breadcrumbs={buildBreadcrumbs(
                 <Fragment>
-                  <Link to={match.path}>schedulers</Link> /{` `}
+                  <Link to={match.path}>
+                    <I18n>schedulers</I18n>
+                  </Link>{' '}
+                  /{` `}
                 </Fragment>,
               )}
             />
@@ -107,7 +147,10 @@ export const SchedulersRouter = ({
               {...props}
               breadcrumbs={buildBreadcrumbs(
                 <Fragment>
-                  <Link to={match.path}>schedulers</Link> /{` `}
+                  <Link to={match.path}>
+                    <I18n>schedulers</I18n>
+                  </Link>{' '}
+                  /{` `}
                 </Fragment>,
               )}
             />
@@ -115,7 +158,11 @@ export const SchedulersRouter = ({
         />
         <Route
           render={props => (
-            <SchedulersList {...props} breadcrumbs={buildBreadcrumbs()} />
+            <SchedulersList
+              {...props}
+              type={type}
+              breadcrumbs={buildBreadcrumbs()}
+            />
           )}
         />
       </Switch>
@@ -141,7 +188,10 @@ export const Schedulers = compose(
         <Fragment>
           {base || (
             <Fragment>
-              <Link to="/">home</Link> /{` `}
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /{` `}
             </Fragment>
           )}
           {breadcrumbs}

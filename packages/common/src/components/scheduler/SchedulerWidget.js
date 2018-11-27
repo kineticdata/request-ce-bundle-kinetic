@@ -8,12 +8,11 @@ import {
 } from 'recompose';
 import moment from 'moment';
 import { Alert, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import { Moment, Constants } from 'common';
 import { LoadingMessage, ErrorMessage } from './Schedulers';
 import {
   DATE_FORMAT,
-  DATE_DISPLAY_FORMAT,
   TIME_FORMAT,
-  TIME_DISPLAY_FORMAT,
   actions,
   State,
   reducer,
@@ -32,6 +31,7 @@ import {
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import { DayPickerSingleDateController } from 'react-dates';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const Timer = compose(
   withState('time', 'setTime', 0),
@@ -47,7 +47,6 @@ const Timer = compose(
       if (time > 0) {
         setTime(time - 1);
       } else {
-        console.log('RESERVATION TIMEOUT');
         clearInterval(timer);
         handleEventDelete();
         if (typeof timeoutCallback === 'function') {
@@ -94,19 +93,23 @@ const Timer = compose(
   ({ isScheduled, time, handleEventDelete }) =>
     !isScheduled ? (
       <div className={time === 0 ? 'text-danger' : ''}>
-        <span>You have </span>
+        <span>
+          <I18n>You have</I18n>{' '}
+        </span>
         <strong>
           {Math.floor(time / 60)}:{time % 60 < 10 ? 0 : ''}
           {time % 60}
         </strong>
         <span>
           {' '}
-          remaining to complete your request to guarantee your time slot.{' '}
+          <I18n>
+            remaining to complete your request to guarantee your time slot.
+          </I18n>{' '}
         </span>
         {time > 0 && (
           <em>
             <button onClick={handleEventDelete} className="btn btn-text">
-              Cancel Reservation
+              <I18n>Cancel Reservation</I18n>
             </button>
           </em>
         )}
@@ -205,11 +208,15 @@ const SchedulerWidgetComponent = ({
                           })
                   }
                 >
-                  {`
-                    ${availableTimeStart.format(TIME_DISPLAY_FORMAT)}
-                    ${' - '}
-                    ${availableTimeEnd.format(TIME_DISPLAY_FORMAT)}
-                  `}
+                  <Moment
+                    timestamp={availableTimeStart}
+                    format={Constants.MOMENT_FORMATS.time}
+                  />
+                  {' - '}
+                  <Moment
+                    timestamp={availableTimeEnd}
+                    format={Constants.MOMENT_FORMATS.time}
+                  />
                 </button>
               );
             } else {
@@ -244,16 +251,6 @@ const SchedulerWidgetComponent = ({
 
   const isScheduled = event && event.coreState !== 'Draft';
   const isReserved = event && event.coreState === 'Draft';
-  const dateTimeValue =
-    rescheduleEvent || event
-      ? `${moment
-          .tz((rescheduleEvent || event).values['Date'], DATE_FORMAT, timezone)
-          .format(DATE_DISPLAY_FORMAT)} at ${moment
-          .tz((rescheduleEvent || event).values['Time'], TIME_FORMAT, timezone)
-          .format(TIME_DISPLAY_FORMAT)} for ${
-          (rescheduleEvent || event).values['Duration']
-        } minutes`
-      : '';
 
   return (
     <div className="scheduler-widget">
@@ -270,7 +267,11 @@ const SchedulerWidgetComponent = ({
       {!openModal &&
         schedulingErrors.size > 0 && (
           <div className="alert alert-danger">
-            {schedulingErrors.map((e, i) => <div key={`error-${i}`}>{e}</div>)}
+            {schedulingErrors.map((e, i) => (
+              <div key={`error-${i}`}>
+                <I18n>{e}</I18n>
+              </div>
+            ))}
           </div>
         )}
       {!loading &&
@@ -279,7 +280,7 @@ const SchedulerWidgetComponent = ({
             {showTypeSelector && (
               <div className="form-group required">
                 <label htmlFor="type-select" className="field-label">
-                  Event Type
+                  <I18n>Event Type</I18n>
                 </label>
                 <select
                   name="type-select"
@@ -294,12 +295,18 @@ const SchedulerWidgetComponent = ({
                     const duration =
                       interval * parseInt(c.values['Duration Multiplier'], 10);
                     return (
-                      <option
-                        value={c.values['Event Type']}
-                        key={c.values['Event Type']}
-                      >
-                        {`${c.values['Event Type']} (${duration} minutes)`}
-                      </option>
+                      <I18n
+                        render={translate => (
+                          <option
+                            value={c.values['Event Type']}
+                            key={c.values['Event Type']}
+                          >
+                            {`${translate(
+                              c.values['Event Type'],
+                            )} (${duration} ${translate('minutes')})`}
+                          </option>
+                        )}
+                      />
                     );
                   })}
                 </select>
@@ -309,26 +316,64 @@ const SchedulerWidgetComponent = ({
               <div className="form-group required">
                 {expired && (
                   <Alert color="danger" toggle={() => setExpired(false)}>
-                    Your selected time has expired.
+                    <I18n>Your selected time has expired.</I18n>
                   </Alert>
                 )}
                 {rescheduled && (
                   <Alert color="info">
-                    <span>Your event has been successfully rescheduled. </span>
+                    <span>
+                      <I18n>Your event has been successfully rescheduled.</I18n>{' '}
+                    </span>
                     <em>
-                      It may take several minutes for your upcoming appointments
-                      list to reflect the changes.
+                      <I18n>
+                        It may take several minutes for your list to reflect the
+                        changes.
+                      </I18n>
                     </em>
                   </Alert>
                 )}
-                <label className="field-label">Date and Time</label>
+                <label className="field-label">
+                  <I18n>Date and Time</I18n>
+                </label>
                 <div className="input-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    readOnly
-                    placeholder="You have not selected a date and time yet"
-                    value={dateTimeValue}
+                  <I18n
+                    render={translate => (
+                      <Moment
+                        render={format => {
+                          const dateTimeValue =
+                            rescheduleEvent || event
+                              ? `${format(
+                                  moment.tz(
+                                    (rescheduleEvent || event).values['Date'],
+                                    DATE_FORMAT,
+                                    timezone,
+                                  ),
+                                  Constants.MOMENT_FORMATS.date,
+                                )} ${translate('at')} ${format(
+                                  moment.tz(
+                                    (rescheduleEvent || event).values['Time'],
+                                    TIME_FORMAT,
+                                    timezone,
+                                  ),
+                                  Constants.MOMENT_FORMATS.time,
+                                )} ${translate('for')} ${
+                                  (rescheduleEvent || event).values['Duration']
+                                } ${translate('minutes')}`
+                              : '';
+                          return (
+                            <input
+                              type="text"
+                              className="form-control"
+                              readOnly
+                              placeholder={translate(
+                                'You have not selected a date and time yet',
+                              )}
+                              value={dateTimeValue}
+                            />
+                          );
+                        }}
+                      />
+                    )}
                   />
                   {!isScheduled && (
                     <div className="input-group-append">
@@ -340,7 +385,9 @@ const SchedulerWidgetComponent = ({
                           setExpired(false);
                         }}
                       >
-                        {isReserved ? 'Change' : 'Select'} Date and Time
+                        <I18n>
+                          {isReserved ? 'Change' : 'Select'} Date and Time
+                        </I18n>
                       </button>
                     </div>
                   )}
@@ -354,7 +401,7 @@ const SchedulerWidgetComponent = ({
                             toggleModal(true);
                           }}
                         >
-                          Reschedule
+                          <I18n>Reschedule</I18n>
                         </button>
                       </div>
                     )}
@@ -387,9 +434,11 @@ const SchedulerWidgetComponent = ({
                 className="btn btn-link"
                 onClick={() => toggleModal(false)}
               >
-                Cancel
+                <I18n>Cancel</I18n>
               </button>
-              <span>Schedule</span>
+              <span>
+                <I18n>Schedule</I18n>
+              </span>
               {now.format(DATE_FORMAT) !== date &&
                 !now.isBefore(minAvailableDate) && (
                   <button
@@ -402,7 +451,7 @@ const SchedulerWidgetComponent = ({
                       setOpenCalendar(false);
                     }}
                   >
-                    Today
+                    <I18n>Today</I18n>
                   </button>
                 )}
             </h4>
@@ -442,13 +491,13 @@ const SchedulerWidgetComponent = ({
                       }
                     >
                       <div className="date-month-year">
-                        {dateVal.format('MMM YYYY')}
+                        <Moment timestamp={dateVal} format="MMM YYYY" />
                       </div>
                       <div className="date-day-number">
-                        {dateVal.format('DD')}
+                        <Moment timestamp={dateVal} format="DD" />
                       </div>
                       <div className="date-day-name">
-                        {dateVal.format('ddd')}
+                        <Moment timestamp={dateVal} format="ddd" />
                       </div>
                     </div>
                   );
@@ -481,7 +530,9 @@ const SchedulerWidgetComponent = ({
                   {schedulingErrors.size > 0 && (
                     <div className="alert alert-danger">
                       {schedulingErrors.map((e, i) => (
-                        <div key={`error-${i}`}>{e}</div>
+                        <div key={`error-${i}`}>
+                          <I18n>{e}</I18n>
+                        </div>
                       ))}
                     </div>
                   )}
@@ -495,8 +546,10 @@ const SchedulerWidgetComponent = ({
                     timeOptions.length === 0 && (
                       <div className="text-center text-muted">
                         <strong>
-                          There are no available time slots for the selected
-                          date.
+                          <I18n>
+                            There are no available time slots for the selected
+                            date.
+                          </I18n>
                         </strong>
                       </div>
                     )}
@@ -517,10 +570,13 @@ const SchedulerWidgetComponent = ({
               {scheduling ? (
                 <span>
                   <span className="fa fa-spinner fa-spin" />
-                  <span> Reserving</span>
+                  <span>
+                    {' '}
+                    <I18n>Reserving</I18n>
+                  </span>
                 </span>
               ) : (
-                'Reserve Time'
+                <I18n>Reserve Time</I18n>
               )}
             </button>
           </ModalFooter>
@@ -757,7 +813,10 @@ const scheduleEvent = ({
     time,
     durationMultiplier,
     scheduler: {
-      values: { 'Time Interval': timeInterval },
+      values: {
+        'Time Interval': timeInterval,
+        Timezone: timezone = moment.tz.guess(),
+      },
     },
     availability,
     overrides,
@@ -782,6 +841,7 @@ const scheduleEvent = ({
     Date: date,
     Time: time,
     Duration: durationMultiplier * interval,
+    Timestamp: moment.tz(`${date}T${time}`, timezone).toISOString(),
   };
 
   if (event) {
@@ -993,6 +1053,9 @@ const completeReschedule = ({
     Date: event.values['Date'],
     Time: event.values['Time'],
     Duration: event.values['Duration'],
+    Timestamp: moment
+      .tz(`${event.values['Date']}T${event.values['Time']}`, timezone)
+      .toISOString(),
   }).then(({ submission, serverError, errors }) => {
     if (serverError || errors) {
       dispatch(
@@ -1015,7 +1078,7 @@ const completeReschedule = ({
         if (se || e) {
           dispatch(
             actions.addSchedulingErrors([
-              'Your appointment was rescheduled, but the details failed to update. Please contact an administrator.',
+              'Your event was rescheduled, but the details failed to update. Please contact an administrator.',
             ]),
           );
         }

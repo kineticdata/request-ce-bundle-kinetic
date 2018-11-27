@@ -7,6 +7,7 @@ export const SCHEDULER_CONFIG_FORM_SLUG = 'scheduler-config';
 export const SCHEDULER_AVAILABILITY_FORM_SLUG = 'scheduler-availability';
 export const SCHEDULER_OVERRIDE_FORM_SLUG = 'scheduler-override';
 export const SCHEDULED_EVENT_FORM_SLUG = 'scheduled-event';
+export const TECH_BAR_SETTINGS_FORM_SLUG = 'tech-bar-settings';
 
 export const types = {
   FETCH_APP_SETTINGS: namespace('techBarApp', 'FETCH_APP_SETTINGS'),

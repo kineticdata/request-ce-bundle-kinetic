@@ -17,7 +17,7 @@
     "kinops-react-scripts": "0.11.0",
     "mdn-polyfills": "^5.11.0",
     "modularscale-sass": "^3.0.5",
-    "moment": "^2.21.0",
+    "moment": "^2.22.2",
     "papaparse": "^4.5.0",
     "react": "^16.2.0",
     "react-app-rewire-yarn-workspaces": "^1.0.2",

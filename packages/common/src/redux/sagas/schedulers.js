@@ -16,12 +16,16 @@ import {
 } from '../modules/schedulers';
 
 export function* fetchSchedulersSaga({
-  payload: { isSchedulerAdmin = false },
+  payload: { isSchedulerAdmin = false, type },
 }) {
   const query = new CoreAPI.SubmissionSearch(true);
   query.include('details,values');
   query.limit('1000');
-  query.index('values[Name]');
+  if (type) {
+    query.index('values[Type],values[Name]').eq('values[Type]', type);
+  } else {
+    query.index('values[Name]');
+  }
 
   if (!isSchedulerAdmin) {
     const schedulerNames = yield select(state =>

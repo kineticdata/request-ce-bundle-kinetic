@@ -11,16 +11,18 @@ import {
   selectCurrentKappSlug,
 } from 'common';
 import { actions } from './redux/modules/techBarApp';
+import { actions as appointmentActions } from './redux/modules/appointments';
 import { Sidebar } from './components/Sidebar';
 import { Home } from './components/Home';
 import { Display } from './components/Display';
 import { Form } from './components/Form';
+import { Settings } from './components/settings/Settings';
+import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
+import { I18n } from '../../app/src/I18nProvider';
 import './assets/styles/master.scss';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
-export const DATE_DISPLAY_FORMAT = 'dddd, LL';
 export const TIME_FORMAT = 'HH:mm';
-export const TIME_DISPLAY_FORMAT = 'LT';
 
 export const AppComponent = props => {
   if (props.loading) {
@@ -29,21 +31,44 @@ export const AppComponent = props => {
     return <ErrorUnexpected />;
   } else {
     return props.render({
-      main: (
-        <main
-          className={`package-layout package-layout--tech-bar ${
-            props.fullScreen ? 'package-layout--tech-bar__full-screen' : ''
-          }`}
-        >
-          <Route path="/" exact component={Home} />
+      sidebar: (
+        <Switch>
           <Route
-            path="/forms/:formSlug/submissions/:id"
-            exact
-            component={Form}
+            path={`/kapps/${props.kappSlug}/settings`}
+            render={() => (
+              <SettingsSidebar settingsBackPath={props.settingsBackPath} />
+            )}
           />
-          <Route path="/forms/:formSlug/:id?" exact component={Form} />
-          <Route path="/display/:id/:mode?" exact component={Display} />
-        </main>
+          <Route
+            render={() => (
+              <Sidebar
+                counts={props.submissionCounts}
+                homePageMode={props.homePageMode}
+                homePageItems={props.homePageItems}
+                openSettings={props.openSettings}
+              />
+            )}
+          />
+        </Switch>
+      ),
+      main: (
+        <I18n>
+          <main
+            className={`package-layout package-layout--tech-bar ${
+              props.fullScreen ? 'package-layout--tech-bar__full-screen' : ''
+            }`}
+          >
+            <Route path="/" exact component={Home} />
+            <Route
+              path="/forms/:formSlug/submissions/:id"
+              exact
+              component={Form}
+            />
+            <Route path="/forms/:formSlug/:id?" exact component={Form} />
+            <Route path="/display/:id/:mode?" exact component={Display} />
+            <Route path="/settings" component={Settings} />
+          </main>
+        </I18n>
       ),
     });
   }
@@ -65,6 +90,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = {
   fetchAppSettings: actions.fetchAppSettings,
+  fetchUpcomingAppointments: appointmentActions.fetchUpcomingAppointments,
 };
 
 const enhance = compose(
@@ -72,18 +98,15 @@ const enhance = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  // withProps(props => {
-  //   return props;
-  // }),
-  // withHandlers({}),
   lifecycle({
     componentDidMount() {
       this.props.fetchAppSettings();
+      this.props.fetchUpcomingAppointments();
     },
   }),
 );
 
 export const App = enhance(AppComponent);
 
-App.shouldHideSidebar = (pathname, kappSlug) =>
+App.shouldSuppressSidebar = (pathname, kappSlug) =>
   matchPath(pathname, { path: `/kapps/${kappSlug}` });

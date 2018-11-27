@@ -2,14 +2,26 @@ import React from 'react';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { I18n } from '../../../app/src/I18nProvider';
 
 export const PageTitleComponent = ({ space, kapp, parts }) => {
-  const title = parts
-    .concat([kapp && kapp.name, space.name, 'kinops'])
-    .filter(item => !!item)
-    .join(' | ');
+  return (
+    <I18n
+      render={translate => {
+        const title = parts
+          .map(p => translate(p))
+          .concat([
+            kapp && translate(kapp.name),
+            translate(space.name),
+            'kinops',
+          ])
+          .filter(item => !!item)
+          .join(' | ');
 
-  return <DocumentTitle title={title} />;
+        return <DocumentTitle title={title} />;
+      }}
+    />
+  );
 };
 
 export const mapStateToProps = state => ({

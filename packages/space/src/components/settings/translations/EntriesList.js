@@ -427,7 +427,7 @@ export const EntriesListComponent = ({
                 {
                   value: 'usages',
                   title: '',
-                  renderCell: renderUsageCell,
+                  renderBodyCell: renderUsageCell,
                   sortable: false,
                   filterable: false,
                 },
