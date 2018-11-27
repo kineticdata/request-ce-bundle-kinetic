@@ -1,106 +1,48 @@
 import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
+import { compose, lifecycle, withHandlers } from 'recompose';
 import { Utils } from 'common';
+import { FormGroup, Label, Input } from 'reactstrap';
 import { DiscussionCard } from './DiscussionCard';
-import { DiscussionContainer } from '../DiscussionContainer';
 import { actions as listActions } from '../../redux/modules/discussionsList';
 import { actions as discussionsActions } from '../../redux/modules/discussions';
 
-export class DiscussionsPanel extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      initialLoad: true,
-      currentDiscussion: null,
-    };
-  }
-
-  handleInitialLoad = discussions => {
-    if (this.state.initialLoad) {
-      // If there is only 1 and the user is already a participant, auto-subscribe.
-      if (discussions && discussions.size === 1) {
-        const initialDiscussion = discussions.first();
-        const participating = initialDiscussion.participants.find(
-          p => p.user.username === this.props.me.username,
-        );
-
-        if (participating) {
-          this.setState({
-            currentDiscussion: initialDiscussion,
-            initialLoad: false,
-          });
-        } else {
-          this.setState({ initialLoad: false });
-        }
-      }
-    }
-  };
-
-  handleDiscussionClear = () => this.setState({ currentDiscussion: null });
-  handleDiscussionClick = discussion => _e =>
-    this.setState({ currentDiscussion: discussion });
-  handleDiscussionCreate = () => {
-    const params = {
-      ...this.props.creationParams(),
-      relatedItem: {
-        type: this.props.itemType,
-        key: this.props.itemKey,
-      },
-      onSuccess: (discussion, _relatedItem) => {
-        props.setCurrentDiscussion(discussion);
-      },
-    };
-    console.log(this.props);
-    this.props.createDiscussion(params);
-  };
-
-  render() {
-    return this.state.currentDiscussion ? (
-      <div className="kinops-discussions d-none d-md-flex">
-        <button
-          onClick={this.handleDiscussionClear}
-          className="btn btn-link btn-back"
-        >
-          <span className="icon">
-            <span className="fa fa-fw fa-chevron-left" />
-          </span>
-          Back to Discussions
-        </button>
-        <DiscussionContainer
-          discussionId={this.state.currentDiscussion.id}
-          isMobileModal
-          renderClose={() => null}
-        />
-      </div>
-    ) : (
-      <div className="recent-discussions-wrapper kinops-discussions d-none d-md-flex">
-        <DiscussionsList
-          itemType={this.props.itemType}
-          itemKey={this.props.itemKey}
-          onLoad={this.handleInitialLoad}
-          handleCreateDiscussion={this.handleDiscussionCreate}
-          handleDiscussionClick={this.handleDiscussionClick}
-          me={this.props.me}
-        />
-      </div>
-    );
-  }
-}
+export const SearchArchivedCheckbox = ({
+  toggleSearchArchived,
+  searchArchived,
+}) => (
+  <div className="form-check">
+    <input
+      className="form-check-input"
+      name="searchArchived"
+      type="checkbox"
+      onChange={toggleSearchArchived}
+      checked={searchArchived}
+    />{' '}
+    <label className="form-check-label">Archived Discussions</label>
+  </div>
+);
 
 export const DiscussionsListComponent = ({
   handleCreateDiscussion,
   handleDiscussionClick,
+  toggleSearchArchived,
+  searchArchived,
   discussions,
   me,
 }) => {
-  // const discussionGroup = Utils.getGroupedDiscussions(discussions);
   return discussions && discussions.size > 0 ? (
     <Fragment>
       <button onClick={handleCreateDiscussion} className="btn btn-inverse">
         New Discussion
       </button>
+
+      <div style={{ alignSelf: 'flex-end' }}>
+        <SearchArchivedCheckbox
+          toggleSearchArchived={toggleSearchArchived}
+          searchArchived={searchArchived}
+        />
+      </div>
 
       {Utils.getGroupedDiscussions(discussions)
         .map((discussions, dateGroup) => (
@@ -126,6 +68,10 @@ export const DiscussionsListComponent = ({
     <div className="empty-discussion">
       <h5>No discussion to display</h5>
       <p>
+        <SearchArchivedCheckbox
+          toggleSearchArchived={toggleSearchArchived}
+          searchArchived={searchArchived}
+        />
         <button onClick={handleCreateDiscussion} className="btn btn-link">
           Create a new discussion
         </button>
@@ -134,19 +80,29 @@ export const DiscussionsListComponent = ({
   );
 };
 
+export const toggleSearchArchived = props => e => {
+  props.setSearchArchived(e.target.checked);
+  props.fetchRelatedDiscussions(props.itemType, props.itemKey, props.onLoad);
+};
+
 const mapDispatchToProps = {
+  setSearchArchived: listActions.setSearchArchived,
   fetchRelatedDiscussions: listActions.fetchRelatedDiscussions,
   createDiscussion: discussionsActions.createDiscussion,
 };
 
 const mapStateToProps = state => ({
   discussions: state.discussions.discussionsList.relatedDiscussions,
+  searchArchived: state.discussions.discussionsList.searchArchived,
 });
 export const DiscussionsList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withHandlers({
+    toggleSearchArchived,
+  }),
   lifecycle({
     componentWillMount() {
       this.props.fetchRelatedDiscussions(

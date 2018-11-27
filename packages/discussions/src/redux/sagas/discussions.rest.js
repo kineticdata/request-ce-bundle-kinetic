@@ -74,6 +74,9 @@ export function* fetchDiscussionTask(action) {
 
 export function* fetchRelatedDiscussionsTask(action) {
   const token = yield select(selectToken);
+  const isArchived = yield select(
+    state => state.discussions.discussionsList.searchArchived,
+  );
   const { type, key, loadCallback } = action.payload;
 
   const { discussions } = yield call(fetchDiscussions, {
@@ -82,6 +85,7 @@ export function* fetchRelatedDiscussionsTask(action) {
       type: type,
       key: key,
     },
+    isArchived,
   });
 
   const discussionsList = newDiscussionsList(discussions);
