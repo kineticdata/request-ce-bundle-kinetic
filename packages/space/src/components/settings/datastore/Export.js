@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
+import downloadjs from 'downloadjs';
 
 import { connect } from 'react-redux';
 import papaparse from 'papaparse';
@@ -87,6 +88,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   fetchAllSubmissions: actions.fetchAllSubmissions,
+  setExportSubmissions: actions.setExportSubmissions,
 };
 
 export const Export = compose(
@@ -105,9 +107,12 @@ export const Export = compose(
         const csv = createCSV(nextProps.submissions, nextProps.form);
         // TODO: If CSV fails setExportStatus to FAILD
         nextProps.setExportStatus('DOWNLOAD');
-        require('downloadjs')(csv, nextProps.form.name + '.csv', 'text/csv');
+        downloadjs(csv, nextProps.form.name + '.csv', 'text/csv');
         nextProps.setExportStatus('COMPLETE');
       }
+    },
+    componentWillUnmount() {
+      this.props.setExportSubmissions([]);
     },
   }),
 )(ExportComponent);
