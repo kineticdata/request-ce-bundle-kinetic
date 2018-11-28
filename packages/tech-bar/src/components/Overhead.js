@@ -8,10 +8,9 @@ import {
   withState,
   withProps,
 } from 'recompose';
-import { TIME_FORMAT, TIME_DISPLAY_FORMAT } from '../App';
 import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
-import moment from 'moment';
+import { I18n } from '../../../app/src/I18nProvider';
 
 export const OverheadComponent = ({ errors, records }) => {
   return (
@@ -21,13 +20,19 @@ export const OverheadComponent = ({ errors, records }) => {
           {errors.length > 0 && (
             <span className="fa fa-exclamation-triangle text-danger mr-2" />
           )}
-          <span>Next up...</span>
+          <span>
+            <I18n>Next up...</I18n>
+          </span>
         </h1>
         <ul className="overhead-display-list">
           {records.filter(r => r.status === 'Checked In').map(r => (
             <li key={r.id}>
               <span>{r.displayName}</span>
-              {r.isWalkIn && <small className="text-muted"> (Walk-In)</small>}
+              {r.isWalkIn && (
+                <small className="text-muted">
+                  <I18n render={translate => ` (${translate('Walk-In')})`} />
+                </small>
+              )}
             </li>
           ))}
         </ul>

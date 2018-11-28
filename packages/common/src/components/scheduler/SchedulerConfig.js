@@ -18,6 +18,7 @@ import {
   SCHEDULER_CONFIG_FORM_SLUG,
 } from '../../redux/modules/schedulers';
 import { actions as toastActions } from '../../redux/modules/toasts';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
 
@@ -44,7 +45,7 @@ const SchedulerConfigComponent = ({
   <div className="list-wrapper list-wrapper--config">
     <div className="text-right">
       <button className="btn btn-primary" onClick={handleAdd}>
-        Add Event Type
+        <I18n>Add Event Type</I18n>
       </button>
     </div>
     {loading && configs.size === 0 && <LoadingMessage />}
@@ -52,7 +53,11 @@ const SchedulerConfigComponent = ({
       errors.length > 0 && (
         <ErrorMessage
           heading="Failed to retrieve event types."
-          text={errors.map(e => <div>{e}</div>)}
+          text={errors.map((e, i) => (
+            <div key={`error-${i}`}>
+              <I18n>{e}</I18n>
+            </div>
+          ))}
         />
       )}
     {!loading &&
@@ -67,22 +72,32 @@ const SchedulerConfigComponent = ({
       <table className="table table-sm table-striped table-configs table--settings">
         <thead className="header">
           <tr>
-            <th scope="col">Event Type</th>
-            <th scope="col">Duration</th>
-            <th scope="col">Status</th>
+            <th scope="col">
+              <I18n>Event Type</I18n>
+            </th>
+            <th scope="col">
+              <I18n>Duration</I18n>
+            </th>
+            <th scope="col">
+              <I18n>Status</I18n>
+            </th>
             <th />
           </tr>
         </thead>
         <tbody>
           {configs.map(config => (
             <tr key={config.values['Event Type']}>
-              <td scope="row">{config.values['Event Type']}</td>
+              <td scope="row">
+                <I18n>{config.values['Event Type']}</I18n>
+              </td>
               <td>
                 {parseInt(config.values['Duration Multiplier'], 10) *
                   timeInterval}{' '}
-                minutes
+                <I18n>minutes</I18n>
               </td>
-              <td>{config.values['Status']}</td>
+              <td>
+                <I18n>{config.values['Status']}</I18n>
+              </td>
               <td className="text-right">
                 <Dropdown
                   toggle={toggleDropdown(config.id)}
@@ -93,10 +108,10 @@ const SchedulerConfigComponent = ({
                   </DropdownToggle>
                   <DropdownMenu right>
                     <DropdownItem onClick={handleEdit(config.id)}>
-                      Edit
+                      <I18n>Edit</I18n>
                     </DropdownItem>
                     <DropdownItem onClick={handleDelete(config.id)}>
-                      Delete
+                      <I18n>Delete</I18n>
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
@@ -116,36 +131,40 @@ const SchedulerConfigComponent = ({
               className="btn btn-link"
               onClick={toggleModal}
             >
-              Cancel
+              <I18n>Cancel</I18n>
             </button>
             <span>
-              {openModal === true ? 'New Event Type' : 'Edit Event Type'}
+              <I18n>
+                {openModal === true ? 'New Event Type' : 'Edit Event Type'}
+              </I18n>
             </span>
           </h4>
         </div>
         <ModalBody>
-          {openModal === true ? (
-            <CoreForm
-              datastore
-              form={SCHEDULER_CONFIG_FORM_SLUG}
-              loaded={handleLoaded}
-              created={handleSaved}
-              error={handleError}
-              values={{
-                'Scheduler Id': schedulerId,
-              }}
-              globals={globals}
-            />
-          ) : (
-            <CoreForm
-              datastore
-              submission={openModal}
-              loaded={handleLoaded}
-              updated={handleSaved}
-              error={handleError}
-              globals={globals}
-            />
-          )}
+          <I18n context={`datastore.form.SCHEDULER_CONFIG_FORM_SLUG`}>
+            {openModal === true ? (
+              <CoreForm
+                datastore
+                form={SCHEDULER_CONFIG_FORM_SLUG}
+                loaded={handleLoaded}
+                created={handleSaved}
+                error={handleError}
+                values={{
+                  'Scheduler Id': schedulerId,
+                }}
+                globals={globals}
+              />
+            ) : (
+              <CoreForm
+                datastore
+                submission={openModal}
+                loaded={handleLoaded}
+                updated={handleSaved}
+                error={handleError}
+                globals={globals}
+              />
+            )}
+          </I18n>
         </ModalBody>
       </Modal>
     )}
@@ -159,18 +178,27 @@ const SchedulerConfigComponent = ({
               className="btn btn-link"
               onClick={toggleConfirm}
             >
-              Cancel
+              <I18n>Cancel</I18n>
             </button>
-            <span>Confirm Delete</span>
+            <span>
+              <I18n>Confirm Delete</I18n>
+            </span>
           </h4>
         </div>
         <ModalBody className="modal-body--padding">
           <div>
-            <span>Are you sure you want to delete the </span>
+            <span>
+              <I18n>Are you sure you want to delete the</I18n>{' '}
+            </span>
             <strong>
-              {configs.find(c => c.id === openConfirm).values['Event Type']}
+              <I18n>
+                {configs.find(c => c.id === openConfirm).values['Event Type']}
+              </I18n>
             </strong>
-            <span> Event Type?</span>
+            <span>
+              {' '}
+              <I18n>Event Type?</I18n>
+            </span>
           </div>
         </ModalBody>
         <ModalFooter>
@@ -179,14 +207,7 @@ const SchedulerConfigComponent = ({
             className="btn btn-primary"
             onClick={processDelete(openConfirm)}
           >
-            Delete
-          </button>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={toggleConfirm}
-          >
-            Cancel
+            <I18n>Delete</I18n>
           </button>
         </ModalFooter>
       </Modal>

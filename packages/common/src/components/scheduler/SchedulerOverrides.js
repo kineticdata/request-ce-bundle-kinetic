@@ -20,11 +20,23 @@ import {
   SCHEDULER_OVERRIDES_PAGE_SIZE,
 } from '../../redux/modules/schedulers';
 import { actions as toastActions } from '../../redux/modules/toasts';
+import { Moment, Constants } from 'common';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
 
-const formatDate = date => moment(date, 'YYYY/MM/DD').format('ll');
-const formatTime = time => moment(time, 'HH:mm').format('LT');
+const formatDate = date => (
+  <Moment
+    timestamp={moment(date, 'YYYY/MM/DD')}
+    format={Constants.MOMENT_FORMATS.date}
+  />
+);
+const formatTime = time => (
+  <Moment
+    timestamp={moment(time, 'HH:mm')}
+    format={Constants.MOMENT_FORMATS.time}
+  />
+);
 
 const SchedulerOverridesComponent = ({
   schedulerId,
@@ -57,10 +69,12 @@ const SchedulerOverridesComponent = ({
         className={`btn ${includePastOverrides ? 'btn-success' : 'btn-subtle'}`}
         onClick={() => togglePastOverrides(!includePastOverrides)}
       >
-        {`${includePastOverrides ? 'Hide' : 'Show'} Past Overrides`}
+        <I18n>{`${
+          includePastOverrides ? 'Hide' : 'Show'
+        } Past Overrides`}</I18n>
       </button>
       <button className="btn btn-primary" onClick={handleAdd}>
-        Add Override
+        <I18n>Add Override</I18n>
       </button>
     </div>
     {loading && overrides.size === 0 && <LoadingMessage />}
@@ -68,7 +82,11 @@ const SchedulerOverridesComponent = ({
       errors.length > 0 && (
         <ErrorMessage
           heading="Failed to retrieve overrides"
-          text={errors.map(e => <div>{e}</div>)}
+          text={errors.map((e, i) => (
+            <div key={`error-${i}`}>
+              <I18n>{e}</I18n>
+            </div>
+          ))}
         />
       )}
     {!loading &&
@@ -83,10 +101,18 @@ const SchedulerOverridesComponent = ({
       <table className="table table-sm table-striped table-overrides table--settings">
         <thead className="header">
           <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Start Time</th>
-            <th scope="col">End Time</th>
-            <th scope="col">Slots</th>
+            <th scope="col">
+              <I18n>Date</I18n>
+            </th>
+            <th scope="col">
+              <I18n>Start Time</I18n>
+            </th>
+            <th scope="col">
+              <I18n>End Time</I18n>
+            </th>
+            <th scope="col">
+              <I18n>Slots</I18n>
+            </th>
             <th />
           </tr>
         </thead>
@@ -106,9 +132,11 @@ const SchedulerOverridesComponent = ({
                     <span className="fa fa-ellipsis-h fa-2x" />
                   </DropdownToggle>
                   <DropdownMenu right>
-                    <DropdownItem onClick={handleEdit(a.id)}>Edit</DropdownItem>
+                    <DropdownItem onClick={handleEdit(a.id)}>
+                      <I18n>Edit</I18n>
+                    </DropdownItem>
                     <DropdownItem onClick={handleDelete(a.id)}>
-                      Delete
+                      <I18n>Delete</I18n>
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
@@ -124,14 +152,23 @@ const SchedulerOverridesComponent = ({
                   <button
                     className="btn btn-sm btn-secondary pull-left"
                     onClick={() => fetchPreviousSchedulerOverrides()}
-                  >{`Previous ${SCHEDULER_OVERRIDES_PAGE_SIZE}`}</button>
+                  >
+                    <I18n>Previous</I18n>
+                    {` ${SCHEDULER_OVERRIDES_PAGE_SIZE}`}
+                  </button>
                 )}
-                {`Viewing Overrides ${startIndex} to ${endIndex}`}
+                <span>
+                  <I18n>Viewing Overrides</I18n> {startIndex} <I18n>to</I18n>{' '}
+                  {endIndex}
+                </span>
                 {hasNextPage && (
                   <button
                     className="btn btn-sm btn-secondary pull-right"
                     onClick={() => fetchNextSchedulerOverrides()}
-                  >{`Next ${SCHEDULER_OVERRIDES_PAGE_SIZE}`}</button>
+                  >
+                    <I18n>Next</I18n>
+                    {` ${SCHEDULER_OVERRIDES_PAGE_SIZE}`}
+                  </button>
                 )}
               </td>
             </tr>
@@ -149,30 +186,36 @@ const SchedulerOverridesComponent = ({
               className="btn btn-link"
               onClick={toggleModal}
             >
-              Cancel
+              <I18n>Cancel</I18n>
             </button>
-            <span>{openModal === true ? 'New Override' : 'Edit Override'}</span>
+            <span>
+              <I18n>
+                {openModal === true ? 'New Override' : 'Edit Override'}
+              </I18n>
+            </span>
           </h4>
         </div>
         <ModalBody>
-          {openModal === true ? (
-            <CoreForm
-              datastore
-              form={SCHEDULER_OVERRIDE_FORM_SLUG}
-              created={handleSaved}
-              error={handleError}
-              values={{ 'Scheduler Id': schedulerId }}
-              globals={globals}
-            />
-          ) : (
-            <CoreForm
-              datastore
-              submission={openModal}
-              updated={handleSaved}
-              error={handleError}
-              globals={globals}
-            />
-          )}
+          <I18n context={`datastore.forms.${SCHEDULER_OVERRIDE_FORM_SLUG}`}>
+            {openModal === true ? (
+              <CoreForm
+                datastore
+                form={SCHEDULER_OVERRIDE_FORM_SLUG}
+                created={handleSaved}
+                error={handleError}
+                values={{ 'Scheduler Id': schedulerId }}
+                globals={globals}
+              />
+            ) : (
+              <CoreForm
+                datastore
+                submission={openModal}
+                updated={handleSaved}
+                error={handleError}
+                globals={globals}
+              />
+            )}
+          </I18n>
         </ModalBody>
       </Modal>
     )}
@@ -186,22 +229,26 @@ const SchedulerOverridesComponent = ({
               className="btn btn-link"
               onClick={toggleConfirm}
             >
-              Cancel
+              <I18n>Cancel</I18n>
             </button>
-            <span>Confirm Delete</span>
+            <span>
+              <I18n>Confirm Delete</I18n>
+            </span>
           </h4>
         </div>
         <ModalBody className="modal-body--padding">
           <div>
-            <div>Are you sure you want to delete the following Override?</div>
+            <div>
+              <I18n>
+                Are you sure you want to delete the following Override?
+              </I18n>
+            </div>
             {[overrides.find(c => c.id === openConfirm)].map((a, i) => (
               <strong key={i}>
-                {`
-                    ${formatDate(a.values['Date'])} from
-                    ${formatTime(a.values['Start Time'])} to
-                    ${formatTime(a.values['End Time'])} with
-                    ${a.values['Slots']} slots.
-                  `}
+                {formatDate(a.values['Date'])} <I18n>from</I18n>{' '}
+                {formatTime(a.values['Start Time'])} <I18n>to</I18n>{' '}
+                {formatTime(a.values['End Time'])} <I18n>with</I18n>{' '}
+                {a.values['Slots']} <I18n>slots</I18n>.
               </strong>
             ))}
           </div>
@@ -212,14 +259,7 @@ const SchedulerOverridesComponent = ({
             className="btn btn-primary"
             onClick={processDelete(openConfirm)}
           >
-            Delete
-          </button>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={toggleConfirm}
-          >
-            Cancel
+            <I18n>Delete</I18n>
           </button>
         </ModalFooter>
       </Modal>

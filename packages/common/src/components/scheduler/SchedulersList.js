@@ -10,6 +10,7 @@ import {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
 } from '../../redux/selectors';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const getStatusColor = status =>
   status === 'Inactive' ? 'status--red' : 'status--green';
@@ -30,11 +31,13 @@ const SchedulersListComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>{breadcrumbs}</h3>
-            <h1>Schedulers</h1>
+            <h1>
+              <I18n>Schedulers</I18n>
+            </h1>
           </div>
           {isSchedulerAdmin && (
             <Link to={`${match.path}/new`} className="btn btn-primary">
-              Create Scheduler
+              <I18n>Create Scheduler</I18n>
             </Link>
           )}
         </div>
@@ -45,10 +48,18 @@ const SchedulersListComponent = ({
             <table className="table table-sm table-striped table-schedulers table--settings">
               <thead className="header">
                 <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Type</th>
-                  <th scope="col">Location</th>
+                  <th scope="col">
+                    <I18n>Name</I18n>
+                  </th>
+                  <th scope="col">
+                    <I18n>Status</I18n>
+                  </th>
+                  <th scope="col">
+                    <I18n>Type</I18n>
+                  </th>
+                  <th scope="col">
+                    <I18n>Location</I18n>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -57,7 +68,9 @@ const SchedulersListComponent = ({
                     <tr key={scheduler.id}>
                       <td scope="row">
                         <Link to={`${match.path}/${scheduler.id}`}>
-                          <span>{scheduler.values['Name']}</span>
+                          <span>
+                            <I18n>{scheduler.values['Name']}</I18n>
+                          </span>
                         </Link>
                       </td>
                       <td>
@@ -66,11 +79,15 @@ const SchedulersListComponent = ({
                             scheduler.values['Status'],
                           )}`}
                         >
-                          {scheduler.values['Status']}
+                          <I18n>{scheduler.values['Status']}</I18n>
                         </span>
                       </td>
-                      <td>{scheduler.values['Type']}</td>
-                      <td>{scheduler.values['Location']}</td>
+                      <td>
+                        <I18n>{scheduler.values['Type']}</I18n>
+                      </td>
+                      <td>
+                        <I18n>{scheduler.values['Location']}</I18n>
+                      </td>
                     </tr>
                   );
                 })}
@@ -89,7 +106,11 @@ const SchedulersListComponent = ({
             errors.length > 0 && (
               <ErrorMessage
                 heading="Failed to retrieve schedulers."
-                text={errors.map(e => <div>{e}</div>)}
+                text={errors.map((e, i) => (
+                  <div key={`error-${i}`}>
+                    <I18n>{e}</I18n>
+                  </div>
+                ))}
               />
             )}
         </div>
@@ -120,6 +141,7 @@ export const SchedulersList = compose(
     componentDidMount() {
       this.props.fetchSchedulers({
         isSchedulerAdmin: this.props.isSchedulerAdmin,
+        type: this.props.type,
       });
     },
   }),

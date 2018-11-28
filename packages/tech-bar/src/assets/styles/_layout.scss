@@ -6,13 +6,11 @@
   // Tech Bar Page Container
   .page-container {
     width: 100%;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
     margin-right: auto;
     margin-left: auto;
-    &--no-padding {
-      padding-left: 0;
-      padding-right: 0;
+    &--tech-bar {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
     }
 
     .home-title {

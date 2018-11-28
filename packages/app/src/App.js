@@ -30,7 +30,7 @@ export const AppComponent = props =>
         toggleSidebarOpen={props.toggleSidebarOpen}
       />
       <props.AppProvider
-        render={({ main, sidebar }) =>
+        render={({ main, sidebar, header }) =>
           !props.sidebarHidden && sidebar ? (
             <Sidebar
               sidebar={sidebar}
@@ -64,6 +64,7 @@ export const mapStateToProps = state => ({
   layoutSize: state.app.layout.size,
   kappSlug: state.app.config.kappSlug,
   pathname: state.router.location.pathname,
+  locale: state.app.config.locale,
 });
 export const mapDispatchToProps = {
   loadApp: loadingActions.loadApp,

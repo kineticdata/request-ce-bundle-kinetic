@@ -19,11 +19,20 @@ import {
   SCHEDULER_AVAILABILITY_FORM_SLUG,
 } from '../../redux/modules/schedulers';
 import { actions as toastActions } from '../../redux/modules/toasts';
+import { Moment, Constants } from 'common';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
 
-const formatDayName = day => moment(day, 'd').format('dddd');
-const formatTime = time => moment(time, 'HH:mm').format('LT');
+const formatDayName = day => (
+  <Moment timestamp={moment(day, 'd')} format="dddd" />
+);
+const formatTime = time => (
+  <Moment
+    timestamp={moment(time, 'HH:mm')}
+    format={Constants.MOMENT_FORMATS.time}
+  />
+);
 
 const SchedulerAvailabilityComponent = ({
   schedulerId,
@@ -45,7 +54,7 @@ const SchedulerAvailabilityComponent = ({
   <div className="list-wrapper list-wrapper--availability">
     <div className="text-right">
       <button className="btn btn-primary" onClick={handleAdd}>
-        Add Availability
+        <I18n>Add Availability</I18n>
       </button>
     </div>
     {loading && availability.size === 0 && <LoadingMessage />}
@@ -53,7 +62,11 @@ const SchedulerAvailabilityComponent = ({
       errors.length > 0 && (
         <ErrorMessage
           heading="Failed to retrieve availability"
-          text={errors.map(e => <div>{e}</div>)}
+          text={errors.map((e, i) => (
+            <div key={`error-${i}`}>
+              <I18n>{e}</I18n>
+            </div>
+          ))}
         />
       )}
     {!loading &&
@@ -68,10 +81,18 @@ const SchedulerAvailabilityComponent = ({
       <table className="table table-sm table-striped table-availability table--settings">
         <thead className="header">
           <tr>
-            <th scope="col">Day</th>
-            <th scope="col">Start Time</th>
-            <th scope="col">End Time</th>
-            <th scope="col">Slots</th>
+            <th scope="col">
+              <I18n>Day</I18n>
+            </th>
+            <th scope="col">
+              <I18n>Start Time</I18n>
+            </th>
+            <th scope="col">
+              <I18n>End Time</I18n>
+            </th>
+            <th scope="col">
+              <I18n>Simultaneous Slots</I18n>
+            </th>
             <th />
           </tr>
         </thead>
@@ -91,9 +112,11 @@ const SchedulerAvailabilityComponent = ({
                     <span className="fa fa-ellipsis-h fa-2x" />
                   </DropdownToggle>
                   <DropdownMenu right>
-                    <DropdownItem onClick={handleEdit(a.id)}>Edit</DropdownItem>
+                    <DropdownItem onClick={handleEdit(a.id)}>
+                      <I18n>Edit</I18n>
+                    </DropdownItem>
                     <DropdownItem onClick={handleDelete(a.id)}>
-                      Delete
+                      <I18n>Delete</I18n>
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
@@ -113,32 +136,36 @@ const SchedulerAvailabilityComponent = ({
               className="btn btn-link"
               onClick={toggleModal}
             >
-              Cancel
+              <I18n>Cancel</I18n>
             </button>
             <span>
-              {openModal === true ? 'New Availability' : 'Edit Availability'}
+              <I18n>
+                {openModal === true ? 'New Availability' : 'Edit Availability'}
+              </I18n>
             </span>
           </h4>
         </div>
         <ModalBody>
-          {openModal === true ? (
-            <CoreForm
-              datastore
-              form={SCHEDULER_AVAILABILITY_FORM_SLUG}
-              created={handleSaved}
-              error={handleError}
-              values={{ 'Scheduler Id': schedulerId }}
-              globals={globals}
-            />
-          ) : (
-            <CoreForm
-              datastore
-              submission={openModal}
-              updated={handleSaved}
-              error={handleError}
-              globals={globals}
-            />
-          )}
+          <I18n context={`datastore.forms.SCHEDULER_AVAILABILITY_FORM_SLUG`}>
+            {openModal === true ? (
+              <CoreForm
+                datastore
+                form={SCHEDULER_AVAILABILITY_FORM_SLUG}
+                created={handleSaved}
+                error={handleError}
+                values={{ 'Scheduler Id': schedulerId }}
+                globals={globals}
+              />
+            ) : (
+              <CoreForm
+                datastore
+                submission={openModal}
+                updated={handleSaved}
+                error={handleError}
+                globals={globals}
+              />
+            )}
+          </I18n>
         </ModalBody>
       </Modal>
     )}
@@ -152,24 +179,26 @@ const SchedulerAvailabilityComponent = ({
               className="btn btn-link"
               onClick={toggleConfirm}
             >
-              Cancel
+              <I18n>Cancel</I18n>
             </button>
-            <span>Confirm Delete</span>
+            <span>
+              <I18n>Confirm Delete</I18n>
+            </span>
           </h4>
         </div>
         <ModalBody className="modal-body--padding">
           <div>
             <div>
-              Are you sure you want to delete the following Availability?
+              <I18n>
+                Are you sure you want to delete the following Availability?
+              </I18n>
             </div>
             {[availability.find(c => c.id === openConfirm)].map((a, i) => (
               <strong key={i}>
-                {`
-                    ${formatDayName(a.values['Day'])} from
-                    ${formatTime(a.values['Start Time'])} to
-                    ${formatTime(a.values['End Time'])} with
-                    ${a.values['Slots']} slots.
-                  `}
+                {formatDayName(a.values['Day'])} <I18n>from</I18n>{' '}
+                {formatTime(a.values['Start Time'])} <I18n>to</I18n>{' '}
+                {formatTime(a.values['End Time'])} <I18n>with</I18n>{' '}
+                {a.values['Slots']} <I18n>slots</I18n>.
               </strong>
             ))}
           </div>
@@ -180,14 +209,7 @@ const SchedulerAvailabilityComponent = ({
             className="btn btn-primary"
             onClick={processDelete(openConfirm)}
           >
-            Delete
-          </button>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={toggleConfirm}
-          >
-            Cancel
+            <I18n>Delete</I18n>
           </button>
         </ModalFooter>
       </Modal>

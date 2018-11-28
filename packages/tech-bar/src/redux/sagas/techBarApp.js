@@ -12,25 +12,44 @@ import {
   SCHEDULED_EVENT_FORM_SLUG,
 } from '../modules/techBarApp';
 
+const TECH_BAR_SETTINGS_FORM_SLUG = 'tech-bar-settings';
+
 export function* fetchAppSettingsSaga() {
-  const query = new CoreAPI.SubmissionSearch(true);
-  query.include('details,values');
-  query.limit('1000');
-  query.index('values[Status],values[Type],values[Name]');
-  query.eq('values[Status]', 'Active');
-  query.eq('values[Type]', 'TechBar');
+  const schedulersQuery = new CoreAPI.SubmissionSearch(true);
+  schedulersQuery.include('details,values');
+  schedulersQuery.limit('1000');
+  schedulersQuery.index('values[Type],values[Name]');
+  schedulersQuery.eq('values[Type]', 'TechBar');
+
+  const settingsQuery = new CoreAPI.SubmissionSearch(true);
+  settingsQuery.include('details,values');
+  settingsQuery.limit('1000');
+  settingsQuery.index('values[Scheduler Id]:UNIQUE');
 
   const kappSlug = yield select(state => state.app.config.kappSlug);
 
+  const Settings = (object = {}) => ({
+    submissionId: object.id,
+    feedbackIdentitifcation:
+      (object.values && object.values['Feedback Identification']) || 'Required',
+    allowWalkIns:
+      ((object.values && object.values['Allow Walk-Ins']) || 'Yes') === 'Yes',
+  });
+
   const [
     { submissions: schedulers, serverError: schedulersServerError },
+    { submissions: techBarSettings, serverError: settingsServerError },
     { forms, serverError: formsServerError },
   ] = yield all([
     call(CoreAPI.searchSubmissions, {
-      search: query.build(),
+      search: schedulersQuery.build(),
       datastore: true,
       form: SCHEDULER_FORM_SLUG,
-      include: 'form,values',
+    }),
+    call(CoreAPI.searchSubmissions, {
+      search: settingsQuery.build(),
+      datastore: true,
+      form: TECH_BAR_SETTINGS_FORM_SLUG,
     }),
     call(CoreAPI.fetchForms, {
       kappSlug,
@@ -38,11 +57,13 @@ export function* fetchAppSettingsSaga() {
     }),
   ]);
 
-  if (schedulersServerError || formsServerError) {
+  if (schedulersServerError || settingsServerError || formsServerError) {
     yield put(
       actions.setAppErrors([
         (schedulersServerError &&
           (schedulersServerError.error || schedulersServerError.statusText)) ||
+          (settingsServerError &&
+            (settingsServerError.error || settingsServerError.statusText)) ||
           (formsServerError &&
             (formsServerError.error || formsServerError.statusText)),
       ]),
@@ -50,7 +71,14 @@ export function* fetchAppSettingsSaga() {
   } else {
     yield put(
       actions.setAppSettings({
-        schedulers,
+        schedulers: schedulers.map(scheduler => ({
+          ...scheduler,
+          settings: Settings(
+            techBarSettings.find(
+              s => s.values['Scheduler Id'] === scheduler.values['Id'],
+            ),
+          ),
+        })),
         forms,
       }),
     );

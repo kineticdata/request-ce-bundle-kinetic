@@ -11,7 +11,7 @@ import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import isMatch from 'lodash.ismatch';
 import memoize from 'memoize-one';
 import { CoreAPI } from 'react-kinetic-core';
-import { Cache } from './Cache';
+import { Cache } from '../../cache';
 
 const EMAIL_PATTERN = /^.+@.+\..+$/;
 

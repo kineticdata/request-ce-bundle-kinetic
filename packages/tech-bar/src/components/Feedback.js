@@ -13,6 +13,7 @@ import { selectCurrentKapp, toastActions } from 'common';
 import { CoreAPI } from 'react-kinetic-core';
 import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
+import { I18n } from '../../../app/src/I18nProvider';
 
 const FEEDBACK_IDENTITY_ATTRIBUTE = 'Feedback Identity';
 const FEEDBACK_FORM_SLUG = 'feedback';
@@ -43,7 +44,7 @@ export const FeedbackComponent = ({
     <section className="tech-bar-display tech-bar-display__small mb-3">
       <div className="details-container">
         <div className="header bg-dark text-white">
-          How was your experience?
+          <I18n>How was your experience?</I18n>
         </div>
         <div className="form body">
           <div className="experience-options my-5">
@@ -81,9 +82,11 @@ export const FeedbackComponent = ({
                 className="btn btn-link"
                 onClick={resetExperience}
               >
-                Cancel
+                <I18n>Cancel</I18n>
               </button>
-              <span>Tell Us Who You Are</span>
+              <span>
+                <I18n>Tell Us Who You Are</I18n>
+              </span>
             </h4>
           </div>
           <ModalBody>
@@ -94,10 +97,13 @@ export const FeedbackComponent = ({
                 }`}
               >
                 <label htmlFor="appointment-search-input">
-                  Find Your Appointment by Name or Email{feedbackIdentityRequired ? (
+                  <I18n>Find Your Appointment by Name or Email</I18n>
+                  {feedbackIdentityRequired ? (
                     <span className="text-danger">*</span>
                   ) : (
-                    ' (Optional)'
+                    <span>
+                      ( <I18n>Optional</I18n>)
+                    </span>
                   )}
                 </label>
                 <input
@@ -124,7 +130,9 @@ export const FeedbackComponent = ({
                     >
                       <div className="details">
                         <div>{appt.displayName}</div>
-                        <div className="text-muted">{appt.type}</div>
+                        <div className="text-muted">
+                          <I18n>{appt.type}</I18n>
+                        </div>
                       </div>
                       {appointmentId !== appt.id && (
                         <button
@@ -132,7 +140,7 @@ export const FeedbackComponent = ({
                           className="btn btn-primary"
                           onClick={() => setAppointmentId(appt.id)}
                         >
-                          Select
+                          <I18n>Select</I18n>
                         </button>
                       )}
                     </div>
@@ -144,7 +152,7 @@ export const FeedbackComponent = ({
                       </div>
                     ) : (
                       <div className="alert alert-warning text-center">
-                        No appointments found.
+                        <I18n>No appointments found.</I18n>
                       </div>
                     ))}
                 </div>
@@ -158,7 +166,7 @@ export const FeedbackComponent = ({
               disabled={feedbackIdentityRequired && !appointmentId}
               onClick={() => handleSubmitFeedback()}
             >
-              Submit Feedback
+              <I18n>Submit Feedback</I18n>
             </button>
           </ModalFooter>
         </Modal>

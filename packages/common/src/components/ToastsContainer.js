@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
+import isarray from 'isarray';
 import { actions } from '../redux/modules/toasts';
+import { I18n } from '../../../app/src/I18nProvider';
 
 const defaultTitle = {
   success: 'Success',
@@ -12,17 +14,35 @@ const defaultTitle = {
 };
 
 const Toast = ({ toast, dismiss }) => (
-  <div className={`toast toast--${toast.type}`}>
-    <div className="toast__message">
+  <div className={`toast toast--${toast.type} toast--${toast.size || 'large'}`}>
+    <div className="toast__wrapper">
       <span className="toast__title">
-        {toast.title || defaultTitle[toast.type]}
-        <div className="toast__actions">
-          <button className="btn btn-link" onClick={dismiss}>
-            <i className="fa fa-fw fa-times" />
-          </button>
-        </div>
+        <I18n
+          render={translate =>
+            toast.title
+              ? isarray(toast.title)
+                ? toast.title.map(t => translate(t)).join(' ')
+                : translate(toast.title)
+              : translate(defaultTitle[toast.type])
+          }
+        />
+        {toast.dismissible && (
+          <div className="toast__actions">
+            <button className="btn btn-link" onClick={dismiss}>
+              <i className="fa fa-fw fa-times" />
+            </button>
+          </div>
+        )}
       </span>
-      {toast.msg}
+      <div className="toast__message">
+        <I18n
+          render={translate =>
+            isarray(toast.msg)
+              ? toast.msg.map(m => translate(m)).join(' ')
+              : translate(toast.msg)
+          }
+        />
+      </div>
     </div>
   </div>
 );

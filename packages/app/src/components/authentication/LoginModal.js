@@ -4,6 +4,7 @@ import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { login } from '../../utils/authentication';
 import { actions } from '../../redux/modules/auth';
+import { I18n } from '../../I18nProvider';
 
 export const LoginModalComponent = props =>
   props.showing && (
@@ -15,16 +16,20 @@ export const LoginModalComponent = props =>
             className="btn btn-link"
             onClick={props.cancelled}
           >
-            Cancel
+            <I18n>Cancel</I18n>
           </button>
-          <span>Sign In</span>
+          <span>
+            <I18n>Sign In</I18n>
+          </span>
           <span />
         </h4>
       </div>
       <form className="login-form-container" onSubmit={props.handleLogin}>
         <ModalBody>
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">
+              <I18n>Email Address</I18n>
+            </label>
             <input
               type="text"
               autoFocus
@@ -37,7 +42,9 @@ export const LoginModalComponent = props =>
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">
+              <I18n>Password</I18n>
+            </label>
             <input
               type="password"
               className="form-control"
@@ -47,10 +54,14 @@ export const LoginModalComponent = props =>
               onChange={props.handlePassword}
             />
           </div>
-          <span className="text-danger">{props.error || ' '}</span>
+          <span className="text-danger">
+            <I18n>{props.error || ' '}</I18n>
+          </span>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-primary">Sign In</button>
+          <button className="btn btn-primary">
+            <I18n>Sign In</I18n>
+          </button>
         </ModalFooter>
       </form>
     </Modal>

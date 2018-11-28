@@ -1,5 +1,6 @@
 import React from 'react';
 import { compose, withState, withHandlers } from 'recompose';
+import { I18n } from '../../I18nProvider';
 
 import { CoreAPI } from 'react-kinetic-core';
 
@@ -23,24 +24,32 @@ const CreateAccount = ({
   submitted ? (
     <div className="login-form-container">
       <div className="submitted">
-        <h3 className="form-title">Create Account</h3>
+        <h3 className="form-title">
+          <I18n>Create Account</I18n>
+        </h3>
         <p className="subtitle">
-          Your request for a new account has been received.
+          <I18n>Your request for a new account has been received.</I18n>
         </p>
         <p className="explaination">
-          Your request for a new account is being reviewed by the team. Once
-          approved you will receive an email with further instructions.
+          <I18n>
+            Your request for a new account is being reviewed by the team. Once
+            approved you will receive an email with further instructions.
+          </I18n>
         </p>
       </div>
     </div>
   ) : (
     <form className="login-form-container" onSubmit={handleSubmit}>
       <div>
-        <h3 className="form-title">Create Account</h3>
+        <h3 className="form-title">
+          <I18n>Create Account</I18n>
+        </h3>
 
         <div className="name-section">
           <div className="form-group">
-            <label className="required">First Name</label>
+            <label className="required">
+              <I18n>First Name</I18n>
+            </label>
             <input
               autoFocus
               className="form-control"
@@ -50,7 +59,9 @@ const CreateAccount = ({
             />
           </div>
           <div className="form-group">
-            <label className="required">Last Name</label>
+            <label className="required">
+              <I18n>Last Name</I18n>
+            </label>
             <input
               className="form-control"
               type="text"
@@ -60,7 +71,9 @@ const CreateAccount = ({
           </div>
         </div>
         <div className="form-group">
-          <label className="required">Email</label>
+          <label className="required">
+            <I18n>Email</I18n>
+          </label>
           <input
             className="form-control"
             type="text"
@@ -69,17 +82,21 @@ const CreateAccount = ({
           />
         </div>
         <div className="form-group">
-          <label>Phone Number</label>
+          <label>
+            <I18n>Phone Number</I18n>
+          </label>
           <input className="form-control" type="text" />
         </div>
         <div className="form-group">
-          <label>Comments</label>
+          <label>
+            <I18n>Comments</I18n>
+          </label>
           <input className="form-control" type="text" />
         </div>
       </div>
       <div className="button-group">
         <button className="btn btn-primary" type="submit" disabled={!formValid}>
-          Request Account
+          <I18n>Request Account</I18n>
         </button>
         <hr />
         <button
@@ -87,7 +104,7 @@ const CreateAccount = ({
           type="button"
           onClick={toSignIn(routed)}
         >
-          &larr; Back to Sign In
+          &larr; <I18n>Back to Sign In</I18n>
         </button>
       </div>
     </form>

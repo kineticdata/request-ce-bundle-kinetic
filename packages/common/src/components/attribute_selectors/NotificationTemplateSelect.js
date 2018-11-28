@@ -12,7 +12,7 @@ import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import memoize from 'memoize-one';
 import { CoreAPI } from 'react-kinetic-core';
 
-import { Cache } from './Cache';
+import { Cache } from '../../cache';
 
 export const TeamMenuItem = props => {
   const disabledReason = props.disabledFn && props.disabledFn(props.option);

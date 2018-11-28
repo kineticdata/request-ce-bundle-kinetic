@@ -18,6 +18,7 @@ import { RobotsWrapper } from './robots/RobotsWrapper';
 import { Users } from './users/Users';
 import { Profile } from './profile/Profile';
 import { Teams } from './teams/Teams';
+import { Translations } from './translations/Translations';
 import { actions as datastoreActions } from '../../redux/modules/settingsDatastore';
 import { actions as teamActions } from '../../redux/modules/teamList';
 
@@ -44,6 +45,7 @@ export const SettingsComponent = () => (
         />
       )}
     />
+    <Route path="/settings/translations" component={Translations} />
     <Route component={SettingsNavigation} />
   </Switch>
 );
@@ -140,6 +142,12 @@ const SettingsNavigationComponent = ({
               path={`/settings/robots`}
               icon="fa-tasks"
               description="View, Create and Edit Robots"
+            />
+            <SettingsCard
+              name="Translations"
+              path={`/settings/translations`}
+              icon="fa-globe"
+              description="View, Create and Edit Translations"
             />
           </Fragment>
         )}

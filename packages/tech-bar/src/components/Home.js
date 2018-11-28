@@ -1,27 +1,20 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { compose, lifecycle, withHandlers, withState } from 'recompose';
+import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import {
-  compose,
-  lifecycle,
-  withHandlers,
-  withState,
-  withProps,
-} from 'recompose';
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from 'reactstrap';
-import { KappLink as Link, PageTitle, selectCurrentKapp } from 'common';
+  KappLink as Link,
+  PageTitle,
+  selectCurrentKapp,
+  Moment,
+  Constants,
+  Utils,
+} from 'common';
 import { actions } from '../redux/modules/appointments';
 import moment from 'moment';
-
-export const DATE_FORMAT = 'YYYY-MM-DD';
-export const DATE_DISPLAY_FORMAT = 'dddd, LL';
-export const TIME_FORMAT = 'HH:mm';
-export const TIME_DISPLAY_FORMAT = 'LT';
+import { I18n } from '../../../app/src/I18nProvider';
+import { DATE_FORMAT, TIME_FORMAT } from '../App';
 
 export const HomeComponent = ({
   kapp,
@@ -34,69 +27,84 @@ export const HomeComponent = ({
   pastAppointments,
   openDropdown,
   toggleDropdown,
+  hasTechBarDisplayRole,
 }) => (
   <Fragment>
     <PageTitle parts={[]} />
-    <div className="page-container page-container--tech-bar-home">
+    <div className="page-container page-container--tech-bar">
       <div className="home-title">
-        Welcome to {kapp ? kapp.name : 'Tech Bar'}
+        <I18n>Welcome to {kapp ? kapp.name : 'Tech Bar'}</I18n>
       </div>
       <section className="mb-4">
-        <h2 className="section__title">Tech Bars</h2>
+        <h2 className="section__title">
+          <I18n>Tech Bars</I18n>
+        </h2>
         <div className="cards__wrapper--tech-bar">
           {techBars.map(techBar => (
             <div className="card card--tech-bar" key={techBar.id}>
               <div className="card-body">
                 <h3 className="card-title">
-                  <span>{techBar.values['Name']}</span>
                   <span>
-                    <Dropdown
-                      toggle={toggleDropdown(techBar.id)}
-                      isOpen={openDropdown === techBar.id}
-                    >
-                      <DropdownToggle color="link" className="btn-sm">
-                        <span className="fa fa-ellipsis-v fa-2x" />
-                      </DropdownToggle>
-                      <DropdownMenu right>
-                        <Link
-                          to={`/display/${techBar.values['Id']}/checkin`}
-                          className="dropdown-item"
-                          target="_blank"
-                        >
-                          <span className="fa fa-external-link fa-fw mr-2" />
-                          <span>Check In</span>
-                        </Link>
-                        <Link
-                          to={`/display/${techBar.values['Id']}/feedback`}
-                          className="dropdown-item"
-                          target="_blank"
-                        >
-                          <span className="fa fa-external-link fa-fw mr-2" />
-                          <span>Feedback</span>
-                        </Link>
-                        <Link
-                          to={`/display/${techBar.values['Id']}/overhead`}
-                          className="dropdown-item"
-                          target="_blank"
-                        >
-                          <span className="fa fa-external-link fa-fw mr-2" />
-                          <span>Overhead</span>
-                        </Link>
-                      </DropdownMenu>
-                    </Dropdown>
+                    <I18n>{techBar.values['Name']}</I18n>
                   </span>
+                  {hasTechBarDisplayRole && (
+                    <span>
+                      <Dropdown
+                        toggle={toggleDropdown(techBar.id)}
+                        isOpen={openDropdown === techBar.id}
+                      >
+                        <DropdownToggle color="link" className="btn-sm">
+                          <span className="fa fa-ellipsis-v fa-2x" />
+                        </DropdownToggle>
+                        <DropdownMenu right>
+                          <Link
+                            to={`/display/${techBar.values['Id']}/checkin`}
+                            className="dropdown-item"
+                            target="_blank"
+                          >
+                            <span className="fa fa-external-link fa-fw mr-2" />
+                            <span>
+                              <I18n>Check In</I18n>
+                            </span>
+                          </Link>
+                          <Link
+                            to={`/display/${techBar.values['Id']}/feedback`}
+                            className="dropdown-item"
+                            target="_blank"
+                          >
+                            <span className="fa fa-external-link fa-fw mr-2" />
+                            <span>
+                              <I18n>Feedback</I18n>
+                            </span>
+                          </Link>
+                          <Link
+                            to={`/display/${techBar.values['Id']}/overhead`}
+                            className="dropdown-item"
+                            target="_blank"
+                          >
+                            <span className="fa fa-external-link fa-fw mr-2" />
+                            <span>
+                              <I18n>Overhead</I18n>
+                            </span>
+                          </Link>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </span>
+                  )}
                 </h3>
                 <div className="card-subtitle">
-                  {techBar.values['Location']}
+                  <I18n>{techBar.values['Location']}</I18n>
                 </div>
-                <p className="card-text">{techBar.values['Description']}</p>
+                <p className="card-text">
+                  <I18n>{techBar.values['Description']}</I18n>
+                </p>
                 <Link
                   to={`/forms/appointment?values[Scheduler Id]=${
                     techBar.values['Id']
                   }`}
                   className="btn btn-primary card-button"
                 >
-                  Schedule
+                  <I18n>Schedule</I18n>
                 </Link>
               </div>
             </div>
@@ -104,7 +112,9 @@ export const HomeComponent = ({
         </div>
       </section>
       <section className="mb-4">
-        <h2 className="section__title">Upcoming Appointments</h2>
+        <h2 className="section__title">
+          <I18n>Upcoming Appointments</I18n>
+        </h2>
         <div className="cards__wrapper--tech-bar">
           {upcomingAppointments.map(appt => {
             const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
@@ -114,19 +124,28 @@ export const HomeComponent = ({
               <div className="card card--tech-bar" key={appt.id}>
                 <div className="card-body">
                   <h5 className="card-title">
-                    {date.format(DATE_DISPLAY_FORMAT)}
+                    <Moment
+                      timestamp={date}
+                      format={Constants.MOMENT_FORMATS.dateWithDay}
+                    />
                   </h5>
                   <div className="card-subtitle">
-                    {`${start.format(TIME_DISPLAY_FORMAT)} - ${end.format(
-                      TIME_DISPLAY_FORMAT,
-                    )}`}
+                    <Moment
+                      timestamp={start}
+                      format={Constants.MOMENT_FORMATS.time}
+                    />
+                    {` - `}
+                    <Moment
+                      timestamp={end}
+                      format={Constants.MOMENT_FORMATS.time}
+                    />
                   </div>
                   <p className="card-text">{appt.values['Summary']}</p>
                   <Link
                     to={`/forms/appointment/${appt.id}`}
                     className="btn btn-dark card-button"
                   >
-                    View Details
+                    <I18n>View Details</I18n>
                   </Link>
                 </div>
               </div>
@@ -137,12 +156,16 @@ export const HomeComponent = ({
           !loadingUpcoming &&
           upcomingErrors.length === 0 && (
             <h6 className="text-muted">
-              <em>You do not have any upcoming appointments.</em>
+              <em>
+                <I18n>You do not have any upcoming appointments.</I18n>
+              </em>
             </h6>
           )}
       </section>
       <section className="mb-4">
-        <h2 className="section__title">Past Appointments</h2>
+        <h2 className="section__title">
+          <I18n>Past Appointments</I18n>
+        </h2>
         <div className="cards__wrapper--tech-bar">
           {pastAppointments.map(appt => {
             const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
@@ -152,19 +175,28 @@ export const HomeComponent = ({
               <div className="card card--tech-bar" key={appt.id}>
                 <div className="card-body">
                   <h5 className="card-title">
-                    {date.format(DATE_DISPLAY_FORMAT)}
+                    <Moment
+                      timestamp={date}
+                      format={Constants.MOMENT_FORMATS.dateWithDay}
+                    />
                   </h5>
                   <div className="card-subtitle">
-                    {`${start.format(TIME_DISPLAY_FORMAT)} - ${end.format(
-                      TIME_DISPLAY_FORMAT,
-                    )}`}
+                    <Moment
+                      timestamp={start}
+                      format={Constants.MOMENT_FORMATS.time}
+                    />
+                    {` - `}
+                    <Moment
+                      timestamp={end}
+                      format={Constants.MOMENT_FORMATS.time}
+                    />
                   </div>
                   <p className="card-text">{appt.values['Summary']}</p>
                   <Link
                     to={`/forms/appointment/${appt.id}`}
                     className="btn btn-subtle card-button"
                   >
-                    View Details
+                    <I18n>View Details</I18n>
                   </Link>
                 </div>
               </div>
@@ -175,7 +207,9 @@ export const HomeComponent = ({
           !loadingPast &&
           pastErrors.length === 0 && (
             <h6 className="text-muted">
-              <em>You do not have any past appointments.</em>
+              <em>
+                <I18n>You do not have any past appointments.</I18n>
+              </em>
             </h6>
           )}
       </section>
@@ -185,13 +219,19 @@ export const HomeComponent = ({
 
 export const mapStateToProps = state => ({
   kapp: selectCurrentKapp(state),
-  techBars: state.techBar.techBarApp.schedulers,
+  techBars: state.techBar.techBarApp.schedulers.filter(
+    s => s.values['Status'] === 'Active',
+  ),
   loadingUpcoming: state.techBar.appointments.upcoming.loading,
   upcomingErrors: state.techBar.appointments.upcoming.errors,
   upcomingAppointments: state.techBar.appointments.upcoming.data,
   loadingPast: state.techBar.appointments.past.loading,
   pastErrors: state.techBar.appointments.past.errors,
   pastAppointments: state.techBar.appointments.past.data,
+  hasTechBarDisplayRole: Utils.isMemberOf(
+    state.app.profile,
+    'Role::Tech Bar Display',
+  ),
 });
 
 export const mapDispatchToProps = {
@@ -215,7 +255,9 @@ export const Home = compose(
   withHandlers({ toggleDropdown }),
   lifecycle({
     componentDidMount() {
-      this.props.fetchUpcomingAppointments();
+      if (!this.props.loadingUpcoming) {
+        this.props.fetchUpcomingAppointments();
+      }
       this.props.fetchPastAppointments();
     },
   }),

@@ -9,6 +9,7 @@ import { ErrorUnauthorized } from '../ErrorUnauthorized';
 import { SCHEDULER_FORM_SLUG } from '../../redux/modules/schedulers';
 import { actions as toastActions } from '../../redux/modules/toasts';
 import { selectHasRoleSchedulerAdmin } from '../../redux/selectors';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
 
@@ -37,23 +38,27 @@ const CreateSchedulerComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>{breadcrumbs}</h3>
-            <h1>Create Scheduler</h1>
+            <h1>
+              <I18n>Create Scheduler</I18n>
+            </h1>
           </div>
           <Link
             to={match.path.replace(/\/new$/, '')}
             className="btn btn-secondary"
           >
-            Cancel Create
+            <I18n>Cancel Create</I18n>
           </Link>
         </div>
         <div className="content-wrapper">
-          <CoreForm
-            datastore
-            form={SCHEDULER_FORM_SLUG}
-            created={handleCreated}
-            error={handleError}
-            globals={globals}
-          />
+          <I18n context={`datastore.forms.${SCHEDULER_FORM_SLUG}`}>
+            <CoreForm
+              datastore
+              form={SCHEDULER_FORM_SLUG}
+              created={handleCreated}
+              error={handleError}
+              globals={globals}
+            />
+          </I18n>
         </div>
       </div>
     </div>

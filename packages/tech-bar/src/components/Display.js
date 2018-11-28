@@ -12,6 +12,7 @@ import {
 import { CheckIn } from './CheckIn';
 import { Feedback } from './Feedback';
 import { Overhead } from './Overhead';
+import { I18n } from '../../../app/src/I18nProvider';
 
 export const DisplayComponent = ({
   kapp,
@@ -24,11 +25,11 @@ export const DisplayComponent = ({
   ) : (
     <Fragment>
       <PageTitle parts={[]} />
-      <div className="page-container page-container--tech-bar-display">
+      <div className="page-container page-container--tech-bar">
         {techBar && (
           <Fragment>
             <div className="home-title text-center mb-4">
-              {techBar.values['Name']}
+              <I18n>{techBar.values['Name']}</I18n>
             </div>
             {displayMode === 'checkin' && <CheckIn techBar={techBar} />}
             {displayMode === 'feedback' && <Feedback techBar={techBar} />}

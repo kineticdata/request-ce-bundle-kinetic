@@ -1,3 +1,5 @@
+import { Avatar } from './components/Avatar';
+import { ProfileCard } from './components/ProfileCard';
 import { ToastsContainer } from './components/ToastsContainer';
 import { ModalFormContainer } from './components/ModalFormContainer';
 import { KappLink } from './components/KappLink';
@@ -6,7 +8,7 @@ import { KappNavLink } from './components/KappNavLink';
 import { KappRedirect } from './components/KappRedirect';
 import { KappRoute } from './components/KappRoute';
 import { TimeAgo } from './components/TimeAgo';
-import { Hoverable } from './components/Hoverable';
+import { Moment, importLocale } from './components/Moment';
 import { Icon } from './components/Icon';
 import { Loading } from './components/Loading';
 import { PageTitle } from './components/PageTitle';
@@ -14,6 +16,7 @@ import { ErrorNotFound } from './components/ErrorNotFound';
 import { ErrorUnauthorized } from './components/ErrorUnauthorized';
 import { ErrorUnexpected } from './components/ErrorUnexpected';
 import { Schedulers } from './components/scheduler/Schedulers';
+import { Table, PaginationControl, FilterControl } from './components/Table';
 
 import {
   selectCurrentKapp,
@@ -39,6 +42,8 @@ import * as AttributeSelectors from './components/attribute_selectors';
 import * as TaskActions from './helpers/taskActions';
 
 export {
+  Avatar,
+  ProfileCard,
   KappLink,
   KappLinkContainer,
   KappNavLink,
@@ -47,7 +52,8 @@ export {
   ToastsContainer,
   ModalFormContainer,
   TimeAgo,
-  Hoverable,
+  Moment,
+  importLocale,
   Icon,
   Loading,
   PageTitle,
@@ -68,4 +74,7 @@ export {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
   TaskActions,
+  Table,
+  PaginationControl,
+  FilterControl,
 };
