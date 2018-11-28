@@ -10,7 +10,7 @@ import {
   DropdownItem,
 } from 'reactstrap';
 
-import { Avatar } from '../../shared/Avatar';
+import { Avatar } from 'common';
 import { actions } from '../../../redux/modules/settingsUsers';
 
 const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
@@ -21,7 +21,7 @@ const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
           <div className="card">
             <div className="card-body">
               <strong className="card-title">
-                <Avatar user={user} />
+                <Avatar username={user.username} />
                 {user.displayName}
               </strong>
               <p className="card-text">
@@ -58,7 +58,7 @@ const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
           </div>
         </td>
         <td scope="row" className="d-none d-md-table-cell">
-          <Avatar user={user} size="18px" />
+          <Avatar username={user.username} size={18} />
         </td>
       </Fragment>
       <td>

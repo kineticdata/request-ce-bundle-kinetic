@@ -142,9 +142,9 @@ const RobotsListComponent = ({
 
 export const mapStateToProps = state => ({
   robot: state.space.settingsRobots.robot,
-  robots: state.space.settingsRobots.robotSchedules,
-  robotsLoading: state.space.settingsRobots.robotSchedulesLoading,
-  robotsErrors: state.space.settingsRobots.robotSchedulesErrors,
+  robots: state.space.settingsRobots.robots,
+  robotsLoading: state.space.settingsRobots.robotsLoading,
+  robotsErrors: state.space.settingsRobots.robotsErrors,
   nextExecutions: state.space.settingsRobots.nextExecutions,
   nextExecutionsLoading: state.space.settingsRobots.nextExecutionsLoading,
 });

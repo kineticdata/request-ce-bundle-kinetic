@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { fromJS } from 'immutable';
 import { modalFormActions, PageTitle } from 'common';
 import { actions } from '../../../redux/modules/profiles';
-import { ProfileCard } from '../../shared/ProfileCard';
+import { ProfileCard } from 'common';
 import { TeamCard } from '../../shared/TeamCard';
 
 export const EditProfileComponent = ({
@@ -239,11 +239,7 @@ export const EditProfileComponent = ({
         <div className="page-panel page-panel--two-fifths page-panel--sidebar page-panel--space-profile-edit-sidebar">
           <ProfileCard
             user={buildProfile(fieldValues, profile)}
-            button={
-              <Link to={`/profile/${profile.username}`}>
-                <button className="btn btn-primary btn-sm">View Profile</button>
-              </Link>
-            }
+            hideProfileLink
           />
         </div>
       </Fragment>

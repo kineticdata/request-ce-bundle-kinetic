@@ -5,12 +5,12 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
 import md5 from 'md5';
 import { fromJS } from 'immutable';
-import { Utils, PageTitle, Hoverable } from 'common';
+import { Utils, PageTitle } from 'common';
 import { AddMemberModal } from './AddMemberModal';
 import { buildHierarchy } from '../../../utils';
 import { IconPicker } from '../../shared/IconPicker';
 import { TeamCard } from '../../shared/TeamCard';
-import { TeamMemberAvatar } from './TeamMemberAvatar';
+import { Avatar } from 'common';
 
 import {
   actions as teamListActions,
@@ -176,7 +176,7 @@ const TeamFormComponent = ({
                     {memberships.map(user => (
                       <tr key={user.username}>
                         <td scope="row">
-                          <TeamMemberAvatar user={user} size="18px" />
+                          <Avatar user={user} />
                         </td>
                         <td>
                           <Link to={`/profile/${user.username}`}>

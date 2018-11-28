@@ -10,14 +10,6 @@ export const ROBOT_EXECUTIONS_FORM_SLUG = 'robot-executions';
 export const ROBOT_EXECUTIONS_PAGE_SIZE = 25;
 
 export const types = {
-  FETCH_ROBOTS: namespace('settingsRobots', 'FETCH_ROBOTS'),
-  SET_ROBOTS: namespace('settingsRobots', 'SET_ROBOTS'),
-  SET_FETCH_ROBOTS_ERROR: namespace('settingsRobots', 'SET_FETCH_ROBOTS_ERROR'),
-  FETCH_ROBOT: namespace('settingsRobots', 'FETCH_ROBOT'),
-  SET_ROBOT: namespace('settingsRobots', 'SET_ROBOT'),
-  SET_ROBOT_ERROR: namespace('settingsRobots', 'SET_ROBOT_ERROR'),
-  RESET_ROBOT: namespace('settingsRobots', 'RESET_ROBOT'),
-  DELETE_ROBOT: namespace('settingsRobots', 'DELETE_ROBOT'),
   SET_DELETE_SUCCESS: namespace('settingsRobots', 'SET_DELETE_SUCCESS'),
   SET_DELETE_ERROR: namespace('settingsRobots', 'SET_DELETE_ERROR'),
 
@@ -67,16 +59,7 @@ export const types = {
 };
 
 export const actions = {
-  // Robots List
-  fetchRobots: noPayload(types.FETCH_ROBOTS),
-  setRobots: withPayload(types.SET_ROBOTS),
-  setFetchRobotsError: withPayload(types.SET_FETCH_ROBOTS_ERROR),
   // Robot
-  fetchRobot: withPayload(types.FETCH_ROBOT),
-  setRobot: withPayload(types.SET_ROBOT),
-  setRobotError: withPayload(types.SET_ROBOT_ERROR),
-  resetRobot: noPayload(types.RESET_ROBOT),
-  deleteRobot: withPayload(types.DELETE_ROBOT),
   setDeleteSuccess: noPayload(types.SET_DELETE_SUCCESS),
   setDeleteError: withPayload(types.SET_DELETE_ERROR),
   // Robot Schedules List
@@ -129,19 +112,13 @@ export function hasRobotSchedules(id, callback) {
 }
 
 export const State = Record({
-  // Robots List
-  loading: true,
-  errors: [],
-  robots: new List(),
   // Robot
-  robot: null,
   robotLoading: true,
   robotDeleting: false,
-  robotErrors: [],
   // Robot Schedules List
-  robotSchedules: new List(),
-  robotSchedulesLoading: false,
-  robotSchedulesErrors: [],
+  robots: new List(),
+  robotsLoading: false,
+  robotsErrors: [],
   // Robot Schedule
   robotSchedule: null,
   robotScheduleLoading: true,
@@ -165,25 +142,6 @@ export const State = Record({
 
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
-    case types.FETCH_ROBOTS:
-      return state.set('loading', true).set('errors', []);
-    case types.SET_ROBOTS:
-      return state
-        .set('loading', false)
-        .set('errors', [])
-        .set('robots', List(payload));
-    case types.SET_FETCH_ROBOTS_ERROR:
-      return state.set('loading', false).set('errors', payload);
-
-    case types.FETCH_ROBOT:
-      return state.set('robotLoading', true);
-    case types.SET_ROBOT:
-      return state.set('robotLoading', false).set('robot', payload);
-    case types.SET_ROBOT_ERROR:
-      return state
-        .set('robotLoading', false)
-        .set('robotErrors', payload)
-        .set('robot', null);
     case types.DELETE_ROBOT:
       return state.set('robotDeleting', true);
     case types.SET_DELETE_SUCCESS:
@@ -194,18 +152,14 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.delete('robot');
 
     case types.FETCH_ROBOT_SCHEDULES:
-      return state
-        .set('robotSchedulesLoading', true)
-        .set('robotSchedulesErrors', []);
+      return state.set('robotsLoading', true).set('robotsErrors', []);
     case types.SET_ROBOT_SCHEDULES:
       return state
-        .set('robotSchedulesLoading', false)
-        .set('robotSchedulesErrors', [])
-        .set('robotSchedules', List(payload));
+        .set('robotsLoading', false)
+        .set('robotsErrors', [])
+        .set('robots', List(payload));
     case types.SET_FETCH_ROBOT_SCHEDULES_ERROR:
-      return state
-        .set('robotSchedulesLoading', false)
-        .set('robotSchedulesErrors', payload);
+      return state.set('robotsLoading', false).set('robotsErrors', payload);
 
     case types.FETCH_ROBOT_SCHEDULE:
       return state.set('robotScheduleLoading', true);

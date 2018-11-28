@@ -10,7 +10,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import memoize from 'memoize-one';
 
-import { Cache } from './Cache';
+import { Cache } from '../../cache';
 
 export const IconMenuItem = props => {
   const disabledReason = props.disabledFn && props.disabledFn(props.option);

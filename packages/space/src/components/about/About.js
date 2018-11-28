@@ -3,7 +3,7 @@ import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { TimeAgo, PageTitle } from 'common';
-import { Avatar } from '../shared/Avatar';
+import { Avatar } from 'common';
 import { actions } from '../../redux/modules/about';
 
 const AboutComponent = ({ space, about, loading }) => (
@@ -58,7 +58,7 @@ const AboutComponent = ({ space, about, loading }) => (
                 {about.spaceAdmins.map(user => (
                   <tr key={user.username}>
                     <td scope="row">
-                      <Avatar user={user} />
+                      <Avatar username={user.username} />
                     </td>
                     <td>
                       <Link to={`/profile/${user.username || user.email}`}>

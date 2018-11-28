@@ -7,6 +7,7 @@ import { KappSelect } from './KappSelect';
 import { NotificationTemplateSelect } from './NotificationTemplateSelect';
 import { PeopleSelect } from './PeopleSelect';
 import { TeamSelect } from './TeamSelect';
+import { TrueFalseSelect } from './TrueFalseSelect';
 
 export {
   ApproverSelect,
@@ -18,4 +19,5 @@ export {
   NotificationTemplateSelect,
   PeopleSelect,
   TeamSelect,
+  TrueFalseSelect,
 };
