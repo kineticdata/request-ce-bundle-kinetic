@@ -143,6 +143,19 @@ export const MainSection = ({
         </button>
       </li>
       <li className="list-group-item">
+        <button
+          type="button"
+          className="btn btn-link icon-wrapper"
+          onClick={() => showSection('group')}
+        >
+          <span className="button-title">Grouped By</span>
+          <span>{filter.groupBy}</span>
+          <span className="icon">
+            <span className="fa fa-angle-right" />
+          </span>
+        </button>
+      </li>
+      <li className="list-group-item">
         <CreatedByMeContainer filter={filter} />
       </li>
     </ul>

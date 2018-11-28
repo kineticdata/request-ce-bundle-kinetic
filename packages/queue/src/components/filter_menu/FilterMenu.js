@@ -6,6 +6,7 @@ import { TeamsSectionContainer } from './TeamsSection';
 import { StatusSectionContainer } from './StatusSection';
 import { DateRangeSectionContainer } from './DateRangeSection';
 import { SortedBySectionContainer } from './SortedBySection';
+import { GroupedBySectionContainer } from './GroupedBySection';
 
 export const FilterMenu = ({
   teams,
@@ -89,6 +90,10 @@ export const FilterMenu = ({
     {currentFilter &&
       activeSection === 'sort' && (
         <SortedBySectionContainer filter={currentFilter} />
+      )}
+    {currentFilter &&
+      activeSection === 'group' && (
+        <GroupedBySectionContainer filter={currentFilter} />
       )}
     <ModalFooter>
       <button

@@ -49,6 +49,9 @@ export const Filter = Record({
   // Filter sort order: createdAt, updatedAt, Due Date.
   sortBy: 'createdAt',
 
+  // Filter Group By: free text input
+  groupBy: '',
+
   // Search Criteria.
   status: VALID_STATUSES.filter(isActiveStatus),
   teams: List(),

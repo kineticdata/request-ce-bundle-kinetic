@@ -2,7 +2,10 @@ import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { connect } from 'react-redux';
 import { is, List } from 'immutable';
 import { getFilterByPath } from '../../redux/modules/queueApp';
-import { actions as queueActions } from '../../redux/modules/queue';
+import {
+  actions as queueActions,
+  selectGroupedQueueItems,
+} from '../../redux/modules/queue';
 import { actions as filterMenuActions } from '../../redux/modules/filterMenu';
 import { QueueList } from './QueueList';
 
@@ -14,8 +17,14 @@ const mapStateToProps = (state, props) => {
     offset: state.queue.queue.offset,
     limit: state.queue.queue.limit,
     sortDirection: state.queue.queue.sortDirection,
+    groupDirection: state.queue.queue.groupDirection,
     sortBy: filter && filter.sortBy,
     queueItems: filter && (state.queue.queue.lists.get(filter) || List()),
+    isGrouped: filter && filter.groupBy !== '',
+    groupedQueueItems:
+      filter &&
+      filter.groupedBy !== '' &&
+      selectGroupedQueueItems(state, filter),
     statusMessage: filter && state.queue.queue.statuses.get(filter),
   };
 };
@@ -24,6 +33,7 @@ const mapDispatchToProps = {
   openFilterMenu: filterMenuActions.open,
   fetchList: queueActions.fetchList,
   setSortDirection: queueActions.setSortDirection,
+  setGroupDirection: queueActions.setGroupDirection,
   setOffset: queueActions.setOffset,
   gotoPrevPage: queueActions.gotoPrevPage,
   gotoNextPage: queueActions.gotoNextPage,
@@ -34,14 +44,47 @@ export const QueueListContainer = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withProps(({ sortDirection, queueItems, limit, offset }) => ({
-    hasPrevPage: offset !== 0,
-    hasNextPage: queueItems.size > limit + offset,
-    count: queueItems.size,
-    queueItems: (sortDirection === 'DESC' ? queueItems.reverse() : queueItems)
-      .skip(offset)
-      .take(limit),
-  })),
+  withProps(
+    ({
+      sortDirection,
+      groupDirection,
+      queueItems,
+      limit,
+      offset,
+      isGrouped,
+      groupedQueueItems,
+    }) => {
+      let items;
+      if (isGrouped) {
+        if (groupDirection === 'DESC') {
+          items = groupedQueueItems.reverse();
+        } else {
+          items = groupedQueueItems;
+        }
+        if (sortDirection === 'DESC') {
+          items = items.map(groupedItemList => groupedItemList.reverse());
+        }
+      } else {
+        items = (sortDirection === 'DESC' ? queueItems.reverse() : queueItems)
+          .skip(offset)
+          .take(limit);
+      }
+      // const items = isGrouped
+      //   ? groupDirection === 'DESC'
+      //     ? groupedQueueItems.reverse()
+      //     : groupedQueueItems
+      //   : (sortDirection === 'DESC' ? queueItems.reverse() : queueItems)
+      //       .skip(offset)
+      //       .take(limit);
+
+      return {
+        hasPrevPage: offset !== 0,
+        hasNextPage: queueItems.size > limit + offset,
+        count: queueItems.size,
+        queueItems: items,
+      };
+    },
+  ),
   withHandlers({
     openFilterMenu: props => () => props.openFilterMenu(props.filter),
     toggleSortDirection: ({
@@ -50,6 +93,14 @@ export const QueueListContainer = compose(
       setOffset,
     }) => () => {
       setSortDirection(sortDirection === 'ASC' ? 'DESC' : 'ASC');
+      setOffset(0);
+    },
+    toggleGroupDirection: ({
+      groupDirection,
+      setGroupDirection,
+      setOffset,
+    }) => () => {
+      setGroupDirection(groupDirection === 'ASC' ? 'DESC' : 'ASC');
       setOffset(0);
     },
     refresh: ({ filter, fetchList, setOffset }) => () => {
@@ -74,6 +125,7 @@ export const QueueListContainer = compose(
       this.props.fetchList(filter);
       this.props.setOffset(0);
       this.props.setSortDirection('ASC');
+      this.props.setGroupDirection('ASC');
     },
   }),
 )(QueueList);

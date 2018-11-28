@@ -16,6 +16,7 @@ export const types = {
   SET_DATE_RANGE_START: '@kd/queue/filterMenu/SET_DATE_RANGE_START',
   SET_DATE_RANGE_END: '@kd/queue/filterMenu/SET_DATE_RANGE_END',
   SET_SORTED_BY: '@kd/queue/filterMenu/SET_SORTED_BY',
+  SET_GROUPED_BY: '@kd/queue/filterMenu/SET_GROUPED_BY',
 };
 
 export const actions = {
@@ -43,6 +44,7 @@ export const actions = {
   setDateRangeStart: payload => ({ type: types.SET_DATE_RANGE_START, payload }),
   setDateRangeEnd: payload => ({ type: types.SET_DATE_RANGE_END, payload }),
   setSortedBy: payload => ({ type: types.SET_SORTED_BY, payload }),
+  setGroupedBy: payload => ({ type: types.SET_GROUPED_BY, payload }),
 };
 
 export const defaultState = Map({
@@ -125,6 +127,8 @@ export const reducer = (state = defaultState, { type, payload }) => {
       return state.setIn(['currentFilter', 'dateRange', 'end'], payload);
     case types.SET_SORTED_BY:
       return state.setIn(['currentFilter', 'sortBy'], payload);
+    case types.SET_GROUPED_BY:
+      return state.setIn(['currentFilter', 'groupBy'], payload);
     default:
       return state;
   }
