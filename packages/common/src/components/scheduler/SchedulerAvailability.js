@@ -62,8 +62,8 @@ const SchedulerAvailabilityComponent = ({
       errors.length > 0 && (
         <ErrorMessage
           heading="Failed to retrieve availability"
-          text={errors.map(e => (
-            <div>
+          text={errors.map((e, i) => (
+            <div key={`error-${i}`}>
               <I18n>{e}</I18n>
             </div>
           ))}

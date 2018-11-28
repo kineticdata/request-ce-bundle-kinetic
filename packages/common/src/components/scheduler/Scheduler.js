@@ -13,6 +13,8 @@ import { PageTitle, Constants, Moment } from 'common';
 import { CoreForm } from 'react-kinetic-core';
 import moment from 'moment';
 import { LoadingMessage, ErrorMessage, InfoMessage } from './Schedulers';
+import { SchedulerManagers } from './SchedulerManagers';
+import { SchedulerAgents } from './SchedulerAgents';
 import { SchedulerConfig } from './SchedulerConfig';
 import { SchedulerAvailability } from './SchedulerAvailability';
 import { SchedulerOverrides } from './SchedulerOverrides';
@@ -49,76 +51,6 @@ const TabPill = ({ match, id, name, path }) => (
       <I18n>{name}</I18n>
     </NavLink>
   </li>
-);
-
-const ManagersTab = ({ loading, managers }) => (
-  <div className="list-wrapper list-wrapper--managers">
-    {loading && !managers && <LoadingMessage />}
-    {!loading &&
-      !managers && (
-        <InfoMessage
-          heading="The role for managers does not exist yet."
-          text=""
-        />
-      )}
-    {managers && (
-      <table className="table table-sm table-striped table-managers table--settings">
-        <thead className="header">
-          <tr>
-            <th scope="col">
-              <I18n>Display Name</I18n>
-            </th>
-            <th scope="col">
-              <I18n>Username</I18n>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {managers.memberships.map(manager => (
-            <tr key={manager.user.username}>
-              <td scope="row">{manager.user.displayName}</td>
-              <td>{manager.user.username}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    )}
-  </div>
-);
-
-const AgentsTab = ({ loading, agents }) => (
-  <div className="list-wrapper list-wrapper--managers">
-    {loading && !agents && <LoadingMessage />}
-    {!loading &&
-      !agents && (
-        <InfoMessage
-          heading="The team for agents does not exist yet."
-          text=""
-        />
-      )}
-    {agents && (
-      <table className="table table-sm table-striped table-agents table--settings">
-        <thead className="header">
-          <tr>
-            <th scope="col">
-              <I18n>Display Name</I18n>
-            </th>
-            <th scope="col">
-              <I18n>Username</I18n>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {agents.memberships.map(agent => (
-            <tr key={agent.user.username}>
-              <td scope="row">{agent.user.displayName}</td>
-              <td>{agent.user.username}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    )}
-  </div>
 );
 
 const SchedulerComponent = ({
@@ -176,7 +108,11 @@ const SchedulerComponent = ({
             errors.length > 0 && (
               <ErrorMessage
                 heading="Failed to retrieve scheduler."
-                text={errors.map(e => <div>{e}</div>)}
+                text={errors.map((e, i) => (
+                  <div key={`error-${i}`}>
+                    <I18n>{e}</I18n>
+                  </div>
+                ))}
               />
             )}
           {currentLoaded &&
@@ -349,12 +285,8 @@ const SchedulerComponent = ({
                       path="/overrides"
                     />
                   </ul>
-                  {mode === 'managers' && (
-                    <ManagersTab loading={loading} managers={managers} />
-                  )}
-                  {mode === 'agents' && (
-                    <AgentsTab loading={loading} agents={agents} />
-                  )}
+                  {mode === 'managers' && <SchedulerManagers />}
+                  {mode === 'agents' && <SchedulerAgents />}
                   {mode === 'config' && (
                     <SchedulerConfig
                       schedulerId={scheduler.values['Id']}

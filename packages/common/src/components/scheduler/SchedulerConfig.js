@@ -53,8 +53,8 @@ const SchedulerConfigComponent = ({
       errors.length > 0 && (
         <ErrorMessage
           heading="Failed to retrieve event types."
-          text={errors.map(e => (
-            <div>
+          text={errors.map((e, i) => (
+            <div key={`error-${i}`}>
               <I18n>{e}</I18n>
             </div>
           ))}
@@ -134,7 +134,9 @@ const SchedulerConfigComponent = ({
               <I18n>Cancel</I18n>
             </button>
             <span>
-              {openModal === true ? 'New Event Type' : 'Edit Event Type'}
+              <I18n>
+                {openModal === true ? 'New Event Type' : 'Edit Event Type'}
+              </I18n>
             </span>
           </h4>
         </div>
