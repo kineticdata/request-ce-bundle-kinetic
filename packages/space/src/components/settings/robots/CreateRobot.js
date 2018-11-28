@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { ROBOT_SCHEDULES_FORM_SLUG } from '../../../redux/modules/settingsRobots';
+import { ROBOT_FORM_SLUG } from '../../../redux/modules/settingsRobots';
 import { CoreForm } from 'react-kinetic-core';
 import { toastActions } from 'common';
 
@@ -32,7 +32,7 @@ const CreateRobotComponent = ({
       <div>
         <CoreForm
           datastore
-          form={ROBOT_SCHEDULES_FORM_SLUG}
+          form={ROBOT_FORM_SLUG}
           loaded={handleLoaded}
           created={handleCreated}
           error={handleError}

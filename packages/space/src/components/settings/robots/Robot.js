@@ -192,15 +192,15 @@ export const processDelete = props => () => {
 };
 
 export const mapStateToProps = state => ({
-  robot: state.space.settingsRobots.robotSchedule,
-  robotLoading: state.space.settingsRobots.robotScheduleLoading,
-  robotErrors: state.space.settingsRobots.robotScheduleErrors,
+  robot: state.space.settingsRobots.robot,
+  robotLoading: state.space.settingsRobots.robotLoading,
+  robotErrors: state.space.settingsRobots.robotErrors,
 });
 
 export const mapDispatchToProps = {
   push,
-  fetchRobot: actions.fetchRobotSchedule,
-  deleteRobot: actions.deleteRobotSchedule,
+  fetchRobot: actions.fetchRobot,
+  deleteRobot: actions.deleteRobot,
   addSuccess: toastActions.addSuccess,
   addError: toastActions.addError,
 };
