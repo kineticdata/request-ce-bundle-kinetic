@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
@@ -11,7 +11,7 @@ import { Cache } from '../cache';
 import { ProfileCard } from './ProfileCard';
 
 const AvatarIcon = ({ target, user, size, onClick }) => (
-  <div id={target}>
+  <span id={target}>
     <ReactAvatar
       name={user.displayName || user.username}
       email={user.email || user.username}
@@ -19,7 +19,7 @@ const AvatarIcon = ({ target, user, size, onClick }) => (
       round
       size={size}
     />
-  </div>
+  </span>
 );
 const userCache = new Cache(() =>
   CoreAPI.fetchUsers({ include: 'profileAttributes' }).then(
@@ -69,7 +69,7 @@ export class AvatarComponent extends React.Component {
     if (user) {
       if (previewable) {
         return (
-          <div key={user.username}>
+          <Fragment>
             <AvatarIcon
               user={user}
               size={size}
@@ -87,7 +87,7 @@ export class AvatarComponent extends React.Component {
             >
               <ProfileCard user={user} />
             </Popover>
-          </div>
+          </Fragment>
         );
       } else {
         return <AvatarIcon user={user} size={size} className={className} />;
