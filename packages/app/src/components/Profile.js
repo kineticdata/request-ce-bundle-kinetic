@@ -1,5 +1,5 @@
 import React from 'react';
-import Avatar from 'react-avatar';
+import { Avatar } from 'common';
 import { Link } from 'react-router-dom';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { bundle } from 'react-kinetic-core';
@@ -21,12 +21,7 @@ export const Profile = ({
       className="icon-wrapper"
       style={{ padding: '0 1em' }}
     >
-      <Avatar
-        size={24}
-        email={profile.email}
-        name={profile.displayName}
-        round
-      />
+      <Avatar size={24} user={profile} previewable={false} />
     </DropdownToggle>
     <DropdownMenu right className="profile-menu">
       <div className="profile-header">

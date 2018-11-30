@@ -6,6 +6,7 @@ import { IntegerSelect } from './IntegerSelect';
 import { KappSelect } from './KappSelect';
 import { NotificationTemplateSelect } from './NotificationTemplateSelect';
 import { TeamSelect } from './TeamSelect';
+import { TrueFalseSelect } from './TrueFalseSelect';
 
 export {
   ApproverSelect,
@@ -16,4 +17,5 @@ export {
   KappSelect,
   NotificationTemplateSelect,
   TeamSelect,
+  TrueFalseSelect,
 };

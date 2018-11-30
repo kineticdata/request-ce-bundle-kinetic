@@ -7,6 +7,7 @@ import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import papaparse from 'papaparse';
 import { fromJS } from 'immutable';
 import { PageTitle } from 'common';
+import downloadjs from 'downloadjs';
 
 import { actions } from '../../../redux/modules/settingsUsers';
 
@@ -31,7 +32,13 @@ const WallyEmptyMessage = ({ filter }) => {
   );
 };
 
-const UsersListComponent = ({ users, loading, match, handleChange, data }) => {
+const UsersListComponent = ({
+  users,
+  loading,
+  match,
+  handleChange,
+  handleDownload,
+}) => {
   return (
     <div className="page-container page-container--settings-users">
       <PageTitle parts={['Users', 'Settings']} />
@@ -62,9 +69,9 @@ const UsersListComponent = ({ users, loading, match, handleChange, data }) => {
             >
               Import Users
             </label>
-            <a className="btn btn-secondary" href={data} download="users.csv">
+            <button className="btn btn-secondary" onClick={handleDownload}>
               Export Users
-            </a>
+            </button>
             <Link to={`${match.path}/new`} className="btn btn-primary">
               New User
             </Link>
@@ -121,7 +128,6 @@ const createCSV = users => {
       return acc;
     }, []),
   );
-  csv = 'data:text/csv;charset=utf-8,' + csv;
   return encodeURI(csv);
 };
 
@@ -189,6 +195,10 @@ const handleChange = props => () => {
   }
 };
 
+export const handleDownload = props => () => {
+  downloadjs(props.data, 'user.csv', 'text/csv');
+};
+
 export const mapStateToProps = state => ({
   loading: state.space.settingsUsers.loading,
   users: state.space.settingsUsers.users,
@@ -207,7 +217,7 @@ export const UsersList = compose(
     mapDispatchToProps,
   ),
   withState('data', 'setData', ''),
-  withHandlers({ handleChange }),
+  withHandlers({ handleChange, handleDownload }),
   lifecycle({
     componentWillMount() {
       this.props.fetchUsers();

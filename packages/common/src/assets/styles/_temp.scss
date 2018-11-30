@@ -87,3 +87,10 @@ ins {
     align-items: center;
   }
 }
+
+.popover.avatar-popover {
+  border: none;
+  .card.card--profile {
+    margin-bottom: 0px;
+  }
+}
