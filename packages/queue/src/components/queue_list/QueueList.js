@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 import { QueueListItemSmall } from './QueueListItem';
 import { TOO_MANY_STATUS_STRING } from '../../redux/sagas/queue';
 import { PageTitle } from 'common';
+import { Popover, PopoverBody } from 'reactstrap';
 
 const SORT_NAMES = {
   createdAt: 'Created At',
@@ -72,6 +73,8 @@ export const QueueList = ({
   limit,
   offset,
   isGrouped,
+  popovers,
+  togglePopover,
 }) =>
   isExact &&
   (!filter ? (
@@ -79,117 +82,337 @@ export const QueueList = ({
   ) : (
     <div className="queue-list-container">
       <PageTitle parts={[filter.name || 'Adhoc']} />
-      <div className="controls">
-        <h6>
-          <button
-            type="button"
-            className="btn btn-link icon-wrapper"
-            onClick={toggleSortDirection}
-          >
-            {sortDirection === 'ASC' ? (
-              <span className="icon">
-                <span
-                  className="fa fa-fw fa-sort-amount-asc"
-                  style={{ fontSize: '16px', color: '#7e8083' }}
-                />
-              </span>
-            ) : (
-              <span className="icon">
-                <span
-                  className="fa fa-fw fa-sort-amount-desc "
-                  style={{ fontSize: '16px', color: '#7e8083' }}
-                />
-              </span>
-            )}
-          </button>
-          Sorted by {SORT_NAMES[sortBy]}
-          {isGrouped && <br />}
-          {isGrouped && (
-            <span>
-              <button
-                type="button"
-                className="btn btn-link icon-wrapper"
-                onClick={toggleGroupDirection}
-              >
-                {groupDirection === 'ASC' ? (
-                  <span className="icon">
-                    <span
-                      className="fa fa-fw fa-sort-amount-asc"
-                      style={{ fontSize: '16px', color: '#7e8083' }}
-                    />
-                  </span>
-                ) : (
-                  <span className="icon">
-                    <span
-                      className="fa fa-fw fa-sort-amount-desc "
-                      style={{ fontSize: '16px', color: '#7e8083' }}
-                    />
-                  </span>
-                )}
+      <div className="queue-controls">
+        <div className="queue-controls__filter">
+          <h2>{filter.name || 'Adhoc'}</h2>
+          <div className="queue-filter-list">
+            <button
+              onClick={togglePopover('teams')}
+              id="teams-popover"
+              className="btn btn-subtle"
+            >
+              Any Team
+              <i className="fa fa-fw fa-caret-down" />
+            </button>
+            <Popover
+              placement="bottom"
+              target="teams-popover"
+              isOpen={popovers.get('teams')}
+              toggle={togglePopover('teams')}
+            >
+              <PopoverBody className="filter-menu-popover">
+                <div className="filter-menu-popover__content">
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>{' '}
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>{' '}
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>{' '}
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>{' '}
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>{' '}
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>{' '}
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>{' '}
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>{' '}
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>{' '}
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>{' '}
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>{' '}
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>{' '}
+                  <label htmlFor="team-default">
+                    <input type="checkbox" id="team-default" />
+                    Default
+                  </label>
+                  <label htmlFor="team-hr">
+                    <input type="checkbox" id="team-hr" />
+                    Developers:: Singapore::Developers
+                    Singapore::Developers::Singapore::
+                  </label>
+                  <label htmlFor="team-it">
+                    <input type="checkbox" id="team-it" />
+                    IT
+                  </label>
+                </div>
+                <div className="filter-menu-popover__footer">
+                  <button className="btn btn-link">Reset</button>
+                  <button className="btn btn-primary">Apply</button>
+                </div>
+              </PopoverBody>
+            </Popover>
+            <button className="btn btn-subtle">
+              Any Assignment <i className="fa fa-fw fa-caret-down" />
+            </button>
+            <div className="btn-group">
+              <button className="btn btn-subtle">Status: Open, Closed</button>
+              <button className="btn btn-subtle">
+                <i className="fa fa-times" />
               </button>
-              Grouped by {filter.groupBy}
-            </span>
-          )}
-        </h6>
+            </div>
+            <button className="btn btn-subtle">
+              Any Date Range <i className="fa fa-fw fa-caret-down" />
+            </button>
+            <label htmlFor="createdBy" className="btn btn-subtle">
+              Created By <input type="checkbox" id="createdBy" />
+            </label>
+          </div>
 
-        <h4>{filter.name || 'Adhoc'}</h4>
-        {count > 0 && !isGrouped ? (
-          <div className="nav-buttons">
+          <div className="buttons">
             <button
               type="button"
               className="btn btn-link icon-wrapper"
-              disabled={!hasPrevPage}
-              onClick={gotoPrevPage}
+              onClick={refresh}
             >
               <span className="icon">
-                <span className="fa fa-fw fa-caret-left" />
+                <span
+                  className="fa fa-fw fa-refresh"
+                  style={{ fontSize: '16px', color: '#7e8083' }}
+                />
               </span>
             </button>
-            <strong>
-              {offset + 1}-{offset + queueItems.size}
-            </strong>
-            {' of '}
-            <strong>{count}</strong>
+
             <button
               type="button"
               className="btn btn-link icon-wrapper"
-              disabled={!hasNextPage}
-              onClick={gotoNextPage}
+              onClick={openFilterMenu}
             >
               <span className="icon">
-                <span className="fa fa-fw fa-caret-right" />
+                <span
+                  className="fa fa-fw fa-sliders"
+                  style={{ fontSize: '16px', color: '#7e8083' }}
+                />
               </span>
             </button>
           </div>
-        ) : (
-          <span />
-        )}
-        <div className="buttons">
-          <button
-            type="button"
-            className="btn btn-link icon-wrapper"
-            onClick={refresh}
-          >
-            <span className="icon">
-              <span
-                className="fa fa-fw fa-refresh"
-                style={{ fontSize: '16px', color: '#7e8083' }}
-              />
-            </span>
-          </button>
-
-          <button
-            type="button"
-            className="btn btn-link icon-wrapper"
-            onClick={openFilterMenu}
-          >
-            <span className="icon">
-              <span
-                className="fa fa-fw fa-sliders"
-                style={{ fontSize: '16px', color: '#7e8083' }}
-              />
-            </span>
-          </button>
+        </div>
+        <div className="queue-controls__sorting">
+          <div className="queue-controls__item--left">
+            {isGrouped ? (
+              <Fragment>
+                <div className="btn-group">
+                  <button
+                    type="button"
+                    className="btn btn-subtle"
+                    id="group-popover"
+                    onClick={togglePopover('group')}
+                  >
+                    <span
+                      className="fa fa-fw fa-folder-open"
+                      style={{ fontSize: '14px', color: '#1094C4' }}
+                    />
+                    Grouped by {filter.groupBy}
+                  </button>
+                  <button className="btn btn-subtle btn-subtle--close">
+                    <i className="fa fa-times" />
+                  </button>
+                </div>
+                <Popover
+                  placement="bottom"
+                  target="group-popover"
+                  isOpen={popovers.get('group')}
+                  toggle={togglePopover('group')}
+                >
+                  <PopoverBody className="filter-menu-popover">
+                    <h6>Group items by</h6>
+                    options
+                  </PopoverBody>
+                </Popover>
+                <button
+                  type="button"
+                  className="btn btn-link icon-wrapper"
+                  onClick={toggleGroupDirection}
+                >
+                  {groupDirection === 'ASC' ? (
+                    <span className="icon">
+                      <span
+                        className="fa fa-fw fa-sort-amount-asc"
+                        style={{ fontSize: '16px', color: '#7e8083' }}
+                      />
+                    </span>
+                  ) : (
+                    <span className="icon">
+                      <span
+                        className="fa fa-fw fa-sort-amount-desc "
+                        style={{ fontSize: '16px', color: '#7e8083' }}
+                      />
+                    </span>
+                  )}
+                </button>
+              </Fragment>
+            ) : (
+              <Fragment>
+                <button className="btn btn-subtle">
+                  <span
+                    className="fa fa-fw fa-folder-open"
+                    style={{ fontSize: '14px', color: '#7e8083' }}
+                  />
+                  Ungrouped
+                </button>
+              </Fragment>
+            )}
+          </div>
+          {count > 0 && !isGrouped ? (
+            <div className="nav-buttons">
+              <button
+                type="button"
+                className="btn btn-link icon-wrapper"
+                disabled={!hasPrevPage}
+                onClick={gotoPrevPage}
+              >
+                <span className="icon">
+                  <span className="fa fa-fw fa-caret-left" />
+                </span>
+              </button>
+              <strong>
+                {offset + 1}-{offset + queueItems.size}
+              </strong>
+              {' of '}
+              <strong>{count}</strong>
+              <button
+                type="button"
+                className="btn btn-link icon-wrapper"
+                disabled={!hasNextPage}
+                onClick={gotoNextPage}
+              >
+                <span className="icon">
+                  <span className="fa fa-fw fa-caret-right" />
+                </span>
+              </button>
+            </div>
+          ) : (
+            <span />
+          )}
+          <div className="queue-controls__item--right">
+            <button
+              className="btn btn-subtle"
+              id="sort-popover"
+              onClick={togglePopover('sort')}
+            >
+              Sorted by {SORT_NAMES[sortBy]}
+            </button>
+            <Popover
+              placement="bottom"
+              target="sort-popover"
+              isOpen={popovers.get('sort')}
+              toggle={togglePopover('sort')}
+            >
+              <PopoverBody className="filter-menu-popover">
+                <h6>Sort items by</h6>
+                options
+              </PopoverBody>
+            </Popover>
+            <button
+              type="button"
+              className="btn btn-link icon-wrapper"
+              onClick={toggleSortDirection}
+            >
+              {sortDirection === 'ASC' ? (
+                <span className="icon">
+                  <span
+                    className="fa fa-fw fa-sort-amount-asc"
+                    style={{ fontSize: '16px', color: '#7e8083' }}
+                  />
+                </span>
+              ) : (
+                <span className="icon">
+                  <span
+                    className="fa fa-fw fa-sort-amount-desc "
+                    style={{ fontSize: '16px', color: '#7e8083' }}
+                  />
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </div>
       <div className="queue-list-content submissions">
@@ -198,12 +421,10 @@ export const QueueList = ({
         ) : queueItems && queueItems.size > 0 ? (
           isGrouped ? (
             queueItems
-              .map((items, dateGroup) => (
-                <div className="messages" key={dateGroup}>
-                  <div className="date">
-                    <hr />
-                    <span>{dateGroup}</span>
-                    <hr />
+              .map((items, groupValue) => (
+                <div className="items-grouping" key={groupValue}>
+                  <div className="items-grouping__banner">
+                    <span>{groupValue}</span>
                   </div>
                   <ul className="list-group">
                     {items.map(item => (

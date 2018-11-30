@@ -1,6 +1,12 @@
-import { compose, lifecycle, withHandlers, withProps } from 'recompose';
+import {
+  compose,
+  lifecycle,
+  withHandlers,
+  withProps,
+  withState,
+} from 'recompose';
 import { connect } from 'react-redux';
-import { is, List } from 'immutable';
+import { is, List, Map } from 'immutable';
 import { getFilterByPath } from '../../redux/modules/queueApp';
 import {
   actions as queueActions,
@@ -85,7 +91,10 @@ export const QueueListContainer = compose(
       };
     },
   ),
+  withState('popovers', 'setPopovers', Map()),
   withHandlers({
+    togglePopover: props => type => () =>
+      props.setPopovers(popovers => popovers.update(type, bool => !bool)),
     openFilterMenu: props => () => props.openFilterMenu(props.filter),
     toggleSortDirection: ({
       sortDirection,

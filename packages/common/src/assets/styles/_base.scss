@@ -14,7 +14,7 @@ a {
   @include setColorAndHover($link-color);
   &:focus {
     box-shadow: none;
-    outline: $blue-gray dotted thin;
+    outline: $orange-kinops dotted thin;
   }
 }
 
