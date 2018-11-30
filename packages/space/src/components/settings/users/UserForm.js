@@ -8,7 +8,7 @@ import { modalFormActions, PageTitle } from 'common';
 
 import { actions as usersActions } from '../../../redux/modules/settingsUsers';
 import { actions as teamsActions } from '../../../redux/modules/teamList';
-import { ProfileCard } from '../../shared/ProfileCard';
+import { ProfileCard } from 'common';
 import { UsersDropdown } from './DropDown';
 
 export const UserFormComponent = ({
@@ -243,16 +243,7 @@ export const UserFormComponent = ({
           </div>
           {mode === 'edit' && (
             <div className="page-panel page-panel--two-fifths page-panel--sidebar page-panel--space-profile-edit-sidebar ">
-              <ProfileCard
-                user={buildProfile(fieldValues, user)}
-                button={
-                  <Link to={`/profile/${user.username}`}>
-                    <button className="btn btn-primary btn-sm">
-                      View Profile
-                    </button>
-                  </Link>
-                }
-              />
+              <ProfileCard user={buildProfile(fieldValues, user)} />
             </div>
           )}
         </Fragment>

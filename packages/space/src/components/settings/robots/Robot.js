@@ -20,11 +20,10 @@ import { PopConfirm } from '../../shared/PopConfirm';
 
 const globals = import('common/globals');
 
-const RobotScheduleComponent = ({
+const RobotComponent = ({
   robot,
-  robotSchedule,
-  robotScheduleLoading,
-  robotScheduleErrors,
+  robotLoading,
+  robotErrors,
   match,
   type,
   handleLoaded,
@@ -35,17 +34,14 @@ const RobotScheduleComponent = ({
   processDelete,
 }) => {
   const loading =
-    robotScheduleLoading &&
-    (robotSchedule === null || robotSchedule.id !== match.params.scheduleId);
+    robotLoading && (robot === null || robot.id !== match.params.robotId);
   const isInactive =
-    !loading &&
-    robotSchedule &&
-    robotSchedule.values['Status'].toLowerCase() === 'inactive';
+    !loading && robot && robot.values['Status'].toLowerCase() === 'inactive';
   const isExpired =
     !loading &&
-    robotSchedule &&
-    robotSchedule.values['End Date'] &&
-    moment(robotSchedule.values['End Date']).isBefore(moment());
+    robot &&
+    robot.values['End Date'] &&
+    moment(robot.values['End Date']).isBefore(moment());
   return (
     <div className="page-container page-container--robots">
       <PageTitle parts={['Robots', 'Settings']} />
@@ -57,9 +53,7 @@ const RobotScheduleComponent = ({
               <Link to="/settings">settings</Link> /{` `}
               <Link to="/settings/robots">robots</Link> /{` `}
             </h3>
-            <h1>
-              {!loading && robotSchedule && robotSchedule.values['Robot Name']}
-            </h1>
+            <h1>{!loading && robot && robot.values['Robot Name']}</h1>
           </div>
         </div>
 
@@ -67,24 +61,24 @@ const RobotScheduleComponent = ({
           <Loading />
         ) : (
           <Fragment>
-            {robotSchedule === null &&
-              robotScheduleErrors.length > 0 && (
+            {robot === null &&
+              robotErrors.length > 0 && (
                 <div className="text-center text-danger">
                   <h1>Oops!</h1>
-                  <h2>Robot Schedule Not Found</h2>
-                  {robotScheduleErrors.map(error => (
+                  <h2>Robot Not Found</h2>
+                  {robotErrors.map(error => (
                     <p className="error-details">{error}</p>
                   ))}
                 </div>
               )}
-            {robotSchedule !== null && (
+            {robot !== null && (
               <Fragment>
                 <div className="tab-navigation tab-navigation--robots">
                   <ul className="nav nav-tabs">
                     <li role="presentation">
                       <NavLink
                         exact
-                        to={`/settings/robots/${match.params.scheduleId}`}
+                        to={`/settings/robots/${match.params.robotId}`}
                         activeClassName="active"
                       >
                         Details
@@ -93,7 +87,7 @@ const RobotScheduleComponent = ({
                     <li role="presentation">
                       <NavLink
                         to={`/settings/robots/${
-                          match.params.scheduleId
+                          match.params.robotId
                         }/executions`}
                         activeClassName="active"
                       >
@@ -106,7 +100,7 @@ const RobotScheduleComponent = ({
                   <div>
                     {(isInactive || isExpired) && (
                       <div className="alert alert-warning">
-                        {'This schedule is '}
+                        {'This robot is '}
                         {isInactive && <strong>Inactive</strong>}
                         {isInactive && isExpired && ' and '}
                         {isExpired && <strong>Expired</strong>}
@@ -115,7 +109,7 @@ const RobotScheduleComponent = ({
                     )}
                     <CoreForm
                       datastore
-                      submission={match.params.scheduleId}
+                      submission={match.params.robotId}
                       loaded={handleLoaded}
                       updated={handleUpdated}
                       error={handleError}
@@ -131,10 +125,7 @@ const RobotScheduleComponent = ({
                       isOpen={confirmDelete}
                       toggle={() => setConfirmDelete(!confirmDelete)}
                     >
-                      <p>
-                        Delete robot schedule{' '}
-                        {robotSchedule.values['Robot Name']}?
-                      </p>
+                      <p>Delete robot {robot.values['Robot Name']}?</p>
                       <Button color="danger" onClick={processDelete}>
                         Yes
                       </Button>
@@ -148,7 +139,7 @@ const RobotScheduleComponent = ({
                   </div>
                 )}
                 {type === 'executions' && (
-                  <RobotExecutionsList scheduleId={match.params.scheduleId} />
+                  <RobotExecutionsList robotId={match.params.robotId} />
                 )}
               </Fragment>
             )}
@@ -171,12 +162,10 @@ export const handleLoaded = props => form => {
 };
 
 export const handleUpdated = props => response => {
-  props.fetchRobotSchedule(response.submission.id);
+  props.fetchRobot(response.submission.id);
   props.addSuccess(
-    `Successfully updated robot schedule (${
-      response.submission.values['Robot Name']
-    })`,
-    'Robot Schedule Updated!',
+    `Successfully updated robot (${response.submission.values['Robot Name']})`,
+    'Robot Updated!',
   );
 };
 
@@ -189,14 +178,14 @@ export const handleDelete = props => () => {
 };
 
 export const processDelete = props => () => {
-  const robotScheduleName = props.robotSchedule.values['Robot Name'];
-  props.deleteRobotSchedule({
-    id: props.robotSchedule.id,
+  const robotName = props.robot.values['Robot Name'];
+  props.deleteRobot({
+    id: props.robot.id,
     callback: () => {
-      props.push(`/settings/robots/${props.robot.id}/schedules`);
+      props.push(`/settings/robots`);
       props.addSuccess(
-        `Successfully deleted robot schedule (${robotScheduleName})`,
-        'Robot Schedule Deleted!',
+        `Successfully deleted robot (${robotName})`,
+        'Robot Deleted!',
       );
     },
   });
@@ -204,20 +193,19 @@ export const processDelete = props => () => {
 
 export const mapStateToProps = state => ({
   robot: state.space.settingsRobots.robot,
-  robotSchedule: state.space.settingsRobots.robotSchedule,
-  robotScheduleLoading: state.space.settingsRobots.robotScheduleLoading,
-  robotScheduleErrors: state.space.settingsRobots.robotScheduleErrors,
+  robotLoading: state.space.settingsRobots.robotLoading,
+  robotErrors: state.space.settingsRobots.robotErrors,
 });
 
 export const mapDispatchToProps = {
   push,
-  fetchRobotSchedule: actions.fetchRobotSchedule,
-  deleteRobotSchedule: actions.deleteRobotSchedule,
+  fetchRobot: actions.fetchRobot,
+  deleteRobot: actions.deleteRobot,
   addSuccess: toastActions.addSuccess,
   addError: toastActions.addError,
 };
 
-export const RobotSchedule = compose(
+export const Robot = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
@@ -242,7 +230,7 @@ export const RobotSchedule = compose(
   }),
   lifecycle({
     componentWillMount() {
-      this.props.fetchRobotSchedule(this.props.match.params.scheduleId);
+      this.props.fetchRobot(this.props.match.params.robotId);
     },
   }),
-)(RobotScheduleComponent);
+)(RobotComponent);

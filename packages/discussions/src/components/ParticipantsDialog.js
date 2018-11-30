@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import Avatar from 'react-avatar';
+import { Avatar } from 'common';
 import { actions } from '../redux/modules/discussions';
 
 export const ParticipantsDialog = props => (
@@ -22,13 +22,13 @@ export const ParticipantsDialog = props => (
         .sortBy(p => p.name)
         .map(p => (
           <li className={`${p.present ? 'present' : ''}`} key={p.email}>
-            <Avatar size={26} src={p.avatar_url} name={p.name} round />
+            <Avatar size={26} username={p.email} />
             {p.name}
           </li>
         ))}
       {props.discussion.invites.map(invite => (
         <li key={invite.email}>
-          <Avatar size={26} round name={invite.email} />
+          <Avatar size={26} username={invite.email} />
           {invite.email} <span className="subtext">invited</span>
         </li>
       ))}

@@ -8,7 +8,7 @@ import { Icon, PageTitle } from 'common';
 import { SpaceSettings } from './space_settings/SpaceSettings';
 import { Notifications } from './notifications/Notifications';
 import { Datastore } from './datastore/Datastore';
-import { Robots } from './robots/Robots';
+import { RobotsWrapper } from './robots/RobotsWrapper';
 import { Users } from './users/Users';
 import { Profile } from './profile/Profile';
 import { Teams } from './teams/Teams';
@@ -20,7 +20,7 @@ export const SettingsComponent = () => (
     <Route path="/settings/profile" component={Profile} />
     <Route path="/settings/system" component={SpaceSettings} />
     <Route path="/settings/datastore" component={Datastore} />
-    <Route path="/settings/robots" component={Robots} />
+    <Route path="/settings/robots" component={RobotsWrapper} />
     <Route path="/settings/users" component={Users} />
     <Route path="/settings/notifications" component={Notifications} />
     <Route path="/settings/teams" component={Teams} />
