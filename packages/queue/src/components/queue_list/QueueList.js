@@ -243,7 +243,7 @@ export const QueueList = ({
               Any Date Range <i className="fa fa-fw fa-caret-down" />
             </button>
             <label htmlFor="createdBy" className="btn btn-subtle">
-              Created By <input type="checkbox" id="createdBy" />
+              Created By Me <input type="checkbox" id="createdBy" />
             </label>
           </div>
 
