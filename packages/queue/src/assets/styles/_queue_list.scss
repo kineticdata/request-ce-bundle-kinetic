@@ -43,6 +43,9 @@
     line-height: 24px;
     margin: 0 0 0.75rem;
     flex: 0 0 auto;
+    .btn {
+      color: #333333;
+    }
   }
   h6 {
     color: $blue-lake;
@@ -127,6 +130,12 @@
   input[type='checkbox'],
   input[type='radio'] {
     margin-right: 0.75rem;
+  }
+  input[type='radio'] {
+    margin-left: 0.05rem;
+  }
+  select {
+    margin-bottom: 0.5rem;
   }
   &__content {
     display: flex;

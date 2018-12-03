@@ -15,7 +15,6 @@ import { Sidebar } from './components/Sidebar';
 import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { QueueItemContainer } from './components/queue_item/QueueItem';
 import { QueueListContainer } from './components/queue_list/QueueListContainer';
-import { FilterMenuContainer } from './components/filter_menu/FilterMenuContainer';
 import { NewItemMenuContainer } from './components/new_item_menu/NewItemMenuContainer';
 import { WorkMenuContainer } from './components/work_menu/WorkMenu';
 import { Settings } from './components/settings/Settings';
@@ -72,7 +71,7 @@ export const AppComponent = props => {
           path="/queue/filter/__show__/details/:id/summary"
           render={({ match }) => <Redirect to={`/item/${match.params.id}`} />}
         />
-        <FilterMenuContainer />
+
         <NewItemMenuContainer />
         <WorkMenuContainer />
       </main>

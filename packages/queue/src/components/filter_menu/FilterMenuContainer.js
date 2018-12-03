@@ -46,7 +46,7 @@ export const mapDispatchToProps = {
   push,
 };
 
-const validateDateRange = filter => {
+export const validateDateRange = filter => {
   if (
     (filter.status.includes('Cancelled') ||
       filter.status.includes('Complete')) &&
