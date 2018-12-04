@@ -175,6 +175,20 @@
           margin: 1rem;
         }
       }
+      &--import-export {
+        h2 {
+          font-size: 1.125rem;
+          margin: 1rem 0 0;
+        }
+        h3 {
+          font-size: 1rem;
+          margin: 1rem 0 0;
+        }
+        h4 {
+          font-size: 0.875rem;
+          margin: 0.25rem 0 1rem;
+        }
+      }
     }
     .modal-footer {
       padding: 0;
