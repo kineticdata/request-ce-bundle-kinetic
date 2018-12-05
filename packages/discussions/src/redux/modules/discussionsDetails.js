@@ -46,6 +46,16 @@ export const reducer = (state = Map(), { type, payload }) => {
       });
     case types.OPEN_HISTORY:
       return state.setIn([payload.id, 'messageHistory'], payload.message);
+    case types.MUTE:
+      return state.setIn([payload.id, 'muting'], true);
+    case types.MUTE_SUCCESS:
+      return state
+        .deleteIn([payload.id, 'muting'])
+        .setIn([payload.id, 'muted'], payload.isMuted);
+    case types.MUTE_ERROR:
+      return state
+        .deleteIn([payload.id, 'muting'])
+        .setIn([payload.id, 'muteError'], true);
     case types.LEAVE:
       return state.setIn([payload.id, 'leaveConfirmation'], true);
     case types.LEAVE_CONFIRM:

@@ -134,11 +134,23 @@ export function* leaveTask(action) {
   const { id, username, onLeave } = action.payload;
   const { error } = yield call(DiscussionAPI.removeParticipant, id, username);
   if (error) {
-    yield put({ type: detailsTypes.LEAVE_ERROR, payload: id });
+    yield put({ type: detailsTypes.LEAVE_ERROR, payload: { id } });
   } else {
     if (typeof onLeave === 'function') {
       onLeave();
     }
+  }
+}
+
+export function* muteTask(action) {
+  const { id, username, isMuted } = action.payload;
+  const { error } = yield call(DiscussionAPI.updateParticipant, id, username, {
+    isMuted,
+  });
+  if (error) {
+    yield put({ type: detailsTypes.MUTE_ERROR, payload: { id } });
+  } else {
+    yield put({ type: detailsTypes.MUTE_SUCCESS, payload: { id, isMuted } });
   }
 }
 
@@ -150,5 +162,6 @@ export function* watchDiscussionRest() {
     takeEvery(detailsTypes.INVITE, inviteTask),
     takeEvery(detailsTypes.REINVITE, reinviteTask),
     takeEvery(detailsTypes.LEAVE_CONFIRM, leaveTask),
+    takeEvery(detailsTypes.MUTE, muteTask),
   ]);
 }

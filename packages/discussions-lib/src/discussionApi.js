@@ -231,6 +231,16 @@ export const removeParticipant = (id, username) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
+export const updateParticipant = (id, username, data) =>
+  axios
+    .request({
+      url: `${baseUrl()}/api/v1/discussions/${id}/participants/${username}`,
+      method: 'put',
+      data,
+    })
+    .then(response => response.data)
+    .catch(response => ({ error: response }));
+
 export const createRelatedItem = (id, relatedItem) =>
   axios
     .request({

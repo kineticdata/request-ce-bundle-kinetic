@@ -12,23 +12,26 @@ export const DiscussionDetailsRootComponent = props => (
         Edit Discussion
         <i className="fa fa-fw fa-angle-right" />
       </button>
-      <label className="btn btn-link">
-        Mute email updates
-        <input type="checkbox" onChange={props.mute} />
-      </label>
-      {false && (
-        <label className="btn btn-link" disabled>
-          Mute email updates
-          <i className="fa fa-fw fa-spinner fa-spin" />
-        </label>
-      )}
-      {false && (
+      {props.muteError ? (
         <label className="btn btn-link text-danger has-error" disabled>
           <div>Mute email updates</div>
           <div>
             <i className="fa fa-fw fa-exclamation-circle" />
             Error saving
           </div>
+        </label>
+      ) : (
+        <label className="btn btn-link" disabled={props.muting}>
+          Mute email updates
+          {props.muting ? (
+            <i className="fa fa-fw fa-spinner fa-spin" />
+          ) : (
+            <input
+              type="checkbox"
+              onChange={props.mute}
+              checked={props.muted}
+            />
+          )}
         </label>
       )}
       <ParticipantsListContainer discussion={props.discussion} />
@@ -90,6 +93,14 @@ export const mapStateToProps = (state, props) => {
     ]),
     leaving: state.discussions.discussionsDetails.getIn([id, 'leaving']),
     leaveError: state.discussions.discussionsDetails.getIn([id, 'leaveError']),
+    muted:
+      state.discussions.discussionsDetails.getIn([id, 'muted']) ||
+      props.discussion.participants
+        .filter(p => p.user.username === props.profile.username)
+        .map(p => p.isMuted)
+        .first(),
+    muting: state.discussions.discussionsDetails.getIn([id, 'muting']),
+    muteError: state.discussions.discussionsDetails.getIn([id, 'muteError']),
   };
 };
 export const mapDispatchToProps = (dispatch, props) => {
@@ -99,9 +110,11 @@ export const mapDispatchToProps = (dispatch, props) => {
   return {
     openEdit: () =>
       dispatch({ type: types.SHOW, payload: { id, view: 'edit' } }),
-    mute: () => console.log('muting not supported yet...'),
-    clearSuccessMessage: () =>
-      dispatch({ type: types.CLEAR_SUCCESS, payload: { id } }),
+    mute: event =>
+      dispatch({
+        type: types.MUTE,
+        payload: { id, username, isMuted: event.target.checked },
+      }),
     leave: () => dispatch({ type: types.LEAVE, payload: { id } }),
     leaveConfirm: () =>
       dispatch({
