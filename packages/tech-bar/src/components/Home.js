@@ -5,6 +5,7 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import {
   KappLink as Link,
+  Icon,
   PageTitle,
   selectCurrentKapp,
   Moment,
@@ -35,13 +36,22 @@ export const HomeComponent = ({
       <div className="home-title">
         <I18n>Welcome to {kapp ? kapp.name : 'Tech Bar'}</I18n>
       </div>
-      <section className="mb-4">
+      <section>
         <h2 className="section__title">
           <I18n>Tech Bars</I18n>
         </h2>
-        <div className="cards__wrapper--tech-bar">
+        <div className="cards__wrapper cards__wrapper--tech-bar">
           {techBars.map(techBar => (
-            <div className="card card--tech-bar" key={techBar.id}>
+            <div
+              className="card card--tech-bar"
+              key={techBar.id}
+              style={{
+                borderTopWidth: '6px',
+                borderTopColor: techBar.values['Location']
+                  ? 'rgb(11, 168, 224)'
+                  : 'rgb(254, 233, 78)',
+              }}
+            >
               <div className="card-body">
                 <h3 className="card-title">
                   <span>
@@ -62,7 +72,7 @@ export const HomeComponent = ({
                             className="dropdown-item"
                             target="_blank"
                           >
-                            <span className="fa fa-external-link fa-fw mr-2" />
+                            <span className="fa fa-fw fa-external-link mr-2" />
                             <span>
                               <I18n>Check In</I18n>
                             </span>
@@ -92,9 +102,11 @@ export const HomeComponent = ({
                     </span>
                   )}
                 </h3>
-                <div className="card-subtitle">
-                  <I18n>{techBar.values['Location']}</I18n>
-                </div>
+                {techBar.values['Location'] && (
+                  <div className="card-subtitle">
+                    <I18n>{techBar.values['Location']}</I18n>
+                  </div>
+                )}
                 <p className="card-text">
                   <I18n>{techBar.values['Description']}</I18n>
                 </p>
@@ -102,34 +114,38 @@ export const HomeComponent = ({
                   to={`/forms/appointment?values[Scheduler Id]=${
                     techBar.values['Id']
                   }`}
-                  className="btn btn-primary card-button"
+                  className="btn btn-link text-left pl-0"
                 >
-                  <I18n>Schedule</I18n>
+                  <I18n>Schedule →</I18n>
                 </Link>
               </div>
             </div>
           ))}
         </div>
       </section>
-      <section className="mb-4">
+      <section>
         <h2 className="section__title">
           <I18n>Upcoming Appointments</I18n>
         </h2>
-        <div className="cards__wrapper--tech-bar">
+        <div className="cards__wrapper cards__wrapper--appt">
           {upcomingAppointments.map(appt => {
             const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
             const start = moment.utc(appt.values['Event Time'], TIME_FORMAT);
             const end = start.clone().add(appt.values['Duration'], 'minute');
             return (
-              <div className="card card--tech-bar" key={appt.id}>
+              <div className="card card--appt" key={appt.id}>
+                <i
+                  className="fa fa-calendar fa-fw card-icon"
+                  style={{ background: 'rgb(255, 74, 94)' }}
+                />
                 <div className="card-body">
-                  <h5 className="card-title">
+                  <h1 className="card-title">
                     <Moment
                       timestamp={date}
                       format={Constants.MOMENT_FORMATS.dateWithDay}
                     />
-                  </h5>
-                  <div className="card-subtitle">
+                  </h1>
+                  <p className="card-subtitle">
                     <Moment
                       timestamp={start}
                       format={Constants.MOMENT_FORMATS.time}
@@ -139,13 +155,13 @@ export const HomeComponent = ({
                       timestamp={end}
                       format={Constants.MOMENT_FORMATS.time}
                     />
-                  </div>
+                  </p>
                   <p className="card-text">{appt.values['Summary']}</p>
                   <Link
                     to={`/forms/appointment/${appt.id}`}
-                    className="btn btn-dark card-button"
+                    className="btn btn-link text-left pl-0"
                   >
-                    <I18n>View Details</I18n>
+                    <I18n>View Details →</I18n>
                   </Link>
                 </div>
               </div>

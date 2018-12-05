@@ -22,9 +22,15 @@
     }
 
     .tech-bar-display {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
       &__small {
-        max-width: 800px;
-        margin: auto;
+        // max-width: 800px;
+        // margin: auto;
       }
 
       .check-in-option {
@@ -118,5 +124,19 @@
     z-index: 1035;
     background-color: $black-3;
     overflow-y: auto;
+  }
+  // Card Wrapper
+  .cards__wrapper {
+    padding: 0 0 3rem;
+    margin: 0;
+    list-style: none;
+    flex-direction: column;
+    &--tech-bar,
+    &--appt {
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      justify-content: flex-start;
+    }
   }
 }

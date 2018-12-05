@@ -2,133 +2,138 @@
  *   Card Overrides ~ Tech Bar
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.cards__wrapper--tech-bar {
-  flex-direction: row;
-  flex-wrap: wrap;
-  display: flex;
-  justify-content: flex-start;
-  .card {
-    flex: 0 0 auto;
-    border: 1px solid $black-16;
-    margin: 0 0.75rem 0.75rem 0;
-    @media all and (min-width: 0) {
-      flex-basis: 100%;
-      @media all and (-ms-high-contrast: none) {
-        width: 100%;
-        flex-basis: auto;
-      }
+.card {
+  flex: 0 0 auto;
+  border: 1px solid $black-16;
+  margin: 0 0.75rem 0.75rem 0;
+  @media all and (min-width: 0) {
+    flex-basis: 100%;
+    @media all and (-ms-high-contrast: none) {
+      width: 100%;
+      flex-basis: auto;
     }
-    @media all and (min-width: 576px) {
-      flex-basis: 48%;
-      @media all and (-ms-high-contrast: none) {
-        width: 48%;
-        flex-basis: auto;
-      }
+  }
+  @media all and (min-width: 576px) {
+    flex-basis: 48%;
+    @media all and (-ms-high-contrast: none) {
+      width: 48%;
+      flex-basis: auto;
     }
-    @media all and (min-width: 768px) {
-      flex-basis: 48%;
-      @media all and (-ms-high-contrast: none) {
-        width: 48%;
-        flex-basis: auto;
-      }
+  }
+  @media all and (min-width: 768px) {
+    flex-basis: 48%;
+    @media all and (-ms-high-contrast: none) {
+      width: 48%;
+      flex-basis: auto;
     }
-    @media all and (min-width: 992px) {
-      flex-basis: 31.5%;
-      @media all and (-ms-high-contrast: none) {
-        width: 31.5%;
-        flex-basis: auto;
-      }
+  }
+  @media all and (min-width: 992px) {
+    flex-basis: 31.5%;
+    @media all and (-ms-high-contrast: none) {
+      width: 31.5%;
+      flex-basis: auto;
     }
-    @media all and (min-width: 1200px) {
-    }
+  }
+  @media all and (min-width: 1200px) {
+  }
 
-    &--tech-bar {
-      .card-body {
-        flex-direction: column;
-        justify-content: flex-start;
+  &--tech-bar {
+    .card-body {
+      flex-direction: column;
+      justify-content: flex-start;
+      display: flex;
+      padding: 0.6875rem 1rem;
+      .card-title {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
         display: flex;
-        padding: 0.6875rem 1rem;
-        h3.card-title,
-        h5.card-title {
-          margin-top: 0;
-          margin-bottom: 0.5rem;
-          display: flex;
-          justify-content: space-between;
-        }
-        .card-subtitle {
-          margin-top: -0.25rem;
-          margin-bottom: 0.5rem;
-          opacity: 0.75;
-        }
-        .card-text {
-          margin-bottom: 0.5rem;
-          flex-grow: 1;
-        }
-        .card-button {
-          margin: 0 -1rem -0.6875rem -1rem;
-          border-top-left-radius: 0;
-          border-top-right-radius: 0;
-        }
+        justify-content: space-between;
+        font-weight: 600;
+        font-size: 1.375rem;
       }
-      &.selected {
-        .card-body {
-          background-color: $primary;
-          * {
-            color: white;
-          }
+      .card-subtitle {
+        margin-top: -0.25rem;
+        margin-bottom: 0.5rem;
+        color: rgba($black, 0.5);
+        font-size: 0.75rem;
+      }
+      .card-text {
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+        flex-grow: 1;
+      }
+    }
+    &.selected {
+      .card-body {
+        background-color: $primary;
+        * {
+          color: $white;
         }
       }
     }
   }
-}
+  &--appointment {
+    display: flex;
+    flex-direction: row;
+    @include border-radius();
+    background-color: $gray4;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
 
-.cards__wrapper--tech-bar__settings {
-  justify-content: flex-start;
-  flex-direction: row;
-  .card {
-    @media all and (min-width: 0) {
-      flex-basis: 100%;
-      @media all and (-ms-high-contrast: none) {
-        width: 100%;
-        flex-basis: auto;
+    &.selected {
+      background-color: $primary;
+      color: $white;
+
+      .text-muted {
+        color: $gray2 !important;
       }
     }
-    @media all and (min-width: 576px) {
-      flex-basis: 48%;
-      margin-right: 2%;
-      &:nth-child(even) {
-        margin-right: 0;
-      }
-      @media all and (-ms-high-contrast: none) {
-        width: 48%;
-        flex-basis: auto;
-      }
+
+    .details {
+      padding: 0.25rem 0.5rem;
+    }
+
+    button {
+      @include border-left-radius(0);
     }
   }
-}
-
-.card--appointment {
-  display: flex;
-  flex-direction: row;
-  @include border-radius();
-  background-color: $gray4;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-
-  &.selected {
-    background-color: $primary;
-    color: white;
-
-    .text-muted {
-      color: $gray2 !important;
+  &--appt {
+    border: 1px solid $black-16;
+    margin-bottom: 0.75rem;
+    padding: 0.6875rem 1rem;
+    transition: background-color 0.3s;
+    @include setBgColorAndHover($white);
+    flex-direction: row;
+    &:focus,
+    &:hover {
+      text-decoration: none;
     }
-  }
-
-  .details {
-    padding: 0.25rem 0.5rem;
-  }
-
-  button {
-    @include border-left-radius(0);
+    .card-icon {
+      flex-direction: column;
+      margin-right: 1rem;
+    }
+    .card-body {
+      padding: 0;
+    }
+    .card-title {
+      color: $black;
+      display: inline-flex;
+      font-size: 1rem;
+      // @include ms-respond(font-size, 3);
+      font-weight: 600;
+      line-height: 2rem;
+      margin: 0;
+    }
+    .card-subtitle,
+    .card-text {
+      color: $black;
+      font-size: 0.75rem;
+      line-height: 1.5rem;
+      // @include ms-respond(font-size, 1);
+      margin-bottom: 0;
+    }
+    .card-subtitle {
+      color: rgba($black, 0.5);
+    }
   }
 }

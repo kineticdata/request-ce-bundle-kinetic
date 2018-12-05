@@ -101,7 +101,7 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
         </div>
       </div>
 
-      <div className="cards__wrapper cards__wrapper--tech-bar__settings">
+      <div className="cards__wrapper cards__wrapper--tech-bar">
         <SettingsCard
           name="Tech Bars"
           path={`/settings/general`}
