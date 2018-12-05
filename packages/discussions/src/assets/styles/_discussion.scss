@@ -221,6 +221,14 @@
 
     .view-all {
       margin-left: auto;
+      .btn {
+        font-size: 1rem;
+        padding-left: 0;
+        padding-right: 0;
+        + .btn {
+          margin-left: 0.5rem;
+        }
+      }
     }
   }
 

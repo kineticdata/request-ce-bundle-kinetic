@@ -1,121 +1,87 @@
-import React, { Fragment } from 'react';
-import { Modal } from 'reactstrap';
-import { List, Map } from 'immutable';
-import { DiscussionEditDialog } from './DiscussionEditDialog';
-import { ParticipantsDialogContainer } from './ParticipantsDialog';
-import { InvitationDialog } from './InvitationDialog';
+import React from 'react';
+import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import {
   Discussion as KineticDiscussion,
   MessageHistory,
-  DiscussionAPI,
 } from 'discussions-lib';
 import { ParticipantsHeaderContainer } from './ParticipantsHeader';
 import { ArchivedBanner } from './ArchivedBanner';
 import { connect } from 'react-redux';
+import { DiscussionDetails } from './DiscussionDetails';
+import { types as detailsTypes } from '../redux/modules/discussionsDetails';
 
-const titles = Map({
-  edit: 'Edit Discussion',
-  participants: 'All Participants',
-  invitations: 'Invite Participants',
+export const DiscussionComponent = props => (
+  <KineticDiscussion
+    id={props.id}
+    invitationtoken={props.invitationToken}
+    profile={props.profile}
+    toggleMessageHistory={props.openHistory}
+    toggleInvitationForm={props.openInvitations}
+    render={({ elements, discussion, canManage }) => (
+      <div className="kinops-discussions">
+        <div className="messages">{elements.messages}</div>
+        <ParticipantsHeaderContainer discussion={discussion} />
+        {discussion.isArchived && (
+          <ArchivedBanner canManage={canManage} open={props.openEdit} />
+        )}
+        {elements.viewUnreadButton}
+        {elements.chatInput}
+        <DiscussionDetails
+          discussion={discussion}
+          profile={props.profile}
+          onLeave={props.onLeave}
+        />
+        <Modal isOpen={props.messageHistory} toggle={props.close}>
+          <ModalHeader>
+            <button
+              type="button"
+              className="btn btn-link"
+              onClick={props.close}
+            >
+              Close
+            </button>
+            <span>Message History</span>
+          </ModalHeader>
+          <ModalBody>
+            <MessageHistory
+              discussion={discussion}
+              message={props.messageHistory}
+            />
+          </ModalBody>
+        </Modal>
+      </div>
+    )}
+  />
+);
+
+export const mapStateToProps = (state, props) => ({
+  profile: state.app.profile,
+  messageHistory: state.discussions.discussionsDetails.getIn([
+    props.id,
+    'messageHistory',
+  ]),
+});
+export const mapDispatchToProps = (dispatch, props) => ({
+  openEdit: () =>
+    dispatch({
+      type: detailsTypes.OPEN,
+      payload: { id: props.id, view: 'edit' },
+    }),
+  openInvitations: () =>
+    dispatch({
+      type: detailsTypes.OPEN,
+      payload: { id: props.id, view: 'invitations' },
+    }),
+  openHistory: message =>
+    dispatch({
+      type: detailsTypes.OPEN_HISTORY,
+      payload: { id: props.id, message },
+    }),
+  close: () =>
+    dispatch({ type: detailsTypes.CLOSE, payload: { id: props.id } }),
 });
 
-const DiscussionLoader = props => (
-  <div className="discussion is-loading">Loading...</div>
-);
-
-const ModalContent = ({ modal, ...props }) => (
-  <Fragment>
-    <div className="modal-header">
-      <h4 className="modal-title">
-        <button type="button" className="btn btn-link" onClick={props.close}>
-          Close
-        </button>
-        <span>{titles.get(modal.type, 'Discussion')}</span>
-        {props.onLeave && modal.type === 'participants' && (
-          <button
-            type="button"
-            className="btn btn-link text-danger"
-            onClick={props.onLeave}
-          >
-            Leave
-          </button>
-        )}
-      </h4>
-    </div>
-    {modal.type === 'edit' ? (
-      <DiscussionEditDialog {...props} />
-    ) : modal.type === 'participants' ? (
-      <ParticipantsDialogContainer {...props} />
-    ) : modal.type === 'invitations' ? (
-      <InvitationDialog {...props} />
-    ) : modal.type === 'history' ? (
-      <MessageHistory {...props} message={modal.data} />
-    ) : null}
-  </Fragment>
-);
-
-export class DiscussionComponent extends React.Component {
-  state = { modals: List() };
-
-  open = type => data => {
-    this.setState(state => ({ modals: state.modals.push({ type, data }) }));
-  };
-
-  close = all => () => {
-    all
-      ? this.setState({ modals: List() })
-      : this.setState(state => ({ modals: state.modals.pop() }));
-  };
-
-  handleLeave = async () => {
-    await DiscussionAPI.removeParticipant(
-      this.props.id,
-      this.props.profile.username,
-    );
-    if (typeof this.props.onLeave === 'function') {
-      this.props.onLeave();
-    }
-  };
-
-  render() {
-    return (
-      <KineticDiscussion
-        id={this.props.id}
-        invitationtoken={this.props.invitationToken}
-        profile={this.props.profile}
-        toggleMessageHistory={this.open('history')}
-        toggleInvitationForm={this.open('invitations')}
-        render={({ elements, discussion, canManage }) => (
-          <div className="kinops-discussions">
-            <div className="messages">{elements.messages}</div>
-            <ParticipantsHeaderContainer
-              discussion={discussion}
-              canManage={canManage}
-              open={this.open}
-            />
-            {discussion.isArchived && (
-              <ArchivedBanner canManage={canManage} open={this.open('edit')} />
-            )}
-            {elements.viewUnreadButton}
-            {elements.chatInput}
-            {!this.state.modals.isEmpty() && (
-              <Modal isOpen toggle={this.close(true)}>
-                <ModalContent
-                  modal={this.state.modals.last()}
-                  discussion={discussion}
-                  open={this.open}
-                  close={this.close(false)}
-                  onLeave={this.props.onLeave && this.handleLeave}
-                />
-              </Modal>
-            )}
-          </div>
-        )}
-      />
-    );
-  }
-}
-
-export const Discussion = connect(state => ({
-  profile: state.app.profile,
-}))(DiscussionComponent);
+export const Discussion = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DiscussionComponent);

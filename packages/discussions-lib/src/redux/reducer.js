@@ -46,6 +46,10 @@ export const actions = {
   ),
 };
 
+const invitationsMatch = (i1, i2) =>
+  (i1.user && i2.user && i1.user.username === i2.user.username) ||
+  (i1.email && i2.email && i1.email === i2.email);
+
 export default function(state = Map(), { type, payload }) {
   switch (type) {
     case JOIN_DISCUSSION:
@@ -97,11 +101,10 @@ export default function(state = Map(), { type, payload }) {
       return state.updateIn(
         ['discussions', payload.id, 'participants'],
         participants =>
-          participants.map(
-            participant =>
-              participant.user.username === payload.participant.user.username
-                ? payload.participant
-                : participant,
+          participants.map(participant =>
+            participant.user.username === payload.participant.user.username
+              ? payload.participant
+              : participant,
           ),
       );
     case ADD_INVITATION:
@@ -121,20 +124,18 @@ export default function(state = Map(), { type, payload }) {
       return state.updateIn(
         ['discussions', payload.id, 'invitations'],
         invitations =>
-          invitations.map(
-            invitation =>
-              invitationsMatch(invitation, payload.invitation)
-                ? payload.invitation
-                : invitation,
+          invitations.map(invitation =>
+            invitationsMatch(invitation, payload.invitation)
+              ? payload.invitation
+              : invitation,
           ),
       );
     case MESSAGE_UPDATE:
       return state.updateIn(['discussions', payload.id, 'messages'], messages =>
         // If the update is for a message we have, update it.
         messages
-          .map(
-            message =>
-              message.id === payload.message.id ? payload.message : message,
+          .map(message =>
+            message.id === payload.message.id ? payload.message : message,
           )
           // If the update is for a parent of a message we have, update the parent.
           .map(message => {

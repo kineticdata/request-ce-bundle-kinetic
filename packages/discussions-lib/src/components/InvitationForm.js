@@ -34,6 +34,8 @@ export const InvitationFormComponent = props => {
         </div>
       </form>
     ),
+    invalid: props.required && props.values.get('invitees').length === 0,
+    submit: props.handleSubmit,
     buttonProps: {
       onClick: props.handleSubmit,
       disabled:
@@ -65,7 +67,7 @@ const handleChange = props => event => {
 };
 
 const handleSubmit = props => event => {
-  event.preventDefault();
+  event && event.preventDefault && event.preventDefault();
   props.setSaving(true);
   if (typeof props.onSubmit === 'function') {
     props.onSubmit(props.values.toJS(), () => props.setSaving(false));

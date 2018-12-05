@@ -51,18 +51,14 @@ export class DiscussionForm extends React.Component {
     return result;
   };
 
-  submit = () => {
-    this.setState({ saving: true });
+  submit = event => {
+    event && event.preventDefault && event.preventDefault();
+    this.setState({ dirty: false, saving: true });
     if (typeof this.props.onSubmit === 'function') {
       this.props.onSubmit(this.state.values, () =>
         this.setState({ saving: false }),
       );
     }
-  };
-
-  handleSubmit = event => {
-    event.preventDefault();
-    this.submit();
   };
 
   handleChange = event => {
@@ -101,7 +97,7 @@ export class DiscussionForm extends React.Component {
     const validations = this.validate(this.state.values);
     return this.props.render({
       formElement: (
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.submit}>
           <div
             className={`form-group required ${
               validations.title && this.state.touched.title ? 'has-error' : ''
@@ -115,10 +111,9 @@ export class DiscussionForm extends React.Component {
               onChange={this.handleChange}
               onBlur={this.handleBlur}
             />
-            {validations.title &&
-              this.state.touched.title && (
-                <p className="text-danger">{validations.title}</p>
-              )}
+            {validations.title && this.state.touched.title && (
+              <p className="text-danger">{validations.title}</p>
+            )}
           </div>
           <div className="form-group">
             <label htmlFor="description">Description</label>
@@ -196,6 +191,9 @@ export class DiscussionForm extends React.Component {
           )}
         </form>
       ),
+      submit: this.submit,
+      dirty: this.state.dirty,
+      invalid: Object.keys(validations).length > 0,
       buttonProps: {
         onClick: this.submit,
         disabled:
