@@ -8,7 +8,7 @@ import { DiscussionEditDialog } from './DiscussionEditDialog';
 
 export const DiscussionDetailsComponent = props => (
   <Modal
-    isOpen={props.view}
+    isOpen={!!props.view}
     toggle={props.close}
     className="discussion-details-modal"
   >
