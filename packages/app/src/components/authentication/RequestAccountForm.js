@@ -1,6 +1,6 @@
 import React from 'react';
 import { compose, withState, withHandlers } from 'recompose';
-
+import { Link } from 'react-router-dom';
 import { CoreAPI } from 'react-kinetic-core';
 
 const RequestAccount = ({
@@ -82,13 +82,9 @@ const RequestAccount = ({
           Request Account
         </button>
         <hr />
-        <button
-          className="btn btn-link"
-          type="button"
-          onClick={toSignIn(routed)}
-        >
+        <Link className="btn btn-link" to="/login">
           &larr; Back to Sign In
-        </button>
+        </Link>
       </div>
     </form>
   );

@@ -2,13 +2,13 @@ import React from 'react';
 import { compose, withProps, withState, withHandlers } from 'recompose';
 import { Map } from 'immutable';
 import axios from 'axios';
-import { CoreAPI, bundle } from 'react-kinetic-core';
+import { Link } from 'react-router-dom';
+import { bundle } from 'react-kinetic-core';
 
 const CreateAccount = ({
+  location,
   error,
   submitted,
-  toSignIn,
-  routed,
   email,
   handleEmail,
   password,
@@ -95,9 +95,9 @@ const CreateAccount = ({
         Accept Invitation
       </button>
       <hr />
-      <button className="btn btn-link" type="button" onClick={toSignIn(routed)}>
+      <Link className="btn btn-link" to={`/login${location.search}`}>
         Already have an account? Login
-      </button>
+      </Link>
     </div>
   </form>
 );
@@ -142,8 +142,8 @@ const handleSubmit = ({
       error.response.status === 404
         ? 'Invitation expired.'
         : error.response.status === 400
-          ? error.response.data.error
-          : '';
+        ? error.response.data.error
+        : '';
     setError(`There was a problem creating your new account. ${errorMessage}`);
   }
 };

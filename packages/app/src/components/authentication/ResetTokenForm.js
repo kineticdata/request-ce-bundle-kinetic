@@ -2,11 +2,11 @@ import React from 'react';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { parse, stringify } from 'qs';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { bundle } from 'react-kinetic-core';
 
 const ResetToken = ({
   email,
-  handleEmail,
   password,
   handlePassword,
   handlePasswordReset,
@@ -14,8 +14,6 @@ const ResetToken = ({
   handlePasswordConfirm,
   formValid,
   error,
-  routed,
-  toSignIn,
 }) => (
   <form className="login-form-container" onSubmit={handlePasswordReset}>
     <div>
@@ -53,9 +51,9 @@ const ResetToken = ({
       <button type="submit" className="btn btn-primary" disabled={!formValid}>
         Reset
       </button>
-      <button type="button" className="btn btn-link" onClick={toSignIn(routed)}>
+      <Link className="btn btn-link" to="/login">
         &larr; Back to Sign In
-      </button>
+      </Link>
     </div>
   </form>
 );

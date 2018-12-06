@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import qs from 'qs';
 import { parse } from 'query-string';
-import { Route, Switch } from 'react-router-dom';
+import { withRouter } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { bundle } from 'react-kinetic-core';
 import { login } from './utils/authentication';
 import { actions as socketActions } from 'discussions/src/redux/modules/socket';
+import { actions as authActions } from './redux/modules/auth';
 import logoImage from './assets/images/login-background.png';
 import logoName from './assets/images/login-name.png';
 import { WallySpinner } from 'common';
@@ -80,33 +82,20 @@ export const LoginScreen = props => (
   </div>
 );
 
-const toResetPassword = ({ push, setDisplay }) => routed => () =>
-  routed ? push('/reset-password') : setDisplay('reset');
-const toSignIn = ({ push, setDisplay }) => routed => () =>
-  routed ? push('/login') : setDisplay('none');
-const toCreateAccount = ({ push, setDisplay }) => routed => () =>
-  routed ? push('/create-account') : setDisplay('create-account');
-
 const handleEmail = ({ setEmail }) => e => setEmail(e.target.value);
 const handlePassword = ({ setPassword }) => e => setPassword(e.target.value);
 
 const handleLogin = ({
-  tryAuthentication,
   email,
   password,
   setError,
   setPassword,
   handleAuthenticated,
-  routed,
-  push,
 }) => async e => {
   e && e.preventDefault();
   try {
     await login(email, password);
     handleAuthenticated();
-    if (routed) {
-      push('/');
-    }
   } catch (error) {
     console.log(error);
     setError('Invalid username or password.');
@@ -152,29 +141,31 @@ const processOAuthToken = (token, state, push, setToken) => {
   }
 };
 
-const CatchAllRoute = props => (
-  <Route
-    path="/"
-    render={route => (
-      <LoginScreen {...props}>
-        {props.display === 'reset' ? (
-          <ResetPasswordForm {...props} />
-        ) : props.display === 'reset-token' ? (
-          <ResetTokenForm {...props} />
-        ) : props.display === 'create-account' ? (
-          <RequestAccountForm {...props} />
-        ) : props.invitationToken ? (
-          <CreateAccountForm {...props} />
-        ) : (
-          <LoginForm {...props} />
-        )}
-      </LoginScreen>
-    )}
-  />
-);
+const mapStateToProps = state => ({
+  location: state.router.location,
+  pathname: state.router.location.pathname,
+  isPublic: state.router.location.search.includes('public'),
+  token: state.discussions.socket.token,
+  destinationRoute: state.app.auth.destinationRoute,
+  invitationToken: parse(state.router.location.search).invitationToken,
+  invitationEmail: parse(state.router.location.search).email || '',
+});
 
-const Authenticated = props => {
-  const { children, authenticated, attempting, isPublic, push, token } = props;
+const mapDispatchToProps = {
+  push,
+  setToken: socketActions.setToken,
+  setDestinationRoute: authActions.setDestinationRoute,
+};
+
+const AuthenticatedComponent = props => {
+  const {
+    children,
+    authenticated,
+    isPublic,
+    push,
+    token,
+    invitationToken,
+  } = props;
 
   // First we need to check to see if this is a redirect with an OAuth token.
   // If it is we need to process the token and save it in Redux. Since this
@@ -187,95 +178,81 @@ const Authenticated = props => {
 
   return authenticated && token && !isPublic ? (
     children
-  ) : attempting ? null : (
-    <div>
-      {props.display === 'none' ? (
-        <Switch>
-          <Route
-            path="/login"
-            exact
-            render={route => (
-              <LoginScreen>
-                <LoginForm {...props} {...route} routed />
-              </LoginScreen>
+  ) : (
+    <Switch>
+      <Route
+        path="/login"
+        exact
+        render={() => (
+          <LoginScreen {...props}>
+            <LoginForm {...props} />
+          </LoginScreen>
+        )}
+      />
+      <Route
+        path="/reset-password"
+        exact
+        render={() => (
+          <LoginScreen>
+            <ResetPasswordForm {...props} />{' '}
+          </LoginScreen>
+        )}
+      />
+      <Route
+        path="/reset-password/:token"
+        exact
+        render={() => (
+          <LoginScreen>
+            <ResetTokenForm {...props} />
+          </LoginScreen>
+        )}
+      />
+      <Route
+        path="/create-account"
+        exact
+        render={() => (
+          <LoginScreen>
+            {invitationToken ? (
+              <CreateAccountForm {...props} />
+            ) : (
+              <RequestAccountForm {...props} />
             )}
-          />
-          <Route
-            path="/reset-password"
-            exact
-            render={route => (
-              <LoginScreen>
-                <ResetPasswordForm {...props} {...route} routed />{' '}
-              </LoginScreen>
-            )}
-          />
-          <Route
-            path="/reset-password/:token"
-            exact
-            render={route => (
-              <LoginScreen>
-                <ResetTokenForm {...props} {...route} routed />
-              </LoginScreen>
-            )}
-          />
-          <Route
-            path="/create-account"
-            exact
-            render={route => (
-              <LoginScreen>
-                <RequestAccountForm {...props} {...route} routed />
-              </LoginScreen>
-            )}
-          />
-          <Route
-            path="/kapps/:kappSlug/forms/:formSlug"
-            exact
-            render={route => (
-              <UnauthenticatedForm {...props} {...route} routed />
-            )}
-          />
-          <Route
-            path="/kapps/:kappSlug/submissions/:id"
-            exact
-            render={route => (
-              <UnauthenticatedForm {...props} {...route} routed />
-            )}
-          />
-          <Route
-            path="/kapps/:kappSlug/forms/:formSlug/submissions/:id"
-            exact
-            render={route => (
-              <UnauthenticatedForm {...props} {...route} routed />
-            )}
-          />
-          <CatchAllRoute {...props} />
-        </Switch>
-      ) : (
-        <CatchAllRoute {...props} />
-      )}
-    </div>
+          </LoginScreen>
+        )}
+      />
+      <Route
+        path="/kapps/:kappSlug/forms/:formSlug"
+        exact
+        render={() => <UnauthenticatedForm {...props} />}
+      />
+      <Route
+        path="/kapps/:kappSlug/submissions/:id"
+        exact
+        render={() => <UnauthenticatedForm {...props} />}
+      />
+      <Route
+        path="/kapps/:kappSlug/forms/:formSlug/submissions/:id"
+        exact
+        render={() => <UnauthenticatedForm {...props} />}
+      />
+      <Redirect to={defaultRedirect(props)} />
+    </Switch>
   );
 };
-
-const mapStateToProps = state => ({
-  location: state.router.location,
-  pathname: state.router.location.pathname,
-  isPublic: state.router.location.search.includes('public'),
-  token: state.discussions.socket.token,
-  invitationToken: parse(state.router.location.search).invitationToken,
-  invitationEmail: parse(state.router.location.search).email,
-});
-
-const mapDispatchToProps = {
-  push,
-  setToken: socketActions.setToken,
-};
+const defaultRedirect = props =>
+  props.invitationToken ? `/create-account${props.location.search}` : '/login';
+const shouldRenderApp = props =>
+  props.authenticated && props.token !== null && !props.isPublic;
+const INVALID_PUSH_ROUTES = ['/login', '/reset-password', '/create-account'];
+const shouldOverridePath = pathname =>
+  INVALID_PUSH_ROUTES.find(p => pathname.startsWith(p));
 
 export const AuthenticatedContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withRouter,
   withState('display', 'setDisplay', 'none'),
   withState('error', 'setError', ''),
   withState('email', 'setEmail', props => props.invitationEmail),
@@ -285,9 +262,6 @@ export const AuthenticatedContainer = compose(
   withState('popupBlocked', 'setPopupBlocked', false),
   withHandlers({ handleAuthenticated }),
   withHandlers({
-    toResetPassword,
-    toSignIn,
-    toCreateAccount,
     handleEmail,
     handlePassword,
     handleLogin,
@@ -314,6 +288,25 @@ export const AuthenticatedContainer = compose(
       }
 
       this.props.setAttempting(false);
+
+      // console.log(this.props.location);
+      // Preserve the original route.
+      this.props.setDestinationRoute(
+        this.props.pathname + this.props.location.search,
+      );
+    },
+
+    componentWillReceiveProps(nextProps) {
+      const current = shouldRenderApp(this.props);
+      const next = shouldRenderApp(nextProps);
+
+      if (next && !current) {
+        const destination = shouldOverridePath(this.props.destinationRoute)
+          ? '/'
+          : this.props.destinationRoute;
+
+        this.props.push(destination);
+      }
     },
   }),
-)(Authenticated);
+)(AuthenticatedComponent);

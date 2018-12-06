@@ -1,5 +1,6 @@
 import React from 'react';
 import { compose, withState, withHandlers } from 'recompose';
+import { Link } from 'react-router-dom';
 import { CoreAPI } from 'react-kinetic-core';
 
 const ResetPassword = ({
@@ -8,8 +9,8 @@ const ResetPassword = ({
   handleEmail,
   showConfirmation,
   error,
-  toSignIn,
-  routed,
+  invitationToken,
+  location,
 }) =>
   showConfirmation ? (
     <div className="login-form-container">
@@ -49,13 +50,12 @@ const ResetPassword = ({
           Reset
         </button>
         <hr />
-        <button
-          type="button"
+        <Link
           className="btn btn-link"
-          onClick={toSignIn(routed)}
+          to={`/login${invitationToken ? location.search : ''}`}
         >
           &larr; Back to Sign In
-        </button>
+        </Link>
       </div>
     </form>
   );

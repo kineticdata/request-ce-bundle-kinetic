@@ -1,17 +1,16 @@
 import React, { Fragment } from 'react';
 import { compose, withState } from 'recompose';
-import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 
 export const Login = ({
+  invitationToken,
+  location,
   handleLogin,
-  toResetPassword,
-  toCreateAccount,
   email,
   password,
   handleEmail,
   handlePassword,
   error,
-  routed,
   popupBlocked,
 }) => (
   <Fragment>
@@ -19,9 +18,9 @@ export const Login = ({
       <h3>
         Sign In
         <small>
-          <a role="button" tabIndex="0" onClick={toCreateAccount(routed)}>
+          <Link to={`/create-account${invitationToken ? location.search : ''}`}>
             Create Account
-          </a>
+          </Link>
         </small>
       </h3>
       {popupBlocked ? (
@@ -63,19 +62,17 @@ export const Login = ({
       <div className="button-group">
         <button className="btn btn-primary">Sign In</button>
         <hr />
-        <button
-          type="button"
+        <Link
           className="btn btn-link"
-          onClick={toResetPassword(routed)}
+          to={`/reset-password${invitationToken ? location.search : ''}`}
         >
           Reset Password
-        </button>
+        </Link>
       </div>
     </form>
   </Fragment>
 );
 
 export const LoginForm = compose(
-  withRouter,
   withState('windowHandle', 'setWindowHandle', null),
 )(Login);
