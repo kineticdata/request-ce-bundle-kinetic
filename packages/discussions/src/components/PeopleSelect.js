@@ -9,7 +9,6 @@ import {
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import isMatch from 'lodash.ismatch';
-import memoize from 'memoize-one';
 import { CoreAPI } from 'react-kinetic-core';
 import { Cache } from './Cache';
 
@@ -79,7 +78,7 @@ const EmailMenuItem = props => {
   );
 };
 
-const renderMenu = memoize(disabledFn => (results, props) => (
+const renderMenu = disabledFn => (results, props) => (
   <Menu {...props}>
     {results.map((option, i) => {
       const CurrentMenuItem = option.user
@@ -98,7 +97,7 @@ const renderMenu = memoize(disabledFn => (results, props) => (
       );
     })}
   </Menu>
-));
+);
 
 const renderToken = (option, props, index) => (
   <Token
@@ -127,21 +126,29 @@ const teamCache = new Cache(() =>
   ),
 );
 
+const justUsers = props => props.users && !props.teams && !props.emails;
+const justTeams = props => props.teams && !props.users && !props.emails;
 const anyMatch = (array, source) =>
   !!array.find(entry => isMatch(entry, source));
 
-const getSelected = (value, valueMapper, options) =>
+const getSelected = (value, optionMapper, options) =>
   options
-    .filter(option =>
-      anyMatch(value, valueMapper ? valueMapper(option) : option),
-    )
+    .filter(option => anyMatch(value, optionMapper(option)))
     .concat(value.filter(v => v.customOption));
 
 export class PeopleSelect extends React.Component {
-  state = { options: null };
-
-  static getDerivedStateFromProps(props) {
-    return { renderMenu: renderMenu(props.disabledFn) };
+  constructor(props) {
+    super(props);
+    this.state = { options: null };
+    this.renderMenu = renderMenu(props.disabledFn);
+    // If the menu is only showing one type of item (users or teams) then we
+    // do not nest the values in objects like { label: '...', user: { ... } }.
+    this.optionMapper = option =>
+      justUsers(props)
+        ? { username: option.user.username }
+        : justTeams(props)
+          ? { name: option.team.name }
+          : option;
   }
 
   componentDidMount() {
@@ -160,9 +167,7 @@ export class PeopleSelect extends React.Component {
     this.props.onChange({
       target: {
         id: this.props.id,
-        value: this.props.valueMapper
-          ? value.map(this.props.valueMapper)
-          : value,
+        value: value.map(this.optionMapper),
       },
     });
   };
@@ -174,11 +179,11 @@ export class PeopleSelect extends React.Component {
           multiple
           allowNew={this.props.emails}
           options={this.state.options}
-          renderMenu={this.state.renderMenu}
+          renderMenu={this.renderMenu}
           renderToken={renderToken}
           selected={getSelected(
             this.props.value,
-            this.props.valueMapper,
+            this.optionMapper,
             this.state.options,
           )}
           onChange={this.handleChange}

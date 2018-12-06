@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { DiscussionsList } from './DiscussionsList';
-import { DiscussionContainer } from '../DiscussionContainer';
+import { Discussion } from '../Discussion';
 import { actions as discussionsActions } from '../../redux/modules/discussions';
 
 export const getDisplayClasses = props =>
@@ -63,7 +63,6 @@ export class DiscussionsPanelComponent extends Component {
   };
 
   render() {
-    console.log(this.props);
     return this.state.currentDiscussion ? (
       <div className={getDisplayClasses(this.props)} style={{ flexGrow: '1' }}>
         <button
@@ -75,10 +74,7 @@ export class DiscussionsPanelComponent extends Component {
           </span>
           Back to Discussions
         </button>
-        <DiscussionContainer
-          discussionId={this.state.currentDiscussion.id}
-          renderClose={() => null}
-        />
+        <Discussion id={this.state.currentDiscussion.id} />
       </div>
     ) : (
       <div

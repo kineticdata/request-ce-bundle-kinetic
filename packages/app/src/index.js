@@ -18,12 +18,20 @@ import {
 } from './redux/modules/auth';
 import { AuthenticatedContainer } from './AuthenticatedContainer';
 import { App } from './App';
+import { configure } from 'discussions-lib/src/redux/store';
+import { Socket } from 'discussions/src/api/socket';
+import { selectToken } from 'discussions/src/redux/modules/socket';
 
 // Create the history instance that enables client-side application routing.
 const history = createHashHistory();
 
 // Create the redux store with the configureStore helper found in redux/store.js
 const store = configureStore(history);
+
+// Create the websocket connection
+export const socket = new Socket();
+
+configure(socket, () => selectToken(store.getState()));
 
 const authInterceptor = new AuthInterceptor(
   store,

@@ -6,7 +6,6 @@ import { push } from 'connected-react-router';
 import { parse } from 'query-string';
 import { PageTitle } from 'common';
 import { Discussion as KinopsDiscussion } from 'discussions';
-import { commonActions } from 'common';
 import { SOCKET_STAGE } from 'discussions/src/api/socket';
 
 const buildRelatedItemLink = (relatedItem, profile) => {
@@ -70,15 +69,9 @@ export const DiscussionComponent = ({
       socketStage === SOCKET_STAGE.IDENTIFIED ||
       socketStage === SOCKET_STAGE.RECONNECTING ? (
         <KinopsDiscussion
-          discussionId={discussionId}
+          id={discussionId}
           invitationToken={invitationToken}
-          leavable
           onLeave={handleLeave}
-          renderClose={() => (
-            <Link to={`/`} className="btn btn-link">
-              Close
-            </Link>
-          )}
         />
       ) : (
         <div className="empty-discussion">

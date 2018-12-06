@@ -9,6 +9,7 @@
   justify-content: center;
   padding: 0 !important;
   flex-grow: 1;
+  position: relative;
   .messages {
     background-color: #f7f7f7;
     flex: 1 0 auto;
@@ -220,6 +221,14 @@
 
     .view-all {
       margin-left: auto;
+      .btn {
+        font-size: 1rem;
+        padding-left: 0;
+        padding-right: 0;
+        + .btn {
+          margin-left: 0.5rem;
+        }
+      }
     }
   }
 

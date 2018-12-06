@@ -2,11 +2,10 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalFooter } from 'reactstrap';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
-import { DiscussionForm } from 'discussions/src/components/DiscussionForm';
-import { InvitationForm } from 'discussions/src/components/InvitationForm';
-import { createDiscussion, sendInvites } from 'discussions/src/discussionApi';
+import { DiscussionForm, InvitationForm, DiscussionAPI } from 'discussions-lib';
 import { toastActions } from 'common';
 import { actions } from '../../redux/modules/spaceApp';
+import { PeopleSelect } from 'discussions/src/components/PeopleSelect';
 
 const CreateDiscussionModalComponent = props => (
   <Modal size="lg" isOpen toggle={props.close}>
@@ -27,6 +26,8 @@ const CreateDiscussionModalComponent = props => (
         forms throughout */}
     <DiscussionForm
       onSubmit={props.next}
+      renderOwningUsersInput={props => <PeopleSelect {...props} users />}
+      renderOwningTeamsInput={props => <PeopleSelect {...props} teams />}
       render={({ formElement, buttonProps }) =>
         props.step === 'discussion' && (
           <Fragment>
@@ -48,6 +49,16 @@ const CreateDiscussionModalComponent = props => (
     />
     <InvitationForm
       onSubmit={props.submit}
+      profile={props.profile}
+      renderInviteesInput={props => (
+        <PeopleSelect
+          {...props}
+          users
+          teams
+          emails
+          placeholder="Search Users…"
+        />
+      )}
       render={({ formElement, buttonProps }) =>
         props.step === 'invitations' && (
           <Fragment>
@@ -71,7 +82,7 @@ const CreateDiscussionModalComponent = props => (
 );
 
 const mapStateToProps = state => ({
-  token: state.discussions.socket.token,
+  profile: state.app.profile,
 });
 
 export const mapDispatchToProps = {
@@ -88,12 +99,11 @@ const next = props => (values, completeSubmit) => {
   completeSubmit();
 };
 const submit = props => async (values, completeSubmit) => {
-  const { discussion, error } = await createDiscussion({
+  const { discussion, error } = await DiscussionAPI.createDiscussion({
     ...props.discussion,
-    token: props.token,
   });
   if (discussion) {
-    const responses = await sendInvites(props.token, discussion, values);
+    const responses = await DiscussionAPI.sendInvites(discussion, values);
     if (!responses.some(response => response.error)) {
       props.addSuccess('Successfully created discussion and sent invitations.');
     } else {

@@ -2,21 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { bundle } from 'react-kinetic-core';
-import { actions } from '../redux/modules/discussions';
 import { isPresent } from '../helpers';
 import { Avatar } from 'common';
-import { ParticipantCard } from './ParticipantCard';
+import { types as detailsTypes } from '../redux/modules/discussionsDetails';
 
 const participantComparator = (p1, p2) =>
   p1.user.username.localeCompare(p2.user.username);
 
 export const ParticipantsHeader = ({
   discussion,
-  openParticipantsModal,
-  openEditDiscussionModal,
+  openDetails,
   openInNewTab,
   isFullScreen,
-  canManage,
 }) =>
   !discussion.participants.isEmpty() && (
     <div className="participants-preview">
@@ -33,6 +30,13 @@ export const ParticipantsHeader = ({
           </div>
         ))}
       <div className="view-all">
+        <button
+          type="button"
+          className="btn btn-icon d-md-inline-flex"
+          onClick={openDetails}
+        >
+          <i className="fa fa-info-circle fa-fw" />
+        </button>
         {!isFullScreen && (
           <button
             type="button"
@@ -41,22 +45,6 @@ export const ParticipantsHeader = ({
             title="Expand Discussion"
           >
             <i className="fa fa-expand fa-fw" />
-          </button>
-        )}
-        <button
-          type="button"
-          className="btn btn-link"
-          onClick={openParticipantsModal}
-        >
-          View All
-        </button>
-        {canManage && (
-          <button
-            type="button"
-            className="btn btn-link"
-            onClick={openEditDiscussionModal}
-          >
-            Edit
           </button>
         )}
       </div>
@@ -69,24 +57,18 @@ const mapStateToProps = state => ({
     state.router.location.pathname.startsWith('/discussion'),
 });
 
-const mapDispatchToProps = {
-  openModal: actions.openModal,
-};
-
 export const ParticipantsHeaderContainer = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps),
   withHandlers({
-    openParticipantsModal: props => () =>
-      props.openModal(props.discussion.id, 'participants'),
-    openEditDiscussionModal: props => () =>
-      props.openModal(props.discussion.id, 'edit'),
     openInNewTab: props => () =>
       window.open(
         `${bundle.spaceLocation()}/#/discussions/${props.discussion.id}`,
         '_blank',
       ),
+    openDetails: props => () =>
+      props.dispatch({
+        type: detailsTypes.OPEN,
+        payload: { id: props.discussion.id },
+      }),
   }),
 )(ParticipantsHeader);

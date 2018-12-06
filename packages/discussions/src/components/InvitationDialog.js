@@ -1,63 +1,86 @@
 import React, { Fragment } from 'react';
-import { compose, withHandlers } from 'recompose';
 import { ModalBody, ModalFooter } from 'reactstrap';
-import { toastActions } from 'common';
 import { connect } from 'react-redux';
-import { actions } from '../redux/modules/discussions';
-import { sendInvites } from '../discussionApi';
-import { InvitationForm } from './InvitationForm';
+import { InvitationForm } from 'discussions-lib';
+import { PeopleSelect } from './PeopleSelect';
+import { types } from '../redux/modules/discussionsDetails';
 
 export const InvitationDialogComponent = props => (
   <InvitationForm
     discussion={props.discussion}
+    profile={props.profile}
     required
-    onSubmit={props.handleSubmit}
-    render={({ formElement, buttonProps }) => (
+    onSubmit={props.invite}
+    renderInviteesInput={props => (
+      <PeopleSelect {...props} users teams emails placeholder="Search Users…" />
+    )}
+    render={({ formElement, submit, invalid }) => (
       <Fragment>
         <ModalBody>
+          <button
+            type="button"
+            className="btn btn-link back"
+            onClick={props.goBack}
+          >
+            <i className="fa fa-fw fa-chevron-left" /> Back
+          </button>
           <div className="discussion-dialog modal-form invitation-dialog">
+            {props.error && (
+              <div className="text-danger">
+                <h6>Failed to invite the following</h6>
+                <ul>
+                  {props.error.map(e => (
+                    <li key={e}>{e}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {formElement}
           </div>
         </ModalBody>
         <ModalFooter>
-          <button type="button" className="btn btn-primary" {...buttonProps}>
-            Send Invite
-          </button>
+          {props.error ? (
+            <button type="button" className="btn btn-danger" disabled>
+              <i className="fa fa-fw fa-exclamation-circle" />
+              Error
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-primary"
+              disabled={props.sending || invalid}
+              onClick={submit}
+            >
+              Send
+              {props.sending && <i className="fa fa-fw fa-spin fa-spinner" />}
+            </button>
+          )}
         </ModalFooter>
       </Fragment>
     )}
   />
 );
 
-const mapStateToProps = state => ({
-  token: state.discussions.socket.token,
-});
-
-const mapDispatchToProps = {
-  closeModal: actions.closeModal,
-  addError: toastActions.addError,
-  addSuccess: toastActions.addSuccess,
+const mapStateToProps = (state, props) => {
+  const id = props.discussion.id;
+  return {
+    profile: state.app.profile,
+    sending: state.discussions.discussionsDetails.getIn([id, 'sending']),
+    error: state.discussions.discussionsDetails.getIn([id, 'errorMessage']),
+  };
 };
 
-export const InvitationDialog = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
-  withHandlers({
-    handleSubmit: props => async (values, completeSubmit) => {
-      const responses = await sendInvites(
-        props.token,
-        props.discussion,
-        values,
-      );
-      if (responses.filter(response => response.error).length > 0) {
-        props.addError('There was an error inviting users and/or teams');
-        completeSubmit();
-      } else {
-        props.addSuccess('Successfully sent invitations');
-        props.closeModal('invitation');
-      }
-    },
-  }),
+export const mapDispatchToProps = (dispatch, props) => {
+  const discussion = props.discussion;
+  const id = discussion.id;
+  return {
+    goBack: () => dispatch({ type: types.SHOW, payload: { id, view: 'root' } }),
+    invite: values =>
+      dispatch({ type: types.INVITE, payload: { id, discussion, values } }),
+  };
+};
+
+export const InvitationDialog = connect(
+  mapStateToProps,
+  mapDispatchToProps,
 )(InvitationDialogComponent);
