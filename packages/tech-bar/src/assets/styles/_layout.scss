@@ -131,6 +131,7 @@
     margin: 0;
     list-style: none;
     flex-direction: column;
+    display: flex;
     &--tech-bar,
     &--appt {
       flex-direction: row;

@@ -121,8 +121,9 @@
       font-size: 1rem;
       // @include ms-respond(font-size, 3);
       font-weight: 600;
-      line-height: 2rem;
+      line-height: 1rem;
       margin: 0;
+      padding-bottom: 0.5rem;
     }
     .card-subtitle,
     .card-text {
