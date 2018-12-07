@@ -105,7 +105,6 @@ const handleLogin = ({
 
 const handleAuthenticated = ({
   setError,
-  setDisplay,
   setEmail,
   setPassword,
   setAttempting,
@@ -113,7 +112,6 @@ const handleAuthenticated = ({
   setToken,
 }) => token => {
   setError('');
-  setDisplay('none');
   setEmail('');
   setPassword('');
   setAttempting(false);
@@ -122,10 +120,6 @@ const handleAuthenticated = ({
   if (token) {
     setToken(token);
   }
-};
-
-export const handleUnauthorized = props => () => {
-  props.setDisplay('login');
 };
 
 const processOAuthToken = (token, state, push, setToken) => {
@@ -193,7 +187,7 @@ const AuthenticatedComponent = props => {
         path="/reset-password"
         exact
         render={() => (
-          <LoginScreen>
+          <LoginScreen {...props}>
             <ResetPasswordForm {...props} />{' '}
           </LoginScreen>
         )}
@@ -202,7 +196,7 @@ const AuthenticatedComponent = props => {
         path="/reset-password/:token"
         exact
         render={() => (
-          <LoginScreen>
+          <LoginScreen {...props}>
             <ResetTokenForm {...props} />
           </LoginScreen>
         )}
@@ -211,7 +205,7 @@ const AuthenticatedComponent = props => {
         path="/create-account"
         exact
         render={() => (
-          <LoginScreen>
+          <LoginScreen {...props}>
             {invitationToken ? (
               <CreateAccountForm {...props} />
             ) : (
@@ -253,7 +247,6 @@ export const AuthenticatedContainer = compose(
     mapDispatchToProps,
   ),
   withRouter,
-  withState('display', 'setDisplay', 'none'),
   withState('error', 'setError', ''),
   withState('email', 'setEmail', props => props.invitationEmail),
   withState('password', 'setPassword', ''),
@@ -265,7 +258,6 @@ export const AuthenticatedContainer = compose(
     handleEmail,
     handlePassword,
     handleLogin,
-    handleUnauthorized,
   }),
   withHandlers(() => {
     let popupEl = null;
@@ -289,7 +281,6 @@ export const AuthenticatedContainer = compose(
 
       this.props.setAttempting(false);
 
-      // console.log(this.props.location);
       // Preserve the original route.
       this.props.setDestinationRoute(
         this.props.pathname + this.props.location.search,
