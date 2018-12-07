@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalFooter } from 'reactstrap';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
+import { push } from 'connected-react-router';
 import { DiscussionForm, InvitationForm, DiscussionAPI } from 'discussions-lib';
 import { toastActions } from 'common';
 import { actions } from '../../redux/modules/spaceApp';
@@ -89,6 +90,7 @@ export const mapDispatchToProps = {
   setModalOpen: actions.setCreateDiscussionModalOpen,
   addError: toastActions.addError,
   addSuccess: toastActions.addSuccess,
+  push,
 };
 
 const close = props => () => props.setModalOpen(false);
@@ -110,6 +112,7 @@ const submit = props => async (values, completeSubmit) => {
       props.addSuccess('Successfully created discussion.');
       props.addError('There was an error inviting users and/or teams.');
     }
+    props.push(`/discussions/${discussion.id}`);
     props.close();
   } else {
     props.addError(error.response.data.message);
