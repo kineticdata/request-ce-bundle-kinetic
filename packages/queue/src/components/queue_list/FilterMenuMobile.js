@@ -39,6 +39,18 @@ export const FilterMenuMobile = ({ filter, ...props }) => (
         <div className="buttons">
           <button
             type="button"
+            className="btn btn-link icon-wrapper"
+            onClick={props.refresh}
+          >
+            <span className="icon">
+              <span
+                className="fa fa-fw fa-refresh"
+                style={{ fontSize: '16px', color: '#7e8083' }}
+              />
+            </span>
+          </button>
+          <button
+            type="button"
             className="btn btn-link"
             onClick={props.openFilterMenu()}
           >

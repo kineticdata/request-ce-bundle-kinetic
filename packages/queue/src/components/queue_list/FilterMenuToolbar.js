@@ -103,7 +103,7 @@ const SortButton = props => {
     </button>
   );
 };
-export const FilterMenuToolbar = ({ filter }) => (
+export const FilterMenuToolbar = ({ filter, refresh }) => (
   <FilterMenuAbstract
     filter={filter}
     render={({
@@ -260,6 +260,18 @@ export const FilterMenuToolbar = ({ filter }) => (
                   )}
                 />
               )}
+              <button
+                type="button"
+                className="btn btn-link icon-wrapper"
+                onClick={refresh}
+              >
+                <span className="icon">
+                  <span
+                    className="fa fa-fw fa-refresh"
+                    style={{ fontSize: '16px', color: '#7e8083' }}
+                  />
+                </span>
+              </button>
             </div>
           </div>
           <div className="queue-controls__sorting">

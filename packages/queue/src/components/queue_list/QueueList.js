@@ -122,13 +122,14 @@ export const QueueList = ({
           <FilterMenuMobile
             filter={filter}
             openFilterMenu={openFilterMenu}
+            refresh={refresh}
             sortDirection={sortDirection}
             toggleSortDirection={toggleSortDirection}
             groupDirection={groupDirection}
             toggleGroupDirection={toggleGroupDirection}
           />
         ) : (
-          <FilterMenuToolbar filter={filter} />
+          <FilterMenuToolbar filter={filter} refresh={refresh} />
         )}
         <div className="queue-list-content submissions">
           {statusMessage ? (
