@@ -111,7 +111,14 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_ADHOC_FILTER:
       return state.set(
         'adhocFilter',
-        payload.set('name', '').set('type', 'adhoc'),
+        payload
+          .set(
+            'name',
+            payload.type === 'custom' || payload.type === 'adhoc'
+              ? payload.name
+              : '',
+          )
+          .set('type', 'adhoc'),
       );
     case types.SET_LIST_ITEMS:
       return state

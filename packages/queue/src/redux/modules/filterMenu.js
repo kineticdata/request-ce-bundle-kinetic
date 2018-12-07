@@ -62,7 +62,9 @@ export const reducer = (state = defaultState, { type, payload }) => {
     case types.RESET:
       return state.set('currentFilter', state.get('initialFilter'));
     case types.SET_FILTER_NAME:
-      return state.set('filterName', payload);
+      return state
+        .set('filterName', payload)
+        .setIn(['currentFilter', 'name'], payload);
     case types.SHOW_SECTION:
       return state.set('activeSection', payload);
     case types.TOGGLE_ASSIGNMENT:

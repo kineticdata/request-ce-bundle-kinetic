@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Popover, PopoverBody, UncontrolledTooltip } from 'reactstrap';
 import { FilterMenuAbstract } from '../filter_menu/FilterMenuAbstract';
+import isarray from 'isarray';
 
 export const Menu = props => {
   const toggle = props.toggleShowing(props.name);
@@ -15,24 +16,43 @@ export const Menu = props => {
         toggle={toggle}
       >
         <PopoverBody className="filter-menu-popover">
-          <div className="filter-menu-popover__content">
-            {props.renderContent()}
-            {props.validations.map((validation, i) => (
-              <p key={i} className="text-danger">
-                {validation}
-              </p>
-            ))}
-          </div>
+          {(isarray(props.renderContent)
+            ? props.renderContent
+            : [props.renderContent]
+          ).map((renderContentFn, index) => (
+            <div
+              className="filter-menu-popover__content"
+              key={`content-${index}`}
+            >
+              {renderContentFn()}
+            </div>
+          ))}
+          {(props.validations.length > 0 ||
+            (props.messages && props.messages.length > 0)) && (
+            <div className="filter-menu-popover__validations">
+              {props.validations.map((validation, i) => (
+                <p key={i} className="text-danger">
+                  <small>{validation}</small>
+                </p>
+              ))}
+              {props.messages &&
+                props.messages.map((message, i) => (
+                  <p key={i} className="text-info">
+                    <small>{message}</small>
+                  </p>
+                ))}
+            </div>
+          )}
           <div className="filter-menu-popover__footer">
             <button className="btn btn-link" onClick={props.reset}>
-              Reset
+              {props.resetLabel || 'Reset'}
             </button>
             <button
               className="btn btn-primary"
               onClick={props.apply}
               disabled={!props.dirty || props.validations.length > 0}
             >
-              Apply
+              {props.applyLabel || 'Apply'}
             </button>
           </div>
         </PopoverBody>
@@ -106,11 +126,10 @@ export const FilterMenuToolbar = ({ filter }) => (
       return (
         <div className="queue-controls">
           <div className="queue-controls__filter">
-            <h2>
+            <h2
+              className={filter.type === 'adhoc' && filter.name ? 'edited' : ''}
+            >
               {filter.name || 'Adhoc'}
-              <button id="filter-config-popover" className="btn btn-link">
-                <i className="fa fa-fw fa-cog" id="cog" />
-              </button>
             </h2>
             <div className="queue-filter-list">
               <Menu
@@ -140,18 +159,22 @@ export const FilterMenuToolbar = ({ filter }) => (
                   filter.assignments.toSeq().every(b => !b) ? (
                     <MenuButton {...btnProps}>
                       Any Assignment
+                      {filter.createdByMe && ' | Created By Me'}
                       <i className="fa fa-fw fa-caret-down" />
                     </MenuButton>
                   ) : (
                     <div className="btn-group">
                       <MenuButton {...btnProps}>
                         Assignment: {props.assignmentSummary}
+                        {filter.createdByMe && ' | Created By Me'}
                       </MenuButton>
-                      <ClearButton action={props.clearAssignments} />
                     </div>
                   )
                 }
-                renderContent={() => props.assignmentFilters}
+                renderContent={[
+                  () => props.assignmentFilters,
+                  () => props.createdByMeFilter,
+                ]}
               />
               <Menu
                 name="status"
@@ -196,15 +219,47 @@ export const FilterMenuToolbar = ({ filter }) => (
                 }
                 renderContent={() => props.dateRangeFilters}
               />
-              <label htmlFor="createdBy" className="btn btn-subtle">
-                Created By{' '}
-                <input
-                  type="checkbox"
-                  id="createdBy"
-                  checked={filter.createdByMe}
-                  onChange={props.toggleCreatedByMe}
+            </div>
+            <div className="queue-filter-save">
+              {filter.type === 'adhoc' && (
+                <Menu
+                  name="save-filter"
+                  {...popoverProps}
+                  dirty={true}
+                  apply={props.saveFilter}
+                  applyLabel="Save"
+                  reset={toggleShowing('save-filter')}
+                  resetLabel="Cancel"
+                  messages={props.saveMessages}
+                  renderButton={btnProps => (
+                    <MenuButton {...btnProps} className="btn btn-primary">
+                      Save Filter?
+                    </MenuButton>
+                  )}
+                  renderContent={() => props.saveFilterOptions}
                 />
-              </label>
+              )}
+              {filter.type === 'custom' && (
+                <Menu
+                  name="delete-filter"
+                  {...popoverProps}
+                  dirty={true}
+                  apply={props.removeFilter}
+                  applyLabel="Delete"
+                  reset={toggleShowing('delete-filter')}
+                  resetLabel="Cancel"
+                  renderButton={btnProps => (
+                    <MenuButton {...btnProps} className="btn btn-danger">
+                      Delete Filter
+                    </MenuButton>
+                  )}
+                  renderContent={() => (
+                    <div>
+                      <label>Are you sure?</label>
+                    </div>
+                  )}
+                />
+              )}
             </div>
           </div>
           <div className="queue-controls__sorting">
@@ -219,7 +274,7 @@ export const FilterMenuToolbar = ({ filter }) => (
                         <span
                           className="fa fa-fw fa-folder-open"
                           style={{ fontSize: '14px', color: '#1094C4' }}
-                        />
+                        />{' '}
                         Grouped by {filter.groupBy}
                       </MenuButton>
                       <ClearButton action={props.clearGroupedBy} />
@@ -230,7 +285,7 @@ export const FilterMenuToolbar = ({ filter }) => (
                         <span
                           className="fa fa-fw fa-folder-open"
                           style={{ fontSize: '14px', color: '#7e8083' }}
-                        />
+                        />{' '}
                         Ungrouped
                       </MenuButton>
                     </div>
@@ -243,44 +298,16 @@ export const FilterMenuToolbar = ({ filter }) => (
                 direction={props.groupDirection}
               />
             </div>
-            {props.count > 0 && !props.isGrouped ? (
-              <div className="nav-buttons">
-                <button
-                  type="button"
-                  className="btn btn-link icon-wrapper"
-                  disabled={!props.hasPrevPage}
-                  onClick={props.gotoPrevPage}
-                >
-                  <span className="icon">
-                    <span className="fa fa-fw fa-caret-left" />
-                  </span>
-                </button>
-                <strong>
-                  {/*{props.offset + 1}-{props.offset + props.queueItems.size}*/}
-                  0
-                </strong>
-                {' of '}
-                <strong>{props.count}</strong>
-                <button
-                  type="button"
-                  className="btn btn-link icon-wrapper"
-                  disabled={!props.hasNextPage}
-                  onClick={props.gotoNextPage}
-                >
-                  <span className="icon">
-                    <span className="fa fa-fw fa-caret-right" />
-                  </span>
-                </button>
-              </div>
-            ) : (
-              <span />
-            )}
             <div className="queue-controls__item--right">
               <Menu
                 name="sorted-by"
                 {...popoverProps}
                 renderButton={btnProps => (
                   <MenuButton {...btnProps}>
+                    <span
+                      className="fa fa-fw fa-sort"
+                      style={{ fontSize: '14px', color: '#1094C4' }}
+                    />{' '}
                     Sorted by {props.sortedBySummary}
                   </MenuButton>
                 )}

@@ -35,7 +35,8 @@ export const DateRangeCriteria = Record({
 export const Filter = Record({
   name: '',
   slug: '',
-  // Valid types are: default, custom, and adhoc.
+  icon: '',
+  // Valid types are: default, team, custom, and adhoc.
   type: 'default',
 
   // Filter sort order: createdAt, updatedAt, Due Date.

@@ -3,9 +3,11 @@ import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 import { QueueListItemSmall } from './QueueListItem';
 import { TOO_MANY_STATUS_STRING } from '../../redux/sagas/queue';
-import { PageTitle } from 'common';
+import { PageTitle, Moment, Constants } from 'common';
 import { FilterMenuToolbar } from './FilterMenuToolbar';
-import { FilterMenuContainer } from '../filter_menu/FilterMenuContainer';
+import { FilterMenuMobile } from './FilterMenuMobile';
+import { QueueListPagination } from './QueueListPagination';
+import moment from 'moment';
 
 const WallyEmptyMessage = ({ filter }) => {
   if (filter.type === 'adhoc') {
@@ -47,6 +49,35 @@ const WallyBadFilter = () => (
   </div>
 );
 
+const GroupByValue = ({ value }) => {
+  if (!value) {
+    return '';
+  } else if (value.match(Constants.DATE_TIME_REGEX)) {
+    return (
+      <Moment
+        timestamp={moment(value)}
+        format={Constants.MOMENT_FORMATS.dateTimeNumeric}
+      />
+    );
+  } else if (value.match(Constants.DATE_REGEX)) {
+    return (
+      <Moment
+        timestamp={moment(value, 'YYYY-MM-DD')}
+        format={Constants.MOMENT_FORMATS.dateNumeric}
+      />
+    );
+  } else if (value.match(Constants.TIME_REGEX)) {
+    return (
+      <Moment
+        timestamp={moment(value, 'HH:mm')}
+        format={Constants.MOMENT_FORMATS.time}
+      />
+    );
+  } else {
+    return value;
+  }
+};
+
 export const QueueList = ({
   filter,
   queueItems,
@@ -64,60 +95,90 @@ export const QueueList = ({
   gotoNextPage,
   isExact,
   count,
+  pageCount,
   limit,
   offset,
   isGrouped,
   isMobile,
-}) =>
-  isExact &&
-  (!filter ? (
-    <WallyBadFilter />
-  ) : (
-    <div className="queue-list-container">
-      <PageTitle parts={[filter.name || 'Adhoc']} />
-      {isMobile ? (
-        <FilterMenuContainer />
-      ) : (
-        <FilterMenuToolbar filter={filter} />
-      )}
-      <div className="queue-list-content submissions">
-        {statusMessage ? (
-          <WallyErrorMessage message={statusMessage} />
-        ) : queueItems && queueItems.size > 0 ? (
-          isGrouped ? (
-            queueItems
-              .map((items, groupValue) => (
-                <div className="items-grouping" key={groupValue}>
-                  <div className="items-grouping__banner">
-                    <span>{groupValue}</span>
-                  </div>
-                  <ul className="list-group">
-                    {items.map(item => (
-                      <QueueListItemSmall
-                        queueItem={item}
-                        key={item.id}
-                        filter={filter}
-                      />
-                    ))}
-                  </ul>
-                </div>
-              ))
-              .toList()
-          ) : (
-            <ul className="list-group">
-              {' '}
-              {queueItems.map(queueItem => (
-                <QueueListItemSmall
-                  queueItem={queueItem}
-                  key={queueItem.id}
-                  filter={filter}
-                />
-              ))}
-            </ul>
-          )
+}) => {
+  const paginationProps = {
+    hasPrevPage,
+    hasNextPage,
+    gotoPrevPage,
+    gotoNextPage,
+    count,
+    pageCount,
+    limit,
+    offset,
+  };
+  return (
+    isExact &&
+    (!filter ? (
+      <WallyBadFilter />
+    ) : (
+      <div className="queue-list-container">
+        <PageTitle parts={[filter.name || 'Adhoc']} />
+        {isMobile ? (
+          <FilterMenuMobile
+            filter={filter}
+            openFilterMenu={openFilterMenu}
+            sortDirection={sortDirection}
+            toggleSortDirection={toggleSortDirection}
+            groupDirection={groupDirection}
+            toggleGroupDirection={toggleGroupDirection}
+          />
         ) : (
-          <WallyEmptyMessage filter={filter} />
+          <FilterMenuToolbar filter={filter} />
         )}
+        <div className="queue-list-content submissions">
+          {statusMessage ? (
+            <WallyErrorMessage message={statusMessage} />
+          ) : queueItems && queueItems.size > 0 ? (
+            isGrouped ? (
+              queueItems
+                .map((items, groupValue) => (
+                  <div
+                    className="items-grouping"
+                    key={groupValue || 'no-group'}
+                  >
+                    <div className="items-grouping__banner">
+                      <span>
+                        <GroupByValue value={groupValue} />
+                      </span>
+                    </div>
+                    <ul className="list-group">
+                      {items.map(item => (
+                        <QueueListItemSmall
+                          queueItem={item}
+                          key={item.id}
+                          filter={filter}
+                        />
+                      ))}
+                    </ul>
+                  </div>
+                ))
+                .toList()
+            ) : (
+              <ul className="list-group">
+                {' '}
+                {queueItems.map(queueItem => (
+                  <QueueListItemSmall
+                    queueItem={queueItem}
+                    key={queueItem.id}
+                    filter={filter}
+                  />
+                ))}
+              </ul>
+            )
+          ) : (
+            <WallyEmptyMessage filter={filter} />
+          )}
+        </div>
+        <QueueListPagination
+          filter={filter}
+          paginationProps={paginationProps}
+        />
       </div>
-    </div>
-  ));
+    ))
+  );
+};
