@@ -13,7 +13,7 @@ import { types as detailsTypes } from '../redux/modules/discussionsDetails';
 export const DiscussionComponent = props => (
   <KineticDiscussion
     id={props.id}
-    invitationtoken={props.invitationToken}
+    invitationToken={props.invitationToken}
     profile={props.profile}
     toggleMessageHistory={props.openHistory}
     toggleInvitationForm={props.openInvitations}

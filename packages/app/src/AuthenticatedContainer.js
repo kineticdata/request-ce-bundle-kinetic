@@ -283,7 +283,7 @@ export const AuthenticatedContainer = compose(
 
       // Preserve the original route.
       this.props.setDestinationRoute(
-        this.props.pathname + this.props.location.search,
+        `${this.props.pathname}${this.props.location.search}`,
       );
     },
 
