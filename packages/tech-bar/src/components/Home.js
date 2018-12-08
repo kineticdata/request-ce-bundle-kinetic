@@ -182,21 +182,25 @@ export const HomeComponent = ({
         <h2 className="section__title">
           <I18n>Past Appointments</I18n>
         </h2>
-        <div className="cards__wrapper--tech-bar">
+        <div className="cards__wrapper cards__wrapper--appt">
           {pastAppointments.map(appt => {
             const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
             const start = moment.utc(appt.values['Event Time'], TIME_FORMAT);
             const end = start.clone().add(appt.values['Duration'], 'minute');
             return (
-              <div className="card card--tech-bar" key={appt.id}>
+              <div className="card card--appt" key={appt.id}>
+                <i
+                  className="fa fa-calendar fa-fw card-icon"
+                  style={{ background: 'rgb(255, 74, 94)' }}
+                />
                 <div className="card-body">
-                  <h5 className="card-title">
+                  <h1 className="card-title">
                     <Moment
                       timestamp={date}
                       format={Constants.MOMENT_FORMATS.dateWithDay}
                     />
-                  </h5>
-                  <div className="card-subtitle">
+                  </h1>
+                  <p className="card-subtitle">
                     <Moment
                       timestamp={start}
                       format={Constants.MOMENT_FORMATS.time}
@@ -206,13 +210,13 @@ export const HomeComponent = ({
                       timestamp={end}
                       format={Constants.MOMENT_FORMATS.time}
                     />
-                  </div>
+                  </p>
                   <p className="card-text">{appt.values['Summary']}</p>
                   <Link
                     to={`/forms/appointment/${appt.id}`}
-                    className="btn btn-subtle card-button"
+                    className="btn btn-link text-left pl-0"
                   >
-                    <I18n>View Details</I18n>
+                    <I18n>View Details →</I18n>
                   </Link>
                 </div>
               </div>
