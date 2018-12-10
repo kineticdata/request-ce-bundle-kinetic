@@ -112,6 +112,7 @@ const handleLeave = ({ push }) => () => {
 const mapStateToProps = (state, props) => ({
   socketStage: state.discussions.socket.status.stage,
   discussionId: props.match.params.id,
+  profile: state.app.profile,
   invitationToken: parse(props.location.search).invitationToken,
 });
 
