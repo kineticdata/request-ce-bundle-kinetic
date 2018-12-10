@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   compose,
   lifecycle,
@@ -93,25 +93,27 @@ const Timer = compose(
   ({ isScheduled, time, handleEventDelete }) =>
     !isScheduled ? (
       <div className={time === 0 ? 'text-danger' : ''}>
-        <span>
-          <I18n>You have</I18n>{' '}
-        </span>
-        <strong>
-          {Math.floor(time / 60)}:{time % 60 < 10 ? 0 : ''}
-          {time % 60}
-        </strong>
-        <span>
-          {' '}
-          <I18n>
-            remaining to complete your request to guarantee your time slot.
-          </I18n>{' '}
-        </span>
+        <div>
+          <span>
+            <I18n>You have</I18n>{' '}
+          </span>
+          <strong>
+            {Math.floor(time / 60)}:{time % 60 < 10 ? 0 : ''}
+            {time % 60}
+          </strong>
+          <span>
+            {' '}
+            <I18n>
+              remaining to complete your request to guarantee your time slot.
+            </I18n>{' '}
+          </span>
+        </div>
         {time > 0 && (
-          <em>
-            <button onClick={handleEventDelete} className="btn btn-text">
+          <div>
+            <button onClick={handleEventDelete} className="btn btn-link">
               <I18n>Cancel Reservation</I18n>
             </button>
-          </em>
+          </div>
         )}
       </div>
     ) : null,
@@ -335,76 +337,86 @@ const SchedulerWidgetComponent = ({
                 <label className="field-label">
                   <I18n>Date and Time</I18n>
                 </label>
-                <div className="input-group">
-                  <I18n
-                    render={translate => (
-                      <Moment
-                        render={format => {
-                          const dateTimeValue =
-                            rescheduleEvent || event
-                              ? `${format(
-                                  moment.tz(
-                                    (rescheduleEvent || event).values['Date'],
-                                    DATE_FORMAT,
-                                    timezone,
-                                  ),
-                                  Constants.MOMENT_FORMATS.date,
-                                )} ${translate('at')} ${format(
-                                  moment.tz(
-                                    (rescheduleEvent || event).values['Time'],
-                                    TIME_FORMAT,
-                                    timezone,
-                                  ),
-                                  Constants.MOMENT_FORMATS.time,
-                                )} ${translate('for')} ${
-                                  (rescheduleEvent || event).values['Duration']
-                                } ${translate('minutes')}`
-                              : '';
-                          return (
-                            <input
-                              type="text"
-                              className="form-control"
-                              readOnly
-                              placeholder={translate(
-                                'You have not selected a date and time yet',
+                <div className="cards__wrapper cards__wrapper--appt pb-0">
+                  <div className="card card--appt">
+                    <i
+                      className="fa fa-calendar fa-fw card-icon"
+                      style={{ background: 'rgb(255, 74, 94)' }}
+                    />
+                    <div className="card-body">
+                      {rescheduleEvent || event ? (
+                        <Fragment>
+                          <h1 className="card-title">
+                            <Moment
+                              timestamp={moment.tz(
+                                (rescheduleEvent || event).values['Date'],
+                                DATE_FORMAT,
+                                timezone,
                               )}
-                              value={dateTimeValue}
+                              format={Constants.MOMENT_FORMATS.dateWithDay}
                             />
-                          );
-                        }}
-                      />
-                    )}
-                  />
-                  {!isScheduled && (
-                    <div className="input-group-append">
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={() => {
-                          toggleModal(true);
-                          setExpired(false);
-                        }}
-                      >
-                        <I18n>
-                          {isReserved ? 'Change' : 'Select'} Date and Time
-                        </I18n>
-                      </button>
+                          </h1>
+                          <p className="card-subtitle">
+                            <Moment
+                              timestamp={moment.tz(
+                                (rescheduleEvent || event).values['Time'],
+                                TIME_FORMAT,
+                                timezone,
+                              )}
+                              format={Constants.MOMENT_FORMATS.time}
+                            />
+                            {` - `}
+                            <Moment
+                              timestamp={moment
+                                .tz(
+                                  (rescheduleEvent || event).values['Time'],
+                                  TIME_FORMAT,
+                                  timezone,
+                                )
+                                .add(
+                                  (rescheduleEvent || event).values['Duration'],
+                                )}
+                              format={Constants.MOMENT_FORMATS.time}
+                            />
+                          </p>
+                        </Fragment>
+                      ) : (
+                        <h1 className="card-title">
+                          <I18n>Date and time not selected</I18n>
+                        </h1>
+                      )}
+                      {!isScheduled && (
+                        <div className="input-group-append">
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={() => {
+                              toggleModal(true);
+                              setExpired(false);
+                            }}
+                          >
+                            <I18n>
+                              {isReserved ? 'Change' : 'Select'} Date and Time
+                            </I18n>
+                          </button>
+                        </div>
+                      )}
+                      {canReschedule &&
+                        isScheduled && (
+                          <div className="input-group-append">
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={() => {
+                                toggleModal(true);
+                              }}
+                            >
+                              <I18n>Reschedule</I18n>
+                            </button>
+                          </div>
+                        )}
                     </div>
-                  )}
-                  {canReschedule &&
-                    isScheduled && (
-                      <div className="input-group-append">
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          onClick={() => {
-                            toggleModal(true);
-                          }}
-                        >
-                          <I18n>Reschedule</I18n>
-                        </button>
-                      </div>
-                    )}
+                  </div>
                 </div>
                 {!scheduling &&
                   isReserved && (
