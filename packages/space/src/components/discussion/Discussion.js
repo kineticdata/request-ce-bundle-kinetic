@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
@@ -47,24 +47,32 @@ const buildRelatedItemLink = (relatedItem, profile) => {
   );
 };
 
+const DiscussionHeader = props => {
+  const discussion = props.discussion;
+  const discussionName =
+    discussion && discussion.title ? discussion.title : 'Loading...';
+  const relatedItems = discussion ? discussion.relatedItems : [];
+
+  return (
+    <Fragment>
+      <PageTitle parts={[discussionName, 'Discussions']} />
+      <div className="subheader">
+        <Link to={'/'}>home</Link> / {discussionName}
+        {relatedItems &&
+          relatedItems.map(relatedItem =>
+            buildRelatedItemLink(relatedItem, profile),
+          )}
+      </div>
+    </Fragment>
+  );
+};
 export const DiscussionComponent = ({
   discussionId,
-  discussionName,
-  relatedItems,
-  profile,
   socketStage,
   handleLeave,
   invitationToken,
 }) => (
   <div className="discussion-wrapper">
-    <PageTitle parts={[discussionName, 'Discussions']} />
-    <div className="subheader">
-      <Link to={'/'}>home</Link> / {discussionName}
-      {relatedItems &&
-        relatedItems.map(relatedItem =>
-          buildRelatedItemLink(relatedItem, profile),
-        )}
-    </div>
     {discussionId ? (
       socketStage === SOCKET_STAGE.IDENTIFIED ||
       socketStage === SOCKET_STAGE.RECONNECTING ? (
@@ -72,19 +80,27 @@ export const DiscussionComponent = ({
           id={discussionId}
           invitationToken={invitationToken}
           onLeave={handleLeave}
+          renderHeader={DiscussionHeader}
         />
       ) : (
-        <div className="empty-discussion">
-          <h6>
-            Real-time connection to server has been interrupted. Please refresh
-            and try again.
-          </h6>
-        </div>
+        <Fragment>
+          <DiscussionHeader />
+
+          <div className="empty-discussion">
+            <h6>
+              Real-time connection to server has been interrupted. Please
+              refresh and try again.
+            </h6>
+          </div>
+        </Fragment>
       )
     ) : (
-      <div className="empty-discussion">
-        <h6>No discussion to display</h6>
-      </div>
+      <Fragment>
+        <DiscussionHeader />
+        <div className="empty-discussion">
+          <h6>No discussion to display</h6>
+        </div>
+      </Fragment>
     )}
   </div>
 );
@@ -93,22 +109,11 @@ const handleLeave = ({ push }) => () => {
   push('/');
 };
 
-const mapStateToProps = (state, props) => {
-  const discussionId = props.match.params.id;
-  const discussion = state.discussions.discussions.discussions.get(
-    discussionId,
-  );
-
-  return {
-    socketStage: state.discussions.socket.status.stage,
-    profile: state.app.profile,
-    discussionId: props.match.params.id,
-    discussionName:
-      discussion && discussion.title ? discussion.title : 'Loading...',
-    relatedItems: discussion ? discussion.relatedItems : [],
-    invitationToken: parse(props.location.search).invitationToken,
-  };
-};
+const mapStateToProps = (state, props) => ({
+  socketStage: state.discussions.socket.status.stage,
+  discussionId: props.match.params.id,
+  invitationToken: parse(props.location.search).invitationToken,
+});
 
 const mapDispatchToProps = {
   push,

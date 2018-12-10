@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import {
   Discussion as KineticDiscussion,
@@ -18,38 +18,41 @@ export const DiscussionComponent = props => (
     toggleMessageHistory={props.openHistory}
     toggleInvitationForm={props.openInvitations}
     render={({ elements, discussion, canManage }) => (
-      <div className="kinops-discussions">
-        <div className="messages">{elements.messages}</div>
-        <ParticipantsHeaderContainer discussion={discussion} />
-        {discussion.isArchived && (
-          <ArchivedBanner canManage={canManage} open={props.openEdit} />
-        )}
-        {elements.viewUnreadButton}
-        {elements.chatInput}
-        <DiscussionDetails
-          discussion={discussion}
-          profile={props.profile}
-          onLeave={props.onLeave}
-        />
-        <Modal isOpen={props.messageHistory} toggle={props.close}>
-          <ModalHeader>
-            <button
-              type="button"
-              className="btn btn-link"
-              onClick={props.close}
-            >
-              Close
-            </button>
-            <span>Message History</span>
-          </ModalHeader>
-          <ModalBody>
-            <MessageHistory
-              discussion={discussion}
-              message={props.messageHistory}
-            />
-          </ModalBody>
-        </Modal>
-      </div>
+      <Fragment>
+        {props.renderHeader && props.renderHeader({ discussion })}
+        <div className="kinops-discussions">
+          <div className="messages">{elements.messages}</div>
+          <ParticipantsHeaderContainer discussion={discussion} />
+          {discussion.isArchived && (
+            <ArchivedBanner canManage={canManage} open={props.openEdit} />
+          )}
+          {elements.viewUnreadButton}
+          {elements.chatInput}
+          <DiscussionDetails
+            discussion={discussion}
+            profile={props.profile}
+            onLeave={props.onLeave}
+          />
+          <Modal isOpen={props.messageHistory} toggle={props.close}>
+            <ModalHeader>
+              <button
+                type="button"
+                className="btn btn-link"
+                onClick={props.close}
+              >
+                Close
+              </button>
+              <span>Message History</span>
+            </ModalHeader>
+            <ModalBody>
+              <MessageHistory
+                discussion={discussion}
+                message={props.messageHistory}
+              />
+            </ModalBody>
+          </Modal>
+        </div>
+      </Fragment>
     )}
   />
 );
