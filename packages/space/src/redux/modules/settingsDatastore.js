@@ -115,6 +115,7 @@ export const types = {
   ),
   SET_IMPORT_FAILED_CALL: namespace('datastore', 'SET_IMPORT_FAILED_CALL'),
   SET_IMPORT_COMPLETE: namespace('datastore', 'SET_IMPORT_COMPLETE'),
+  RESET_IMPORT_FAILED_CALL: namespace('datastore', 'RESET_IMPORT_FAILED_CALL'),
 };
 
 export const actions = {
@@ -181,6 +182,7 @@ export const actions = {
   debouncePercentComplete: withPayload(types.DEBOUNCE_PERCENT_COMPLETE),
   setImportFailedCall: withPayload(types.SET_IMPORT_FAILED_CALL),
   setImportComplete: noPayload(types.SET_IMPORT_COMPLETE),
+  resetImportFailedCall: noPayload(types.RESET_IMPORT_FAILED_CALL),
 };
 
 const parseConfigJson = json => {
@@ -444,13 +446,12 @@ export const reducer = (state = State(), { type, payload }) => {
               }),
             ),
           )
-          .map(
-            (part, index) =>
-              index > partIndex && operation !== 'Is Equal To'
-                ? part
-                    .set('operation', 'All')
-                    .set('value', IndexValues({ values: List() }))
-                : part,
+          .map((part, index) =>
+            index > partIndex && operation !== 'Is Equal To'
+              ? part
+                  .set('operation', 'All')
+                  .set('value', IndexValues({ values: List() }))
+              : part,
           ),
       );
     }
@@ -584,6 +585,8 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('importProcessing', false)
         .set('importPercentComplete', 0)
         .set('importComplete', true);
+    case types.RESET_IMPORT_FAILED_CALL:
+      return state.set('importFailedCalls', List());
     default:
       return state;
   }

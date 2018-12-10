@@ -12,8 +12,8 @@ const getStatusColor = status =>
   status === 'Inactive'
     ? 'status--red'
     : status === 'Expired'
-      ? 'status--yellow'
-      : 'status--green';
+    ? 'status--yellow'
+    : 'status--green';
 
 const getNextExecution = (nextExecutions, robotId) => {
   let nextExecution;
@@ -67,16 +67,15 @@ const RobotsListComponent = ({
             Create Robot
           </Link>
         </div>
-        {robots.size <= 0 &&
-          robotsErrors.length > 0 && (
-            <div className="text-center text-danger">
-              <h1>Oops!</h1>
-              <h2>Robots Not Found</h2>
-              {robotsErrors.map(error => (
-                <p className="error-details">{error}</p>
-              ))}
-            </div>
-          )}
+        {robots.size <= 0 && robotsErrors.length > 0 && (
+          <div className="text-center text-danger">
+            <h1>Oops!</h1>
+            <h2>Robots Not Found</h2>
+            {robotsErrors.map(error => (
+              <p className="error-details">{error}</p>
+            ))}
+          </div>
+        )}
         {robots.size > 0 && (
           <table className="table table-sm table-striped table-robots">
             <thead className="header">
@@ -151,7 +150,7 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = {
   push,
-  fetchRobots: actions.fetchRobotSchedules,
+  fetchRobots: actions.fetchRobots,
   fetchNextExecutions: actions.fetchNextExecutions,
 };
 

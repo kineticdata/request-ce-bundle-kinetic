@@ -61,16 +61,15 @@ const RobotComponent = ({
           <Loading />
         ) : (
           <Fragment>
-            {robot === null &&
-              robotErrors.length > 0 && (
-                <div className="text-center text-danger">
-                  <h1>Oops!</h1>
-                  <h2>Robot Not Found</h2>
-                  {robotErrors.map(error => (
-                    <p className="error-details">{error}</p>
-                  ))}
-                </div>
-              )}
+            {robot === null && robotErrors.length > 0 && (
+              <div className="text-center text-danger">
+                <h1>Oops!</h1>
+                <h2>Robot Not Found</h2>
+                {robotErrors.map(error => (
+                  <p className="error-details">{error}</p>
+                ))}
+              </div>
+            )}
             {robot !== null && (
               <Fragment>
                 <div className="tab-navigation tab-navigation--robots">
@@ -192,15 +191,15 @@ export const processDelete = props => () => {
 };
 
 export const mapStateToProps = state => ({
-  robot: state.space.settingsRobots.robotSchedule,
-  robotLoading: state.space.settingsRobots.robotScheduleLoading,
-  robotErrors: state.space.settingsRobots.robotScheduleErrors,
+  robot: state.space.settingsRobots.robot,
+  robotLoading: state.space.settingsRobots.robotLoading,
+  robotErrors: state.space.settingsRobots.robotErrors,
 });
 
 export const mapDispatchToProps = {
   push,
-  fetchRobot: actions.fetchRobotSchedule,
-  deleteRobot: actions.deleteRobotSchedule,
+  fetchRobot: actions.fetchRobot,
+  deleteRobot: actions.deleteRobot,
   addSuccess: toastActions.addSuccess,
   addError: toastActions.addError,
 };

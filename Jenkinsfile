@@ -31,23 +31,10 @@ pipeline {
       }
     }
     stage('Upload to S3') {
-      when {
-        anyOf {branch 'master'; branch 'develop'; branch 'feature/kinetic-discussions'}
-      }
       steps {
         script {
           BUNDLE = sh(returnStdout: true, script: 'echo `expr "$GIT_URL" : \'^.*/request-ce-bundle-\\(.*\\)\\.git$\'`').trim()
-          switch(env.BRANCH_NAME) {
-            case "master":
-              VERSION = "v1"
-              break
-            case "feature/kinetic-discussions":
-              VERSION = "discussions"
-              break
-            default:
-              VERSION = "develop"
-              break
-          }
+          VERSION = env.BRANCH_NAME == "master" ? "v1" : env.BRANCH_NAME
           OPTIONS = '--acl public-read --cache-control="must-revalidate, max-age: 0" --delete'
           sh "aws s3 sync packages/app/build s3://kinops.io/bundles/hydrogen/${BUNDLE}/${VERSION} ${OPTIONS}"
         }
