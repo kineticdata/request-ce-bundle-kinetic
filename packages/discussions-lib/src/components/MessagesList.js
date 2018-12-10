@@ -12,6 +12,7 @@ export const MessagesList = props => (
     {partitionListBy(differentDate, props.messages).map((messages, i) => (
       <MessagesByDate
         key={i}
+        discussion={props.discussion}
         profile={props.profile}
         messages={messages}
         actions={props.actions}
