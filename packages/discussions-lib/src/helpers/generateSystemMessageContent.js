@@ -1,3 +1,17 @@
+import isarray from 'isarray';
+
+const formatLabel = label =>
+  label === 'owningUsers'
+    ? 'owning users'
+    : label === 'owningTeams'
+      ? 'owning teams'
+      : label;
+
+const formatValue = value =>
+  isarray(value)
+    ? value.map(formatValue).join(', ')
+    : value.username || value.name || value;
+
 const getToken = (tokens, name, required = true) => {
   const result = tokens
     // find the token by the name
@@ -109,10 +123,13 @@ export default (action, content) => {
         return [
           getToken(content, 'updatedBy'),
           textToken('updated the discussion'),
-          ...Object.entries(previous).map(([name], i) =>
-            // prettier-ignore
-            textToken(`${i > 0 ? ', and ' : ''}${name} from [${previous[name]}] to [${current[name]}]`,),
-          ),
+          ...Object.entries(previous).map(([name], i) => {
+            const prefix = i > 0 ? ', and ' : '';
+            const l = formatLabel(name);
+            const p = formatValue(previous[name]);
+            const c = formatValue(current[name]);
+            return textToken(`${prefix}${l} from [${p}] to [${c}]`);
+          }),
         ];
     }
   } catch (e) {
