@@ -389,7 +389,9 @@ const SchedulerWidgetComponent = ({
                         <div className="input-group-append">
                           <button
                             type="button"
-                            className="btn btn-primary"
+                            className={`btn ${
+                              isReserved ? 'btn-primary' : 'btn-inverse'
+                            }`}
                             onClick={() => {
                               toggleModal(true);
                               setExpired(false);
