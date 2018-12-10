@@ -19,7 +19,7 @@ export const actions = {
 };
 
 export const State = Record({
-  size: 'small',
+  size: 'large',
   sidebarOpen: true,
   // There are some pages where we want the sidebar to be less of a focus in the
   // user interface (the home page of the services kapp is one example). The
