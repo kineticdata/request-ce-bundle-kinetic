@@ -8,7 +8,7 @@ import { PageTitle } from 'common';
 import { Discussion as KinopsDiscussion } from 'discussions';
 import { SOCKET_STAGE } from 'discussions/src/api/socket';
 
-const buildRelatedItemLink = (relatedItem, profile) => {
+const buildRelatedItemLink = relatedItem => {
   let label = relatedItem.type;
   let link;
 
@@ -59,9 +59,7 @@ const DiscussionHeader = props => {
       <div className="subheader">
         <Link to={'/'}>home</Link> / {discussionName}
         {relatedItems &&
-          relatedItems.map(relatedItem =>
-            buildRelatedItemLink(relatedItem, profile),
-          )}
+          relatedItems.map(relatedItem => buildRelatedItemLink(relatedItem))}
       </div>
     </Fragment>
   );
@@ -112,7 +110,6 @@ const handleLeave = ({ push }) => () => {
 const mapStateToProps = (state, props) => ({
   socketStage: state.discussions.socket.status.stage,
   discussionId: props.match.params.id,
-  profile: state.app.profile,
   invitationToken: parse(props.location.search).invitationToken,
 });
 
