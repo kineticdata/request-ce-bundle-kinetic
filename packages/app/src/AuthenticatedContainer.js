@@ -195,9 +195,9 @@ const AuthenticatedComponent = props => {
       <Route
         path="/reset-password/:token"
         exact
-        render={() => (
+        render={routeProps => (
           <LoginScreen {...props}>
-            <ResetTokenForm {...props} />
+            <ResetTokenForm {...props} {...routeProps} />
           </LoginScreen>
         )}
       />
