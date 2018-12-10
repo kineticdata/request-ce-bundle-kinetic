@@ -5,8 +5,11 @@ import { push } from 'connected-react-router';
 import { isImmutable, List, Map, OrderedMap } from 'immutable';
 import { actions as queueActions } from '../../redux/modules/queue';
 import { actions } from '../../redux/modules/filterMenu';
+import { actions as appActions } from '../../redux/modules/queueApp';
 import { DateRangeSelector } from 'common/src/components/DateRangeSelector';
-import { validateDateRange } from './FilterMenuContainer';
+import { validateAssignments, validateDateRange } from './FilterMenuContainer';
+import moment from 'moment';
+import { AttributeSelectors } from 'common';
 
 const VALID_STATUSES = List(['Open', 'Pending', 'Cancelled', 'Complete']);
 
@@ -52,6 +55,12 @@ const restrictDateRange = filter =>
     ? 'A date range is required if status includes Complete or Cancelled'
     : null;
 
+const validateFilterName = filter => {
+  if (filter.name && filter.name.indexOf('%') >= 0) {
+    return 'Percentage signs are not allowed in filter names.';
+  }
+};
+
 const FilterCheckbox = props => (
   <label htmlFor={props.id}>
     <input type="checkbox" {...props} />
@@ -82,6 +91,15 @@ const FilterMenuAbstractComponent = props =>
       }))
       .valueSeq()
       .map(props => <FilterCheckbox key={props.name} {...props} />),
+    createdByMeFilter: (
+      <FilterCheckbox
+        id="createdByMe"
+        name="createdByMe"
+        label="Created By Me"
+        checked={props.currentFilter.createdByMe}
+        onChange={props.toggleCreatedByMe}
+      />
+    ),
     statusFilters: VALID_STATUSES.map(status => ({
       id: `filter-menu-status-checkbox-${status}`,
       name: status,
@@ -120,11 +138,22 @@ const FilterMenuAbstractComponent = props =>
       </label>
     )).toList(),
     groupedByOptions: (
-      <input
-        type="text"
+      <AttributeSelectors.FieldSelect
+        forms={props.forms}
         value={props.currentFilter.groupBy}
         onChange={props.changeGroupedBy}
       />
+    ),
+    saveFilterOptions: (
+      <div>
+        <label htmlFor="save-filter-name">Filter Name</label>
+        <input
+          type="text"
+          id="save-filter-name"
+          value={props.currentFilter.name}
+          onChange={props.changeFilterName}
+        />
+      </div>
     ),
     teamSummary: props.filter.teams.join(', '),
     assignmentSummary: props.filter.assignments
@@ -144,7 +173,7 @@ const FilterMenuAbstractComponent = props =>
     dirty: !props.currentFilter.equals(props.filter),
     apply: props.applyFilter,
     reset: props.resetFilter,
-    validations: [validateDateRange]
+    validations: [validateAssignments, validateDateRange, validateFilterName]
       .map(fn => fn(props.currentFilter))
       .filter(v => v),
     clearTeams: props.clearTeams,
@@ -155,15 +184,22 @@ const FilterMenuAbstractComponent = props =>
     toggleCreatedByMe: props.toggleCreatedByMe,
     toggleSortDirection: props.toggleSortDirection,
     toggleGroupDirection: props.toggleGroupDirection,
+    saveMessages: [props.checkFilterName]
+      .map(fn => fn(props.currentFilter))
+      .filter(v => v),
+    saveFilter: props.saveFilter,
+    removeFilter: props.removeFilter,
   });
 
 export const mapStateToProps = (state, props) => ({
+  myFilters: state.queue.queueApp.myFilters,
   currentFilter: state.queue.filterMenu.get('currentFilter'),
   showing: state.queue.filterMenu.get('activeSection'),
   kappSlug: state.app.config.kappSlug,
   teams: state.queue.queueApp.myTeams,
   sortDirection: state.queue.queue.sortDirection,
   groupDirection: state.queue.queue.groupDirection,
+  forms: state.queue.queueApp.forms,
 });
 
 export const mapDispatchToProps = {
@@ -173,24 +209,32 @@ export const mapDispatchToProps = {
   resetFilter: actions.reset,
   toggleTeam: actions.toggleTeam,
   toggleAssignment: actions.toggleAssignment,
+  toggleCreatedByMe: actions.toggleCreatedByMe,
   toggleStatus: actions.toggleStatus,
   setDateRangeTimeline: actions.setDateRangeTimeline,
   setDateRange: actions.setDateRange,
   setSortedBy: actions.setSortedBy,
   setGroupedBy: actions.setGroupedBy,
+  setFilterName: actions.setFilterName,
   setSortDirection: queueActions.setSortDirection,
   setGroupDirection: queueActions.setGroupDirection,
   setOffset: queueActions.setOffset,
   push,
   setAdhocFilter: queueActions.setAdhocFilter,
+  addPersonalFilter: appActions.addPersonalFilter,
+  updatePersonalFilter: appActions.updatePersonalFilter,
+  removePersonalFilter: appActions.removePersonalFilter,
 };
 
 const toggleTeam = props => e => props.toggleTeam(e.target.name);
 const toggleAssignment = props => e => props.toggleAssignment(e.target.name);
+const toggleCreatedByMe = props => e =>
+  props.toggleCreatedByMe(!props.currentFilter.createdByMe);
 const toggleStatus = props => e => props.toggleStatus(e.target.name);
 const changeTimeline = props => e => props.setDateRangeTimeline(e.target.value);
 const changeSortedBy = props => e => props.setSortedBy(e.target.value);
 const changeGroupedBy = props => e => props.setGroupedBy(e.target.value);
+const changeFilterName = props => e => props.setFilterName(e.target.value);
 
 const toggleShowing = props => name => () => {
   props.resetFilter();
@@ -212,8 +256,8 @@ const clearDateRange = props => () =>
   props.applyFilter(props.filter.delete('dateRange'));
 const clearGroupedBy = props => () =>
   props.applyFilter(props.filter.delete('groupBy'));
-const toggleCreatedByMe = props => () =>
-  props.applyFilter(props.filter.update('createdByMe', b => !b));
+// const toggleCreatedByMe = props => () =>
+//   props.applyFilter(props.filter.update('createdByMe', b => !b));
 const toggleSortDirection = props => () => {
   props.setSortDirection(props.sortDirection === 'ASC' ? 'DESC' : 'ASC');
   props.setOffset(0);
@@ -221,6 +265,30 @@ const toggleSortDirection = props => () => {
 const toggleGroupDirection = props => () => {
   props.setGroupDirection(props.groupDirection === 'ASC' ? 'DESC' : 'ASC');
   props.setOffset(0);
+};
+
+const checkFilterName = props => filter => {
+  if (props.myFilters.find(f => f.name === filter.name)) {
+    return 'Filter exists and will be updated';
+  }
+};
+const saveFilter = props => filter => {
+  const currentFilter = isImmutable(filter) ? filter : props.currentFilter;
+  if (props.myFilters.find(f => f.name === currentFilter.name)) {
+    props.updatePersonalFilter(currentFilter.set('type', 'custom'));
+  } else {
+    props.addPersonalFilter(currentFilter.set('type', 'custom'));
+  }
+  props.push(
+    `/kapps/${props.kappSlug}/custom/${encodeURIComponent(currentFilter.name)}`,
+  );
+};
+
+const removeFilter = props => filter => {
+  props.removePersonalFilter(
+    isImmutable(filter) ? filter : props.currentFilter,
+  );
+  props.push(`/kapps/${props.kappSlug}/list/Mine`);
 };
 
 export const FilterMenuAbstract = compose(
@@ -238,6 +306,7 @@ export const FilterMenuAbstract = compose(
     changeTimeline,
     changeSortedBy,
     changeGroupedBy,
+    changeFilterName,
     toggleSortDirection,
     toggleGroupDirection,
     clearTeams,
@@ -245,6 +314,9 @@ export const FilterMenuAbstract = compose(
     clearStatus,
     clearDateRange,
     clearGroupedBy,
+    checkFilterName,
+    saveFilter,
+    removeFilter,
   }),
   lifecycle({
     componentDidMount() {

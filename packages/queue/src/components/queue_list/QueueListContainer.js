@@ -2,10 +2,7 @@ import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { connect } from 'react-redux';
 import { is, List } from 'immutable';
 import { getFilterByPath } from '../../redux/modules/queueApp';
-import {
-  actions as queueActions,
-  selectGroupedQueueItems,
-} from '../../redux/modules/queue';
+import { actions as queueActions } from '../../redux/modules/queue';
 import { actions as filterMenuActions } from '../../redux/modules/filterMenu';
 import { QueueList } from './QueueList';
 
@@ -19,12 +16,8 @@ const mapStateToProps = (state, props) => {
     sortDirection: state.queue.queue.sortDirection,
     groupDirection: state.queue.queue.groupDirection,
     sortBy: filter && filter.sortBy,
-    queueItems: filter && (state.queue.queue.lists.get(filter) || List()),
+    queueItems: (filter && state.queue.queue.lists.get(filter)) || List(),
     isGrouped: filter && filter.groupBy !== '',
-    groupedQueueItems:
-      filter &&
-      filter.groupedBy !== '' &&
-      selectGroupedQueueItems(state, filter),
     statusMessage: filter && state.queue.queue.statuses.get(filter),
     isMobile: state.app.layout.size === 'small',
   };
@@ -32,12 +25,58 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = {
   openFilterMenu: filterMenuActions.open,
+  showFilterMenuSection: filterMenuActions.showSection,
   fetchList: queueActions.fetchList,
   setSortDirection: queueActions.setSortDirection,
   setGroupDirection: queueActions.setGroupDirection,
   setOffset: queueActions.setOffset,
   gotoPrevPage: queueActions.gotoPrevPage,
   gotoNextPage: queueActions.gotoNextPage,
+};
+
+const SYSTEM_PROPERTIES_FOR_GROUPING = [
+  'closedAt',
+  'closedBy',
+  'coreState',
+  'createdAt',
+  'createdBy',
+  'submittedAt',
+  'submittedBy',
+  'type',
+  'updatedAt',
+  'updatedBy',
+];
+
+const SYSTEM_PROPERTIES_FOR_SORTING = ['closedAt', 'createdAt', 'updatedAt'];
+
+const sortQueueItems = (items, filter, groupDirection, sortDirection) => {
+  if (!filter) {
+    return items;
+  }
+  if (filter.groupBy) {
+    const getGroupByValue = SYSTEM_PROPERTIES_FOR_GROUPING.includes(
+      filter.groupBy,
+    )
+      ? i => i[filter.groupBy]
+      : i => i.values[filter.groupBy];
+    const getSortByValue = SYSTEM_PROPERTIES_FOR_SORTING.includes(filter.sortBy)
+      ? i => i[filter.sortBy]
+      : i => i.values[filter.sortBy];
+    return items.sortBy(
+      item => [getGroupByValue(item) || '', getSortByValue(item) || ''],
+      (a, b) => {
+        if (a[0].localeCompare(b[0]) === 0) {
+          return a[1].localeCompare(b[1]) * (sortDirection === 'DESC' ? -1 : 1);
+        } else {
+          return (
+            a[0].localeCompare(b[0]) * (groupDirection === 'DESC' ? -1 : 1)
+          );
+        }
+      },
+    );
+  } else {
+    return sortDirection === 'DESC' ? items.reverse() : items;
+  }
 };
 
 export const QueueListContainer = compose(
@@ -47,47 +86,45 @@ export const QueueListContainer = compose(
   ),
   withProps(
     ({
+      filter,
       sortDirection,
       groupDirection,
       queueItems,
       limit,
       offset,
       isGrouped,
-      groupedQueueItems,
     }) => {
-      let items;
-      if (isGrouped) {
-        if (groupDirection === 'DESC') {
-          items = groupedQueueItems.reverse();
-        } else {
-          items = groupedQueueItems;
-        }
-        if (sortDirection === 'DESC') {
-          items = items.map(groupedItemList => groupedItemList.reverse());
-        }
-      } else {
-        items = (sortDirection === 'DESC' ? queueItems.reverse() : queueItems)
-          .skip(offset)
-          .take(limit);
-      }
-      // const items = isGrouped
-      //   ? groupDirection === 'DESC'
-      //     ? groupedQueueItems.reverse()
-      //     : groupedQueueItems
-      //   : (sortDirection === 'DESC' ? queueItems.reverse() : queueItems)
-      //       .skip(offset)
-      //       .take(limit);
+      const items = sortQueueItems(
+        queueItems,
+        filter,
+        groupDirection,
+        sortDirection,
+      )
+        .skip(offset)
+        .take(limit);
 
       return {
         hasPrevPage: offset !== 0,
         hasNextPage: queueItems.size > limit + offset,
         count: queueItems.size,
-        queueItems: items,
+        pageCount: items.size,
+        queueItems: isGrouped
+          ? items.groupBy(
+              SYSTEM_PROPERTIES_FOR_GROUPING.includes(filter.groupBy)
+                ? i => i[filter.groupBy]
+                : i => i.values[filter.groupBy],
+            )
+          : items,
       };
     },
   ),
   withHandlers({
-    openFilterMenu: props => () => props.openFilterMenu(props.filter),
+    openFilterMenu: props => section => () => {
+      props.openFilterMenu(props.filter);
+      if (section) {
+        props.showFilterMenuSection(section);
+      }
+    },
     toggleSortDirection: ({
       sortDirection,
       setSortDirection,

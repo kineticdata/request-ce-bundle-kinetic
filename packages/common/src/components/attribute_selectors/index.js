@@ -1,5 +1,6 @@
 import { ApproverSelect } from './ApproverSelect';
 import { DiscussionInviteSelect } from './DiscussionInviteSelect';
+import { FieldSelect } from './FieldSelect';
 import { FormSelect } from './FormSelect';
 import { IconSelect } from './IconSelect';
 import { IntegerSelect } from './IntegerSelect';
@@ -12,6 +13,7 @@ import { TrueFalseSelect } from './TrueFalseSelect';
 export {
   ApproverSelect,
   DiscussionInviteSelect,
+  FieldSelect,
   FormSelect,
   IconSelect,
   IntegerSelect,

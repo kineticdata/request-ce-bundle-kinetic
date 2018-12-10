@@ -8,6 +8,7 @@ const { namespace, withPayload, noPayload } = Utils;
 export const types = {
   LOAD_APP_SETTINGS: namespace('queueApp', 'LOAD_APP_SETTINGS'),
   SET_APP_SETTINGS: namespace('queueApp', 'SET_APP_SETTINGS'),
+  SET_PROFILE: namespace('queueApp', 'SET_PROFILE'),
   ADD_PERSONAL_FILTER: namespace('queueApp', 'ADD_PERSONAL_FILTER'),
   UPDATE_PERSONAL_FILTER: namespace('queueApp', 'UPDATE_PERSONAL_FILTER'),
   REMOVE_PERSONAL_FILTER: namespace('queueApp', 'REMOVE_PERSONAL_FILTER'),
@@ -18,6 +19,7 @@ export const types = {
 export const actions = {
   loadAppSettings: noPayload(types.LOAD_APP_SETTINGS),
   setAppSettings: withPayload(types.SET_APP_SETTINGS),
+  setProfile: withPayload(types.SET_PROFILE),
   addPersonalFilter: withPayload(types.ADD_PERSONAL_FILTER),
   updatePersonalFilter: withPayload(types.UPDATE_PERSONAL_FILTER),
   removePersonalFilter: withPayload(types.REMOVE_PERSONAL_FILTER),
@@ -27,12 +29,14 @@ export const actions = {
 
 const ADHOC_PATH = { path: '/kapps/:slug/adhoc', exact: false };
 const DEFAULT_LIST_PATH = { path: '/kapps/:slug/list/:name', exact: false };
+const TEAM_LIST_PATH = { path: '/kapps/:slug/team/:name', exact: false };
 const CUSTOM_LIST_PATH = { path: '/kapps/:slug/custom/:name', exact: false };
 
 export const getFilterByPath = (state, pathname) => {
   const findByName = name => filter => filter.name === name;
   const adhocMatch = matchPath(pathname, ADHOC_PATH);
   const defaultListMatch = matchPath(pathname, DEFAULT_LIST_PATH);
+  const teamListMatch = matchPath(pathname, TEAM_LIST_PATH);
   const customListMatch = matchPath(pathname, CUSTOM_LIST_PATH);
   if (adhocMatch) {
     return state.queue.queue.adhocFilter;
@@ -40,6 +44,12 @@ export const getFilterByPath = (state, pathname) => {
     return state.queue.queueApp.filters.find(
       findByName(defaultListMatch.params.name),
     );
+  } else if (teamListMatch) {
+    let filterName = teamListMatch.params.name;
+    try {
+      filterName = decodeURIComponent(teamListMatch.params.name);
+    } catch (e) {}
+    return state.queue.queueApp.teamFilters.find(findByName(filterName));
   } else if (customListMatch) {
     let filterName = customListMatch.params.name;
     try {
@@ -54,6 +64,8 @@ export const buildFilterPath = filter => {
     return '';
   } else if (filter.type === 'default') {
     return `/list/${filter.name}`;
+  } else if (filter.type === 'team') {
+    return `/team/${filter.name}`;
   } else if (filter.type === 'custom') {
     return `/custom/${encodeURIComponent(filter.name)}`;
   } else {
@@ -88,6 +100,13 @@ export const selectAssignments = state =>
         team: t.name,
       })),
     );
+
+export const getTeamIcon = team => {
+  const iconAttribute = Utils.getAttributeValue(team, 'Icon', 'fa-users');
+  return iconAttribute.indexOf('fa-') === 0
+    ? iconAttribute.slice('fa-'.length)
+    : iconAttribute;
+};
 
 /*
  *
@@ -125,6 +144,7 @@ export const State = Record({
   allTeams: List(),
   myTeams: List(),
   myTeammates: List(),
+  teamFilters: List(),
   myFilters: List(),
   forms: List(),
   loading: true,
@@ -142,9 +162,27 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('allTeams', List(payload.allTeams))
         .set('myTeams', List(payload.myTeams))
         .set('myTeammates', payload.myTeammates)
+        .set(
+          'teamFilters',
+          List(payload.myTeams).map(team =>
+            Filter({
+              name: team.name,
+              type: 'team',
+              icon: getTeamIcon(team),
+              teams: List([team.name]),
+              assignments: AssignmentCriteria({
+                mine: true,
+                teammates: true,
+                unassigned: true,
+              }),
+            }),
+          ),
+        )
         .set('myFilters', List(payload.myFilters))
         .set('forms', payload.forms)
         .set('loading', false);
+    case types.SET_PROFILE:
+      return state.set('profile', payload);
     case types.ADD_PERSONAL_FILTER:
       return state.update('myFilters', filters => filters.push(payload));
     case types.UPDATE_PERSONAL_FILTER:
