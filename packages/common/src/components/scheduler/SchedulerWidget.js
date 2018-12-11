@@ -375,6 +375,7 @@ const SchedulerWidgetComponent = ({
                                 )
                                 .add(
                                   (rescheduleEvent || event).values['Duration'],
+                                  'minute',
                                 )}
                               format={Constants.MOMENT_FORMATS.time}
                             />

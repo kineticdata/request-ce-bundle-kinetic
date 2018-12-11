@@ -7,6 +7,7 @@ import {
   Moment,
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
+  selectHasRoleSchedulerAgent,
 } from 'common';
 import { Nav, NavItem } from 'reactstrap';
 import moment from 'moment';
@@ -17,8 +18,7 @@ export const SidebarComponent = ({
   loadingUpcoming,
   upcomingErrors,
   upcomingAppointments,
-  isSchedulerAdmin,
-  isSchedulerManager,
+  hasSettingsAccess,
 }) => (
   <div className="sidebar sidebar--tech-bar">
     <div className="sidebar-group--content-wrapper">
@@ -75,7 +75,7 @@ export const SidebarComponent = ({
           )}
       </div>
     </div>
-    {(isSchedulerAdmin || isSchedulerManager) && (
+    {hasSettingsAccess && (
       <div className="sidebar-group sidebar-group--settings">
         <ul className="nav flex-column settings-group">
           <Link to="/settings/general" className="nav-link">
@@ -92,8 +92,10 @@ export const mapStateToProps = state => ({
   loadingUpcoming: state.techBar.appointments.upcoming.loading,
   upcomingErrors: state.techBar.appointments.upcoming.errors,
   upcomingAppointments: state.techBar.appointments.upcoming.data,
-  isSchedulerAdmin: selectHasRoleSchedulerAdmin(state),
-  isSchedulerManager: selectHasRoleSchedulerManager(state),
+  hasSettingsAccess:
+    selectHasRoleSchedulerManager(state) ||
+    selectHasRoleSchedulerAdmin(state) ||
+    selectHasRoleSchedulerAgent(state),
 });
 
 export const Sidebar = connect(mapStateToProps)(SidebarComponent);

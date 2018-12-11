@@ -9,6 +9,10 @@ export const selectHasRoleSchedulerManager = state =>
   !state.app.loading
     ? Utils.isMemberOfDescendant(state.app.profile, 'Role::Scheduler')
     : false;
+export const selectHasRoleSchedulerAgent = state =>
+  !state.app.loading
+    ? Utils.isMemberOfDescendant(state.app.profile, 'Scheduler')
+    : false;
 export const selectHasRoleCurrentSchedulerManager = state =>
   !state.common.schedulers.scheduler.loading
     ? Utils.isMemberOf(
