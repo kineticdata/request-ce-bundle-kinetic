@@ -15,7 +15,6 @@ import { Sidebar } from './components/Sidebar';
 import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { QueueItemContainer } from './components/queue_item/QueueItem';
 import { QueueListContainer } from './components/queue_list/QueueListContainer';
-import { FilterMenuContainer } from './components/filter_menu/FilterMenuContainer';
 import { NewItemMenuContainer } from './components/new_item_menu/NewItemMenuContainer';
 import { WorkMenuContainer } from './components/work_menu/WorkMenu';
 import { Settings } from './components/settings/Settings';
@@ -35,6 +34,7 @@ export const AppComponent = props => {
         <Route
           render={() => (
             <Sidebar
+              teamFilters={props.teamFilters}
               myFilters={props.myFilters}
               counts={props.counts}
               hasTeammates={props.hasTeammates}
@@ -62,6 +62,7 @@ export const AppComponent = props => {
         />
         <Route path="/" exact render={() => <Redirect to="/list/Mine" />} />
         <Route path="/list/:filter" component={QueueListContainer} />
+        <Route path="/team/:filter" component={QueueListContainer} />
         <Route path="/custom/:filter" component={QueueListContainer} />
         <Route path="/adhoc" component={QueueListContainer} />
         <Route
@@ -72,7 +73,7 @@ export const AppComponent = props => {
           path="/queue/filter/__show__/details/:id/summary"
           render={({ match }) => <Redirect to={`/item/${match.params.id}`} />}
         />
-        <FilterMenuContainer />
+
         <NewItemMenuContainer />
         <WorkMenuContainer />
       </main>
@@ -83,6 +84,7 @@ export const AppComponent = props => {
 const mapStateToProps = (state, props) => ({
   loading: state.queue.queueApp.loading,
   defaultFilters: state.queue.queueApp.filters,
+  teamFilters: state.queue.queueApp.teamFilters,
   myFilters: state.queue.queueApp.myFilters,
   counts: state.queue.queueApp.filters
     .toMap()

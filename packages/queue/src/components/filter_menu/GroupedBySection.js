@@ -3,26 +3,26 @@ import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
+import { AttributeSelectors } from 'common';
 
-export const GroupedBySection = ({ filter, setGroupedByHandler }) => (
+export const GroupedBySection = ({ filter, forms, setGroupedByHandler }) => (
   <ModalBody className="filter-section">
     <h5>Grouped By</h5>
     <label htmlFor="grouped-by">
-      <input
-        type="text"
-        id="grouped-by"
+      <AttributeSelectors.FieldSelect
+        forms={forms}
         value={filter.groupBy}
-        name="grouped-by"
         onChange={setGroupedByHandler}
       />
-      Grouped By
     </label>
   </ModalBody>
 );
 
 export const GroupedBySectionContainer = compose(
   connect(
-    null,
+    state => ({
+      forms: state.queue.queueApp.forms,
+    }),
     {
       setGroupedBy: actions.setGroupedBy,
     },
