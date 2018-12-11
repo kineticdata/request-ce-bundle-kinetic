@@ -9,6 +9,7 @@ export const Sidebar = ({
   handleOpenNewItemMenu,
   handleNewPersonalFilter,
   myFilters,
+  teamFilters,
   hasTeammates,
   hasTeams,
   hasForms,
@@ -75,6 +76,25 @@ export const Sidebar = ({
           </NavItem>
         </Nav>
       </div>
+      {hasTeams && (
+        <div className="sidebar-group sidebar-team-filters">
+          <h1>Team Filters</h1>
+          <Nav vertical>
+            {teamFilters.map(filter => (
+              <NavItem key={filter.name}>
+                <NavLink
+                  to={`/team/${encodeURIComponent(filter.name)}`}
+                  className="nav-link"
+                  activeClassName="active"
+                >
+                  <span className={`fa fa-fw fa-${filter.icon}`} />
+                  {`${filter.name}`}
+                </NavLink>
+              </NavItem>
+            ))}
+          </Nav>
+        </div>
+      )}
       <div className="sidebar-group sidebar-my-filters">
         <h1>
           My Filters

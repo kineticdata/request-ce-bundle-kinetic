@@ -109,7 +109,17 @@ export const State = Record({
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.SET_ADHOC_FILTER:
-      return state.set('adhocFilter', payload);
+      return state.set(
+        'adhocFilter',
+        payload
+          .set(
+            'name',
+            payload.type === 'custom' || payload.type === 'adhoc'
+              ? payload.name
+              : '',
+          )
+          .set('type', 'adhoc'),
+      );
     case types.SET_LIST_ITEMS:
       return state
         .setIn(['lists', payload.filter], List(payload.list))

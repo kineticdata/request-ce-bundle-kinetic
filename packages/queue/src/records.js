@@ -20,15 +20,7 @@ export const AssignmentCriteria = Record({
   mine: false,
   teammates: false,
   unassigned: false,
-  byIndividuals: false,
-  individuals: List(),
 });
-
-const assignmentCriteriaReviver = assignmentCriteriaJSON => {
-  const individuals = List(assignmentCriteriaJSON.individuals);
-
-  return AssignmentCriteria({ ...assignmentCriteriaJSON, individuals });
-};
 
 export const DateRangeCriteria = Record({
   // createdAt, updatedAt, closedAt
@@ -43,7 +35,8 @@ export const DateRangeCriteria = Record({
 export const Filter = Record({
   name: '',
   slug: '',
-  // Valid types are: default, custom, and adhoc.
+  icon: '',
+  // Valid types are: default, team, custom, and adhoc.
   type: 'default',
 
   // Filter sort order: createdAt, updatedAt, Due Date.
@@ -63,7 +56,7 @@ export const Filter = Record({
 export const filterReviver = filterJSON => {
   const status = List(filterJSON.status);
   const teams = List(filterJSON.teams);
-  const assignments = assignmentCriteriaReviver(filterJSON.assignments);
+  const assignments = AssignmentCriteria(filterJSON.assignments);
   const dateRange = DateRangeCriteria(filterJSON.dateRange);
 
   return Filter({ ...filterJSON, status, teams, assignments, dateRange });

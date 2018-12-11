@@ -227,7 +227,7 @@ const SchedulerComponent = ({
                           </label>
                           <div>
                             <Moment
-                              timestampe={moment(
+                              timestamp={moment(
                                 scheduler.values['Scheduling Range Start Date'],
                                 DATE_FORMAT,
                               )}
@@ -245,7 +245,7 @@ const SchedulerComponent = ({
                           </label>
                           <div>
                             <Moment
-                              timestampe={moment(
+                              timestamp={moment(
                                 scheduler.values['Scheduling Range End Date'],
                                 DATE_FORMAT,
                               )}
