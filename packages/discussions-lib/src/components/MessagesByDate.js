@@ -22,6 +22,7 @@ export const MessagesByDate = props => {
       dateBanner={<DateBanner date={props.messages.first().createdAt} />}
       messageGroups={partitionListBy(differentAuthor, props.messages)
         .map(messages => ({
+          discussion: props.discussion,
           profile: props.profile,
           messages,
           actions: props.actions,

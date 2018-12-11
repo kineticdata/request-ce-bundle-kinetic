@@ -108,6 +108,7 @@ export class DiscussionComponent extends React.Component {
                 loading={this.props.loadingMoreMessages}
               />
               <MessagesList
+                discussion={this.props.discussion}
                 profile={this.props.profile}
                 messages={this.props.discussion.messages.reverse()}
                 actions={messageActions}

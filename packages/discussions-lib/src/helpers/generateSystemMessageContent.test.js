@@ -214,6 +214,40 @@ describe('generateContent', () => {
       ];
       expect(generateContent('Discussion Updated', content)).toEqual(expected);
     });
+
+    it('returns the discussion update message with changed owners', () => {
+      const previousValues = {
+        owningUsers: [
+          { username: 'alice@kinops.io' },
+          { username: 'bob@kinops.io' },
+        ],
+        owningTeams: [{ name: 'IT' }],
+      };
+      const values = {
+        owningUsers: [{ username: 'alice@kinops.io' }],
+        owningTeams: [{ name: 'IT' }, { name: 'HR' }],
+      };
+      const content = [
+        { type: 'user', name: 'updatedBy', value: USER1 },
+        {
+          type: 'json',
+          name: 'previousValues',
+          value: JSON.stringify(previousValues),
+        },
+        { type: 'json', name: 'values', value: JSON.stringify(values) },
+      ];
+      const expected = [
+        { type: 'user', value: USER1 },
+        { type: 'text', value: 'updated the discussion' },
+        {
+          type: 'text',
+          value:
+            'owning users from [alice@kinops.io, bob@kinops.io] to [alice@kinops.io]',
+        },
+        { type: 'text', value: ', and owning teams from [IT] to [IT, HR]' },
+      ];
+      expect(generateContent('Discussion Updated', content)).toEqual(expected);
+    });
   });
 
   describe('Message Updated', () => {

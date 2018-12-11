@@ -83,5 +83,8 @@ store.dispatch(configActions.setKappSlug(match && match.params.kappSlug));
   });
   if (mql.matches) {
     store.dispatch(layoutActions.setSize(size));
+    if (size === 'small') {
+      store.dispatch(layoutActions.setSidebarOpen(false));
+    }
   }
 });
