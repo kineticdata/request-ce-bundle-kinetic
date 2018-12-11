@@ -6,27 +6,9 @@ import { DiscussionCard } from './DiscussionCard';
 import { actions as listActions } from '../../redux/modules/discussionsList';
 import { actions as discussionsActions } from '../../redux/modules/discussions';
 
-export const SearchArchivedCheckbox = ({
-  toggleSearchArchived,
-  searchArchived,
-}) => (
-  <div className="form-check">
-    <input
-      className="form-check-input"
-      name="searchArchived"
-      type="checkbox"
-      onChange={toggleSearchArchived}
-      checked={searchArchived}
-    />{' '}
-    <label className="form-check-label">Archived Discussions</label>
-  </div>
-);
-
 export const DiscussionsListComponent = ({
   handleCreateDiscussion,
   handleDiscussionClick,
-  toggleSearchArchived,
-  searchArchived,
   discussions,
   me,
 }) => {
@@ -35,13 +17,6 @@ export const DiscussionsListComponent = ({
       <button onClick={handleCreateDiscussion} className="btn btn-inverse">
         New Discussion
       </button>
-
-      <div style={{ alignSelf: 'flex-end' }}>
-        <SearchArchivedCheckbox
-          toggleSearchArchived={toggleSearchArchived}
-          searchArchived={searchArchived}
-        />
-      </div>
 
       {Utils.getGroupedDiscussions(discussions)
         .map((discussions, dateGroup) => (
@@ -67,10 +42,6 @@ export const DiscussionsListComponent = ({
     <div className="empty-discussion">
       <h5>No discussion to display</h5>
       <p>
-        <SearchArchivedCheckbox
-          toggleSearchArchived={toggleSearchArchived}
-          searchArchived={searchArchived}
-        />
         <button onClick={handleCreateDiscussion} className="btn btn-link">
           Create a new discussion
         </button>
@@ -79,29 +50,19 @@ export const DiscussionsListComponent = ({
   );
 };
 
-export const toggleSearchArchived = props => e => {
-  props.setSearchArchived(e.target.checked);
-  props.fetchRelatedDiscussions(props.itemType, props.itemKey, props.onLoad);
-};
-
 const mapDispatchToProps = {
-  setSearchArchived: listActions.setSearchArchived,
   fetchRelatedDiscussions: listActions.fetchRelatedDiscussions,
   createDiscussion: discussionsActions.createDiscussion,
 };
 
 const mapStateToProps = state => ({
   discussions: state.discussions.discussionsList.relatedDiscussions,
-  searchArchived: state.discussions.discussionsList.searchArchived,
 });
 export const DiscussionsList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withHandlers({
-    toggleSearchArchived,
-  }),
   lifecycle({
     componentWillMount() {
       this.props.fetchRelatedDiscussions(

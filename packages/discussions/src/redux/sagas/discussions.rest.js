@@ -8,20 +8,30 @@ import { types } from '../modules/discussions';
 import { DiscussionAPI, createDiscussionList } from 'discussions-lib';
 
 export function* fetchRelatedDiscussionsTask(action) {
-  const isArchived = yield select(
-    state => state.discussions.discussionsList.searchArchived,
-  );
   const { type, key, loadCallback } = action.payload;
-
-  const { discussions } = yield call(DiscussionAPI.fetchDiscussions, {
+  const data = {
     relatedItem: {
       type: type,
       key: key,
     },
-    isArchived,
-  });
+  };
 
-  const discussionsList = createDiscussionList(discussions);
+  const [discussions, archivedDiscussions] = yield all([
+    call(DiscussionAPI.fetchDiscussions, data),
+    call(DiscussionAPI.fetchDiscussions, { ...data, isArchived: true }),
+  ]);
+
+  const combinedDiscussions = []
+    .concat(
+      discussions && discussions.discussions ? discussions.discussions : [],
+    )
+    .concat(
+      archivedDiscussions && archivedDiscussions.discussions
+        ? archivedDiscussions.discussions
+        : [],
+    );
+
+  const discussionsList = createDiscussionList(combinedDiscussions);
   yield put(listActions.setRelatedDiscussions(discussionsList));
 
   if (typeof loadCallback === 'function') {
