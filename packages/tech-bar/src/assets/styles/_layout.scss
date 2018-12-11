@@ -112,16 +112,6 @@
     }
   }
 
-  &__full-screen {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1035;
-    background-color: $black-3;
-    overflow-y: auto;
-  }
   // Card Wrapper
   .cards__wrapper {
     padding: 0 0 3rem;

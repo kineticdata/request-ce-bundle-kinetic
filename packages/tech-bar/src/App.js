@@ -53,11 +53,7 @@ export const AppComponent = props => {
       ),
       main: (
         <I18n>
-          <main
-            className={`package-layout package-layout--tech-bar ${
-              props.fullScreen ? 'package-layout--tech-bar__full-screen' : ''
-            }`}
-          >
+          <main className={`package-layout package-layout--tech-bar`}>
             <Route path="/" exact component={Home} />
             <Route
               path="/forms/:formSlug/submissions/:id"
@@ -110,3 +106,5 @@ export const App = enhance(AppComponent);
 
 App.shouldSuppressSidebar = (pathname, kappSlug) =>
   matchPath(pathname, { path: `/kapps/${kappSlug}` });
+App.shouldHideHeader = (pathname, kappSlug) =>
+  matchPath(pathname, { path: `/kapps/${kappSlug}/display` });

@@ -25,34 +25,48 @@ export const AppComponent = props =>
       <ToastsContainer />
       <LoginModal />
       <ModalFormContainer />
-      <HeaderContainer
-        hasSidebar={!props.sidebarHidden}
-        toggleSidebarOpen={props.toggleSidebarOpen}
-      />
-      <props.AppProvider
-        render={({ main, sidebar, header }) =>
-          !props.sidebarHidden && sidebar ? (
-            <Sidebar
-              sidebar={sidebar}
-              shadow={false}
-              open={props.sidebarOpen && props.layoutSize === 'small'}
-              docked={props.sidebarOpen && props.layoutSize !== 'small'}
-              onSetOpen={props.setSidebarOpen}
-              rootClassName="sidebar-layout-wrapper"
-              sidebarClassName={`sidebar-container ${
-                true ? 'drawer' : 'overlay'
-              }`}
-              contentClassName={`main-container ${
-                props.sidebarOpen ? 'open' : 'closed'
-              }`}
-            >
+      {!props.headerHidden ? (
+        <Fragment>
+          <HeaderContainer
+            hasSidebar={!props.sidebarHidden}
+            toggleSidebarOpen={props.toggleSidebarOpen}
+          />
+          <props.AppProvider
+            render={({ main, sidebar, header }) =>
+              !props.sidebarHidden && sidebar ? (
+                <Sidebar
+                  sidebar={sidebar}
+                  shadow={false}
+                  open={props.sidebarOpen && props.layoutSize === 'small'}
+                  docked={props.sidebarOpen && props.layoutSize !== 'small'}
+                  onSetOpen={props.setSidebarOpen}
+                  rootClassName="sidebar-layout-wrapper"
+                  sidebarClassName={`sidebar-container ${
+                    true ? 'drawer' : 'overlay'
+                  }`}
+                  contentClassName={`main-container ${
+                    props.sidebarOpen ? 'open' : 'closed'
+                  }`}
+                >
+                  {main}
+                </Sidebar>
+              ) : (
+                <div className="main-container main-container--no-sidebar">
+                  {main}
+                </div>
+              )
+            }
+          />
+        </Fragment>
+      ) : (
+        <props.AppProvider
+          render={({ main }) => (
+            <div className="main-container main-container--no-header">
               {main}
-            </Sidebar>
-          ) : (
-            <div className="main-container--no-sidebar">{main}</div>
-          )
-        }
-      />
+            </div>
+          )}
+        />
+      )}
     </Fragment>
   );
 
@@ -104,6 +118,9 @@ export const App = compose(
     const sidebarOpen = shouldSuppressSidebar
       ? props.suppressedSidebarOpen
       : props.sidebarOpen;
+    const headerHidden =
+      AppProvider.shouldHideHeader &&
+      AppProvider.shouldHideHeader(props.pathname, props.kappSlug);
     const sidebarHidden =
       AppProvider.shouldHideSidebar &&
       AppProvider.shouldHideSidebar(props.pathname, props.kappSlug);
@@ -111,6 +128,7 @@ export const App = compose(
       AppProvider,
       shouldSuppressSidebar,
       sidebarOpen,
+      headerHidden,
       sidebarHidden,
     };
   }),
