@@ -2,15 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, lifecycle, withProps } from 'recompose';
-import {
-  KappLink as Link,
-  PageTitle,
-  selectCurrentKapp,
-  ErrorNotFound,
-  ErrorUnauthorized,
-  Utils,
-  Schedulers,
-} from 'common';
+import { KappLink as Link, selectCurrentKapp, Utils, Schedulers } from 'common';
 import { actions } from '../../redux/modules/techBarApp';
 import { I18n } from '../../../../app/src/I18nProvider';
 

@@ -34,6 +34,7 @@ import { actions as modalFormActions } from './redux/modules/modalForm';
 import {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
+  selectHasRoleSchedulerAgent,
 } from './redux/selectors';
 
 import * as Utils from './utils';
@@ -73,6 +74,7 @@ export {
   Schedulers,
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
+  selectHasRoleSchedulerAgent,
   TaskActions,
   Table,
   PaginationControl,

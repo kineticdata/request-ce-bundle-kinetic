@@ -1,5 +1,6 @@
 import { Record, List } from 'immutable';
 import { Utils } from 'common';
+import moment from 'moment';
 const { namespace, noPayload, withPayload } = Utils;
 
 export const APPOINTMENT_FORM_SLUG = 'appointment';
@@ -35,6 +36,13 @@ export const types = {
     'appointments',
     'SET_TODAY_APPOINTMENT_ERRORS',
   ),
+  FETCH_APPOINTMENTS_LIST: namespace('appointments', 'FETCH_APPOINTMENTS_LIST'),
+  SET_APPOINTMENTS_LIST: namespace('appointments', 'SET_APPOINTMENTS_LIST'),
+  SET_APPOINTMENTS_LIST_ERRORS: namespace(
+    'appointments',
+    'SET_APPOINTMENTS_LIST_ERRORS',
+  ),
+  SET_APPOINTMENTS_DATE: namespace('appointments', 'SET_APPOINTMENTS_DATE'),
 };
 
 export const actions = {
@@ -52,6 +60,10 @@ export const actions = {
   fetchTodayAppointments: withPayload(types.FETCH_TODAY_APPOINTMENTS),
   setTodayAppointments: withPayload(types.SET_TODAY_APPOINTMENTS),
   setTodayAppointmentErrors: withPayload(types.SET_TODAY_APPOINTMENT_ERRORS),
+  fetchAppointmentsList: withPayload(types.FETCH_APPOINTMENTS_LIST),
+  setAppointmentsList: withPayload(types.SET_APPOINTMENTS_LIST),
+  setAppointmentsListErrors: withPayload(types.SET_APPOINTMENTS_LIST_ERRORS),
+  setAppointmentsDate: withPayload(types.SET_APPOINTMENTS_DATE),
 };
 
 export const State = Record({
@@ -69,6 +81,12 @@ export const State = Record({
     data: new List(),
   },
   today: {
+    loading: false,
+    errors: [],
+    data: new List(),
+  },
+  list: {
+    date: moment(),
     loading: false,
     errors: [],
     data: new List(),
@@ -129,6 +147,23 @@ export const reducer = (state = State(), { type, payload }) => {
       return state
         .setIn(['today', 'errors'], payload)
         .setIn(['today', 'loading'], false);
+    case types.FETCH_APPOINTMENTS_LIST:
+      return state.setIn(['list', 'loading'], true);
+    case types.SET_APPOINTMENTS_LIST:
+      return state
+        .setIn(
+          ['list', 'data'],
+          List(payload).sortBy(
+            a => `${a.values['Event Date']} ${a.values['Event Time']}`,
+          ),
+        )
+        .setIn(['list', 'loading'], false);
+    case types.SET_APPOINTMENTS_LIST_ERRORS:
+      return state
+        .setIn(['list', 'errors'], payload)
+        .setIn(['list', 'loading'], false);
+    case types.SET_APPOINTMENTS_DATE:
+      return state.setIn(['list', 'date'], moment(payload.date));
     default:
       return state;
   }

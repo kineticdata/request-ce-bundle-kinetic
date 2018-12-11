@@ -119,6 +119,37 @@ export function* fetchTodayAppointmentsSaga({ payload: schedulerId }) {
   }
 }
 
+export function* fetchAppointmentsListSaga({ payload: { schedulerId } }) {
+  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const date = yield select(state => state.techBar.appointments.list.date);
+  const searchBuilder = new CoreAPI.SubmissionSearch()
+    .limit(1000)
+    .include('details,values')
+    .eq('values[Scheduler Id]', schedulerId)
+    .eq('values[Event Date]', date.format('YYYY-MM-DD'));
+
+  const { submissions, errors, serverError } = yield call(
+    CoreAPI.searchSubmissions,
+    {
+      search: searchBuilder.build(),
+      form: APPOINTMENT_FORM_SLUG,
+      kapp: kappSlug,
+    },
+  );
+
+  if (serverError) {
+    yield put(
+      actions.setAppointmentsListErrors([
+        serverError.error || serverError.statusText,
+      ]),
+    );
+  } else if (errors) {
+    yield put(actions.setAppointmentsListErrors(errors));
+  } else {
+    yield put(actions.setAppointmentsList(submissions));
+  }
+}
+
 export function* watchAppointments() {
   yield takeEvery(types.FETCH_APPOINTMENT, fetchAppointmentSaga);
   yield takeEvery(
@@ -127,4 +158,8 @@ export function* watchAppointments() {
   );
   yield takeEvery(types.FETCH_PAST_APPOINTMENTS, fetchPastAppointmentsSaga);
   yield takeEvery(types.FETCH_TODAY_APPOINTMENTS, fetchTodayAppointmentsSaga);
+  yield takeEvery(
+    [types.FETCH_APPOINTMENTS_LIST, types.SET_APPOINTMENTS_DATE],
+    fetchAppointmentsListSaga,
+  );
 }

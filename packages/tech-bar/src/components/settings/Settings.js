@@ -7,24 +7,39 @@ import {
   selectCurrentKappSlug,
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
+  selectHasRoleSchedulerAgent,
 } from 'common';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { SchedulerSettings } from './SchedulerSettings';
 import { TechBarSettings } from './TechBarSettings';
+import { TechBar } from './tech-bar/TechBar';
+import { TechBarSettingsForm } from './tech-bar/TechBarSettingsForm';
+import { AppointmentForm } from './tech-bar/AppointmentForm';
 import { I18n } from '../../../../app/src/I18nProvider';
 
-export const SettingsComponent = ({
-  kappSlug,
-  isSchedulerAdmin,
-  isSchedulerManager,
-}) =>
-  isSchedulerAdmin || isSchedulerManager ? (
+export const SettingsComponent = ({ kappSlug, hasSettingsAccess }) =>
+  hasSettingsAccess ? (
     <Switch>
       <Route
         exact
-        path={`/kapps/${kappSlug}/settings/general/:id?`}
+        path={`/kapps/${kappSlug}/settings/general`}
         component={TechBarSettings}
+      />
+      <Route
+        exact
+        path={`/kapps/${kappSlug}/settings/general/:id`}
+        component={TechBar}
+      />
+      <Route
+        exact
+        path={`/kapps/${kappSlug}/settings/general/:id/edit`}
+        component={TechBarSettingsForm}
+      />
+      <Route
+        exact
+        path={`/kapps/${kappSlug}/settings/general/:id/appointment/:apptid`}
+        component={AppointmentForm}
       />
       <Route
         path={`/kapps/${kappSlug}/settings/schedulers`}
@@ -52,11 +67,15 @@ export const SettingsComponent = ({
     <ErrorUnauthorized />
   );
 
-const mapStateToProps = (state, props) => ({
-  kappSlug: selectCurrentKappSlug(state),
-  isSchedulerAdmin: selectHasRoleSchedulerAdmin(state),
-  isSchedulerManager: selectHasRoleSchedulerManager(state),
-});
+const mapStateToProps = (state, props) => {
+  return {
+    kappSlug: selectCurrentKappSlug(state),
+    hasSettingsAccess:
+      selectHasRoleSchedulerAgent(state) ||
+      selectHasRoleSchedulerManager(state) ||
+      selectHasRoleSchedulerAdmin(state),
+  };
+};
 
 const mapDispatchToProps = {};
 
@@ -84,7 +103,7 @@ const SettingsCard = ({ path, icon, name, description }) => (
   </Link>
 );
 
-const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
+const SettingsNavigationComponent = ({ hasManagerAccess }) => (
   <div className="page-container page-container--no-padding page-container--tech-bar-settings">
     <div className="page-panel">
       <div className="page-title">
@@ -108,20 +127,26 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
           icon="fa-gear"
           description="View and modify Tech Bar settings."
         />
-        <SettingsCard
-          name="Schedulers"
-          path={`/settings/schedulers`}
-          icon="fa-calendar"
-          description="View and modify scheduler settings, including event types and availability."
-        />
+        {hasManagerAccess && (
+          <SettingsCard
+            name="Schedulers"
+            path={`/settings/schedulers`}
+            icon="fa-calendar"
+            description="View and modify scheduler settings, including event types and availability."
+          />
+        )}
       </div>
     </div>
   </div>
 );
 
-const mapStateToPropsNav = state => ({
-  isSpaceAdmin: state.app.profile.spaceAdmin,
-});
+const mapStateToPropsNav = state => {
+  return {
+    hasManagerAccess:
+      selectHasRoleSchedulerManager(state) ||
+      selectHasRoleSchedulerAdmin(state),
+  };
+};
 
 export const SettingsNavigation = compose(
   connect(

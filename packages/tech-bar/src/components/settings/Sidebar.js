@@ -2,7 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { KappNavLink as NavLink, selectCurrentKapp } from 'common';
+import {
+  KappNavLink as NavLink,
+  selectCurrentKapp,
+  selectHasRoleSchedulerAdmin,
+  selectHasRoleSchedulerManager,
+} from 'common';
 import { I18n } from '../../../../app/src/I18nProvider';
 
 export const SidebarComponent = ({
@@ -10,6 +15,7 @@ export const SidebarComponent = ({
   loading,
   spaceAdmin,
   kapp,
+  hasManagerAccess,
 }) => (
   <div className="sidebar space-sidebar">
     <Link to={settingsBackPath} className="nav-return">
@@ -28,14 +34,16 @@ export const SidebarComponent = ({
               <I18n>Tech Bars</I18n>
               <span className="fa fa-fw fa-angle-right" />
             </NavLink>
-            <NavLink
-              to="/settings/schedulers"
-              className="nav-link"
-              activeClassName="active"
-            >
-              <I18n>Schedulers</I18n>
-              <span className="fa fa-fw fa-angle-right" />
-            </NavLink>
+            {hasManagerAccess && (
+              <NavLink
+                to="/settings/schedulers"
+                className="nav-link"
+                activeClassName="active"
+              >
+                <I18n>Schedulers</I18n>
+                <span className="fa fa-fw fa-angle-right" />
+              </NavLink>
+            )}
           </li>
         </ul>
       )}
@@ -47,6 +55,8 @@ export const mapStateToProps = state => ({
   loading: false,
   pathname: state.router.location.pathname,
   kapp: selectCurrentKapp(state),
+  hasManagerAccess:
+    selectHasRoleSchedulerManager(state) || selectHasRoleSchedulerAdmin(state),
 });
 
 export const Sidebar = compose(connect(mapStateToProps))(SidebarComponent);

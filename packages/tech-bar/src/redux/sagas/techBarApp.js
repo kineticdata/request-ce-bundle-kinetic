@@ -4,12 +4,8 @@ import { List } from 'immutable';
 import {
   actions,
   types,
+  Settings,
   SCHEDULER_FORM_SLUG,
-  SCHEDULER_CONFIG_FORM_SLUG,
-  SCHEDULER_AVAILABILITY_FORM_SLUG,
-  SCHEDULER_OVERRIDE_FORM_SLUG,
-  SCHEDULER_OVERRIDES_PAGE_SIZE,
-  SCHEDULED_EVENT_FORM_SLUG,
 } from '../modules/techBarApp';
 
 const TECH_BAR_SETTINGS_FORM_SLUG = 'tech-bar-settings';
@@ -27,14 +23,6 @@ export function* fetchAppSettingsSaga() {
   settingsQuery.index('values[Scheduler Id]:UNIQUE');
 
   const kappSlug = yield select(state => state.app.config.kappSlug);
-
-  const Settings = (object = {}) => ({
-    submissionId: object.id,
-    feedbackIdentitifcation:
-      (object.values && object.values['Feedback Identification']) || 'Required',
-    allowWalkIns:
-      ((object.values && object.values['Allow Walk-Ins']) || 'Yes') === 'Yes',
-  });
 
   const [
     { submissions: schedulers, serverError: schedulersServerError },
