@@ -20,6 +20,7 @@ export const DiscussionDetailsComponent = props => (
     </ModalHeader>
     {props.view === 'root' ? (
       <DiscussionDetailsRoot
+        canManage={props.canManage}
         discussion={props.discussion}
         profile={props.profile}
         onLeave={props.onLeave}

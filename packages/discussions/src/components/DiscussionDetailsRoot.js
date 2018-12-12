@@ -8,10 +8,12 @@ import { SectionToast } from 'common/src/components/SectionToast';
 export const DiscussionDetailsRootComponent = props => (
   <Fragment>
     <ModalBody>
-      <button type="button" className="btn btn-link" onClick={props.openEdit}>
-        Edit Discussion
-        <i className="fa fa-fw fa-angle-right" />
-      </button>
+      {props.canManage && (
+        <button type="button" className="btn btn-link" onClick={props.openEdit}>
+          Edit Discussion
+          <i className="fa fa-fw fa-angle-right" />
+        </button>
+      )}
       {props.muteError ? (
         <label className="btn btn-link text-danger has-error" disabled>
           <div>Mute email updates</div>

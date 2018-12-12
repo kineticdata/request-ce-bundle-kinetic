@@ -29,6 +29,7 @@ export const DiscussionComponent = props => (
           {elements.viewUnreadButton}
           {elements.chatInput}
           <DiscussionDetails
+            canManage={canManage}
             discussion={discussion}
             profile={props.profile}
             onLeave={props.onLeave}
