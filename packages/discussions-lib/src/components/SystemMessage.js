@@ -12,7 +12,7 @@ export const PlainMessageContent = ({ content }) => {
         case 'text':
           return token.value.trim();
         case 'user':
-          return token.value.displayName;
+          return token.value.unknown ? '<Unknown>' : token.value.displayName;
         default:
           return `(${token.type.toUpperCase()})`;
       }
@@ -52,7 +52,7 @@ export const SystemMessageContent = ({ actions, content }) =>
         case 'user':
           return (
             <span key={i} className="user-token">
-              {token.value.displayName}
+              {token.value.unknown ? '<Unknown>' : token.value.displayName}
             </span>
           );
         default:
