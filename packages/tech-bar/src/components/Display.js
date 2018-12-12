@@ -25,10 +25,11 @@ export const DisplayComponent = ({
   ) : (
     <Fragment>
       <PageTitle parts={[]} />
-      <div className="page-container page-container--tech-bar">
+      <div className="page-container page-container--tech-bar page-container--display">
         {techBar && (
           <Fragment>
-            <div className="home-title text-center mb-4">
+            <div className="location-title">
+              <span className="fa fa-fw fa-map-marker" />
               <I18n>{techBar.values['Name']}</I18n>
             </div>
             {displayMode === 'checkin' && <CheckIn techBar={techBar} />}

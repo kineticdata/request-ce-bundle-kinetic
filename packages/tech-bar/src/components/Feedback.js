@@ -41,31 +41,33 @@ export const FeedbackComponent = ({
   const filteredAppointments =
     experience && input.length > 2 ? getFilteredAppointments() : null;
   return (
-    <section className="tech-bar-display tech-bar-display__small mb-3">
+    <section className="tech-bar-display">
       <div className="details-container">
-        <div className="header bg-dark text-white">
-          <I18n>How was your experience?</I18n>
-        </div>
-        <div className="form body">
-          <div className="experience-options my-5">
-            <button
-              type="button"
-              className="btn btn-success"
-              disabled={disabled}
-              onClick={() => handleExperienceClick('Positive')}
-            >
-              <span className="fa fa-smile-o" />
-            </button>
-            <button
-              type="button"
-              className="btn btn-danger"
-              disabled={disabled}
-              onClick={() => handleExperienceClick('Negative')}
-            >
-              <span className="fa fa-frown-o" />
-            </button>
+        <div className="header bg-dark" />
+        <div className="body">
+          <div className="form">
+            <h1>
+              <I18n>How was your experience?</I18n>
+            </h1>
+            <div className="experience-options">
+              <button
+                type="button"
+                className="btn btn-success"
+                disabled={disabled}
+                onClick={() => handleExperienceClick('Positive')}
+              >
+                <span className="fa fa-smile-o" />
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                disabled={disabled}
+                onClick={() => handleExperienceClick('Negative')}
+              >
+                <span className="fa fa-frown-o" />
+              </button>
+            </div>
           </div>
-          <div className="form-group" />
         </div>
       </div>
       {experience && (

@@ -15,27 +15,34 @@ import { I18n } from '../../../app/src/I18nProvider';
 export const OverheadComponent = ({ errors, records }) => {
   return (
     <section className="tech-bar-display tech-bar-display__small mb-3">
-      <div className="overhead-display">
-        <h1>
-          {errors.length > 0 && (
-            <span className="fa fa-exclamation-triangle text-danger mr-2" />
-          )}
-          <span>
-            <I18n>Next up...</I18n>
-          </span>
-        </h1>
-        <ul className="overhead-display-list">
-          {records.filter(r => r.status === 'Checked In').map(r => (
-            <li key={r.id}>
-              <span>{r.displayName}</span>
-              {r.isWalkIn && (
-                <small className="text-muted">
-                  <I18n render={translate => ` (${translate('Walk-In')})`} />
-                </small>
+      <div className="details-container">
+        <div className="header bg-dark" />
+        <div className="overhead-display body">
+          <div className="form">
+            <h1>
+              {errors.length > 0 && (
+                <span className="fa fa-exclamation-triangle text-danger mr-2" />
               )}
-            </li>
-          ))}
-        </ul>
+              <span>
+                <I18n>Next up...</I18n>
+              </span>
+            </h1>
+            <ul className="overhead-display-list">
+              {records.filter(r => r.status === 'Checked In').map(r => (
+                <li key={r.id}>
+                  <span>{r.displayName}</span>
+                  {r.isWalkIn && (
+                    <small className="text-muted">
+                      <I18n
+                        render={translate => ` (${translate('Walk-In')})`}
+                      />
+                    </small>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
   );
