@@ -54,10 +54,19 @@ export const Filter = Record({
 });
 
 export const filterReviver = filterJSON => {
-  const status = List(filterJSON.status);
-  const teams = List(filterJSON.teams);
-  const assignments = AssignmentCriteria(filterJSON.assignments);
-  const dateRange = DateRangeCriteria(filterJSON.dateRange);
+  try {
+    let filter = filterJSON;
+    if (typeof filterJSON === 'string') {
+      filter = JSON.parse(filterJSON);
+    }
 
-  return Filter({ ...filterJSON, status, teams, assignments, dateRange });
+    const status = List(filter.status);
+    const teams = List(filter.teams);
+    const assignments = AssignmentCriteria(filter.assignments);
+    const dateRange = DateRangeCriteria(filter.dateRange);
+
+    return Filter({ ...filter, status, teams, assignments, dateRange });
+  } catch (e) {
+    return null;
+  }
 };

@@ -2,9 +2,9 @@ import { List } from 'immutable';
 import { Form } from '../../models';
 
 export const types = {
-  FETCH_FORMS: '@kd/catalog/FETCH_FORMS',
-  SET_FORMS: '@kd/catalog/SET_FORMS',
-  SET_FORMS_ERRORS: '@kd/catalog/SET_FORMS_ERRORS',
+  FETCH_FORMS: '@kd/queue/FETCH_FORMS',
+  SET_FORMS: '@kd/queue/SET_FORMS',
+  SET_FORMS_ERRORS: '@kd/queue/SET_FORMS_ERRORS',
 };
 
 export const actions = {

@@ -41,7 +41,6 @@ export const AppComponent = props => {
               hasTeams={props.hasTeams}
               hasForms={props.hasForms}
               handleOpenNewItemMenu={props.handleOpenNewItemMenu}
-              handleNewPersonalFilter={props.handleNewPersonalFilter}
             />
           )}
         />
@@ -66,7 +65,7 @@ export const AppComponent = props => {
         <Route path="/custom/:filter" component={QueueListContainer} />
         <Route path="/adhoc" component={QueueListContainer} />
         <Route
-          path="/(list|custom|adhoc)?/:filter?/item/:id"
+          path="/(list|team|custom|adhoc)?/:filter?/item/:id"
           component={QueueItemContainer}
         />
         <Route
@@ -113,8 +112,6 @@ const enhance = compose(
   ),
   withHandlers({
     handleOpenNewItemMenu: ({ openNewItemMenu }) => () => openNewItemMenu(),
-    handleNewPersonalFilter: ({ openFilterMenu }) => () =>
-      openFilterMenu(Filter({ type: 'custom' })),
   }),
   lifecycle({
     componentWillMount() {

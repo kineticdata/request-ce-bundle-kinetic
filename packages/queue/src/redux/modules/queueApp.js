@@ -2,8 +2,13 @@ import { Record, List, Set } from 'immutable';
 import { matchPath } from 'react-router-dom';
 import { LOCATION_CHANGE } from 'connected-react-router';
 import { Utils } from 'common';
-import { Profile, Filter, AssignmentCriteria } from '../../records';
-const { namespace, withPayload, noPayload } = Utils;
+import {
+  Profile,
+  Filter,
+  AssignmentCriteria,
+  filterReviver,
+} from '../../records';
+const { namespace, withPayload, noPayload, getAttributeValue } = Utils;
 
 export const types = {
   LOAD_APP_SETTINGS: namespace('queueApp', 'LOAD_APP_SETTINGS'),
@@ -164,19 +169,35 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('myTeammates', payload.myTeammates)
         .set(
           'teamFilters',
-          List(payload.myTeams).map(team =>
-            Filter({
-              name: team.name,
-              type: 'team',
-              icon: getTeamIcon(team),
-              teams: List([team.name]),
-              assignments: AssignmentCriteria({
-                mine: true,
-                teammates: true,
-                unassigned: true,
-              }),
-            }),
-          ),
+          List(payload.myTeams).map(team => {
+            const filter = filterReviver(
+              getAttributeValue(team, 'Default Queue Filter'),
+            );
+            console.log(filter && filter.toJS());
+            if (filter) {
+              return filter
+                .set('type', 'team')
+                .update('name', name => name || team.name)
+                .update('icon', icon => icon || getTeamIcon(team))
+                .update(
+                  'teams',
+                  teams =>
+                    teams.includes(team.name) ? teams : teams.push(team.name),
+                );
+            } else {
+              return Filter({
+                name: team.name,
+                type: 'team',
+                icon: getTeamIcon(team),
+                teams: List([team.name]),
+                assignments: AssignmentCriteria({
+                  mine: true,
+                  teammates: true,
+                  unassigned: true,
+                }),
+              });
+            }
+          }),
         )
         .set('myFilters', List(payload.myFilters))
         .set('forms', payload.forms)
