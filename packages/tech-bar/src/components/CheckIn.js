@@ -46,55 +46,60 @@ export const CheckInComponent = ({
       ? getFilteredAppointments()
       : null;
   return (
-    <section className="tech-bar-display tech-bar-display__small mb-3">
+    <section className="tech-bar-display">
       {!showDetails ? (
         <Fragment>
-          <button
-            type="button"
-            className="check-in-option btn btn-success mb-5"
-            onClick={() => toggleShowDetails('appointment')}
-          >
-            <I18n>I have an appointment</I18n>
-          </button>
-          {techBar.settings.allowWalkIns && (
-            <button
-              type="button"
-              className="check-in-option btn btn-info"
-              onClick={() => toggleShowDetails('walkin')}
-            >
-              <I18n>I am a walk-in</I18n>
-            </button>
-          )}
+          <div className="details-container">
+            <div className="header bg-dark" />
+            <div className=" body">
+              <div className="form">
+                <button
+                  type="button"
+                  className="check-in-option btn btn-success mb-5"
+                  onClick={() => toggleShowDetails('appointment')}
+                >
+                  <I18n>I have an appointment</I18n>
+                </button>
+                {techBar.settings.allowWalkIns && (
+                  <button
+                    type="button"
+                    className="check-in-option btn btn-info"
+                    onClick={() => toggleShowDetails('walkin')}
+                  >
+                    <I18n>I am a walk-in</I18n>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
         </Fragment>
       ) : (
         <Fragment>
           {showDetails === 'appointment' && (
             <div className="details-container">
-              <div className="header bg-success text-white">
-                <I18n>I have an appointment</I18n>
-                <button
-                  type="button"
-                  className="btn btn-link text-white"
-                  onClick={() => toggleShowDetails(null)}
-                >
-                  <I18n>Cancel</I18n>
-                </button>
-              </div>
-              <div className="form body">
-                <div className="form-group">
-                  <label htmlFor="appointment-search-input">
-                    <I18n>Find Appointment by Name or Email</I18n>
-                  </label>
-                  <input
-                    type="text"
-                    name="appointment-search-input"
-                    id="appointment-search-input"
-                    className="form-control"
-                    autoComplete="off"
-                    value={input}
-                    onChange={e => setInput(e.target.value)}
-                  />
+              <div className="header bg-success" />
+              <div className="body">
+                <h1>
+                  <I18n>I have an appointment</I18n>
+                </h1>
+
+                <div className="form">
+                  <div className="form-group">
+                    <label htmlFor="appointment-search-input">
+                      <I18n>Find Appointment by Name or Email</I18n>
+                    </label>
+                    <input
+                      type="text"
+                      name="appointment-search-input"
+                      id="appointment-search-input"
+                      className="form-control"
+                      autoComplete="off"
+                      value={input}
+                      onChange={e => setInput(e.target.value)}
+                    />
+                  </div>
                 </div>
+
                 {filteredAppointments && (
                   <div className="form-group">
                     {filteredAppointments.map(appt => (
@@ -158,22 +163,21 @@ export const CheckInComponent = ({
                       ))}
                   </div>
                 )}
-              </div>
-            </div>
-          )}
-          {showDetails === 'walkin' && (
-            <div className="details-container">
-              <div className="header bg-info text-white">
-                I am a walk-in
                 <button
                   type="button"
-                  className="btn btn-link text-white"
+                  className="btn btn-link"
                   onClick={() => toggleShowDetails(null)}
                 >
                   <I18n>Cancel</I18n>
                 </button>
               </div>
+            </div>
+          )}
+          {showDetails === 'walkin' && (
+            <div className="details-container">
+              <div className="header bg-info" />
               <div className="body">
+                <h1>I am a walk-in</h1>
                 {!walkInUser && (
                   <div className="form">
                     <div className="form-group">
@@ -188,10 +192,10 @@ export const CheckInComponent = ({
                         onChange={e => setWalkInUser(e.target.value)}
                       />
                     </div>
-                    <div className="form-group text-center">
+                    <div className="form-group">
                       <button
                         type="button"
-                        className="btn btn-primary"
+                        className="btn btn-sm btn-primary"
                         onClick={() => setWalkInUser(true)}
                       >
                         <I18n>I do not have an account</I18n>
@@ -220,6 +224,13 @@ export const CheckInComponent = ({
                     />
                   </I18n>
                 )}
+                <button
+                  type="button"
+                  className="btn btn-link"
+                  onClick={() => toggleShowDetails(null)}
+                >
+                  <I18n>Cancel</I18n>
+                </button>
               </div>
             </div>
           )}
