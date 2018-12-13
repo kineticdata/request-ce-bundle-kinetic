@@ -140,6 +140,22 @@ export function* reinviteTask(action) {
   });
 }
 
+export function* uninviteTask(action) {
+  const id = action.payload.id;
+  const invitation = action.payload.invitation;
+
+  const { error } = yield call(DiscussionAPI.removeInvite, {
+    discussionId: id,
+    username: invitation.user && invitation.user.username,
+    email: invitation.email,
+  });
+
+  yield put({
+    type: error ? detailsTypes.UNINVITE_ERROR : detailsTypes.UNINVITE_SUCCESS,
+    payload: { id, invitation },
+  });
+}
+
 export function* leaveTask(action) {
   const { id, username, onLeave } = action.payload;
   const { error } = yield call(DiscussionAPI.removeParticipant, id, username);
@@ -171,6 +187,7 @@ export function* watchDiscussionRest() {
     takeEvery(detailsTypes.SAVE, saveDiscussionTask),
     takeEvery(detailsTypes.INVITE, inviteTask),
     takeEvery(detailsTypes.REINVITE, reinviteTask),
+    takeEvery(detailsTypes.UNINVITE_CONFIRM, uninviteTask),
     takeEvery(detailsTypes.LEAVE_CONFIRM, leaveTask),
     takeEvery(detailsTypes.MUTE, muteTask),
   ]);

@@ -1,6 +1,10 @@
 import { List, Map } from 'immutable';
 import { namespace } from 'common/src/utils';
 
+const invitationType = invitation => (invitation.user ? 'user' : 'email');
+const invitationKey = invitation =>
+  invitation.user ? invitation.user.username : invitation.email;
+
 export const types = {
   OPEN: namespace('discussionsDetails', 'OPEN'),
   CLOSE: namespace('discussionsDetails', 'CLOSE'),
@@ -20,6 +24,11 @@ export const types = {
   REINVITE: namespace('discussionsDetails', 'REINVITE'),
   REINVITE_SUCCESS: namespace('discussionsDetails', 'REINVITE_SUCCESS'),
   REINVITE_ERROR: namespace('discussionsDetails', 'REINVITE_ERROR'),
+  UNINVITE: namespace('discussionDetails', 'UNINVITE'),
+  UNINVITE_CONFIRM: namespace('discussionDetails', 'UNINVITE_CONFIRM'),
+  UNINVITE_CANCEL: namespace('discussionDetails', 'UNINVITE_CANCEL'),
+  UNINVITE_SUCCESS: namespace('discussionDetails', 'UNINVITE_SUCCESS'),
+  UNINVITE_ERROR: namespace('discussionDetails', 'UNINVITE_ERROR'),
   SAVE: namespace('discussionsDetails', 'SAVE'),
   SAVE_SUCCESS: namespace('discussionsDetails', 'SAVE_SUCCESS'),
   SAVE_ERROR: namespace('discussionsDetails', 'SAVE_ERROR'),
@@ -84,17 +93,43 @@ export const reducer = (state = Map(), { type, payload }) => {
     case types.REINVITE:
     case types.REINVITE_SUCCESS:
     case types.REINVITE_ERROR:
-      const mode = payload.invitation.user ? 'user' : 'email';
-      const key = payload.invitation.user
-        ? payload.invitation.user.username
-        : payload.invitation.email;
-      const status =
+      return state.setIn(
+        [
+          payload.id,
+          'reinvites',
+          invitationType(payload.invitation),
+          invitationKey(payload.invitation),
+        ],
         type === types.REINVITE
           ? 'sending'
           : type === types.REINVITE_SUCCESS
-          ? 'success'
-          : 'error';
-      return state.setIn([payload.id, 'reinvites', mode, key], status);
+            ? 'success'
+            : 'error',
+      );
+    case types.UNINVITE:
+    case types.UNINVITE_CONFIRM:
+    case types.UNINVITE_ERROR:
+      return state.setIn(
+        [
+          payload.id,
+          'uninvites',
+          invitationType(payload.invitation),
+          invitationKey(payload.invitation),
+        ],
+        type === types.UNINVITE
+          ? 'confirming'
+          : type === types.UNINVITE_CONFIRM
+            ? 'removing'
+            : 'error',
+      );
+    case types.UNINVITE_CANCEL:
+    case types.UNINVITE_SUCCESS:
+      return state.deleteIn([
+        payload.id,
+        'uninvites',
+        invitationType(payload.invitation),
+        invitationKey(payload.invitation),
+      ]);
     case types.SAVE:
       return state.setIn([payload.id, 'saving'], true);
     case types.SAVE_SUCCESS:
