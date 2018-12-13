@@ -173,7 +173,6 @@ export const reducer = (state = State(), { type, payload }) => {
             const filter = filterReviver(
               getAttributeValue(team, 'Default Queue Filter'),
             );
-            console.log(filter && filter.toJS());
             if (filter) {
               return filter
                 .set('type', 'team')

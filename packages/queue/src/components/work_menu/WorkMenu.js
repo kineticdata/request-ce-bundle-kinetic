@@ -18,7 +18,7 @@ export const WorkMenu = ({
   handleSaveClick,
 }) =>
   queueItem && (
-    <Modal isOpen toggle={handleCloseClick} size="lg">
+    <Modal isOpen toggle={handleCloseClick} size="lg" backdrop="static">
       <div className="modal-header">
         <h4 className="modal-title">
           <button
