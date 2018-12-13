@@ -5,6 +5,10 @@ import { getFilterByPath } from '../../redux/modules/queueApp';
 import { actions as queueActions } from '../../redux/modules/queue';
 import { actions as filterMenuActions } from '../../redux/modules/filterMenu';
 import { QueueList } from './QueueList';
+import {
+  validateAssignments,
+  validateDateRange,
+} from '../filter_menu/FilterMenuContainer';
 
 const mapStateToProps = (state, props) => {
   const filter = getFilterByPath(state, props.location.pathname);
@@ -115,6 +119,11 @@ export const QueueListContainer = compose(
                 : i => i.values[filter.groupBy],
             )
           : items,
+        filterValidations: filter
+          ? [validateAssignments, validateDateRange]
+              .map(fn => fn(filter))
+              .filter(v => v)
+          : [],
       };
     },
   ),
@@ -152,18 +161,20 @@ export const QueueListContainer = compose(
   }),
   lifecycle({
     componentWillMount() {
-      this.loadFilter(this.props.filter);
+      this.loadFilter(this.props.filter, this.props.filterValidations);
     },
     componentWillReceiveProps(nextProps) {
       if (!is(this.props.filter, nextProps.filter)) {
-        this.loadFilter(nextProps.filter);
+        this.loadFilter(nextProps.filter, nextProps.filterValidations);
       }
     },
-    loadFilter(filter) {
-      this.props.fetchList(filter);
-      this.props.setOffset(0);
-      this.props.setSortDirection('ASC');
-      this.props.setGroupDirection('ASC');
+    loadFilter(filter, filterValidations) {
+      if (filterValidations.length <= 0) {
+        this.props.fetchList(filter);
+        this.props.setOffset(0);
+        this.props.setSortDirection('ASC');
+        this.props.setGroupDirection('ASC');
+      }
     },
   }),
 )(QueueList);

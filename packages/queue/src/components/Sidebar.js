@@ -7,7 +7,6 @@ const formatCount = count => (count >= 1000 ? '999+' : `${count}`);
 export const Sidebar = ({
   counts,
   handleOpenNewItemMenu,
-  handleNewPersonalFilter,
   myFilters,
   teamFilters,
   hasTeammates,
@@ -96,12 +95,7 @@ export const Sidebar = ({
         </div>
       )}
       <div className="sidebar-group sidebar-my-filters">
-        <h1>
-          My Filters
-          <button className="btn btn-icon" onClick={handleNewPersonalFilter}>
-            <span className="fa fa-plus" />
-          </button>
-        </h1>
+        <h1>My Filters</h1>
         <Nav vertical>
           {myFilters.map(filter => (
             <NavItem key={filter.name}>

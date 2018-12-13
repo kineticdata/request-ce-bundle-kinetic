@@ -41,11 +41,14 @@ const WallyErrorMessage = ({ message }) => {
   );
 };
 
-const WallyBadFilter = () => (
+const WallyBadFilter = ({ message }) => (
   <div className="empty-state empty-state--wally">
     <h5>Invalid List</h5>
     <img src={wallyMissingImage} alt="Missing Wally" />
-    <h6>Invalid list, please choose a valid list from the left side.</h6>
+    <h6>
+      {message ||
+        'Invalid list, please choose a valid list from the left side.'}
+    </h6>
   </div>
 );
 
@@ -100,6 +103,7 @@ export const QueueList = ({
   offset,
   isGrouped,
   isMobile,
+  filterValidations,
 }) => {
   const paginationProps = {
     hasPrevPage,
@@ -131,50 +135,56 @@ export const QueueList = ({
         ) : (
           <FilterMenuToolbar filter={filter} refresh={refresh} />
         )}
-        <div className="queue-list-content submissions">
-          {statusMessage ? (
-            <WallyErrorMessage message={statusMessage} />
-          ) : queueItems && queueItems.size > 0 ? (
-            isGrouped ? (
-              queueItems
-                .map((items, groupValue) => (
-                  <div
-                    className="items-grouping"
-                    key={groupValue || 'no-group'}
-                  >
-                    <div className="items-grouping__banner">
-                      <span>
-                        <GroupByValue value={groupValue} />
-                      </span>
+        {filterValidations.length <= 0 ? (
+          <div className="queue-list-content submissions">
+            {statusMessage ? (
+              <WallyErrorMessage message={statusMessage} />
+            ) : queueItems && queueItems.size > 0 ? (
+              isGrouped ? (
+                queueItems
+                  .map((items, groupValue) => (
+                    <div
+                      className="items-grouping"
+                      key={groupValue || 'no-group'}
+                    >
+                      <div className="items-grouping__banner">
+                        <span>
+                          <GroupByValue value={groupValue} />
+                        </span>
+                      </div>
+                      <ul className="list-group">
+                        {items.map(item => (
+                          <QueueListItemSmall
+                            queueItem={item}
+                            key={item.id}
+                            filter={filter}
+                          />
+                        ))}
+                      </ul>
                     </div>
-                    <ul className="list-group">
-                      {items.map(item => (
-                        <QueueListItemSmall
-                          queueItem={item}
-                          key={item.id}
-                          filter={filter}
-                        />
-                      ))}
-                    </ul>
-                  </div>
-                ))
-                .toList()
+                  ))
+                  .toList()
+              ) : (
+                <ul className="list-group">
+                  {' '}
+                  {queueItems.map(queueItem => (
+                    <QueueListItemSmall
+                      queueItem={queueItem}
+                      key={queueItem.id}
+                      filter={filter}
+                    />
+                  ))}
+                </ul>
+              )
             ) : (
-              <ul className="list-group">
-                {' '}
-                {queueItems.map(queueItem => (
-                  <QueueListItemSmall
-                    queueItem={queueItem}
-                    key={queueItem.id}
-                    filter={filter}
-                  />
-                ))}
-              </ul>
-            )
-          ) : (
-            <WallyEmptyMessage filter={filter} />
-          )}
-        </div>
+              <WallyEmptyMessage filter={filter} />
+            )}
+          </div>
+        ) : (
+          <WallyBadFilter
+            message={filterValidations.map((v, i) => <p key={i}>{v}</p>)}
+          />
+        )}
         <QueueListPagination
           filter={filter}
           paginationProps={paginationProps}

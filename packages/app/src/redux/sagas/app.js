@@ -15,6 +15,7 @@ import { importLocale } from 'common';
 import semver from 'semver';
 
 const MINIMUM_CE_VERSION = '2.0.2';
+const MINIMUM_TRANSLATIONS_CE_VERSION = '2.3.0';
 
 // Fetch Entire App
 export function* fetchAppTask({ payload }) {
@@ -61,7 +62,12 @@ export function* fetchAppTask({ payload }) {
     if (me.preferredLocale) {
       importLocale(me.preferredLocale);
       yield put(configActions.setLocale(me.preferredLocale));
-    } else {
+    } else if (
+      semver.satisfies(
+        semver.coerce(version.version),
+        `>=${MINIMUM_TRANSLATIONS_CE_VERSION}`,
+      )
+    ) {
       const { defaultLocale } = yield call(CoreAPI.fetchDefaultLocale);
       importLocale((defaultLocale && defaultLocale.code) || 'en');
       yield put(configActions.setLocale(defaultLocale && defaultLocale.code));
