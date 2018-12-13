@@ -30,6 +30,52 @@ export const ParticipantsList = props => (
           >
             <Avatar size={26} username={p.username} />
             {p.displayName}
+            {props.kicks.get(p.username) === 'error' ? (
+              <span className="subtext text-danger">
+                <i className="fa fa-fw fa-exclamation-circle" />
+                kick failed
+              </span>
+            ) : props.kicks.get(p.username) === 'kicking' ? (
+              <span className="subtext text-danger">
+                <button className="btn btn-link" disabled>
+                  <i className="fa fa-fw fa-spin fa-spinner" />
+                </button>
+              </span>
+            ) : (
+              <Fragment>
+                <span className="subtext">
+                  <button
+                    id="kick-participant"
+                    className="btn btn-link"
+                    onClick={props.kick(p)}
+                  >
+                    <i className="fa fa-fw fa-trash" />
+                  </button>
+                </span>
+                <Popover
+                  target="kick-participant"
+                  isOpen={props.kicks.get(p.username) === 'confirming'}
+                  toggle={props.kickCancel(p)}
+                  placement="top"
+                >
+                  <PopoverBody>
+                    <div>Are you sure?</div>
+                    <button
+                      className="btn btn-link"
+                      onClick={props.kickCancel(p)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={props.kickConfirm(p)}
+                    >
+                      Kick
+                    </button>
+                  </PopoverBody>
+                </Popover>
+              </Fragment>
+            )}
           </li>
         ))}
       {props.discussion.invitations.map(i => {
@@ -104,7 +150,7 @@ export const ParticipantsList = props => (
                       className="btn btn-danger"
                       onClick={props.uninviteConfirm(i)}
                     >
-                      Remove
+                      Uninvite
                     </button>
                   </PopoverBody>
                 </Popover>
@@ -136,6 +182,7 @@ export const mapStateToProps = (state, props) => {
       [id, 'uninvites', 'email'],
       Map(),
     ),
+    kicks: state.discussions.discussionsDetails.getIn([id, 'kicks'], Map()),
   };
 };
 export const mapDispatchToProps = (dispatch, props) => {
@@ -151,6 +198,12 @@ export const mapDispatchToProps = (dispatch, props) => {
       dispatch({ type: types.UNINVITE_CANCEL, payload: { id, invitation } }),
     uninviteConfirm: invitation => () =>
       dispatch({ type: types.UNINVITE_CONFIRM, payload: { id, invitation } }),
+    kick: participant => () =>
+      dispatch({ type: types.KICK, payload: { id, participant } }),
+    kickCancel: participant => () =>
+      dispatch({ type: types.KICK_CANCEL, payload: { id, participant } }),
+    kickConfirm: participant => () =>
+      dispatch({ type: types.KICK_CONFIRM, payload: { id, participant } }),
   };
 };
 

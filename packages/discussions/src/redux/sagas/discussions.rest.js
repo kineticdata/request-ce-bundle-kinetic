@@ -156,6 +156,19 @@ export function* uninviteTask(action) {
   });
 }
 
+export function* kickTask(action) {
+  const { id, participant } = action.payload;
+  const { error } = yield call(
+    DiscussionAPI.removeParticipant,
+    id,
+    participant.username,
+  );
+  yield put({
+    type: error ? detailsTypes.KICK_ERROR : detailsTypes.KICK_SUCCESS,
+    payload: { id, participant },
+  });
+}
+
 export function* leaveTask(action) {
   const { id, username, onLeave } = action.payload;
   const { error } = yield call(DiscussionAPI.removeParticipant, id, username);
@@ -188,6 +201,7 @@ export function* watchDiscussionRest() {
     takeEvery(detailsTypes.INVITE, inviteTask),
     takeEvery(detailsTypes.REINVITE, reinviteTask),
     takeEvery(detailsTypes.UNINVITE_CONFIRM, uninviteTask),
+    takeEvery(detailsTypes.KICK_CONFIRM, kickTask),
     takeEvery(detailsTypes.LEAVE_CONFIRM, leaveTask),
     takeEvery(detailsTypes.MUTE, muteTask),
   ]);

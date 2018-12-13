@@ -29,6 +29,11 @@ export const types = {
   UNINVITE_CANCEL: namespace('discussionDetails', 'UNINVITE_CANCEL'),
   UNINVITE_SUCCESS: namespace('discussionDetails', 'UNINVITE_SUCCESS'),
   UNINVITE_ERROR: namespace('discussionDetails', 'UNINVITE_ERROR'),
+  KICK: namespace('discussionDetails', 'KICK'),
+  KICK_CONFIRM: namespace('discussionDetails', 'KICK_CONFIRM'),
+  KICK_CANCEL: namespace('discussionDetails', 'KICK_CANCEL'),
+  KICK_SUCCESS: namespace('discussionDetails', 'KICK_SUCCESS'),
+  KICK_ERROR: namespace('discussionDetails', 'KICK_ERROR'),
   SAVE: namespace('discussionsDetails', 'SAVE'),
   SAVE_SUCCESS: namespace('discussionsDetails', 'SAVE_SUCCESS'),
   SAVE_ERROR: namespace('discussionsDetails', 'SAVE_ERROR'),
@@ -129,6 +134,24 @@ export const reducer = (state = Map(), { type, payload }) => {
         'uninvites',
         invitationType(payload.invitation),
         invitationKey(payload.invitation),
+      ]);
+    case types.KICK:
+    case types.KICK_CONFIRM:
+    case types.KICK_ERROR:
+      return state.setIn(
+        [payload.id, 'kicks', payload.participant.username],
+        type === types.KICK
+          ? 'confirming'
+          : type === types.KICK_CONFIRM
+            ? 'kicking'
+            : 'error',
+      );
+    case types.KICK_CANCEL:
+    case types.KICK_SUCCESS:
+      return state.deleteIn([
+        payload.id,
+        'kicks',
+        payload.participant.username,
       ]);
     case types.SAVE:
       return state.setIn([payload.id, 'saving'], true);
