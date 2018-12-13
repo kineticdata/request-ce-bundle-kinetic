@@ -878,7 +878,6 @@ const scheduleEvent = ({
         },
       );
     } else {
-      console.log('### START RESCHEDULING');
       // Reschedule event: create new, verify, update existing, delete new
       createScheduledEvent(values).then(
         ({ submission, serverError, errors }) => {
@@ -891,7 +890,6 @@ const scheduleEvent = ({
           } else if (errors) {
             dispatch(actions.addSchedulingErrors(errors));
           } else {
-            console.log('### VERIFY RESCHEDULED DRAFT');
             dispatch(
               actions.setState({
                 event: submission,
@@ -1060,7 +1058,6 @@ const completeReschedule = ({
   rescheduleDataMap,
   setRescheduled,
 }) => () => {
-  console.log('### COMPLETE RESCHEDULING');
   // Update scheduled event, create Reschedule record, and delete temp draft
   updateScheduledEvent(rescheduleEvent.id, {
     'Scheduler Id': event.values['Scheduler Id'],
@@ -1107,7 +1104,6 @@ const completeReschedule = ({
         );
         toggleModal(false);
         setRescheduled(true);
-        console.log('EVERYTHING WORKED YAY');
       });
     }
   });
@@ -1263,7 +1259,6 @@ const handleEventDelete = ({
   stateData: { event },
   eventDeleted,
 }) => () => {
-  console.log('DELETE EVENT', event);
   if (event && event.coreState === 'Draft') {
     deleteScheduledEvent(event.id).then(() => {
       dispatch(
@@ -1346,7 +1341,6 @@ export const SchedulerWidget = compose(
           'SchedulerWidget failed, eventType is a required prop.',
         );
       }
-      console.log('MOUNT', this.props.stateData.toJS());
       this.props.fetchSchedulerDetails();
     },
     componentDidUpdate(previousProps) {
@@ -1405,22 +1399,22 @@ export const SchedulerWidget = compose(
 
       // If state changed, fire appropriate functions
       if (stateData !== prevStateData) {
-        console.log(
-          'STATE CHANGED',
-          Object.keys(stateData.toJS()).reduce((diff, key) => {
-            if (stateData[key] !== prevStateData[key]) {
-              return {
-                ...diff,
-                [key]: {
-                  old: prevStateData[key],
-                  new: stateData[key],
-                },
-              };
-            } else {
-              return diff;
-            }
-          }, {}),
-        );
+        // console.log(
+        //   'STATE CHANGED',
+        //   Object.keys(stateData.toJS()).reduce((diff, key) => {
+        //     if (stateData[key] !== prevStateData[key]) {
+        //       return {
+        //         ...diff,
+        //         [key]: {
+        //           old: prevStateData[key],
+        //           new: stateData[key],
+        //         },
+        //       };
+        //     } else {
+        //       return diff;
+        //     }
+        //   }, {}),
+        // );
 
         // If event is reserved
         if (stateData.event && stateData.event.coreState === 'Draft') {
@@ -1467,7 +1461,6 @@ export const SchedulerWidget = compose(
         this.props.stateData.event &&
         this.props.stateData.event.coreState === 'Draft'
       ) {
-        console.log('UNMOUNT & DELETE');
         this.props.handleEventDelete();
       }
     },

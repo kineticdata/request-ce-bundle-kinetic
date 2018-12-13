@@ -19,7 +19,7 @@ export const ViewOriginalRequestComponent = ({
       >
         View Original Request
       </button>
-      <Modal isOpen={isOpen} toggle={toggleOpen} size="lg">
+      <Modal isOpen={isOpen} toggle={toggleOpen} size="lg" backdrop="static">
         <div className="modal-header">
           <h4 className="modal-title">
             <button type="button" className="btn btn-link" onClick={toggleOpen}>
