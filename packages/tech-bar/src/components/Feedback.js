@@ -41,8 +41,8 @@ export const FeedbackComponent = ({
   const filteredAppointments =
     experience && input.length > 2 ? getFilteredAppointments() : null;
   return (
-    <section className="tech-bar-display">
-      <div className="details-container">
+    <section className="tech-bar-display tech-bar-display--feedback">
+      <div className="full-screen-container">
         <div className="header bg-dark" />
         <div className="body">
           <div className="form">

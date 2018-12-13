@@ -46,16 +46,16 @@ export const CheckInComponent = ({
       ? getFilteredAppointments()
       : null;
   return (
-    <section className="tech-bar-display">
+    <section className="tech-bar-display tech-bar-display--checkin">
       {!showDetails ? (
         <Fragment>
-          <div className="details-container">
+          <div className="full-screen-container">
             <div className="header bg-dark" />
-            <div className=" body">
+            <div className="body">
               <div className="form">
                 <button
                   type="button"
-                  className="check-in-option btn btn-success mb-5"
+                  className="btn btn--checkin btn-success"
                   onClick={() => toggleShowDetails('appointment')}
                 >
                   <I18n>I have an appointment</I18n>
@@ -63,7 +63,7 @@ export const CheckInComponent = ({
                 {techBar.settings.allowWalkIns && (
                   <button
                     type="button"
-                    className="check-in-option btn btn-info"
+                    className="btn btn--checkin btn-info"
                     onClick={() => toggleShowDetails('walkin')}
                   >
                     <I18n>I am a walk-in</I18n>
@@ -76,7 +76,7 @@ export const CheckInComponent = ({
       ) : (
         <Fragment>
           {showDetails === 'appointment' && (
-            <div className="details-container">
+            <div className="full-screen-container">
               <div className="header bg-success" />
               <div className="body">
                 <h1>
@@ -174,7 +174,7 @@ export const CheckInComponent = ({
             </div>
           )}
           {showDetails === 'walkin' && (
-            <div className="details-container">
+            <div className="full-screen-container">
               <div className="header bg-info" />
               <div className="body">
                 <h1>I am a walk-in</h1>

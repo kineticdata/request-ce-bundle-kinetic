@@ -31,14 +31,20 @@
       font-size: 1.5rem;
       font-weight: 500;
       padding: 0.5rem 1.25rem;
+      .fa {
+        color: $black-50;
+      }
     }
 
     .tech-bar-display {
-      .check-in-option {
+      .btn--checkin {
         @include border-radius(1rem);
         width: 100%;
         font-size: 1.6rem;
         line-height: 10rem;
+        &:first-child {
+          margin-bottom: 2rem;
+        }
       }
 
       .experience-options {
@@ -68,20 +74,12 @@
         }
       }
 
-      .details-container {
+      .full-screen-container {
         width: 65vw;
 
         .header {
           @include border-top-radius(1rem);
-          text-align: center;
-          position: relative;
           height: 1rem;
-
-          button:last-child {
-            position: absolute;
-            top: 0;
-            right: 0;
-          }
         }
 
         .body {
@@ -105,11 +103,35 @@
         }
       }
 
-      .overhead-display {
-        ul.overhead-display-list {
-          list-style: none;
+      &--overhead {
+        .full-screen-container {
+          width: 90vw;
+          .body {
+            height: 80vh;
+          }
+        }
+        .overhead-display-list {
+          margin: 0;
+          padding: 0 0 0 5rem;
+          list-style-type: none;
+          counter-reset: my-badass-counter;
           li {
             font-size: 2.4rem;
+            line-height: 3rem;
+            position: relative;
+            &:before {
+              content: counter(my-badass-counter);
+              counter-increment: my-badass-counter;
+              position: absolute;
+              left: -3rem;
+              top: 0;
+              color: $black-50;
+              font-size: 3rem;
+              font-weight: bold;
+            }
+            small {
+              color: $black-50;
+            }
           }
         }
       }
