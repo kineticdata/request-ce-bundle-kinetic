@@ -20,6 +20,9 @@
   flex: 1 1 100%;
   flex-direction: column;
   min-height: $page-height;
+  &--guest {
+    margin-top: $header-height !important;
+  }
 }
 
 .page-container {

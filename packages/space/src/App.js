@@ -49,7 +49,11 @@ export const AppComponent = props => {
     main: (
       <Fragment>
         <Notifications />
-        <main className="package-layout package-layout--space">
+        <main
+          className={`package-layout package-layout--space ${
+            props.isGuest ? 'package-layout--guest' : ''
+          }`}
+        >
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/about" exact component={About} />
