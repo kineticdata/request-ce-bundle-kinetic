@@ -23,7 +23,7 @@ export const ParticipantsList = props => (
         .map(p => p.user)
         .filter(p => !p.unknown)
         .sortBy(p => p.name)
-        .map(p => (
+        .map((p, i) => (
           <li
             className={isPresent(props.discussion, p.username) ? 'present' : ''}
             key={p.email}
@@ -42,43 +42,45 @@ export const ParticipantsList = props => (
                 </button>
               </span>
             ) : (
-              <Fragment>
-                <span className="subtext">
-                  <button
-                    id="kick-participant"
-                    className="btn btn-link"
-                    onClick={props.kick(p)}
-                  >
-                    <i className="fa fa-fw fa-trash" />
-                  </button>
-                </span>
-                <Popover
-                  target="kick-participant"
-                  isOpen={props.kicks.get(p.username) === 'confirming'}
-                  toggle={props.kickCancel(p)}
-                  placement="top"
-                >
-                  <PopoverBody>
-                    <div>Are you sure?</div>
+              props.canManage && (
+                <Fragment>
+                  <span className="subtext">
                     <button
+                      id={`kick-participant-${i}`}
                       className="btn btn-link"
-                      onClick={props.kickCancel(p)}
+                      onClick={props.kick(p)}
                     >
-                      Cancel
+                      <i className="fa fa-fw fa-trash" />
                     </button>
-                    <button
-                      className="btn btn-danger"
-                      onClick={props.kickConfirm(p)}
-                    >
-                      Kick
-                    </button>
-                  </PopoverBody>
-                </Popover>
-              </Fragment>
+                  </span>
+                  <Popover
+                    target={`kick-participant-${i}`}
+                    isOpen={props.kicks.get(p.username) === 'confirming'}
+                    toggle={props.kickCancel(p)}
+                    placement="top"
+                  >
+                    <PopoverBody>
+                      <div>Are you sure?</div>
+                      <button
+                        className="btn btn-link"
+                        onClick={props.kickCancel(p)}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="btn btn-danger"
+                        onClick={props.kickConfirm(p)}
+                      >
+                        Kick
+                      </button>
+                    </PopoverBody>
+                  </Popover>
+                </Fragment>
+              )
             )}
           </li>
         ))}
-      {props.discussion.invitations.map(i => {
+      {props.discussion.invitations.map((i, index) => {
         const username = i.user ? i.user.username : i.email;
         const displayName = i.user ? i.user.username : i.email;
         const reinviteStatus = i.user
@@ -125,35 +127,39 @@ export const ParticipantsList = props => (
                 <button className="btn btn-link" onClick={props.reinvite(i)}>
                   <i className="fa fa-fw fa-refresh" />
                 </button>
-                <button
-                  id="remove-invitation"
-                  className="btn btn-link text-danger"
-                  onClick={props.uninvite(i)}
-                >
-                  <i className="fa fa-fw fa-close" />
-                </button>
-                <Popover
-                  target="remove-invitation"
-                  isOpen={uninviteStatus === 'confirming'}
-                  toggle={props.uninviteCancel(i)}
-                  placement="top"
-                >
-                  <PopoverBody>
-                    <div>Are you sure?</div>
+                {props.canManage && (
+                  <Fragment>
                     <button
+                      id={`remove-invitation-${index}`}
                       className="btn btn-link"
-                      onClick={props.uninviteCancel(i)}
+                      onClick={props.uninvite(i)}
                     >
-                      Cancel
+                      <i className="fa fa-fw fa-trash" />
                     </button>
-                    <button
-                      className="btn btn-danger"
-                      onClick={props.uninviteConfirm(i)}
+                    <Popover
+                      target={`remove-invitation-${index}`}
+                      isOpen={uninviteStatus === 'confirming'}
+                      toggle={props.uninviteCancel(i)}
+                      placement="top"
                     >
-                      Uninvite
-                    </button>
-                  </PopoverBody>
-                </Popover>
+                      <PopoverBody>
+                        <div>Are you sure?</div>
+                        <button
+                          className="btn btn-link"
+                          onClick={props.uninviteCancel(i)}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          onClick={props.uninviteConfirm(i)}
+                        >
+                          Uninvite
+                        </button>
+                      </PopoverBody>
+                    </Popover>
+                  </Fragment>
+                )}
               </Fragment>
             )}
           </li>

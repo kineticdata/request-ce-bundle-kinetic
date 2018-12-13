@@ -36,7 +36,10 @@ export const DiscussionDetailsRootComponent = props => (
           )}
         </label>
       )}
-      <ParticipantsListContainer discussion={props.discussion} />
+      <ParticipantsListContainer
+        canManage={props.canManage}
+        discussion={props.discussion}
+      />
       {props.successMessage && (
         <SectionToast>{props.successMessage}</SectionToast>
       )}
