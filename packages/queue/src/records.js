@@ -1,4 +1,6 @@
 import { List, Record } from 'immutable';
+import isarray from 'isarray';
+import isobject from 'isobject';
 
 export const Profile = Record({
   displayName: '',
@@ -11,6 +13,13 @@ export const VALID_STATUSES = List([
   'Pending',
   'Cancelled',
   'Complete',
+]);
+
+export const VALID_SORT_OPTIONS = List([
+  'createdAt',
+  'updatedAt',
+  'closedAt',
+  'Due Date',
 ]);
 
 export const isActiveStatus = status =>
@@ -39,7 +48,7 @@ export const Filter = Record({
   // Valid types are: default, team, custom, and adhoc.
   type: 'default',
 
-  // Filter sort order: createdAt, updatedAt, Due Date.
+  // Filter sort order: createdAt, updatedAt, closedAt, Due Date.
   sortBy: 'createdAt',
 
   // Filter Group By: free text input
@@ -59,13 +68,31 @@ export const filterReviver = filterJSON => {
     if (typeof filterJSON === 'string') {
       filter = JSON.parse(filterJSON);
     }
+    const sortBy = VALID_SORT_OPTIONS.includes(filter.sortBy)
+      ? filter.sortBy
+      : undefined;
+    const status = isarray(filter.status) ? List(filter.status) : undefined;
+    const teams = isarray(filter.teams) ? List(filter.teams) : undefined;
+    const assignments = isobject(filter.assignments)
+      ? AssignmentCriteria(filter.assignments)
+      : undefined;
+    const dateRange = isobject(filter.dateRange)
+      ? DateRangeCriteria(filter.dateRange)
+      : undefined;
 
-    const status = List(filter.status);
-    const teams = List(filter.teams);
-    const assignments = AssignmentCriteria(filter.assignments);
-    const dateRange = DateRangeCriteria(filter.dateRange);
-
-    return Filter({ ...filter, status, teams, assignments, dateRange });
+    return Filter({
+      name: filter.name,
+      slug: filter.slug,
+      icon: filter.icon,
+      type: filter.type,
+      groupBy: filter.groupBy,
+      sortBy,
+      status,
+      teams,
+      assignments,
+      dateRange,
+      createdByMe: filter.createdByMe === true,
+    });
   } catch (e) {
     return null;
   }

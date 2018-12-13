@@ -165,7 +165,7 @@ const FilterMenuAbstractComponent = props =>
     statusSummary: props.filter.status.join(', '),
     dateRangeSummary: summarizeDateRange(props.filter.dateRange),
     dateRangeError: validateDateRange(props.currentFilter),
-    sortedBySummary: SORT_OPTIONS.get(props.filter.sortBy).label,
+    sortedBySummary: SORT_OPTIONS.getIn([props.filter.sortBy, 'label']),
     sortDirection: props.sortDirection,
     groupDirection: props.groupDirection,
     showing: props.showing,
