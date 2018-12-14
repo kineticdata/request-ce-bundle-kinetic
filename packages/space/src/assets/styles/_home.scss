@@ -74,6 +74,12 @@
         & > .avatar {
           padding: 0;
         }
+        .sb-avatar {
+          line-height: initial;
+          img {
+            box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.9);
+          }
+        }
 
         & > .related-link {
           margin-right: 2rem;

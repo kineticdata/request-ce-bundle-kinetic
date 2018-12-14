@@ -28,9 +28,15 @@
       .sb-avatar {
         margin: 0 0.75rem 0 0;
         img {
-          border: 2px solid transparent;
+          box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.9);
         }
-        &.present img {
+        .sb-avatar__text,
+        img {
+          border: 2px solid transparent;
+          transition: border-color 300ms;
+        }
+        &.present img,
+        &.prsent .sb-avatar__text {
           border-color: $present;
         }
       }
