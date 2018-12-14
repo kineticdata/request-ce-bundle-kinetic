@@ -9,7 +9,7 @@ import {
   SCHEDULER_AVAILABILITY_FORM_SLUG,
   SCHEDULER_OVERRIDE_FORM_SLUG,
   SCHEDULED_EVENT_FORM_SLUG,
-  RESCHEDULE_EVENT_FORM_SLUG,
+  SCHEDULED_EVENT_ACTION_FORM_SLUG,
 } from '../redux/modules/schedulers';
 import axios from 'axios';
 
@@ -148,10 +148,10 @@ export const updateScheduledEvent = (id, values = {}, submit) => {
   });
 };
 
-export const createRescheduleEvent = values => {
+export const createScheduledEventAction = values => {
   return CoreAPI.createSubmission({
     datastore: true,
-    formSlug: RESCHEDULE_EVENT_FORM_SLUG,
+    formSlug: SCHEDULED_EVENT_ACTION_FORM_SLUG,
     values,
     completed: false,
     include: 'details,values',
@@ -312,6 +312,7 @@ export const State = Record({
   event: null,
   rescheduleEvent: null,
   timeslots: {},
+  eventCancelled: false,
 });
 
 export const reducer = (state = State(), { type, payload }) => {

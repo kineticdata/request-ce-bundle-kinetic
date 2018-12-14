@@ -229,6 +229,7 @@ bundle.helpers.confirm = (options = {}) => {
  *    scheduledEventId        string
  *    eventUpdated            string
  *    canReschedule           boolean [Default: false]
+ *    canCancel               boolean [Default: false]
  *    performSubmit           function action.continue function from submit event
  *  }
  * @param form      Kinetic form object *required*
@@ -263,7 +264,6 @@ bundle.helpers.schedulerWidget = (div, props = {}, form, fieldMap = {}) => {
       <SchedulerWidget
         {...props}
         appointmentRequestId={form.submission().id()}
-        canReschedule={form.submission().value('Status') === 'Scheduled'}
         rescheduleDataMap={fieldMap}
         eventUpdated={event => {
           if (

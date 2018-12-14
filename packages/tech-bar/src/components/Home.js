@@ -144,6 +144,15 @@ export const HomeComponent = ({
                       timestamp={date}
                       format={Constants.MOMENT_FORMATS.dateWithDay}
                     />
+                    <span
+                      className={`badge ${
+                        appt.coreState === 'Closed'
+                          ? 'badge-dark'
+                          : 'badge-success'
+                      }`}
+                    >
+                      {appt.values['Status']}
+                    </span>
                   </h1>
                   <p className="card-subtitle">
                     <Moment
@@ -199,6 +208,15 @@ export const HomeComponent = ({
                       timestamp={date}
                       format={Constants.MOMENT_FORMATS.dateWithDay}
                     />
+                    <span
+                      className={`badge ${
+                        appt.coreState === 'Closed'
+                          ? 'badge-dark'
+                          : 'badge-success'
+                      }`}
+                    >
+                      {appt.values['Status']}
+                    </span>
                   </h1>
                   <p className="card-subtitle">
                     <Moment
