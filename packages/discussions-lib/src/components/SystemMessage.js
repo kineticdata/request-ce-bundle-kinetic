@@ -7,6 +7,8 @@ export const PlainMessageContent = ({ content }) => {
   const plainContent = content
     .map(token => {
       switch (token.type) {
+        case 'attachment':
+          return token.value.filename;
         case 'team':
           return token.value.name;
         case 'text':
@@ -53,6 +55,12 @@ export const SystemMessageContent = ({ actions, content }) =>
           return (
             <span key={i} className="user-token">
               {token.value.unknown ? '*Unknown*' : token.value.displayName}
+            </span>
+          );
+        case 'attachment':
+          return (
+            <span key={i} className="attachment-token">
+              {token.value.name}
             </span>
           );
         default:

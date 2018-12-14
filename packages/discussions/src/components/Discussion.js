@@ -34,7 +34,7 @@ export const DiscussionComponent = props => (
             profile={props.profile}
             onLeave={props.onLeave}
           />
-          <Modal isOpen={props.messageHistory} toggle={props.close}>
+          <Modal isOpen={!!props.messageHistory} toggle={props.close}>
             <ModalHeader>
               <button
                 type="button"
