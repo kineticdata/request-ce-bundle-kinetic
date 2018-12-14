@@ -72,33 +72,41 @@ export default (action, content) => {
         const invitedBy = getToken(content, 'invitedBy', false);
         const invitationEmail = getToken(content, 'invitationEmail', false);
         const joinedAsAdmin = getToken(content, 'joinedAsAdmin', false);
-        if (invitedBy) {
-          return invitationEmail
-            ? [
-                user,
-                textToken('joined the discussion after'),
-                invitedBy,
-                textToken(`sent an invitation to ${invitationEmail.value}`),
-              ]
-            : [
-                user,
-                textToken('joined the discussion after being invited by'),
-                invitedBy,
-              ];
+        const joinedAsOwner = getToken(content, 'joinedAsOwner', false);
+        if (invitedBy && invitationEmail) {
+          return [
+            user,
+            textToken('joined the discussion after'),
+            invitedBy,
+            textToken(`sent an invitation to ${invitationEmail.value}`),
+          ];
+        } else if (invitedBy) {
+          return [
+            user,
+            textToken('joined the discussion after being invited by'),
+            invitedBy,
+          ];
+        } else if (joinedAsAdmin) {
+          return [
+            user,
+            textToken(
+              'joined the discussion after being authorized as a space admin',
+            ),
+          ];
+        } else if (joinedAsOwner) {
+          return [
+            user,
+            textToken(
+              'joined the discussion after being authorized as an owner',
+            ),
+          ];
         } else {
-          return joinedAsAdmin
-            ? [
-                user,
-                textToken(
-                  'joined the discussion after being authorized as a space admin',
-                ),
-              ]
-            : [
-                user,
-                textToken(
-                  'joined the discussion after being authorized by the join policy',
-                ),
-              ];
+          return [
+            user,
+            textToken(
+              'joined the discussion after being authorized by the join policy',
+            ),
+          ];
         }
       }
       case 'Participant Left':

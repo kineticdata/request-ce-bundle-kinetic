@@ -115,6 +115,22 @@ describe('generateContent', () => {
       expect(generateContent('Participant Joined', content)).toEqual(expected);
     });
 
+    it('returns joined as owner message', () => {
+      const content = [
+        { name: 'user', type: 'user', value: USER1 },
+        { name: 'joinedAsOwner', type: 'json', value: 'true' },
+      ];
+      // USER1 joined the discussion after being authorized as an owner
+      const expected = [
+        { type: 'user', value: USER1 },
+        {
+          type: 'text',
+          value: 'joined the discussion after being authorized as an owner',
+        },
+      ];
+      expect(generateContent('Participant Joined', content)).toEqual(expected);
+    });
+
     it('returns joined as space admin message', () => {
       const content = [
         { name: 'user', type: 'user', value: USER1 },
