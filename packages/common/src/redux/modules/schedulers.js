@@ -8,7 +8,7 @@ export const SCHEDULER_AVAILABILITY_FORM_SLUG = 'scheduler-availability';
 export const SCHEDULER_OVERRIDE_FORM_SLUG = 'scheduler-override';
 export const SCHEDULER_OVERRIDES_PAGE_SIZE = 10;
 export const SCHEDULED_EVENT_FORM_SLUG = 'scheduled-event';
-export const RESCHEDULE_EVENT_FORM_SLUG = 'reschedule-event';
+export const SCHEDULED_EVENT_ACTION_FORM_SLUG = 'scheduled-event-action';
 
 export const types = {
   // Schedulers List

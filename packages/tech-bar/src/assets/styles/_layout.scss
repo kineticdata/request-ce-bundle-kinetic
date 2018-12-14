@@ -36,6 +36,14 @@
       }
     }
 
+    .home-title {
+      color: $black;
+      font-size: 1.625rem;
+      font-weight: 600;
+      line-height: 3rem;
+      margin-bottom: 1rem;
+    }
+
     .tech-bar-display {
       .btn--checkin {
         @include border-radius(1rem);

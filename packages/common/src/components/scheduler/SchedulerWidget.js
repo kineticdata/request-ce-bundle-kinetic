@@ -26,7 +26,7 @@ import {
   updateScheduledEvent,
   submitScheduledEvent,
   deleteScheduledEvent,
-  createRescheduleEvent,
+  createScheduledEventAction,
 } from '../../helpers/schedulerWidget';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
@@ -122,6 +122,7 @@ const Timer = compose(
 const SchedulerWidgetComponent = ({
   showTypeSelector = false,
   canReschedule = false,
+  canCancel = false,
   stateData: {
     loading,
     loadingData,
@@ -146,6 +147,7 @@ const SchedulerWidgetComponent = ({
     schedulingErrors,
     event,
     rescheduleEvent,
+    eventCancelled,
   },
   handleTypeChange,
   handleDateChange,
@@ -154,12 +156,16 @@ const SchedulerWidgetComponent = ({
   handleEventDelete,
   openModal,
   toggleModal,
+  openCancel,
+  toggleCancel,
   openCalendar,
   setOpenCalendar,
   expired,
   setExpired,
   rescheduled,
+  cancelled,
   scheduleEvent,
+  cancelEvent,
 }) => {
   const interval = parseInt(timeInterval, 10);
   const timeout = parseInt(reservationTimeout, 10);
@@ -321,10 +327,10 @@ const SchedulerWidgetComponent = ({
                     <I18n>Your selected time has expired.</I18n>
                   </Alert>
                 )}
-                {rescheduled && (
+                {cancelled && (
                   <Alert color="info">
                     <span>
-                      <I18n>Your event has been successfully rescheduled.</I18n>{' '}
+                      <I18n>Your event has been successfully cancelled.</I18n>{' '}
                     </span>
                     <em>
                       <I18n>
@@ -334,6 +340,22 @@ const SchedulerWidgetComponent = ({
                     </em>
                   </Alert>
                 )}
+                {rescheduled &&
+                  !cancelled && (
+                    <Alert color="info">
+                      <span>
+                        <I18n>
+                          Your event has been successfully rescheduled.
+                        </I18n>{' '}
+                      </span>
+                      <em>
+                        <I18n>
+                          It may take several minutes for your list to reflect
+                          the changes.
+                        </I18n>
+                      </em>
+                    </Alert>
+                  )}
                 <label className="field-label">
                   <I18n>Date and Time</I18n>
                 </label>
@@ -343,82 +365,107 @@ const SchedulerWidgetComponent = ({
                       className="fa fa-calendar fa-fw card-icon"
                       style={{ background: 'rgb(255, 74, 94)' }}
                     />
-                    <div className="card-body">
-                      {rescheduleEvent || event ? (
-                        <Fragment>
-                          <h1 className="card-title">
-                            <Moment
-                              timestamp={moment.tz(
-                                (rescheduleEvent || event).values['Date'],
-                                DATE_FORMAT,
-                                timezone,
-                              )}
-                              format={Constants.MOMENT_FORMATS.dateWithDay}
-                            />
-                          </h1>
-                          <p className="card-subtitle">
-                            <Moment
-                              timestamp={moment.tz(
-                                (rescheduleEvent || event).values['Time'],
-                                TIME_FORMAT,
-                                timezone,
-                              )}
-                              format={Constants.MOMENT_FORMATS.time}
-                            />
-                            {` - `}
-                            <Moment
-                              timestamp={moment
-                                .tz(
+                    {!eventCancelled ? (
+                      <div className="card-body">
+                        {rescheduleEvent || event ? (
+                          <Fragment>
+                            <h1 className="card-title">
+                              <Moment
+                                timestamp={moment.tz(
+                                  (rescheduleEvent || event).values['Date'],
+                                  DATE_FORMAT,
+                                  timezone,
+                                )}
+                                format={Constants.MOMENT_FORMATS.dateWithDay}
+                              />
+                            </h1>
+                            <p className="card-subtitle">
+                              <Moment
+                                timestamp={moment.tz(
                                   (rescheduleEvent || event).values['Time'],
                                   TIME_FORMAT,
                                   timezone,
-                                )
-                                .add(
-                                  (rescheduleEvent || event).values['Duration'],
-                                  'minute',
                                 )}
-                              format={Constants.MOMENT_FORMATS.time}
-                            />
-                          </p>
-                        </Fragment>
-                      ) : (
-                        <h1 className="card-title">
-                          <I18n>Date and time not selected</I18n>
-                        </h1>
-                      )}
-                      {!isScheduled && (
-                        <div className="input-group-append">
-                          <button
-                            type="button"
-                            className={`btn ${
-                              isReserved ? 'btn-primary' : 'btn-inverse'
-                            }`}
-                            onClick={() => {
-                              toggleModal(true);
-                              setExpired(false);
-                            }}
-                          >
-                            <I18n>
-                              {isReserved ? 'Change' : 'Select'} Date and Time
-                            </I18n>
-                          </button>
-                        </div>
-                      )}
-                      {canReschedule &&
-                        isScheduled && (
-                          <div className="input-group-append">
-                            <button
-                              type="button"
-                              className="btn btn-primary"
-                              onClick={() => {
-                                toggleModal(true);
-                              }}
-                            >
-                              <I18n>Reschedule</I18n>
-                            </button>
-                          </div>
+                                format={Constants.MOMENT_FORMATS.time}
+                              />
+                              {` - `}
+                              <Moment
+                                timestamp={moment
+                                  .tz(
+                                    (rescheduleEvent || event).values['Time'],
+                                    TIME_FORMAT,
+                                    timezone,
+                                  )
+                                  .add(
+                                    (rescheduleEvent || event).values[
+                                      'Duration'
+                                    ],
+                                    'minute',
+                                  )}
+                                format={Constants.MOMENT_FORMATS.time}
+                              />
+                            </p>
+                          </Fragment>
+                        ) : (
+                          <h1 className="card-title">
+                            <I18n>Date and time not selected</I18n>
+                          </h1>
                         )}
-                    </div>
+                        {!isScheduled &&
+                          !scheduling && (
+                            <div className="actions">
+                              <button
+                                type="button"
+                                className={`btn ${
+                                  isReserved ? 'btn-primary' : 'btn-inverse'
+                                }`}
+                                onClick={() => {
+                                  toggleModal(true);
+                                  setExpired(false);
+                                }}
+                              >
+                                <I18n>
+                                  {isReserved ? 'Change' : 'Select'} Date and
+                                  Time
+                                </I18n>
+                              </button>
+                            </div>
+                          )}
+                        {isScheduled &&
+                          !scheduling && (
+                            <div className="card-actions">
+                              {canReschedule && (
+                                <button
+                                  type="button"
+                                  className="btn btn-primary"
+                                  onClick={() => {
+                                    toggleModal(true);
+                                  }}
+                                >
+                                  <I18n>Reschedule</I18n>
+                                </button>
+                              )}
+                              {canCancel && (
+                                <button
+                                  type="button"
+                                  className="btn btn-link text-danger"
+                                  onClick={() => {
+                                    toggleCancel(true);
+                                  }}
+                                >
+                                  <I18n>Cancel</I18n>
+                                </button>
+                              )}
+                            </div>
+                          )}
+                      </div>
+                    ) : (
+                      <div className="card-body">
+                        <h1 className="card-message text-danger">
+                          <I18n>Cancelled</I18n>
+                        </h1>
+                      </div>
+                    )}
                   </div>
                 </div>
                 {!scheduling &&
@@ -449,7 +496,7 @@ const SchedulerWidgetComponent = ({
                 className="btn btn-link"
                 onClick={() => toggleModal(false)}
               >
-                <I18n>Cancel</I18n>
+                <I18n>Close</I18n>
               </button>
               <span>
                 <I18n>Schedule</I18n>
@@ -597,6 +644,43 @@ const SchedulerWidgetComponent = ({
           </ModalFooter>
         </Modal>
       )}
+      {openCancel && (
+        <Modal
+          isOpen={!!openCancel}
+          toggle={() => toggleCancel(false)}
+          size="sm"
+          className="scheduler-widget-modal"
+        >
+          <div className="modal-header">
+            <h4 className="modal-title">
+              <button
+                type="button"
+                className="btn btn-link"
+                onClick={() => toggleCancel(false)}
+              >
+                <I18n>Close</I18n>
+              </button>
+              <span>
+                <I18n>Confirm</I18n>
+              </span>
+            </h4>
+          </div>
+          <ModalBody className="modal-body--padding">
+            <div className="body-content">
+              <I18n>Are you sure you want to cancel this event?</I18n>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={cancelEvent}
+            >
+              <I18n>Cancel Event</I18n>
+            </button>
+          </ModalFooter>
+        </Modal>
+      )}
     </div>
   );
 };
@@ -606,6 +690,7 @@ const fetchSchedulerDetails = ({
   eventType,
   stateData: { schedulerId, scheduledEventId },
   setResultToState,
+  setEventResultToState,
   setScheduler,
   setScheduledEvent,
   setSchedulerConfigs,
@@ -618,7 +703,7 @@ const fetchSchedulerDetails = ({
     fetchSchedulerConfigsBySchedulerId(schedulerId),
     fetchSchedulerAvailabilityBySchedulerId(schedulerId),
   ]).then(([event, scheduler, configs, availability]) => {
-    event && setResultToState(event, setScheduledEvent);
+    event && setEventResultToState(event, setScheduledEvent);
     setResultToState(scheduler, setScheduler);
     setResultToState(configs, setSchedulerConfigs);
     setResultToState(availability, setSchedulerAvailability);
@@ -656,6 +741,23 @@ const fetchSchedulerData = ({
 const setResultToState = ({ dispatch }) => (result, set) => {
   const { serverError, errors } = result;
   if (serverError) {
+    dispatch(actions.addErrors([serverError.error || serverError.statusText]));
+  } else if (errors) {
+    dispatch(actions.addErrors(errors));
+  } else {
+    set(result);
+  }
+};
+
+const setEventResultToState = ({ dispatch }) => (result, set) => {
+  const { serverError, errors } = result;
+  if (serverError && serverError.status === 404) {
+    dispatch(
+      actions.setState({
+        eventCancelled: true,
+      }),
+    );
+  } else if (serverError) {
     dispatch(actions.addErrors([serverError.error || serverError.statusText]));
   } else if (errors) {
     dispatch(actions.addErrors(errors));
@@ -919,6 +1021,40 @@ const scheduleEvent = ({
   }
 };
 
+const cancelEvent = ({
+  dispatch,
+  stateData: { event },
+  appointmentRequestId,
+  toggleCancel,
+  setCancelled,
+}) => () => {
+  deleteScheduledEvent(event.id).then(() => {
+    createScheduledEventAction({
+      Action: 'Cancel',
+      'Scheduled Event Id': event.id,
+      'Request Id': appointmentRequestId,
+    }).then(({ serverError: se, errors: e }) => {
+      if (se || e) {
+        dispatch(
+          actions.addSchedulingErrors([
+            'Your event was cancelled, but the details failed to update. Please contact an administrator.',
+          ]),
+        );
+      }
+      dispatch(
+        actions.setState({
+          eventCancelled: true,
+          time: '',
+          event: null,
+          rescheduleEvent: null,
+        }),
+      );
+      toggleCancel(false);
+      setCancelled(true);
+    });
+  });
+};
+
 const verifyScheduledEvent = ({
   dispatch,
   stateData: {
@@ -1071,9 +1207,7 @@ const completeReschedule = ({
   }).then(({ submission, serverError, errors }) => {
     if (serverError || errors) {
       dispatch(
-        actions.addSchedulingErrors([
-          'Failed to update your current appointment.',
-        ]),
+        actions.addSchedulingErrors(['Failed to update your current event.']),
       );
       dispatch(
         actions.setState({
@@ -1082,7 +1216,8 @@ const completeReschedule = ({
         }),
       );
     } else {
-      createRescheduleEvent({
+      createScheduledEventAction({
+        Action: 'Reschedule',
         'Scheduled Event Id': submission.id,
         'Request Id': appointmentRequestId,
         'Data Map': JSON.stringify(rescheduleDataMap),
@@ -1254,6 +1389,16 @@ const toggleModal = ({
   }
 };
 
+const toggleCancel = ({
+  dispatch,
+  stateData: { scheduling },
+  setOpenCancel,
+}) => open => {
+  if (!scheduling) {
+    setOpenCancel(open);
+  }
+};
+
 const handleEventDelete = ({
   dispatch,
   stateData: { event },
@@ -1277,7 +1422,9 @@ const handleEventDelete = ({
 export const SchedulerWidget = compose(
   withState('expired', 'setExpired', false),
   withState('rescheduled', 'setRescheduled', false),
+  withState('cancelled', 'setCancelled', false),
   withState('openModal', 'setOpenModal', false),
+  withState('openCancel', 'setOpenCancel', false),
   withState('openCalendar', 'setOpenCalendar', false),
   withReducer(
     'stateData',
@@ -1304,10 +1451,10 @@ export const SchedulerWidget = compose(
     setSchedulerAvailability,
     setSchedulerOverrides,
     setScheduledEvents,
-    scheduleEvent,
   }),
   withHandlers({
     setResultToState,
+    setEventResultToState,
     handleTypeChange,
     handleDateChange,
     handleTimeChange,
@@ -1321,6 +1468,7 @@ export const SchedulerWidget = compose(
   }),
   withHandlers({
     toggleModal,
+    toggleCancel,
   }),
   withHandlers({
     verifyScheduledEvent,
@@ -1328,6 +1476,7 @@ export const SchedulerWidget = compose(
   }),
   withHandlers({
     scheduleEvent,
+    cancelEvent,
   }),
   lifecycle({
     componentDidMount() {
