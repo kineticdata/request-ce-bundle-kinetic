@@ -8,9 +8,11 @@ const formatLabel = label =>
       : label;
 
 const formatValue = value =>
-  isarray(value)
-    ? value.map(formatValue).join(', ')
-    : value.username || value.name || value;
+  value === null
+    ? ''
+    : isarray(value)
+      ? value.map(formatValue).join(', ')
+      : value.username || value.name || value;
 
 const getToken = (tokens, name, required = true) => {
   const result = tokens
