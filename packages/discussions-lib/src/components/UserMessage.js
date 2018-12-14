@@ -97,7 +97,7 @@ const formatFileSize = fileSize => {
 };
 
 export const TextMessage = ({ discussion, message }) => (
-  <Fragment>
+  <div>
     <Markdown source={produceContent(message)} skipHtml />
     {message.content.filter(c => c.type === 'attachment').map(attachment => (
       <div
@@ -125,7 +125,7 @@ export const TextMessage = ({ discussion, message }) => (
         </small>
       </div>
     ))}
-  </Fragment>
+  </div>
 );
 
 export const Message = ({ discussion, message, actions }) => (
