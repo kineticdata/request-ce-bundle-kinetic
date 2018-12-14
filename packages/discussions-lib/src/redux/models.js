@@ -48,3 +48,20 @@ export const Discussion = Record({
   loading: true,
   loadingMoreMessages: false,
 });
+
+export const getLastMessageAt = discussion =>
+  discussion.messages && discussion.messages.first()
+    ? discussion.messages.first().createdAt
+    : discussion.createdAt;
+
+export const sortByLastMessageAt = (d1, d2) => {
+  return moment
+    .utc(getLastMessageAt(d2))
+    .diff(moment.utc(getLastMessageAt(d1)));
+};
+
+export const getGroupedDiscussions = discussions => {
+  return discussions.groupBy(discussion =>
+    moment(getLastMessageAt(discussion)).fromNow(),
+  );
+};

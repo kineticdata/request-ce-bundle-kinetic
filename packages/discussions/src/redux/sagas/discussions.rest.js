@@ -1,11 +1,17 @@
 import { all, call, select, put, takeEvery } from 'redux-saga/effects';
+import moment from 'moment';
 import {
   types as listTypes,
   actions as listActions,
 } from '../modules/discussionsList';
 import { types as detailsTypes } from '../modules/discussionsDetails';
 import { types } from '../modules/discussions';
-import { DiscussionAPI, createDiscussionList } from 'discussions-lib';
+import {
+  DiscussionAPI,
+  createDiscussionList,
+  getLastMessageAt,
+} from 'discussions-lib';
+import { sortByLastMessageAt } from '../../../../discussions-lib/src/redux/models';
 
 export function* fetchRelatedDiscussionsTask(action) {
   const { type, key, loadCallback } = action.payload;
@@ -31,7 +37,10 @@ export function* fetchRelatedDiscussionsTask(action) {
         : [],
     );
 
-  const discussionsList = createDiscussionList(combinedDiscussions);
+  const discussionsList = createDiscussionList(combinedDiscussions).sort(
+    sortByLastMessageAt,
+  );
+
   yield put(listActions.setRelatedDiscussions(discussionsList));
 
   if (typeof loadCallback === 'function') {

@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
-import { PageTitle, Utils } from 'common';
+import { PageTitle } from 'common';
+import { getGroupedDiscussions } from 'discussions-lib';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { actions } from '../../redux/modules/spaceApp';
 import { actions as teamListActions } from '../../redux/modules/teamList';
@@ -57,8 +58,8 @@ const HomeComponent = ({
               {discussionsSearchTerm !== ''
                 ? `${discussionsSearchTerm}`
                 : showingArchived
-                  ? 'Archived Discussions'
-                  : 'Recent Discussions'}
+                ? 'Archived Discussions'
+                : 'Recent Discussions'}
               <button
                 className="btn btn-link"
                 id="header-dropdown"
@@ -168,24 +169,20 @@ const HomeComponent = ({
             </div>
           </div>
         )}
-      {!discussionsError &&
-        !discussionsLoading &&
-        discussionGroups.size === 0 && (
-          <div className="empty-state empty-state--wally">
-            <h5>No discussions found</h5>
-            <img src={wallyMissingImage} alt="Missing Wally" />
-            <h6>You are not involved in any discussions!</h6>
-          </div>
-        )}
+      {!discussionsError && !discussionsLoading && discussionGroups.size === 0 && (
+        <div className="empty-state empty-state--wally">
+          <h5>No discussions found</h5>
+          <img src={wallyMissingImage} alt="Missing Wally" />
+          <h6>You are not involved in any discussions!</h6>
+        </div>
+      )}
     </div>
   </div>
 );
 
 export const mapStateToProps = state => ({
   spaceName: state.app.space.name,
-  discussionGroups: Utils.getGroupedDiscussions(
-    state.space.spaceApp.discussions,
-  ),
+  discussionGroups: getGroupedDiscussions(state.space.spaceApp.discussions),
   discussionsError: state.space.spaceApp.discussionsError,
   discussionsLoading: state.space.spaceApp.discussionsLoading,
   discussionsPageToken: state.space.spaceApp.discussionsPageToken,

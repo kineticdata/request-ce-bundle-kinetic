@@ -5,6 +5,7 @@ import { List } from 'immutable';
 export const DEFAULT_MESSAGE_LIMIT = 25;
 export const DEFAULT_DISCUSSION_LIMIT = 10;
 
+const isExistingAttachment = attachment => attachment.type === 'attachment';
 const baseUrl = () => `${bundle.spaceLocation()}/app/discussions`;
 
 export const sendMessage = params => {
@@ -24,7 +25,6 @@ export const sendMessage = params => {
     params.attachment.forEach(attachment => {
       formData.append('attachments', attachment);
     });
-    // formData.append('attachments', params.attachment);
 
     axios.request({
       url: `${baseUrl()}/api/v1/discussions/${params.id}/messages`,
@@ -43,21 +43,37 @@ export const sendMessage = params => {
   }
 };
 
-export const updateMessage = params =>
+export const updateMessage = params => {
+  const attachments = params.attachment || [];
+
+  const message = {
+    content: [
+      {
+        type: 'text',
+        value: params.message,
+      },
+      ...attachments.filter(isExistingAttachment),
+    ],
+  };
+  const newAttachments = attachments.filter(a => !isExistingAttachment(a));
+
+  const formData = new FormData();
+  formData.append('message', JSON.stringify(message));
+  newAttachments.forEach(attachment => {
+    formData.append('attachments', attachment);
+  });
+
   axios.request({
     url: `${baseUrl()}/api/v1/discussions/${params.discussionId}/messages/${
       params.id
     }`,
-    method: 'put',
-    data: {
-      content: [
-        {
-          type: 'text',
-          value: params.message,
-        },
-      ],
+    method: 'post',
+    headers: {
+      'Content-Type': 'multipart/form-data',
     },
+    data: formData,
   });
+};
 
 export const deleteMessage = params =>
   axios.request({

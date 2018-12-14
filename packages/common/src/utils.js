@@ -179,17 +179,6 @@ export const getConfig = ({
   }
 };
 
-const getLastMessageAt = discussion =>
-  discussion.messages && discussion.messages.first()
-    ? discussion.messages.first().createdAt
-    : discussion.createdAt;
-
-export const getGroupedDiscussions = discussions => {
-  return discussions.groupBy(discussion =>
-    moment(getLastMessageAt(discussion)).fromNow(),
-  );
-};
-
 export const calculateDateRange = (now, range) => {
   if (!range) {
     throw 'Cannot calculate date range for blank value';

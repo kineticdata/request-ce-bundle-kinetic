@@ -13,6 +13,7 @@ import classNames from 'classnames';
 import ContentEditable from './ContentEditable';
 import { Provider, connect, dispatch } from '../redux/store';
 import { actions } from '../redux/reducer';
+import { bundle } from 'react-kinetic-core';
 
 const VALID_IMG_TYPES = [
   'image/jpeg',
@@ -23,51 +24,70 @@ const VALID_IMG_TYPES = [
   'image/svg+xml',
 ];
 
-const canShowPreview = file =>
-  file.preview && VALID_IMG_TYPES.includes(file.type);
+const canShowPreview = attachment =>
+  (attachment.preview && VALID_IMG_TYPES.includes(attachment.type)) ||
+  VALID_IMG_TYPES.includes(attachment.value.contentType);
 
-const UploadCard = ({ attachment, handleAttachmentCancel }) => (
-  <div
-    className="icon-wrapper"
-    style={{
-      display: 'flex',
-      backgroundColor: '#fff',
-      height: '24px',
-      minWidth: '96px',
-      maxWidth: '182px',
-      color: '#54698D',
-      fontSize: '10px',
-      lineHeight: '12px',
-      marginBottom: '0.5em',
-      marginRight: '0.5em',
-    }}
-  >
-    {canShowPreview(attachment) && (
-      <img
-        src={attachment.preview}
-        alt={attachment.name}
+const getThumbnailUrl = (discussion, message, attachment) =>
+  `${bundle.spaceLocation()}/app/discussions/api/v1/discussions/${
+    discussion.id
+  }/messages/${message.id}/files/${
+    attachment.value.thumbnailId
+  }/${encodeURIComponent(attachment.value.filename.replace(/ /g, '_'))}`;
+
+const getThumbnailSrc = (discussion, message, attachment) =>
+  canShowPreview(attachment)
+    ? attachment.type === 'attachment'
+      ? getThumbnailUrl(discussion, message, attachment)
+      : attachment.preview
+    : null;
+
+const UploadCard = ({ discussion, message, attachment, remove }) => {
+  const name = attachment.value ? attachment.value.filename : attachment.name;
+  const thumbnailSrc = getThumbnailSrc(discussion, message, attachment);
+  return (
+    <div
+      className="icon-wrapper"
+      style={{
+        display: 'flex',
+        backgroundColor: '#fff',
+        height: '24px',
+        minWidth: '96px',
+        maxWidth: '182px',
+        color: '#54698D',
+        fontSize: '10px',
+        lineHeight: '12px',
+        marginBottom: '0.5em',
+        marginRight: '0.5em',
+      }}
+    >
+      {thumbnailSrc && (
+        <img
+          src={thumbnailSrc}
+          alt={name}
+          style={{
+            width: '24px',
+            height: '24px',
+          }}
+        />
+      )}
+      <span style={{ flex: '1', marginLeft: '0.5em' }}>{name}</span>
+      <button
+        className="btn btn-icon"
+        type="button"
         style={{
           width: '24px',
           height: '24px',
+          display: 'flex',
+          justifyContent: 'center',
         }}
-      />
-    )}
-    <span style={{ flex: '1', marginLeft: '0.5em' }}>{attachment.name}</span>
-    <button
-      className="btn btn-icon"
-      type="button"
-      style={{
-        width: '24px',
-        height: '24px',
-        display: 'flex',
-        justifyContent: 'center',
-      }}
-      onClick={handleAttachmentCancel(attachment)}
-    >
-      <i className="fa fa-fw fa-times" />
-    </button>
-  </div>
-);
+        onClick={remove(attachment)}
+      >
+        <i className="fa fa-fw fa-times" />
+      </button>
+    </div>
+  );
+};
 
 class ChatInput extends Component {
   constructor(props) {
@@ -144,8 +164,10 @@ class ChatInput extends Component {
   }
 
   editMessage(message) {
+    const [textToken, ...attachmentTokens] = message.content;
     this.setState({
-      chatInput: message.content[0].value,
+      chatInput: textToken.value,
+      fileAttachments: attachmentTokens,
     });
     this.contentEditable.focus();
   }
@@ -260,9 +282,15 @@ class ChatInput extends Component {
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               {this.state.fileAttachments.map(attachment => (
                 <UploadCard
-                  key={attachment.name}
+                  key={
+                    attachment.value
+                      ? attachment.value.documentId
+                      : attachment.name
+                  }
+                  discussion={this.props.discussion}
+                  message={this.props.messageActions.editing}
                   attachment={attachment}
-                  handleAttachmentCancel={this.handleAttachmentCancel}
+                  remove={this.handleAttachmentCancel}
                 />
               ))}
             </div>
