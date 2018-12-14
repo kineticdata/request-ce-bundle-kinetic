@@ -204,11 +204,16 @@ export const resendInvite = ({ discussionId, email, username }) =>
     .then(response => response.data)
     .catch(response => ({ error: response }));
 
-export const removeInvite = (id, inviteId) =>
+export const removeInvite = ({ discussionId, email, username }) =>
   axios
     .request({
-      url: `${baseUrl()}/api/v1/discussions/${id}/invitations/${inviteId}`,
+      url: `${baseUrl()}/api/v1/discussions/${discussionId}/invitations/${email ||
+        username}`,
       method: 'delete',
+      params: {
+        // If we are looking up by email add an email parameter to the object
+        ...(email ? { email: '' } : {}),
+      },
     })
     .then(response => response.data)
     .catch(response => ({ error: response }));
@@ -269,10 +274,11 @@ export const sendInvites = (discussion, values) => {
         value: item.user ? item.user.username : item.label,
         message: values.message,
       }))
-      .filter(args =>
-        args.type === 'username'
-          ? !existingUsernames.contains(args.value)
-          : !existingEmails.contains(args.value),
+      .filter(
+        args =>
+          args.type === 'username'
+            ? !existingUsernames.contains(args.value)
+            : !existingEmails.contains(args.value),
       )
       .map(createInvite),
   );

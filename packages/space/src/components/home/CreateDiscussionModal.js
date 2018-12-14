@@ -27,6 +27,7 @@ const CreateDiscussionModalComponent = props => (
         forms throughout */}
     <DiscussionForm
       onSubmit={props.next}
+      defaults={{ owningUsers: [{ username: props.profile.username }] }}
       renderOwningUsersInput={props => <PeopleSelect {...props} users />}
       renderOwningTeamsInput={props => <PeopleSelect {...props} teams />}
       render={({ formElement, buttonProps }) =>

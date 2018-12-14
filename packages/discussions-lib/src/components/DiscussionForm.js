@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import axios from 'axios';
 import { bundle } from 'react-kinetic-core';
 
@@ -21,7 +21,7 @@ export class DiscussionForm extends React.Component {
             description: '',
             isPrivate: false,
             joinPolicy: '',
-            owningUsers: [],
+            owningUsers: (props.defaults && props.defaults.owningUsers) || [],
             owningTeams: [],
             isArchived: false,
           },
@@ -111,9 +111,10 @@ export class DiscussionForm extends React.Component {
               onChange={this.handleChange}
               onBlur={this.handleBlur}
             />
-            {validations.title && this.state.touched.title && (
-              <p className="text-danger">{validations.title}</p>
-            )}
+            {validations.title &&
+              this.state.touched.title && (
+                <p className="text-danger">{validations.title}</p>
+              )}
           </div>
           <div className="form-group">
             <label htmlFor="description">Description</label>
@@ -135,25 +136,28 @@ export class DiscussionForm extends React.Component {
               Private?
             </label>
           </div>
-          <div className="form-group">
-            <label htmlFor="joinPolicy">Join Policy</label>
-            <select
-              id="joinPolicy"
-              value={
-                this.state.values.joinPolicy
-                  ? this.state.values.joinPolicy.name
-                  : ''
-              }
-              onChange={this.handleJoinPolicyChange}
-            >
-              <option />
-              {this.state.securityPolicyDefinitions.map(definition => (
-                <option value={definition.name} key={definition.name}>
-                  {definition.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <p>Private discussions require explicit invitations to join</p>
+          {!this.state.values.isPrivate && (
+            <div className="form-group">
+              <label htmlFor="joinPolicy">Join Policy</label>
+              <select
+                id="joinPolicy"
+                value={
+                  this.state.values.joinPolicy
+                    ? this.state.values.joinPolicy.name
+                    : ''
+                }
+                onChange={this.handleJoinPolicyChange}
+              >
+                <option />
+                {this.state.securityPolicyDefinitions.map(definition => (
+                  <option value={definition.name} key={definition.name}>
+                    {definition.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           <div className="form-group">
             <label htmlFor="owningUsers">Owning Users</label>
             <OwningUsersInput
@@ -170,24 +174,29 @@ export class DiscussionForm extends React.Component {
               onChange={this.handleChange}
             />
           </div>
+          <p>
+            Owning users and teams are able to make changes to the discussion
+          </p>
           {this.state.editing && (
-            <div className="form-group">
-              <div className="form-check-inline">
-                <input
-                  className="form-check-input"
-                  id="isArchived"
-                  type="checkbox"
-                  checked={this.state.values.isArchived}
-                  onChange={this.handleChange}
-                />
-                <label className="form-check-label" htmlFor="isArchived">
-                  Archived?
-                </label>
+            <Fragment>
+              <div className="form-group">
+                <div className="form-check-inline">
+                  <input
+                    className="form-check-input"
+                    id="isArchived"
+                    type="checkbox"
+                    checked={this.state.values.isArchived}
+                    onChange={this.handleChange}
+                  />
+                  <label className="form-check-label" htmlFor="isArchived">
+                    Archived?
+                  </label>
+                </div>
               </div>
               <p className="text-danger">
-                Once archived users will not be able to send any messages
+                While archived, users are not able to send any messages
               </p>
-            </div>
+            </Fragment>
           )}
         </form>
       ),
