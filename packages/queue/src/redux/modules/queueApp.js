@@ -199,7 +199,12 @@ export const reducer = (state = State(), { type, payload }) => {
           }),
         )
         .set('myFilters', List(payload.myFilters))
-        .set('forms', payload.forms)
+        .set(
+          'forms',
+          payload.forms.filter(
+            f => f.status === 'Active' || f.status === 'New',
+          ),
+        )
         .set('loading', false);
     case types.SET_PROFILE:
       return state.set('profile', payload);
