@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers } from 'recompose';
-import { Utils } from 'common';
+import { getGroupedDiscussions } from 'discussions-lib';
 import { DiscussionCard } from './DiscussionCard';
 import { actions as listActions } from '../../redux/modules/discussionsList';
 import { actions as discussionsActions } from '../../redux/modules/discussions';
@@ -18,7 +18,7 @@ export const DiscussionsListComponent = ({
         New Discussion
       </button>
 
-      {Utils.getGroupedDiscussions(discussions)
+      {getGroupedDiscussions(discussions)
         .map((discussions, dateGroup) => (
           <div className="messages" key={dateGroup}>
             <div className="date">

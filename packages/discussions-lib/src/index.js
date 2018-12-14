@@ -4,7 +4,13 @@ import { UserMessageGroup } from './components/UserMessageGroup';
 import { DiscussionForm } from './components/DiscussionForm';
 import { InvitationForm } from './components/InvitationForm';
 import { MessageHistory } from './components/MessageHistory';
-import { createDiscussion, createDiscussionList } from './redux/models';
+import {
+  createDiscussion,
+  createDiscussionList,
+  getLastMessageAt,
+  getGroupedDiscussions,
+  sortByLastMessageAt,
+} from './redux/models';
 
 export {
   DiscussionAPI,
@@ -15,4 +21,7 @@ export {
   MessageHistory,
   createDiscussion,
   createDiscussionList,
+  getLastMessageAt,
+  getGroupedDiscussions,
+  sortByLastMessageAt,
 };
