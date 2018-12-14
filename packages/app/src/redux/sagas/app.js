@@ -1,8 +1,12 @@
 import { takeEvery, call, put, all, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { Map } from 'immutable';
-import { CoreAPI } from 'react-kinetic-core';
-import { actions as configActions } from '../modules/config';
+import axios from 'axios';
+import { CoreAPI, bundle } from 'react-kinetic-core';
+import {
+  actions as configActions,
+  types as configTypes,
+} from '../modules/config';
 import { actions as kappActions } from '../modules/kapps';
 import {
   actions as loadingActions,
@@ -64,6 +68,18 @@ export function* fetchAppTask({ payload }) {
         push(`/kapps/${defaultKappDisplayProfile || defaultKappDisplaySpace}`),
       );
     }
+
+    const { locales, timezones } = yield all({
+      locales: call(fetchLocales),
+      timezones: call(fetchTimezones),
+    });
+
+    yield put(
+      configActions.setLocaleMetadata({
+        locales: locales.data.locales,
+        timezones: timezones.data.timezones,
+      }),
+    );
     yield put(loadingActions.setLoading(false));
   } else {
     window.alert(
@@ -71,6 +87,10 @@ export function* fetchAppTask({ payload }) {
     );
   }
 }
+
+const fetchLocales = () => axios.get(`${bundle.apiLocation()}/meta/locales`);
+const fetchTimezones = () =>
+  axios.get(`${bundle.apiLocation()}/meta/timezones`);
 
 export function* watchApp() {
   yield takeEvery(loadingTypes.LOAD_APP, fetchAppTask);

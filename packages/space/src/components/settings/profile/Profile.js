@@ -28,6 +28,8 @@ export const EditProfileComponent = ({
   handleSubmit,
   handleTogglePassword,
   kapps,
+  locales,
+  timezones,
 }) => (
   <div className="page-container page-container--panels page-container--space-profile-edit">
     <PageTitle parts={['Edit Profile']} />
@@ -76,6 +78,45 @@ export const EditProfileComponent = ({
                     onChange={handleFieldChange}
                     value={fieldValues.phoneNumber}
                   />
+                </div>
+                <div className="form-group col-md-6">
+                  <label htmlFor="preferredLocale">Preferred Locale</label>
+                  <select
+                    type="text"
+                    id="preferredLocale"
+                    name="preferredLocale"
+                    className="form-control"
+                    onChange={handleFieldChange}
+                    value={fieldValues.preferredLocale}
+                  >
+                    <option value="">None Selected</option>
+                    {locales.map(locale => (
+                      <option
+                        value={locale.code}
+                        key={`${locale.code}+${locale.name}`}
+                      >
+                        {locale.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group col-md-6">
+                  <label htmlFor="timezone">Timezone</label>
+                  <select
+                    type="text"
+                    id="timezone"
+                    name="timezone"
+                    className="form-control"
+                    onChange={handleFieldChange}
+                    value={fieldValues.timezone}
+                  >
+                    <option value="">None Selected</option>
+                    {timezones.map(timezone => (
+                      <option value={timezone.id} key={timezone.id}>
+                        {timezone.name} ({timezone.id})
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 {defaultKappDisplayEnabled && (
                   <div className="form-group col-md-6">
@@ -299,6 +340,8 @@ const buildProfile = (fieldValues, profile) => {
     ...profile,
     displayName: fieldValues.displayName,
     email: fieldValues.email,
+    preferredLocale: fieldValues.preferredLocale,
+    timezone: fieldValues.timezone,
     profileAttributes: profileAttributes,
   };
 };
@@ -306,6 +349,8 @@ const buildProfile = (fieldValues, profile) => {
 const translateProfileToFieldValues = profile => ({
   displayName: profile.displayName || '',
   email: profile.email || '',
+  preferredLocale: profile.preferredLocale || '',
+  timezone: profile.timezone || '',
   newPassword: '',
   confirmPassword: '',
   phoneNumber: getProfilePhone(profile) || '',
@@ -317,6 +362,11 @@ const translateFieldValuesToProfile = (fieldValues, profile) => {
   const result = {
     displayName: updatedProfile.displayName,
     email: updatedProfile.email,
+    preferredLocale:
+      updatedProfile.preferredLocale === ''
+        ? null
+        : updatedProfile.preferredLocale,
+    timezone: updatedProfile.timezone === '' ? null : updatedProfile.timezone,
     profileAttributes: updatedProfile.profileAttributes,
   };
   if (fieldValues.newPassword !== '') {
@@ -372,6 +422,8 @@ const mapStateToProps = state => ({
       return memo;
     }, {}),
   kapps: state.app.kapps,
+  locales: state.app.config.locales,
+  timezones: state.app.config.timezones,
 });
 
 const mapDispatchToProps = {
