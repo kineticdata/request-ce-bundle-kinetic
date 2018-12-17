@@ -209,6 +209,7 @@
     padding: 0 1.5rem;
     .sb-avatar {
       margin-right: 0.25rem;
+      cursor: pointer;
       &--gravatar {
         line-height: initial;
       }
@@ -388,6 +389,7 @@
       visibility: hidden;
       opacity: 0;
       align-items: center;
+      cursor: pointer;
       li + li:before {
         content: '• ';
         padding: 0 0.5rem;
