@@ -146,9 +146,13 @@
       line-height: 1.5rem;
       // @include ms-respond(font-size, 1);
       margin-bottom: 0;
+      strong {
+        font-weight: 600;
+      }
     }
     .card-subtitle {
       color: rgba($black, 0.75);
+      font-size: 0.875rem;
     }
     .card-actions {
       display: flex;

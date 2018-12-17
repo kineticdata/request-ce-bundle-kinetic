@@ -146,7 +146,7 @@ const SchedulerAvailabilityComponent = ({
           </h4>
         </div>
         <ModalBody>
-          <I18n context={`datastore.forms.SCHEDULER_AVAILABILITY_FORM_SLUG`}>
+          <I18n context={`datastore.forms.${SCHEDULER_AVAILABILITY_FORM_SLUG}`}>
             {openModal === true ? (
               <CoreForm
                 datastore

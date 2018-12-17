@@ -79,7 +79,7 @@ const SchedulerManagersComponent = ({
               <th scope="col">
                 <I18n>Username</I18n>
               </th>
-              <th />
+              {isSchedulerAdmin && <th />}
             </tr>
           </thead>
           <tbody>
@@ -89,23 +89,25 @@ const SchedulerManagersComponent = ({
                 <tr key={manager.user.username}>
                   <td scope="row">{manager.user.displayName}</td>
                   <td>{manager.user.username}</td>
-                  <td className="text-right">
-                    <Dropdown
-                      toggle={toggleDropdown(manager.user.username)}
-                      isOpen={openDropdown === manager.user.username}
-                    >
-                      <DropdownToggle color="link" className="btn-sm">
-                        <span className="fa fa-ellipsis-h fa-2x" />
-                      </DropdownToggle>
-                      <DropdownMenu right>
-                        <DropdownItem
-                          onClick={handleRemove(manager.user.username)}
-                        >
-                          <I18n>Remove</I18n>
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </td>
+                  {isSchedulerAdmin && (
+                    <td className="text-right">
+                      <Dropdown
+                        toggle={toggleDropdown(manager.user.username)}
+                        isOpen={openDropdown === manager.user.username}
+                      >
+                        <DropdownToggle color="link" className="btn-sm">
+                          <span className="fa fa-ellipsis-h fa-2x" />
+                        </DropdownToggle>
+                        <DropdownMenu right>
+                          <DropdownItem
+                            onClick={handleRemove(manager.user.username)}
+                          >
+                            <I18n>Remove</I18n>
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </td>
+                  )}
                 </tr>
               ))}
           </tbody>
