@@ -26,52 +26,54 @@ export const SidebarComponent = ({
         <h1>
           <I18n>Upcoming Appointments</I18n>
         </h1>
-        <Nav vertical>
-          {upcomingAppointments.map(appt => {
-            const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
-            const start = moment.utc(appt.values['Event Time'], TIME_FORMAT);
-            const end = start.clone().add(appt.values['Duration'], 'minute');
-            return (
-              <NavItem key={appt.id}>
-                <NavLink
-                  to={`/forms/appointment/${appt.id}`}
-                  activeClassName="active"
-                  className="nav-link"
-                  exact
-                >
-                  <div>
+        {upcomingAppointments.size > 0 && (
+          <Nav vertical>
+            {upcomingAppointments.map(appt => {
+              const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
+              const start = moment.utc(appt.values['Event Time'], TIME_FORMAT);
+              const end = start.clone().add(appt.values['Duration'], 'minute');
+              return (
+                <NavItem key={appt.id}>
+                  <NavLink
+                    to={`/forms/appointment/${appt.id}`}
+                    activeClassName="active"
+                    className="nav-link"
+                    exact
+                  >
                     <div>
-                      <strong>{appt.values['Summary']}</strong>
+                      <div>
+                        <strong>{appt.values['Summary']}</strong>
+                      </div>
+                      <div>
+                        <Moment
+                          timestamp={date}
+                          format={Constants.MOMENT_FORMATS.date}
+                        />
+                      </div>
+                      <div>
+                        <Moment
+                          timestamp={start}
+                          format={Constants.MOMENT_FORMATS.time}
+                        />
+                        {` - `}
+                        <Moment
+                          timestamp={end}
+                          format={Constants.MOMENT_FORMATS.time}
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <Moment
-                        timestamp={date}
-                        format={Constants.MOMENT_FORMATS.date}
-                      />
-                    </div>
-                    <div>
-                      <Moment
-                        timestamp={start}
-                        format={Constants.MOMENT_FORMATS.time}
-                      />
-                      {` - `}
-                      <Moment
-                        timestamp={end}
-                        format={Constants.MOMENT_FORMATS.time}
-                      />
-                    </div>
-                  </div>
-                </NavLink>
-              </NavItem>
-            );
-          })}
-        </Nav>
+                  </NavLink>
+                </NavItem>
+              );
+            })}
+          </Nav>
+        )}
         {upcomingAppointments.size === 0 &&
           !loadingUpcoming &&
           upcomingErrors.length === 0 && (
-            <em className="text-muted">
+            <div className="empty-state">
               <I18n>You do not have any upcoming appointments.</I18n>
-            </em>
+            </div>
           )}
       </div>
     </div>

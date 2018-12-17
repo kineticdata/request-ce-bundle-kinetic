@@ -244,7 +244,9 @@ export const mapStateToProps = (state, props) => ({
   kapp: selectCurrentKapp(state),
   loading: state.techBar.appointments.today.loading,
   errors: state.techBar.appointments.today.errors,
-  appointments: state.techBar.appointments.today.data,
+  appointments: state.techBar.appointments.today.data.filter(
+    appt => appt.values['Status'] === 'Scheduled',
+  ),
 });
 
 export const mapDispatchToProps = {

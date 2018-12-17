@@ -54,12 +54,14 @@ export const TechBarComponent = ({
                 <I18n>{techBar.values['Name']}</I18n>
               </h1>
             </div>
-            <Link
-              to={`/settings/general/${techBar.id}/edit`}
-              className="btn btn-primary"
-            >
-              <I18n>Edit Settings</I18n>
-            </Link>
+            {hasManagerAccess && (
+              <Link
+                to={`/settings/general/${techBar.id}/edit`}
+                className="btn btn-primary"
+              >
+                <I18n>Edit Settings</I18n>
+              </Link>
+            )}
           </div>
           <div className="content-wrapper">
             <div className="form">

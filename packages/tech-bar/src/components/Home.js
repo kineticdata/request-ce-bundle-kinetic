@@ -129,6 +129,9 @@ export const HomeComponent = ({
         </h2>
         <div className="cards__wrapper cards__wrapper--appt">
           {upcomingAppointments.map(appt => {
+            const techBar = techBars.find(
+              t => t.values['Id'] === appt.values['Scheduler Id'],
+            );
             const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
             const start = moment.utc(appt.values['Event Time'], TIME_FORMAT);
             const end = start.clone().add(appt.values['Duration'], 'minute');
@@ -165,7 +168,18 @@ export const HomeComponent = ({
                       format={Constants.MOMENT_FORMATS.time}
                     />
                   </p>
-                  <p className="card-text">{appt.values['Summary']}</p>
+                  <p className="card-text">
+                    {techBar && (
+                      <I18n
+                        render={translate => (
+                          <strong>{`${translate(
+                            techBar.values['Name'],
+                          )}: `}</strong>
+                        )}
+                      />
+                    )}
+                    {appt.values['Summary']}
+                  </p>
                   <Link
                     to={`/forms/appointment/${appt.id}`}
                     className="btn btn-link text-left pl-0"
@@ -193,6 +207,9 @@ export const HomeComponent = ({
         </h2>
         <div className="cards__wrapper cards__wrapper--appt">
           {pastAppointments.map(appt => {
+            const techBar = techBars.find(
+              t => t.values['Id'] === appt.values['Scheduler Id'],
+            );
             const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
             const start = moment.utc(appt.values['Event Time'], TIME_FORMAT);
             const end = start.clone().add(appt.values['Duration'], 'minute');
@@ -229,7 +246,18 @@ export const HomeComponent = ({
                       format={Constants.MOMENT_FORMATS.time}
                     />
                   </p>
-                  <p className="card-text">{appt.values['Summary']}</p>
+                  <p className="card-text">
+                    {techBar && (
+                      <I18n
+                        render={translate => (
+                          <strong>{`${translate(
+                            techBar.values['Name'],
+                          )}: `}</strong>
+                        )}
+                      />
+                    )}
+                    {appt.values['Summary']}
+                  </p>
                   <Link
                     to={`/forms/appointment/${appt.id}`}
                     className="btn btn-link text-left pl-0"
