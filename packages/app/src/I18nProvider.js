@@ -110,7 +110,9 @@ export class I18n extends React.Component {
       <I18nContext.Consumer>
         {({ context, locale, translations, loadTranslations, disabled }) =>
           disabled ? (
-            this.props.children
+            <I18nDisabled render={this.props.render}>
+              {this.props.children}
+            </I18nDisabled>
           ) : typeof this.props.render === 'function' ||
           typeof this.props.children === 'string' ||
           (isarray(this.props.children) &&
@@ -199,3 +201,11 @@ const wrap = (content, highlight) =>
   ) : (
     content
   );
+
+const I18nDisabled = ({ render, children }) => {
+  if (typeof render === 'function') {
+    return render(t => t);
+  } else {
+    return children;
+  }
+};
