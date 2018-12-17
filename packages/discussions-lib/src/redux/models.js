@@ -29,6 +29,7 @@ export const Discussion = Record({
   createdAt: new Date(),
   createdBy: {},
   description: '',
+  error: null,
   id: '',
   invitations: List(),
   isPrivate: false,

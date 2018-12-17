@@ -9,6 +9,7 @@ export const {
   REMOVE_INVITATION, UPDATE_INVITATION, FETCH_MORE_MESSAGES, SET_MORE_MESSAGES,
   ADD_PARTICIPANT, REMOVE_PARTICIPANT, UPDATE_PARTICIPANT, ADD_MESSAGE, REMOVE_MESSAGE,
   MESSAGE_UPDATE, SEND_MESSAGE, SEND_MESSAGE_UPDATE, SET_TOPIC_STATUS, UPDATE_PRESENCE,
+  SET_DISCUSSION_ERROR,
 } = actionTypes('');
 
 export const actions = {
@@ -71,6 +72,8 @@ export default function(state = Map(), { type, payload }) {
       );
     case LEAVE_DISCUSSION:
       return state.update('discussions', map => map.delete(payload));
+    case SET_DISCUSSION_ERROR:
+      return state.setIn(['discussions', payload.id, 'error'], payload.error);
     case FETCH_MORE_MESSAGES:
       return state.setIn(['discussions', payload, 'loadingMoreMessages'], true);
     case SET_MORE_MESSAGES:

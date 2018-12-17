@@ -23,6 +23,7 @@ import {
   ADD_DISCUSSION,
   JOIN_DISCUSSION,
   LEAVE_DISCUSSION,
+  SET_DISCUSSION_ERROR,
   FETCH_MORE_MESSAGES,
   actions,
   SEND_MESSAGE,
@@ -151,7 +152,12 @@ export function* watchDiscussionsSocket() {
         } else {
           yield put({ type: ADD_DISCUSSION, payload: discussion });
         }
-      } catch (e) {}
+      } catch (e) {
+        yield put({
+          type: SET_DISCUSSION_ERROR,
+          payload: { id: joinTopic.payload.id, error: e.payload },
+        });
+      }
     }
 
     // The UI requested to leave a topic.

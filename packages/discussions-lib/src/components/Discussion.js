@@ -95,6 +95,7 @@ export class DiscussionComponent extends React.Component {
     if (this.props.discussion && !this.props.loading) {
       const messageActions = this.buildMessageActions();
       return this.props.render({
+        error: this.props.error,
         discussion: this.props.discussion,
         canManage: canManage(this.props.discussion, this.props.profile),
         elements: {
@@ -135,6 +136,9 @@ export class DiscussionComponent extends React.Component {
           ) : null,
         },
       });
+    } else if (this.props.error) {
+      const { DiscussionError } = this.props.components;
+      return <DiscussionError error={this.props.error} />;
     }
     return this.props.loader ? this.props.loader() : null;
   }
@@ -145,6 +149,7 @@ const ConnectedDiscussionComponent = connect((state, props) => {
   return {
     discussion: state.getIn(path),
     loading: state.getIn([...path, 'loading']),
+    error: state.getIn([...path, 'error']),
     hasMoreMessages: state.getIn([...path, 'nextPageToken']) !== null,
     loadingMoreMessaes: state.getIn([...path, 'loadingMoreMessages']),
   };

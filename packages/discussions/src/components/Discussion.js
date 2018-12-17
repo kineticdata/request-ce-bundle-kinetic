@@ -9,6 +9,10 @@ import { ArchivedBanner } from './ArchivedBanner';
 import { connect } from 'react-redux';
 import { DiscussionDetails } from './DiscussionDetails';
 import { types as detailsTypes } from '../redux/modules/discussionsDetails';
+import {
+  DiscussionFullPageError,
+  DiscussionPanelError,
+} from './DiscussionError';
 
 export const DiscussionComponent = props => (
   <KineticDiscussion
@@ -17,6 +21,11 @@ export const DiscussionComponent = props => (
     profile={props.profile}
     toggleMessageHistory={props.openHistory}
     toggleInvitationForm={props.openInvitations}
+    components={{
+      DiscussionError: props.fullPage
+        ? DiscussionFullPageError
+        : DiscussionPanelError,
+    }}
     render={({ elements, discussion, canManage }) => (
       <Fragment>
         {props.renderHeader && props.renderHeader({ discussion })}

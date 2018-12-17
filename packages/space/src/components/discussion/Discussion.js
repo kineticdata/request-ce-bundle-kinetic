@@ -75,6 +75,7 @@ export const DiscussionComponent = ({
       socketStage === SOCKET_STAGE.IDENTIFIED ||
       socketStage === SOCKET_STAGE.RECONNECTING ? (
         <KinopsDiscussion
+          fullPage
           id={discussionId}
           invitationToken={invitationToken}
           onLeave={handleLeave}
