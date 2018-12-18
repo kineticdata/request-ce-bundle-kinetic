@@ -29,11 +29,11 @@ export const types = {
   UNINVITE_CANCEL: namespace('discussionDetails', 'UNINVITE_CANCEL'),
   UNINVITE_SUCCESS: namespace('discussionDetails', 'UNINVITE_SUCCESS'),
   UNINVITE_ERROR: namespace('discussionDetails', 'UNINVITE_ERROR'),
-  KICK: namespace('discussionDetails', 'KICK'),
-  KICK_CONFIRM: namespace('discussionDetails', 'KICK_CONFIRM'),
-  KICK_CANCEL: namespace('discussionDetails', 'KICK_CANCEL'),
-  KICK_SUCCESS: namespace('discussionDetails', 'KICK_SUCCESS'),
-  KICK_ERROR: namespace('discussionDetails', 'KICK_ERROR'),
+  REMOVE: namespace('discussionDetails', 'REMOVE'),
+  REMOVE_CONFIRM: namespace('discussionDetails', 'REMOVE_CONFIRM'),
+  REMOVE_CANCEL: namespace('discussionDetails', 'REMOVE_CANCEL'),
+  REMOVE_SUCCESS: namespace('discussionDetails', 'REMOVE_SUCCESS'),
+  REMOVE_ERROR: namespace('discussionDetails', 'REMOVE_ERROR'),
   SAVE: namespace('discussionsDetails', 'SAVE'),
   SAVE_SUCCESS: namespace('discussionsDetails', 'SAVE_SUCCESS'),
   SAVE_ERROR: namespace('discussionsDetails', 'SAVE_ERROR'),
@@ -135,22 +135,22 @@ export const reducer = (state = Map(), { type, payload }) => {
         invitationType(payload.invitation),
         invitationKey(payload.invitation),
       ]);
-    case types.KICK:
-    case types.KICK_CONFIRM:
-    case types.KICK_ERROR:
+    case types.REMOVE:
+    case types.REMOVE_CONFIRM:
+    case types.REMOVE_ERROR:
       return state.setIn(
-        [payload.id, 'kicks', payload.participant.username],
-        type === types.KICK
+        [payload.id, 'removals', payload.participant.username],
+        type === types.REMOVE
           ? 'confirming'
-          : type === types.KICK_CONFIRM
-            ? 'kicking'
+          : type === types.REMOVE_CONFIRM
+            ? 'removing'
             : 'error',
       );
-    case types.KICK_CANCEL:
-    case types.KICK_SUCCESS:
+    case types.REMOVE_CANCEL:
+    case types.REMOVE_SUCCESS:
       return state.deleteIn([
         payload.id,
-        'kicks',
+        'removals',
         payload.participant.username,
       ]);
     case types.SAVE:

@@ -182,7 +182,7 @@ describe('generateContent', () => {
       ];
       const expected = [
         { type: 'user', value: USER1 },
-        { type: 'text', value: 'has been kicked by' },
+        { type: 'text', value: 'has been removed by' },
         { type: 'user', value: USER2 },
       ];
       expect(generateContent('Participant Removed', content)).toEqual(expected);

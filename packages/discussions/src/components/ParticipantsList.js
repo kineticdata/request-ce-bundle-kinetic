@@ -30,12 +30,12 @@ export const ParticipantsList = props => (
           >
             <Avatar size={26} username={p.username} />
             {p.displayName}
-            {props.kicks.get(p.username) === 'error' ? (
+            {props.removals.get(p.username) === 'error' ? (
               <span className="subtext text-danger">
                 <i className="fa fa-fw fa-exclamation-circle" />
-                kick failed
+                remove failed
               </span>
-            ) : props.kicks.get(p.username) === 'kicking' ? (
+            ) : props.removals.get(p.username) === 'removing' ? (
               <span className="subtext text-danger">
                 <button className="btn btn-link" disabled>
                   <i className="fa fa-fw fa-spin fa-spinner" />
@@ -46,32 +46,32 @@ export const ParticipantsList = props => (
                 <Fragment>
                   <span className="subtext">
                     <button
-                      id={`kick-participant-${i}`}
+                      id={`remove-participant-${i}`}
                       className="btn btn-link"
-                      onClick={props.kick(p)}
+                      onClick={props.remove(p)}
                     >
                       <i className="fa fa-fw fa-trash" />
                     </button>
                   </span>
                   <Popover
-                    target={`kick-participant-${i}`}
-                    isOpen={props.kicks.get(p.username) === 'confirming'}
-                    toggle={props.kickCancel(p)}
+                    target={`remove-participant-${i}`}
+                    isOpen={props.removals.get(p.username) === 'confirming'}
+                    toggle={props.removeCancel(p)}
                     placement="top"
                   >
                     <PopoverBody>
                       <div>Are you sure?</div>
                       <button
                         className="btn btn-link"
-                        onClick={props.kickCancel(p)}
+                        onClick={props.removeCancel(p)}
                       >
                         Cancel
                       </button>
                       <button
                         className="btn btn-danger"
-                        onClick={props.kickConfirm(p)}
+                        onClick={props.removeConfirm(p)}
                       >
-                        Kick
+                        Remove
                       </button>
                     </PopoverBody>
                   </Popover>
@@ -188,7 +188,10 @@ export const mapStateToProps = (state, props) => {
       [id, 'uninvites', 'email'],
       Map(),
     ),
-    kicks: state.discussions.discussionsDetails.getIn([id, 'kicks'], Map()),
+    removals: state.discussions.discussionsDetails.getIn(
+      [id, 'removals'],
+      Map(),
+    ),
   };
 };
 export const mapDispatchToProps = (dispatch, props) => {
@@ -204,12 +207,12 @@ export const mapDispatchToProps = (dispatch, props) => {
       dispatch({ type: types.UNINVITE_CANCEL, payload: { id, invitation } }),
     uninviteConfirm: invitation => () =>
       dispatch({ type: types.UNINVITE_CONFIRM, payload: { id, invitation } }),
-    kick: participant => () =>
-      dispatch({ type: types.KICK, payload: { id, participant } }),
-    kickCancel: participant => () =>
-      dispatch({ type: types.KICK_CANCEL, payload: { id, participant } }),
-    kickConfirm: participant => () =>
-      dispatch({ type: types.KICK_CONFIRM, payload: { id, participant } }),
+    remove: participant => () =>
+      dispatch({ type: types.REMOVE, payload: { id, participant } }),
+    removeCancel: participant => () =>
+      dispatch({ type: types.REMOVE_CANCEL, payload: { id, participant } }),
+    removeConfirm: participant => () =>
+      dispatch({ type: types.REMOVE_CONFIRM, payload: { id, participant } }),
   };
 };
 

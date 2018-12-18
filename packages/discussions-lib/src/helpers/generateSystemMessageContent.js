@@ -116,7 +116,7 @@ export default (action, content) => {
       case 'Participant Removed':
         return [
           getToken(content, 'user'),
-          textToken('has been kicked by'),
+          textToken('has been removed by'),
           getToken(content, 'removedBy'),
         ];
       case 'Message Updated':
