@@ -9,7 +9,7 @@ export const {
   REMOVE_INVITATION, UPDATE_INVITATION, FETCH_MORE_MESSAGES, SET_MORE_MESSAGES,
   ADD_PARTICIPANT, REMOVE_PARTICIPANT, UPDATE_PARTICIPANT, ADD_MESSAGE, REMOVE_MESSAGE,
   MESSAGE_UPDATE, SEND_MESSAGE, SEND_MESSAGE_UPDATE, SET_TOPIC_STATUS, UPDATE_PRESENCE,
-  SET_DISCUSSION_ERROR,
+  SET_DISCUSSION_ERROR, UNSUBSCRIBED,
 } = actionTypes('');
 
 export const actions = {
@@ -45,6 +45,7 @@ export const actions = {
     'message',
     'attachment',
   ),
+  unsubscribed: withPayload(UNSUBSCRIBED, 'id'),
 };
 
 const invitationsMatch = (i1, i2) =>
@@ -170,6 +171,8 @@ export default function(state = Map(), { type, payload }) {
       return state.updateIn(['discussions', payload.id], discussion =>
         discussion.setIn(['topic', 'topicStatus'], payload.status),
       );
+    case UNSUBSCRIBED:
+      return state.setIn(['discussions', payload.id, 'error'], 'Unsubscribed');
     default:
       return state;
   }

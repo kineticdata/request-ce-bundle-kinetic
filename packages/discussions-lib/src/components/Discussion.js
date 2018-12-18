@@ -92,7 +92,10 @@ export class DiscussionComponent extends React.Component {
   });
 
   render() {
-    if (this.props.discussion && !this.props.loading) {
+    if (this.props.error) {
+      const { DiscussionError } = this.props.components;
+      return <DiscussionError error={this.props.error} />;
+    } else if (this.props.discussion && !this.props.loading) {
       const messageActions = this.buildMessageActions();
       return this.props.render({
         error: this.props.error,
@@ -136,9 +139,6 @@ export class DiscussionComponent extends React.Component {
           ) : null,
         },
       });
-    } else if (this.props.error) {
-      const { DiscussionError } = this.props.components;
-      return <DiscussionError error={this.props.error} />;
     }
     return this.props.loader ? this.props.loader() : null;
   }

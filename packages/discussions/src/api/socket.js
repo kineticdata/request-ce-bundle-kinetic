@@ -198,24 +198,10 @@ export class Socket {
     this.socket.send(JSON.stringify(message));
   }
 
-  parseJson(data) {
-    // Attempt to parse the payload data. If parsing the payload fails then
-    // we will simply take it at face value. For example if we are given a string
-    // that is just a string parsing will fail annd we will want to retain that payload.
-    let payload;
-    try {
-      payload = JSON.parse(data);
-    } catch (_) {
-      payload = data;
-    }
-    return payload;
-  }
-
   receive(data) {
     try {
       // Parse the incoming message.
-      const message = this.parseJson(data);
-      message.payload = this.parseJson(message.payload);
+      const message = JSON.parse(data);
 
       if (message.ref) {
         // If the server sent a ref back then we should check for any ref callbacks.
@@ -236,9 +222,15 @@ export class Socket {
         this.receivePresence(message);
       }
       // Delegate it to the relevant topic.
-      const topic = this.topics[message.topic];
+      const topic = this.topics[
+        message.event === 'unsubscribed' ? message.payload.topic : message.topic
+      ];
       if (topic) {
         topic.receive(message);
+      }
+      // If the event is 'unsubscribed'  delete the topic.
+      if (message.event === 'unsubscribed') {
+        delete this.topics[message.payload.topic];
       }
     } catch (e) {
       console.warn('Received invalid message from server: ', data, e);

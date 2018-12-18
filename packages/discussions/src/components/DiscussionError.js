@@ -2,16 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 
+const errors = {
+  Unauthorized: "Sorry, you don't have access to this discussion",
+  Unsubscribed: 'You have left the discussion',
+};
+
 export const DiscussionError = props => (
   <div className="kinops-discussions">
     <div className="empty-state empty-state--wally">
-      <h5>
-        {props.error === 'Unauthorized'
-          ? `Sorry, you don't have access to this ${
-              props.fullPage ? 'page' : 'discussion'
-            }.`
-          : props.error}
-      </h5>
+      <h5>{errors[props.error] || props.error}</h5>
       <img src={wallyMissingImage} alt="Missing Wally" />
       {props.fullPage && (
         <h6>

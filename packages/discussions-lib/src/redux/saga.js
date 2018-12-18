@@ -49,7 +49,8 @@ export function registerTopicChannel(topic) {
       .on('relatedItem:created', emit)
       .on('relatedItem:deleted', emit)
       .on('discussion:updated', emit)
-      .on('discussion:deleted', emit);
+      .on('discussion:deleted', emit)
+      .on('unsubscribed', emit);
 
     return () => topic.unsubscribe();
   });
@@ -96,6 +97,8 @@ export function* handleTopicChannel(channel, id, socket, topic) {
         case 'invitation:updated':
           yield put(actions.updateInvitation(id, topicEvent.payload));
           break;
+        case 'unsubscribed':
+          yield put(actions.unsubscribed(id));
         default:
           console.log(
             `Unhandled socket action '${topicEvent.event}' for ${id}: `,
