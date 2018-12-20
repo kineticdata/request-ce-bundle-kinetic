@@ -129,6 +129,7 @@ export const SchedulersRouter = ({
           render={props => (
             <CreateScheduler
               {...props}
+              type={type}
               breadcrumbs={buildBreadcrumbs(
                 <Fragment>
                   <Link to={match.path}>

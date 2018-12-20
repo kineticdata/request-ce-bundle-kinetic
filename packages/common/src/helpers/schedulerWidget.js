@@ -364,12 +364,43 @@ export const reducer = (state = State(), { type, payload }) => {
       payload(state);
       return state;
     case types.EDIT_EVENT:
-      return state
-        .set('schedulerId', state.event.values['Scheduler Id'])
-        .set('type', state.event.values['Event Type'])
-        .set('date', state.event.values['Date'])
-        .set('time', state.event.values['Time']);
+      let validatedDate = validateDate(state, state.event.values['Date']);
+      if (validatedDate === state.event.values['Date']) {
+        return state
+          .set('schedulerId', state.event.values['Scheduler Id'])
+          .set('type', state.event.values['Event Type'])
+          .set('date', state.event.values['Date'])
+          .set('time', state.event.values['Time']);
+      } else {
+        return state
+          .set('schedulerId', state.event.values['Scheduler Id'])
+          .set('type', state.event.values['Event Type'])
+          .set('date', validatedDate)
+          .set('time', '');
+      }
     default:
       return state;
+  }
+};
+
+const validateDate = (
+  {
+    scheduler: {
+      values: { Timezone: timezone = moment.tz.guess() },
+    },
+    minAvailableDate,
+    maxAvailableDate,
+  },
+  date,
+) => {
+  const selectedDate = moment.tz(date, DATE_FORMAT, timezone);
+  if (maxAvailableDate && maxAvailableDate.isBefore(minAvailableDate)) {
+    return moment.tz(timezone).format(DATE_FORMAT);
+  } else if (selectedDate.isBefore(minAvailableDate)) {
+    return minAvailableDate.format(DATE_FORMAT);
+  } else if (maxAvailableDate && selectedDate.isAfter(maxAvailableDate)) {
+    return maxAvailableDate.format(DATE_FORMAT);
+  } else {
+    return date;
   }
 };

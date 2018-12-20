@@ -243,18 +243,23 @@ const SchedulerWidgetComponent = ({
     ? maxAvailableDate.diff(selectedDate, 'days')
     : 10; // Default to 10 which is more than needed since we only show a max of 5
 
-  // If at least 2 days available in each direction, show 5 with selected date in the middle
-  const dateOptions = (availableBefore > 1 && availableAfter > 1
-    ? Array(5).fill(selectedDate.add(-2, 'days'))
-    : // If fewer than 5 total days around selected date vailable, show them all
-      availableBefore + availableAfter < 5
-      ? Array(availableBefore + availableAfter + 1).fill(
-          selectedDate.add(-availableBefore, 'days'),
-        )
-      : // Otherwise show range with one endpoint, so date won't be in the middle
-        availableBefore < 2
-        ? Array(5).fill(selectedDate.add(-availableBefore, 'days'))
-        : Array(5).fill(selectedDate.add(-(4 - availableAfter), 'days'))
+  const dateOptions = (!selectedDate.isValid() ||
+  availableBefore < 0 ||
+  availableAfter < 0
+    ? // If invalid date set, make empty array for options
+      []
+    : // If at least 2 days available in each direction, show 5 with selected date in the middle
+      availableBefore > 1 && availableAfter > 1
+      ? Array(5).fill(selectedDate.add(-2, 'days'))
+      : // If fewer than 5 total days around selected date available, show them all
+        availableBefore + availableAfter < 5
+        ? Array(availableBefore + availableAfter + 1).fill(
+            selectedDate.add(-availableBefore, 'days'),
+          )
+        : // Otherwise show range with one endpoint, so date won't be in the middle
+          availableBefore < 2
+          ? Array(5).fill(selectedDate.add(-availableBefore, 'days'))
+          : Array(5).fill(selectedDate.add(-(4 - availableAfter), 'days'))
   ).map((d, i) => d.clone().add(i, 'days'));
 
   const isScheduled = event && event.coreState !== 'Draft';
@@ -501,7 +506,8 @@ const SchedulerWidgetComponent = ({
               <span>
                 <I18n>Schedule</I18n>
               </span>
-              {now.format(DATE_FORMAT) !== date &&
+              {date &&
+                now.format(DATE_FORMAT) !== date &&
                 !now.isBefore(minAvailableDate) && (
                   <button
                     type="button"
@@ -520,105 +526,111 @@ const SchedulerWidgetComponent = ({
           </div>
           <ModalBody>
             <div className="body-content">
-              <div className="date-slider">
-                <div
-                  className="calendar-box"
-                  onClick={() => setOpenCalendar(!openCalendar)}
-                >
-                  <span
-                    className={`fa ${
-                      openCalendar
-                        ? 'fa-calendar-times-o text-danger'
-                        : 'fa-calendar'
-                    }`}
-                  />
-                </div>
-                {dateOptions.map(dateVal => {
-                  const isSelected = dateVal.format(DATE_FORMAT) === date;
-                  return (
+              {dateOptions.length > 0 ? (
+                <Fragment>
+                  <div className="date-slider">
                     <div
-                      key={dateVal.format(DATE_FORMAT)}
-                      className={`date-box ${isSelected ? 'selected' : ''}`}
-                      onClick={
-                        isSelected
-                          ? () => setOpenCalendar(!openCalendar)
-                          : () => {
-                              handleDateChange({
-                                target: {
-                                  value: dateVal.format(DATE_FORMAT),
-                                },
-                              });
-                              setOpenCalendar(false);
-                            }
-                      }
+                      className="calendar-box"
+                      onClick={() => setOpenCalendar(!openCalendar)}
                     >
-                      <div className="date-month-year">
-                        <Moment timestamp={dateVal} format="MMM YYYY" />
-                      </div>
-                      <div className="date-day-number">
-                        <Moment timestamp={dateVal} format="DD" />
-                      </div>
-                      <div className="date-day-name">
-                        <Moment timestamp={dateVal} format="ddd" />
-                      </div>
+                      <span
+                        className={`fa ${
+                          openCalendar
+                            ? 'fa-calendar-times-o text-danger'
+                            : 'fa-calendar'
+                        }`}
+                      />
                     </div>
-                  );
-                })}
-              </div>
-              {openCalendar ? (
-                <div className="date-picker">
-                  <DayPickerSingleDateController
-                    date={moment(date, DATE_FORMAT)}
-                    onDateChange={selectedDate => {
-                      handleDateChange({
-                        target: { value: selectedDate.format(DATE_FORMAT) },
-                      });
-                      setOpenCalendar(false);
-                    }}
-                    isOutsideRange={d =>
-                      d.startOf('day').isBefore(minAvailableDate) ||
-                      d.startOf('day').isAfter(maxAvailableDate)
-                    }
-                    numberOfMonths={1}
-                    daySize={36}
-                    enableOutsideDays={true}
-                    hideKeyboardShortcutsPanel={true}
-                    noBorder={true}
-                    focused={true}
-                  />
-                </div>
-              ) : (
-                <div className="time-picker">
-                  {schedulingErrors.size > 0 && (
-                    <div className="alert alert-danger">
-                      {schedulingErrors.map((e, i) => (
-                        <div key={`error-${i}`}>
-                          <I18n>{e}</I18n>
+                    {dateOptions.map(dateVal => {
+                      const isSelected = dateVal.format(DATE_FORMAT) === date;
+                      return (
+                        <div
+                          key={dateVal.format(DATE_FORMAT)}
+                          className={`date-box ${isSelected ? 'selected' : ''}`}
+                          onClick={
+                            isSelected
+                              ? () => setOpenCalendar(!openCalendar)
+                              : () => {
+                                  handleDateChange({
+                                    target: {
+                                      value: dateVal.format(DATE_FORMAT),
+                                    },
+                                  });
+                                  setOpenCalendar(false);
+                                }
+                          }
+                        >
+                          <div className="date-month-year">
+                            <Moment timestamp={dateVal} format="MMM YYYY" />
+                          </div>
+                          <div className="date-day-number">
+                            <Moment timestamp={dateVal} format="DD" />
+                          </div>
+                          <div className="date-day-name">
+                            <Moment timestamp={dateVal} format="ddd" />
+                          </div>
                         </div>
-                      ))}
+                      );
+                    })}
+                  </div>
+                  {openCalendar ? (
+                    <div className="date-picker">
+                      <DayPickerSingleDateController
+                        date={moment(date, DATE_FORMAT)}
+                        onDateChange={selectedDate => {
+                          handleDateChange({
+                            target: { value: selectedDate.format(DATE_FORMAT) },
+                          });
+                          setOpenCalendar(false);
+                        }}
+                        isOutsideRange={d =>
+                          d.startOf('day').isBefore(minAvailableDate) ||
+                          d.startOf('day').isAfter(maxAvailableDate)
+                        }
+                        numberOfMonths={1}
+                        daySize={36}
+                        enableOutsideDays={true}
+                        hideKeyboardShortcutsPanel={true}
+                        noBorder={true}
+                        focused={true}
+                      />
+                    </div>
+                  ) : (
+                    <div className="time-picker">
+                      {schedulingErrors.size > 0 && (
+                        <div className="alert alert-danger">
+                          {schedulingErrors.map((e, i) => (
+                            <div key={`error-${i}`}>
+                              <I18n>{e}</I18n>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {!scheduling &&
+                        loadingData && (
+                          <div className="text-center">
+                            <span className="fa fa-spinner fa-spin fa-lg" />
+                          </div>
+                        )}
+                      {!loadingData &&
+                        timeOptions.length === 0 && (
+                          <div className="text-center text-muted">
+                            <strong>
+                              <I18n>
+                                There are no available time slots for the
+                                selected date.
+                              </I18n>
+                            </strong>
+                          </div>
+                        )}
+                      {(scheduling || !loadingData) &&
+                        timeOptions.length > 0 &&
+                        timeOptions}
                     </div>
                   )}
-                  {!scheduling &&
-                    loadingData && (
-                      <div className="text-center">
-                        <span className="fa fa-spinner fa-spin fa-lg" />
-                      </div>
-                    )}
-                  {!loadingData &&
-                    timeOptions.length === 0 && (
-                      <div className="text-center text-muted">
-                        <strong>
-                          <I18n>
-                            There are no available time slots for the selected
-                            date.
-                          </I18n>
-                        </strong>
-                      </div>
-                    )}
-                  {(scheduling || !loadingData) &&
-                    timeOptions.length > 0 &&
-                    timeOptions}
-                </div>
+                </Fragment>
+              ) : (
+                <h5 className="m-3 text-danger">No Dates Available</h5>
               )}
             </div>
           </ModalBody>
@@ -800,7 +812,10 @@ const setScheduler = ({ dispatch, stateData: { date } }) => ({
         : maxDate || maxWindowDate;
 
     const selectedDate = moment.tz(date, DATE_FORMAT, timezone);
-    if (selectedDate.isBefore(minAvailableDate)) {
+    if (maxAvailableDate && maxAvailableDate.isBefore(minAvailableDate)) {
+      dispatch(actions.setDate(moment.tz(timezone).format(DATE_FORMAT)));
+      dispatch(actions.setTime(''));
+    } else if (selectedDate.isBefore(minAvailableDate)) {
       dispatch(actions.setDate(minAvailableDate.format(DATE_FORMAT)));
       dispatch(actions.setTime(''));
     } else if (maxAvailableDate && selectedDate.isAfter(maxAvailableDate)) {
