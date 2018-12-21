@@ -77,8 +77,12 @@
         align-items: center;
         .sb-avatar {
           margin-right: 0.5rem;
+          cursor: pointer;
           img {
-            border: 2px solid rgba(0, 212, 106, 0);
+            box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.9);
+          }
+          .sb-avatar__text,
+          img {
             transition: border-color 300ms;
           }
         }
@@ -95,8 +99,28 @@
           line-height: unset;
         }
       }
-      li.present .sb-avatar img {
-        border-color: $present;
+    }
+  }
+  .participant {
+    position: relative;
+    &__avatar {
+      font-size: 1rem;
+      .sb-avatar__text {
+        line-height: 26px !important;
+      }
+    }
+    &__status {
+      position: absolute;
+      top: 1px;
+      left: -1px;
+      display: block;
+      width: 26px;
+      height: 26px;
+      pointer-events: none;
+      border: 2px solid rgba($present, 0);
+      border-radius: 50%;
+      &--active {
+        border-color: rgba($present, 1);
       }
     }
   }

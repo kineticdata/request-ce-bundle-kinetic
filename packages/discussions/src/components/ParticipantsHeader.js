@@ -22,11 +22,15 @@ export const ParticipantsHeader = ({
         .filter(p => !p.user.unknown)
         .sort(participantComparator)
         .map(p => (
-          <div
-            key={p.user.username}
-            className={isPresent(discussion, p.user.username) ? 'present' : ''}
-          >
-            <Avatar size={26} username={p.user.username} />
+          <div key={p.user.username} className="participant">
+            <Avatar size={24} username={p.user.username} />
+            <div
+              className={
+                isPresent(discussion, p.user.username)
+                  ? 'participant__status participant__status--active'
+                  : 'participant__status participant__status--active'
+              }
+            />
           </div>
         ))}
       <div className="view-all">

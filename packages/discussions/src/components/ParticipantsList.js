@@ -24,11 +24,18 @@ export const ParticipantsList = props => (
         .filter(p => !p.unknown)
         .sortBy(p => p.name)
         .map((p, i) => (
-          <li
-            className={isPresent(props.discussion, p.username) ? 'present' : ''}
-            key={p.email}
-          >
-            <Avatar size={26} username={p.username} />
+          <li key={p.email} className="participant">
+            <div className="participant__avatar">
+              <Avatar size={24} username={p.username} />
+              <div
+                className={
+                  isPresent(props.discussion, p.username)
+                    ? 'participant__status participant__status--active'
+                    : 'participant__status participant__status--active'
+                }
+              />
+            </div>
+
             {p.displayName}
             {props.removals.get(p.username) === 'error' ? (
               <span className="subtext text-danger">

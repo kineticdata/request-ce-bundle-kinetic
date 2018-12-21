@@ -209,6 +209,7 @@
     padding: 0 1.5rem;
     .sb-avatar {
       margin-right: 0.25rem;
+
       cursor: pointer;
       &--gravatar {
         line-height: initial;
@@ -218,17 +219,9 @@
       }
       .sb-avatar__text,
       img {
-        border: 2px solid rgba($green-grass, 0);
         transition: border-color 300ms;
       }
     }
-    .present {
-      .sb-avatar .sb-avatar__text,
-      .sb-avatar img {
-        border-color: rgba($green-grass, 1);
-      }
-    }
-
     .view-all {
       margin-left: auto;
       .btn {
@@ -241,7 +234,23 @@
       }
     }
   }
-
+  .participant {
+    position: relative;
+    &__status {
+      position: absolute;
+      top: 1px;
+      left: -1px;
+      display: block;
+      width: 26px;
+      height: 26px;
+      pointer-events: none;
+      border: 2px solid rgba($present, 0);
+      border-radius: 50%;
+      &--active {
+        border-color: rgba($present, 1);
+      }
+    }
+  }
   .archived-banner {
     position: absolute;
     top: 3rem;
@@ -338,12 +347,12 @@
     }
     img,
     .sb-avatar__text {
-      border: 2px solid transparent;
+      border: 2px solid rgba($present, 0);
       transition: border-color 300ms;
     }
     &.present img,
     &.present .sb-avatar__text {
-      border-color: $present;
+      border-color: rgba($present, 1);
     }
   }
   .message-list {
