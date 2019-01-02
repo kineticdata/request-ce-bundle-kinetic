@@ -31,7 +31,7 @@ export const ParticipantsList = props => (
                 className={
                   isPresent(props.discussion, p.username)
                     ? 'participant__status participant__status--active'
-                    : 'participant__status participant__status--active'
+                    : 'participant__status'
                 }
               />
             </div>
