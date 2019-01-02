@@ -151,7 +151,7 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = {
   push,
-  fetchRobots: actions.fetchRobotSchedules,
+  fetchRobots: actions.fetchRobots,
   fetchNextExecutions: actions.fetchNextExecutions,
 };
 

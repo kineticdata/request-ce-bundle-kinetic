@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
-
+import downloadjs from 'downloadjs';
 import { connect } from 'react-redux';
 import papaparse from 'papaparse';
 
@@ -38,22 +38,6 @@ const ExportComponent = ({
     )}
   </Fragment>
 );
-
-function download(filename, data) {
-  var element = document.createElement('a');
-  element.setAttribute(
-    'href',
-    'data:text/csv;charset=utf-8,' + encodeURIComponent(data),
-  );
-  element.setAttribute('download', filename + '.csv');
-
-  element.style.display = 'none';
-  document.body.appendChild(element);
-
-  element.click();
-
-  document.body.removeChild(element);
-}
 
 function createCSV(submissions, form) {
   // Create csv string that will be used for download
@@ -105,6 +89,7 @@ const mapStateToProps = state => ({
   submissions: state.services.settingsForms.exportSubmissions,
   submissionsCount: state.services.settingsForms.exportCount,
   downloaded: state.services.settingsForms.downloaded,
+  fetchingAll: state.services.settingsForms.fetchingAll,
 });
 
 const mapDispatchToProps = {
@@ -123,12 +108,15 @@ export const Export = compose(
   }),
   lifecycle({
     componentWillReceiveProps(nextProps) {
-      if (nextProps.exportStatus === 'FETCHING_RECORDS') {
+      if (
+        nextProps.exportStatus === 'FETCHING_RECORDS' &&
+        nextProps.submissions.length > 0
+      ) {
         nextProps.setExportStatus('CONVERT');
         const csv = createCSV(nextProps.submissions, nextProps.form);
         // TODO: If CSV fails setExportStatus to FAILED
         nextProps.setExportStatus('DOWNLOAD');
-        download(nextProps.form.name, csv);
+        downloadjs(csv, nextProps.form.name + '.csv', 'text/csv');
         nextProps.setExportStatus('COMPLETE');
         nextProps.setDownloaded(true);
       }

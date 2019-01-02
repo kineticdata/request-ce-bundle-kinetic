@@ -5,12 +5,12 @@ import { actions as systemErrorActions } from '../modules/errors';
 import {
   actions,
   types,
-  ROBOT_SCHEDULES_FORM_SLUG,
+  ROBOT_FORM_SLUG,
   ROBOT_EXECUTIONS_FORM_SLUG,
   ROBOT_EXECUTIONS_PAGE_SIZE,
 } from '../modules/settingsRobots';
 
-export function* fetchRobotSchedulesSaga(action) {
+export function* fetchRobotsSaga(action) {
   const query = new CoreAPI.SubmissionSearch(true);
   query.include('details,values');
   query.limit('1000');
@@ -20,20 +20,20 @@ export function* fetchRobotSchedulesSaga(action) {
     {
       search: query.build(),
       datastore: true,
-      form: ROBOT_SCHEDULES_FORM_SLUG,
+      form: ROBOT_FORM_SLUG,
     },
   );
 
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
   } else if (errors) {
-    yield put(actions.setFetchRobotSchedulesError(errors));
+    yield put(actions.setFetchRobotsError(errors));
   } else {
-    yield put(actions.setRobotSchedules(submissions));
+    yield put(actions.setRobots(submissions));
   }
 }
 
-export function* fetchRobotScheduleSaga(action) {
+export function* fetchRobotSaga(action) {
   const include = 'details,values';
   const { submission, errors, serverError } = yield call(
     CoreAPI.fetchSubmission,
@@ -47,13 +47,13 @@ export function* fetchRobotScheduleSaga(action) {
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
   } else if (errors) {
-    yield put(actions.setRobotScheduleError(errors));
+    yield put(actions.setRobotError(errors));
   } else {
-    yield put(actions.setRobotSchedule(submission));
+    yield put(actions.setRobot(submission));
   }
 }
 
-export function* deleteRobotScheduleSaga(action) {
+export function* deleteRobotSaga(action) {
   const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
     id: action.payload.id,
     datastore: true,
@@ -62,9 +62,9 @@ export function* deleteRobotScheduleSaga(action) {
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
   } else if (errors) {
-    yield put(actions.setDeleteScheduleError(errors));
+    yield put(actions.setDeleteError(errors));
   } else {
-    yield put(actions.setDeleteScheduleSuccess());
+    yield put(actions.setDeleteSuccess());
     if (typeof action.payload.callback === 'function') {
       action.payload.callback();
     }
@@ -146,9 +146,9 @@ export function* fetchNextExecutionsSaga(action) {
 }
 
 export function* watchSettingsRobots() {
-  yield takeEvery(types.FETCH_ROBOT_SCHEDULES, fetchRobotSchedulesSaga);
-  yield takeEvery(types.FETCH_ROBOT_SCHEDULE, fetchRobotScheduleSaga);
-  yield takeEvery(types.DELETE_ROBOT_SCHEDULE, deleteRobotScheduleSaga);
+  yield takeEvery(types.FETCH_ROBOTS, fetchRobotsSaga);
+  yield takeEvery(types.FETCH_ROBOT, fetchRobotSaga);
+  yield takeEvery(types.DELETE_ROBOT, deleteRobotSaga);
   yield takeEvery(
     [
       types.FETCH_ROBOT_EXECUTIONS,
