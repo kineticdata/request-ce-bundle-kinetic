@@ -1,4 +1,6 @@
 import { List, Record } from 'immutable';
+import isarray from 'isarray';
+import isobject from 'isobject';
 
 export const Profile = Record({
   displayName: '',
@@ -58,10 +60,32 @@ export const Filter = Record({
 });
 
 export const filterReviver = filterJSON => {
-  const status = List(filterJSON.status);
-  const teams = List(filterJSON.teams);
-  const assignments = assignmentCriteriaReviver(filterJSON.assignments);
-  const dateRange = DateRangeCriteria(filterJSON.dateRange);
+  try {
+    let filter = filterJSON;
+    if (typeof filterJSON === 'string') {
+      filter = JSON.parse(filterJSON);
+    }
+    const status = isarray(filter.status) ? List(filter.status) : undefined;
+    const teams = isarray(filter.teams) ? List(filter.teams) : undefined;
+    const assignments = isobject(filter.assignments)
+      ? assignmentCriteriaReviver(filter.assignments)
+      : undefined;
+    const dateRange = isobject(filter.dateRange)
+      ? DateRangeCriteria(filter.dateRange)
+      : undefined;
 
-  return Filter({ ...filterJSON, status, teams, assignments, dateRange });
+    return Filter({
+      name: filter.name,
+      slug: filter.slug,
+      type: filter.type,
+      sortBy: filter.sortBy,
+      status,
+      teams,
+      assignments,
+      dateRange,
+      createdByMe: filter.createdByMe === true,
+    });
+  } catch (e) {
+    return null;
+  }
 };
