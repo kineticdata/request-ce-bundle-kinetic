@@ -273,7 +273,6 @@ export function* fetchAllSubmissionsSaga(action) {
   };
 
   yield put(actions.setExportCount(action.payload.accumulator.length));
-
   if (nextPageToken) {
     yield call(fetchAllSubmissionsSaga, action);
   } else {

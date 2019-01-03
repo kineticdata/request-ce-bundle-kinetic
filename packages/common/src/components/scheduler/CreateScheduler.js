@@ -30,6 +30,7 @@ const CreateSchedulerComponent = ({
   handleCreated,
   handleError,
   isSchedulerAdmin,
+  type,
 }) =>
   isSchedulerAdmin ? (
     <div className="page-container page-container--scheduler">
@@ -54,6 +55,7 @@ const CreateSchedulerComponent = ({
             <CoreForm
               datastore
               form={SCHEDULER_FORM_SLUG}
+              values={{ Type: type || '' }}
               created={handleCreated}
               error={handleError}
               globals={globals}

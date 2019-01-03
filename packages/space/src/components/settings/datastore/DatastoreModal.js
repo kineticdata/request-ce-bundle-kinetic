@@ -8,7 +8,7 @@ import { Export } from './Export';
 import { Import } from './Import';
 
 const DatastoreModalComponent = ({ modalIsOpen, closeModal, modalName }) => (
-  <Modal isOpen={modalIsOpen} toggle={closeModal}>
+  <Modal isOpen={modalIsOpen} toggle={closeModal} size="lg">
     <div className="modal-header">
       <h4 className="modal-title">
         <button onClick={closeModal} type="button" className="btn btn-link">
@@ -18,8 +18,8 @@ const DatastoreModalComponent = ({ modalIsOpen, closeModal, modalName }) => (
         <span>&nbsp;</span>
       </h4>
     </div>
-    <ModalBody>
-      <div style={{ padding: '1rem' }}>
+    <ModalBody className="modal-body--import-export">
+      <div style={{ padding: '1.5rem' }}>
         {modalName === 'import' ? <Import /> : <Export />}
       </div>
     </ModalBody>

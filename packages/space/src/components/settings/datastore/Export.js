@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
+import downloadjs from 'downloadjs';
 
 import { connect } from 'react-redux';
 import papaparse from 'papaparse';
@@ -14,50 +15,45 @@ const ExportComponent = ({
   form,
 }) => (
   <Fragment>
-    {exportStatus === 'NOT_STARTED' ? (
-      <button className="btn btn-info" onClick={handleDownload}>
-        {1 === 2 ? (
-          <span>Export Records for Query</span>
-        ) : (
-          <span>Export All Records</span>
-        )}
-      </button>
-    ) : (
-      <Fragment>
-        <p>{submissionsCount} Records retrieved</p>
-        {/* TODO: Warp user feedback in a conditional if exportStatus === Failed */}
-        {exportStatus === 'CONVERT' && <p>Converting Records to CSV format</p>}
-        {exportStatus === 'DOWNLOAD' && (
-          <p>{`Downloading ${submissionsCount} Records to ${form.name}.csv`}</p>
-        )}
-        {exportStatus === 'COMPLETE' && (
-          <Fragment>
-            <p>
-              {`${submissionsCount} Records exported to ${form.name}.csv.  `}
-            </p>
-            <p>Click Cancel to close the modal</p>
-          </Fragment>
-        )}
-      </Fragment>
-    )}
+    <div className="text-center">
+      {exportStatus === 'NOT_STARTED' ? (
+        <Fragment>
+          <h2>This process will export as a .csv file</h2>
+          <h4>Please don't close modal until confirmation</h4>
+          <button className="btn btn-primary" onClick={handleDownload}>
+            {1 === 2 ? (
+              <span>Export Records for Query</span>
+            ) : (
+              <span>Export All Records</span>
+            )}
+          </button>
+        </Fragment>
+      ) : (
+        <Fragment>
+          <h2>Retrieving Records</h2>
+          <h4>{submissionsCount} records retrieved</h4>
+          {/* TODO: Warp user feedback in a conditional if exportStatus === Failed */}
+          {exportStatus === 'CONVERT' && (
+            <h4>Converting Records to CSV format</h4>
+          )}
+          {exportStatus === 'DOWNLOAD' && (
+            <h4>{`Downloading ${submissionsCount} Records to ${
+              form.name
+            }.csv`}</h4>
+          )}
+          {exportStatus === 'COMPLETE' && (
+            <Fragment>
+              <h2>
+                {`${submissionsCount} Records exported to ${form.name}.csv.  `}
+              </h2>
+              <h4>Click Cancel to close the modal</h4>
+            </Fragment>
+          )}
+        </Fragment>
+      )}
+    </div>
   </Fragment>
 );
-
-function download(filename, data) {
-  var element = document.createElement('a');
-  element.setAttribute(
-    'href',
-    'data:text/csv;charset=utf-8,' + encodeURIComponent(data),
-  );
-  element.setAttribute('download', filename + '.csv');
-
-  element.style.display = 'none';
-  document.body.appendChild(element);
-
-  element.click();
-
-  document.body.removeChild(element);
-}
 
 function createCSV(submissions, form) {
   // Create csv string that will be used for download
@@ -103,6 +99,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   fetchAllSubmissions: actions.fetchAllSubmissions,
+  setExportSubmissions: actions.setExportSubmissions,
 };
 
 export const Export = compose(
@@ -121,9 +118,12 @@ export const Export = compose(
         const csv = createCSV(nextProps.submissions, nextProps.form);
         // TODO: If CSV fails setExportStatus to FAILD
         nextProps.setExportStatus('DOWNLOAD');
-        download(nextProps.form.name, csv);
+        downloadjs(csv, nextProps.form.name + '.csv', 'text/csv');
         nextProps.setExportStatus('COMPLETE');
       }
+    },
+    componentWillUnmount() {
+      this.props.setExportSubmissions([]);
     },
   }),
 )(ExportComponent);

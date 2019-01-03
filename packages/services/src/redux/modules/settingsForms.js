@@ -208,6 +208,7 @@ export const State = Record({
   exportSubmissions: [],
   exportCount: 0,
   downloaded: false,
+  fetchingAll: false,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
