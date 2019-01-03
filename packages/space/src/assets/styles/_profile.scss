@@ -104,12 +104,14 @@
     line-height: 1.5rem;
     margin-bottom: 0;
   }
+  .sb-avatar--gravatar {
+    box-shadow: inset 0px 0px 10px rgba($black, 0.9);
+  }
   img {
     flex-shrink: 0;
     border-radius: 50%;
     height: 100%;
     width: 100%;
-    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.9);
   }
   dl span {
     display: flex;
