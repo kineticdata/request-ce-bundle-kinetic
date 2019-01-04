@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import {
@@ -43,26 +43,28 @@ const SchedulerAgentsComponent = ({
   processRemove,
 }) => (
   <div className="list-wrapper list-wrapper--agents">
-    <div className="text-right">
-      <button className="btn btn-primary" onClick={handleAdd}>
-        <I18n>Add Agent</I18n>
-      </button>
-    </div>
     {loading && !agents && <LoadingMessage />}
     {!loading &&
       !agents && (
         <InfoMessage
-          heading="The team for agents does not exist yet."
-          text=""
+          heading="The team for agents is being created."
+          text="This may take a few minutes."
         />
       )}
     {!loading &&
       agents &&
-      agents.memberships.size === 0 && (
-        <EmptyMessage
-          heading="No Agents Found"
-          text="Agents are the users who are assigned to scheduled events."
-        />
+      agents.memberships.length === 0 && (
+        <Fragment>
+          <EmptyMessage
+            heading="No Agents Found"
+            text="Agents are the users who are assigned to scheduled events."
+          />
+          <div className="text-center">
+            <button className="btn btn-primary" onClick={handleAdd}>
+              <I18n>Add Agent</I18n>
+            </button>
+          </div>
+        </Fragment>
       )}
     {!loading &&
       agents &&
@@ -76,7 +78,11 @@ const SchedulerAgentsComponent = ({
               <th scope="col">
                 <I18n>Username</I18n>
               </th>
-              <th />
+              <th className="text-right">
+                <button className="btn btn-primary" onClick={handleAdd}>
+                  <I18n>Add Agent</I18n>
+                </button>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -280,6 +286,7 @@ export const mapDispatchToProps = {
   addSchedulerAgent: actions.addSchedulerMembership,
   removeSchedulerAgent: actions.removeSchedulerMembership,
   createUserAsSchedulerAgent: actions.createUserWithSchedulerMembership,
+  fetchSchedulerAgentsTeam: actions.fetchSchedulerAgentsTeam,
   addError: toastActions.addError,
 };
 
@@ -338,6 +345,7 @@ export const SchedulerAgents = compose(
   withState('usernames', 'setUsernames', []),
   withState('user', 'setUser', null),
   withState('openConfirm', 'setOpenConfirm', false),
+  withState('teamPoller', 'setTeamPoller', false),
   withHandlers({
     toggleDropdown,
     handleAdd,
@@ -348,6 +356,18 @@ export const SchedulerAgents = compose(
     processRemove,
   }),
   lifecycle({
-    componentDidMount() {},
+    componentDidUpdate(prevProps) {
+      if (!this.props.loading && !this.props.agents && !this.props.teamPoller) {
+        const currentProps = this.props;
+        this.props.setTeamPoller(
+          window.setTimeout(() => {
+            currentProps.fetchSchedulerAgentsTeam({
+              schedulerName: currentProps.schedulerName,
+            });
+            currentProps.setTeamPoller(false);
+          }, 3000),
+        );
+      }
+    },
   }),
 )(SchedulerAgentsComponent);

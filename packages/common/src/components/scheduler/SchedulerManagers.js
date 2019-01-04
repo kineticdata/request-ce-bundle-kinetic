@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import {
@@ -44,28 +44,30 @@ const SchedulerManagersComponent = ({
   processRemove,
 }) => (
   <div className="list-wrapper list-wrapper--managers">
-    {isSchedulerAdmin && (
-      <div className="text-right">
-        <button className="btn btn-primary" onClick={handleAdd}>
-          <I18n>Add Manager</I18n>
-        </button>
-      </div>
-    )}
     {loading && !managers && <LoadingMessage />}
     {!loading &&
       !managers && (
         <InfoMessage
-          heading="The team for managers does not exist yet."
-          text=""
+          heading="The team for managers is being created."
+          text="This may take a few minutes."
         />
       )}
     {!loading &&
       managers &&
-      managers.memberships.size === 0 && (
-        <EmptyMessage
-          heading="No Managers Found"
-          text="Managers are the users who are assigned to scheduled events."
-        />
+      managers.memberships.length === 0 && (
+        <Fragment>
+          <EmptyMessage
+            heading="No Managers Found"
+            text="Managers are the users who can manage the scheduler and its agents."
+          />
+          {isSchedulerAdmin && (
+            <div className="text-center">
+              <button className="btn btn-primary" onClick={handleAdd}>
+                <I18n>Add Manager</I18n>
+              </button>
+            </div>
+          )}
+        </Fragment>
       )}
     {!loading &&
       managers &&
@@ -79,7 +81,13 @@ const SchedulerManagersComponent = ({
               <th scope="col">
                 <I18n>Username</I18n>
               </th>
-              {isSchedulerAdmin && <th />}
+              {isSchedulerAdmin && (
+                <th className="text-right">
+                  <button className="btn btn-primary" onClick={handleAdd}>
+                    <I18n>Add Manager</I18n>
+                  </button>
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -286,6 +294,7 @@ export const mapDispatchToProps = {
   addSchedulerManager: actions.addSchedulerMembership,
   removeSchedulerManager: actions.removeSchedulerMembership,
   createUserAsSchedulerManager: actions.createUserWithSchedulerMembership,
+  fetchSchedulerManagersTeam: actions.fetchSchedulerManagersTeam,
   addError: toastActions.addError,
 };
 
@@ -342,6 +351,7 @@ export const SchedulerManagers = compose(
   withState('usernames', 'setUsernames', []),
   withState('user', 'setUser', null),
   withState('openConfirm', 'setOpenConfirm', false),
+  withState('teamPoller', 'setTeamPoller', false),
   withHandlers({
     toggleDropdown,
     handleAdd,
@@ -352,6 +362,22 @@ export const SchedulerManagers = compose(
     processRemove,
   }),
   lifecycle({
-    componentDidMount() {},
+    componentDidUpdate(prevProps) {
+      if (
+        !this.props.loading &&
+        !this.props.managers &&
+        !this.props.teamPoller
+      ) {
+        const currentProps = this.props;
+        this.props.setTeamPoller(
+          window.setTimeout(() => {
+            currentProps.fetchSchedulerManagersTeam({
+              schedulerName: currentProps.schedulerName,
+            });
+            currentProps.setTeamPoller(false);
+          }, 3000),
+        );
+      }
+    },
   }),
 )(SchedulerManagersComponent);

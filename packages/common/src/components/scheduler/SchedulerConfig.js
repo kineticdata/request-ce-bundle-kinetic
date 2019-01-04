@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
@@ -43,11 +43,6 @@ const SchedulerConfigComponent = ({
   processDelete,
 }) => (
   <div className="list-wrapper list-wrapper--config">
-    <div className="text-right">
-      <button className="btn btn-primary" onClick={handleAdd}>
-        <I18n>Add Event Type</I18n>
-      </button>
-    </div>
     {loading && configs.size === 0 && <LoadingMessage />}
     {!loading &&
       errors.length > 0 && (
@@ -63,10 +58,18 @@ const SchedulerConfigComponent = ({
     {!loading &&
       errors.length === 0 &&
       configs.size === 0 && (
-        <EmptyMessage
-          heading="No Event Types Found"
-          text="Event Types define the duration of the various events customers can schedule."
-        />
+        <Fragment>
+          <EmptyMessage
+            heading="No Event Types Found"
+            text="Event Types define the duration of the various events customers can schedule."
+          />
+
+          <div className="text-center">
+            <button className="btn btn-primary" onClick={handleAdd}>
+              <I18n>Add Event Type</I18n>
+            </button>
+          </div>
+        </Fragment>
       )}
     {configs.size > 0 && (
       <table className="table table-sm table-striped table-configs table--settings">
@@ -81,7 +84,11 @@ const SchedulerConfigComponent = ({
             <th scope="col">
               <I18n>Status</I18n>
             </th>
-            <th />
+            <th className="text-right">
+              <button className="btn btn-primary" onClick={handleAdd}>
+                <I18n>Add Event Type</I18n>
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>

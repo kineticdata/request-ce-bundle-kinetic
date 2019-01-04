@@ -62,7 +62,6 @@ export const EmptyMessage = ({ heading, text }) => {
       <h5>
         <I18n>{heading || 'No Results Found'}</I18n>
       </h5>
-      <img src={wallyHappyImage} alt="Happy Wally" />
       {text && (
         <h6>
           <I18n>{text}</I18n>
