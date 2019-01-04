@@ -74,7 +74,9 @@ export function* fetchAppSettingsTask() {
     .filter(u => u.username !== profile.username);
 
   const myFilters = profile.profileAttributes['Queue Personal Filters']
-    ? profile.profileAttributes['Queue Personal Filters'].map(filterReviver)
+    ? profile.profileAttributes['Queue Personal Filters']
+        .map(filterReviver)
+        .filter(f => f)
     : List();
 
   const appSettings = {
@@ -93,10 +95,16 @@ export function* updatePersonalFilterTask() {
   const myFilters = yield select(selectPersonalFilters);
   const profile = yield select(selectProfile);
 
-  profile.profileAttributes['Queue Personal Filters'] = myFilters.toJS();
-
   const { serverError } = yield call(CoreAPI.updateProfile, {
-    profile,
+    profile: {
+      ...profile,
+      profileAttributes: {
+        ...profile.profileAttributes,
+        'Queue Personal Filters': myFilters
+          .toJS()
+          .map(filter => JSON.stringify(filter)),
+      },
+    },
     include: PROFILE_INCLUDES,
   });
   if (!serverError) {
