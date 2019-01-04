@@ -165,7 +165,7 @@ export const CheckInComponent = ({
                 )}
                 <button
                   type="button"
-                  className="btn btn-link"
+                  className="btn btn-outline-danger"
                   onClick={() => toggleShowDetails(null)}
                 >
                   <I18n>Cancel</I18n>
@@ -195,7 +195,7 @@ export const CheckInComponent = ({
                     <div className="form-group">
                       <button
                         type="button"
-                        className="btn btn-sm btn-primary"
+                        className="btn btn-primary"
                         onClick={() => setWalkInUser(true)}
                       >
                         <I18n>I do not have an account</I18n>
@@ -226,7 +226,7 @@ export const CheckInComponent = ({
                 )}
                 <button
                   type="button"
-                  className="btn btn-link"
+                  className="btn btn-outline-danger"
                   onClick={() => toggleShowDetails(null)}
                 >
                   <I18n>Cancel</I18n>
