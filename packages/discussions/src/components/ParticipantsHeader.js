@@ -27,7 +27,7 @@ export const ParticipantsHeader = ({
             <div
               className={
                 isPresent(discussion, p.user.username)
-                  ? 'participant__status participant__status--active'
+                  ? 'participant__status is-active'
                   : 'participant__status'
               }
             />

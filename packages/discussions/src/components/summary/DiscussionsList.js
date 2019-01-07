@@ -39,13 +39,12 @@ export const DiscussionsListComponent = ({
         .toList()}
     </Fragment>
   ) : (
-    <div className="empty-discussion">
-      <h5>No discussion to display</h5>
-      <p>
-        <button onClick={handleCreateDiscussion} className="btn btn-link">
-          Create a new discussion
-        </button>
-      </p>
+    <div className="empty-state empty-state--discussions">
+      <h5 className="empty-state__title">No discussion to display</h5>
+
+      <button onClick={handleCreateDiscussion} className="btn btn-inverse">
+        Create a new discussion
+      </button>
     </div>
   );
 };

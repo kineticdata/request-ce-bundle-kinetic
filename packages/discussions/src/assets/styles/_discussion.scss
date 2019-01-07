@@ -1,8 +1,8 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Discussion ~ Discussions
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.kinops-discussions,
-.kinops-discussions-modal-body {
+.discussions,
+.discussions-modal-body {
   background-color: $white;
   display: flex;
   flex-direction: column;
@@ -40,31 +40,25 @@
         margin: 0 0.75rem;
       }
     }
-    button.more-messages {
-      position: absolute;
-      bottom: 20px;
-      width: 180px;
-      left: 50%;
-      margin-left: -90px;
-      font-size: 12px;
-      display: flex;
-      justify-content: center;
-      .icon {
-        margin-left: 10px;
-        path {
-          fill: $white;
-        }
-      }
+  }
+  .btn--more-messages {
+    position: absolute;
+    bottom: 3.75rem;
+    width: 20%;
+    left: 50%;
+    margin-left: -90px;
+    font-size: 0.75rem;
+    display: flex;
+    justify-content: center;
+    line-height: 1.5rem;
+    .fa {
+      line-height: 1.5rem;
     }
   }
-  &.empty {
-    justify-content: center;
-  }
-  .load-more-messages {
+  .more-messages {
     text-align: center;
     padding-top: 1.5rem;
-    // padding: 1.5rem;
-    h5 {
+    &__title {
       color: $blue1;
       @include ms-respond(font-size, 2);
       font-weight: 600;
@@ -72,7 +66,7 @@
       margin-top: 0;
     }
 
-    h6 {
+    &__subtitle {
       color: $blue2;
       @include ms-respond(font-size, -1);
       margin-top: 0;
@@ -83,10 +77,10 @@
     display: flex;
     padding: 0;
     overflow: visible;
-    &.editing,
-    &.replying {
+    &--editing,
+    &--replying {
       background-color: rgba(245, 166, 35, 0.15);
-      .input-container {
+      .new-message__input-container {
         background-color: rgba(245, 166, 35, 0.15);
       }
       .btn-subtle,
@@ -94,9 +88,9 @@
         background-color: rgba(245, 166, 35, 0.05);
       }
     }
-    &.disabled {
+    &--default {
       background-color: rgba(240, 240, 240, 0.75);
-      .input-container {
+      .new-message__input-container {
         background-color: rgba(240, 240, 240, 0.75);
       }
     }
@@ -162,7 +156,7 @@
       }
     }
 
-    .input-container {
+    &__input-container {
       flex: 1 1 100%;
       padding: 0.75rem 1rem;
       background-color: $blue3;
@@ -171,7 +165,7 @@
         color: #a8b7c7;
         position: absolute;
         pointer-events: none;
-        &.hidden {
+        &.is-hidden {
           display: none;
         }
       }
@@ -189,7 +183,7 @@
         outline: unset;
       }
 
-      &.disabled {
+      &.is-disabled {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -207,19 +201,20 @@
     align-items: center;
     background-color: rgba(255, 255, 255, 0.8);
     padding: 0 1.5rem;
+    z-index: 1;
     .sb-avatar {
       margin-right: 0.25rem;
 
       cursor: pointer;
       &--gravatar {
         line-height: initial;
-      }
-      img {
-        box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.9);
+        box-shadow: inset 0px 0px 10px rgba($black, 0.9);
       }
       .sb-avatar__text,
       img {
         transition: border-color 300ms;
+        z-index: -1;
+        position: relative;
       }
     }
     .view-all {
@@ -246,7 +241,7 @@
       pointer-events: none;
       border: 2px solid rgba($present, 0);
       border-radius: 50%;
-      &--active {
+      &.is-active {
         border-color: rgba($present, 1);
       }
     }
@@ -274,24 +269,11 @@
     }
   }
 
-  .empty-discussion {
+  .empty-state--discussions {
     background-color: $black-3;
     border-radius: 0.5rem;
-    margin: 1rem;
     text-align: center;
-
-    h5 {
-      color: $blue-lake;
-      font-size: 14px;
-      @include ms-respond(font-size, 2);
-      font-weight: 600;
-      line-height: 1.5rem;
-    }
-
-    button {
-      color: $blue2;
-      font-size: 14px;
-    }
+    justify-content: flex-start;
   }
   .btn {
     flex: 0 0 auto;
@@ -304,7 +286,7 @@
     text-align: left;
   }
   // Discussion container fixes
-  &.recent-discussions-wrapper {
+  &.discussions--recent {
     overflow-y: scroll;
     justify-content: space-between;
     flex-direction: column;
@@ -362,7 +344,7 @@
     align-items: stretch;
     color: $blue1;
     @include ms-respond(font-size, 0);
-    .message-list-item {
+    &__item {
       // border: 1px solid green;
       display: flex;
       flex: 0 1 auto;
@@ -370,7 +352,7 @@
       &:hover {
         background-color: $white;
         border-radius: 3px;
-        ul.actions {
+        .message-list__actions {
           visibility: visible;
           opacity: 1;
           transition: opacity 0.3s;
@@ -378,7 +360,7 @@
         }
       }
     }
-    ul.actions {
+    &__actions {
       list-style: none;
       display: inline-flex;
       padding: 0 1rem;
@@ -489,7 +471,7 @@
   }
   &.mine {
     .message-list {
-      .message-list-item {
+      &__item {
         justify-content: flex-end;
         &:hover {
           background-color: $white;
@@ -528,7 +510,7 @@
     }
   }
   .message-list {
-    .message-list-item {
+    &__item {
       &.editing,
       &.replying {
         background-color: rgba(245, 166, 35, 0.15);
@@ -585,7 +567,7 @@
   top: -2.5rem;
   width: 100%;
 
-  .markdown-sample + .markdown-sample {
+  &__sample + &__sample {
     margin-left: 0.5rem;
   }
 }

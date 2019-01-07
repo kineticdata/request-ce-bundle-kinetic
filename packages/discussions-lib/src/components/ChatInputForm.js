@@ -241,9 +241,11 @@ class ChatInput extends Component {
       >
         <form
           onSubmit={this.handleSendChatMessage}
-          className={`new-message disabled ${
-            this.props.messageActions.editing ? 'editing' : ''
-          } ${this.props.messageActions.replying ? 'replying' : ''}`}
+          className={`new-message new-message--default ${
+            this.props.messageActions.editing ? 'new-message--editing' : ''
+          } ${
+            this.props.messageActions.replying ? 'new-message--replying' : ''
+          }`}
         >
           {!this.props.discussion.isArchived && (
             <ButtonDropdown
@@ -278,7 +280,7 @@ class ChatInput extends Component {
               </PopoverBody>
             )}
           </Popover>
-          <div className="input-container" id="chatInput">
+          <div className="new-message__input-container" id="chatInput">
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               {this.state.fileAttachments.map(attachment => (
                 <UploadCard
@@ -297,7 +299,7 @@ class ChatInput extends Component {
 
             <div
               className={classNames('placeholder', {
-                hidden:
+                'is-hidden':
                   this.state.chatInput !== '' ||
                   this.props.discussion.isArchived,
               })}
@@ -318,7 +320,7 @@ class ChatInput extends Component {
                 onBlur={this.handleBlur}
               />
             ) : (
-              <div className="message-input disabled text-danger">
+              <div className="message-input is-disabled text-danger">
                 This discussion has been archived and is read-only.
               </div>
             )}
@@ -349,12 +351,12 @@ class ChatInput extends Component {
         </form>
         {this.state.hasFocus && (
           <div className="markdown-help">
-            <strong className="markdown-sample">**Bold**</strong>
-            <em className="markdown-sample">_Italics_</em>
-            <span className="markdown-sample">
+            <strong className="markdown-help__sample">**Bold**</strong>
+            <em className="markdown-help__sample">_Italics_</em>
+            <span className="markdown-help__sample">
               ~~<strike>Strike</strike>~~
             </span>
-            <span className="markdown-sample">&gt;Blockquote</span>
+            <span className="markdown-help__sample">&gt;Blockquote</span>
           </div>
         )}
       </Dropzone>

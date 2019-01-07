@@ -11,9 +11,10 @@
     }
 
     // Make the discussion box fit in the right sidebar.
-    .kinops-discussions {
+    .discussions {
       border-left: 2px solid $gray4;
       flex: 1 1 40%;
+      justify-content: flex-start;
     }
   }
 }

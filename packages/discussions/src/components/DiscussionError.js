@@ -8,12 +8,14 @@ const errors = {
 };
 
 export const DiscussionError = props => (
-  <div className="kinops-discussions">
+  <div className="discussions">
     <div className="empty-state empty-state--wally">
-      <h5>{errors[props.error] || props.error}</h5>
+      <h5 className="empty-state__title">
+        {errors[props.error] || props.error}
+      </h5>
       <img src={wallyMissingImage} alt="Missing Wally" />
       {props.fullPage && (
-        <h6>
+        <h6 className="empty-state__subtitle">
           Head back to the <Link to="/">homepage</Link>.
         </h6>
       )}

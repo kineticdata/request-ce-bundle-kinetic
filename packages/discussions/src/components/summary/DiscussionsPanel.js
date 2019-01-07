@@ -7,8 +7,8 @@ import { actions as discussionsActions } from '../../redux/modules/discussions';
 
 export const getDisplayClasses = props =>
   props.isModal === true
-    ? 'kinops-discussions d-flex d-md-none d-lg-none d-xl-none'
-    : 'kinops-discussions d-none d-md-flex';
+    ? 'discussions d-flex d-md-none d-lg-none d-xl-none'
+    : 'discussions d-none d-md-flex';
 
 export class DiscussionsPanelComponent extends Component {
   constructor(props) {
@@ -78,9 +78,7 @@ export class DiscussionsPanelComponent extends Component {
       </div>
     ) : (
       <div
-        className={`recent-discussions-wrapper ${getDisplayClasses(
-          this.props,
-        )}`}
+        className={`discussions--recent ${getDisplayClasses(this.props)}`}
         style={{ margin: this.props.isModal === true ? '1em' : undefined }}
       >
         <DiscussionsList

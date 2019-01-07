@@ -56,7 +56,7 @@ const DiscussionHeader = props => {
   return (
     <Fragment>
       <PageTitle parts={[discussionName, 'Discussions']} />
-      <div className="subheader">
+      <div className="discussion__subheader">
         <Link to={'/'}>home</Link> / {discussionName}
         {relatedItems &&
           relatedItems.map(relatedItem => buildRelatedItemLink(relatedItem))}
@@ -70,7 +70,7 @@ export const DiscussionComponent = ({
   handleLeave,
   invitationToken,
 }) => (
-  <div className="discussion-wrapper">
+  <div className="discussion">
     {discussionId ? (
       socketStage === SOCKET_STAGE.IDENTIFIED ||
       socketStage === SOCKET_STAGE.RECONNECTING ? (
@@ -85,8 +85,8 @@ export const DiscussionComponent = ({
         <Fragment>
           <DiscussionHeader />
 
-          <div className="empty-discussion">
-            <h6>
+          <div className="empty-state empty-state--discussions">
+            <h6 className="empty-state--discussions__title">
               Real-time connection to server has been interrupted. Please
               refresh and try again.
             </h6>
@@ -96,8 +96,10 @@ export const DiscussionComponent = ({
     ) : (
       <Fragment>
         <DiscussionHeader />
-        <div className="empty-discussion">
-          <h6>No discussion to display</h6>
+        <div className="empty-state empty-state--discussions">
+          <h6 className="empty-state--discussions__title">
+            No discussion to display
+          </h6>
         </div>
       </Fragment>
     )}
