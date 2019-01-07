@@ -38,6 +38,9 @@
   }
 
   &--tech-bar {
+    border-top-width: 6px;
+    border-top-color: $blue-slate;
+
     .card-body {
       flex-direction: column;
       justify-content: flex-start;

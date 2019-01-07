@@ -1,13 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import {
-  compose,
-  lifecycle,
-  withHandlers,
-  withProps,
-  withState,
-} from 'recompose';
+import { compose, withHandlers, withProps, withState } from 'recompose';
 import {
   Modal,
   ModalBody,
@@ -27,6 +21,8 @@ import { I18n } from '../../../../app/src/I18nProvider';
 const SchedulerManagersComponent = ({
   loading,
   managers,
+  fetchSchedulerManagersTeam,
+  schedulerName,
   isSchedulerAdmin,
   openDropdown,
   toggleDropdown,
@@ -44,28 +40,44 @@ const SchedulerManagersComponent = ({
   processRemove,
 }) => (
   <div className="list-wrapper list-wrapper--managers">
-    {isSchedulerAdmin && (
-      <div className="text-right">
-        <button className="btn btn-primary" onClick={handleAdd}>
-          <I18n>Add Manager</I18n>
-        </button>
-      </div>
-    )}
     {loading && !managers && <LoadingMessage />}
     {!loading &&
       !managers && (
-        <InfoMessage
-          heading="The team for managers does not exist yet."
-          text=""
-        />
+        <Fragment>
+          <InfoMessage
+            heading="The team for managers is being created."
+            text="This may take a few minutes."
+          />
+          <div className="text-center">
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                fetchSchedulerManagersTeam({
+                  schedulerName,
+                });
+              }}
+            >
+              <span className="fa fa-refresh" />
+            </button>
+          </div>
+        </Fragment>
       )}
     {!loading &&
       managers &&
-      managers.memberships.size === 0 && (
-        <EmptyMessage
-          heading="No Managers Found"
-          text="Managers are the users who are assigned to scheduled events."
-        />
+      managers.memberships.length === 0 && (
+        <Fragment>
+          <EmptyMessage
+            heading="No Managers Found"
+            text="Managers are the users who can manage the scheduler and its agents."
+          />
+          {isSchedulerAdmin && (
+            <div className="text-center">
+              <button className="btn btn-primary" onClick={handleAdd}>
+                <I18n>Add Manager</I18n>
+              </button>
+            </div>
+          )}
+        </Fragment>
       )}
     {!loading &&
       managers &&
@@ -79,7 +91,13 @@ const SchedulerManagersComponent = ({
               <th scope="col">
                 <I18n>Username</I18n>
               </th>
-              {isSchedulerAdmin && <th />}
+              {isSchedulerAdmin && (
+                <th className="text-right">
+                  <button className="btn btn-primary" onClick={handleAdd}>
+                    <I18n>Add Manager</I18n>
+                  </button>
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -286,6 +304,7 @@ export const mapDispatchToProps = {
   addSchedulerManager: actions.addSchedulerMembership,
   removeSchedulerManager: actions.removeSchedulerMembership,
   createUserAsSchedulerManager: actions.createUserWithSchedulerMembership,
+  fetchSchedulerManagersTeam: actions.fetchSchedulerManagersTeam,
   addError: toastActions.addError,
 };
 
@@ -350,8 +369,5 @@ export const SchedulerManagers = compose(
     handleRemove,
     toggleConfirm,
     processRemove,
-  }),
-  lifecycle({
-    componentDidMount() {},
   }),
 )(SchedulerManagersComponent);

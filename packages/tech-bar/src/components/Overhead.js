@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { Moment, Constants } from 'common';
 import {
   compose,
   lifecycle,
@@ -24,18 +25,27 @@ export const OverheadComponent = ({ errors, records }) => {
                 <span className="fa fa-fw fa-exclamation-triangle text-danger mr-2" />
               )}
               <span>
-                <I18n>Next up...</I18n>
+                <I18n>Checked In</I18n>
               </span>
             </h1>
             <ol className="overhead-display-list">
               {records.filter(r => r.status === 'Checked In').map(r => (
                 <li key={r.id}>
                   {r.displayName}
-                  {r.isWalkIn && (
+                  {r.isWalkIn ? (
                     <small>
                       <I18n
                         render={translate => ` (${translate('Walk-In')})`}
                       />
+                    </small>
+                  ) : (
+                    <small>
+                      {' ('}
+                      <Moment
+                        timestamp={r.appointmentTime}
+                        format={Constants.MOMENT_FORMATS.time}
+                      />
+                      {')'}
                     </small>
                   )}
                 </li>
@@ -56,7 +66,8 @@ export const mapStateToProps = (state, props) => ({
   records: state.techBar.appointments.today.data
     .map(a => ({
       id: a.id,
-      updatedAt: a.updatedAt,
+      updatedAt: `${a.values['Event Date']} ${a.values['Event Time']}`,
+      appointmentTime: `${a.values['Event Date']} ${a.values['Event Time']}`,
       username: a.values['Requested For'],
       displayName: a.values['Requested For Display Name'],
       status: a.values['Status'],
