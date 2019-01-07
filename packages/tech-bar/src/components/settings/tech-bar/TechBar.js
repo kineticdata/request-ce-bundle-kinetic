@@ -11,6 +11,7 @@ import {
   selectHasRoleSchedulerAdmin,
   Moment,
   Constants,
+  Table,
 } from 'common';
 import moment from 'moment';
 import { actions } from '../../../redux/modules/appointments';
@@ -28,6 +29,7 @@ export const TechBarComponent = ({
   handleNextDay,
   handleToday,
   isToday,
+  push,
 }) => {
   return techBar ? (
     <Fragment>
@@ -115,38 +117,48 @@ export const TechBarComponent = ({
                   />
                 </span>
               </div>
-              <div className="cards__wrapper cards__wrapper--appt">
-                {appointments.map(appt => {
-                  const start = moment.utc(
-                    appt.values['Event Time'],
-                    TIME_FORMAT,
-                  );
-                  const end = start
-                    .clone()
-                    .add(appt.values['Duration'], 'minute');
-                  return (
-                    <div className="card card--appt" key={appt.id}>
-                      <i
-                        className="fa fa-calendar fa-fw card-icon"
-                        style={{ background: 'rgb(255, 74, 94)' }}
-                      />
-                      <div className="card-body">
-                        <h1 className="card-title">
-                          <span>
-                            {appt.values['Requested For Display Name']}{' '}
-                            <small>({appt.values['Event Type']})</small>
-                          </span>
-                          <span
-                            className={`badge ${
-                              appt.coreState === 'Closed'
-                                ? 'badge-dark'
-                                : 'badge-success'
-                            }`}
-                          >
-                            {appt.values['Status']}
-                          </span>
-                        </h1>
-                        <p className="card-subtitle">
+
+              <Table
+                props={{
+                  class: 'table--settings table-hover',
+                  name: 'appointments-table',
+                  id: 'appointments-table',
+                }}
+                data={appointments
+                  .map(a => ({
+                    ...a.values,
+                    _id: a.id,
+                    _coreState: a.coreState,
+                  }))
+                  .toJS()}
+                columns={[
+                  {
+                    value: 'Summary',
+                    title: 'Summary',
+                    renderBodyCell: ({ content, row }) => (
+                      <td>
+                        <Link
+                          to={`/settings/general/${techBar.id}/appointment/${
+                            row._id
+                          }`}
+                        >
+                          {content}
+                        </Link>
+                      </td>
+                    ),
+                  },
+                  {
+                    value: 'Requested For Display Name',
+                    title: 'User',
+                  },
+                  {
+                    value: 'Event Time',
+                    title: 'Time',
+                    renderBodyCell: ({ content, row }) => {
+                      const start = moment.utc(row['Event Time'], TIME_FORMAT);
+                      const end = start.clone().add(row['Duration'], 'minute');
+                      return (
+                        <td>
                           <Moment
                             timestamp={start}
                             format={Constants.MOMENT_FORMATS.time}
@@ -156,32 +168,41 @@ export const TechBarComponent = ({
                             timestamp={end}
                             format={Constants.MOMENT_FORMATS.time}
                           />
-                        </p>
-                        <p className="card-text">{appt.values['Summary']}</p>
-                        <Link
-                          to={`/settings/general/${techBar.id}/appointment/${
-                            appt.id
+                        </td>
+                      );
+                    },
+                  },
+                  {
+                    value: 'Event Type',
+                    title: 'Event Type',
+                  },
+                  {
+                    value: 'Status',
+                    title: 'Status',
+                    width: '1%',
+                    renderBodyCell: ({ content, row }) => (
+                      <td>
+                        <span
+                          className={`badge ${
+                            row._coreState === 'Closed'
+                              ? 'badge-dark'
+                              : 'badge-success'
                           }`}
-                          className="btn btn-link text-left pl-0"
                         >
-                          <I18n>View Details →</I18n>
-                        </Link>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              {appointments.size === 0 &&
-                !loadingAppointments &&
-                appointmentErrors.length === 0 && (
-                  <h6 className="text-muted">
-                    <em>
-                      <I18n>
-                        There are no appointments for the selected date.
-                      </I18n>
-                    </em>
-                  </h6>
+                          {content}
+                        </span>
+                      </td>
+                    ),
+                  },
+                ]}
+                emptyMessage="There are no appointments for the selected date."
+                filtering={false}
+                pagination={false}
+                sortOrder={2}
+                render={({ table }) => (
+                  <div className="table-wrapper">{table}</div>
                 )}
+              />
             </div>
           </div>
         </div>
