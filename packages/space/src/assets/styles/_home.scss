@@ -72,14 +72,21 @@
         justify-content: flex-end;
         flex-basis: 40%;
         overflow-x: scroll;
+        z-index: 1;
         & > .avatar {
           padding: 0;
         }
         .sb-avatar {
-          line-height: initial;
+          // line-height: initial;
           cursor: pointer;
+
+          &--gravatar {
+            line-height: initial;
+            box-shadow: inset 0px 0px 10px rgba($black, 0.9);
+          }
           img {
-            box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.9);
+            z-index: -1;
+            position: relative;
           }
         }
 
