@@ -189,6 +189,28 @@ export function* fetchSchedulerSaga({ payload: { id } }) {
   }
 }
 
+export function* deleteSchedulerSaga({ payload: { id, successCallback } }) {
+  const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
+    id,
+    datastore: true,
+  });
+
+  if (serverError) {
+    yield put(
+      toastActions.addError(
+        serverError.error || serverError.statusText,
+        'Delete Failed',
+      ),
+    );
+  } else if (errors) {
+    yield put(toastActions.addError(errors.join(' '), 'Delete Failed'));
+  } else {
+    if (typeof successCallback === 'function') {
+      successCallback();
+    }
+  }
+}
+
 export function* fetchSchedulerManagersTeamSaga({
   payload: { schedulerName },
 }) {
@@ -505,6 +527,7 @@ export function* deleteSchedulerOverrideSaga({ payload: { id } }) {
 export function* watchSchedulers() {
   yield takeEvery(types.FETCH_SCHEDULERS, fetchSchedulersSaga);
   yield takeEvery(types.FETCH_SCHEDULER, fetchSchedulerSaga);
+  yield takeEvery(types.DELETE_SCHEDULER, deleteSchedulerSaga);
   yield takeEvery(
     types.FETCH_SCHEDULER_MANAGERS_TEAM,
     fetchSchedulerManagersTeamSaga,

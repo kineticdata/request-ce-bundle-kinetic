@@ -1,13 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import {
-  compose,
-  lifecycle,
-  withHandlers,
-  withProps,
-  withState,
-} from 'recompose';
+import { compose, withHandlers, withProps, withState } from 'recompose';
 import {
   Modal,
   ModalBody,
@@ -27,6 +21,8 @@ import { I18n } from '../../../../app/src/I18nProvider';
 const SchedulerManagersComponent = ({
   loading,
   managers,
+  fetchSchedulerManagersTeam,
+  schedulerName,
   isSchedulerAdmin,
   openDropdown,
   toggleDropdown,
@@ -47,10 +43,24 @@ const SchedulerManagersComponent = ({
     {loading && !managers && <LoadingMessage />}
     {!loading &&
       !managers && (
-        <InfoMessage
-          heading="The team for managers is being created."
-          text="This may take a few minutes."
-        />
+        <Fragment>
+          <InfoMessage
+            heading="The team for managers is being created."
+            text="This may take a few minutes."
+          />
+          <div className="text-center">
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                fetchSchedulerManagersTeam({
+                  schedulerName,
+                });
+              }}
+            >
+              <span className="fa fa-refresh" />
+            </button>
+          </div>
+        </Fragment>
       )}
     {!loading &&
       managers &&
@@ -351,7 +361,6 @@ export const SchedulerManagers = compose(
   withState('usernames', 'setUsernames', []),
   withState('user', 'setUser', null),
   withState('openConfirm', 'setOpenConfirm', false),
-  withState('teamPoller', 'setTeamPoller', false),
   withHandlers({
     toggleDropdown,
     handleAdd,
@@ -360,24 +369,5 @@ export const SchedulerManagers = compose(
     handleRemove,
     toggleConfirm,
     processRemove,
-  }),
-  lifecycle({
-    componentDidUpdate(prevProps) {
-      if (
-        !this.props.loading &&
-        !this.props.managers &&
-        !this.props.teamPoller
-      ) {
-        const currentProps = this.props;
-        this.props.setTeamPoller(
-          window.setTimeout(() => {
-            currentProps.fetchSchedulerManagersTeam({
-              schedulerName: currentProps.schedulerName,
-            });
-            currentProps.setTeamPoller(false);
-          }, 3000),
-        );
-      }
-    },
   }),
 )(SchedulerManagersComponent);
