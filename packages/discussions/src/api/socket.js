@@ -238,7 +238,6 @@ export class Socket {
   }
 
   receivePresence(message) {
-    message.payload = JSON.parse(message.payload);
     if ([PRESENCE_CREATE_OP, PRESENCE_REMOVE_OP].includes(message.payload.op)) {
       this.processPresence(message.payload.op, message.payload.presenceData);
     } else if (message.payload.op === PRESENCE_INIT_OP) {
