@@ -42,16 +42,7 @@ export const HomeComponent = ({
         </h2>
         <div className="cards__wrapper cards__wrapper--tech-bar">
           {techBars.map(techBar => (
-            <div
-              className="card card--tech-bar"
-              key={techBar.id}
-              style={{
-                borderTopWidth: '6px',
-                borderTopColor: techBar.values['Location']
-                  ? 'rgb(11, 168, 224)'
-                  : 'rgb(254, 233, 78)',
-              }}
-            >
+            <div className="card card--tech-bar" key={techBar.id}>
               <div className="card-body">
                 <h3 className="card-title">
                   <span>

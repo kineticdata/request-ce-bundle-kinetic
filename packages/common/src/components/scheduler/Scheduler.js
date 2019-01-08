@@ -9,8 +9,16 @@ import {
   withProps,
   withState,
 } from 'recompose';
+import {
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+} from 'reactstrap';
 import { PageTitle, Constants, Moment } from 'common';
-import { CoreForm } from 'react-kinetic-core';
+import { CoreAPI, CoreForm } from 'react-kinetic-core';
 import moment from 'moment';
 import { LoadingMessage, ErrorMessage, InfoMessage } from './Schedulers';
 import { SchedulerManagers } from './SchedulerManagers';
@@ -18,7 +26,11 @@ import { SchedulerAgents } from './SchedulerAgents';
 import { SchedulerConfig } from './SchedulerConfig';
 import { SchedulerAvailability } from './SchedulerAvailability';
 import { SchedulerOverrides } from './SchedulerOverrides';
-import { actions, SCHEDULER_FORM_SLUG } from '../../redux/modules/schedulers';
+import {
+  actions,
+  SCHEDULER_FORM_SLUG,
+  SCHEDULED_EVENT_FORM_SLUG,
+} from '../../redux/modules/schedulers';
 import { actions as toastActions } from '../../redux/modules/toasts';
 import { DATE_FORMAT } from '../../helpers/schedulerWidget';
 import {
@@ -71,6 +83,12 @@ const SchedulerComponent = ({
   handleError,
   isSchedulerAdmin,
   isSchedulerManager,
+  optionsOpen,
+  setOptionsOpen,
+  openConfirm,
+  toggleConfirm,
+  confirmSchedulerDelete,
+  handleSchedulerDelete,
 }) => {
   return (
     <div className="page-container page-container--scheduler">
@@ -83,23 +101,53 @@ const SchedulerComponent = ({
               <I18n>{pageName}</I18n>
             </h1>
           </div>
-          {currentLoaded &&
-            (mode !== 'edit' ? (
-              <Link
-                onClick={() => setPreviousMode(mode === 'managers' ? '' : mode)}
-                to={match.path.replace(/:id\/:mode\?/, `${id}/edit`)}
-                className="btn btn-primary"
-              >
-                <I18n>Edit Scheduler</I18n>
-              </Link>
-            ) : (
-              <Link
-                to={match.path.replace(/:id\/:mode\?/, `${id}/${previousMode}`)}
-                className="btn btn-secondary"
-              >
-                <I18n>Cancel Edit</I18n>
-              </Link>
-            ))}
+          <div className="page-title__actions">
+            {currentLoaded &&
+              (mode !== 'edit' ? (
+                <Fragment>
+                  <Link
+                    onClick={() =>
+                      setPreviousMode(mode === 'managers' ? '' : mode)
+                    }
+                    to={match.path.replace(/:id\/:mode\?/, `${id}/edit`)}
+                    className="btn btn-primary"
+                  >
+                    <I18n>Edit Scheduler</I18n>
+                  </Link>
+                  {isSchedulerAdmin && (
+                    <ButtonDropdown
+                      isOpen={optionsOpen}
+                      toggle={() => setOptionsOpen(!optionsOpen)}
+                    >
+                      <DropdownToggle
+                        className="dropdown-toggle hide-caret"
+                        color="link"
+                      >
+                        <span className="fa fa-ellipsis-v fa-lg" />
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        <button
+                          onClick={confirmSchedulerDelete}
+                          className="dropdown-item text-danger"
+                        >
+                          Delete Scheduler
+                        </button>
+                      </DropdownMenu>
+                    </ButtonDropdown>
+                  )}
+                </Fragment>
+              ) : (
+                <Link
+                  to={match.path.replace(
+                    /:id\/:mode\?/,
+                    `${id}/${previousMode}`,
+                  )}
+                  className="btn btn-secondary"
+                >
+                  <I18n>Cancel Edit</I18n>
+                </Link>
+              ))}
+          </div>
         </div>
 
         <div className="content-wrapper">
@@ -316,6 +364,44 @@ const SchedulerComponent = ({
             ))}
         </div>
       </div>
+
+      {openConfirm && (
+        <Modal isOpen={!!openConfirm} toggle={toggleConfirm}>
+          <div className="modal-header">
+            <h4 className="modal-title">
+              <button
+                type="button"
+                className="btn btn-link"
+                onClick={toggleConfirm}
+              >
+                <I18n>Cancel</I18n>
+              </button>
+              <span>
+                <I18n>Confirm Delete</I18n>
+              </span>
+            </h4>
+          </div>
+          <ModalBody className="modal-body--padding">
+            <div>
+              <div>
+                <I18n>
+                  Are you sure you want to delete this Scheduler? This cannot be
+                  undone.
+                </I18n>
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleSchedulerDelete}
+            >
+              <I18n>Delete</I18n>
+            </button>
+          </ModalFooter>
+        </Modal>
+      )}
     </div>
   );
 };
@@ -335,6 +421,82 @@ export const mapDispatchToProps = {
   addSuccess: toastActions.addSuccess,
   addError: toastActions.addError,
   fetchScheduler: actions.fetchScheduler,
+  deleteScheduler: actions.deleteScheduler,
+};
+
+const toggleConfirm = ({ setOpenConfirm }) => () => setOpenConfirm(false);
+
+const confirmSchedulerDelete = ({
+  setOptionsOpen,
+  setOpenConfirm,
+  scheduler,
+  addError,
+}) => e => {
+  setOptionsOpen(false);
+  const timezone = scheduler.values['Timezone'] || moment.tz.guess();
+  if (
+    scheduler.values['Scheduling Range End Date'] &&
+    moment
+      .tz(scheduler.values['Scheduling Range End Date'], DATE_FORMAT, timezone)
+      .isBefore(moment.tz(timezone).startOf('day'))
+  ) {
+    setOpenConfirm(true);
+  } else {
+    addError(
+      'You can only delete a Scheduler if it has a Scheduling Range End Date that is in the past.',
+    );
+  }
+};
+
+const handleSchedulerDelete = ({
+  setOpenConfirm,
+  scheduler,
+  deleteScheduler,
+  addError,
+  addSuccess,
+  match,
+  push,
+}) => () => {
+  setOpenConfirm(false);
+  CoreAPI.searchSubmissions({
+    search: new CoreAPI.SubmissionSearch(true)
+      .limit(1000)
+      .index('values[Scheduler Id],values[Date],values[Time]')
+      .eq('values[Scheduler Id]', scheduler.values['Id'])
+      .gteq(
+        'values[Date]',
+        moment
+          .tz(scheduler.values['Timezone'] || moment.tz.guess())
+          .startOf('day')
+          .format(DATE_FORMAT),
+      )
+      .build(),
+    datastore: true,
+    form: SCHEDULED_EVENT_FORM_SLUG,
+    include: 'details,values',
+  }).then(({ submissions, serverError, errors }) => {
+    if (serverError || errors) {
+      addError(
+        'There was an error deleting the scheduler. Please contact an administrator.',
+        'Delete Failed',
+      );
+    } else if (submissions.length > 0) {
+      addError(
+        'You cannot delete a Scheduler if it still has future events scheduled.',
+      );
+    } else {
+      deleteScheduler({
+        id: scheduler.id,
+        successCallback: () => {
+          addSuccess(
+            'The Scheduler was sucessfully deleted.',
+            'Delete Successful',
+          );
+          push(match.path.replace(/:id\/:mode\?/, ``));
+        },
+      });
+    }
+  });
 };
 
 export const Scheduler = compose(
@@ -342,11 +504,16 @@ export const Scheduler = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withState('openConfirm', 'setOpenConfirm', false),
+  withState('optionsOpen', 'setOptionsOpen', false),
+  withState('previousMode', 'setPreviousMode', ''),
   withHandlers({
     handleUpdated,
     handleError,
+    toggleConfirm,
+    confirmSchedulerDelete,
+    handleSchedulerDelete,
   }),
-  withState('previousMode', 'setPreviousMode', ''),
   withProps(({ match: { params: { id, mode = 'managers' } }, scheduler }) => ({
     id,
     currentLoaded: scheduler.id === id,

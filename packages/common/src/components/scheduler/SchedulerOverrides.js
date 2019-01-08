@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
@@ -64,18 +64,17 @@ const SchedulerOverridesComponent = ({
   processDelete,
 }) => (
   <div className="list-wrapper list-wrapper--overrides">
-    <div className="text-right">
-      <button
-        className={`btn ${includePastOverrides ? 'btn-success' : 'btn-subtle'}`}
-        onClick={() => togglePastOverrides(!includePastOverrides)}
-      >
-        <I18n>{`${
-          includePastOverrides ? 'Hide' : 'Show'
-        } Past Overrides`}</I18n>
-      </button>
-      <button className="btn btn-primary" onClick={handleAdd}>
-        <I18n>Add Override</I18n>
-      </button>
+    <div className="form py-2 px-0">
+      <label htmlFor="past-overrides" className="m-0">
+        <input
+          type="checkbox"
+          id="past-overrides"
+          className="mr-2"
+          checked={includePastOverrides}
+          onChange={() => togglePastOverrides(!includePastOverrides)}
+        />
+        <span>Show Past Overrides</span>
+      </label>
     </div>
     {loading && overrides.size === 0 && <LoadingMessage />}
     {!loading &&
@@ -92,10 +91,17 @@ const SchedulerOverridesComponent = ({
     {!loading &&
       errors.length === 0 &&
       overrides.size === 0 && (
-        <EmptyMessage
-          heading="No Overrides Found"
-          text="Overrides overwrite the standard availability for a given date."
-        />
+        <Fragment>
+          <EmptyMessage
+            heading="No Overrides Found"
+            text="Overrides overwrite the standard availability for a given date."
+          />
+          <div className="text-center">
+            <button className="btn btn-primary" onClick={handleAdd}>
+              <I18n>Add Override</I18n>
+            </button>
+          </div>
+        </Fragment>
       )}
     {overrides.size > 0 && (
       <table className="table table-sm table-striped table-overrides table--settings">
@@ -113,7 +119,11 @@ const SchedulerOverridesComponent = ({
             <th scope="col">
               <I18n>Slots</I18n>
             </th>
-            <th />
+            <th className="text-right">
+              <button className="btn btn-primary" onClick={handleAdd}>
+                <I18n>Add Override</I18n>
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>

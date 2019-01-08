@@ -9,6 +9,7 @@ import {
 } from 'recompose';
 import { List } from 'immutable';
 import isarray from 'isarray';
+import { I18n } from '../../../app/src/I18nProvider';
 
 const KeyWrapper = ({ children }) => children;
 
@@ -197,7 +198,7 @@ const buildTableBody = ({
       )
     ) : (
       <tbody className={addClass} {...tbodyProps}>
-        {rows.map(buildTableBodyRow)}
+        {rows.size > 0 ? rows.map(buildTableBodyRow) : buildTableBodyRow()}
       </tbody>
     )
   ) : (
@@ -209,33 +210,44 @@ const buildTableBodyRow = ({
   bodyRowProps: { class: addClass = '', ...trProps } = {},
   rows,
   columns,
+  emptyMessage,
   filterProps,
   sortProps,
   paginationProps,
   buildTableBodyCell,
-}) => (row, index) => (
-  <KeyWrapper key={`row-${index}`}>
-    {typeof renderBodyRow === 'function' ? (
-      validateTag(
-        renderBodyRow({
-          content: columns.map(buildTableBodyCell(row, index)),
-          row,
-          index,
-          rows: rows.toJS(),
-          filterProps,
-          sortProps,
-          paginationProps,
-        }),
-        'tr',
-        'renderBodyRow',
-      )
-    ) : (
-      <tr className={addClass} {...trProps}>
-        {columns.map(buildTableBodyCell(row, index))}
-      </tr>
-    )}
-  </KeyWrapper>
-);
+}) => (row, index) => {
+  return typeof row === 'undefined' ? (
+    <tr className={addClass} {...trProps}>
+      <td className="text-center" colSpan={columns.length}>
+        <em>
+          <I18n>{emptyMessage || 'No data found.'}</I18n>
+        </em>
+      </td>
+    </tr>
+  ) : (
+    <KeyWrapper key={`row-${index}`}>
+      {typeof renderBodyRow === 'function' ? (
+        validateTag(
+          renderBodyRow({
+            content: columns.map(buildTableBodyCell(row, index)),
+            row,
+            index,
+            rows: rows.toJS(),
+            filterProps,
+            sortProps,
+            paginationProps,
+          }),
+          'tr',
+          'renderBodyRow',
+        )
+      ) : (
+        <tr className={addClass} {...trProps}>
+          {columns.map(buildTableBodyCell(row, index))}
+        </tr>
+      )}
+    </KeyWrapper>
+  );
+};
 
 const buildTableBodyCell = ({
   rows,
@@ -575,6 +587,7 @@ Table.propTypes = {
   footerProps: PropTypes.object,
   renderFooterRow: PropTypes.func,
   footerRowProps: PropTypes.object,
+  emptyMessage: PropTypes.string,
   pagination: PropTypes.bool,
   pageSize: PropTypes.number,
   filtering: PropTypes.bool,

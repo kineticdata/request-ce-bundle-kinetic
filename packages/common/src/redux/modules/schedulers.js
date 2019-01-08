@@ -19,6 +19,7 @@ export const types = {
   FETCH_SCHEDULER: namespace('schedulers', 'FETCH_SCHEDULER'),
   SET_SCHEDULER: namespace('schedulers', 'SET_SCHEDULER'),
   SET_SCHEDULER_ERRORS: namespace('schedulers', 'SET_SCHEDULER_ERRORS'),
+  DELETE_SCHEDULER: namespace('schedulers', 'DELETE_SCHEDULER'),
   FETCH_SCHEDULER_MANAGERS_TEAM: namespace(
     'schedulers',
     'FETCH_SCHEDULER_MANAGERS_TEAM',
@@ -99,6 +100,7 @@ export const actions = {
   fetchScheduler: withPayload(types.FETCH_SCHEDULER),
   setScheduler: withPayload(types.SET_SCHEDULER),
   setSchedulerErrors: withPayload(types.SET_SCHEDULER_ERRORS),
+  deleteScheduler: withPayload(types.DELETE_SCHEDULER),
   fetchSchedulerManagersTeam: withPayload(types.FETCH_SCHEDULER_MANAGERS_TEAM),
   fetchSchedulerAgentsTeam: withPayload(types.FETCH_SCHEDULER_AGENTS_TEAM),
   addSchedulerMembership: withPayload(types.ADD_SCHEDULER_MEMBERSHIP),

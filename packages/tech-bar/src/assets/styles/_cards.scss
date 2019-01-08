@@ -38,6 +38,8 @@
 
   &--tech-bar {
     margin: 0 0.75rem 0.75rem 0;
+    border-top-width: 6px;
+    border-top-color: $blue-slate;
     .card-body {
       flex-direction: column;
       justify-content: flex-start;
@@ -99,7 +101,6 @@
   }
   &--appt {
     border: 1px solid $black-16;
-    margin-bottom: 0.75rem;
     margin: 0 0.75rem 0.75rem 0;
     padding: 0.6875rem 1rem;
     transition: background-color 0.3s;

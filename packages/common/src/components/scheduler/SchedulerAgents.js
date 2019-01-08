@@ -1,13 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import {
-  compose,
-  lifecycle,
-  withHandlers,
-  withProps,
-  withState,
-} from 'recompose';
+import { compose, withHandlers, withProps, withState } from 'recompose';
 import {
   Modal,
   ModalBody,
@@ -27,6 +21,8 @@ import { I18n } from '../../../../app/src/I18nProvider';
 const SchedulerAgentsComponent = ({
   loading,
   agents,
+  fetchSchedulerAgentsTeam,
+  schedulerName,
   openDropdown,
   toggleDropdown,
   openModal,
@@ -43,26 +39,42 @@ const SchedulerAgentsComponent = ({
   processRemove,
 }) => (
   <div className="list-wrapper list-wrapper--agents">
-    <div className="text-right">
-      <button className="btn btn-primary" onClick={handleAdd}>
-        <I18n>Add Agent</I18n>
-      </button>
-    </div>
     {loading && !agents && <LoadingMessage />}
     {!loading &&
       !agents && (
-        <InfoMessage
-          heading="The team for agents does not exist yet."
-          text=""
-        />
+        <Fragment>
+          <InfoMessage
+            heading="The team for agents is being created."
+            text="This may take a few minutes."
+          />
+          <div className="text-center">
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                fetchSchedulerAgentsTeam({
+                  schedulerName,
+                });
+              }}
+            >
+              <span className="fa fa-refresh" />
+            </button>
+          </div>
+        </Fragment>
       )}
     {!loading &&
       agents &&
-      agents.memberships.size === 0 && (
-        <EmptyMessage
-          heading="No Agents Found"
-          text="Agents are the users who are assigned to scheduled events."
-        />
+      agents.memberships.length === 0 && (
+        <Fragment>
+          <EmptyMessage
+            heading="No Agents Found"
+            text="Agents are the users who are assigned to scheduled events."
+          />
+          <div className="text-center">
+            <button className="btn btn-primary" onClick={handleAdd}>
+              <I18n>Add Agent</I18n>
+            </button>
+          </div>
+        </Fragment>
       )}
     {!loading &&
       agents &&
@@ -76,7 +88,11 @@ const SchedulerAgentsComponent = ({
               <th scope="col">
                 <I18n>Username</I18n>
               </th>
-              <th />
+              <th className="text-right">
+                <button className="btn btn-primary" onClick={handleAdd}>
+                  <I18n>Add Agent</I18n>
+                </button>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -280,6 +296,7 @@ export const mapDispatchToProps = {
   addSchedulerAgent: actions.addSchedulerMembership,
   removeSchedulerAgent: actions.removeSchedulerMembership,
   createUserAsSchedulerAgent: actions.createUserWithSchedulerMembership,
+  fetchSchedulerAgentsTeam: actions.fetchSchedulerAgentsTeam,
   addError: toastActions.addError,
 };
 
@@ -346,8 +363,5 @@ export const SchedulerAgents = compose(
     handleRemove,
     toggleConfirm,
     processRemove,
-  }),
-  lifecycle({
-    componentDidMount() {},
   }),
 )(SchedulerAgentsComponent);

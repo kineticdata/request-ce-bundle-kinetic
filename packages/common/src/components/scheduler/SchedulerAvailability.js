@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
@@ -52,11 +52,6 @@ const SchedulerAvailabilityComponent = ({
   processDelete,
 }) => (
   <div className="list-wrapper list-wrapper--availability">
-    <div className="text-right">
-      <button className="btn btn-primary" onClick={handleAdd}>
-        <I18n>Add Availability</I18n>
-      </button>
-    </div>
     {loading && availability.size === 0 && <LoadingMessage />}
     {!loading &&
       errors.length > 0 && (
@@ -72,10 +67,17 @@ const SchedulerAvailabilityComponent = ({
     {!loading &&
       errors.length === 0 &&
       availability.size === 0 && (
-        <EmptyMessage
-          heading="No Availability Found"
-          text="Availability is the times during which customers can request appointments and how many appointments are available at each time."
-        />
+        <Fragment>
+          <EmptyMessage
+            heading="No Availability Found"
+            text="Availability is the times during which customers can request appointments and how many appointments are available at each time."
+          />
+          <div className="text-center">
+            <button className="btn btn-primary" onClick={handleAdd}>
+              <I18n>Add Availability</I18n>
+            </button>
+          </div>
+        </Fragment>
       )}
     {availability.size > 0 && (
       <table className="table table-sm table-striped table-availability table--settings">
@@ -93,7 +95,11 @@ const SchedulerAvailabilityComponent = ({
             <th scope="col">
               <I18n>Simultaneous Slots</I18n>
             </th>
-            <th />
+            <th className="text-right">
+              <button className="btn btn-primary" onClick={handleAdd}>
+                <I18n>Add Availability</I18n>
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>
