@@ -28,8 +28,8 @@ export const FeedbackComponent = ({
   experience,
   input,
   setInput,
-  appointmentId,
-  setAppointmentId,
+  appointment,
+  setAppointment,
   addSuccess,
   addError,
   disabled,
@@ -104,7 +104,8 @@ export const FeedbackComponent = ({
                     <span className="text-danger">*</span>
                   ) : (
                     <span>
-                      ( <I18n>Optional</I18n>)
+                      {' '}
+                      (<I18n>Optional</I18n>)
                     </span>
                   )}
                 </label>
@@ -117,7 +118,7 @@ export const FeedbackComponent = ({
                   value={input}
                   onChange={e => {
                     setInput(e.target.value);
-                    setAppointmentId('');
+                    setAppointment(null);
                   }}
                 />
               </div>
@@ -126,7 +127,9 @@ export const FeedbackComponent = ({
                   {filteredAppointments.map(appt => (
                     <div
                       className={`card--appointment ${
-                        appointmentId === appt.id ? 'selected' : ''
+                        appointment && appointment.id === appt.id
+                          ? 'selected'
+                          : ''
                       }`}
                       key={appt.id}
                     >
@@ -136,11 +139,11 @@ export const FeedbackComponent = ({
                           <I18n>{appt.type}</I18n>
                         </div>
                       </div>
-                      {appointmentId !== appt.id && (
+                      {(!appointment || appointment.id !== appt.id) && (
                         <button
                           type="button"
                           className="btn btn-primary"
-                          onClick={() => setAppointmentId(appt.id)}
+                          onClick={() => setAppointment(appt)}
                         >
                           <I18n>Select</I18n>
                         </button>
@@ -165,7 +168,7 @@ export const FeedbackComponent = ({
             <button
               type="button"
               className="btn btn-primary"
-              disabled={feedbackIdentityRequired && !appointmentId}
+              disabled={feedbackIdentityRequired && !appointment}
               onClick={() => handleSubmitFeedback()}
             >
               <I18n>Submit Feedback</I18n>
@@ -194,6 +197,9 @@ export const mapStateToProps = (state, props) => ({
       type: 'Appointment',
       username: a.values['Requested For'],
       displayName: a.values['Requested For Display Name'],
+      schedulerId: a.values['Scheduler Id'],
+      eventType: a.values['Event Type'],
+      eventDate: a.values['Event Date'],
     }))
     .concat(
       state.techBar.walkIns.today.data.map(w => ({
@@ -203,6 +209,9 @@ export const mapStateToProps = (state, props) => ({
         displayName:
           w.values['Requested For Display Name'] ||
           `${w.values['First Name']} ${w.values['Last Name']}`,
+        schedulerId: w.values['Scheduler Id'],
+        eventType: w.values['Event Type'],
+        eventDate: w.values['Date'],
       })),
     ),
 });
@@ -252,7 +261,7 @@ const handleExperienceClick = ({
 const handleSubmitFeedback = ({
   kapp,
   experience,
-  appointmentId,
+  appointment,
   resetExperience,
   addError,
   addSuccess,
@@ -263,7 +272,14 @@ const handleSubmitFeedback = ({
     formSlug: FEEDBACK_FORM_SLUG,
     values: values || {
       Experience: experience,
-      'Appointment Id': appointmentId,
+      ...(appointment
+        ? {
+            'Appointment Id': appointment.id,
+            'Scheduler Id': appointment.schedulerId,
+            'Event Type': appointment.eventType,
+            'Event Date': appointment.eventDate,
+          }
+        : {}),
     },
     completed: true,
   }).then(({ submission, errors, serverError }) => {
@@ -286,23 +302,17 @@ export const Feedback = compose(
     mapDispatchToProps,
   ),
   withProps(({ techBar, kapp }) => {
-    const feedbackIdentityAttribute = kapp.attributes.find(
-      attr => attr.name === FEEDBACK_IDENTITY_ATTRIBUTE,
-    );
     return {
       techBarId: techBar.values['Id'],
       feedbackIdentityAvailable:
-        !!feedbackIdentityAttribute &&
-        (feedbackIdentityAttribute.values[0] === 'Required' ||
-          feedbackIdentityAttribute.values[0] === 'Optional'),
+        techBar.settings.feedbackIdentitifcation !== 'Hidden',
       feedbackIdentityRequired:
-        !!feedbackIdentityAttribute &&
-        feedbackIdentityAttribute.values[0] === 'Required',
+        techBar.settings.feedbackIdentitifcation === 'Required',
     };
   }),
   withState('experience', 'setExperience', null),
   withState('input', 'setInput', ''),
-  withState('appointmentId', 'setAppointmentId', ''),
+  withState('appointment', 'setAppointment', null),
   withState('disabled', 'setDisabled', false),
   withHandlers({ resetExperience }),
   withHandlers({
