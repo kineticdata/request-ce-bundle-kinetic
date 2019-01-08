@@ -14,8 +14,10 @@ import {
   Table,
 } from 'common';
 import moment from 'moment';
-import { actions } from '../../../redux/modules/appointments';
+import { actions } from '../../../redux/modules/techBarApp';
+import { actions as appointmentActions } from '../../../redux/modules/appointments';
 import { I18n } from '../../../../../app/src/I18nProvider';
+import { TechBarDisplayMembers } from './TechBarDisplayMembers';
 import { TIME_FORMAT } from '../../../App';
 
 export const TechBarComponent = ({
@@ -86,6 +88,15 @@ export const TechBarComponent = ({
                   <I18n>{techBar.settings.feedbackIdentitifcation}</I18n>
                 </div>
               </div>
+            </div>
+            <div className="mb-5">
+              <h2 className="section__title">
+                <I18n>Front Desk Users</I18n>
+              </h2>
+              <TechBarDisplayMembers
+                techBar={techBar}
+                hasManagerAccess={hasManagerAccess}
+              />
             </div>
             <div>
               <h2 className="section__title">
@@ -242,13 +253,16 @@ export const mapStateToProps = (state, props) => {
     appointmentErrors: state.techBar.appointments.list.errors,
     appointments: state.techBar.appointments.list.data,
     appointmentDate: state.techBar.appointments.list.date,
+    displayTeamLoading: state.techBar.techBarApp.displayTeamLoading,
+    displayTeam: state.techBar.techBarApp.displayTeam,
   };
 };
 
 export const mapDispatchToProps = {
   push,
-  fetchAppointmentsList: actions.fetchAppointmentsList,
-  setAppointmentsDate: actions.setAppointmentsDate,
+  fetchAppointmentsList: appointmentActions.fetchAppointmentsList,
+  setAppointmentsDate: appointmentActions.setAppointmentsDate,
+  fetchDisplayTeam: actions.fetchDisplayTeam,
 };
 
 export const TechBar = compose(
@@ -293,6 +307,9 @@ export const TechBar = compose(
     componentDidMount() {
       this.props.fetchAppointmentsList({
         schedulerId: this.props.techBar.values['Id'],
+      });
+      this.props.fetchDisplayTeam({
+        techBarName: this.props.techBar.values['Name'],
       });
     },
   }),

@@ -30,10 +30,6 @@ export const mapStateToProps = (state, props) => ({
   techBar: state.techBar.techBarApp.schedulers.find(
     scheduler => scheduler.values['Id'] === props.techBarId,
   ),
-  hasTechBarDisplayRole: Utils.isMemberOf(
-    state.app.profile,
-    'Role::Tech Bar Display',
-  ),
 });
 
 export const mapDispatchToProps = {
@@ -51,7 +47,7 @@ export const SchedulerSettings = compose(
   ),
   lifecycle({
     componentWillUnmount() {
-      // this.props.fetchAppSettings();
+      this.props.fetchAppSettings(true);
     },
   }),
 )(SchedulerSettingsComponent);

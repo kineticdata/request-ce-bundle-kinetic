@@ -1,7 +1,13 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { compose, withHandlers, withProps, withState } from 'recompose';
+import {
+  compose,
+  lifecycle,
+  withHandlers,
+  withProps,
+  withState,
+} from 'recompose';
 import {
   Modal,
   ModalBody,
@@ -12,17 +18,16 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import { List } from 'immutable';
-import { AttributeSelectors } from 'common';
-import { LoadingMessage, EmptyMessage, InfoMessage } from './Schedulers';
-import { actions as toastActions } from '../../redux/modules/toasts';
-import { actions } from '../../redux/modules/schedulers';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { AttributeSelectors, toastActions } from 'common';
+import { actions } from '../../../redux/modules/techBarApp';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
-const SchedulerAgentsComponent = ({
+const TechBarDisplayMembersComponent = ({
+  hasManagerAccess,
   loading,
-  agents,
-  fetchSchedulerAgentsTeam,
-  schedulerName,
+  team,
+  fetchDisplayTeam,
+  techBarName,
   openDropdown,
   toggleDropdown,
   openModal,
@@ -38,21 +43,35 @@ const SchedulerAgentsComponent = ({
   handleRemove,
   processRemove,
 }) => (
-  <div className="list-wrapper list-wrapper--agents">
-    {loading && !agents && <LoadingMessage />}
+  <div className="list-wrapper list-wrapper--users">
+    {loading &&
+      !team && (
+        <div className="loading-state">
+          <h4>
+            <i className="fa fa-spinner fa-spin fa-lg fa-fw" />
+          </h4>
+          <h5>
+            <I18n>Loading</I18n>
+          </h5>
+        </div>
+      )}
     {!loading &&
-      !agents && (
+      !team && (
         <Fragment>
-          <InfoMessage
-            heading="The team for agents is being created."
-            text="This may take a few minutes."
-          />
+          <div className="info-state">
+            <h5>
+              <I18n>The team for front desk users is being created.</I18n>
+            </h5>
+            <h6>
+              <I18n>This may take a few minutes.</I18n>
+            </h6>
+          </div>
           <div className="text-center">
             <button
               className="btn btn-primary"
               onClick={() => {
-                fetchSchedulerAgentsTeam({
-                  schedulerName,
+                fetchDisplayTeam({
+                  techBarName,
                 });
               }}
             >
@@ -62,24 +81,32 @@ const SchedulerAgentsComponent = ({
         </Fragment>
       )}
     {!loading &&
-      agents &&
-      agents.memberships.length === 0 && (
+      team &&
+      team.memberships.length === 0 && (
         <Fragment>
-          <EmptyMessage
-            heading="No Agents Found"
-            text="Agents are the users who are assigned to scheduled events."
-          />
-          <div className="text-center">
-            <button className="btn btn-primary" onClick={handleAdd}>
-              <I18n>Add Agent</I18n>
-            </button>
+          <div className="empty-state">
+            <h5>
+              <I18n>No Front Desk Users Found</I18n>
+            </h5>
+            <h6>
+              <I18n>
+                Front Desk Users are the users who have access to the check-in,
+                feedback, and overhead display pages.
+              </I18n>
+            </h6>
           </div>
+          {hasManagerAccess && (
+            <div className="text-center">
+              <button className="btn btn-primary" onClick={handleAdd}>
+                <I18n>Add User</I18n>
+              </button>
+            </div>
+          )}
         </Fragment>
       )}
-    {!loading &&
-      agents &&
-      agents.memberships.length > 0 && (
-        <table className="table table-sm table-striped table-agents table--settings">
+    {team &&
+      team.memberships.length > 0 && (
+        <table className="table table-sm table-striped table-users table--settings">
           <thead className="header">
             <tr>
               <th scope="col">
@@ -88,37 +115,41 @@ const SchedulerAgentsComponent = ({
               <th scope="col">
                 <I18n>Username</I18n>
               </th>
-              <th className="text-right">
-                <button className="btn btn-primary" onClick={handleAdd}>
-                  <I18n>Add Agent</I18n>
-                </button>
-              </th>
+              {hasManagerAccess && (
+                <th className="text-right" width="1%">
+                  <button className="btn btn-primary" onClick={handleAdd}>
+                    <I18n>Add User</I18n>
+                  </button>
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
-            {List(agents.memberships)
+            {List(team.memberships)
               .sortBy(a => a.user.displayName)
-              .map(agent => (
-                <tr key={agent.user.username}>
-                  <td scope="row">{agent.user.displayName}</td>
-                  <td>{agent.user.username}</td>
-                  <td className="text-right">
-                    <Dropdown
-                      toggle={toggleDropdown(agent.user.username)}
-                      isOpen={openDropdown === agent.user.username}
-                    >
-                      <DropdownToggle color="link" className="btn-sm">
-                        <span className="fa fa-ellipsis-h fa-2x" />
-                      </DropdownToggle>
-                      <DropdownMenu right>
-                        <DropdownItem
-                          onClick={handleRemove(agent.user.username)}
-                        >
-                          <I18n>Remove</I18n>
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </td>
+              .map(displayUser => (
+                <tr key={displayUser.user.username}>
+                  <td scope="row">{displayUser.user.displayName}</td>
+                  <td>{displayUser.user.username}</td>
+                  {hasManagerAccess && (
+                    <td className="text-right">
+                      <Dropdown
+                        toggle={toggleDropdown(displayUser.user.username)}
+                        isOpen={openDropdown === displayUser.user.username}
+                      >
+                        <DropdownToggle color="link" className="btn-sm">
+                          <span className="fa fa-ellipsis-h fa-2x" />
+                        </DropdownToggle>
+                        <DropdownMenu right>
+                          <DropdownItem
+                            onClick={handleRemove(displayUser.user.username)}
+                          >
+                            <I18n>Remove</I18n>
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </td>
+                  )}
                 </tr>
               ))}
           </tbody>
@@ -137,17 +168,16 @@ const SchedulerAgentsComponent = ({
               <I18n>Cancel</I18n>
             </button>
             <span>
-              <I18n>New Agent</I18n>
+              <I18n>New User</I18n>
             </span>
           </h4>
         </div>
         <ModalBody>
-          {/* TODO: add people search, and create new user options, create actions and sagas */}
           {!user && (
             <div className="form overflow-visible">
               <div className="form-group">
-                <label htmlFor="add-agent-select">
-                  <I18n>Select Users to Add as Agents</I18n>
+                <label htmlFor="add-user-select">
+                  <I18n>Select Users to Add to Front Desk</I18n>
                 </label>
                 <AttributeSelectors.PeopleSelect
                   id="walkin-account-select"
@@ -263,7 +293,7 @@ const SchedulerAgentsComponent = ({
         <ModalBody className="modal-body--padding">
           <div>
             <span>
-              <I18n>Are you sure you want to remove the Agent</I18n>{' '}
+              <I18n>Are you sure you want to remove the user</I18n>{' '}
             </span>
             <strong>{openConfirm}</strong>
             <span>
@@ -286,17 +316,16 @@ const SchedulerAgentsComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.common.schedulers.scheduler.loading,
-  scheduler: state.common.schedulers.scheduler.data,
-  agents: state.common.schedulers.scheduler.teams.agents,
+  loading: state.techBar.techBarApp.displayTeamLoading,
+  team: state.techBar.techBarApp.displayTeam,
 });
 
 export const mapDispatchToProps = {
   push,
-  addSchedulerAgent: actions.addSchedulerMembership,
-  removeSchedulerAgent: actions.removeSchedulerMembership,
-  createUserAsSchedulerAgent: actions.createUserWithSchedulerMembership,
-  fetchSchedulerAgentsTeam: actions.fetchSchedulerAgentsTeam,
+  addDisplayTeamUser: actions.addDisplayTeamMembership,
+  removeDisplayTeamUser: actions.removeDisplayTeamMembership,
+  createUserAsDisplayTeamUser: actions.createUserWithDisplayTeamMembership,
+  fetchDisplayTeam: actions.fetchDisplayTeam,
   addError: toastActions.addError,
 };
 
@@ -313,18 +342,18 @@ const toggleModal = ({ setOpenModal, setUsernames, setUser }) => () => {
   setUser(null);
 };
 const processAdd = ({
-  addSchedulerAgent,
-  createUserAsSchedulerAgent,
+  addDisplayTeamUser,
+  createUserAsDisplayTeamUser,
   setOpenModal,
-  schedulerName,
+  techBarName,
   usernames,
   setUsernames,
   user,
   setUser,
 }) => () => {
   user
-    ? createUserAsSchedulerAgent({ user, schedulerName })
-    : addSchedulerAgent({ usernames, schedulerName });
+    ? createUserAsDisplayTeamUser({ user, techBarName })
+    : addDisplayTeamUser({ usernames, techBarName });
   setOpenModal(false);
   setUsernames([]);
   setUser(null);
@@ -332,21 +361,21 @@ const processAdd = ({
 const handleRemove = ({ setOpenConfirm }) => id => () => setOpenConfirm(id);
 const toggleConfirm = ({ setOpenConfirm }) => () => setOpenConfirm(false);
 const processRemove = ({
-  removeSchedulerAgent,
+  removeDisplayTeamUser,
   setOpenConfirm,
-  schedulerName,
+  techBarName,
 }) => username => () => {
-  removeSchedulerAgent({ username, schedulerName });
+  removeDisplayTeamUser({ username, techBarName });
   setOpenConfirm(false);
 };
 
-export const SchedulerAgents = compose(
+export const TechBarDisplayMembers = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withProps(({ scheduler }) => ({
-    schedulerName: scheduler ? scheduler.values['Name'] : '',
+  withProps(({ techBar }) => ({
+    techBarName: techBar ? techBar.values['Name'] : '',
   })),
   withState('openDropdown', 'setOpenDropdown', false),
   withState('openModal', 'setOpenModal', false),
@@ -362,4 +391,11 @@ export const SchedulerAgents = compose(
     toggleConfirm,
     processRemove,
   }),
-)(SchedulerAgentsComponent);
+  lifecycle({
+    componentDidMount() {
+      this.props.fetchDisplayTeam({
+        techBarName: this.props.techBarName,
+      });
+    },
+  }),
+)(TechBarDisplayMembersComponent);

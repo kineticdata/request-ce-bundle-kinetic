@@ -54,7 +54,7 @@ const paramBuilder = options => {
   return params;
 };
 
-const createMembership = (options = {}) => {
+export const createMembership = (options = {}) => {
   const { team, user } = options;
 
   if (!team) {
@@ -83,7 +83,7 @@ const createMembership = (options = {}) => {
   return promise;
 };
 
-const deleteMembership = (options = {}) => {
+export const deleteMembership = (options = {}) => {
   const { teamSlug, username } = options;
 
   if (!teamSlug) {

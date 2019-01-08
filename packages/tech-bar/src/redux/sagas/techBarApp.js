@@ -7,6 +7,11 @@ import {
   Settings,
   SCHEDULER_FORM_SLUG,
 } from '../modules/techBarApp';
+import {
+  createMembership,
+  deleteMembership,
+} from 'common/src/redux/sagas/schedulers';
+import md5 from 'md5';
 
 const TECH_BAR_SETTINGS_FORM_SLUG = 'tech-bar-settings';
 
@@ -73,6 +78,128 @@ export function* fetchAppSettingsSaga() {
   }
 }
 
+export function* fetchDisplayTeamSaga({ payload: { techBarName } }) {
+  const { team } = yield call(CoreAPI.fetchTeam, {
+    teamSlug: md5(`Role::Tech Bar Display::${techBarName}`),
+    include:
+      'attributes,memberships.user,memberships.user.attributes,memberships.user.profileAttributes',
+  });
+  yield put(actions.setDisplayTeam(team));
+}
+
+export function* addDisplayTeamMembershipSaga({
+  payload: { username, usernames = [], techBarName },
+}) {
+  const toAdd = username ? [username] : usernames;
+  if (toAdd.length === 0) {
+    yield put(toastActions.addError('No users selected to add.', 'Error'));
+    return;
+  }
+
+  const results = yield all(
+    toAdd.map(u =>
+      call(createMembership, {
+        team: {
+          name: `Role::Tech Bar Display::${techBarName}`,
+        },
+        user: { username: u },
+      }),
+    ),
+  );
+
+  let success = false;
+  const errorList = results.reduce((errorList, { errors, serverError }) => {
+    if (serverError) {
+      return [...errorList, serverError.error || serverError.statusText];
+    } else if (errors) {
+      return [...errorList, ...errors];
+    } else {
+      success = true;
+      return errorList;
+    }
+  }, []);
+
+  if (errorList.length > 0) {
+    yield put(toastActions.addError(errorList.join(' '), 'Error'));
+  }
+
+  if (success) {
+    yield put(actions.fetchDisplayTeam({ techBarName }));
+  }
+}
+
+export function* createUserWithDisplayTeamMembershipSaga({
+  payload: { user, teamName, techBarName },
+}) {
+  const { errors, serverError } = yield call(CoreAPI.createUser, {
+    user: {
+      username: user.email,
+      email: user.email,
+      displayName: `${user.firstName} ${user.lastName}`,
+      enabled: true,
+      spaceAdmin: false,
+      memberships: [
+        {
+          team: {
+            name: `Role::Tech Bar Display::${techBarName}`,
+          },
+        },
+      ],
+      profileAttributesMap: {
+        'First Name': [user.firstName],
+        'Last Name': [user.lastName],
+      },
+    },
+  });
+  if (serverError) {
+    yield put(
+      toastActions.addError(
+        serverError.error || serverError.statusText,
+        'Error',
+      ),
+    );
+  } else if (errors) {
+    yield put(toastActions.addError(errors.join(' '), 'Error'));
+  } else {
+    yield put(actions.fetchDisplayTeam({ techBarName }));
+  }
+}
+
+export function* removeSchedulerDisplayTeamSaga({
+  payload: { username, techBarName },
+}) {
+  const { errors, serverError } = yield call(deleteMembership, {
+    teamSlug: md5(`Role::Tech Bar Display::${techBarName}`),
+    username,
+  });
+
+  if (serverError) {
+    yield put(
+      toastActions.addError(
+        serverError.error || serverError.statusText,
+        'Error',
+      ),
+    );
+  } else if (errors) {
+    yield put(toastActions.addError(errors.join(' '), 'Error'));
+  } else {
+    yield put(actions.fetchDisplayTeam({ techBarName }));
+  }
+}
+
 export function* watchTechBarApp() {
   yield takeEvery(types.FETCH_APP_SETTINGS, fetchAppSettingsSaga);
+  yield takeEvery(types.FETCH_DISPLAY_TEAM, fetchDisplayTeamSaga);
+  yield takeEvery(
+    types.ADD_DISPLAY_TEAM_MEMBERSHIP,
+    addDisplayTeamMembershipSaga,
+  );
+  yield takeEvery(
+    types.CREATE_USER_WITH_DISPLAY_TEAM_MEMBERSHIP,
+    createUserWithDisplayTeamMembershipSaga,
+  );
+  yield takeEvery(
+    types.REMOVE_DISPLAY_TEAM_MEMBERSHIP,
+    removeSchedulerDisplayTeamSaga,
+  );
 }

@@ -12,7 +12,7 @@ export const TECH_BAR_SETTINGS_FORM_SLUG = 'tech-bar-settings';
 export const Settings = (object = {}) => ({
   submissionId: object.id,
   feedbackIdentitifcation:
-    (object.values && object.values['Feedback Identification']) || 'Required',
+    (object.values && object.values['Feedback Identification']) || 'Optional',
   allowWalkIns:
     ((object.values && object.values['Allow Walk-Ins']) || 'Yes') === 'Yes',
 });
@@ -22,13 +22,36 @@ export const types = {
   SET_APP_SETTINGS: namespace('techBarApp', 'SET_APP_SETTINGS'),
   SET_APP_ERRORS: namespace('techBarApp', 'SET_APP_ERRORS'),
   UPDATE_TECH_BAR_SETTINGS: namespace('techBarApp', 'UPDATE_TECH_BAR_SETTINGS'),
+  FETCH_DISPLAY_TEAM: namespace('techBarApp', 'FETCH_DISPLAY_TEAM'),
+  SET_DISPLAY_TEAM: namespace('techBarApp', 'SET_DISPLAY_TEAM'),
+  ADD_DISPLAY_TEAM_MEMBERSHIP: namespace(
+    'techBarApp',
+    'ADD_DISPLAY_TEAM_MEMBERSHIP',
+  ),
+  CREATE_USER_WITH_DISPLAY_TEAM_MEMBERSHIP: namespace(
+    'techBarApp',
+    'CREATE_USER_WITH_DISPLAY_TEAM_MEMBERSHIP',
+  ),
+  REMOVE_DISPLAY_TEAM_MEMBERSHIP: namespace(
+    'techBarApp',
+    'REMOVE_DISPLAY_TEAM_MEMBERSHIP',
+  ),
 };
 
 export const actions = {
-  fetchAppSettings: noPayload(types.FETCH_APP_SETTINGS),
+  fetchAppSettings: withPayload(types.FETCH_APP_SETTINGS),
   setAppSettings: withPayload(types.SET_APP_SETTINGS),
   setAppErrors: withPayload(types.SET_APP_ERRORS),
   updateTechBarSettings: withPayload(types.UPDATE_TECH_BAR_SETTINGS),
+  fetchDisplayTeam: withPayload(types.FETCH_DISPLAY_TEAM),
+  setDisplayTeam: withPayload(types.SET_DISPLAY_TEAM),
+  addDisplayTeamMembership: withPayload(types.ADD_DISPLAY_TEAM_MEMBERSHIP),
+  createUserWithDisplayTeamMembership: withPayload(
+    types.CREATE_USER_WITH_DISPLAY_TEAM_MEMBERSHIP,
+  ),
+  removeDisplayTeamMembership: withPayload(
+    types.REMOVE_DISPLAY_TEAM_MEMBERSHIP,
+  ),
 };
 
 export const State = Record({
@@ -36,12 +59,14 @@ export const State = Record({
   appErrors: [],
   schedulers: new List(),
   forms: new List(),
+  displayTeamLoading: false,
+  displayTeam: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.FETCH_APP_SETTINGS:
-      return state.set('appLoading', true);
+      return state.set('appLoading', !payload);
     case types.SET_APP_SETTINGS:
       return state
         .set('schedulers', List(payload.schedulers))
@@ -61,6 +86,10 @@ export const reducer = (state = State(), { type, payload }) => {
       } else {
         return state;
       }
+    case types.FETCH_DISPLAY_TEAM:
+      return state.set('displayTeamLoading', true);
+    case types.SET_DISPLAY_TEAM:
+      return state.set('displayTeam', payload).set('displayTeamLoading', false);
     default:
       return state;
   }
