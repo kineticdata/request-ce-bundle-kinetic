@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { UncontrolledTooltip, ButtonGroup, Button } from 'reactstrap';
 import { KappLinkContainer as LinkContainer } from 'common';
 
 const CLOSED_STATUSES = ['Cancelled', 'Complete'];
 
 const getStatusClass = status =>
-  `queue-status queue-status--${status.toLowerCase().replace(/\s+/g, '-')}`;
+  `submission-status submission-status--${status
+    .toLowerCase()
+    .replace(/\s+/g, '-')}`;
 
 const getStatusId = queueItem => `tooltip-${queueItem.id}-status-paragraph`;
 
@@ -37,30 +39,36 @@ const PrevAndNextGroup = ({ prevAndNext }) => (
   </ButtonGroup>
 );
 
-export const StatusParagraph = ({ queueItem, prevAndNext }) => (
-  <div className="status-paragraph">
-    <p className="queue-status">
-      <span className={getStatusClass(queueItem.values.Status)}>
-        {CLOSED_STATUSES.includes(queueItem.values.Status) ? (
-          <span className="fa fa-fw fa-circle" />
-        ) : (
-          <span className="fa fa-fw fa-circle-o " />
-        )}
+export const StatusContent = ({ queueItem, prevAndNext }) => (
+  <Fragment>
+    <div
+      className={
+        prevAndNext
+          ? 'status-content  status-content--is-active'
+          : 'status-content'
+      }
+    >
+      <span
+        className={getStatusClass(queueItem.values.Status)}
+        id={getStatusId(queueItem)}
+      >
         {queueItem.values.Status}
+        {queueItem.values.Status !== 'Open' && (
+          <UncontrolledTooltip
+            placement="top"
+            target={getStatusId(queueItem)}
+            delay={0}
+          >
+            {getStatusReason(queueItem)}
+          </UncontrolledTooltip>
+        )}
       </span>
-      <span className="queue-status--reason" id={getStatusId(queueItem)}>
+    </div>
+    {prevAndNext && (
+      <span className="submission-status--reason" id={getStatusId(queueItem)}>
         {getStatusReason(queueItem)}
       </span>
-      {queueItem.values.Status !== 'Open' && (
-        <UncontrolledTooltip
-          placement="top"
-          target={getStatusId(queueItem)}
-          delay={0}
-        >
-          {getStatusReason(queueItem)}
-        </UncontrolledTooltip>
-      )}
-    </p>
+    )}
     {prevAndNext && <PrevAndNextGroup prevAndNext={prevAndNext} />}
-  </div>
+  </Fragment>
 );
