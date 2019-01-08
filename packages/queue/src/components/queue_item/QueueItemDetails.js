@@ -10,7 +10,7 @@ import { ViewOriginalRequest } from './ViewOriginalRequest';
 import { AssignmentBadge } from './AssignmentBadge';
 import { QueueListItemSmall } from '../queue_list/QueueListItem';
 import { AssignmentSelector } from '../shared/AssignmentSelector';
-import { StatusParagraph } from '../shared/StatusParagraph';
+import { StatusContent } from '../shared/StatusContent';
 import { WallyButtonContainer } from '../shared/WallyButton';
 
 const nonQueueLink = (queueItem, kappSlug) =>
@@ -62,7 +62,9 @@ export const QueueItemDetails = ({
               : 'View Discussion'}
           </button>
         )}
-        <StatusParagraph queueItem={queueItem} prevAndNext={prevAndNext} />
+        <div className="submission__meta">
+          <StatusContent queueItem={queueItem} prevAndNext={prevAndNext} />
+        </div>
         <h1>
           {queueItem.form.name} ({queueItem.handle})
         </h1>
