@@ -10,7 +10,7 @@ import {
   selectHasRoleSchedulerAgent,
 } from 'common';
 import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
+import { compose } from 'recompose';
 import { SchedulerSettings } from './SchedulerSettings';
 import { TechBarSettings } from './TechBarSettings';
 import { TechBar } from './tech-bar/TechBar';
@@ -84,11 +84,6 @@ export const Settings = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  lifecycle({
-    componentWillUnmount() {
-      // TODO when to reload tech bar data?
-    },
-  }),
 )(SettingsComponent);
 
 const SettingsCard = ({ path, icon, name, description }) => (

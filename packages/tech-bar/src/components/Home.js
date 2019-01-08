@@ -48,7 +48,7 @@ export const HomeComponent = ({
                   <span>
                     <I18n>{techBar.values['Name']}</I18n>
                   </span>
-                  {hasTechBarDisplayRole && (
+                  {hasTechBarDisplayRole(techBar.values['Name']) && (
                     <span>
                       <Dropdown
                         toggle={toggleDropdown(techBar.id)}
@@ -285,10 +285,7 @@ export const mapStateToProps = state => ({
   loadingPast: state.techBar.appointments.past.loading,
   pastErrors: state.techBar.appointments.past.errors,
   pastAppointments: state.techBar.appointments.past.data,
-  hasTechBarDisplayRole: Utils.isMemberOf(
-    state.app.profile,
-    'Role::Tech Bar Display',
-  ),
+  profile: state.app.profile,
 });
 
 export const mapDispatchToProps = {
@@ -303,13 +300,16 @@ const toggleDropdown = ({
 }) => dropdownSlug => () =>
   setOpenDropdown(dropdownSlug === openDropdown ? false : dropdownSlug);
 
+const hasTechBarDisplayRole = ({ profile }) => techBarName =>
+  Utils.isMemberOf(profile, `Role::Tech Bar Display::${techBarName}`);
+
 export const Home = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
   withState('openDropdown', 'setOpenDropdown', false),
-  withHandlers({ toggleDropdown }),
+  withHandlers({ toggleDropdown, hasTechBarDisplayRole }),
   lifecycle({
     componentDidMount() {
       if (!this.props.loadingUpcoming) {

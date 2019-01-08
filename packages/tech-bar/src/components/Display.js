@@ -43,16 +43,21 @@ export const DisplayComponent = ({
   );
 };
 
-export const mapStateToProps = (state, props) => ({
-  kapp: selectCurrentKapp(state),
-  techBar: state.techBar.techBarApp.schedulers.find(
+export const mapStateToProps = (state, props) => {
+  const techBar = state.techBar.techBarApp.schedulers.find(
     scheduler => scheduler.values['Id'] === props.techBarId,
-  ),
-  hasTechBarDisplayRole: Utils.isMemberOf(
-    state.app.profile,
-    'Role::Tech Bar Display',
-  ),
-});
+  );
+  return {
+    kapp: selectCurrentKapp(state),
+    techBar,
+    hasTechBarDisplayRole:
+      techBar &&
+      Utils.isMemberOf(
+        state.app.profile,
+        `Role::Tech Bar Display::${techBar.values['Name']}`,
+      ),
+  };
+};
 
 export const mapDispatchToProps = {
   push,
