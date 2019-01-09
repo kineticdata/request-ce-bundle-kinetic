@@ -15,9 +15,9 @@ export const InvitationFormComponent = props => {
             value={props.values.get('invitees')}
             disabledFn={props.disabledFn}
           />
-          <p className="form-text text-muted">
+          <small className="form-text text-muted">
             Enter a valid email address to invite a new user
-          </p>
+          </small>
         </div>
         <div className="form-group">
           <label htmlFor="message">Message for Invitees</label>
@@ -27,7 +27,7 @@ export const InvitationFormComponent = props => {
             onChange={props.handleChange}
             value={props.values.get('message')}
           />
-          <small>
+          <small className="form-text text-muted">
             This note will be sent as part of the invitation and visible to all
             members inside the discussion
           </small>
