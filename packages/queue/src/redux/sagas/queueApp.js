@@ -74,7 +74,9 @@ export function* fetchAppSettingsTask() {
     .filter(u => u.username !== profile.username);
 
   const myFilters = profile.profileAttributes['Queue Personal Filters']
-    ? profile.profileAttributes['Queue Personal Filters'].map(filterReviver)
+    ? profile.profileAttributes['Queue Personal Filters']
+        .map(JSON.parse)
+        .map(filterReviver)
     : List();
 
   const appSettings = {
