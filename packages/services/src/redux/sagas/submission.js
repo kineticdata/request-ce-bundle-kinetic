@@ -9,11 +9,13 @@ import {
   select,
 } from 'redux-saga/effects';
 import { CoreAPI } from 'react-kinetic-core';
+import { DiscussionAPI } from 'discussions-lib';
 import { Map, Seq } from 'immutable';
 import { push } from 'connected-react-router';
 
 import { actions, types } from '../modules/submission';
 import { actions as systemErrorActions } from '../modules/systemError';
+import { getCancelFormConfig, getCommentFormConfig } from '../../utils';
 
 export function* fetchSubmissionSaga(action) {
   const include =
@@ -109,6 +111,89 @@ export function* deleteSubmissionSaga(action) {
   }
 }
 
+export function* fetchDiscussionSaga(action) {
+  const { discussions } = yield call(DiscussionAPI.fetchDiscussions, {
+    relatedItem: {
+      type: 'Submission',
+      key: action.payload,
+    },
+  });
+
+  if (discussions && discussions.length > 0) {
+    yield put(actions.setDiscussion(discussions[0]));
+  }
+}
+
+export function* sendMessageSaga(action) {
+  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const submission = yield select(state => state.services.submission.data);
+  let discussion = yield select(state => state.services.submission.discussion);
+  const profile = yield select(state => state.app.profile);
+  const sendMessageType = yield select(
+    state => state.services.submission.sendMessageType,
+  );
+  // Create the Discussion if it doesn't exist for the submission
+  if (discussion === null) {
+    const discussionProps = {
+      title: submission.label,
+      description: `Global discussion for ${submission.label}`,
+      owningUsers: [{ username: profile.username }],
+    };
+    const { discussion: newDiscussion } = yield call(
+      DiscussionAPI.createDiscussion,
+      discussionProps,
+    );
+
+    if (newDiscussion) {
+      discussion = newDiscussion;
+      // Relate the new Discussion to the Submission
+      yield call(DiscussionAPI.createRelatedItem, discussion.id, {
+        type: 'Submission',
+        key: submission.id,
+      });
+      // Create an Initial Message in the Disussion to provide context
+      const initialMessage = `I would like to start a discussion about my ${
+        submission.form.name
+      } - ${submission.label} request (with confirmation ${submission.handle})`;
+
+      yield call(DiscussionAPI.sendMessage, {
+        id: discussion.id,
+        message: initialMessage,
+      });
+
+      // Update Submission with Discussion ID
+      yield call(CoreAPI.updateSubmission, {
+        id: submission.id,
+        values: { 'Discussion Id': discussion.id },
+      });
+
+      yield put(actions.setDiscussion(discussion));
+    }
+  }
+  // Send the Comment/Cancel Request Message
+  const commentMessage =
+    sendMessageType === 'comment'
+      ? action.payload
+      : `I would like to cancel my ${submission.form.name} - ${
+          submission.label
+        } request (with confirmation ${submission.handle}) 
+        
+        ${action.payload}`;
+
+  yield call(DiscussionAPI.sendMessage, {
+    id: discussion.id,
+    message: commentMessage,
+  });
+
+  const formConfig =
+    sendMessageType === 'comment'
+      ? getCommentFormConfig(kappSlug, submission.id, action.payload)
+      : getCancelFormConfig(kappSlug, submission.id, action.payload);
+
+  yield call(CoreAPI.createSubmission, formConfig);
+  yield put(actions.setSendMessageModalOpen(false));
+}
+
 export function* pollerTask(id) {
   const include =
     'details,values,form,form.attributes,form.kapp.attributes,' +
@@ -153,4 +238,6 @@ export function* watchSubmission() {
   yield takeEvery(types.FETCH_SUBMISSION, fetchSubmissionSaga);
   yield takeEvery(types.CLONE_SUBMISSION, cloneSubmissionSaga);
   yield takeEvery(types.DELETE_SUBMISSION, deleteSubmissionSaga);
+  yield takeEvery(types.FETCH_DISCUSSION, fetchDiscussionSaga);
+  yield takeEvery(types.SEND_MESSAGE, sendMessageSaga);
 }

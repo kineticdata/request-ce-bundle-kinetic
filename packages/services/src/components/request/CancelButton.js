@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
-import { modalFormActions, Utils } from 'common';
+import { Utils } from 'common';
 import { actions } from '../../redux/modules/submission';
 import * as constants from '../../constants';
-import { getCancelFormConfig } from '../../utils';
 
 const CancelButton = props =>
   props.enableButton && (
@@ -25,7 +24,7 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = {
   deleteSubmission: actions.deleteSubmission,
-  openForm: modalFormActions.openForm,
+  setSendMessageModalOpen: actions.setSendMessageModalOpen,
 };
 
 const enhance = compose(
@@ -55,9 +54,7 @@ const enhance = compose(
       if (props.submission.coreState === constants.CORE_STATE_DRAFT) {
         props.deleteSubmission(props.submission.id, props.deleteCallback);
       } else {
-        props.openForm(
-          getCancelFormConfig(props.kappSlug, props.submission.id),
-        );
+        props.setSendMessageModalOpen(true, 'cancel');
       }
     },
   }),

@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
-import { modalFormActions, Utils } from 'common';
-import { getCommentFormConfig } from '../../utils';
+import { Utils } from 'common';
+
+import { actions } from '../../redux/modules/submission';
 
 const CommentButton = props =>
   props.enableButton && (
@@ -11,16 +12,14 @@ const CommentButton = props =>
       onClick={props.handleClick}
       className="btn btn-success"
     >
-      Add Comment
+      Start Discussion
     </button>
   );
 
-export const mapStateToProps = state => ({
-  kappSlug: state.app.config.kappSlug,
-});
+export const mapStateToProps = state => ({});
 
 export const mapDispatchToProps = {
-  openForm: modalFormActions.openForm,
+  setSendMessageModalOpen: actions.setSendMessageModalOpen,
 };
 
 const enhance = compose(
@@ -42,8 +41,7 @@ const enhance = compose(
     };
   }),
   withHandlers({
-    handleClick: props => () =>
-      props.openForm(getCommentFormConfig(props.kappSlug, props.submission.id)),
+    handleClick: props => () => props.setSendMessageModalOpen(true, 'comment'),
   }),
 );
 

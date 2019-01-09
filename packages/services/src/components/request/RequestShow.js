@@ -10,11 +10,14 @@ import {
 } from 'common';
 import { bundle, CoreForm } from 'react-kinetic-core';
 import { RequestShowConfirmationContainer } from './RequestShowConfirmation';
+import { RequestDiscussion } from './RequestDiscussion';
 import { RequestActivityList } from './RequestActivityList';
 import { CancelButtonContainer } from './CancelButton';
 import { CommentButtonContainer } from './CommentButton';
 import { CloneButtonContainer } from './CloneButton';
 import { FeedbackButtonContainer } from './FeedbackButton';
+import { ViewDiscussionButtonContainer } from './ViewDiscussionButton';
+import { SendMessageModal } from './SendMessageModal';
 import * as constants from '../../constants';
 import {
   getDueDate,
@@ -131,99 +134,127 @@ const CompletedInItem = ({ submission }) => {
   );
 };
 
-export const RequestShow = ({ submission, listType, mode }) => (
-  <Fragment>
-    <PageTitle parts={[submission && `#${submission.handle}`, 'Requests']} />
-    <span className="services-color-bar services-color-bar__blue-slate" />
-    <Link className="nav-return" to={`/requests/${listType || ''}`}>
-      <span className="fa fa-fw fa-chevron-left" />
-      {listType || 'All'} Requests
-    </Link>
-    {submission && (
-      <Fragment>
-        <div className="submission-meta">
-          <div className="page-container">
-            <div className="data-list-row">
-              <StatusItem submission={submission} />
-              <div className="data-list-row__col">
-                <dl>
-                  <dt>Confirmation #</dt>
-                  <dd>{submission.handle}</dd>
-                </dl>
-              </div>
-              <DisplayDateItem submission={submission} />
-              <ServiceOwnerItem submission={submission} />
-              <EstCompletionItem submission={submission} />
-              <CompletedInItem submission={submission} />
-              <div className="col-lg-auto btn-group-col">
-                <CloneButtonContainer submission={submission} />
-                {submission.coreState === constants.CORE_STATE_SUBMITTED && (
-                  <CommentButtonContainer submission={submission} />
-                )}
-                {submission.coreState === constants.CORE_STATE_CLOSED && (
-                  <FeedbackButtonContainer submission={submission} />
-                )}
-
-                <CancelButtonContainer submission={submission} />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="page-container page-container--submission">
-          <div className="page-content">
-            <div className="submission-title">
-              <h1>
-                <Icon
-                  image={getIcon(submission.form)}
-                  background="greenGrass"
-                />
-                {submission.form.name}
-              </h1>
-              {submission.form.name !== submission.label && (
-                <p>{submission.label}</p>
-              )}
-            </div>
-
-            {mode === 'confirmation' && (
-              <div className="card card--submission-confirmation">
-                <RequestShowConfirmationContainer submission={submission} />
-              </div>
-            )}
-
-            <div className="submission-tabs">
-              <ul className="nav nav-tabs">
-                <li role="presentation">
-                  <NavLink
-                    to={getSubmissionPath(submission, null, listType)}
-                    activeClassName="active"
-                  >
-                    Timeline
-                  </NavLink>
-                </li>
-                <li role="presentation">
-                  <NavLink
-                    to={`${getSubmissionPath(submission, 'review', listType)}`}
-                    activeClassName="active"
-                  >
-                    Review Request
-                  </NavLink>
-                </li>
-              </ul>
-              <div className="submission-tabs__content">
-                {mode === 'review' ? (
-                  <CoreForm
-                    submission={submission.id}
-                    review
-                    globals={globals}
+export const RequestShow = ({
+  submission,
+  listType,
+  mode,
+  sendMessageModalOpen,
+  viewDiscussionModal,
+  hasDiscussion,
+  openDiscussion,
+  closeDiscussion,
+}) => (
+  <div className="page-container page-container--panels page-container--services-submission">
+    <div className="page-panel page-panel--three-fifths page-panel--scrollable">
+      <PageTitle parts={[submission && `#${submission.handle}`, 'Requests']} />
+      {sendMessageModalOpen && <SendMessageModal submission={submission} />}
+      <span className="services-color-bar services-color-bar__blue-slate" />
+      <Link className="nav-return" to={`/requests/${listType || ''}`}>
+        <span className="fa fa-fw fa-chevron-left" />
+        {listType || 'All'} Requests
+      </Link>
+      {submission && (
+        <Fragment>
+          <div className="submission-meta">
+            <div className="page-container">
+              <div className="data-list-row">
+                <StatusItem submission={submission} />
+                <div className="data-list-row__col">
+                  <dl>
+                    <dt>Confirmation #</dt>
+                    <dd>{submission.handle}</dd>
+                  </dl>
+                </div>
+                <DisplayDateItem submission={submission} />
+                <ServiceOwnerItem submission={submission} />
+                <EstCompletionItem submission={submission} />
+                <CompletedInItem submission={submission} />
+                <div className="col-lg-auto btn-group-col">
+                  <ViewDiscussionButtonContainer
+                    openDiscussion={openDiscussion}
                   />
-                ) : (
-                  <RequestActivityList submission={submission} />
-                )}
+                  <CloneButtonContainer submission={submission} />
+                  {submission.coreState === constants.CORE_STATE_SUBMITTED &&
+                    !hasDiscussion && (
+                      <CommentButtonContainer submission={submission} />
+                    )}
+                  {submission.coreState === constants.CORE_STATE_CLOSED && (
+                    <FeedbackButtonContainer submission={submission} />
+                  )}
+
+                  <CancelButtonContainer submission={submission} />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </Fragment>
+          <div className="page-container page-container--submission">
+            <div className="page-content">
+              <div className="submission-title">
+                <h1>
+                  <Icon
+                    image={getIcon(submission.form)}
+                    background="greenGrass"
+                  />
+                  {submission.form.name}
+                </h1>
+                {submission.form.name !== submission.label && (
+                  <p>{submission.label}</p>
+                )}
+              </div>
+
+              {mode === 'confirmation' && (
+                <div className="card card--submission-confirmation">
+                  <RequestShowConfirmationContainer submission={submission} />
+                </div>
+              )}
+
+              <div className="submission-tabs">
+                <ul className="nav nav-tabs">
+                  <li role="presentation">
+                    <NavLink
+                      to={getSubmissionPath(submission, null, listType)}
+                      activeClassName="active"
+                    >
+                      Timeline
+                    </NavLink>
+                  </li>
+
+                  <li role="presentation">
+                    <NavLink
+                      to={`${getSubmissionPath(
+                        submission,
+                        'review',
+                        listType,
+                      )}`}
+                      activeClassName="active"
+                    >
+                      Review Request
+                    </NavLink>
+                  </li>
+                </ul>
+                <div className="submission-tabs__content">
+                  {mode === 'review' ? (
+                    <CoreForm
+                      submission={submission.id}
+                      review
+                      globals={globals}
+                    />
+                  ) : (
+                    <RequestActivityList submission={submission} />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Fragment>
+      )}
+    </div>
+    {hasDiscussion && (
+      <RequestDiscussion
+        submission={submission}
+        viewDiscussionModal={viewDiscussionModal}
+        closeDiscussion={closeDiscussion}
+      />
     )}
-  </Fragment>
+  </div>
 );

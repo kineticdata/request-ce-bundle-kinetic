@@ -1,97 +1,108 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Requests ~ services
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// Hide Back to Discussions Button in Services Discussions
+.page-container--services-submission,
+.services-submission-discussion {
+  .kinops-discussions {
+    button.btn-back {
+      display: none;
+    }
+  }
+}
 
-.submission-meta {
-  min-height: 3.75rem;
-  width: 100%;
-  background-color: $black-5;
-  padding: 0.75rem 0;
-  margin-bottom: 1.5rem;
-  flex: 0 0 auto;
-  .data-list-row {
-    margin-left: -1.5rem;
-    margin-right: -1.5rem;
-    &__col {
-      border-right: 1px solid $black-16;
-      padding-left: 0.75rem;
-      padding-right: 0.75rem;
-      &:last-child {
-        border: none;
+.page-container--services-submission {
+  .submission-meta {
+    min-height: 3.75rem;
+    width: 100%;
+    background-color: $black-5;
+    padding: 0.75rem 0;
+    margin-bottom: 1.5rem;
+    flex: 0 0 auto;
+    .data-list-row {
+      margin-left: -1.5rem;
+      margin-right: -1.5rem;
+      &__col {
+        border-right: 1px solid $black-16;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        &:last-child {
+          border: none;
+        }
+      }
+      dt {
+        font-size: 0.625rem;
+        font-weight: 600;
+        line-height: 0.75rem;
+        margin-bottom: 0.5rem;
+      }
+      dd {
+        color: $black-50;
+        font-size: 1rem;
+        font-weight: 300;
+        line-height: 1rem;
       }
     }
-    dt {
-      font-size: 0.625rem;
-      font-weight: 600;
-      line-height: 0.75rem;
-      margin-bottom: 0.5rem;
+    .btn-group-col {
+      display: flex;
+      align-items: center;
+      margin-top: 0;
+      justify-content: space-around;
+      .btn {
+        margin-right: 1rem;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+      @media all and (min-width: 0) {
+        margin-top: 1rem;
+      }
+      @media all and (min-width: 576px) {
+        margin-top: 1rem;
+      }
+      @media all and (min-width: 768px) {
+        margin-top: 1rem;
+      }
+      @media all and (min-width: 992px) {
+        margin-top: 0;
+      }
+      @media all and (min-width: 1200px) {
+        margin-top: 0;
+      }
     }
-    dd {
+  }
+
+  .submission-title {
+    h1 {
+      color: $black;
+      font-size: 1.625rem;
+      font-weight: 600;
+      line-height: 3rem;
+      margin: 0;
+      display: flex;
+    }
+    p {
       color: $black-50;
       font-size: 1rem;
-      font-weight: 300;
-      line-height: 1rem;
+      line-height: 1.5rem;
+    }
+    .card-icon {
+      margin-top: 12px;
+      border-radius: 50%;
     }
   }
-  .btn-group-col {
-    display: flex;
+
+  .submission-tabs {
+    .nav-tabs {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .card--submission-confirmation {
+    padding: 0;
+    margin: 1rem 0;
+    text-align: center;
     align-items: center;
-    margin-top: 0;
-    justify-content: space-around;
-    .btn {
-      margin-right: 1rem;
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-    @media all and (min-width: 0) {
-      margin-top: 1rem;
-    }
-    @media all and (min-width: 576px) {
-      margin-top: 1rem;
-    }
-    @media all and (min-width: 768px) {
-      margin-top: 1rem;
-    }
-    @media all and (min-width: 992px) {
-      margin-top: 0;
-    }
-    @media all and (min-width: 1200px) {
-      margin-top: 0;
-    }
+    background-color: $white;
   }
-}
-
-.submission-title {
-  h1 {
-    color: $black;
-    font-size: 1.625rem;
-    font-weight: 600;
-    line-height: 3rem;
-    margin: 0;
-    display: flex;
-  }
-  p {
-    color: $black-50;
-    font-size: 1rem;
-    line-height: 1.5rem;
-  }
-  .card-icon {
-    margin-top: 12px;
-    border-radius: 50%;
-  }
-}
-
-.submission-tabs {
-  .nav-tabs {
-    margin-bottom: 1.5rem;
-  }
-}
-
-.card--submission-confirmation {
-  padding: 0;
-  margin: 1rem 0;
-  text-align: center;
-  align-items: center;
-  background-color: $white;
 }

@@ -108,16 +108,24 @@ export const getSubmissionPath = (submission, mode, listType) => {
     .join('/');
 };
 
-export const getCommentFormConfig = (kappSlug, submissionId) => ({
+export const getCommentFormConfig = (kappSlug, submissionId, comment) => ({
   ...constants.COMMENT_FORM_CONFIG,
   kappSlug,
-  values: { [constants.RELATED_SUBMISSION_ID_FIELD]: submissionId },
+  values: {
+    [constants.RELATED_SUBMISSION_ID_FIELD]: submissionId,
+    Comment: comment,
+  },
+  completed: true,
 });
 
-export const getCancelFormConfig = (kappSlug, submissionId) => ({
+export const getCancelFormConfig = (kappSlug, submissionId, comment) => ({
   ...constants.CANCEL_FORM_CONFIG,
   kappSlug,
-  values: { [constants.RELATED_SUBMISSION_ID_FIELD]: submissionId },
+  values: {
+    [constants.RELATED_SUBMISSION_ID_FIELD]: submissionId,
+    'Cancellation Reason': comment,
+  },
+  completed: true,
 });
 
 export const getFeedbackFormConfig = (kappSlug, submissionId) => ({

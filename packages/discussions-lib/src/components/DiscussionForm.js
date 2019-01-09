@@ -17,8 +17,8 @@ export class DiscussionForm extends React.Component {
             isArchived: props.discussion.isArchived,
           }
         : {
-            title: '',
-            description: '',
+            title: (props.defaults && props.defaults.title) || '',
+            description: (props.defaults && props.defaults.description) || '',
             isPrivate: false,
             joinPolicy: '',
             owningUsers: (props.defaults && props.defaults.owningUsers) || [],

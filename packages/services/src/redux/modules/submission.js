@@ -2,6 +2,10 @@ export const types = {
   FETCH_SUBMISSION: '@kd/catalog/FETCH_SUBMISSION',
   SET_SUBMISSION: '@kd/catalog/SET_SUBMISSION',
   SET_SUBMISSION_ERRORS: '@kd/catalog/SET_SUBMISSION_ERRORS',
+  SET_SEND_MESSAGE_MODAL_OPEN: '@kd/catalog/SET_SEND_MESSAGE_MODAL_OPEN',
+  FETCH_DISCUSSION: '@kd/catalog/FETCH_DISCUSSION',
+  SET_DISCUSSION: '@kd/catalog/SET_DISCUSSION',
+  SEND_MESSAGE: '@kd/catalog/SEND_MESSAGE',
   CLEAR_SUBMISSION: '@kd/catalog/CLEAR_SUBMISSION',
   CLONE_SUBMISSION: '@kd/catalog/CLONE_SUBMISSION',
   CLONE_SUBMISSION_SUCCESS: '@kd/catalog/CLONE_SUBMISSION_SUCCESS',
@@ -22,6 +26,22 @@ export const actions = {
   setSubmissionErrors: errors => ({
     type: types.SET_SUBMISSION_ERRORS,
     payload: errors,
+  }),
+  fetchDiscussion: submissionId => ({
+    type: types.FETCH_DISCUSSION,
+    payload: submissionId,
+  }),
+  setDiscussion: discussion => ({
+    type: types.SET_DISCUSSION,
+    payload: discussion,
+  }),
+  setSendMessageModalOpen: (isOpen, type) => ({
+    type: types.SET_SEND_MESSAGE_MODAL_OPEN,
+    payload: { isOpen, type },
+  }),
+  sendMessage: message => ({
+    type: types.SEND_MESSAGE,
+    payload: message,
   }),
   clearSubmission: () => ({ type: types.CLEAR_SUBMISSION }),
   cloneSubmission: id => ({ type: types.CLONE_SUBMISSION, payload: id }),
@@ -52,6 +72,9 @@ export const defaultState = {
   deleting: false,
   errors: [],
   data: null,
+  discussion: null,
+  isSendMessageModalOpen: false,
+  sendMessageType: 'comment',
 };
 
 const reducer = (state = defaultState, action) => {
@@ -59,12 +82,28 @@ const reducer = (state = defaultState, action) => {
     case types.FETCH_SUBMISSION:
       return { ...state, loading: true, errors: [] };
     case types.SET_SUBMISSION:
-      return { ...state, loading: false, errors: [], data: action.payload };
+      return {
+        ...state,
+        loading: false,
+        errors: [],
+        data: action.payload,
+      };
+    case types.SET_DISCUSSION:
+      return {
+        ...state,
+        discussion: action.payload,
+      };
     case types.SET_SUBMISSION_ERRORS:
       return {
         ...state,
         loading: false,
         errors: state.errors.concat(action.payload),
+      };
+    case types.SET_SEND_MESSAGE_MODAL_OPEN:
+      return {
+        ...state,
+        isSendMessageModalOpen: action.payload.isOpen,
+        sendMessageType: action.payload.type || 'comment',
       };
     case types.CLEAR_SUBMISSION:
       return defaultState;

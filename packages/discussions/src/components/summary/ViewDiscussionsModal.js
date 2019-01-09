@@ -8,6 +8,7 @@ export const ViewDiscussionsModal = ({
   itemType,
   me,
   creationParams,
+  modalBodyClassName,
 }) => (
   <Modal isOpen size="lg" toggle={close}>
     <div className="modal-header">
@@ -19,7 +20,7 @@ export const ViewDiscussionsModal = ({
         <span />
       </h4>
     </div>
-    <ModalBody>
+    <ModalBody className={modalBodyClassName}>
       <DiscussionsPanel
         itemKey={itemKey}
         itemType={itemType}
