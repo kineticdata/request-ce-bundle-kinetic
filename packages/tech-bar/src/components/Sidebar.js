@@ -31,7 +31,9 @@ export const SidebarComponent = ({
             {upcomingAppointments.map(appt => {
               const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
               const start = moment.utc(appt.values['Event Time'], TIME_FORMAT);
-              const end = start.clone().add(appt.values['Duration'], 'minute');
+              const end = start
+                .clone()
+                .add(appt.values['Event Duration'], 'minute');
               return (
                 <NavItem key={appt.id}>
                   <NavLink

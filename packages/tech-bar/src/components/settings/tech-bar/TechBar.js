@@ -167,7 +167,9 @@ export const TechBarComponent = ({
                     title: 'Time',
                     renderBodyCell: ({ content, row }) => {
                       const start = moment.utc(row['Event Time'], TIME_FORMAT);
-                      const end = start.clone().add(row['Duration'], 'minute');
+                      const end = start
+                        .clone()
+                        .add(row['Event Duration'], 'minute');
                       return (
                         <td>
                           <Moment
