@@ -17,6 +17,7 @@ import { ErrorUnauthorized } from './components/ErrorUnauthorized';
 import { ErrorUnexpected } from './components/ErrorUnexpected';
 import { Schedulers } from './components/scheduler/Schedulers';
 import { Table, PaginationControl, FilterControl } from './components/Table';
+import { GroupDivider } from './components/GroupDivider';
 
 import {
   selectCurrentKapp,
@@ -79,4 +80,5 @@ export {
   Table,
   PaginationControl,
   FilterControl,
+  GroupDivider,
 };

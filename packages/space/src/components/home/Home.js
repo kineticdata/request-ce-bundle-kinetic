@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
-import { PageTitle } from 'common';
+import { GroupDivider, PageTitle } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import {
   actions,
@@ -102,11 +102,7 @@ const HomeComponent = ({
             {discussionGroups
               .map((discussions, dateGroup) => (
                 <div className="messages" key={dateGroup}>
-                  <div className="date">
-                    <hr />
-                    <span>{dateGroup}</span>
-                    <hr />
-                  </div>
+                  <GroupDivider value={dateGroup} className="my-4" />
                   {discussions.map(discussion => (
                     <Discussion
                       key={discussion.id}
