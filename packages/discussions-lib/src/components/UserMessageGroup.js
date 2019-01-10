@@ -10,10 +10,10 @@ export const UserMessageGroup = ({
   actions,
 }) => (
   <div
-    className={`messages-group ${
+    className={`messages__grouping ${
       messages.first().createdBy.username === profile.username
-        ? 'mine'
-        : 'other'
+        ? 'is-mine'
+        : 'is-other'
     }`}
   >
     {messages.first().createdBy.username !== profile.username && (

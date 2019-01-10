@@ -141,7 +141,7 @@
         margin: 0 0.75rem;
       }
     }
-    button.more-messages {
+    .btn--more-messages {
       position: absolute;
       bottom: 20px;
       width: 180px;
@@ -159,10 +159,10 @@
     }
   }
 
-  .load-more-messages {
+  .more-messages {
     text-align: center;
     // padding: 1.5rem;
-    h5 {
+    &__title {
       color: $blue1;
       @include ms-respond(font-size, 2);
       font-weight: 600;
@@ -170,7 +170,7 @@
       margin-top: 0;
     }
 
-    h6 {
+    &__subtitle {
       color: $blue2;
       @include ms-respond(font-size, -1);
       margin-top: 0;
@@ -299,21 +299,6 @@
 
     button.view-all {
       margin-left: auto;
-    }
-  }
-
-  .empty-discussion {
-    background-color: $gray4;
-    border-radius: 0.5rem;
-    margin: 1rem;
-    text-align: center;
-
-    h6 {
-      color: $blue1;
-    }
-
-    button {
-      color: $blue2;
     }
   }
 }

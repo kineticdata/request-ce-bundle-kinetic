@@ -16,7 +16,7 @@ export const ParticipantsHeader = ({
   isFullScreen,
 }) =>
   !discussion.participants.isEmpty() && (
-    <div className="participants-preview">
+    <div className="discussion__meta">
       {discussion.participants
         .toList()
         .filter(p => !p.user.unknown)
@@ -27,13 +27,13 @@ export const ParticipantsHeader = ({
             <div
               className={
                 isPresent(discussion, p.user.username)
-                  ? 'participant__status participant__status--active'
+                  ? 'participant__status is-active'
                   : 'participant__status'
               }
             />
           </div>
         ))}
-      <div className="view-all">
+      <div className="discussion__info">
         <button
           type="button"
           className="btn btn-icon d-md-inline-flex"

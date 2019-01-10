@@ -9,15 +9,20 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  h5 {
+  &__title {
     color: $blue-lake;
     @include ms-respond(font-size, 2);
     font-weight: 600;
     line-height: 1.5rem;
   }
-  h6 {
+  &__subtitle {
     color: $blue-gray;
     @include ms-respond(font-size, -1);
     line-height: 1.5rem;
+  }
+  button {
+    // color: $blue2;
+    // @include ms-respond(font-size, 0);
+    margin-bottom: 1.5rem;
   }
 }

@@ -51,7 +51,7 @@ export const produceContent = message =>
   }, '');
 
 const editedClass = message =>
-  message.createdAt !== message.updatedAt ? 'edited' : '';
+  message.createdAt !== message.updatedAt ? 'is-edited' : '';
 
 const SUPPORTED_IMAGE_MIMES = [
   'image/gif',
@@ -141,9 +141,9 @@ export const Message = ({ discussion, message, actions }) => (
         </button>
       )}
     {message.parent && (
-      <div className="parent-message">
+      <div className="message--parent">
         {message.parent.unknown ? (
-          <div className="message message-missing">(Message missing)</div>
+          <div className="message message--missing">(Message missing)</div>
         ) : message.parent.omitted ? null : (
           <Fragment>
             <Message
@@ -163,14 +163,14 @@ export const Message = ({ discussion, message, actions }) => (
 
 export const UserMessage = ({ discussion, message, profile, actions }) => (
   <div
-    className={classnames('message-list-item', {
+    className={classnames('message-list__item', {
       editing: actions && actions.editing && actions.editing.id === message.id,
       replying:
         actions && actions.replying && actions.replying.id === message.id,
     })}
   >
     {actions && (
-      <ul className="actions meta">
+      <ul className="message-list__actions meta">
         <li>
           <a role="button" onClick={() => actions.reply(message)}>
             Reply

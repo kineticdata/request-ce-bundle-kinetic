@@ -45,16 +45,17 @@ export const QueueItemDetails = ({
   isSmallLayout,
   getCreationParams,
 }) => (
-  <div className="queue-item-details">
-    {viewDiscussionsModal && isSmallLayout && (
-      <ViewDiscussionsModal
-        itemType="Submission"
-        itemKey={queueItem.id}
-        close={closeDiscussions}
-        creationParams={getCreationParams}
-        me={profile}
-      />
-    )}
+  <div className="page-panel page-panel--three-fifths page-panel--queue-details">
+    {viewDiscussionsModal &&
+      isSmallLayout && (
+        <ViewDiscussionsModal
+          itemType="Submission"
+          itemKey={queueItem.id}
+          close={closeDiscussions}
+          creationParams={getCreationParams}
+          me={profile}
+        />
+      )}
     <div className="scroll-wrapper">
       <div className="general">
         {discussionsEnabled && (

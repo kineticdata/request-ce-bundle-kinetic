@@ -17,9 +17,9 @@ export const MoreMessagesBanner = props => {
     }
   }
   return (
-    <div className="load-more-messages">
-      <h5>{title}</h5>
-      <h6>{subtitle}</h6>
+    <div className="banner banner--more">
+      <h5 className="banner__title">{title}</h5>
+      <h6 className="banner__subtitle">{subtitle}</h6>
     </div>
   );
 };

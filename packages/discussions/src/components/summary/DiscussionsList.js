@@ -20,8 +20,8 @@ export const DiscussionsListComponent = ({
 
       {getGroupedDiscussions(discussions)
         .map((discussions, dateGroup) => (
-          <div className="messages" key={dateGroup}>
-            <div className="date">
+          <div className="discussion__messages" key={dateGroup}>
+            <div className="date-divider">
               <hr />
               <span>{dateGroup}</span>
               <hr />
@@ -39,13 +39,12 @@ export const DiscussionsListComponent = ({
         .toList()}
     </Fragment>
   ) : (
-    <div className="empty-discussion">
-      <h5>No discussion to display</h5>
-      <p>
-        <button onClick={handleCreateDiscussion} className="btn btn-link">
-          Create a new discussion
-        </button>
-      </p>
+    <div className="empty-state empty-state--discussions">
+      <h5 className="empty-state__title">No discussion to display</h5>
+
+      <button onClick={handleCreateDiscussion} className="btn btn-inverse">
+        Create a new discussion
+      </button>
     </div>
   );
 };

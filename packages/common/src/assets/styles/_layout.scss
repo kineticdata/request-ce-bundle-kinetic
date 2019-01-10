@@ -21,7 +21,10 @@
   flex-direction: column;
   min-height: $page-height;
   &--guest {
-    margin-top: $header-height !important;
+    .page-container--space-home {
+      margin-top: $header-height !important;
+    }
+    min-height: 100vh;
   }
 }
 

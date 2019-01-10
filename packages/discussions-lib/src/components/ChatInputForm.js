@@ -238,12 +238,13 @@ class ChatInput extends Component {
         onDrop={this.handleAttachmentDrop}
         multiple
         style={{}}
+        className="discussion__dropzone"
       >
         <form
           onSubmit={this.handleSendChatMessage}
-          className={`new-message disabled ${
-            this.props.messageActions.editing ? 'editing' : ''
-          } ${this.props.messageActions.replying ? 'replying' : ''}`}
+          className={`message-form message-form--default ${
+            this.props.messageActions.editing ? 'is-editing' : ''
+          } ${this.props.messageActions.replying ? 'is-replying' : ''}`}
         >
           {!this.props.discussion.isArchived && (
             <ButtonDropdown
@@ -278,7 +279,7 @@ class ChatInput extends Component {
               </PopoverBody>
             )}
           </Popover>
-          <div className="input-container" id="chatInput">
+          <div className="message-form__input" id="chatInput">
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               {this.state.fileAttachments.map(attachment => (
                 <UploadCard
@@ -296,8 +297,8 @@ class ChatInput extends Component {
             </div>
 
             <div
-              className={classNames('placeholder', {
-                hidden:
+              className={classNames('message-form__placeholder', {
+                'is-hidden':
                   this.state.chatInput !== '' ||
                   this.props.discussion.isArchived,
               })}
@@ -309,7 +310,7 @@ class ChatInput extends Component {
                 ref={element => (this.contentEditable = element)}
                 tabIndex={0}
                 tagName="div"
-                className="message-input"
+                className="message-form__editor"
                 contentEditable="plaintext-only"
                 html={this.state.chatInput}
                 onChange={this.handleChatInput}
@@ -318,7 +319,7 @@ class ChatInput extends Component {
                 onBlur={this.handleBlur}
               />
             ) : (
-              <div className="message-input disabled text-danger">
+              <div className="message-form__editor is-disabled text-danger">
                 This discussion has been archived and is read-only.
               </div>
             )}
@@ -349,12 +350,12 @@ class ChatInput extends Component {
         </form>
         {this.state.hasFocus && (
           <div className="markdown-help">
-            <strong className="markdown-sample">**Bold**</strong>
-            <em className="markdown-sample">_Italics_</em>
-            <span className="markdown-sample">
+            <strong className="markdown-help__sample">**Bold**</strong>
+            <em className="markdown-help__sample">_Italics_</em>
+            <span className="markdown-help__sample">
               ~~<strike>Strike</strike>~~
             </span>
-            <span className="markdown-sample">&gt;Blockquote</span>
+            <span className="markdown-help__sample">&gt;Blockquote</span>
           </div>
         )}
       </Dropzone>

@@ -124,19 +124,25 @@ export class DiscussionForm extends React.Component {
               onChange={this.handleChange}
             />
           </div>
-          <div className="form-group form-check-inline">
-            <input
-              className="form-check-input"
-              id="isPrivate"
-              type="checkbox"
-              checked={this.state.values.isPrivate}
-              onChange={this.handleChange}
-            />
-            <label className="form-check-label" htmlFor="isPrivate">
-              Private?
-            </label>
+          <hr />
+          <div className="form-group">
+            <div className="form-check-inline">
+              <input
+                className="form-check-input"
+                id="isPrivate"
+                type="checkbox"
+                checked={this.state.values.isPrivate}
+                onChange={this.handleChange}
+              />
+              <label className="form-check-label" htmlFor="isPrivate">
+                Private?
+              </label>
+            </div>
+            <small className="form-text text-muted">
+              Private discussions require explicit invitations to join
+            </small>
           </div>
-          <p>Private discussions require explicit invitations to join</p>
+
           {!this.state.values.isPrivate && (
             <div className="form-group">
               <label htmlFor="joinPolicy">Join Policy</label>
@@ -158,6 +164,7 @@ export class DiscussionForm extends React.Component {
               </select>
             </div>
           )}
+          <hr />
           <div className="form-group">
             <label htmlFor="owningUsers">Owning Users</label>
             <OwningUsersInput
@@ -173,10 +180,11 @@ export class DiscussionForm extends React.Component {
               value={this.state.values.owningTeams}
               onChange={this.handleChange}
             />
+            <small className="form-text text-muted">
+              Owning users and teams are able to make changes to the discussion
+            </small>
           </div>
-          <p>
-            Owning users and teams are able to make changes to the discussion
-          </p>
+          <hr />
           {this.state.editing && (
             <Fragment>
               <div className="form-group">
@@ -192,10 +200,10 @@ export class DiscussionForm extends React.Component {
                     Archived?
                   </label>
                 </div>
+                <small className="form-text text-danger">
+                  While archived, users are not able to send any messages
+                </small>
               </div>
-              <p className="text-danger">
-                While archived, users are not able to send any messages
-              </p>
             </Fragment>
           )}
         </form>

@@ -36,7 +36,9 @@
     }
   }
 }
-.recent-discussions-wrapper {
+
+// Discussion Recent
+.page-panel--discussions--recent {
   .discussion-summary {
     display: flex;
     flex-direction: column;
@@ -98,12 +100,12 @@
         }
       }
     }
-    .messages .messages-group {
+    .discussions__messages .messages__grouping {
       margin-bottom: 0;
       background-color: $white;
     }
   }
-  .recent-discussion-actions {
+  .discussion__actions {
     display: flex;
     justify-content: center;
     align-items: center;

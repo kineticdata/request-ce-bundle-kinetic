@@ -29,8 +29,8 @@ export const DiscussionComponent = props => (
     render={({ elements, discussion, canManage }) => (
       <Fragment>
         {props.renderHeader && props.renderHeader({ discussion })}
-        <div className="kinops-discussions">
-          <div className="messages">{elements.messages}</div>
+        <div className="discussion__content">
+          <div className="discussion__messages">{elements.messages}</div>
           <ParticipantsHeaderContainer discussion={discussion} />
           {discussion.isArchived && (
             <ArchivedBanner canManage={canManage} open={props.openEdit} />
