@@ -3,7 +3,7 @@ import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 import { QueueListItemSmall } from './QueueListItem';
 import { TOO_MANY_STATUS_STRING } from '../../redux/sagas/queue';
-import { PageTitle, Moment, Constants } from 'common';
+import { PageTitle, Moment, Constants, GroupDivider } from 'common';
 import { FilterMenuToolbar } from './FilterMenuToolbar';
 import { FilterMenuMobile } from './FilterMenuMobile';
 import { QueueListPagination } from './QueueListPagination';
@@ -147,11 +147,9 @@ export const QueueList = ({
                       className="items-grouping"
                       key={groupValue || 'no-group'}
                     >
-                      <div className="items-grouping__banner">
-                        <span>
-                          <GroupByValue value={groupValue} />
-                        </span>
-                      </div>
+                      <GroupDivider>
+                        <GroupByValue value={groupValue} />
+                      </GroupDivider>
                       <ul className="list-group">
                         {items.map(item => (
                           <QueueListItemSmall

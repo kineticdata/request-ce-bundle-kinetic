@@ -67,7 +67,6 @@ export const QueueListItemSmall = ({ queueItem, filter }) => {
 
         <h6 className="submission__title">{queueItem.label}</h6>
         <ul className="submission__timestamps list-group">
-          <Timestamp label="Scheduled" value={values['Due Date']} id={id} />
           <DueOrCloseDate queueItem={queueItem} />
           <Timestamp
             label="Updated"

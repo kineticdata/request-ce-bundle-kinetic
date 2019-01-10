@@ -104,3 +104,19 @@
     margin-bottom: 0;
   }
 }
+
+.group-divider {
+  align-items: center;
+  color: $blue-lake;
+  display: flex;
+  @include ms-respond(font-size, -1);
+  font-weight: bold;
+  text-align: center;
+  > hr {
+    border: 2px solid $blue3;
+    flex: 1 0 auto;
+  }
+  > span {
+    margin: 0 0.75rem;
+  }
+}
