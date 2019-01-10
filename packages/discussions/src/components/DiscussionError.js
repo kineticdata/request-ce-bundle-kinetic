@@ -8,7 +8,7 @@ const errors = {
 };
 
 export const DiscussionError = props => (
-  <div className="discussions">
+  <div className="discussions--error">
     <div className="empty-state empty-state--wally">
       <h5 className="empty-state__title">
         {errors[props.error] || props.error}
