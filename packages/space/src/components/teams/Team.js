@@ -42,7 +42,7 @@ export const Team = ({
                 to={`/settings/teams/${team.slug}/edit`}
                 className="btn btn-secondary"
               >
-                Team
+                Edit Team
               </Link>
             )}
           </div>
