@@ -86,7 +86,7 @@ export const DiscussionComponent = ({
           <DiscussionHeader />
 
           <div className="empty-state empty-state--discussions">
-            <h6 className="empty-state--discussions__title">
+            <h6 className="empty-state__title">
               Real-time connection to server has been interrupted. Please
               refresh and try again.
             </h6>
@@ -97,9 +97,7 @@ export const DiscussionComponent = ({
       <Fragment>
         <DiscussionHeader />
         <div className="empty-state empty-state--discussions">
-          <h6 className="empty-state--discussions__title">
-            No discussion to display
-          </h6>
+          <h6 className="empty-state__title">No discussion to display</h6>
         </div>
       </Fragment>
     )}
