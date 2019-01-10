@@ -53,13 +53,14 @@
     &__timestamps {
       display: flex;
       flex-direction: row;
+      flex-wrap: wrap;
       .list-group-item {
         padding: 0;
         color: rgba($black, 0.5);
         background-color: transparent;
         font-weight: 400;
         @include ms-respond(font-size, -1);
-        &:not(:first-child):before {
+        &:not(:last-child):after {
           content: '•';
           color: rgba($black, 0.25);
           margin: 0 0.3125rem;
