@@ -20,8 +20,8 @@ export const DiscussionsListComponent = ({
 
       {getGroupedDiscussions(discussions)
         .map((discussions, dateGroup) => (
-          <div className="messages" key={dateGroup}>
-            <div className="date">
+          <div className="discussion__messages" key={dateGroup}>
+            <div className="date-divider">
               <hr />
               <span>{dateGroup}</span>
               <hr />

@@ -51,7 +51,7 @@ export const produceContent = message =>
   }, '');
 
 const editedClass = message =>
-  message.createdAt !== message.updatedAt ? 'edited' : '';
+  message.createdAt !== message.updatedAt ? 'is-edited' : '';
 
 const SUPPORTED_IMAGE_MIMES = [
   'image/gif',
@@ -141,7 +141,7 @@ export const Message = ({ discussion, message, actions }) => (
         </button>
       )}
     {message.parent && (
-      <div className="parent-message">
+      <div className="message--parent">
         {message.parent.unknown ? (
           <div className="message message--missing">(Message missing)</div>
         ) : message.parent.omitted ? null : (

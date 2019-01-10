@@ -8,7 +8,7 @@ const getMessageDate = message =>
 const differentDate = (m1, m2) => getMessageDate(m1) !== getMessageDate(m2);
 
 export const MessagesList = props => (
-  <div className="message-list">
+  <div className="messages-list">
     {partitionListBy(differentDate, props.messages).map((messages, i) => (
       <MessagesByDate
         key={i}

@@ -1,292 +1,17 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Discussion ~ Discussions
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.discussions,
-.discussions-modal-body {
+
+// Discussion container fixes
+.page-panel--discussions {
   background-color: $white;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  // justify-content: center;
   padding: 0 !important;
   flex-grow: 1;
   position: relative;
-  .messages {
-    background-color: #f7f7f7;
-    flex: 1 0 auto;
-    position: relative;
-
-    .message-wrapper {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      padding: 1.5rem;
-      overflow-y: auto;
-    }
-    .date {
-      align-items: center;
-      color: $blue-lake;
-      display: flex;
-      @include ms-respond(font-size, -1);
-      font-weight: bold;
-      margin: 1.5rem 0;
-      text-align: center;
-      hr {
-        border: 2px solid $blue3;
-        flex: 1 0 auto;
-      }
-      span {
-        margin: 0 0.75rem;
-      }
-    }
-  }
-  .btn--more-messages {
-    position: absolute;
-    bottom: 3.75rem;
-    width: 20%;
-    left: 50%;
-    margin-left: -90px;
-    font-size: 0.75rem;
-    display: flex;
-    justify-content: center;
-    line-height: 1.5rem;
-    .fa {
-      line-height: 1.5rem;
-    }
-  }
-  .more-messages {
-    text-align: center;
-    padding-top: 1.5rem;
-    &__title {
-      color: $blue1;
-      @include ms-respond(font-size, 2);
-      font-weight: 600;
-      line-height: 1.5rem;
-      margin-top: 0;
-    }
-
-    &__subtitle {
-      color: $blue2;
-      @include ms-respond(font-size, -1);
-      margin-top: 0;
-      line-height: 1.5rem;
-    }
-  }
-  .new-message {
-    display: flex;
-    padding: 0;
-    overflow: visible;
-    &--editing,
-    &--replying {
-      background-color: rgba(245, 166, 35, 0.15);
-      .new-message__input-container {
-        background-color: rgba(245, 166, 35, 0.15);
-      }
-      .btn-subtle,
-      .btn-send {
-        background-color: rgba(245, 166, 35, 0.05);
-      }
-    }
-    &--default {
-      background-color: rgba(240, 240, 240, 0.75);
-      .new-message__input-container {
-        background-color: rgba(240, 240, 240, 0.75);
-      }
-    }
-    button {
-      border-radius: 0;
-      &.btn-subtle {
-        background-color: $blue3;
-        border-width: 0;
-        opacity: 0.5;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 48px;
-      }
-
-      &.btn-send {
-        background-color: $blue3;
-        color: $primary;
-        opacity: 1;
-        cursor: pointer;
-        &:disabled {
-          cursor: not-allowed;
-          color: $gray;
-        }
-      }
-      &.btn {
-        &.disabled,
-        &:disabled {
-          opacity: 1;
-        }
-      }
-    }
-
-    .show > .dropdown-menu {
-      display: flex;
-    }
-    .dropdown-menu {
-      border: none;
-      flex-direction: column;
-      margin: 0.5rem;
-      padding: 0.5rem;
-      filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 3px 4px);
-      button {
-        cursor: pointer;
-        font-size: 12px;
-        padding: 0.25rem 0.5rem;
-        width: auto;
-        .icon {
-          margin-right: 0.5rem;
-        }
-      }
-      &:after {
-        content: ' ';
-        position: absolute;
-        height: 0;
-        width: 0;
-        border-color: transparent;
-        border-style: solid;
-        bottom: -8px;
-        left: 8px;
-        border-width: 8px 8px 0;
-        border-top-color: white;
-      }
-    }
-
-    &__input-container {
-      flex: 1 1 100%;
-      padding: 0.75rem 1rem;
-      background-color: $blue3;
-
-      .placeholder {
-        color: #a8b7c7;
-        position: absolute;
-        pointer-events: none;
-        &.is-hidden {
-          display: none;
-        }
-      }
-    }
-
-    .message-input {
-      min-height: 24px;
-      max-height: 25vh;
-      overflow-y: auto;
-      overflow-wrap: break-word;
-      white-space: pre-wrap;
-      color: #54698d;
-
-      &:focus {
-        outline: unset;
-      }
-
-      &.is-disabled {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    }
-  }
-
-  .participants-preview {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3rem;
-    display: flex;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 0 1.5rem;
-    z-index: 1;
-    .sb-avatar {
-      margin-right: 0.25rem;
-
-      cursor: pointer;
-      &--gravatar {
-        line-height: initial;
-        box-shadow: inset 0px 0px 10px rgba($black, 0.9);
-      }
-      .sb-avatar__text,
-      img {
-        transition: border-color 300ms;
-        z-index: -1;
-        position: relative;
-      }
-    }
-    .view-all {
-      margin-left: auto;
-      .btn {
-        font-size: 1rem;
-        padding-left: 0;
-        padding-right: 0;
-        + .btn {
-          margin-left: 0.5rem;
-        }
-      }
-    }
-  }
-  .participant {
-    position: relative;
-    &__status {
-      position: absolute;
-      top: 1px;
-      left: -1px;
-      display: block;
-      width: 26px;
-      height: 26px;
-      pointer-events: none;
-      border: 2px solid rgba($present, 0);
-      border-radius: 50%;
-      &.is-active {
-        border-color: rgba($present, 1);
-      }
-    }
-  }
-  .archived-banner {
-    position: absolute;
-    top: 3rem;
-    left: 0;
-    right: 0;
-    height: 3rem;
-    background-color: rgba(240, 240, 240, 0.75);
-    padding: 0 1.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .message {
-      margin: 0 0.5rem;
-    }
-    a {
-      text-decoration: underline;
-    }
-    a:hover {
-      cursor: pointer;
-      text-decoration: underline;
-    }
-  }
-
-  .empty-state--discussions {
-    background-color: $black-3;
-    border-radius: 0.5rem;
-    text-align: center;
-    justify-content: flex-start;
-  }
-  .btn {
-    flex: 0 0 auto;
-  }
-  .btn-link.btn-back {
-    border-bottom: 1px solid $black-16;
-    border-top: 0;
-    border-radius: 0;
-    padding: 0.9375rem 1rem;
-    text-align: left;
-  }
-  // Discussion container fixes
-  &.discussions--recent {
+  &--recent {
     overflow-y: scroll;
     justify-content: space-between;
     flex-direction: column;
@@ -295,11 +20,294 @@
     padding: 0.5em 1em !important;
     .modal-body & {
       padding: 0 !important;
-      .messages {
+      .discussion__messages {
         background-color: $white;
       }
     }
   }
+}
+.discussion__content {
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 !important;
+  flex-grow: 1;
+  position: relative;
+}
+.discussion__messages {
+  background-color: #f7f7f7;
+  flex: 1 0 auto;
+  position: relative;
+
+  .messages-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    padding: 1.5rem;
+    overflow-y: auto;
+  }
+}
+.date-divider {
+  align-items: center;
+  color: $blue-lake;
+  display: flex;
+  @include ms-respond(font-size, -1);
+  font-weight: bold;
+  margin: 1.5rem 0;
+  text-align: center;
+  hr {
+    border: 2px solid $blue3;
+    flex: 1 0 auto;
+  }
+  span {
+    margin: 0 0.75rem;
+  }
+}
+.btn--banner {
+  position: absolute;
+  bottom: 3.75rem;
+  width: 20%;
+  left: 50%;
+  margin-left: -90px;
+  font-size: 0.75rem;
+  display: flex;
+  justify-content: center;
+  line-height: 1.5rem;
+  .fa {
+    line-height: 1.5rem;
+  }
+}
+.banner {
+  text-align: center;
+  padding-top: 1.5rem;
+  &__title {
+    color: $blue1;
+    @include ms-respond(font-size, 2);
+    font-weight: 600;
+    line-height: 1.5rem;
+    margin-top: 0;
+  }
+
+  &__subtitle {
+    color: $blue2;
+    @include ms-respond(font-size, -1);
+    margin-top: 0;
+    line-height: 1.5rem;
+  }
+}
+.message-form {
+  display: flex;
+  padding: 0;
+  overflow: visible;
+  &.is-editing,
+  &.is-replying {
+    background-color: rgba(245, 166, 35, 0.15);
+    .message-form__input {
+      background-color: rgba(245, 166, 35, 0.15);
+    }
+    .btn-subtle,
+    .btn-send {
+      background-color: rgba(245, 166, 35, 0.05);
+    }
+  }
+  &--default {
+    background-color: rgba(240, 240, 240, 0.75);
+    .message-form__input {
+      background-color: rgba(240, 240, 240, 0.75);
+    }
+  }
+  button {
+    border-radius: 0;
+    &.btn-subtle {
+      background-color: $blue3;
+      border-width: 0;
+      opacity: 0.5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 48px;
+    }
+
+    &.btn-send {
+      background-color: $blue3;
+      color: $primary;
+      opacity: 1;
+      cursor: pointer;
+      &:disabled {
+        cursor: not-allowed;
+        color: $gray;
+      }
+    }
+    &.btn {
+      &.disabled,
+      &:disabled {
+        opacity: 1;
+      }
+    }
+  }
+
+  .show > .dropdown-menu {
+    display: flex;
+  }
+  .dropdown-menu {
+    border: none;
+    flex-direction: column;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 3px 4px);
+    button {
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0.25rem 0.5rem;
+      width: auto;
+      .icon {
+        margin-right: 0.5rem;
+      }
+    }
+    &:after {
+      content: ' ';
+      position: absolute;
+      height: 0;
+      width: 0;
+      border-color: transparent;
+      border-style: solid;
+      bottom: -8px;
+      left: 8px;
+      border-width: 8px 8px 0;
+      border-top-color: white;
+    }
+  }
+
+  &__input {
+    flex: 1 1 100%;
+    padding: 0.75rem 1rem;
+    background-color: $blue3;
+  }
+  &__placeholder {
+    color: #a8b7c7;
+    position: absolute;
+    pointer-events: none;
+    &.is-hidden {
+      display: none;
+    }
+  }
+
+  &__editor {
+    min-height: 24px;
+    max-height: 25vh;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    color: #54698d;
+
+    &:focus {
+      outline: unset;
+    }
+
+    &.is-disabled {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.discussion__meta {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0 1.5rem;
+  z-index: 0;
+  .sb-avatar {
+    margin-right: 0.25rem;
+
+    cursor: pointer;
+    &--gravatar {
+      line-height: initial;
+      box-shadow: inset 0px 0px 10px rgba($black, 0.9);
+    }
+    .sb-avatar__text,
+    img {
+      transition: border-color 300ms;
+      z-index: -1;
+      position: relative;
+    }
+  }
+  .discussion__info {
+    margin-left: auto;
+    .btn {
+      font-size: 1rem;
+      padding-left: 0;
+      padding-right: 0;
+      + .btn {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+}
+.participant {
+  position: relative;
+  &__status {
+    position: absolute;
+    top: 1px;
+    left: -1px;
+    display: block;
+    width: 26px;
+    height: 26px;
+    pointer-events: none;
+    border: 2px solid rgba($present, 0);
+    border-radius: 50%;
+    &.is-active {
+      border-color: rgba($present, 1);
+    }
+  }
+}
+.banner--archived {
+  position: absolute;
+  top: 3rem;
+  left: 0;
+  right: 0;
+  height: 3rem;
+  background-color: rgba(240, 240, 240, 0.75);
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .message {
+    margin: 0 0.5rem;
+  }
+  a {
+    text-decoration: underline;
+  }
+  a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+.empty-state--discussions {
+  background-color: $black-3;
+  border-radius: 0.5rem;
+  text-align: center;
+  justify-content: flex-start;
+}
+.btn {
+  flex: 0 0 auto;
+}
+.btn-link.btn-back {
+  border-bottom: 1px solid $black-16;
+  border-top: 0;
+  border-radius: 0;
+  padding: 0.9375rem 1rem;
+  text-align: left;
 }
 
 .message-versions-controls {
@@ -317,7 +325,7 @@
   padding: 1.5rem;
 }
 
-.messages-group {
+.messages__grouping {
   display: flex;
   margin-bottom: 1.5rem;
   .sb-avatar {
@@ -409,7 +417,7 @@
       }
 
       .message {
-        &.edited {
+        &.is-edited {
           display: flex;
           flex-direction: row;
           align-items: center;
@@ -426,38 +434,14 @@
             overflow-wrap: break-word;
           }
         }
-      }
-
-      .parent-message {
-        border-left: 2px solid $blue-lake;
-        padding-left: 0.5rem;
-        margin-top: 0.5rem;
-      }
-    }
-    .message-upload {
-      display: flex;
-      flex-direction: column;
-
-      &.message-other {
-        align-items: flex-start;
-      }
-
-      &.message-mine {
-        align-items: flex-end;
-      }
-
-      .upload-image {
-        display: flex;
-        height: 120px;
-        img {
-          height: 100%;
-          width: auto;
-        }
-        & + .upload-description {
-          margin-top: 0.75rem;
+        &--parent {
+          border-left: 2px solid $blue-lake;
+          padding-left: 0.5rem;
+          margin-top: 0.5rem;
         }
       }
     }
+
     .meta {
       @include ms-respond(font-size, -2);
       line-height: 1.5rem;
@@ -469,7 +453,7 @@
       }
     }
   }
-  &.mine {
+  &.is-mine {
     .message-list {
       &__item {
         justify-content: flex-end;
@@ -498,7 +482,7 @@
       }
     }
   }
-  &.other {
+  &.is-other {
     .message-list {
       .message-bubble {
         &:after {
@@ -558,7 +542,7 @@
   }
 }
 
-// Markdown Help
+// Markdown Helper for Messages Form
 .markdown-help {
   background-color: $white;
   color: $blue-lake;

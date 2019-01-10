@@ -131,11 +131,11 @@ const HomeComponent = ({
         !discussionsError &&
         !discussionsLoading &&
         discussionGroups.size > 0 && (
-          <div className="discussions discussions--recent">
+          <div className="page-panel--discussions discussions--space-home page-panel--discussions--recent">
             {discussionGroups
               .map((discussions, dateGroup) => (
-                <div className="messages" key={dateGroup}>
-                  <div className="date">
+                <div className="discussion__messages" key={dateGroup}>
+                  <div className="date-divider">
                     <hr />
                     <span>{dateGroup}</span>
                     <hr />
@@ -153,7 +153,7 @@ const HomeComponent = ({
               ))
               .toList()}
 
-            <div className="recent-discussion-actions">
+            <div className="discussion__actions">
               {discussionsPageTokens.size > 1 && (
                 <button className="btn btn-primary" onClick={handlePrevPage}>
                   Prev

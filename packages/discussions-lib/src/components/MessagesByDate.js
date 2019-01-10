@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { DateBanner } from './DateBanner';
 import partitionListBy from '../helpers/partitionListBy';
 import { SystemMessageGroup } from './SystemMessageGroup';
@@ -9,10 +9,10 @@ const differentAuthor = (m1, m2) =>
   (m1.type === 'User' && m1.createdBy.username !== m2.createdBy.username);
 
 const Default = ({ dateBanner, messageGroups }) => (
-  <div className="messages-date">
+  <Fragment>
     {dateBanner}
     {messageGroups}
-  </div>
+  </Fragment>
 );
 
 export const MessagesByDate = props => {

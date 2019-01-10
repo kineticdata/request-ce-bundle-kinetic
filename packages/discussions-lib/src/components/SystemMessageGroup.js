@@ -2,7 +2,7 @@ import React from 'react';
 import { SystemMessage } from './SystemMessage';
 
 export const SystemMessageGroup = props => (
-  <div className="messages-group">
+  <div className="messages__grouping">
     <div className="system-message-list">
       {props.messages.map(message => (
         <SystemMessage

@@ -238,14 +238,13 @@ class ChatInput extends Component {
         onDrop={this.handleAttachmentDrop}
         multiple
         style={{}}
+        className="discussion__dropzone"
       >
         <form
           onSubmit={this.handleSendChatMessage}
-          className={`new-message new-message--default ${
-            this.props.messageActions.editing ? 'new-message--editing' : ''
-          } ${
-            this.props.messageActions.replying ? 'new-message--replying' : ''
-          }`}
+          className={`message-form message-form--default ${
+            this.props.messageActions.editing ? 'is-editing' : ''
+          } ${this.props.messageActions.replying ? 'is-replying' : ''}`}
         >
           {!this.props.discussion.isArchived && (
             <ButtonDropdown
@@ -280,7 +279,7 @@ class ChatInput extends Component {
               </PopoverBody>
             )}
           </Popover>
-          <div className="new-message__input-container" id="chatInput">
+          <div className="message-form__input" id="chatInput">
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               {this.state.fileAttachments.map(attachment => (
                 <UploadCard
@@ -298,7 +297,7 @@ class ChatInput extends Component {
             </div>
 
             <div
-              className={classNames('placeholder', {
+              className={classNames('message-form__placeholder', {
                 'is-hidden':
                   this.state.chatInput !== '' ||
                   this.props.discussion.isArchived,
@@ -311,7 +310,7 @@ class ChatInput extends Component {
                 ref={element => (this.contentEditable = element)}
                 tabIndex={0}
                 tagName="div"
-                className="message-input"
+                className="message-form__editor"
                 contentEditable="plaintext-only"
                 html={this.state.chatInput}
                 onChange={this.handleChatInput}
@@ -320,7 +319,7 @@ class ChatInput extends Component {
                 onBlur={this.handleBlur}
               />
             ) : (
-              <div className="message-input is-disabled text-danger">
+              <div className="message-form__editor is-disabled text-danger">
                 This discussion has been archived and is read-only.
               </div>
             )}

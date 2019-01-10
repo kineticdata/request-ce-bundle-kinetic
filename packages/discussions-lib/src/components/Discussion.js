@@ -130,7 +130,7 @@ export class DiscussionComponent extends React.Component {
           viewUnreadButton: this.state.hasUnreadMessages ? (
             <button
               type="button"
-              className="btn btn-primary btn--more-messages"
+              className="btn btn-primary btn--banner"
               onClick={this.scrollHelper && this.scrollHelper.scrollToBottom}
             >
               New messages

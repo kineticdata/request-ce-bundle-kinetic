@@ -70,7 +70,7 @@ export const DiscussionComponent = ({
   handleLeave,
   invitationToken,
 }) => (
-  <div className="discussion">
+  <div className="page-panel page-panel--discussions">
     {discussionId ? (
       socketStage === SOCKET_STAGE.IDENTIFIED ||
       socketStage === SOCKET_STAGE.RECONNECTING ? (
