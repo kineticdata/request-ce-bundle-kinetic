@@ -260,6 +260,7 @@ const handleExperienceClick = ({
 
 const handleSubmitFeedback = ({
   kapp,
+  techBarId,
   experience,
   appointment,
   resetExperience,
@@ -270,17 +271,22 @@ const handleSubmitFeedback = ({
   CoreAPI.createSubmission({
     kappSlug: kapp.slug,
     formSlug: FEEDBACK_FORM_SLUG,
-    values: values || {
-      Experience: experience,
-      ...(appointment
-        ? {
-            'Appointment Id': appointment.id,
-            'Scheduler Id': appointment.schedulerId,
-            'Event Type': appointment.eventType,
-            'Event Date': appointment.eventDate,
-          }
-        : {}),
-    },
+    values: values
+      ? {
+          ...values,
+          'Scheduler Id': techBarId,
+        }
+      : {
+          Experience: experience,
+          'Scheduler Id': techBarId,
+          ...(appointment
+            ? {
+                'Appointment Id': appointment.id,
+                'Event Type': appointment.eventType,
+                'Event Date': appointment.eventDate,
+              }
+            : {}),
+        },
     completed: true,
   }).then(({ submission, errors, serverError }) => {
     if (serverError || errors) {

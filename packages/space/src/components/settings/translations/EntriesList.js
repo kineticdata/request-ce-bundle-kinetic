@@ -228,6 +228,32 @@ const EditModal = ({
                 </div>
               </div>
             )}
+            {entryToEdit.property !== 'key' &&
+              entryToEdit.inheritanceEntry !== null && (
+                <div className="col-12">
+                  <div className="alert alert-info">
+                    <div className="row">
+                      <div className="col-12 mb-2">
+                        <strong>Inherited from:</strong>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="form-group mb-0">
+                          <label>Context</label>
+                          <span>{entryToEdit.inheritanceEntry.context}</span>
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="form-group mb-0">
+                          <label>Locale</label>
+                          <Badge color="secondary">
+                            {entryToEdit.inheritanceEntry.locale}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
           </div>
         </div>
       )}
@@ -769,7 +795,7 @@ const renderUsageCell = () => ({ value, row, index }) => (
 );
 
 const renderTranslationCell = () => ({ value, row, index }) => (
-  <td>{row.createdAt ? value : <em>{value}</em>}</td>
+  <td>{row.inheritanceEntry === null ? value : <em>{value}</em>}</td>
 );
 
 const renderTranslationFooterCell = ({
