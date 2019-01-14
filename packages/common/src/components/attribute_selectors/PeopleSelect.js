@@ -171,16 +171,20 @@ export class PeopleSelect extends React.Component {
     return (
       this.state.options && (
         <Typeahead
-          multiple
+          multiple={this.props.multiple !== false}
           allowNew={this.props.emails}
           options={this.state.options}
           renderMenu={this.state.renderMenu}
           renderToken={renderToken}
-          selected={getSelected(
-            this.props.value,
-            this.props.valueMapper,
-            this.state.options,
-          )}
+          selected={
+            typeof this.props.value !== 'undefined'
+              ? getSelected(
+                  this.props.value,
+                  this.props.valueMapper,
+                  this.state.options,
+                )
+              : undefined
+          }
           onChange={this.handleChange}
           placeholder={this.props.placeholder}
         />

@@ -8,6 +8,7 @@ import {
 import { Alert } from '../../../src/components/notifications/Alert';
 import { Confirm } from '../../../src/components/notifications/Confirm';
 import { SchedulerWidget } from '../../../src/components/scheduler/SchedulerWidget';
+import { PeopleSelect } from '../../../src/components/attribute_selectors/PeopleSelect';
 
 // Ensure the bundle global object exists
 const bundle = typeof window.bundle !== 'undefined' ? window.bundle : {};
@@ -306,3 +307,49 @@ bundle.helpers.schedulerWidget = (div, props = {}, form, fieldMap = {}) => {
     );
   }
 };
+
+/**
+ * Renders a PeopleSelect into the given container.
+ *
+ * @param options {
+ *    container:        DOM Element *required*
+ *        Element into which the PeopleSelect should be rendered.
+ *
+ *    multiple:         boolean [Default: true]
+ *        If true, PeopleSelect will allow multiple users to be sleected.
+ *
+ *    onChange:         Function *required*
+ *        Function that is called when the value of the PeopleSelect changes.
+ *        Passed a user object if multiple=false.
+ *        Passed a list of user objects if multiple=true.
+ * }
+ */
+bundle.helpers.peopleSelect = (options = {}) => {
+  if (options.container) {
+    const multiple = options.multiple !== false;
+    renderIntoDom(
+      <PeopleSelect
+        multiple={multiple}
+        users={true}
+        valueMapper={value => value.user}
+        onChange={
+          typeof options.onChange === 'function'
+            ? e =>
+                options.onChange(multiple ? e.target.value : e.target.value[0])
+            : undefined
+        }
+      />,
+      options.container,
+    );
+  } else {
+    console.warn('bundle.helpers.peopleSelect must pass container as an option');
+  }
+};
+/**
+ * Removes the people select from a given container.
+ *
+ * @param container:        DOM Element *required*
+ *    Element from which the PeopleSelect should be removed.
+ */
+bundle.helpers.peopleSelect.remove = container =>
+  ReactDOM.unmountComponentAtNode(container);
