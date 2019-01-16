@@ -89,8 +89,33 @@ export const selectMyTeamForms = state =>
       : true;
   });
 
-export const selectAssignments = state =>
-  state.queue.queueApp.allTeams
+export const selectAssignments = (allTeams, form, queueItem) => {
+  // Filter out any teams without members
+  const filteredTeams = allTeams.filter(t => t.memberships.length > 0);
+  const disallowReassignment =
+    !!form &&
+    !!queueItem &&
+    ['No', 'False'].includes(
+      Utils.getAttributeValue(form, 'Allow Reassignment', 'Yes'),
+    );
+  const assignableTeams = form
+    ? Utils.getAttributeValues(form, 'Assignable Teams', [])
+    : [];
+
+  const availableTeams =
+    queueItem && disallowReassignment
+      ? // If queue item exists and doesn't allow reassignment,
+        // only allow reassignment to users in current Assigned Team
+        filteredTeams.filter(t => t.name === queueItem.values['Assigned Team'])
+      : // Otherwise see if form defines which teams it can be assigned to
+        assignableTeams.length > 0
+        ? // If Assignable Teams attribute isn't empty,
+          //only allow reassignment to the listed fields
+          filteredTeams.filter(t => assignableTeams.includes(t.name))
+        : // Otherwise allow reassignment to any team
+          filteredTeams;
+
+  return availableTeams
     .flatMap(t =>
       t.memberships.map(m => {
         const user = m.user;
@@ -99,12 +124,13 @@ export const selectAssignments = state =>
       }),
     )
     .concat(
-      state.queue.queueApp.allTeams.map(t => ({
+      availableTeams.map(t => ({
         username: null,
         displayName: 'Unassigned',
         team: t.name,
       })),
     );
+};
 
 export const getTeamIcon = team => {
   const iconAttribute = Utils.getAttributeValue(team, 'Icon', 'fa-users');

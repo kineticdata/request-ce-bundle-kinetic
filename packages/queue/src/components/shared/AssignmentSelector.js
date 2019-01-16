@@ -83,6 +83,9 @@ export class AssignmentSelector extends Component {
             {byTeams[t]}
           </div>
         ))}
+        {items.length <= 0 && (
+          <div className="text-center text-info">No valid assignments.</div>
+        )}
       </div>
     );
   }

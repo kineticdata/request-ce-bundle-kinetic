@@ -167,14 +167,21 @@ const getAttr = (form, attrName) => {
   return attrConfig && attrConfig.values[0];
 };
 
-export const mapStateToProps = (state, props) => ({
-  filter: props.filter,
-  queueItem: state.queue.queue.currentItem,
-  assignments: selectAssignments(state).toJS(),
-  prevAndNext: selectPrevAndNext(state, props.filter),
-  kappSlug: state.app.config.kappSlug,
-  discussionsEnabled: selectDiscussionsEnabled(state),
-});
+export const mapStateToProps = (state, props) => {
+  const queueItem = state.queue.queue.currentItem;
+  return {
+    filter: props.filter,
+    queueItem,
+    assignments: selectAssignments(
+      state.queue.queueApp.allTeams,
+      queueItem.form,
+      queueItem,
+    ).toJS(),
+    prevAndNext: selectPrevAndNext(state, props.filter),
+    kappSlug: state.app.config.kappSlug,
+    discussionsEnabled: selectDiscussionsEnabled(state),
+  };
+};
 
 export const mapDispatchToProps = {
   updateQueueItem: actions.updateQueueItem,

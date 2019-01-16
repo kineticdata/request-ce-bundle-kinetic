@@ -11,6 +11,7 @@ export function* fetchFormsSaga(action) {
 
   if (serverError) {
     // TODO: implement system error push.
+    yield put(actions.setForms([]));
   } else {
     yield put(actions.setForms(forms));
   }

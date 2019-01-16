@@ -16,7 +16,7 @@ const mapStateToProps = state => ({
       ),
   isOpen: state.queue.queue.newItemMenuOpen,
   options: state.queue.queue.newItemMenuOptions,
-  assignments: selectAssignments(state).toJS(),
+  allTeams: state.queue.queueApp.allTeams,
   kappSlug: state.app.config.kappSlug,
 });
 
@@ -84,6 +84,7 @@ export const NewItemMenuContainer = compose(
     return {
       assignmentRequired:
         !assignmentType || assignmentType.toLowerCase() !== 'none',
+      assignments: selectAssignments(props.allTeams, props.currentForm).toJS(),
     };
   }),
   withHandlers({
