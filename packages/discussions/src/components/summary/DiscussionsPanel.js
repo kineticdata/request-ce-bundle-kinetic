@@ -78,7 +78,7 @@ export class DiscussionsPanelComponent extends Component {
       </div>
     ) : (
       <div
-        className={`page-panel--discussions--recent ${getDisplayClasses(
+        className={`page-panel--discussions-recent ${getDisplayClasses(
           this.props,
         )}`}
         style={{ margin: this.props.isModal === true ? '1em' : undefined }}

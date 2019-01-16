@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
@@ -11,7 +11,7 @@ export const RequestDiscussionComponent = ({
   closeDiscussion,
   me,
 }) => (
-  <div className="recent-discussions-wrapper kinops-discussions d-none d-md-flex">
+  <Fragment>
     {viewDiscussionModal && isSmallLayout ? (
       <ViewDiscussionsModal
         close={closeDiscussion}
@@ -23,7 +23,7 @@ export const RequestDiscussionComponent = ({
     ) : (
       <DiscussionsPanel itemType="Submission" itemKey={submission.id} me={me} />
     )}
-  </div>
+  </Fragment>
 );
 
 export const mapStateToProps = state => ({

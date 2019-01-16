@@ -3,6 +3,7 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .package-layout--services {
   .nav-return {
+    display: block;
     @include setColorAndHover($blue);
   }
 }

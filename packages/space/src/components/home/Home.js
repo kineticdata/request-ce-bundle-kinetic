@@ -131,7 +131,7 @@ const HomeComponent = ({
         !discussionsError &&
         !discussionsLoading &&
         discussionGroups.size > 0 && (
-          <div className="page-panel--discussions discussions--space-home page-panel--discussions--recent">
+          <div className="page-panel--discussions discussions--space-home page-panel--discussions-recent">
             {discussionGroups
               .map((discussions, dateGroup) => (
                 <div className="discussion__messages" key={dateGroup}>
