@@ -323,6 +323,46 @@ export const FormContainer = ({
               />
             </div>
 
+            {inputs['Allow Reassignment'] && (
+              <div className="form-group">
+                <label>Allow Reassignment</label>
+                <select
+                  value={
+                    inputs['Allow Reassignment'] === 'No' ||
+                    inputs['Allow Reassignment'] === 'False'
+                      ? 'No'
+                      : 'Yes'
+                  }
+                  onChange={event =>
+                    setInputs({
+                      ...inputs,
+                      'Allow Reassignment': event.target.value,
+                    })
+                  }
+                  className="form-control col-8"
+                >
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            )}
+
+            {inputs['Assignable Teams'] && (
+              <div className="form-group">
+                <label>Assignable Teams</label>
+                <Select
+                  selected={inputs['Assignable Teams']}
+                  name="Assignable Teams"
+                  type="teams"
+                  data={teams}
+                  setInputs={setInputs}
+                  inputs={inputs}
+                  className="col-8"
+                  multiple="true"
+                />
+              </div>
+            )}
+
             <div className="form-group">
               <label>Notification Template Name - Complete</label>
               <Select
@@ -390,6 +430,7 @@ export const FormContainer = ({
 
 export const setInitialInputs = ({ setInputs, form }) => () => {
   const config = buildFormConfigurationObject(form);
+  console.log(form.attributesMap);
   setInputs({
     description: form.description,
     type: form.type,
@@ -406,6 +447,14 @@ export const setInitialInputs = ({ setInputs, form }) => () => {
       : '',
     'Owning Team': form.attributesMap['Owning Team']
       ? form.attributesMap['Owning Team']
+      : '',
+    'Allow Reassignment': form.attributesMap['Allow Reassignment']
+      ? form.attributesMap['Allow Reassignment'][0]
+        ? form.attributesMap['Allow Reassignment'][0]
+        : 'Yes'
+      : '',
+    'Assignable Teams': form.attributesMap['Assignable Teams']
+      ? form.attributesMap['Assignable Teams']
       : '',
     'Notification Template Name - Complete': form.attributesMap[
       'Notification Template Name - Complete'

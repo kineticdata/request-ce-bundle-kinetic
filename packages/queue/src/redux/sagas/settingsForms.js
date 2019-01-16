@@ -112,6 +112,12 @@ export function* updateFormSaga(action) {
       'Prohibit Subtasks': currentFormChanges['Prohibit Subtasks']
         ? [currentFormChanges['Prohibit Subtasks']]
         : [],
+      'Allow Reassignment': currentFormChanges['Allow Reassignment']
+        ? [currentFormChanges['Allow Reassignment']]
+        : [],
+      'Assignable Teams': currentFormChanges['Assignable Teams']
+        ? currentFormChanges['Assignable Teams']
+        : [],
       'Notification Template Name - Create': currentFormChanges[
         'Notification Template Name - Create'
       ]
@@ -143,7 +149,12 @@ export function* updateFormSaga(action) {
     include: FORM_INCLUDES,
   });
   if (!serverError) {
-    yield put(toastActions.addSuccess('Message', 'Title'));
+    yield put(
+      toastActions.addSuccess(
+        'The form was successfully updated.',
+        'Update Successful',
+      ),
+    );
     yield put(
       actions.fetchForm({
         kappSlug: action.payload.kappSlug,
@@ -166,10 +177,8 @@ export function* fetchNotificationsSaga() {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Title', 'Message Error'));
     yield put(actions.setFormsError(serverError));
   } else {
-    yield put(toastActions.addSuccess('Title', 'Message Success'));
     yield put(actions.setNotifications(submissions));
   }
 }
