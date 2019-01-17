@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-
 import { actions } from '../../redux/modules/errors';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const defaultTitle = {
   success: 'Success',
@@ -16,9 +16,9 @@ const Notification = ({ notification, dismiss }) => (
   <div className={`notification ${notification.type}`}>
     <div className="message">
       <div className="headline-copy">
-        {notification.title || defaultTitle[notification.type]}
+        <I18n>{notification.title || defaultTitle[notification.type]}</I18n>
       </div>
-      {notification.msg}
+      <I18n>{notification.msg}</I18n>
     </div>
     <div className="actions">
       <button className="btn btn-link" onClick={dismiss}>

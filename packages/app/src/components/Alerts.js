@@ -51,8 +51,15 @@ export const Alerts = ({
                 <I18n>{alert.values.Title}</I18n>
               </Link>
             </h1>
-
-            <p dangerouslySetInnerHTML={{ __html: alert.values.Content }} />
+            <I18n
+              render={translate => (
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: translate(alert.values.Content),
+                  }}
+                />
+              )}
+            />
             <span className="meta">{alert.values.CreatedAt}</span>
           </li>
         ))}

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { compose, withHandlers } from 'recompose';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -30,31 +31,42 @@ const AlertFormComponent = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">home</Link> / <Link to="/alerts">alerts</Link> /
+            <Link to="/">
+              <I18n>home</I18n>
+            </Link>{' '}
+            /{' '}
+            <Link to="/alerts">
+              <I18n>alerts</I18n>
+            </Link>{' '}
+            /
           </h3>
-          <h1>{editing ? 'Edit' : 'New'} Alert</h1>
+          <h1>
+            <I18n>{editing ? 'Edit' : 'New'} Alert</I18n>
+          </h1>
         </div>
       </div>
-      {editing ? (
-        <div>
-          <CoreForm
-            submission={submissionId}
-            globals={globals}
-            updated={handleCreateOrUpdate}
-          />
-        </div>
-      ) : (
-        <div>
-          <CoreForm
-            kapp={alertsKappSlug}
-            form={alertsFormSlug}
-            globals={globals}
-            created={handleCreateOrUpdate}
-            updated={handleCreateOrUpdate}
-            values={values}
-          />
-        </div>
-      )}
+      <I18n context={`kapps.${alertsKappSlug}.forms.${alertsFormSlug}`}>
+        {editing ? (
+          <div>
+            <CoreForm
+              submission={submissionId}
+              globals={globals}
+              updated={handleCreateOrUpdate}
+            />
+          </div>
+        ) : (
+          <div>
+            <CoreForm
+              kapp={alertsKappSlug}
+              form={alertsFormSlug}
+              globals={globals}
+              created={handleCreateOrUpdate}
+              updated={handleCreateOrUpdate}
+              values={values}
+            />
+          </div>
+        )}
+      </I18n>
     </div>
   </div>
 );

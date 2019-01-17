@@ -2,15 +2,16 @@ import React from 'react';
 import { Utils } from 'common';
 import { Link, NavLink } from 'react-router-dom';
 import { getTeamColor } from '../utils';
+import { I18n } from '../../../app/src/I18nProvider';
 
 export const Sidebar = ({ kapps, teams, isSpaceAdmin, openSettings }) => (
   <div className="sidebar space-sidebar">
     <div className="sidebar-group--content-wrapper">
       <div className="sidebar-group sidebar-group--my-teams">
         <h1>
-          My Teams
+          <I18n>My Teams</I18n>
           <Link to="/teams" className="view-all">
-            All Teams
+            <I18n>All Teams</I18n>
           </Link>
         </h1>
 
@@ -18,13 +19,13 @@ export const Sidebar = ({ kapps, teams, isSpaceAdmin, openSettings }) => (
           <ul className="nav flex-column">
             <li className="nav-item">
               <Link to="/teams" className="nav-link">
-                Join a team
+                <I18n>Join a team</I18n>
               </Link>
             </li>
             {isSpaceAdmin && (
               <li className="nav-item">
                 <Link to="/teams/new" className="nav-link">
-                  Create a team
+                  <I18n>Create a team</I18n>
                 </Link>
               </li>
             )}
@@ -47,7 +48,7 @@ export const Sidebar = ({ kapps, teams, isSpaceAdmin, openSettings }) => (
                       'fa-group',
                     )} fa-fw card-icon`}
                   />
-                  {`${team.name}`}
+                  <I18n>{`${team.name}`}</I18n>
                 </NavLink>
               </li>
             ))}
@@ -61,7 +62,7 @@ export const Sidebar = ({ kapps, teams, isSpaceAdmin, openSettings }) => (
           onClick={openSettings}
           className="nav-link"
         >
-          Settings
+          <I18n>Settings</I18n>
           <span className="fa fa-fw fa-angle-right" />
         </Link>
       </ul>

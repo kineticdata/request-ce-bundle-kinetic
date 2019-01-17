@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Utils, PageTitle } from 'common';
 import { bundle } from 'react-kinetic-core';
 import { Discussion as KinopsDiscussion } from 'discussions';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const buildRelatedItem = issue => {
   const tagList = issue.tag_list;
@@ -54,7 +55,7 @@ const buildRelatedItemLink = (relatedItem, profile) => {
   return (
     link && (
       <a className="btn btn-inverse btn-sm related-link ml-3" href={link}>
-        {label}
+        <I18n>{label}</I18n>
       </a>
     )
   );
@@ -69,7 +70,10 @@ export const DiscussionComponent = ({
   <div className="discussion-wrapper">
     <PageTitle parts={[discussionName, 'Discussions']} />
     <div className="subheader">
-      <Link to={'/'}>home</Link> / {discussionName}
+      <Link to={'/'}>
+        <I18n>home</I18n>
+      </Link>{' '}
+      / {discussionName}
       {relatedItem && buildRelatedItemLink(relatedItem, profile)}
     </div>
     {discussionId ? (
@@ -77,13 +81,15 @@ export const DiscussionComponent = ({
         discussionId={discussionId}
         renderClose={() => (
           <Link to={`/`} className="btn btn-link">
-            Close
+            <I18n>Close</I18n>
           </Link>
         )}
       />
     ) : (
       <div className="empty-discussion">
-        <h6>No discussion to display</h6>
+        <h6>
+          <I18n>No discussion to display</I18n>
+        </h6>
       </div>
     )}
   </div>
