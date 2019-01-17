@@ -14,6 +14,7 @@ import { CreateDiscussionModal } from './CreateDiscussionModal';
 import { Discussion } from './Discussion';
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 import { bundle } from 'react-kinetic-core';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const HomeComponent = ({
   spaceName,
@@ -38,20 +39,25 @@ const HomeComponent = ({
     <PageTitle parts={['Home']} />
     <CreateDiscussionModal />
     <div className="page-panel page-panel--space-home">
-      <h4 className="space-home-title">Welcome to kinops for {spaceName}</h4>
+      <h4 className="space-home-title">
+        <I18n>Welcome to kinops for</I18n> {spaceName}
+      </h4>
       {discussionsEnabled ? (
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
               <Link onClick={handleHomeLinkClick} to="/">
-                home
+                <I18n>home</I18n>
               </Link>{' '}
-              / {discussionsSearchTerm !== '' ? `search results` : ''}
+              /{' '}
+              {discussionsSearchTerm !== '' ? <I18n>search results</I18n> : ''}
             </h3>
             <h1>
-              {discussionsSearchTerm !== ''
-                ? `${discussionsSearchTerm}`
-                : 'Recent Discussions'}
+              {discussionsSearchTerm !== '' ? (
+                `${discussionsSearchTerm}`
+              ) : (
+                <I18n>Recent Discussions</I18n>
+              )}
             </h1>
           </div>
           <div className="search-form--discussion">
@@ -61,12 +67,16 @@ const HomeComponent = ({
                 className="search-box__form"
               >
                 <div className="input-group">
-                  <input
-                    type="text"
-                    placeholder="Search discussions"
-                    onChange={handleDiscussionSearchInputChange}
-                    className="form-control"
-                    value={discussionsSearchInputValue}
+                  <I18n
+                    render={translate => (
+                      <input
+                        type="text"
+                        placeholder={translate('Search discussions')}
+                        onChange={handleDiscussionSearchInputChange}
+                        className="form-control"
+                        value={discussionsSearchInputValue}
+                      />
+                    )}
                   />
                   <div className="input-group-append">
                     <button className="btn" type="submit">
@@ -80,16 +90,21 @@ const HomeComponent = ({
               onClick={handleCreateDiscussionButtonClick}
               className="btn btn-secondary"
             >
-              New Discussion
+              <I18n>New Discussion</I18n>
             </button>
           </div>
         </div>
       ) : (
         <div className="empty-state empty-state--wally">
-          <h5>Woops...</h5>
+          <h5>
+            <I18n>Woops...</I18n>
+          </h5>
           <img src={wallyMissingImage} alt="Missing Wally" />
           <h6>
-            Looks like this space does not have a Discussion Server configured!
+            <I18n>
+              Looks like this space does not have a Discussion Server
+              configured!
+            </I18n>
           </h6>
         </div>
       )}
@@ -121,7 +136,7 @@ const HomeComponent = ({
                   className="btn btn-primary"
                   onClick={handleLoadMoreButtonClick}
                 >
-                  Load More
+                  <I18n>Load More</I18n>
                 </button>
               </div>
             )}
@@ -131,9 +146,13 @@ const HomeComponent = ({
         !discussionsLoading &&
         discussionGroups.size === 0 && (
           <div className="empty-state empty-state--wally">
-            <h5>No discussions found</h5>
+            <h5>
+              <I18n>No discussions found</I18n>
+            </h5>
             <img src={wallyMissingImage} alt="Missing Wally" />
-            <h6>You are not involved in any discussions!</h6>
+            <h6>
+              <I18n>You are not involved in any discussions!</I18n>
+            </h6>
           </div>
         )}
     </div>

@@ -1,10 +1,9 @@
 import React from 'react';
 import { compose, withState, withHandlers } from 'recompose';
 import { Link } from 'react-router-dom';
-
 import { getTeamColor, getTeamIcon } from '../../utils';
-
 import { Avatar } from 'common';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const TeamCardComponent = props => {
   const { team, showMembers, toggleShowMembers } = props;
@@ -20,22 +19,26 @@ const TeamCardComponent = props => {
       </div>
       <div className="card--team__body">
         <h1>{name}</h1>
-        <pre className="text-truncate">{description}</pre>
+        <pre className="text-truncate">
+          <I18n>{description}</I18n>
+        </pre>
 
         {slug && (
           <Link to={`/teams/${slug}`} className="btn btn-primary btn-sm">
-            View Team
+            <I18n>View Team</I18n>
           </Link>
         )}
         {memberships && memberships.length > 0 ? (
           <p className="members-toggle" onClick={toggleShowMembers}>
-            {showMembers ? 'Less' : 'More'}
+            <I18n>{showMembers ? 'Less' : 'More'}</I18n>
             <span
               className={`fa fa-fw fa-chevron-${showMembers ? 'up' : 'down'}`}
             />
           </p>
         ) : (
-          <p>No members</p>
+          <p>
+            <I18n>No members</I18n>
+          </p>
         )}
       </div>
       {memberships && memberships.length > 0 && showMembers ? (
@@ -57,7 +60,9 @@ export const TeamCard = compose(
 
 const Members = ({ members }) => (
   <div className="card--team__footer">
-    <h1>Members</h1>
+    <h1>
+      <I18n>Members</I18n>
+    </h1>
     <div className="card--team__footer__members">
       {(members || []).map(member => {
         return (

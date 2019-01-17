@@ -2,10 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { List } from 'immutable';
 import { MessagesGroup } from 'discussions';
-
 import { getTeamColor } from '../../utils';
-
 import { Avatar } from 'common';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const getTeamHeaderStyle = (discussion, teams) => {
   const teamSlug = discussion.tag_list.find(t => t === 'META:TYPE:Team')
@@ -47,7 +46,7 @@ const RelatedItemBadge = ({ discussion }) => {
           className="btn btn-inverse btn-sm"
           to={`/kapps/queue/submissions/${id}`}
         >
-          View Task
+          <I18n>View Task</I18n>
         </Link>
       );
     // Removed to differeniate between task and team discussions

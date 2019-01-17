@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalFooter } from 'reactstrap';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
-
 import { actions } from '../../redux/modules/spaceApp';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const CreateDiscussionModalComponent = ({
   fieldValues,
@@ -16,9 +16,11 @@ const CreateDiscussionModalComponent = ({
     <div className="modal-header">
       <h4 className="modal-title">
         <button onClick={handleToggle} type="button" className="btn btn-link">
-          Close
+          <I18n>Close</I18n>
         </button>
-        <span>New Discussion</span>
+        <span>
+          <I18n>New Discussion</I18n>
+        </span>
       </h4>
     </div>
     <div className="modal-body">
@@ -26,33 +28,55 @@ const CreateDiscussionModalComponent = ({
         <form>
           <div className="discussions-input-container">
             <div className="form-group required">
-              <label className="field-label">Name</label>
-              <input
-                name="title"
-                type="text"
-                onChange={handleFieldChange}
-                value={fieldValues.title}
-                placeholder="Name of the discussion"
+              <label className="field-label">
+                <I18n>Name</I18n>
+              </label>
+              <I18n
+                render={translate => (
+                  <input
+                    name="title"
+                    type="text"
+                    onChange={handleFieldChange}
+                    value={fieldValues.title}
+                    placeholder={translate('Name of the discussion')}
+                  />
+                )}
               />
             </div>
           </div>
           <div className="form-group">
-            <label className="field-label">Description</label>
-            <textarea
-              name="description"
-              value={fieldValues.description}
-              onChange={handleFieldChange}
-              placeholder="Description for easier searching"
+            <label className="field-label">
+              <I18n>Description</I18n>
+            </label>
+            <I18n
+              render={translate => (
+                <textarea
+                  name="description"
+                  value={fieldValues.description}
+                  onChange={handleFieldChange}
+                  placeholder={translate('Description for easier searching')}
+                />
+              )}
             />
           </div>
-          <h1 className="section__title">Invite Members</h1>
+          <h1 className="section__title">
+            <I18n>Invite Members</I18n>
+          </h1>
           <div className="form-group">
-            <label className="field-label">Invite member(s) </label>
-            <textarea
-              name="members"
-              value={fieldValues.members}
-              onChange={handleFieldChange}
-              placeholder="Comma separated list of email addresses"
+            <label className="field-label">
+              <I18n>Invite member(s)</I18n>{' '}
+            </label>
+            <I18n
+              render={translate => (
+                <textarea
+                  name="members"
+                  value={fieldValues.members}
+                  onChange={handleFieldChange}
+                  placeholder={translate(
+                    'Comma separated list of email addresses',
+                  )}
+                />
+              )}
             />
           </div>
         </form>
@@ -65,7 +89,7 @@ const CreateDiscussionModalComponent = ({
         disabled={fieldValues.title === ''}
         onClick={handleSubmit}
       >
-        Create Discussion
+        <I18n>Create Discussion</I18n>
       </button>
     </ModalFooter>
   </Modal>

@@ -6,11 +6,14 @@ import { Link } from 'react-router-dom';
 import { FormCard } from './FormCard';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions as spaceFormActions } from '../../redux/modules/spaceForms';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const WallyEmptyMessage = () => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>No Forms To Display</h5>
+      <h5>
+        <I18n>No Forms To Display</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
     </div>
   );
@@ -24,9 +27,18 @@ export const FormListComponent = ({ forms, loading, kapp }) =>
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /
             </h3>
-            <h1>{`${kapp.name} Forms`}</h1>
+            <h1>
+              <I18n
+                render={translate => {
+                  `${translate(kapp.name)} ${translate('Forms')}`;
+                }}
+              />
+            </h1>
           </div>
         </div>
         {forms.length > 0 ? (

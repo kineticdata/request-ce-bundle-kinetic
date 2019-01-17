@@ -6,7 +6,7 @@ import { types, actions } from '../modules/spaceForms';
 export function* fetchFormsSaga(action) {
   const { forms, serverError } = yield call(CoreAPI.fetchForms, {
     kappSlug: action.payload,
-    include: 'attributes',
+    include: 'attributes,kapp',
   });
 
   if (serverError) {
