@@ -22,31 +22,31 @@ const SendMessageModalComponent = props => {
           </button>
           <span>{title}</span>
         </h4>
-        <div className="modal-body">
-          <div className="modal-form">
-            <textarea
-              className="form-control"
-              type="textarea"
-              placeholder={placeholder}
-              value={props.comment}
-              onChange={e => props.setComment(e.target.value)}
-            />
-            <br />
-            <p className="text-center">
-              Once submitted, the fulfillment team will be in touch shortly!
-            </p>
-          </div>
-        </div>
-        <ModalFooter>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={props.submit}
-          >
-            Continue
-          </button>
-        </ModalFooter>
       </div>
+      <div className="modal-body">
+        <div className="modal-form">
+          <textarea
+            className="form-control"
+            type="textarea"
+            placeholder={placeholder}
+            value={props.comment}
+            onChange={e => props.setComment(e.target.value)}
+          />
+          <br />
+          <p className="text-center">
+            Once submitted, the fulfillment team will be in touch shortly!
+          </p>
+        </div>
+      </div>
+      <ModalFooter>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={props.submit}
+        >
+          Continue
+        </button>
+      </ModalFooter>
     </Modal>
   );
 };
