@@ -2,10 +2,10 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
-import { ViewDiscussionsModal, DiscussionsPanel } from 'discussions';
+import { ViewDiscussionsModal, Discussion } from 'discussions';
 
 export const RequestDiscussionComponent = ({
-  submission,
+  discussion,
   viewDiscussionModal,
   isSmallLayout,
   closeDiscussion,
@@ -15,13 +15,13 @@ export const RequestDiscussionComponent = ({
     {viewDiscussionModal && isSmallLayout ? (
       <ViewDiscussionsModal
         close={closeDiscussion}
-        itemType="Submission"
-        itemKey={submission.id}
-        me={me}
+        discussionId={discussion.id}
         modalBodyClassName="services-submission-discussion"
       />
     ) : (
-      <DiscussionsPanel itemType="Submission" itemKey={submission.id} me={me} />
+      <div className="page-panel page-panel--two-fifths page-panel--scrollable page-panel--discussions d-none d-md-flex">
+        <Discussion id={discussion.id} />
+      </div>
     )}
   </Fragment>
 );

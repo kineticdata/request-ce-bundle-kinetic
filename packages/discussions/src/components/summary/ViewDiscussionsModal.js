@@ -1,9 +1,11 @@
 import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import { DiscussionsPanel } from './DiscussionsPanel';
+import { Discussion } from '../Discussion';
 
 export const ViewDiscussionsModal = ({
   close,
+  discussionId,
   itemKey,
   itemType,
   me,
@@ -16,18 +18,22 @@ export const ViewDiscussionsModal = ({
         <button type="button" className="btn btn-link" onClick={close}>
           Close
         </button>
-        <span>View Discussions</span>
+        <span>{discussionId ? 'View Discussion' : 'View Discussions'}</span>
         <span />
       </h4>
     </div>
     <ModalBody className={modalBodyClassName}>
-      <DiscussionsPanel
-        itemKey={itemKey}
-        itemType={itemType}
-        me={me}
-        isModal
-        creationParams={creationParams}
-      />
+      {discussionId ? (
+        <Discussion id={discussionId} />
+      ) : (
+        <DiscussionsPanel
+          itemKey={itemKey}
+          itemType={itemType}
+          me={me}
+          isModal
+          creationParams={creationParams}
+        />
+      )}
     </ModalBody>
   </Modal>
 );

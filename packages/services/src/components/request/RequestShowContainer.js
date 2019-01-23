@@ -13,7 +13,7 @@ export const mapStateToProps = (state, props) => ({
   submission: state.services.submission.data,
   listType: props.match.params.type,
   mode: props.match.params.mode,
-  hasDiscussion: state.services.submission.discussion !== null,
+  discussion: state.services.submission.discussion,
   sendMessageModalOpen: state.services.submission.isSendMessageModalOpen,
 });
 

@@ -141,7 +141,7 @@ export const RequestShow = ({
   mode,
   sendMessageModalOpen,
   viewDiscussionModal,
-  hasDiscussion,
+  discussion,
   openDiscussion,
   closeDiscussion,
 }) => (
@@ -150,7 +150,7 @@ export const RequestShow = ({
       className={classNames(
         'page-panel page-panel--services-submission page-panel--scrollable',
         {
-          'page-panel--three-fifths page-panel--no-padding ': hasDiscussion,
+          'page-panel--three-fifths page-panel--no-padding ': discussion,
         },
       )}
     >
@@ -185,7 +185,7 @@ export const RequestShow = ({
                   />
                   <CloneButtonContainer submission={submission} />
                   {submission.coreState === constants.CORE_STATE_SUBMITTED &&
-                    !hasDiscussion && (
+                    !discussion && (
                       <CommentButtonContainer submission={submission} />
                     )}
                   {submission.coreState === constants.CORE_STATE_CLOSED && (
@@ -259,9 +259,9 @@ export const RequestShow = ({
         )}
       </div>
     </div>
-    {hasDiscussion && (
+    {discussion && (
       <RequestDiscussion
-        submission={submission}
+        discussion={discussion}
         viewDiscussionModal={viewDiscussionModal}
         closeDiscussion={closeDiscussion}
       />
