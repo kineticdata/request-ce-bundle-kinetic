@@ -3,6 +3,7 @@ import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { KappLink as Link, PageTitle } from 'common';
 import { RequestCard } from '../shared/RequestCard';
 import { getSubmissionPath } from '../../utils';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const emptyStateMessage = type => {
   switch (type) {
@@ -38,11 +39,20 @@ export const RequestList = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">services</Link> /{' '}
-            {type && <Link to="/requests">requests</Link>}
+            <Link to="/">
+              <I18n>services</I18n>
+            </Link>{' '}
+            /{' '}
+            {type && (
+              <Link to="/requests">
+                <I18n>requests</I18n>
+              </Link>
+            )}
             {type && ' / '}
           </h3>
-          <h1>{type || 'All Requests'}</h1>
+          <h1>
+            <I18n>{type || 'All Requests'}</I18n>
+          </h1>
         </div>
         <div className="btn-group">
           <button
@@ -80,9 +90,13 @@ export const RequestList = ({
             .map(props => <RequestCard {...props} />)
         ) : (
           <div className="empty-state empty-state--wally">
-            <h5>No {type !== 'All' ? type : ''} Requests Found...</h5>
+            <h5>
+              <I18n>No {type !== 'All' ? type : ''} Requests Found...</I18n>
+            </h5>
             <img src={wallyHappyImage} alt="Happy Wally" />
-            <h6>{emptyStateMessage(type)}</h6>
+            <h6>
+              <I18n>{emptyStateMessage(type)}</I18n>
+            </h6>
           </div>
         )}
       </div>

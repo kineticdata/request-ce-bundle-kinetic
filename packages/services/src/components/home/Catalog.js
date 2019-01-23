@@ -5,6 +5,7 @@ import { CategoryCard } from '../shared/CategoryCard';
 import { ServiceCard } from '../shared/ServiceCard';
 import { RequestCard } from '../shared/RequestCard';
 import { getSubmissionPath } from '../../utils';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const Catalog = ({
   kapp,
@@ -19,7 +20,9 @@ export const Catalog = ({
       <PageTitle parts={[]} />
       <div className="search-services-home">
         <div className="search-services-home__wrapper">
-          <h1 className="text-truncate">Welcome, how can we help?</h1>
+          <h1 className="text-truncate">
+            <I18n>Welcome, how can we help?</I18n>
+          </h1>
           <div className="search-box">
             <CatalogSearchContainer />
           </div>
@@ -29,10 +32,16 @@ export const Catalog = ({
         <div className="page-panel page-panel--transparent page-panel--one-thirds page-panel--auto-height page-panel--my-requests">
           <div className="page-title">
             <div className="page-title__wrapper">
-              <h3 className="text-lowercase">{kapp.name} /</h3>
-              <h1>Recent Requests</h1>
+              <h3 className="text-lowercase">
+                <I18n>{kapp.name}</I18n> /
+              </h3>
+              <h1>
+                <I18n>Recent Requests</I18n>
+              </h1>
             </div>
-            <Link to="/requests">View All</Link>
+            <Link to="/requests">
+              <I18n>View All</I18n>
+            </Link>
           </div>
 
           <div className="cards__wrapper cards__wrapper--requests">
@@ -49,8 +58,12 @@ export const Catalog = ({
                 .map(props => <RequestCard {...props} />)
             ) : (
               <div className="card card--empty-state">
-                <h1>You have no requests yet.</h1>
-                <p>As you request new services, they’ll appear here.</p>
+                <h1>
+                  <I18n>You have no requests yet.</I18n>
+                </h1>
+                <p>
+                  <I18n>As you request new services, they’ll appear here.</I18n>
+                </p>
               </div>
             )}
           </div>
@@ -58,8 +71,12 @@ export const Catalog = ({
         <div className="page-panel page-panel--transparent page-panel--two-thirds page-panel--services">
           <div className="page-title">
             <div className="page-title__wrapper">
-              <h3 className="text-lowercase">{kapp.name} /</h3>
-              <h1>{homePageMode}</h1>
+              <h3 className="text-lowercase">
+                <I18n>{kapp.name}</I18n> /
+              </h3>
+              <h1>
+                <I18n>{homePageMode}</I18n>
+              </h1>
             </div>
           </div>
           <div className="cards__wrapper cards__wrapper--categories">

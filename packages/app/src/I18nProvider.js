@@ -189,9 +189,9 @@ export class I18nTranslate extends React.Component {
 const translate = ({ context, locale, translations }) => key => {
   trackKeys(context, key);
   /* Uncomment to wrap translated text for easily seeing what's wrapped. */
-  return `*${translations.getIn([locale, context, key]) ||
-    translations.getIn([locale, 'shared', key]) ||
-    key}*`;
+  // return `*${translations.getIn([locale, context, key]) ||
+  //   translations.getIn([locale, 'shared', key]) ||
+  //   key}*`;
   /* End */
   return (
     translations.getIn([locale, context, key]) ||
