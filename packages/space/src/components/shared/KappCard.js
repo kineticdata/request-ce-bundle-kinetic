@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Utils } from 'common';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const KappCard = ({
   kapp,
@@ -14,8 +15,14 @@ export const KappCard = ({
   <Link className="kapp-card" to={`/kapps/${kapp.slug}`}>
     <h1>
       <Icon image={icon} />
-      {kapp.name}
+      <I18n>{kapp.name}</I18n>
     </h1>
-    {description !== '' ? <p>{description}</p> : ''}
+    {description !== '' ? (
+      <p>
+        <I18n>{description}</I18n>
+      </p>
+    ) : (
+      ''
+    )}
   </Link>
 );

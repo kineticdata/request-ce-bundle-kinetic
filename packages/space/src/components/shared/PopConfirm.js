@@ -1,5 +1,6 @@
 import React from 'react';
 import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const PopConfirm = props => (
   <Popover
@@ -8,7 +9,9 @@ export const PopConfirm = props => (
     target={props.target}
     toggle={props.toggle}
   >
-    <PopoverHeader>{props.title}</PopoverHeader>
+    <PopoverHeader>
+      <I18n>{props.title}</I18n>
+    </PopoverHeader>
     <PopoverBody>{props.children}</PopoverBody>
   </Popover>
 );

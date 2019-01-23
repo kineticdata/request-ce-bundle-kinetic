@@ -8,9 +8,9 @@ import {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
 } from 'common';
-
 import { NOTIFICATIONS_FORM_SLUG } from '../../redux/modules/settingsNotifications';
 import { ROBOT_DEFINITIONS_FORM_SLUG } from '../../redux/modules/settingsRobots';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const SidebarComponent = ({
   settingsBackPath,
@@ -25,7 +25,7 @@ export const SidebarComponent = ({
   <div className="sidebar space-sidebar">
     <Link to={settingsBackPath} className="nav-return">
       <span className="fa fa-fw fa-chevron-left" />
-      Return to Home
+      <I18n>Return to Home</I18n>
     </Link>
     <div className="sidebar-group--content-wrapper">
       {!loading && (
@@ -36,7 +36,7 @@ export const SidebarComponent = ({
               className="nav-link"
               activeClassName="active"
             >
-              Profile
+              <I18n>Profile</I18n>
               <span className="fa fa-fw fa-angle-right" />
             </NavLink>
             {spaceAdmin && (
@@ -45,7 +45,7 @@ export const SidebarComponent = ({
                 className="nav-link"
                 activeClassName="active"
               >
-                System
+                <I18n>System</I18n>
                 <span className="fa fa-fw fa-angle-right" />
               </NavLink>
             )}
@@ -55,7 +55,7 @@ export const SidebarComponent = ({
                 className="nav-link"
                 activeClassName="active"
               >
-                Datastore
+                <I18n>Datastore</I18n>
                 <span className="fa fa-fw fa-angle-right" />
               </NavLink>
             )}
@@ -65,7 +65,7 @@ export const SidebarComponent = ({
                 className="nav-link"
                 activeClassName="active"
               >
-                Notifications
+                <I18n>Notifications</I18n>
                 <span className="fa fa-fw fa-angle-right" />
               </NavLink>
             )}
@@ -75,7 +75,7 @@ export const SidebarComponent = ({
                 className="nav-link"
                 activeClassName="active"
               >
-                Robots
+                <I18n>Robots</I18n>
                 <span className="fa fa-fw fa-angle-right" />
               </NavLink>
             )}
@@ -85,7 +85,7 @@ export const SidebarComponent = ({
                 className="nav-link"
                 activeClassName="active"
               >
-                Users
+                <I18n>Users</I18n>
                 <span className="fa fa-fw fa-angle-right" />
               </NavLink>
             )}
@@ -95,7 +95,7 @@ export const SidebarComponent = ({
                 className="nav-link"
                 activeClassName="active"
               >
-                Teams
+                <I18n>Teams</I18n>
                 <span className="fa fa-fw fa-angle-right" />
               </NavLink>
             )}
@@ -105,7 +105,7 @@ export const SidebarComponent = ({
                 className="nav-link"
                 activeClassName="active"
               >
-                Schedulers
+                <I18n>Schedulers</I18n>
                 <span className="fa fa-fw fa-angle-right" />
               </NavLink>
             )}
@@ -115,7 +115,7 @@ export const SidebarComponent = ({
                 className="nav-link"
                 activeClassName="active"
               >
-                Translations
+                <I18n>Translations</I18n>
                 <span className="fa fa-fw fa-angle-right" />
               </NavLink>
             )}
@@ -132,7 +132,7 @@ export const SidebarComponent = ({
               target="blank"
               className="nav-link nav-link--admin"
             >
-              Kinetic Request Admin
+              <I18n>Kinetic Request Admin</I18n>
               <span className="fa fa-fw fa-external-link" />
             </a>
           </li>
@@ -143,7 +143,7 @@ export const SidebarComponent = ({
                 target="blank"
                 className="nav-link nav-link--admin"
               >
-                Kinetic Task Admin
+                <I18n>Kinetic Task Admin</I18n>
                 <span className="fa fa-fw fa-external-link" />
               </a>
             </li>

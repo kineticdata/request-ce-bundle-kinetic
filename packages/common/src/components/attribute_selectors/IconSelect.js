@@ -11,6 +11,7 @@ import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import memoize from 'memoize-one';
 
 import { Cache } from '../../cache';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const IconMenuItem = props => {
   const disabledReason = props.disabledFn && props.disabledFn(props.option);
@@ -25,7 +26,9 @@ export const IconMenuItem = props => {
           <Highlighter search={props.text}>{props.option.label}</Highlighter>
           <div>
             {props.option.paginationOption ? (
-              <small>Narrow your search or load more</small>
+              <small>
+                <I18n>Narrow your search or load more</I18n>
+              </small>
             ) : (
               <i className={`fa ${props.option.icon.id}`} />
             )}
@@ -137,7 +140,9 @@ export class IconSelect extends React.Component {
     return (
       this.state.options && (
         <div className="form-group">
-          <label>{this.props.label}</label>
+          <label>
+            <I18n>{this.props.label}</I18n>
+          </label>
           <div className="input-group">
             {icon && (
               <span className="input-group-addon input-group-prepend">
@@ -146,24 +151,30 @@ export class IconSelect extends React.Component {
                 </span>
               </span>
             )}
-            <Typeahead
-              filterBy={filterByCallback}
-              className={this.props.className}
-              multiple={this.props.multiple}
-              options={this.state.options}
-              renderMenu={this.state.renderMenu}
-              renderToken={renderToken}
-              selected={getSelected(
-                this.props.value,
-                valueMapper,
-                this.state.options,
+            <I18n
+              render={translate => (
+                <Typeahead
+                  filterBy={filterByCallback}
+                  className={this.props.className}
+                  multiple={this.props.multiple}
+                  options={this.state.options}
+                  renderMenu={this.state.renderMenu}
+                  renderToken={renderToken}
+                  selected={getSelected(
+                    this.props.value,
+                    valueMapper,
+                    this.state.options,
+                  )}
+                  onChange={this.handleChange}
+                  placeholder={translate(
+                    this.props.placeholder || 'Select an Icon',
+                  )}
+                />
               )}
-              onChange={this.handleChange}
-              placeholder={this.props.placeholder || 'Select an Icon'}
             />
           </div>
           <small className="form-text text-muted">
-            {this.props.description}
+            <I18n>{this.props.description}</I18n>
           </small>
         </div>
       )

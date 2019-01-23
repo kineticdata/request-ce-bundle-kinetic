@@ -8,8 +8,8 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import moment from 'moment';
-
 import { Constants } from 'common';
+import { I18n } from '../../../../../../app/src/I18nProvider';
 
 const DiscussionIcon = () => (
   <span className="icon">
@@ -51,7 +51,10 @@ const MobileSubmissionCard = ({ submission, columns, path }) => (
                       <DiscussionIcon />
                     ) : (
                       <span>
-                        <strong>{innerColumn.label}:</strong> {innerRowData}
+                        <strong>
+                          <I18n>{innerColumn.label}</I18n>:
+                        </strong>{' '}
+                        {innerRowData}
                       </span>
                     )}
                     <br />
@@ -62,17 +65,17 @@ const MobileSubmissionCard = ({ submission, columns, path }) => (
           </p>
           <div className="btn-group" role="group" aria-label="Actions">
             <Link to={`${path}/${submission.id}`} className="btn btn-primary">
-              View
+              <I18n>View</I18n>
             </Link>
             <Link to={`${path}/${submission.id}/edit`} className="btn btn-info">
-              Edit
+              <I18n>Edit</I18n>
             </Link>
             <button
               type="button"
               onClick={handleClone(submission.id)}
               className="btn btn-success"
             >
-              Clone
+              <I18n>Clone</I18n>
             </button>
             <div className="dropdown-divider" />
             <button
@@ -80,7 +83,7 @@ const MobileSubmissionCard = ({ submission, columns, path }) => (
               onClick={handleDelete(submission.id)}
               className="btn btn-danger"
             >
-              Delete
+              <I18n>Delete</I18n>
             </button>
           </div>
         </div>
@@ -130,20 +133,20 @@ const TableSubmissionRow = ({
         </DropdownToggle>
         <DropdownMenu right>
           <DropdownItem tag={Link} to={`${path}/${submission.id}`}>
-            View
+            <I18n>View</I18n>
           </DropdownItem>
           <DropdownItem tag={Link} to={`${path}/${submission.id}/edit`}>
-            Edit
+            <I18n>Edit</I18n>
           </DropdownItem>
           <DropdownItem onClick={handleClone(submission.id)}>
-            Clone
+            <I18n>Clone</I18n>
           </DropdownItem>
           <DropdownItem divider />
           <DropdownItem
             onClick={handleDelete(submission.id)}
             className="text-danger"
           >
-            Delete
+            <I18n>Delete</I18n>
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>

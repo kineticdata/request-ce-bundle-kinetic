@@ -25,6 +25,7 @@ import { Table, PaginationControl, FilterControl } from 'common';
 import { UnpublishedChanges } from './TranslationsList';
 import md5 from 'md5';
 import { actions } from '../../../redux/modules/settingsTranslations';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const ImportModal = ({
   importOpen,
@@ -37,15 +38,19 @@ const ImportModal = ({
     <div className="modal-header">
       <h4 className="modal-title">
         <button type="button" className="btn btn-link" onClick={toggleImport()}>
-          Cancel
+          <I18n>Cancel</I18n>
         </button>
-        <span>Import Translations</span>
+        <span>
+          <I18n>Import Translations</I18n>
+        </span>
       </h4>
     </div>
     <ModalBody>
       <div className="form p-3">
         <div className="form-group">
-          <label>File to Upload (CSV or JSON)</label>
+          <label>
+            <I18n>File to Upload (CSV or JSON)</I18n>
+          </label>
           <input
             type="text"
             readOnly
@@ -53,7 +58,7 @@ const ImportModal = ({
             className="form-control"
           />
           <label htmlFor="import-file-input" className="btn btn-info">
-            Select File
+            <I18n>Select File</I18n>
             <input
               className="collapse"
               id="import-file-input"
@@ -72,7 +77,7 @@ const ImportModal = ({
         className="btn btn-primary"
         onClick={handleImport}
       >
-        Import
+        <I18n>Import</I18n>
       </button>
     </ModalFooter>
   </Modal>
@@ -91,12 +96,12 @@ const ConfirmDeleteModal = ({
           className="btn btn-link"
           onClick={toggleDelete(null)}
         >
-          Cancel
+          <I18n>Cancel</I18n>
         </button>
         <span>
-          {`Delete Translation${
+          <I18n>{`Delete Translation${
             entryToDelete && entryToDelete.property === 'key' ? ' Key' : ''
-          }`}
+          }`}</I18n>
         </span>
       </h4>
     </div>
@@ -106,7 +111,9 @@ const ConfirmDeleteModal = ({
           <div className="row">
             <div className="col-md-6">
               <div className="form-group">
-                <label>Context</label>
+                <label>
+                  <I18n>Context</I18n>
+                </label>
                 <span>{entryToDelete.context}</span>
               </div>
             </div>
@@ -114,28 +121,34 @@ const ConfirmDeleteModal = ({
               <Fragment>
                 <div className="col-md-6">
                   <div className="form-group">
-                    <label>Locale</label>
+                    <label>
+                      <I18n>Locale</I18n>
+                    </label>
                     <Badge color="secondary">{entryToDelete.locale}</Badge>
                   </div>
                 </div>
                 <div className="col-12">
                   <div className="form-group">
-                    <label>Key</label>
+                    <label>
+                      <I18n>Key</I18n>
+                    </label>
                     <span>{entryToDelete.key}</span>
                   </div>
                 </div>
                 <div className="col-12">
                   <div className="form-group">
-                    <label>Value</label>
+                    <label>
+                      <I18n>Value</I18n>
+                    </label>
                     <span>{entryToDelete.value}</span>
                   </div>
                 </div>
               </Fragment>
             ) : (
               <div className="col-12">
-                Are you sure you want to delete the key{' '}
-                <strong>{entryToDelete.key}</strong> and all of its
-                translations?
+                <I18n>Are you sure you want to delete the key</I18n>{' '}
+                <strong>{entryToDelete.key}</strong>{' '}
+                <I18n>and all of its translations?</I18n>
               </div>
             )}
           </div>
@@ -148,7 +161,7 @@ const ConfirmDeleteModal = ({
         className="btn btn-primary"
         onClick={handleDeleteTranslation}
       >
-        Delete
+        <I18n>Delete</I18n>
       </button>
     </ModalFooter>
   </Modal>
@@ -168,12 +181,12 @@ const EditModal = ({
           className="btn btn-link"
           onClick={toggleEdit(null)}
         >
-          Cancel
+          <I18n>Cancel</I18n>
         </button>
         <span>
-          {`Edit Translation${
+          <I18n>{`Edit Translation${
             entryToEdit && entryToEdit.property === 'key' ? ' Key' : ''
-          }`}
+          }`}</I18n>
         </span>
       </h4>
     </div>
@@ -183,25 +196,33 @@ const EditModal = ({
           <div className="row">
             <div className="col-md-6">
               <div className="form-group">
-                <label>Context</label>
+                <label>
+                  <I18n>Context</I18n>
+                </label>
                 <span>{entryToEdit.context}</span>
               </div>
             </div>
             <div className="col-md-6">
               <div className="form-group">
-                <label>Locale</label>
+                <label>
+                  <I18n>Locale</I18n>
+                </label>
                 <Badge color="secondary">{entryToEdit.locale}</Badge>
               </div>
             </div>
             <div className="col-12">
               {entryToEdit.property !== 'key' ? (
                 <div className="form-group">
-                  <label>Key</label>
+                  <label>
+                    <I18n>Key</I18n>
+                  </label>
                   <span>{entryToEdit.key}</span>
                 </div>
               ) : (
                 <div className="form-group">
-                  <label htmlFor="entry-key-input">Key</label>
+                  <label htmlFor="entry-key-input">
+                    <I18n>Key</I18n>
+                  </label>
                   <textarea
                     name="entry-key-input"
                     id="entry-key-input"
@@ -216,7 +237,9 @@ const EditModal = ({
             {entryToEdit.property !== 'key' && (
               <div className="col-12">
                 <div className="form-group">
-                  <label htmlFor="entry-value-input">Value</label>
+                  <label htmlFor="entry-value-input">
+                    <I18n>Value</I18n>
+                  </label>
                   <textarea
                     name="entry-value-input"
                     id="entry-value-input"
@@ -234,17 +257,23 @@ const EditModal = ({
                   <div className="alert alert-info">
                     <div className="row">
                       <div className="col-12 mb-2">
-                        <strong>Inherited from:</strong>
+                        <strong>
+                          <I18n>Inherited from</I18n>:
+                        </strong>
                       </div>
                       <div className="col-md-6">
                         <div className="form-group mb-0">
-                          <label>Context</label>
+                          <label>
+                            <I18n>Context</I18n>
+                          </label>
                           <span>{entryToEdit.inheritanceEntry.context}</span>
                         </div>
                       </div>
                       <div className="col-md-6">
                         <div className="form-group mb-0">
-                          <label>Locale</label>
+                          <label>
+                            <I18n>Locale</I18n>
+                          </label>
                           <Badge color="secondary">
                             {entryToEdit.inheritanceEntry.locale}
                           </Badge>
@@ -264,7 +293,7 @@ const EditModal = ({
         className="btn btn-primary"
         onClick={handleEditEntry}
       >
-        Save
+        <I18n>Save</I18n>
       </button>
     </ModalFooter>
   </Modal>
@@ -316,9 +345,18 @@ export const EntriesListComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /{` `}
-              <Link to="/settings">settings</Link> /{` `}
-              <Link to="/settings/translations">translations</Link> /{` `}
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings/translations">
+                <I18n>translations</I18n>
+              </Link>{' '}
+              /{` `}
               {keyHash && (
                 <Fragment>
                   <Link to={`/settings/translations/context/${context}`}>
@@ -330,7 +368,10 @@ export const EntriesListComponent = ({
             </h3>
             <h1>
               {keyHash ? currentKey : context || availableLocalesMap[locale]}
-              <small> Translations</small>
+              <small>
+                {' '}
+                <I18n>Translations</I18n>
+              </small>
             </h1>
           </div>
           <div className="page-title__actions">
@@ -350,14 +391,14 @@ export const EntriesListComponent = ({
                   value="export-csv"
                   className="dropdown-item"
                 >
-                  Export Translations
+                  <I18n>Export Translations</I18n>
                 </button>
                 <button
                   onClick={toggleImport(true)}
                   value="import-csv"
                   className="dropdown-item"
                 >
-                  Import Translations
+                  <I18n>Import Translations</I18n>
                 </button>
               </DropdownMenu>
             </ButtonDropdown>
@@ -372,7 +413,9 @@ export const EntriesListComponent = ({
             {!keyHash && (
               <div className="input-group mb-3">
                 <div className="input-group-prepend">
-                  <span className="input-group-text">Locale</span>
+                  <span className="input-group-text">
+                    <I18n>Locale</I18n>
+                  </span>
                 </div>
                 <select
                   name="locale-select"
@@ -387,7 +430,11 @@ export const EntriesListComponent = ({
                     )
                   }
                 >
-                  {context && <option value="">All Locales</option>}
+                  {context && (
+                    <option value="">
+                      <I18n>All Locales</I18n>
+                    </option>
+                  )}
                   {enabledLocales.map((locale, index) => (
                     <option key={`${locale.code}-${index}`} value={locale.code}>
                       {`${availableLocalesMap[locale.code]} | ${locale.code}`}
@@ -401,7 +448,9 @@ export const EntriesListComponent = ({
                 <table className="table table-sm table-striped table--settings">
                   <thead className="header">
                     <tr>
-                      <th scope="col">Key</th>
+                      <th scope="col">
+                        <I18n>Key</I18n>
+                      </th>
                       <th width="1%" />
                     </tr>
                   </thead>

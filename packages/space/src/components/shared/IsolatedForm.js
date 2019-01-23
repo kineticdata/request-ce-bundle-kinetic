@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
-import { I18n } from '../../../../app/src/I18nProvider';
 import { PageTitle } from 'common';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -30,7 +30,9 @@ const IsolatedFormComponent = ({
         {showHeader && (
           <div className="page-title">
             <div className="page-title__wrapper">
-              <h1>{formName}</h1>
+              <h1>
+                <I18n>{formName}</I18n>
+              </h1>
             </div>
           </div>
         )}

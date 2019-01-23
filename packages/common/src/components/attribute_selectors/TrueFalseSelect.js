@@ -1,4 +1,5 @@
 import React from 'react';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const getValue = value => {
   if (value.first()) {
@@ -22,7 +23,9 @@ export class TrueFalseSelect extends React.Component {
   render() {
     return (
       <div className="form-group">
-        <label>{this.props.label}</label>
+        <label>
+          <I18n>{this.props.label}</I18n>
+        </label>
         <div className="form-check form-check-inline">
           <input
             className={this.props.className || 'form-check-input'}
@@ -36,7 +39,7 @@ export class TrueFalseSelect extends React.Component {
             style={{ 'margin-right': '15px' }}
             className="form-check-label"
           >
-            Yes{' '}
+            <I18n>Yes</I18n>
           </label>
 
           <input
@@ -47,9 +50,13 @@ export class TrueFalseSelect extends React.Component {
             checked={!getValue(this.props.value)}
             onChange={this.handleChange}
           />
-          <label className="form-check-label">No</label>
+          <label className="form-check-label">
+            <I18n>No</I18n>
+          </label>
         </div>
-        <small className="form-text text-muted">{this.props.description}</small>
+        <small className="form-text text-muted">
+          <I18n>{this.props.description}</I18n>
+        </small>
       </div>
     );
   }

@@ -13,6 +13,7 @@ import memoize from 'memoize-one';
 import { CoreAPI } from 'react-kinetic-core';
 
 import { Cache } from '../../cache';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const TeamMenuItem = props => {
   const disabledReason = props.disabledFn && props.disabledFn(props.option);
@@ -247,22 +248,27 @@ export class ApproverSelect extends React.Component {
     return (
       this.state.options && (
         <div className="form-group">
-          <label>{this.props.label}</label>
-
-          <Typeahead
-            options={this.state.options}
-            renderMenu={this.state.renderMenu}
-            renderToken={renderToken}
-            selected={getSelected(
-              this.props.value,
-              valueMapper,
-              this.state.options,
+          <label>
+            <I18n>{this.props.label}</I18n>
+          </label>
+          <I18n
+            render={translate => (
+              <Typeahead
+                options={this.state.options}
+                renderMenu={this.state.renderMenu}
+                renderToken={renderToken}
+                selected={getSelected(
+                  this.props.value,
+                  valueMapper,
+                  this.state.options,
+                )}
+                onChange={this.handleChange}
+                placeholder={translate(this.props.placeholder)}
+              />
             )}
-            onChange={this.handleChange}
-            placeholder={this.props.placeholder}
           />
           <small className="form-text text-muted">
-            {this.props.description}
+            <I18n>{this.props.description}</I18n>
           </small>
         </div>
       )

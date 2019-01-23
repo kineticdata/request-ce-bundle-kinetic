@@ -9,6 +9,7 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import { actions } from '../../../redux/modules/settingsNotifications';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const NotificationListItemComponent = ({
   notification,
@@ -41,17 +42,17 @@ const NotificationListItemComponent = ({
           </DropdownToggle>
           <DropdownMenu right>
             <DropdownItem onClick={handlePreview(notification)}>
-              Preview
+              <I18n>Preview</I18n>
             </DropdownItem>
             <DropdownItem onClick={handleClone(notification.id)}>
-              Clone
+              <I18n>Clone</I18n>
             </DropdownItem>
             <DropdownItem divider />
             <DropdownItem
               onClick={handleDelete(notification.id)}
               className="text-danger"
             >
-              Delete
+              <I18n>Delete</I18n>
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>

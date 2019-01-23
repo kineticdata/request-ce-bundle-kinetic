@@ -7,6 +7,7 @@ import { compose, lifecycle, withHandlers } from 'recompose';
 import { Table, PaginationControl, FilterControl } from 'common';
 import md5 from 'md5';
 import { actions } from '../../../redux/modules/settingsTranslations';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const StagedListComponent = ({
   match: {
@@ -28,15 +29,26 @@ export const StagedListComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /{` `}
-              <Link to="/settings">settings</Link> /{` `}
-              <Link to="/settings/translations">translations</Link> /{` `}
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings/translations">
+                <I18n>translations</I18n>
+              </Link>{' '}
+              /{` `}
             </h3>
-            <h1>Publish Translations</h1>
+            <h1>
+              <I18n>Publish Translations</I18n>
+            </h1>
           </div>
           <div className="page-title__actions">
             <button className="btn btn-primary" onClick={handlePublish}>
-              Publish
+              <I18n>Publish</I18n>
             </button>
           </div>
         </div>

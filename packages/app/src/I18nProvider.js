@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { bundle } from 'react-kinetic-core';
-import { Map } from 'immutable';
+import { Map, Set } from 'immutable';
 import isarray from 'isarray';
 import semver from 'semver';
 const MINIMUM_CE_VERSION = '2.3.0';
@@ -165,22 +165,18 @@ export class I18nTranslate extends React.Component {
   }
 
   render() {
-    const highlight = false;
     if (
       this.props.translations.hasIn([this.props.locale, this.props.context])
     ) {
       if (typeof this.props.render === 'function') {
-        return wrap(this.props.render(translate(this.props)), highlight);
+        return this.props.render(translate(this.props));
       } else if (typeof this.props.children === 'string') {
-        return wrap(translate(this.props)(this.props.children), highlight);
+        return translate(this.props)(this.props.children);
       } else if (
         isarray(this.props.children) &&
         this.props.children.every(c => typeof c === 'string')
       ) {
-        return wrap(
-          translate(this.props)(this.props.children.join('')),
-          highlight,
-        );
+        return translate(this.props)(this.props.children.join(''));
       } else {
         return this.props.children;
       }
@@ -190,17 +186,27 @@ export class I18nTranslate extends React.Component {
   }
 }
 
-const translate = ({ context, locale, translations }) => key =>
-  translations.getIn([locale, context, key]) ||
-  translations.getIn([locale, 'shared', key]) ||
-  key;
-
-const wrap = (content, highlight) =>
-  highlight ? (
-    <span style={{ backgroundColor: 'rgba(256,256,0,0.5)' }}>{content}</span>
-  ) : (
-    content
+const translate = ({ context, locale, translations }) => key => {
+  trackKeys(context, key);
+  /* Uncomment to wrap translated text for easily seeing what's wrapped. */
+  return `*${translations.getIn([locale, context, key]) ||
+    translations.getIn([locale, 'shared', key]) ||
+    key}*`;
+  /* End */
+  return (
+    translations.getIn([locale, context, key]) ||
+    translations.getIn([locale, 'shared', key]) ||
+    key
   );
+};
+
+let trackedKeys = Map();
+const trackKeys = (context, key) => {
+  trackedKeys = trackedKeys.has(key)
+    ? trackedKeys.set(key, trackedKeys.get(key).add(context))
+    : trackedKeys.set(key, Set([context]));
+  window.bundle.config.translationKeys = trackedKeys.toJS();
+};
 
 const I18nDisabled = ({ render, children }) => {
   if (typeof render === 'function') {

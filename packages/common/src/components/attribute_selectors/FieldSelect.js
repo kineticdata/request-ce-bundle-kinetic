@@ -7,6 +7,7 @@ import {
   MenuItem,
 } from 'react-bootstrap-typeahead';
 import { Set } from 'immutable';
+import { I18n } from '../../../../app/src/I18nProvider';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 
@@ -140,18 +141,28 @@ export class FieldSelect extends React.Component {
     return (
       this.state.options && (
         <div className="form-group">
-          {this.props.label && <label>{this.props.label}</label>}
-          <Typeahead
-            className={this.props.className}
-            options={this.state.options}
-            renderMenu={renderMenu}
-            renderToken={renderToken}
-            selected={getSelected(this.props.value, this.state.options)}
-            onChange={this.handleChange}
-            placeholder={this.props.placeholder || 'Select a Field'}
+          {this.props.label && (
+            <label>
+              <I18n>{this.props.label}</I18n>
+            </label>
+          )}
+          <I18n
+            render={translate => (
+              <Typeahead
+                className={this.props.className}
+                options={this.state.options}
+                renderMenu={renderMenu}
+                renderToken={renderToken}
+                selected={getSelected(this.props.value, this.state.options)}
+                onChange={this.handleChange}
+                placeholder={translate(
+                  this.props.placeholder || 'Select a Field',
+                )}
+              />
+            )}
           />
           <small className="form-text text-muted">
-            {this.props.description}
+            <I18n>{this.props.description}</I18n>
           </small>
         </div>
       )

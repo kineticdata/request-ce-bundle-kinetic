@@ -17,6 +17,7 @@ import { Searchbar } from './Searchbar';
 import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
 import { DatastoreModal } from '../DatastoreModal';
+import { I18n } from '../../../../../../app/src/I18nProvider';
 
 const SubmissionSearchComponent = ({
   form,
@@ -26,7 +27,7 @@ const SubmissionSearchComponent = ({
   optionsOpen,
   setOptionsOpen,
 }) => (
-  <Fragment>
+  <I18n context={`datastore.forms.${form.slug}`}>
     {!loading ? (
       <div className="page-container page-container--datastore">
         <PageTitle parts={['Search', form.name, 'Datastore']} />
@@ -34,18 +35,29 @@ const SubmissionSearchComponent = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to="/">home</Link> /{` `}
-                <Link to="/settings">settings</Link> /{` `}
-                <Link to={`/settings/datastore/`}>datastore</Link> /{` `}
+                <Link to="/">
+                  <I18n>home</I18n>
+                </Link>{' '}
+                /{` `}
+                <Link to="/settings">
+                  <I18n>settings</I18n>
+                </Link>{' '}
+                /{` `}
+                <Link to={`/settings/datastore/`}>
+                  <I18n>datastore</I18n>
+                </Link>{' '}
+                /{` `}
               </h3>
-              <h1>{form.name}</h1>
+              <h1>
+                <I18n>{form.name}</I18n>
+              </h1>
             </div>
             <div className="page-title__actions">
               <Link
                 to={`/settings/datastore/${form.slug}/new`}
                 className="btn btn-primary"
               >
-                New Record
+                <I18n>New Record</I18n>
               </Link>
               <ButtonDropdown
                 isOpen={optionsOpen}
@@ -63,21 +75,21 @@ const SubmissionSearchComponent = ({
                     value="export"
                     className="dropdown-item"
                   >
-                    Export Records
+                    <I18n>Export Records</I18n>
                   </button>
                   <button
                     onClick={() => openModal('import')}
                     value="import"
                     className="dropdown-item"
                   >
-                    Import Records
+                    <I18n>Import Records</I18n>
                   </button>
                   {form.canManage && (
                     <Link
                       to={`/settings/datastore/${form.slug}/settings`}
                       className="dropdown-item"
                     >
-                      Configure Form
+                      <I18n>Configure Form</I18n>
                     </Link>
                   )}
                 </DropdownMenu>
@@ -91,7 +103,7 @@ const SubmissionSearchComponent = ({
       </div>
     ) : null}
     <DatastoreModal />
-  </Fragment>
+  </I18n>
 );
 
 export const mapStateToProps = state => ({

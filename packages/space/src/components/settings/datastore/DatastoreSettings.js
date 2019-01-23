@@ -10,6 +10,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { List } from 'immutable';
 import { PageTitle } from 'common';
 import { isBlank } from '../../../utils';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 import {
   BridgeQualification,
@@ -49,354 +50,415 @@ const SettingsComponent = ({
   fetchForm,
 }) =>
   !loading && (
-    <div className="page-container page-container--panels page-container--datastore">
-      <PageTitle parts={['Settings', origForm.name, 'Datastore']} />
-      <div className="page-panel page-panel--two-thirds page-panel--scrollable page-panel--datastore-content">
-        <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
-              <Link to="/">home</Link> /{` `}
-              <Link to="/settings">settings</Link> /{` `}
-              <Link to={`/settings/datastore/`}>datastore</Link> /{` `}
-              <Link to={`/settings/datastore/${origForm.slug}/`}>
-                {origForm.name}
-              </Link>
-            </h3>
-            <h1>Configuration</h1>
-          </div>
-
-          <a
-            href={`${bundle.spaceLocation()}/app/#/admin/datastore/form/${
-              origForm.slug
-            }/builder`}
-            className="btn btn-primary"
-            target="blank"
-          >
-            Form Builder <i className="fa fa-fw fa-external-link" />
-          </a>
-        </div>
-        {canManage ? (
-          <div className="datastore-settings">
-            <h3 className="section__title">General Settings</h3>
-            <div className="form settings">
-              <div className="form-row">
-                <div className="col">
-                  <div className="form-group required">
-                    <label htmlFor="name">Datastore Name</label>
-                    <input
-                      id="name"
-                      name="name"
-                      onChange={e => {
-                        handleFormChange('name', e.target.value);
-                        handleBridgeChange('formName', e.target.value);
-                      }}
-                      value={updatedForm.name}
-                      className="form-control"
-                    />
-                  </div>
-                </div>
-                <div className="col">
-                  <div className="form-group required">
-                    <label htmlFor="slug">Datastore Slug</label>
-                    <input
-                      id="slug"
-                      name="slug"
-                      onChange={e => handleFormChange('slug', e.target.value)}
-                      value={updatedForm.slug}
-                      className="form-control"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="name">
-                  Datastore Description <small>(optional)</small>
-                </label>
-                <textarea
-                  id="description"
-                  className="form-control"
-                  onChange={e =>
-                    handleFormChange('description', e.target.value)
-                  }
-                  value={updatedForm.description || ''}
-                  rows="3"
-                  name="description"
-                />
-              </div>
+    <I18n context={`datastore.forms.${origForm.slug}`}>
+      <div className="page-container page-container--panels page-container--datastore">
+        <PageTitle parts={['Settings', origForm.name, 'Datastore']} />
+        <div className="page-panel page-panel--two-thirds page-panel--scrollable page-panel--datastore-content">
+          <div className="page-title">
+            <div className="page-title__wrapper">
+              <h3>
+                <Link to="/">
+                  <I18n>home</I18n>
+                </Link>{' '}
+                /{` `}
+                <Link to="/settings">
+                  <I18n>settings</I18n>
+                </Link>{' '}
+                /{` `}
+                <Link to={`/settings/datastore/`}>
+                  <I18n>datastore</I18n>
+                </Link>{' '}
+                /{` `}
+                <Link to={`/settings/datastore/${origForm.slug}/`}>
+                  <I18n>{origForm.name}</I18n>
+                </Link>
+              </h3>
+              <h1>
+                <I18n>Configuration</I18n>
+              </h1>
             </div>
-            <div className="table-settings">
-              <h3 className="section__title">Table Display Settings</h3>
+
+            <a
+              href={`${bundle.spaceLocation()}/app/#/admin/datastore/form/${
+                origForm.slug
+              }/builder`}
+              className="btn btn-primary"
+              target="blank"
+            >
+              <I18n>Form Builder</I18n>{' '}
+              <i className="fa fa-fw fa-external-link" />
+            </a>
+          </div>
+          {canManage ? (
+            <div className="datastore-settings">
+              <h3 className="section__title">General Settings</h3>
               <div className="form settings">
-                <div className="form-group">
-                  <label htmlFor="default-search-index">
-                    Default Search Index
-                  </label>
-                  <select
-                    id="default-search-index"
-                    name="default-search-index"
-                    onChange={e => {
-                      handleFormChange(
-                        'defaultSearchIndex',
-                        e.target.value
-                          ? {
-                              index: e.target.value,
-                              direction: 'ASC',
-                            }
-                          : null,
-                      );
-                    }}
-                    value={
-                      (updatedForm.defaultSearchIndex &&
-                        updatedForm.defaultSearchIndex.index) ||
-                      ''
-                    }
-                    className="form-control"
-                  >
-                    <option value="">Don't perform default search</option>
-                    <optgroup label="Search by Index:">
-                      {List(origForm.indexDefinitions)
-                        .filter(d => d.status === 'Built')
-                        .map(({ name }) => (
-                          <option value={name} key={name}>
-                            {name.replace(':UNIQUE', '')}
-                          </option>
-                        ))}
-                    </optgroup>
-                  </select>
+                <div className="form-row">
+                  <div className="col">
+                    <div className="form-group required">
+                      <label htmlFor="name">
+                        <I18n>Datastore Name</I18n>
+                      </label>
+                      <input
+                        id="name"
+                        name="name"
+                        onChange={e => {
+                          handleFormChange('name', e.target.value);
+                          handleBridgeChange('formName', e.target.value);
+                        }}
+                        value={updatedForm.name}
+                        className="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div className="form-group required">
+                      <label htmlFor="slug">
+                        <I18n>Datastore Slug</I18n>
+                      </label>
+                      <input
+                        id="slug"
+                        name="slug"
+                        onChange={e => handleFormChange('slug', e.target.value)}
+                        value={updatedForm.slug}
+                        className="form-control"
+                      />
+                    </div>
+                  </div>
                 </div>
-                {updatedForm.defaultSearchIndex && (
+                <div className="form-group">
+                  <label htmlFor="name">
+                    <I18n>Datastore Description</I18n>{' '}
+                    <small>
+                      <I18n>(optional)</I18n>
+                    </small>
+                  </label>
+                  <textarea
+                    id="description"
+                    className="form-control"
+                    onChange={e =>
+                      handleFormChange('description', e.target.value)
+                    }
+                    value={updatedForm.description || ''}
+                    rows="3"
+                    name="description"
+                  />
+                </div>
+              </div>
+              <div className="table-settings">
+                <h3 className="section__title">
+                  <I18n>Table Display Settings</I18n>
+                </h3>
+                <div className="form settings">
                   <div className="form-group">
-                    <label htmlFor="default-search-direction">
-                      Default Search Sort Direction
+                    <label htmlFor="default-search-index">
+                      <I18n>Default Search Index</I18n>
                     </label>
                     <select
-                      id="default-search-direction"
-                      name="default-search-direction"
+                      id="default-search-index"
+                      name="default-search-index"
                       onChange={e => {
                         handleFormChange(
                           'defaultSearchIndex',
                           e.target.value
                             ? {
-                                index: updatedForm.defaultSearchIndex.index,
-                                direction: e.target.value,
+                                index: e.target.value,
+                                direction: 'ASC',
                               }
                             : null,
                         );
                       }}
                       value={
                         (updatedForm.defaultSearchIndex &&
-                          updatedForm.defaultSearchIndex.direction) ||
-                        'ASC'
+                          updatedForm.defaultSearchIndex.index) ||
+                        ''
                       }
                       className="form-control"
                     >
-                      <option value="ASC">Ascending</option>
-                      <option value="DESC">Descending</option>
+                      <option value="">
+                        <I18n>Don't perform default search</I18n>
+                      </option>
+                      <I18n
+                        render={translate => (
+                          <optgroup label={translate('Search by Index:')}>
+                            {List(origForm.indexDefinitions)
+                              .filter(d => d.status === 'Built')
+                              .map(({ name }) => (
+                                <option value={name} key={name}>
+                                  {name.replace(':UNIQUE', '')}
+                                </option>
+                              ))}
+                          </optgroup>
+                        )}
+                      />
                     </select>
                   </div>
-                )}
-                <table className="table table--settings table-draggable">
-                  <thead>
-                    <tr className="header">
-                      <th scope="col">Field</th>
-                      <th scope="col">Visible in Table</th>
-                    </tr>
-                  </thead>
-                  <DragDropContext onDragEnd={handleColumnOrderChange}>
-                    <Droppable droppableId="columns">
-                      {provided => (
-                        <tbody ref={provided.innerRef}>
-                          {updatedForm.columns.map((col, index) => (
-                            <Draggable
-                              key={col.name}
-                              draggableId={col.name}
-                              index={index}
-                            >
-                              {(provided, snapshot) => (
-                                <tr
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  className={`${
-                                    snapshot.isDragging ? 'dragging' : ''
-                                  }`}
-                                >
-                                  <td scope="row">
-                                    {col.type === 'value' ? (
-                                      col.label
-                                    ) : (
-                                      <i>
-                                        {col.label}{' '}
-                                        <small>(system field)</small>
-                                      </i>
-                                    )}
-                                  </td>
-                                  <td>
-                                    <input
-                                      onChange={e =>
-                                        handleColumnChange(
-                                          index,
-                                          'visible',
-                                          e.target.checked,
-                                        )
-                                      }
-                                      type="checkbox"
-                                      checked={col.visible}
-                                    />
-                                  </td>
-                                </tr>
-                              )}
-                            </Draggable>
-                          ))}
-                        </tbody>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
-                </table>
-              </div>
-            </div>
-            <div className="table-settings">
-              <h3 className="section__title">Bridge Configuration</h3>
-              <div className="form settings">
-                <div className="form-group">
-                  <label htmlFor="name">Bridge Name</label>
-                  <select
-                    id="bridgeName"
-                    name="bridgeName"
-                    onChange={e =>
-                      handleBridgeChange('bridgeName', e.target.value)
-                    }
-                    value={updatedForm.bridgeName}
-                    className="form-control"
-                  >
-                    {!origForm.bridgeName && <option />}
-                    {bridges.map(b => (
-                      <option key={b} value={b}>
-                        {b}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {updatedForm.bridgeName && (
-                  <div>
+                  {updatedForm.defaultSearchIndex && (
                     <div className="form-group">
-                      <span>Model & Mapping Name: </span>
-                      <strong>
-                        {updatedForm.bridgeModel.name ||
-                          `Datastore - ${updatedForm.name}`}
-                      </strong>
+                      <label htmlFor="default-search-direction">
+                        <I18n>Default Search Sort Direction</I18n>
+                      </label>
+                      <select
+                        id="default-search-direction"
+                        name="default-search-direction"
+                        onChange={e => {
+                          handleFormChange(
+                            'defaultSearchIndex',
+                            e.target.value
+                              ? {
+                                  index: updatedForm.defaultSearchIndex.index,
+                                  direction: e.target.value,
+                                }
+                              : null,
+                          );
+                        }}
+                        value={
+                          (updatedForm.defaultSearchIndex &&
+                            updatedForm.defaultSearchIndex.direction) ||
+                          'ASC'
+                        }
+                        className="form-control"
+                      >
+                        <option value="ASC">
+                          <I18n>Ascending</I18n>
+                        </option>
+                        <option value="DESC">
+                          <I18n>Descending</I18n>
+                        </option>
+                      </select>
                     </div>
-                    <QualificationTable
-                      updatedForm={updatedForm}
-                      handleBridgeChange={handleBridgeChange}
-                      setNewQualification={setNewQualification}
-                    />
-                    <QualificationModal
-                      updatedForm={updatedForm}
-                      handleBridgeChange={handleBridgeChange}
-                      newQualification={newQualification}
-                      setNewQualification={setNewQualification}
-                    />
-                    <AttributeTable
-                      updatedForm={updatedForm}
-                      editAttribute={editAttribute}
-                      setEditAttribute={setEditAttribute}
-                      newAttribute={newAttribute}
-                      setNewAttribute={setNewAttribute}
-                      handleBridgeChange={handleBridgeChange}
-                      canGenerateAttributes={canGenerateAttributes}
-                      generateAttributes={generateAttributes}
-                    />
-                  </div>
-                )}
+                  )}
+                  <table className="table table--settings table-draggable">
+                    <thead>
+                      <tr className="header">
+                        <th scope="col">
+                          <I18n>Field</I18n>
+                        </th>
+                        <th scope="col">
+                          <I18n>Visible in Table</I18n>
+                        </th>
+                      </tr>
+                    </thead>
+                    <DragDropContext onDragEnd={handleColumnOrderChange}>
+                      <Droppable droppableId="columns">
+                        {provided => (
+                          <tbody ref={provided.innerRef}>
+                            {updatedForm.columns.map((col, index) => (
+                              <Draggable
+                                key={col.name}
+                                draggableId={col.name}
+                                index={index}
+                              >
+                                {(provided, snapshot) => (
+                                  <tr
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    className={`${
+                                      snapshot.isDragging ? 'dragging' : ''
+                                    }`}
+                                  >
+                                    <td scope="row">
+                                      {col.type === 'value' ? (
+                                        <I18n>{col.label}</I18n>
+                                      ) : (
+                                        <i>
+                                          <I18n>{col.label}</I18n>{' '}
+                                          <small>
+                                            <I18n>(system field)</I18n>
+                                          </small>
+                                        </i>
+                                      )}
+                                    </td>
+                                    <td>
+                                      <input
+                                        onChange={e =>
+                                          handleColumnChange(
+                                            index,
+                                            'visible',
+                                            e.target.checked,
+                                          )
+                                        }
+                                        type="checkbox"
+                                        checked={col.visible}
+                                      />
+                                    </td>
+                                  </tr>
+                                )}
+                              </Draggable>
+                            ))}
+                          </tbody>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
+                  </table>
+                </div>
               </div>
-            </div>
-            <div className="form__footer">
-              <div className="form__footer__right">
-                {hasChanged && (
+              <div className="table-settings">
+                <h3 className="section__title">
+                  <I18n>Bridge Configuration</I18n>
+                </h3>
+                <div className="form settings">
+                  <div className="form-group">
+                    <label htmlFor="name">
+                      <I18n>Bridge Name</I18n>
+                    </label>
+                    <select
+                      id="bridgeName"
+                      name="bridgeName"
+                      onChange={e =>
+                        handleBridgeChange('bridgeName', e.target.value)
+                      }
+                      value={updatedForm.bridgeName}
+                      className="form-control"
+                    >
+                      {!origForm.bridgeName && <option />}
+                      {bridges.map(b => (
+                        <option key={b} value={b}>
+                          {b}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  {updatedForm.bridgeName && (
+                    <div>
+                      <div className="form-group">
+                        <span>
+                          <I18n>Model & Mapping Name:</I18n>{' '}
+                        </span>
+                        <strong>
+                          {updatedForm.bridgeModel.name ||
+                            `Datastore - ${updatedForm.name}`}
+                        </strong>
+                      </div>
+                      <QualificationTable
+                        updatedForm={updatedForm}
+                        handleBridgeChange={handleBridgeChange}
+                        setNewQualification={setNewQualification}
+                      />
+                      <QualificationModal
+                        updatedForm={updatedForm}
+                        handleBridgeChange={handleBridgeChange}
+                        newQualification={newQualification}
+                        setNewQualification={setNewQualification}
+                      />
+                      <AttributeTable
+                        updatedForm={updatedForm}
+                        editAttribute={editAttribute}
+                        setEditAttribute={setEditAttribute}
+                        newAttribute={newAttribute}
+                        setNewAttribute={setNewAttribute}
+                        handleBridgeChange={handleBridgeChange}
+                        canGenerateAttributes={canGenerateAttributes}
+                        generateAttributes={generateAttributes}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="form__footer">
+                <div className="form__footer__right">
+                  {hasChanged && (
+                    <button
+                      type="button"
+                      onClick={handleReset()}
+                      className="btn btn-link mr-3"
+                    >
+                      <I18n>Reset</I18n>
+                    </button>
+                  )}
                   <button
                     type="button"
-                    onClick={handleReset()}
-                    className="btn btn-link mr-3"
+                    onClick={handleSave()}
+                    className="btn btn-primary"
+                    disabled={!hasChanged}
                   >
-                    Reset
+                    <I18n>Save Changes</I18n>
                   </button>
-                )}
-                <button
-                  type="button"
-                  onClick={handleSave()}
-                  className="btn btn-primary"
-                  disabled={!hasChanged}
-                >
-                  Save Changes
-                </button>
+                </div>
               </div>
             </div>
-          </div>
-        ) : (
-          <p>You do not have access to configure this datastore.</p>
-        )}
-      </div>
-      <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
-        <h3>Datastore Configuration</h3>
-        <p>
-          To update the datastore form fields, click the Form Builder button,
-          which will open the form builder in a new window. You will need to
-          reload this page after making changes in the form builder.
-        </p>
-        <h4>Table Display Settings</h4>
-        <p>
-          The Display Table Settings section lists all of the fields that exist
-          in this datastore. You may select which fields you'd like to be
-          visible in the table when viewing records.
-        </p>
-      </div>
-      <Modal
-        isOpen={staleFields}
-        toggle={() => setStaleFields(false)}
-        size="lg"
-      >
-        <div className="modal-header">
-          <h4 className="modal-title">
-            <button
-              onClick={() => setStaleFields(false)}
-              type="button"
-              className="btn btn-link"
-            >
-              Cancel
-            </button>
-            <span>Form Has Changed</span>
-          </h4>
-        </div>
-        <div className="modal-body">
-          <div className="modal-form">
+          ) : (
             <p>
-              This datastore's form has been updated. Click reload in order to
-              see the latest fields.
+              <I18n>You do not have access to configure this datastore.</I18n>
             </p>
-            {hasChanged && (
-              <p className="text-danger">
-                <span className="fa fa-exclamation-triangle" />
-                &nbsp; You have unsaved changes that will be lost if you reload
-                now.
-              </p>
-            )}
+          )}
+        </div>
+        <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
+          <h3>
+            <I18n>Datastore Configuration</I18n>
+          </h3>
+          <p>
+            <I18n>
+              To update the datastore form fields, click the Form Builder
+              button, which will open the form builder in a new window. You will
+              need to reload this page after making changes in the form builder.
+            </I18n>
+          </p>
+          <h4>
+            <I18n>Table Display Settings</I18n>
+          </h4>
+          <p>
+            <I18n>
+              The Display Table Settings section lists all of the fields that
+              exist in this datastore. You may select which fields you'd like to
+              be visible in the table when viewing records.
+            </I18n>
+          </p>
+        </div>
+        <Modal
+          isOpen={staleFields}
+          toggle={() => setStaleFields(false)}
+          size="lg"
+        >
+          <div className="modal-header">
+            <h4 className="modal-title">
+              <button
+                onClick={() => setStaleFields(false)}
+                type="button"
+                className="btn btn-link"
+              >
+                <I18n>Cancel</I18n>
+              </button>
+              <span>
+                <I18n>Form Has Changed</I18n>
+              </span>
+            </h4>
           </div>
-        </div>
-        <div className="modal-footer">
-          <button
-            onClick={() => {
-              fetchForm(origForm.slug);
-              setStaleFields(false);
-            }}
-            type="button"
-            className="btn btn-primary"
-          >
-            Reload
-          </button>
-        </div>
-      </Modal>
-    </div>
+          <div className="modal-body">
+            <div className="modal-form">
+              <p>
+                <I18n>
+                  This datastore's form has been updated. Click reload in order
+                  to see the latest fields.
+                </I18n>
+              </p>
+              {hasChanged && (
+                <p className="text-danger">
+                  <span className="fa fa-exclamation-triangle" />{' '}
+                  <I18n>
+                    You have unsaved changes that will be lost if you reload
+                    now.
+                  </I18n>
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="modal-footer">
+            <button
+              onClick={() => {
+                fetchForm(origForm.slug);
+                setStaleFields(false);
+              }}
+              type="button"
+              className="btn btn-primary"
+            >
+              <I18n>Reload</I18n>
+            </button>
+          </div>
+        </Modal>
+      </div>
+    </I18n>
   );
 
 const QualificationTable = ({
@@ -407,23 +469,31 @@ const QualificationTable = ({
   <div>
     <div className="table-title">
       <div className="table-title__wrapper">
-        <div>Bridge Qualifications</div>
+        <div>
+          <I18n>Bridge Qualifications</I18n>
+        </div>
       </div>
       <div className="table-title__actions">
         <button
           onClick={() => setNewQualification(BridgeQualification())}
           className="btn btn-primary pull-right"
         >
-          Add Qualification
+          <I18n>Add Qualification</I18n>
         </button>
       </div>
     </div>
     <table className="table table--settings">
       <thead>
         <tr className="header">
-          <th scope="col">Qualification Name</th>
-          <th scope="col">Result Type</th>
-          <th scope="col">Parameters</th>
+          <th scope="col">
+            <I18n>Qualification Name</I18n>
+          </th>
+          <th scope="col">
+            <I18n>Result Type</I18n>
+          </th>
+          <th scope="col">
+            <I18n>Parameters</I18n>
+          </th>
           <th />
         </tr>
       </thead>
@@ -431,8 +501,12 @@ const QualificationTable = ({
         {updatedForm.bridgeModel.qualifications.map((qual, index) => (
           <tr key={qual.name}>
             <td scope="row">{qual.name}</td>
-            <td>{qual.resultType}</td>
-            <td>{qual.parameters.length} Parameters</td>
+            <td>
+              <I18n>{qual.resultType}</I18n>
+            </td>
+            <td>
+              {qual.parameters.length} <I18n>Parameters</I18n>
+            </td>
             <td>
               <div className="btn-group btn-group-sm pull-right">
                 <button
@@ -466,7 +540,7 @@ const QualificationTable = ({
         {updatedForm.bridgeModel.qualifications.size === 0 && (
           <tr>
             <td scope="row" colSpan="4" className="text-center">
-              No qualifications.
+              <I18n>No qualifications.</I18n>
             </td>
           </tr>
         )}
@@ -494,17 +568,21 @@ const QualificationModal = ({
             type="button"
             className="btn btn-link"
           >
-            Cancel
+            <I18n>Cancel</I18n>
           </button>
           <span>
-            {newQualification.index !== null ? 'Edit' : 'Add'} Qualification
+            <I18n>
+              {newQualification.index !== null ? 'Edit' : 'Add'} Qualification
+            </I18n>
           </span>
         </h4>
       </div>
       <div className="modal-body">
         <div className="modal-form">
           <div className="form-group required">
-            <label htmlFor="name">Qualification Name</label>
+            <label htmlFor="name">
+              <I18n>Qualification Name</I18n>
+            </label>
             <input
               id="name"
               name="name"
@@ -523,7 +601,9 @@ const QualificationModal = ({
             />
           </div>
           <div className="form-group required">
-            <label htmlFor="resultType">Result Type</label>
+            <label htmlFor="resultType">
+              <I18n>Result Type</I18n>
+            </label>
             <select
               id="resultType"
               name="resultType"
@@ -535,17 +615,27 @@ const QualificationModal = ({
               value={newQualification.resultType}
               className="form-control"
             >
-              <option value="Multiple">Multiple</option>
-              <option value="Single">Single</option>
+              <option value="Multiple">
+                <I18n>Multiple</I18n>
+              </option>
+              <option value="Single">
+                <I18n>Single</I18n>
+              </option>
             </select>
           </div>
           <div className="form-group">
-            <label>Parameters</label>
+            <label>
+              <I18n>Parameters</I18n>
+            </label>
             <table className="table table--settings">
               <thead>
                 <tr className="header">
-                  <th scope="col">Name</th>
-                  <th scope="col">Notes</th>
+                  <th scope="col">
+                    <I18n>Name</I18n>
+                  </th>
+                  <th scope="col">
+                    <I18n>Notes</I18n>
+                  </th>
                   <th width="1%" />
                 </tr>
               </thead>
@@ -573,7 +663,7 @@ const QualificationModal = ({
                 {newQualification.parameters.length === 0 && (
                   <tr>
                     <td colSpan="3" className="text-center">
-                      No parameters.
+                      <I18n>No parameters.</I18n>
                     </td>
                   </tr>
                 )}
@@ -581,7 +671,9 @@ const QualificationModal = ({
               <tfoot>
                 {newQualification.newParameterError && (
                   <tr className="alert alert-danger" role="alert">
-                    <td colSpan="3">{newQualification.newParameterError}</td>
+                    <td colSpan="3">
+                      <I18n>{newQualification.newParameterError}</I18n>
+                    </td>
                   </tr>
                 )}
                 <tr>
@@ -667,7 +759,7 @@ const QualificationModal = ({
                       }}
                       disabled={isBlank(newQualification.newParameterName)}
                     >
-                      Add
+                      <I18n>Add</I18n>
                     </button>
                   </td>
                 </tr>
@@ -675,7 +767,9 @@ const QualificationModal = ({
             </table>
           </div>
           <div className="form-group">
-            <label htmlFor="name">Query</label>
+            <label htmlFor="name">
+              <I18n>Query</I18n>
+            </label>
             <textarea
               id="query"
               name="query"
@@ -690,7 +784,9 @@ const QualificationModal = ({
             />
           </div>
           {newQualification.error && (
-            <div className="alert alert-danger">{newQualification.error}</div>
+            <div className="alert alert-danger">
+              <I18n>{newQualification.error}</I18n>
+            </div>
           )}
         </div>
         <div className="modal-footer">
@@ -718,7 +814,7 @@ const QualificationModal = ({
             type="button"
             className="btn btn-primary"
           >
-            Save
+            <I18n>Save</I18n>
           </button>
         </div>
       </div>
@@ -738,7 +834,9 @@ const AttributeTable = ({
   <div>
     <div className="table-title">
       <div className="table-title__wrapper">
-        <div>Bridge Attributes</div>
+        <div>
+          <I18n>Bridge Attributes</I18n>
+        </div>
       </div>
       <div className="table-title__actions">
         {canGenerateAttributes() && (
@@ -746,7 +844,7 @@ const AttributeTable = ({
             onClick={() => generateAttributes()}
             className="btn btn-primary pull-right"
           >
-            Generate from Fields
+            <I18n>Generate from Fields</I18n>
           </button>
         )}
       </div>
@@ -754,8 +852,12 @@ const AttributeTable = ({
     <table className="table table--settings">
       <thead>
         <tr className="header">
-          <th scope="col">Attribute Name</th>
-          <th scope="col">Mapping</th>
+          <th scope="col">
+            <I18n>Attribute Name</I18n>
+          </th>
+          <th scope="col">
+            <I18n>Mapping</I18n>
+          </th>
           <th />
         </tr>
       </thead>
@@ -812,7 +914,9 @@ const AttributeTable = ({
                   />
                 ) : (
                   attrMapping.structureField || (
-                    <em className="text-muted">No Mapping</em>
+                    <em className="text-muted">
+                      <I18n>No Mapping</I18n>
+                    </em>
                   )
                 )}
               </td>
@@ -866,7 +970,7 @@ const AttributeTable = ({
         {updatedForm.bridgeModel.attributes.size === 0 && (
           <tr>
             <td scope="row" colSpan="3" className="text-center">
-              No attributes.
+              <I18n>No attributes.</I18n>
             </td>
           </tr>
         )}
@@ -875,7 +979,7 @@ const AttributeTable = ({
         {newAttribute.error && (
           <tr className="alert alert-danger" role="alert">
             <td scope="row" colSpan="3">
-              {newAttribute.error}
+              <I18n>{newAttribute.error}</I18n>
             </td>
           </tr>
         )}
@@ -934,7 +1038,7 @@ const AttributeTable = ({
               }}
               disabled={isBlank(newAttribute.name)}
             >
-              Add
+              <I18n>Add</I18n>
             </button>
           </td>
         </tr>

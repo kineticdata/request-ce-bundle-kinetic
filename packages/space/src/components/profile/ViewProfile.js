@@ -185,20 +185,24 @@ export const mapStateToProps = state => ({
   error: state.space.profiles.error,
   department:
     state.space.profiles.profile &&
+    state.space.profiles.profile.attributes['Department'] &&
     state.space.profiles.profile.attributes['Department'][0],
   departmentEnabled:
     state.space.spaceApp.userAttributeDefinitions['Department'],
   manager:
     state.space.profiles.profile &&
-    state.space.profiles.profile.attributes['Manager'],
-  managerEnabled: state.space.spaceApp.userAttributeDefinitions['Manager'][0],
+    state.space.profiles.profile.attributes['Manager'] &&
+    state.space.profiles.profile.attributes['Manager'][0],
+  managerEnabled: state.space.spaceApp.userAttributeDefinitions['Manager'],
   organization:
     state.space.profiles.profile &&
+    state.space.profiles.profile.attributes['Organization'] &&
     state.space.profiles.profile.attributes['Organization'][0],
   organizationEnabled:
     state.space.spaceApp.userAttributeDefinitions['Organization'],
   site:
     state.space.profiles.profile &&
+    state.space.profiles.profile.attributes['Site'] &&
     state.space.profiles.profile.attributes['Site'][0],
   siteEnabled: state.space.spaceApp.userAttributeDefinitions['Site'],
   isMyProfile: selectIsMyProfile(state),

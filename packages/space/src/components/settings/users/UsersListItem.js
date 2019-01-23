@@ -12,6 +12,7 @@ import {
 
 import { Avatar } from 'common';
 import { actions } from '../../../redux/modules/settingsUsers';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
   return (
@@ -26,11 +27,17 @@ const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
               </strong>
               <p className="card-text">
                 <span>
-                  <strong>Username:</strong> {user.username}
+                  <strong>
+                    <I18n>Username</I18n>:
+                  </strong>{' '}
+                  {user.username}
                 </span>
                 <br />
                 <span>
-                  <strong>Email:</strong> {user.email}
+                  <strong>
+                    <I18n>Email</I18n>:
+                  </strong>{' '}
+                  {user.email}
                 </span>
                 <br />
               </p>
@@ -39,19 +46,19 @@ const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
                   to={`/profile/${user.username}`}
                   className="btn btn-primary"
                 >
-                  View
+                  <I18n>View</I18n>
                 </Link>
                 <Link
                   to={`/settings/users/${user.username}/edit`}
                   className="btn btn-info"
                 >
-                  Edit
+                  <I18n>Edit</I18n>
                 </Link>
                 <Link
                   to={`/settings/users/${user.username}/clone`}
                   className="btn btn-info"
                 >
-                  Clone
+                  <I18n>Clone</I18n>
                 </Link>
               </div>
             </div>
@@ -81,19 +88,19 @@ const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
           </DropdownToggle>
           <DropdownMenu right>
             <DropdownItem tag={Link} to={`/profile/${user.username}`}>
-              View
+              <I18n>View</I18n>
             </DropdownItem>
             <DropdownItem
               tag={Link}
               to={`/settings/users/${user.username}/edit`}
             >
-              Edit
+              <I18n>Edit</I18n>
             </DropdownItem>
             <DropdownItem
               tag={Link}
               to={`/settings/users/${user.username}/clone`}
             >
-              Clone
+              <I18n>Clone</I18n>
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>

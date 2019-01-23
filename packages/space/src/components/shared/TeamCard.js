@@ -18,7 +18,9 @@ const TeamCardComponent = props => {
         <span />
       </div>
       <div className="card--team__body">
-        <h1>{name}</h1>
+        <h1>
+          <I18n>{name}</I18n>
+        </h1>
         <pre className="text-truncate">
           <I18n>{description}</I18n>
         </pre>

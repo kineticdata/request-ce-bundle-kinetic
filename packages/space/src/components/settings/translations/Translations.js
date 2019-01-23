@@ -6,19 +6,32 @@ import { TranslationsList } from './TranslationsList';
 import { EntriesList } from './EntriesList';
 import { StagedList } from './StagedList';
 import { actions } from '../../../redux/modules/settingsTranslations';
+import { I18n } from '../../../../../app/src/I18nProvider';
 import semver from 'semver';
 const MINIMUM_CE_VERSION = '2.3.0';
 
-const TranslationsError = () => <h1>Error loading Translations</h1>;
+const TranslationsError = () => (
+  <h1>
+    <I18n>Error loading Translations</I18n>
+  </h1>
+);
 const TranslationsVersionError = ({ version }) => (
   <div className="page-panel page-panel--scrollable">
     <div className="page-title">
       <div className="page-title__wrapper">
         <h3>
-          <Link to="/">home</Link> /{` `}
-          <Link to="/settings">settings</Link> /{` `}
+          <Link to="/">
+            <I18n>home</I18n>
+          </Link>{' '}
+          /{` `}
+          <Link to="/settings">
+            <I18n>settings</I18n>
+          </Link>{' '}
+          /{` `}
         </h3>
-        <h1>Invalid CE Version</h1>
+        <h1>
+          <I18n>Invalid CE Version</I18n>
+        </h1>
       </div>
     </div>
     <p>

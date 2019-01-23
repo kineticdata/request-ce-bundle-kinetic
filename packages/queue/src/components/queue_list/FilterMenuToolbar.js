@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Popover, PopoverBody, UncontrolledTooltip } from 'reactstrap';
 import { FilterMenuAbstract } from '../filter_menu/FilterMenuAbstract';
 import isarray from 'isarray';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const Menu = props => {
   const toggle = props.toggleShowing(props.name);
@@ -52,7 +53,7 @@ export const Menu = props => {
               onClick={props.apply}
               disabled={!props.dirty || props.validations.length > 0}
             >
-              {props.applyLabel || 'Apply'}
+              <I18n>{props.applyLabel || 'Apply'}</I18n>
             </button>
           </div>
         </PopoverBody>
@@ -132,25 +133,29 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
               {filter.name || 'Adhoc'}
             </h2>
             <div className="queue-filter-list">
-              <Menu
-                name="team"
-                {...popoverProps}
-                renderButton={btnProps =>
-                  filter.teams.isEmpty() ? (
-                    <MenuButton {...btnProps}>
-                      Any Team
-                      <i className="fa fa-fw fa-caret-down" />
-                    </MenuButton>
-                  ) : (
-                    <div className="btn-group">
-                      <MenuButton {...btnProps}>
-                        Team: {props.teamSummary}
-                      </MenuButton>
-                      <ClearButton action={props.clearTeams} />
-                    </div>
-                  )
-                }
-                renderContent={() => props.teamFilters}
+              <I18n
+                render={translate => (
+                  <Menu
+                    name="team"
+                    {...popoverProps}
+                    renderButton={btnProps =>
+                      filter.teams.isEmpty() ? (
+                        <MenuButton {...btnProps}>
+                          {translate('Any Team')}
+                          <i className="fa fa-fw fa-caret-down" />
+                        </MenuButton>
+                      ) : (
+                        <div className="btn-group">
+                          <MenuButton {...btnProps}>
+                            {translate('Team')}: {props.teamSummary}
+                          </MenuButton>
+                          <ClearButton action={props.clearTeams} />
+                        </div>
+                      )
+                    }
+                    renderContent={() => props.teamFilters}
+                  />
+                )}
               />
               <Menu
                 name="assignment"

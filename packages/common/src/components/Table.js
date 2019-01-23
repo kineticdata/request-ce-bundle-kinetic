@@ -167,7 +167,7 @@ const buildTableHeaderCell = ({
           {...(title ? { scope: 'col' } : {})}
           onClick={sortClick}
         >
-          {title}
+          <I18n>{title}</I18n>
         </th>
       )}
     </KeyWrapper>
@@ -621,7 +621,9 @@ export const PaginationControl = ({
           <span className="icon">
             <span className="fa fa-fw fa-caret-left" aria-hidden="true" />
           </span>
-          <span className="sr-only">Previous</span>
+          <span className="sr-only">
+            <I18n>Previous</I18n>
+          </span>
         </a>
       </li>
       {Array(pageCount)
@@ -646,7 +648,9 @@ export const PaginationControl = ({
           <span className="icon">
             <span className="fa fa-fw fa-caret-right" aria-hidden="true" />
           </span>
-          <span className="sr-only">Next</span>
+          <span className="sr-only">
+            <I18n>Next</I18n>
+          </span>
         </a>
       </li>
     </ul>
@@ -656,7 +660,9 @@ export const PaginationControl = ({
 export const FilterControl = ({ filter, handleFilterChange }) => (
   <div className="input-group">
     <div className="input-group-prepend">
-      <span className="input-group-text">Filter:</span>
+      <span className="input-group-text">
+        <I18n>Filter</I18n>:
+      </span>
     </div>
     <input
       type="text"

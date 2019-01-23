@@ -34,9 +34,9 @@ export const FormListComponent = ({ forms, loading, kapp }) =>
             </h3>
             <h1>
               <I18n
-                render={translate => {
-                  `${translate(kapp.name)} ${translate('Forms')}`;
-                }}
+                render={translate =>
+                  `${translate(kapp.name)} ${translate('Forms')}`
+                }
               />
             </h1>
           </div>
