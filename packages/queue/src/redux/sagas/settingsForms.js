@@ -32,6 +32,8 @@ export function* fetchFormSubmissionsSaga(action) {
   const searchBuilder = new CoreAPI.SubmissionSearch().includes([
     'details',
     'values',
+    'form',
+    'form.kapp',
   ]);
   // Add some of the optional parameters to the search
   if (pageToken) searchBuilder.pageToken(pageToken);
@@ -234,7 +236,7 @@ export function* fetchAllSubmissionsSaga(action) {
       searcher.eq(key, q[key]);
     }
   }
-  searcher.include('values');
+  searcher.include('values,form,form.kapp');
   searcher.limit(1000);
   if (pageToken) {
     searcher.pageToken(pageToken);

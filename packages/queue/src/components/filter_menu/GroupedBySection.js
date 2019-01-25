@@ -4,10 +4,13 @@ import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
 import { AttributeSelectors } from 'common';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const GroupedBySection = ({ filter, forms, setGroupedByHandler }) => (
   <ModalBody className="filter-section">
-    <h5>Grouped By</h5>
+    <h5>
+      <I18n>Grouped By</I18n>
+    </h5>
     <label htmlFor="grouped-by">
       <AttributeSelectors.FieldSelect
         forms={forms}

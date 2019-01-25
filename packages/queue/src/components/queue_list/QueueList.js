@@ -8,24 +8,35 @@ import { FilterMenuToolbar } from './FilterMenuToolbar';
 import { FilterMenuMobile } from './FilterMenuMobile';
 import { QueueListPagination } from './QueueListPagination';
 import moment from 'moment';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const WallyEmptyMessage = ({ filter }) => {
   if (filter.type === 'adhoc') {
     return (
       <div className="empty-state empty-state--wally">
-        <h5>No Results</h5>
+        <h5>
+          <I18n>No Results</I18n>
+        </h5>
         <img src={wallyMissingImage} alt="Missing Wally" />
-        <h6>Try a less specific filter.</h6>
-        <h5>Try again</h5>
+        <h6>
+          <I18n>Try a less specific filter.</I18n>
+        </h6>
+        <h5>
+          <I18n>Try again</I18n>
+        </h5>
       </div>
     );
   }
 
   return (
     <div className="empty-state empty-state--wally">
-      <h5>No Assignments</h5>
+      <h5>
+        <I18n>No Assignments</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
-      <h6>An empty queue is a happy queue.</h6>
+      <h6>
+        <I18n>An empty queue is a happy queue.</I18n>
+      </h6>
     </div>
   );
 };
@@ -33,21 +44,33 @@ const WallyEmptyMessage = ({ filter }) => {
 const WallyErrorMessage = ({ message }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>{message === TOO_MANY_STATUS_STRING ? 'Too Many Items' : 'Error'}</h5>
+      <h5>
+        <I18n>
+          {message === TOO_MANY_STATUS_STRING ? 'Too Many Items' : 'Error'}
+        </I18n>
+      </h5>
       <img src={wallyMissingImage} alt="Missing Wally" />
-      <h6>{message}</h6>
-      <h5>Try again</h5>
+      <h6>
+        <I18n>{message}</I18n>
+      </h6>
+      <h5>
+        <I18n>Try again</I18n>
+      </h5>
     </div>
   );
 };
 
 const WallyBadFilter = ({ message }) => (
   <div className="empty-state empty-state--wally">
-    <h5>Invalid List</h5>
+    <h5>
+      <I18n>Invalid List</I18n>
+    </h5>
     <img src={wallyMissingImage} alt="Missing Wally" />
     <h6>
-      {message ||
-        'Invalid list, please choose a valid list from the left side.'}
+      <I18n>
+        {message ||
+          'Invalid list, please choose a valid list from the left side.'}
+      </I18n>
     </h6>
   </div>
 );

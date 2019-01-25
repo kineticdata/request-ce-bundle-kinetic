@@ -5,11 +5,12 @@ import isobject from 'isobject';
 const { namespace, noPayload, withPayload } = Utils;
 
 export const FORMS_INCLUDES = 'details,attributes';
-export const FORM_INCLUDES = 'details,fields,attributesMap,categorizations';
+export const FORM_INCLUDES =
+  'details,fields,attributesMap,categorizations,kapp';
 export const FORM_FULL_INCLUDES =
-  'details,fields,bridgedResources,customHeadContent,pages,securityPolicies,attributesMap,categorizations';
+  'details,fields,bridgedResources,customHeadContent,pages,securityPolicies,attributesMap,categorizations,kapp';
 export const SUBMISSION_INCLUDES =
-  'details,values,form,form.fields,activities,activities.details';
+  'details,values,form,form.kapp,form.fields,activities,activities.details';
 
 // Used to define form configurations
 export const FormConfig = Record({
@@ -52,26 +53,38 @@ export const SUBMISSION_SYSTEM_PROPS = [
 ];
 
 export const types = {
-  FETCH_FORM: namespace('settingsForms', 'FETCH_FORM'),
-  SET_QUEUE_FORM: namespace('settingsForms', 'SET_QUEUE_FORM'),
-  UPDATE_QUEUE_FORM: namespace('settingsForms', 'UPDATE_QUEUE_FORM'),
-  CREATE_FORM: namespace('settingsForms', 'CREATE_FORM'),
-  FETCH_FORM_SUBMISSIONS: namespace('settingsForms', 'FETCH_FORM_SUBMISSIONS'),
-  SET_FORM_SUBMISSIONS: namespace('settingsForms', 'SET_FORM_SUBMISSIONS'),
-  FETCH_FORM_SUBMISSION: namespace('settingsForms', 'FETCH_FORM_SUBMISSION'),
-  SET_FORM_SUBMISSION: namespace('settingsForms', 'SET_FORM_SUBMISSION'),
-  FETCH_KAPP: namespace('settingsForms', 'FETCH_KAPP'),
-  SET_KAPP: namespace('settingsForms', 'SET_KAPP'),
-  SET_FORMS_ERROR: namespace('settingsForms', 'SET_FORMS_ERROR'),
-  FETCH_NOTIFICATIONS: namespace('settingsForms', 'FETCH_NOTIFICATIONS'),
-  SET_NOTIFICATIONS: namespace('settingsForms', 'SET_NOTIFICATIONS'),
-  SET_CLIENT_SORT_INFO: namespace('settingsForms', 'SET_CLIENT_SORT_INFO'),
-  FETCH_ALL_SUBMISSIONS: namespace('settingsForms', 'FETCH_ALL_SUBMISSIONS'),
-  SET_EXPORT_SUBMISSIONS: namespace('settingsForms', 'SET_EXPORT_SUBMISSIONS'),
-  SET_EXPORT_COUNT: namespace('settingsForms', 'SET_EXPORT_COUNT'),
-  OPEN_MODAL: namespace('settingsForms', 'OPEN_MODAL'),
-  CLOSE_MODAL: namespace('settingsForms', 'CLOSE_MODAL'),
-  SET_DOWNLOADED: namespace('settingsForms', 'SET_DOWNLOADED'),
+  FETCH_FORM: namespace('settingsQueueForms', 'FETCH_FORM'),
+  SET_QUEUE_FORM: namespace('settingsQueueForms', 'SET_QUEUE_FORM'),
+  UPDATE_QUEUE_FORM: namespace('settingsQueueForms', 'UPDATE_QUEUE_FORM'),
+  CREATE_FORM: namespace('settingsQueueForms', 'CREATE_FORM'),
+  FETCH_FORM_SUBMISSIONS: namespace(
+    'settingsQueueForms',
+    'FETCH_FORM_SUBMISSIONS',
+  ),
+  SET_FORM_SUBMISSIONS: namespace('settingsQueueForms', 'SET_FORM_SUBMISSIONS'),
+  FETCH_FORM_SUBMISSION: namespace(
+    'settingsQueueForms',
+    'FETCH_FORM_SUBMISSION',
+  ),
+  SET_FORM_SUBMISSION: namespace('settingsQueueForms', 'SET_FORM_SUBMISSION'),
+  FETCH_KAPP: namespace('settingsQueueForms', 'FETCH_KAPP'),
+  SET_KAPP: namespace('settingsQueueForms', 'SET_KAPP'),
+  SET_FORMS_ERROR: namespace('settingsQueueForms', 'SET_FORMS_ERROR'),
+  FETCH_NOTIFICATIONS: namespace('settingsQueueForms', 'FETCH_NOTIFICATIONS'),
+  SET_NOTIFICATIONS: namespace('settingsQueueForms', 'SET_NOTIFICATIONS'),
+  SET_CLIENT_SORT_INFO: namespace('settingsQueueForms', 'SET_CLIENT_SORT_INFO'),
+  FETCH_ALL_SUBMISSIONS: namespace(
+    'settingsQueueForms',
+    'FETCH_ALL_SUBMISSIONS',
+  ),
+  SET_EXPORT_SUBMISSIONS: namespace(
+    'settingsQueueForms',
+    'SET_EXPORT_SUBMISSIONS',
+  ),
+  SET_EXPORT_COUNT: namespace('settingsQueueForms', 'SET_EXPORT_COUNT'),
+  OPEN_MODAL: namespace('settingsQueueForms', 'OPEN_MODAL'),
+  CLOSE_MODAL: namespace('settingsQueueForms', 'CLOSE_MODAL'),
+  SET_DOWNLOADED: namespace('settingsQueueForms', 'SET_DOWNLOADED'),
 };
 
 export const actions = {

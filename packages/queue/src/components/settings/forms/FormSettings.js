@@ -10,6 +10,7 @@ import {
   buildFormConfigurationObject,
 } from '../../../redux/modules/settingsForms';
 import { actions as queueActions } from '../../../redux/modules/settingsQueue';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const TextInput = ({ value, name, setInputs, inputs, className }) => (
   <input
@@ -132,14 +133,27 @@ export const FormContainer = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to={`/kapps/${kappSlug}`}>queue</Link> /{` `}
-              <Link to={`/kapps/${kappSlug}/settings`}>settings</Link> /{` `}
-              <Link to={`/kapps/${kappSlug}/settings/forms`}>forms</Link> /{` `}
+              <Link to={`/kapps/${kappSlug}`}>
+                <I18n>queue</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to={`/kapps/${kappSlug}/settings`}>
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to={`/kapps/${kappSlug}/settings/forms`}>
+                <I18n>forms</I18n>
+              </Link>{' '}
+              /{` `}
               <Link to={`/kapps/${kappSlug}/settings/forms/${form.slug}`}>
-                {form.name}
+                <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
+                  {form.name}
+                </I18n>
               </Link>{' '}
             </h3>
-            <h1>Form Settings</h1>
+            <h1>
+              <I18n>Form Settings</I18n>
+            </h1>
           </div>
           <a
             href={`${bundle.spaceLocation()}/app/#/${kappSlug}/author/form/${
@@ -148,14 +162,19 @@ export const FormContainer = ({
             className="btn btn-primary"
             target="blank"
           >
-            Form Builder <i className="fa fa-fw fa-external-link" />
+            <I18n>Form Builder</I18n>{' '}
+            <i className="fa fa-fw fa-external-link" />
           </a>
         </div>
         <div className="general-settings">
-          <h3 className="section__title">General Settings</h3>
+          <h3 className="section__title">
+            <I18n>General Settings</I18n>
+          </h3>
           <div className="form settings">
             <div className="form-group">
-              <label>Description</label>
+              <label>
+                <I18n>Description</I18n>
+              </label>
               <textarea
                 className="form-control col-12"
                 name="description"
@@ -170,7 +189,9 @@ export const FormContainer = ({
               />
             </div>
             <div className="form-group">
-              <label>Form Type</label>
+              <label>
+                <I18n>Form Type</I18n>
+              </label>
               <select
                 className="form-control col-6"
                 name="type"
@@ -187,7 +208,9 @@ export const FormContainer = ({
               </select>
             </div>
             <div className="form-group">
-              <label>Form Status</label>
+              <label>
+                <I18n>Form Status</I18n>
+              </label>
               <select
                 className="form-control col-6"
                 name="status"
@@ -210,8 +233,12 @@ export const FormContainer = ({
             <table className="table table-datastore table-draggable">
               <thead>
                 <tr className="header">
-                  <th>Field</th>
-                  <th>Visible in Table</th>
+                  <th>
+                    <I18n>Field</I18n>
+                  </th>
+                  <th>
+                    <I18n>Visible in Table</I18n>
+                  </th>
                 </tr>
               </thead>
               {inputs.columns && (
@@ -236,10 +263,13 @@ export const FormContainer = ({
                               >
                                 <td>
                                   {col.type === 'value' ? (
-                                    col.label
+                                    <I18n>{col.label}</I18n>
                                   ) : (
                                     <i>
-                                      {col.label} <small>(system field)</small>
+                                      <I18n>{col.label}</I18n>{' '}
+                                      <small>
+                                        <I18n>(system field)</I18n>
+                                      </small>
                                     </i>
                                   )}
                                 </td>
@@ -269,11 +299,15 @@ export const FormContainer = ({
           </div>
         </div>
         <div className="attribute-settings">
-          <h3 className="section__title">Attributes</h3>
+          <h3 className="section__title">
+            <I18n>Attributes</I18n>
+          </h3>
           <div className="form settings">
             {inputs['Permitted Subtasks'] && (
               <div className="form-group">
-                <label>Permitted Subtasks</label>
+                <label>
+                  <I18n>Permitted Subtasks</I18n>
+                </label>
                 <Select
                   selected={inputs['Permitted Subtasks']}
                   name="Permitted Subtasks"
@@ -288,7 +322,9 @@ export const FormContainer = ({
             )}
             {inputs['Prohibit Subtasks'] && (
               <div className="form-group">
-                <label>Prohibit Subtasks</label>
+                <label>
+                  <I18n>Prohibit Subtasks</I18n>
+                </label>
                 <select
                   value={
                     inputs['Prohibit Subtasks'] === 'Yes' ||
@@ -304,13 +340,19 @@ export const FormContainer = ({
                   }
                   className="form-control col-8"
                 >
-                  <option value="No">No</option>
-                  <option value="Yes">Yes</option>
+                  <option value="No">
+                    <I18n>No</I18n>
+                  </option>
+                  <option value="Yes">
+                    <I18n>Yes</I18n>
+                  </option>
                 </select>
               </div>
             )}
             <div className="form-group">
-              <label>Owning Team</label>
+              <label>
+                <I18n>Owning Team</I18n>
+              </label>
               <Select
                 selected={inputs['Owning Team']}
                 name="Owning Team"
@@ -325,7 +367,9 @@ export const FormContainer = ({
 
             {inputs['Allow Reassignment'] && (
               <div className="form-group">
-                <label>Allow Reassignment</label>
+                <label>
+                  <I18n>Allow Reassignment</I18n>
+                </label>
                 <select
                   value={
                     inputs['Allow Reassignment'] === 'No' ||
@@ -341,15 +385,21 @@ export const FormContainer = ({
                   }
                   className="form-control col-8"
                 >
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
+                  <option value="Yes">
+                    <I18n>Yes</I18n>
+                  </option>
+                  <option value="No">
+                    <I18n>No</I18n>
+                  </option>
                 </select>
               </div>
             )}
 
             {inputs['Assignable Teams'] && (
               <div className="form-group">
-                <label>Assignable Teams</label>
+                <label>
+                  <I18n>Assignable Teams</I18n>
+                </label>
                 <Select
                   selected={inputs['Assignable Teams']}
                   name="Assignable Teams"
@@ -364,7 +414,9 @@ export const FormContainer = ({
             )}
 
             <div className="form-group">
-              <label>Notification Template Name - Complete</label>
+              <label>
+                <I18n>Notification Template Name - Complete</I18n>
+              </label>
               <Select
                 selected={inputs['Notification Template Name - Complete']}
                 name="Notification Template Name - Complete"
@@ -377,7 +429,9 @@ export const FormContainer = ({
             </div>
 
             <div className="form-group">
-              <label>Notification Template Name - Create</label>
+              <label>
+                <I18n>Notification Template Name - Create</I18n>
+              </label>
               <Select
                 selected={inputs['Notification Template Name - Create']}
                 name="Notification Template Name - Create"
@@ -400,29 +454,43 @@ export const FormContainer = ({
                 updateFormSettings(newObj);
               }}
             >
-              Save Changes
+              <I18n>Save Changes</I18n>
             </button>
           </span>
         </div>
       </div>
       <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
-        <h3>Form Settings</h3>
-        <h4>General Settings</h4>
+        <h3>
+          <I18n>Form Settings</I18n>
+        </h3>
+        <h4>
+          <I18n>General Settings</I18n>
+        </h4>
         <p>
-          To update the form fields, click the Form Builder button, which will
-          open the form builder in a new window. You will need to reload this
-          page after making changes in the form builder.
+          <I18n>
+            To update the form fields, click the Form Builder button, which will
+            open the form builder in a new window. You will need to reload this
+            page after making changes in the form builder.
+          </I18n>
         </p>
-        <h4>Table Display Settings</h4>
+        <h4>
+          <I18n>Table Display Settings</I18n>
+        </h4>
         <p>
-          The Display Table Settings section lists all of the fields that exist
-          on this form. You may select which fields you'd like to be visible in
-          the table when viewing records.
+          <I18n>
+            The Display Table Settings section lists all of the fields that
+            exist on this form. You may select which fields you'd like to be
+            visible in the table when viewing records.
+          </I18n>
         </p>
-        <h4>Categories</h4>
+        <h4>
+          <I18n>Categories</I18n>
+        </h4>
         <p>
-          You can update the categories associated with this form by checking
-          them off in the Category Settings area.
+          <I18n>
+            You can update the categories associated with this form by checking
+            them off in the Category Settings area.
+          </I18n>
         </p>
       </div>
     </div>

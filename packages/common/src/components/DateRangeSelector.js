@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { I18n } from '../../../app/src/I18nProvider';
 
 const handleRadioChange = props => event => {
   props.onChange(
@@ -26,7 +27,7 @@ export const DateRangeSelector = props => {
             checked={props.value === ''}
             onChange={handleRadioChange(props)}
           />
-          None
+          <I18n>None</I18n>
         </label>
       )}
       {[7, 14, 30, 60, 90].map(numberOfDays => (
@@ -39,7 +40,7 @@ export const DateRangeSelector = props => {
             checked={props.value === `${numberOfDays}days`}
             onChange={handleRadioChange(props)}
           />
-          Last {numberOfDays} Days
+          <I18n>{`Last ${numberOfDays} Days`}</I18n>
         </label>
       ))}
       <label htmlFor="date-range-custom">
@@ -51,11 +52,13 @@ export const DateRangeSelector = props => {
           checked={isCustom}
           onChange={handleRadioChange(props)}
         />
-        Custom
+        <I18n>Custom</I18n>
       </label>
       {isCustom && (
         <div>
-          <label htmlFor="date-range-custom-start">Start Date*</label>
+          <label htmlFor="date-range-custom-start">
+            <I18n>Start Date</I18n>*
+          </label>
           <input
             type="date"
             id="date-range-custom-start"
@@ -66,7 +69,9 @@ export const DateRangeSelector = props => {
       )}
       {isCustom && (
         <div>
-          <label htmlFor="date-range-custom-end">End Date</label>
+          <label htmlFor="date-range-custom-end">
+            <I18n>End Date</I18n>
+          </label>
           <input
             type="date"
             id="date-range-custom-end"

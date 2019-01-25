@@ -4,6 +4,7 @@ import { compose, withHandlers, withProps, withState } from 'recompose';
 import { actions } from '../../redux/modules/workMenu';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { CoreForm } from 'react-kinetic-core';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
 
@@ -26,21 +27,29 @@ export const WorkMenu = ({
             className="btn btn-link"
             onClick={handleCloseClick}
           >
-            Close
+            <I18n>Close</I18n>
           </button>
-          <span>{mode} It</span>
+          <span>
+            <I18n>{`${mode} It`}</I18n>
+          </span>
           <span />
         </h4>
       </div>
       <ModalBody>
-        <CoreForm
-          globals={globals}
-          submission={queueItem.id}
-          review={queueItem.coreState !== 'Draft'}
-          onLoaded={handleLoaded}
-          onUpdated={handleUpdated}
-          onCompleted={handleCompleted}
-        />
+        <I18n
+          context={`kapps.${queueItem.form.kapp.slug}.forms.${
+            queueItem.form.slug
+          }`}
+        >
+          <CoreForm
+            globals={globals}
+            submission={queueItem.id}
+            review={queueItem.coreState !== 'Draft'}
+            onLoaded={handleLoaded}
+            onUpdated={handleUpdated}
+            onCompleted={handleCompleted}
+          />
+        </I18n>
       </ModalBody>
       {mode === 'Work' &&
         !complete && (
@@ -50,7 +59,14 @@ export const WorkMenu = ({
               className="btn btn-primary"
               onClick={handleSaveClick}
             >
-              Save {queueItem.form.name}
+              <I18n>Save</I18n>{' '}
+              <I18n
+                context={`kapps.${queueItem.form.kapp.slug}.forms.${
+                  queueItem.form.slug
+                }`}
+              >
+                {queueItem.form.name}
+              </I18n>
             </button>
           </ModalFooter>
         )}

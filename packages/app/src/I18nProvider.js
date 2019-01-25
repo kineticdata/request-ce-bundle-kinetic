@@ -3,6 +3,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { bundle } from 'react-kinetic-core';
 import { Map, Set } from 'immutable';
+import { CoreAPI } from 'react-kinetic-core';
 import isarray from 'isarray';
 import semver from 'semver';
 const MINIMUM_CE_VERSION = '2.3.0';
@@ -104,52 +105,126 @@ export const ConnectedI18nProvider = connect(state => ({
   <I18nProvider {...props}>{children}</I18nProvider>
 ));
 
+const submissionContexts = {};
 export class I18n extends React.Component {
+  constructor(props) {
+    super();
+    this.state = {
+      loading: !!props.submissionId,
+      context: props.context,
+    };
+  }
+
+  componentDidMount() {
+    if (this.state.loading) {
+      console.log(
+        'loading i18n',
+        this.props.submissionId,
+        submissionContexts[this.props.submissionId],
+      );
+      // If submissionId is passed in, we need to fetch the submission to build the context
+      if (this.props.submissionId) {
+        // If submission was already fetched, use previous result
+        if (submissionContexts.hasOwnProperty(this.props.submissionId)) {
+          this.setState(state => ({
+            loading: false,
+            context:
+              submissionContexts[this.props.submissionId] || this.state.context,
+          }));
+        } else {
+          // Otherwise fetch the submission
+          CoreAPI.fetchSubmission({
+            id: this.props.submissionId,
+            datastore: !!this.props.datastore,
+            include: 'form,form.kapp',
+          }).then(({ submission }) => {
+            // Build context using submission data
+            const context = submission
+              ? !!this.props.datastore
+                ? `datastore.forms.${submission.form.slug}`
+                : `kapps.${submission.form.kapp.slug}.forms.${
+                    submission.form.slug
+                  }`
+              : null;
+            // Store the context for the submissionId
+            submissionContexts[this.props.submissionId] = context;
+            // Update loading state to false and set correct context
+            this.setState(state => ({
+              loading: false,
+              context: context || this.state.context,
+            }));
+          });
+        }
+      } else {
+        this.setState(state => ({
+          ...state,
+          loading: false,
+        }));
+      }
+    }
+  }
+
   render() {
-    return (
+    return !this.state.loading ? (
       <I18nContext.Consumer>
-        {({ context, locale, translations, loadTranslations, disabled }) =>
-          disabled ? (
-            <I18nDisabled render={this.props.render}>
-              {this.props.children}
-            </I18nDisabled>
-          ) : typeof this.props.render === 'function' ||
-          typeof this.props.children === 'string' ||
-          (isarray(this.props.children) &&
-            this.props.children.every(c => typeof c === 'string')) ? (
-            <I18nTranslate
-              context={this.props.context || context}
-              locale={locale}
-              translations={translations}
-              loadTranslations={loadTranslations}
-              render={this.props.render}
-            >
-              {this.props.children}
-            </I18nTranslate>
-          ) : this.props.context ? (
-            <I18nContext.Provider
-              value={{
-                context: this.props.context,
-                locale: locale,
-                translations: translations,
-                loadTranslations: loadTranslations,
-              }}
-            >
+        {({ context, locale, translations, loadTranslations, disabled }) => {
+          // If Translations are disabled, return noop component
+          if (disabled) {
+            return (
+              <I18nDisabled render={this.props.render}>
+                {this.props.children}
+              </I18nDisabled>
+            );
+          }
+          // If render funtion is passed, or children is a string or array of strings,
+          // return the translation of the children string
+          else if (
+            typeof this.props.render === 'function' ||
+            typeof this.props.children === 'string' ||
+            (isarray(this.props.children) &&
+              this.props.children.every(c => typeof c === 'string'))
+          ) {
+            return (
               <I18nTranslate
-                context={this.props.context}
+                context={this.state.context || context}
                 locale={locale}
                 translations={translations}
                 loadTranslations={loadTranslations}
+                render={this.props.render}
               >
                 {this.props.children}
               </I18nTranslate>
-            </I18nContext.Provider>
-          ) : (
-            this.props.children
-          )
-        }
+            );
+          }
+          // Otherwise wrap children in a new instance of I18nProvider with the new context
+          else if (this.state.context) {
+            return (
+              <I18nContext.Provider
+                value={{
+                  context: this.state.context,
+                  locale: locale,
+                  translations: translations,
+                  loadTranslations: loadTranslations,
+                }}
+              >
+                <I18nTranslate
+                  context={this.state.context}
+                  locale={locale}
+                  translations={translations}
+                  loadTranslations={loadTranslations}
+                >
+                  {this.props.children}
+                </I18nTranslate>
+              </I18nContext.Provider>
+            );
+          }
+          // Otherwise return children
+          else {
+            return this.props.children;
+          }
+        }}
       </I18nContext.Consumer>
-    );
+    ) : null;
   }
 }
 
@@ -188,16 +263,18 @@ export class I18nTranslate extends React.Component {
 
 const translate = ({ context, locale, translations }) => key => {
   trackKeys(context, key);
-  /* Uncomment to wrap translated text for easily seeing what's wrapped. */
-  // return `*${translations.getIn([locale, context, key]) ||
-  //   translations.getIn([locale, 'shared', key]) ||
-  //   key}*`;
-  /* End */
-  return (
-    translations.getIn([locale, context, key]) ||
-    translations.getIn([locale, 'shared', key]) ||
-    key
-  );
+  if (window.highlightTranslations) {
+    // Surround translated text with asterisks to easily see what's wrapped
+    return `*${translations.getIn([locale, context, key]) ||
+      translations.getIn([locale, 'shared', key]) ||
+      key}*`;
+  } else {
+    return (
+      translations.getIn([locale, context, key]) ||
+      translations.getIn([locale, 'shared', key]) ||
+      key
+    );
+  }
 };
 
 let trackedKeys = Map();

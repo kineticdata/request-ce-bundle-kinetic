@@ -11,7 +11,7 @@ export const TOO_MANY_STATUS_STRING =
   'Your filter matches too many items. Try a more specific filter.';
 
 export const SUBMISSION_INCLUDES =
-  'details,values,attributes,form,children,children.details,children.form,children.values,form.attributes,parent,parent.details,parent.values,parent.form,parent.form.kapp';
+  'details,values,attributes,form,form.kapp,children,children.details,children.form,children.values,form.attributes,parent,parent.details,parent.values,parent.form,parent.form.kapp';
 
 export const getAppSettings = state => state.queue.queueApp;
 export const getCurrentItem = state => state.queue.queue.currentItem;
@@ -144,7 +144,7 @@ export const buildSearch = (filter, appSettings) => {
   searcher.end();
 
   return {
-    search: searcher.include('details,form,values').build(),
+    search: searcher.include('details,form,form.kapp,values').build(),
     assignmentContext,
   };
 };
