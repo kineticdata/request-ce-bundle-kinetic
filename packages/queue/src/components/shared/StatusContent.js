@@ -40,6 +40,10 @@ const PrevAndNextGroup = ({ prevAndNext }) => (
   </ButtonGroup>
 );
 
+const sizeString = str => {
+  return str.length > 20 ? `${str.slice(0, 20).trim()}...` : str;
+};
+
 export const StatusContent = ({ queueItem, prevAndNext }) => (
   <Fragment>
     <div
@@ -60,7 +64,7 @@ export const StatusContent = ({ queueItem, prevAndNext }) => (
             target={getStatusId(queueItem)}
             delay={0}
           >
-            {getStatusReason(queueItem)}
+            {sizeString(getStatusReason(queueItem))}
           </UncontrolledTooltip>
         )}
       </span>
