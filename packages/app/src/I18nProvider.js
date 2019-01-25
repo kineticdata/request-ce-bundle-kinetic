@@ -60,14 +60,21 @@ export class I18nProvider extends React.Component {
       this.loading = this.loading.setIn([locale, context], true);
       const url = `${bundle.apiLocation()}/translations/entries?cache&context=${context}&locale=${locale ||
         ''}`;
-      axios.get(url).then(response => {
-        this.setState(state => ({
-          translations: state.translations.setIn(
-            [locale, context],
-            Map(response.data.entries.map(entry => [entry.key, entry.value])),
-          ),
-        }));
-      });
+      axios
+        .get(url)
+        .then(response => {
+          this.setState(state => ({
+            translations: state.translations.setIn(
+              [locale, context],
+              Map(response.data.entries.map(entry => [entry.key, entry.value])),
+            ),
+          }));
+        })
+        .catch(error => {
+          this.setState(state => ({
+            translations: state.translations.setIn([locale, context], Map()),
+          }));
+        });
     }
   };
 
