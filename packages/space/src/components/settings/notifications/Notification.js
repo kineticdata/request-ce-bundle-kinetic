@@ -16,6 +16,12 @@ const fields = {
   Status: {
     required: true,
   },
+  Language: {
+    required: true,
+  },
+  Region: {
+    required: true,
+  },
   Subject: {
     required: values => values.get('Type') === 'Template',
     visible: values => values.get('Type') === 'Template',
@@ -142,6 +148,32 @@ const NotificationComponent = ({
                 />
                 Inactive
               </label>
+            </div>
+            <div className="form-group required">
+              <label className="field-label" htmlFor="language">
+                <I18n>Language</I18n>
+              </label>
+              <input
+                type="text"
+                id="language"
+                name="Language"
+                onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
+                value={values.get('Language')}
+              />
+            </div>
+            <div className="form-group required">
+              <label className="field-label" htmlFor="region">
+                <I18n>Region</I18n>
+              </label>
+              <input
+                type="text"
+                id="region"
+                name="Region"
+                onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
+                value={values.get('Region')}
+              />
             </div>
             {isVisible('Subject', values) && (
               <div className="form-group required">
