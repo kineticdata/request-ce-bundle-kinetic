@@ -4,6 +4,7 @@ import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
 import { DateRangeSelector } from 'common/src/components/DateRangeSelector';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const convertDateRangeValue = dateRange =>
   !dateRange.custom
@@ -18,11 +19,11 @@ export const DateRangeSection = ({
 }) => (
   <ModalBody className="filter-section">
     <h5>
-      Date Range
+      <I18n>Date Range</I18n>
       <br />
       {errors.get('Date Range') && (
         <small className="text-danger text-small">
-          {errors.get('Date Range')}
+          <I18n>{errors.get('Date Range')}</I18n>
         </small>
       )}
     </h5>
@@ -30,9 +31,15 @@ export const DateRangeSection = ({
       value={filter.dateRange.timeline}
       onChange={setDateRangeTimelineHandler}
     >
-      <option value="createdAt">Created At</option>
-      <option value="updatedAt">Updated At</option>
-      <option value="completedAt">Completed At</option>
+      <option value="createdAt">
+        <I18n>Created At</I18n>
+      </option>
+      <option value="updatedAt">
+        <I18n>Updated At</I18n>
+      </option>
+      <option value="completedAt">
+        <I18n>Completed At</I18n>
+      </option>
     </select>
     <DateRangeSelector
       allowNone

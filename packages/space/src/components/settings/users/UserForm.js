@@ -10,6 +10,7 @@ import { actions as usersActions } from '../../../redux/modules/settingsUsers';
 import { actions as teamsActions } from '../../../redux/modules/teamList';
 import { ProfileCard } from 'common';
 import { UsersDropdown } from './DropDown';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const UserFormComponent = ({
   mode,
@@ -39,19 +40,34 @@ export const UserFormComponent = ({
             <div className="page-title">
               <div className="page-title__wrapper">
                 <h3>
-                  <Link to="/">home</Link> /{` `}
-                  <Link to="/settings">settings</Link> /{` `}
-                  <Link to={`/settings/users/`}>users</Link> /{` `}
+                  <Link to="/">
+                    <I18n>home</I18n>
+                  </Link>{' '}
+                  /{` `}
+                  <Link to="/settings">
+                    <I18n>settings</I18n>
+                  </Link>{' '}
+                  /{` `}
+                  <Link to={`/settings/users/`}>
+                    <I18n>users</I18n>
+                  </Link>{' '}
+                  /{` `}
                 </h3>
                 {mode === 'edit' ? (
-                  <h1>Edit: {user.displayName || user.username}</h1>
+                  <h1>
+                    <I18n>Edit</I18n>: {user.displayName || user.username}
+                  </h1>
                 ) : (
-                  <h1>New User</h1>
+                  <h1>
+                    <I18n>New User</I18n>
+                  </h1>
                 )}
               </div>
             </div>
             <div>
-              <h2 className="section__title">General</h2>
+              <h2 className="section__title">
+                <I18n>General</I18n>
+              </h2>
               <form onSubmit={handleSubmit}>
                 <div className="user-admin">
                   <label htmlFor="spaceAdmin">
@@ -61,7 +77,8 @@ export const UserFormComponent = ({
                       name="spaceAdmin"
                       onChange={handleCheckboxChange}
                       checked={fieldValues.spaceAdmin}
-                    />Space Admin
+                    />
+                    <I18n>Space Admin</I18n>
                   </label>
                   <label htmlFor="enabled">
                     <input
@@ -70,12 +87,15 @@ export const UserFormComponent = ({
                       name="enabled"
                       onChange={handleCheckboxChange}
                       checked={fieldValues.enabled}
-                    />Enabled
+                    />
+                    <I18n>Enabled</I18n>
                   </label>
                 </div>
                 {mode !== 'edit' && (
                   <div className="form-group required">
-                    <label htmlFor="username">Username</label>
+                    <label htmlFor="username">
+                      <I18n>Username</I18n>
+                    </label>
                     <input
                       type="text"
                       id="username"
@@ -86,7 +106,9 @@ export const UserFormComponent = ({
                   </div>
                 )}
                 <div className="form-group required">
-                  <label htmlFor="displayName">Display Name</label>
+                  <label htmlFor="displayName">
+                    <I18n>Display Name</I18n>
+                  </label>
                   <input
                     type="text"
                     id="displayName"
@@ -96,7 +118,9 @@ export const UserFormComponent = ({
                   />
                 </div>
                 <div className="form-group required">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="email">
+                    <I18n>Email</I18n>
+                  </label>
                   <input
                     type="text"
                     id="email"
@@ -106,10 +130,14 @@ export const UserFormComponent = ({
                   />
                 </div>
                 <div>
-                  <h2 className="section__title">Profile Attributes</h2>
+                  <h2 className="section__title">
+                    <I18n>Profile Attributes</I18n>
+                  </h2>
                   <div className="user-attributes-wrapper">
                     <div className="form-group">
-                      <label htmlFor="firstName">First Name</label>
+                      <label htmlFor="firstName">
+                        <I18n>First Name</I18n>
+                      </label>
                       <input
                         id="firstName"
                         name="firstName"
@@ -119,7 +147,9 @@ export const UserFormComponent = ({
                       />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="lastName">Last Name</label>
+                      <label htmlFor="lastName">
+                        <I18n>Last Name</I18n>
+                      </label>
                       <input
                         id="lastName"
                         name="lastName"
@@ -129,7 +159,9 @@ export const UserFormComponent = ({
                       />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="phoneNumber">Phone Number</label>
+                      <label htmlFor="phoneNumber">
+                        <I18n>Phone Number</I18n>
+                      </label>
                       <input
                         id="phoneNumber"
                         name="phoneNumber"
@@ -141,10 +173,14 @@ export const UserFormComponent = ({
                   </div>
                 </div>
                 <div>
-                  <h2 className="section__title">User Attributes</h2>
+                  <h2 className="section__title">
+                    <I18n>User Attributes</I18n>
+                  </h2>
                   <div className="user-attributes-wrapper">
                     <div className="form-group">
-                      <label htmlFor="department">Department</label>
+                      <label htmlFor="department">
+                        <I18n>Department</I18n>
+                      </label>
                       <input
                         id="department"
                         name="department"
@@ -154,7 +190,9 @@ export const UserFormComponent = ({
                       />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="manager">Manager</label>
+                      <label htmlFor="manager">
+                        <I18n>Manager</I18n>
+                      </label>
                       <UsersDropdown
                         users={users}
                         initialValue={managerLookup(users, fieldValues.manager)}
@@ -164,7 +202,9 @@ export const UserFormComponent = ({
                       />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="organization">Organization</label>
+                      <label htmlFor="organization">
+                        <I18n>Organization</I18n>
+                      </label>
                       <input
                         id="organization"
                         name="organization"
@@ -174,7 +214,9 @@ export const UserFormComponent = ({
                       />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="site">Site</label>
+                      <label htmlFor="site">
+                        <I18n>Site</I18n>
+                      </label>
                       <input
                         id="site"
                         name="site"
@@ -185,7 +227,9 @@ export const UserFormComponent = ({
                     </div>
                   </div>
                   <div>
-                    <h2 className="section__title">Roles</h2>
+                    <h2 className="section__title">
+                      <I18n>Roles</I18n>
+                    </h2>
                     {roles &&
                       roles.map(role => (
                         <label key={role.slug} htmlFor={role.name}>
@@ -196,12 +240,14 @@ export const UserFormComponent = ({
                             checked={fieldValues.userRoles.includes(role.name)}
                             value={role.name}
                           />
-                          {role.name.replace(/^Role::(.*?)/, '$1')}
+                          <I18n>{role.name.replace(/^Role::(.*?)/, '$1')}</I18n>
                         </label>
                       ))}
                   </div>
                   <div>
-                    <h2 className="section__title">Teams</h2>
+                    <h2 className="section__title">
+                      <I18n>Teams</I18n>
+                    </h2>
                     {teams &&
                       teams.map(team => (
                         <label key={team.slug} htmlFor={team.name}>
@@ -212,7 +258,7 @@ export const UserFormComponent = ({
                             checked={fieldValues.userTeams.includes(team.name)}
                             value={team.name}
                           />
-                          {team.name}
+                          <I18n>{team.name}</I18n>
                         </label>
                       ))}
                   </div>
@@ -223,18 +269,20 @@ export const UserFormComponent = ({
                       className="btn btn-link text-danger"
                       onClick={handleDelete}
                     >
-                      Delete User
+                      <I18n>Delete User</I18n>
                     </button>
                   )}
                   <div className="form__footer__right">
                     <Link to={`/settings/users`} className="btn btn-link mb-0">
-                      Cancel
+                      <I18n>Cancel</I18n>
                     </Link>
                     <button
                       disabled={!fieldValuesValid(fieldValues)}
                       className="btn btn-primary"
                     >
-                      {mode === 'edit' ? 'Save User' : 'Create User'}
+                      <I18n>
+                        {mode === 'edit' ? 'Save User' : 'Create User'}
+                      </I18n>
                     </button>
                   </div>
                 </div>

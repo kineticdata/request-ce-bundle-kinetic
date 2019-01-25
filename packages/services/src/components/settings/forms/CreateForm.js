@@ -5,6 +5,7 @@ import { push } from 'connected-react-router';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { actions } from '../../../redux/modules/settingsForms';
 import { actions as servicesActions } from '../../../redux/modules/settingsServices';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const teamOptions = teams => {
   let optionElements = '<option></option>';
@@ -58,19 +59,35 @@ export const CreateFormComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/kapps/services">services</Link> /{` `}
-              <Link to="/kapps/services/settings">settings</Link> /{` `}
+              <Link to="/kapps/services">
+                <I18n>services</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/kapps/services/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/kapps/services/settings/forms">
+                <I18n>forms</I18n>
+              </Link>{' '}
+              /{` `}
             </h3>
-            <h1>{clone ? 'Clone' : 'New'} Form</h1>
+            <h1>
+              <I18n>{clone ? 'Clone' : 'New'} Form</I18n>
+            </h1>
           </div>
         </div>
 
         <section>
           <form>
             <div className="form-group">
-              <label>{clone ? 'Form' : 'Template'} to Clone</label>
+              <label>
+                <I18n>{clone ? 'Form' : 'Template'} to Clone</I18n>
+              </label>
               {clone ? (
-                form.name
+                <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
+                  {form.name}
+                </I18n>
               ) : (
                 <select
                   className="form-control col-8"
@@ -87,14 +104,18 @@ export const CreateFormComponent = ({
                   <option />
                   {templateForms.map(form => (
                     <option key={form.slug} value={form.slug}>
-                      {form.name}
+                      <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
+                        {form.name}
+                      </I18n>
                     </option>
                   ))}
                 </select>
               )}
             </div>
             <div className="form-group">
-              <label>Name</label>
+              <label>
+                <I18n>Name</I18n>
+              </label>
               <input
                 className="form-control col-8"
                 name="Name"
@@ -121,7 +142,9 @@ export const CreateFormComponent = ({
               />
             </div>
             <div className="form-group">
-              <label>Slug</label>
+              <label>
+                <I18n>Slug</I18n>
+              </label>
               <input
                 className="form-control col-8"
                 name="Slug"
@@ -135,7 +158,9 @@ export const CreateFormComponent = ({
               />
             </div>
             <div className="form-group">
-              <label>Description</label>
+              <label>
+                <I18n>Description</I18n>
+              </label>
               <textarea
                 className="form-control col-8"
                 name="Description"
@@ -150,7 +175,9 @@ export const CreateFormComponent = ({
               />
             </div>
             <div className="form-group">
-              <label>Type</label>
+              <label>
+                <I18n>Type</I18n>
+              </label>
               <select
                 className="form-control col-8"
                 name="Type"
@@ -167,7 +194,9 @@ export const CreateFormComponent = ({
               </select>
             </div>
             <div className="form-group">
-              <label>Status</label>
+              <label>
+                <I18n>Status</I18n>
+              </label>
               <select
                 className="form-control col-8"
                 name="Status"
@@ -183,7 +212,9 @@ export const CreateFormComponent = ({
               </select>
             </div>
             <div className="form-group">
-              <label>Owning Team</label>
+              <label>
+                <I18n>Owning Team</I18n>
+              </label>
               <select
                 className="form-control col-8"
                 name="Owning Team"
@@ -211,7 +242,7 @@ export const CreateFormComponent = ({
                 to="/kapps/services/settings/forms"
                 className="btn btn-link mb-0"
               >
-                Cancel
+                <I18n>Cancel</I18n>
               </Link>
               <button
                 className="btn btn-primary"
@@ -229,7 +260,7 @@ export const CreateFormComponent = ({
                       });
                 }}
               >
-                {clone ? 'Clone Form' : 'Create Form'}
+                <I18n>{clone ? 'Clone Form' : 'Create Form'}</I18n>
               </button>
             </span>
           </div>

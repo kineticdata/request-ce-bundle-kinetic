@@ -3,13 +3,20 @@ import { Link } from 'react-router-dom';
 import { PageTitle } from 'common';
 import { TeamCard } from '../shared/TeamCard';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const WallyEmptyMessage = ({ me }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>No Teams Right Now...</h5>
+      <h5>
+        <I18n>No Teams Right Now...</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
-      {me.spaceAdmin && <h6>Add a team by hitting the new button!</h6>}
+      {me.spaceAdmin && (
+        <h6>
+          <I18n>Add a team by hitting the new button!</I18n>
+        </h6>
+      )}
     </div>
   );
 };
@@ -23,17 +30,20 @@ export const Teams = ({ loading, teams, me, openRequestNewTeam }) => (
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /
             </h3>
             <h1>Teams</h1>
           </div>
           {me.spaceAdmin ? (
             <Link to="/settings/teams/new" className="btn btn-secondary">
-              New Team
+              <I18n>New Team</I18n>
             </Link>
           ) : (
             <button onClick={openRequestNewTeam} className="btn btn-secondary">
-              Request New Team
+              <I18n>Request New Team</I18n>
             </button>
           )}
         </div>

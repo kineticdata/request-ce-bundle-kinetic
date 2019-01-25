@@ -4,6 +4,7 @@ import { compose, withHandlers } from 'recompose';
 import { actions as discussionsActions } from 'discussions';
 import { actions } from '../../../redux/modules/settingsDatastore';
 import { Discussion } from 'discussions';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const DatastoreDiscussionsComponent = props => {
   const { discussionId, createDiscussion } = props;
@@ -17,10 +18,12 @@ export const DatastoreDiscussionsComponent = props => {
   ) : (
     <div className="kinops-discussions d-none d-md-flex">
       <div className="empty-discussion">
-        <h5>No discussion to display</h5>
+        <h5>
+          <I18n>No discussion to display</I18n>
+        </h5>
         <p>
           <button onClick={createDiscussion} className="btn btn-link">
-            Create a new discussion
+            <I18n>Create a new discussion</I18n>
           </button>
         </p>
       </div>

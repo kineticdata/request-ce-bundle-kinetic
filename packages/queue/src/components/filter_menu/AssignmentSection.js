@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const AssignmentSection = ({
   filter,
@@ -12,10 +13,11 @@ export const AssignmentSection = ({
 }) => (
   <ModalBody className="filter-section">
     <h5>
-      Assignment<br />
+      <I18n>Assignment</I18n>
+      <br />
       {errors.get('Assignment') && (
         <small className="text-danger text-small">
-          {errors.get('Assignment')}
+          <I18n>{errors.get('Assignment')}</I18n>
         </small>
       )}
     </h5>
@@ -27,7 +29,7 @@ export const AssignmentSection = ({
         checked={filter.assignments.mine}
         onChange={toggleAssignmentHandler}
       />
-      Mine
+      <I18n>Mine</I18n>
     </label>
     <label htmlFor="assignment-teammates">
       <input
@@ -37,7 +39,7 @@ export const AssignmentSection = ({
         checked={filter.assignments.teammates}
         onChange={toggleAssignmentHandler}
       />
-      Teammates
+      <I18n>Teammates</I18n>
     </label>
     <label htmlFor="assignment-unassigned">
       <input
@@ -47,7 +49,7 @@ export const AssignmentSection = ({
         checked={filter.assignments.unassigned}
         onChange={toggleAssignmentHandler}
       />
-      Unassigned
+      <I18n>Unassigned</I18n>
     </label>
   </ModalBody>
 );

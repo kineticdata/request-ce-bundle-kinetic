@@ -11,6 +11,7 @@ import {
 } from 'reactstrap';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { actions } from '../../../redux/modules/settingsTranslations';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const LocalesListComponent = ({
   pathPrefix,
@@ -30,8 +31,12 @@ export const LocalesListComponent = ({
     <table className="table table-sm table-striped table--settings">
       <thead className="header">
         <tr>
-          <th scope="col">Locale Name</th>
-          <th scope="col">Code</th>
+          <th scope="col">
+            <I18n>Locale Name</I18n>
+          </th>
+          <th scope="col">
+            <I18n>Code</I18n>
+          </th>
           <th />
         </tr>
       </thead>
@@ -52,7 +57,9 @@ export const LocalesListComponent = ({
               </td>
               <td className="text-right" width="1%">
                 {isDefault ? (
-                  <em className="text-info">Default Locale</em>
+                  <em className="text-info">
+                    <I18n>Default Locale</I18n>
+                  </em>
                 ) : (
                   <Dropdown
                     toggle={toggleDropdown(locale.code)}
@@ -63,12 +70,12 @@ export const LocalesListComponent = ({
                     </DropdownToggle>
                     <DropdownMenu right>
                       <DropdownItem onClick={handleDisableLocale(locale.code)}>
-                        Disable Locale
+                        <I18n>Disable Locale</I18n>
                       </DropdownItem>
                       <DropdownItem
                         onClick={handleSetDefaultLocale(locale.code)}
                       >
-                        Make Default
+                        <I18n>Make Default</I18n>
                       </DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
@@ -111,7 +118,7 @@ export const LocalesListComponent = ({
               className={`btn btn-success`}
               onClick={handleEnableLocale}
             >
-              Enable Locale
+              <I18n>Enable Locale</I18n>
             </button>
           </td>
         </tr>

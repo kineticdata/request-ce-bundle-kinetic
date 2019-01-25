@@ -8,13 +8,18 @@ import { Modal, ModalBody } from 'reactstrap';
 import { NotificationListItem } from './NotificationListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/settingsNotifications';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const WallyNoResultsFoundMessage = ({ type }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>No Notification {type}s Found</h5>
+      <h5>
+        <I18n>No Notification {type}s Found</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
-      <h6>Add some {type}s by hitting the new button!</h6>
+      <h6>
+        <I18n>Add some {type}s by hitting the new button!</I18n>
+      </h6>
     </div>
   );
 };
@@ -32,13 +37,21 @@ const NotificationsListComponent = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">home</Link> /{` `}
-            <Link to="/settings">settings</Link> /{` `}
+            <Link to="/">
+              <I18n>home</I18n>
+            </Link>{' '}
+            /{` `}
+            <Link to="/settings">
+              <I18n>settings</I18n>
+            </Link>{' '}
+            /{` `}
           </h3>
-          <h1>Notifications</h1>
+          <h1>
+            <I18n>Notifications</I18n>
+          </h1>
         </div>
         <Link to={`${match.url}/new`} className="btn btn-primary">
-          New {type}
+          <I18n>New {type}</I18n>
         </Link>
       </div>
       <div className="notifications-tabs">
@@ -48,7 +61,7 @@ const NotificationsListComponent = ({
               to="/settings/notifications/templates"
               activeClassName="active"
             >
-              Templates
+              <I18n>Templates</I18n>
             </NavLink>
           </li>
           <li role="presentation">
@@ -56,7 +69,7 @@ const NotificationsListComponent = ({
               to="/settings/notifications/snippets"
               activeClassName="active"
             >
-              Snippets
+              <I18n>Snippets</I18n>
             </NavLink>
           </li>
           <li role="presentation">
@@ -64,7 +77,7 @@ const NotificationsListComponent = ({
               to="/settings/notifications/date-formats"
               activeClassName="active"
             >
-              Date Formats
+              <I18n>Date Formats</I18n>
             </NavLink>
           </li>
         </ul>
@@ -73,10 +86,18 @@ const NotificationsListComponent = ({
         <table className="table table-sm table-striped table--settings">
           <thead className="sortable">
             <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Status</th>
               <th scope="col">
-                {type === 'Date Format' ? 'Format' : 'Subject'}
+                <I18n>Name</I18n>
+              </th>
+              <th scope="col">
+                <I18n>Status</I18n>
+              </th>
+              <th scope="col">
+                {type === 'Date Format' ? (
+                  <I18n>Format</I18n>
+                ) : (
+                  <I18n>Subject</I18n>
+                )}
               </th>
               <th className="sort-disabled" />
             </tr>
@@ -106,9 +127,11 @@ const NotificationsListComponent = ({
                 type="button"
                 className="btn btn-link"
               >
-                Close
+                <I18n>Close</I18n>
               </button>
-              <span>Template Preview</span>
+              <span>
+                <I18n>Template Preview</I18n>
+              </span>
               <span>&nbsp;</span>
             </h4>
           </div>

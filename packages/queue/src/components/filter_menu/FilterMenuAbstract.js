@@ -10,6 +10,7 @@ import { DateRangeSelector } from 'common/src/components/DateRangeSelector';
 import { validateAssignments, validateDateRange } from './FilterMenuContainer';
 import moment from 'moment';
 import { AttributeSelectors } from 'common';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const VALID_STATUSES = List(['Open', 'Pending', 'Cancelled', 'Complete']);
 
@@ -44,11 +45,15 @@ const formatPreset = preset => {
 const formatDate = date => moment(date).format('l');
 
 const summarizeDateRange = range =>
-  range.preset !== ''
-    ? formatTimeline(range.timeline) + ' in last ' + formatPreset(range.preset)
-    : range.custom
-      ? formatDate(range.start) + ' - ' + formatDate(range.end)
-      : null;
+  range.preset !== '' ? (
+    <I18n>
+      {formatTimeline(range.timeline) +
+        ' in last ' +
+        formatPreset(range.preset)}
+    </I18n>
+  ) : range.custom ? (
+    formatDate(range.start) + ' - ' + formatDate(range.end)
+  ) : null;
 
 const restrictDateRange = filter =>
   filter.status.includes('Cancelled') || filter.status.includes('Complete')
@@ -64,132 +69,151 @@ const validateFilterName = filter => {
 const FilterCheckbox = props => (
   <label htmlFor={props.id}>
     <input type="checkbox" {...props} />
-    {props.label}
+    <I18n>{props.label}</I18n>
   </label>
 );
 
-const FilterMenuAbstractComponent = props =>
-  props.currentFilter &&
-  props.render({
-    teamFilters: props.teams
-      .map(team => ({
-        id: `filter-menu-team-checkbox-${team.slug}`,
-        name: team.name,
-        label: team.name,
-        checked: props.currentFilter.teams.includes(team.name),
-        onChange: props.toggleTeam,
-      }))
-      .map(props => <FilterCheckbox key={props.name} {...props} />),
-    assignmentFilters: props.currentFilter.assignments
-      .toSeq()
-      .map((checked, name) => ({
-        id: `filter-menu-assignment-checkbox-${name}`,
-        name,
-        label: ASSIGNMENT_LABELS[name],
-        checked,
-        onChange: props.toggleAssignment,
-      }))
-      .valueSeq()
-      .map(props => <FilterCheckbox key={props.name} {...props} />),
-    createdByMeFilter: (
-      <FilterCheckbox
-        id="createdByMe"
-        name="createdByMe"
-        label="Created By Me"
-        checked={props.currentFilter.createdByMe}
-        onChange={props.toggleCreatedByMe}
-      />
-    ),
-    statusFilters: VALID_STATUSES.map(status => ({
-      id: `filter-menu-status-checkbox-${status}`,
-      name: status,
-      label: status,
-      checked: props.currentFilter.status.includes(status),
-      onChange: props.toggleStatus,
-    })).map(props => <FilterCheckbox key={props.name} {...props} />),
-    dateRangeFilters: (
-      <Fragment>
-        <select
-          value={props.currentFilter.dateRange.timeline}
-          onChange={props.changeTimeline}
-        >
-          <option value="createdAt">Created At</option>
-          <option value="updatedAt">Updated At</option>
-          <option value="completedAt">Completed At</option>
-        </select>
-        <DateRangeSelector
-          allowNone
-          value={convertDateRangeValue(props.currentFilter.dateRange)}
-          onChange={props.setDateRange}
-        />
-      </Fragment>
-    ),
-    sortedByOptions: SORT_OPTIONS.map(({ label, id }, value) => (
-      <label key={id} htmlFor={id}>
-        <input
-          type="radio"
-          id={id}
-          value={value}
-          name="sorted-by"
-          checked={value === props.currentFilter.sortBy}
-          onChange={props.changeSortedBy}
-        />
-        {label}
-      </label>
-    )).toList(),
-    groupedByOptions: (
-      <AttributeSelectors.FieldSelect
-        forms={props.forms}
-        value={props.currentFilter.groupBy}
-        onChange={props.changeGroupedBy}
-      />
-    ),
-    saveFilterOptions: (
-      <div>
-        <label htmlFor="save-filter-name">Filter Name</label>
-        <input
-          type="text"
-          id="save-filter-name"
-          value={props.currentFilter.name}
-          onChange={props.changeFilterName}
-        />
-      </div>
-    ),
-    teamSummary: props.filter.teams.join(', '),
-    assignmentSummary: props.filter.assignments
-      .toSeq()
-      .filter(b => b)
-      .keySeq()
-      .map(v => ASSIGNMENT_LABELS[v])
-      .join(', '),
-    statusSummary: props.filter.status.join(', '),
-    dateRangeSummary: summarizeDateRange(props.filter.dateRange),
-    dateRangeError: validateDateRange(props.currentFilter),
-    sortedBySummary: SORT_OPTIONS.getIn([props.filter.sortBy, 'label']),
-    sortDirection: props.sortDirection,
-    groupDirection: props.groupDirection,
-    showing: props.showing,
-    toggleShowing: props.toggleShowing,
-    dirty: !props.currentFilter.equals(props.filter),
-    apply: props.applyFilter,
-    reset: props.resetFilter,
-    validations: [validateAssignments, validateDateRange, validateFilterName]
-      .map(fn => fn(props.currentFilter))
-      .filter(v => v),
-    clearTeams: props.clearTeams,
-    clearAssignments: props.clearAssignments,
-    clearStatus: props.clearStatus,
-    clearDateRange: restrictDateRange(props.filter) || props.clearDateRange,
-    clearGroupedBy: props.clearGroupedBy,
-    toggleCreatedByMe: props.toggleCreatedByMe,
-    toggleSortDirection: props.toggleSortDirection,
-    toggleGroupDirection: props.toggleGroupDirection,
-    saveMessages: [props.checkFilterName]
-      .map(fn => fn(props.currentFilter))
-      .filter(v => v),
-    saveFilter: props.saveFilter,
-    removeFilter: props.removeFilter,
-  });
+const FilterMenuAbstractComponent = props => (
+  <I18n
+    render={translate =>
+      props.currentFilter &&
+      props.render({
+        teamFilters: props.teams
+          .map(team => ({
+            id: `filter-menu-team-checkbox-${team.slug}`,
+            name: team.name,
+            label: team.name,
+            checked: props.currentFilter.teams.includes(team.name),
+            onChange: props.toggleTeam,
+          }))
+          .map(props => <FilterCheckbox key={props.name} {...props} />),
+        assignmentFilters: props.currentFilter.assignments
+          .toSeq()
+          .map((checked, name) => ({
+            id: `filter-menu-assignment-checkbox-${name}`,
+            name,
+            label: ASSIGNMENT_LABELS[name],
+            checked,
+            onChange: props.toggleAssignment,
+          }))
+          .valueSeq()
+          .map(props => <FilterCheckbox key={props.name} {...props} />),
+        createdByMeFilter: (
+          <FilterCheckbox
+            id="createdByMe"
+            name="createdByMe"
+            label="Created By Me"
+            checked={props.currentFilter.createdByMe}
+            onChange={props.toggleCreatedByMe}
+          />
+        ),
+        statusFilters: VALID_STATUSES.map(status => ({
+          id: `filter-menu-status-checkbox-${status}`,
+          name: status,
+          label: status,
+          checked: props.currentFilter.status.includes(status),
+          onChange: props.toggleStatus,
+        })).map(props => <FilterCheckbox key={props.name} {...props} />),
+        dateRangeFilters: (
+          <Fragment>
+            <select
+              value={props.currentFilter.dateRange.timeline}
+              onChange={props.changeTimeline}
+            >
+              <option value="createdAt">
+                <I18n>Created At</I18n>
+              </option>
+              <option value="updatedAt">
+                <I18n>Updated At</I18n>
+              </option>
+              <option value="completedAt">
+                <I18n>Completed At</I18n>
+              </option>
+            </select>
+            <DateRangeSelector
+              allowNone
+              value={convertDateRangeValue(props.currentFilter.dateRange)}
+              onChange={props.setDateRange}
+            />
+          </Fragment>
+        ),
+        sortedByOptions: SORT_OPTIONS.map(({ label, id }, value) => (
+          <label key={id} htmlFor={id}>
+            <input
+              type="radio"
+              id={id}
+              value={value}
+              name="sorted-by"
+              checked={value === props.currentFilter.sortBy}
+              onChange={props.changeSortedBy}
+            />
+            <I18n>{label}</I18n>
+          </label>
+        )).toList(),
+        groupedByOptions: (
+          <AttributeSelectors.FieldSelect
+            forms={props.forms}
+            value={props.currentFilter.groupBy}
+            onChange={props.changeGroupedBy}
+          />
+        ),
+        saveFilterOptions: (
+          <div>
+            <label htmlFor="save-filter-name">
+              <I18n>Filter Name</I18n>
+            </label>
+            <input
+              type="text"
+              id="save-filter-name"
+              value={props.currentFilter.name}
+              onChange={props.changeFilterName}
+            />
+          </div>
+        ),
+        teamSummary: props.filter.teams.map(translate).join(', '),
+        assignmentSummary: props.filter.assignments
+          .toSeq()
+          .filter(b => b)
+          .keySeq()
+          .map(v => translate(ASSIGNMENT_LABELS[v]))
+          .join(', '),
+        statusSummary: props.filter.status.map(translate).join(', '),
+        dateRangeSummary: summarizeDateRange(props.filter.dateRange),
+        dateRangeError: validateDateRange(props.currentFilter),
+        sortedBySummary: translate(
+          SORT_OPTIONS.getIn([props.filter.sortBy, 'label']),
+        ),
+        sortDirection: props.sortDirection,
+        groupDirection: props.groupDirection,
+        showing: props.showing,
+        toggleShowing: props.toggleShowing,
+        dirty: !props.currentFilter.equals(props.filter),
+        apply: props.applyFilter,
+        reset: props.resetFilter,
+        validations: [
+          validateAssignments,
+          validateDateRange,
+          validateFilterName,
+        ]
+          .map(fn => fn(props.currentFilter))
+          .filter(v => v),
+        clearTeams: props.clearTeams,
+        clearAssignments: props.clearAssignments,
+        clearStatus: props.clearStatus,
+        clearDateRange: restrictDateRange(props.filter) || props.clearDateRange,
+        clearGroupedBy: props.clearGroupedBy,
+        toggleCreatedByMe: props.toggleCreatedByMe,
+        toggleSortDirection: props.toggleSortDirection,
+        toggleGroupDirection: props.toggleGroupDirection,
+        saveMessages: [props.checkFilterName]
+          .map(fn => fn(props.currentFilter))
+          .filter(v => v),
+        saveFilter: props.saveFilter,
+        removeFilter: props.removeFilter,
+      })
+    }
+  />
+);
 
 export const mapStateToProps = (state, props) => ({
   myFilters: state.queue.queueApp.myFilters,

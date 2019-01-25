@@ -32,7 +32,7 @@
     "react-sidebar": "^2.3.2",
     "react-sortable-tree": "^2.2.0",
     "react-transition-group": "^2.2.1",
-    "reactstrap": "^6.5.0",
+    "reactstrap": "^7.1.0",
     "recompose": "^0.30.0",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",

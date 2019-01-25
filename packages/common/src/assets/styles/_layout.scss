@@ -118,5 +118,8 @@
   }
   > span {
     margin: 0 0.75rem;
+    &:empty {
+      display: none;
+    }
   }
 }

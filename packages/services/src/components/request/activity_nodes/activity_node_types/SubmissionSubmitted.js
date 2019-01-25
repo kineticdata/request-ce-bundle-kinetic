@@ -1,15 +1,16 @@
 import React, { Fragment } from 'react';
 import { TimeAgo } from 'common';
 import { activityData } from '../../RequestActivityList';
+import { I18n } from '../../../../../../app/src/I18nProvider';
 
 export const SubmissionSubmittedHeader = ({ activity, submission }) => {
   const data = activityData(activity);
   return (
     <Fragment>
       <h1>
-        {activity.label}
+        <I18n>{activity.label}</I18n>
         <span className="status status--green">
-          {data.Status || 'Submitted'}
+          <I18n>{data.Status || 'Submitted'}</I18n>
         </span>
       </h1>
     </Fragment>
@@ -24,7 +25,8 @@ export const SubmissionSubmittedBody = ({ activity, submission }) => {
         <div className="data-list-row__col">
           <dl>
             <dt>
-              <span className="fa fa-fw fa-calendar" />Submitted
+              <span className="fa fa-fw fa-calendar" />
+              <I18n>Submitted</I18n>
             </dt>
             <dd>
               <TimeAgo timestamp={submission.submittedAt} />
@@ -35,7 +37,9 @@ export const SubmissionSubmittedBody = ({ activity, submission }) => {
       {data.Comments && (
         <div className="data-list-row">
           <div className="data-list-row__col">
-            <p>{data.Comments}</p>
+            <p>
+              <I18n>{data.Comments}</I18n>
+            </p>
           </div>
         </div>
       )}

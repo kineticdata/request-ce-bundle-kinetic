@@ -9,8 +9,13 @@ import { Robot } from './Robot';
 import { RobotExecution } from './RobotExecution';
 import { RobotExecutionsList } from './RobotExecutionsList';
 import { RobotsList } from './RobotsList';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
-const RobotError = () => <h1>Error loading Robot</h1>;
+const RobotError = () => (
+  <h1>
+    <I18n>Error loading Robot</I18n>
+  </h1>
+);
 
 const RobotContainerComponent = ({ match }) => (
   <Fragment>

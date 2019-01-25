@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import papaparse from 'papaparse';
 
 import { actions } from '../../../redux/modules/settingsForms';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const ExportComponent = ({
   submissions,
@@ -16,22 +17,46 @@ const ExportComponent = ({
   <Fragment>
     {exportStatus === 'NOT_STARTED' ? (
       <button className="btn btn-info" onClick={handleDownload}>
-        <span>Export Records</span>
+        <span>
+          <I18n>Export Records</I18n>
+        </span>
       </button>
     ) : (
       <Fragment>
-        <p>{submissionsCount} Records retrieved</p>
+        <p>
+          {submissionsCount} <I18n>Records retrieved</I18n>
+        </p>
         {/* TODO: Warp user feedback in a conditional if exportStatus === Failed */}
-        {exportStatus === 'CONVERT' && <p>Converting Records to CSV format</p>}
+        {exportStatus === 'CONVERT' && (
+          <p>
+            <I18n>Converting Records to CSV format</I18n>
+          </p>
+        )}
         {exportStatus === 'DOWNLOAD' && (
-          <p>{`Downloading ${submissionsCount} Records to ${form.name}.csv`}</p>
+          <p>
+            <I18n
+              render={translate =>
+                `${translate('Downloading')} ${submissionsCount} ${translate(
+                  'Records to',
+                )} ${form.name}.csv`
+              }
+            />
+          </p>
         )}
         {exportStatus === 'COMPLETE' && (
           <Fragment>
             <p>
-              {`${submissionsCount} Records exported to ${form.name}.csv.  `}
+              <I18n
+                render={translate =>
+                  `${submissionsCount} ${translate('Records exported to')} ${
+                    form.name
+                  }.csv`
+                }
+              />
             </p>
-            <p>Click Cancel to close the modal</p>
+            <p>
+              <I18n>Click Cancel to close the modal</I18n>
+            </p>
           </Fragment>
         )}
       </Fragment>

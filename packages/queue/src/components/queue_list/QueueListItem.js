@@ -2,11 +2,14 @@ import React from 'react';
 import { KappLink as Link, TimeAgo, Avatar } from 'common';
 import { StatusContent } from '../shared/StatusContent';
 import { buildFilterPath } from '../../redux/modules/queueApp';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const AssignmentParagraph = ({ values }) => (
   <span className="submission__assignment">
-    {values['Assigned Team'] &&
-      (values['Assigned Team Display Name'] || values['Assigned Team'])}
+    <I18n>
+      {values['Assigned Team'] &&
+        (values['Assigned Team Display Name'] || values['Assigned Team'])}
+    </I18n>
     {values['Assigned Individual'] && values['Assigned Team'] && ' > '}
     {values['Assigned Individual'] &&
       (values['Assigned Individual Display Name'] ||
@@ -17,7 +20,7 @@ const AssignmentParagraph = ({ values }) => (
 const Timestamp = ({ id, label, value, username }) =>
   value && (
     <li className="list-group-item">
-      {label}
+      <I18n>{label}</I18n>
       &nbsp;
       <TimeAgo timestamp={value} id={`${id}-${label}`} />
     </li>
@@ -52,7 +55,14 @@ export const QueueListItemSmall = ({ queueItem, filter }) => {
         <div className="submission__meta">
           <StatusContent queueItem={queueItem} />
           <div className="submission__handler">
-            {queueItem.form.name} ({queueItem.handle})
+            <I18n
+              context={`kapps.${queueItem.form.kapp.slug}.forms.${
+                queueItem.form.slug
+              }`}
+            >
+              {queueItem.form.name}
+            </I18n>{' '}
+            ({queueItem.handle})
           </div>
           <AssignmentParagraph values={values} />
           {queueItem.values['Discussion Id'] && (

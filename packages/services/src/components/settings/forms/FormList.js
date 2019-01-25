@@ -12,11 +12,14 @@ import {
 import { TimeAgo } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/forms';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const WallyEmptyMessage = ({ filter }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>No Services Forms Found</h5>
+      <h5>
+        <I18n>No Services Forms Found</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
     </div>
   );
@@ -25,7 +28,7 @@ const WallyEmptyMessage = ({ filter }) => {
 const Timestamp = ({ slug, label, value }) =>
   value && (
     <span>
-      {label}
+      <I18n>{label}</I18n>
       &nbsp;
       <TimeAgo timestamp={value} />
     </span>
@@ -56,37 +59,57 @@ const FormListComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/kapps/services">services</Link> /{` `}
-              <Link to="/kapps/services/settings">settings</Link> /{` `}
+              <Link to="/kapps/services">
+                <I18n>services</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/kapps/services/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
             </h3>
-            <h1>Forms</h1>
+            <h1>
+              <I18n>Forms</I18n>
+            </h1>
           </div>
           {isSpaceAdmin && (
             <Link to={`${match.path}/new`} className="btn btn-primary">
-              New Form
+              <I18n>New Form</I18n>
             </Link>
           )}
         </div>
 
         <div className="forms-list-wrapper">
           {loading ? (
-            <h3>Loading</h3>
+            <h3>
+              <I18n>Loading</I18n>
+            </h3>
           ) : forms && forms.length > 0 ? (
             <div>
               <table className="table table-sm table-striped table--settings">
                 <thead className="header sortable">
                   <tr>
                     <th scope="col" width="20%">
-                      Form Name
+                      <I18n>Form Name</I18n>
                     </th>
-                    <th scope="col">Slug</th>
+                    <th scope="col">
+                      <I18n>Slug</I18n>
+                    </th>
                     <th scope="col" width="20%">
-                      Description
+                      <I18n>Description</I18n>
                     </th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Updated</th>
-                    <th scope="col">Created</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">
+                      <I18n>Type</I18n>
+                    </th>
+                    <th scope="col">
+                      <I18n>Updated</I18n>
+                    </th>
+                    <th scope="col">
+                      <I18n>Created</I18n>
+                    </th>
+                    <th scope="col">
+                      <I18n>Status</I18n>
+                    </th>
                     <th scope="col" width="48px" className="sort-disabled" />
                   </tr>
                 </thead>
@@ -129,19 +152,19 @@ const FormListComponent = ({
                                   tag={Link}
                                   to={`${match.path}/${form.slug}`}
                                 >
-                                  View
+                                  <I18n>View</I18n>
                                 </DropdownItem>
                                 <DropdownItem
                                   tag={Link}
                                   to={`${match.path}/${form.slug}/settings`}
                                 >
-                                  Configure
+                                  <I18n>Configure</I18n>
                                 </DropdownItem>
                                 <DropdownItem
                                   tag={Link}
                                   to={`${match.path}/clone/${form.slug}/`}
                                 >
-                                  Clone
+                                  <I18n>Clone</I18n>
                                 </DropdownItem>
                               </DropdownMenu>
                             </Dropdown>
@@ -162,7 +185,9 @@ const FormListComponent = ({
                           aria-hidden="true"
                         />
                       </span>
-                      <span className="sr-only">Previous</span>
+                      <span className="sr-only">
+                        <I18n>Previous</I18n>
+                      </span>
                     </a>
                   </li>
                   {pageNumbers.map(number => (
@@ -187,7 +212,9 @@ const FormListComponent = ({
                           aria-hidden="true"
                         />
                       </span>
-                      <span className="sr-only">Next</span>
+                      <span className="sr-only">
+                        <I18n>Next</I18n>
+                      </span>
                     </a>
                   </li>
                 </ul>

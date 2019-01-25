@@ -1,4 +1,5 @@
 import React from 'react';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const QueueListPagination = ({ filter, paginationProps }) => {
   return (
@@ -19,9 +20,8 @@ export const QueueListPagination = ({ filter, paginationProps }) => {
             <strong>
               {paginationProps.offset + 1}-{paginationProps.offset +
                 paginationProps.pageCount}
-            </strong>
-            {' of '}
-            <strong>{paginationProps.count}</strong>
+            </strong>{' '}
+            <I18n>of</I18n> <strong>{paginationProps.count}</strong>
           </small>
           <button
             type="button"

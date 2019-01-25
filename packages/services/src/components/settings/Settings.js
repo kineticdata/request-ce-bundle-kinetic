@@ -12,6 +12,7 @@ import { FormActivity } from './forms/FormActivity';
 import { CreateForm } from './forms/CreateForm';
 import { CategoriesSettings } from './categories/Categories';
 import { FormSubmissions } from './forms/FormSubmissions';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const SettingsComponent = ({ kappSlug }) => (
   <Switch>
@@ -83,9 +84,11 @@ const SettingsCard = ({ path, icon, name, description }) => (
   <Link to={path} className="card card--service">
     <h1>
       <Icon image={icon || 'fa-sticky-note-o'} background="blueSlate" />
-      {name}
+      <I18n>{name}</I18n>
     </h1>
-    <p>{description}</p>
+    <p>
+      <I18n>{description}</I18n>
+    </p>
   </Link>
 );
 
@@ -95,9 +98,14 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">services</Link> /{` `}
+            <Link to="/">
+              <I18n>services</I18n>
+            </Link>{' '}
+            /{` `}
           </h3>
-          <h1>Settings</h1>
+          <h1>
+            <I18n>Settings</I18n>
+          </h1>
         </div>
       </div>
 

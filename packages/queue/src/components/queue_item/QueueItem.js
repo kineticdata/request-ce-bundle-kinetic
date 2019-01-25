@@ -7,6 +7,7 @@ import { actions } from '../../redux/modules/queue';
 import { QueueItemDetailsContainer } from './QueueItemDetails';
 import { QueueItemDiscussionsContainer } from './QueueItemDiscussionsContainer';
 import { getFilterByPath, buildFilterPath } from '../../redux/modules/queueApp';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const QueueItem = ({ filter, queueItem, discussionsEnabled }) =>
   queueItem !== null && (
@@ -16,7 +17,7 @@ export const QueueItem = ({ filter, queueItem, discussionsEnabled }) =>
           <span className="icon">
             <span className="fa fa-fw fa-chevron-left" />
           </span>
-          {filter.name || 'Adhoc'}
+          <I18n>{filter.name || 'Adhoc'}</I18n>
         </Link>
       )}
       <div className="queue-item-content">

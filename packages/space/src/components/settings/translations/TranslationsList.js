@@ -28,7 +28,9 @@ export const UnpublishedChanges = ({ stagedEntries, link }) =>
     <div className="alert alert-info text-center">
       <Link to={link}>
         <span className="fa fa-fw fa-info-circle" />
-        <span>There are new translations waiting to be published.</span>
+        <span>
+          <I18n>There are new translations waiting to be published.</I18n>
+        </span>
       </Link>
     </div>
   ) : null;
@@ -46,15 +48,18 @@ const ConfirmDeleteModal = ({
           className="btn btn-link"
           onClick={toggleDelete('')}
         >
-          Cancel
+          <I18n>Cancel</I18n>
         </button>
-        <span>Delete Context</span>
+        <span>
+          <I18n>Delete Context</I18n>
+        </span>
       </h4>
     </div>
     <ModalBody>
       <div className="p-3">
-        Are you sure you want to delete the context{' '}
-        <strong>{contextToDelete}</strong> and all of its translations?
+        <I18n>Are you sure you want to delete the context</I18n>{' '}
+        <strong>{contextToDelete}</strong>{' '}
+        <I18n>and all of its translations</I18n>?
       </div>
     </ModalBody>
     <ModalFooter>
@@ -63,7 +68,7 @@ const ConfirmDeleteModal = ({
         className="btn btn-primary"
         onClick={handleDeleteContext}
       >
-        Delete
+        <I18n>Delete</I18n>
       </button>
     </ModalFooter>
   </Modal>
@@ -95,10 +100,18 @@ export const TranslationsListComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /{` `}
-              <Link to="/settings">settings</Link> /{` `}
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
             </h3>
-            <h1>Translations</h1>
+            <h1>
+              <I18n>Translations</I18n>
+            </h1>
           </div>
         </div>
         <UnpublishedChanges
@@ -106,27 +119,33 @@ export const TranslationsListComponent = ({
           link={`${pathPrefix}/staged`}
         />
         <div className="list-wrapper list-wrapper--locales mb-5">
-          <h2 className="section__title">Enabled Locales</h2>
+          <h2 className="section__title">
+            <I18n>Enabled Locales</I18n>
+          </h2>
           <LocalesList pathPrefix={pathPrefix} />
         </div>
         <div className="list-wrapper list-wrapper--contexts">
-          <h2 className="section__title">Translation Contexts</h2>
+          <h2 className="section__title">
+            <I18n>Translation Contexts</I18n>
+          </h2>
 
           <ul className="nav nav-tabs">
             <li role="presentation">
               <Link to={`${pathPrefix}/context/shared`}>
-                Shared Translations
+                <I18n>Shared Translations</I18n>
               </Link>
             </li>
           </ul>
           <div className="mb-4">
-            Shared translations are global and inherited by all contexts.
+            <I18n>
+              Shared translations are global and inherited by all contexts.
+            </I18n>
           </div>
 
           <ul className="nav nav-tabs">
             <li role="presentation">
               <NavLink exact to={`${pathPrefix}`} activeClassName="active">
-                Form Contexts
+                <I18n>Form Contexts</I18n>
               </NavLink>
             </li>
             <li role="presentation">
@@ -135,7 +154,7 @@ export const TranslationsListComponent = ({
                 to={`${pathPrefix}/datastore`}
                 activeClassName="active"
               >
-                Datastore Contexts
+                <I18n>Datastore Contexts</I18n>
               </NavLink>
             </li>
             <li role="presentation">
@@ -144,17 +163,32 @@ export const TranslationsListComponent = ({
                 to={`${pathPrefix}/custom`}
                 activeClassName="active"
               >
-                Custom Contexts
+                <I18n>Custom Contexts</I18n>
               </NavLink>
             </li>
           </ul>
           <div className="mb-2">
-            {!mode &&
-              'Form translations apply to the specific form only. If a key is not translated in the form context, the shared translation will be used if one exists.'}
-            {mode === 'datastore' &&
-              'Datastore form translations apply to the specific datastore form only. If a key is not translated in the datastore form context, the shared translation will be used if one exists.'}
-            {mode === 'custom' &&
-              'Custom translations are only applied when you specify the custom context. If a key is not translated in the custom context, the shared translation will be used if one exists.'}
+            {!mode && (
+              <I18n>
+                Form translations apply to the specific form only. If a key is
+                not translated in the form context, the shared translation will
+                be used if one exists.
+              </I18n>
+            )}
+            {mode === 'datastore' && (
+              <I18n>
+                Datastore form translations apply to the specific datastore form
+                only. If a key is not translated in the datastore form context,
+                the shared translation will be used if one exists.
+              </I18n>
+            )}
+            {mode === 'custom' && (
+              <I18n>
+                Custom translations are only applied when you specify the custom
+                context. If a key is not translated in the custom context, the
+                shared translation will be used if one exists.
+              </I18n>
+            )}
           </div>
           <Table
             identifier={mode || 'form'}

@@ -16,6 +16,7 @@ export const Form = object => ({
   status: object.status,
   createdAt: object.createdAt,
   updatedAt: object.updatedAt,
+  kapp: object.kapp,
 });
 
 export const Category = object => ({

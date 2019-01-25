@@ -18,6 +18,7 @@ import { QueueListContainer } from './components/queue_list/QueueListContainer';
 import { NewItemMenuContainer } from './components/new_item_menu/NewItemMenuContainer';
 import { WorkMenuContainer } from './components/work_menu/WorkMenu';
 import { Settings } from './components/settings/Settings';
+import { I18n } from '../../app/src/I18nProvider';
 import './assets/styles/master.scss';
 
 export const AppComponent = props => {
@@ -47,35 +48,37 @@ export const AppComponent = props => {
       </Switch>
     ),
     main: (
-      <main className="package-layout package-layout--queue">
-        <Route path="/settings" component={Settings} />
-        <Route
-          path="/submissions/:id"
-          exact
-          render={({ match }) => <Redirect to={`/item/${match.params.id}`} />}
-        />
-        <Route
-          path="/forms/:formSlug/submissions/:id"
-          exact
-          render={({ match }) => <Redirect to={`/item/${match.params.id}`} />}
-        />
-        <Route path="/" exact render={() => <Redirect to="/list/Mine" />} />
-        <Route path="/list/:filter" component={QueueListContainer} />
-        <Route path="/team/:filter" component={QueueListContainer} />
-        <Route path="/custom/:filter" component={QueueListContainer} />
-        <Route path="/adhoc" component={QueueListContainer} />
-        <Route
-          path="/(list|team|custom|adhoc)?/:filter?/item/:id"
-          component={QueueItemContainer}
-        />
-        <Route
-          path="/queue/filter/__show__/details/:id/summary"
-          render={({ match }) => <Redirect to={`/item/${match.params.id}`} />}
-        />
+      <I18n>
+        <main className="package-layout package-layout--queue">
+          <Route path="/settings" component={Settings} />
+          <Route
+            path="/submissions/:id"
+            exact
+            render={({ match }) => <Redirect to={`/item/${match.params.id}`} />}
+          />
+          <Route
+            path="/forms/:formSlug/submissions/:id"
+            exact
+            render={({ match }) => <Redirect to={`/item/${match.params.id}`} />}
+          />
+          <Route path="/" exact render={() => <Redirect to="/list/Mine" />} />
+          <Route path="/list/:filter" component={QueueListContainer} />
+          <Route path="/team/:filter" component={QueueListContainer} />
+          <Route path="/custom/:filter" component={QueueListContainer} />
+          <Route path="/adhoc" component={QueueListContainer} />
+          <Route
+            path="/(list|team|custom|adhoc)?/:filter?/item/:id"
+            component={QueueItemContainer}
+          />
+          <Route
+            path="/queue/filter/__show__/details/:id/summary"
+            render={({ match }) => <Redirect to={`/item/${match.params.id}`} />}
+          />
 
-        <NewItemMenuContainer />
-        <WorkMenuContainer />
-      </main>
+          <NewItemMenuContainer />
+          <WorkMenuContainer />
+        </main>
+      </I18n>
     ),
   });
 };

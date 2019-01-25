@@ -3,14 +3,17 @@ import moment from 'moment';
 import { ModalBody } from 'reactstrap';
 import { SORT_OPTIONS } from './SortedBySection';
 import { CreatedByMeContainer } from './CreatedByMe';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const ListSummary = ({ type, list }) =>
   list.size > 0 &&
   (list.size === 1 ? (
-    <span>{list.get(0)}</span>
+    <span>
+      <I18n>{list.get(0)}</I18n>
+    </span>
   ) : (
     <span>
-      {list.size} {type}
+      {list.size} <I18n>{type}</I18n>
     </span>
   ));
 
@@ -22,9 +25,17 @@ const AssignmentSummary = ({ errors, appliedAssignments }) => {
       </span>
     );
   } else if (appliedAssignments.size === 1) {
-    return <span>{appliedAssignments.get(0)}</span>;
+    return (
+      <span>
+        <I18n>{appliedAssignments.get(0)}</I18n>
+      </span>
+    );
   }
-  return <span>{appliedAssignments.size} Assignments</span>;
+  return (
+    <span>
+      {appliedAssignments.size} <I18n>Assignments</I18n>
+    </span>
+  );
 };
 
 const formatTimeline = timeline => {
@@ -40,17 +51,20 @@ const formatPreset = preset => {
 const DateRangeSummary = ({ errors, filter }) =>
   errors.get('Date Range') ? (
     <span className="validation-error text-danger">
-      {errors.get('Date Range')}
+      <I18n>{errors.get('Date Range')}</I18n>
     </span>
   ) : filter.dateRange.preset !== '' ? (
     <span>
-      {formatTimeline(filter.dateRange.timeline)} in last&nbsp;
-      {formatPreset(filter.dateRange.preset)}
+      <I18n>
+        {formatTimeline(filter.dateRange.timeline)} in last{' '}
+        {formatPreset(filter.dateRange.preset)}
+      </I18n>
     </span>
   ) : filter.dateRange.custom ? (
     <span style={{ textAlign: 'right' }}>
-      {formatTimeline(filter.dateRange.timeline)} between<br />
-      {moment(filter.dateRange.start).format('l')} and&nbsp;
+      <I18n>{formatTimeline(filter.dateRange.timeline)} between</I18n>
+      <br />
+      {moment(filter.dateRange.start).format('l')} <I18n>and</I18n>{' '}
       {moment(filter.dateRange.end).format('l')}
     </span>
   ) : null;
@@ -58,7 +72,7 @@ const DateRangeSummary = ({ errors, filter }) =>
 const FilterNameSummary = ({ errors }) =>
   errors.get('Filter Name') ? (
     <span className="validation-error text-danger">
-      {errors.get('Filter Name')}
+      <I18n>{errors.get('Filter Name')}</I18n>
     </span>
   ) : null;
 
@@ -80,7 +94,9 @@ export const MainSection = ({
           className="btn btn-link"
           onClick={() => showSection('teams')}
         >
-          <span className="button-title">Teams</span>
+          <span className="button-title">
+            <I18n>Teams</I18n>
+          </span>
           <ListSummary type="Teams" list={filter.teams} />
           <span className="icon">
             <span className="fa fa-angle-right" />
@@ -93,7 +109,9 @@ export const MainSection = ({
           className="btn btn-link icon-wrapper"
           onClick={() => showSection('assignment')}
         >
-          <span className="button-title">Assignment</span>
+          <span className="button-title">
+            <I18n>Assignment</I18n>
+          </span>
           <AssignmentSummary
             errors={errors}
             appliedAssignments={appliedAssignments}
@@ -109,7 +127,9 @@ export const MainSection = ({
           className="btn btn-link icon-wrapper"
           onClick={() => showSection('status')}
         >
-          <span className="button-title">Status</span>
+          <span className="button-title">
+            <I18n>Status</I18n>
+          </span>
           <ListSummary type="Statuses" list={filter.status} />
           <span className="icon">
             <span className="fa fa-angle-right" />
@@ -122,7 +142,9 @@ export const MainSection = ({
           className="btn btn-link icon-wrapper"
           onClick={() => showSection('date')}
         >
-          <span className="button-title">Date Range</span>
+          <span className="button-title">
+            <I18n>Date Range</I18n>
+          </span>
           <DateRangeSummary errors={errors} filter={filter} />
           <span className="icon">
             <span className="fa fa-angle-right" />
@@ -135,8 +157,12 @@ export const MainSection = ({
           className="btn btn-link icon-wrapper"
           onClick={() => showSection('sort')}
         >
-          <span className="button-title">Sorted By</span>
-          <span>{SORT_OPTIONS.get(filter.sortBy).label}</span>
+          <span className="button-title">
+            <I18n>Sorted By</I18n>
+          </span>
+          <span>
+            <I18n>{SORT_OPTIONS.get(filter.sortBy).label}</I18n>
+          </span>
           <span className="icon">
             <span className="fa fa-angle-right" />
           </span>
@@ -148,8 +174,12 @@ export const MainSection = ({
           className="btn btn-link icon-wrapper"
           onClick={() => showSection('group')}
         >
-          <span className="button-title">Grouped By</span>
-          <span>{filter.groupBy}</span>
+          <span className="button-title">
+            <I18n>Grouped By</I18n>
+          </span>
+          <span>
+            <I18n>{filter.groupBy}</I18n>
+          </span>
           <span className="icon">
             <span className="fa fa-angle-right" />
           </span>
@@ -160,13 +190,19 @@ export const MainSection = ({
       </li>
     </ul>
     <div className="save-filter">
-      <label>Filter Name</label>
+      <label>
+        <I18n>Filter Name</I18n>
+      </label>
       <FilterNameSummary errors={errors} />
-      <input
-        type="text"
-        placeholder="New Filter Name"
-        value={filterName}
-        onChange={handleChangeFilterName}
+      <I18n
+        render={translate => (
+          <input
+            type="text"
+            placeholder={translate('New Filter Name')}
+            value={filterName}
+            onChange={handleChangeFilterName}
+          />
+        )}
       />
       <button
         type="button"
@@ -174,9 +210,11 @@ export const MainSection = ({
         onClick={handleSaveFilter}
         disabled={filterName === '' || !errors.isEmpty()}
       >
-        {filter && filter.type === 'custom' && filter.name === filterName
-          ? 'Save Filter'
-          : 'Save Filter As'}
+        <I18n>
+          {filter && filter.type === 'custom' && filter.name === filterName
+            ? 'Save Filter'
+            : 'Save Filter As'}
+        </I18n>
       </button>
       {filter &&
         filter.type === 'custom' &&
@@ -187,7 +225,7 @@ export const MainSection = ({
             onClick={handleRemoveFilter}
             disabled={filterName === '' || !errors.isEmpty()}
           >
-            Delete Filter
+            <I18n>Delete Filter</I18n>
           </button>
         )}
     </div>

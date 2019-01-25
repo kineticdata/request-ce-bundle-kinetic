@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { FilterMenuContainer } from '../filter_menu/FilterMenuContainer';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 // Define some simple button components just to cleanup the toolbar component.
 const ShortcutButton = props => (
@@ -34,7 +35,7 @@ export const FilterMenuMobile = ({ filter, ...props }) => (
     <div className="queue-controls">
       <div className="queue-controls__filter">
         <h2 className={filter.type === 'adhoc' && filter.name ? 'edited' : ''}>
-          {filter.name || 'Adhoc'}
+          <I18n>{filter.name || 'Adhoc'}</I18n>
         </h2>
         <div className="buttons">
           <button
@@ -67,19 +68,19 @@ export const FilterMenuMobile = ({ filter, ...props }) => (
             open={props.openFilterMenu('teams')}
             inactive={filter.teams.isEmpty()}
           >
-            Teams
+            <I18n>Teams</I18n>
           </ShortcutButton>
           <ShortcutButton
             open={props.openFilterMenu('assignment')}
             inactive={filter.assignments.toSeq().every(b => !b)}
           >
-            Assignments
+            <I18n>Assignments</I18n>
           </ShortcutButton>
           <ShortcutButton
             open={props.openFilterMenu('status')}
             inactive={filter.status.isEmpty()}
           >
-            Status
+            <I18n>Status</I18n>
           </ShortcutButton>
           <ShortcutButton
             open={props.openFilterMenu('date')}
@@ -87,7 +88,7 @@ export const FilterMenuMobile = ({ filter, ...props }) => (
               !filter.dateRange.custom && filter.dateRange.preset === ''
             }
           >
-            Date Range
+            <I18n>Date Range</I18n>
           </ShortcutButton>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { UncontrolledTooltip, ButtonGroup, Button } from 'reactstrap';
 import { KappLinkContainer as LinkContainer } from 'common';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const CLOSED_STATUSES = ['Cancelled', 'Complete'];
 
@@ -52,7 +53,7 @@ export const StatusContent = ({ queueItem, prevAndNext }) => (
         className={getStatusClass(queueItem.values.Status)}
         id={getStatusId(queueItem)}
       >
-        {queueItem.values.Status}
+        <I18n>{queueItem.values.Status}</I18n>
         {queueItem.values.Status !== 'Open' && (
           <UncontrolledTooltip
             placement="top"

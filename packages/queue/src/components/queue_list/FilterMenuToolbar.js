@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Popover, PopoverBody, UncontrolledTooltip } from 'reactstrap';
 import { FilterMenuAbstract } from '../filter_menu/FilterMenuAbstract';
 import isarray from 'isarray';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const Menu = props => {
   const toggle = props.toggleShowing(props.name);
@@ -32,27 +33,33 @@ export const Menu = props => {
             <div className="filter-menu-popover__validations">
               {props.validations.map((validation, i) => (
                 <p key={i} className="text-danger">
-                  <small>{validation}</small>
+                  <small>
+                    <I18n>{validation}</I18n>
+                  </small>
                 </p>
               ))}
               {props.messages &&
                 props.messages.map((message, i) => (
                   <p key={i} className="text-info">
-                    <small>{message}</small>
+                    <small>
+                      <I18n>{message}</I18n>
+                    </small>
                   </p>
                 ))}
             </div>
           )}
           <div className="filter-menu-popover__footer">
             <button className="btn btn-link" onClick={props.reset}>
-              {props.resetLabel || 'Reset'}
+              <I18n>{props.resetLabel || 'Reset'}</I18n>
             </button>
             <button
               className="btn btn-primary"
               onClick={props.apply}
               disabled={!props.dirty || props.validations.length > 0}
             >
-              {props.applyLabel || 'Apply'}
+              <I18n>
+                <I18n>{props.applyLabel || 'Apply'}</I18n>
+              </I18n>
             </button>
           </div>
         </PopoverBody>
@@ -79,7 +86,7 @@ const ClearButton = props => {
       </button>
       {disabled && (
         <UncontrolledTooltip placement="right" target={props.id}>
-          {props.action}
+          <I18n>{props.action}</I18n>
         </UncontrolledTooltip>
       )}
     </Fragment>
@@ -129,7 +136,7 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
             <h2
               className={filter.type === 'adhoc' && filter.name ? 'edited' : ''}
             >
-              {filter.name || 'Adhoc'}
+              <I18n>{filter.name || 'Adhoc'}</I18n>
             </h2>
             <div className="queue-filter-list">
               <Menu
@@ -138,13 +145,13 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                 renderButton={btnProps =>
                   filter.teams.isEmpty() ? (
                     <MenuButton {...btnProps}>
-                      Any Team
+                      <I18n>Any Team</I18n>
                       <i className="fa fa-fw fa-caret-down" />
                     </MenuButton>
                   ) : (
                     <div className="btn-group">
                       <MenuButton {...btnProps}>
-                        Team: {props.teamSummary}
+                        <I18n>Team</I18n>: {props.teamSummary}
                       </MenuButton>
                       <ClearButton action={props.clearTeams} />
                     </div>
@@ -152,29 +159,35 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                 }
                 renderContent={() => props.teamFilters}
               />
-              <Menu
-                name="assignment"
-                {...popoverProps}
-                renderButton={btnProps =>
-                  filter.assignments.toSeq().every(b => !b) ? (
-                    <MenuButton {...btnProps}>
-                      Any Assignment
-                      {filter.createdByMe && ' | Created By Me'}
-                      <i className="fa fa-fw fa-caret-down" />
-                    </MenuButton>
-                  ) : (
-                    <div className="btn-group">
-                      <MenuButton {...btnProps}>
-                        Assignment: {props.assignmentSummary}
-                        {filter.createdByMe && ' | Created By Me'}
-                      </MenuButton>
-                    </div>
-                  )
-                }
-                renderContent={[
-                  () => props.assignmentFilters,
-                  () => props.createdByMeFilter,
-                ]}
+              <I18n
+                render={translate => (
+                  <Menu
+                    name="assignment"
+                    {...popoverProps}
+                    renderButton={btnProps =>
+                      filter.assignments.toSeq().every(b => !b) ? (
+                        <MenuButton {...btnProps}>
+                          {translate('Any Assignment')}
+                          {filter.createdByMe &&
+                            ` | ${translate('Created By Me')}`}
+                          <i className="fa fa-fw fa-caret-down" />
+                        </MenuButton>
+                      ) : (
+                        <div className="btn-group">
+                          <MenuButton {...btnProps}>
+                            {translate('Assignment')}: {props.assignmentSummary}
+                            {filter.createdByMe &&
+                              ` | ${translate('Created By Me')}`}
+                          </MenuButton>
+                        </div>
+                      )
+                    }
+                    renderContent={[
+                      () => props.assignmentFilters,
+                      () => props.createdByMeFilter,
+                    ]}
+                  />
+                )}
               />
               <Menu
                 name="status"
@@ -182,13 +195,13 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                 renderButton={btnProps =>
                   filter.status.isEmpty() ? (
                     <MenuButton {...btnProps}>
-                      Any Status
+                      <I18n>Any Status</I18n>
                       <i className="fa fa-fw fa-caret-down" />
                     </MenuButton>
                   ) : (
                     <div className="btn-group">
                       <MenuButton {...btnProps}>
-                        Status: {props.statusSummary}
+                        <I18n>Status</I18n>: {props.statusSummary}
                       </MenuButton>
                       <ClearButton action={props.clearStatus} />
                     </div>
@@ -202,7 +215,7 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                 renderButton={btnProps =>
                   !filter.dateRange.custom && filter.dateRange.preset === '' ? (
                     <MenuButton {...btnProps}>
-                      Any Date Range
+                      <I18n>Any Date Range</I18n>
                       <i className="fa fa-fw fa-caret-down" />
                     </MenuButton>
                   ) : (
@@ -233,7 +246,7 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                   messages={props.saveMessages}
                   renderButton={btnProps => (
                     <MenuButton {...btnProps} className="btn btn-primary">
-                      Save Filter?
+                      <I18n>Save Filter?</I18n>
                     </MenuButton>
                   )}
                   renderContent={() => props.saveFilterOptions}
@@ -250,12 +263,14 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                   resetLabel="Cancel"
                   renderButton={btnProps => (
                     <MenuButton {...btnProps} className="btn btn-danger">
-                      Delete Filter
+                      <I18n>Delete Filter</I18n>
                     </MenuButton>
                   )}
                   renderContent={() => (
                     <div>
-                      <label>Are you sure?</label>
+                      <label>
+                        <I18n>Are you sure?</I18n>
+                      </label>
                     </div>
                   )}
                 />
@@ -287,7 +302,7 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                           className="fa fa-fw fa-folder-open"
                           style={{ fontSize: '14px', color: '#1094C4' }}
                         />{' '}
-                        Grouped by {filter.groupBy}
+                        <I18n>Grouped by</I18n> <I18n>{filter.groupBy}</I18n>
                       </MenuButton>
                       <ClearButton action={props.clearGroupedBy} />
                     </div>
@@ -298,7 +313,7 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                           className="fa fa-fw fa-folder-open"
                           style={{ fontSize: '14px', color: '#7e8083' }}
                         />{' '}
-                        Ungrouped
+                        <I18n>Ungrouped</I18n>
                       </MenuButton>
                     </div>
                   )
@@ -320,7 +335,7 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                       className="fa fa-fw fa-sort"
                       style={{ fontSize: '14px', color: '#1094C4' }}
                     />{' '}
-                    Sorted by {props.sortedBySummary}
+                    <I18n>Sorted by</I18n> {props.sortedBySummary}
                   </MenuButton>
                 )}
                 renderContent={() => props.sortedByOptions}

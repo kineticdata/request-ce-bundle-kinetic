@@ -10,6 +10,7 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import { getTeamColor, getTeamIcon } from '../../../utils';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const TeamsListItemComponent = ({ team, openDropdown, toggleDropdown }) => {
   return (
@@ -25,15 +26,19 @@ const TeamsListItemComponent = ({ team, openDropdown, toggleDropdown }) => {
               <span />
             </div>
             <div className="card--team__body">
-              <h1>{team.name}</h1>
-              <pre className="text-truncate">{team.description}</pre>
+              <h1>
+                <I18n>{team.name}</I18n>
+              </h1>
+              <pre className="text-truncate">
+                <I18n>{team.description}</I18n>
+              </pre>
 
               <div className="btn-group" role="group" aria-label="Actions">
                 <Link
                   to={`/settings/teams/${team.slug}/edit`}
                   className="btn btn-info"
                 >
-                  Edit
+                  <I18n>Edit</I18n>
                 </Link>
               </div>
             </div>
@@ -41,9 +46,13 @@ const TeamsListItemComponent = ({ team, openDropdown, toggleDropdown }) => {
         </td>
       </Fragment>
       <td scope="row">
-        <Link to={`/settings/teams/${team.slug}/edit`}>{team.name}</Link>
+        <Link to={`/settings/teams/${team.slug}/edit`}>
+          <I18n>{team.name}</I18n>
+        </Link>
       </td>
-      <td className="d-none d-md-table-cell">{team.description}</td>
+      <td className="d-none d-md-table-cell">
+        <I18n>{team.description}</I18n>
+      </td>
     </tr>
   );
 };

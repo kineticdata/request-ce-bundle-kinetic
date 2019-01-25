@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const AssignmentBadge = ({ queueItem, toggle, readOnly }) => (
   <div
@@ -17,7 +18,7 @@ export const AssignmentBadge = ({ queueItem, toggle, readOnly }) => (
     </span>
     <div tabIndex={-1}>
       <div className="team">
-        {queueItem.values['Assigned Team Display Name']}
+        <I18n>{queueItem.values['Assigned Team Display Name']}</I18n>
       </div>
       <div className="individual text-truncate">
         {queueItem.values['Assigned Individual Display Name']}

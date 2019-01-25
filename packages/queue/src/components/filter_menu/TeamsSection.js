@@ -3,10 +3,13 @@ import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const TeamsSection = ({ teams, filter, toggleTeamHandler }) => (
   <ModalBody className="filter-section">
-    <h5>Teams</h5>
+    <h5>
+      <I18n>Teams</I18n>
+    </h5>
     {teams.map(team => (
       <label key={team.name} htmlFor={team.slug}>
         <input
@@ -16,7 +19,7 @@ export const TeamsSection = ({ teams, filter, toggleTeamHandler }) => (
           checked={filter.teams.includes(team.name)}
           onChange={toggleTeamHandler}
         />
-        {team.name}
+        <I18n>{team.name}</I18n>
       </label>
     ))}
   </ModalBody>

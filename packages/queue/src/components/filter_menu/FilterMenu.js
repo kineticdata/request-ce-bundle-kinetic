@@ -7,6 +7,7 @@ import { StatusSectionContainer } from './StatusSection';
 import { DateRangeSectionContainer } from './DateRangeSection';
 import { SortedBySectionContainer } from './SortedBySection';
 import { GroupedBySectionContainer } from './GroupedBySection';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const FilterMenu = ({
   teams,
@@ -29,16 +30,18 @@ export const FilterMenu = ({
     <div className="modal-header">
       <h4 className="modal-title">
         <button type="button" className="btn btn-link" onClick={close}>
-          Close
+          <I18n>Close</I18n>
         </button>
-        <span>Filters</span>
+        <span>
+          <I18n>Filters</I18n>
+        </span>
         <button
           type="button"
           className="btn btn-link"
           disabled={!isDirty}
           onClick={reset}
         >
-          Reset
+          <I18n>Reset</I18n>
         </button>
       </h4>
       {activeSection !== null && (
@@ -50,7 +53,7 @@ export const FilterMenu = ({
           <span className="icon">
             <span className="fa fa-fw fa-chevron-left" />
           </span>
-          Filters
+          <I18n>Filters</I18n>
         </button>
       )}
     </div>
@@ -102,7 +105,7 @@ export const FilterMenu = ({
         disabled={!isDirty || !errors.isEmpty()}
         onClick={applyFilterHandler}
       >
-        Apply Filter
+        <I18n>Apply Filter</I18n>
       </button>
     </ModalFooter>
   </Modal>

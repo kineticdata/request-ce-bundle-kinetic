@@ -1,6 +1,7 @@
 import React from 'react';
 import { KappLink as Link, KappNavLink as NavLink } from 'common';
 import { Nav, NavItem } from 'reactstrap';
+import { I18n } from '../../../app/src/I18nProvider';
 
 const formatCount = count => (count >= 1000 ? '999+' : `${count}`);
 
@@ -22,7 +23,7 @@ export const Sidebar = ({
             className="btn btn-secondary btn-sidebar-action"
             onClick={handleOpenNewItemMenu}
           >
-            New Task
+            <I18n>New Task</I18n>
           </button>
         </div>
       )}
@@ -36,7 +37,7 @@ export const Sidebar = ({
               activeClassName="active"
             >
               <span className="fa fa-fw fa-user" />
-              Mine ({formatCount(counts.get('Mine', 0))})
+              <I18n>Mine</I18n> ({formatCount(counts.get('Mine', 0))})
             </NavLink>
           </NavItem>
           {hasTeammates && (
@@ -47,7 +48,9 @@ export const Sidebar = ({
                 activeClassName="active"
               >
                 <span className="fa fa-fw fa-users" />
-                Teammates ({formatCount(counts.get('Teammates', 0))})
+                <I18n>Teammates</I18n> ({formatCount(
+                  counts.get('Teammates', 0),
+                )})
               </NavLink>
             </NavItem>
           )}
@@ -59,7 +62,9 @@ export const Sidebar = ({
                 activeClassName="active"
               >
                 <span className="fa fa-fw fa-inbox" />
-                Unassigned ({formatCount(counts.get('Unassigned', 0))})
+                <I18n>Unassigned</I18n> ({formatCount(
+                  counts.get('Unassigned', 0),
+                )})
               </NavLink>
             </NavItem>
           )}
@@ -70,14 +75,18 @@ export const Sidebar = ({
               activeClassName="active"
             >
               <span className="fa fa-fw fa-user-circle-o" />
-              Created By Me ({formatCount(counts.get('Created By Me', 0))})
+              <I18n>Created By Me</I18n> ({formatCount(
+                counts.get('Created By Me', 0),
+              )})
             </NavLink>
           </NavItem>
         </Nav>
       </div>
       {hasTeams && (
         <div className="sidebar-group sidebar-team-filters">
-          <h1>Team Filters</h1>
+          <h1>
+            <I18n>Team Filters</I18n>
+          </h1>
           <Nav vertical>
             {teamFilters.map(filter => (
               <NavItem key={filter.name}>
@@ -87,7 +96,7 @@ export const Sidebar = ({
                   activeClassName="active"
                 >
                   <span className={`fa fa-fw fa-${filter.icon}`} />
-                  {`${filter.name}`}
+                  <I18n>{`${filter.name}`}</I18n>
                 </NavLink>
               </NavItem>
             ))}
@@ -95,7 +104,9 @@ export const Sidebar = ({
         </div>
       )}
       <div className="sidebar-group sidebar-my-filters">
-        <h1>My Filters</h1>
+        <h1>
+          <I18n>My Filters</I18n>
+        </h1>
         <Nav vertical>
           {myFilters.map(filter => (
             <NavItem key={filter.name}>
@@ -114,7 +125,7 @@ export const Sidebar = ({
             <NavItem>
               <i className="nav-link">
                 <span className="fa fa-filled-star" />
-                None Configured
+                <I18n>None Configured</I18n>
               </i>
             </NavItem>
           )}
@@ -124,7 +135,7 @@ export const Sidebar = ({
     <div className="sidebar-group sidebar-group--settings">
       <ul className="nav flex-column settings-group">
         <Link to="/settings/" className="nav-link">
-          Settings
+          <I18n>Settings</I18n>
           <span className="fa fa-fw fa-angle-right" />
         </Link>
       </ul>

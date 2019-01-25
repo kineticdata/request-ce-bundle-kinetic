@@ -53,7 +53,7 @@ export function* fetchAppSettingsTask() {
     }),
     forms: call(CoreAPI.fetchForms, {
       kappSlug,
-      include: 'details,attributes,fields,fields.details',
+      include: 'details,attributes,fields,fields.details,kapp',
     }),
     teams: call(CoreAPI.fetchTeams, {
       include:

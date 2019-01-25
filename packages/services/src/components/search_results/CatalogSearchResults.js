@@ -3,16 +3,20 @@ import { KappLink as Link, PageTitle } from 'common';
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 import { ServiceCard } from '../shared/ServiceCard';
 import { CatalogSearchContainer } from '../shared/CatalogSearchContainer';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const CatalogSearchResults = ({ query, forms }) => (
   <div>
-    <PageTitle parts={[`Search: ${query}`]} />
+    <PageTitle parts={[query, 'Search']} />
     <span className="services-color-bar services-color-bar__blue-slate" />
     <div className="page-container page-container--search-results">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">services</Link> / search results
+            <Link to="/">
+              <I18n>services</I18n>
+            </Link>{' '}
+            / <I18n>search results</I18n>
           </h3>
           <h1>{query}</h1>
         </div>
@@ -32,11 +36,15 @@ export const CatalogSearchResults = ({ query, forms }) => (
             </ul>
           ) : (
             <div className="empty-state empty-state--wally">
-              <h5>No Results for '{query}'</h5>
+              <h5>
+                <I18n>No Results for</I18n> '{query}'
+              </h5>
               <img src={wallyMissingImage} alt="Missing Wally" />
               <h6>
-                Make sure words are spelled correctly, use less specific or
-                different keywords
+                <I18n>
+                  Make sure words are spelled correctly, use less specific or
+                  different keywords
+                </I18n>
               </h6>
             </div>
           )}
