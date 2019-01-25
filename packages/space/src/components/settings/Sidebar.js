@@ -129,7 +129,7 @@ export const SidebarComponent = ({
           <li>
             <a
               href={`${bundle.spaceLocation()}/app`}
-              target="blank"
+              target="_blank"
               className="nav-link nav-link--admin"
             >
               <I18n>Kinetic Request Admin</I18n>
@@ -140,7 +140,7 @@ export const SidebarComponent = ({
             <li>
               <a
                 href={`${bundle.spaceLocation()}/kinetic-task`}
-                target="blank"
+                target="_blank"
                 className="nav-link nav-link--admin"
               >
                 <I18n>Kinetic Task Admin</I18n>
