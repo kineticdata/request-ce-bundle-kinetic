@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, lifecycle, withHandlers } from 'recompose';
+import { compose, lifecycle, withProps } from 'recompose';
 import { KappLink as Link, PageTitle } from 'common';
 import { DiscussionsPanel } from 'discussions';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
@@ -8,11 +8,45 @@ import { actions } from '../../redux/modules/queue';
 import { QueueItemDetailsContainer } from './QueueItemDetails';
 import { getFilterByPath, buildFilterPath } from '../../redux/modules/queueApp';
 
+const CreationForm = ({ onChange, values, errors }) => (
+  <React.Fragment>
+    <div className="form-group">
+      <label htmlFor="title">Title</label>
+      <input
+        id="title"
+        name="title"
+        type="text"
+        value={values.title}
+        onChange={onChange}
+      />
+      {errors.title && (
+        <small className="form-text text-danger">{errors.title}</small>
+      )}
+    </div>
+    <div className="form-group">
+      <div className="form-check-inline">
+        <input
+          id="relateOriginatingRequest"
+          name="relateOriginatingRequest"
+          type="checkbox"
+          className="form-check-input"
+          checked={values.relateOriginatingRequest}
+          onChange={onChange}
+        />
+        <label htmlFor="relateOriginatingRequest" className="form-check-label">
+          Relate Originating Request
+        </label>
+      </div>
+    </div>
+  </React.Fragment>
+);
+
 export const QueueItem = ({
   filter,
   queueItem,
   discussionsEnabled,
-  getCreationParams,
+  creationFields,
+  onCreated,
   profile,
 }) =>
   queueItem !== null && (
@@ -34,36 +68,23 @@ export const QueueItem = ({
         />
         <QueueItemDetailsContainer
           filter={filter}
-          getCreationParams={getCreationParams}
+          creationFields={creationFields}
+          onCreated={onCreated}
+          CreationForm={CreationForm}
         />
         {discussionsEnabled && (
           <DiscussionsPanel
             itemType="Submission"
             itemKey={queueItem.id}
-            creationParams={getCreationParams}
+            creationFields={creationFields}
+            onCreated={onCreated}
+            CreationForm={CreationForm}
             me={profile}
           />
         )}
       </div>
     </div>
   );
-
-export const getCreationParams = props => () => {
-  const owningTeams = [{ name: props.queueItem.values['Assigned Team'] }];
-  const owningUsers = [
-    {
-      username:
-        props.queueItem.values['Assigned Individual'] || props.profile.username,
-    },
-  ];
-
-  return {
-    title: props.queueItem.label || 'Queue Discussion',
-    description: props.queueItem.values['Details'] || '',
-    owningTeams,
-    owningUsers,
-  };
-};
 
 export const mapStateToProps = (state, props) => ({
   id: props.match.params.id,
@@ -83,9 +104,24 @@ export const QueueItemContainer = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withHandlers({
-    getCreationParams,
-  }),
+  withProps(
+    props =>
+      props.queueItem && {
+        creationFields: {
+          title: props.queueItem.label || 'Queue Discussion',
+          description: props.queueItem.values['Details'] || '',
+          owningTeams: [{ name: props.queueItem.values['Assigned Team'] }],
+          owningUsers: [
+            {
+              username:
+                props.queueItem.values['Assigned Individual'] ||
+                props.profile.username,
+            },
+          ],
+          relateOriginatingRequest: false,
+        },
+      },
+  ),
   lifecycle({
     componentWillMount() {
       this.props.fetchCurrentItem(this.props.id);

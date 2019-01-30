@@ -43,7 +43,9 @@ export const QueueItemDetails = ({
   discussionsEnabled,
   profile,
   isSmallLayout,
-  getCreationParams,
+  creationFields,
+  onCreated,
+  CreationForm,
 }) => (
   <div className="page-panel page-panel--three-fifths page-panel--queue-details">
     {viewDiscussionsModal &&
@@ -52,7 +54,9 @@ export const QueueItemDetails = ({
           itemType="Submission"
           itemKey={queueItem.id}
           close={closeDiscussions}
-          creationParams={getCreationParams}
+          creationFields={creationFields}
+          onCreated={onCreated}
+          CreationForm={CreationForm}
           me={profile}
         />
       )}

@@ -9,7 +9,9 @@ export const ViewDiscussionsModal = ({
   itemKey,
   itemType,
   me,
-  creationParams,
+  creationFields,
+  onCreated,
+  CreationForm,
   modalBodyClassName,
 }) => (
   <Modal isOpen size="lg" toggle={close}>
@@ -31,7 +33,9 @@ export const ViewDiscussionsModal = ({
           itemType={itemType}
           me={me}
           isModal
-          creationParams={creationParams}
+          creationFields={creationFields}
+          onCreated={onCreated}
+          CreationForm={CreationForm}
         />
       )}
     </ModalBody>
