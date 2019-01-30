@@ -5,9 +5,25 @@ import { ViewDiscussionsModal, DiscussionsPanel } from 'discussions';
 import { PageTitle, Avatar } from 'common';
 import { ServiceCard } from '../shared/ServiceCard';
 
+const CreationForm = ({ onChange, values, errors }) => (
+  <div className="form-group">
+    <label htmlFor="title">Title</label>
+    <input
+      id="title"
+      name="title"
+      type="text"
+      value={values.title}
+      onChange={onChange}
+    />
+    {errors.title && (
+      <small className="form-text text-danger">{errors.title}</small>
+    )}
+  </div>
+);
+
 export const Team = ({
   loading,
-  getCreationParams,
+  creationFields,
   openDiscussions,
   closeDiscussions,
   viewDiscussionsModal,
@@ -140,14 +156,16 @@ export const Team = ({
                   close={closeDiscussions}
                   itemType="Team"
                   itemKey={team.slug}
-                  creationParams={getCreationParams}
+                  creationFields={creationFields}
+                  CreationForm={CreationForm}
                   me={me}
                 />
               )}
             <DiscussionsPanel
               itemType="Team"
               itemKey={team.slug}
-              creationParams={getCreationParams}
+              creationFields={creationFields}
+              CreationForm={CreationForm}
               me={me}
             />
           </Fragment>

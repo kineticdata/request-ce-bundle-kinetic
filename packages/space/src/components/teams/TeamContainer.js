@@ -1,4 +1,10 @@
-import { compose, lifecycle, withHandlers, withState } from 'recompose';
+import {
+  compose,
+  lifecycle,
+  withHandlers,
+  withProps,
+  withState,
+} from 'recompose';
 import { connect } from 'react-redux';
 import { modalFormActions, Utils } from 'common';
 import { buildHierarchy } from '../../utils';
@@ -22,16 +28,6 @@ export const openDiscussions = props => () =>
 
 export const closeDiscussions = props => () =>
   props.setViewDiscussionsModal(false);
-
-export const getCreationParams = props => () => {
-  const owningTeams = [{ name: props.team.name }];
-
-  return {
-    title: props.team.name || 'Team Discussion',
-    description: props.team.name || '',
-    owningTeams,
-  };
-};
 
 const mapStateToProps = state => {
   const team = selectTeam(state);
@@ -142,6 +138,15 @@ export const TeamContainer = compose(
     openRequestToLeaveForm,
     openDiscussions,
     closeDiscussions,
-    getCreationParams,
   }),
+  withProps(
+    props =>
+      props.team && {
+        creationFields: {
+          title: props.team.name || 'Team Discussion',
+          description: props.team.name || '',
+          owningTeams: [{ name: props.team.name }],
+        },
+      },
+  ),
 )(Team);

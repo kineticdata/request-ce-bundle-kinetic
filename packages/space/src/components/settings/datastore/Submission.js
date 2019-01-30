@@ -1,8 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { List } from 'immutable';
-import { compose, withHandlers, withState, lifecycle } from 'recompose';
+import {
+  compose,
+  withHandlers,
+  withProps,
+  withState,
+  lifecycle,
+} from 'recompose';
 import { Link } from 'react-router-dom';
 import { parse } from 'query-string';
 import { ButtonGroup, Button } from 'reactstrap';
@@ -22,6 +27,22 @@ import { DiscussionsPanel, ViewDiscussionsModal } from 'discussions';
 
 const globals = import('common/globals');
 
+const CreationForm = ({ onChange, values, errors }) => (
+  <div className="form-group">
+    <label htmlFor="title">Title</label>
+    <input
+      id="title"
+      name="title"
+      type="text"
+      value={values.title}
+      onChange={onChange}
+    />
+    {errors.title && (
+      <small className="form-text text-danger">{errors.title}</small>
+    )}
+  </div>
+);
+
 const DatastoreSubmissionComponent = ({
   form,
   showPrevAndNext,
@@ -40,7 +61,7 @@ const DatastoreSubmissionComponent = ({
   openDiscussions,
   closeDiscussions,
   profile,
-  getCreationParams,
+  creationFields,
 }) => (
   <div className="page-container page-container--panels page-container--datastore">
     <PageTitle
@@ -135,7 +156,8 @@ const DatastoreSubmissionComponent = ({
     {discussionsEnabled &&
       submission && (
         <DiscussionsPanel
-          creationParams={getCreationParams}
+          creationFields={creationFields}
+          CreationForm={CreationForm}
           itemType="Datastore Submission"
           itemKey={submissionId}
           me={profile}
@@ -144,7 +166,8 @@ const DatastoreSubmissionComponent = ({
     {viewDiscussionsModal &&
       isSmallLayout && (
         <ViewDiscussionsModal
-          creationParams={getCreationParams}
+          creationFields={creationFields}
+          CreationForm={CreationForm}
           close={closeDiscussions}
           itemType="Datastore Submission"
           itemKey={submissionId}
@@ -199,11 +222,6 @@ export const openDiscussions = props => () =>
 export const closeDiscussions = props => () =>
   props.setViewDiscussionsModal(false);
 
-export const getCreationParams = props => () => ({
-  title: props.submission.label || 'Datastore Discussion',
-  description: props.submission.form.name || '',
-});
-
 export const mapStateToProps = (state, { match: { params } }) => ({
   submissionId: params.id,
   submission: state.space.settingsDatastore.submission,
@@ -238,8 +256,16 @@ export const DatastoreSubmission = compose(
     handleError,
     openDiscussions,
     closeDiscussions,
-    getCreationParams,
   }),
+  withProps(
+    props =>
+      props.submission && {
+        creationFields: {
+          title: props.submission.label || 'Datastore Discussion',
+          description: props.submission.form.name || '',
+        },
+      },
+  ),
   lifecycle({
     componentWillMount() {
       if (this.props.match.params.id) {
