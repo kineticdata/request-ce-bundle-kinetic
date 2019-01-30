@@ -16,13 +16,6 @@ import {
   Utils,
   selectHasRoleSchedulerAdmin,
 } from 'common';
-import {
-  VictoryPie,
-  VictoryChart,
-  VictoryBar,
-  VictoryTheme,
-  VictoryGroup,
-} from 'victory';
 import { MetricsSummary } from './metrics/MetricsSummary';
 import {
   actions,
@@ -31,9 +24,6 @@ import {
 } from '../../redux/modules/metrics';
 import { I18n } from '../../../../app/src/I18nProvider';
 import moment from 'moment';
-
-const getStatusColor = status =>
-  status === 'Inactive' ? 'status--red' : 'status--green';
 
 export const TechBarMetricsComponent = ({
   mode,
@@ -73,7 +63,9 @@ export const TechBarMetricsComponent = ({
         <div className="form p-0">
           <div className="row">
             <div className="form-group col-md-6">
-              <label htmlFor="scheduler-select">Tech Bar</label>
+              <label htmlFor="scheduler-select">
+                <I18n>Tech Bar</I18n>
+              </label>
               <select
                 name="scheduler-select"
                 id="scheduler-select"
@@ -84,13 +76,15 @@ export const TechBarMetricsComponent = ({
                   setEventType('');
                 }}
               >
-                <option value="">All Tech Bars</option>
+                <option value="">
+                  <I18n>All Tech Bars</I18n>
+                </option>
                 {techBars.map(techBar => (
                   <option
                     value={techBar.values['Id']}
                     key={techBar.values['Id']}
                   >
-                    {techBar.values['Name']}
+                    <I18n>{techBar.values['Name']}</I18n>
                   </option>
                 ))}
               </select>
@@ -107,10 +101,12 @@ export const TechBarMetricsComponent = ({
                     setEventType(e.target.value);
                   }}
                 >
-                  <option value="">All Event Types</option>
+                  <option value="">
+                    <I18n>All Event Types</I18n>
+                  </option>
                   {eventTypes.map(eventType => (
                     <option value={eventType} key={eventType}>
-                      {eventType}
+                      <I18n>{eventType}</I18n>
                     </option>
                   ))}
                 </select>
@@ -130,7 +126,9 @@ export const TechBarMetricsComponent = ({
                   setSelectedRange('last30Days');
                 }}
               >
-                <I18n>Summary</I18n>
+                <I18n>
+                  <I18n>Summary</I18n>
+                </I18n>
               </NavLink>
             </li>
             {/*<li role="presentation">
@@ -149,7 +147,9 @@ export const TechBarMetricsComponent = ({
           <div className="form p-0 my-3">
             <div className="row">
               <div className="form-group col-md-6">
-                <label htmlFor="date-range-select">Date Range</label>
+                <label htmlFor="date-range-select">
+                  <I18n>Date Range</I18n>
+                </label>
                 <select
                   name="date-range-select"
                   id="date-range-select"
@@ -165,22 +165,36 @@ export const TechBarMetricsComponent = ({
                   }}
                 >
                   {mode === 'summary' && (
-                    <option value="singleDay">Single Day</option>
+                    <option value="singleDay">
+                      <I18n>Single Day</I18n>
+                    </option>
                   )}
-                  <option value="last7Days">Last 7 Days</option>
-                  <option value="last30Days">Last 30 Days</option>
-                  <option value="monthToDate">Month to Date</option>
+                  <option value="last7Days">
+                    <I18n>Last 7 Days</I18n>
+                  </option>
+                  <option value="last30Days">
+                    <I18n>Last 30 Days</I18n>
+                  </option>
+                  <option value="monthToDate">
+                    <I18n>Month to Date</I18n>
+                  </option>
                   {mode === 'trend' && (
-                    <option value="last12Months">Last 12 Months</option>
+                    <option value="last12Months">
+                      <I18n>Last 12 Months</I18n>
+                    </option>
                   )}
                   {mode === 'trend' && (
-                    <option value="yearToDate">Year To Date</option>
+                    <option value="yearToDate">
+                      <I18n>Year To Date</I18n>
+                    </option>
                   )}
                 </select>
               </div>
               {selectedRange === 'singleDay' && (
                 <div className="form-group col-md-6">
-                  <label htmlFor="date-select">Date</label>
+                  <label htmlFor="date-select">
+                    <I18n>Date</I18n>
+                  </label>
                   <input
                     type="date"
                     id="date-select"

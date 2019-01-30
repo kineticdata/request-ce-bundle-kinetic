@@ -1,28 +1,17 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import {
-  compose,
-  lifecycle,
-  withHandlers,
-  withProps,
-  withState,
-} from 'recompose';
+import { compose, withProps } from 'recompose';
 import {
   VictoryContainer,
-  VictoryZoomContainer,
   VictoryPie,
   VictoryChart,
   VictoryBar,
-  VictoryTheme,
   VictoryGroup,
-  VictoryStack,
   VictoryTooltip,
-  VictoryPortal,
   VictoryAxis,
 } from 'victory';
-import { Constants, Table, Utils } from 'common';
-import { actions, DATE_FORMAT } from '../../../redux/modules/metrics';
+import { Constants, Table } from 'common';
 import { I18n } from '../../../../../app/src/I18nProvider';
 import moment from 'moment';
 import { Record } from 'immutable';
@@ -30,35 +19,39 @@ import { Record } from 'immutable';
 const toInt = value => parseInt(value, 10) || 0;
 const toPercent = (a, b) => (b !== 0 ? `${Math.round((a / b) * 100)}%` : '');
 
-const Wrapper = <VictoryContainer style={{ height: '250px' }} />;
-
 const Appointments = ({ appointments }) => (
   <Fragment>
-    <div className="section__title">Appointments</div>
+    <div className="section__title">
+      <I18n>Appointments</I18n>
+    </div>
     {appointments.total > 0 ? (
       <Fragment>
-        <div className="text-center">
-          <div>
-            <span
-              className="fa fa-square fa-fw"
-              style={{ color: Constants.COLORS.blueSky }}
-            />
-            {`${toPercent(
-              appointments.scheduled,
-              appointments.total,
-            )} Scheduled (${appointments.scheduled})`}
-          </div>
-          <div>
-            <span
-              className="fa fa-square fa-fw"
-              style={{ color: Constants.COLORS.sunflower }}
-            />
-            {`${toPercent(
-              appointments.walkins,
-              appointments.total,
-            )} Walk-Ins (${appointments.walkins})`}
-          </div>
-        </div>
+        <I18n
+          render={translate => (
+            <div className="text-center">
+              <div>
+                <span
+                  className="fa fa-square fa-fw"
+                  style={{ color: Constants.COLORS.blueSky }}
+                />
+                {`${toPercent(
+                  appointments.scheduled,
+                  appointments.total,
+                )} ${translate('Scheduled')} (${appointments.scheduled})`}
+              </div>
+              <div>
+                <span
+                  className="fa fa-square fa-fw"
+                  style={{ color: Constants.COLORS.sunflower }}
+                />
+                {`${toPercent(
+                  appointments.walkins,
+                  appointments.total,
+                )} ${translate('Walk-Ins')} (${appointments.walkins})`}
+              </div>
+            </div>
+          )}
+        />
         <VictoryContainer
           className="VictoryContainer max-height-250"
           height={100}
@@ -101,13 +94,15 @@ const Appointments = ({ appointments }) => (
               className="fa fa-square fa-fw"
               style={{ color: Constants.COLORS.blueLake }}
             />
-            {`Same Day Appointments (${appointments.sameDay})`}
+            <I18n>Same Day Appointments</I18n> {`(${appointments.sameDay})`}
           </div>
         </div>
       </Fragment>
     ) : (
       <div className="text-center">
-        <em>No Appointments</em>
+        <em>
+          <I18n>No Appointments</I18n>
+        </em>
       </div>
     )}
   </Fragment>
@@ -115,29 +110,35 @@ const Appointments = ({ appointments }) => (
 
 const Feedback = ({ feedback }) => (
   <Fragment>
-    <div className="section__title">Feedback</div>
+    <div className="section__title">
+      <I18n>Feedback</I18n>
+    </div>
     {feedback.total > 0 ? (
       <Fragment>
-        <div className="text-center">
-          <div>
-            <span
-              className="fa fa-square fa-fw"
-              style={{ color: Constants.COLORS.green }}
-            />
-            {`${toPercent(feedback.positive, feedback.total)} Happy (${
-              feedback.positive
-            })`}
-          </div>
-          <div>
-            <span
-              className="fa fa-square fa-fw"
-              style={{ color: Constants.COLORS.red }}
-            />
-            {`${toPercent(feedback.negative, feedback.total)} Unhappy (${
-              feedback.negative
-            })`}
-          </div>
-        </div>
+        <I18n
+          render={translate => (
+            <div className="text-center">
+              <div>
+                <span
+                  className="fa fa-square fa-fw"
+                  style={{ color: Constants.COLORS.green }}
+                />
+                {`${toPercent(feedback.positive, feedback.total)} ${translate(
+                  'Happy',
+                )} (${feedback.positive})`}
+              </div>
+              <div>
+                <span
+                  className="fa fa-square fa-fw"
+                  style={{ color: Constants.COLORS.red }}
+                />
+                {`${toPercent(feedback.negative, feedback.total)} ${translate(
+                  'Unhappy',
+                )} (${feedback.negative})`}
+              </div>
+            </div>
+          )}
+        />
         <VictoryPie
           containerComponent={
             <VictoryContainer
@@ -156,7 +157,9 @@ const Feedback = ({ feedback }) => (
       </Fragment>
     ) : (
       <div className="text-center">
-        <em>No Feedback</em>
+        <em>
+          <I18n>No Feedback</I18n>
+        </em>
       </div>
     )}
   </Fragment>
@@ -164,7 +167,9 @@ const Feedback = ({ feedback }) => (
 
 const Utilization = ({ utilization }) => (
   <Fragment>
-    <div className="section__title">Utilization</div>
+    <div className="section__title">
+      <I18n>Utilization</I18n>
+    </div>
     {utilization.available > 0 ? (
       <Fragment>
         <div className="text-center">
@@ -173,17 +178,16 @@ const Utilization = ({ utilization }) => (
               className="fa fa-square fa-fw"
               style={{ color: Constants.COLORS.blueSky }}
             />
-            {`${toPercent(
-              utilization.scheduled,
-              utilization.available,
-            )} Scheduled`}
+            {toPercent(utilization.scheduled, utilization.available)}{' '}
+            <I18n>Scheduled</I18n>
           </div>
           <div>
             <span
               className="fa fa-square fa-fw"
               style={{ color: Constants.COLORS.greenGrass }}
             />
-            {`${toPercent(utilization.actual, utilization.available)} Actual`}
+            {toPercent(utilization.actual, utilization.available)}{' '}
+            <I18n>Actual</I18n>
           </div>
         </div>
         <VictoryContainer
@@ -223,7 +227,9 @@ const Utilization = ({ utilization }) => (
       </Fragment>
     ) : (
       <div className="text-center">
-        <em>No Availability</em>
+        <em>
+          <I18n>No Availability</I18n>
+        </em>
       </div>
     )}
   </Fragment>
@@ -240,88 +246,101 @@ const TimeOfVisit = ({ timeOfVisit }) => {
   }, Array(24).fill(0));
   return (
     <Fragment>
-      <div className="section__title">Time of Visit</div>
+      <div className="section__title">
+        <I18n>Time of Visit</I18n>
+      </div>
       {Object.keys(timeOfVisit.scheduled).length > 0 ||
       Object.keys(timeOfVisit.walkins).length > 0 ? (
         <Fragment>
-          <VictoryChart
-            containerComponent={
-              <VictoryContainer
-                className="VictoryContainer max-height-350"
-                style={{ height: 'auto' }}
-                zoomDimension="x"
-              />
-            }
-            width={750}
-            height={300}
-            domainPadding={12}
-          >
-            <VictoryGroup
-              colorScale={[
-                Constants.COLORS.blueSky,
-                Constants.COLORS.sunflower,
-              ]}
-              offset={12}
-              labelComponent={<VictoryTooltip />}
-            >
-              <VictoryBar
-                barWidth={12}
-                data={scheduledData.map((count, index) => ({
-                  x: moment(index, 'H').format('LT'),
-                  y: count,
-                  label: d => `${d.x}: ${d.y} Scheduled`,
-                }))}
-              />
-              <VictoryBar
-                barWidth={12}
-                data={walkinsData.map((count, index) => ({
-                  x: moment(index, 'H').format('LT'),
-                  y: count,
-                  label: d => `${d.x}: ${d.y} Walk-In${d.y !== 1 ? 's' : ''}`,
-                }))}
-              />
-            </VictoryGroup>
-            <VictoryAxis
-              style={{
-                tickLabels: {
-                  angle: 45,
-                  verticalAnchor: 'middle',
-                  textAnchor: 'start',
-                  padding: 5,
-                  fontSize: 14,
-                },
-              }}
-            />
-            <VictoryAxis
-              dependentAxis
-              style={{
-                tickLabels: {
-                  padding: 5,
-                  fontSize: 14,
-                },
-              }}
-            />
-          </VictoryChart>
+          <I18n
+            render={translate => (
+              <VictoryChart
+                containerComponent={
+                  <VictoryContainer
+                    className="VictoryContainer max-height-350"
+                    style={{ height: 'auto' }}
+                    zoomDimension="x"
+                  />
+                }
+                width={750}
+                height={300}
+                domainPadding={12}
+              >
+                <VictoryGroup
+                  colorScale={[
+                    Constants.COLORS.blueSky,
+                    Constants.COLORS.sunflower,
+                  ]}
+                  offset={12}
+                  labelComponent={<VictoryTooltip />}
+                >
+                  <VictoryBar
+                    barWidth={12}
+                    data={scheduledData.map((count, index) => ({
+                      x: moment(index, 'H').format('LT'),
+                      y: count,
+                      label: d => `${d.x}: ${d.y} ${translate('Scheduled')}`,
+                    }))}
+                  />
+                  <VictoryBar
+                    barWidth={12}
+                    data={walkinsData.map((count, index) => ({
+                      x: moment(index, 'H').format('LT'),
+                      y: count,
+                      label: d =>
+                        `${d.x}: ${d.y} ${
+                          d.y !== 1
+                            ? translate('Walk-Ins')
+                            : translate('Walk-In')
+                        }`,
+                    }))}
+                  />
+                </VictoryGroup>
+                <VictoryAxis
+                  style={{
+                    tickLabels: {
+                      angle: 45,
+                      verticalAnchor: 'middle',
+                      textAnchor: 'start',
+                      padding: 5,
+                      fontSize: 14,
+                    },
+                  }}
+                />
+                <VictoryAxis
+                  dependentAxis
+                  style={{
+                    tickLabels: {
+                      padding: 5,
+                      fontSize: 14,
+                    },
+                  }}
+                />
+              </VictoryChart>
+            )}
+          />
           <div className="text-center">
             <div>
               <span
                 className="fa fa-square fa-fw"
                 style={{ color: Constants.COLORS.blueSky }}
               />
-              Scheduled
+              <I18n>Scheduled</I18n>
             </div>
             <div>
               <span
                 className="fa fa-square fa-fw"
                 style={{ color: Constants.COLORS.sunflower }}
               />
-              Walk-Ins
+              <I18n>Walk-Ins</I18n>
             </div>
           </div>
         </Fragment>
       ) : (
         <div className="text-center">
-          <em>No Visits</em>
+          <em>
+            <I18n>No Visits</I18n>
+          </em>
         </div>
       )}
     </Fragment>
@@ -330,78 +349,98 @@ const TimeOfVisit = ({ timeOfVisit }) => {
 
 const Duration = ({ durations, techBars }) => (
   <Fragment>
-    <div className="section__title">Average Durations</div>
+    <div className="section__title">
+      <I18n>Average Durations</I18n>
+    </div>
     {durations.length > 0 ? (
-      <Table
-        class="table-settings"
-        data={durations.map(d => {
-          const techBar = techBars.find(t => t.values['Id'] === d.schedulerId);
-          const schedulerName = techBar
-            ? techBar.values['Name']
-            : d.schedulerId;
-          const actualAverage =
-            d.quantity > 0 ? Math.round(d.actual / d.quantity) : null;
-          return {
-            ...d,
-            actualAverage,
-            variance:
-              d.quantity > 0 ? (actualAverage - d.duration) / d.duration : null,
-            waitTimeAverage:
-              d.quantity > 0 ? Math.round(d.waitTime / d.quantity) : null,
-            schedulerName,
-            sortValue: `${schedulerName} ${d.type}`,
-          };
-        })}
-        columns={[
-          {
-            title: 'Event Type',
-            value: 'sortValue',
-            renderBodyCell: ({ value, row }) => (
-              <td>
-                <div>{row.type}</div>
-                <small className="text-muted">{row.schedulerName}</small>
-              </td>
-            ),
-          },
-          {
-            title: 'Scheduled',
-            value: 'duration',
-            renderBodyCell: ({ value }) => <td>{`${value} min`}</td>,
-          },
-          {
-            title: 'Actual',
-            value: 'actualAverage',
-            renderBodyCell: ({ value }) => (
-              <td>{value !== null ? `${value} min` : ''}</td>
-            ),
-          },
-          {
-            title: 'Variance',
-            value: 'variance',
-            renderBodyCell: ({ value, row }) => (
-              <td>{value !== null ? toPercent(value, 1) : ''}</td>
-            ),
-          },
-          {
-            title: 'Wait Time',
-            value: 'waitTimeAverage',
-            renderBodyCell: ({ value }) => (
-              <td>{value !== null ? `${value} min` : ''}</td>
-            ),
-          },
-          {
-            title: 'Qty',
-            value: 'quantity',
-            width: '1%',
-          },
-        ]}
-        filtering={false}
-        pagination={false}
-        render={({ table }) => <div className="table-wrapper">{table}</div>}
+      <I18n
+        render={translate => (
+          <Table
+            class="table-settings"
+            data={durations.map(d => {
+              const techBar = techBars.find(
+                t => t.values['Id'] === d.schedulerId,
+              );
+              const schedulerName = techBar
+                ? techBar.values['Name']
+                : d.schedulerId;
+              const actualAverage =
+                d.quantity > 0 ? Math.round(d.actual / d.quantity) : null;
+              return {
+                ...d,
+                actualAverage,
+                variance:
+                  d.quantity > 0
+                    ? (actualAverage - d.duration) / d.duration
+                    : null,
+                waitTimeAverage:
+                  d.quantity > 0 ? Math.round(d.waitTime / d.quantity) : null,
+                schedulerName,
+                sortValue: `${schedulerName} ${d.type}`,
+              };
+            })}
+            columns={[
+              {
+                title: 'Event Type',
+                value: 'sortValue',
+                renderBodyCell: ({ value, row }) => (
+                  <td>
+                    <div>{translate(row.type)}</div>
+                    <small className="text-muted">
+                      {translate(row.schedulerName)}
+                    </small>
+                  </td>
+                ),
+              },
+              {
+                title: 'Scheduled',
+                value: 'duration',
+                renderBodyCell: ({ value }) => (
+                  <td>{`${value} ${translate('min')}`}</td>
+                ),
+              },
+              {
+                title: 'Actual',
+                value: 'actualAverage',
+                renderBodyCell: ({ value }) => (
+                  <td>
+                    {value !== null ? `${value} ${translate('min')}` : ''}
+                  </td>
+                ),
+              },
+              {
+                title: 'Variance',
+                value: 'variance',
+                renderBodyCell: ({ value, row }) => (
+                  <td>{value !== null ? toPercent(value, 1) : ''}</td>
+                ),
+              },
+              {
+                title: 'Wait Time',
+                value: 'waitTimeAverage',
+                renderBodyCell: ({ value }) => (
+                  <td>
+                    {value !== null ? `${value} ${translate('min')}` : ''}
+                  </td>
+                ),
+              },
+              {
+                title: 'Qty',
+                value: 'quantity',
+                width: '1%',
+              },
+            ]}
+            filtering={false}
+            pagination={false}
+            render={({ table }) => <div className="table-wrapper">{table}</div>}
+          />
+        )}
       />
     ) : (
       <div className="text-center">
-        <em>No Event Types</em>
+        <em>
+          <I18n>No Event Types</I18n>
+        </em>
       </div>
     )}
   </Fragment>
