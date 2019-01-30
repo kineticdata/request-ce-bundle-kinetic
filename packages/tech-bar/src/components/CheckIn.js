@@ -13,6 +13,7 @@ import {
   Moment,
   Constants,
 } from 'common';
+import { DisplayTabs } from './Display';
 import { TIME_FORMAT } from '../App';
 import { actions } from '../redux/modules/appointments';
 import moment from 'moment';
@@ -26,6 +27,7 @@ import { I18n } from '../../../app/src/I18nProvider';
 const globals = import('common/globals');
 
 export const CheckInComponent = ({
+  crosslink,
   kapp,
   techBarId,
   techBar,
@@ -50,6 +52,13 @@ export const CheckInComponent = ({
       {!showDetails ? (
         <Fragment>
           <div className="full-screen-container">
+            {crosslink && (
+              <DisplayTabs
+                techBarId={techBarId}
+                checkInClassName={'bg-dark'}
+                onClick={() => toggleShowDetails(null)}
+              />
+            )}
             <div className="header bg-dark" />
             <div className="body">
               <div className="form">
@@ -77,6 +86,13 @@ export const CheckInComponent = ({
         <Fragment>
           {showDetails === 'appointment' && (
             <div className="full-screen-container">
+              {crosslink && (
+                <DisplayTabs
+                  techBarId={techBarId}
+                  checkInClassName={'bg-success'}
+                  onClick={() => toggleShowDetails(null)}
+                />
+              )}
               <div className="header bg-success" />
               <div className="body">
                 <h1>
@@ -114,6 +130,8 @@ export const CheckInComponent = ({
                               )}
                               format={Constants.MOMENT_FORMATS.time}
                             />
+                            {' - '}
+                            <I18n>{appt.values['Event Type']}</I18n>
                           </div>
                         </div>
                         <button
@@ -175,6 +193,13 @@ export const CheckInComponent = ({
           )}
           {showDetails === 'walkin' && (
             <div className="full-screen-container">
+              {crosslink && (
+                <DisplayTabs
+                  techBarId={techBarId}
+                  checkInClassName={'bg-info'}
+                  onClick={() => toggleShowDetails(null)}
+                />
+              )}
               <div className="header bg-info" />
               <div className="body">
                 <h1>I am a walk-in</h1>

@@ -143,6 +143,26 @@
           }
         }
       }
+
+      .display-tabs {
+        display: flex;
+        justify-content: space-around;
+
+        .display-tab-link {
+          padding: 1rem 4rem;
+          border-top-left-radius: 1rem;
+          border-top-right-radius: 1rem;
+          font-size: 1.2rem;
+          color: $white;
+          text-decoration: none;
+          background-color: rgb(180, 180, 180);
+          &:active,
+          &:visited,
+          &:hover {
+            color: $white;
+          }
+        }
+      }
     }
   }
 
