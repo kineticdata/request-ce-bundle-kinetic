@@ -1,5 +1,6 @@
 import isarray from 'isarray';
 import { all, fork } from 'redux-saga/effects';
+import { CoreAPI } from 'react-kinetic-core';
 
 export const zip = (array1, array2) =>
   array1.reduce(
@@ -183,4 +184,16 @@ export const getConfig = ({
         'submission, form, kapp, space.',
     );
   }
+};
+
+export const recordSearch = (kappSlug, query, results) => {
+  CoreAPI.createSubmission({
+    datastore: true,
+    formSlug: 'search-results',
+    values: {
+      'Kapp Slug': kappSlug,
+      Query: query,
+      'Search Results': results,
+    },
+  });
 };
