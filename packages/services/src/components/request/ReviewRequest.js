@@ -1,18 +1,20 @@
 import React, { Fragment } from 'react';
-import { withState, withHandlers, compose } from 'recompose';
+import { withState, withHandlers, compose, setDisplayName } from 'recompose';
 import { I18n } from '../../../../app/src/I18nProvider';
 import { CoreForm } from 'react-kinetic-core';
-import axios from 'axios';
 
 const globals = import('common/globals');
 
 export const ReviewRequestComponent = ({
   handleLoaded,
-  handlePageChange,
+  handleNextPage,
+  handlePreviousPage,
+  formLoaded,
   kappSlug,
   submission,
-  nextPage,
-  previousPage,
+  disabledNextPage,
+  disabledPreviousPage,
+  reviewPage,
 }) => {
   return (
     <Fragment>
@@ -20,45 +22,70 @@ export const ReviewRequestComponent = ({
         <CoreForm
           loaded={handleLoaded}
           submission={submission.id}
-          review
+          review={reviewPage}
           globals={globals}
         />
       </I18n>
-      <button onClick={handlePageChange} value={previousPage}>
-        Previous
-      </button>
-      <button onClick={handlePageChange} value={nextPage}>
-        Next
-      </button>
+      {formLoaded && (
+        <Fragment>
+          <button onClick={handlePreviousPage} disabled={disabledPreviousPage}>
+            Previous
+          </button>
+          <button onClick={handleNextPage} disabled={disabledNextPage}>
+            Next
+          </button>
+        </Fragment>
+      )}
     </Fragment>
   );
 };
 
 export const handleLoaded = props => form => {
-  const formPages = form.displayablePages();
-  const currentLoc = formPages.findIndex(
-    currentPage => currentPage === form.page().name(),
-  );
+  props.setDisplayPages(form.displayablePages());
+  props.setCurrentPage(form.page().name());
+  props.setFormLoaded(true);
 
-  if (currentLoc > 0) {
-    props.setPreviousPage(formPages[currentLoc]);
+  const currentLoc = form
+    .displayablePages()
+    .findIndex(currentPage => currentPage === form.page().name());
+
+  if (currentLoc <= 0) {
+    props.disablePrevious(true);
   } else {
-    props.setPreviousPage(null);
+    props.disablePrevious(false);
   }
 
-  if (currentLoc < formPages.length - 1) {
-    props.setNextPage(formPages[currentLoc + 1]);
+  if (currentLoc >= form.displayablePages().length - 1) {
+    props.disableNext(true);
   } else {
-    props.setNextPage(null);
+    props.disableNext(false);
   }
 };
 
-const handlePageChange = props => event => {};
+const handlePreviousPage = props => event => {
+  const currentLoc = props.displayPages.findIndex(
+    currentPage => currentPage === props.currentPage,
+  );
+  props.setReviewPage(props.displayPages[currentLoc - 1]);
+  props.setFormLoaded(false);
+};
+
+const handleNextPage = props => event => {
+  const currentLoc = props.displayPages.findIndex(
+    currentPage => currentPage === props.currentPage,
+  );
+  props.setReviewPage(props.displayPages[currentLoc + 1]);
+  props.setFormLoaded(false);
+};
 
 const enhance = compose(
-  withState('nextPage', 'setNextPage', null),
-  withState('previousPage', 'setPreviousPage', null),
-  withHandlers({ handleLoaded, handlePageChange }),
+  withState('formLoaded', 'setFormLoaded', false),
+  withState('displayPages', 'setDisplayPages', null),
+  withState('currentPage', 'setCurrentPage', null),
+  withState('disabledNextPage', 'disableNext', true),
+  withState('disabledPreviousPage', 'disablePrevious', true),
+  withState('reviewPage', 'setReviewPage', true),
+  withHandlers({ handleLoaded, handlePreviousPage, handleNextPage }),
 );
 
 export const ReviewRequest = enhance(ReviewRequestComponent);
