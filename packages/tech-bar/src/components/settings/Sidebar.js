@@ -27,6 +27,14 @@ export const SidebarComponent = ({
         <ul className="nav flex-column sidebar-group">
           <li className="nav-item">
             <NavLink
+              to="/settings/metrics"
+              className="nav-link"
+              activeClassName="active"
+            >
+              <I18n>Metrics</I18n>
+              <span className="fa fa-fw fa-angle-right" />
+            </NavLink>
+            <NavLink
               to="/settings/general"
               className="nav-link"
               activeClassName="active"

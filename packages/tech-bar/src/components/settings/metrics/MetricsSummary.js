@@ -1,0 +1,571 @@
+import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
+import {
+  compose,
+  lifecycle,
+  withHandlers,
+  withProps,
+  withState,
+} from 'recompose';
+import {
+  VictoryContainer,
+  VictoryZoomContainer,
+  VictoryPie,
+  VictoryChart,
+  VictoryBar,
+  VictoryTheme,
+  VictoryGroup,
+  VictoryStack,
+  VictoryTooltip,
+  VictoryPortal,
+  VictoryAxis,
+} from 'victory';
+import { Constants, Table, Utils } from 'common';
+import { actions, DATE_FORMAT } from '../../../redux/modules/metrics';
+import { I18n } from '../../../../../app/src/I18nProvider';
+import moment from 'moment';
+import { Record } from 'immutable';
+
+const toInt = value => parseInt(value, 10) || 0;
+const toPercent = (a, b) => (b !== 0 ? `${Math.round((a / b) * 100)}%` : '');
+
+const Wrapper = <VictoryContainer style={{ height: '250px' }} />;
+
+const Appointments = ({ appointments }) => (
+  <Fragment>
+    <div className="section__title">Appointments</div>
+    {appointments.total > 0 ? (
+      <Fragment>
+        <div className="text-center">
+          <div>
+            <span
+              className="fa fa-square fa-fw"
+              style={{ color: Constants.COLORS.blueSky }}
+            />
+            {`${toPercent(
+              appointments.scheduled,
+              appointments.total,
+            )} Scheduled (${appointments.scheduled})`}
+          </div>
+          <div>
+            <span
+              className="fa fa-square fa-fw"
+              style={{ color: Constants.COLORS.sunflower }}
+            />
+            {`${toPercent(
+              appointments.walkins,
+              appointments.total,
+            )} Walk-Ins (${appointments.walkins})`}
+          </div>
+        </div>
+        <VictoryContainer
+          className="VictoryContainer max-height-250"
+          height={100}
+          width={100}
+          style={{ height: 'auto' }}
+        >
+          {' '}
+          <VictoryPie
+            standalone={false}
+            colorScale={[Constants.COLORS.blueSky, Constants.COLORS.sunflower]}
+            height={100}
+            width={100}
+            radius={40}
+            innerRadius={25}
+            labels={() => null}
+            data={[{ y: appointments.scheduled }, { y: appointments.walkins }]}
+          />
+          <VictoryPie
+            standalone={false}
+            colorScale={[
+              Constants.COLORS.blueLake,
+              'whitesmoke',
+              'transparent',
+            ]}
+            height={100}
+            width={100}
+            radius={22}
+            innerRadius={17}
+            labels={() => null}
+            data={[
+              { y: appointments.sameDay },
+              { y: appointments.scheduled - appointments.sameDay },
+              { y: appointments.walkins },
+            ]}
+          />
+        </VictoryContainer>
+        <div className="text-center">
+          <div>
+            <span
+              className="fa fa-square fa-fw"
+              style={{ color: Constants.COLORS.blueLake }}
+            />
+            {`Same Day Appointments (${appointments.sameDay})`}
+          </div>
+        </div>
+      </Fragment>
+    ) : (
+      <div className="text-center">
+        <em>No Appointments</em>
+      </div>
+    )}
+  </Fragment>
+);
+
+const Feedback = ({ feedback }) => (
+  <Fragment>
+    <div className="section__title">Feedback</div>
+    {feedback.total > 0 ? (
+      <Fragment>
+        <div className="text-center">
+          <div>
+            <span
+              className="fa fa-square fa-fw"
+              style={{ color: Constants.COLORS.green }}
+            />
+            {`${toPercent(feedback.positive, feedback.total)} Happy (${
+              feedback.positive
+            })`}
+          </div>
+          <div>
+            <span
+              className="fa fa-square fa-fw"
+              style={{ color: Constants.COLORS.red }}
+            />
+            {`${toPercent(feedback.negative, feedback.total)} Unhappy (${
+              feedback.negative
+            })`}
+          </div>
+        </div>
+        <VictoryPie
+          containerComponent={
+            <VictoryContainer
+              className="VictoryContainer max-height-250"
+              style={{ height: 'auto' }}
+            />
+          }
+          colorScale={[Constants.COLORS.green, Constants.COLORS.red]}
+          height={100}
+          width={100}
+          radius={40}
+          innerRadius={25}
+          labels={() => null}
+          data={[{ y: feedback.positive }, { y: feedback.negative }]}
+        />
+      </Fragment>
+    ) : (
+      <div className="text-center">
+        <em>No Feedback</em>
+      </div>
+    )}
+  </Fragment>
+);
+
+const Utilization = ({ utilization }) => (
+  <Fragment>
+    <div className="section__title">Utilization</div>
+    {utilization.available > 0 ? (
+      <Fragment>
+        <div className="text-center">
+          <div>
+            <span
+              className="fa fa-square fa-fw"
+              style={{ color: Constants.COLORS.blueSky }}
+            />
+            {`${toPercent(
+              utilization.scheduled,
+              utilization.available,
+            )} Scheduled`}
+          </div>
+          <div>
+            <span
+              className="fa fa-square fa-fw"
+              style={{ color: Constants.COLORS.greenGrass }}
+            />
+            {`${toPercent(utilization.actual, utilization.available)} Actual`}
+          </div>
+        </div>
+        <VictoryContainer
+          className="VictoryContainer max-height-250"
+          height={100}
+          width={100}
+          style={{ height: 'auto' }}
+        >
+          }
+          <VictoryPie
+            standalone={false}
+            colorScale={[Constants.COLORS.greenGrass, 'whitesmoke']}
+            height={100}
+            width={100}
+            radius={40}
+            innerRadius={25}
+            labels={() => null}
+            data={[
+              { y: utilization.actual },
+              { y: utilization.available - utilization.actual },
+            ]}
+          />
+          <VictoryPie
+            standalone={false}
+            colorScale={[Constants.COLORS.blueSky, 'whitesmoke']}
+            height={100}
+            width={100}
+            radius={22}
+            innerRadius={7}
+            labels={() => null}
+            data={[
+              { y: utilization.scheduled },
+              { y: utilization.available - utilization.scheduled },
+            ]}
+          />
+        </VictoryContainer>
+      </Fragment>
+    ) : (
+      <div className="text-center">
+        <em>No Availability</em>
+      </div>
+    )}
+  </Fragment>
+);
+
+const TimeOfVisit = ({ timeOfVisit }) => {
+  const scheduledData = Object.keys(timeOfVisit.scheduled).reduce((d, hour) => {
+    d[toInt(hour)] = timeOfVisit.scheduled[hour];
+    return d;
+  }, Array(24).fill(0));
+  const walkinsData = Object.keys(timeOfVisit.walkins).reduce((d, hour) => {
+    d[toInt(hour)] = timeOfVisit.walkins[hour];
+    return d;
+  }, Array(24).fill(0));
+  return (
+    <Fragment>
+      <div className="section__title">Time of Visit</div>
+      {Object.keys(timeOfVisit.scheduled).length > 0 ||
+      Object.keys(timeOfVisit.walkins).length > 0 ? (
+        <Fragment>
+          <VictoryChart
+            containerComponent={
+              <VictoryContainer
+                className="VictoryContainer max-height-350"
+                style={{ height: 'auto' }}
+                zoomDimension="x"
+              />
+            }
+            width={750}
+            height={300}
+            domainPadding={12}
+          >
+            <VictoryGroup
+              colorScale={[
+                Constants.COLORS.blueSky,
+                Constants.COLORS.sunflower,
+              ]}
+              offset={12}
+              labelComponent={<VictoryTooltip />}
+            >
+              <VictoryBar
+                barWidth={12}
+                data={scheduledData.map((count, index) => ({
+                  x: moment(index, 'H').format('LT'),
+                  y: count,
+                  label: d => `${d.x}: ${d.y} Scheduled`,
+                }))}
+              />
+              <VictoryBar
+                barWidth={12}
+                data={walkinsData.map((count, index) => ({
+                  x: moment(index, 'H').format('LT'),
+                  y: count,
+                  label: d => `${d.x}: ${d.y} Walk-In${d.y !== 1 ? 's' : ''}`,
+                }))}
+              />
+            </VictoryGroup>
+            <VictoryAxis
+              style={{
+                tickLabels: {
+                  angle: 45,
+                  verticalAnchor: 'middle',
+                  textAnchor: 'start',
+                  padding: 5,
+                  fontSize: 14,
+                },
+              }}
+            />
+            <VictoryAxis
+              dependentAxis
+              style={{
+                tickLabels: {
+                  padding: 5,
+                  fontSize: 14,
+                },
+              }}
+            />
+          </VictoryChart>
+          <div className="text-center">
+            <div>
+              <span
+                className="fa fa-square fa-fw"
+                style={{ color: Constants.COLORS.blueSky }}
+              />
+              Scheduled
+            </div>
+            <div>
+              <span
+                className="fa fa-square fa-fw"
+                style={{ color: Constants.COLORS.sunflower }}
+              />
+              Walk-Ins
+            </div>
+          </div>
+        </Fragment>
+      ) : (
+        <div className="text-center">
+          <em>No Visits</em>
+        </div>
+      )}
+    </Fragment>
+  );
+};
+
+const Duration = ({ durations, techBars }) => (
+  <Fragment>
+    <div className="section__title">Average Durations</div>
+    {durations.length > 0 ? (
+      <Table
+        class="table-settings"
+        data={durations.map(d => {
+          const techBar = techBars.find(t => t.values['Id'] === d.schedulerId);
+          const schedulerName = techBar
+            ? techBar.values['Name']
+            : d.schedulerId;
+          const actualAverage =
+            d.quantity > 0 ? Math.round(d.actual / d.quantity) : null;
+          return {
+            ...d,
+            actualAverage,
+            variance:
+              d.quantity > 0 ? (actualAverage - d.duration) / d.duration : null,
+            waitTimeAverage:
+              d.quantity > 0 ? Math.round(d.waitTime / d.quantity) : null,
+            schedulerName,
+            sortValue: `${schedulerName} ${d.type}`,
+          };
+        })}
+        columns={[
+          {
+            title: 'Event Type',
+            value: 'sortValue',
+            renderBodyCell: ({ value, row }) => (
+              <td>
+                <div>{row.type}</div>
+                <small className="text-muted">{row.schedulerName}</small>
+              </td>
+            ),
+          },
+          {
+            title: 'Scheduled',
+            value: 'duration',
+            renderBodyCell: ({ value }) => <td>{`${value} min`}</td>,
+          },
+          {
+            title: 'Actual',
+            value: 'actualAverage',
+            renderBodyCell: ({ value }) => (
+              <td>{value !== null ? `${value} min` : ''}</td>
+            ),
+          },
+          {
+            title: 'Variance',
+            value: 'variance',
+            renderBodyCell: ({ value, row }) => (
+              <td>{value !== null ? toPercent(value, 1) : ''}</td>
+            ),
+          },
+          {
+            title: 'Wait Time',
+            value: 'waitTimeAverage',
+            renderBodyCell: ({ value }) => (
+              <td>{value !== null ? `${value} min` : ''}</td>
+            ),
+          },
+          {
+            title: 'Qty',
+            value: 'quantity',
+            width: '1%',
+          },
+        ]}
+        filtering={false}
+        pagination={false}
+        render={({ table }) => <div className="table-wrapper">{table}</div>}
+      />
+    ) : (
+      <div className="text-center">
+        <em>No Event Types</em>
+      </div>
+    )}
+  </Fragment>
+);
+
+export const MetricsSummaryComponent = ({
+  loading,
+  errors,
+  summary,
+  techBars,
+}) => {
+  return loading ? (
+    <div className="text-center">
+      <span className="fa fa-lg fa-spinner fa-spin" />
+    </div>
+  ) : (
+    <div className="row">
+      <div className="col-md-4 mb-5">
+        <Appointments appointments={summary.appointments} />
+      </div>
+      <div className="col-md-4 mb-5">
+        <Feedback feedback={summary.feedback} />
+      </div>
+      <div className="col-md-4 mb-5">
+        <Utilization utilization={summary.utilization} />
+      </div>
+      <div className="col-xl-6 mb-5">
+        <TimeOfVisit timeOfVisit={summary.timeOfVisit} />
+      </div>
+      <div className="col-xl-6 mb-5">
+        <Duration durations={summary.durations} techBars={techBars} />
+      </div>
+    </div>
+  );
+};
+
+export const mapStateToProps = (state, props) => ({
+  loading: state.techBar.metrics.loading,
+  errors: state.techBar.metrics.errors,
+  metrics: state.techBar.metrics.metrics,
+});
+
+export const mapDispatchToProps = {
+  push,
+};
+
+const Summary = Record({
+  appointments: {
+    walkins: 0,
+    scheduled: 0,
+    sameDay: 0,
+  },
+  feedback: {
+    positive: 0,
+    negative: 0,
+  },
+  utilization: {
+    available: 0,
+    actual: 0,
+    scheduled: 0,
+  },
+  timeOfVisit: { scheduled: {}, walkins: {} },
+  durations: [], // { quantity, actual, duration, schedulerId, type }
+});
+
+export const MetricsSummary = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+  withProps(({ schedulerId, eventType, loading, metrics }) => {
+    if (loading) {
+      return { summary: Summary() };
+    }
+    const records = schedulerId
+      ? metrics.filter(m => m.schedulerId === schedulerId)
+      : metrics;
+
+    const summary = records.reduce((summary, { data }) => {
+      // Add total available minutes
+      summary.utilization.available += toInt(data.totalMinutesAvailable);
+      // If event type is not specified, add feedback results not associated to events
+      if (!eventType) {
+        summary.feedback.positive += toInt(data.feedback.Positive);
+        summary.feedback.negative += toInt(data.feedback.Negative);
+      }
+      // Iterate through all the event types
+      return (
+        data.eventTypes
+          // If event type is selected, filter to only that type
+          .filter(event => !eventType || eventType === event.type)
+          .reduce((s, event) => {
+            // Add appointment counts
+            s.appointments.scheduled += toInt(event.scheduledAppointments);
+            s.appointments.walkins += toInt(event.walkins);
+            s.appointments.sameDay += toInt(event.sameDayAppointments);
+            // Add feedback counts
+            s.feedback.positive += toInt(event.feedback.Positive);
+            s.feedback.negative += toInt(event.feedback.Negative);
+            // Add total scheduled minutes and actual minutes
+            s.utilization.scheduled +=
+              parseInt(event.scheduledAppointments, 10) * toInt(event.duration);
+            s.utilization.actual += toInt(event.scheduledTotalDuration);
+            // Add time ov visit counts for scheduled appointments
+            Object.keys(event.scheduledAppointmentTimes).forEach(time => {
+              if (!s.timeOfVisit.scheduled[time]) {
+                s.timeOfVisit.scheduled[time] = toInt(
+                  event.scheduledAppointmentTimes[time],
+                );
+              } else {
+                s.timeOfVisit.scheduled[time] += toInt(
+                  event.scheduledAppointmentTimes[time],
+                );
+              }
+            });
+            // Add time ov visit counts for walkin appointments
+            Object.keys(event.walkinAppointmentTimes).forEach(time => {
+              if (!s.timeOfVisit.walkins[time]) {
+                s.timeOfVisit.walkins[time] = toInt(
+                  event.walkinAppointmentTimes[time],
+                );
+              } else {
+                s.timeOfVisit.walkins[time] += toInt(
+                  event.walkinAppointmentTimes[time],
+                );
+              }
+            });
+            // Add duration info
+            const existingDuration = s.durations.find(
+              d => d.schedulerId === data.schedulerId && d.type === event.type,
+            );
+            if (existingDuration) {
+              existingDuration.quantity +=
+                toInt(event.scheduledAppointments) + toInt(event.walkins);
+              existingDuration.actual +=
+                toInt(event.walkinTotalDuration) +
+                toInt(event.scheduledTotalDuration);
+              existingDuration.waitTime +=
+                toInt(event.walkinTotalWaitTime) +
+                toInt(event.scheduledTotalWaitTime);
+            } else {
+              s.durations.push({
+                type: event.type,
+                schedulerId: data.schedulerId,
+                duration: toInt(event.duration),
+                quantity:
+                  toInt(event.scheduledAppointments) + toInt(event.walkins),
+                actual:
+                  toInt(event.walkinTotalDuration) +
+                  toInt(event.scheduledTotalDuration),
+                waitTime:
+                  toInt(event.walkinTotalWaitTime) +
+                  toInt(event.scheduledTotalWaitTime),
+              });
+            }
+            return s;
+          }, summary)
+      );
+    }, Summary().toJS());
+    // Total appointments and feedback
+    summary.appointments.total =
+      summary.appointments.scheduled + summary.appointments.walkins;
+    summary.feedback.total =
+      summary.feedback.positive + summary.feedback.negative;
+    return { summary };
+  }),
+)(MetricsSummaryComponent);

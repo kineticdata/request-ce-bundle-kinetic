@@ -37,7 +37,8 @@
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
     "semver": "^5.5.0",
-    "typeface-open-sans": "^0.0.54"
+    "typeface-open-sans": "^0.0.54",
+    "victory": "^31.1.0"
   },
   "devDependencies": {
     "enzyme": "^3.3.0",
