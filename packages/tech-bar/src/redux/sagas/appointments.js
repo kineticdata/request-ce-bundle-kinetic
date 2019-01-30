@@ -93,7 +93,6 @@ export function* fetchTodayAppointmentsSaga({ payload: schedulerId }) {
   const searchBuilder = new CoreAPI.SubmissionSearch()
     .limit(1000)
     .include('details,values')
-    .coreState('Submitted')
     .eq('values[Scheduler Id]', schedulerId)
     .eq('values[Event Date]', moment().format('YYYY-MM-DD'));
 
@@ -115,7 +114,11 @@ export function* fetchTodayAppointmentsSaga({ payload: schedulerId }) {
   } else if (errors) {
     yield put(actions.setTodayAppointmentErrors(errors));
   } else {
-    yield put(actions.setTodayAppointments(submissions));
+    yield put(
+      actions.setTodayAppointments(
+        submissions.filter(s => s.coreState !== 'Draft'),
+      ),
+    );
   }
 }
 
