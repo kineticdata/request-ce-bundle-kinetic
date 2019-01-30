@@ -12,6 +12,7 @@ import {
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { SchedulerSettings } from './SchedulerSettings';
+import { TechBarMetrics } from './TechBarMetrics';
 import { TechBarSettings } from './TechBarSettings';
 import { TechBar } from './tech-bar/TechBar';
 import { TechBarSettingsForm } from './tech-bar/TechBarSettingsForm';
@@ -21,6 +22,11 @@ import { I18n } from '../../../../app/src/I18nProvider';
 export const SettingsComponent = ({ kappSlug, hasSettingsAccess }) =>
   hasSettingsAccess ? (
     <Switch>
+      <Route
+        exact
+        path={`/kapps/${kappSlug}/settings/metrics/:mode?`}
+        component={TechBarMetrics}
+      />
       <Route
         exact
         path={`/kapps/${kappSlug}/settings/general`}
@@ -116,6 +122,12 @@ const SettingsNavigationComponent = ({ hasManagerAccess }) => (
       </div>
 
       <div className="cards__wrapper cards__wrapper--tech-bar">
+        <SettingsCard
+          name="Metrics"
+          path={`/settings/metrics`}
+          icon="fa-bar-chart"
+          description="View metrics for the Tech Bars."
+        />
         <SettingsCard
           name="Tech Bars"
           path={`/settings/general`}

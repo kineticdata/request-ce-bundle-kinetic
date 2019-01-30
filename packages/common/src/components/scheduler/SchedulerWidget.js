@@ -1342,7 +1342,7 @@ const calculateTotalTimeslots = ({
         `${DATE_FORMAT}T${TIME_FORMAT}`,
         timezone,
       );
-      const startIndex = Math.floor(
+      const startIndex = Math.ceil(
         (startTime.hour() * 60 + startTime.minute()) / interval,
       );
       const endIndex = Math.floor(
@@ -1369,7 +1369,7 @@ const calculateTotalTimeslots = ({
         `${DATE_FORMAT}T${TIME_FORMAT}`,
         timezone,
       );
-      const startIndex = Math.floor(
+      const startIndex = Math.ceil(
         (startTime.hour() * 60 + startTime.minute()) / interval,
       );
       const endIndex = Math.floor(
