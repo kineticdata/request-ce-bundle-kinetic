@@ -450,17 +450,6 @@ const SchedulerWidgetComponent = ({
                                   <I18n>Reschedule</I18n>
                                 </button>
                               )}
-                              {canCancel && (
-                                <button
-                                  type="button"
-                                  className="btn btn-link text-danger"
-                                  onClick={() => {
-                                    toggleCancel(true);
-                                  }}
-                                >
-                                  <I18n>Cancel</I18n>
-                                </button>
-                              )}
                             </div>
                           )}
                       </div>
@@ -473,6 +462,20 @@ const SchedulerWidgetComponent = ({
                     )}
                   </div>
                 </div>
+                {!eventCancelled &&
+                  isScheduled &&
+                  !scheduling &&
+                  canCancel && (
+                    <button
+                      type="button"
+                      className="btn btn-danger mt-3"
+                      onClick={() => {
+                        toggleCancel(true);
+                      }}
+                    >
+                      <I18n>Cancel Reservation</I18n>
+                    </button>
+                  )}
                 {!scheduling &&
                   isReserved && (
                     <Timer
