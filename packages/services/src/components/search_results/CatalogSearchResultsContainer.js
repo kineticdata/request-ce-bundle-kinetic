@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { lifecycle, compose } from 'recompose';
 import { CatalogSearchResults } from './CatalogSearchResults';
 import { displayableFormPredicate } from '../../utils';
-import { Utils } from 'common';
+import { searchHistoryActions } from 'common';
 
 const matches = (form, term) =>
   form.name.toLowerCase().includes(term.toLowerCase()) ||
@@ -22,24 +22,30 @@ const mapStateToProps = (state, props) => {
   };
 };
 
+const mapDispatchToProps = {
+  recordSearchHistory: searchHistoryActions.recordSearchHistory,
+};
+
 const enhance = compose(
-  connect(mapStateToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   lifecycle({
     componentDidMount() {
-      if (this.props.searchResultsFormExists) {
-        Utils.recordSearch(
-          this.props.kappSlug,
-          this.props.query,
-          this.props.forms,
-        );
-      }
+      this.props.recordSearchHistory({
+        kappSlug: this.props.kappSlug,
+        searchTerm: this.props.query,
+        resultsCount: this.props.forms.size,
+      });
     },
-    componentWillReceiveProps(nextProp) {
-      if (
-        nextProp.searchResultsFormExists &&
-        this.props.query !== nextProp.query
-      ) {
-        Utils.recordSearch(nextProp.kappSlug, nextProp.query, nextProp.forms);
+    componentDidUpdate(prevProps) {
+      if (this.props.query !== prevProps.query) {
+        this.props.recordSearchHistory({
+          kappSlug: this.props.kappSlug,
+          searchTerm: this.props.query,
+          resultsCount: this.props.forms.size,
+        });
       }
     },
   }),
