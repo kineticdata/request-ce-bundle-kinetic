@@ -12,6 +12,7 @@ import {
 import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
 import { I18n } from '../../../app/src/I18nProvider';
+import moment from 'moment';
 
 export const OverheadComponent = ({ errors, records }) => {
   return (
@@ -29,7 +30,7 @@ export const OverheadComponent = ({ errors, records }) => {
               </span>
             </h1>
             <ol className="overhead-display-list">
-              {records.filter(r => r.status === 'Checked In').map(r => (
+              {records.map(r => (
                 <li key={r.id}>
                   {r.displayName}
                   {r.isWalkIn ? (
@@ -75,7 +76,10 @@ export const mapStateToProps = (state, props) => ({
     .concat(
       state.techBar.walkIns.today.data.map(w => ({
         id: w.id,
-        updatedAt: w.updatedAt,
+        updatedAt: moment
+          .utc(w.updatedAt)
+          .tz(props.techBar.values['Timezone'] || moment.tz.guess())
+          .format('YYYY-MM-DD HH:mm'),
         isWalkIn: true,
         username: w.values['Requested For'] || w.values['Email'],
         displayName:
@@ -98,7 +102,7 @@ const fetchData = ({
   fetchTodayAppointments,
   fetchTodayWalkIns,
 }) => () => {
-  fetchTodayAppointments(techBarId);
+  fetchTodayAppointments({ schedulerId: techBarId, status: 'Checked In' });
   fetchTodayWalkIns(techBarId);
 };
 

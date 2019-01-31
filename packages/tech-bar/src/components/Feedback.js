@@ -257,7 +257,7 @@ const handleExperienceClick = ({
 }) => value => {
   if (feedbackIdentityAvailable) {
     setExperience(value);
-    fetchTodayAppointments(techBarId);
+    fetchTodayAppointments({ schedulerId: techBarId });
     fetchTodayWalkIns(techBarId);
   } else {
     handleSubmitFeedback({ Experience: value });

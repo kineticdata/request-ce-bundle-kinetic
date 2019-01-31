@@ -3,6 +3,7 @@ import { CoreAPI } from 'react-kinetic-core';
 import { List } from 'immutable';
 import { actions, types, APPOINTMENT_FORM_SLUG } from '../modules/appointments';
 import moment from 'moment';
+import isarray from 'isarray';
 
 export function* fetchAppointmentSaga({ payload }) {
   const { submission, errors, serverError } = yield call(
@@ -88,13 +89,20 @@ export function* fetchPastAppointmentsSaga() {
   }
 }
 
-export function* fetchTodayAppointmentsSaga({ payload: schedulerId }) {
+export function* fetchTodayAppointmentsSaga({
+  payload: { schedulerId, status },
+}) {
   const kappSlug = yield select(state => state.app.config.kappSlug);
   const searchBuilder = new CoreAPI.SubmissionSearch()
     .limit(1000)
     .include('details,values')
     .eq('values[Scheduler Id]', schedulerId)
     .eq('values[Event Date]', moment().format('YYYY-MM-DD'));
+  if (isarray(status) && status.length > 0) {
+    searchBuilder.in('values[Status]', status);
+  } else if (status) {
+    searchBuilder.eq('values[Status]', status);
+  }
 
   const { submissions, errors, serverError } = yield call(
     CoreAPI.searchSubmissions,

@@ -269,9 +269,7 @@ export const mapStateToProps = (state, props) => ({
   kapp: selectCurrentKapp(state),
   loading: state.techBar.appointments.today.loading,
   errors: state.techBar.appointments.today.errors,
-  appointments: state.techBar.appointments.today.data.filter(
-    appt => appt.values['Status'] === 'Scheduled',
-  ),
+  appointments: state.techBar.appointments.today.data,
 });
 
 export const mapDispatchToProps = {
@@ -293,7 +291,7 @@ const toggleShowDetails = ({
   setInput('');
   setWalkInUser(null);
   if (name === 'appointment') {
-    fetchTodayAppointments(techBarId);
+    fetchTodayAppointments({ schedulerId: techBarId, status: 'Scheduled' });
   }
 };
 
