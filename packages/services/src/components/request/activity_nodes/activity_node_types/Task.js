@@ -1,19 +1,20 @@
 import React, { Fragment } from 'react';
 import { TimeAgo } from 'common';
 import { activityData } from '../../RequestActivityList';
+import { I18n } from '../../../../../../app/src/I18nProvider';
 
 export const TaskHeader = ({ activity }) => {
   const data = activityData(activity);
   return (
     <Fragment>
       <h1>
-        {activity.label}
+        <I18n>{activity.label}</I18n>
         <span
           className={`status ${
             data.Status === 'Complete' ? 'status--gray' : 'status--green'
           }`}
         >
-          {data.Status}
+          <I18n>{data.Status}</I18n>
         </span>
       </h1>
     </Fragment>
@@ -28,7 +29,8 @@ export const TaskBody = ({ activity }) => {
         <div className="data-list-row__col">
           <dl>
             <dt>
-              <span className="fa fa-fw fa-calendar" />Created
+              <span className="fa fa-fw fa-calendar" />
+              <I18n>Created</I18n>
             </dt>
             <dd>
               <TimeAgo timestamp={activity.createdAt} />
@@ -38,7 +40,8 @@ export const TaskBody = ({ activity }) => {
         <div className="data-list-row__col">
           <dl>
             <dt>
-              <span className="fa fa-fw fa-calendar" />Updated
+              <span className="fa fa-fw fa-calendar" />
+              <I18n>Updated</I18n>
             </dt>
             <dd>
               <TimeAgo timestamp={activity.updatedAt} />
@@ -49,7 +52,8 @@ export const TaskBody = ({ activity }) => {
           <div className="data-list-row__col">
             <dl>
               <dt>
-                <span className="fa fa-fw fa-user" />Assignee
+                <span className="fa fa-fw fa-user" />
+                <I18n>Assignee</I18n>
               </dt>
               <dd>
                 {data['Assigned Team'] && data['Assigned Individual']
@@ -62,7 +66,9 @@ export const TaskBody = ({ activity }) => {
         {data.Comments && (
           <div className="data-list-row__col">
             <dl>
-              <dt>Comments</dt>
+              <dt>
+                <I18n>Comments</I18n>
+              </dt>
               <dd>{data.Comments}</dd>
             </dl>
           </div>

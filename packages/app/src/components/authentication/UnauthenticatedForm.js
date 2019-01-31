@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
+import { I18n } from '../../I18nProvider';
 
 import { PageTitle } from 'common';
 
@@ -27,41 +28,45 @@ const UnauthenticatedFormComponent = props => {
   } = props;
 
   return (
-    <div className="page--container">
-      <PageTitle parts={[formSlug]} />
-      <div className="page-panel">
-        {showHeader && (
-          <div className="page-title">
-            <div className="page-title__wrapper">
-              <h1>{formName}</h1>
+    <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+      <div className="page--container">
+        <PageTitle parts={[formSlug]} />
+        <div className="page-panel">
+          {showHeader && (
+            <div className="page-title">
+              <div className="page-title__wrapper">
+                <h1>
+                  <I18n>{formName}</I18n>
+                </h1>
+              </div>
             </div>
-          </div>
-        )}
-        {submissionId ? (
-          <Fragment>
-            <CoreForm
-              onUnauthorized={handleUnauthorized}
-              submission={submissionId}
-              globals={globals}
-              created={handleCreated}
-              loaded={handleLoaded}
-            />
-          </Fragment>
-        ) : (
-          <Fragment>
-            <CoreForm
-              onUnauthorized={handleUnauthorized}
-              kapp={kappSlug}
-              form={formSlug}
-              globals={globals}
-              created={handleCreated}
-              loaded={handleLoaded}
-              values={values}
-            />
-          </Fragment>
-        )}
+          )}
+          {submissionId ? (
+            <Fragment>
+              <CoreForm
+                onUnauthorized={handleUnauthorized}
+                submission={submissionId}
+                globals={globals}
+                created={handleCreated}
+                loaded={handleLoaded}
+              />
+            </Fragment>
+          ) : (
+            <Fragment>
+              <CoreForm
+                onUnauthorized={handleUnauthorized}
+                kapp={kappSlug}
+                form={formSlug}
+                globals={globals}
+                created={handleCreated}
+                loaded={handleLoaded}
+                values={values}
+              />
+            </Fragment>
+          )}
+        </div>
       </div>
-    </div>
+    </I18n>
   );
 };
 

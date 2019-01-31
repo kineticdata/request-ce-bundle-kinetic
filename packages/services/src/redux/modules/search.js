@@ -20,7 +20,7 @@ const reducer = (state = defaultState, action) => {
     case types.SEACH_INPUT_CHANGE:
       return { ...state, inputValue: action.payload };
     case LOCATION_CHANGE:
-      return defaultState;
+      return { ...state, ...defaultState };
     default:
       return state;
   }

@@ -11,6 +11,7 @@ import {
   selectTeam,
   selectTeamMemberships,
 } from '../../../redux/modules/team';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const getAvailableUsers = (allUsers, currentMembers, addedMembers) => {
   const excludedUsers = Set(
@@ -36,51 +37,60 @@ const AddMemberModalComponent = ({
     <div className="modal-header">
       <h4 className="modal-title">
         <button onClick={handleToggle} type="button" className="btn btn-link">
-          Close
+          <I18n>Close</I18n>
         </button>
-        <span>Add {team.name} Team Members</span>
+        <span>
+          <I18n>Add</I18n> <I18n>{team.name}</I18n> <I18n>Team Members</I18n>
+        </span>
       </h4>
     </div>
     <div className="modal-body">
       <div className="modal-form">
         <form>
-          <Autocomplete
-            inputProps={{
-              id: 'user-autocomplete',
-              className: 'form-control input-sm typeahead tt-input',
-              placeholder:
-                'Search for a user to add by Name, Username, or Email',
-            }}
-            wrapperStyle={{ marginBottom: '1rem' }}
-            getItemValue={item => item.username}
-            items={getAvailableUsers(users, currentMembers, addedMembers)}
-            shouldItemRender={(user, value) =>
-              user.username.toLowerCase().includes(value.toLowerCase())
-            }
-            renderItem={(item, isHighlighted) => (
-              <div
-                className="tt-suggestion tt-selectable"
-                style={{ background: isHighlighted ? 'lightgray' : 'white' }}
-              >
-                {item.displayName}
-              </div>
+          <I18n
+            render={translate => (
+              <Autocomplete
+                inputProps={{
+                  id: 'user-autocomplete',
+                  className: 'form-control input-sm typeahead tt-input',
+                  placeholder: translate(
+                    'Search for a user to add by Name, Username, or Email',
+                  ),
+                }}
+                wrapperStyle={{ marginBottom: '1rem' }}
+                getItemValue={item => item.username}
+                items={getAvailableUsers(users, currentMembers, addedMembers)}
+                shouldItemRender={(user, value) =>
+                  user.username.toLowerCase().includes(value.toLowerCase())
+                }
+                renderItem={(item, isHighlighted) => (
+                  <div
+                    className="tt-suggestion tt-selectable"
+                    style={{
+                      background: isHighlighted ? 'lightgray' : 'white',
+                    }}
+                  >
+                    {item.displayName}
+                  </div>
+                )}
+                menuStyle={{
+                  borderRadius: '3px',
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  padding: '2px 0',
+                  marginBottom: '1rem',
+                  fontSize: '90%',
+                  position: 'inherit',
+                  overflow: 'auto',
+                  maxHeight: '50%',
+                }}
+                value={typeAheadValue}
+                onChange={e => handleFieldChange(e.target.value)}
+                onSelect={(username, fullUser) => {
+                  handleAddMemberTemp(fullUser);
+                  handleFieldChange('');
+                }}
+              />
             )}
-            menuStyle={{
-              borderRadius: '3px',
-              background: 'rgba(255, 255, 255, 0.9)',
-              padding: '2px 0',
-              marginBottom: '1rem',
-              fontSize: '90%',
-              position: 'inherit',
-              overflow: 'auto',
-              maxHeight: '50%',
-            }}
-            value={typeAheadValue}
-            onChange={e => handleFieldChange(e.target.value)}
-            onSelect={(username, fullUser) => {
-              handleAddMemberTemp(fullUser);
-              handleFieldChange('');
-            }}
           />
         </form>
 
@@ -116,7 +126,7 @@ const AddMemberModalComponent = ({
         disabled={addedMembers.length === 0}
         onClick={handleSubmit}
       >
-        Add Members
+        <I18n>Add Members</I18n>
       </button>
     </ModalFooter>
   </Modal>

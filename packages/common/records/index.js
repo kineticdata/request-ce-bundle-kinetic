@@ -5,3 +5,18 @@ export const Profile = Record({
   username: '',
   email: '',
 });
+
+export const DatastoreSubmission = Record({
+  activities: [],
+  coreState: null,
+  createdAt: null,
+  createdBy: null,
+  form: null,
+  handle: null,
+  id: null,
+  submittedAt: null,
+  submittedBy: null,
+  updatedAt: null,
+  updatedBy: null,
+  values: {},
+});

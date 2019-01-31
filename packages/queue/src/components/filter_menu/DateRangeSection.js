@@ -3,22 +3,27 @@ import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
+import { DateRangeSelector } from 'common/src/components/DateRangeSelector';
+import { I18n } from '../../../../app/src/I18nProvider';
+
+const convertDateRangeValue = dateRange =>
+  !dateRange.custom
+    ? dateRange.preset
+    : { start: dateRange.start, end: dateRange.end };
 
 export const DateRangeSection = ({
   filter,
   errors,
   setDateRangeTimelineHandler,
-  radioClickHandler,
-  setDateRangeStartHandler,
-  setDateRangeEndHandler,
+  setDateRange,
 }) => (
   <ModalBody className="filter-section">
     <h5>
-      Date Range
+      <I18n>Date Range</I18n>
       <br />
       {errors.get('Date Range') && (
         <small className="text-danger text-small">
-          {errors.get('Date Range')}
+          <I18n>{errors.get('Date Range')}</I18n>
         </small>
       )}
     </h5>
@@ -26,67 +31,21 @@ export const DateRangeSection = ({
       value={filter.dateRange.timeline}
       onChange={setDateRangeTimelineHandler}
     >
-      <option value="createdAt">Created At</option>
-      <option value="updatedAt">Updated At</option>
-      <option value="completedAt">Completed At</option>
+      <option value="createdAt">
+        <I18n>Created At</I18n>
+      </option>
+      <option value="updatedAt">
+        <I18n>Updated At</I18n>
+      </option>
+      <option value="completedAt">
+        <I18n>Completed At</I18n>
+      </option>
     </select>
-    <label htmlFor="date-range-none">
-      <input
-        type="radio"
-        id="date-range-none"
-        value=""
-        name="date-range"
-        checked={filter.dateRange.preset === '' && !filter.dateRange.custom}
-        onChange={radioClickHandler}
-      />
-      None
-    </label>
-    {[7, 14, 30, 60, 90].map(numberOfDays => (
-      <label key={numberOfDays} htmlFor={`date-range-${numberOfDays}days`}>
-        <input
-          type="radio"
-          id={`date-range-${numberOfDays}days`}
-          value={`${numberOfDays}days`}
-          name="date-range"
-          checked={filter.dateRange.preset === `${numberOfDays}days`}
-          onChange={radioClickHandler}
-        />
-        Last {numberOfDays} Days
-      </label>
-    ))}
-    <label htmlFor="date-range-custom">
-      <input
-        type="radio"
-        id="date-range-custom"
-        value="custom"
-        name="date-range"
-        checked={filter.dateRange.custom}
-        onChange={radioClickHandler}
-      />
-      Custom
-    </label>
-    {filter.dateRange.custom && (
-      <div>
-        <label htmlFor="date-range-custom-start">Start Date*</label>
-        <input
-          type="date"
-          id="date-range-custom-start"
-          value={filter.dateRange.start}
-          onChange={setDateRangeStartHandler}
-        />
-      </div>
-    )}
-    {filter.dateRange.custom && (
-      <div>
-        <label htmlFor="date-range-custom-end">End Date</label>
-        <input
-          type="date"
-          id="date-range-custom-end"
-          value={filter.dateRange.end}
-          onChange={setDateRangeEndHandler}
-        />
-      </div>
-    )}
+    <DateRangeSelector
+      allowNone
+      value={convertDateRangeValue(filter.dateRange)}
+      onChange={setDateRange}
+    />
   </ModalBody>
 );
 
@@ -95,25 +54,11 @@ export const DateRangeSectionContainer = compose(
     null,
     {
       setDateRangeTimeline: actions.setDateRangeTimeline,
-      setDateRangePreset: actions.setDateRangePreset,
-      toggleDateRangeCustom: actions.toggleDateRangeCustom,
-      setDateRangeStart: actions.setDateRangeStart,
-      setDateRangeEnd: actions.setDateRangeEnd,
+      setDateRange: actions.setDateRange,
     },
   ),
   withHandlers({
     setDateRangeTimelineHandler: props => event =>
       props.setDateRangeTimeline(event.target.value),
-    radioClickHandler: props => event => {
-      if (event.target.value === 'custom') {
-        props.toggleDateRangeCustom();
-      } else {
-        props.setDateRangePreset(event.target.value);
-      }
-    },
-    setDateRangeStartHandler: props => event =>
-      props.setDateRangeStart(event.target.value),
-    setDateRangeEndHandler: props => event =>
-      props.setDateRangeEnd(event.target.value),
   }),
 )(DateRangeSection);

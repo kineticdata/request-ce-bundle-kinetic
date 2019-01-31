@@ -6,16 +6,18 @@ import { actions } from '../../../redux/modules/settingsDatastore';
 
 import { Export } from './Export';
 import { Import } from './Import';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const DatastoreModalComponent = ({ modalIsOpen, closeModal, modalName }) => (
   <Modal isOpen={modalIsOpen} toggle={closeModal} size="lg">
     <div className="modal-header">
       <h4 className="modal-title">
         <button onClick={closeModal} type="button" className="btn btn-link">
-          Cancel
+          <I18n>Cancel</I18n>
         </button>
-        <span>{modalName === 'import' ? 'Import' : 'Export'} Records</span>
-        <span>&nbsp;</span>
+        <span>
+          <I18n>{modalName === 'import' ? 'Import' : 'Export'} Records</I18n>
+        </span>
       </h4>
     </div>
     <ModalBody className="modal-body--import-export">

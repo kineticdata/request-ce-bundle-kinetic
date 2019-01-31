@@ -22,6 +22,7 @@ import {
   getStatus,
   getSubmissionPath,
 } from '../../utils';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
 
@@ -34,15 +35,19 @@ const getIcon = form =>
 
 const ProfileLink = ({ submitter }) => (
   <SpaceLink to={`/profile/${encodeURIComponent(submitter)}`}>
-    {submitter === bundle.identity() ? 'you' : submitter}
+    {submitter === bundle.identity() ? <I18n>you</I18n> : submitter}
   </SpaceLink>
 );
 
 const StatusItem = ({ submission }) => (
   <div className="data-list-row__col">
     <dl>
-      <dt>Status:</dt>
-      <dd>{getStatus(submission)}</dd>
+      <dt>
+        <I18n>Status</I18n>:
+      </dt>
+      <dd>
+        <I18n>{getStatus(submission)}</I18n>
+      </dd>
     </dl>
   </div>
 );
@@ -51,12 +56,16 @@ const DisplayDateItem = ({ submission }) =>
   !submission.submittedAt ? (
     <div className="data-list-row__col">
       <dl>
-        <dt>Created:</dt>
+        <dt>
+          <I18n>Created</I18n>:
+        </dt>
         <dd>
           <TimeAgo timestamp={submission.createdAt} />
         </dd>
         <dd>
-          <em>by</em>
+          <em>
+            <I18n>by</I18n>
+          </em>
           {` `}
           <ProfileLink submitter={submission.createdBy} />
         </dd>
@@ -65,12 +74,14 @@ const DisplayDateItem = ({ submission }) =>
   ) : (
     <div className="data-list-row__col">
       <dl>
-        <dt>Submitted:</dt>
+        <dt>
+          <I18n>Submitted</I18n>:
+        </dt>
         <dd className="text-truncate">
           <TimeAgo timestamp={submission.submittedAt} />
           <br />
           <small>
-            by
+            <I18n>by</I18n>
             {` `}
             <ProfileLink submitter={submission.submittedBy} />
           </small>
@@ -88,8 +99,12 @@ const ServiceOwnerItem = ({ submission }) => {
     !!serviceOwner && (
       <div className="data-list-row__col">
         <dl>
-          <dt>Service Owning Team:</dt>
-          <dd>{serviceOwner} Team</dd>
+          <dt>
+            <I18n>Service Owning Team</I18n>:
+          </dt>
+          <dd>
+            {serviceOwner} <I18n>Team</I18n>
+          </dd>
         </dl>
       </div>
     )
@@ -103,7 +118,9 @@ const EstCompletionItem = ({ submission }) => {
     !!dueDate && (
       <div className="data-list-row__col">
         <dl>
-          <dt>Est. Completion:</dt>
+          <dt>
+            <I18n>Est. Completion</I18n>:
+          </dt>
           <dd>
             <TimeAgo timestamp={dueDate} />
           </dd>
@@ -121,9 +138,11 @@ const CompletedInItem = ({ submission }) => {
     (duration || duration === 0) && (
       <div className="data-list-row__col">
         <dl>
-          <dt>Completed in:</dt>
+          <dt>
+            <I18n>Completed in</I18n>:
+          </dt>
           <dd>
-            {duration} {duration === 1 ? 'day' : 'days'}
+            {duration} {duration === 1 ? <I18n>day</I18n> : <I18n>days</I18n>}
           </dd>
         </dl>
       </div>
@@ -131,13 +150,13 @@ const CompletedInItem = ({ submission }) => {
   );
 };
 
-export const RequestShow = ({ submission, listType, mode }) => (
+export const RequestShow = ({ submission, listType, mode, kappSlug }) => (
   <Fragment>
     <PageTitle parts={[submission && `#${submission.handle}`, 'Requests']} />
     <span className="services-color-bar services-color-bar__blue-slate" />
     <Link className="nav-return" to={`/requests/${listType || ''}`}>
       <span className="fa fa-fw fa-chevron-left" />
-      {listType || 'All'} Requests
+      <I18n>{listType || 'All'} Requests</I18n>
     </Link>
     {submission && (
       <Fragment>
@@ -147,7 +166,9 @@ export const RequestShow = ({ submission, listType, mode }) => (
               <StatusItem submission={submission} />
               <div className="data-list-row__col">
                 <dl>
-                  <dt>Confirmation #</dt>
+                  <dt>
+                    <I18n>Confirmation #</I18n>
+                  </dt>
                   <dd>{submission.handle}</dd>
                 </dl>
               </div>
@@ -177,7 +198,11 @@ export const RequestShow = ({ submission, listType, mode }) => (
                   image={getIcon(submission.form)}
                   background="greenGrass"
                 />
-                {submission.form.name}
+                <I18n
+                  context={`kapps.${kappSlug}.forms.${submission.form.slug}`}
+                >
+                  {submission.form.name}
+                </I18n>
               </h1>
               {submission.form.name !== submission.label && (
                 <p>{submission.label}</p>
@@ -197,7 +222,7 @@ export const RequestShow = ({ submission, listType, mode }) => (
                     to={getSubmissionPath(submission, null, listType)}
                     activeClassName="active"
                   >
-                    Timeline
+                    <I18n>Timeline</I18n>
                   </NavLink>
                 </li>
                 <li role="presentation">
@@ -205,17 +230,21 @@ export const RequestShow = ({ submission, listType, mode }) => (
                     to={`${getSubmissionPath(submission, 'review', listType)}`}
                     activeClassName="active"
                   >
-                    Review Request
+                    <I18n>Review Request</I18n>
                   </NavLink>
                 </li>
               </ul>
               <div className="submission-tabs__content">
                 {mode === 'review' ? (
-                  <CoreForm
-                    submission={submission.id}
-                    review
-                    globals={globals}
-                  />
+                  <I18n
+                    context={`kapps.${kappSlug}.forms.${submission.form.slug}`}
+                  >
+                    <CoreForm
+                      submission={submission.id}
+                      review
+                      globals={globals}
+                    />
+                  </I18n>
                 ) : (
                   <RequestActivityList submission={submission} />
                 )}

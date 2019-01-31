@@ -22,3 +22,22 @@ export const COLORS = {
   yellow: 'rgb(254, 233, 78)',
   white: 'rgb(255, 255, 255)',
 };
+
+export const MOMENT_FORMATS = {
+  time: 'LT',
+  timeWithSeconds: 'LTS',
+  date: 'LL',
+  dateWithDay: 'dddd, LL',
+  dateNumeric: 'L',
+  dateShort: 'll',
+  dateWithDayShort: 'ddd, ll',
+  dateTime: 'LLL',
+  dateTimeNumeric: 'L LT',
+  dateTimeShort: 'lll',
+  dateTimeWithDay: 'LLLL',
+  dateTimeWithDayShort: 'llll',
+};
+
+export const DATE_TIME_REGEX = /^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d(\.\d+)?([+-][0-2]\d:[0-5]\d|Z)$/;
+export const DATE_REGEX = /^\d{4}-[01]\d-[0-3]\d$/;
+export const TIME_REGEX = /^[0-2]\d:[0-5]\d$/;

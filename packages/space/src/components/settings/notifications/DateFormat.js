@@ -6,6 +6,7 @@ import { CoreForm } from 'react-kinetic-core';
 import { push } from 'connected-react-router';
 import { toastActions, PageTitle } from 'common';
 import { NOTIFICATIONS_DATE_FORMAT_FORM_SLUG } from '../../../redux/modules/settingsNotifications';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const DateFormatComponent = props => (
   <div className="page-container page-container--notifications">
@@ -14,22 +15,34 @@ export const DateFormatComponent = props => (
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">home</Link> /{` `}
-            <Link to="/settings">settings</Link> /{` `}
+            <Link to="/">
+              <I18n>home</I18n>
+            </Link>{' '}
+            /{` `}
+            <Link to="/settings">
+              <I18n>settings</I18n>
+            </Link>{' '}
+            /{` `}
             <Link to="/settings/notifications/date-formats">
-              notification date formats
+              <I18n>notification date formats</I18n>
             </Link>
             {` `}
             /
           </h3>
-          <h1>{props.submissionId ? 'Edit' : 'New'} Date Format</h1>
-          <CoreForm
-            datastore
-            form={!props.submissionId && NOTIFICATIONS_DATE_FORMAT_FORM_SLUG}
-            submission={props.submissionId}
-            onCreated={props.handleCreated}
-            onUpdated={props.handleUpdated}
-          />
+          <h1>
+            <I18n>{props.submissionId ? 'Edit' : 'New'} Date Format</I18n>
+          </h1>
+          <I18n
+            context={`datastore.forms.${NOTIFICATIONS_DATE_FORMAT_FORM_SLUG}`}
+          >
+            <CoreForm
+              datastore
+              form={!props.submissionId && NOTIFICATIONS_DATE_FORMAT_FORM_SLUG}
+              submission={props.submissionId}
+              onCreated={props.handleCreated}
+              onUpdated={props.handleUpdated}
+            />
+          </I18n>
         </div>
       </div>
     </div>

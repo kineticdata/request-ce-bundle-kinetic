@@ -6,6 +6,7 @@ import { compose, withHandlers } from 'recompose';
 import { ROBOT_FORM_SLUG } from '../../../redux/modules/settingsRobots';
 import { CoreForm } from 'react-kinetic-core';
 import { toastActions } from 'common';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
 
@@ -21,23 +22,36 @@ const CreateRobotComponent = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">home</Link> /{` `}
-            <Link to="/settings">settings</Link> /{` `}
-            <Link to="/settings/robots">robots</Link> /{` `}
+            <Link to="/">
+              <I18n>home</I18n>
+            </Link>{' '}
+            /{` `}
+            <Link to="/settings">
+              <I18n>settings</I18n>
+            </Link>{' '}
+            /{` `}
+            <Link to="/settings/robots">
+              <I18n>robots</I18n>
+            </Link>{' '}
+            /{` `}
           </h3>
-          <h1>New Robot</h1>
+          <h1>
+            <I18n>New Robot</I18n>
+          </h1>
         </div>
       </div>
 
       <div>
-        <CoreForm
-          datastore
-          form={ROBOT_FORM_SLUG}
-          loaded={handleLoaded}
-          created={handleCreated}
-          error={handleError}
-          globals={globals}
-        />
+        <I18n context={`datastore.forms.${ROBOT_FORM_SLUG}`}>
+          <CoreForm
+            datastore
+            form={ROBOT_FORM_SLUG}
+            loaded={handleLoaded}
+            created={handleCreated}
+            error={handleError}
+            globals={globals}
+          />
+        </I18n>
       </div>
     </div>
   </div>

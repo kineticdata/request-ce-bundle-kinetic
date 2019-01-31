@@ -7,6 +7,7 @@ import { modalFormActions, PageTitle } from 'common';
 import { actions } from '../../../redux/modules/profiles';
 import { ProfileCard } from 'common';
 import { TeamCard } from '../../shared/TeamCard';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const EditProfileComponent = ({
   loading,
@@ -37,17 +38,27 @@ export const EditProfileComponent = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to="/">home</Link> / <Link to="/settings">settings</Link>{' '}
+                <Link to="/">
+                  <I18n>home</I18n>
+                </Link>{' '}
+                /{' '}
+                <Link to="/settings">
+                  <I18n>settings</I18n>
+                </Link>{' '}
                 /{' '}
               </h3>
-              <h1>Edit Profile</h1>
+              <h1>
+                <I18n>Edit Profile</I18n>
+              </h1>
             </div>
           </div>
           <section>
             <h2 className="section__title">General</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group required">
-                <label htmlFor="displayName">Display Name</label>
+                <label htmlFor="displayName">
+                  <I18n>Display Name</I18n>
+                </label>
                 <input
                   type="text"
                   id="displayName"
@@ -58,7 +69,9 @@ export const EditProfileComponent = ({
               </div>
               <div className="profile-input-container row">
                 <div className="form-group required col-md-6">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="email">
+                    <I18n>Email</I18n>
+                  </label>
                   <input
                     type="text"
                     id="email"
@@ -68,7 +81,9 @@ export const EditProfileComponent = ({
                   />
                 </div>
                 <div className="form-group col-md-6">
-                  <label htmlFor="phoneNumber">Phone Number</label>
+                  <label htmlFor="phoneNumber">
+                    <I18n>Phone Number</I18n>
+                  </label>
                   <input
                     type="text"
                     id="phoneNumber"
@@ -79,7 +94,9 @@ export const EditProfileComponent = ({
                 </div>
                 {defaultKappDisplayEnabled && (
                   <div className="form-group col-md-6">
-                    <label htmlFor="phoneNumber">Default Kapp Display</label>
+                    <label htmlFor="phoneNumber">
+                      <I18n>Default Kapp Display</I18n>
+                    </label>
                     <select
                       className="form-control"
                       type="kapp"
@@ -88,10 +105,14 @@ export const EditProfileComponent = ({
                       onChange={handleFieldChange}
                       value={fieldValues.defaultKappDisplay}
                     >
-                      <option value="">--Home--</option>
+                      <option value="">
+                        <I18n
+                          render={translate => `--${translate('Home')}--`}
+                        />
+                      </option>
                       {kapps.map(k => (
                         <option key={k.slug} value={k.slug}>
-                          {k.name}
+                          <I18n>{k.name}</I18n>
                         </option>
                       ))}
                     </select>
@@ -104,7 +125,7 @@ export const EditProfileComponent = ({
                   <div className="profile-input-container row">
                     <div className="form-group col">
                       <label htmlFor="newPassword" className="required">
-                        New Password
+                        <I18n>New Password</I18n>
                       </label>
                       <input
                         type="password"
@@ -116,7 +137,7 @@ export const EditProfileComponent = ({
                     </div>
                     <div className="form-group col">
                       <label htmlFor="confirmPassword" className="required">
-                        Password Confirmation
+                        <I18n>Password Confirmation</I18n>
                       </label>
                       <input
                         type="password"
@@ -128,14 +149,16 @@ export const EditProfileComponent = ({
                     </div>
                   </div>
                   {fieldValues.newPassword !== fieldValues.confirmPassword && (
-                    <p className="form-alert">Passwords Must Match</p>
+                    <p className="form-alert">
+                      <I18n>Passwords Must Match</I18n>
+                    </p>
                   )}
                   <div>
                     <button
                       onClick={handleTogglePassword}
                       className="btn btn-secondary btn-sm"
                     >
-                      Cancel Password Change
+                      <I18n>Cancel Password Change</I18n>
                     </button>
                   </div>
                   <hr />
@@ -145,7 +168,7 @@ export const EditProfileComponent = ({
                   onClick={handleTogglePassword}
                   className="change-password btn btn-secondary btn-sm"
                 >
-                  Change Password
+                  <I18n>Change Password</I18n>
                 </button>
               )}
               <div className="form__footer">
@@ -155,7 +178,7 @@ export const EditProfileComponent = ({
                     className="btn btn-primary"
                     // TODO: Disable until a change is made. Save Changes
                   >
-                    Save Changes
+                    <I18n>Save Changes</I18n>
                   </button>
                 </div>
               </div>
@@ -173,15 +196,19 @@ export const EditProfileComponent = ({
                     {managerEnabled && (
                       <tr>
                         <td scope="row" className="name">
-                          Manager
+                          <I18n>Manager</I18n>
                         </td>
                         <td>
-                          {manager || <em>No Manager</em>}
+                          {manager || (
+                            <em>
+                              <I18n>No Manager</I18n>
+                            </em>
+                          )}
                           <button
                             className="btn btn-link btn-sm"
                             onClick={handleChangeManagerClick}
                           >
-                            Change Manager
+                            <I18n>Change Manager</I18n>
                           </button>
                         </td>
                       </tr>
@@ -189,27 +216,43 @@ export const EditProfileComponent = ({
                     {departmentEnabled && (
                       <tr>
                         <td scope="row" className="name">
-                          {' '}
-                          Department{' '}
+                          <I18n>Department</I18n>
                         </td>
-                        <td> {department || <em> No Department </em>}</td>
+                        <td>
+                          {department || (
+                            <em>
+                              <I18n>No Department</I18n>
+                            </em>
+                          )}
+                        </td>
                       </tr>
                     )}
                     {organizationEnabled && (
                       <tr>
                         <td scope="row" className="name">
-                          {' '}
-                          Organization{' '}
+                          <I18n>Organization</I18n>
                         </td>
-                        <td> {organization || <em> No Organization </em>}</td>
+                        <td>
+                          {organization || (
+                            <em>
+                              <I18n>No Organization</I18n>
+                            </em>
+                          )}
+                        </td>
                       </tr>
                     )}
                     {siteEnabled && (
                       <tr>
                         <td scope="row" className="name">
-                          Site
+                          <I18n>Site</I18n>
                         </td>
-                        <td>{site || <em>No Site</em>}</td>
+                        <td>
+                          {site || (
+                            <em>
+                              <I18n>No Site</I18n>
+                            </em>
+                          )}
+                        </td>
                       </tr>
                     )}
                   </tbody>
@@ -252,7 +295,9 @@ const UserTeams = ({ teams }) => (
     {Object.keys(teams).length > 0 ? (
       teams.map(item => <TeamCard key={item.team.name} team={item.team} />)
     ) : (
-      <p>No teams assigned</p>
+      <p>
+        <I18n>No teams assigned</I18n>
+      </p>
     )}
   </div>
 );
@@ -262,11 +307,13 @@ const UserRoles = ({ roles }) => (
     {Object.keys(roles).length > 0 ? (
       roles.map(item => (
         <span className="profile-role" key={item.team.name}>
-          {item.team.name.replace(/^Role::(.*?)/, '$1')}
+          <I18n>{item.team.name.replace(/^Role::(.*?)/, '$1')}</I18n>
         </span>
       ))
     ) : (
-      <p>No roles assigned</p>
+      <p>
+        <I18n>No roles assigned</I18n>
+      </p>
     )}
   </div>
 );

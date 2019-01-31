@@ -4,6 +4,7 @@ import { compose, withHandlers } from 'recompose';
 import { actions } from '../../../../redux/modules/settingsDatastore';
 import { SubmissionListItem } from './SubmissionListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
+import { I18n } from '../../../../../../app/src/I18nProvider';
 
 const DiscussionIcon = () => (
   <span className="icon">
@@ -20,9 +21,13 @@ const DiscussionIcon = () => (
 const WallyNoResultsFoundMessage = ({ form }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>No {form.name} Submissions Found</h5>
+      <h5>
+        <I18n>No {form.name} Submissions Found</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
-      <h6>Add a new one by hitting the new button!.</h6>
+      <h6>
+        <I18n>Add a new one by hitting the new button!</I18n>
+      </h6>
     </div>
   );
 };
@@ -30,11 +35,15 @@ const WallyNoResultsFoundMessage = ({ form }) => {
 const WallyEnterSearchTerm = ({ form }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>Enter a term to search</h5>
+      <h5>
+        <I18n>Enter a term to search</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
       <h6>
-        You can search by any field on the form, or by choosing an index and
-        building a search query.
+        <I18n>
+          You can search by any field on the form, or by choosing an index and
+          building a search query.
+        </I18n>
       </h6>
     </div>
   );
@@ -43,9 +52,13 @@ const WallyEnterSearchTerm = ({ form }) => {
 const WallySearching = () => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>Searching</h5>
+      <h5>
+        <I18n>Searching</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
-      <h6>Just a sec while we find those submissions.</h6>
+      <h6>
+        <I18n>Just a sec while we find those submissions.</I18n>
+      </h6>
     </div>
   );
 };
@@ -104,7 +117,9 @@ const SubmissionListComponent = ({
   return (
     <div className="datastore-submissions">
       {loading ? (
-        <h3>Loading</h3>
+        <h3>
+          <I18n>Loading</I18n>
+        </h3>
       ) : (
         <div>
           {submissions.size > 0 && (
@@ -113,7 +128,8 @@ const SubmissionListComponent = ({
                 pageTokens.size === 0 &&
                 !searching && (
                   <div className="alert alert-success mt-3">
-                    <strong>{submissions.size}</strong> results found
+                    <strong>{submissions.size}</strong>{' '}
+                    <I18n>results found</I18n>
                   </div>
                 )}
               {clientSortInfo &&
@@ -121,8 +137,10 @@ const SubmissionListComponent = ({
                   <div className="text-info mb-2">
                     <small>
                       <em>
-                        Sorting the table columns will only sort the visible
-                        records on the current page.
+                        <I18n>
+                          Sorting the table columns will only sort the visible
+                          records on the current page.
+                        </I18n>
                       </em>
                     </small>
                   </div>
@@ -148,7 +166,11 @@ const SubmissionListComponent = ({
                           onClick={e => sortTable(c)}
                           scope="col"
                         >
-                          {isDiscussionIdField ? <DiscussionIcon /> : c.label}
+                          {isDiscussionIdField ? (
+                            <DiscussionIcon />
+                          ) : (
+                            <I18n>{c.label}</I18n>
+                          )}
                         </th>
                       );
                     })}
@@ -160,7 +182,9 @@ const SubmissionListComponent = ({
                     <th scope="col">
                       <div className="input-group">
                         <div className="input-group-prepend">
-                          <span className="input-group-text">Sort By</span>
+                          <span className="input-group-text">
+                            <I18n>Sort By</I18n>
+                          </span>
                         </div>
                         <select
                           className="form-control"
@@ -190,7 +214,7 @@ const SubmissionListComponent = ({
                               key={`${c.name}::${c.type}`}
                               value={`${c.name}::${c.type}`}
                             >
-                              {c.label}
+                              <I18n>{c.label}</I18n>
                             </option>
                           ))}
                         </select>
@@ -207,8 +231,12 @@ const SubmissionListComponent = ({
                               });
                             }}
                           >
-                            <option value="ASC">Asc</option>
-                            <option value="DESC">Desc</option>
+                            <option value="ASC">
+                              <I18n>Asc</I18n>
+                            </option>
+                            <option value="DESC">
+                              <I18n>Desc</I18n>
+                            </option>
                           </select>
                         )}
                       </div>

@@ -3,12 +3,15 @@ import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const STATUSES = ['Open', 'Pending', 'Complete', 'Cancelled'];
 
 export const StatusSection = ({ filter, toggleStatusHandler }) => (
   <ModalBody className="filter-section">
-    <h5>Status</h5>
+    <h5>
+      <I18n>Status</I18n>
+    </h5>
     {STATUSES.map(status => (
       <label htmlFor={`filter-status-${status}`} key={status}>
         <input
@@ -18,7 +21,7 @@ export const StatusSection = ({ filter, toggleStatusHandler }) => (
           checked={filter.status.includes(status)}
           onChange={toggleStatusHandler}
         />
-        {status}
+        <I18n>{status}</I18n>
       </label>
     ))}
   </ModalBody>

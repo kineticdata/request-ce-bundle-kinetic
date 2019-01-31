@@ -1,6 +1,7 @@
 import React from 'react';
 import { KappLink as Link, KappNavLink as NavLink } from 'common';
 import { Nav, NavItem } from 'reactstrap';
+import { I18n } from '../../../app/src/I18nProvider';
 
 const formatCount = count =>
   !count ? '' : count >= 1000 ? '(999+)' : `(${count})`;
@@ -12,7 +13,9 @@ export const Sidebar = props => (
   <div className="sidebar services-sidebar">
     <div className="sidebar-group--content-wrapper">
       <div className="sidebar-group sidebar-my-requests">
-        <h1>My Requests</h1>
+        <h1>
+          <I18n>My Requests</I18n>
+        </h1>
         <Nav vertical>
           <NavItem>
             <NavLink
@@ -22,7 +25,7 @@ export const Sidebar = props => (
               exact
             >
               <span className="fa fa-fw fa-star" />
-              All
+              <I18n>All</I18n>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -33,7 +36,7 @@ export const Sidebar = props => (
               exact
             >
               <span className="fa fa-fw fa-book" />
-              Open {formatCount(props.counts.Submitted)}
+              <I18n>Open</I18n> {formatCount(props.counts.Submitted)}
             </NavLink>
           </NavItem>
           <NavItem>
@@ -44,7 +47,7 @@ export const Sidebar = props => (
               exact
             >
               <span className="fa fa-fw fa-times" />
-              Closed {formatCount(props.counts.Closed)}
+              <I18n>Closed</I18n> {formatCount(props.counts.Closed)}
             </NavLink>
           </NavItem>
           <NavItem>
@@ -55,18 +58,18 @@ export const Sidebar = props => (
               exact
             >
               <span className="fa fa-fw fa-inbox" />
-              Draft {formatCount(props.counts.Draft)}
+              <I18n>Draft</I18n> {formatCount(props.counts.Draft)}
             </NavLink>
           </NavItem>
         </Nav>
       </div>
       <div className="sidebar-group sidebar-home-page-item">
         <h1>
-          {props.homePageMode}
+          <I18n>{props.homePageMode}</I18n>
           <Link
             to={props.homePageMode === 'Categories' ? '/categories' : '/forms'}
           >
-            View All
+            <I18n>View All</I18n>
           </Link>
         </h1>
         <Nav vertical>
@@ -78,7 +81,7 @@ export const Sidebar = props => (
                 activeClassName="active"
                 exact
               >
-                {item.name}
+                <I18n>{item.name}</I18n>
               </NavLink>
             </NavItem>
           ))}
@@ -88,7 +91,7 @@ export const Sidebar = props => (
     <div className="sidebar-group sidebar-group--settings">
       <ul className="nav flex-column settings-group">
         <Link to="/settings/" onClick={props.openSettings} className="nav-link">
-          Settings
+          <I18n>Settings</I18n>
           <span className="fa fa-fw fa-angle-right" />
         </Link>
       </ul>

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { PopConfirm } from '../shared/PopConfirm';
 import { Button } from 'reactstrap';
 import { actions as appActions } from '../../redux/modules/spaceApp';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const AlertComponent = ({
   alert,
@@ -17,14 +18,22 @@ const AlertComponent = ({
     {alert.values.URL ? (
       <td scope="row">
         <a href={alert.values.URL} target="blank">
-          {alert.values.Title}
+          <I18n>{alert.values.Title}</I18n>
           <i className="fa fa-fw fa-external-link " />
         </a>
       </td>
     ) : (
-      <td>{alert.values.Title}</td>
+      <td>
+        <I18n>{alert.values.Title}</I18n>
+      </td>
     )}
-    <td dangerouslySetInnerHTML={{ __html: alert.values.Content }} />
+    <I18n
+      render={translate => (
+        <td
+          dangerouslySetInnerHTML={{ __html: translate(alert.values.Content) }}
+        />
+      )}
+    />
     {canEdit && (
       <td>
         <div className="btn-group btn-group-sm">
@@ -45,12 +54,14 @@ const AlertComponent = ({
           isOpen={alert.id === openDeleteConfirm}
           toggle={toggleDeleteConfirm()}
         >
-          <p>Remove Alert?</p>
+          <p>
+            <I18n>Remove Alert?</I18n>
+          </p>
           <Button color="danger" onClick={() => deleteAlert(alert.id)}>
-            Yes
+            <I18n>Yes</I18n>
           </Button>
           <Button color="link" onClick={toggleDeleteConfirm()}>
-            No
+            <I18n>No</I18n>
           </Button>
         </PopConfirm>
       </td>

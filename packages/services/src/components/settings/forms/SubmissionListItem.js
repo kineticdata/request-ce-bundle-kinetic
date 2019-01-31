@@ -10,6 +10,7 @@ import {
 import moment from 'moment';
 
 import { Constants } from 'common';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const DiscussionIcon = () => (
   <span className="icon">
@@ -51,7 +52,10 @@ const MobileSubmissionCard = ({ submission, columns, to }) => (
                       <DiscussionIcon />
                     ) : (
                       <span>
-                        <strong>{innerColumn.label}:</strong> {innerRowData}
+                        <strong>
+                          <I18n>{innerColumn.label}</I18n>:
+                        </strong>{' '}
+                        {innerRowData}
                       </span>
                     )}
                     <br />
@@ -62,7 +66,7 @@ const MobileSubmissionCard = ({ submission, columns, to }) => (
           </p>
           <div className="btn-group" role="group" aria-label="Actions">
             <Link to={to} className="btn btn-primary">
-              View
+              <I18n>View</I18n>
             </Link>
           </div>
         </div>
@@ -102,7 +106,7 @@ const TableSubmissionRow = ({
     ))}
     <td>
       <Link to={to} title="View submission">
-        View
+        <I18n>View</I18n>
       </Link>
     </td>
   </tr>

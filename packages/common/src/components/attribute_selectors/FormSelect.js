@@ -13,6 +13,7 @@ import memoize from 'memoize-one';
 import { CoreAPI } from 'react-kinetic-core';
 
 import { Cache } from '../../cache';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const FormMenuItem = props => {
   const disabledReason = props.disabledFn && props.disabledFn(props.option);
@@ -140,24 +141,32 @@ export class FormSelect extends React.Component {
     return (
       this.state.options && (
         <div className="form-group">
-          <label>{this.props.label}</label>
-          <Typeahead
-            className={this.props.className}
-            kappSlug={this.props.kappSlug}
-            multiple={this.props.multiple}
-            options={this.state.options}
-            renderMenu={this.state.renderMenu}
-            renderToken={renderToken}
-            selected={getSelected(
-              this.props.value,
-              this.props.valueMapper,
-              this.state.options,
+          <label>
+            <I18n>{this.props.label}</I18n>
+          </label>
+          <I18n
+            render={translate => (
+              <Typeahead
+                className={this.props.className}
+                kappSlug={this.props.kappSlug}
+                multiple={this.props.multiple}
+                options={this.state.options}
+                renderMenu={this.state.renderMenu}
+                renderToken={renderToken}
+                selected={getSelected(
+                  this.props.value,
+                  this.props.valueMapper,
+                  this.state.options,
+                )}
+                onChange={this.handleChange}
+                placeholder={translate(
+                  this.props.placeholder || 'Select a Form',
+                )}
+              />
             )}
-            onChange={this.handleChange}
-            placeholder={this.props.placeholder || 'Select a Form'}
           />
           <small className="form-text text-muted">
-            {this.props.description}
+            <I18n>{this.props.description}</I18n>
           </small>
         </div>
       )

@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose, withHandlers } from 'recompose';
 import { login } from '../../utils/authentication';
+import { I18n } from '../../I18nProvider';
 
 export const Login = ({
   handleLogin,
@@ -15,11 +16,11 @@ export const Login = ({
 }) => (
   <form className="login-form-container" onSubmit={handleLogin}>
     <h3>
-      Sign In
+      <I18n>Sign In</I18n>
       <small>
-        {'or '}
+        <I18n>or</I18n>{' '}
         <a role="button" tabIndex="0" onClick={toCreateAccount(routed)}>
-          Create Account
+          <I18n>Create Account</I18n>
         </a>
       </small>
     </h3>
@@ -30,7 +31,9 @@ export const Login = ({
       }}
     >
       <div className="form-group">
-        <label htmlFor="email">Email Address</label>
+        <label htmlFor="email">
+          <I18n>Email Address</I18n>
+        </label>
         <input
           type="text"
           autoFocus
@@ -42,7 +45,9 @@ export const Login = ({
         />
       </div>
       <div className="form-group">
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">
+          <I18n>Password</I18n>
+        </label>
         <input
           type="password"
           className="form-control"
@@ -55,14 +60,16 @@ export const Login = ({
       <span className="text-danger">{error || ' '}</span>
     </div>
     <div className="button-group">
-      <button className="btn btn-primary">Sign In</button>
+      <button className="btn btn-primary">
+        <I18n>Sign In</I18n>
+      </button>
       <hr />
       <button
         type="button"
         className="btn btn-link"
         onClick={toResetPassword(routed)}
       >
-        Reset Password
+        <I18n>Reset Password</I18n>
       </button>
     </div>
   </form>

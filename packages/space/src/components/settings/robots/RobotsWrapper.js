@@ -2,19 +2,32 @@ import React from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RobotContainer } from './RobotContainer';
+import { I18n } from '../../../../../app/src/I18nProvider';
 import semver from 'semver';
 const MINIMUM_CE_VERSION = '2.1.0';
 
-const RobotsError = () => <h1>Error loading Robots</h1>;
+const RobotsError = () => (
+  <h1>
+    <I18n>Error loading Robots</I18n>
+  </h1>
+);
 const RobotsVersionError = ({ version }) => (
   <div className="page-panel page-panel--scrollable">
     <div className="page-title">
       <div className="page-title__wrapper">
         <h3>
-          <Link to="/">home</Link> /{` `}
-          <Link to="/settings">settings</Link> /{` `}
+          <Link to="/">
+            <I18n>home</I18n>
+          </Link>{' '}
+          /{` `}
+          <Link to="/settings">
+            <I18n>settings</I18n>
+          </Link>{' '}
+          /{` `}
         </h3>
-        <h1>Invalid CE Version</h1>
+        <h1>
+          <I18n>Invalid CE Version</I18n>
+        </h1>
       </div>
     </div>
     <p>

@@ -11,6 +11,8 @@ import {
   selectCurrentKapp,
 } from 'common';
 import { CoreAPI } from 'react-kinetic-core';
+import isarray from 'isarray';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const SettingsComponent = ({
   attributesMap,
@@ -24,31 +26,43 @@ export const SettingsComponent = ({
   previousKappName,
 }) => (
   <div className="page-container page-container--space-settings">
-    <PageTitle parts={[`${currentKapp.name} Kapp Settings`]} />
+    <PageTitle parts={['Kapp Settings', currentKapp.name]} />
     <div className="page-panel page-panel--scrollable page-panel--space-profile-edit">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to={`/kapps/${currentKapp.slug}`}>services</Link> /{` `}
+            <Link to={`/kapps/${currentKapp.slug}`}>
+              <I18n>services</I18n>
+            </Link>{' '}
+            /{` `}
             <Link to={`/kapps/${currentKapp.slug}/settings`}>
-              settings
-            </Link> /{` `}
+              <I18n>settings</I18n>
+            </Link>{' '}
+            /{` `}
           </h3>
-          <h1>{currentKapp.name} Settings</h1>
+          <h1>
+            <I18n>{currentKapp.name}</I18n> <I18n>Settings</I18n>
+          </h1>
         </div>
       </div>
       <section>
         <form>
-          <h2 className="section__title">Display Options</h2>
+          <h2 className="section__title">
+            <I18n>Display Options</I18n>
+          </h2>
           <div className="form-group">
-            <label>Kapp Name</label>
+            <label>
+              <I18n>Kapp Name</I18n>
+            </label>
             <input
               type="text"
               className="form-control"
               value={kappName}
               onChange={handleNameChange}
             />
-            <small>The Name of the Kapp Referenced Throughout the Kapp</small>
+            <small>
+              <I18n>The Name of the Kapp Referenced Throughout the Kapp</I18n>
+            </small>
           </div>
           {attributesMap.has('Icon') && (
             <AttributeSelectors.IconSelect
@@ -62,13 +76,45 @@ export const SettingsComponent = ({
           {attributesMap.has('Hidden') && (
             <AttributeSelectors.TrueFalseSelect
               id="Hidden"
-              value={attributesMap.getIn(['Hidden', 'value'])}
+              value={attributesMap.getIn(['Hidden', 'value', 0])}
               onChange={handleAttributeChange}
               label="Hide Kapp from Navigation"
               description={attributesMap.getIn(['Hidden', 'description'])}
             />
           )}
-          <h2 className="section__title">Workflow Options</h2>
+          {attributesMap.has('Record Search History') && (
+            <div className="form-group">
+              <label htmlFor="Record Search History">
+                <I18n>Record Search History</I18n>
+              </label>
+              <select
+                id="Record Search History"
+                value={
+                  attributesMap.getIn(['Record Search History', 'value', 0]) ||
+                  'Off'
+                }
+                onChange={handleAttributeChange}
+              >
+                <option value="All">
+                  <I18n>All (always recorded)</I18n>
+                </option>
+                <option value="None">
+                  <I18n>None (only recorded if no results found)</I18n>
+                </option>
+                <option value="Off">
+                  <I18n>Off (never recorded)</I18n>
+                </option>
+              </select>
+              <small>
+                <I18n>
+                  Controls when searches made from this kapp are recorded.
+                </I18n>
+              </small>
+            </div>
+          )}
+          <h2 className="section__title">
+            <I18n>Workflow Options</I18n>
+          </h2>
           {attributesMap.has('Approver') && (
             <AttributeSelectors.ApproverSelect
               id="Approver"
@@ -104,7 +150,9 @@ export const SettingsComponent = ({
               ])}
             />
           )}
-          <h2 className="section__title">Form Mapping</h2>
+          <h2 className="section__title">
+            <I18n>Form Mapping</I18n>
+          </h2>
           {requiredKapps.queue &&
             attributesMap.has('Approval Form Slug') && (
               <AttributeSelectors.FormSelect
@@ -201,7 +249,7 @@ export const SettingsComponent = ({
                 )
               }
             >
-              Save Changes
+              <I18n>Save Changes</I18n>
             </button>
           </span>
         </div>
@@ -330,7 +378,9 @@ const handleAttributeChange = ({
   setAttributesMapDifferences,
 }) => event => {
   const field = event.target.id;
-  const value = List(event.target.value);
+  const value = List(
+    isarray(event.target.value) ? event.target.value : [event.target.value],
+  );
   const updatedAttributesMap = attributesMap.setIn([field, 'value'], value);
   const diff = updatedAttributesMap
     .filter((v, k) => !previousAttributesMap.get(k).equals(v))

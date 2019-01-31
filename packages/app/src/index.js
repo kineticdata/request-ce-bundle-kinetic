@@ -18,12 +18,13 @@ import {
 } from './redux/modules/auth';
 import { AuthenticatedContainer } from './AuthenticatedContainer';
 import { App } from './App';
+import { ConnectedI18nProvider } from './I18nProvider';
 
 // Create the history instance that enables client-side application routing.
 const history = createHashHistory();
 
 // Create the redux store with the configureStore helper found in redux/store.js
-const store = configureStore(history);
+export const store = configureStore(history);
 
 const authInterceptor = new AuthInterceptor(
   store,
@@ -44,11 +45,13 @@ ReactDOM.render(
       />
     </Helmet>
     <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <AuthenticatedContainer>
-          <Route path="/" component={App} />
-        </AuthenticatedContainer>
-      </ConnectedRouter>
+      <ConnectedI18nProvider>
+        <ConnectedRouter history={history}>
+          <AuthenticatedContainer>
+            <Route path="/" component={App} />
+          </AuthenticatedContainer>
+        </ConnectedRouter>
+      </ConnectedI18nProvider>
     </Provider>
   </Fragment>,
   document.getElementById('root'),

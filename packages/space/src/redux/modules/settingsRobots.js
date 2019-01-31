@@ -132,9 +132,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_DELETE_SUCCESS:
       return state.set('robotDeleting', false);
     case types.SET_DELETE_ERROR:
-      return state
-        .set('robotDeleting', false)
-        .set('robotErrors', payload);
+      return state.set('robotDeleting', false).set('robotErrors', payload);
 
     case types.FETCH_ROBOT_EXECUTIONS:
       return state

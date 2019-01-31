@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { CoreAPI } from 'react-kinetic-core';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 import {
   commonActions,
@@ -29,17 +30,29 @@ export const SettingsComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /{` `}
-              <Link to="/settings">settings</Link> /{` `}
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
             </h3>
-            <h1>System Settings</h1>
+            <h1>
+              <I18n>System Settings</I18n>
+            </h1>
           </div>
         </div>
         <section>
           <form>
-            <h2 className="section__title">Display Options</h2>
+            <h2 className="section__title">
+              <I18n>Display Options</I18n>
+            </h2>
             <div className="form-group">
-              <label>Space Name</label>
+              <label>
+                <I18n>Space Name</I18n>
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -47,7 +60,9 @@ export const SettingsComponent = ({
                 onChange={handleNameChange}
               />
               <small>
-                The Name of the Space Referenced Throughout the System
+                <I18n>
+                  The Name of the Space Referenced Throughout the System
+                </I18n>
               </small>
             </div>
             {attributesMap.has('Default Kapp Display') && (
@@ -64,7 +79,9 @@ export const SettingsComponent = ({
                 ])}
               />
             )}
-            <h2 className="section__title">Workflow Options</h2>
+            <h2 className="section__title">
+              <I18n>Workflow Options</I18n>
+            </h2>
             {attributesMap.has('Service Days Due') && (
               <AttributeSelectors.IntegerSelect
                 id="Service Days Due"
@@ -90,7 +107,9 @@ export const SettingsComponent = ({
                 ])}
               />
             )}
-            <h2 className="section__title">Form Mapping</h2>
+            <h2 className="section__title">
+              <I18n>Form Mapping</I18n>
+            </h2>
             {requiredKapps.queue &&
               attributesMap.has('Approval Form Slug') && (
                 <AttributeSelectors.FormSelect
@@ -201,7 +220,7 @@ export const SettingsComponent = ({
                   )
                 }
               >
-                Save Changes
+                <I18n>Save Changes</I18n>
               </button>
             </span>
           </div>

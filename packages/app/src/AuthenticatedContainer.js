@@ -4,6 +4,7 @@ import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { Route, Switch } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { bundle } from 'react-kinetic-core';
+import { I18n } from './I18nProvider';
 
 import logoImage from './assets/images/login-background.png';
 import logoName from './assets/images/login-name.png';
@@ -27,8 +28,12 @@ export const LoginScreen = props => (
             src={logoName}
             alt="Kinops - streamline everyday work for teams"
           />
-          <h3>Welcome to kinops</h3>
-          <p>Streamline everyday work for teams.</p>
+          <h3>
+            <I18n>Welcome to kinops</I18n>
+          </h3>
+          <p>
+            <I18n>Streamline everyday work for teams.</I18n>
+          </p>
         </div>
       </div>
     </div>

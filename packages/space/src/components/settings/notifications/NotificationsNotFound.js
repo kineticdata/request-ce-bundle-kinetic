@@ -1,13 +1,18 @@
 import React from 'react';
 import wallyMissingIMage from 'common/src/assets/images/wally-missing.svg';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const NotificationsNotFound = () => (
   <div className="empty-state empty-state--wally">
-    <h5>Notification Forms Not Found</h5>
+    <h5>
+      <I18n>Notification Forms Not Found</I18n>
+    </h5>
     <img src={wallyMissingIMage} alt="Missing Wally" />
     <h6>
-      There are several datastore forms used to implement the notification
-      functionality that need to be installed first.
+      <I18n>
+        There are several datastore forms used to implement the notification
+        functionality that need to be installed first.
+      </I18n>
     </h6>
   </div>
 );

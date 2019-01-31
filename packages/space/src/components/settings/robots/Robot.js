@@ -11,12 +11,16 @@ import {
   withState,
 } from 'recompose';
 import { NavLink } from 'react-router-dom';
-import { actions } from '../../../redux/modules/settingsRobots';
+import {
+  actions,
+  ROBOT_FORM_SLUG,
+} from '../../../redux/modules/settingsRobots';
 import { CoreForm } from 'react-kinetic-core';
 import { Button } from 'reactstrap';
 import { toastActions, Loading, PageTitle } from 'common';
 import { RobotExecutionsList } from './RobotExecutionsList';
 import { PopConfirm } from '../../shared/PopConfirm';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
 
@@ -49,9 +53,18 @@ const RobotComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /{` `}
-              <Link to="/settings">settings</Link> /{` `}
-              <Link to="/settings/robots">robots</Link> /{` `}
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings/robots">
+                <I18n>robots</I18n>
+              </Link>{' '}
+              /{` `}
             </h3>
             <h1>{!loading && robot && robot.values['Robot Name']}</h1>
           </div>
@@ -64,8 +77,12 @@ const RobotComponent = ({
             {robot === null &&
               robotErrors.length > 0 && (
                 <div className="text-center text-danger">
-                  <h1>Oops!</h1>
-                  <h2>Robot Not Found</h2>
+                  <h1>
+                    <I18n>Oops!</I18n>
+                  </h1>
+                  <h2>
+                    <I18n>Robot Not Found</I18n>
+                  </h2>
                   {robotErrors.map(error => (
                     <p className="error-details">{error}</p>
                   ))}
@@ -81,7 +98,7 @@ const RobotComponent = ({
                         to={`/settings/robots/${match.params.robotId}`}
                         activeClassName="active"
                       >
-                        Details
+                        <I18n>Details</I18n>
                       </NavLink>
                     </li>
                     <li role="presentation">
@@ -91,7 +108,7 @@ const RobotComponent = ({
                         }/executions`}
                         activeClassName="active"
                       >
-                        Executions
+                        <I18n>Executions</I18n>
                       </NavLink>
                     </li>
                   </ul>
@@ -100,21 +117,36 @@ const RobotComponent = ({
                   <div>
                     {(isInactive || isExpired) && (
                       <div className="alert alert-warning">
-                        {'This robot is '}
-                        {isInactive && <strong>Inactive</strong>}
-                        {isInactive && isExpired && ' and '}
-                        {isExpired && <strong>Expired</strong>}
+                        <I18n>This robot is</I18n>{' '}
+                        {isInactive && (
+                          <strong>
+                            <I18n>Inactive</I18n>
+                          </strong>
+                        )}
+                        {isInactive &&
+                          isExpired && (
+                            <I18n
+                              render={translate => ` ${translate('and')} `}
+                            />
+                          )}
+                        {isExpired && (
+                          <strong>
+                            <I18n>Expired</I18n>
+                          </strong>
+                        )}
                         {'.'}
                       </div>
                     )}
-                    <CoreForm
-                      datastore
-                      submission={match.params.robotId}
-                      loaded={handleLoaded}
-                      updated={handleUpdated}
-                      error={handleError}
-                      globals={globals}
-                    />
+                    <I18n context={`datastore.forms.${ROBOT_FORM_SLUG}`}>
+                      <CoreForm
+                        datastore
+                        submission={match.params.robotId}
+                        loaded={handleLoaded}
+                        updated={handleUpdated}
+                        error={handleError}
+                        globals={globals}
+                      />
+                    </I18n>
                     <span id="popover-placeholder" />
                     <PopConfirm
                       target={
@@ -125,15 +157,17 @@ const RobotComponent = ({
                       isOpen={confirmDelete}
                       toggle={() => setConfirmDelete(!confirmDelete)}
                     >
-                      <p>Delete robot {robot.values['Robot Name']}?</p>
+                      <p>
+                        <I18n>Delete robot</I18n> {robot.values['Robot Name']}?
+                      </p>
                       <Button color="danger" onClick={processDelete}>
-                        Yes
+                        <I18n>Yes</I18n>
                       </Button>
                       <Button
                         color="link"
                         onClick={() => setConfirmDelete(!confirmDelete)}
                       >
-                        No
+                        <I18n>No</I18n>
                       </Button>
                     </PopConfirm>
                   </div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import { AssignmentItem } from './AssignmentItem';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 /* eslint-disable class-methods-use-this */
 export class AssignmentSelector extends Component {
@@ -79,10 +80,17 @@ export class AssignmentSelector extends Component {
       <div key="menu">
         {Object.keys(byTeams).map(t => (
           <div key={t}>
-            <h5 className="select-combobox__title">{t}</h5>
+            <h5 className="select-combobox__title">
+              <I18n>{t}</I18n>
+            </h5>
             {byTeams[t]}
           </div>
         ))}
+        {items.length <= 0 && (
+          <div className="text-center text-info">
+            <I18n>No valid assignments.</I18n>
+          </div>
+        )}
       </div>
     );
   }
@@ -90,7 +98,7 @@ export class AssignmentSelector extends Component {
   render() {
     return (
       <div className="assignment-badge">
-        Assignment
+        <I18n>Assignment</I18n>
         <div className="select-combobox select-combobox--assignment">
           <Autocomplete
             ref={el => {
