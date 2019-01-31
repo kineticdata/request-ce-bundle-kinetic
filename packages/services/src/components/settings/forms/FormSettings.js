@@ -122,6 +122,7 @@ export const FormContainer = ({
   notifications,
   handleColumnOrderChange,
   handleColumnChange,
+  handleWorkflowToggle,
 }) =>
   !loading &&
   !kappLoading &&
@@ -505,8 +506,10 @@ export const FormContainer = ({
 
               <tbody>
                 {categoryDefinitions
-                  .filter(c =>
-                    inputs.categories.find(fc => fc.category.slug === c.slug),
+                  .filter(
+                    c =>
+                      inputs.categories &&
+                      inputs.categories.find(fc => fc.category.slug === c.slug),
                   )
                   .map(val => (
                     <tr key={val.slug}>
@@ -534,6 +537,7 @@ export const FormContainer = ({
                       {categoryDefinitions
                         .filter(
                           c =>
+                            !inputs.categories ||
                             !inputs.categories.find(
                               fc => fc.category.slug === c.slug,
                             ),
@@ -563,6 +567,130 @@ export const FormContainer = ({
                 </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+        <div className="workflow-settings">
+          <h3 className="section__title">
+            <I18n>Workflow</I18n>
+          </h3>
+          <div className="form settings">
+            <div className="form-group">
+              <label>
+                <I18n>Submission Created</I18n>
+              </label>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  id="submission-created-default"
+                  name="createdWorkflow"
+                  value="default"
+                  checked={inputs.createdWorkflow === 'default'}
+                  onChange={handleWorkflowToggle}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="submission-created-default"
+                >
+                  Default
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  id="submission-created-custom"
+                  name="createdWorkflow"
+                  value="custom"
+                  checked={inputs.createdWorkflow === 'custom'}
+                  onChange={handleWorkflowToggle}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="submission-created-custom"
+                >
+                  Custom
+                </label>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>
+                <I18n>Submission Submitted</I18n>
+              </label>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  id="submission-submitted-default"
+                  name="submittedWorkflow"
+                  value="default"
+                  checked={inputs.submittedWorkflow === 'default'}
+                  onChange={handleWorkflowToggle}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="submission-submitted-default"
+                >
+                  Default
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  id="submission-submitted-custom"
+                  name="submittedWorkflow"
+                  value="custom"
+                  checked={inputs.submittedWorkflow === 'custom'}
+                  onChange={handleWorkflowToggle}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="submission-submitted-custom"
+                >
+                  Custom
+                </label>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>
+                <I18n>Submission Updated</I18n>
+              </label>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  id="submission-updated-default"
+                  name="updatedWorkflow"
+                  value="default"
+                  checked={inputs.updatedWorkflow === 'default'}
+                  onChange={handleWorkflowToggle}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="submission-updated-default"
+                >
+                  Default
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  id="submission-updated-custom"
+                  name="updatedWorkflow"
+                  value="custom"
+                  checked={inputs.updatedWorkflow === 'custom'}
+                  onChange={handleWorkflowToggle}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="submission-updated-custom"
+                >
+                  Custom
+                </label>
+              </div>
+            </div>
           </div>
         </div>
         <div className="form__footer">
@@ -618,12 +746,22 @@ export const FormContainer = ({
             them off in the Category Settings area.
           </I18n>
         </p>
+        <h4>
+          <I18n>Workflow</I18n>
+        </h4>
+        <p>
+          <I18n>
+            Configure whether the form uses default or custom workflow for the
+            created, updated, and submitted events.
+          </I18n>
+        </p>
       </div>
     </div>
   );
 
 export const setInitialInputs = ({ setInputs, form }) => () => {
   const config = buildFormConfigurationObject(form);
+  const customWorkflow = form.attributesMap['Custom Submission Workflow'];
   setInputs({
     description: form.description,
     type: form.type,
@@ -659,6 +797,11 @@ export const setInitialInputs = ({ setInputs, form }) => () => {
       ? form.attributesMap['Notification Template Name - Create'][0]
       : '',
     columns: config.columns,
+    createdWorkflow: customWorkflow.includes('Created') ? 'custom' : 'default',
+    submittedWorkflow: customWorkflow.includes('Submitted')
+      ? 'custom'
+      : 'default',
+    updatedWorkflow: customWorkflow.includes('Updated') ? 'custom' : 'default',
   });
 };
 
@@ -705,6 +848,10 @@ const handleColumnOrderChange = ({ setInputs, inputs }) => ({
 const handleColumnChange = ({ setInputs, inputs }) => (index, prop, value) => {
   const updated = inputs.columns.setIn([index, prop], value);
   setInputs({ ...inputs, columns: updated });
+};
+
+const handleWorkflowToggle = ({ setInputs, inputs }) => event => {
+  setInputs({ ...inputs, [event.target.name]: event.target.value });
 };
 
 const mapStateToProps = (state, { match: { params } }) => {
@@ -754,6 +901,7 @@ export const FormSettings = compose(
     handleRemoveCategory,
     handleColumnOrderChange,
     handleColumnChange,
+    handleWorkflowToggle,
   }),
   lifecycle({
     componentWillMount() {

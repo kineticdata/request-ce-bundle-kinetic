@@ -140,6 +140,11 @@ export function* updateFormSaga(action) {
           columns: currentFormChanges.columns.toJS(),
         }),
       ],
+      'Custom Submission Workflow': [
+        currentFormChanges.createdWorkflow === 'custom' && 'Created',
+        currentFormChanges.submittedWorkflow === 'custom' && 'Submitted',
+        currentFormChanges.updatedWorkflow === 'custom' && 'Updated',
+      ].filter(value => !!value),
     },
     status: currentFormChanges.status,
     type: currentFormChanges.type,
