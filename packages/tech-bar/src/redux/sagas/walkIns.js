@@ -29,7 +29,6 @@ export function* fetchTodayWalkInsSaga({ payload: schedulerId }) {
   const searchBuilder = new CoreAPI.SubmissionSearch()
     .limit(1000)
     .include('details,values')
-    .coreState('Submitted')
     .eq('values[Scheduler Id]', schedulerId)
     .eq('values[Date]', moment().format('YYYY-MM-DD'));
 
@@ -51,7 +50,9 @@ export function* fetchTodayWalkInsSaga({ payload: schedulerId }) {
   } else if (errors) {
     yield put(actions.setTodayWalkInErrors(errors));
   } else {
-    yield put(actions.setTodayWalkIns(submissions));
+    yield put(
+      actions.setTodayWalkIns(submissions.filter(s => s.coreState !== 'Draft')),
+    );
   }
 }
 

@@ -10,7 +10,7 @@ import {
 } from '../modules/loading';
 import { actions as profileActions } from '../modules/profile';
 import { actions as spaceActions } from '../modules/space';
-import { importLocale } from 'common';
+import { importLocale, searchHistoryActions, Utils } from 'common';
 
 import semver from 'semver';
 
@@ -43,6 +43,14 @@ export function* fetchAppTask({ payload }) {
       put(kappActions.setKapps(kapps)),
       put(profileActions.setProfile(me)),
       put(spaceActions.setSpace(space)),
+      ...kapps.map(kapp => {
+        return put(
+          searchHistoryActions.enableSearchHistory({
+            kappSlug: kapp.slug,
+            value: Utils.getAttributeValue(kapp, 'Record Search History', ''),
+          }),
+        );
+      }),
     ]);
     const defaultKappDisplaySpace =
       profile.space.attributesMap &&

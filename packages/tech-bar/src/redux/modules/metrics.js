@@ -19,7 +19,6 @@ export const actions = {
 };
 
 export const MetricsData = object => {
-  let data = {};
   try {
     return {
       schedulerId: object.values['Scheduler Id'],

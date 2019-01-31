@@ -8,6 +8,7 @@ import {
   withState,
   withProps,
 } from 'recompose';
+import { DisplayTabs } from './Display';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { selectCurrentKapp, toastActions } from 'common';
 import { CoreAPI } from 'react-kinetic-core';
@@ -15,10 +16,10 @@ import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
 import { I18n } from '../../../app/src/I18nProvider';
 
-const FEEDBACK_IDENTITY_ATTRIBUTE = 'Feedback Identity';
 const FEEDBACK_FORM_SLUG = 'feedback';
 
 export const FeedbackComponent = ({
+  crosslink,
   kapp,
   techBarId,
   techBar,
@@ -43,6 +44,9 @@ export const FeedbackComponent = ({
   return (
     <section className="tech-bar-display tech-bar-display--feedback">
       <div className="full-screen-container">
+        {crosslink && (
+          <DisplayTabs techBarId={techBarId} feedbackClassName={'bg-dark'} />
+        )}
         <div className="header bg-dark" />
         <div className="body">
           <div className="form">
@@ -136,6 +140,8 @@ export const FeedbackComponent = ({
                       <div className="details">
                         <div>{appt.displayName}</div>
                         <div className="text-muted">
+                          <I18n>{appt.eventType}</I18n>
+                          {' - '}
                           <I18n>{appt.type}</I18n>
                         </div>
                       </div>

@@ -32,6 +32,7 @@ import {
   types as toastTypes,
 } from './redux/modules/toasts';
 import { actions as modalFormActions } from './redux/modules/modalForm';
+import { actions as searchHistoryActions } from './redux/modules/searchHistory';
 import {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
@@ -64,6 +65,7 @@ export {
   toastActions,
   toastTypes,
   modalFormActions,
+  searchHistoryActions,
   selectCurrentKapp,
   selectCurrentKappSlug,
   Utils,
