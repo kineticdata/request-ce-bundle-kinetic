@@ -1,0 +1,50 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Multi Page ~ services
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.multi-page--service {
+  .page-display--top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    h3 {
+      margin: 0;
+    }
+  }
+  .page-display--bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+  .navigation-dropdown {
+    .dropdown {
+      .btn {
+        color: $primary;
+        background-color: white;
+        border-color: $gray3;
+        border-radius: 0;
+        &:hover {
+          border-color: $gray2;
+          color: $primary;
+          background-color: white;
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+        }
+        &:focus {
+          box-shadow: none;
+        }
+      }
+    }
+  }
+  .form-wrapper--review {
+    margin: 1rem 0 1rem 0;
+    .load-wrapper {
+      min-height: 5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hidden {
+      display: none;
+    }
+  }
+}
