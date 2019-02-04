@@ -11,6 +11,7 @@ import {
   selectCurrentKapp,
 } from 'common';
 import { CoreAPI } from 'react-kinetic-core';
+import isarray from 'isarray';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const SettingsComponent = ({
@@ -75,11 +76,41 @@ export const SettingsComponent = ({
           {attributesMap.has('Hidden') && (
             <AttributeSelectors.TrueFalseSelect
               id="Hidden"
-              value={attributesMap.getIn(['Hidden', 'value'])}
+              value={attributesMap.getIn(['Hidden', 'value', 0])}
               onChange={handleAttributeChange}
               label="Hide Kapp from Navigation"
               description={attributesMap.getIn(['Hidden', 'description'])}
             />
+          )}
+          {attributesMap.has('Record Search History') && (
+            <div className="form-group">
+              <label htmlFor="Record Search History">
+                <I18n>Record Search History</I18n>
+              </label>
+              <select
+                id="Record Search History"
+                value={
+                  attributesMap.getIn(['Record Search History', 'value', 0]) ||
+                  'Off'
+                }
+                onChange={handleAttributeChange}
+              >
+                <option value="All">
+                  <I18n>All (always recorded)</I18n>
+                </option>
+                <option value="None">
+                  <I18n>None (only recorded if no results found)</I18n>
+                </option>
+                <option value="Off">
+                  <I18n>Off (never recorded)</I18n>
+                </option>
+              </select>
+              <small>
+                <I18n>
+                  Controls when searches made from this kapp are recorded.
+                </I18n>
+              </small>
+            </div>
           )}
           <h2 className="section__title">
             <I18n>Workflow Options</I18n>
@@ -347,7 +378,9 @@ const handleAttributeChange = ({
   setAttributesMapDifferences,
 }) => event => {
   const field = event.target.id;
-  const value = List(event.target.value);
+  const value = List(
+    isarray(event.target.value) ? event.target.value : [event.target.value],
+  );
   const updatedAttributesMap = attributesMap.setIn([field, 'value'], value);
   const diff = updatedAttributesMap
     .filter((v, k) => !previousAttributesMap.get(k).equals(v))

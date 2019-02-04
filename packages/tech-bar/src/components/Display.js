@@ -8,13 +8,43 @@ import {
   ErrorNotFound,
   ErrorUnauthorized,
   Utils,
+  KappLink as Link,
 } from 'common';
 import { CheckIn } from './CheckIn';
 import { Feedback } from './Feedback';
 import { Overhead } from './Overhead';
 import { I18n } from '../../../app/src/I18nProvider';
 
+export const DisplayTabs = ({
+  techBarId,
+  checkInClassName = '',
+  feedbackClassName = '',
+  onClick,
+}) => (
+  <div className="display-tabs">
+    <Link
+      to={`/display/${techBarId}/checkin?crosslink`}
+      className={`display-tab-link ${checkInClassName}`}
+      onClick={onClick}
+    >
+      <span>
+        <I18n>Check In</I18n>
+      </span>
+    </Link>
+    <Link
+      to={`/display/${techBarId}/feedback?crosslink`}
+      className={`display-tab-link ${feedbackClassName}`}
+      onClick={onClick}
+    >
+      <span>
+        <I18n>Feedback</I18n>
+      </span>
+    </Link>
+  </div>
+);
+
 export const DisplayComponent = ({
+  location: { search },
   kapp,
   techBar,
   displayMode,
@@ -32,8 +62,18 @@ export const DisplayComponent = ({
               <span className="fa fa-fw fa-map-marker" />
               <I18n>{techBar.values['Name']}</I18n>
             </div>
-            {displayMode === 'checkin' && <CheckIn techBar={techBar} />}
-            {displayMode === 'feedback' && <Feedback techBar={techBar} />}
+            {displayMode === 'checkin' && (
+              <CheckIn
+                techBar={techBar}
+                crosslink={search.includes('crosslink')}
+              />
+            )}
+            {displayMode === 'feedback' && (
+              <Feedback
+                techBar={techBar}
+                crosslink={search.includes('crosslink')}
+              />
+            )}
             {displayMode === 'overhead' && <Overhead techBar={techBar} />}
           </Fragment>
         )}

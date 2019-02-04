@@ -79,6 +79,18 @@ export const HomeComponent = ({
                             </span>
                           </Link>
                           <Link
+                            to={`/display/${
+                              techBar.values['Id']
+                            }/checkin?crosslink`}
+                            className="dropdown-item"
+                            target="_blank"
+                          >
+                            <span className="fa fa-external-link fa-fw mr-2" />
+                            <span>
+                              <I18n>Check In / Feedback</I18n>
+                            </span>
+                          </Link>
+                          <Link
                             to={`/display/${techBar.values['Id']}/overhead`}
                             className="dropdown-item"
                             target="_blank"
