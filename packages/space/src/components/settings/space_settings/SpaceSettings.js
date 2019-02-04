@@ -33,17 +33,29 @@ export const SettingsComponent = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">home</Link> /{` `}
-            <Link to="/settings">settings</Link> /{` `}
+            <Link to="/">
+              <I18n>home</I18n>
+            </Link>{' '}
+            /{` `}
+            <Link to="/settings">
+              <I18n>settings</I18n>
+            </Link>{' '}
+            /{` `}
           </h3>
-          <h1>System Settings</h1>
+          <h1>
+            <I18n>System Settings</I18n>
+          </h1>
         </div>
       </div>
       <section>
         <form>
-          <h2 className="section__title">Display Options</h2>
+          <h2 className="section__title">
+            <I18n>Display Options</I18n>
+          </h2>
           <div className="form-group">
-            <label>Space Name</label>
+            <label>
+              <I18n>Space Name</I18n>
+            </label>
             <input
               type="text"
               className="form-control"
@@ -51,11 +63,15 @@ export const SettingsComponent = ({
               onChange={handleNameChange}
             />
             <small>
-              The Name of the Space Referenced Throughout the System
+              <I18n>
+                The Name of the Space Referenced Throughout the System
+              </I18n>
             </small>
           </div>
           <div className="form-group">
-            <label htmlFor="defaultLocale">Default Locale</label>
+            <label htmlFor="defaultLocale">
+              <I18n>Default Locale</I18n>
+            </label>
             <select
               id="defaultLocale"
               name="defaultLocale"
@@ -63,7 +79,9 @@ export const SettingsComponent = ({
               onChange={handleDefaultLocaleChange}
               value={defaultLocale}
             >
-              <option value="">None Selected</option>
+              <option value="">
+                <I18n>None Selected</I18n>
+              </option>
               {locales.map(locale => (
                 <option
                   value={locale.code}
@@ -74,12 +92,16 @@ export const SettingsComponent = ({
               ))}
             </select>
             <small>
-              The default locale used for the Space. This can be overridden per
-              user.
+              <I18n>
+                The default locale used for the Space. This can be overridden
+                per user.
+              </I18n>
             </small>
           </div>
           <div className="form-group">
-            <label htmlFor="defaultTimezone">Default Timezone</label>
+            <label htmlFor="defaultTimezone">
+              <I18n>Default Timezone</I18n>
+            </label>
             <select
               id="defaultTimezone"
               name="defaultTimezone"
@@ -87,7 +109,9 @@ export const SettingsComponent = ({
               onChange={handleDefaultTimezoneChange}
               value={defaultTimezone}
             >
-              <option value="">None Selected</option>
+              <option value="">
+                <I18n>None Selected</I18n>
+              </option>
               {timezones.map(timezone => (
                 <option value={timezone.id} key={timezone.id}>
                   {timezone.name} ({timezone.id})
@@ -95,144 +119,190 @@ export const SettingsComponent = ({
               ))}
             </select>
             <small>
-              The default timezone used for the Space. This can be overridden
-              per user.
+              <I18n>
+                The default timezone used for the Space. This can be overridden
+                per user.
+              </I18n>
             </small>
           </div>
           {attributesMap.has('Default Kapp Display') && (
-            <AttributeSelectors.KappSelect
-              id="Default Kapp Display"
-              value={attributesMap.getIn(['Default Kapp Display', 'value'])}
-              onChange={handleAttributeChange}
-              valueMapper={value => value.kapp.slug}
-              placeholder="--Home--"
-              label="Default Kapp Display"
-              description={attributesMap.getIn([
-                'Default Kapp Display',
-                'description',
-              ])}
+            <I18n
+              render={translate => (
+                <AttributeSelectors.KappSelect
+                  id="Default Kapp Display"
+                  value={attributesMap.getIn(['Default Kapp Display', 'value'])}
+                  onChange={handleAttributeChange}
+                  valueMapper={value => value.kapp.slug}
+                  placeholder="--Home--"
+                  label={translate('Default Kapp Display')}
+                  description={attributesMap.getIn([
+                    'Default Kapp Display',
+                    'description',
+                  ])}
+                />
+              )}
             />
           )}
-          <h2 className="section__title">Workflow Options</h2>
+          <h2 className="section__title">
+            <I18n>Workflow Options</I18n>
+          </h2>
           {attributesMap.has('Service Days Due') && (
-            <AttributeSelectors.IntegerSelect
-              id="Service Days Due"
-              value={attributesMap.getIn(['Service Days Due', 'value'])}
-              onChange={handleAttributeChange}
-              label="Default Service Days Due"
-              description={attributesMap.getIn([
-                'Service Days Due',
-                'description',
-              ])}
+            <I18n
+              render={translate => (
+                <AttributeSelectors.IntegerSelect
+                  id="Service Days Due"
+                  value={attributesMap.getIn(['Service Days Due', 'value'])}
+                  onChange={handleAttributeChange}
+                  label={translate('Default Service Days Due')}
+                  description={attributesMap.getIn([
+                    'Service Days Due',
+                    'description',
+                  ])}
+                />
+              )}
             />
           )}
           {attributesMap.has('Task Assignee Team') && (
-            <AttributeSelectors.TeamSelect
-              id="Task Assignee Team"
-              value={attributesMap.getIn(['Task Assignee Team', 'value'])}
-              onChange={handleAttributeChange}
-              valueMapper={value => value.team.name}
-              label="Task Assignee Team"
-              description={attributesMap.getIn([
-                'Task Assignee Team',
-                'description',
-              ])}
+            <I18n
+              render={translate => (
+                <AttributeSelectors.TeamSelect
+                  id="Task Assignee Team"
+                  value={attributesMap.getIn(['Task Assignee Team', 'value'])}
+                  onChange={handleAttributeChange}
+                  valueMapper={value => value.team.name}
+                  label={translate('Task Assignee Team')}
+                  description={attributesMap.getIn([
+                    'Task Assignee Team',
+                    'description',
+                  ])}
+                />
+              )}
             />
           )}
-          <h2 className="section__title">Form Mapping</h2>
-          {requiredKapps.queue && attributesMap.has('Approval Form Slug') && (
-            <AttributeSelectors.FormSelect
-              id="Approval Form Slug"
-              value={attributesMap.getIn(['Approval Form Slug', 'value'])}
-              onChange={handleAttributeChange}
-              valueMapper={value => value.slug}
-              kappSlug={requiredKapps.queue.slug}
-              label="Default Approval Form"
-              style={{ width: '50%' }}
-              description={attributesMap.getIn([
-                'Approval Form Slug',
-                'description',
-              ])}
-            />
-          )}
-          {requiredKapps.admin && attributesMap.has('Feedback Form Slug') && (
-            <AttributeSelectors.FormSelect
-              id="Feedback Form Slug"
-              value={attributesMap.getIn(['Feedback Form Slug', 'value'])}
-              onChange={handleAttributeChange}
-              valueMapper={value => value.slug}
-              kappSlug={requiredKapps.admin.slug}
-              label="Feedback Form Slug"
-              description={attributesMap.getIn([
-                'Feedback Form Slug',
-                'description',
-              ])}
-            />
-          )}
-          {requiredKapps.admin && attributesMap.has('Help Form Slug') && (
-            <AttributeSelectors.FormSelect
-              id="Help Form Slug"
-              value={attributesMap.getIn(['Help Form Slug', 'value'])}
-              onChange={handleAttributeChange}
-              valueMapper={value => value.slug}
-              kappSlug={requiredKapps.admin.slug}
-              label="Help Form Slug"
-              description={attributesMap.getIn([
-                'Help Form Slug',
-                'description',
-              ])}
-            />
-          )}
+          <h2 className="section__title">
+            <I18n>Form Mapping</I18n>
+          </h2>
+          {requiredKapps.queue &&
+            attributesMap.has('Approval Form Slug') && (
+              <I18n
+                render={translate => (
+                  <AttributeSelectors.FormSelect
+                    id="Approval Form Slug"
+                    value={attributesMap.getIn(['Approval Form Slug', 'value'])}
+                    onChange={handleAttributeChange}
+                    valueMapper={value => value.slug}
+                    kappSlug={requiredKapps.queue.slug}
+                    label={translate('Default Approval Form')}
+                    style={{ width: '50%' }}
+                    description={attributesMap.getIn([
+                      'Approval Form Slug',
+                      'description',
+                    ])}
+                  />
+                )}
+              />
+            )}
+          {requiredKapps.admin &&
+            attributesMap.has('Feedback Form Slug') && (
+              <I18n
+                render={translate => (
+                  <AttributeSelectors.FormSelect
+                    id="Feedback Form Slug"
+                    value={attributesMap.getIn(['Feedback Form Slug', 'value'])}
+                    onChange={handleAttributeChange}
+                    valueMapper={value => value.slug}
+                    kappSlug={requiredKapps.admin.slug}
+                    label={translate('Feedback Form Slug')}
+                    description={attributesMap.getIn([
+                      'Feedback Form Slug',
+                      'description',
+                    ])}
+                  />
+                )}
+              />
+            )}
+          {requiredKapps.admin &&
+            attributesMap.has('Help Form Slug') && (
+              <I18n
+                render={translate => (
+                  <AttributeSelectors.FormSelect
+                    id="Help Form Slug"
+                    value={attributesMap.getIn(['Help Form Slug', 'value'])}
+                    onChange={handleAttributeChange}
+                    valueMapper={value => value.slug}
+                    kappSlug={requiredKapps.admin.slug}
+                    label={translate('Help Form Slug')}
+                    description={attributesMap.getIn([
+                      'Help Form Slug',
+                      'description',
+                    ])}
+                  />
+                )}
+              />
+            )}
           {requiredKapps.admin &&
             attributesMap.has('Request Alert Form Slug') && (
-              <AttributeSelectors.FormSelect
-                id="Request Alert Form Slug"
-                value={attributesMap.getIn([
-                  'Request Alert Form Slug',
-                  'value',
-                ])}
-                onChange={handleAttributeChange}
-                valueMapper={value => value.slug}
-                kappSlug={requiredKapps.admin.slug}
-                label="Request Alert Form Slug"
-                description={attributesMap.getIn([
-                  'Request Alert Form Slug',
-                  'description',
-                ])}
+              <I18n
+                render={translate => (
+                  <AttributeSelectors.FormSelect
+                    id="Request Alert Form Slug"
+                    value={attributesMap.getIn([
+                      'Request Alert Form Slug',
+                      'value',
+                    ])}
+                    onChange={handleAttributeChange}
+                    valueMapper={value => value.slug}
+                    kappSlug={requiredKapps.admin.slug}
+                    label={translate('Request Alert Form Slug')}
+                    description={attributesMap.getIn([
+                      'Request Alert Form Slug',
+                      'description',
+                    ])}
+                  />
+                )}
               />
             )}
           {requiredKapps.services &&
             attributesMap.has('Suggest a Service Form Slug') && (
-              <AttributeSelectors.FormSelect
-                id="Suggest a Service Form Slug"
-                value={attributesMap.getIn([
-                  'Suggest a Service Form Slug',
-                  'value',
-                ])}
-                onChange={handleAttributeChange}
-                valueMapper={value => value.slug}
-                kappSlug={requiredKapps.services.slug}
-                label="Suggest a Service Form Slug"
-                description={attributesMap.getIn([
-                  'Suggest a Service Form Slug',
-                  'description',
-                ])}
+              <I18n
+                render={translate => (
+                  <AttributeSelectors.FormSelect
+                    id="Suggest a Service Form Slug"
+                    value={attributesMap.getIn([
+                      'Suggest a Service Form Slug',
+                      'value',
+                    ])}
+                    onChange={handleAttributeChange}
+                    valueMapper={value => value.slug}
+                    kappSlug={requiredKapps.services.slug}
+                    label={translate('Suggest a Service Form Slug')}
+                    description={attributesMap.getIn([
+                      'Suggest a Service Form Slug',
+                      'description',
+                    ])}
+                  />
+                )}
               />
             )}
-          {requiredKapps.queue && attributesMap.has('Task Form Slug') && (
-            <AttributeSelectors.FormSelect
-              id="Task Form Slug"
-              value={attributesMap.getIn(['Task Form Slug', 'value'])}
-              onChange={handleAttributeChange}
-              valueMapper={value => value.slug}
-              kappSlug={requiredKapps.queue.slug}
-              label="Default Task Form Slug"
-              description={attributesMap.getIn([
-                'Task Form Slug',
-                'description',
-              ])}
-            />
-          )}
+          {requiredKapps.queue &&
+            attributesMap.has('Task Form Slug') && (
+              <I18n
+                render={translate => (
+                  <AttributeSelectors.FormSelect
+                    id="Task Form Slug"
+                    value={attributesMap.getIn(['Task Form Slug', 'value'])}
+                    onChange={handleAttributeChange}
+                    valueMapper={value => value.slug}
+                    kappSlug={requiredKapps.queue.slug}
+                    label={translate('Default Task Form Slug')}
+                    description={attributesMap.getIn([
+                      'Task Form Slug',
+                      'description',
+                    ])}
+                  />
+                )}
+              />
+            )}
         </form>
         <div className="form__footer">
           <span className="form__footer__right">
@@ -241,7 +311,7 @@ export const SettingsComponent = ({
               onClick={updateSettings}
               disabled={isFormDisabled()}
             >
-              Save Changes
+              <I18n>Save Changes</I18n>
             </button>
           </span>
         </div>

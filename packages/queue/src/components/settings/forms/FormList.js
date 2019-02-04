@@ -12,11 +12,14 @@ import {
 import { TimeAgo } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/forms';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const WallyEmptyMessage = ({ filter }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>No Queue Forms Found</h5>
+      <h5>
+        <I18n>No Queue Forms Found</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
     </div>
   );
@@ -25,7 +28,7 @@ const WallyEmptyMessage = ({ filter }) => {
 const Timestamp = ({ slug, label, value }) =>
   value && (
     <span>
-      {label}
+      <I18n>{label}</I18n>
       &nbsp;
       <TimeAgo timestamp={value} />
     </span>
@@ -56,32 +59,52 @@ const FormListComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/kapps/queue">queue</Link> /{` `}
-              <Link to="/kapps/queue/settings">settings</Link> /{` `}
+              <Link to="/kapps/queue">
+                <I18n>queue</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/kapps/queue/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
             </h3>
-            <h1>Forms</h1>
+            <h1>
+              <I18n>Forms</I18n>
+            </h1>
           </div>
           {isSpaceAdmin && (
             <Link to={`${match.path}/new`} className="btn btn-primary">
-              Create Form
+              <I18n>Create Form</I18n>
             </Link>
           )}
         </div>
 
         <div className="forms-list-wrapper">
           {loading ? (
-            <h3>Loading</h3>
+            <h3>
+              <I18n>Loading</I18n>
+            </h3>
           ) : forms && forms.length > 0 ? (
             <div>
               <table className="table table-sm table-striped settings-table">
                 <thead className="header">
                   <tr>
                     <th>Form Name</th>
-                    <th width="30%">Description</th>
-                    <th width="10%">Type</th>
-                    <th width="10%">Updated</th>
-                    <th width="10%">Created</th>
-                    <th width="10%">Status</th>
+                    <th width="30%">
+                      <I18n>Description</I18n>
+                    </th>
+                    <th width="10%">
+                      <I18n>Type</I18n>
+                    </th>
+                    <th width="10%">
+                      <I18n>Updated</I18n>
+                    </th>
+                    <th width="10%">
+                      <I18n>Created</I18n>
+                    </th>
+                    <th width="10%">
+                      <I18n>Status</I18n>
+                    </th>
                     <th width="48px">&nbsp;</th>
                   </tr>
                 </thead>
@@ -125,13 +148,13 @@ const FormListComponent = ({
                                   tag={Link}
                                   to={`${match.path}/${form.slug}/settings`}
                                 >
-                                  Configure Form
+                                  <I18n>Configure Form</I18n>
                                 </DropdownItem>
                                 <DropdownItem
                                   tag={Link}
                                   to={`${match.path}/clone/${form.slug}/`}
                                 >
-                                  Clone Form
+                                  <I18n>Clone Form</I18n>
                                 </DropdownItem>
                               </DropdownMenu>
                             </Dropdown>
@@ -152,7 +175,9 @@ const FormListComponent = ({
                           aria-hidden="true"
                         />
                       </span>
-                      <span className="sr-only">Previous</span>
+                      <span className="sr-only">
+                        <I18n>Previous</I18n>
+                      </span>
                     </a>
                   </li>
                   {pageNumbers.map(number => (
@@ -177,7 +202,9 @@ const FormListComponent = ({
                           aria-hidden="true"
                         />
                       </span>
-                      <span className="sr-only">Next</span>
+                      <span className="sr-only">
+                        <I18n>Next</I18n>
+                      </span>
                     </a>
                   </li>
                 </ul>

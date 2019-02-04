@@ -11,7 +11,7 @@
 @mixin setBgColorAndHover($baseColor) {
   background-color: $baseColor;
   &:hover {
-    background-color: darken($baseColor, 5%);
+    background-color: darken($baseColor, 2%);
   }
 }
 

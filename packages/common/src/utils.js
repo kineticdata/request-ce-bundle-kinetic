@@ -54,6 +54,13 @@ export const isMemberOf = (profile, name) => {
   return matchingMembership !== undefined;
 };
 
+export const isMemberOfDescendant = (profile, name) => {
+  const matchingMembership = profile.memberships.find(membership =>
+    membership.team.name.startsWith(`${name}::`),
+  );
+  return matchingMembership !== undefined;
+};
+
 export const getTeams = profile => {
   const matchingMemberships = profile.memberships.filter(
     membership =>

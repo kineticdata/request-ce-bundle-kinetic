@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { I18n } from '../../../app/src/I18nProvider';
 
 const handleRadioChange = props => event => {
   props.onChange(
@@ -31,7 +32,7 @@ export const DateRangeSelector = props => {
             checked={props.value === ''}
             onChange={handleRadioChange(props)}
           />
-          None
+          <I18n>None</I18n>
         </label>
       )}
       {[7, 14, 30, 60, 90].map(numberOfDays => (
@@ -48,7 +49,7 @@ export const DateRangeSelector = props => {
             checked={props.value === `${numberOfDays}days`}
             onChange={handleRadioChange(props)}
           />
-          Last {numberOfDays} Days
+          <I18n>Last {numberOfDays} Days</I18n>
         </label>
       ))}
       <label className="date-range-radio" htmlFor="date-range-custom">
@@ -60,13 +61,15 @@ export const DateRangeSelector = props => {
           checked={isCustom}
           onChange={handleRadioChange(props)}
         />
-        Custom
+        <I18n>Custom</I18n>
       </label>
       {isCustom && (
         <div
           className={`form-group date-range-date ${hasError(props, 'start')}`}
         >
-          <label htmlFor="date-range-custom-start">Start Date*</label>
+          <label htmlFor="date-range-custom-start">
+            <I18n>Start Date</I18n>*
+          </label>
           <input
             className="form-control"
             type="date"
@@ -77,14 +80,16 @@ export const DateRangeSelector = props => {
           {props.validations &&
             props.validations.filter(v => v.field === 'start').map((v, i) => (
               <p key={i} className="text-danger">
-                {v.error}
+                <I18n>{v.error}</I18n>
               </p>
             ))}
         </div>
       )}
       {isCustom && (
         <div className={`form-group date-range-date ${hasError(props, 'end')}`}>
-          <label htmlFor="date-range-custom-end">End Date</label>
+          <label htmlFor="date-range-custom-end">
+            <I18n>End Date</I18n>
+          </label>
           <input
             className="form-control"
             type="date"
@@ -95,7 +100,7 @@ export const DateRangeSelector = props => {
           {props.validations &&
             props.validations.filter(v => v.field === 'end').map((v, i) => (
               <p key={i} className="text-danger">
-                {v.error}
+                <I18n>{v.error}</I18n>
               </p>
             ))}
         </div>

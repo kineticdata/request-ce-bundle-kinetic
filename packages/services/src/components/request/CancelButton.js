@@ -4,6 +4,7 @@ import { compose, withHandlers, withProps } from 'recompose';
 import { Utils } from 'common';
 import { actions } from '../../redux/modules/submission';
 import * as constants from '../../constants';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const CancelButton = props =>
   props.enableButton && (
@@ -12,9 +13,11 @@ const CancelButton = props =>
       onClick={props.handleClick}
       className="btn btn-outline-danger"
     >
-      {props.submission.coreState === constants.CORE_STATE_DRAFT
-        ? 'Cancel Request'
-        : 'Cancel Request'}
+      <I18n>
+        {props.submission.coreState === constants.CORE_STATE_DRAFT
+          ? 'Cancel Request'
+          : 'Cancel Request'}
+      </I18n>
     </button>
   );
 

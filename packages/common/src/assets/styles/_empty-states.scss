@@ -2,7 +2,10 @@
  *   Empty States ~ Common
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.empty-state {
+.empty-state,
+.error-state,
+.info-state,
+.loading-state {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,5 +27,15 @@
     // color: $blue2;
     // @include ms-respond(font-size, 0);
     margin-bottom: 1.5rem;
+  }
+}
+
+.error-state {
+  h4,
+  h5 {
+    color: $red;
+  }
+  h6 {
+    color: $red-rose;
   }
 }

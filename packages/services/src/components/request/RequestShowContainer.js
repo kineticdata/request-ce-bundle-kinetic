@@ -15,6 +15,7 @@ export const mapStateToProps = (state, props) => ({
   mode: props.match.params.mode,
   discussion: state.services.submission.discussion,
   sendMessageModalOpen: state.services.submission.isSendMessageModalOpen,
+  kappSlug: state.app.config.kappSlug,
 });
 
 export const mapDispatchToProps = {

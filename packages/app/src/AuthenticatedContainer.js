@@ -21,6 +21,7 @@ import { RequestAccountForm } from './components/authentication/RequestAccountFo
 import { UnauthenticatedForm } from './components/authentication/UnauthenticatedForm';
 import { RetrieveJwtIframe } from './components/authentication/RetrieveJwtIframe';
 import { OAuthPopup } from './components/authentication/OAuthPopup';
+import { I18n } from './I18nProvider';
 
 const LoginLogo = () => (
   <div
@@ -29,8 +30,12 @@ const LoginLogo = () => (
   >
     <div className="kinops-text">
       <img src={logoName} alt="Kinops - streamline everyday work for teams" />
-      <h3>Welcome to kinops</h3>
-      <p>Streamline everyday work for teams.</p>
+      <h3>
+        <I18n>Welcome to kinops</I18n>
+      </h3>
+      <p>
+        <I18n>Streamline everyday work for teams.</I18n>
+      </p>
     </div>
   </div>
 );
@@ -47,11 +52,13 @@ export const LoginScreen = props => (
     <div className="login-wrapper">
       {bundle.config.loginPopup && !props.token ? (
         <div className="login-form-container">
-          <h3 className="form-title">Authenticate with your provider</h3>
+          <h3 className="form-title">
+            <I18n>Authenticate with your provider</I18n>
+          </h3>
           {props.popupBlocked && (
             <h3>
               <span className="text-danger">
-                Our pop-up window was blocked.
+                <I18n>Our pop-up window was blocked.</I18n>
               </span>
             </h3>
           )}
@@ -60,7 +67,7 @@ export const LoginScreen = props => (
             className="btn btn-primary"
             onClick={props.openPopup}
           >
-            Open Login Popup
+            <I18n>Open Login Popup</I18n>
           </button>
           <OAuthPopup
             ref={props.setPopupRef}

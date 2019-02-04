@@ -8,7 +8,7 @@ import { CoreAPI } from 'react-kinetic-core';
 const QUEUE_SETTING_INCLUDES = 'formTypes,attributesMap,forms,forms.details';
 const TEAMS_SETTING_INCLUDES = 'teams';
 const SPACE_SETTING_INCLUDES = 'kapps,kapps.forms,attributesMap';
-const FORM_INCLUDES = 'details,fields,attributesMap,categorizations';
+const FORM_INCLUDES = 'details,fields,attributesMap,categorizations,kapp';
 
 export function* fetchQueueSettingsSaga({ payload }) {
   const [{ serverError, kapp }, manageableForms] = yield all([

@@ -4,6 +4,7 @@ import { parse, stringify } from 'qs';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { bundle } from 'react-kinetic-core';
+import { I18n } from '../../I18nProvider';
 
 const ResetToken = ({
   email,
@@ -17,13 +18,19 @@ const ResetToken = ({
 }) => (
   <form className="login-form-container" onSubmit={handlePasswordReset}>
     <div>
-      <h3 className="form-title">Password Reset</h3>
+      <h3 className="form-title">
+        <I18n>Password Reset</I18n>
+      </h3>
       <div className="form-group">
-        <label htmlFor="email">Email Address</label>
+        <label htmlFor="email">
+          <I18n>Email Address</I18n>
+        </label>
         <p className="form-control-static">{email}</p>
       </div>
       <div className="form-group">
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">
+          <I18n>Password</I18n>
+        </label>
         <input
           autoFocus
           type="password"
@@ -35,7 +42,9 @@ const ResetToken = ({
         />
       </div>
       <div className="form-group">
-        <label htmlFor="password-confirm">Confirm Password</label>
+        <label htmlFor="password-confirm">
+          <I18n>Confirm Password</I18n>
+        </label>
         <input
           type="password"
           className="form-control"
@@ -45,14 +54,16 @@ const ResetToken = ({
           onChange={handlePasswordConfirm}
         />
       </div>
-      <span className="text-danger">{error}</span>
+      <span className="text-danger">
+        <I18n>{error}</I18n>
+      </span>
     </div>
     <div className="button-group">
       <button type="submit" className="btn btn-primary" disabled={!formValid}>
-        Reset
+        <I18n>Reset</I18n>
       </button>
       <Link className="btn btn-link" to="/login">
-        &larr; Back to Sign In
+        &larr; <I18n>Back to Sign In</I18n>
       </Link>
     </div>
   </form>

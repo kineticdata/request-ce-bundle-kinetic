@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { compose, withState } from 'recompose';
 import { Link } from 'react-router-dom';
+import { I18n } from '../../I18nProvider';
 
 export const Login = ({
   invitationToken,
@@ -16,16 +17,18 @@ export const Login = ({
   <Fragment>
     <form className="login-form-container" onSubmit={handleLogin}>
       <h3>
-        Sign In
+        <I18n>Sign In</I18n>
         <small>
           <Link to={`/create-account${invitationToken ? location.search : ''}`}>
-            Create Account
+            <I18n>Create Account</I18n>
           </Link>
         </small>
       </h3>
       {popupBlocked ? (
         <h3>
-          <span className="text-danger">Our pop-up window was blocked.</span>
+          <span className="text-danger">
+            <I18n>Our pop-up window was blocked.</I18n>
+          </span>
         </h3>
       ) : null}
       <div
@@ -35,7 +38,9 @@ export const Login = ({
         }}
       >
         <div className="form-group">
-          <label htmlFor="email">Email Address</label>
+          <label htmlFor="email">
+            <I18n>Email Address</I18n>
+          </label>
           <input
             type="text"
             autoFocus
@@ -47,7 +52,9 @@ export const Login = ({
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">
+            <I18n>Password</I18n>
+          </label>
           <input
             type="password"
             className="form-control"
@@ -57,16 +64,20 @@ export const Login = ({
             onChange={handlePassword}
           />
         </div>
-        <span className="text-danger">{error || ' '}</span>
+        <span className="text-danger">
+          <I18n>{error || ' '}</I18n>
+        </span>
       </div>
       <div className="button-group">
-        <button className="btn btn-primary">Sign In</button>
+        <button className="btn btn-primary">
+          <I18n>Sign In</I18n>
+        </button>
         <hr />
         <Link
           className="btn btn-link"
           to={`/reset-password${invitationToken ? location.search : ''}`}
         >
-          Reset Password
+          <I18n>Reset Password</I18n>
         </Link>
       </div>
     </form>

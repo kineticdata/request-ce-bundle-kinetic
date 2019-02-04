@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { CoreForm } from 'react-kinetic-core';
 import { AssignmentSelector } from '../shared/AssignmentSelector';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
 
@@ -18,7 +19,11 @@ const FormList = ({ myTeamForms, handleFormClick, permittedSubtasks }) => (
             className="btn btn-link"
             onClick={handleFormClick(form)}
           >
-            <span className="button-title">{form.name}</span>
+            <span className="button-title">
+              <I18n context={`kapps.${form.kapp.slug}.forms.${form.slug}`}>
+                {form.name}
+              </I18n>
+            </span>
             <span className="icon">
               <span className="fa fa-angle-right" />
             </span>
@@ -41,7 +46,7 @@ const FormsBackButton = ({ handleFormClick }) => (
     <span className="icon">
       <span className="fa fa-fw fa-chevron-left" />
     </span>
-    Forms
+    <I18n>Forms</I18n>
   </button>
 );
 
@@ -54,7 +59,7 @@ const AssignmentBackButton = ({ handleAssignmentClick }) => (
     <span className="icon">
       <span className="fa fa-fw fa-chevron-left" />
     </span>
-    Assignment
+    <I18n>Assignment</I18n>
   </button>
 );
 
@@ -90,9 +95,18 @@ export const NewItemMenu = ({
           className="btn btn-link"
           onClick={closeNewItemMenu}
         >
-          Close
+          <I18n>Close</I18n>
         </button>
-        <span>New {currentForm ? currentForm.name : 'Task'}</span>
+        <span>
+          <I18n>New</I18n>{' '}
+          {currentForm ? (
+            <I18n context={`kapps.${kappSlug}.forms.${currentForm.slug}`}>
+              {currentForm.name}
+            </I18n>
+          ) : (
+            <I18n>Task</I18n>
+          )}
+        </span>
         <span>&nbsp;</span>
       </h4>
       {currentForm !== null &&
@@ -114,16 +128,18 @@ export const NewItemMenu = ({
       ) : assignmentRequired && currentAssignment === null ? (
         <AssignmentList assignments={assignments} handleSelect={handleSelect} />
       ) : (
-        <CoreForm
-          kapp={kappSlug}
-          form={currentForm.slug}
-          globals={globals}
-          values={currentAssignment}
-          onLoaded={onFormLoaded}
-          onCreated={onCreated}
-          originId={options.get('originId')}
-          parentId={options.get('parentId')}
-        />
+        <I18n context={`kapps.${kappSlug}.forms.${currentForm.slug}`}>
+          <CoreForm
+            kapp={kappSlug}
+            form={currentForm.slug}
+            globals={globals}
+            values={currentAssignment}
+            onLoaded={onFormLoaded}
+            onCreated={onCreated}
+            originId={options.get('originId')}
+            parentId={options.get('parentId')}
+          />
+        </I18n>
       )}
     </ModalBody>
     {currentForm !== null &&
@@ -134,7 +150,10 @@ export const NewItemMenu = ({
             className="btn btn-primary"
             onClick={handleSave}
           >
-            Save {currentForm.name}
+            <I18n>Save</I18n>{' '}
+            <I18n context={`kapps.${kappSlug}.forms.${currentForm.slug}`}>
+              {currentForm.name}
+            </I18n>
           </button>
         </ModalFooter>
       )}

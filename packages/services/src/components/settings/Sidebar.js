@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
 import { KappNavLink as NavLink, selectCurrentKapp } from 'common';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const SidebarComponent = ({
   settingsBackPath,
@@ -14,7 +15,7 @@ export const SidebarComponent = ({
   <div className="sidebar space-sidebar">
     <Link to={settingsBackPath} className="nav-return">
       <span className="fa fa-fw fa-chevron-left" />
-      {`Return to ${kapp.name}`}
+      <I18n>Return to</I18n> <I18n>{kapp.name}</I18n>
     </Link>
     <div className="sidebar-group--content-wrapper">
       {!loading && (
@@ -26,7 +27,7 @@ export const SidebarComponent = ({
                 className="nav-link"
                 activeClassName="active"
               >
-                General
+                <I18n>General</I18n>
                 <span className="fa fa-fw fa-angle-right" />
               </NavLink>
             )}
@@ -35,7 +36,7 @@ export const SidebarComponent = ({
               className="nav-link"
               activeClassName="active"
             >
-              Forms
+              <I18n>Forms</I18n>
               <span className="fa fa-fw fa-angle-right" />
             </NavLink>
             {spaceAdmin && (
@@ -44,7 +45,7 @@ export const SidebarComponent = ({
                 className="nav-link"
                 activeClassName="active"
               >
-                Categories
+                <I18n>Categories</I18n>
                 <span className="fa fa-fw fa-angle-right" />
               </NavLink>
             )}

@@ -7,6 +7,7 @@ import { parse } from 'query-string';
 import { PageTitle } from 'common';
 import { Discussion as KinopsDiscussion } from 'discussions';
 import { SOCKET_STAGE } from 'discussions/src/api/socket';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const buildRelatedItemLink = relatedItem => {
   let label = relatedItem.type;
@@ -41,7 +42,7 @@ const buildRelatedItemLink = relatedItem => {
         to={link}
         key={`${relatedItem.type}/${relatedItem.key}`}
       >
-        {label}
+        <I18n>{label}</I18n>
       </Link>
     )
   );
@@ -57,7 +58,10 @@ const DiscussionHeader = props => {
     <Fragment>
       <PageTitle parts={[discussionName, 'Discussions']} />
       <div className="discussion__subheader">
-        <Link to={'/'}>home</Link> / {discussionName}
+        <Link to={'/'}>
+          <I18n>home</I18n>
+        </Link>{' '}
+        / {discussionName}
         {relatedItems &&
           relatedItems.map(relatedItem => buildRelatedItemLink(relatedItem))}
       </div>
@@ -87,8 +91,10 @@ export const DiscussionComponent = ({
 
           <div className="empty-state empty-state--discussions">
             <h6 className="empty-state__title">
-              Real-time connection to server has been interrupted. Please
-              refresh and try again.
+              <I18n>
+                Real-time connection to server has been interrupted. Please
+                refresh and try again.
+              </I18n>
             </h6>
           </div>
         </Fragment>
@@ -97,7 +103,9 @@ export const DiscussionComponent = ({
       <Fragment>
         <DiscussionHeader />
         <div className="empty-state empty-state--discussions">
-          <h6 className="empty-state__title">No discussion to display</h6>
+          <h6 className="empty-state__title">
+            <I18n>No discussion to display</I18n>
+          </h6>
         </div>
       </Fragment>
     )}

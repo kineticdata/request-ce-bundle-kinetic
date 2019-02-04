@@ -4,15 +4,18 @@
 
 // Nav-tabs
 .nav-tabs {
-  padding-bottom: 0.5rem;
-  > li a {
-    text-decoration: none;
-    padding-bottom: 0.5rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-  > li a.active {
-    border-bottom: 2px solid $orange;
+  > li {
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    a {
+      text-decoration: none;
+      padding-bottom: 0.5rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+    a.active {
+      border-bottom: 2px solid $orange;
+    }
   }
   .badge {
     margin-left: 0.25rem;

@@ -21,12 +21,13 @@ import { App } from './App';
 import { configure } from 'discussions-lib/src/redux/store';
 import { Socket } from 'discussions/src/api/socket';
 import { selectToken } from 'discussions/src/redux/modules/socket';
+import { ConnectedI18nProvider } from './I18nProvider';
 
 // Create the history instance that enables client-side application routing.
 const history = createHashHistory();
 
 // Create the redux store with the configureStore helper found in redux/store.js
-const store = configureStore(history);
+export const store = configureStore(history);
 
 // Create the websocket connection
 export const socket = new Socket();
@@ -52,11 +53,13 @@ ReactDOM.render(
       />
     </Helmet>
     <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <AuthenticatedContainer>
-          <Route path="/" component={App} />
-        </AuthenticatedContainer>
-      </ConnectedRouter>
+      <ConnectedI18nProvider>
+        <ConnectedRouter history={history}>
+          <AuthenticatedContainer>
+            <Route path="/" component={App} />
+          </AuthenticatedContainer>
+        </ConnectedRouter>
+      </ConnectedI18nProvider>
     </Provider>
   </Fragment>,
   document.getElementById('root'),

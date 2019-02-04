@@ -7,6 +7,7 @@ import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { actions } from '../../redux/modules/queue';
 import { QueueItemDetailsContainer } from './QueueItemDetails';
 import { getFilterByPath, buildFilterPath } from '../../redux/modules/queueApp';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const CreationForm = ({ onChange, values, errors }) => (
   <React.Fragment>
@@ -56,7 +57,7 @@ export const QueueItem = ({
           <span className="icon">
             <span className="fa fa-fw fa-chevron-left" />
           </span>
-          {filter.name || 'Adhoc'}
+          <I18n>{filter.name || 'Adhoc'}</I18n>
         </Link>
       )}
       <div className="queue-item-content">

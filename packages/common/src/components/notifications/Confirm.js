@@ -1,6 +1,7 @@
 import React from 'react';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { Alert, Button } from 'reactstrap';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const ConfirmComponent = ({
   color,
@@ -11,18 +12,29 @@ const ConfirmComponent = ({
   handleAccept,
   handleReject,
 }) => (
-  <Alert color={color} style={style}>
-    <div dangerouslySetInnerHTML={{ __html: message }} />
-    <hr />
-    <div>
-      <Button color="success" onClick={handleAccept}>
-        {acceptButtonText}
-      </Button>
-      <Button color="link" onClick={handleReject}>
-        {rejectButtonText}
-      </Button>
-    </div>
-  </Alert>
+  <I18n
+    render={translate => (
+      <Alert color={color} style={style}>
+        <div
+          dangerouslySetInnerHTML={{
+            __html:
+              typeof message === 'function'
+                ? message(translate)
+                : translate(message),
+          }}
+        />
+        <hr />
+        <div>
+          <Button color="success" onClick={handleAccept}>
+            {translate(acceptButtonText)}
+          </Button>
+          <Button color="link" onClick={handleReject}>
+            {translate(rejectButtonText)}
+          </Button>
+        </div>
+      </Alert>
+    )}
+  />
 );
 
 export const Confirm = compose(

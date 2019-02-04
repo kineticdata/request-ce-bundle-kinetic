@@ -3,9 +3,13 @@ import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers } from 'recompose';
-import { actions } from '../../../redux/modules/settingsRobots';
+import {
+  actions,
+  ROBOT_EXECUTIONS_FORM_SLUG,
+} from '../../../redux/modules/settingsRobots';
 import { CoreForm } from 'react-kinetic-core';
 import { toastActions } from 'common';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
 
@@ -16,25 +20,38 @@ const RobotExecutionComponent = ({ robotExecution, match, handleError }) => {
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /{` `}
-              <Link to="/settings">settings</Link> /{` `}
-              <Link to="/settings/robots">robots</Link> /{` `}
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings/robots">
+                <I18n>robots</I18n>
+              </Link>{' '}
+              /{` `}
               {robotExecution && (
                 <Link to={`/settings/robots/${match.params.robotId}`}>
                   <span>{robotExecution.values['Robot Name']}</span>
                 </Link>
               )}
             </h3>
-            <h1>Execution Details</h1>
+            <h1>
+              <I18n>Execution Details</I18n>
+            </h1>
           </div>
         </div>
-        <CoreForm
-          datastore
-          review
-          submission={match.params.executionId}
-          error={handleError}
-          globals={globals}
-        />
+        <I18n context={`datastore.forms.${ROBOT_EXECUTIONS_FORM_SLUG}`}>
+          <CoreForm
+            datastore
+            review
+            submission={match.params.executionId}
+            error={handleError}
+            globals={globals}
+          />
+        </I18n>
       </div>
     </div>
   );

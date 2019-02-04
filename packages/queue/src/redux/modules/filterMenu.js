@@ -13,11 +13,13 @@ export const types = {
   SET_DATE_RANGE_TIMELINE: '@kd/queue/filterMenu/SET_DATE_RANGE_TIMELINE',
   SET_DATE_RANGE: '@kd/queue/filterMenu/SET_DATE_RANGE',
   SET_SORTED_BY: '@kd/queue/filterMenu/SET_SORTED_BY',
+  SET_GROUPED_BY: '@kd/queue/filterMenu/SET_GROUPED_BY',
 };
 
 export const actions = {
   open: initialFilter => ({ type: types.OPEN, payload: initialFilter }),
   close: () => ({ type: types.CLOSE }),
+
   reset: () => ({ type: types.RESET }),
   setFilterName: filterName => ({
     type: types.SET_FILTER_NAME,
@@ -34,6 +36,7 @@ export const actions = {
   }),
   setDateRange: payload => ({ type: types.SET_DATE_RANGE, payload }),
   setSortedBy: payload => ({ type: types.SET_SORTED_BY, payload }),
+  setGroupedBy: payload => ({ type: types.SET_GROUPED_BY, payload }),
 };
 
 export const defaultState = Map({
@@ -47,17 +50,21 @@ export const defaultState = Map({
 export const reducer = (state = defaultState, { type, payload }) => {
   switch (type) {
     case types.OPEN:
-      return state
-        .set('isOpen', true)
-        .set('initialFilter', payload)
-        .set('currentFilter', payload)
-        .set('filterName', payload.type === 'custom' ? payload.name : '');
+      return Map({
+        isOpen: true,
+        initialFilter: payload,
+        currentFilter: payload,
+        activeSection: null,
+        filterName: payload.type === 'custom' ? payload.name : '',
+      });
     case types.CLOSE:
       return defaultState;
     case types.RESET:
       return state.set('currentFilter', state.get('initialFilter'));
     case types.SET_FILTER_NAME:
-      return state.set('filterName', payload);
+      return state
+        .set('filterName', payload)
+        .setIn(['currentFilter', 'name'], payload);
     case types.SHOW_SECTION:
       return state.set('activeSection', payload);
     case types.TOGGLE_ASSIGNMENT:
@@ -68,13 +75,10 @@ export const reducer = (state = defaultState, { type, payload }) => {
     case types.TOGGLE_CREATED_BY_ME:
       return state.setIn(['currentFilter', 'createdByMe'], payload);
     case types.TOGGLE_TEAM:
-      return state.getIn(['currentFilter', 'teams']).includes(payload)
-        ? state.updateIn(['currentFilter', 'teams'], teams =>
-            teams.delete(teams.indexOf(payload)),
-          )
-        : state.updateIn(['currentFilter', 'teams'], teams =>
-            teams.push(payload),
-          );
+      return state.updateIn(['currentFilter', 'teams'], teams => {
+        const i = teams.indexOf(payload);
+        return i > -1 ? teams.delete(i) : teams.push(payload);
+      });
     case types.TOGGLE_STATUS:
       const currentStatuses = state.getIn(['currentFilter', 'status']);
       return (
@@ -112,6 +116,8 @@ export const reducer = (state = defaultState, { type, payload }) => {
       });
     case types.SET_SORTED_BY:
       return state.setIn(['currentFilter', 'sortBy'], payload);
+    case types.SET_GROUPED_BY:
+      return state.setIn(['currentFilter', 'groupBy'], payload);
     default:
       return state;
   }

@@ -1,6 +1,7 @@
 import { Record, List } from 'immutable';
 import { LOCATION_CHANGE } from 'connected-react-router';
 import { matchPath } from 'react-router';
+import moment from 'moment';
 import * as Utils from 'common/src/utils';
 const { namespace, withPayload } = Utils;
 
@@ -8,12 +9,14 @@ export const types = {
   SET_VERSION: namespace('config', 'SET_APP'),
   SET_KAPP_SLUG: namespace('config', 'SET_KAPP_SLUG'),
   SET_LOCALE_METADATA: namespace('config', 'SET_LOCALE_METADATA'),
+  SET_LOCALE: namespace('config', 'SET_LOCALE'),
 };
 
 export const actions = {
   setVersion: withPayload(types.SET_VERSION),
   setKappSlug: withPayload(types.SET_KAPP_SLUG),
   setLocaleMetadata: withPayload(types.SET_LOCALE_METADATA),
+  setLocale: withPayload(types.SET_LOCALE),
 };
 
 export const State = Record({
@@ -21,6 +24,7 @@ export const State = Record({
   version: null,
   locales: List(),
   timezones: List(),
+  locale: moment.locale(),
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -37,6 +41,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state
         .set('locales', List(payload.locales))
         .set('timezones', payload.timezones);
+    case types.SET_LOCALE:
+      return state.set('locale', payload || moment.locale());
     default:
       return state;
   }

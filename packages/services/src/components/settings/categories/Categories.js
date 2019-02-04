@@ -16,6 +16,7 @@ import axios from 'axios';
 import 'react-sortable-tree/style.css';
 import { actions } from '../../../redux/modules/settingsCategories';
 import { setInitialInputs } from '../forms/FormSettings';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 /**
  * AXIOS Calls
@@ -27,7 +28,7 @@ const addCategory = ({ name, slug, sort, parent }) => {
     attributes: [
       {
         name: 'Sort Order',
-        values: [sort],
+        values: sort || sort === 0 ? [sort.toString()] : [],
       },
     ],
   };
@@ -62,8 +63,8 @@ export const updateCategory = ({ name, slug, sort, parent, originalSlug }) => {
     name: name,
     slug: slug,
     attributesMap: {
-      'Sort Order': [sort],
-      Parent: [parent],
+      'Sort Order': sort || sort === 0 ? [sort.toString()] : [],
+      Parent: parent ? [parent] : [],
     },
   };
   return axios.request({
@@ -88,7 +89,8 @@ export const mapCatgories = ({ rawCategories, setCategories }) => () => {
     b.attributes['Sort Order'] = b.attributes['Sort Order'] || [0];
     return a.attributes['Sort Order'][0] > b.attributes['Sort Order'][0]
       ? 1
-      : b.attributes['Sort Order'][0] > a.attributes['Sort Order'][0]
+      : parseInt(b.attributes['Sort Order'][0]) >
+        parseInt(a.attributes['Sort Order'][0])
         ? -1
         : 0;
   });
@@ -111,7 +113,11 @@ export const mapCatgories = ({ rawCategories, setCategories }) => () => {
         a.attributes['Sort Order'] = a.attributes['Sort Order'] || [0];
         b.attributes = b.attributes || {};
         b.attributes['Sort Order'] = b.attributes['Sort Order'] || [0];
-        return a.sort[0] > b.sort[0] ? 1 : b.sort[0] > a.sort[0] ? -1 : 0;
+        return parseInt(a.sort[0]) > parseInt(b.sort[0])
+          ? 1
+          : parseInt(b.sort[0]) > parseInt(a.sort[0])
+            ? -1
+            : 0;
       });
     } else {
       mapped[slug] = cat;
@@ -394,59 +400,75 @@ export const CategoriesContainer = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/kapps/services">services</Link> /{` `}
-              <Link to="/kapps/services/settings">settings</Link> /{` `}
+              <Link to="/kapps/services">
+                <I18n>services</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/kapps/services/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
             </h3>
-            <h1>Categories</h1>
+            <h1>
+              <I18n>Categories</I18n>
+            </h1>
           </div>
         </div>
         <section className="row">
           <div className="col-sm-6 sortable-categories">
-            <SortableTree
-              treeData={categories}
-              onChange={treeData => setCategories(treeData)}
-              getNodeKey={categories.slug}
-              onMoveNode={args => updateCategoryOrder(args)}
-              generateNodeProps={rowInfo => ({
-                buttons: [
-                  <div>
-                    <span
-                      className="fa fa-pencil fa-lg"
-                      label="Edit"
-                      onClick={event =>
-                        setSubcategory({
-                          ...subcategory,
-                          rowInfo: rowInfo,
-                          name: rowInfo.node.name,
-                          slug: rowInfo.node.slug,
-                          action: 'edit',
-                        })
-                      }
-                    />
+            <I18n
+              render={translate => (
+                <SortableTree
+                  treeData={categories}
+                  onChange={treeData => setCategories(treeData)}
+                  getNodeKey={categories.slug}
+                  onMoveNode={args => updateCategoryOrder(args)}
+                  generateNodeProps={rowInfo => ({
+                    buttons: [
+                      <div>
+                        <span
+                          className="fa fa-pencil fa-lg"
+                          label={translate('Edit')}
+                          onClick={event =>
+                            setSubcategory({
+                              ...subcategory,
+                              rowInfo: rowInfo,
+                              name: rowInfo.node.name,
+                              slug: rowInfo.node.slug,
+                              action: 'edit',
+                            })
+                          }
+                        />
 
-                    <span
-                      className="fa fa-plus-circle fa-lg"
-                      label="Add Subcategory"
-                      onClick={event =>
-                        setSubcategory({ ...subcategory, rowInfo: rowInfo })
-                      }
-                    />
+                        <span
+                          className="fa fa-plus-circle fa-lg"
+                          label={translate('Add Subcategory')}
+                          onClick={event =>
+                            setSubcategory({ ...subcategory, rowInfo: rowInfo })
+                          }
+                        />
 
-                    <span
-                      className="fa fa-times-circle fa-lg"
-                      label="Delete"
-                      onClick={event => removeCategory(rowInfo)}
-                    />
-                  </div>,
-                ],
-              })}
+                        <span
+                          className="fa fa-times-circle fa-lg"
+                          label={translate('Delete')}
+                          onClick={event => removeCategory(rowInfo)}
+                        />
+                      </div>,
+                    ],
+                  })}
+                />
+              )}
             />
           </div>
           <div className="col-sm-6">
-            <h3>New Category</h3>
+            <h3>
+              <I18n>New Category</I18n>
+            </h3>
             <form>
               <div className="form-group">
-                <label>Category Name</label>
+                <label>
+                  <I18n>Category Name</I18n>
+                </label>
                 <input
                   name="category"
                   value={inputs.category}
@@ -475,7 +497,9 @@ export const CategoriesContainer = ({
                 />
               </div>
               <div className="form-group">
-                <label>Category Slug</label>
+                <label>
+                  <I18n>Category Slug</I18n>
+                </label>
                 <input
                   name="category-slug"
                   value={inputs.slug}
@@ -488,14 +512,16 @@ export const CategoriesContainer = ({
                 />
               </div>
               {inputs.error && (
-                <div className="alert alert-danger">{inputs.error}</div>
+                <div className="alert alert-danger">
+                  <I18n>{inputs.error}</I18n>
+                </div>
               )}
               <div
                 className="btn btn-primary"
                 onClick={addNewCategory}
                 disabled={inputs.loading}
               >
-                Create Category
+                <I18n>Create Category</I18n>
               </div>
             </form>
           </div>
@@ -514,15 +540,19 @@ export const CategoriesContainer = ({
                   type="button"
                   className="btn btn-link"
                 >
-                  Cancel
+                  <I18n>Cancel</I18n>
                 </button>
-                <span>Subcategory</span>
+                <span>
+                  <I18n>Subcategory</I18n>
+                </span>
               </h4>
             </div>
             <div className="modal-body">
               <div className="modal-form">
                 <div className="form-group required">
-                  <label htmlFor="name">Name</label>
+                  <label htmlFor="name">
+                    <I18n>Name</I18n>
+                  </label>
                   <input
                     id="name"
                     name="name"
@@ -551,7 +581,9 @@ export const CategoriesContainer = ({
                   />
                 </div>
                 <div className="form-group required">
-                  <label htmlFor="name">Slug</label>
+                  <label htmlFor="name">
+                    <I18n>Slug</I18n>
+                  </label>
                   <input
                     id="slug"
                     name="slug"
@@ -564,7 +596,9 @@ export const CategoriesContainer = ({
                   />
                 </div>
                 {subcategory.error && (
-                  <div className="alert alert-danger">{subcategory.error}</div>
+                  <div className="alert alert-danger">
+                    <I18n>{subcategory.error}</I18n>
+                  </div>
                 )}
               </div>
               <div className="modal-footer">
@@ -578,7 +612,7 @@ export const CategoriesContainer = ({
                   type="button"
                   className="btn btn-primary"
                 >
-                  Save
+                  <I18n>Save</I18n>
                 </button>
               </div>
             </div>

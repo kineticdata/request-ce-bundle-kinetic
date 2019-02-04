@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
-import { Utils } from 'common';
-
 import { actions } from '../../redux/modules/submission';
+import { modalFormActions, Utils } from 'common';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const CommentButton = props =>
   props.enableButton && (
@@ -12,7 +12,7 @@ const CommentButton = props =>
       onClick={props.handleClick}
       className="btn btn-success"
     >
-      Start Discussion
+      <I18n>Start Discussion</I18n>
     </button>
   );
 

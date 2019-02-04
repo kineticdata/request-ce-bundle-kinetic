@@ -1,23 +1,26 @@
 import React from 'react';
 import { KappLink as Link, TimeAgo, Avatar } from 'common';
-import { StatusParagraph } from '../shared/StatusParagraph';
+import { StatusContent } from '../shared/StatusContent';
 import { buildFilterPath } from '../../redux/modules/queueApp';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const AssignmentParagraph = ({ values }) => (
-  <p className="assignment">
-    {values['Assigned Team'] &&
-      (values['Assigned Team Display Name'] || values['Assigned Team'])}
+  <span className="submission__assignment">
+    <I18n>
+      {values['Assigned Team'] &&
+        (values['Assigned Team Display Name'] || values['Assigned Team'])}
+    </I18n>
     {values['Assigned Individual'] && values['Assigned Team'] && ' > '}
     {values['Assigned Individual'] &&
       (values['Assigned Individual Display Name'] ||
         values['Assigned Individual'])}
-  </p>
+  </span>
 );
 
 const Timestamp = ({ id, label, value, username }) =>
   value && (
     <li className="list-group-item">
-      {label}
+      <I18n>{label}</I18n>
       &nbsp;
       <TimeAgo timestamp={value} id={`${id}-${label}`} />
     </li>
@@ -47,23 +50,33 @@ export const QueueListItemSmall = ({ queueItem, filter }) => {
     <li className="submission list-group-item">
       <Link
         to={`${buildFilterPath(filter)}/item/${id}`}
-        className="summary-group"
+        className="submission-summary"
       >
-        <StatusParagraph queueItem={queueItem} />
-        <h6>
-          {queueItem.form.name} ({queueItem.handle})
+        <div className="submission__meta">
+          <StatusContent queueItem={queueItem} />
+          <div className="submission__handler">
+            <I18n
+              context={`kapps.${queueItem.form.kapp.slug}.forms.${
+                queueItem.form.slug
+              }`}
+            >
+              {queueItem.form.name}
+            </I18n>{' '}
+            ({queueItem.handle})
+          </div>
+          <AssignmentParagraph values={values} />
           {queueItem.values['Discussion Id'] && (
-            <span className="btn icon">
+            <span className="btn icon icon--discussion">
               <span
                 className="fa fa-fw fa-comments"
                 style={{ color: 'rgb(9, 84, 130)', fontSize: '16px' }}
               />
             </span>
           )}
-        </h6>
-        <p className="summary">{values.Summary}</p>
-        <AssignmentParagraph values={values} />
-        <ul className="timestamps list-group">
+        </div>
+
+        <h6 className="submission__title">{queueItem.label}</h6>
+        <ul className="submission__timestamps list-group">
           <DueOrCloseDate queueItem={queueItem} />
           <Timestamp
             label="Updated"

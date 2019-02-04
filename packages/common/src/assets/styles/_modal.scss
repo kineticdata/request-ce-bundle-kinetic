@@ -86,6 +86,9 @@
       }
     }
     .modal-body {
+      &--padding {
+        padding: 0.875rem 1rem;
+      }
       display: flex;
       flex-direction: column;
       padding: 0;
@@ -204,10 +207,13 @@
     }
     .modal-footer {
       padding: 0;
-      .btn.btn-primary {
-        flex-grow: 1;
-        border-radius: 0;
-        padding: 1rem;
+      .btn {
+        &.btn-primary,
+        &.btn-secondary {
+          flex-grow: 1;
+          border-radius: 0;
+          padding: 1rem;
+        }
       }
     }
   }

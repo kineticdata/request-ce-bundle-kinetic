@@ -4,6 +4,7 @@ import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
 import { DateRangeSelector } from 'common/src/components/DateRangeSelector';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const convertDateRangeValue = dateRange =>
   !dateRange.custom
@@ -18,11 +19,11 @@ export const DateRangeSection = ({
 }) => (
   <ModalBody className="filter-section">
     <h5>
-      Date Range
+      <I18n>Date Range</I18n>
       <br />
       {errors.get('Date Range') && (
         <small className="text-danger text-small">
-          {errors.get('Date Range')}
+          <I18n>{errors.get('Date Range')}</I18n>
         </small>
       )}
     </h5>

@@ -53,7 +53,7 @@ export function* fetchAppSettingsTask() {
     }),
     forms: call(CoreAPI.fetchForms, {
       kappSlug,
-      include: 'details,attributes',
+      include: 'details,attributes,fields,fields.details,kapp',
     }),
     teams: call(CoreAPI.fetchTeams, {
       include:
@@ -75,8 +75,8 @@ export function* fetchAppSettingsTask() {
 
   const myFilters = profile.profileAttributes['Queue Personal Filters']
     ? profile.profileAttributes['Queue Personal Filters']
-        .map(JSON.parse)
         .map(filterReviver)
+        .filter(f => f)
     : List();
 
   const appSettings = {
@@ -95,10 +95,16 @@ export function* updatePersonalFilterTask() {
   const myFilters = yield select(selectPersonalFilters);
   const profile = yield select(selectProfile);
 
-  profile.profileAttributes['Queue Personal Filters'] = myFilters.toJS();
-
   const { serverError } = yield call(CoreAPI.updateProfile, {
-    profile,
+    profile: {
+      ...profile,
+      profileAttributes: {
+        ...profile.profileAttributes,
+        'Queue Personal Filters': myFilters
+          .toJS()
+          .map(filter => JSON.stringify(filter)),
+      },
+    },
     include: PROFILE_INCLUDES,
   });
   if (!serverError) {

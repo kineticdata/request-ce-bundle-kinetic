@@ -7,6 +7,7 @@ import Dropzone from 'react-dropzone';
 import Papa from 'papaparse';
 
 import { actions } from '../../../redux/modules/settingsDatastore';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 /**
  *   This function creates the map that is used to match the csv's headers
@@ -73,9 +74,14 @@ const findMissingFields = headerMapList =>
 const DropzoneContent = () => (
   <Fragment>
     <i className="fa fa-upload" />
-    <h2>Upload a .csv file</h2>
+    <h2>
+      <I18n>Upload a .csv file</I18n>
+    </h2>
     <p>
-      Drag a file to attach or <span className="text-primary">browse</span>
+      <I18n>Drag a file to attach or</I18n>{' '}
+      <span className="text-primary">
+        <I18n>browse</I18n>
+      </span>
     </p>
   </Fragment>
 );
@@ -133,7 +139,7 @@ export class ImportComponent extends Component {
   /*  headerToFieldMap must be passed in because handleSelect and handleOmit update headerToFieldMap
    * in state just before calling handleCsvToJson.  If we used this.state.headerToFieldMap we would
    * get a stale version of the data.
-   */
+  */
   handleCsvToJson = headerToFieldMap => {
     const resultsList = fromJS(this.parseResults.data);
     this.setState({
@@ -281,41 +287,52 @@ export class ImportComponent extends Component {
       <Fragment>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {/* // Upload CSV */}
-          {!this.readFile && !this.state.postResult && (
-            <Fragment>
-              <div className="text-center">
-                <h2>Only .csv files are permitted to be uploaded.</h2>
-                <h4>
-                  Size is limited to 20<em>mb</em>
-                </h4>
-              </div>
-              <div className="dropzone">
-                <Dropzone
-                  onDrop={this.handleChange}
-                  className="dropzone__area"
-                  acceptClassName="dropzone__area--active"
-                  rejectClassName="dropzone__area--disabled"
-                >
-                  {({ isDragActive, isDragReject }) => {
-                    if (isDragReject) {
-                      return 'Only .csv files are vaild';
-                    }
-                    if (isDragActive) {
-                      return <DropzoneContent />;
-                    }
+          {!this.readFile &&
+            !this.state.postResult && (
+              <Fragment>
+                <div className="text-center">
+                  <h2>
+                    <I18n>Only .csv files are permitted to be uploaded.</I18n>
+                  </h2>
+                  <h4>
+                    <I18n>Size is limited to 20mb</I18n>
+                  </h4>
+                </div>
+                <div className="dropzone">
+                  <I18n
+                    render={translate => (
+                      <Dropzone
+                        onDrop={this.handleChange}
+                        className="dropzone__area"
+                        acceptClassName="dropzone__area--active"
+                        rejectClassName="dropzone__area--disabled"
+                      >
+                        {({ isDragActive, isDragReject }) => {
+                          if (isDragReject) {
+                            return translate('Only .csv files are vaild');
+                          }
+                          if (isDragActive) {
+                            return <DropzoneContent />;
+                          }
 
-                    return <DropzoneContent />;
-                  }}
-                </Dropzone>
-              </div>
-            </Fragment>
-          )}
+                          return <DropzoneContent />;
+                        }}
+                      </Dropzone>
+                    )}
+                  />
+                </div>
+              </Fragment>
+            )}
 
           {/* // Missing Fields */}
           {this.state.missingFields.size > 0 && (
             <div className="text-center">
-              <h2>The .csv has headers that do not exist on the form</h2>
-              <h4>Please review the headers to match or omit.</h4>
+              <h2>
+                <I18n>The .csv has headers that do not exist on the form</I18n>
+              </h2>
+              <h4>
+                <I18n>Please review the headers to match or omit.</I18n>
+              </h4>
             </div>
           )}
 
@@ -332,30 +349,47 @@ export class ImportComponent extends Component {
           {this.state.postResult && (
             <Fragment>
               <div className="text-center">
-                <h2>Post Results</h2>
+                <h2>
+                  <I18n>Post Results</I18n>
+                </h2>
                 {this.state.attemptedRecords > 0 ? (
                   <Fragment>
-                    <h4>
-                      {this.state.attemptedRecords} record
-                      {this.state.attemptedRecords > 1 && 's'} attempted to be
-                      posted
-                    </h4>
+                    <I18n
+                      render={translate => (
+                        <h4>
+                          {this.state.attemptedRecords}{' '}
+                          {this.state.attemptedRecords !== 1
+                            ? translate('records')
+                            : translate('record')}{' '}
+                          {translate('attempted to be posted')}
+                        </h4>
+                      )}
+                    />
                     {/* TODO: Display a link to download failed files */}
-                    <h4 className="text-danger">
-                      {this.props.failedCalls.size} record
-                      {this.props.failedCalls.size > 1 && 's'} failed
-                    </h4>
+                    <I18n
+                      render={translate => (
+                        <h4 className="text-danger">
+                          {this.props.failedCalls.size}{' '}
+                          {this.props.failedCalls.size !== 1
+                            ? translate('records')
+                            : translate('record')}{' '}
+                          {translate('failed')}
+                        </h4>
+                      )}
+                    />
                     {/* <button className="btn btn-primary">Download failed records</button> */}
                   </Fragment>
                 ) : (
-                  <h4>No records found to post</h4>
+                  <h4>
+                    <I18n>No records found to post</I18n>
+                  </h4>
                 )}
                 <button
                   className="btn btn-link"
                   style={{ alignSelf: 'flex-end' }}
                   onClick={this.handleReset}
                 >
-                  Upload a new file?
+                  <I18n>Upload a new file?</I18n>
                 </button>
               </div>
             </Fragment>
@@ -367,9 +401,15 @@ export class ImportComponent extends Component {
               <table className="table table-sm table--settings">
                 <thead>
                   <tr>
-                    <th scope="col">Omit</th>
-                    <th scope="col">Header Name</th>
-                    <th scope="col">Form Fields</th>
+                    <th scope="col">
+                      <I18n>Omit</I18n>
+                    </th>
+                    <th scope="col">
+                      <I18n>Header Name</I18n>
+                    </th>
+                    <th scope="col">
+                      <I18n>Form Fields</I18n>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -379,7 +419,7 @@ export class ImportComponent extends Component {
                     )
                     .map((obj, idx) => (
                       <tr key={obj.header + idx}>
-                        <th scope="row">
+                        <td scope="row">
                           <input
                             type="checkbox"
                             id="omit"
@@ -389,7 +429,7 @@ export class ImportComponent extends Component {
                             checked={obj.checked}
                             onChange={this.handleOmit}
                           />
-                        </th>
+                        </td>
                         <td>{obj.header}</td>
                         <td />
                       </tr>
@@ -398,7 +438,7 @@ export class ImportComponent extends Component {
                     if (obj.header.toLowerCase() !== 'datastore record id') {
                       return (
                         <tr key={obj.header + idx}>
-                          <th scope="row">
+                          <td scope="row">
                             <input
                               type="checkbox"
                               id="omit"
@@ -408,7 +448,7 @@ export class ImportComponent extends Component {
                               checked={obj.checked}
                               onChange={this.handleOmit}
                             />
-                          </th>
+                          </td>
                           <td>{obj.header}</td>
                           <td>
                             <select
@@ -417,10 +457,12 @@ export class ImportComponent extends Component {
                               index={idx}
                               value={obj.field}
                             >
-                              <option value={''}>Select Option</option>
+                              <option value={''}>
+                                <I18n>Select Option</I18n>
+                              </option>
                               {this.formFieldNames.map(fieldName => (
                                 <option key={fieldName} value={fieldName}>
-                                  {fieldName}
+                                  <I18n>{fieldName}</I18n>
                                 </option>
                               ))}
                             </select>
@@ -444,15 +486,16 @@ export class ImportComponent extends Component {
           )}
 
           {/* // Reset or upload a new file */}
-          {this.readFile && !this.state.postResult && (
-            <button
-              className="btn btn-link"
-              style={{ alignSelf: 'flex-end' }}
-              onClick={this.handleReset}
-            >
-              Upload a new file
-            </button>
-          )}
+          {this.readFile &&
+            !this.state.postResult && (
+              <button
+                className="btn btn-link"
+                style={{ alignSelf: 'flex-end' }}
+                onClick={this.handleReset}
+              >
+                <I18n>Upload a new file</I18n>
+              </button>
+            )}
 
           {/* // Review records that match */}
           {!this.props.processing &&
@@ -461,15 +504,19 @@ export class ImportComponent extends Component {
             this.state.recordsHeaders.size > 0 && (
               <Fragment>
                 <div className="text-center">
-                  <h2>Review Records below.</h2>
-                  <h4>The first 5 records are displayed below.</h4>
+                  <h2>
+                    <I18n>Review Records below.</I18n>
+                  </h2>
+                  <h4>
+                    <I18n>The first 5 records are displayed below.</I18n>
+                  </h4>
                 </div>
                 <Table className="table table-sm table--settings">
                   <thead>
                     <tr>
                       {this.state.headerToFieldMap.map((obj, idx) => (
                         <th scope="col" key={obj.header + idx}>
-                          {obj.header}
+                          <I18n>{obj.header}</I18n>
                         </th>
                       ))}
                     </tr>
@@ -498,11 +545,12 @@ export class ImportComponent extends Component {
             )}
 
           {/* // Import Records Button   */}
-          {this.state.records.size > 0 && this.state.missingFields.size <= 0 && (
-            <button className="btn btn-secondary" onClick={this.handleImport}>
-              Import Records
-            </button>
-          )}
+          {this.state.records.size > 0 &&
+            this.state.missingFields.size <= 0 && (
+              <button className="btn btn-secondary" onClick={this.handleImport}>
+                <I18n>Import Records</I18n>
+              </button>
+            )}
         </div>
       </Fragment>
     );

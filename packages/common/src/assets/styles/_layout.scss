@@ -13,6 +13,14 @@
 .main-container {
   display: flex;
   overflow-y: auto !important;
+
+  &--no-sidebar {
+    position: absolute;
+    top: $header-height;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+  }
 }
 
 .package-layout {
@@ -100,5 +108,24 @@
     color: $black;
     font-size: 0.875rem;
     margin-bottom: 0;
+  }
+}
+
+.group-divider {
+  align-items: center;
+  color: $blue-lake;
+  display: flex;
+  @include ms-respond(font-size, -1);
+  font-weight: bold;
+  text-align: center;
+  > hr {
+    border: 2px solid $blue3;
+    flex: 1 0 auto;
+  }
+  > span {
+    margin: 0 0.75rem;
+    &:empty {
+      display: none;
+    }
   }
 }

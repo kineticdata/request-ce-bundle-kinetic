@@ -1,11 +1,20 @@
 import React, { Fragment } from 'react';
 import { TimeAgo } from 'common';
 import { activityData } from '../../RequestActivityList';
+import { I18n } from '../../../../../../app/src/I18nProvider';
 
 const ActivityDataItem = ({ label, value }) => (
   <dl>
-    <dt>{label !== 'STRING' && <span className={'title'}>{label}</span>}</dt>
-    <dd>{value}</dd>
+    <dt>
+      {label !== 'STRING' && (
+        <span className={'title'}>
+          <I18n>{label}</I18n>
+        </span>
+      )}
+    </dt>
+    <dd>
+      <I18n>{value}</I18n>
+    </dd>
   </dl>
 );
 
@@ -19,7 +28,8 @@ export const DefaultBody = ({ activity }) => {
         <div className="data-list-row__col">
           <dl>
             <dt>
-              <span className="fa fa-fw fa-calendar" /> Created
+              <span className="fa fa-fw fa-calendar" />
+              <I18n>Created</I18n>
             </dt>
             <dd>
               <TimeAgo timestamp={activity.createdAt} />
@@ -29,7 +39,8 @@ export const DefaultBody = ({ activity }) => {
         <div className="data-list-row__col">
           <dl>
             <dt>
-              <span className="fa fa-fw fa-calendar" /> Updated
+              <span className="fa fa-fw fa-calendar" />
+              <I18n>Updated</I18n>
             </dt>
             <dd>
               <TimeAgo timestamp={activity.updatedAt} />

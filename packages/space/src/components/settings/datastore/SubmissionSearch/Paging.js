@@ -8,6 +8,7 @@ import {
   actions,
   DATASTORE_LIMIT,
 } from '../../../../redux/modules/settingsDatastore';
+import { I18n } from '../../../../../../app/src/I18nProvider';
 
 const getPageText = (pageTokens, nextPageToken, submissions) => {
   let pages = pageTokens.size + 1;
@@ -15,7 +16,7 @@ const getPageText = (pageTokens, nextPageToken, submissions) => {
   const bottom = pages > 1 ? (pages - 1) * DATASTORE_LIMIT + 1 : pages;
   const top = (pages - 1) * DATASTORE_LIMIT + submissions.size;
 
-  return ` ${bottom} to ${top}`;
+  return <I18n render={translate => `${bottom} ${translate('to')} ${top}`} />;
 };
 
 const PagingComponent = ({
@@ -35,7 +36,7 @@ const PagingComponent = ({
           onClick={handlePrevThousandPage}
         >
           <span className="fa fa-fw fa-caret-left" />
-          Previous {DATASTORE_LIMIT}
+          <I18n>Previous</I18n> {DATASTORE_LIMIT}
         </button>
         <span>
           {!searching && submissions.size > 0
@@ -47,7 +48,7 @@ const PagingComponent = ({
           disabled={nextPageToken === null}
           onClick={handleNextThousandPage}
         >
-          Next {DATASTORE_LIMIT}
+          <I18n>Next</I18n> {DATASTORE_LIMIT}
           <span className="fa fa-fw fa-caret-right" />
         </button>
       </div>

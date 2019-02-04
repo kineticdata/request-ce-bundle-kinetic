@@ -3,32 +3,40 @@ import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 import { QueueListItemSmall } from './QueueListItem';
 import { TOO_MANY_STATUS_STRING } from '../../redux/sagas/queue';
-import { PageTitle } from 'common';
-
-const SORT_NAMES = {
-  createdAt: 'Created At',
-  updatedAt: 'Updated At',
-  closedAt: 'Closed At',
-  'Due Date': 'Due Date',
-};
+import { PageTitle, Moment, Constants, GroupDivider } from 'common';
+import { FilterMenuToolbar } from './FilterMenuToolbar';
+import { FilterMenuMobile } from './FilterMenuMobile';
+import { QueueListPagination } from './QueueListPagination';
+import moment from 'moment';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const WallyEmptyMessage = ({ filter }) => {
   if (filter.type === 'adhoc') {
     return (
       <div className="empty-state empty-state--wally">
-        <h5>No Results</h5>
+        <h5>
+          <I18n>No Results</I18n>
+        </h5>
         <img src={wallyMissingImage} alt="Missing Wally" />
-        <h6>Try a less specific filter.</h6>
-        <h5>Try again</h5>
+        <h6>
+          <I18n>Try a less specific filter.</I18n>
+        </h6>
+        <h5>
+          <I18n>Try again</I18n>
+        </h5>
       </div>
     );
   }
 
   return (
     <div className="empty-state empty-state--wally">
-      <h5>No Assignments</h5>
+      <h5>
+        <I18n>No Assignments</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
-      <h6>An empty queue is a happy queue.</h6>
+      <h6>
+        <I18n>An empty queue is a happy queue.</I18n>
+      </h6>
     </div>
   );
 };
@@ -36,21 +44,65 @@ const WallyEmptyMessage = ({ filter }) => {
 const WallyErrorMessage = ({ message }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>{message === TOO_MANY_STATUS_STRING ? 'Too Many Items' : 'Error'}</h5>
+      <h5>
+        <I18n>
+          {message === TOO_MANY_STATUS_STRING ? 'Too Many Items' : 'Error'}
+        </I18n>
+      </h5>
       <img src={wallyMissingImage} alt="Missing Wally" />
-      <h6>{message}</h6>
-      <h5>Try again</h5>
+      <h6>
+        <I18n>{message}</I18n>
+      </h6>
+      <h5>
+        <I18n>Try again</I18n>
+      </h5>
     </div>
   );
 };
 
-const WallyBadFilter = () => (
+const WallyBadFilter = ({ message }) => (
   <div className="empty-state empty-state--wally">
-    <h5>Invalid List</h5>
+    <h5>
+      <I18n>Invalid List</I18n>
+    </h5>
     <img src={wallyMissingImage} alt="Missing Wally" />
-    <h6>Invalid list, please choose a valid list from the left side.</h6>
+    <h6>
+      <I18n>
+        {message ||
+          'Invalid list, please choose a valid list from the left side.'}
+      </I18n>
+    </h6>
   </div>
 );
+
+const GroupByValue = ({ value }) => {
+  if (!value) {
+    return '';
+  } else if (value.match(Constants.DATE_TIME_REGEX)) {
+    return (
+      <Moment
+        timestamp={moment(value)}
+        format={Constants.MOMENT_FORMATS.dateTimeNumeric}
+      />
+    );
+  } else if (value.match(Constants.DATE_REGEX)) {
+    return (
+      <Moment
+        timestamp={moment(value, 'YYYY-MM-DD')}
+        format={Constants.MOMENT_FORMATS.dateNumeric}
+      />
+    );
+  } else if (value.match(Constants.TIME_REGEX)) {
+    return (
+      <Moment
+        timestamp={moment(value, 'HH:mm')}
+        format={Constants.MOMENT_FORMATS.time}
+      />
+    );
+  } else {
+    return value;
+  }
+};
 
 export const QueueList = ({
   filter,
@@ -60,6 +112,8 @@ export const QueueList = ({
   sortDirection,
   sortBy,
   toggleSortDirection,
+  groupDirection,
+  toggleGroupDirection,
   refresh,
   hasPrevPage,
   hasNextPage,
@@ -67,116 +121,96 @@ export const QueueList = ({
   gotoNextPage,
   isExact,
   count,
+  pageCount,
   limit,
   offset,
-}) =>
-  isExact &&
-  (!filter ? (
-    <WallyBadFilter />
-  ) : (
-    <div className="queue-list-container">
-      <PageTitle parts={[filter.name || 'Adhoc']} />
-      <div className="controls">
-        <h6>
-          {filter.name || 'Adhoc'}
-          <br />
-          <small>by {SORT_NAMES[sortBy]}</small>
-        </h6>
-        {count > 0 ? (
-          <div className="nav-buttons">
-            <button
-              type="button"
-              className="btn btn-link icon-wrapper"
-              disabled={!hasPrevPage}
-              onClick={gotoPrevPage}
-            >
-              <span className="icon">
-                <span className="fa fa-fw fa-caret-left" />
-              </span>
-            </button>
-            <strong>
-              {offset + 1}-{offset + queueItems.size}
-            </strong>
-            {' of '}
-            <strong>{count}</strong>
-            <button
-              type="button"
-              className="btn btn-link icon-wrapper"
-              disabled={!hasNextPage}
-              onClick={gotoNextPage}
-            >
-              <span className="icon">
-                <span className="fa fa-fw fa-caret-right" />
-              </span>
-            </button>
+  isGrouped,
+  isMobile,
+  filterValidations,
+}) => {
+  const paginationProps = {
+    hasPrevPage,
+    hasNextPage,
+    gotoPrevPage,
+    gotoNextPage,
+    count,
+    pageCount,
+    limit,
+    offset,
+  };
+  return (
+    isExact &&
+    (!filter ? (
+      <WallyBadFilter />
+    ) : (
+      <div className="queue-list-container">
+        <PageTitle parts={[filter.name || 'Adhoc']} />
+        {isMobile ? (
+          <FilterMenuMobile
+            filter={filter}
+            openFilterMenu={openFilterMenu}
+            refresh={refresh}
+            sortDirection={sortDirection}
+            toggleSortDirection={toggleSortDirection}
+            groupDirection={groupDirection}
+            toggleGroupDirection={toggleGroupDirection}
+          />
+        ) : (
+          <FilterMenuToolbar filter={filter} refresh={refresh} />
+        )}
+        {filterValidations.length <= 0 ? (
+          <div className="queue-list-content submissions">
+            {statusMessage ? (
+              <WallyErrorMessage message={statusMessage} />
+            ) : queueItems && queueItems.size > 0 ? (
+              isGrouped ? (
+                queueItems
+                  .map((items, groupValue) => (
+                    <div
+                      className="items-grouping"
+                      key={groupValue || 'no-group'}
+                    >
+                      <GroupDivider>
+                        <GroupByValue value={groupValue} />
+                      </GroupDivider>
+                      <ul className="list-group">
+                        {items.map(item => (
+                          <QueueListItemSmall
+                            queueItem={item}
+                            key={item.id}
+                            filter={filter}
+                          />
+                        ))}
+                      </ul>
+                    </div>
+                  ))
+                  .toList()
+              ) : (
+                <ul className="list-group">
+                  {' '}
+                  {queueItems.map(queueItem => (
+                    <QueueListItemSmall
+                      queueItem={queueItem}
+                      key={queueItem.id}
+                      filter={filter}
+                    />
+                  ))}
+                </ul>
+              )
+            ) : (
+              <WallyEmptyMessage filter={filter} />
+            )}
           </div>
         ) : (
-          <span />
+          <WallyBadFilter
+            message={filterValidations.map((v, i) => <p key={i}>{v}</p>)}
+          />
         )}
-        <div className="buttons">
-          <button
-            type="button"
-            className="btn btn-link icon-wrapper"
-            onClick={refresh}
-          >
-            <span className="icon">
-              <span
-                className="fa fa-fw fa-refresh"
-                style={{ fontSize: '16px', color: '#7e8083' }}
-              />
-            </span>
-          </button>
-          <button
-            type="button"
-            className="btn btn-link icon-wrapper"
-            onClick={toggleSortDirection}
-          >
-            {sortDirection === 'ASC' ? (
-              <span className="icon">
-                <span
-                  className="fa fa-fw fa-sort-amount-asc"
-                  style={{ fontSize: '16px', color: '#7e8083' }}
-                />
-              </span>
-            ) : (
-              <span className="icon">
-                <span
-                  className="fa fa-fw fa-sort-amount-desc "
-                  style={{ fontSize: '16px', color: '#7e8083' }}
-                />
-              </span>
-            )}
-          </button>
-          <button
-            type="button"
-            className="btn btn-link icon-wrapper"
-            onClick={openFilterMenu}
-          >
-            <span className="icon">
-              <span
-                className="fa fa-fw fa-sliders"
-                style={{ fontSize: '16px', color: '#7e8083' }}
-              />
-            </span>
-          </button>
-        </div>
+        <QueueListPagination
+          filter={filter}
+          paginationProps={paginationProps}
+        />
       </div>
-      <div className="queue-list-content submissions">
-        {statusMessage ? (
-          <WallyErrorMessage message={statusMessage} />
-        ) : queueItems && queueItems.size > 0 ? (
-          <ul className="list-group">
-            {queueItems.map(queueItem => (
-              <QueueListItemSmall
-                queueItem={queueItem}
-                key={queueItem.id}
-                filter={filter}
-              />
-            ))}
-          </ul>
-        ) : (
-          <WallyEmptyMessage filter={filter} />
-        )}
-      </div>
-    </div>
-  ));
+    ))
+  );
+};

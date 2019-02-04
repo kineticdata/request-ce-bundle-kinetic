@@ -7,6 +7,7 @@ import { DiscussionForm, InvitationForm, DiscussionAPI } from 'discussions-lib';
 import { toastActions } from 'common';
 import { actions } from '../../redux/modules/spaceApp';
 import { PeopleSelect } from 'discussions/src/components/PeopleSelect';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const CreateDiscussionModalComponent = props => (
   <Modal size="lg" isOpen toggle={props.close}>
@@ -17,9 +18,15 @@ const CreateDiscussionModalComponent = props => (
           type="button"
           className="btn btn-link"
         >
-          {props.step === 'discussion' ? 'Cancel' : 'Back'}
+          {props.step === 'discussion' ? (
+            <I18n>Cancel</I18n>
+          ) : (
+            <I18n>Back</I18n>
+          )}
         </button>
-        <span>New Discussion</span>
+        <span>
+          <I18n>New Discussion</I18n>
+        </span>
       </h4>
     </div>
     {/* We always render the Discussion/Invitation form components and hide/show
@@ -42,7 +49,7 @@ const CreateDiscussionModalComponent = props => (
                 className="btn btn-primary"
                 {...buttonProps}
               >
-                Continue
+                <I18n>Continue</I18n>
               </button>
             </ModalFooter>
           </Fragment>
@@ -53,12 +60,16 @@ const CreateDiscussionModalComponent = props => (
       onSubmit={props.submit}
       profile={props.profile}
       renderInviteesInput={props => (
-        <PeopleSelect
-          {...props}
-          users
-          teams
-          emails
-          placeholder="Search Users…"
+        <I18n
+          render={translate => (
+            <PeopleSelect
+              {...props}
+              users
+              teams
+              emails
+              placeholder={translate('Search Users…')}
+            />
+          )}
         />
       )}
       render={({ formElement, buttonProps }) =>
@@ -73,7 +84,7 @@ const CreateDiscussionModalComponent = props => (
                 className="btn btn-primary"
                 {...buttonProps}
               >
-                Submit
+                <I18n>Submit</I18n>
               </button>
             </ModalFooter>
           </Fragment>

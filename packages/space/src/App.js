@@ -19,6 +19,7 @@ import { TeamContainer } from './components/teams/TeamContainer';
 import { TeamsContainer } from './components/teams/TeamsContainer';
 import { IsolatedForm } from './components/shared/IsolatedForm';
 import { FormList } from './components/default_kapp/FormList';
+import { I18n } from '../../app/src/I18nProvider';
 import './assets/styles/master.scss';
 
 export const AppComponent = props => {
@@ -47,7 +48,7 @@ export const AppComponent = props => {
       </Switch>
     ),
     main: (
-      <Fragment>
+      <I18n>
         <Notifications />
         <main
           className={`package-layout package-layout--space ${
@@ -100,7 +101,7 @@ export const AppComponent = props => {
             <Route component={ErrorNotFound} />
           </Switch>
         </main>
-      </Fragment>
+      </I18n>
     ),
   });
 };

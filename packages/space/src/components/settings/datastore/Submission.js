@@ -24,6 +24,7 @@ import {
 } from '../../../redux/modules/settingsDatastore';
 
 import { DiscussionsPanel, ViewDiscussionsModal } from 'discussions';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
 
@@ -63,118 +64,136 @@ const DatastoreSubmissionComponent = ({
   profile,
   creationFields,
 }) => (
-  <div className="page-container page-container--panels page-container--datastore">
-    <PageTitle
-      parts={[
-        submissionId ? (submission ? submission.label : '') : ' New Record',
-        'Datastore',
-      ]}
-    />
-    <div className="page-panel page-panel--three-fifths page-panel--space-datastore-submission page-panel--scrollable">
-      <div className="page-title">
-        <div className="page-title__wrapper">
-          <h3>
-            <Link to="/">home</Link> /{` `}
-            <Link to="/settings">settings</Link> /{` `}
-            <Link to={`/settings/datastore/`}>datastore</Link> /{` `}
-            <Link to={`/settings/datastore/${form.slug}/`}>{form.name}</Link> /
-          </h3>
-          <h1>
-            {submissionId
-              ? submission
-                ? submission.label
-                : ''
-              : ' New Record'}
-          </h1>
-        </div>
-        <div className="page-title__actions">
-          {showPrevAndNext &&
-            !isEditing && (
-              <ButtonGroup className="datastore-prev-next">
-                <LinkContainer to={prevAndNext.prev || ''}>
-                  <Button color="inverse" disabled={!prevAndNext.prev}>
-                    <span className="icon">
-                      <span className="fa fa-fw fa-caret-left" />
-                    </span>
-                  </Button>
-                </LinkContainer>
-                <LinkContainer to={prevAndNext.next || ''}>
-                  <Button color="inverse" disabled={!prevAndNext.next}>
-                    <span className="icon">
-                      <span className="fa fa-fw fa-caret-right" />
-                    </span>
-                  </Button>
-                </LinkContainer>
-              </ButtonGroup>
-            )}
-          {submissionId &&
-            !isEditing && (
-              <Link
-                to={`/settings/datastore/${form.slug}/${submissionId}/edit`}
-                className="btn btn-primary ml-3 datastore-edit"
+  <I18n context={`datastore.forms.${form.slug}`}>
+    <div className="page-container page-container--panels page-container--datastore">
+      <PageTitle
+        parts={[
+          submissionId ? (submission ? submission.label : '') : ' New Record',
+          'Datastore',
+        ]}
+      />
+      <div className="page-panel page-panel--three-fifths page-panel--space-datastore-submission page-panel--scrollable">
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h3>
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to={`/settings/datastore/`}>
+                <I18n>datastore</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to={`/settings/datastore/${form.slug}/`}>
+                <I18n>{form.name}</I18n>
+              </Link>{' '}
+              /
+            </h3>
+            <h1>
+              {submissionId ? (
+                submission ? (
+                  submission.label
+                ) : (
+                  ''
+                )
+              ) : (
+                <I18n>New Record</I18n>
+              )}
+            </h1>
+          </div>
+          <div className="page-title__actions">
+            {showPrevAndNext &&
+              !isEditing && (
+                <ButtonGroup className="datastore-prev-next">
+                  <LinkContainer to={prevAndNext.prev || ''}>
+                    <Button color="inverse" disabled={!prevAndNext.prev}>
+                      <span className="icon">
+                        <span className="fa fa-fw fa-caret-left" />
+                      </span>
+                    </Button>
+                  </LinkContainer>
+                  <LinkContainer to={prevAndNext.next || ''}>
+                    <Button color="inverse" disabled={!prevAndNext.next}>
+                      <span className="icon">
+                        <span className="fa fa-fw fa-caret-right" />
+                      </span>
+                    </Button>
+                  </LinkContainer>
+                </ButtonGroup>
+              )}
+            {submissionId &&
+              !isEditing && (
+                <Link
+                  to={`/settings/datastore/${form.slug}/${submissionId}/edit`}
+                  className="btn btn-primary ml-3 datastore-edit"
+                >
+                  <I18n>Edit Record</I18n>
+                </Link>
+              )}
+            {discussionsEnabled && (
+              <button
+                onClick={openDiscussions}
+                className="btn btn-inverse d-md-none d-lg-none d-xl-none"
               >
-                Edit Record
-              </Link>
+                <span
+                  className="fa fa-fw fa-comments"
+                  style={{ fontSize: '16px' }}
+                />
+                <I18n>View Discussions</I18n>
+              </button>
             )}
-          {discussionsEnabled && (
-            <button
-              onClick={openDiscussions}
-              className="btn btn-inverse d-md-none d-lg-none d-xl-none"
-            >
-              <span
-                className="fa fa-fw fa-comments"
-                style={{ fontSize: '16px' }}
-              />
-              View Discussions
-            </button>
+          </div>
+        </div>
+        <div>
+          {submissionId ? (
+            <CoreForm
+              datastore
+              review={!isEditing}
+              submission={submissionId}
+              updated={handleUpdated}
+              error={handleError}
+              globals={globals}
+            />
+          ) : (
+            <CoreForm
+              key={formKey}
+              form={form.slug}
+              datastore
+              onCreated={handleCreated}
+              error={handleError}
+              values={values}
+              globals={globals}
+            />
           )}
         </div>
       </div>
-      <div>
-        {submissionId ? (
-          <CoreForm
-            datastore
-            review={!isEditing}
-            submission={submissionId}
-            updated={handleUpdated}
-            error={handleError}
-            globals={globals}
-          />
-        ) : (
-          <CoreForm
-            key={formKey}
-            form={form.slug}
-            datastore
-            onCreated={handleCreated}
-            error={handleError}
-            values={values}
-            globals={globals}
+      {discussionsEnabled &&
+        submission && (
+          <DiscussionsPanel
+            creationFields={creationFields}
+            CreationForm={CreationForm}
+            itemType="Datastore Submission"
+            itemKey={submissionId}
+            me={profile}
           />
         )}
-      </div>
+      {viewDiscussionsModal &&
+        isSmallLayout && (
+          <ViewDiscussionsModal
+            creationFields={creationFields}
+            CreationForm={CreationForm}
+            close={closeDiscussions}
+            itemType="Datastore Submission"
+            itemKey={submissionId}
+            me={profile}
+          />
+        )}
     </div>
-    {discussionsEnabled &&
-      submission && (
-        <DiscussionsPanel
-          creationFields={creationFields}
-          CreationForm={CreationForm}
-          itemType="Datastore Submission"
-          itemKey={submissionId}
-          me={profile}
-        />
-      )}
-    {viewDiscussionsModal &&
-      isSmallLayout && (
-        <ViewDiscussionsModal
-          creationFields={creationFields}
-          CreationForm={CreationForm}
-          close={closeDiscussions}
-          itemType="Datastore Submission"
-          itemKey={submissionId}
-          me={profile}
-        />
-      )}
-  </div>
+  </I18n>
 );
 
 const valuesFromQueryParams = queryParams => {

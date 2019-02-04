@@ -10,6 +10,7 @@ import { RetrieveJwtIframe } from './RetrieveJwtIframe';
 
 import { login } from '../../utils/authentication';
 import { actions } from '../../redux/modules/auth';
+import { I18n } from '../../I18nProvider';
 
 const PopupForm = props => (
   <Fragment>
@@ -20,9 +21,11 @@ const PopupForm = props => (
           className="btn btn-link"
           onClick={props.cancelled}
         >
-          Cancel
+          <I18n>Cancel</I18n>
         </button>
-        <span>Sign In</span>
+        <span>
+          <I18n>Sign In</I18n>
+        </span>
         <span />
       </h4>
     </div>
@@ -30,11 +33,15 @@ const PopupForm = props => (
       <ModalBody>
         {props.popupBlocked && (
           <h3>
-            <span className="text-danger">Our pop-up window was blocked.</span>
+            <span className="text-danger">
+              <I18n>Our pop-up window was blocked.</I18n>
+            </span>
           </h3>
         )}
         <h3>
-          <span>Authenticate with your provider.</span>
+          <span>
+            <I18n>Authenticate with your provider.</I18n>
+          </span>
         </h3>
       </ModalBody>
     </div>
@@ -44,7 +51,7 @@ const PopupForm = props => (
         className="btn btn-primary"
         onClick={props.openPopup}
       >
-        Open Login Popup
+        <I18n>Open Login Popup</I18n>
       </button>
     </ModalFooter>
     <OAuthPopup
@@ -64,21 +71,27 @@ const LoginForm = props => (
           className="btn btn-link"
           onClick={props.cancelled}
         >
-          Cancel
+          <I18n>Cancel</I18n>
         </button>
-        <span>Sign In</span>
+        <span>
+          <I18n>Sign In</I18n>
+        </span>
         <span />
       </h4>
     </div>
     {props.popupBlocked ? (
       <h3>
-        <span className="text-danger">Our pop-up window was blocked.</span>
+        <span className="text-danger">
+          <I18n>Our pop-up window was blocked.</I18n>
+        </span>
       </h3>
     ) : null}
     <form className="login-form-container" onSubmit={props.handleLogin}>
       <ModalBody>
         <div className="form-group">
-          <label htmlFor="email">Email Address</label>
+          <label htmlFor="email">
+            <I18n>Email Address</I18n>
+          </label>
           <input
             type="text"
             autoFocus
@@ -91,7 +104,9 @@ const LoginForm = props => (
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">
+            <I18n>Password</I18n>
+          </label>
           <input
             type="password"
             className="form-control"
@@ -101,10 +116,14 @@ const LoginForm = props => (
             onChange={props.handlePassword}
           />
         </div>
-        <span className="text-danger">{props.error || ' '}</span>
+        <span className="text-danger">
+          <I18n>{props.error || ' '}</I18n>
+        </span>
       </ModalBody>
       <ModalFooter>
-        <button className="btn btn-primary">Sign In</button>
+        <button className="btn btn-primary">
+          <I18n>Sign In</I18n>
+        </button>
       </ModalFooter>
     </form>
   </Fragment>

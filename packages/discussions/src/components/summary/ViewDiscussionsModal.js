@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import { DiscussionsPanel } from './DiscussionsPanel';
 import { Discussion } from '../Discussion';
+import { I18n } from 'app/src/I18nProvider';
 
 export const ViewDiscussionsModal = ({
   close,
@@ -18,9 +19,11 @@ export const ViewDiscussionsModal = ({
     <div className="modal-header">
       <h4 className="modal-title">
         <button type="button" className="btn btn-link" onClick={close}>
-          Close
+          <I18n>Close</I18n>
         </button>
-        <span>{discussionId ? 'View Discussion' : 'View Discussions'}</span>
+        <span>
+          <I18n>{discussionId ? 'View Discussion' : 'View Discussions'}</I18n>
+        </span>
         <span />
       </h4>
     </div>

@@ -4,6 +4,7 @@ import { Map } from 'immutable';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { bundle } from 'react-kinetic-core';
+import { I18n } from '../../I18nProvider';
 
 const CreateAccount = ({
   location,
@@ -20,12 +21,14 @@ const CreateAccount = ({
 }) => (
   <form className="login-form-container" onSubmit={handleSubmit}>
     <div>
-      <h3 className="form-title">Get Started</h3>
+      <h3 className="form-title">
+        <I18n>Get Started</I18n>
+      </h3>
       {error && <p className="alert alert-danger">{error}</p>}
       <div className="name-section">
         <div className="form-group">
           <label htmlFor="firstName" className="required">
-            First Name
+            <I18n>First Name</I18n>
           </label>
           <input
             autoFocus
@@ -38,7 +41,7 @@ const CreateAccount = ({
         </div>
         <div className="form-group">
           <label htmlFor="lastName" className="required">
-            Last Name
+            <I18n>Last Name</I18n>
           </label>
           <input
             className="form-control"
@@ -51,7 +54,7 @@ const CreateAccount = ({
       </div>
       <div className="form-group">
         <label htmlFor="email" className="required">
-          Email
+          <I18n>Email</I18n>
         </label>
         <input
           className="form-control"
@@ -63,7 +66,7 @@ const CreateAccount = ({
       </div>
       <div className="form-group">
         <label htmlFor="password" className="required">
-          Password
+          <I18n>Password</I18n>
         </label>
         <input
           className="form-control"
@@ -75,7 +78,7 @@ const CreateAccount = ({
       </div>
       <div className="form-group">
         <label htmlFor="passwordConfirmation" className="required">
-          Password Confirmation
+          <I18n>Password Confirmation</I18n>
         </label>
         <input
           className="form-control"
@@ -92,11 +95,11 @@ const CreateAccount = ({
         type="submit"
         disabled={!formValid || submitted}
       >
-        Accept Invitation
+        <I18n>Accept Invitation</I18n>
       </button>
       <hr />
       <Link className="btn btn-link" to={`/login${location.search}`}>
-        Already have an account? Login
+        <I18n>Already have an account? Login</I18n>
       </Link>
     </div>
   </form>
@@ -142,8 +145,8 @@ const handleSubmit = ({
       error.response.status === 404
         ? 'Invitation expired.'
         : error.response.status === 400
-        ? error.response.data.error
-        : '';
+          ? error.response.data.error
+          : '';
     setError(`There was a problem creating your new account. ${errorMessage}`);
   }
 };

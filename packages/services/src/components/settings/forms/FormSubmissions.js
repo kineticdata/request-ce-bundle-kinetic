@@ -8,6 +8,7 @@ import { Modal } from 'reactstrap';
 import { SubmissionListItem } from './SubmissionListItem';
 import { ExportModal } from './ExportModal';
 import { actions } from '../../../redux/modules/settingsForms';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const DiscussionIcon = () => (
   <span className="icon">
@@ -188,11 +189,24 @@ export const FormSubmissionsContainer = ({
             <div className="page-title">
               <div className="page-title__wrapper">
                 <h3>
-                  <Link to="/kapps/services">services</Link> /{` `}
-                  <Link to="/kapps/services/settings">settings</Link> /{` `}
-                  <Link to="/kapps/services/settings/forms">forms</Link> /{` `}
+                  <Link to="/kapps/services">
+                    <I18n>services</I18n>
+                  </Link>{' '}
+                  /{` `}
+                  <Link to="/kapps/services/settings">
+                    <I18n>settings</I18n>
+                  </Link>{' '}
+                  /{` `}
+                  <Link to="/kapps/services/settings/forms">
+                    <I18n>forms</I18n>
+                  </Link>{' '}
+                  /{` `}
                 </h3>
-                <h1>{form.name}</h1>
+                <h1>
+                  <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
+                    {form.name}
+                  </I18n>
+                </h1>
               </div>
             </div>
             <div className="submission-meta">
@@ -200,37 +214,49 @@ export const FormSubmissionsContainer = ({
                 <div className="data-list-row">
                   <div className="data-list-row__col">
                     <dl>
-                      <dt>Form Type</dt>
+                      <dt>
+                        <I18n>Form Type</I18n>
+                      </dt>
                       <dd className="text-truncate">{form.type}</dd>
                     </dl>
                   </div>
                   <div className="data-list-row__col">
                     <dl>
-                      <dt>Form Status</dt>
+                      <dt>
+                        <I18n>Form Status</I18n>
+                      </dt>
                       <dd className="text-truncate">{form.status}</dd>
                     </dl>
                   </div>
                   <div className="data-list-row__col">
                     <dl>
-                      <dt>Created</dt>
+                      <dt>
+                        <I18n>Created</I18n>
+                      </dt>
                       <dd className="text-truncate">
                         <span className="time-ago">
                           {moment(form.createdAt).fromNow()}
                         </span>
                         <br />
-                        <small>by {form.createdBy}</small>
+                        <small>
+                          <I18n>by</I18n> {form.createdBy}
+                        </small>
                       </dd>
                     </dl>
                   </div>
                   <div className="data-list-row__col">
                     <dl>
-                      <dt>Updated</dt>
+                      <dt>
+                        <I18n>Updated</I18n>
+                      </dt>
                       <dd className="text-truncate">
                         <span className="time-ago">
                           {moment(form.updatedAt).fromNow()}
                         </span>
                         <br />
-                        <small>by {form.updatedBy}</small>
+                        <small>
+                          <I18n>by</I18n> {form.updatedBy}
+                        </small>
                       </dd>
                     </dl>
                   </div>
@@ -241,7 +267,11 @@ export const FormSubmissionsContainer = ({
               <div className="settings-flex row">
                 <div className="col-md-12">
                   {form.description && (
-                    <p className="text-truncate">{form.description}</p>
+                    <p className="text-truncate">
+                      <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
+                        {form.description}
+                      </I18n>
+                    </p>
                   )}
                   <button
                     className="btn btn-primary pull-right"
@@ -255,7 +285,7 @@ export const FormSubmissionsContainer = ({
                     value="export"
                     className="btn btn-primary pull-left"
                   >
-                    Export Records
+                    <I18n>Export Records</I18n>
                   </button>
                 </div>
               </div>
@@ -266,8 +296,10 @@ export const FormSubmissionsContainer = ({
                     <div className="text-info mb-2">
                       <small>
                         <em>
-                          Sorting the table columns will only sort the visible
-                          records on the current page.
+                          <I18n>
+                            Sorting the table columns will only sort the visible
+                            records on the current page.
+                          </I18n>
                         </em>
                       </small>
                     </div>
@@ -295,7 +327,11 @@ export const FormSubmissionsContainer = ({
                               ${isDiscussionIdField ? 'sort-disabled' : ''}`}
                             onClick={e => sortTable(c)}
                           >
-                            {isDiscussionIdField ? <DiscussionIcon /> : c.label}
+                            {isDiscussionIdField ? (
+                              <DiscussionIcon />
+                            ) : (
+                              <I18n>{c.label}</I18n>
+                            )}
                           </th>
                         );
                       })}
@@ -307,7 +343,9 @@ export const FormSubmissionsContainer = ({
                       <th scope="col">
                         <div className="input-group">
                           <div className="input-group-prepend">
-                            <span className="input-group-text">Sort By</span>
+                            <span className="input-group-text">
+                              <I18n>Sort By</I18n>
+                            </span>
                           </div>
                           <select
                             className="form-control"
@@ -339,7 +377,7 @@ export const FormSubmissionsContainer = ({
                                     key={`${c.name}::${c.type}`}
                                     value={`${c.name}::${c.type}`}
                                   >
-                                    {c.label}
+                                    <I18n>{c.label}</I18n>
                                   </option>
                                 );
                               } else {
@@ -361,8 +399,12 @@ export const FormSubmissionsContainer = ({
                                 });
                               }}
                             >
-                              <option value="ASC">Asc</option>
-                              <option value="DESC">Desc</option>
+                              <option value="ASC">
+                                <I18n>Asc</I18n>
+                              </option>
+                              <option value="DESC">
+                                <I18n>Desc</I18n>
+                              </option>
                             </select>
                           )}
                         </div>
@@ -393,7 +435,7 @@ export const FormSubmissionsContainer = ({
                       className="page-item disabled"
                       onClick={() => previousPage(form.slug)}
                     >
-                      Previous
+                      <I18n>Previous</I18n>
                     </li>
                   )}
                   <li className="page-item disabled">
@@ -404,7 +446,7 @@ export const FormSubmissionsContainer = ({
                       className="page-item disabled"
                       onClick={() => nextPage(form.slug)}
                     >
-                      Next
+                      <I18n>Next</I18n>
                     </li>
                   )}
                 </ul>
@@ -427,20 +469,24 @@ export const FormSubmissionsContainer = ({
                         type="button"
                         className="btn btn-link"
                       >
-                        Cancel
+                        <I18n>Cancel</I18n>
                       </button>
-                      <span>Filter Records</span>
+                      <span>
+                        <I18n>Filter Records</I18n>
+                      </span>
                     </h4>
                   </div>
                   <div className="modal-body">
                     <div className="modal-form">
                       <div className="form-group required">
-                        <label htmlFor="name">Filter By Properties</label>
+                        <label htmlFor="name">
+                          <I18n>Filter By Properties</I18n>
+                        </label>
                         {filter.properties &&
                           Object.keys(filter.properties).map(key => (
                             <div className="form-group" key={key}>
                               <label htmlFor={filter.properties[key].name}>
-                                {filter.properties[key].label}
+                                <I18n>{filter.properties[key].label}</I18n>
                               </label>
                               <div className="input-group">
                                 <input
@@ -493,7 +539,7 @@ export const FormSubmissionsContainer = ({
                               value="handle"
                               disabled={filter.properties.handle !== undefined}
                             >
-                              Handle
+                              <I18n>Handle</I18n>
                             </option>
                             <option
                               value="submittedBy"
@@ -501,7 +547,7 @@ export const FormSubmissionsContainer = ({
                                 filter.properties.submittedBy !== undefined
                               }
                             >
-                              Submitted By
+                              <I18n>Submitted By</I18n>
                             </option>
                           </select>
                           <div className="input-group-append">
@@ -528,12 +574,14 @@ export const FormSubmissionsContainer = ({
                         </div>
                       </div>
                       <div className="form-group">
-                        <label htmlFor="name">Filter by Values</label>
+                        <label htmlFor="name">
+                          <I18n>Filter by Values</I18n>
+                        </label>
                         {filter.values &&
                           Object.keys(filter.values).map(key => (
                             <div className="form-group" key={key}>
                               <label htmlFor={filter.values[key].name}>
-                                {filter.values[key].label}
+                                <I18n>{filter.values[key].label}</I18n>
                               </label>
                               <div className="input-group">
                                 <input
@@ -590,7 +638,13 @@ export const FormSubmissionsContainer = ({
                                   filter.values[field.name] !== undefined
                                 }
                               >
-                                {field.name}
+                                <I18n
+                                  context={`kapps.${kappSlug}.forms.${
+                                    form.slug
+                                  }`}
+                                >
+                                  {field.name}
+                                </I18n>
                               </option>
                             ))}
                           </select>
@@ -618,7 +672,9 @@ export const FormSubmissionsContainer = ({
                         </div>
                       </div>
                       {filter.error && (
-                        <div className="alert alert-danger">{filter.error}</div>
+                        <div className="alert alert-danger">
+                          <I18n>{filter.error}</I18n>
+                        </div>
                       )}
                     </div>
                     <div className="modal-footer">
@@ -635,7 +691,7 @@ export const FormSubmissionsContainer = ({
                           ).length > 0
                         }
                       >
-                        Apply
+                        <I18n>Apply</I18n>
                       </button>
                     </div>
                   </div>

@@ -6,6 +6,7 @@ import { MessagesGroup } from 'discussions';
 import { getTeamColor } from '../../utils';
 
 import { Avatar } from 'common';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const getTeamHeaderStyle = (discussion, teams) => {
   const teamRI = discussion.relatedItems.find(ri => ri.type === 'Team');
@@ -33,7 +34,7 @@ const RelatedItemBadge = ({ discussion }) => {
         className="btn btn-inverse btn-sm"
         to={`/kapps/queue/submissions/${relatedItem.key}`}
       >
-        View Task
+        <I18n>View Task</I18n>
       </Link>
     );
   }

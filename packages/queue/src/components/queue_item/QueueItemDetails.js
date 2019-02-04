@@ -10,8 +10,9 @@ import { ViewOriginalRequest } from './ViewOriginalRequest';
 import { AssignmentBadge } from './AssignmentBadge';
 import { QueueListItemSmall } from '../queue_list/QueueListItem';
 import { AssignmentSelector } from '../shared/AssignmentSelector';
-import { StatusParagraph } from '../shared/StatusParagraph';
+import { StatusContent } from '../shared/StatusContent';
 import { WallyButtonContainer } from '../shared/WallyButton';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const nonQueueLink = (queueItem, kappSlug) =>
   queueItem.parent &&
@@ -71,12 +72,25 @@ export const QueueItemDetails = ({
               className="fa fa-fw fa-comments"
               style={{ fontSize: '16px' }}
             />
-            View Discussions
+            <I18n>
+              {queueItem.values['Discussion Id'] === null
+                ? 'New Discussion'
+                : 'View Discussion'}
+            </I18n>
           </button>
         )}
-        <StatusParagraph queueItem={queueItem} prevAndNext={prevAndNext} />
+        <div className="submission__meta">
+          <StatusContent queueItem={queueItem} prevAndNext={prevAndNext} />
+        </div>
         <h1>
-          {queueItem.form.name} ({queueItem.handle})
+          <I18n
+            context={`kapps.${queueItem.form.kapp.slug}.forms.${
+              queueItem.form.slug
+            }`}
+          >
+            {queueItem.form.name}
+          </I18n>{' '}
+          ({queueItem.handle})
         </h1>
         <p className="summary">{queueItem.values.Summary}</p>
         <pre>{queueItem.values.Details}</pre>
@@ -113,24 +127,30 @@ export const QueueItemDetails = ({
             to={`/item/${queueItem.parent.id}`}
             className="btn btn-primary btn-inverse request-button"
           >
-            View Parent
+            <I18n>View Parent</I18n>
           </Link>
         )}
         <ul className="list-group timestamps">
           <li className="list-group-item timestamp">
-            <span className="label">Due</span>
+            <span className="label">
+              <I18n>Due</I18n>
+            </span>
             <span className="value">
               <TimeAgo timestamp={queueItem.values['Due Date']} id="due-date" />
             </span>
           </li>
           <li className="list-group-item timestamp">
-            <span className="label">Updated</span>
+            <span className="label">
+              <I18n>Updated</I18n>
+            </span>
             <span className="value">
               <TimeAgo timestamp={queueItem.updatedAt} id="updated-at" />
             </span>
           </li>
           <li className="list-group-item timestamp">
-            <span className="label">Created</span>
+            <span className="label">
+              <I18n>Created</I18n>
+            </span>
             <span className="value">
               <TimeAgo timestamp={queueItem.createdAt} id="created-at" />
             </span>
@@ -141,7 +161,7 @@ export const QueueItemDetails = ({
       {!prohibitSubtasks && (
         <div className="subtasks-section">
           <h2 className="section__title">
-            Subtasks
+            <I18n>Subtasks</I18n>
             {queueItem.coreState === 'Draft' && (
               <button className="btn btn-link" onClick={openNewItemMenu}>
                 <span className="fa fa-plus" />
@@ -157,10 +177,14 @@ export const QueueItemDetails = ({
           )}
           {queueItem.children.length < 1 && (
             <div className="empty-subtasks">
-              <h5>No Subtasks to display</h5>
+              <h5>
+                <I18n>No Subtasks to display</I18n>
+              </h5>
               <h6>
-                Subtasks are an easy way to create smaller and/or related tasks
-                to parent task.
+                <I18n>
+                  Subtasks are an easy way to create smaller and/or related
+                  tasks to parent task.
+                </I18n>
               </h6>
             </div>
           )}
@@ -177,16 +201,23 @@ const getAttr = (form, attrName) => {
   return attrConfig && attrConfig.values[0];
 };
 
-export const mapStateToProps = (state, props) => ({
-  filter: props.filter,
-  queueItem: state.queue.queue.currentItem,
-  assignments: selectAssignments(state).toJS(),
-  prevAndNext: selectPrevAndNext(state, props.filter),
-  kappSlug: state.app.config.kappSlug,
-  discussionsEnabled: selectDiscussionsEnabled(state),
-  profile: state.app.profile,
-  isSmallLayout: state.app.layout.get('size') === 'small',
-});
+export const mapStateToProps = (state, props) => {
+  const queueItem = state.queue.queue.currentItem;
+  return {
+    filter: props.filter,
+    queueItem,
+    assignments: selectAssignments(
+      state.queue.queueApp.allTeams,
+      queueItem.form,
+      queueItem,
+    ).toJS(),
+    prevAndNext: selectPrevAndNext(state, props.filter),
+    kappSlug: state.app.config.kappSlug,
+    discussionsEnabled: selectDiscussionsEnabled(state),
+    profile: state.app.profile,
+    isSmallLayout: state.app.layout.get('size') === 'small',
+  };
+};
 
 export const mapDispatchToProps = {
   updateQueueItem: actions.updateQueueItem,
