@@ -17,7 +17,7 @@ const AlertComponent = ({
   <tr>
     {alert.values.URL ? (
       <td scope="row">
-        <a href={alert.values.URL} target="blank">
+        <a href={alert.values.URL} target="_blank">
           <I18n>{alert.values.Title}</I18n>
           <i className="fa fa-fw fa-external-link " />
         </a>
