@@ -47,11 +47,12 @@ const WallyEmptyMessage = () => {
 const RobotsListComponent = ({
   robots,
   robotsLoading,
+  robotsLoaded,
   robotsErrors,
   nextExecutions,
   nextExecutionsLoading,
 }) => {
-  const loading = !nextExecutionsLoading && !robotsLoading && robots.size <= 0;
+  const loading = !nextExecutionsLoading && !robotsLoading && !robotsLoaded;
   return loading ? (
     <Loading />
   ) : (
@@ -169,6 +170,7 @@ export const mapStateToProps = state => ({
   robot: state.space.settingsRobots.robot,
   robots: state.space.settingsRobots.robots,
   robotsLoading: state.space.settingsRobots.robotsLoading,
+  robotsLoaded: state.space.settingsRobots.robotsLoaded,
   robotsErrors: state.space.settingsRobots.robotsErrors,
   nextExecutions: state.space.settingsRobots.nextExecutions,
   nextExecutionsLoading: state.space.settingsRobots.nextExecutionsLoading,
