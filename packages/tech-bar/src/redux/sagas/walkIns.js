@@ -3,6 +3,7 @@ import { CoreAPI } from 'react-kinetic-core';
 import { List } from 'immutable';
 import { actions, types, WALK_IN_FORM_SLUG } from '../modules/walkIns';
 import moment from 'moment';
+import isarray from 'isarray';
 
 export function* fetchWalkInSaga({ payload }) {
   const { submission, errors, serverError } = yield call(
@@ -24,13 +25,18 @@ export function* fetchWalkInSaga({ payload }) {
   }
 }
 
-export function* fetchTodayWalkInsSaga({ payload: schedulerId }) {
+export function* fetchTodayWalkInsSaga({ payload: { schedulerId, status } }) {
   const kappSlug = yield select(state => state.app.config.kappSlug);
   const searchBuilder = new CoreAPI.SubmissionSearch()
     .limit(1000)
     .include('details,values')
     .eq('values[Scheduler Id]', schedulerId)
     .eq('values[Date]', moment().format('YYYY-MM-DD'));
+  if (isarray(status) && status.length > 0) {
+    searchBuilder.in('values[Status]', status);
+  } else if (status) {
+    searchBuilder.eq('values[Status]', status);
+  }
 
   const { submissions, errors, serverError } = yield call(
     CoreAPI.searchSubmissions,

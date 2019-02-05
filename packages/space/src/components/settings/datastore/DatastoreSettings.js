@@ -83,7 +83,7 @@ const SettingsComponent = ({
                 origForm.slug
               }/builder`}
               className="btn btn-primary"
-              target="blank"
+              target="_blank"
             >
               <I18n>Form Builder</I18n>{' '}
               <i className="fa fa-fw fa-external-link" />

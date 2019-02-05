@@ -103,7 +103,7 @@ const fetchData = ({
   fetchTodayWalkIns,
 }) => () => {
   fetchTodayAppointments({ schedulerId: techBarId, status: 'Checked In' });
-  fetchTodayWalkIns(techBarId);
+  fetchTodayWalkIns({ schedulerId: techBarId, status: 'Checked In' });
 };
 
 export const Overhead = compose(
