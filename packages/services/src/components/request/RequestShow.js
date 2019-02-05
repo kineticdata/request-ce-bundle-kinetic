@@ -8,7 +8,7 @@ import {
   TimeAgo,
   Utils as CommonUtils,
 } from 'common';
-import { bundle, CoreForm } from 'react-kinetic-core';
+import { bundle } from 'react-kinetic-core';
 import { RequestShowConfirmationContainer } from './RequestShowConfirmation';
 import { RequestActivityList } from './RequestActivityList';
 import { CancelButtonContainer } from './CancelButton';
@@ -22,9 +22,8 @@ import {
   getStatus,
   getSubmissionPath,
 } from '../../utils';
+import { ReviewRequest } from './ReviewRequest';
 import { I18n } from '../../../../app/src/I18nProvider';
-
-const globals = import('common/globals');
 
 const getIcon = form =>
   CommonUtils.getAttributeValue(
@@ -236,15 +235,7 @@ export const RequestShow = ({ submission, listType, mode, kappSlug }) => (
               </ul>
               <div className="submission-tabs__content">
                 {mode === 'review' ? (
-                  <I18n
-                    context={`kapps.${kappSlug}.forms.${submission.form.slug}`}
-                  >
-                    <CoreForm
-                      submission={submission.id}
-                      review
-                      globals={globals}
-                    />
-                  </I18n>
+                  <ReviewRequest kappSlug={kappSlug} submission={submission} />
                 ) : (
                   <RequestActivityList submission={submission} />
                 )}
