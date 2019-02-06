@@ -21,7 +21,7 @@ const FEEDBACK_FORM_CONFIG = {
 };
 
 const INVITE_OTHERS_FORM_CONFIG = {
-  formSlug: 'kinops-invite-others',
+  formSlug: 'invite-users',
   kappSlug: 'admin',
   title: 'Invite Others',
   confirmationMessage: "We'll send those invitations out right away.",
