@@ -143,9 +143,11 @@ export const UserFormComponent = ({
                     onChange={handleFieldChange}
                     value={fieldValues.preferredLocale}
                   >
-                    <option value="">
-                      <I18n>None Selected</I18n>
-                    </option>
+                    <I18n
+                      render={translate => (
+                        <option value="">{translate('None Selected')}</option>
+                      )}
+                    />
                     {locales.map(locale => (
                       <option
                         value={locale.code}
@@ -168,9 +170,11 @@ export const UserFormComponent = ({
                     onChange={handleFieldChange}
                     value={fieldValues.timezone}
                   >
-                    <option value="">
-                      <I18n>None Selected</I18n>
-                    </option>
+                    <I18n
+                      render={translate => (
+                        <option value="">{translate('None Selected')}</option>
+                      )}
+                    />
                     {timezones.map(timezone => (
                       <option value={timezone.id} key={timezone.id}>
                         {timezone.name} ({timezone.id})
