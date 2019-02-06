@@ -14,7 +14,6 @@ import { I18n } from '../../../../app/src/I18nProvider';
 const globals = import('common/globals');
 
 const AlertFormComponent = ({
-  alertsKappSlug,
   alertsFormSlug,
   submissionId,
   submissionLabel,
@@ -45,10 +44,11 @@ const AlertFormComponent = ({
           </h1>
         </div>
       </div>
-      <I18n context={`kapps.${alertsKappSlug}.forms.${alertsFormSlug}`}>
+      <I18n context={`datastore.forms.${alertsFormSlug}`}>
         {editing ? (
           <div>
             <CoreForm
+              datastore
               submission={submissionId}
               globals={globals}
               updated={handleCreateOrUpdate}
@@ -57,7 +57,7 @@ const AlertFormComponent = ({
         ) : (
           <div>
             <CoreForm
-              kapp={alertsKappSlug}
+              datastore
               form={alertsFormSlug}
               globals={globals}
               created={handleCreateOrUpdate}
@@ -75,11 +75,6 @@ const mapStateToProps = (state, { match: { params } }) => ({
   spaceName: state.app.space.name,
   editing: params.id !== 'new',
   submissionId: params.id,
-  alertsKappSlug: Utils.getAttributeValue(
-    state.app.space,
-    'Admin Kapp Slug',
-    'admin',
-  ),
   alertsFormSlug: Utils.getAttributeValue(
     state.app.space,
     'Alerts Form Slug',

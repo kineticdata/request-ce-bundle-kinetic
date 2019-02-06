@@ -45,6 +45,7 @@ export function* fetchAppSettingsSaga() {
 
 export function* deleteAlertSaga(action) {
   const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
+    datastore: true,
     id: action.payload,
   });
 

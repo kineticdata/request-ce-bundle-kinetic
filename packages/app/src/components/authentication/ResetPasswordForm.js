@@ -83,7 +83,7 @@ const handleResetPassword = ({
   try {
     await CoreAPI.createSubmission({
       kappSlug: 'admin',
-      formSlug: 'kinops-reset-password',
+      formSlug: 'account-password-reset',
       values: {
         Username: email,
         'Display Name': null,

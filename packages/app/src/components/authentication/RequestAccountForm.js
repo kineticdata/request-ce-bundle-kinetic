@@ -37,7 +37,6 @@ const RequestAccount = ({
     <form className="login-form-container" onSubmit={handleSubmit}>
       <div>
         <h3 className="form-title">Create Account</h3>
-
         <div className="name-section">
           <div className="form-group">
             <label className="required">First Name</label>
@@ -122,7 +121,7 @@ const handleSubmit = ({
   try {
     await CoreAPI.createSubmission({
       kappSlug: 'admin',
-      formSlug: 'kinops-account-request',
+      formSlug: 'account-request',
       values: {
         'First Name': firstName,
         'Last Name': lastName,

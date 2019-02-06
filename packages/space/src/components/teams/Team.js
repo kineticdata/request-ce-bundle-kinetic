@@ -32,7 +32,6 @@ export const Team = ({
   parent,
   team,
   subteams,
-  services,
   memberships,
   me,
   userIsMember,
@@ -167,47 +166,27 @@ export const Team = ({
               </div>
             </section>
           )}
-          {services.length > 0 && (
-            <section>
-              <h3 className="section__title">
-                <I18n>Services</I18n>
-              </h3>
-              <div className="cards__wrapper cards__wrapper--services">
-                {services.map(service => (
-                  <I18n context={`kapps.services.forms.${service.slug}`}>
-                    <ServiceCard
-                      key={service.slug}
-                      path={`/kapps/services/forms/${service.slug}`}
-                      form={service}
-                    />
-                  </I18n>
-                ))}
-              </div>
-            </section>
-          )}
         </div>
-        {userIsMember && (
-          <Fragment>
-            {viewDiscussionsModal &&
-              isSmallLayout && (
-                <ViewDiscussionsModal
-                  close={closeDiscussions}
-                  itemType="Team"
-                  itemKey={team.slug}
-                  creationFields={creationFields}
-                  CreationForm={CreationForm}
-                  me={me}
-                />
-              )}
-            <DiscussionsPanel
-              itemType="Team"
-              itemKey={team.slug}
-              creationFields={creationFields}
-              CreationForm={CreationForm}
-              me={me}
-            />
-          </Fragment>
-        )}
+        <Fragment>
+          {viewDiscussionsModal &&
+            isSmallLayout && (
+              <ViewDiscussionsModal
+                close={closeDiscussions}
+                itemType="Team"
+                itemKey={team.slug}
+                creationFields={creationFields}
+                CreationForm={CreationForm}
+                me={me}
+              />
+            )}
+          <DiscussionsPanel
+            itemType="Team"
+            itemKey={team.slug}
+            creationFields={creationFields}
+            CreationForm={CreationForm}
+            me={me}
+          />
+        </Fragment>
       </Fragment>
     )}
   </div>

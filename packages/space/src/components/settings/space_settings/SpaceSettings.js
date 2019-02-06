@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { CoreAPI } from 'react-kinetic-core';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 import {
   commonActions,

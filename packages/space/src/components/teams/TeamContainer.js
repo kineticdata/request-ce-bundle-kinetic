@@ -16,10 +16,6 @@ import {
   selectIsTeamMember,
 } from '../../redux/modules/team';
 import { actions as teamListActions } from '../../redux/modules/teamList';
-import {
-  actions as spaceFormsActions,
-  selectFormsForTeam,
-} from '../../redux/modules/spaceForms';
 
 import { Team } from './Team';
 
@@ -40,16 +36,8 @@ const mapStateToProps = state => {
   }, {});
 
   return {
-    loading:
-      state.space.team.loading ||
-      state.space.teamList.loading ||
-      state.space.spaceForms.loading,
+    loading: state.space.team.loading || state.space.teamList.loading,
     space: state.app.space,
-    catalogSlug: Utils.getAttributeValue(
-      state.app.space,
-      'Catalog Kapp Slug',
-      'catalog',
-    ),
     me,
     team,
     adminKappSlug: Utils.getAttributeValue(
@@ -67,7 +55,6 @@ const mapStateToProps = state => {
           item.name !== team.name &&
           item.name.replace(/::[^:]+$/, '') === team.name,
       ),
-    services: selectFormsForTeam(state),
     isSmallLayout: state.app.layout.get('size') === 'small',
   };
 };
@@ -76,7 +63,6 @@ const mapDispatchToProps = {
   openForm: modalFormActions.openForm,
   fetchTeam: actions.fetchTeam,
   fetchTeams: teamListActions.fetchTeams,
-  fetchForms: spaceFormsActions.fetchForms,
   resetTeam: actions.resetTeam,
 };
 
@@ -88,7 +74,7 @@ const openRequestToJoinForm = ({
 }) => config =>
   openForm({
     kappSlug: adminKappSlug,
-    formSlug: 'request-to-join-team',
+    formSlug: 'join-team-request',
     title: 'Request to Join',
     confirmationMessage: 'Your request has been submitted.',
     values: {
@@ -104,7 +90,7 @@ const openRequestToLeaveForm = ({
 }) => config =>
   openForm({
     kappSlug: adminKappSlug,
-    formSlug: 'request-to-leave-team',
+    formSlug: 'leave-team-request',
     title: 'Request to Leave',
     confirmationMessage: 'Your request has been submitted.',
     values: {
@@ -122,7 +108,6 @@ export const TeamContainer = compose(
     componentWillMount() {
       this.props.fetchTeam(this.props.match.params.slug);
       this.props.fetchTeams();
-      this.props.fetchForms(this.props.catalogSlug);
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.match.params.slug !== nextProps.match.params.slug) {

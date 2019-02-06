@@ -29,7 +29,7 @@ const openRequestNewTeam = ({
 }) => config =>
   openForm({
     kappSlug: adminKappSlug,
-    formSlug: 'request-a-new-team',
+    formSlug: 'new-team-request',
     title: 'Request New Team',
     confirmationMessage: 'Your request has been submitted.',
   });

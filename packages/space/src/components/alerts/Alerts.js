@@ -25,7 +25,14 @@ const WallyEmptyMessage = ({ canEdit }) => {
   );
 };
 
-const AlertsComponent = ({ alerts, loading, match, error, canEdit }) => {
+const AlertsComponent = ({
+  alerts,
+  spaceAdminAlerts,
+  loading,
+  match,
+  error,
+  canEdit,
+}) => {
   const selectedAlert = match.params.id;
   return (
     <div className="page-container page-container--space-alerts">
@@ -58,9 +65,13 @@ const AlertsComponent = ({ alerts, loading, match, error, canEdit }) => {
           )}
           <div className="page-content  page-content--space-alerts">
             {!error &&
-              alerts.size <= 0 && <WallyEmptyMessage canEdit={canEdit} />}
+              ((canEdit && spaceAdminAlerts.size <= 0) ||
+                (!canEdit && alerts.size <= 0)) && (
+                <WallyEmptyMessage canEdit={canEdit} />
+              )}
             {!error &&
-              alerts.size > 0 && (
+              ((canEdit && spaceAdminAlerts.size > 0) ||
+                (!canEdit && alerts.size > 0)) && (
                 <table className="table table--alerts">
                   <thead>
                     <tr>
@@ -74,13 +85,21 @@ const AlertsComponent = ({ alerts, loading, match, error, canEdit }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {alerts.map(alert => (
-                      <Alert
-                        key={alert.id}
-                        alert={alert}
-                        active={alert.id === selectedAlert}
-                      />
-                    ))}
+                    {canEdit
+                      ? spaceAdminAlerts.map(alert => (
+                          <Alert
+                            key={alert.id}
+                            alert={alert}
+                            active={alert.id === selectedAlert}
+                          />
+                        ))
+                      : alerts.map(alert => (
+                          <Alert
+                            key={alert.id}
+                            alert={alert}
+                            active={alert.id === selectedAlert}
+                          />
+                        ))}
                   </tbody>
                 </table>
               )}
@@ -93,6 +112,11 @@ const AlertsComponent = ({ alerts, loading, match, error, canEdit }) => {
 
 export const mapStateToProps = state => ({
   loading: state.app.alerts.loading,
+  spaceAdminAlerts: List(state.app.alerts.get('data'))
+    .sortBy(alert =>
+      moment(alert.values['Start Date Time'] || alert.createdAt).unix(),
+    )
+    .reverse(),
   alerts: List(state.app.alerts.get('data'))
     .filter(
       alert =>

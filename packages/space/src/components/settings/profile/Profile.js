@@ -146,14 +146,11 @@ export const EditProfileComponent = ({
                       onChange={handleFieldChange}
                       value={fieldValues.defaultKappDisplay}
                     >
-                      <option value="">
-                        <I18n
-                          render={translate => `--${translate('Home')}--`}
-                        />
-                      </option>
+                      <option value="">Home</option>
+
                       {kapps.map(k => (
                         <option key={k.slug} value={k.slug}>
-                          <I18n>{k.name}</I18n>
+                          {k.name}
                         </option>
                       ))}
                     </select>
@@ -426,7 +423,7 @@ const openChangeManagerForm = ({ spaceAttributes, openForm }) => config => {
   openForm({
     kappSlug: spaceAttributes['Admin Kapp Slug'] || 'admin',
     formSlug:
-      spaceAttributes['Change Manager Form Slug'] || 'manager-change-request',
+      spaceAttributes['Change Manager Form Slug'] || 'change-manager-request',
     title: 'Change Manager',
     confirmationMessage: 'Your request has been submitted.',
   });
