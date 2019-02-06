@@ -156,6 +156,7 @@ export const createDiscussion = ({
   isPrivate = false,
   owningUsers,
   owningTeams,
+  joinPolicy,
 }) =>
   axios
     .request({
@@ -168,6 +169,7 @@ export const createDiscussion = ({
         owningUsers,
         owningTeams,
         isPrivate,
+        joinPolicy,
       },
     })
     .then(response => response.data)
