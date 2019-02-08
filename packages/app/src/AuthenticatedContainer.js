@@ -129,6 +129,8 @@ const handleAuthenticated = ({
   }
 };
 
+const handleUnauthorized = ({ push }) => push('/login');
+
 const processOAuthToken = (token, state, push, setToken) => {
   if (window.opener && window.opener.__OAUTH_CALLBACK__) {
     // If it was opened in a popup, this is being executed in another window so we
@@ -224,17 +226,23 @@ const AuthenticatedComponent = props => {
       <Route
         path="/kapps/:kappSlug/forms/:formSlug"
         exact
-        render={() => <UnauthenticatedForm {...props} />}
+        render={routeProps => (
+          <UnauthenticatedForm {...props} {...routeProps} />
+        )}
       />
       <Route
         path="/kapps/:kappSlug/submissions/:id"
         exact
-        render={() => <UnauthenticatedForm {...props} />}
+        render={routeProps => (
+          <UnauthenticatedForm {...props} {...routeProps} />
+        )}
       />
       <Route
         path="/kapps/:kappSlug/forms/:formSlug/submissions/:id"
         exact
-        render={() => <UnauthenticatedForm {...props} />}
+        render={routeProps => (
+          <UnauthenticatedForm {...props} {...routeProps} />
+        )}
       />
       <Redirect to={defaultRedirect(props)} />
     </Switch>
@@ -260,7 +268,7 @@ export const AuthenticatedContainer = compose(
   withState('attempting', 'setAttempting', true),
   withState('authenticated', 'setAuthenticated', false),
   withState('popupBlocked', 'setPopupBlocked', false),
-  withHandlers({ handleAuthenticated }),
+  withHandlers({ handleAuthenticated, handleUnauthorized }),
   withHandlers({
     handleEmail,
     handlePassword,
