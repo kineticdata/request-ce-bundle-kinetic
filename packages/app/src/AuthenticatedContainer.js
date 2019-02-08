@@ -41,9 +41,13 @@ const LoginLogo = () => (
 );
 
 const LoginLoading = ({ setToken }) => (
-  <div className="wally-loader-wrapper">
-    <WallySpinner />
-    <RetrieveJwtIframe onSuccess={setToken} />
+  <div className="login-container">
+    <div className="login-wrapper">
+      <div className="wally-loader-wrapper">
+        <WallySpinner />
+        <RetrieveJwtIframe onSuccess={setToken} />
+      </div>
+    </div>
   </div>
 );
 
@@ -75,10 +79,6 @@ export const LoginScreen = props => (
             onPopupBlocked={props.setPopupBlocked}
           />
         </div>
-      ) : props.authenticated ? (
-        props.token ? null : (
-          <LoginLoading setToken={props.setToken} />
-        )
       ) : (
         <Fragment>
           {props.children}
@@ -181,6 +181,8 @@ const AuthenticatedComponent = props => {
 
   return authenticated && token && !isPublic ? (
     children
+  ) : authenticated && !token && !isPublic ? (
+    <LoginLoading {...props} />
   ) : (
     <Switch>
       <Route
