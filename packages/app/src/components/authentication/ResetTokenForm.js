@@ -138,9 +138,4 @@ export const ResetTokenForm = compose(
     handlePasswordConfirm,
     handlePasswordReset,
   }),
-  lifecycle({
-    componentWillMount() {
-      console.log(this.props);
-    },
-  }),
 )(ResetToken);
