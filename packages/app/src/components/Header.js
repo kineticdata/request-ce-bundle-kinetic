@@ -49,7 +49,7 @@ export const Header = ({
 }) => (
   <Navbar color="faded" light fixed="top">
     <Nav className="nav-header">
-      {hasSidebar &&
+      {/* {hasSidebar &&
         !isGuest && (
           <NavItem id="header-sidebar-toggle">
             <NavLink
@@ -61,14 +61,8 @@ export const Header = ({
               <i className="fa fa-fw fa-bars" />
             </NavLink>
           </NavItem>
-        )}
+        )} */}
       <NavItem>
-        <KappLink className="nav-link" to="/">
-          <span className={`fa fa-fw ${dropdownIcon(currentKapp)}`} />{' '}
-          {dropdownTitleName(currentKapp)}
-        </KappLink>
-      </NavItem>
-      <div className="nav-item-right">
         {!isGuest && (
           <Dropdown
             id="header-kapp-dropdown"
@@ -76,7 +70,7 @@ export const Header = ({
             toggle={kappDropdownToggle}
           >
             <DropdownToggle nav role="button">
-              <i className="fa fa-fw fa-th" />
+              <i className="fa fa-fw fa-th" /> {dropdownTitleName(currentKapp)}
             </DropdownToggle>
             <DropdownMenu>
               <Link
@@ -84,8 +78,8 @@ export const Header = ({
                 to="/"
                 onClick={kappDropdownToggle}
               >
-                <span className="fa fa-fw fa-home" />
-                <I18n>Home</I18n>
+                <span className="fa fa-fw fa-comments" />
+                <I18n>Discussions</I18n>
               </Link>
               <DropdownItem divider />
               {predefinedKapps.map(thisKapp => (
@@ -102,9 +96,14 @@ export const Header = ({
                   onClick={kappDropdownToggle}
                 />
               ))}
+              <DropdownItem divider />
+              <DropdownItem>Datastore</DropdownItem>
+              <DropdownItem>Robots</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         )}
+      </NavItem>
+      <div className="nav-item-right">
         {!isGuest && <AlertsContainer />}
         <ProfileContainer />
       </div>
