@@ -18,7 +18,6 @@ export const RetrieveJwtIframe = compose(
       frameRef: () => ref => (frameRef = ref),
       getFrameRef: () => () => frameRef,
       handleFrameLoad: ({ handleJwt }) => () => {
-        console.log('******** frame loaded');
         if (handleJwt) {
           handleJwt(frameRef);
         }
@@ -28,14 +27,12 @@ export const RetrieveJwtIframe = compose(
   lifecycle({
     componentWillMount() {
       window.__OAUTH_CALLBACK__ = token => {
-        console.log('******** OAUTH CALLBACK CALLED');
         if (typeof this.props.onSuccess === 'function') {
           this.props.onSuccess(token);
         }
       };
     },
     componentDidMount() {
-      console.log('******** frame parent mounted');
       this.props.getFrameRef().onload = this.props.handleFrameLoad;
     },
   }),
