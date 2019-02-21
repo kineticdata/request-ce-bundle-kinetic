@@ -32,29 +32,62 @@ export const AppComponent = props =>
             toggleSidebarOpen={props.toggleSidebarOpen}
           />
           <props.AppProvider
-            render={({ main, sidebar, header }) =>
-              !props.sidebarHidden && sidebar ? (
-                <Sidebar
-                  sidebar={sidebar}
-                  shadow={false}
-                  open={props.sidebarOpen && props.layoutSize === 'small'}
-                  docked={props.sidebarOpen && props.layoutSize !== 'small'}
-                  onSetOpen={props.setSidebarOpen}
-                  rootClassName="sidebar-layout-wrapper"
-                  sidebarClassName={`sidebar-container ${
-                    true ? 'drawer' : 'overlay'
-                  }`}
-                  contentClassName={`main-container ${
-                    props.sidebarOpen ? 'open' : 'closed'
+            render={
+              ({ main, sidebar, header }) => (
+                <div
+                  className={`app-container ${
+                    sidebar
+                      ? props.sidebarOpen
+                        ? 'open-sidebar'
+                        : 'closed-sidebar'
+                      : ''
                   }`}
                 >
-                  {main}
-                </Sidebar>
-              ) : (
-                <div className="main-container main-container--no-sidebar">
-                  {main}
+                  {sidebar && (
+                    <div className="sidebar-container">
+                      {sidebar}
+                      <span
+                        onClick={props.toggleSidebarOpen}
+                        className={`sidebar-toggle fa fa-fw fa-chevron-left`}
+                      />
+                    </div>
+                  )}
+                  <div
+                    className="main-container"
+                    onClick={
+                      sidebar &&
+                      props.sidebarOpen &&
+                      props.layoutSize === 'small'
+                        ? props.toggleSidebarOpen
+                        : undefined
+                    }
+                  >
+                    {main}
+                  </div>
                 </div>
               )
+              // !props.sidebarHidden && sidebar ? (
+              //   <Sidebar
+              //     sidebar={sidebar}
+              //     shadow={false}
+              //     open={props.sidebarOpen && props.layoutSize === 'small'}
+              //     docked={props.sidebarOpen && props.layoutSize !== 'small'}
+              //     onSetOpen={props.setSidebarOpen}
+              //     rootClassName="sidebar-layout-wrapper"
+              //     sidebarClassName={`sidebar-container ${
+              //       true ? 'drawer' : 'overlay'
+              //     }`}
+              //     contentClassName={`main-container ${
+              //       props.sidebarOpen ? 'open' : 'closed'
+              //     }`}
+              //   >
+              //     {main}
+              //   </Sidebar>
+              // ) : (
+              //   <div className="main-container main-container--no-sidebar">
+              //     {main}
+              //   </div>
+              // )
             }
           />
         </Fragment>

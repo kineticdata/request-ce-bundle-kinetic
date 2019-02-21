@@ -47,7 +47,7 @@ export const Header = ({
   kappDropdownOpen,
   kappDropdownToggle,
 }) => (
-  <Navbar color="faded" light fixed="top">
+  <Navbar color="faded" light>
     <Nav className="nav-header">
       {/* {hasSidebar &&
         !isGuest && (
