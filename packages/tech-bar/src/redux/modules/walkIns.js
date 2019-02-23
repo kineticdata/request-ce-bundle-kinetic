@@ -1,6 +1,6 @@
 import { Record, List } from 'immutable';
 import { Utils } from 'common';
-const { namespace, noPayload, withPayload } = Utils;
+const { namespace, withPayload } = Utils;
 
 export const WALK_IN_FORM_SLUG = 'walk-in';
 
@@ -45,6 +45,7 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.setIn(['today', 'loading'], true);
     case types.SET_TODAY_WALK_INS:
       return state
+        .setIn(['today', 'errors'], [])
         .setIn(
           ['today', 'data'],
           List(payload).sortBy(
