@@ -41,7 +41,7 @@ const PrevAndNextGroup = ({ prevAndNext }) => (
 );
 
 const sizeString = str => {
-  return str.length > 20 ? `${str.slice(0, 20).trim()}...` : str;
+  return str && str.length > 20 ? `${str.slice(0, 20).trim()}...` : str;
 };
 
 export const StatusContent = ({ queueItem, prevAndNext }) => (
