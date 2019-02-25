@@ -154,32 +154,32 @@ const SettingsComponent = ({
                     <label htmlFor="default-search-index">
                       <I18n>Default Search Index</I18n>
                     </label>
-                    <select
-                      id="default-search-index"
-                      name="default-search-index"
-                      onChange={e => {
-                        handleFormChange(
-                          'defaultSearchIndex',
-                          e.target.value
-                            ? {
-                                index: e.target.value,
-                                direction: 'ASC',
-                              }
-                            : null,
-                        );
-                      }}
-                      value={
-                        (updatedForm.defaultSearchIndex &&
-                          updatedForm.defaultSearchIndex.index) ||
-                        ''
-                      }
-                      className="form-control"
-                    >
-                      <option value="">
-                        <I18n>Don't perform default search</I18n>
-                      </option>
-                      <I18n
-                        render={translate => (
+                    <I18n
+                      render={translate => (
+                        <select
+                          id="default-search-index"
+                          name="default-search-index"
+                          onChange={e => {
+                            handleFormChange(
+                              'defaultSearchIndex',
+                              e.target.value
+                                ? {
+                                    index: e.target.value,
+                                    direction: 'ASC',
+                                  }
+                                : null,
+                            );
+                          }}
+                          value={
+                            (updatedForm.defaultSearchIndex &&
+                              updatedForm.defaultSearchIndex.index) ||
+                            ''
+                          }
+                          className="form-control"
+                        >
+                          <option value="">
+                            {translate("Don't perform default search")}
+                          </option>
                           <optgroup label={translate('Search by Index:')}>
                             {List(origForm.indexDefinitions)
                               .filter(d => d.status === 'Built')
@@ -189,43 +189,48 @@ const SettingsComponent = ({
                                 </option>
                               ))}
                           </optgroup>
-                        )}
-                      />
-                    </select>
+                        </select>
+                      )}
+                    />
                   </div>
                   {updatedForm.defaultSearchIndex && (
                     <div className="form-group">
                       <label htmlFor="default-search-direction">
                         <I18n>Default Search Sort Direction</I18n>
                       </label>
-                      <select
-                        id="default-search-direction"
-                        name="default-search-direction"
-                        onChange={e => {
-                          handleFormChange(
-                            'defaultSearchIndex',
-                            e.target.value
-                              ? {
-                                  index: updatedForm.defaultSearchIndex.index,
-                                  direction: e.target.value,
-                                }
-                              : null,
-                          );
-                        }}
-                        value={
-                          (updatedForm.defaultSearchIndex &&
-                            updatedForm.defaultSearchIndex.direction) ||
-                          'ASC'
-                        }
-                        className="form-control"
-                      >
-                        <option value="ASC">
-                          <I18n>Ascending</I18n>
-                        </option>
-                        <option value="DESC">
-                          <I18n>Descending</I18n>
-                        </option>
-                      </select>
+                      <I18n
+                        render={translate => (
+                          <select
+                            id="default-search-direction"
+                            name="default-search-direction"
+                            onChange={e => {
+                              handleFormChange(
+                                'defaultSearchIndex',
+                                e.target.value
+                                  ? {
+                                      index:
+                                        updatedForm.defaultSearchIndex.index,
+                                      direction: e.target.value,
+                                    }
+                                  : null,
+                              );
+                            }}
+                            value={
+                              (updatedForm.defaultSearchIndex &&
+                                updatedForm.defaultSearchIndex.direction) ||
+                              'ASC'
+                            }
+                            className="form-control"
+                          >
+                            <option value="ASC">
+                              {translate('Ascending')}
+                            </option>
+                            <option value="DESC">
+                              {translate('Descending')}
+                            </option>
+                          </select>
+                        )}
+                      />
                     </div>
                   )}
                   <table className="table table--settings table-draggable">
@@ -604,24 +609,24 @@ const QualificationModal = ({
             <label htmlFor="resultType">
               <I18n>Result Type</I18n>
             </label>
-            <select
-              id="resultType"
-              name="resultType"
-              onChange={e =>
-                setNewQualification(
-                  newQualification.set('resultType', e.target.value),
-                )
-              }
-              value={newQualification.resultType}
-              className="form-control"
-            >
-              <option value="Multiple">
-                <I18n>Multiple</I18n>
-              </option>
-              <option value="Single">
-                <I18n>Single</I18n>
-              </option>
-            </select>
+            <I18n
+              render={translate => (
+                <select
+                  id="resultType"
+                  name="resultType"
+                  onChange={e =>
+                    setNewQualification(
+                      newQualification.set('resultType', e.target.value),
+                    )
+                  }
+                  value={newQualification.resultType}
+                  className="form-control"
+                >
+                  <option value="Multiple">{translate('Multiple')}</option>
+                  <option value="Single">{translate('Single')}</option>
+                </select>
+              )}
+            />
           </div>
           <div className="form-group">
             <label>

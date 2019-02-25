@@ -66,50 +66,54 @@ export const TechBarMetricsComponent = ({
               <label htmlFor="scheduler-select">
                 <I18n>Tech Bar</I18n>
               </label>
-              <select
-                name="scheduler-select"
-                id="scheduler-select"
-                className="form-control"
-                value={schedulerId}
-                onChange={e => {
-                  setSchedulerId(e.target.value);
-                  setEventType('');
-                }}
-              >
-                <option value="">
-                  <I18n>All Tech Bars</I18n>
-                </option>
-                {techBars.map(techBar => (
-                  <option
-                    value={techBar.values['Id']}
-                    key={techBar.values['Id']}
+              <I18n
+                render={translate => (
+                  <select
+                    name="scheduler-select"
+                    id="scheduler-select"
+                    className="form-control"
+                    value={schedulerId}
+                    onChange={e => {
+                      setSchedulerId(e.target.value);
+                      setEventType('');
+                    }}
                   >
-                    <I18n>{techBar.values['Name']}</I18n>
-                  </option>
-                ))}
-              </select>
+                    <option value="">{translate('All Tech Bars')}</option>
+                    {techBars.map(techBar => (
+                      <option
+                        value={techBar.values['Id']}
+                        key={techBar.values['Id']}
+                      >
+                        {translate(techBar.values['Name'])}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              />
             </div>
             {schedulerId && (
               <div className="form-group col-md-6">
                 <label htmlFor="event-type-select">Event Type</label>
-                <select
-                  name="event-type-select"
-                  id="event-type-select"
-                  className="form-control"
-                  value={eventType}
-                  onChange={e => {
-                    setEventType(e.target.value);
-                  }}
-                >
-                  <option value="">
-                    <I18n>All Event Types</I18n>
-                  </option>
-                  {eventTypes.map(eventType => (
-                    <option value={eventType} key={eventType}>
-                      <I18n>{eventType}</I18n>
-                    </option>
-                  ))}
-                </select>
+                <I18n
+                  render={translate => (
+                    <select
+                      name="event-type-select"
+                      id="event-type-select"
+                      className="form-control"
+                      value={eventType}
+                      onChange={e => {
+                        setEventType(e.target.value);
+                      }}
+                    >
+                      <option value="">{translate('All Event Types')}</option>
+                      {eventTypes.map(eventType => (
+                        <option value={eventType} key={eventType}>
+                          {translate(eventType)}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                />
               </div>
             )}
           </div>
@@ -150,45 +154,49 @@ export const TechBarMetricsComponent = ({
                 <label htmlFor="date-range-select">
                   <I18n>Date Range</I18n>
                 </label>
-                <select
-                  name="date-range-select"
-                  id="date-range-select"
-                  className="form-control"
-                  value={selectedRange}
-                  onChange={e => {
-                    setSelectedRange(e.target.value);
-                    setSelectedDate(
-                      moment()
-                        .add(-1, 'day')
-                        .format(DATE_FORMAT),
-                    );
-                  }}
-                >
-                  {mode === 'summary' && (
-                    <option value="singleDay">
-                      <I18n>Single Day</I18n>
-                    </option>
+                <I18n
+                  render={translate => (
+                    <select
+                      name="date-range-select"
+                      id="date-range-select"
+                      className="form-control"
+                      value={selectedRange}
+                      onChange={e => {
+                        setSelectedRange(e.target.value);
+                        setSelectedDate(
+                          moment()
+                            .add(-1, 'day')
+                            .format(DATE_FORMAT),
+                        );
+                      }}
+                    >
+                      {mode === 'summary' && (
+                        <option value="singleDay">
+                          {translate('Single Day')}
+                        </option>
+                      )}
+                      <option value="last7Days">
+                        {translate('Last 7 Days')}
+                      </option>
+                      <option value="last30Days">
+                        {translate('Last 30 Days')}
+                      </option>
+                      <option value="monthToDate">
+                        {translate('Month to Date')}
+                      </option>
+                      {mode === 'trend' && (
+                        <option value="last12Months">
+                          {translate('Last 12 Months')}
+                        </option>
+                      )}
+                      {mode === 'trend' && (
+                        <option value="yearToDate">
+                          {translate('Year To Date')}
+                        </option>
+                      )}
+                    </select>
                   )}
-                  <option value="last7Days">
-                    <I18n>Last 7 Days</I18n>
-                  </option>
-                  <option value="last30Days">
-                    <I18n>Last 30 Days</I18n>
-                  </option>
-                  <option value="monthToDate">
-                    <I18n>Month to Date</I18n>
-                  </option>
-                  {mode === 'trend' && (
-                    <option value="last12Months">
-                      <I18n>Last 12 Months</I18n>
-                    </option>
-                  )}
-                  {mode === 'trend' && (
-                    <option value="yearToDate">
-                      <I18n>Year To Date</I18n>
-                    </option>
-                  )}
-                </select>
+                />
               </div>
               {selectedRange === 'singleDay' && (
                 <div className="form-group col-md-6">

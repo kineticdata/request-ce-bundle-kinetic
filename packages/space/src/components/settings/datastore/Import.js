@@ -451,21 +451,25 @@ export class ImportComponent extends Component {
                           </td>
                           <td>{obj.header}</td>
                           <td>
-                            <select
-                              onChange={this.handleSelect}
-                              name={obj.header}
-                              index={idx}
-                              value={obj.field}
-                            >
-                              <option value={''}>
-                                <I18n>Select Option</I18n>
-                              </option>
-                              {this.formFieldNames.map(fieldName => (
-                                <option key={fieldName} value={fieldName}>
-                                  <I18n>{fieldName}</I18n>
-                                </option>
-                              ))}
-                            </select>
+                            <I18n
+                              render={translate => (
+                                <select
+                                  onChange={this.handleSelect}
+                                  name={obj.header}
+                                  index={idx}
+                                  value={obj.field}
+                                >
+                                  <option value={''}>
+                                    {translate('Select Option')}
+                                  </option>
+                                  {this.formFieldNames.map(fieldName => (
+                                    <option key={fieldName} value={fieldName}>
+                                      {translate(fieldName)}
+                                    </option>
+                                  ))}
+                                </select>
+                              )}
+                            />
 
                             {this.state.missingFields.find(
                               fieldName => fieldName === obj.header,
