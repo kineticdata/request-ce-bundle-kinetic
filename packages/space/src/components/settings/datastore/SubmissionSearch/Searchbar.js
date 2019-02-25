@@ -119,23 +119,27 @@ const IndexSelector = ({
       </strong>
     </Col>
     <Col sm={simpleSearchActive ? 4 : 10}>
-      <Input
-        className="index-chooser-select"
-        onChange={e => setIndexHandler(e.target.value)}
-        value={searchParams.index ? searchParams.index.name : 'all-fields'}
-        type="select"
-        name="Search By"
-        id="index-chooser"
-      >
-        <option value="all-fields">
-          <I18n>All fields that start with</I18n>
-        </option>
-        {indexDefinitions.map(index => (
-          <option key={index.name} value={index.name}>
-            <I18n>{index.name}</I18n>
-          </option>
-        ))}
-      </Input>
+      <I18n
+        render={translate => (
+          <Input
+            className="index-chooser-select"
+            onChange={e => setIndexHandler(e.target.value)}
+            value={searchParams.index ? searchParams.index.name : 'all-fields'}
+            type="select"
+            name="Search By"
+            id="index-chooser"
+          >
+            <option value="all-fields">
+              {translate('All fields that start with')}
+            </option>
+            {indexDefinitions.map(index => (
+              <option key={index.name} value={index.name}>
+                {translate(index.name)}
+              </option>
+            ))}
+          </Input>
+        )}
+      />
     </Col>
     {simpleSearchActive && (
       <Col sm={6}>
@@ -175,24 +179,28 @@ const IndexPartSelector = ({
       </span>
     </Col>
     <Col sm={4}>
-      <Input
-        className="index-part-operation"
-        type="select"
-        name={`${part.name} Operation`}
-        id={`${part.name}-operation`}
-        value={part.operation}
-        onChange={e => handleIndexPartOperation(part, e.target.value)}
-      >
-        {OPERATIONS.filter(
-          operation =>
-            !previousPartOperations.some(opp => opp !== EQUALS_OPERATION) ||
-            operation === 'All',
-        ).map(operation => (
-          <option key={operation} value={operation}>
-            <I18n>{operation}</I18n>
-          </option>
-        ))}
-      </Input>
+      <I18n
+        render={translate => (
+          <Input
+            className="index-part-operation"
+            type="select"
+            name={`${part.name} Operation`}
+            id={`${part.name}-operation`}
+            value={part.operation}
+            onChange={e => handleIndexPartOperation(part, e.target.value)}
+          >
+            {OPERATIONS.filter(
+              operation =>
+                !previousPartOperations.some(opp => opp !== EQUALS_OPERATION) ||
+                operation === 'All',
+            ).map(operation => (
+              <option key={operation} value={operation}>
+                {translate(operation)}
+              </option>
+            ))}
+          </Input>
+        )}
+      />
     </Col>
     <Col sm={6}>
       <span className="index-part-values">
@@ -229,21 +237,21 @@ const DirectionSelector = ({ sortDirection, setSortDirection }) => (
       </strong>
     </Col>
     <Col sm={10}>
-      <Input
-        className="sort-direction-select"
-        onChange={e => setSortDirection(e.target.value)}
-        value={sortDirection}
-        type="select"
-        name="Sort Direction"
-        id="sort-direction-chooser"
-      >
-        <option value="ASC">
-          <I18n>Ascending</I18n>
-        </option>
-        <option value="DESC">
-          <I18n>Descending</I18n>
-        </option>
-      </Input>
+      <I18n
+        render={translate => (
+          <Input
+            className="sort-direction-select"
+            onChange={e => setSortDirection(e.target.value)}
+            value={sortDirection}
+            type="select"
+            name="Sort Direction"
+            id="sort-direction-chooser"
+          >
+            <option value="ASC">{translate('Ascending')}</option>
+            <option value="DESC">{translate('Descending')}</option>
+          </Input>
+        )}
+      />
     </Col>
   </div>
 );

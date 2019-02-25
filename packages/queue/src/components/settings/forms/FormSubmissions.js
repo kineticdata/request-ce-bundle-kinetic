@@ -346,65 +346,74 @@ export const FormSubmissionsContainer = ({
                               <I18n>Sort By</I18n>
                             </span>
                           </div>
-                          <select
-                            className="form-control"
-                            value={
-                              (clientSortInfo &&
-                                `${clientSortInfo.name}::${
-                                  clientSortInfo.type
-                                }`) ||
-                              ''
-                            }
-                            onChange={e => {
-                              const sortInfo = e.target.value.split('::');
-                              sortTable(
-                                sortInfo.length === 2
-                                  ? visibleColumns.find(
-                                      c =>
-                                        c.name === sortInfo[0] &&
-                                        c.type === sortInfo[1],
-                                    )
-                                  : null,
-                              );
-                            }}
-                          >
-                            {!clientSortInfo && <option />}
-                            {visibleColumns.map(c => {
-                              if (c.name !== 'Discussion Id') {
-                                return (
-                                  <option
-                                    key={`${c.name}::${c.type}`}
-                                    value={`${c.name}::${c.type}`}
-                                  >
-                                    <I18n>{c.label}</I18n>
-                                  </option>
-                                );
-                              } else {
-                                return null;
-                              }
-                            })}
-                          </select>
+                          <I18n
+                            render={translate => (
+                              <select
+                                className="form-control"
+                                value={
+                                  (clientSortInfo &&
+                                    `${clientSortInfo.name}::${
+                                      clientSortInfo.type
+                                    }`) ||
+                                  ''
+                                }
+                                onChange={e => {
+                                  const sortInfo = e.target.value.split('::');
+                                  sortTable(
+                                    sortInfo.length === 2
+                                      ? visibleColumns.find(
+                                          c =>
+                                            c.name === sortInfo[0] &&
+                                            c.type === sortInfo[1],
+                                        )
+                                      : null,
+                                  );
+                                }}
+                              >
+                                {!clientSortInfo && <option />}
+                                {visibleColumns.map(c => {
+                                  if (c.name !== 'Discussion Id') {
+                                    return (
+                                      <option
+                                        key={`${c.name}::${c.type}`}
+                                        value={`${c.name}::${c.type}`}
+                                      >
+                                        {translate(c.label)}
+                                      </option>
+                                    );
+                                  } else {
+                                    return null;
+                                  }
+                                })}
+                              </select>
+                            )}
+                          />
                           {clientSortInfo && (
-                            <select
-                              className="form-control"
-                              value={
-                                (clientSortInfo && clientSortInfo.direction) ||
-                                ''
-                              }
-                              onChange={e => {
-                                sortTable({
-                                  ...clientSortInfo,
-                                  direction: e.target.value,
-                                });
-                              }}
-                            >
-                              <option value="ASC">
-                                <I18n>Asc</I18n>
-                              </option>
-                              <option value="DESC">
-                                <I18n>Desc</I18n>
-                              </option>
-                            </select>
+                            <I18n
+                              render={translate => (
+                                <select
+                                  className="form-control"
+                                  value={
+                                    (clientSortInfo &&
+                                      clientSortInfo.direction) ||
+                                    ''
+                                  }
+                                  onChange={e => {
+                                    sortTable({
+                                      ...clientSortInfo,
+                                      direction: e.target.value,
+                                    });
+                                  }}
+                                >
+                                  <option value="ASC">
+                                    {translate('Asc')}
+                                  </option>
+                                  <option value="DESC">
+                                    {translate('Desc')}
+                                  </option>
+                                </select>
+                              )}
+                            />
                           )}
                         </div>
                       </th>
@@ -521,34 +530,41 @@ export const FormSubmissionsContainer = ({
                             </div>
                           ))}
                         <div className="input-group">
-                          <select
-                            name="properties"
-                            value={property.name}
-                            className="form-control"
-                            onChange={event => {
-                              setProperty({
-                                name: event.target.value,
-                                label:
-                                  event.target[event.target.selectedIndex].text,
-                              });
-                            }}
-                          >
-                            <option />
-                            <option
-                              value="handle"
-                              disabled={filter.properties.handle !== undefined}
-                            >
-                              <I18n>Handle</I18n>
-                            </option>
-                            <option
-                              value="submittedBy"
-                              disabled={
-                                filter.properties.submittedBy !== undefined
-                              }
-                            >
-                              <I18n>Submitted By</I18n>
-                            </option>
-                          </select>
+                          <I18n
+                            render={translate => (
+                              <select
+                                name="properties"
+                                value={property.name}
+                                className="form-control"
+                                onChange={event => {
+                                  setProperty({
+                                    name: event.target.value,
+                                    label:
+                                      event.target[event.target.selectedIndex]
+                                        .text,
+                                  });
+                                }}
+                              >
+                                <option />
+                                <option
+                                  value="handle"
+                                  disabled={
+                                    filter.properties.handle !== undefined
+                                  }
+                                >
+                                  {translate('Handle')}
+                                </option>
+                                <option
+                                  value="submittedBy"
+                                  disabled={
+                                    filter.properties.submittedBy !== undefined
+                                  }
+                                >
+                                  {translate('Submitted By')}
+                                </option>
+                              </select>
+                            )}
+                          />
                           <div className="input-group-append">
                             <button
                               className="btn btn-primary"
