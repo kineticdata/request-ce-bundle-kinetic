@@ -186,58 +186,66 @@ const SubmissionListComponent = ({
                             <I18n>Sort By</I18n>
                           </span>
                         </div>
-                        <select
-                          className="form-control"
-                          value={
-                            (clientSortInfo &&
-                              `${clientSortInfo.name}::${
-                                clientSortInfo.type
-                              }`) ||
-                            ''
-                          }
-                          onChange={e => {
-                            const sortInfo = e.target.value.split('::');
-                            sortTable(
-                              sortInfo.length === 2
-                                ? visibleColumns.find(
-                                    c =>
-                                      c.name === sortInfo[0] &&
-                                      c.type === sortInfo[1],
-                                  )
-                                : null,
-                            );
-                          }}
-                        >
-                          {!clientSortInfo && <option />}
-                          {visibleColumns.map(c => (
-                            <option
-                              key={`${c.name}::${c.type}`}
-                              value={`${c.name}::${c.type}`}
+                        <I18n
+                          render={translate => (
+                            <select
+                              className="form-control"
+                              value={
+                                (clientSortInfo &&
+                                  `${clientSortInfo.name}::${
+                                    clientSortInfo.type
+                                  }`) ||
+                                ''
+                              }
+                              onChange={e => {
+                                const sortInfo = e.target.value.split('::');
+                                sortTable(
+                                  sortInfo.length === 2
+                                    ? visibleColumns.find(
+                                        c =>
+                                          c.name === sortInfo[0] &&
+                                          c.type === sortInfo[1],
+                                      )
+                                    : null,
+                                );
+                              }}
                             >
-                              <I18n>{c.label}</I18n>
-                            </option>
-                          ))}
-                        </select>
+                              {!clientSortInfo && <option />}
+                              {visibleColumns.map(c => (
+                                <option
+                                  key={`${c.name}::${c.type}`}
+                                  value={`${c.name}::${c.type}`}
+                                >
+                                  {translate(c.label)}
+                                </option>
+                              ))}
+                            </select>
+                          )}
+                        />
                         {clientSortInfo && (
-                          <select
-                            className="form-control"
-                            value={
-                              (clientSortInfo && clientSortInfo.direction) || ''
-                            }
-                            onChange={e => {
-                              sortTable({
-                                ...clientSortInfo,
-                                direction: e.target.value,
-                              });
-                            }}
-                          >
-                            <option value="ASC">
-                              <I18n>Asc</I18n>
-                            </option>
-                            <option value="DESC">
-                              <I18n>Desc</I18n>
-                            </option>
-                          </select>
+                          <I18n
+                            render={translate => (
+                              <select
+                                className="form-control"
+                                value={
+                                  (clientSortInfo &&
+                                    clientSortInfo.direction) ||
+                                  ''
+                                }
+                                onChange={e => {
+                                  sortTable({
+                                    ...clientSortInfo,
+                                    direction: e.target.value,
+                                  });
+                                }}
+                              >
+                                <option value="ASC">{translate('Asc')}</option>
+                                <option value="DESC">
+                                  {translate('Desc')}
+                                </option>
+                              </select>
+                            )}
+                          />
                         )}
                       </div>
                     </th>

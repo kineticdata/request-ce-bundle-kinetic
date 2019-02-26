@@ -138,22 +138,25 @@ export const EditProfileComponent = ({
                     <label htmlFor="phoneNumber">
                       <I18n>Default Kapp Display</I18n>
                     </label>
-                    <select
-                      className="form-control"
-                      type="kapp"
-                      id="defaultKappDisplay"
-                      name="defaultKappDisplay"
-                      onChange={handleFieldChange}
-                      value={fieldValues.defaultKappDisplay}
-                    >
-                      <option value="">Home</option>
-
-                      {kapps.map(k => (
-                        <option key={k.slug} value={k.slug}>
-                          {k.name}
-                        </option>
-                      ))}
-                    </select>
+                    <I18n
+                      render={translate => (
+                        <select
+                          className="form-control"
+                          type="kapp"
+                          id="defaultKappDisplay"
+                          name="defaultKappDisplay"
+                          onChange={handleFieldChange}
+                          value={fieldValues.defaultKappDisplay}
+                        >
+                          <option value="">{translate('Home')}</option>
+                          {kapps.map(k => (
+                            <option key={k.slug} value={k.slug}>
+                              {translate(k.name)}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    />
                   </div>
                 )}
               </div>

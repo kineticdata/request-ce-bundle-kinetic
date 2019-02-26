@@ -815,9 +815,9 @@ export const FormContainer = ({
 
 export const setInitialInputs = ({ setInputs, form }) => () => {
   const config = buildFormConfigurationObject(form);
-  const customWorkflow = form.attributesMap['Custom Submission Workflow'];
+  const customWorkflow = form.attributesMap['Custom Submission Workflow'] || [];
   setInputs({
-    description: form.description,
+    description: form.description || '',
     type: form.type,
     status: form.status,
     icon: form.attributesMap.Icon[0] ? form.attributesMap.Icon[0] : '',

@@ -103,11 +103,15 @@ export const CreateFormComponent = ({
                 >
                   <option />
                   {templateForms.map(form => (
-                    <option key={form.slug} value={form.slug}>
-                      <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
-                        {form.name}
-                      </I18n>
-                    </option>
+                    <I18n
+                      key={form.slug}
+                      context={`kapps.${kappSlug}.forms.${form.slug}`}
+                      render={translate => (
+                        <option value={form.slug}>
+                          {translate(form.name)}
+                        </option>
+                      )}
+                    />
                   ))}
                 </select>
               )}
