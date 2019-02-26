@@ -9,7 +9,7 @@ export const FORM_INCLUDES = 'details,fields,attributesMap,categorizations';
 export const FORM_FULL_INCLUDES =
   'details,fields,bridgedResources,customHeadContent,pages,securityPolicies,attributesMap,categorizations';
 export const SUBMISSION_INCLUDES =
-  'details,values,form,form.fields,activities,activities.details';
+  'details,values,form,form.kapp,form.fields,activities,activities.details';
 
 // Used to define form configurations
 export const FormConfig = Record({

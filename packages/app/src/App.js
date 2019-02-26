@@ -17,6 +17,7 @@ import { actions as layoutActions } from './redux/modules/layout';
 import { App as ServicesApp } from 'services/src/App';
 import { App as QueueApp } from 'queue/src/App';
 import { App as SpaceApp } from 'space/src/App';
+import { App as TechBarApp } from 'tech-bar/src/App';
 
 export const AppComponent = props =>
   !props.loading && (
@@ -24,31 +25,48 @@ export const AppComponent = props =>
       <ToastsContainer />
       <LoginModal />
       <ModalFormContainer />
-      <HeaderContainer hasSidebar toggleSidebarOpen={props.toggleSidebarOpen} />
-      <props.AppProvider
-        render={({ main, sidebar }) =>
-          sidebar ? (
-            <Sidebar
-              sidebar={sidebar}
-              shadow={false}
-              open={props.sidebarOpen && props.layoutSize === 'small'}
-              docked={props.sidebarOpen && props.layoutSize !== 'small'}
-              onSetOpen={props.setSidebarOpen}
-              rootClassName="sidebar-layout-wrapper"
-              sidebarClassName={`sidebar-container ${
-                true ? 'drawer' : 'overlay'
-              }`}
-              contentClassName={`main-container ${
-                props.sidebarOpen ? 'open' : 'closed'
-              }`}
-            >
+      {!props.headerHidden ? (
+        <Fragment>
+          <HeaderContainer
+            hasSidebar={!props.sidebarHidden}
+            toggleSidebarOpen={props.toggleSidebarOpen}
+          />
+          <props.AppProvider
+            render={({ main, sidebar, header }) =>
+              !props.sidebarHidden && sidebar ? (
+                <Sidebar
+                  sidebar={sidebar}
+                  shadow={false}
+                  open={props.sidebarOpen && props.layoutSize === 'small'}
+                  docked={props.sidebarOpen && props.layoutSize !== 'small'}
+                  onSetOpen={props.setSidebarOpen}
+                  rootClassName="sidebar-layout-wrapper"
+                  sidebarClassName={`sidebar-container ${
+                    true ? 'drawer' : 'overlay'
+                  }`}
+                  contentClassName={`main-container ${
+                    props.sidebarOpen ? 'open' : 'closed'
+                  }`}
+                >
+                  {main}
+                </Sidebar>
+              ) : (
+                <div className="main-container main-container--no-sidebar">
+                  {main}
+                </div>
+              )
+            }
+          />
+        </Fragment>
+      ) : (
+        <props.AppProvider
+          render={({ main }) => (
+            <div className="main-container main-container--no-header">
               {main}
-            </Sidebar>
-          ) : (
-            main
-          )
-        }
-      />
+            </div>
+          )}
+        />
+      )}
     </Fragment>
   );
 
@@ -60,6 +78,7 @@ export const mapStateToProps = state => ({
   layoutSize: state.app.layout.size,
   kappSlug: state.app.config.kappSlug,
   pathname: state.router.location.pathname,
+  locale: state.app.config.locale,
 });
 export const mapDispatchToProps = {
   loadApp: loadingActions.loadApp,
@@ -77,6 +96,8 @@ const getAppProvider = kapp => {
       return ServicesApp;
     case 'queue':
       return QueueApp;
+    case 'tech-bar':
+      return TechBarApp;
     default:
       return SpaceApp;
   }
@@ -97,10 +118,18 @@ export const App = compose(
     const sidebarOpen = shouldSuppressSidebar
       ? props.suppressedSidebarOpen
       : props.sidebarOpen;
+    const headerHidden =
+      AppProvider.shouldHideHeader &&
+      AppProvider.shouldHideHeader(props.pathname, props.kappSlug);
+    const sidebarHidden =
+      AppProvider.shouldHideSidebar &&
+      AppProvider.shouldHideSidebar(props.pathname, props.kappSlug);
     return {
       AppProvider,
       shouldSuppressSidebar,
       sidebarOpen,
+      headerHidden,
+      sidebarHidden,
     };
   }),
   withHandlers({

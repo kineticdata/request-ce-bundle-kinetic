@@ -4,6 +4,7 @@ import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { OrderedMap } from 'immutable';
 import { actions } from '../../redux/modules/filterMenu';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const SORT_OPTIONS = OrderedMap([
   ['createdAt', { label: 'Created At', id: 'sorted-by-created-at' }],
@@ -14,7 +15,9 @@ export const SORT_OPTIONS = OrderedMap([
 
 export const SortedBySection = ({ filter, setSortedByHandler }) => (
   <ModalBody className="filter-section">
-    <h5>Sorted By</h5>
+    <h5>
+      <I18n>Sorted By</I18n>
+    </h5>
     {SORT_OPTIONS.map(({ label, id }, value) => (
       <label key={id} htmlFor={id}>
         <input
@@ -25,7 +28,7 @@ export const SortedBySection = ({ filter, setSortedByHandler }) => (
           checked={value === filter.sortBy}
           onChange={setSortedByHandler}
         />
-        {label}
+        <I18n>{label}</I18n>
       </label>
     )).toList()}
   </ModalBody>

@@ -9,6 +9,7 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import { actions } from '../../../redux/modules/settingsNotifications';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const wrapVar = type => property => `\${${type}('${property}')}`;
 const MINIMUM_CE_VERSION_FOR_DATASTORE = '2.1.0';
@@ -47,7 +48,9 @@ const SubmissionMenu = ({ form, handleClick }) => (
       </DropdownItem>
     ))}
     <div className="dropdown-divider" />
-    <h6 className="dropdown-header">Submission Values</h6>
+    <h6 className="dropdown-header">
+      <I18n>Submission Values</I18n>
+    </h6>
     {form ? (
       form.fields
         .map(field => field.name)
@@ -60,8 +63,10 @@ const SubmissionMenu = ({ form, handleClick }) => (
     ) : (
       <Fragment>
         <small className="dropdown-header">
-          Select a form to see available fields or select the placeholder below
-          and manually enter the field name
+          <I18n>
+            Select a form to see available fields or select the placeholder
+            below and manually enter the field name
+          </I18n>
         </small>
         <DropdownItem
           data-value={wrapVar('values')('###Field Name Here###')}
@@ -82,7 +87,9 @@ const FormMenu = ({ form, handleClick }) => (
       </DropdownItem>
     ))}
     <div className="dropdown-divider" />
-    <h6 className="dropdown-header">Form Attributes</h6>
+    <h6 className="dropdown-header">
+      <I18n>Form Attributes</I18n>
+    </h6>
     {form ? (
       Object.keys(form.attributes)
         .map(wrapVar('formAttributes'))
@@ -94,8 +101,10 @@ const FormMenu = ({ form, handleClick }) => (
     ) : (
       <Fragment>
         <small className="dropdown-header">
-          Select a form to see available attributes or select the placeholder
-          below and manually enter the attribute name
+          <I18n>
+            Select a form to see available attributes or select the placeholder
+            below and manually enter the attribute name
+          </I18n>
         </small>
         <DropdownItem
           data-value={wrapVar('formAttributes')(
@@ -118,7 +127,9 @@ const KappMenu = ({ kapp, handleClick }) => (
       </DropdownItem>
     ))}
     <div className="dropdown-divider" />
-    <h6 className="dropdown-header">Kapp Attributes</h6>
+    <h6 className="dropdown-header">
+      <I18n>Kapp Attributes</I18n>
+    </h6>
     {kapp ? (
       kapp.attributes
         .map(attribute => attribute.name)
@@ -131,8 +142,10 @@ const KappMenu = ({ kapp, handleClick }) => (
     ) : (
       <Fragment>
         <small className="dropdown-header">
-          Select a kapp to see available attributes or select the placeholder
-          below and manually enter the attribute name
+          <I18n>
+            Select a kapp to see available attributes or select the placeholder
+            below and manually enter the attribute name
+          </I18n>
         </small>
         <DropdownItem
           data-value={wrapVar('kappAttributes')(
@@ -155,7 +168,9 @@ const SpaceMenu = ({ space, handleClick }) => (
       </DropdownItem>
     ))}
     <div className="dropdown-divider" />
-    <h6 className="dropdown-header">Space Attributes</h6>
+    <h6 className="dropdown-header">
+      <I18n>Space Attributes</I18n>
+    </h6>
     {space.attributes
       .map(attribute => attribute.name)
       .map(wrapVar('spaceAttributes'))
@@ -170,8 +185,10 @@ const SpaceMenu = ({ space, handleClick }) => (
 const OtherVariablesMenu = ({ handleClick }) => (
   <ul className="dropdown-menu">
     <small className="dropdown-header">
-      Provided at run-time in the Task engine. Select the placeholder below and
-      manually enter the variable name
+      <I18n>
+        Provided at run-time in the Task engine. Select the placeholder below
+        and manually enter the variable name
+      </I18n>
     </small>
     <DropdownItem
       data-value={wrapVar('vars')('##Replace with variable name##')}
@@ -187,7 +204,7 @@ const DateFormatMenu = ({ dateFormats, selection, handleClick }) => (
     {selection && selection.startsWith('${') && selection.endsWith('}') ? (
       <Fragment>
         <small className="dropdown-header">
-          Formatting selection: {selection}
+          <I18n>Formatting selection:</I18n> {selection}
         </small>
         {dateFormats.map(name => (
           <DropdownItem
@@ -203,8 +220,10 @@ const DateFormatMenu = ({ dateFormats, selection, handleClick }) => (
       </Fragment>
     ) : (
       <small className="dropdown-header">
-        Highlight a dynamic replacement value in one of the fields below that
-        you would like to apply a date format to.
+        <I18n>
+          Highlight a dynamic replacement value in one of the fields below that
+          you would like to apply a date format to.
+        </I18n>
       </small>
     )}
   </ul>
@@ -244,38 +263,52 @@ export const NotificationMenuComponent = ({
     <div className="form-row">
       {hasDatastore && (
         <div className="form-group col-2">
-          <label htmlFor="notification-menu-datastore">Datastore?</label>
-          <select
-            id="notification-menu-datastore"
-            className="form-control form-control-sm"
-            value={isDatastore}
-            onChange={toggleIsDatastore}
-          >
-            <option value={false}>No</option>
-            <option value={true}>Yes</option>
-          </select>
+          <label htmlFor="notification-menu-datastore">
+            <I18n>Datastore?</I18n>
+          </label>
+          <I18n
+            render={translate => (
+              <select
+                id="notification-menu-datastore"
+                className="form-control form-control-sm"
+                value={isDatastore}
+                onChange={toggleIsDatastore}
+              >
+                <option value={false}>{translate('No')}</option>
+                <option value={true}>{translate('Yes')}</option>
+              </select>
+            )}
+          />
         </div>
       )}
       {!isDatastore && (
         <div className="form-group col-md-2">
-          <label htmlFor="notification-menu-kapp">Kapp</label>
-          <select
-            id="notification-menu-kapp"
-            className="form-control form-control-sm"
-            value={selectedKapp ? selectedKapp.slug : ''}
-            onChange={handleKappSelect}
-          >
-            <option />
-            {kapps.map(kapp => (
-              <option key={kapp.slug} value={kapp.slug}>
-                {kapp.name}
-              </option>
-            ))}
-          </select>
+          <label htmlFor="notification-menu-kapp">
+            <I18n>Kapp</I18n>
+          </label>
+          <I18n
+            render={translate => (
+              <select
+                id="notification-menu-kapp"
+                className="form-control form-control-sm"
+                value={selectedKapp ? selectedKapp.slug : ''}
+                onChange={handleKappSelect}
+              >
+                <option />
+                {kapps.map(kapp => (
+                  <option key={kapp.slug} value={kapp.slug}>
+                    {translate(kapp.name)}
+                  </option>
+                ))}
+              </select>
+            )}
+          />
         </div>
       )}
       <div className="form-group col">
-        <label htmlFor="notification-menu-form">Form</label>
+        <label htmlFor="notification-menu-form">
+          <I18n>Form</I18n>
+        </label>
         <select
           id="notification-menu-form"
           className="form-control form-control-sm"
@@ -286,55 +319,65 @@ export const NotificationMenuComponent = ({
             <Fragment>
               <option />
               {forms.map(form => (
-                <option key={form.slug} value={form.slug}>
-                  {form.name}
-                </option>
+                <I18n
+                  key={form.slug}
+                  context={`kapps.${selectedKapp.slug}.forms.${form.slug}`}
+                  render={translate => (
+                    <option value={form.slug}>{translate(form.name)}</option>
+                  )}
+                />
               ))}
             </Fragment>
           ) : (
-            <option value="" disabled>
-              Select a Kapp first or Set Is Datastore to Yes
-            </option>
+            <I18n
+              render={translate => (
+                <option value="" disabled>
+                  {translate('Select a Kapp first or Set Is Datastore to Yes')}
+                </option>
+              )}
+            />
           )}
         </select>
       </div>
     </div>
     <div className="form-row">
       <div className="form-group col-md-5">
-        <label htmlFor="">Dynamic Replacement Value</label>
+        <label htmlFor="">
+          <I18n>Dynamic Replacement Value</I18n>
+        </label>
         <UncontrolledButtonDropdown>
           <DropdownToggle caret>
-            Insert Dynamic Replacement Value
+            <I18n>Insert Dynamic Replacement Value</I18n>
           </DropdownToggle>
           <DropdownMenu className="dropdown-multi">
             <li className="dropdown-item dropdown-submenu">
-              Snippets
+              <I18n>Snippets</I18n>
               <SnippetsMenu snippets={snippets} handleClick={handleClick} />
             </li>
             <li className="dropdown-item dropdown-submenu">
-              Submission
+              <I18n>Submission</I18n>
               <SubmissionMenu form={selectedForm} handleClick={handleClick} />
             </li>
             <li className="dropdown-item dropdown-submenu">
-              Form
+              <I18n>Form</I18n>
               <FormMenu form={selectedForm} handleClick={handleClick} />
             </li>
             {!isDatastore && (
               <li className="dropdown-item dropdown-submenu">
-                Kapp
+                <I18n>Kapp</I18n>
                 <KappMenu kapp={selectedKapp} handleClick={handleClick} />
               </li>
             )}
             <li className="dropdown-item dropdown-submenu">
-              Space
+              <I18n>Space</I18n>
               <SpaceMenu space={space} handleClick={handleClick} />
             </li>
             <li className="dropdown-item dropdown-submenu">
-              Other variables
+              <I18n>Other variables</I18n>
               <OtherVariablesMenu handleClick={handleClick} />
             </li>
             <li className="dropdown-item dropdown-submenu">
-              Date Formats
+              <I18n>Date Formats</I18n>
               <DateFormatMenu
                 handleClick={handleClick}
                 selection={selection}

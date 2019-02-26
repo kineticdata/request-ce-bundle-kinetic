@@ -4,10 +4,11 @@ import { compose, withHandlers } from 'recompose';
 import { modalFormActions } from 'common';
 import { selectAdminKapp } from 'app/src/redux/selectors';
 import { getFeedbackFormConfig } from '../../utils';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const FeedbackButton = props => (
   <button type="button" onClick={props.handleClick} className="btn btn-success">
-    Provide Feedback
+    <I18n>Provide Feedback</I18n>
   </button>
 );
 

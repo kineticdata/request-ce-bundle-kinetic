@@ -9,6 +9,7 @@ import { IndexPart } from '../../../../records';
 import { actions } from '../../../../redux/modules/settingsDatastore';
 
 import { AutoFocusInput } from './AutoFocusInput';
+import { I18n } from '../../../../../../app/src/I18nProvider';
 
 const OPERATIONS = [
   'Equal To',
@@ -113,36 +114,48 @@ const IndexSelector = ({
 }) => (
   <div className="index-selector">
     <Col sm={2}>
-      <strong>Search By:</strong>
+      <strong>
+        <I18n>Search By:</I18n>
+      </strong>
     </Col>
     <Col sm={simpleSearchActive ? 4 : 10}>
-      <Input
-        className="index-chooser-select"
-        onChange={e => setIndexHandler(e.target.value)}
-        value={searchParams.index ? searchParams.index.name : 'all-fields'}
-        type="select"
-        name="Search By"
-        id="index-chooser"
-      >
-        <option value="all-fields">All fields that start with</option>
-        {indexDefinitions.map(index => (
-          <option key={index.name} value={index.name}>
-            {index.name}
-          </option>
-        ))}
-      </Input>
+      <I18n
+        render={translate => (
+          <Input
+            className="index-chooser-select"
+            onChange={e => setIndexHandler(e.target.value)}
+            value={searchParams.index ? searchParams.index.name : 'all-fields'}
+            type="select"
+            name="Search By"
+            id="index-chooser"
+          >
+            <option value="all-fields">
+              {translate('All fields that start with')}
+            </option>
+            {indexDefinitions.map(index => (
+              <option key={index.name} value={index.name}>
+                {translate(index.name)}
+              </option>
+            ))}
+          </Input>
+        )}
+      />
     </Col>
     {simpleSearchActive && (
       <Col sm={6}>
-        <AutoFocusInput
-          aria-label="Search"
-          onKeyPress={handleInputKeypress}
-          id="simple-search-term2"
-          name="simple-search-term"
-          onChange={e => setSimpleSearchParam(e.target.value)}
-          value={simpleSearchParam}
-          placeholder={placeholderText}
-          disabled={!simpleSearchActive}
+        <I18n
+          render={translate => (
+            <AutoFocusInput
+              aria-label="Search"
+              onKeyPress={handleInputKeypress}
+              id="simple-search-term2"
+              name="simple-search-term"
+              onChange={e => setSimpleSearchParam(e.target.value)}
+              value={simpleSearchParam}
+              placeholder={translate(placeholderText)}
+              disabled={!simpleSearchActive}
+            />
+          )}
         />
       </Col>
     )}
@@ -161,27 +174,33 @@ const IndexPartSelector = ({
 }) => (
   <div className="index-part">
     <Col sm={2}>
-      <span className="index-part-label">{part.name}</span>
+      <span className="index-part-label">
+        <I18n>{part.name}</I18n>
+      </span>
     </Col>
     <Col sm={4}>
-      <Input
-        className="index-part-operation"
-        type="select"
-        name={`${part.name} Operation`}
-        id={`${part.name}-operation`}
-        value={part.operation}
-        onChange={e => handleIndexPartOperation(part, e.target.value)}
-      >
-        {OPERATIONS.filter(
-          operation =>
-            !previousPartOperations.some(opp => opp !== EQUALS_OPERATION) ||
-            operation === 'All',
-        ).map(operation => (
-          <option key={operation} value={operation}>
-            {operation}
-          </option>
-        ))}
-      </Input>
+      <I18n
+        render={translate => (
+          <Input
+            className="index-part-operation"
+            type="select"
+            name={`${part.name} Operation`}
+            id={`${part.name}-operation`}
+            value={part.operation}
+            onChange={e => handleIndexPartOperation(part, e.target.value)}
+          >
+            {OPERATIONS.filter(
+              operation =>
+                !previousPartOperations.some(opp => opp !== EQUALS_OPERATION) ||
+                operation === 'All',
+            ).map(operation => (
+              <option key={operation} value={operation}>
+                {translate(operation)}
+              </option>
+            ))}
+          </Input>
+        )}
+      />
     </Col>
     <Col sm={6}>
       <span className="index-part-values">
@@ -213,20 +232,26 @@ const IndexPartSelector = ({
 const DirectionSelector = ({ sortDirection, setSortDirection }) => (
   <div className="direction-selector">
     <Col sm={2}>
-      <strong>Sort Direction:</strong>
+      <strong>
+        <I18n>Sort Direction:</I18n>
+      </strong>
     </Col>
     <Col sm={10}>
-      <Input
-        className="sort-direction-select"
-        onChange={e => setSortDirection(e.target.value)}
-        value={sortDirection}
-        type="select"
-        name="Sort Direction"
-        id="sort-direction-chooser"
-      >
-        <option value="ASC">Ascending</option>
-        <option value="DESC">Descending</option>
-      </Input>
+      <I18n
+        render={translate => (
+          <Input
+            className="sort-direction-select"
+            onChange={e => setSortDirection(e.target.value)}
+            value={sortDirection}
+            type="select"
+            name="Sort Direction"
+            id="sort-direction-chooser"
+          >
+            <option value="ASC">{translate('Ascending')}</option>
+            <option value="DESC">{translate('Descending')}</option>
+          </Input>
+        )}
+      />
     </Col>
   </div>
 );
@@ -260,16 +285,20 @@ const SearchbarComponent = ({
 }) => (
   <div className="datastore-searchbar">
     <InputGroup size="lg" className="simple-search-input-group">
-      <AutoFocusInput
-        aria-label="Search"
-        onKeyPress={handleInputKeypress}
-        id="simple-search-term"
-        name="simple-search-term"
-        className={advancedSearchOpen ? 'advanced-open' : ''}
-        onChange={e => setSimpleSearchParam(e.target.value)}
-        value={simpleSearchParam}
-        placeholder={placeholderText}
-        disabled={!simpleSearchActive}
+      <I18n
+        render={translate => (
+          <AutoFocusInput
+            aria-label="Search"
+            onKeyPress={handleInputKeypress}
+            id="simple-search-term"
+            name="simple-search-term"
+            className={advancedSearchOpen ? 'advanced-open' : ''}
+            onChange={e => setSimpleSearchParam(e.target.value)}
+            value={simpleSearchParam}
+            placeholder={translate(placeholderText)}
+            disabled={!simpleSearchActive}
+          />
+        )}
       />
       <InputGroupAddon
         style={{ display: advancedSearchOpen ? 'none' : '' }}
@@ -305,7 +334,9 @@ const SearchbarComponent = ({
     {advancedSearchOpen && (
       <div className="advanced-dropdown-wrapper">
         <div className="advanced-dropdown-header">
-          <h5>Advanced Search</h5>
+          <h5>
+            <I18n>Advanced Search</I18n>
+          </h5>
           <button
             onClick={toggleAdvancedSearchOpen}
             type="button"
@@ -353,14 +384,14 @@ const SearchbarComponent = ({
         />
         <div className="row justify-content-end">
           <button className="btn btn-link" onClick={handleResetSearch}>
-            Reset
+            <I18n>Reset</I18n>
           </button>
           <Button
             disabled={searching}
             color="primary"
             onClick={handleSearchSubmissions}
           >
-            Apply
+            <I18n>Apply</I18n>
           </Button>
         </div>
       </div>

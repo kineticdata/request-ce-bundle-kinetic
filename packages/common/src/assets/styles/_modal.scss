@@ -86,6 +86,9 @@
       }
     }
     .modal-body {
+      &--padding {
+        padding: 0.875rem 1rem;
+      }
       display: flex;
       flex-direction: column;
       padding: 0;
@@ -175,13 +178,30 @@
           margin: 1rem;
         }
       }
+      &--import-export {
+        h2 {
+          font-size: 1.125rem;
+          margin: 1rem 0 0;
+        }
+        h3 {
+          font-size: 1rem;
+          margin: 1rem 0 0;
+        }
+        h4 {
+          font-size: 0.875rem;
+          margin: 0.25rem 0 1rem;
+        }
+      }
     }
     .modal-footer {
       padding: 0;
-      .btn.btn-primary {
-        flex-grow: 1;
-        border-radius: 0;
-        padding: 1rem;
+      .btn {
+        &.btn-primary,
+        &.btn-secondary {
+          flex-grow: 1;
+          border-radius: 0;
+          padding: 1rem;
+        }
       }
     }
   }

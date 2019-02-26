@@ -46,7 +46,7 @@ export const mapDispatchToProps = {
   push,
 };
 
-const validateDateRange = filter => {
+export const validateDateRange = filter => {
   if (
     (filter.status.includes('Cancelled') ||
       filter.status.includes('Complete')) &&
@@ -67,9 +67,24 @@ const validateDateRange = filter => {
   }
 };
 
-const validateFilterName = filterName => {
+export const validateFilterName = filterName => {
   if (filterName && filterName.indexOf('%') >= 0) {
     return 'Percentage signs are not allowed in filter names.';
+  }
+};
+
+export const validateAssignments = filter => {
+  if (
+    List([
+      filter.assignments.mine && 'Mine',
+      filter.assignments.teammates && 'Teammates',
+      filter.assignments.unassigned && 'Unassigned',
+    ])
+      .filter(assignmentType => !!assignmentType)
+      .isEmpty() &&
+    !filter.createdByMe
+  ) {
+    return 'Select an assignment or created by me';
   }
 };
 

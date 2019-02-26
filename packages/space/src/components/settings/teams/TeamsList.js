@@ -3,13 +3,20 @@ import { Link } from 'react-router-dom';
 import { PageTitle } from 'common';
 import { TeamsListItem } from './TeamsListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const WallyEmptyMessage = ({ me }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>No Teams Right Now...</h5>
+      <h5>
+        <I18n>No Teams Right Now...</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
-      {me.spaceAdmin && <h6>Add a team by hitting the new button!</h6>}
+      {me.spaceAdmin && (
+        <h6>
+          <I18n>Add a team by hitting the new button!</I18n>
+        </h6>
+      )}
     </div>
   );
 };
@@ -22,14 +29,22 @@ export const TeamsList = ({ loading, teams, me }) => (
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /
-              <Link to="/settings"> settings</Link> /
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /{' '}
+              <Link to="/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{' '}
             </h3>
-            <h1>Teams</h1>
+            <h1>
+              <I18n>Teams</I18n>
+            </h1>
           </div>
 
           <Link to="/settings/teams/new" className="btn btn-secondary">
-            New Team
+            <I18n>New Team</I18n>
           </Link>
         </div>
         {teams.size > 0 ? (
@@ -38,9 +53,11 @@ export const TeamsList = ({ loading, teams, me }) => (
               <thead className="d-none d-md-table-header-group sortable">
                 <tr className="header">
                   <th scope="col" width="33%">
-                    Team
+                    <I18n>Team</I18n>
                   </th>
-                  <th scope="col">Description</th>
+                  <th scope="col">
+                    <I18n>Description</I18n>
+                  </th>
                   <th className="sort-disabled" />
                 </tr>
               </thead>

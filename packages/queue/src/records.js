@@ -15,6 +15,13 @@ export const VALID_STATUSES = List([
   'Complete',
 ]);
 
+export const VALID_SORT_OPTIONS = List([
+  'createdAt',
+  'updatedAt',
+  'closedAt',
+  'Due Date',
+]);
+
 export const isActiveStatus = status =>
   status !== 'Complete' && status !== 'Cancelled';
 
@@ -22,15 +29,7 @@ export const AssignmentCriteria = Record({
   mine: false,
   teammates: false,
   unassigned: false,
-  byIndividuals: false,
-  individuals: List(),
 });
-
-const assignmentCriteriaReviver = assignmentCriteriaJSON => {
-  const individuals = List(assignmentCriteriaJSON.individuals);
-
-  return AssignmentCriteria({ ...assignmentCriteriaJSON, individuals });
-};
 
 export const DateRangeCriteria = Record({
   // createdAt, updatedAt, closedAt
@@ -45,11 +44,15 @@ export const DateRangeCriteria = Record({
 export const Filter = Record({
   name: '',
   slug: '',
-  // Valid types are: default, custom, and adhoc.
+  icon: '',
+  // Valid types are: default, team, custom, and adhoc.
   type: 'default',
 
-  // Filter sort order: createdAt, updatedAt, Due Date.
+  // Filter sort order: createdAt, updatedAt, closedAt, Due Date.
   sortBy: 'createdAt',
+
+  // Filter Group By: free text input
+  groupBy: '',
 
   // Search Criteria.
   status: VALID_STATUSES.filter(isActiveStatus),
@@ -65,10 +68,13 @@ export const filterReviver = filterJSON => {
     if (typeof filterJSON === 'string') {
       filter = JSON.parse(filterJSON);
     }
+    const sortBy = VALID_SORT_OPTIONS.includes(filter.sortBy)
+      ? filter.sortBy
+      : undefined;
     const status = isarray(filter.status) ? List(filter.status) : undefined;
     const teams = isarray(filter.teams) ? List(filter.teams) : undefined;
     const assignments = isobject(filter.assignments)
-      ? assignmentCriteriaReviver(filter.assignments)
+      ? AssignmentCriteria(filter.assignments)
       : undefined;
     const dateRange = isobject(filter.dateRange)
       ? DateRangeCriteria(filter.dateRange)
@@ -77,8 +83,10 @@ export const filterReviver = filterJSON => {
     return Filter({
       name: filter.name,
       slug: filter.slug,
+      icon: filter.icon,
       type: filter.type,
-      sortBy: filter.sortBy,
+      groupBy: filter.groupBy,
+      sortBy,
       status,
       teams,
       assignments,

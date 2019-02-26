@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { KappLink as Link, PageTitle } from 'common';
 import { CategoryCard } from '../shared/CategoryCard';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const CategoryList = ({ categories }) => (
   <Fragment>
@@ -10,9 +11,14 @@ export const CategoryList = ({ categories }) => (
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">services</Link> /
+            <Link to="/">
+              <I18n>services</I18n>
+            </Link>{' '}
+            /
           </h3>
-          <h1>All Categories</h1>
+          <h1>
+            <I18n>All Categories</I18n>
+          </h1>
         </div>
       </div>
       <div className="cards__wrapper cards__wrapper--categories">

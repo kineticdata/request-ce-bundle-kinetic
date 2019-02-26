@@ -6,11 +6,12 @@ import { types, actions } from '../modules/spaceForms';
 export function* fetchFormsSaga(action) {
   const { forms, serverError } = yield call(CoreAPI.fetchForms, {
     kappSlug: action.payload,
-    include: 'attributes',
+    include: 'attributes,kapp',
   });
 
   if (serverError) {
     // TODO: implement system error push.
+    yield put(actions.setForms([]));
   } else {
     yield put(actions.setForms(forms));
   }

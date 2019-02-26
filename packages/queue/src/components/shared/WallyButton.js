@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { actions } from '../../redux/modules/workMenu';
 import { actions as queueActions } from '../../redux/modules/queue';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const getButtonMode = (queueItem, profile) => {
   if (queueItem.coreState !== 'Draft') {
@@ -16,7 +17,7 @@ const getButtonMode = (queueItem, profile) => {
 
 export const WallyButton = ({ className, buttonMode, handleClick }) => (
   <button type="button" className={className} onClick={handleClick}>
-    {buttonMode} It
+    <I18n>{buttonMode} It</I18n>
   </button>
 );
 

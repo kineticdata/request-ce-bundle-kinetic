@@ -8,6 +8,7 @@ import { Constants, Loading, PageTitle } from 'common';
 import { NavLink } from 'react-router-dom';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/settingsRobots';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const getStatusColor = status =>
   status === 'Queued'
@@ -19,9 +20,13 @@ const getStatusColor = status =>
 const WallyEmptyMessage = () => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>No Executions Found</h5>
+      <h5>
+        <I18n>No Executions Found</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
-      <h6>Executions are a record of a run of a robot</h6>
+      <h6>
+        <I18n>Executions are a record of a run of a robot</I18n>
+      </h6>
     </div>
   );
 };
@@ -52,11 +57,22 @@ const RobotExecutionsListComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /{` `}
-              <Link to="/settings">settings</Link> /{` `}
-              <Link to="/settings/robots">robots</Link> /{` `}
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings/robots">
+                <I18n>robots</I18n>
+              </Link>{' '}
+              /{` `}
             </h3>
-            <h1>Executions</h1>
+            <h1>
+              <I18n>Executions</I18n>
+            </h1>
           </div>
         </div>
         <div className="tab-navigation tab-navigation--robots">
@@ -67,7 +83,7 @@ const RobotExecutionsListComponent = ({
                 to={`/settings/robots/${match.params.robotId}`}
                 activeClassName="active"
               >
-                Details
+                <I18n>Details</I18n>
               </NavLink>
             </li>
             <li role="presentation">
@@ -75,7 +91,7 @@ const RobotExecutionsListComponent = ({
                 to={`/settings/robots/${match.params.robotId}/executions`}
                 activeClassName="active"
               >
-                Executions
+                <I18n>Executions</I18n>
               </NavLink>
             </li>
           </ul>
@@ -83,8 +99,12 @@ const RobotExecutionsListComponent = ({
         {robotExecutions.size <= 0 &&
           robotExecutionsErrors.length > 0 && (
             <div className="text-center text-danger">
-              <h1>Oops!</h1>
-              <h2>Robot Executions Not Found</h2>
+              <h1>
+                <I18n>Oops!</I18n>
+              </h1>
+              <h2>
+                <I18n>Robot Executions Not Found</I18n>
+              </h2>
               {robotExecutionsErrors.map(error => (
                 <p className="error-details">{error}</p>
               ))}
@@ -94,12 +114,18 @@ const RobotExecutionsListComponent = ({
           <table className="table table-sm table-striped table-robots">
             <thead className="header">
               <tr>
-                <th scope="col">Robot Name</th>
-                <th scope="col" width="10%">
-                  Status
+                <th scope="col">
+                  <I18n>Robot Name</I18n>
                 </th>
-                <th scope="col">Start</th>
-                <th scope="col">End</th>
+                <th scope="col" width="10%">
+                  <I18n>Status</I18n>
+                </th>
+                <th scope="col">
+                  <I18n>Start</I18n>
+                </th>
+                <th scope="col">
+                  <I18n>End</I18n>
+                </th>
                 <th width="1%" />
               </tr>
             </thead>
@@ -133,7 +159,9 @@ const RobotExecutionsListComponent = ({
                           execution.values['Robot ID']
                         }/executions/${execution.id}`}
                       >
-                        <span>View&nbsp;</span>
+                        <span>
+                          <I18n>View</I18n>{' '}
+                        </span>
                         <span className="fa fa-external-link-square" />
                       </Link>
                     </td>

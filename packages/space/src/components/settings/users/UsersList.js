@@ -12,6 +12,7 @@ import downloadjs from 'downloadjs';
 import { actions } from '../../../redux/modules/settingsUsers';
 
 import { UsersListItem } from './UsersListItem';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const IsJsonString = str => {
   try {
@@ -25,9 +26,13 @@ const IsJsonString = str => {
 const WallyEmptyMessage = ({ filter }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>No Users Found</h5>
+      <h5>
+        <I18n>No Users Found</I18n>
+      </h5>
       <img src={wallyHappyImage} alt="Happy Wally" />
-      <h6>Click Create User to add a new user</h6>
+      <h6>
+        <I18n>Click Create User to add a new user</I18n>
+      </h6>
     </div>
   );
 };
@@ -46,10 +51,18 @@ const UsersListComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /{` `}
-              <Link to="/settings">settings</Link> /{` `}
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="/settings">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
             </h3>
-            <h1>Users</h1>
+            <h1>
+              <I18n>Users</I18n>
+            </h1>
           </div>
           <div className="page-title__actions">
             <input
@@ -67,29 +80,37 @@ const UsersListComponent = ({
               className="btn btn-info"
               style={{ marginBottom: '0px' }}
             >
-              Import Users
+              <I18n>Import Users</I18n>
             </label>
             <button className="btn btn-secondary" onClick={handleDownload}>
-              Export Users
+              <I18n>Export Users</I18n>
             </button>
             <Link to={`${match.path}/new`} className="btn btn-primary">
-              New User
+              <I18n>New User</I18n>
             </Link>
           </div>
         </div>
 
         <div>
           {loading ? (
-            <h3>Loading</h3>
+            <h3>
+              <I18n>Loading</I18n>
+            </h3>
           ) : users.length > 0 ? (
             <div className="space-admin-wrapper">
               <table className="table table--settings table-sm">
                 <thead className="d-none d-md-table-header-group sortable">
                   <tr className="header">
                     <th className="sort-disabled" />
-                    <th scope="col">Username</th>
-                    <th scope="col">Display Name</th>
-                    <th scope="col">Email</th>
+                    <th scope="col">
+                      <I18n>Username</I18n>
+                    </th>
+                    <th scope="col">
+                      <I18n>Display Name</I18n>
+                    </th>
+                    <th scope="col">
+                      <I18n>Email</I18n>
+                    </th>
                     <th className="sort-disabled" />
                   </tr>
                 </thead>

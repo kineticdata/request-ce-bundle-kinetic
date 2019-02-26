@@ -20,6 +20,7 @@ import {
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import { CoreAPI } from 'react-kinetic-core';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 export const SettingsComponent = ({
   attributesMap,
@@ -33,25 +34,37 @@ export const SettingsComponent = ({
   previousKappName,
 }) => (
   <div className="page-container page-container--space-settings">
-    <PageTitle parts={[`${currentKapp.name} Kapp Settings`]} />
+    <PageTitle parts={['Kapp Settings', currentKapp.name]} />
     <div className="page-panel page-panel--scrollable page-panel--space-profile-edit">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to={`/kapps/${currentKapp.slug}`}>queue</Link> /{` `}
+            <Link to={`/kapps/${currentKapp.slug}`}>
+              <I18n>queue</I18n>
+            </Link>{' '}
+            /{` `}
             <Link to={`/kapps/${currentKapp.slug}/settings`}>
-              settings
-            </Link> /{` `}
+              <I18n>settings</I18n>
+            </Link>{' '}
+            /{` `}
           </h3>
-          <h1>{currentKapp.name} Settings</h1>
+          <h1>
+            <I18n>{currentKapp.name}</I18n> <I18n>Settings</I18n>
+          </h1>
         </div>
       </div>
       <section>
         <form>
-          <h2 className="section__title">Display Options</h2>
+          <h2 className="section__title">
+            <I18n>Display Options</I18n>
+          </h2>
           <div className="form-group">
-            <label>Kapp Name</label>
-            <small>The Name of the Kapp Referenced Throughout the Kapp</small>
+            <label>
+              <I18n>Kapp Name</I18n>
+            </label>
+            <small>
+              <I18n>The Name of the Kapp Referenced Throughout the Kapp</I18n>
+            </small>
             <input
               type="text"
               className="form-control"
@@ -68,55 +81,65 @@ export const SettingsComponent = ({
               description={attributesMap.getIn(['Icon', 'description'])}
             />
           )}
-          <h2 className="section__title">Form Mapping</h2>
+          <h2 className="section__title">
+            <I18n>Form Mapping</I18n>
+          </h2>
           {attributesMap.has('Form Workflow') && (
             <div className="form-group">
-              <label>Form Workflow Created</label>
+              <label>
+                <I18n>Form Workflow Created</I18n>
+              </label>
               <small className="form-text text-muted">
-                Vaild prefixs are: Created, Deleted, Updated. Only one of each
-                prefix can be selected
+                <I18n>
+                  Vaild prefixs are: Created, Deleted, Updated. Only one of each
+                  prefix can be selected
+                </I18n>
               </small>
-              <Typeahead
-                options={[
-                  'Created - True',
-                  'Created - False',
-                  'Created - Standard',
-                  'Deleted - True',
-                  'Deleted - False',
-                  'Deleted - Standard',
-                  'Updated - True',
-                  'Updated - False',
-                  'Updated - Standard',
-                ]}
-                allowNew
-                multiple
-                newSelectionPrefix="Click to add:"
-                selected={attributesMap
-                  .getIn(['Form Workflow', 'value'])
-                  .toJS()}
-                onChange={selectedArr => {
-                  const checkedArr = selectedArr.reduce((acc, value) => {
-                    if (typeof value !== 'string') {
-                      value = value['label'];
-                    }
-                    const prefix = value
-                      .trim()
-                      .slice(0, value.search(/(-)/) + 2);
-                    if (
-                      prefix === 'Created - ' ||
-                      prefix === 'Deleted - ' ||
-                      prefix === 'Updated - '
-                    ) {
-                      acc.push(value);
-                    } else {
-                      console.log('must be proceded by a valid prifix');
-                    }
-                    return acc;
-                  }, []);
-                  handleAttributeChange({
-                    target: { id: 'Form Workflow', value: checkedArr },
-                  });
-                }}
+              <I18n
+                render={translate => (
+                  <Typeahead
+                    options={[
+                      'Created - True',
+                      'Created - False',
+                      'Created - Standard',
+                      'Deleted - True',
+                      'Deleted - False',
+                      'Deleted - Standard',
+                      'Updated - True',
+                      'Updated - False',
+                      'Updated - Standard',
+                    ]}
+                    allowNew
+                    multiple
+                    newSelectionPrefix={translate('Click to add:')}
+                    selected={attributesMap
+                      .getIn(['Form Workflow', 'value'])
+                      .toJS()}
+                    onChange={selectedArr => {
+                      const checkedArr = selectedArr.reduce((acc, value) => {
+                        if (typeof value !== 'string') {
+                          value = value['label'];
+                        }
+                        const prefix = value
+                          .trim()
+                          .slice(0, value.search(/(-)/) + 2);
+                        if (
+                          prefix === 'Created - ' ||
+                          prefix === 'Deleted - ' ||
+                          prefix === 'Updated - '
+                        ) {
+                          acc.push(value);
+                        } else {
+                          console.log('must be proceded by a valid prifix');
+                        }
+                        return acc;
+                      }, []);
+                      handleAttributeChange({
+                        target: { id: 'Form Workflow', value: checkedArr },
+                      });
+                    }}
+                  />
+                )}
               />
             </div>
           )}
@@ -167,7 +190,7 @@ export const SettingsComponent = ({
                 )
               }
             >
-              Save Changes
+              <I18n>Save Changes</I18n>
             </button>
           </span>
         </div>

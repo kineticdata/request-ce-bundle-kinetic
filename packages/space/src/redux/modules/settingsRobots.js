@@ -81,6 +81,7 @@ export const State = Record({
   // Robots List
   robots: new List(),
   robotsLoading: false,
+  robotsLoaded: false,
   robotsErrors: [],
   // Robot
   robot: null,
@@ -113,6 +114,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_ROBOTS:
       return state
         .set('robotsLoading', false)
+        .set('robotsLoaded', true)
         .set('robotsErrors', [])
         .set('robots', List(payload));
     case types.SET_FETCH_ROBOT_ERROR:
@@ -132,9 +134,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_DELETE_SUCCESS:
       return state.set('robotDeleting', false);
     case types.SET_DELETE_ERROR:
-      return state
-        .set('robotDeleting', false)
-        .set('robotErrors', payload);
+      return state.set('robotDeleting', false).set('robotErrors', payload);
 
     case types.FETCH_ROBOT_EXECUTIONS:
       return state

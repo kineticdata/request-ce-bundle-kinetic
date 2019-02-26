@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { actions } from '../../../redux/modules/settingsForms';
 
 import { Export } from './Export';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const ExportModalComponent = ({
   modalIsOpen,
@@ -17,9 +18,11 @@ const ExportModalComponent = ({
     <div className="modal-header">
       <h4 className="modal-title">
         <button onClick={closeModal} type="button" className="btn btn-link">
-          Cancel
+          <I18n>Cancel</I18n>
         </button>
-        <span>{modalName === 'import' ? 'Import' : 'Export'} Records</span>
+        <span>
+          <I18n>{modalName === 'import' ? 'Import' : 'Export'} Records</I18n>
+        </span>
         <span>&nbsp;</span>
       </h4>
     </div>

@@ -10,10 +10,12 @@ import {
 } from '../modules/loading';
 import { actions as profileActions } from '../modules/profile';
 import { actions as spaceActions } from '../modules/space';
+import { importLocale, searchHistoryActions, Utils } from 'common';
 
 import semver from 'semver';
 
 const MINIMUM_CE_VERSION = '2.0.2';
+const MINIMUM_TRANSLATIONS_CE_VERSION = '2.3.0';
 
 // Fetch Entire App
 export function* fetchAppTask({ payload }) {
@@ -41,6 +43,14 @@ export function* fetchAppTask({ payload }) {
       put(kappActions.setKapps(kapps)),
       put(profileActions.setProfile(me)),
       put(spaceActions.setSpace(space)),
+      ...kapps.map(kapp => {
+        return put(
+          searchHistoryActions.enableSearchHistory({
+            kappSlug: kapp.slug,
+            value: Utils.getAttributeValue(kapp, 'Record Search History', ''),
+          }),
+        );
+      }),
     ]);
     const defaultKappDisplaySpace =
       profile.space.attributesMap &&
@@ -54,6 +64,23 @@ export function* fetchAppTask({ payload }) {
       profile.profileAttributesMap['Default Kapp Display'].length > 0
         ? profile.profileAttributesMap['Default Kapp Display'][0]
         : undefined;
+
+    // Preload locale before displaying the app to get rid of flicker
+    // Set locale in config
+    if (me.preferredLocale) {
+      importLocale(me.preferredLocale);
+      yield put(configActions.setLocale(me.preferredLocale));
+    } else if (
+      semver.satisfies(
+        semver.coerce(version.version),
+        `>=${MINIMUM_TRANSLATIONS_CE_VERSION}`,
+      )
+    ) {
+      const { defaultLocale } = yield call(CoreAPI.fetchDefaultLocale);
+      importLocale((defaultLocale && defaultLocale.code) || 'en');
+      yield put(configActions.setLocale(defaultLocale && defaultLocale.code));
+    }
+
     const currentRoute = yield select(state => state.router.location.pathname);
     if (
       initialLoad &&

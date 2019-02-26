@@ -7,6 +7,7 @@ export const mapStateToProps = (state, props) => ({
   submission: state.services.submission.data,
   listType: props.match.params.type,
   mode: props.match.params.mode,
+  kappSlug: state.app.config.kappSlug,
 });
 
 export const mapDispatchToProps = {

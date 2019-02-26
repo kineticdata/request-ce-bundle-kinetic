@@ -7,12 +7,19 @@ import { push } from 'connected-react-router';
 import { toastActions, PageTitle } from 'common';
 import { actions } from '../../../redux/modules/settingsNotifications';
 import { NotificationMenu } from './NotificationMenu';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const fields = {
   Name: {
     required: true,
   },
   Status: {
+    required: true,
+  },
+  Language: {
+    required: true,
+  },
+  Region: {
     required: true,
   },
   Subject: {
@@ -71,16 +78,24 @@ const NotificationComponent = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">home</Link> /{` `}
-            <Link to="/settings">settings</Link> /{` `}
+            <Link to="/">
+              <I18n>home</I18n>
+            </Link>{' '}
+            /{` `}
+            <Link to="/settings">
+              <I18n>settings</I18n>
+            </Link>{' '}
+            /{` `}
             <Link to={`/settings/notifications/${type}`}>
-              notification {type}
+              <I18n>notification {type}</I18n>
             </Link>
             {` `}
             /
           </h3>
           {!loading && (
-            <h1>{submission ? submission.label : `New ${title}`}</h1>
+            <h1>
+              {submission ? submission.label : <I18n>{`New ${title}`}</I18n>}
+            </h1>
           )}
         </div>
       </div>
@@ -95,7 +110,7 @@ const NotificationComponent = ({
             </Fragment>
             <div className="form-group required">
               <label className="field-label" htmlFor="name">
-                Name
+                <I18n>Name</I18n>
               </label>
               <input
                 type="text"
@@ -108,7 +123,9 @@ const NotificationComponent = ({
             </div>
 
             <div className="radio required">
-              <label className="field-label">Status</label>
+              <label className="field-label">
+                <I18n>Status</I18n>
+              </label>
               <label>
                 <input
                   type="radio"
@@ -132,10 +149,36 @@ const NotificationComponent = ({
                 Inactive
               </label>
             </div>
+            <div className="form-group required">
+              <label className="field-label" htmlFor="language">
+                <I18n>Language</I18n>
+              </label>
+              <input
+                type="text"
+                id="language"
+                name="Language"
+                onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
+                value={values.get('Language')}
+              />
+            </div>
+            <div className="form-group required">
+              <label className="field-label" htmlFor="region">
+                <I18n>Region</I18n>
+              </label>
+              <input
+                type="text"
+                id="region"
+                name="Region"
+                onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
+                value={values.get('Region')}
+              />
+            </div>
             {isVisible('Subject', values) && (
               <div className="form-group required">
                 <label className="field-label" htmlFor="subject">
-                  Subject
+                  <I18n>Subject</I18n>
                 </label>
                 <textarea
                   id="subject"
@@ -149,7 +192,7 @@ const NotificationComponent = ({
             )}
             <div className="form-group required">
               <label className="field-label" htmlFor="htmlContent">
-                HTML Content
+                <I18n>HTML Content</I18n>
               </label>
               <textarea
                 id="htmlContent"
@@ -166,7 +209,7 @@ const NotificationComponent = ({
               }`}
             >
               <label className="field-label" htmlFor="textContent">
-                Text Content
+                <I18n>Text Content</I18n>
               </label>
               <textarea
                 id="textContent"
@@ -183,14 +226,18 @@ const NotificationComponent = ({
                   to="/settings/notifications"
                   className="btn btn-link mb-0"
                 >
-                  Cancel
+                  <I18n>Cancel</I18n>
                 </Link>
                 <button
                   type="submit"
                   className="btn btn-primary"
                   disabled={!dirty || !isValid(values)}
                 >
-                  {submission ? 'Save Changes' : `Create ${title}`}
+                  {submission ? (
+                    <I18n>Save Changes</I18n>
+                  ) : (
+                    <I18n>{`Create ${title}`}</I18n>
+                  )}
                 </button>
               </div>
             </div>
@@ -198,22 +245,30 @@ const NotificationComponent = ({
         )}
     </div>
     <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--settings-sidebar">
-      <h3>Dynamic Replacements</h3>
+      <h3>
+        <I18n>Dynamic Replacements</I18n>
+      </h3>
       <p>
-        Use the dropdown to insert dynamic elements within the subject and body
-        of your templates. Just put your cursor into one of those fields where
-        you want the element to appear and choose an option from the dropdown
-        list.
+        <I18n>
+          Use the dropdown to insert dynamic elements within the subject and
+          body of your templates. Just put your cursor into one of those fields
+          where you want the element to appear and choose an option from the
+          dropdown list.
+        </I18n>
       </p>
       <p>
-        Selecting a Kapp and Form will populate the dropdown menu with available
-        options.
+        <I18n>
+          Selecting a Kapp and Form will populate the dropdown menu with
+          available options.
+        </I18n>
       </p>
       <p>
-        Caution: Email templates can be used by any process. Since not all Kapps
-        have the same attributes and not all forms have the same attributes or
-        fields, relying on attributes or fields that may not exist will yield
-        unexpected results. Test your email templates!
+        <I18n>
+          Caution: Email templates can be used by any process. Since not all
+          Kapps have the same attributes and not all forms have the same
+          attributes or fields, relying on attributes or fields that may not
+          exist will yield unexpected results. Test your email templates!
+        </I18n>
       </p>
     </div>
   </div>

@@ -13,9 +13,11 @@ import { Link } from 'react-router-dom';
 import { KappLink, Utils } from 'common';
 import { AlertsContainer } from './AlertsContainer';
 import { ProfileContainer } from './ProfileContainer';
+import { I18n } from '../I18nProvider';
 
-export const dropdownTitleName = currentKapp =>
-  currentKapp ? currentKapp.name : 'Home';
+export const dropdownTitleName = currentKapp => (
+  <I18n>{currentKapp ? currentKapp.name : 'Home'}</I18n>
+);
 
 export const dropdownIcon = currentKapp =>
   currentKapp
@@ -28,7 +30,7 @@ const BuildKappLink = ({ kapp, onClick, nameOverride = kapp.name }) => (
       className={`fa fa-fw' ${Utils.getAttributeValue(kapp, 'Icon') ||
         'fa-book'}`}
     />
-    {nameOverride}
+    <I18n>{nameOverride}</I18n>
   </Link>
 );
 
@@ -82,7 +84,8 @@ export const Header = ({
                 to="/"
                 onClick={kappDropdownToggle}
               >
-                <span className="fa fa-fw fa-home" />Home
+                <span className="fa fa-fw fa-home" />
+                <I18n>Home</I18n>
               </Link>
               <DropdownItem divider />
               {predefinedKapps.map(thisKapp => (

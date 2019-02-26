@@ -1,0 +1,92 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Schedulers ~ Common
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.scheduler-widget {
+}
+
+.modal-dialog.scheduler-widget-modal {
+  .modal-body {
+    .body-content {
+      height: 100%;
+      overflow: hidden;
+
+      .date-slider {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid $gray4;
+
+        .calendar-box {
+          flex-basis: 15%;
+          text-align: center;
+          cursor: pointer;
+          padding: 0.25rem 0;
+          border-right: 1px solid $gray4;
+          line-height: 3.8rem;
+          font-size: 1.5rem;
+          color: $primary;
+        }
+
+        .date-box {
+          flex-basis: 17%;
+          text-align: center;
+          opacity: 0.5;
+          cursor: pointer;
+          padding: 0.25rem 0;
+
+          &.selected {
+            opacity: 1;
+          }
+
+          &.disabled {
+            opacity: 0;
+            cursor: default;
+          }
+
+          .date-month-year {
+            font-size: 0.6rem;
+            line-height: 1rem;
+            font-weight: 500;
+          }
+          .date-day-number {
+            font-size: 1.6rem;
+            line-height: 1.8rem;
+            font-weight: 700;
+            color: $primary;
+          }
+          .date-day-name {
+            font-size: 1rem;
+            line-height: 1rem;
+            font-weight: 600;
+          }
+        }
+      }
+
+      .date-picker {
+        > * {
+          margin: auto;
+        }
+      }
+
+      .time-picker {
+        display: block;
+        padding: 0.675rem;
+        overflow: auto;
+        height: calc(100% - 69px);
+        @media (min-width: 768px) {
+          max-height: 50vh;
+        }
+
+        .time-box {
+          text-align: center;
+          width: 100%;
+          &:not(:last-child) {
+            margin-bottom: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+}

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { TimeAgo, PageTitle } from 'common';
 import { Avatar } from 'common';
 import { actions } from '../../redux/modules/about';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 const AboutComponent = ({ space, about, loading }) => (
   <div className="page-container page-container--space-about">
@@ -14,29 +15,43 @@ const AboutComponent = ({ space, about, loading }) => (
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">home</Link> /
+              <Link to="/">
+                <I18n>home</I18n>
+              </Link>{' '}
+              /
             </h3>
-            <h1>About My Space</h1>
+            <h1>
+              <I18n>About My Space</I18n>
+            </h1>
           </div>
         </div>
         <div className="page-content page-content--space-about">
           <section>
-            <h2 className="section__title">General</h2>
+            <h2 className="section__title">
+              <I18n>General</I18n>
+            </h2>
             <div className="data-list-row">
               <dl className="data-list-row__col">
-                <dt>Space Name</dt>
+                <dt>
+                  <I18n>Space Name</I18n>
+                </dt>
                 <dd>{space.name}</dd>
               </dl>
 
               <dl className="data-list-row__col">
-                <dt>User Base</dt>
+                <dt>
+                  <I18n>User Base</I18n>
+                </dt>
                 <dd>
-                  {about.numberOfUsers} users in {about.numberOfTeams} teams
+                  {about.numberOfUsers} <I18n>users in</I18n>{' '}
+                  {about.numberOfTeams} <I18n>teams</I18n>
                 </dd>
               </dl>
 
               <dl className="data-list-row__col">
-                <dt>Created At</dt>
+                <dt>
+                  <I18n>Created At</I18n>
+                </dt>
                 <dd>
                   <TimeAgo timestamp={space.createdAt} id={space.slug} />
                 </dd>
@@ -44,14 +59,20 @@ const AboutComponent = ({ space, about, loading }) => (
             </div>
           </section>
           <section>
-            <h2 className="section__title">Space Admins</h2>
+            <h2 className="section__title">
+              <I18n>Space Admins</I18n>
+            </h2>
 
             <table className="table table-responsive-sm">
               <thead>
                 <tr>
                   <th />
-                  <th scope="col">Email</th>
-                  <th scope="col">Display Name</th>
+                  <th scope="col">
+                    <I18n>Email</I18n>
+                  </th>
+                  <th scope="col">
+                    <I18n>Display Name</I18n>
+                  </th>
                 </tr>
               </thead>
               <tbody>

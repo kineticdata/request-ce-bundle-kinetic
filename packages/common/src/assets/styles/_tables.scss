@@ -94,6 +94,7 @@ thead.sortable {
     cursor: pointer;
     position: relative;
     padding-right: 1.1rem;
+    vertical-align: initial;
 
     &:before {
       font-family: 'FontAwesome';

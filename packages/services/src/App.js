@@ -30,6 +30,7 @@ import { RequestListContainer } from './components/request_list/RequestListConta
 import { RequestShowContainer } from './components/request/RequestShowContainer';
 import { Settings } from './components/settings/Settings';
 import { displayableFormPredicate } from './utils';
+import { I18n } from '../../app/src/I18nProvider';
 
 import './assets/styles/master.scss';
 
@@ -59,84 +60,90 @@ export const AppComponent = props => {
       </Switch>
     ),
     main: (
-      <main className="package-layout package-layout--services">
-        <KappRoute path="/settings" component={Settings} />
-        <KappRoute
-          path="/submissions/:id"
-          exact
-          render={({ match, location }) => (
-            <Redirect
-              to={`/requests/request/${match.params.id}/${
-                location.search.includes('review') ? 'review' : 'activity'
-              }`}
-            />
-          )}
-        />
-        <KappRoute
-          path="/forms/:formSlug/submissions/:id"
-          exact
-          render={({ match, location }) => (
-            <Redirect
-              to={`/requests/request/${match.params.id}/${
-                location.search.includes('review') ? 'review' : 'activity'
-              }`}
-            />
-          )}
-        />
-        <KappRoute
-          exact
-          path="/"
-          render={() => (
-            <CatalogContainer
-              homePageMode={props.homePageMode}
-              homePageItems={props.homePageItems}
-            />
-          )}
-        />
-        <KappRoute exact path="/categories" component={CategoryListContainer} />
-        <KappRoute
-          exact
-          path="/categories/:categorySlug"
-          component={CategoryContainer}
-        />
-        <KappRoute
-          exact
-          path="/categories/:categorySlug/:formSlug"
-          component={FormContainer}
-        />
-        <KappRoute
-          exact
-          path="/categories/:categorySlug/:formSlug/:submissionId"
-          component={FormContainer}
-        />
-        <KappRoute exact path="/forms" component={FormListContainer} />
-        <KappRoute path="/forms/:formSlug" component={FormContainer} />
-        <KappRoute
-          exact
-          path="/search"
-          component={CatalogSearchResultsContainer}
-        />
-        <KappRoute
-          exact
-          path="/search/:query"
-          component={CatalogSearchResultsContainer}
-        />
-        <KappRoute
-          exact
-          path="/requests/:type?"
-          component={RequestListContainer}
-        />
-        <KappRoute
-          exact
-          path="/requests/:type?/request/:submissionId"
-          component={FormContainer}
-        />
-        <KappRoute
-          exact
-          path="/requests/:type?/request/:submissionId/:mode"
-          component={RequestShowContainer}
-        />
-      </main>
+      <I18n>
+        <main className="package-layout package-layout--services">
+          <KappRoute path="/settings" component={Settings} />
+          <KappRoute
+            path="/submissions/:id"
+            exact
+            render={({ match, location }) => (
+              <Redirect
+                to={`/requests/request/${match.params.id}/${
+                  location.search.includes('review') ? 'review' : 'activity'
+                }`}
+              />
+            )}
+          />
+          <KappRoute
+            path="/forms/:formSlug/submissions/:id"
+            exact
+            render={({ match, location }) => (
+              <Redirect
+                to={`/requests/request/${match.params.id}/${
+                  location.search.includes('review') ? 'review' : 'activity'
+                }`}
+              />
+            )}
+          />
+          <KappRoute
+            exact
+            path="/"
+            render={() => (
+              <CatalogContainer
+                homePageMode={props.homePageMode}
+                homePageItems={props.homePageItems}
+              />
+            )}
+          />
+          <KappRoute
+            exact
+            path="/categories"
+            component={CategoryListContainer}
+          />
+          <KappRoute
+            exact
+            path="/categories/:categorySlug"
+            component={CategoryContainer}
+          />
+          <KappRoute
+            exact
+            path="/categories/:categorySlug/:formSlug"
+            component={FormContainer}
+          />
+          <KappRoute
+            exact
+            path="/categories/:categorySlug/:formSlug/:submissionId"
+            component={FormContainer}
+          />
+          <KappRoute exact path="/forms" component={FormListContainer} />
+          <KappRoute path="/forms/:formSlug" component={FormContainer} />
+          <KappRoute
+            exact
+            path="/search"
+            component={CatalogSearchResultsContainer}
+          />
+          <KappRoute
+            exact
+            path="/search/:query"
+            component={CatalogSearchResultsContainer}
+          />
+          <KappRoute
+            exact
+            path="/requests/:type?"
+            component={RequestListContainer}
+          />
+          <KappRoute
+            exact
+            path="/requests/:type?/request/:submissionId"
+            component={FormContainer}
+          />
+          <KappRoute
+            exact
+            path="/requests/:type?/request/:submissionId/:mode"
+            component={RequestShowContainer}
+          />
+        </main>
+      </I18n>
     ),
   });
 };

@@ -1,14 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import renderIntoDom from '../../../src/helpers/renderIntoDom';
 import {
   validateNotificationOptions,
   processNotificationExits,
 } from './notifications';
 import { Alert } from '../../../src/components/notifications/Alert';
 import { Confirm } from '../../../src/components/notifications/Confirm';
+import { SchedulerWidget } from '../../../src/components/scheduler/SchedulerWidget';
+import { PeopleSelect } from '../../../src/components/attribute_selectors/PeopleSelect';
 
 // Ensure the bundle global object exists
-const bundle = typeof window.bundle !== "undefined" ? window.bundle : {};
+const bundle = typeof window.bundle !== 'undefined' ? window.bundle : {};
 // Create helpers namespace
 bundle.helpers = bundle.helpers || {};
 
@@ -66,31 +69,47 @@ bundle.helpers = bundle.helpers || {};
  */
 bundle.helpers.alert = (options = {}) => {
   // Combine passed in options with the defaults and validate
-  const opts = validateNotificationOptions({
-    color: 'danger',
-    message: 'Error',
-    style: {},
-    closable: true,
-    ...options,
-  }, 'bundle.helpers.alert');
+  const opts = validateNotificationOptions(
+    {
+      color: 'danger',
+      message: 'Error',
+      style: {},
+      closable: true,
+      ...options,
+    },
+    'bundle.helpers.alert',
+  );
   // If method returns true, no need to create new notification
-  if (processNotificationExits(opts)) { return; }
+  if (processNotificationExits(opts)) {
+    return;
+  }
   // Create wrapper div to insert into DOM
   const div = document.createElement('div');
-  div.classList.add("notification-wrapper");
+  div.classList.add('notification-wrapper');
   // Insert the wrapper div into the DOM
   opts.anchor.parentElement.insertBefore(div, opts.anchor);
   // Initialize the Alert component
-  ReactDOM.render(<Alert
-    {...opts}
-    domWrapper={div}
-    handleClose={() => ReactDOM.unmountComponentAtNode(div)}
-  />, div);
+  renderIntoDom(
+    <Alert
+      {...opts}
+      domWrapper={div}
+      handleClose={() => ReactDOM.unmountComponentAtNode(div)}
+    />,
+    div,
+  );
   // Add exitEvents to the element
-  if (opts.exitEvents && typeof opts.exitEvents === 'string' && typeof alert.closeAlert === 'function') {
-    opts.element.addEventListener(opts.exitEvents, e => {
-      ReactDOM.unmountComponentAtNode(div);
-    }, { once: true });
+  if (
+    opts.exitEvents &&
+    typeof opts.exitEvents === 'string' &&
+    typeof alert.closeAlert === 'function'
+  ) {
+    opts.element.addEventListener(
+      opts.exitEvents,
+      e => {
+        ReactDOM.unmountComponentAtNode(div);
+      },
+      { once: true },
+    );
   }
 };
 
@@ -153,36 +172,184 @@ bundle.helpers.alert = (options = {}) => {
  */
 bundle.helpers.confirm = (options = {}) => {
   // Combine passed in options with the defaults and validate
-  const opts = validateNotificationOptions({
-    color: 'danger',
-    message: 'Error',
-    acceptButtonText: 'OK',
-    rejectButtonText: 'Cancel',
-    style: {},
-    disable: true,
-    ...options,
-    onClose: options.disable === false
-      ? options.onClose
-      : (element, notification) => {
-        element.disabled = false;
-        if (typeof options.onClose === 'function') {
-          options.onClose(element, notification);
-        }
-      },
-  }, 'bundle.helpers.confirm');
+  const opts = validateNotificationOptions(
+    {
+      color: 'danger',
+      message: 'Error',
+      acceptButtonText: 'OK',
+      rejectButtonText: 'Cancel',
+      style: {},
+      disable: true,
+      ...options,
+      onClose:
+        options.disable === false
+          ? options.onClose
+          : (element, notification) => {
+              element.disabled = false;
+              if (typeof options.onClose === 'function') {
+                options.onClose(element, notification);
+              }
+            },
+    },
+    'bundle.helpers.confirm',
+  );
   // If method returns true, no need to create new notification
-  if (processNotificationExits(opts)) { return; }
+  if (processNotificationExits(opts)) {
+    return;
+  }
   // Create wrapper div to insert into DOM
   const div = document.createElement('div');
-  div.classList.add("notification-wrapper");
+  div.classList.add('notification-wrapper');
   // Insert the wrapper div into the DOM
   opts.anchor.parentElement.insertBefore(div, opts.anchor);
   // Initialize the Confirm component
-  ReactDOM.render(<Confirm
-    {...opts}
-    domWrapper={div}
-    handleClose={() => ReactDOM.unmountComponentAtNode(div)}
-  />, div);
+  renderIntoDom(
+    <Confirm
+      {...opts}
+      domWrapper={div}
+      handleClose={() => ReactDOM.unmountComponentAtNode(div)}
+    />,
+    div,
+  );
   // Disable element if disable option is true
-  if (opts.disable) { opts.element.disabled = true; }
+  if (opts.disable) {
+    opts.element.disabled = true;
+  }
 };
+
+/**
+ * Displays the sheduler widget to allow users to shcedule a time.
+ *
+ * @param div       DOM element *required*
+ *    The element into which the scheduler should be inserted.
+ * @param props     {
+ *    showSchedulerSelector   boolean [Default: false]
+ *    schedulerId             string *required if showSchedulerSelector != true*
+ *    showTypeSelector        boolean [Default: false]
+ *    eventType               string *required if showTypeSelector != true*
+ *    scheduledEventId        string
+ *    eventUpdated            string
+ *    canReschedule           boolean [Default: false]
+ *    canCancel               boolean [Default: false]
+ *    performSubmit           function action.continue function from submit event
+ *  }
+ * @param form      Kinetic form object *required*
+ * @param fieldMap  Map *required*
+ *    A map of scheduled event values to form fields that should be updated on
+ *    event creation, update, or delete.
+ *    Available values:
+ *      scheduledEventId *required*
+ *      eventDate
+ *      eventTime
+ *      duration
+ */
+bundle.helpers.schedulerWidget = (div, props = {}, form, fieldMap = {}) => {
+  /*
+    TODO
+    - Make showSchedulerSelector and showTypeSelector work in widget and update
+    corresponding fields with fieldMap
+  */
+  if (
+    (!props.showSchedulerSelector && !props.schedulerId) ||
+    (!props.showTypeSelector && !props.eventType)
+  ) {
+    ReactDOM.unmountComponentAtNode(div);
+  } else {
+    if (typeof props.performSubmit === 'function') {
+      if (Object.keys(form.validate()).length > 0) {
+        props.performSubmit();
+        return;
+      }
+    }
+    renderIntoDom(
+      <SchedulerWidget
+        {...props}
+        appointmentRequestId={form.submission().id()}
+        rescheduleDataMap={fieldMap}
+        eventUpdated={event => {
+          if (
+            fieldMap.scheduledEventId &&
+            form.getFieldByName(fieldMap.scheduledEventId)
+          ) {
+            form.getFieldByName(fieldMap.scheduledEventId).value(event.id);
+          }
+          if (fieldMap.eventDate && form.getFieldByName(fieldMap.eventDate)) {
+            form.getFieldByName(fieldMap.eventDate).value(event.values['Date']);
+          }
+          if (fieldMap.eventTime && form.getFieldByName(fieldMap.eventTime)) {
+            form.getFieldByName(fieldMap.eventTime).value(event.values['Time']);
+          }
+          if (fieldMap.duration && form.getFieldByName(fieldMap.duration)) {
+            form
+              .getFieldByName(fieldMap.duration)
+              .value(event.values['Duration']);
+          }
+        }}
+        eventDeleted={() => {
+          if (
+            fieldMap.scheduledEventId &&
+            form.getFieldByName(fieldMap.scheduledEventId)
+          ) {
+            form.getFieldByName(fieldMap.scheduledEventId).value('');
+          }
+          if (fieldMap.eventDate && form.getFieldByName(fieldMap.eventDate)) {
+            form.getFieldByName(fieldMap.eventDate).value('');
+          }
+          if (fieldMap.eventTime && form.getFieldByName(fieldMap.eventTime)) {
+            form.getFieldByName(fieldMap.eventTime).value('');
+          }
+          if (fieldMap.duration && form.getFieldByName(fieldMap.duration)) {
+            form.getFieldByName(fieldMap.duration).value('');
+          }
+        }}
+      />,
+      div,
+    );
+  }
+};
+
+/**
+ * Renders a PeopleSelect into the given container.
+ *
+ * @param options {
+ *    container:        DOM Element *required*
+ *        Element into which the PeopleSelect should be rendered.
+ *
+ *    multiple:         boolean [Default: true]
+ *        If true, PeopleSelect will allow multiple users to be sleected.
+ *
+ *    onChange:         Function *required*
+ *        Function that is called when the value of the PeopleSelect changes.
+ *        Passed a user object if multiple=false.
+ *        Passed a list of user objects if multiple=true.
+ * }
+ */
+bundle.helpers.peopleSelect = (options = {}) => {
+  if (options.container) {
+    const multiple = options.multiple !== false;
+    renderIntoDom(
+      <PeopleSelect
+        multiple={multiple}
+        users={true}
+        valueMapper={value => value.user}
+        onChange={
+          typeof options.onChange === 'function'
+            ? e =>
+                options.onChange(multiple ? e.target.value : e.target.value[0])
+            : undefined
+        }
+      />,
+      options.container,
+    );
+  } else {
+    console.warn('bundle.helpers.peopleSelect must pass container as an option');
+  }
+};
+/**
+ * Removes the people select from a given container.
+ *
+ * @param container:        DOM Element *required*
+ *    Element from which the PeopleSelect should be removed.
+ */
+bundle.helpers.peopleSelect.remove = container =>
+  ReactDOM.unmountComponentAtNode(container);

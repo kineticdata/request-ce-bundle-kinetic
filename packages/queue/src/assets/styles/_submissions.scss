@@ -13,91 +13,100 @@
     padding: 0.75rem 1.5rem;
     @include setBgColorAndHover($white);
     // This is the details part of the card.
-    .summary-group {
-      flex-grow: 1;
+    &:last-child {
+      border-bottom: none;
+    }
+    &-summary {
+      flex: 1 0 100%;
       text-decoration: none;
       &:focus {
-        outline: $blue-lake dotted thin;
-      }
-      h6 {
-        color: $black;
-        font-weight: 400;
-        margin: 0;
-        line-height: 1.5rem;
-      }
-      .summary {
-        @include ms-respond(font-size, -1);
-        line-height: 1.5rem;
-        margin-bottom: 0;
-        color: $gray;
-      }
-
-      .assignment {
-        margin-bottom: 0;
-      }
-
-      .assignment,
-      .timestamps {
-        font-weight: 300;
-        @include ms-respond(font-size, -2);
-        line-height: 1.5rem;
-        color: $gray;
-      }
-
-      .timestamps {
-        display: flex;
-        flex-direction: row;
-        text-transform: uppercase;
-        .list-group-item {
-          padding: 0;
-          color: $gray;
-          background-color: transparent;
-          @include ms-respond(font-size, -3);
-          &:not(:first-child):before {
-            content: '•';
-            font-weight: 700;
-            margin: 0 0.3125rem;
-          }
-        }
+        outline: $orange-kinops dotted thin;
       }
     }
-
-    // This is for the action dropdown.
-    .actions {
-      .dropdown > .dropdown-menu {
-        left: -5.5rem;
-        top: 1rem;
+    &__title {
+      color: $black;
+      font-weight: 600;
+      margin: 0.25rem 0;
+      line-height: 1.5rem;
+    }
+    &__meta {
+      @include ms-respond(font-size, -1);
+      line-height: 1.3125rem;
+      margin-bottom: 0;
+      color: rgba($black, 0.5);
+      display: flex;
+      align-items: center;
+    }
+    &__handler,
+    &__assignment {
+      margin-left: 1rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-transform: none;
+      white-space: nowrap;
+      flex-grow: 0;
+    }
+    .icon--discussion {
+      padding: 0 0.75rem;
+      line-height: 1.5rem;
+    }
+    &__timestamps {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      .list-group-item {
         padding: 0;
-        min-width: 7rem;
-        border-radius: 0;
-        border: none;
-        margin-top: 15px;
-        position: absolute;
-        box-sizing: border-box;
-        filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 3px 4px);
-        // Add the up arrow.
-
-        &:after {
-          content: '';
-          border: 10px solid;
-          border-color: transparent transparent white;
-          content: '';
-          right: 10%;
-          margin-left: -10px;
-          position: absolute;
-          top: -20px;
-          z-index: 9998;
+        color: rgba($black, 0.5);
+        background-color: transparent;
+        font-weight: 400;
+        @include ms-respond(font-size, -1);
+        &:not(:last-child):after {
+          content: '•';
+          color: rgba($black, 0.25);
+          margin: 0 0.3125rem;
         }
-
-        a.dropdown-item,
-        button.dropdown-item {
-          height: 24px;
-          color: #54698d;
-          font-size: 0.75rem;
-          line-height: 1.5rem;
-          padding: 3px 0.75rem;
+        .time-ago__text {
+          color: $black;
         }
       }
     }
+
+    // // This is for the action dropdown.
+    // .actions {
+    //   .dropdown > .dropdown-menu {
+    //     left: -5.5rem;
+    //     top: 1rem;
+    //     padding: 0;
+    //     min-width: 7rem;
+    //     border-radius: 0;
+    //     border: none;
+    //     margin-top: 15px;
+    //     position: absolute;
+    //     box-sizing: border-box;
+    //     filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 3px 4px);
+    //     // Add the up arrow.
+
+    //     &:after {
+    //       content: "";
+    //       border: 10px solid;
+    //       border-color: transparent transparent white;
+    //       content: "";
+    //       right: 10%;
+    //       margin-left: -10px;
+    //       position: absolute;
+    //       top: -20px;
+    //       z-index: 9998;
+    //     }
+
+    //     a.dropdown-item,
+    //     button.dropdown-item {
+    //       height: 24px;
+    //       color: #54698d;
+    //       font-size: 0.75rem;
+    //       line-height: 1.5rem;
+    //       padding: 3px 0.75rem;
+    //     }
+    //   }
+    // }
   }
 }

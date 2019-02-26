@@ -11,6 +11,7 @@ import { buildHierarchy } from '../../../utils';
 import { IconPicker } from '../../shared/IconPicker';
 import { TeamCard } from '../../shared/TeamCard';
 import { Avatar } from 'common';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 import {
   actions as teamListActions,
@@ -48,18 +49,34 @@ const TeamFormComponent = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to="/">home</Link> / <Link to="/settings">settings</Link>{' '}
-                / <Link to="/settings/teams">teams</Link> /
+                <Link to="/">
+                  <I18n>home</I18n>
+                </Link>{' '}
+                /{' '}
+                <Link to="/settings">
+                  <I18n>settings</I18n>
+                </Link>{' '}
+                /{' '}
+                <Link to="/settings/teams">
+                  <I18n>teams</I18n>
+                </Link>{' '}
+                /
               </h3>
-              <h1>{editing ? 'Edit' : 'New'} Team</h1>
+              <h1>
+                <I18n>{editing ? 'Edit' : 'New'} Team</I18n>
+              </h1>
             </div>
           </div>
 
           <section>
-            <h2 className="section__title">General</h2>
+            <h2 className="section__title">
+              <I18n>General</I18n>
+            </h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group required">
-                <label htmlFor="name">Display Name</label>
+                <label htmlFor="name">
+                  <I18n>Display Name</I18n>
+                </label>
                 <input
                   id="name"
                   name="name"
@@ -70,7 +87,9 @@ const TeamFormComponent = ({
               </div>
 
               <div className="form-group">
-                <label htmlFor="description">Description</label>
+                <label htmlFor="description">
+                  <I18n>Description</I18n>
+                </label>
                 <textarea
                   id="description"
                   className="form-control"
@@ -82,41 +101,55 @@ const TeamFormComponent = ({
               </div>
 
               <div className="form-group">
-                <label htmlFor="parent">Parent Team</label>
-                <select
-                  id="parent"
-                  onChange={handleFieldChange}
-                  name="parentName"
-                  value={fieldValues.parentName}
-                >
-                  <option key={''} value={''} />
-                  {teams.map(team => (
-                    <option key={team.slug} value={team.name}>
-                      {team.name}
-                    </option>
-                  ))}
-                </select>
+                <label htmlFor="parent">
+                  <I18n>Parent Team</I18n>
+                </label>
+                <I18n
+                  render={translate => (
+                    <select
+                      id="parent"
+                      onChange={handleFieldChange}
+                      name="parentName"
+                      value={fieldValues.parentName}
+                    >
+                      <option key={''} value={''} />
+                      {teams.map(team => (
+                        <option key={team.slug} value={team.name}>
+                          {translate(team.name)}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                />
               </div>
 
               <div className="form-group">
-                <label htmlFor="assignable">Assignable</label>
-                <select
-                  id="assignable"
-                  onChange={handleFieldChange}
-                  name="assignable"
-                  value={fieldValues.assignable}
-                >
-                  <option key={'true'} value={'True'}>
-                    True
-                  </option>
-                  <option key={'false'} value={'False'}>
-                    False
-                  </option>
-                </select>
+                <label htmlFor="assignable">
+                  <I18n>Assignable</I18n>
+                </label>
+                <I18n
+                  render={translate => (
+                    <select
+                      id="assignable"
+                      onChange={handleFieldChange}
+                      name="assignable"
+                      value={fieldValues.assignable}
+                    >
+                      <option key={'true'} value={'True'}>
+                        {translate('True')}
+                      </option>
+                      <option key={'false'} value={'False'}>
+                        {translate('False')}
+                      </option>
+                    </select>
+                  )}
+                />
               </div>
 
               <div className="form-group">
-                <label htmlFor="icon">Icon</label>
+                <label htmlFor="icon">
+                  <I18n>Icon</I18n>
+                </label>
                 <IconPicker
                   id="icon"
                   controls={{
@@ -134,16 +167,20 @@ const TeamFormComponent = ({
                       className="btn btn-link text-danger"
                       onClick={handleDelete}
                     >
-                      Delete
+                      <I18n>Delete</I18n>
                     </button>
                   )}
                 </span>
                 <span className="form__footer__right">
                   <button className="btn btn-link" onClick={handleCancel}>
-                    Cancel
+                    <I18n>Cancel</I18n>
                   </button>
                   <button className="btn btn-primary">
-                    {editing ? 'Save Changes' : 'Create Team'}
+                    {editing ? (
+                      <I18n>Save Changes</I18n>
+                    ) : (
+                      <I18n>Create Team</I18n>
+                    )}
                   </button>
                 </span>
               </div>
@@ -154,7 +191,7 @@ const TeamFormComponent = ({
             <section className="team-members-wrapper">
               <AddMemberModal />
               <h3 className="section__title">
-                Members
+                <I18n>Members</I18n>
                 <i
                   className={'fa fa-plus control'}
                   style={{ cursor: 'pointer' }}
@@ -167,8 +204,12 @@ const TeamFormComponent = ({
                   <thead>
                     <tr>
                       <th>&nbsp;</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Username</th>
+                      <th scope="col">
+                        <I18n>Name</I18n>
+                      </th>
+                      <th scope="col">
+                        <I18n>Username</I18n>
+                      </th>
                       <th>&nbsp;</th>
                     </tr>
                   </thead>
@@ -203,7 +244,7 @@ const TeamFormComponent = ({
           {editing && (
             <section className="team-subteams-wrapper">
               <h3 className="section__title">
-                Subteams
+                <I18n>Subteams</I18n>
                 <Link to={`/settings/teams/new?parent=${team.name}`}>
                   <i className={'fa fa-plus control'} />
                 </Link>

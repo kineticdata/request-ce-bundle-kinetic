@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
-
 import { PageTitle } from 'common';
+import { I18n } from '../../../../app/src/I18nProvider';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -23,39 +23,43 @@ const IsolatedFormComponent = ({
   values,
   showHeader,
 }) => (
-  <div className="page--container">
-    <PageTitle parts={[formName]} />
-    <div className="page-panel">
-      {showHeader && (
-        <div className="page-title">
-          <div className="page-title__wrapper">
-            <h1>{formName}</h1>
+  <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+    <div className="page--container">
+      <PageTitle parts={[formName]} />
+      <div className="page-panel">
+        {showHeader && (
+          <div className="page-title">
+            <div className="page-title__wrapper">
+              <h1>
+                <I18n>{formName}</I18n>
+              </h1>
+            </div>
           </div>
-        </div>
-      )}
-      {submissionId ? (
-        <div>
-          <CoreForm
-            submission={submissionId}
-            globals={globals}
-            created={handleCreated}
-            loaded={handleLoaded}
-          />
-        </div>
-      ) : (
-        <div>
-          <CoreForm
-            kapp={kappSlug}
-            form={formSlug}
-            globals={globals}
-            created={handleCreated}
-            loaded={handleLoaded}
-            values={values}
-          />
-        </div>
-      )}
+        )}
+        {submissionId ? (
+          <div>
+            <CoreForm
+              submission={submissionId}
+              globals={globals}
+              created={handleCreated}
+              loaded={handleLoaded}
+            />
+          </div>
+        ) : (
+          <div>
+            <CoreForm
+              kapp={kappSlug}
+              form={formSlug}
+              globals={globals}
+              created={handleCreated}
+              loaded={handleLoaded}
+              values={values}
+            />
+          </div>
+        )}
+      </div>
     </div>
-  </div>
+  </I18n>
 );
 
 const valuesFromQueryParams = queryParams => {

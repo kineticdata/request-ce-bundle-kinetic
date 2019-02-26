@@ -7,6 +7,7 @@ import commonReducers from 'common/src/redux/reducers';
 import servicesReducers from 'services/src/redux/reducers';
 import queueReducers from 'queue/src/redux/reducers';
 import spaceReducers from 'space/src/redux/reducers';
+import techBarReducers from 'tech-bar/src/redux/reducers';
 import {
   sagas as discussionSagas,
   reducers as discussionReducers,
@@ -16,6 +17,7 @@ import commonSagas from 'common/src/redux/sagas';
 import servicesSagas from 'services/src/redux/sagas';
 import queueSagas from 'queue/src/redux/sagas';
 import spaceSagas from 'space/src/redux/sagas';
+import techBarSagas from 'tech-bar/src/redux/sagas';
 
 export const configureStore = history => {
   // To enable the redux dev tools in the browser we need to conditionally use a
@@ -38,6 +40,7 @@ export const configureStore = history => {
         queue: combineReducers(queueReducers),
         space: combineReducers(spaceReducers),
         discussions: combineReducers(discussionReducers),
+        techBar: combineReducers(techBarReducers),
       }),
     ),
     composeEnhancers(
@@ -56,6 +59,7 @@ export const configureStore = history => {
       queueSagas,
       spaceSagas,
       discussionSagas,
+      techBarSagas,
     ]),
   );
 

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { TimeAgo } from 'common';
 import { activityData } from '../../RequestActivityList';
+import { I18n } from '../../../../../../app/src/I18nProvider';
 
 const getStatusColor = status =>
   status === 'In Progress'
@@ -14,9 +15,9 @@ export const ApprovalHeader = ({ activity }) => {
   return (
     <Fragment>
       <h1>
-        {activity.label}
+        <I18n>{activity.label}</I18n>
         <span className={`status ${getStatusColor(data.Status)}`}>
-          {data.Status}
+          <I18n>{data.Status}</I18n>
         </span>
       </h1>
     </Fragment>
@@ -31,7 +32,8 @@ export const ApprovalBody = ({ activity }) => {
         <div className="data-list-row__col">
           <dl>
             <dt>
-              <span className="fa fa-fw fa-calendar" />Created
+              <span className="fa fa-fw fa-calendar" />
+              <I18n>Created</I18n>
             </dt>
             <dd>
               <TimeAgo timestamp={activity.createdAt} />
@@ -41,7 +43,8 @@ export const ApprovalBody = ({ activity }) => {
         <div className="data-list-row__col">
           <dl>
             <dt>
-              <span className="fa fa-fw fa-calendar" />Updated
+              <span className="fa fa-fw fa-calendar" />
+              <I18n>Updated</I18n>
             </dt>
             <dd>
               <TimeAgo timestamp={activity.updatedAt} />
@@ -54,7 +57,8 @@ export const ApprovalBody = ({ activity }) => {
           <div className="data-list-row__col">
             <dl>
               <dt>
-                <span className="fa fa-fw fa-user" />Approver
+                <span className="fa fa-fw fa-user" />
+                <I18n>Approver</I18n>
               </dt>
               <dd>
                 {data['Assigned Team'] && data['Assigned Individual']
@@ -69,9 +73,12 @@ export const ApprovalBody = ({ activity }) => {
             <div className="data-list-row__col">
               <dl>
                 <dt>
-                  <span className="fa fa-fw fa-code-fork" />Decision
+                  <span className="fa fa-fw fa-code-fork" />
+                  <I18n>Decision</I18n>
                 </dt>
-                <dd>{data.Decision}</dd>
+                <dd>
+                  <I18n>{data.Decision}</I18n>
+                </dd>
               </dl>
             </div>
           )}
@@ -80,7 +87,8 @@ export const ApprovalBody = ({ activity }) => {
             <div className="data-list-row__col">
               <dl>
                 <dt>
-                  <span className="fa fa-fw fa-window-close" />Denial Reason
+                  <span className="fa fa-fw fa-window-close" />
+                  <I18n>Denial Reason</I18n>
                 </dt>
                 <dd>{data['Denial Reason']}</dd>
               </dl>
@@ -90,7 +98,8 @@ export const ApprovalBody = ({ activity }) => {
           <div className="data-list-row__col">
             <dl>
               <dt>
-                <span className="fa fa-fw fa-comment" />Comments
+                <span className="fa fa-fw fa-comment" />
+                <I18n>Comments</I18n>
               </dt>
               <dd>{data.Comments}</dd>
             </dl>
