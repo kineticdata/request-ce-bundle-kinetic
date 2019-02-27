@@ -92,7 +92,9 @@ const mapStateToProps = (state, props) => ({
     .toMap()
     .mapEntries(([_, filter]) => [
       filter.name,
-      state.queue.queue.getIn(['lists', filter], List()).size,
+      state.queue.queue.hasIn(['lists', filter])
+        ? state.queue.queue.getIn(['lists', filter], List()).size
+        : null,
     ]),
   hasTeammates: state.queue.queueApp.myTeammates.size > 0,
   hasTeams: state.queue.queueApp.myTeams.size > 0,
