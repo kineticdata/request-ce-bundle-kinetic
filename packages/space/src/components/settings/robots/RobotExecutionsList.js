@@ -14,8 +14,8 @@ const getStatusColor = status =>
   status === 'Queued'
     ? 'status--yellow'
     : status === 'Running'
-      ? 'status--green'
-      : 'status--gray';
+    ? 'status--green'
+    : 'status--gray';
 
 const WallyEmptyMessage = () => {
   return (
@@ -96,20 +96,19 @@ const RobotExecutionsListComponent = ({
             </li>
           </ul>
         </div>
-        {robotExecutions.size <= 0 &&
-          robotExecutionsErrors.length > 0 && (
-            <div className="text-center text-danger">
-              <h1>
-                <I18n>Oops!</I18n>
-              </h1>
-              <h2>
-                <I18n>Robot Executions Not Found</I18n>
-              </h2>
-              {robotExecutionsErrors.map(error => (
-                <p className="error-details">{error}</p>
-              ))}
-            </div>
-          )}
+        {robotExecutions.size <= 0 && robotExecutionsErrors.length > 0 && (
+          <div className="text-center text-danger">
+            <h1>
+              <I18n>Oops!</I18n>
+            </h1>
+            <h2>
+              <I18n>Robot Executions Not Found</I18n>
+            </h2>
+            {robotExecutionsErrors.map(error => (
+              <p className="error-details">{error}</p>
+            ))}
+          </div>
+        )}
         {robotExecutions.size > 0 && (
           <table className="table table-sm table-striped table-robots">
             <thead className="header">
@@ -149,9 +148,10 @@ const RobotExecutionsListComponent = ({
                       )}
                     </td>
                     <td>
-                      {moment(execution.values['End']).format(
-                        Constants.TIME_FORMAT,
-                      )}
+                      {execution.values['Status'].toLowerCase() !== 'running' &&
+                        moment(execution.values['End']).format(
+                          Constants.TIME_FORMAT,
+                        )}
                     </td>
                     <td>
                       <Link
@@ -171,8 +171,9 @@ const RobotExecutionsListComponent = ({
             </tbody>
           </table>
         )}
-        {robotExecutionsErrors.length <= 0 &&
-          robotExecutions.size === 0 && <WallyEmptyMessage />}
+        {robotExecutionsErrors.length <= 0 && robotExecutions.size === 0 && (
+          <WallyEmptyMessage />
+        )}
         <div className="robots-pagination">
           <div className="btn-group">
             <button
