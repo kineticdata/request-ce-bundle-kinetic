@@ -3,7 +3,8 @@ import { KappLink as Link, KappNavLink as NavLink } from 'common';
 import { Nav, NavItem } from 'reactstrap';
 import { I18n } from '../../../app/src/I18nProvider';
 
-const formatCount = count => (count >= 1000 ? '999+' : `${count}`);
+const formatCount = count =>
+  count || count === 0 ? (count >= 1000 ? '(999+)' : `(${count})`) : '';
 
 export const Sidebar = ({
   counts,
@@ -37,7 +38,7 @@ export const Sidebar = ({
               activeClassName="active"
             >
               <span className="fa fa-fw fa-user" />
-              <I18n>Mine</I18n> ({formatCount(counts.get('Mine', 0))})
+              <I18n>Mine</I18n> {formatCount(counts.get('Mine'))}
             </NavLink>
           </NavItem>
           {hasTeammates && (
@@ -48,9 +49,7 @@ export const Sidebar = ({
                 activeClassName="active"
               >
                 <span className="fa fa-fw fa-users" />
-                <I18n>Teammates</I18n> ({formatCount(
-                  counts.get('Teammates', 0),
-                )})
+                <I18n>Teammates</I18n> {formatCount(counts.get('Teammates'))}
               </NavLink>
             </NavItem>
           )}
@@ -62,9 +61,7 @@ export const Sidebar = ({
                 activeClassName="active"
               >
                 <span className="fa fa-fw fa-inbox" />
-                <I18n>Unassigned</I18n> ({formatCount(
-                  counts.get('Unassigned', 0),
-                )})
+                <I18n>Unassigned</I18n> {formatCount(counts.get('Unassigned'))}
               </NavLink>
             </NavItem>
           )}
@@ -75,9 +72,8 @@ export const Sidebar = ({
               activeClassName="active"
             >
               <span className="fa fa-fw fa-user-circle-o" />
-              <I18n>Created By Me</I18n> ({formatCount(
-                counts.get('Created By Me', 0),
-              )})
+              <I18n>Created By Me</I18n>{' '}
+              {formatCount(counts.get('Created By Me'))}
             </NavLink>
           </NavItem>
         </Nav>

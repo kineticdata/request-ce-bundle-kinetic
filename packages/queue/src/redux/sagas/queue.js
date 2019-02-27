@@ -205,12 +205,19 @@ export function* fetchListTask(action) {
   if (assignmentContext.length === 0) {
     yield put(actions.setListItems(filter, []));
   } else {
-    const { submissions, messages, nextPageToken, serverError } = yield call(
-      CoreAPI.searchSubmissions,
-      { kapp: kappSlug, search, limit: 1000 },
-    );
+    const {
+      submissions,
+      messages,
+      nextPageToken,
+      serverError,
+      error,
+    } = yield call(CoreAPI.searchSubmissions, {
+      kapp: kappSlug,
+      search,
+      limit: 1000,
+    });
 
-    if (serverError || (messages && messages.length > 0)) {
+    if (serverError || error || (messages && messages.length > 0)) {
       yield put(actions.setListStatus(filter, ERROR_STATUS_STRING));
       yield put(errorActions.addError('Failed to retrieve items!'));
     } else if (nextPageToken) {
