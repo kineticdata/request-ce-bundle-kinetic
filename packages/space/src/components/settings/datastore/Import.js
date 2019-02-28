@@ -139,7 +139,7 @@ export class ImportComponent extends Component {
   /*  headerToFieldMap must be passed in because handleSelect and handleOmit update headerToFieldMap
    * in state just before calling handleCsvToJson.  If we used this.state.headerToFieldMap we would
    * get a stale version of the data.
-  */
+   */
   handleCsvToJson = headerToFieldMap => {
     const resultsList = fromJS(this.parseResults.data);
     this.setState({
@@ -287,42 +287,41 @@ export class ImportComponent extends Component {
       <Fragment>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {/* // Upload CSV */}
-          {!this.readFile &&
-            !this.state.postResult && (
-              <Fragment>
-                <div className="text-center">
-                  <h2>
-                    <I18n>Only .csv files are permitted to be uploaded.</I18n>
-                  </h2>
-                  <h4>
-                    <I18n>Size is limited to 20mb</I18n>
-                  </h4>
-                </div>
-                <div className="dropzone">
-                  <I18n
-                    render={translate => (
-                      <Dropzone
-                        onDrop={this.handleChange}
-                        className="dropzone__area"
-                        acceptClassName="dropzone__area--active"
-                        rejectClassName="dropzone__area--disabled"
-                      >
-                        {({ isDragActive, isDragReject }) => {
-                          if (isDragReject) {
-                            return translate('Only .csv files are vaild');
-                          }
-                          if (isDragActive) {
-                            return <DropzoneContent />;
-                          }
-
+          {!this.readFile && !this.state.postResult && (
+            <Fragment>
+              <div className="text-center">
+                <h2>
+                  <I18n>Only .csv files are permitted to be uploaded.</I18n>
+                </h2>
+                <h4>
+                  <I18n>Size is limited to 20mb</I18n>
+                </h4>
+              </div>
+              <div className="dropzone">
+                <I18n
+                  render={translate => (
+                    <Dropzone
+                      onDrop={this.handleChange}
+                      className="dropzone__area"
+                      acceptClassName="dropzone__area--active"
+                      rejectClassName="dropzone__area--disabled"
+                    >
+                      {({ isDragActive, isDragReject }) => {
+                        if (isDragReject) {
+                          return translate('Only .csv files are vaild');
+                        }
+                        if (isDragActive) {
                           return <DropzoneContent />;
-                        }}
-                      </Dropzone>
-                    )}
-                  />
-                </div>
-              </Fragment>
-            )}
+                        }
+
+                        return <DropzoneContent />;
+                      }}
+                    </Dropzone>
+                  )}
+                />
+              </div>
+            </Fragment>
+          )}
 
           {/* // Missing Fields */}
           {this.state.missingFields.size > 0 && (
@@ -490,16 +489,15 @@ export class ImportComponent extends Component {
           )}
 
           {/* // Reset or upload a new file */}
-          {this.readFile &&
-            !this.state.postResult && (
-              <button
-                className="btn btn-link"
-                style={{ alignSelf: 'flex-end' }}
-                onClick={this.handleReset}
-              >
-                <I18n>Upload a new file</I18n>
-              </button>
-            )}
+          {this.readFile && !this.state.postResult && (
+            <button
+              className="btn btn-link"
+              style={{ alignSelf: 'flex-end' }}
+              onClick={this.handleReset}
+            >
+              <I18n>Upload a new file</I18n>
+            </button>
+          )}
 
           {/* // Review records that match */}
           {!this.props.processing &&
@@ -526,7 +524,7 @@ export class ImportComponent extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.records.map((record, idx) => {
+                    {this.state.records.slice(0, 5).map((record, idx) => {
                       const { values, id } = record;
                       return (
                         <tr key={idx}>
@@ -549,12 +547,11 @@ export class ImportComponent extends Component {
             )}
 
           {/* // Import Records Button   */}
-          {this.state.records.size > 0 &&
-            this.state.missingFields.size <= 0 && (
-              <button className="btn btn-secondary" onClick={this.handleImport}>
-                <I18n>Import Records</I18n>
-              </button>
-            )}
+          {this.state.records.size > 0 && this.state.missingFields.size <= 0 && (
+            <button className="btn btn-secondary" onClick={this.handleImport}>
+              <I18n>Import Records</I18n>
+            </button>
+          )}
         </div>
       </Fragment>
     );

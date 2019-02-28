@@ -568,10 +568,12 @@ export function* deleteAllSubmissionsSaga(action) {
 export function* executeImportSaga(action) {
   const { form, records, recordsLength } = action.payload;
   let recordsChunk = null;
+  let currentRecordCount;
   const CHUNK_SIZE = 10;
 
   // abstract chunking requirement from function call.
   if (!action.beenChunked) {
+    currentRecordCount = 0;
     recordsChunk = chunkList(records, CHUNK_SIZE);
   } else {
     recordsChunk = records;
@@ -587,28 +589,32 @@ export function* executeImportSaga(action) {
 
   const responses = yield all(
     head
-      .map(
-        record =>
-          record.id
-            ? call(CoreAPI.updateSubmission, {
-                datastore: true,
-                formSlug: form.slug,
-                values: record.values,
-                id: record.id,
-              })
-            : call(CoreAPI.createSubmission, {
-                datastore: true,
-                formSlug: form.slug,
-                values: record.values,
-              }),
+      .map(record =>
+        record.id
+          ? call(CoreAPI.updateSubmission, {
+              datastore: true,
+              formSlug: form.slug,
+              values: record.values,
+              id: record.id,
+            })
+          : call(CoreAPI.createSubmission, {
+              datastore: true,
+              formSlug: form.slug,
+              values: record.values,
+            }),
       )
       .toJS(),
   );
 
   for (let x = 0; x < responses.length; x++) {
+    currentRecordCount++;
     const { serverError, errors } = responses[x];
     if (serverError || errors) {
-      yield put(actions.setImportFailedCall(errors ? errors : serverError));
+      const failedRow = {
+        rowNumber: currentRecordCount,
+        errors: errors ? errors : serverError,
+      };
+      yield put(actions.setImportFailedCall(failedRow));
     }
   }
 

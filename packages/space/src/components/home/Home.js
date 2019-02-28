@@ -142,19 +142,17 @@ const HomeComponent = ({
             )}
           </div>
         )}
-      {!discussionsError &&
-        !discussionsLoading &&
-        discussionGroups.size === 0 && (
-          <div className="empty-state empty-state--wally">
-            <h5>
-              <I18n>No discussions found</I18n>
-            </h5>
-            <img src={wallyMissingImage} alt="Missing Wally" />
-            <h6>
-              <I18n>You are not involved in any discussions!</I18n>
-            </h6>
-          </div>
-        )}
+      {!discussionsError && !discussionsLoading && discussionGroups.size === 0 && (
+        <div className="empty-state empty-state--wally">
+          <h5>
+            <I18n>No discussions found</I18n>
+          </h5>
+          <img src={wallyMissingImage} alt="Missing Wally" />
+          <h6>
+            <I18n>You are not involved in any discussions!</I18n>
+          </h6>
+        </div>
+      )}
     </div>
   </div>
 );
