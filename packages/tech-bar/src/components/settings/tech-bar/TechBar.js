@@ -202,7 +202,7 @@ export const TechBarComponent = ({
                               : 'badge-success'
                           }`}
                         >
-                          {content}
+                          <I18n>{content}</I18n>
                         </span>
                       </td>
                     ),
