@@ -136,6 +136,7 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.setIn(['today', 'loading'], true);
     case types.SET_TODAY_APPOINTMENTS:
       return state
+        .setIn(['today', 'errors'], [])
         .setIn(
           ['today', 'data'],
           List(payload).sortBy(

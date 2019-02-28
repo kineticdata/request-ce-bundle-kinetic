@@ -266,19 +266,19 @@ export const NotificationMenuComponent = ({
           <label htmlFor="notification-menu-datastore">
             <I18n>Datastore?</I18n>
           </label>
-          <select
-            id="notification-menu-datastore"
-            className="form-control form-control-sm"
-            value={isDatastore}
-            onChange={toggleIsDatastore}
-          >
-            <option value={false}>
-              <I18n>No</I18n>
-            </option>
-            <option value={true}>
-              <I18n>Yes</I18n>
-            </option>
-          </select>
+          <I18n
+            render={translate => (
+              <select
+                id="notification-menu-datastore"
+                className="form-control form-control-sm"
+                value={isDatastore}
+                onChange={toggleIsDatastore}
+              >
+                <option value={false}>{translate('No')}</option>
+                <option value={true}>{translate('Yes')}</option>
+              </select>
+            )}
+          />
         </div>
       )}
       {!isDatastore && (
@@ -286,19 +286,23 @@ export const NotificationMenuComponent = ({
           <label htmlFor="notification-menu-kapp">
             <I18n>Kapp</I18n>
           </label>
-          <select
-            id="notification-menu-kapp"
-            className="form-control form-control-sm"
-            value={selectedKapp ? selectedKapp.slug : ''}
-            onChange={handleKappSelect}
-          >
-            <option />
-            {kapps.map(kapp => (
-              <option key={kapp.slug} value={kapp.slug}>
-                <I18n>{kapp.name}</I18n>
-              </option>
-            ))}
-          </select>
+          <I18n
+            render={translate => (
+              <select
+                id="notification-menu-kapp"
+                className="form-control form-control-sm"
+                value={selectedKapp ? selectedKapp.slug : ''}
+                onChange={handleKappSelect}
+              >
+                <option />
+                {kapps.map(kapp => (
+                  <option key={kapp.slug} value={kapp.slug}>
+                    {translate(kapp.name)}
+                  </option>
+                ))}
+              </select>
+            )}
+          />
         </div>
       )}
       <div className="form-group col">
@@ -315,19 +319,23 @@ export const NotificationMenuComponent = ({
             <Fragment>
               <option />
               {forms.map(form => (
-                <option key={form.slug} value={form.slug}>
-                  <I18n
-                    context={`kapps.${selectedKapp.slug}.forms.${form.slug}`}
-                  >
-                    {form.name}
-                  </I18n>
-                </option>
+                <I18n
+                  key={form.slug}
+                  context={`kapps.${selectedKapp.slug}.forms.${form.slug}`}
+                  render={translate => (
+                    <option value={form.slug}>{translate(form.name)}</option>
+                  )}
+                />
               ))}
             </Fragment>
           ) : (
-            <option value="" disabled>
-              <I18n>Select a Kapp first or Set Is Datastore to Yes</I18n>
-            </option>
+            <I18n
+              render={translate => (
+                <option value="" disabled>
+                  {translate('Select a Kapp first or Set Is Datastore to Yes')}
+                </option>
+              )}
+            />
           )}
         </select>
       </div>

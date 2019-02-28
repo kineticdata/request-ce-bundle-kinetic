@@ -529,7 +529,7 @@ describe('queue saga', () => {
     describe('when request is successful', () => {
       test('it sets the list items', () => {
         const include =
-          'details,values,attributes,form,form.kapp,children,children.details,children.form,children.values,form.attributes,parent,parent.details,parent.values,parent.form,parent.form.kapp';
+          'details,values,attributes,form,form.kapp,children,children.details,children.form,children.form.kapp,children.values,form.attributes,parent,parent.details,parent.values,parent.form,parent.form.kapp';
         const saga = fetchCurrentItemTask(action);
 
         // Execute the search.
@@ -545,7 +545,7 @@ describe('queue saga', () => {
 
   describe('#updateQueueItemTask', () => {
     const include =
-      'details,values,attributes,form,form.kapp,children,children.details,children.form,children.values,form.attributes,parent,parent.details,parent.values,parent.form,parent.form.kapp';
+      'details,values,attributes,form,form.kapp,children,children.details,children.form,children.form.kapp,children.values,form.attributes,parent,parent.details,parent.values,parent.form,parent.form.kapp';
     const id = 'abc123';
     const values = { 'Assigned Individual': 'Me' };
     const response = { submission: { id: 'abc123', values: {} } };

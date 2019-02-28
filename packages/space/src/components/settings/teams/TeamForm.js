@@ -104,38 +104,46 @@ const TeamFormComponent = ({
                 <label htmlFor="parent">
                   <I18n>Parent Team</I18n>
                 </label>
-                <select
-                  id="parent"
-                  onChange={handleFieldChange}
-                  name="parentName"
-                  value={fieldValues.parentName}
-                >
-                  <option key={''} value={''} />
-                  {teams.map(team => (
-                    <option key={team.slug} value={team.name}>
-                      <I18n>{team.name}</I18n>
-                    </option>
-                  ))}
-                </select>
+                <I18n
+                  render={translate => (
+                    <select
+                      id="parent"
+                      onChange={handleFieldChange}
+                      name="parentName"
+                      value={fieldValues.parentName}
+                    >
+                      <option key={''} value={''} />
+                      {teams.map(team => (
+                        <option key={team.slug} value={team.name}>
+                          {translate(team.name)}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                />
               </div>
 
               <div className="form-group">
                 <label htmlFor="assignable">
                   <I18n>Assignable</I18n>
                 </label>
-                <select
-                  id="assignable"
-                  onChange={handleFieldChange}
-                  name="assignable"
-                  value={fieldValues.assignable}
-                >
-                  <option key={'true'} value={'True'}>
-                    <I18n>True</I18n>
-                  </option>
-                  <option key={'false'} value={'False'}>
-                    <I18n>False</I18n>
-                  </option>
-                </select>
+                <I18n
+                  render={translate => (
+                    <select
+                      id="assignable"
+                      onChange={handleFieldChange}
+                      name="assignable"
+                      value={fieldValues.assignable}
+                    >
+                      <option key={'true'} value={'True'}>
+                        {translate('True')}
+                      </option>
+                      <option key={'false'} value={'False'}>
+                        {translate('False')}
+                      </option>
+                    </select>
+                  )}
+                />
               </div>
 
               <div className="form-group">

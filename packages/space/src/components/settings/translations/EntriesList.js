@@ -417,30 +417,39 @@ export const EntriesListComponent = ({
                     <I18n>Locale</I18n>
                   </span>
                 </div>
-                <select
-                  name="locale-select"
-                  id="locale-select"
-                  className="form-control"
-                  value={locale}
-                  onChange={e =>
-                    push(
-                      `/settings/translations${
-                        context ? `/context/${context}` : ''
-                      }${e.target.value ? `/locale/${e.target.value}` : ''}`,
-                    )
-                  }
-                >
-                  {context && (
-                    <option value="">
-                      <I18n>All Locales</I18n>
-                    </option>
+                <I18n
+                  render={translate => (
+                    <select
+                      name="locale-select"
+                      id="locale-select"
+                      className="form-control"
+                      value={locale}
+                      onChange={e =>
+                        push(
+                          `/settings/translations${
+                            context ? `/context/${context}` : ''
+                          }${
+                            e.target.value ? `/locale/${e.target.value}` : ''
+                          }`,
+                        )
+                      }
+                    >
+                      {context && (
+                        <option value="">{translate('All Locales')}</option>
+                      )}
+                      {enabledLocales.map((locale, index) => (
+                        <option
+                          key={`${locale.code}-${index}`}
+                          value={locale.code}
+                        >
+                          {`${availableLocalesMap[locale.code]} | ${
+                            locale.code
+                          }`}
+                        </option>
+                      ))}
+                    </select>
                   )}
-                  {enabledLocales.map((locale, index) => (
-                    <option key={`${locale.code}-${index}`} value={locale.code}>
-                      {`${availableLocalesMap[locale.code]} | ${locale.code}`}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
             )}
             {keyHash &&

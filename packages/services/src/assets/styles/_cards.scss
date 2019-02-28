@@ -31,6 +31,7 @@
     line-height: 1.5rem;
     @include ms-respond(font-size, 1);
     margin-bottom: 0;
+    @include word-break;
   }
 }
 .card--category {

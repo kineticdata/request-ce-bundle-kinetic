@@ -160,7 +160,7 @@ export const FormContainer = ({
               form.slug
             }/builder`}
             className="btn btn-primary"
-            target="blank"
+            target="_blank"
           >
             <I18n>Form Builder</I18n>{' '}
             <i className="fa fa-fw fa-external-link" />
@@ -325,28 +325,28 @@ export const FormContainer = ({
                 <label>
                   <I18n>Prohibit Subtasks</I18n>
                 </label>
-                <select
-                  value={
-                    inputs['Prohibit Subtasks'] === 'Yes' ||
-                    inputs['Prohibit Subtasks'] === 'True'
-                      ? 'Yes'
-                      : 'No'
-                  }
-                  onChange={event =>
-                    setInputs({
-                      ...inputs,
-                      'Prohibit Subtasks': event.target.value,
-                    })
-                  }
-                  className="form-control col-8"
-                >
-                  <option value="No">
-                    <I18n>No</I18n>
-                  </option>
-                  <option value="Yes">
-                    <I18n>Yes</I18n>
-                  </option>
-                </select>
+                <I18n
+                  render={translate => (
+                    <select
+                      value={
+                        inputs['Prohibit Subtasks'] === 'Yes' ||
+                        inputs['Prohibit Subtasks'] === 'True'
+                          ? 'Yes'
+                          : 'No'
+                      }
+                      onChange={event =>
+                        setInputs({
+                          ...inputs,
+                          'Prohibit Subtasks': event.target.value,
+                        })
+                      }
+                      className="form-control col-8"
+                    >
+                      <option value="No">{translate('No')}</option>
+                      <option value="Yes">{translate('Yes')}</option>
+                    </select>
+                  )}
+                />
               </div>
             )}
             <div className="form-group">
@@ -370,28 +370,28 @@ export const FormContainer = ({
                 <label>
                   <I18n>Allow Reassignment</I18n>
                 </label>
-                <select
-                  value={
-                    inputs['Allow Reassignment'] === 'No' ||
-                    inputs['Allow Reassignment'] === 'False'
-                      ? 'No'
-                      : 'Yes'
-                  }
-                  onChange={event =>
-                    setInputs({
-                      ...inputs,
-                      'Allow Reassignment': event.target.value,
-                    })
-                  }
-                  className="form-control col-8"
-                >
-                  <option value="Yes">
-                    <I18n>Yes</I18n>
-                  </option>
-                  <option value="No">
-                    <I18n>No</I18n>
-                  </option>
-                </select>
+                <I18n
+                  render={translate => (
+                    <select
+                      value={
+                        inputs['Allow Reassignment'] === 'No' ||
+                        inputs['Allow Reassignment'] === 'False'
+                          ? 'No'
+                          : 'Yes'
+                      }
+                      onChange={event =>
+                        setInputs({
+                          ...inputs,
+                          'Allow Reassignment': event.target.value,
+                        })
+                      }
+                      className="form-control col-8"
+                    >
+                      <option value="No">{translate('No')}</option>
+                      <option value="Yes">{translate('Yes')}</option>
+                    </select>
+                  )}
+                />
               </div>
             )}
 
