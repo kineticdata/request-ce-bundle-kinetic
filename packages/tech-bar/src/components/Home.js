@@ -119,7 +119,7 @@ export const HomeComponent = ({
                   }`}
                   className="btn btn-link text-left pl-0"
                 >
-                  <I18n>Schedule →</I18n>
+                  <I18n>Schedule</I18n> →
                 </Link>
               </div>
             </div>
@@ -159,7 +159,7 @@ export const HomeComponent = ({
                           : 'badge-success'
                       }`}
                     >
-                      {appt.values['Status']}
+                      <I18n>{appt.values['Status']}</I18n>
                     </span>
                   </h1>
                   <p className="card-subtitle">
@@ -189,7 +189,7 @@ export const HomeComponent = ({
                     to={`/forms/appointment/${appt.id}`}
                     className="btn btn-link text-left pl-0"
                   >
-                    <I18n>View Details →</I18n>
+                    <I18n>View Details</I18n> →
                   </Link>
                 </div>
               </div>
@@ -239,7 +239,7 @@ export const HomeComponent = ({
                           : 'badge-success'
                       }`}
                     >
-                      {appt.values['Status']}
+                      <I18n>{appt.values['Status']}</I18n>
                     </span>
                   </h1>
                   <p className="card-subtitle">
@@ -269,7 +269,7 @@ export const HomeComponent = ({
                     to={`/forms/appointment/${appt.id}`}
                     className="btn btn-link text-left pl-0"
                   >
-                    <I18n>View Details →</I18n>
+                    <I18n>View Details</I18n> →
                   </Link>
                 </div>
               </div>
