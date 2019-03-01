@@ -1,13 +1,116 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import { compose, lifecycle } from 'recompose';
 import { Line } from 'rc-progress';
 import { Table } from 'reactstrap';
 import { Set, List, fromJS } from 'immutable';
 import Dropzone from 'react-dropzone';
 import Papa from 'papaparse';
+import { Table as CommonTable, PaginationControl } from 'common';
 
 import { actions } from '../../../redux/modules/settingsDatastore';
 import { I18n } from '../../../../../app/src/I18nProvider';
+
+export const FailedImportTable = ({ records }) => (
+  <CommonTable
+    props={{
+      class: 'table--settings',
+      name: 'failed-import-table',
+      id: 'failed-import-table',
+    }}
+    data={records}
+    columns={[
+      {
+        value: 'rowNumber',
+        title: 'Row Number',
+      },
+      {
+        renderBodyCell: ({ value }) => (
+          <td>
+            {value.map((val, idx) => (
+              <span key={idx}>{val}</span>
+            ))}
+          </td>
+        ),
+        value: 'errors',
+        title: 'Failed Reason',
+      },
+    ].filter(c => c)}
+    renderFooter={true}
+    render={({ table, paginationProps }) => (
+      <div className="table-wrapper">
+        {table}
+        <PaginationControl {...paginationProps} />
+      </div>
+    )}
+  />
+);
+
+export const PostResults = ({ attemptedRecords, failedCalls, handleReset }) => (
+  <Fragment>
+    <div className="text-center">
+      <h2>
+        <I18n>Post Results</I18n>
+      </h2>
+      {attemptedRecords > 0 ? (
+        <Fragment>
+          <I18n
+            render={translate => (
+              <h4>
+                {`${attemptedRecords} ${
+                  attemptedRecords !== 1
+                    ? translate('records')
+                    : translate('record')
+                } ${translate('attempted to be posted')} ${attemptedRecords -
+                  failedCalls.size} ${translate('successful')}`}
+              </h4>
+            )}
+          />
+          {/* TODO: Display a link to download failed files */}
+          <I18n
+            render={translate => (
+              <h4 className="text-danger">
+                {failedCalls.size}{' '}
+                {failedCalls.size !== 1
+                  ? translate('records')
+                  : translate('record')}{' '}
+                {translate('failed')}
+              </h4>
+            )}
+          />
+          <FailedImportTable records={failedCalls} />
+          {/* <button className="btn btn-primary">Download failed records</button> */}
+        </Fragment>
+      ) : (
+        <h4>
+          <I18n>No records found to post</I18n>
+        </h4>
+      )}
+      <button
+        className="btn btn-link"
+        style={{ alignSelf: 'flex-end' }}
+        onClick={handleReset}
+      >
+        <I18n>Upload a new file?</I18n>
+      </button>
+    </div>
+  </Fragment>
+);
+
+export const DropzoneContent = () => (
+  <Fragment>
+    <i className="fa fa-upload" />
+    <h2>
+      <I18n>Upload a .csv file</I18n>
+    </h2>
+    <p>
+      <I18n>Drag a file to attach or</I18n>{' '}
+      <span className="text-primary">
+        <I18n>browse</I18n>
+      </span>
+    </p>
+  </Fragment>
+);
 
 /**
  *   This function creates the map that is used to match the csv's headers
@@ -71,21 +174,6 @@ const findMissingFields = headerMapList =>
       return acc.push(obj.header);
     }, List([]));
 
-const DropzoneContent = () => (
-  <Fragment>
-    <i className="fa fa-upload" />
-    <h2>
-      <I18n>Upload a .csv file</I18n>
-    </h2>
-    <p>
-      <I18n>Drag a file to attach or</I18n>{' '}
-      <span className="text-primary">
-        <I18n>browse</I18n>
-      </span>
-    </p>
-  </Fragment>
-);
-
 export class ImportComponent extends Component {
   constructor(props) {
     super(props);
@@ -95,7 +183,6 @@ export class ImportComponent extends Component {
       submissions: [],
       records: List(),
       recordsHeaders: Set([]),
-      formSlug: props.form.slug,
       missingFields: List([]),
       mapHeadersShow: false,
       percentComplete: 0,
@@ -139,7 +226,7 @@ export class ImportComponent extends Component {
   /*  headerToFieldMap must be passed in because handleSelect and handleOmit update headerToFieldMap
    * in state just before calling handleCsvToJson.  If we used this.state.headerToFieldMap we would
    * get a stale version of the data.
-  */
+   */
   handleCsvToJson = headerToFieldMap => {
     const resultsList = fromJS(this.parseResults.data);
     this.setState({
@@ -274,12 +361,9 @@ export class ImportComponent extends Component {
         recordsHeaders: Set([]),
         missingFields: List([]),
         percentComplete: 0,
+        failedCalls: nextProps.failedCalls,
       });
     }
-  }
-
-  componentWillUnmount() {
-    this.props.resetImportFailedCall();
   }
 
   render() {
@@ -287,42 +371,41 @@ export class ImportComponent extends Component {
       <Fragment>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {/* // Upload CSV */}
-          {!this.readFile &&
-            !this.state.postResult && (
-              <Fragment>
-                <div className="text-center">
-                  <h2>
-                    <I18n>Only .csv files are permitted to be uploaded.</I18n>
-                  </h2>
-                  <h4>
-                    <I18n>Size is limited to 20mb</I18n>
-                  </h4>
-                </div>
-                <div className="dropzone">
-                  <I18n
-                    render={translate => (
-                      <Dropzone
-                        onDrop={this.handleChange}
-                        className="dropzone__area"
-                        acceptClassName="dropzone__area--active"
-                        rejectClassName="dropzone__area--disabled"
-                      >
-                        {({ isDragActive, isDragReject }) => {
-                          if (isDragReject) {
-                            return translate('Only .csv files are vaild');
-                          }
-                          if (isDragActive) {
-                            return <DropzoneContent />;
-                          }
-
+          {!this.readFile && !this.state.postResult && (
+            <Fragment>
+              <div className="text-center">
+                <h2>
+                  <I18n>Only .csv files are permitted to be uploaded.</I18n>
+                </h2>
+                <h4>
+                  <I18n>Size is limited to 20mb</I18n>
+                </h4>
+              </div>
+              <div className="dropzone">
+                <I18n
+                  render={translate => (
+                    <Dropzone
+                      onDrop={this.handleChange}
+                      className="dropzone__area"
+                      acceptClassName="dropzone__area--active"
+                      rejectClassName="dropzone__area--disabled"
+                    >
+                      {({ isDragActive, isDragReject }) => {
+                        if (isDragReject) {
+                          return translate('Only .csv files are vaild');
+                        }
+                        if (isDragActive) {
                           return <DropzoneContent />;
-                        }}
-                      </Dropzone>
-                    )}
-                  />
-                </div>
-              </Fragment>
-            )}
+                        }
+
+                        return <DropzoneContent />;
+                      }}
+                    </Dropzone>
+                  )}
+                />
+              </div>
+            </Fragment>
+          )}
 
           {/* // Missing Fields */}
           {this.state.missingFields.size > 0 && (
@@ -345,54 +428,12 @@ export class ImportComponent extends Component {
             />
           )}
 
-          {/* //Show Results */}
           {this.state.postResult && (
-            <Fragment>
-              <div className="text-center">
-                <h2>
-                  <I18n>Post Results</I18n>
-                </h2>
-                {this.state.attemptedRecords > 0 ? (
-                  <Fragment>
-                    <I18n
-                      render={translate => (
-                        <h4>
-                          {this.state.attemptedRecords}{' '}
-                          {this.state.attemptedRecords !== 1
-                            ? translate('records')
-                            : translate('record')}{' '}
-                          {translate('attempted to be posted')}
-                        </h4>
-                      )}
-                    />
-                    {/* TODO: Display a link to download failed files */}
-                    <I18n
-                      render={translate => (
-                        <h4 className="text-danger">
-                          {this.props.failedCalls.size}{' '}
-                          {this.props.failedCalls.size !== 1
-                            ? translate('records')
-                            : translate('record')}{' '}
-                          {translate('failed')}
-                        </h4>
-                      )}
-                    />
-                    {/* <button className="btn btn-primary">Download failed records</button> */}
-                  </Fragment>
-                ) : (
-                  <h4>
-                    <I18n>No records found to post</I18n>
-                  </h4>
-                )}
-                <button
-                  className="btn btn-link"
-                  style={{ alignSelf: 'flex-end' }}
-                  onClick={this.handleReset}
-                >
-                  <I18n>Upload a new file?</I18n>
-                </button>
-              </div>
-            </Fragment>
+            <PostResults
+              attemptedRecords={this.state.attemptedRecords}
+              failedCalls={this.props.failedCalls}
+              handleReset={this.handleReset}
+            />
           )}
 
           {/* // Table of records to be imported */}
@@ -490,16 +531,15 @@ export class ImportComponent extends Component {
           )}
 
           {/* // Reset or upload a new file */}
-          {this.readFile &&
-            !this.state.postResult && (
-              <button
-                className="btn btn-link"
-                style={{ alignSelf: 'flex-end' }}
-                onClick={this.handleReset}
-              >
-                <I18n>Upload a new file</I18n>
-              </button>
-            )}
+          {this.readFile && !this.state.postResult && (
+            <button
+              className="btn btn-link"
+              style={{ alignSelf: 'flex-end' }}
+              onClick={this.handleReset}
+            >
+              <I18n>Upload a new file</I18n>
+            </button>
+          )}
 
           {/* // Review records that match */}
           {!this.props.processing &&
@@ -526,7 +566,7 @@ export class ImportComponent extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.records.map((record, idx) => {
+                    {this.state.records.slice(0, 5).map((record, idx) => {
                       const { values, id } = record;
                       return (
                         <tr key={idx}>
@@ -549,12 +589,11 @@ export class ImportComponent extends Component {
             )}
 
           {/* // Import Records Button   */}
-          {this.state.records.size > 0 &&
-            this.state.missingFields.size <= 0 && (
-              <button className="btn btn-secondary" onClick={this.handleImport}>
-                <I18n>Import Records</I18n>
-              </button>
-            )}
+          {this.state.records.size > 0 && this.state.missingFields.size <= 0 && (
+            <button className="btn btn-secondary" onClick={this.handleImport}>
+              <I18n>Import Records</I18n>
+            </button>
+          )}
         </div>
       </Fragment>
     );
@@ -575,7 +614,14 @@ export const mapDispatchToProps = {
   resetImportFailedCall: actions.resetImportFailedCall,
 };
 
-export const Import = connect(
-  mapStateToProps,
-  mapDispatchToProps,
+export const Import = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+  lifecycle({
+    componentWillUnmount() {
+      this.props.resetImportFailedCall();
+    },
+  }),
 )(ImportComponent);
