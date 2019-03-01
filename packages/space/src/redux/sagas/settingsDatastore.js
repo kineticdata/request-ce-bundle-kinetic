@@ -568,12 +568,14 @@ export function* deleteAllSubmissionsSaga(action) {
 export function* executeImportSaga(action) {
   const { form, records, recordsLength } = action.payload;
   let recordsChunk = null;
-  let currentRecordCount;
+  // This variable keeps the current row number for use with error display.
+  let currentRecordCount = action.currentRecordCount
+    ? action.currentRecordCount
+    : 0;
   const CHUNK_SIZE = 10;
 
   // abstract chunking requirement from function call.
   if (!action.beenChunked) {
-    currentRecordCount = 0;
     recordsChunk = chunkList(records, CHUNK_SIZE);
   } else {
     recordsChunk = records;
@@ -606,16 +608,34 @@ export function* executeImportSaga(action) {
       .toJS(),
   );
 
-  for (let x = 0; x < responses.length; x++) {
+  // for (let x = 0; x < responses.length; x++) {
+  //   currentRecordCount++;
+  //   const { serverError, errors } = responses[x];
+  //   // Not handling nonconforming errors from CoreAPI.
+  //   if (serverError || errors) {
+  //     const failedRow = {
+  //       rowNumber: currentRecordCount,
+  //       errors: errors ? errors : [serverError.statusText],
+  //     };
+  //     yield put(actions.setImportFailedCall(failedRow));
+  //   }
+  // }
+
+  const errorsArray = responses.reduce((acc, response) => {
     currentRecordCount++;
-    const { serverError, errors } = responses[x];
+    const { serverError, errors } = response;
+
+    // Not handling nonconforming errors from CoreAPI.
     if (serverError || errors) {
-      const failedRow = {
+      acc.push({
         rowNumber: currentRecordCount,
-        errors: errors ? errors : serverError,
-      };
-      yield put(actions.setImportFailedCall(failedRow));
+        errors: errors ? errors : [serverError.statusText],
+      });
     }
+    return acc;
+  }, []);
+  if (errorsArray.length > 0) {
+    yield put(actions.setImportFailedCalls(errorsArray));
   }
 
   if (tail.size > 0) {
@@ -626,6 +646,7 @@ export function* executeImportSaga(action) {
         records: tail,
       },
       beenChunked: true,
+      currentRecordCount,
     });
   } else {
     yield put(actions.setImportComplete());
