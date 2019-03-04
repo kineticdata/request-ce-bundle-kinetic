@@ -27,10 +27,12 @@ export const AppComponent = props =>
       <ModalFormContainer />
       {!props.headerHidden ? (
         <Fragment>
-          <HeaderContainer
-            hasSidebar={!props.sidebarHidden}
-            toggleSidebarOpen={props.toggleSidebarOpen}
-          />
+          <div className="app-header">
+            <HeaderContainer
+              hasSidebar={!props.sidebarHidden}
+              toggleSidebarOpen={props.toggleSidebarOpen}
+            />
+          </div>
           <props.AppProvider
             render={
               ({ main, sidebar, header }) => (
@@ -44,13 +46,7 @@ export const AppComponent = props =>
                   }`}
                 >
                   {sidebar && (
-                    <div className="sidebar-container">
-                      {sidebar}
-                      <span
-                        onClick={props.toggleSidebarOpen}
-                        className={`sidebar-toggle fa fa-fw fa-chevron-left`}
-                      />
-                    </div>
+                    <div className="sidebar-container">{sidebar}</div>
                   )}
                   <div
                     className="main-container"

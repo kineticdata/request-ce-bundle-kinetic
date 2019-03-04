@@ -49,7 +49,7 @@ export const Header = ({
 }) => (
   <Navbar color="faded" light>
     <Nav className="nav-header">
-      {/* {hasSidebar &&
+      {hasSidebar &&
         !isGuest && (
           <NavItem id="header-sidebar-toggle">
             <NavLink
@@ -61,7 +61,7 @@ export const Header = ({
               <i className="fa fa-fw fa-bars" />
             </NavLink>
           </NavItem>
-        )} */}
+        )}
       <NavItem>
         {!isGuest && (
           <Dropdown
@@ -70,7 +70,8 @@ export const Header = ({
             toggle={kappDropdownToggle}
           >
             <DropdownToggle nav role="button">
-              <i className="fa fa-fw fa-th" /> {dropdownTitleName(currentKapp)}
+              {dropdownTitleName(currentKapp)}{' '}
+              <i className="fa fa-fw fa-caret-down" />
             </DropdownToggle>
             <DropdownMenu>
               <Link
