@@ -91,3 +91,23 @@
     }
   }
 }
+
+#header-kapp-dropdown {
+  .nav-link {
+    border: 1px solid $black-16;
+    border-radius: 0.5rem;
+    color: $black;
+    height: 2.25rem;
+    margin-left: 1rem;
+    margin-top: 0.3725rem;
+    padding: 0.5rem 1rem;
+    box-shadow: 0.08s linear, min-width 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    &:hover {
+      border-color: rgba($blue-slate, 0.5);
+      color: $primary;
+      background-color: rgba($blue-slate, 0.015);
+      box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302),
+        0 2px 6px 3px rgba(60, 64, 67, 0.149);
+    }
+  }
+}

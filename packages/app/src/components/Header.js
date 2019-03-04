@@ -71,7 +71,7 @@ export const Header = ({
           >
             <DropdownToggle nav role="button">
               {dropdownTitleName(currentKapp)}{' '}
-              <i className="fa fa-fw fa-caret-down" />
+              <i className="fa fa-caret-down" />
             </DropdownToggle>
             <DropdownMenu>
               <Link
