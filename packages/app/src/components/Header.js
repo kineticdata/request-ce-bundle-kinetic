@@ -70,7 +70,7 @@ export const Header = ({
             toggle={kappDropdownToggle}
           >
             <DropdownToggle nav role="button">
-              {dropdownTitleName(currentKapp)}{' '}
+              <span>{dropdownTitleName(currentKapp)}</span>{' '}
               <i className="fa fa-caret-down" />
             </DropdownToggle>
             <DropdownMenu>

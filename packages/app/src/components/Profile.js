@@ -20,7 +20,7 @@ export const Profile = ({
       nav
       role="button"
       className="icon-wrapper"
-      style={{ padding: '0 1em' }}
+      style={{ padding: '0 0.75rem' }}
     >
       <Avatar size={24} user={profile} previewable={false} />
     </DropdownToggle>
