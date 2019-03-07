@@ -5,7 +5,6 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import {
   KappLink as Link,
-  Icon,
   PageTitle,
   selectCurrentKapp,
   Moment,
@@ -23,9 +22,6 @@ export const HomeComponent = ({
   loadingUpcoming,
   upcomingErrors,
   upcomingAppointments,
-  loadingPast,
-  pastErrors,
-  pastAppointments,
   openDropdown,
   toggleDropdown,
   hasTechBarDisplayRole,
@@ -36,6 +32,89 @@ export const HomeComponent = ({
       <div className="home-title">
         <I18n>Welcome to {kapp ? kapp.name : 'Tech Bar'}</I18n>
       </div>
+      <section>
+        <h2 className="section__title">
+          <I18n>Upcoming Appointments</I18n>
+          <Link to="/past" className="btn btn-link">
+            <I18n>View Past Appointments</I18n>
+          </Link>
+        </h2>
+        <div className="cards__wrapper cards__wrapper--appt mb-5">
+          {upcomingAppointments.map(appt => {
+            const techBar = techBars.find(
+              t => t.values['Id'] === appt.values['Scheduler Id'],
+            );
+            const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
+            const start = moment.utc(appt.values['Event Time'], TIME_FORMAT);
+            const end = start
+              .clone()
+              .add(appt.values['Event Duration'], 'minute');
+            return (
+              <div className="card card--appt" key={appt.id}>
+                <i
+                  className="fa fa-calendar fa-fw card-icon"
+                  style={{ background: 'rgb(255, 74, 94)' }}
+                />
+                <div className="card-body">
+                  <h1 className="card-title">
+                    <Moment
+                      timestamp={date}
+                      format={Constants.MOMENT_FORMATS.dateWithDay}
+                    />
+                    <span
+                      className={`badge ${
+                        appt.coreState === 'Closed'
+                          ? 'badge-dark'
+                          : 'badge-success'
+                      }`}
+                    >
+                      <I18n>{appt.values['Status']}</I18n>
+                    </span>
+                  </h1>
+                  <p className="card-subtitle">
+                    <Moment
+                      timestamp={start}
+                      format={Constants.MOMENT_FORMATS.time}
+                    />
+                    {` - `}
+                    <Moment
+                      timestamp={end}
+                      format={Constants.MOMENT_FORMATS.time}
+                    />
+                  </p>
+                  <p className="card-text">
+                    {techBar && (
+                      <I18n
+                        render={translate => (
+                          <strong>{`${translate(
+                            techBar.values['Name'],
+                          )}: `}</strong>
+                        )}
+                      />
+                    )}
+                    {appt.values['Summary']}
+                  </p>
+                  <Link
+                    to={`/forms/appointment/${appt.id}`}
+                    className="btn btn-link text-left pl-0"
+                  >
+                    <I18n>View Details</I18n> →
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        {upcomingAppointments.size === 0 &&
+          !loadingUpcoming &&
+          upcomingErrors.length === 0 && (
+            <h6 className="text-muted">
+              <em>
+                <I18n>You do not have any upcoming appointments.</I18n>
+              </em>
+            </h6>
+          )}
+      </section>
       <section>
         <h2 className="section__title">
           <I18n>Tech Bars</I18n>
@@ -126,166 +205,6 @@ export const HomeComponent = ({
           ))}
         </div>
       </section>
-      <section>
-        <h2 className="section__title">
-          <I18n>Upcoming Appointments</I18n>
-        </h2>
-        <div className="cards__wrapper cards__wrapper--appt">
-          {upcomingAppointments.map(appt => {
-            const techBar = techBars.find(
-              t => t.values['Id'] === appt.values['Scheduler Id'],
-            );
-            const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
-            const start = moment.utc(appt.values['Event Time'], TIME_FORMAT);
-            const end = start
-              .clone()
-              .add(appt.values['Event Duration'], 'minute');
-            return (
-              <div className="card card--appt" key={appt.id}>
-                <i
-                  className="fa fa-calendar fa-fw card-icon"
-                  style={{ background: 'rgb(255, 74, 94)' }}
-                />
-                <div className="card-body">
-                  <h1 className="card-title">
-                    <Moment
-                      timestamp={date}
-                      format={Constants.MOMENT_FORMATS.dateWithDay}
-                    />
-                    <span
-                      className={`badge ${
-                        appt.coreState === 'Closed'
-                          ? 'badge-dark'
-                          : 'badge-success'
-                      }`}
-                    >
-                      <I18n>{appt.values['Status']}</I18n>
-                    </span>
-                  </h1>
-                  <p className="card-subtitle">
-                    <Moment
-                      timestamp={start}
-                      format={Constants.MOMENT_FORMATS.time}
-                    />
-                    {` - `}
-                    <Moment
-                      timestamp={end}
-                      format={Constants.MOMENT_FORMATS.time}
-                    />
-                  </p>
-                  <p className="card-text">
-                    {techBar && (
-                      <I18n
-                        render={translate => (
-                          <strong>{`${translate(
-                            techBar.values['Name'],
-                          )}: `}</strong>
-                        )}
-                      />
-                    )}
-                    {appt.values['Summary']}
-                  </p>
-                  <Link
-                    to={`/forms/appointment/${appt.id}`}
-                    className="btn btn-link text-left pl-0"
-                  >
-                    <I18n>View Details</I18n> →
-                  </Link>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        {upcomingAppointments.size === 0 &&
-          !loadingUpcoming &&
-          upcomingErrors.length === 0 && (
-            <h6 className="text-muted">
-              <em>
-                <I18n>You do not have any upcoming appointments.</I18n>
-              </em>
-            </h6>
-          )}
-      </section>
-      <section className="mb-4">
-        <h2 className="section__title">
-          <I18n>Past Appointments</I18n>
-        </h2>
-        <div className="cards__wrapper cards__wrapper--appt">
-          {pastAppointments.map(appt => {
-            const techBar = techBars.find(
-              t => t.values['Id'] === appt.values['Scheduler Id'],
-            );
-            const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
-            const start = moment.utc(appt.values['Event Time'], TIME_FORMAT);
-            const end = start
-              .clone()
-              .add(appt.values['Event Duration'], 'minute');
-            return (
-              <div className="card card--appt" key={appt.id}>
-                <i
-                  className="fa fa-calendar fa-fw card-icon"
-                  style={{ background: 'rgb(255, 74, 94)' }}
-                />
-                <div className="card-body">
-                  <h1 className="card-title">
-                    <Moment
-                      timestamp={date}
-                      format={Constants.MOMENT_FORMATS.dateWithDay}
-                    />
-                    <span
-                      className={`badge ${
-                        appt.coreState === 'Closed'
-                          ? 'badge-dark'
-                          : 'badge-success'
-                      }`}
-                    >
-                      <I18n>{appt.values['Status']}</I18n>
-                    </span>
-                  </h1>
-                  <p className="card-subtitle">
-                    <Moment
-                      timestamp={start}
-                      format={Constants.MOMENT_FORMATS.time}
-                    />
-                    {` - `}
-                    <Moment
-                      timestamp={end}
-                      format={Constants.MOMENT_FORMATS.time}
-                    />
-                  </p>
-                  <p className="card-text">
-                    {techBar && (
-                      <I18n
-                        render={translate => (
-                          <strong>{`${translate(
-                            techBar.values['Name'],
-                          )}: `}</strong>
-                        )}
-                      />
-                    )}
-                    {appt.values['Summary']}
-                  </p>
-                  <Link
-                    to={`/forms/appointment/${appt.id}`}
-                    className="btn btn-link text-left pl-0"
-                  >
-                    <I18n>View Details</I18n> →
-                  </Link>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        {pastAppointments.size === 0 &&
-          !loadingPast &&
-          pastErrors.length === 0 && (
-            <h6 className="text-muted">
-              <em>
-                <I18n>You do not have any past appointments.</I18n>
-              </em>
-            </h6>
-          )}
-      </section>
     </div>
   </Fragment>
 );
@@ -298,16 +217,12 @@ export const mapStateToProps = state => ({
   loadingUpcoming: state.techBar.appointments.upcoming.loading,
   upcomingErrors: state.techBar.appointments.upcoming.errors,
   upcomingAppointments: state.techBar.appointments.upcoming.data,
-  loadingPast: state.techBar.appointments.past.loading,
-  pastErrors: state.techBar.appointments.past.errors,
-  pastAppointments: state.techBar.appointments.past.data,
   profile: state.app.profile,
 });
 
 export const mapDispatchToProps = {
   push,
   fetchUpcomingAppointments: actions.fetchUpcomingAppointments,
-  fetchPastAppointments: actions.fetchPastAppointments,
 };
 
 const toggleDropdown = ({
@@ -331,7 +246,6 @@ export const Home = compose(
       if (!this.props.loadingUpcoming) {
         this.props.fetchUpcomingAppointments();
       }
-      this.props.fetchPastAppointments();
     },
   }),
 )(HomeComponent);

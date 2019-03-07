@@ -29,6 +29,7 @@ export const FormComponent = ({
   match: {
     params: { formSlug, id, mode },
   },
+  isPast,
   form,
   match,
   handleCreated,
@@ -48,6 +49,14 @@ export const FormComponent = ({
               <I18n>tech bar</I18n>
             </Link>{' '}
             /{' '}
+            {isPast && (
+              <Fragment>
+                <Link to="/past">
+                  <I18n>past appointments</I18n>
+                </Link>{' '}
+                /{' '}
+              </Fragment>
+            )}
           </h3>
           {form && (
             <h1>
