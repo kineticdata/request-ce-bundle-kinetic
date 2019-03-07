@@ -48,9 +48,9 @@ export const actions = {
 };
 
 export const selectPrevAndNext = (state, filter) => {
-  const queueItems = state.queue.queue.lists.get(filter) || List();
+  const queueItems = state.queue.lists.get(filter) || List();
   const currentItemIndex = queueItems.findIndex(
-    item => item.id === state.queue.queue.currentItem.id,
+    item => item.id === state.queue.currentItem.id,
   );
   const prevItem =
     currentItemIndex > 0 ? queueItems.get(currentItemIndex - 1).id : null;
@@ -67,7 +67,7 @@ export const selectPrevAndNext = (state, filter) => {
 
 export const selectGroupedQueueItems = (state, filter) => {
   const groupedBy = filter.groupBy;
-  const queueItems = state.queue.queue.lists.get(filter) || List();
+  const queueItems = state.queue.lists.get(filter) || List();
   return queueItems
     .sort(
       (s1, s2) =>

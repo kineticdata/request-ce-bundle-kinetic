@@ -15,7 +15,7 @@ import { actions as loadingActions } from './redux/modules/loading';
 import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';
 import { App as ServicesApp } from 'services/src/App';
-import { App as QueueApp } from 'queue/src/App';
+import { QueueApp } from 'queue/src/QueueApp';
 import { App as SpaceApp } from 'space/src/App';
 import { App as TechBarApp } from 'tech-bar/src/App';
 
@@ -32,6 +32,14 @@ export const AppComponent = props =>
             toggleSidebarOpen={props.toggleSidebarOpen}
           />
           <props.AppProvider
+            appState={{
+              space: props.space,
+              profile: props.profile,
+              kappSlug: props.kappSlug,
+              layoutSize: props.layoutSize,
+            }}
+            appRefresh={props.refreshApp}
+            history={props.history}
             render={({ main, sidebar, header }) =>
               !props.sidebarHidden && sidebar ? (
                 <Sidebar
@@ -79,6 +87,8 @@ export const mapStateToProps = state => ({
   kappSlug: state.app.config.kappSlug,
   pathname: state.router.location.pathname,
   locale: state.app.config.locale,
+  profile: state.app.profile,
+  space: state.app.space,
 });
 export const mapDispatchToProps = {
   loadApp: loadingActions.loadApp,
@@ -137,6 +147,7 @@ export const App = compose(
       props.shouldSuppressSidebar
         ? props.setSuppressedSidebarOpen(!props.sidebarOpen)
         : props.setSidebarOpen(!props.sidebarOpen),
+    refreshApp: props => () => props.loadApp(true),
   }),
   lifecycle({
     componentDidMount() {

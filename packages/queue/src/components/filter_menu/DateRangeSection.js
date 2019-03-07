@@ -5,6 +5,7 @@ import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
 import { DateRangeSelector } from 'common/src/components/DateRangeSelector';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 const convertDateRangeValue = dateRange =>
   !dateRange.custom
@@ -54,6 +55,8 @@ export const DateRangeSectionContainer = compose(
       setDateRangeTimeline: actions.setDateRangeTimeline,
       setDateRange: actions.setDateRange,
     },
+    null,
+    { context },
   ),
   withHandlers({
     setDateRangeTimelineHandler: props => event =>

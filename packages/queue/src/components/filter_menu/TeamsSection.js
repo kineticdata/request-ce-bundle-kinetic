@@ -4,6 +4,7 @@ import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 export const TeamsSection = ({ teams, filter, toggleTeamHandler }) => (
   <ModalBody className="filter-section">
@@ -31,6 +32,8 @@ export const TeamsSectionContainer = compose(
     {
       toggleTeam: actions.toggleTeam,
     },
+    null,
+    { context },
   ),
   withHandlers({
     toggleTeamHandler: props => event => props.toggleTeam(event.target.value),

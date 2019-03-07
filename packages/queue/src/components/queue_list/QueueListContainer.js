@@ -9,21 +9,22 @@ import {
   validateAssignments,
   validateDateRange,
 } from '../filter_menu/FilterMenuContainer';
+import { context } from '../../redux/store';
 
 const mapStateToProps = (state, props) => {
   const filter = getFilterByPath(state, props.location.pathname);
   return {
     filter,
     isExact: props.match.isExact,
-    offset: state.queue.queue.offset,
-    limit: state.queue.queue.limit,
-    sortDirection: state.queue.queue.sortDirection,
-    groupDirection: state.queue.queue.groupDirection,
+    offset: state.queue.offset,
+    limit: state.queue.limit,
+    sortDirection: state.queue.sortDirection,
+    groupDirection: state.queue.groupDirection,
     sortBy: filter && filter.sortBy,
-    queueItems: (filter && state.queue.queue.lists.get(filter)) || List(),
+    queueItems: (filter && state.queue.lists.get(filter)) || List(),
     isGrouped: filter && filter.groupBy !== '',
-    statusMessage: filter && state.queue.queue.statuses.get(filter),
-    isMobile: state.app.layout.size === 'small',
+    statusMessage: filter && state.queue.statuses.get(filter),
+    isMobile: state.app.layoutSize === 'small',
   };
 };
 
@@ -87,6 +88,8 @@ export const QueueListContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(
     ({

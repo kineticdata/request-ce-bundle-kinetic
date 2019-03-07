@@ -44,9 +44,9 @@ export const getFilterByPath = (state, pathname) => {
   const teamListMatch = matchPath(pathname, TEAM_LIST_PATH);
   const customListMatch = matchPath(pathname, CUSTOM_LIST_PATH);
   if (adhocMatch) {
-    return state.queue.queue.adhocFilter;
+    return state.queue.adhocFilter;
   } else if (defaultListMatch) {
-    return state.queue.queueApp.filters.find(
+    return state.queueApp.filters.find(
       findByName(defaultListMatch.params.name),
     );
   } else if (teamListMatch) {
@@ -54,13 +54,13 @@ export const getFilterByPath = (state, pathname) => {
     try {
       filterName = decodeURIComponent(teamListMatch.params.name);
     } catch (e) {}
-    return state.queue.queueApp.teamFilters.find(findByName(filterName));
+    return state.queueApp.teamFilters.find(findByName(filterName));
   } else if (customListMatch) {
     let filterName = customListMatch.params.name;
     try {
       filterName = decodeURIComponent(customListMatch.params.name);
     } catch (e) {}
-    return state.queue.queueApp.myFilters.find(findByName(filterName));
+    return state.queueApp.myFilters.find(findByName(filterName));
   }
 };
 
@@ -79,10 +79,10 @@ export const buildFilterPath = filter => {
 };
 
 export const selectMyTeamForms = state =>
-  state.queue.queueApp.forms.filter(f => {
+  state.queueApp.forms.filter(f => {
     const owningTeam = f.attributes['Owning Team'];
     return owningTeam
-      ? state.queue.queueApp.myTeams
+      ? state.queueApp.myTeams
           .map(t => t.name)
           .toSet()
           .intersect(new Set(owningTeam)).size > 0

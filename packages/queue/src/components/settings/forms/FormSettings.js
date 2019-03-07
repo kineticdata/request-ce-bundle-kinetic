@@ -11,6 +11,7 @@ import {
 } from '../../../redux/modules/settingsForms';
 import { actions as queueActions } from '../../../redux/modules/settingsQueue';
 import { I18n } from '../../../../../app/src/I18nProvider';
+import { context } from '../../../redux/store';
 
 export const TextInput = ({ value, name, setInputs, inputs, className }) => (
   <input
@@ -557,15 +558,15 @@ const handleColumnChange = ({ setInputs, inputs }) => (index, prop, value) => {
 };
 
 const mapStateToProps = (state, { match: { params } }) => ({
-  form: state.queue.settingsForms.currentForm,
-  formChanges: state.queue.settingsForms.currentFormChanges,
-  loading: state.queue.settingsForms.loading,
-  kappLoading: state.queue.settingsForms.kappLoading,
-  notificationsLoading: state.queue.settingsForms.notificationsLoading,
-  notifications: state.queue.settingsForms.notifications,
-  settingsForms: state.queue.settingsForms,
-  queueSettings: state.queue.queueSettings,
-  kappSlug: state.app.config.kappSlug,
+  form: state.settingsForms.currentForm,
+  formChanges: state.settingsForms.currentFormChanges,
+  loading: state.settingsForms.loading,
+  kappLoading: state.settingsForms.kappLoading,
+  notificationsLoading: state.settingsForms.notificationsLoading,
+  notifications: state.settingsForms.notifications,
+  settingsForms: state.settingsForms,
+  queueSettings: state.queueSettings,
+  kappSlug: state.app.kappSlug,
 });
 
 const mapDispatchToProps = {
@@ -582,6 +583,8 @@ export const FormSettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('inputs', 'setInputs', {}),
   withHandlers({

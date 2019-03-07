@@ -6,6 +6,7 @@ import { compose, lifecycle } from 'recompose';
 import { PageTitle } from 'common';
 import { actions } from '../../../redux/modules/settingsForms';
 import { I18n } from '../../../../../app/src/I18nProvider';
+import { context } from '../../../redux/store';
 
 export const FormActivityContainer = ({ loading, submission, space }) =>
   !loading && (
@@ -278,10 +279,10 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
   );
 
 const mapStateToProps = (state, { match: { params } }) => ({
-  loading: state.queue.settingsForms.submissionLoading,
-  submission: state.queue.settingsForms.formSubmission,
+  loading: state.settingsForms.submissionLoading,
+  submission: state.settingsForms.formSubmission,
   space: state.app.space,
-  activityLoading: state.queue.settingsForms.submissionActivityLoading,
+  activityLoading: state.settingsForms.submissionActivityLoading,
 });
 
 const mapDispatchToProps = {
@@ -292,6 +293,8 @@ export const FormActivity = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentWillMount() {

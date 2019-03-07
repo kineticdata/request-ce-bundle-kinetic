@@ -20,6 +20,7 @@ import { WorkMenuContainer } from './components/work_menu/WorkMenu';
 import { Settings } from './components/settings/Settings';
 import { I18n } from '../../app/src/I18nProvider';
 import './assets/styles/master.scss';
+import { context } from './redux/store';
 
 export const AppComponent = props => {
   if (props.loading) {
@@ -84,18 +85,18 @@ export const AppComponent = props => {
 };
 
 const mapStateToProps = (state, props) => ({
-  loading: state.queue.queueApp.loading,
-  defaultFilters: state.queue.queueApp.filters,
-  teamFilters: state.queue.queueApp.teamFilters,
-  myFilters: state.queue.queueApp.myFilters,
-  counts: state.queue.queueApp.filters
+  loading: state.queueApp.loading,
+  defaultFilters: state.queueApp.filters,
+  teamFilters: state.queueApp.teamFilters,
+  myFilters: state.queueApp.myFilters,
+  counts: state.queueApp.filters
     .toMap()
     .mapEntries(([_, filter]) => [
       filter.name,
-      state.queue.queue.getIn(['lists', filter], List()).size,
+      state.queue.getIn(['lists', filter], List()).size,
     ]),
-  hasTeammates: state.queue.queueApp.myTeammates.size > 0,
-  hasTeams: state.queue.queueApp.myTeams.size > 0,
+  hasTeammates: state.queueApp.myTeammates.size > 0,
+  hasTeams: state.queueApp.myTeams.size > 0,
   hasForms:
     selectMyTeamForms(state).filter(form => form.type === 'Task').length > 0,
 });
@@ -112,6 +113,8 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({
     handleOpenNewItemMenu: ({ openNewItemMenu }) => () => openNewItemMenu(),

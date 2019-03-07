@@ -21,6 +21,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import { CoreAPI } from 'react-kinetic-core';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 export const SettingsComponent = ({
   attributesMap,
@@ -338,8 +339,8 @@ const handleNameChange = ({ setKappName }) => event => {
 
 const mapStateToProps = state => ({
   currentKapp: selectCurrentKapp(state),
-  queueSettings: state.queue.queueSettings,
-  forms: state.queue.forms.data,
+  queueSettings: state.queueSettings,
+  forms: state.forms.data,
 });
 
 const mapDispatchToProps = {
@@ -351,6 +352,8 @@ export const QueueSettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('attributesMap', 'setAttributesMap', Map()),
   withState('previousAttributesMap', 'setPreviousAttributesMap', Map()),

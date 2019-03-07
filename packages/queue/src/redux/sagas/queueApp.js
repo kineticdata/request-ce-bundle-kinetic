@@ -14,8 +14,8 @@ import { filterReviver } from '../../records';
 const PROFILE_INCLUDES =
   'attributes,profileAttributes,memberships,memberships.team,memberships.team.attributes,memberships.team.memberships,memberships.team.memberships.user';
 
-export const selectPersonalFilters = state => state.queue.queueApp.myFilters;
-export const selectProfile = state => state.queue.queueApp.profile;
+export const selectPersonalFilters = state => state.queueApp.myFilters;
+export const selectProfile = state => state.queueApp.profile;
 
 // We'll implicitly believe teams to be assignable.
 export const isAssignable = team => {
@@ -42,7 +42,7 @@ export const isAssignable = team => {
 
 // TODO decide on error handling for these calls.
 export function* fetchAppSettingsTask() {
-  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const kappSlug = yield select(state => state.app.kappSlug);
   const {
     profile: { profile },
     forms: { forms },

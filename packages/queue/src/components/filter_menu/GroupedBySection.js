@@ -5,6 +5,7 @@ import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
 import { AttributeSelectors } from 'common';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 export const GroupedBySection = ({ filter, forms, setGroupedByHandler }) => (
   <ModalBody className="filter-section">
@@ -24,11 +25,13 @@ export const GroupedBySection = ({ filter, forms, setGroupedByHandler }) => (
 export const GroupedBySectionContainer = compose(
   connect(
     state => ({
-      forms: state.queue.queueApp.forms,
+      forms: state.queueApp.forms,
     }),
     {
       setGroupedBy: actions.setGroupedBy,
     },
+    null,
+    { context },
   ),
   withHandlers({
     setGroupedByHandler: props => event =>

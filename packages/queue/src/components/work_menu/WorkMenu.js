@@ -5,6 +5,7 @@ import { actions } from '../../redux/modules/workMenu';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { CoreForm } from 'react-kinetic-core';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 const globals = import('common/globals');
 
@@ -74,8 +75,8 @@ export const WorkMenu = ({
   );
 
 export const mapStateToProps = state => ({
-  queueItem: state.queue.workMenu.queueItem,
-  onWorked: state.queue.workMenu.onWorked,
+  queueItem: state.workMenu.queueItem,
+  onWorked: state.workMenu.onWorked,
 });
 export const mapDispatchToProps = {
   closeWorkMenu: actions.closeWorkMenu,
@@ -85,6 +86,8 @@ export const WorkMenuContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('complete', 'setComplete', false),
   withProps(({ queueItem }) => ({

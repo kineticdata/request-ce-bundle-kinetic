@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 export const SidebarComponent = ({ loading, spaceAdmin }) => (
   <div className="sidebar space-sidebar">
@@ -40,10 +41,17 @@ export const SidebarComponent = ({ loading, spaceAdmin }) => (
 );
 
 export const mapStateToProps = state => ({
-  loading: state.queue.queueSettings.loading,
-  forms: state.queue.forms.data,
+  loading: state.queueSettings.loading,
+  forms: state.forms.data,
   spaceAdmin: state.app.profile.spaceAdmin,
   pathname: state.router.location.pathname,
 });
 
-export const Sidebar = compose(connect(mapStateToProps))(SidebarComponent);
+export const Sidebar = compose(
+  connect(
+    mapStateToProps,
+    null,
+    null,
+    { context },
+  ),
+)(SidebarComponent);

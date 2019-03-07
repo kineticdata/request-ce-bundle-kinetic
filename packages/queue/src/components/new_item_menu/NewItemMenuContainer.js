@@ -7,17 +7,18 @@ import {
 } from '../../redux/modules/queueApp';
 import { actions } from '../../redux/modules/queue';
 import { NewItemMenu } from './NewItemMenu';
+import { context } from '../../redux/store';
 
 const mapStateToProps = state => ({
-  myTeamForms: !state.queue.queue.newItemMenuOptions.get('parentId')
+  myTeamForms: !state.queue.newItemMenuOptions.get('parentId')
     ? selectMyTeamForms(state).filter(form => form.type === 'Task')
     : selectMyTeamForms(state).filter(
         form => form.type === 'Task' || form.type === 'Subtask',
       ),
-  isOpen: state.queue.queue.newItemMenuOpen,
-  options: state.queue.queue.newItemMenuOptions,
-  allTeams: state.queue.queueApp.allTeams,
-  kappSlug: state.app.config.kappSlug,
+  isOpen: state.queue.newItemMenuOpen,
+  options: state.queue.newItemMenuOptions,
+  allTeams: state.queueApp.allTeams,
+  kappSlug: state.app.kappSlug,
 });
 
 const mapDispatchToProps = {
@@ -72,6 +73,8 @@ export const NewItemMenuContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('currentAssignment', 'setAssignment', null),
   withState('currentForm', 'setCurrentForm', null),

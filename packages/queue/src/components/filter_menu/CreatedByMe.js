@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { actions } from '../../redux/modules/filterMenu';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 export const CreatedByMe = ({ filter, toggleCreatedByMeHandler }) => (
   <button
@@ -31,6 +32,8 @@ export const CreatedByMeContainer = compose(
     {
       toggleCreatedByMe: actions.toggleCreatedByMe,
     },
+    null,
+    { context },
   ),
   withHandlers({
     toggleCreatedByMeHandler: props => event =>

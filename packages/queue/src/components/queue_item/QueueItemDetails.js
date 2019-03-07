@@ -13,6 +13,7 @@ import { AssignmentSelector } from '../shared/AssignmentSelector';
 import { StatusContent } from '../shared/StatusContent';
 import { WallyButtonContainer } from '../shared/WallyButton';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 const nonQueueLink = (queueItem, kappSlug) =>
   queueItem.parent &&
@@ -204,20 +205,20 @@ const getAttr = (form, attrName) => {
 };
 
 export const mapStateToProps = (state, props) => {
-  const queueItem = state.queue.queue.currentItem;
+  const queueItem = state.queue.currentItem;
   return {
     filter: props.filter,
     queueItem,
     assignments: selectAssignments(
-      state.queue.queueApp.allTeams,
+      state.queueApp.allTeams,
       queueItem.form,
       queueItem,
     ).toJS(),
     prevAndNext: selectPrevAndNext(state, props.filter),
-    kappSlug: state.app.config.kappSlug,
+    kappSlug: state.app.kappSlug,
     discussionsEnabled: selectDiscussionsEnabled(state),
     profile: state.app.profile,
-    isSmallLayout: state.app.layout.get('size') === 'small',
+    isSmallLayout: state.app.layoutSize === 'small',
   };
 };
 
@@ -234,6 +235,8 @@ export const QueueItemDetailsContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(({ queueItem }) => {
     const prohibit = getAttr(queueItem.form, 'Prohibit Subtasks');

@@ -8,6 +8,7 @@ import { actions } from '../../redux/modules/queue';
 import { QueueItemDetailsContainer } from './QueueItemDetails';
 import { getFilterByPath, buildFilterPath } from '../../redux/modules/queueApp';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 const CreationForm = ({ onChange, values, errors }) => (
   <React.Fragment>
@@ -90,7 +91,7 @@ export const QueueItem = ({
 export const mapStateToProps = (state, props) => ({
   id: props.match.params.id,
   filter: getFilterByPath(state, props.location.pathname),
-  queueItem: state.queue.queue.currentItem,
+  queueItem: state.queue.currentItem,
   discussionsEnabled: selectDiscussionsEnabled(state),
   profile: state.app.profile,
 });
@@ -104,6 +105,8 @@ export const QueueItemContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(
     props =>

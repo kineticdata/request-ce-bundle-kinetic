@@ -6,6 +6,7 @@ import papaparse from 'papaparse';
 
 import { actions } from '../../../redux/modules/settingsForms';
 import { I18n } from '../../../../../app/src/I18nProvider';
+import { context } from '../../../redux/store';
 
 const ExportComponent = ({
   submissions,
@@ -125,11 +126,11 @@ const handleDownload = props => () => {
 };
 
 const mapStateToProps = state => ({
-  form: state.queue.settingsForms.currentForm,
-  kappSlug: state.app.config.kappSlug,
-  submissions: state.queue.settingsForms.exportSubmissions,
-  submissionsCount: state.queue.settingsForms.exportCount,
-  downloaded: state.queue.settingsForms.downloaded,
+  form: state.settingsForms.currentForm,
+  kappSlug: state.app.kappSlug,
+  submissions: state.settingsForms.exportSubmissions,
+  submissionsCount: state.settingsForms.exportCount,
+  downloaded: state.settingsForms.downloaded,
 });
 
 const mapDispatchToProps = {
@@ -141,6 +142,8 @@ export const Export = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('exportStatus', 'setExportStatus', 'NOT_STARTED'),
   withHandlers({

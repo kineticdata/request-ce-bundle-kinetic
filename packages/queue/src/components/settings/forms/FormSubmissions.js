@@ -9,6 +9,7 @@ import { SubmissionListItem } from './SubmissionListItem';
 import { ExportModal } from './ExportModal';
 import { actions } from '../../../redux/modules/settingsForms';
 import { I18n } from '../../../../../app/src/I18nProvider';
+import { context } from '../../../redux/store';
 
 const DiscussionIcon = () => (
   <span className="icon">
@@ -716,17 +717,17 @@ export const FormSubmissionsContainer = ({
 };
 
 const mapStateToProps = (state, { match: { params } }) => ({
-  form: state.queue.settingsForms.currentForm,
-  kappSlug: state.app.config.kappSlug,
-  loading: state.queue.settingsForms.loading,
-  nextPageToken: state.queue.settingsForms.nextPageToken,
-  submissionsLoading: state.queue.settingsForms.submissionsLoading,
-  submissions: state.queue.settingsForms.currentFormSubmissions,
-  submissionColumns: state.queue.settingsForms.submissionColumns,
-  clientSortInfo: state.queue.settingsForms.clientSortInfo,
+  form: state.settingsForms.currentForm,
+  kappSlug: state.app.kappSlug,
+  loading: state.settingsForms.loading,
+  nextPageToken: state.settingsForms.nextPageToken,
+  submissionsLoading: state.settingsForms.submissionsLoading,
+  submissions: state.settingsForms.currentFormSubmissions,
+  submissionColumns: state.settingsForms.submissionColumns,
+  clientSortInfo: state.settingsForms.clientSortInfo,
   path: state.router.location.pathname.replace(/\/$/, ''),
-  isMobile: state.app.layout.size === 'small',
-  downloaded: state.queue.settingsForms.downloaded,
+  isMobile: state.app.layoutSize === 'small',
+  downloaded: state.settingsForms.downloaded,
 });
 
 const mapDispatchToProps = {
@@ -742,6 +743,8 @@ export const FormSubmissions = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('previousPageTokens', 'setPreviousPageToken', []),
   withState('currentPage', 'setCurrentPage', 1),

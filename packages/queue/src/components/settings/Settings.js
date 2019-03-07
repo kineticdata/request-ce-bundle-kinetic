@@ -13,6 +13,7 @@ import { FormActivity } from './forms/FormActivity';
 import { CreateForm } from './forms/CreateForm';
 import { FormSubmissions } from './forms/FormSubmissions';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 export const SettingsComponent = () => (
   <Switch>
@@ -59,6 +60,8 @@ export const Settings = compose(
   connect(
     null,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentWillMount(prev, next) {
@@ -124,5 +127,7 @@ export const SettingsNavigation = compose(
   connect(
     mapStateToProps,
     {},
+    null,
+    { context },
   ),
 )(SettingsNavigationComponent);

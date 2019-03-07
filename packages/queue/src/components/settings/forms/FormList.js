@@ -13,6 +13,7 @@ import { TimeAgo } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/forms';
 import { I18n } from '../../../../../app/src/I18nProvider';
+import { context } from '../../../redux/store';
 
 const WallyEmptyMessage = ({ filter }) => {
   return (
@@ -220,8 +221,8 @@ const FormListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.queue.queueSettings.loading,
-  kapp: state.queue.queueSettings.queueSettingsKapp,
+  loading: state.queueSettings.loading,
+  kapp: state.queueSettings.queueSettingsKapp,
   formsPerPage: 10,
   isSpaceAdmin: state.app.profile.spaceAdmin,
 });
@@ -241,6 +242,8 @@ export const FormList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('openDropdown', 'setOpenDropdown', ''),
   withState('currentPage', 'setCurrentPage', 1),

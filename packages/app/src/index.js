@@ -56,7 +56,7 @@ ReactDOM.render(
       <ConnectedI18nProvider>
         <ConnectedRouter history={history}>
           <AuthenticatedContainer>
-            <Route path="/" component={App} />
+            <Route path="/" render={() => <App history={history} />} />
           </AuthenticatedContainer>
         </ConnectedRouter>
       </ConnectedI18nProvider>

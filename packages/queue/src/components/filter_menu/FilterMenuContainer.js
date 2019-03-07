@@ -6,10 +6,11 @@ import { FilterMenu } from './FilterMenu';
 import { actions } from '../../redux/modules/filterMenu';
 import { actions as queueActions } from '../../redux/modules/queue';
 import { actions as appActions } from '../../redux/modules/queueApp';
+import { context } from '../../redux/store';
 
 const selectAppliedAssignments = state => {
-  if (state.queue.filterMenu.get('currentFilter')) {
-    const assignments = state.queue.filterMenu.get('currentFilter').assignments;
+  if (state.filterMenu.get('currentFilter')) {
+    const assignments = state.filterMenu.get('currentFilter').assignments;
     return List([
       assignments.mine && 'Mine',
       assignments.teammates && 'Teammates',
@@ -20,17 +21,17 @@ const selectAppliedAssignments = state => {
 };
 
 export const mapStateToProps = state => ({
-  teams: state.queue.queueApp.myTeams,
-  isOpen: state.queue.filterMenu.get('isOpen'),
-  activeSection: state.queue.filterMenu.get('activeSection'),
-  currentFilter: state.queue.filterMenu.get('currentFilter'),
+  teams: state.queueApp.myTeams,
+  isOpen: state.filterMenu.get('isOpen'),
+  activeSection: state.filterMenu.get('activeSection'),
+  currentFilter: state.filterMenu.get('currentFilter'),
   isDirty: !is(
-    state.queue.filterMenu.get('currentFilter'),
-    state.queue.filterMenu.get('initialFilter'),
+    state.filterMenu.get('currentFilter'),
+    state.filterMenu.get('initialFilter'),
   ),
-  filterName: state.queue.filterMenu.get('filterName'),
+  filterName: state.filterMenu.get('filterName'),
   appliedAssignments: selectAppliedAssignments(state),
-  kappSlug: state.app.config.kappSlug,
+  kappSlug: state.app.kappSlug,
 });
 
 export const mapDispatchToProps = {
@@ -92,6 +93,8 @@ export const FilterMenuContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(({ appliedAssignments, currentFilter, filterName }) => ({
     errors: !currentFilter

@@ -6,6 +6,7 @@ import { actions } from '../../../redux/modules/settingsForms';
 
 import { Export } from './Export';
 import { I18n } from '../../../../../app/src/I18nProvider';
+import { context } from '../../../redux/store';
 
 const ExportModalComponent = ({
   modalIsOpen,
@@ -35,8 +36,8 @@ const ExportModalComponent = ({
 );
 
 const mapStateToProps = state => ({
-  modalIsOpen: state.queue.settingsForms.modalIsOpen,
-  modalName: state.queue.settingsForms.modalName,
+  modalIsOpen: state.settingsForms.modalIsOpen,
+  modalName: state.settingsForms.modalName,
 });
 
 const mapDispatchToProps = {
@@ -46,4 +47,6 @@ const mapDispatchToProps = {
 export const ExportModal = connect(
   mapStateToProps,
   mapDispatchToProps,
+  null,
+  { context },
 )(ExportModalComponent);

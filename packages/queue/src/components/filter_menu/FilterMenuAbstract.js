@@ -11,6 +11,7 @@ import { validateAssignments, validateDateRange } from './FilterMenuContainer';
 import moment from 'moment';
 import { AttributeSelectors } from 'common';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 const VALID_STATUSES = List(['Open', 'Pending', 'Cancelled', 'Complete']);
 
@@ -210,14 +211,14 @@ const FilterMenuAbstractComponent = props => (
 );
 
 export const mapStateToProps = (state, props) => ({
-  myFilters: state.queue.queueApp.myFilters,
-  currentFilter: state.queue.filterMenu.get('currentFilter'),
-  showing: state.queue.filterMenu.get('activeSection'),
-  kappSlug: state.app.config.kappSlug,
-  teams: state.queue.queueApp.myTeams,
-  sortDirection: state.queue.queue.sortDirection,
-  groupDirection: state.queue.queue.groupDirection,
-  forms: state.queue.queueApp.forms,
+  myFilters: state.queueApp.myFilters,
+  currentFilter: state.filterMenu.get('currentFilter'),
+  showing: state.filterMenu.get('activeSection'),
+  kappSlug: state.app.kappSlug,
+  teams: state.queueApp.myTeams,
+  sortDirection: state.queue.sortDirection,
+  groupDirection: state.queue.groupDirection,
+  forms: state.queueApp.forms,
 });
 
 export const mapDispatchToProps = {
@@ -313,6 +314,8 @@ export const FilterMenuAbstract = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({ applyFilter }),
   withHandlers({

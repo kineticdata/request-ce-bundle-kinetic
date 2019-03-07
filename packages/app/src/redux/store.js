@@ -5,7 +5,6 @@ import { Utils } from 'common';
 import reducers from './reducers';
 import commonReducers from 'common/src/redux/reducers';
 import servicesReducers from 'services/src/redux/reducers';
-import queueReducers from 'queue/src/redux/reducers';
 import spaceReducers from 'space/src/redux/reducers';
 import techBarReducers from 'tech-bar/src/redux/reducers';
 import {
@@ -15,7 +14,6 @@ import {
 import { sagas } from './sagas';
 import commonSagas from 'common/src/redux/sagas';
 import servicesSagas from 'services/src/redux/sagas';
-import queueSagas from 'queue/src/redux/sagas';
 import spaceSagas from 'space/src/redux/sagas';
 import techBarSagas from 'tech-bar/src/redux/sagas';
 
@@ -37,7 +35,6 @@ export const configureStore = history => {
         app: combineReducers(reducers),
         common: combineReducers(commonReducers),
         services: combineReducers(servicesReducers),
-        queue: combineReducers(queueReducers),
         space: combineReducers(spaceReducers),
         discussions: combineReducers(discussionReducers),
         techBar: combineReducers(techBarReducers),
@@ -56,7 +53,6 @@ export const configureStore = history => {
       sagas,
       commonSagas,
       servicesSagas,
-      queueSagas,
       spaceSagas,
       discussionSagas,
       techBarSagas,

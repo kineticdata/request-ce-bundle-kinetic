@@ -191,11 +191,11 @@ const sortSubmissions = (submissions, sortInfo) => {
   }
 };
 
-export const selectCurrentForm = state => state.queue.settingsForms.currentForm;
+export const selectCurrentForm = state => state.settingsForms.currentForm;
 export const selectCurrentFormChanges = state =>
-  state.queue.settingsForms.currentFormChanges;
+  state.settingsForms.currentFormChanges;
 export const selectFormBySlug = (state, formSlug) =>
-  state.queue.forms.find(form => form.slug === formSlug);
+  state.forms.find(form => form.slug === formSlug);
 
 export const State = Record({
   loading: true,

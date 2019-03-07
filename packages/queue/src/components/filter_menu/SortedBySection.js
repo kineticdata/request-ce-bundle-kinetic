@@ -5,6 +5,7 @@ import { ModalBody } from 'reactstrap';
 import { OrderedMap } from 'immutable';
 import { actions } from '../../redux/modules/filterMenu';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 export const SORT_OPTIONS = OrderedMap([
   ['createdAt', { label: 'Created At', id: 'sorted-by-created-at' }],
@@ -40,6 +41,8 @@ export const SortedBySectionContainer = compose(
     {
       setSortedBy: actions.setSortedBy,
     },
+    null,
+    { context },
   ),
   withHandlers({
     setSortedByHandler: props => event => props.setSortedBy(event.target.value),

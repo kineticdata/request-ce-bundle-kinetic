@@ -6,6 +6,7 @@ import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { actions } from '../../../redux/modules/settingsForms';
 import { actions as queueActions } from '../../../redux/modules/settingsQueue';
 import { I18n } from '../../../../../app/src/I18nProvider';
+import { context } from '../../../redux/store';
 
 export const teamOptions = teams => {
   let optionElements = '<option></option>';
@@ -260,12 +261,10 @@ export const CreateFormComponent = ({
   );
 
 export const mapStateToProps = (state, { match: { params } }) => ({
-  loading: state.queue.forms.loading,
-  templateForms: state.queue.forms.data.filter(
-    form => form.type === 'Template',
-  ),
-  queueSettings: state.queue.queueSettings,
-  kappSlug: state.app.config.kappSlug,
+  loading: state.forms.loading,
+  templateForms: state.forms.data.filter(form => form.type === 'Template'),
+  queueSettings: state.queueSettings,
+  kappSlug: state.app.kappSlug,
   clone: params.id,
 });
 
@@ -281,6 +280,8 @@ export const CreateForm = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('inputs', 'setInputs', { Type: 'Service', Status: 'Active' }),
   withState('slugEntered', 'setSlugEntered', false),
