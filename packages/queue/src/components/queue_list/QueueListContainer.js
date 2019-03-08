@@ -15,7 +15,6 @@ const mapStateToProps = (state, props) => {
   const filter = getFilterByPath(state, props.location.pathname);
   return {
     filter,
-    isExact: props.match.isExact,
     offset: state.queue.offset,
     limit: state.queue.limit,
     sortDirection: state.queue.sortDirection,

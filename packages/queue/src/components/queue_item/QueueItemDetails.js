@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, withProps } from 'recompose';
-import { KappLink as Link, TimeAgo } from 'common';
+import { Link } from '@reach/router';
+import { TimeAgo } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { ViewDiscussionsModal } from 'discussions';
 import { selectAssignments } from '../../redux/modules/queueApp';
@@ -153,7 +154,7 @@ export const QueueItemDetails = ({
         )}
         {queueLink(queueItem, kappSlug) && (
           <Link
-            to={`/item/${queueItem.parent.id}`}
+            to={`item/${queueItem.parent.id}`}
             className="btn btn-primary btn-inverse request-button"
           >
             <I18n>View Parent</I18n>

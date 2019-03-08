@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { PageTitle } from 'common';
@@ -190,15 +190,15 @@ export const FormSubmissionsContainer = ({
             <div className="page-title">
               <div className="page-title__wrapper">
                 <h3>
-                  <Link to="/kapps/queue">
+                  <Link to="../../..">
                     <I18n>queue</I18n>
                   </Link>{' '}
                   /{` `}
-                  <Link to="/kapps/queue/settings">
+                  <Link to="../..">
                     <I18n>settings</I18n>
                   </Link>{' '}
                   /{` `}
-                  <Link to="/kapps/queue/settings/forms">
+                  <Link to="..">
                     <I18n>forms</I18n>
                   </Link>{' '}
                   /{` `}
@@ -429,9 +429,7 @@ export const FormSubmissionsContainer = ({
                             submission={s}
                             form={form}
                             columns={visibleColumns}
-                            to={`/kapps/${kappSlug}/settings/forms/${
-                              s.id
-                            }/activity`}
+                            to={`../${s.id}/activity`}
                             isMobile={isMobile}
                           />
                         ))}
@@ -716,7 +714,7 @@ export const FormSubmissionsContainer = ({
   );
 };
 
-const mapStateToProps = (state, { match: { params } }) => ({
+const mapStateToProps = state => ({
   form: state.settingsForms.currentForm,
   kappSlug: state.app.kappSlug,
   loading: state.settingsForms.loading,
@@ -769,11 +767,11 @@ export const FormSubmissions = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchFormSettings({
-        formSlug: this.props.match.params.id,
+        formSlug: this.props.id,
         kappSlug: this.props.kappSlug,
       });
       this.props.fetchFormSubmissions({
-        formSlug: this.props.match.params.id,
+        formSlug: this.props.id,
         kappSlug: this.props.kappSlug,
         pageToken: this.props.nextPageToken,
       });

@@ -8,7 +8,12 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import Sidebar from 'react-sidebar';
-import { Utils, ToastsContainer, ModalFormContainer } from 'common';
+import {
+  Utils,
+  ToastsContainer,
+  ModalFormContainer,
+  selectCurrentKapp,
+} from 'common';
 import { LoginModal } from './components/authentication/LoginModal';
 import { HeaderContainer } from './components/HeaderContainer';
 import { actions as loadingActions } from './redux/modules/loading';
@@ -34,9 +39,11 @@ export const AppComponent = props =>
           <props.AppProvider
             appState={{
               space: props.space,
+              kapp: props.kapp,
               profile: props.profile,
               kappSlug: props.kappSlug,
               layoutSize: props.layoutSize,
+              location: `/kapps/${props.kappSlug}`,
             }}
             appRefresh={props.refreshApp}
             history={props.history}
@@ -85,6 +92,7 @@ export const mapStateToProps = state => ({
   suppressedSidebarOpen: state.app.layout.suppressedSidebarOpen,
   layoutSize: state.app.layout.size,
   kappSlug: state.app.config.kappSlug,
+  kapp: selectCurrentKapp(state),
   pathname: state.router.location.pathname,
   locale: state.app.config.locale,
   profile: state.app.profile,

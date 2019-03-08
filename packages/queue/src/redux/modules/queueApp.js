@@ -1,6 +1,6 @@
 import { Record, List, Set } from 'immutable';
-import { matchPath } from 'react-router-dom';
-import { LOCATION_CHANGE } from 'connected-react-router';
+import matchPath from 'rudy-match-path';
+import { LOCATION_CHANGE } from 'redux-first-history';
 import { Utils } from 'common';
 import {
   Profile,
@@ -32,10 +32,10 @@ export const actions = {
   setSidebarOpen: withPayload(types.SET_SIDEBAR_OPEN),
 };
 
-const ADHOC_PATH = { path: '/kapps/:slug/adhoc', exact: false };
-const DEFAULT_LIST_PATH = { path: '/kapps/:slug/list/:name', exact: false };
-const TEAM_LIST_PATH = { path: '/kapps/:slug/team/:name', exact: false };
-const CUSTOM_LIST_PATH = { path: '/kapps/:slug/custom/:name', exact: false };
+const ADHOC_PATH = { path: '*/adhoc', exact: false };
+const DEFAULT_LIST_PATH = { path: '*/list/:name', exact: false };
+const TEAM_LIST_PATH = { path: '*/team/:name', exact: false };
+const CUSTOM_LIST_PATH = { path: '*/custom/:name', exact: false };
 
 export const getFilterByPath = (state, pathname) => {
   const findByName = name => filter => filter.name === name;
@@ -61,20 +61,6 @@ export const getFilterByPath = (state, pathname) => {
       filterName = decodeURIComponent(customListMatch.params.name);
     } catch (e) {}
     return state.queueApp.myFilters.find(findByName(filterName));
-  }
-};
-
-export const buildFilterPath = filter => {
-  if (!filter) {
-    return '';
-  } else if (filter.type === 'default') {
-    return `/list/${filter.name}`;
-  } else if (filter.type === 'team') {
-    return `/team/${filter.name}`;
-  } else if (filter.type === 'custom') {
-    return `/custom/${encodeURIComponent(filter.name)}`;
-  } else {
-    return '/adhoc';
   }
 };
 

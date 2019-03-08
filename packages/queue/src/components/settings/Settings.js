@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Route, Switch } from 'react-router-dom';
+import { Router, Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { Icon } from 'common';
@@ -16,40 +15,16 @@ import { I18n } from '../../../../app/src/I18nProvider';
 import { context } from '../../redux/store';
 
 export const SettingsComponent = () => (
-  <Switch>
-    <Route
-      exact
-      path="/kapps/queue/settings/general"
-      component={QueueSettings}
-    />
-    <Route exact path="/kapps/queue/settings/forms" component={FormList} />
-    <Route
-      exact
-      path="/kapps/queue/settings/forms/new"
-      component={CreateForm}
-    />
-    <Route
-      exact
-      path="/kapps/queue/settings/forms/clone/:id"
-      component={CreateForm}
-    />
-    <Route
-      exact
-      path="/kapps/queue/settings/forms/:id/settings"
-      component={FormSettings}
-    />
-    <Route
-      exact
-      path="/kapps/queue/settings/forms/:id/"
-      component={FormSubmissions}
-    />
-    <Route
-      exact
-      path="/kapps/queue/settings/forms/:id/activity"
-      component={FormActivity}
-    />
-    <Route component={SettingsNavigation} />
-  </Switch>
+  <Router>
+    <QueueSettings path="general" />
+    <FormList path="forms" />
+    <CreateForm path="forms/new" />
+    <CreateForm path="forms/clone/:id" />
+    <FormSettings path="forms/:id/settings" />
+    <FormSubmissions path="forms/:id/" />
+    <FormActivity path="forms/:id/activity" />
+    <SettingsNavigation default />
+  </Router>
 );
 
 const mapDispatchToProps = {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { KappLink as Link, TimeAgo, Avatar } from 'common';
+import { Link } from '@reach/router';
+import { TimeAgo } from 'common';
 import { StatusContent } from '../shared/StatusContent';
-import { buildFilterPath } from '../../redux/modules/queueApp';
 import { I18n } from '../../../../app/src/I18nProvider';
 
 const AssignmentParagraph = ({ values }) => (
@@ -48,10 +48,7 @@ export const QueueListItemSmall = ({ queueItem, filter }) => {
   const { createdAt, createdBy, updatedAt, updatedBy, id, values } = queueItem;
   return (
     <li className="submission list-group-item">
-      <Link
-        to={`${buildFilterPath(filter)}/item/${id}`}
-        className="submission-summary"
-      >
+      <Link to={`item/${id}`} className="submission-summary">
         <div className="submission__meta">
           <StatusContent queueItem={queueItem} />
           <div className="submission__handler">

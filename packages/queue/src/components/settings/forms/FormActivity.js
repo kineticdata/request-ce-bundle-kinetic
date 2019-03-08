@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { PageTitle } from 'common';
@@ -17,21 +17,19 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to="/kapps/queue">
+                <Link to="../../../..">
                   <I18n>queue</I18n>
                 </Link>{' '}
                 /{` `}
-                <Link to="/kapps/queue/settings">
+                <Link to="../../..">
                   <I18n>settings</I18n>
                 </Link>{' '}
                 /{` `}
-                <Link to="/kapps/queue/settings/forms">
+                <Link to="../..">
                   <I18n>forms</I18n>
                 </Link>{' '}
                 /{` `}
-                <Link
-                  to={`/kapps/queue/settings/forms/${submission.form.slug}`}
-                >
+                <Link to={`../../${submission.form.slug}`}>
                   <I18n
                     context={`kapps.${submission.form.kapp.slug}.forms.${
                       submission.form.slug
@@ -278,7 +276,7 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
     </div>
   );
 
-const mapStateToProps = (state, { match: { params } }) => ({
+const mapStateToProps = state => ({
   loading: state.settingsForms.submissionLoading,
   submission: state.settingsForms.formSubmission,
   space: state.app.space,
@@ -299,7 +297,7 @@ export const FormActivity = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchFormSubmission({
-        id: this.props.match.params.id,
+        id: this.props.id,
       });
     },
   }),

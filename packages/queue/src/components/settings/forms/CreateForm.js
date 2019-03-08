@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { actions } from '../../../redux/modules/settingsForms';
 import { actions as queueActions } from '../../../redux/modules/settingsQueue';
@@ -49,6 +49,7 @@ export const CreateFormComponent = ({
   kappSlug,
   createForm,
   push,
+  location,
   clone,
 }) =>
   !loading &&
@@ -60,15 +61,15 @@ export const CreateFormComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/kapps/queue">
+              <Link to={location}>
                 <I18n>queue</I18n>
               </Link>{' '}
               /{` `}
-              <Link to="/kapps/queue/settings">
+              <Link to={`${location}/settings`}>
                 <I18n>settings</I18n>
               </Link>{' '}
               /{` `}
-              <Link to="/kapps/queue/settings/forms">
+              <Link to={`${location}/settings/forms`}>
                 <I18n>forms</I18n>
               </Link>{' '}
               /{` `}
@@ -100,7 +101,7 @@ export const CreateFormComponent = ({
                       'Template to Clone': event.target.value,
                     })
                   }
-                  required="true"
+                  required
                 >
                   <option />
                   {templateForms.map(form => (
@@ -140,7 +141,7 @@ export const CreateFormComponent = ({
                     });
                   }
                 }}
-                required="true"
+                required
               />
             </div>
             <div className="form-group">
@@ -156,7 +157,7 @@ export const CreateFormComponent = ({
                   setInputs({ ...inputs, Slug: event.target.value })
                 }
                 onKeyUp={() => setSlugEntered(true)}
-                required="true"
+                required
               />
             </div>
             <div className="form-group">
@@ -228,8 +229,8 @@ export const CreateFormComponent = ({
                   }
                   setInputs({ ...inputs, 'Owning Team': value });
                 }}
-                multiple="true"
-                required="true"
+                multiple
+                required
               >
                 {teamOptions(teams)}
               </select>
@@ -247,7 +248,7 @@ export const CreateFormComponent = ({
                         inputs,
                         kappSlug,
                         callback: slug =>
-                          push(`/kapps/queue/settings/forms/${slug}/settings`),
+                          push(`${location}/settings/forms/${slug}/settings`),
                       });
                 }}
               >
@@ -260,12 +261,13 @@ export const CreateFormComponent = ({
     </div>
   );
 
-export const mapStateToProps = (state, { match: { params } }) => ({
+export const mapStateToProps = (state, props) => ({
   loading: state.forms.loading,
   templateForms: state.forms.data.filter(form => form.type === 'Template'),
   queueSettings: state.queueSettings,
   kappSlug: state.app.kappSlug,
-  clone: params.id,
+  clone: props.id,
+  location: state.app.location,
 });
 
 export const mapDispatchToProps = {

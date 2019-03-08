@@ -1,16 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Switch } from 'react-router-dom';
+import { Router, Redirect } from '@reach/router';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { List } from 'immutable';
-import { Filter } from './records';
-import { KappRoute as Route, KappRedirect as Redirect, Loading } from 'common';
-
+import { Loading } from 'common';
 import { actions, selectMyTeamForms } from './redux/modules/queueApp';
 import { actions as queueActions } from './redux/modules/queue';
 import { actions as filterMenuActions } from './redux/modules/filterMenu';
 import { actions as formsActions } from './redux/modules/forms';
-
 import { Sidebar } from './components/Sidebar';
 import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { QueueItemContainer } from './components/queue_item/QueueItem';
@@ -22,60 +19,60 @@ import { I18n } from '../../app/src/I18nProvider';
 import './assets/styles/master.scss';
 import { context } from './redux/store';
 
+const CustomRedirect = props => (
+  <Redirect to={`${props.appLocation}/item/${props.id}`} noThrow />
+);
+
 export const AppComponent = props => {
   if (props.loading) {
     return <Loading text="App is loading ..." />;
   }
   return props.render({
     sidebar: (
-      <Switch>
-        <Route
-          path="/kapps/queue/settings"
-          render={() => <SettingsSidebar />}
+      <Router>
+        <SettingsSidebar path="settings/*" />
+        <Sidebar
+          path="*"
+          teamFilters={props.teamFilters}
+          myFilters={props.myFilters}
+          counts={props.counts}
+          hasTeammates={props.hasTeammates}
+          hasTeams={props.hasTeams}
+          hasForms={props.hasForms}
+          handleOpenNewItemMenu={props.handleOpenNewItemMenu}
         />
-        <Route
-          render={() => (
-            <Sidebar
-              teamFilters={props.teamFilters}
-              myFilters={props.myFilters}
-              counts={props.counts}
-              hasTeammates={props.hasTeammates}
-              hasTeams={props.hasTeams}
-              hasForms={props.hasForms}
-              handleOpenNewItemMenu={props.handleOpenNewItemMenu}
-            />
-          )}
-        />
-      </Switch>
+      </Router>
     ),
     main: (
       <I18n>
         <main className="package-layout package-layout--queue">
-          <Route path="/settings" component={Settings} />
-          <Route
-            path="/submissions/:id"
-            exact
-            render={({ match }) => <Redirect to={`/item/${match.params.id}`} />}
-          />
-          <Route
-            path="/forms/:formSlug/submissions/:id"
-            exact
-            render={({ match }) => <Redirect to={`/item/${match.params.id}`} />}
-          />
-          <Route path="/" exact render={() => <Redirect to="/list/Mine" />} />
-          <Route path="/list/:filter" component={QueueListContainer} />
-          <Route path="/team/:filter" component={QueueListContainer} />
-          <Route path="/custom/:filter" component={QueueListContainer} />
-          <Route path="/adhoc" component={QueueListContainer} />
-          <Route
-            path="/(list|team|custom|adhoc)?/:filter?/item/:id"
-            component={QueueItemContainer}
-          />
-          <Route
-            path="/queue/filter/__show__/details/:id/summary"
-            render={({ match }) => <Redirect to={`/item/${match.params.id}`} />}
-          />
-
+          <Router>
+            <Settings path="settings/*" />
+            <QueueListContainer path="list/:filter" />
+            <QueueListContainer path="team/:filter" />
+            <QueueListContainer path="custom/:filter" />
+            <QueueListContainer path="adhoc" />
+            <QueueItemContainer path="list/:filter/item/:id" />
+            <QueueItemContainer path="team/:filter/item/:id" />
+            <QueueItemContainer path="custom/:filter/item/:id" />
+            <QueueItemContainer path="adhoc/item/:id" />
+            <QueueItemContainer path="item/:id" />
+            <Redirect from="/" to={`${props.appLocation}/list/Mine`} noThrow />
+            <Redirect
+              from="submissions/:id"
+              to={`${props.appLocation}/item/:id`}
+              noThrow
+            />
+            <CustomRedirect
+              path="forms/:formSlug/submissions/:id"
+              appLocation={props.appLocation}
+            />
+            <Redirect
+              from="queue/filter/__show__/details/:id/summary"
+              to={`${props.appLocation}/item/:id`}
+              noThrow
+            />
+          </Router>
           <NewItemMenuContainer />
           <WorkMenuContainer />
         </main>
@@ -99,6 +96,7 @@ const mapStateToProps = (state, props) => ({
   hasTeams: state.queueApp.myTeams.size > 0,
   hasForms:
     selectMyTeamForms(state).filter(form => form.type === 'Task').length > 0,
+  appLocation: state.app.location,
 });
 
 const mapDispatchToProps = {

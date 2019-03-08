@@ -1,9 +1,10 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { I18n } from '../../../../app/src/I18nProvider';
 import { context } from '../../redux/store';
+import { isActiveClass } from '../../utils';
 
 export const SidebarComponent = ({ loading, spaceAdmin }) => (
   <div className="sidebar space-sidebar">
@@ -16,23 +17,15 @@ export const SidebarComponent = ({ loading, spaceAdmin }) => (
         <ul className="nav flex-column sidebar-group">
           <li className="nav-item">
             {spaceAdmin && (
-              <NavLink
-                to="/kapps/queue/settings/general"
-                className="nav-link"
-                activeClassName="active"
-              >
+              <Link to="general" className="nav-link" getProps={isActiveClass}>
                 <I18n>General</I18n>
                 <span className="fa fa-fw fa-angle-right" />
-              </NavLink>
+              </Link>
             )}
-            <NavLink
-              to="/kapps/queue/settings/forms"
-              className="nav-link"
-              activeClassName="active"
-            >
+            <Link to="forms" className="nav-link" getProps={isActiveClass}>
               <I18n>Forms</I18n>
               <span className="fa fa-fw fa-angle-right" />
-            </NavLink>
+            </Link>
           </li>
         </ul>
       )}

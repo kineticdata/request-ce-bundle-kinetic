@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers } from 'recompose';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { isImmutable, List, Map, OrderedMap } from 'immutable';
 import { actions as queueActions } from '../../redux/modules/queue';
 import { actions } from '../../redux/modules/filterMenu';
@@ -214,11 +214,11 @@ export const mapStateToProps = (state, props) => ({
   myFilters: state.queueApp.myFilters,
   currentFilter: state.filterMenu.get('currentFilter'),
   showing: state.filterMenu.get('activeSection'),
-  kappSlug: state.app.kappSlug,
   teams: state.queueApp.myTeams,
   sortDirection: state.queue.sortDirection,
   groupDirection: state.queue.groupDirection,
   forms: state.queueApp.forms,
+  location: state.app.location,
 });
 
 export const mapDispatchToProps = {
@@ -263,7 +263,7 @@ const toggleShowing = props => name => () => {
 const applyFilter = props => filter => {
   props.close();
   props.setAdhocFilter(isImmutable(filter) ? filter : props.currentFilter);
-  props.push(`/kapps/${props.kappSlug}/adhoc`);
+  props.push(`${props.location}/adhoc`);
 };
 const clearTeams = props => () =>
   props.applyFilter(props.filter.delete('teams'));
@@ -299,7 +299,7 @@ const saveFilter = props => filter => {
     props.addPersonalFilter(currentFilter.set('type', 'custom'));
   }
   props.push(
-    `/kapps/${props.kappSlug}/custom/${encodeURIComponent(currentFilter.name)}`,
+    `${props.location}/custom/${encodeURIComponent(currentFilter.name)}`,
   );
 };
 
@@ -307,7 +307,7 @@ const removeFilter = props => filter => {
   props.removePersonalFilter(
     isImmutable(filter) ? filter : props.currentFilter,
   );
-  props.push(`/kapps/${props.kappSlug}/list/Mine`);
+  props.push(`${props.location}/list/Mine`);
 };
 
 export const FilterMenuAbstract = compose(

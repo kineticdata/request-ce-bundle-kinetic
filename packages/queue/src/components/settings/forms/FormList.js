@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 import { compose, withState, withHandlers } from 'recompose';
 import {
   Dropdown,
@@ -38,7 +37,6 @@ const Timestamp = ({ slug, label, value }) =>
 const FormListComponent = ({
   loading,
   kapp,
-  match,
   toggleDropdown,
   openDropdown,
   currentPage,
@@ -60,11 +58,11 @@ const FormListComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/kapps/queue">
+              <Link to="../..">
                 <I18n>queue</I18n>
               </Link>{' '}
               /{` `}
-              <Link to="/kapps/queue/settings">
+              <Link to="..">
                 <I18n>settings</I18n>
               </Link>{' '}
               /{` `}
@@ -74,7 +72,7 @@ const FormListComponent = ({
             </h1>
           </div>
           {isSpaceAdmin && (
-            <Link to={`${match.path}/new`} className="btn btn-primary">
+            <Link to="new" className="btn btn-primary">
               <I18n>Create Form</I18n>
             </Link>
           )}
@@ -114,7 +112,7 @@ const FormListComponent = ({
                     return (
                       <tr key={form.slug}>
                         <td>
-                          <Link to={`${match.path}/${form.slug}`}>
+                          <Link to={form.slug}>
                             <span>{form.name}</span>
                           </Link>
                           <br />
@@ -147,13 +145,13 @@ const FormListComponent = ({
                               <DropdownMenu right>
                                 <DropdownItem
                                   tag={Link}
-                                  to={`${match.path}/${form.slug}/settings`}
+                                  to={`${form.slug}/settings`}
                                 >
                                   <I18n>Configure Form</I18n>
                                 </DropdownItem>
                                 <DropdownItem
                                   tag={Link}
-                                  to={`${match.path}/clone/${form.slug}/`}
+                                  to={`clone/${form.slug}/`}
                                 >
                                   <I18n>Clone Form</I18n>
                                 </DropdownItem>
@@ -228,7 +226,6 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = {
-  push,
   fetchForms: actions.fetchForms,
 };
 

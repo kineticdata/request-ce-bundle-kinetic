@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { bundle } from 'react-kinetic-core';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
@@ -134,19 +134,19 @@ export const FormContainer = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to={`/kapps/${kappSlug}`}>
+              <Link to="../../../..">
                 <I18n>queue</I18n>
               </Link>{' '}
               /{` `}
-              <Link to={`/kapps/${kappSlug}/settings`}>
+              <Link to="../../..">
                 <I18n>settings</I18n>
               </Link>{' '}
               /{` `}
-              <Link to={`/kapps/${kappSlug}/settings/forms`}>
+              <Link to="../..">
                 <I18n>forms</I18n>
               </Link>{' '}
               /{` `}
-              <Link to={`/kapps/${kappSlug}/settings/forms/${form.slug}`}>
+              <Link to="..">
                 <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
                   {form.name}
                 </I18n>
@@ -317,7 +317,7 @@ export const FormContainer = ({
                   setInputs={setInputs}
                   inputs={inputs}
                   className="col-8"
-                  multiple="true"
+                  multiple
                 />
               </div>
             )}
@@ -362,7 +362,7 @@ export const FormContainer = ({
                 setInputs={setInputs}
                 inputs={inputs}
                 className="col-8"
-                multiple="true"
+                multiple
               />
             </div>
 
@@ -409,7 +409,7 @@ export const FormContainer = ({
                   setInputs={setInputs}
                   inputs={inputs}
                   className="col-8"
-                  multiple="true"
+                  multiple
                 />
               </div>
             )}
@@ -499,7 +499,6 @@ export const FormContainer = ({
 
 export const setInitialInputs = ({ setInputs, form }) => () => {
   const config = buildFormConfigurationObject(form);
-  console.log(form.attributesMap);
   setInputs({
     description: form.description,
     type: form.type,
@@ -557,7 +556,7 @@ const handleColumnChange = ({ setInputs, inputs }) => (index, prop, value) => {
   setInputs({ ...inputs, columns: updated });
 };
 
-const mapStateToProps = (state, { match: { params } }) => ({
+const mapStateToProps = state => ({
   form: state.settingsForms.currentForm,
   formChanges: state.settingsForms.currentFormChanges,
   loading: state.settingsForms.loading,
@@ -595,7 +594,7 @@ export const FormSettings = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchFormSettings({
-        formSlug: this.props.match.params.id,
+        formSlug: this.props.id,
         kappSlug: this.props.kappSlug,
       });
       this.props.fetchKapp(this.props.kappSlug);

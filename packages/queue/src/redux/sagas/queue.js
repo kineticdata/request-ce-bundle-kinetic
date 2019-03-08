@@ -2,7 +2,6 @@ import { select, call, put, takeEvery } from 'redux-saga/effects';
 import moment from 'moment';
 import { CoreAPI } from 'react-kinetic-core';
 import isFunction from 'is-function';
-import { selectToken } from 'discussions/src/redux/modules/socket';
 
 import { types, actions } from '../modules/queue';
 import { actions as errorActions } from '../modules/errors';
@@ -229,9 +228,6 @@ export function* fetchListTask(action) {
 }
 
 export function* fetchCurrentItemTask(action) {
-  const token = yield select(selectToken);
-  const appSettings = yield select(getAppSettings);
-
   const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
     id: action.payload,
     include: SUBMISSION_INCLUDES,

@@ -1,7 +1,8 @@
 import React from 'react';
-import { KappLink as Link, KappNavLink as NavLink } from 'common';
+import { Link } from '@reach/router';
 import { Nav, NavItem } from 'reactstrap';
 import { I18n } from '../../../app/src/I18nProvider';
+import { isActiveClass } from '../utils';
 
 const formatCount = count => (count >= 1000 ? '999+' : `${count}`);
 
@@ -31,54 +32,38 @@ export const Sidebar = ({
         <h1>Default Filters</h1>
         <Nav vertical>
           <NavItem>
-            <NavLink
-              to="/list/Mine"
-              className="nav-link"
-              activeClassName="active"
-            >
+            <Link to="list/Mine" getProps={isActiveClass('nav-link')}>
               <span className="fa fa-fw fa-user" />
               <I18n>Mine</I18n> ({formatCount(counts.get('Mine', 0))})
-            </NavLink>
+            </Link>
           </NavItem>
           {hasTeammates && (
             <NavItem>
-              <NavLink
-                to="/list/Teammates"
-                className="nav-link"
-                activeClassName="active"
-              >
+              <Link to="list/Teammates" getProps={isActiveClass('nav-link')}>
                 <span className="fa fa-fw fa-users" />
                 <I18n>Teammates</I18n> ({formatCount(
                   counts.get('Teammates', 0),
                 )})
-              </NavLink>
+              </Link>
             </NavItem>
           )}
           {hasTeams && (
             <NavItem>
-              <NavLink
-                to="/list/Unassigned"
-                className="nav-link"
-                activeClassName="active"
-              >
+              <Link to="list/Unassigned" getProps={isActiveClass('nav-link')}>
                 <span className="fa fa-fw fa-inbox" />
                 <I18n>Unassigned</I18n> ({formatCount(
                   counts.get('Unassigned', 0),
                 )})
-              </NavLink>
+              </Link>
             </NavItem>
           )}
           <NavItem>
-            <NavLink
-              to="/list/Created By Me"
-              className="nav-link"
-              activeClassName="active"
-            >
+            <Link to="list/Created By Me" getProps={isActiveClass('nav-link')}>
               <span className="fa fa-fw fa-user-circle-o" />
               <I18n>Created By Me</I18n> ({formatCount(
                 counts.get('Created By Me', 0),
               )})
-            </NavLink>
+            </Link>
           </NavItem>
         </Nav>
       </div>
@@ -90,14 +75,13 @@ export const Sidebar = ({
           <Nav vertical>
             {teamFilters.map(filter => (
               <NavItem key={filter.name}>
-                <NavLink
-                  to={`/team/${encodeURIComponent(filter.name)}`}
-                  className="nav-link"
-                  activeClassName="active"
+                <Link
+                  to={`team/${encodeURIComponent(filter.name)}`}
+                  getProps={isActiveClass('nav-link')}
                 >
                   <span className={`fa fa-fw fa-${filter.icon}`} />
                   <I18n>{`${filter.name}`}</I18n>
-                </NavLink>
+                </Link>
               </NavItem>
             ))}
           </Nav>
@@ -110,15 +94,14 @@ export const Sidebar = ({
         <Nav vertical>
           {myFilters.map(filter => (
             <NavItem key={filter.name}>
-              <NavLink
-                to={`/custom/${encodeURIComponent(filter.name)}`}
-                className="nav-link"
-                activeClassName="active"
+              <Link
+                to={`custom/${encodeURIComponent(filter.name)}`}
+                getProps={isActiveClass('nav-link')}
               >
                 <span className="fa fa-fw fa-star-o" />
 
                 {`${filter.name}`}
-              </NavLink>
+              </Link>
             </NavItem>
           ))}
           {myFilters.size === 0 && (
@@ -134,7 +117,7 @@ export const Sidebar = ({
     </div>
     <div className="sidebar-group sidebar-group--settings">
       <ul className="nav flex-column settings-group">
-        <Link to="/settings/" className="nav-link">
+        <Link to="settings" className="nav-link">
           <I18n>Settings</I18n>
           <span className="fa fa-fw fa-angle-right" />
         </Link>

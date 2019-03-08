@@ -119,7 +119,6 @@ export const QueueList = ({
   hasNextPage,
   gotoPrevPage,
   gotoNextPage,
-  isExact,
   count,
   pageCount,
   limit,
@@ -138,79 +137,73 @@ export const QueueList = ({
     limit,
     offset,
   };
-  return (
-    isExact &&
-    (!filter ? (
-      <WallyBadFilter />
-    ) : (
-      <div className="queue-list-container">
-        <PageTitle parts={[filter.name || 'Adhoc']} />
-        {isMobile ? (
-          <FilterMenuMobile
-            filter={filter}
-            openFilterMenu={openFilterMenu}
-            refresh={refresh}
-            sortDirection={sortDirection}
-            toggleSortDirection={toggleSortDirection}
-            groupDirection={groupDirection}
-            toggleGroupDirection={toggleGroupDirection}
-          />
-        ) : (
-          <FilterMenuToolbar filter={filter} refresh={refresh} />
-        )}
-        {filterValidations.length <= 0 ? (
-          <div className="queue-list-content submissions">
-            {statusMessage ? (
-              <WallyErrorMessage message={statusMessage} />
-            ) : queueItems && queueItems.size > 0 ? (
-              isGrouped ? (
-                queueItems
-                  .map((items, groupValue) => (
-                    <div
-                      className="items-grouping"
-                      key={groupValue || 'no-group'}
-                    >
-                      <GroupDivider>
-                        <GroupByValue value={groupValue} />
-                      </GroupDivider>
-                      <ul className="list-group">
-                        {items.map(item => (
-                          <QueueListItemSmall
-                            queueItem={item}
-                            key={item.id}
-                            filter={filter}
-                          />
-                        ))}
-                      </ul>
-                    </div>
-                  ))
-                  .toList()
-              ) : (
-                <ul className="list-group">
-                  {' '}
-                  {queueItems.map(queueItem => (
-                    <QueueListItemSmall
-                      queueItem={queueItem}
-                      key={queueItem.id}
-                      filter={filter}
-                    />
-                  ))}
-                </ul>
-              )
-            ) : (
-              <WallyEmptyMessage filter={filter} />
-            )}
-          </div>
-        ) : (
-          <WallyBadFilter
-            message={filterValidations.map((v, i) => <p key={i}>{v}</p>)}
-          />
-        )}
-        <QueueListPagination
+  return !filter ? (
+    <WallyBadFilter />
+  ) : (
+    <div className="queue-list-container">
+      <PageTitle parts={[filter.name || 'Adhoc']} />
+      {isMobile ? (
+        <FilterMenuMobile
           filter={filter}
-          paginationProps={paginationProps}
+          openFilterMenu={openFilterMenu}
+          refresh={refresh}
+          sortDirection={sortDirection}
+          toggleSortDirection={toggleSortDirection}
+          groupDirection={groupDirection}
+          toggleGroupDirection={toggleGroupDirection}
         />
-      </div>
-    ))
+      ) : (
+        <FilterMenuToolbar filter={filter} refresh={refresh} />
+      )}
+      {filterValidations.length <= 0 ? (
+        <div className="queue-list-content submissions">
+          {statusMessage ? (
+            <WallyErrorMessage message={statusMessage} />
+          ) : queueItems && queueItems.size > 0 ? (
+            isGrouped ? (
+              queueItems
+                .map((items, groupValue) => (
+                  <div
+                    className="items-grouping"
+                    key={groupValue || 'no-group'}
+                  >
+                    <GroupDivider>
+                      <GroupByValue value={groupValue} />
+                    </GroupDivider>
+                    <ul className="list-group">
+                      {items.map(item => (
+                        <QueueListItemSmall
+                          queueItem={item}
+                          key={item.id}
+                          filter={filter}
+                        />
+                      ))}
+                    </ul>
+                  </div>
+                ))
+                .toList()
+            ) : (
+              <ul className="list-group">
+                {' '}
+                {queueItems.map(queueItem => (
+                  <QueueListItemSmall
+                    queueItem={queueItem}
+                    key={queueItem.id}
+                    filter={filter}
+                  />
+                ))}
+              </ul>
+            )
+          ) : (
+            <WallyEmptyMessage filter={filter} />
+          )}
+        </div>
+      ) : (
+        <WallyBadFilter
+          message={filterValidations.map((v, i) => <p key={i}>{v}</p>)}
+        />
+      )}
+      <QueueListPagination filter={filter} paginationProps={paginationProps} />
+    </div>
   );
 };

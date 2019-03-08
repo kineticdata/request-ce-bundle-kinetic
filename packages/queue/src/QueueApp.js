@@ -1,4 +1,5 @@
 import { is } from 'immutable';
+import { LocationProvider, Router } from '@reach/router';
 import React, { Component } from 'react';
 import { configureStore, history, context, store } from './redux/store';
 import { types } from './redux/modules/app';
@@ -47,7 +48,14 @@ export class QueueApp extends Component {
     return (
       this.state.ready && (
         <Provider store={store} context={context}>
-          <App render={this.props.render} />
+          <LocationProvider history={history}>
+            <Router>
+              <App
+                render={this.props.render}
+                path={`${this.props.appState.location}/*`}
+              />
+            </Router>
+          </LocationProvider>
         </Provider>
       )
     );

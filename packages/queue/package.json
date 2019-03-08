@@ -6,8 +6,6 @@
     "@reach/router": "^1.2.1",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.5",
-    "connected-react-router": "^4.2.3",
-    "history": "^4.7.2",
     "immutable": "4.0.0-rc.9",
     "is-function": "^1.0.1",
     "isarray": "^2.0.2",
@@ -20,13 +18,13 @@
     "react-kinetic-core": "^0.11.0",
     "react-popper": "^0.8.2",
     "react-redux": "^6.0.1",
-    "react-router-dom": "^4.2.2",
     "react-svg-inline": "^2.0.0",
     "react-transition-group": "^1.1.2",
     "reactstrap": "^7.1.0",
     "recompose": "^0.30.0",
     "redux": "^3.7.2",
     "redux-first-history": "^4.0.0-alpha.7",
-    "redux-saga": "^0.15.6"
+    "redux-saga": "^0.15.6",
+    "rudy-match-path": "^0.3.0"
   }
 }

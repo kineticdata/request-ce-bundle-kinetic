@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
@@ -8,7 +8,6 @@ import {
   toastActions,
   PageTitle,
   AttributeSelectors,
-  selectCurrentKapp,
 } from 'common';
 import {
   Menu,
@@ -40,11 +39,11 @@ export const SettingsComponent = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to={`/kapps/${currentKapp.slug}`}>
+            <Link to="../..">
               <I18n>queue</I18n>
             </Link>{' '}
             /{` `}
-            <Link to={`/kapps/${currentKapp.slug}/settings`}>
+            <Link to="..">
               <I18n>settings</I18n>
             </Link>{' '}
             /{` `}
@@ -338,7 +337,7 @@ const handleNameChange = ({ setKappName }) => event => {
 };
 
 const mapStateToProps = state => ({
-  currentKapp: selectCurrentKapp(state),
+  currentKapp: state.app.kapp,
   queueSettings: state.queueSettings,
   forms: state.forms.data,
 });

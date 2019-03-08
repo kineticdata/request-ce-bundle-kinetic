@@ -3,7 +3,6 @@ import { ProfileCard } from './components/ProfileCard';
 import { ToastsContainer } from './components/ToastsContainer';
 import { ModalFormContainer } from './components/ModalFormContainer';
 import { KappLink } from './components/KappLink';
-import { KappLinkContainer } from './components/KappLinkContainer';
 import { KappNavLink } from './components/KappNavLink';
 import { KappRedirect } from './components/KappRedirect';
 import { KappRoute } from './components/KappRoute';
@@ -49,7 +48,6 @@ export {
   Avatar,
   ProfileCard,
   KappLink,
-  KappLinkContainer,
   KappNavLink,
   KappRedirect,
   KappRoute,

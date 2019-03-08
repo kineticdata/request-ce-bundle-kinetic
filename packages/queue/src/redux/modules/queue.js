@@ -1,7 +1,6 @@
 import { Record, Map, List } from 'immutable';
 import { Utils } from 'common';
 import { Filter, AssignmentCriteria } from '../../records';
-import { buildFilterPath } from './queueApp';
 import { getSubmissionDate } from '../sagas/queue';
 import moment from 'moment';
 
@@ -52,17 +51,13 @@ export const selectPrevAndNext = (state, filter) => {
   const currentItemIndex = queueItems.findIndex(
     item => item.id === state.queue.currentItem.id,
   );
-  const prevItem =
+  const prev =
     currentItemIndex > 0 ? queueItems.get(currentItemIndex - 1).id : null;
-  const nextItem =
+  const next =
     currentItemIndex < queueItems.size - 1
       ? queueItems.get(currentItemIndex + 1).id
       : null;
-  const filterPath = buildFilterPath(filter);
-  return {
-    prev: prevItem && `${filterPath}/item/${prevItem}`,
-    next: nextItem && `${filterPath}/item/${nextItem}`,
-  };
+  return { prev, next };
 };
 
 export const selectGroupedQueueItems = (state, filter) => {

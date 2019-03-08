@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { is, List, Map } from 'immutable';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { FilterMenu } from './FilterMenu';
 import { actions } from '../../redux/modules/filterMenu';
 import { actions as queueActions } from '../../redux/modules/queue';
@@ -31,7 +31,7 @@ export const mapStateToProps = state => ({
   ),
   filterName: state.filterMenu.get('filterName'),
   appliedAssignments: selectAppliedAssignments(state),
-  kappSlug: state.app.kappSlug,
+  location: state.app.location,
 });
 
 export const mapDispatchToProps = {
@@ -113,7 +113,7 @@ export const FilterMenuContainer = compose(
       props.setAdhocFilter(
         props.currentFilter.set('name', '').set('type', 'adhoc'),
       );
-      props.push(`/kapps/${props.kappSlug}/adhoc`);
+      props.push(`${props.location}/adhoc`);
       props.close();
     },
     handleSaveFilter: ({
@@ -124,7 +124,7 @@ export const FilterMenuContainer = compose(
       filterName,
       push,
       close,
-      kappSlug,
+      location,
     }) => () => {
       if (
         currentFilter.type === 'custom' &&
@@ -137,7 +137,7 @@ export const FilterMenuContainer = compose(
         addPersonalFilter(
           currentFilter.set('name', filterName).set('type', 'custom'),
         );
-        push(`/kapps/${kappSlug}/custom/${encodeURIComponent(filterName)}`);
+        push(`${location}/custom/${encodeURIComponent(filterName)}`);
       }
 
       close();
@@ -147,11 +147,11 @@ export const FilterMenuContainer = compose(
       currentFilter,
       push,
       close,
-      kappSlug,
+      location,
     }) => () => {
       removePersonalFilter(currentFilter);
 
-      push(`/kapps/${kappSlug}/list/Mine`);
+      push(`${location}/list/Mine`);
       close();
     },
     handleChangeFilterName: ({ setFilterName }) => e =>

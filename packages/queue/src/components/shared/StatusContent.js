@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import { UncontrolledTooltip, ButtonGroup, Button } from 'reactstrap';
-import { KappLinkContainer as LinkContainer } from 'common';
+import { Link } from '@reach/router';
+import { UncontrolledTooltip, ButtonGroup } from 'reactstrap';
 import { I18n } from '../../../../app/src/I18nProvider';
 
 const CLOSED_STATUSES = ['Cancelled', 'Complete'];
@@ -27,16 +27,20 @@ const getStatusReason = queueItem => {
 
 const PrevAndNextGroup = ({ prevAndNext }) => (
   <ButtonGroup className="queue-details-nav">
-    <LinkContainer to={prevAndNext.prev || ''}>
-      <Button color="inverse" disabled={!prevAndNext.prev}>
-        <span className="fa fa-fw fa-caret-left" />
-      </Button>
-    </LinkContainer>
-    <LinkContainer to={prevAndNext.next || ''}>
-      <Button color="inverse" disabled={!prevAndNext.next}>
-        <span className="fa fa-fw fa-caret-right" />
-      </Button>
-    </LinkContainer>
+    <Link
+      to={`../${prevAndNext.prev}`}
+      className="btn btn-inverse"
+      disabled={!prevAndNext.prev}
+    >
+      <span className="fa fa-fw fa-caret-left" />
+    </Link>
+    <Link
+      to={`../${prevAndNext.next}`}
+      className="btn btn-inverse"
+      disabled={!prevAndNext.next}
+    >
+      <span className="fa fa-fw fa-caret-right" />
+    </Link>
   </ButtonGroup>
 );
 

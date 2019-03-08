@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withProps } from 'recompose';
-import { KappLink as Link, PageTitle } from 'common';
+import { Link } from '@reach/router';
+import { PageTitle } from 'common';
 import { DiscussionsPanel } from 'discussions';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { actions } from '../../redux/modules/queue';
 import { QueueItemDetailsContainer } from './QueueItemDetails';
-import { getFilterByPath, buildFilterPath } from '../../redux/modules/queueApp';
+import { getFilterByPath } from '../../redux/modules/queueApp';
 import { I18n } from '../../../../app/src/I18nProvider';
 import { context } from '../../redux/store';
 
@@ -54,7 +55,7 @@ export const QueueItem = ({
   queueItem !== null && (
     <div className="queue-item-container">
       {filter && (
-        <Link to={buildFilterPath(filter)} className="nav-return">
+        <Link to="../.." className="nav-return">
           <span className="icon">
             <span className="fa fa-fw fa-chevron-left" />
           </span>
@@ -89,7 +90,7 @@ export const QueueItem = ({
   );
 
 export const mapStateToProps = (state, props) => ({
-  id: props.match.params.id,
+  id: props.id,
   filter: getFilterByPath(state, props.location.pathname),
   queueItem: state.queue.currentItem,
   discussionsEnabled: selectDiscussionsEnabled(state),
