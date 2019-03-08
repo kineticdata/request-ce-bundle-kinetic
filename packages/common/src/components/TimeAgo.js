@@ -16,7 +16,12 @@ export class TimeAgo extends Component {
         <span className="time-ago__text" id={this.uuid}>
           <Moment timestamp={this.props.timestamp} format="fromNow" />
         </span>
-        <UncontrolledTooltip placement="top" target={this.uuid} delay={0}>
+        <UncontrolledTooltip
+          placement="top"
+          target={this.uuid}
+          delay={0}
+          trigger="hover focus"
+        >
           <Moment
             timestamp={this.props.timestamp}
             format={MOMENT_FORMATS.dateTime}

@@ -22,7 +22,7 @@ const WallyEmptyMessage = ({ me }) => {
 };
 
 export const Teams = ({ loading, teams, me, openRequestNewTeam }) => (
-  <div className="space-teams--container page--container">
+  <div className="space-teams--container page-container">
     <PageTitle parts={['Teams']} />
 
     {!loading && (
