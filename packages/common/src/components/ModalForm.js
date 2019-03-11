@@ -1,5 +1,5 @@
 import React from 'react';
-import { CoreForm } from 'react-kinetic-core';
+import { CoreForm } from 'react-kinetic-lib';
 import { Modal, ModalBody } from 'reactstrap';
 import { ErrorNotFound } from './ErrorNotFound';
 import { ErrorUnauthorized } from './ErrorUnauthorized';

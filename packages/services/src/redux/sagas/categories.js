@@ -1,5 +1,5 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchCategories } from 'react-kinetic-lib';
 
 import { actions, types } from '../modules/categories';
 import { actions as systemErrorActions } from '../modules/systemError';
@@ -7,10 +7,10 @@ import { actions as systemErrorActions } from '../modules/systemError';
 export function* fetchCategoriesSaga() {
   const kappSlug = yield select(state => state.app.config.kappSlug);
 
-  const { categories, errors, serverError } = yield call(
-    CoreAPI.fetchCategories,
-    { kappSlug, include: 'categorizations,attributes' },
-  );
+  const { categories, errors, serverError } = yield call(fetchCategories, {
+    kappSlug,
+    include: 'categorizations,attributes',
+  });
 
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));

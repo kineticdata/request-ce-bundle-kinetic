@@ -1,5 +1,5 @@
 import React from 'react';
-import { CoreForm } from 'react-kinetic-core';
+import { CoreForm } from 'react-kinetic-lib';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, withHandlers, withState } from 'recompose';

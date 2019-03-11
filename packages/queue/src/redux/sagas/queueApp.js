@@ -7,7 +7,12 @@ import {
   takeEvery,
 } from 'redux-saga/effects';
 import { List } from 'immutable';
-import { CoreAPI } from 'react-kinetic-core';
+import {
+  fetchProfile,
+  fetchForms,
+  fetchTeams,
+  updateProfile,
+} from 'react-kinetic-lib';
 import { actions, types } from '../modules/queueApp';
 import { filterReviver } from '../../records';
 
@@ -48,14 +53,14 @@ export function* fetchAppSettingsTask() {
     forms: { forms },
     teams: { teams },
   } = yield all({
-    profile: call(CoreAPI.fetchProfile, {
+    profile: call(fetchProfile, {
       include: PROFILE_INCLUDES,
     }),
-    forms: call(CoreAPI.fetchForms, {
+    forms: call(fetchForms, {
       kappSlug,
       include: 'details,attributes,fields,fields.details,kapp',
     }),
-    teams: call(CoreAPI.fetchTeams, {
+    teams: call(fetchTeams, {
       include:
         'details,attributes,memberships.memberships.user,memberships.user.details',
     }),
@@ -95,7 +100,7 @@ export function* updatePersonalFilterTask() {
   const myFilters = yield select(selectPersonalFilters);
   const profile = yield select(selectProfile);
 
-  const { serverError } = yield call(CoreAPI.updateProfile, {
+  const { serverError } = yield call(updateProfile, {
     profile: {
       ...profile,
       profileAttributes: {

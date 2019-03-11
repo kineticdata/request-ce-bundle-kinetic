@@ -1,15 +1,15 @@
 import { takeEvery, all, call, put } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchTeams, fetchUsers } from 'react-kinetic-lib';
 
 import { types, actions } from '../modules/about';
 import { actions as systemErrorActions } from '../modules/errors';
 
 export function* fetchAboutSaga() {
   const [teamResult, userResult] = yield all([
-    call(CoreAPI.fetchTeams),
-    call(CoreAPI.fetchUsers),
+    call(fetchTeams),
+    call(fetchUsers),
   ]);
   const serverError = teamResult.serverError || userResult.serverError;
   if (serverError) {

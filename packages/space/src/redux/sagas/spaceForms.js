@@ -1,10 +1,10 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchForms } from 'react-kinetic-lib';
 
 import { types, actions } from '../modules/spaceForms';
 
 export function* fetchFormsSaga(action) {
-  const { forms, serverError } = yield call(CoreAPI.fetchForms, {
+  const { forms, serverError } = yield call(fetchForms, {
     kappSlug: action.payload,
     include: 'attributes,kapp',
   });

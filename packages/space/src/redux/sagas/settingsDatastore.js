@@ -6,7 +6,22 @@ import {
   all,
   throttle,
 } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
+import {
+  fetchForms,
+  fetchForm,
+  fetchSpace,
+  fetchBridgeModels,
+  createForm,
+  updateForm,
+  updateBridgeModel,
+  createBridgeModel,
+  searchSubmissions,
+  fetchSubmission,
+  createSubmission,
+  deleteSubmission,
+  updateSubmission,
+  SubmissionSearch,
+} from 'react-kinetic-lib';
 import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'connected-react-router';
 import { selectToken } from 'discussions/src/redux/modules/socket';
@@ -31,15 +46,15 @@ import { chunkList } from '../../utils';
 
 export function* fetchFormsSaga() {
   const [displayableForms, manageableForms, space] = yield all([
-    call(CoreAPI.fetchForms, {
+    call(fetchForms, {
       datastore: true,
       include: FORMS_INCLUDES,
     }),
-    call(CoreAPI.fetchForms, {
+    call(fetchForms, {
       datastore: true,
       manage: 'true',
     }),
-    call(CoreAPI.fetchSpace, {
+    call(fetchSpace, {
       include: SPACE_INCLUDES,
     }),
   ]);
@@ -59,12 +74,12 @@ export function* fetchFormsSaga() {
 
 export function* fetchFormSaga(action) {
   const [formCall, modelsCall] = yield all([
-    call(CoreAPI.fetchForm, {
+    call(fetchForm, {
       datastore: true,
       formSlug: action.payload,
       include: FORM_INCLUDES,
     }),
-    call(CoreAPI.fetchBridgeModels, {
+    call(fetchBridgeModels, {
       include: BRIDGE_MODEL_INCLUDES,
     }),
   ]);
@@ -108,7 +123,7 @@ export function* updateFormSaga() {
 
   // Update form if content has changed
   if (!formContent.equals(formContentChanges)) {
-    const { serverError, error, form } = yield call(CoreAPI.updateForm, {
+    const { serverError, error, form } = yield call(updateForm, {
       datastore: true,
       formSlug: currentForm.slug,
       form: formContentChanges,
@@ -141,11 +156,11 @@ export function* updateFormSaga() {
       ])
       .toJS();
     const { error, serverError } = !!modelName
-      ? yield call(CoreAPI.updateBridgeModel, {
+      ? yield call(updateBridgeModel, {
           modelName,
           bridgeModel,
         })
-      : yield call(CoreAPI.createBridgeModel, {
+      : yield call(createBridgeModel, {
           bridgeModel,
         });
     if (error || serverError) {
@@ -172,7 +187,7 @@ export function* createFormSaga(action) {
     name: form.name,
     description: form.description,
   };
-  const { error, serverError } = yield call(CoreAPI.createForm, {
+  const { error, serverError } = yield call(createForm, {
     datastore: true,
     form: formContent,
     include: FORM_INCLUDES,
@@ -212,7 +227,7 @@ export function* fetchSubmissionsSimpleSaga() {
     const index = form.indexDefinitions.find(
       definition => definition.name === simpleSearchNextPageIndex,
     );
-    const query = new CoreAPI.SubmissionSearch(true);
+    const query = new SubmissionSearch(true);
     query.include(SUBMISSION_INCLUDES);
     query.limit(DATASTORE_LIMIT);
     query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
@@ -221,7 +236,7 @@ export function* fetchSubmissionsSimpleSaga() {
     query.pageToken(pageToken);
 
     const { submissions, nextPageToken = null, serverError } = yield call(
-      CoreAPI.searchSubmissions,
+      searchSubmissions,
       { search: query.build(), datastore: true, form: form.slug },
     );
 
@@ -245,7 +260,7 @@ export function* fetchSubmissionsSimpleSaga() {
           definition.name.startsWith('values['),
       )
       .map(index => {
-        const query = new CoreAPI.SubmissionSearch(true);
+        const query = new SubmissionSearch(true);
         query.include(SUBMISSION_INCLUDES);
         query.limit(DATASTORE_LIMIT);
         query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
@@ -255,7 +270,7 @@ export function* fetchSubmissionsSimpleSaga() {
       });
 
     const searchCalls = searchQueries.map(searchQuery =>
-      call(CoreAPI.searchSubmissions, {
+      call(searchSubmissions, {
         search: searchQuery.build(),
         datastore: true,
         form: form.slug,
@@ -324,7 +339,7 @@ export function* fetchSubmissionsAdvancedSaga() {
     selectSearchParams,
   );
 
-  const searcher = new CoreAPI.SubmissionSearch(true);
+  const searcher = new SubmissionSearch(true);
 
   searcher.include(SUBMISSION_INCLUDES);
   searcher.limit(DATASTORE_LIMIT);
@@ -379,7 +394,7 @@ export function* fetchSubmissionsAdvancedSaga() {
   });
 
   const { submissions, nextPageToken = null, serverError } = yield call(
-    CoreAPI.searchSubmissions,
+    searchSubmissions,
     { search: searcher.build(), datastore: true, form: form.slug },
   );
 
@@ -403,7 +418,7 @@ export function* fetchSubmissionSaga(action) {
   const profile = yield select(state => state.app.profile);
   const include =
     'details,values,form,form.attributes,form.fields,activities,activities.details';
-  const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
+  const { submission, serverError } = yield call(fetchSubmission, {
     id: action.payload,
     include,
     datastore: true,
@@ -418,10 +433,11 @@ export function* fetchSubmissionSaga(action) {
 
 export function* cloneSubmissionSaga(action) {
   const include = 'details,values,form,form.fields.details';
-  const { submission, errors, serverError } = yield call(
-    CoreAPI.fetchSubmission,
-    { id: action.payload.id, include, datastore: true },
-  );
+  const { submission, errors, serverError } = yield call(fetchSubmission, {
+    id: action.payload.id,
+    include,
+    datastore: true,
+  });
 
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
@@ -456,7 +472,7 @@ export function* cloneSubmissionSaga(action) {
       submission: cloneSubmission,
       postErrors,
       postServerError,
-    } = yield call(CoreAPI.createSubmission, {
+    } = yield call(createSubmission, {
       datastore: true,
       formSlug: form.slug,
       values,
@@ -479,7 +495,7 @@ export function* cloneSubmissionSaga(action) {
 }
 
 export function* deleteSubmissionSaga(action) {
-  const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
+  const { errors, serverError } = yield call(deleteSubmission, {
     id: action.payload.id,
     datastore: true,
   });
@@ -499,7 +515,7 @@ export function* deleteSubmissionSaga(action) {
 
 export function* fetchAllSubmissionsSaga(action) {
   const { pageToken, accumulator, formSlug } = action.payload;
-  const searcher = new CoreAPI.SubmissionSearch(true);
+  const searcher = new SubmissionSearch(true);
 
   searcher.include('values');
   searcher.limit(1000);
@@ -508,7 +524,7 @@ export function* fetchAllSubmissionsSaga(action) {
   }
 
   const { submissions, nextPageToken = null, serverError } = yield call(
-    CoreAPI.searchSubmissions,
+    searchSubmissions,
     {
       search: searcher.build(),
       datastore: true,
@@ -541,21 +557,18 @@ export function* fetchAllSubmissionsSaga(action) {
 
 export function* deleteAllSubmissionsSaga(action) {
   const { form } = yield select(selectSearchParams);
-  const searcher = new CoreAPI.SubmissionSearch(true);
+  const searcher = new SubmissionSearch(true);
 
   searcher.limit(1000);
 
-  const { submissions, nextPageToken = null } = yield call(
-    CoreAPI.searchSubmissions,
-    {
-      search: searcher.build(),
-      datastore: true,
-      form: form.slug,
-    },
-  );
+  const { submissions, nextPageToken = null } = yield call(searchSubmissions, {
+    search: searcher.build(),
+    datastore: true,
+    form: form.slug,
+  });
 
   submissions.forEach(submission =>
-    CoreAPI.deleteSubmission({
+    deleteSubmission({
       datastore: true,
       id: submission.id,
     }),
@@ -591,13 +604,13 @@ export function* executeImportSaga(action) {
       .map(
         record =>
           record.id
-            ? call(CoreAPI.updateSubmission, {
+            ? call(updateSubmission, {
                 datastore: true,
                 formSlug: form.slug,
                 values: record.values,
                 id: record.id,
               })
-            : call(CoreAPI.createSubmission, {
+            : call(createSubmission, {
                 datastore: true,
                 formSlug: form.slug,
                 values: record.values,

@@ -1,6 +1,11 @@
 import { select, call, put, takeEvery } from 'redux-saga/effects';
 import moment from 'moment';
-import { CoreAPI } from 'react-kinetic-core';
+import {
+  SubmissionSearch,
+  searchSubmissions,
+  fetchSubmission,
+  updateSubmission,
+} from 'react-kinetic-lib';
 import isFunction from 'is-function';
 import { selectToken } from 'discussions/src/redux/modules/socket';
 
@@ -125,7 +130,7 @@ export const prepareCreatedByMeFilter = (searcher, filter, appSettings) => {
 };
 
 export const buildSearch = (filter, appSettings) => {
-  let searcher = new CoreAPI.SubmissionSearch();
+  let searcher = new SubmissionSearch();
 
   searcher = prepareStatusFilter(searcher, filter);
   searcher = prepareDateRangeFilter(searcher, filter, moment());
@@ -206,7 +211,7 @@ export function* fetchListTask(action) {
     yield put(actions.setListItems(filter, []));
   } else {
     const { submissions, messages, nextPageToken, serverError } = yield call(
-      CoreAPI.searchSubmissions,
+      searchSubmissions,
       { kapp: kappSlug, search, limit: 1000 },
     );
 
@@ -232,7 +237,7 @@ export function* fetchCurrentItemTask(action) {
   const token = yield select(selectToken);
   const appSettings = yield select(getAppSettings);
 
-  const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
+  const { submission, serverError } = yield call(fetchSubmission, {
     id: action.payload,
     include: SUBMISSION_INCLUDES,
   });
@@ -245,7 +250,7 @@ export function* fetchCurrentItemTask(action) {
 }
 
 export function* updateQueueItemTask(action) {
-  const { submission } = yield call(CoreAPI.updateSubmission, {
+  const { submission } = yield call(updateSubmission, {
     id: action.payload.id,
     values: action.payload.values,
     include: SUBMISSION_INCLUDES,

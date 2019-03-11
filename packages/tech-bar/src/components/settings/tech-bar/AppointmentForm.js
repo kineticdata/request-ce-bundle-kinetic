@@ -9,7 +9,7 @@ import {
   ErrorNotFound,
   selectHasRoleSchedulerAdmin,
 } from 'common';
-import { CoreForm } from 'react-kinetic-core';
+import { CoreForm } from 'react-kinetic-lib';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 // Asynchronously import the global dependencies that are used in the embedded

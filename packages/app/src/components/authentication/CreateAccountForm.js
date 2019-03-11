@@ -3,7 +3,7 @@ import { compose, withProps, withState, withHandlers } from 'recompose';
 import { Map } from 'immutable';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { bundle } from 'react-kinetic-core';
+import { bundle } from 'react-kinetic-lib';
 import { I18n } from '../../I18nProvider';
 
 const CreateAccount = ({

@@ -1,5 +1,5 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
+import { searchSubmissions, SubmissionSearch } from 'react-kinetic-lib';
 
 import * as constants from '../../constants';
 import { actions, types } from '../modules/submissions';
@@ -9,7 +9,7 @@ export function* fetchSubmissionsSaga({ payload: { coreState } }) {
   const kappSlug = yield select(state => state.app.config.kappSlug);
   const username = yield select(state => state.app.profile.username);
   const pageToken = yield select(state => state.services.submissions.current);
-  const searchBuilder = new CoreAPI.SubmissionSearch()
+  const searchBuilder = new SubmissionSearch()
     .type(constants.SUBMISSION_FORM_TYPE)
     .limit(constants.PAGE_SIZE)
     .includes([
@@ -43,7 +43,7 @@ export function* fetchSubmissionsSaga({ payload: { coreState } }) {
   const search = searchBuilder.build();
 
   const { submissions, nextPageToken, serverError } = yield call(
-    CoreAPI.searchSubmissions,
+    searchSubmissions,
     { search, kapp: kappSlug },
   );
 

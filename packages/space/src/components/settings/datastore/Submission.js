@@ -11,7 +11,7 @@ import {
 import { Link } from 'react-router-dom';
 import { parse } from 'query-string';
 import { ButtonGroup, Button } from 'reactstrap';
-import { CoreForm } from 'react-kinetic-core';
+import { CoreForm } from 'react-kinetic-lib';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import { PageTitle, toastActions } from 'common';

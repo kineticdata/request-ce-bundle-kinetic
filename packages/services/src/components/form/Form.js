@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { CoreForm } from 'react-kinetic-core';
+import { CoreForm } from 'react-kinetic-lib';
 import {
   KappLink as Link,
   ErrorNotFound,

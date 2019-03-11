@@ -8,7 +8,7 @@ import {
   withState,
   withProps,
 } from 'recompose';
-import { CoreForm } from 'react-kinetic-core';
+import { CoreForm } from 'react-kinetic-lib';
 import {
   KappLink as Link,
   ErrorNotFound,

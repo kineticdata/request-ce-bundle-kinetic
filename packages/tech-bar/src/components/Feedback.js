@@ -1,17 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import {
-  compose,
-  lifecycle,
-  withHandlers,
-  withState,
-  withProps,
-} from 'recompose';
+import { compose, withHandlers, withState, withProps } from 'recompose';
 import { DisplayTabs } from './Display';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { selectCurrentKapp, toastActions } from 'common';
-import { CoreAPI } from 'react-kinetic-core';
+import { createSubmission } from 'react-kinetic-lib';
 import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
 import { I18n } from '../../../app/src/I18nProvider';
@@ -20,9 +14,7 @@ const FEEDBACK_FORM_SLUG = 'feedback';
 
 export const FeedbackComponent = ({
   crosslink,
-  kapp,
   techBarId,
-  techBar,
   loading,
   getFilteredAppointments,
   handleExperienceClick,
@@ -31,12 +23,9 @@ export const FeedbackComponent = ({
   setInput,
   appointment,
   setAppointment,
-  addSuccess,
-  addError,
   disabled,
   feedbackIdentityRequired,
   resetExperience,
-  handleAppointmentSelect,
   handleSubmitFeedback,
 }) => {
   const filteredAppointments =
@@ -274,7 +263,7 @@ const handleSubmitFeedback = ({
   addSuccess,
   setDisabled,
 }) => values => {
-  CoreAPI.createSubmission({
+  createSubmission({
     kappSlug: kapp.slug,
     formSlug: FEEDBACK_FORM_SLUG,
     values: values

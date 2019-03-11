@@ -8,9 +8,8 @@ import {
 } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
-import isMatch from 'lodash.ismatch';
 import memoize from 'memoize-one';
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchUsers, fetchTeams } from 'react-kinetic-lib';
 
 import { Cache } from '../../cache';
 import { I18n } from '../../../../app/src/I18nProvider';
@@ -157,7 +156,7 @@ const renderToken = (option, props, index) => (
 );
 
 const userCache = new Cache(() =>
-  CoreAPI.fetchUsers().then(response =>
+  fetchUsers().then(response =>
     response.users.map(user => ({
       label: user.displayName || user.username,
       user,
@@ -165,7 +164,7 @@ const userCache = new Cache(() =>
   ),
 );
 const teamCache = new Cache(() =>
-  CoreAPI.fetchTeams().then(response =>
+  fetchTeams().then(response =>
     response.teams.map(team => ({
       label: team.name,
       team,

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { compose, lifecycle, withHandlers } from 'recompose';
-import { getGroupedDiscussions } from 'discussions-lib';
+import { compose, lifecycle } from 'recompose';
+import { getGroupedDiscussions } from 'react-kinetic-lib';
 import { DiscussionCard } from './DiscussionCard';
 import { actions as listActions } from '../../redux/modules/discussionsList';
 import { actions as discussionsActions } from '../../redux/modules/discussions';

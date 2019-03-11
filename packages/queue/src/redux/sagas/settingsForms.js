@@ -1,5 +1,14 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
-import { CoreAPI, bundle } from 'react-kinetic-core';
+import {
+  bundle,
+  fetchForm,
+  SubmissionSearch,
+  searchSubmissions,
+  fetchSubmission,
+  fetchKapp,
+  updateForm,
+  createForm,
+} from 'react-kinetic-lib';
 import { toastActions } from 'common';
 import axios from 'axios';
 import {
@@ -11,7 +20,7 @@ import {
 } from '../modules/settingsForms';
 
 export function* fetchFormSaga(action) {
-  const { serverError, form } = yield call(CoreAPI.fetchForm, {
+  const { serverError, form } = yield call(fetchForm, {
     kappSlug: action.payload.kappSlug,
     formSlug: action.payload.formSlug,
     include: FORM_INCLUDES,
@@ -29,7 +38,7 @@ export function* fetchFormSubmissionsSaga(action) {
   const pageToken = action.payload.pageToken;
   const formSlug = action.payload.formSlug;
   const q = action.payload.q;
-  const searchBuilder = new CoreAPI.SubmissionSearch().includes([
+  const searchBuilder = new SubmissionSearch().includes([
     'details',
     'values',
     'form',
@@ -48,7 +57,7 @@ export function* fetchFormSubmissionsSaga(action) {
   const search = searchBuilder.build();
 
   const { submissions, nextPageToken, serverError } = yield call(
-    CoreAPI.searchSubmissions,
+    searchSubmissions,
     { search, kapp: kappSlug, form: formSlug },
   );
 
@@ -61,7 +70,7 @@ export function* fetchFormSubmissionsSaga(action) {
 
 export function* fetchFormSubmissionSaga(action) {
   const id = action.payload.id;
-  const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
+  const { submission, serverError } = yield call(fetchSubmission, {
     id,
     include: SUBMISSION_INCLUDES,
   });
@@ -73,7 +82,7 @@ export function* fetchFormSubmissionSaga(action) {
 }
 
 export function* fetchKappSaga(action) {
-  const { serverError, kapp } = yield call(CoreAPI.fetchKapp, {
+  const { serverError, kapp } = yield call(fetchKapp, {
     kappSlug: action.payload,
     include: 'formTypes, categories, formAttributeDefinitions',
   });
@@ -144,7 +153,7 @@ export function* updateFormSaga(action) {
     description: currentFormChanges.description,
     categorizations: currentFormChanges.categories,
   };
-  const { serverError } = yield call(CoreAPI.updateForm, {
+  const { serverError } = yield call(updateForm, {
     kappSlug: action.payload.kappSlug,
     formSlug: currentForm.slug,
     form: formContent,
@@ -167,12 +176,12 @@ export function* updateFormSaga(action) {
 }
 
 export function* fetchNotificationsSaga() {
-  const search = new CoreAPI.SubmissionSearch(true)
+  const search = new SubmissionSearch(true)
     .index('values[Name]')
     .includes(['details', 'values'])
     .build();
 
-  const { serverError, submissions } = yield call(CoreAPI.searchSubmissions, {
+  const { serverError, submissions } = yield call(searchSubmissions, {
     search,
     form: 'notification-data',
     datastore: true,
@@ -186,7 +195,7 @@ export function* fetchNotificationsSaga() {
 }
 
 export function* createFormSaga(action) {
-  const { serverError, form } = yield call(CoreAPI.fetchForm, {
+  const { serverError, form } = yield call(fetchForm, {
     kappSlug: action.payload.kappSlug,
     formSlug: action.payload.inputs['Template to Clone'],
     include: FORM_FULL_INCLUDES,
@@ -209,7 +218,7 @@ export function* createFormSaga(action) {
     },
   };
 
-  const createdForm = yield call(CoreAPI.createForm, {
+  const createdForm = yield call(createForm, {
     kappSlug: action.payload.kappSlug,
     form: formContent,
     include: FORM_FULL_INCLUDES,
@@ -229,7 +238,7 @@ export function* createFormSaga(action) {
 
 export function* fetchAllSubmissionsSaga(action) {
   const { pageToken, accumulator, formSlug, kappSlug, q } = action.payload;
-  const searcher = new CoreAPI.SubmissionSearch(true);
+  const searcher = new SubmissionSearch(true);
 
   if (q) {
     for (const key in q) {
@@ -243,7 +252,7 @@ export function* fetchAllSubmissionsSaga(action) {
   }
 
   const { submissions, nextPageToken = null, serverError } = yield call(
-    CoreAPI.searchSubmissions,
+    searchSubmissions,
     {
       search: searcher.build(),
       form: formSlug,

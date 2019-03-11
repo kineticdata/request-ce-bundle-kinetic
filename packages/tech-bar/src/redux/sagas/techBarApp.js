@@ -1,28 +1,31 @@
 import { takeEvery, put, all, call, select } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
-import { List } from 'immutable';
+import {
+  SubmissionSearch,
+  searchSubmissions,
+  fetchTeam,
+  createUser,
+  fetchForms,
+  createMembership,
+  deleteMembership,
+} from 'react-kinetic-lib';
 import {
   actions,
   types,
   Settings,
   SCHEDULER_FORM_SLUG,
 } from '../modules/techBarApp';
-import {
-  createMembership,
-  deleteMembership,
-} from 'common/src/redux/sagas/schedulers';
 import md5 from 'md5';
 
 const TECH_BAR_SETTINGS_FORM_SLUG = 'tech-bar-settings';
 
 export function* fetchAppSettingsSaga() {
-  const schedulersQuery = new CoreAPI.SubmissionSearch(true);
+  const schedulersQuery = new SubmissionSearch(true);
   schedulersQuery.include('details,values');
   schedulersQuery.limit('1000');
   schedulersQuery.index('values[Type],values[Name]');
   schedulersQuery.eq('values[Type]', 'TechBar');
 
-  const settingsQuery = new CoreAPI.SubmissionSearch(true);
+  const settingsQuery = new SubmissionSearch(true);
   settingsQuery.include('details,values');
   settingsQuery.limit('1000');
   settingsQuery.index('values[Scheduler Id]:UNIQUE');
@@ -34,17 +37,17 @@ export function* fetchAppSettingsSaga() {
     { submissions: techBarSettings, serverError: settingsServerError },
     { forms, serverError: formsServerError },
   ] = yield all([
-    call(CoreAPI.searchSubmissions, {
+    call(searchSubmissions, {
       search: schedulersQuery.build(),
       datastore: true,
       form: SCHEDULER_FORM_SLUG,
     }),
-    call(CoreAPI.searchSubmissions, {
+    call(searchSubmissions, {
       search: settingsQuery.build(),
       datastore: true,
       form: TECH_BAR_SETTINGS_FORM_SLUG,
     }),
-    call(CoreAPI.fetchForms, {
+    call(fetchForms, {
       kappSlug,
       include: 'details,attributes',
     }),
@@ -79,7 +82,7 @@ export function* fetchAppSettingsSaga() {
 }
 
 export function* fetchDisplayTeamSaga({ payload: { techBarName } }) {
-  const { team } = yield call(CoreAPI.fetchTeam, {
+  const { team } = yield call(fetchTeam, {
     teamSlug: md5(`Role::Tech Bar Display::${techBarName}`),
     include:
       'attributes,memberships.user,memberships.user.attributes,memberships.user.profileAttributes',
@@ -131,7 +134,7 @@ export function* addDisplayTeamMembershipSaga({
 export function* createUserWithDisplayTeamMembershipSaga({
   payload: { user, teamName, techBarName },
 }) {
-  const { errors, serverError } = yield call(CoreAPI.createUser, {
+  const { errors, serverError } = yield call(createUser, {
     user: {
       username: user.email,
       email: user.email,

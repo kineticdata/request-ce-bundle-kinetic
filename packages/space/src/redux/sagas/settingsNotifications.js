@@ -1,5 +1,13 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
+import {
+  fetchSubmission,
+  createSubmission,
+  deleteSubmission,
+  updateSubmission,
+  fetchForms,
+  searchSubmissions,
+  SubmissionSearch,
+} from 'react-kinetic-lib';
 import { Seq, Map } from 'immutable';
 import { push } from 'connected-react-router';
 
@@ -12,15 +20,16 @@ import {
 } from '../modules/settingsNotifications';
 
 export function* fetchNotificationsSaga() {
-  const query = new CoreAPI.SubmissionSearch(true);
+  const query = new SubmissionSearch(true);
   query.include('details,values');
   query.limit('1000');
   query.index('createdAt');
 
-  const { submissions, errors, serverError } = yield call(
-    CoreAPI.searchSubmissions,
-    { search: query.build(), datastore: true, form: NOTIFICATIONS_FORM_SLUG },
-  );
+  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+    search: query.build(),
+    datastore: true,
+    form: NOTIFICATIONS_FORM_SLUG,
+  });
 
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
@@ -41,7 +50,7 @@ export function* fetchNotificationSaga(action) {
   if (action.payload === 'new') {
     yield put(actions.setNotification(null));
   } else {
-    const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
+    const { submission, serverError } = yield call(fetchSubmission, {
       id: action.payload,
       include,
       datastore: true,
@@ -57,10 +66,11 @@ export function* fetchNotificationSaga(action) {
 
 export function* cloneNotificationSaga(action) {
   const include = 'details,values,form,form.fields.details';
-  const { submission, errors, serverError } = yield call(
-    CoreAPI.fetchSubmission,
-    { id: action.payload, include, datastore: true },
-  );
+  const { submission, errors, serverError } = yield call(fetchSubmission, {
+    id: action.payload,
+    include,
+    datastore: true,
+  });
 
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
@@ -93,7 +103,7 @@ export function* cloneNotificationSaga(action) {
       submission: cloneSubmission,
       postErrors,
       postServerError,
-    } = yield call(CoreAPI.createSubmission, {
+    } = yield call(createSubmission, {
       datastore: true,
       formSlug: submission.form.slug,
       values,
@@ -121,7 +131,7 @@ export function* cloneNotificationSaga(action) {
 }
 
 export function* deleteNotificationSaga(action) {
-  const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
+  const { errors, serverError } = yield call(deleteSubmission, {
     id: action.payload.id,
     datastore: true,
   });
@@ -147,8 +157,8 @@ export function* saveNotificationSaga(action) {
   } = action;
 
   const { errors, error, serverError, submission } = yield id
-    ? call(CoreAPI.updateSubmission, { datastore, id, values })
-    : call(CoreAPI.createSubmission, {
+    ? call(updateSubmission, { datastore, id, values })
+    : call(createSubmission, {
         datastore,
         completed,
         formSlug,
@@ -171,7 +181,7 @@ export function* fetchVariablesSaga(action) {
   if (action.payload.kappSlug) {
     // When Datastore is selected, we're passing the string 'app/datastore' as the kapp-slug
     const isDatastore = action.payload.kappSlug === 'app/datastore';
-    const { forms, errors, serverError } = yield call(CoreAPI.fetchForms, {
+    const { forms, errors, serverError } = yield call(fetchForms, {
       include: 'attributes,fields',
       datastore: isDatastore,
       ...(!isDatastore && { kappSlug: action.payload.kappSlug }),
@@ -187,11 +197,11 @@ export function* fetchVariablesSaga(action) {
   }
 }
 
-export function* fetchDateFormatsSaga(action) {
-  const { submissions } = yield call(CoreAPI.searchSubmissions, {
+export function* fetchDateFormatsSaga() {
+  const { submissions } = yield call(searchSubmissions, {
     datastore: true,
     form: NOTIFICATIONS_DATE_FORMAT_FORM_SLUG,
-    search: new CoreAPI.SubmissionSearch(true).includes(['values']).build(),
+    search: new SubmissionSearch(true).includes(['values']).build(),
   });
 
   yield put(

@@ -8,8 +8,16 @@ import {
   takeEvery,
   select,
 } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
-import { DiscussionAPI } from 'discussions-lib';
+import {
+  fetchSubmission,
+  createSubmission,
+  deleteSubmission,
+  updateSubmission,
+  fetchDiscussions,
+  createRelatedItem,
+  createDiscussion,
+  sendMessage,
+} from 'react-kinetic-lib';
 import { Map, Seq } from 'immutable';
 import { push } from 'connected-react-router';
 
@@ -21,10 +29,10 @@ export function* fetchSubmissionSaga(action) {
   const include =
     'details,values,form,form.attributes,form.kapp.attributes,' +
     'form.kapp.space.attributes,activities,activities.details';
-  const { submission, errors, serverError } = yield call(
-    CoreAPI.fetchSubmission,
-    { id: action.payload, include },
-  );
+  const { submission, errors, serverError } = yield call(fetchSubmission, {
+    id: action.payload,
+    include,
+  });
 
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
@@ -38,10 +46,10 @@ export function* fetchSubmissionSaga(action) {
 export function* cloneSubmissionSaga(action) {
   const include = 'details,values,form,form.fields.details,form.kapp';
   const kappSlug = yield select(state => state.app.config.kappSlug);
-  const { submission, errors, serverError } = yield call(
-    CoreAPI.fetchSubmission,
-    { id: action.payload, include },
-  );
+  const { submission, errors, serverError } = yield call(fetchSubmission, {
+    id: action.payload,
+    include,
+  });
 
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
@@ -74,7 +82,7 @@ export function* cloneSubmissionSaga(action) {
       submission: cloneSubmission,
       postErrors,
       postServerError,
-    } = yield call(CoreAPI.createSubmission, {
+    } = yield call(createSubmission, {
       kappSlug: submission.form.kapp.slug,
       formSlug: submission.form.slug,
       values,
@@ -95,7 +103,7 @@ export function* cloneSubmissionSaga(action) {
 }
 
 export function* deleteSubmissionSaga(action) {
-  const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
+  const { errors, serverError } = yield call(deleteSubmission, {
     id: action.payload.id,
   });
 
@@ -112,7 +120,7 @@ export function* deleteSubmissionSaga(action) {
 }
 
 export function* fetchDiscussionSaga(action) {
-  const { discussions } = yield call(DiscussionAPI.fetchDiscussions, {
+  const { discussions } = yield call(fetchDiscussions, {
     relatedItem: {
       type: 'Submission',
       key: action.payload,
@@ -140,14 +148,14 @@ export function* sendMessageSaga(action) {
       owningUsers: [{ username: profile.username }],
     };
     const { discussion: newDiscussion } = yield call(
-      DiscussionAPI.createDiscussion,
+      createDiscussion,
       discussionProps,
     );
 
     if (newDiscussion) {
       discussion = newDiscussion;
       // Relate the new Discussion to the Submission
-      yield call(DiscussionAPI.createRelatedItem, discussion.id, {
+      yield call(createRelatedItem, discussion.id, {
         type: 'Submission',
         key: submission.id,
       });
@@ -156,13 +164,13 @@ export function* sendMessageSaga(action) {
         submission.form.name
       } - ${submission.label} request (with confirmation ${submission.handle})`;
 
-      yield call(DiscussionAPI.sendMessage, {
+      yield call(sendMessage, {
         id: discussion.id,
         message: initialMessage,
       });
 
       // Update Submission with Discussion ID
-      yield call(CoreAPI.updateSubmission, {
+      yield call(updateSubmission, {
         id: submission.id,
         values: { 'Discussion Id': discussion.id },
       });
@@ -180,7 +188,7 @@ export function* sendMessageSaga(action) {
         
         ${action.payload}`;
 
-  yield call(DiscussionAPI.sendMessage, {
+  yield call(sendMessage, {
     id: discussion.id,
     message: commentMessage,
   });
@@ -190,7 +198,7 @@ export function* sendMessageSaga(action) {
       ? getCommentFormConfig(kappSlug, submission.id, action.payload)
       : getCancelFormConfig(kappSlug, submission.id, action.payload);
 
-  yield call(CoreAPI.createSubmission, formConfig);
+  yield call(createSubmission, formConfig);
   yield put(actions.setSendMessageModalOpen(false));
 }
 
@@ -204,7 +212,7 @@ export function* pollerTask(id) {
     // Wait
     yield delay(pollDelay);
     // Query
-    const { submission, serverError } = yield call(CoreAPI.fetchSubmission, {
+    const { submission, serverError } = yield call(fetchSubmission, {
       id,
       include,
     });

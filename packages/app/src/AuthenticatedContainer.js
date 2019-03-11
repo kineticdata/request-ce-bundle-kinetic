@@ -6,7 +6,7 @@ import { parse } from 'query-string';
 import { withRouter } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { push } from 'connected-react-router';
-import { bundle } from 'react-kinetic-core';
+import { bundle } from 'react-kinetic-lib';
 import { login } from './utils/authentication';
 import { actions as socketActions } from 'discussions/src/redux/modules/socket';
 import { actions as authActions } from './redux/modules/auth';

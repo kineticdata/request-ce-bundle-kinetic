@@ -1,18 +1,18 @@
-import { takeEvery, put, all, call, select } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
-import { List } from 'immutable';
+import { takeEvery, put, call, select } from 'redux-saga/effects';
+import {
+  fetchSubmission,
+  searchSubmissions,
+  SubmissionSearch,
+} from 'react-kinetic-lib';
 import { actions, types, APPOINTMENT_FORM_SLUG } from '../modules/appointments';
 import moment from 'moment';
 import isarray from 'isarray';
 
 export function* fetchAppointmentSaga({ payload }) {
-  const { submission, errors, serverError } = yield call(
-    CoreAPI.fetchSubmission,
-    {
-      id: payload,
-      include: 'details,values',
-    },
-  );
+  const { submission, errors, serverError } = yield call(fetchSubmission, {
+    id: payload,
+    include: 'details,values',
+  });
 
   if (serverError) {
     yield put(
@@ -30,20 +30,17 @@ export function* fetchAppointmentSaga({ payload }) {
 export function* fetchUpcomingAppointmentsSaga() {
   const kappSlug = yield select(state => state.app.config.kappSlug);
   const username = yield select(state => state.app.profile.username);
-  const searchBuilder = new CoreAPI.SubmissionSearch()
+  const searchBuilder = new SubmissionSearch()
     .limit(1000)
     .include('details,values')
     .coreState('Submitted')
     .eq('values[Requested For]', username);
 
-  const { submissions, errors, serverError } = yield call(
-    CoreAPI.searchSubmissions,
-    {
-      search: searchBuilder.build(),
-      form: APPOINTMENT_FORM_SLUG,
-      kapp: kappSlug,
-    },
-  );
+  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+    search: searchBuilder.build(),
+    form: APPOINTMENT_FORM_SLUG,
+    kapp: kappSlug,
+  });
 
   if (serverError) {
     yield put(
@@ -61,20 +58,17 @@ export function* fetchUpcomingAppointmentsSaga() {
 export function* fetchPastAppointmentsSaga() {
   const kappSlug = yield select(state => state.app.config.kappSlug);
   const username = yield select(state => state.app.profile.username);
-  const searchBuilder = new CoreAPI.SubmissionSearch()
+  const searchBuilder = new SubmissionSearch()
     .limit(1000)
     .include('details,values')
     .coreState('Closed')
     .eq('values[Requested For]', username);
 
-  const { submissions, errors, serverError } = yield call(
-    CoreAPI.searchSubmissions,
-    {
-      search: searchBuilder.build(),
-      form: APPOINTMENT_FORM_SLUG,
-      kapp: kappSlug,
-    },
-  );
+  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+    search: searchBuilder.build(),
+    form: APPOINTMENT_FORM_SLUG,
+    kapp: kappSlug,
+  });
 
   if (serverError) {
     yield put(
@@ -93,7 +87,7 @@ export function* fetchTodayAppointmentsSaga({
   payload: { schedulerId, status },
 }) {
   const kappSlug = yield select(state => state.app.config.kappSlug);
-  const searchBuilder = new CoreAPI.SubmissionSearch()
+  const searchBuilder = new SubmissionSearch()
     .limit(1000)
     .include('details,values')
     .eq('values[Scheduler Id]', schedulerId)
@@ -104,14 +98,11 @@ export function* fetchTodayAppointmentsSaga({
     searchBuilder.eq('values[Status]', status);
   }
 
-  const { submissions, errors, serverError } = yield call(
-    CoreAPI.searchSubmissions,
-    {
-      search: searchBuilder.build(),
-      form: APPOINTMENT_FORM_SLUG,
-      kapp: kappSlug,
-    },
-  );
+  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+    search: searchBuilder.build(),
+    form: APPOINTMENT_FORM_SLUG,
+    kapp: kappSlug,
+  });
 
   if (serverError) {
     yield put(
@@ -133,20 +124,17 @@ export function* fetchTodayAppointmentsSaga({
 export function* fetchAppointmentsListSaga({ payload: { schedulerId } }) {
   const kappSlug = yield select(state => state.app.config.kappSlug);
   const date = yield select(state => state.techBar.appointments.list.date);
-  const searchBuilder = new CoreAPI.SubmissionSearch()
+  const searchBuilder = new SubmissionSearch()
     .limit(1000)
     .include('details,values')
     .eq('values[Scheduler Id]', schedulerId)
     .eq('values[Event Date]', date.format('YYYY-MM-DD'));
 
-  const { submissions, errors, serverError } = yield call(
-    CoreAPI.searchSubmissions,
-    {
-      search: searchBuilder.build(),
-      form: APPOINTMENT_FORM_SLUG,
-      kapp: kappSlug,
-    },
-  );
+  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+    search: searchBuilder.build(),
+    form: APPOINTMENT_FORM_SLUG,
+    kapp: kappSlug,
+  });
 
   if (serverError) {
     yield put(

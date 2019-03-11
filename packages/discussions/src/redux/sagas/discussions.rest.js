@@ -5,8 +5,19 @@ import {
 } from '../modules/discussionsList';
 import { types as detailsTypes } from '../modules/discussionsDetails';
 import { types } from '../modules/discussions';
-import { DiscussionAPI, createDiscussionList } from 'discussions-lib';
-import { sortByLastMessageAt } from '../../../../discussions-lib/src/redux/models';
+import {
+  fetchDiscussions,
+  createDiscussion,
+  sendInvites,
+  updateDiscussion,
+  resendInvite,
+  removeInvite,
+  removeParticipant,
+  updateParticipant,
+  createDiscussionList,
+  createRelatedItem,
+  sortByLastMessageAt,
+} from 'react-kinetic-lib';
 
 export function* fetchRelatedDiscussionsTask(action) {
   const { type, key, loadCallback } = action.payload;
@@ -18,8 +29,8 @@ export function* fetchRelatedDiscussionsTask(action) {
   };
 
   const [discussions, archivedDiscussions] = yield all([
-    call(DiscussionAPI.fetchDiscussions, data),
-    call(DiscussionAPI.fetchDiscussions, { ...data, isArchived: true }),
+    call(fetchDiscussions, data),
+    call(fetchDiscussions, { ...data, isArchived: true }),
   ]);
 
   const combinedDiscussions = []
@@ -53,7 +64,7 @@ export function* createDiscussionTask({ payload }) {
     owningTeams,
     onSuccess,
   } = payload;
-  const { discussion, error } = yield call(DiscussionAPI.createDiscussion, {
+  const { discussion, error } = yield call(createDiscussion, {
     title,
     description,
     isPrivate,
@@ -69,11 +80,7 @@ export function* createDiscussionTask({ payload }) {
     // In a successful scenario we should toast a success, join the discussion
     // and if a submission was passed we should update its "Discussion Id" value.
     if (relatedItem) {
-      const result = yield call(
-        DiscussionAPI.createRelatedItem,
-        discussion.id,
-        relatedItem,
-      );
+      const result = yield call(createRelatedItem, discussion.id, relatedItem);
 
       createdRealtedItem = result.relatedItem;
     }
@@ -87,7 +94,7 @@ export function* createDiscussionTask({ payload }) {
 export function* saveDiscussionTask(action) {
   const id = action.payload.id;
   const { discussion, error } = yield call(
-    DiscussionAPI.updateDiscussion,
+    updateDiscussion,
     id,
     action.payload.discussion,
   );
@@ -109,7 +116,7 @@ export function* saveDiscussionTask(action) {
 export function* inviteTask(action) {
   const id = action.payload.id;
   const results = yield call(
-    DiscussionAPI.sendInvites,
+    sendInvites,
     action.payload.discussion,
     action.payload.values,
   );
@@ -132,7 +139,7 @@ export function* reinviteTask(action) {
   const id = action.payload.id;
   const invitation = action.payload.invitation;
 
-  const { error } = yield call(DiscussionAPI.resendInvite, {
+  const { error } = yield call(resendInvite, {
     discussionId: id,
     username: invitation.user && invitation.user.username,
     email: invitation.email,
@@ -148,7 +155,7 @@ export function* uninviteTask(action) {
   const id = action.payload.id;
   const invitation = action.payload.invitation;
 
-  const { error } = yield call(DiscussionAPI.removeInvite, {
+  const { error } = yield call(removeInvite, {
     discussionId: id,
     username: invitation.user && invitation.user.username,
     email: invitation.email,
@@ -162,11 +169,7 @@ export function* uninviteTask(action) {
 
 export function* removeTask(action) {
   const { id, participant } = action.payload;
-  const { error } = yield call(
-    DiscussionAPI.removeParticipant,
-    id,
-    participant.username,
-  );
+  const { error } = yield call(removeParticipant, id, participant.username);
   yield put({
     type: error ? detailsTypes.REMOVE_ERROR : detailsTypes.REMOVE_SUCCESS,
     payload: { id, participant },
@@ -175,7 +178,7 @@ export function* removeTask(action) {
 
 export function* leaveTask(action) {
   const { id, username, onLeave } = action.payload;
-  const { error } = yield call(DiscussionAPI.removeParticipant, id, username);
+  const { error } = yield call(removeParticipant, id, username);
   if (error) {
     yield put({ type: detailsTypes.LEAVE_ERROR, payload: { id } });
   } else {
@@ -187,7 +190,7 @@ export function* leaveTask(action) {
 
 export function* muteTask(action) {
   const { id, username, isMuted } = action.payload;
-  const { error } = yield call(DiscussionAPI.updateParticipant, id, username, {
+  const { error } = yield call(updateParticipant, id, username, {
     isMuted,
   });
   if (error) {

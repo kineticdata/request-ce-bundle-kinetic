@@ -7,7 +7,12 @@ import { types as errorTypes } from '../modules/errors';
 global.bundle = {
   apiLocation: () => '/acme/app/api/v1',
 };
-const { CoreAPI } = require('react-kinetic-core');
+const {
+  searchSubmissions,
+  fetchSubmission,
+  updateSubmission,
+  SubmissionSearch,
+} = require('react-kinetic-lib');
 const { Filter, Profile } = require('../../records');
 const {
   ERROR_STATUS_STRING,
@@ -31,7 +36,7 @@ const findQuery = (searcher, value) =>
   searcher.query.find(q => q.lvalue === value);
 
 // Helper that performs the date transformation we expect to be done by the
-// combination of prepareDateRangeFilter and CoreAPI.SubmissionSearch.
+// combination of prepareDateRangeFilter and SubmissionSearch.
 const expectedDateFn = date =>
   moment(date)
     .toDate()
@@ -45,7 +50,7 @@ describe('queue saga', () => {
 
     beforeEach(() => {
       filter = new Filter();
-      searcher = new CoreAPI.SubmissionSearch();
+      searcher = new SubmissionSearch();
 
       appSettings = {
         myTeams: List([{ name: 'REAL_TEAM' }]),
@@ -446,7 +451,7 @@ describe('queue saga', () => {
         );
         // Execute the search.
         expect(saga.next(search).value).toEqual(
-          call(CoreAPI.searchSubmissions, {
+          call(searchSubmissions, {
             kapp: 'queue',
             search: search.search,
             limit: 1000,
@@ -473,7 +478,7 @@ describe('queue saga', () => {
         );
         // Execute the search.
         expect(saga.next(search).value).toEqual(
-          call(CoreAPI.searchSubmissions, {
+          call(searchSubmissions, {
             kapp: 'queue',
             search: search.search,
             limit: 1000,
@@ -500,7 +505,7 @@ describe('queue saga', () => {
         );
         // Execute the search.
         expect(saga.next(search).value).toEqual(
-          call(CoreAPI.searchSubmissions, {
+          call(searchSubmissions, {
             kapp: 'queue',
             search: search.search,
             limit: 1000,
@@ -534,7 +539,7 @@ describe('queue saga', () => {
 
         // Execute the search.
         expect(saga.next().value).toEqual(
-          call(CoreAPI.fetchSubmission, { id: action.payload, include }),
+          call(fetchSubmission, { id: action.payload, include }),
         );
         expect(saga.next(response).value).toEqual(
           put(actions.setCurrentItem(response.submission)),
@@ -554,7 +559,7 @@ describe('queue saga', () => {
         it('calls updateSubmission but does not dispatch any other actions', () => {
           const saga = updateQueueItemTask({ payload: { id, values } });
           expect(saga.next().value).toEqual(
-            call(CoreAPI.updateSubmission, { id, values, include }),
+            call(updateSubmission, { id, values, include }),
           );
           expect(saga.next(response).done).toBe(true);
         });
@@ -567,7 +572,7 @@ describe('queue saga', () => {
             payload: { id, values, onSuccess },
           });
           expect(saga.next().value).toEqual(
-            call(CoreAPI.updateSubmission, { id, values, include }),
+            call(updateSubmission, { id, values, include }),
           );
           expect(saga.next(response).done).toBe(true);
           expect(onSuccess.mock.calls).toEqual([[response.submission]]);
@@ -579,7 +584,7 @@ describe('queue saga', () => {
       it('returns a "put" effect with a generic error message', () => {
         const saga = updateQueueItemTask({ payload: { id, values } });
         expect(saga.next().value).toEqual(
-          call(CoreAPI.updateSubmission, { id, values, include }),
+          call(updateSubmission, { id, values, include }),
         );
         const effect = saga.next({ serverError: 'error' }).value;
         expect(effect.PUT.action.type).toEqual(errorTypes.ADD_NOTIFICATION);

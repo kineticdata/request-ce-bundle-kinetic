@@ -4,7 +4,7 @@ import {
   types,
   SEARCH_HISTORY_FORM_SLUG,
 } from '../modules/searchHistory';
-import { CoreAPI } from 'react-kinetic-core';
+import { createSubmission, fetchForm } from 'react-kinetic-lib';
 
 export function* recordSearchHistorySaga({ payload }) {
   const searchHistoryExists = yield select(
@@ -13,7 +13,7 @@ export function* recordSearchHistorySaga({ payload }) {
   // If searchHistoryExists is undefined, check if Search History form exists
   if (typeof searchHistoryExists === 'undefined') {
     console.log('fetch search history form');
-    const { form } = yield call(CoreAPI.fetchForm, {
+    const { form } = yield call(fetchForm, {
       datastore: true,
       formSlug: SEARCH_HISTORY_FORM_SLUG,
     });
@@ -37,7 +37,7 @@ export function* recordSearchHistorySaga({ payload }) {
         'Search Term': payload.searchTerm,
         'Number of Results Found': payload.resultsCount,
       });
-      yield call(CoreAPI.createSubmission, {
+      yield call(createSubmission, {
         datastore: true,
         formSlug: SEARCH_HISTORY_FORM_SLUG,
         values: {

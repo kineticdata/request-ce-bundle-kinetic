@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, withProps } from 'recompose';
-import { bundle } from 'react-kinetic-core';
+import { bundle } from 'react-kinetic-lib';
 import { selectHasSharedTaskEngine } from '../../redux/modules/spaceApp';
 import {
   selectHasRoleSchedulerAdmin,

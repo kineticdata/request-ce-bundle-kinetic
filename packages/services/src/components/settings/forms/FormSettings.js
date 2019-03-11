@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { bundle } from 'react-kinetic-core';
+import { bundle } from 'react-kinetic-lib';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';

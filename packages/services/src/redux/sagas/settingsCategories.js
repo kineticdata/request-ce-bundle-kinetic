@@ -1,12 +1,10 @@
-import { call, put, takeEvery, select, all } from 'redux-saga/effects';
-import { CoreAPI, bundle } from 'react-kinetic-core';
+import { call, put, takeEvery } from 'redux-saga/effects';
+import { fetchCategories } from 'react-kinetic-lib';
 import { toastActions } from 'common';
-import axios from 'axios';
 import { actions, types } from '../modules/settingsCategories';
-import { Promise } from 'core-js';
 
 export function* fetchCategoriesSaga(action) {
-  const { serverError, categories } = yield call(CoreAPI.fetchCategories, {
+  const { serverError, categories } = yield call(fetchCategories, {
     kappSlug: action.payload,
     include: 'attributes',
   });

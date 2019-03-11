@@ -1,22 +1,16 @@
 import React from 'react';
 import { compose, withState, withHandlers } from 'recompose';
 import { Link } from 'react-router-dom';
-import { CoreAPI } from 'react-kinetic-core';
+import { createSubmission } from 'react-kinetic-lib';
 
 const RequestAccount = ({
   submitted,
-  toSignIn,
-  routed,
   email,
   handleEmail,
   firstName,
   handleFirstName,
   lastName,
   handleLastName,
-  phone,
-  handlePhone,
-  comments,
-  handleComments,
   formValid,
   handleSubmit,
 }) =>
@@ -119,7 +113,7 @@ const handleSubmit = ({
   e.preventDefault();
 
   try {
-    await CoreAPI.createSubmission({
+    await createSubmission({
       kappSlug: 'admin',
       formSlug: 'account-request',
       values: {

@@ -2,7 +2,12 @@ import { takeEvery, call, put, all, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { Map } from 'immutable';
 import axios from 'axios';
-import { CoreAPI, bundle } from 'react-kinetic-core';
+import {
+  bundle,
+  fetchVersion,
+  fetchProfile,
+  fetchDefaultLocale,
+} from 'react-kinetic-lib';
 import {
   actions as configActions,
   types as configTypes,
@@ -23,13 +28,13 @@ const MINIMUM_TRANSLATIONS_CE_VERSION = '2.3.0';
 
 // Fetch Entire App
 export function* fetchAppTask({ payload }) {
-  const { version } = yield call(CoreAPI.fetchVersion);
+  const { version } = yield call(fetchVersion);
   const initialLoad = payload;
   // Check to make sure the version is compatible with this bundle.
   if (
     semver.satisfies(semver.coerce(version.version), `>=${MINIMUM_CE_VERSION}`)
   ) {
-    const { profile } = yield call(CoreAPI.fetchProfile, {
+    const { profile } = yield call(fetchProfile, {
       include:
         'attributes,profileAttributes,profileAttributesMap,memberships,memberships.team,memberships.team.attributes,memberships.team.memberships,memberships.team.memberships.user,attributes,space,space.details,space.attributes,space.attributesMap,space.kapps,space.kapps.attributes',
     });
@@ -80,7 +85,7 @@ export function* fetchAppTask({ payload }) {
         `>=${MINIMUM_TRANSLATIONS_CE_VERSION}`,
       )
     ) {
-      const { defaultLocale } = yield call(CoreAPI.fetchDefaultLocale);
+      const { defaultLocale } = yield call(fetchDefaultLocale);
       importLocale((defaultLocale && defaultLocale.code) || 'en');
       yield put(configActions.setLocale(defaultLocale && defaultLocale.code));
     }

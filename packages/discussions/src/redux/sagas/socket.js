@@ -1,6 +1,6 @@
 import { eventChannel } from 'redux-saga';
 import { cancelled, race, take, put, takeEvery } from 'redux-saga/effects';
-import { bundle } from 'react-kinetic-core';
+import { bundle } from 'react-kinetic-lib';
 
 import { types, actions } from '../modules/socket';
 

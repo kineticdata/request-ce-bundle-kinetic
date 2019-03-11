@@ -1,12 +1,12 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchForms } from 'react-kinetic-lib';
 
 import { actions, types } from '../modules/forms';
 import { actions as systemErrorActions } from '../modules/systemError';
 
 export function* fetchFormsSaga() {
   const kappSlug = yield select(state => state.app.config.kappSlug);
-  const { forms, errors, serverError } = yield call(CoreAPI.fetchForms, {
+  const { forms, errors, serverError } = yield call(fetchForms, {
     kappSlug,
     include: 'details,categorizations,attributes,kapp',
   });

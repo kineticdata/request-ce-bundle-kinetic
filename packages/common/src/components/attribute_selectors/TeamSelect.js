@@ -9,7 +9,7 @@ import {
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import memoize from 'memoize-one';
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchTeams } from 'react-kinetic-lib';
 
 import { Cache } from '../../cache';
 import { I18n } from '../../../../app/src/I18nProvider';
@@ -58,7 +58,7 @@ const renderToken = (option, props, index) => (
 );
 
 const teamCache = new Cache(() =>
-  CoreAPI.fetchTeams({ include: 'attributesMap' }).then(response =>
+  fetchTeams({ include: 'attributesMap' }).then(response =>
     response.teams
       .filter(team => !team.name.startsWith('Role::'))
       .map(team => ({

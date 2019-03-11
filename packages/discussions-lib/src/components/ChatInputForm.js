@@ -11,9 +11,9 @@ import {
 } from 'reactstrap';
 import classNames from 'classnames';
 import ContentEditable from './ContentEditable';
-import { Provider, connect, dispatch } from '../redux/store';
+import { Provider, connect } from '../redux/store';
 import { actions } from '../redux/reducer';
-import { bundle } from 'react-kinetic-core';
+import { bundle } from 'react-kinetic-lib';
 
 const VALID_IMG_TYPES = [
   'image/jpeg',

@@ -10,7 +10,7 @@ import {
   AttributeSelectors,
   selectCurrentKapp,
 } from 'common';
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchKapp, updateKapp } from 'react-kinetic-lib';
 import isarray from 'isarray';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
@@ -314,7 +314,7 @@ const fetchSettings = ({
   setPreviousKappName,
   currentKapp,
 }) => async () => {
-  const { kapp } = await CoreAPI.fetchKapp({
+  const { kapp } = await fetchKapp({
     kappSlug: currentKapp.slug,
     include: KAPP_INCLUDES,
   });
@@ -343,7 +343,7 @@ const updateSettings = ({
   reloadApp,
   currentKapp,
 }) => async () => {
-  const { kapp, serverError } = await CoreAPI.updateKapp({
+  const { kapp, serverError } = await updateKapp({
     kappSlug: currentKapp.slug,
     include: KAPP_INCLUDES,
     kapp: {

@@ -2,7 +2,6 @@
 
 exports[`<Header /> .hasSidebar exists when there is a #toggleSidebarOpen 1`] = `
 ShallowWrapper {
-  "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Navbar
     color="faded"
@@ -43,7 +42,9 @@ ShallowWrapper {
                     className="fa fa-fw fa-book"
                 />
                  
-                name
+                <I18n>
+                    name
+                </I18n>
             </Connect(KappLinkComponent)>
         </NavItem>
         <div
@@ -57,6 +58,7 @@ ShallowWrapper {
                 inNavbar={false}
                 isOpen={false}
                 nav={false}
+                setActiveFromChild={false}
                 toggle={undefined}
             >
                 <DropdownToggle
@@ -82,7 +84,9 @@ ShallowWrapper {
                         <span
                             className="fa fa-fw fa-home"
                         />
-                        Home
+                        <I18n>
+                            Home
+                        </I18n>
                     </Link>
                     <DropdownItem
                         divider={true}
@@ -107,8 +111,10 @@ ShallowWrapper {
 </Navbar>,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
+    "checkPropTypes": [Function],
     "getNode": [Function],
     "render": [Function],
+    "simulateError": [Function],
     "simulateEvent": [Function],
     "unmount": [Function],
   },
@@ -149,7 +155,9 @@ ShallowWrapper {
                                 className="fa fa-fw fa-book"
                         />
                          
-                        name
+                        <I18n>
+                                name
+                        </I18n>
                 </Connect(KappLinkComponent)>
         </NavItem>
         <div
@@ -163,6 +171,7 @@ ShallowWrapper {
                         inNavbar={false}
                         isOpen={false}
                         nav={false}
+                        setActiveFromChild={false}
                         toggle={undefined}
                 >
                         <DropdownToggle
@@ -188,7 +197,9 @@ ShallowWrapper {
                                         <span
                                                 className="fa fa-fw fa-home"
                                         />
-                                        Home
+                                        <I18n>
+                                                Home
+                                        </I18n>
                                 </Link>
                                 <DropdownItem
                                         divider={true}
@@ -246,7 +257,9 @@ ShallowWrapper {
                                     className="fa fa-fw fa-book"
                         />
                          
-                        name
+                        <I18n>
+                                    name
+                        </I18n>
             </Connect(KappLinkComponent)>
 </NavItem>,
           <div
@@ -260,6 +273,7 @@ ShallowWrapper {
                         inNavbar={false}
                         isOpen={false}
                         nav={false}
+                        setActiveFromChild={false}
                         toggle={undefined}
             >
                         <DropdownToggle
@@ -285,7 +299,9 @@ ShallowWrapper {
                                                 <span
                                                             className="fa fa-fw fa-home"
                                                 />
-                                                Home
+                                                <I18n>
+                                                            Home
+                                                </I18n>
                                     </Link>
                                     <DropdownItem
                                                 divider={true}
@@ -376,7 +392,9 @@ ShallowWrapper {
                             className="fa fa-fw fa-book"
               />
                
-              name
+              <I18n>
+                            name
+              </I18n>
 </Connect(KappLinkComponent)>,
             "tag": "li",
           },
@@ -391,7 +409,9 @@ ShallowWrapper {
                   className="fa fa-fw fa-book"
 />,
                 " ",
-                "name",
+                <I18n>
+                  name
+</I18n>,
               ],
               "className": "nav-link",
               "to": "/",
@@ -410,7 +430,17 @@ ShallowWrapper {
                 "type": "span",
               },
               " ",
-              "name",
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": "name",
+                },
+                "ref": null,
+                "rendered": "name",
+                "type": [Function],
+              },
             ],
             "type": [Function],
           },
@@ -430,6 +460,7 @@ ShallowWrapper {
                 inNavbar={false}
                 isOpen={false}
                 nav={false}
+                setActiveFromChild={false}
                 toggle={undefined}
 >
                 <DropdownToggle
@@ -455,7 +486,9 @@ ShallowWrapper {
                                                 <span
                                                                 className="fa fa-fw fa-home"
                                                 />
-                                                Home
+                                                <I18n>
+                                                                Home
+                                                </I18n>
                                 </Link>
                                 <DropdownItem
                                                 divider={true}
@@ -511,7 +544,9 @@ ShallowWrapper {
                                         <span
                                                             className="fa fa-fw fa-home"
                                         />
-                                        Home
+                                        <I18n>
+                                                            Home
+                                        </I18n>
                     </Link>
                     <DropdownItem
                                         divider={true}
@@ -534,6 +569,7 @@ ShallowWrapper {
                 "inNavbar": false,
                 "isOpen": false,
                 "nav": false,
+                "setActiveFromChild": false,
                 "toggle": undefined,
               },
               "ref": null,
@@ -580,7 +616,9 @@ ShallowWrapper {
                         <span
                                                 className="fa fa-fw fa-home"
                         />
-                        Home
+                        <I18n>
+                                                Home
+                        </I18n>
 </Link>,
                       <DropdownItem
                         divider={true}
@@ -614,7 +652,9 @@ ShallowWrapper {
                           <span
                             className="fa fa-fw fa-home"
 />,
-                          "Home",
+                          <I18n>
+                            Home
+</I18n>,
                         ],
                         "className": "dropdown-item",
                         "onClick": undefined,
@@ -634,7 +674,17 @@ ShallowWrapper {
                           "rendered": null,
                           "type": "span",
                         },
-                        "Home",
+                        Object {
+                          "instance": null,
+                          "key": undefined,
+                          "nodeType": "class",
+                          "props": Object {
+                            "children": "Home",
+                          },
+                          "ref": null,
+                          "rendered": "Home",
+                          "type": [Function],
+                        },
                       ],
                       "type": [Function],
                     },
@@ -736,7 +786,9 @@ ShallowWrapper {
                                         className="fa fa-fw fa-book"
                               />
                                
-                              name
+                              <I18n>
+                                        name
+                              </I18n>
                     </Connect(KappLinkComponent)>
           </NavItem>
           <div
@@ -750,6 +802,7 @@ ShallowWrapper {
                               inNavbar={false}
                               isOpen={false}
                               nav={false}
+                              setActiveFromChild={false}
                               toggle={undefined}
                     >
                               <DropdownToggle
@@ -775,7 +828,9 @@ ShallowWrapper {
                                                   <span
                                                             className="fa fa-fw fa-home"
                                                   />
-                                                  Home
+                                                  <I18n>
+                                                            Home
+                                                  </I18n>
                                         </Link>
                                         <DropdownItem
                                                   divider={true}
@@ -833,7 +888,9 @@ ShallowWrapper {
                                           className="fa fa-fw fa-book"
                             />
                              
-                            name
+                            <I18n>
+                                          name
+                            </I18n>
               </Connect(KappLinkComponent)>
 </NavItem>,
             <div
@@ -847,6 +904,7 @@ ShallowWrapper {
                             inNavbar={false}
                             isOpen={false}
                             nav={false}
+                            setActiveFromChild={false}
                             toggle={undefined}
               >
                             <DropdownToggle
@@ -872,7 +930,9 @@ ShallowWrapper {
                                                         <span
                                                                       className="fa fa-fw fa-home"
                                                         />
-                                                        Home
+                                                        <I18n>
+                                                                      Home
+                                                        </I18n>
                                           </Link>
                                           <DropdownItem
                                                         divider={true}
@@ -963,7 +1023,9 @@ ShallowWrapper {
                                 className="fa fa-fw fa-book"
                 />
                  
-                name
+                <I18n>
+                                name
+                </I18n>
 </Connect(KappLinkComponent)>,
               "tag": "li",
             },
@@ -978,7 +1040,9 @@ ShallowWrapper {
                     className="fa fa-fw fa-book"
 />,
                   " ",
-                  "name",
+                  <I18n>
+                    name
+</I18n>,
                 ],
                 "className": "nav-link",
                 "to": "/",
@@ -997,7 +1061,17 @@ ShallowWrapper {
                   "type": "span",
                 },
                 " ",
-                "name",
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": "name",
+                  },
+                  "ref": null,
+                  "rendered": "name",
+                  "type": [Function],
+                },
               ],
               "type": [Function],
             },
@@ -1017,6 +1091,7 @@ ShallowWrapper {
                   inNavbar={false}
                   isOpen={false}
                   nav={false}
+                  setActiveFromChild={false}
                   toggle={undefined}
 >
                   <DropdownToggle
@@ -1042,7 +1117,9 @@ ShallowWrapper {
                                                       <span
                                                                         className="fa fa-fw fa-home"
                                                       />
-                                                      Home
+                                                      <I18n>
+                                                                        Home
+                                                      </I18n>
                                     </Link>
                                     <DropdownItem
                                                       divider={true}
@@ -1098,7 +1175,9 @@ ShallowWrapper {
                                             <span
                                                                   className="fa fa-fw fa-home"
                                             />
-                                            Home
+                                            <I18n>
+                                                                  Home
+                                            </I18n>
                       </Link>
                       <DropdownItem
                                             divider={true}
@@ -1121,6 +1200,7 @@ ShallowWrapper {
                   "inNavbar": false,
                   "isOpen": false,
                   "nav": false,
+                  "setActiveFromChild": false,
                   "toggle": undefined,
                 },
                 "ref": null,
@@ -1167,7 +1247,9 @@ ShallowWrapper {
                           <span
                                                     className="fa fa-fw fa-home"
                           />
-                          Home
+                          <I18n>
+                                                    Home
+                          </I18n>
 </Link>,
                         <DropdownItem
                           divider={true}
@@ -1201,7 +1283,9 @@ ShallowWrapper {
                             <span
                               className="fa fa-fw fa-home"
 />,
-                            "Home",
+                            <I18n>
+                              Home
+</I18n>,
                           ],
                           "className": "dropdown-item",
                           "onClick": undefined,
@@ -1221,7 +1305,17 @@ ShallowWrapper {
                             "rendered": null,
                             "type": "span",
                           },
-                          "Home",
+                          Object {
+                            "instance": null,
+                            "key": undefined,
+                            "nodeType": "class",
+                            "props": Object {
+                              "children": "Home",
+                            },
+                            "ref": null,
+                            "rendered": "Home",
+                            "type": [Function],
+                          },
                         ],
                         "type": [Function],
                       },
@@ -1290,6 +1384,20 @@ ShallowWrapper {
     "adapter": ReactSixteenAdapter {
       "options": Object {
         "enableComponentDidUpdateOnSetState": true,
+        "legacyContextMode": "parent",
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getChildContext": Object {
+            "calledByRenderer": false,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
       },
     },
   },
@@ -1298,7 +1406,6 @@ ShallowWrapper {
 
 exports[`<Header /> snapshot 1`] = `
 ShallowWrapper {
-  "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <Unknown
     additionalKapps={Array []}
@@ -1331,8 +1438,10 @@ ShallowWrapper {
 />,
   Symbol(enzyme.__renderer__): Object {
     "batchedUpdates": [Function],
+    "checkPropTypes": [Function],
     "getNode": [Function],
     "render": [Function],
+    "simulateError": [Function],
     "simulateEvent": [Function],
     "unmount": [Function],
   },
@@ -1373,7 +1482,9 @@ ShallowWrapper {
                                 className="fa fa-fw fa-book"
                         />
                          
-                        name
+                        <I18n>
+                                name
+                        </I18n>
                 </Connect(KappLinkComponent)>
         </NavItem>
         <div
@@ -1387,6 +1498,7 @@ ShallowWrapper {
                         inNavbar={false}
                         isOpen={false}
                         nav={false}
+                        setActiveFromChild={false}
                         toggle={undefined}
                 >
                         <DropdownToggle
@@ -1412,7 +1524,9 @@ ShallowWrapper {
                                         <span
                                                 className="fa fa-fw fa-home"
                                         />
-                                        Home
+                                        <I18n>
+                                                Home
+                                        </I18n>
                                 </Link>
                                 <DropdownItem
                                         divider={true}
@@ -1474,7 +1588,9 @@ ShallowWrapper {
                                     className="fa fa-fw fa-book"
                         />
                          
-                        name
+                        <I18n>
+                                    name
+                        </I18n>
             </Connect(KappLinkComponent)>
 </NavItem>,
           <div
@@ -1488,6 +1604,7 @@ ShallowWrapper {
                         inNavbar={false}
                         isOpen={false}
                         nav={false}
+                        setActiveFromChild={false}
                         toggle={undefined}
             >
                         <DropdownToggle
@@ -1513,7 +1630,9 @@ ShallowWrapper {
                                                 <span
                                                             className="fa fa-fw fa-home"
                                                 />
-                                                Home
+                                                <I18n>
+                                                            Home
+                                                </I18n>
                                     </Link>
                                     <DropdownItem
                                                 divider={true}
@@ -1604,7 +1723,9 @@ ShallowWrapper {
                             className="fa fa-fw fa-book"
               />
                
-              name
+              <I18n>
+                            name
+              </I18n>
 </Connect(KappLinkComponent)>,
             "tag": "li",
           },
@@ -1619,7 +1740,9 @@ ShallowWrapper {
                   className="fa fa-fw fa-book"
 />,
                 " ",
-                "name",
+                <I18n>
+                  name
+</I18n>,
               ],
               "className": "nav-link",
               "to": "/",
@@ -1638,7 +1761,17 @@ ShallowWrapper {
                 "type": "span",
               },
               " ",
-              "name",
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "class",
+                "props": Object {
+                  "children": "name",
+                },
+                "ref": null,
+                "rendered": "name",
+                "type": [Function],
+              },
             ],
             "type": [Function],
           },
@@ -1658,6 +1791,7 @@ ShallowWrapper {
                 inNavbar={false}
                 isOpen={false}
                 nav={false}
+                setActiveFromChild={false}
                 toggle={undefined}
 >
                 <DropdownToggle
@@ -1683,7 +1817,9 @@ ShallowWrapper {
                                                 <span
                                                                 className="fa fa-fw fa-home"
                                                 />
-                                                Home
+                                                <I18n>
+                                                                Home
+                                                </I18n>
                                 </Link>
                                 <DropdownItem
                                                 divider={true}
@@ -1739,7 +1875,9 @@ ShallowWrapper {
                                         <span
                                                             className="fa fa-fw fa-home"
                                         />
-                                        Home
+                                        <I18n>
+                                                            Home
+                                        </I18n>
                     </Link>
                     <DropdownItem
                                         divider={true}
@@ -1762,6 +1900,7 @@ ShallowWrapper {
                 "inNavbar": false,
                 "isOpen": false,
                 "nav": false,
+                "setActiveFromChild": false,
                 "toggle": undefined,
               },
               "ref": null,
@@ -1808,7 +1947,9 @@ ShallowWrapper {
                         <span
                                                 className="fa fa-fw fa-home"
                         />
-                        Home
+                        <I18n>
+                                                Home
+                        </I18n>
 </Link>,
                       <DropdownItem
                         divider={true}
@@ -1842,7 +1983,9 @@ ShallowWrapper {
                           <span
                             className="fa fa-fw fa-home"
 />,
-                          "Home",
+                          <I18n>
+                            Home
+</I18n>,
                         ],
                         "className": "dropdown-item",
                         "onClick": undefined,
@@ -1862,7 +2005,17 @@ ShallowWrapper {
                           "rendered": null,
                           "type": "span",
                         },
-                        "Home",
+                        Object {
+                          "instance": null,
+                          "key": undefined,
+                          "nodeType": "class",
+                          "props": Object {
+                            "children": "Home",
+                          },
+                          "ref": null,
+                          "rendered": "Home",
+                          "type": [Function],
+                        },
                       ],
                       "type": [Function],
                     },
@@ -1964,7 +2117,9 @@ ShallowWrapper {
                                         className="fa fa-fw fa-book"
                               />
                                
-                              name
+                              <I18n>
+                                        name
+                              </I18n>
                     </Connect(KappLinkComponent)>
           </NavItem>
           <div
@@ -1978,6 +2133,7 @@ ShallowWrapper {
                               inNavbar={false}
                               isOpen={false}
                               nav={false}
+                              setActiveFromChild={false}
                               toggle={undefined}
                     >
                               <DropdownToggle
@@ -2003,7 +2159,9 @@ ShallowWrapper {
                                                   <span
                                                             className="fa fa-fw fa-home"
                                                   />
-                                                  Home
+                                                  <I18n>
+                                                            Home
+                                                  </I18n>
                                         </Link>
                                         <DropdownItem
                                                   divider={true}
@@ -2065,7 +2223,9 @@ ShallowWrapper {
                                           className="fa fa-fw fa-book"
                             />
                              
-                            name
+                            <I18n>
+                                          name
+                            </I18n>
               </Connect(KappLinkComponent)>
 </NavItem>,
             <div
@@ -2079,6 +2239,7 @@ ShallowWrapper {
                             inNavbar={false}
                             isOpen={false}
                             nav={false}
+                            setActiveFromChild={false}
                             toggle={undefined}
               >
                             <DropdownToggle
@@ -2104,7 +2265,9 @@ ShallowWrapper {
                                                         <span
                                                                       className="fa fa-fw fa-home"
                                                         />
-                                                        Home
+                                                        <I18n>
+                                                                      Home
+                                                        </I18n>
                                           </Link>
                                           <DropdownItem
                                                         divider={true}
@@ -2195,7 +2358,9 @@ ShallowWrapper {
                                 className="fa fa-fw fa-book"
                 />
                  
-                name
+                <I18n>
+                                name
+                </I18n>
 </Connect(KappLinkComponent)>,
               "tag": "li",
             },
@@ -2210,7 +2375,9 @@ ShallowWrapper {
                     className="fa fa-fw fa-book"
 />,
                   " ",
-                  "name",
+                  <I18n>
+                    name
+</I18n>,
                 ],
                 "className": "nav-link",
                 "to": "/",
@@ -2229,7 +2396,17 @@ ShallowWrapper {
                   "type": "span",
                 },
                 " ",
-                "name",
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "class",
+                  "props": Object {
+                    "children": "name",
+                  },
+                  "ref": null,
+                  "rendered": "name",
+                  "type": [Function],
+                },
               ],
               "type": [Function],
             },
@@ -2249,6 +2426,7 @@ ShallowWrapper {
                   inNavbar={false}
                   isOpen={false}
                   nav={false}
+                  setActiveFromChild={false}
                   toggle={undefined}
 >
                   <DropdownToggle
@@ -2274,7 +2452,9 @@ ShallowWrapper {
                                                       <span
                                                                         className="fa fa-fw fa-home"
                                                       />
-                                                      Home
+                                                      <I18n>
+                                                                        Home
+                                                      </I18n>
                                     </Link>
                                     <DropdownItem
                                                       divider={true}
@@ -2330,7 +2510,9 @@ ShallowWrapper {
                                             <span
                                                                   className="fa fa-fw fa-home"
                                             />
-                                            Home
+                                            <I18n>
+                                                                  Home
+                                            </I18n>
                       </Link>
                       <DropdownItem
                                             divider={true}
@@ -2353,6 +2535,7 @@ ShallowWrapper {
                   "inNavbar": false,
                   "isOpen": false,
                   "nav": false,
+                  "setActiveFromChild": false,
                   "toggle": undefined,
                 },
                 "ref": null,
@@ -2399,7 +2582,9 @@ ShallowWrapper {
                           <span
                                                     className="fa fa-fw fa-home"
                           />
-                          Home
+                          <I18n>
+                                                    Home
+                          </I18n>
 </Link>,
                         <DropdownItem
                           divider={true}
@@ -2433,7 +2618,9 @@ ShallowWrapper {
                             <span
                               className="fa fa-fw fa-home"
 />,
-                            "Home",
+                            <I18n>
+                              Home
+</I18n>,
                           ],
                           "className": "dropdown-item",
                           "onClick": undefined,
@@ -2453,7 +2640,17 @@ ShallowWrapper {
                             "rendered": null,
                             "type": "span",
                           },
-                          "Home",
+                          Object {
+                            "instance": null,
+                            "key": undefined,
+                            "nodeType": "class",
+                            "props": Object {
+                              "children": "Home",
+                            },
+                            "ref": null,
+                            "rendered": "Home",
+                            "type": [Function],
+                          },
                         ],
                         "type": [Function],
                       },
@@ -2522,6 +2719,20 @@ ShallowWrapper {
     "adapter": ReactSixteenAdapter {
       "options": Object {
         "enableComponentDidUpdateOnSetState": true,
+        "legacyContextMode": "parent",
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getChildContext": Object {
+            "calledByRenderer": false,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
       },
     },
   },

@@ -1,5 +1,11 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
+import {
+  fetchUser,
+  fetchUsers,
+  updateUser,
+  createUser,
+  deleteUser,
+} from 'react-kinetic-lib';
 
 import { commonActions } from 'common';
 import { types, actions } from '../modules/settingsUsers';
@@ -9,7 +15,7 @@ const USER_INCLUDES =
   'attributes,profileAttributes,memberships,memberships.team,memberships.team.attributes,memberships.team.memberships,memberships.team.memberships.user';
 
 export function* fetchUserSaga({ payload }) {
-  const { serverError, user } = yield call(CoreAPI.fetchUser, {
+  const { serverError, user } = yield call(fetchUser, {
     include: USER_INCLUDES,
     username: payload,
   });
@@ -21,7 +27,7 @@ export function* fetchUserSaga({ payload }) {
 }
 
 export function* updateUserSaga({ payload }) {
-  const { serverError, user } = yield call(CoreAPI.updateUser, {
+  const { serverError, user } = yield call(updateUser, {
     include: USER_INCLUDES,
     username: payload.username,
     user: payload,
@@ -40,7 +46,7 @@ export function* updateUserSaga({ payload }) {
 }
 
 export function* createUserSaga({ payload }) {
-  const { serverError, user } = yield call(CoreAPI.createUser, {
+  const { serverError, user } = yield call(createUser, {
     include: USER_INCLUDES,
     user: payload,
   });
@@ -54,7 +60,7 @@ export function* createUserSaga({ payload }) {
 }
 
 export function* fetchUsersSaga() {
-  const { users, serverError } = yield call(CoreAPI.fetchUsers, {
+  const { users, serverError } = yield call(fetchUsers, {
     include: 'attributesMap,memberships,profileAttributesMap',
   });
 
@@ -70,7 +76,7 @@ export function* fetchUsersSaga() {
 }
 
 export function* deleteUserSaga({ payload }) {
-  const { serverError } = yield call(CoreAPI.deleteUser, { username: payload });
+  const { serverError } = yield call(deleteUser, { username: payload });
 
   if (serverError) {
     yield put(errorActions.setSystemError(serverError));

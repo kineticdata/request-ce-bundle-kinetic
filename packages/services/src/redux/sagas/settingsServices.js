@@ -3,20 +3,30 @@ import { all, takeEvery, call, put } from 'redux-saga/effects';
 import { actions, types } from '../modules/settingsServices';
 import { toastActions, commonActions } from 'common';
 
-import { CoreAPI } from 'react-kinetic-core';
+import {
+  fetchKapp,
+  fetchForms,
+  fetchTeams,
+  fetchUsers,
+  fetchSpace,
+  updateKapp,
+  searchSubmissions,
+  fetchForm,
+  SubmissionSearch,
+} from 'react-kinetic-lib';
 
 const SERVICES_SETTING_INCLUDES = 'formTypes,attributesMap,forms,forms.details';
 const TEAMS_SETTING_INCLUDES = 'teams';
 const SPACE_SETTING_INCLUDES = 'kapps,kapps.forms,attributesMap';
 const FORM_INCLUDES = 'details,fields,attributesMap,categorizations';
 
-export function* fetchServicesSettingsSaga({ payload }) {
+export function* fetchServicesSettingsSaga() {
   const [{ serverError, kapp }, manageableForms] = yield all([
-    call(CoreAPI.fetchKapp, {
+    call(fetchKapp, {
       include: SERVICES_SETTING_INCLUDES,
       kappSlug: 'services',
     }),
-    call(CoreAPI.fetchForms, {
+    call(fetchForms, {
       kappSlug: 'services',
       manage: 'true',
     }),
@@ -47,7 +57,7 @@ export function* fetchServicesSettingsSaga({ payload }) {
 }
 
 export function* fetchTeamsSaga({ payload }) {
-  const { serverError, teams } = yield call(CoreAPI.fetchTeams, {
+  const { serverError, teams } = yield call(fetchTeams, {
     include: TEAMS_SETTING_INCLUDES,
     teams: payload,
   });
@@ -60,8 +70,8 @@ export function* fetchTeamsSaga({ payload }) {
   }
 }
 
-export function* fetchUsersSaga({ payload }) {
-  const { serverError, users } = yield call(CoreAPI.fetchUsers, {
+export function* fetchUsersSaga() {
+  const { serverError, users } = yield call(fetchUsers, {
     include: 'details',
   });
 
@@ -74,7 +84,7 @@ export function* fetchUsersSaga({ payload }) {
 }
 
 export function* fetchSpaceSaga({ payload }) {
-  const { serverError, space } = yield call(CoreAPI.fetchSpace, {
+  const { serverError, space } = yield call(fetchSpace, {
     include: SPACE_SETTING_INCLUDES,
     space: payload,
   });
@@ -93,7 +103,7 @@ export function* updateServicesSettingsSaga({ payload }) {
     .map(value => (value.constructor === Array ? value : [value]))
     .toJS();
 
-  const { serverError, kapp } = yield call(CoreAPI.updateKapp, {
+  const { serverError, kapp } = yield call(updateKapp, {
     include: SERVICES_SETTING_INCLUDES,
     kapp: {
       attributesMap: attributes,
@@ -118,12 +128,12 @@ export function* updateServicesSettingsSaga({ payload }) {
 }
 
 export function* fetchNotificationsSaga() {
-  const search = new CoreAPI.SubmissionSearch(true)
+  const search = new SubmissionSearch(true)
     .index('values[Name]')
     .includes(['details', 'values'])
     .build();
 
-  const { serverError, submissions } = yield call(CoreAPI.searchSubmissions, {
+  const { serverError, submissions } = yield call(searchSubmissions, {
     search,
     form: 'notification-data',
     datastore: true,
@@ -143,7 +153,7 @@ export function* fetchNotificationsSaga() {
 }
 
 export function* fetchFormSaga(action) {
-  const { serverError, form } = yield call(CoreAPI.fetchForm, {
+  const { serverError, form } = yield call(fetchForm, {
     kappSlug: action.payload.kappSlug,
     formSlug: action.payload.formSlug,
     include: FORM_INCLUDES,

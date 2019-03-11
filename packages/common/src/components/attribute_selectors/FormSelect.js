@@ -10,7 +10,7 @@ import { Map, List } from 'immutable';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import memoize from 'memoize-one';
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchSpace } from 'react-kinetic-lib';
 
 import { Cache } from '../../cache';
 import { I18n } from '../../../../app/src/I18nProvider';
@@ -64,7 +64,7 @@ const renderToken = (option, props, index) => (
 );
 
 const formCache = new Cache(() =>
-  CoreAPI.fetchSpace({
+  fetchSpace({
     include: 'kapps,kapps.attributesMap,kapps.forms,kapps.forms.attributesMap',
   }).then(({ space }) =>
     space.kapps.reduce((kappAcc, kapp) => {

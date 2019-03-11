@@ -8,7 +8,13 @@ import { createHashHistory } from 'history';
 import { configureStore } from './redux/store';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
-import { CoreAPI } from 'react-kinetic-core';
+import {
+  KineticLib,
+  configure,
+  addResponseInterceptor,
+  setDefaultAuthAssumed,
+  Socket,
+} from 'react-kinetic-lib';
 import AuthInterceptor from './utils/AuthInterceptor';
 import { actions as layoutActions } from './redux/modules/layout';
 import { actions as configActions } from './redux/modules/config';
@@ -18,8 +24,6 @@ import {
 } from './redux/modules/auth';
 import { AuthenticatedContainer } from './AuthenticatedContainer';
 import { App } from './App';
-import { configure } from 'discussions-lib/src/redux/store';
-import { Socket } from 'discussions/src/api/socket';
 import { selectToken } from 'discussions/src/redux/modules/socket';
 import { ConnectedI18nProvider } from './I18nProvider';
 
@@ -31,7 +35,6 @@ export const store = configureStore(history);
 
 // Create the websocket connection
 export const socket = new Socket();
-
 configure(socket, () => selectToken(store.getState()));
 
 const authInterceptor = new AuthInterceptor(
@@ -41,8 +44,8 @@ const authInterceptor = new AuthInterceptor(
   authSelectors.cancelledSelector,
 );
 axios.interceptors.response.use(null, authInterceptor.handleRejected);
-CoreAPI.addResponseInterceptor(null, authInterceptor.handleRejected);
-CoreAPI.setDefaultAuthAssumed(true);
+addResponseInterceptor(null, authInterceptor.handleRejected);
+setDefaultAuthAssumed(true);
 
 ReactDOM.render(
   <Fragment>
@@ -53,13 +56,15 @@ ReactDOM.render(
       />
     </Helmet>
     <Provider store={store}>
-      <ConnectedI18nProvider>
-        <ConnectedRouter history={history}>
-          <AuthenticatedContainer>
-            <Route path="/" component={App} />
-          </AuthenticatedContainer>
-        </ConnectedRouter>
-      </ConnectedI18nProvider>
+      <KineticLib>
+        <ConnectedI18nProvider>
+          <ConnectedRouter history={history}>
+            <AuthenticatedContainer>
+              <Route path="/" component={App} />
+            </AuthenticatedContainer>
+          </ConnectedRouter>
+        </ConnectedI18nProvider>
+      </KineticLib>
     </Provider>
   </Fragment>,
   document.getElementById('root'),

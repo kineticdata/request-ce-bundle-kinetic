@@ -1,5 +1,5 @@
 import { axios } from './redux/store';
-import { bundle } from 'react-kinetic-core';
+import { bundle } from 'react-kinetic-lib';
 import { List } from 'immutable';
 
 export const DEFAULT_MESSAGE_LIMIT = 25;
