@@ -16,7 +16,7 @@ import { ProfileContainer } from './ProfileContainer';
 import { I18n } from '../I18nProvider';
 
 export const dropdownTitleName = currentKapp => (
-  <I18n>{currentKapp ? currentKapp.name : 'Home'}</I18n>
+  <I18n>{currentKapp ? currentKapp.name : 'Discussions'}</I18n>
 );
 
 export const dropdownIcon = currentKapp =>
