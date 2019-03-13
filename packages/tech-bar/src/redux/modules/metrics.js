@@ -7,12 +7,14 @@ export const DATE_FORMAT = 'YYYY-MM-DD';
 export const MONTH_FORMAT = 'YYYY-MM';
 
 export const types = {
+  CLEAR_METRICS: namespace('techBarMetrics', 'CLEAR_METRICS'),
   FETCH_METRICS: namespace('techBarMetrics', 'FETCH_METRICS'),
   SET_METRICS: namespace('techBarMetrics', 'SET_METRICS'),
   SET_METRICS_ERRORS: namespace('techBarMetrics', 'SET_METRICS_ERRORS'),
 };
 
 export const actions = {
+  clearMetrics: withPayload(types.CLEAR_METRICS),
   fetchMetrics: withPayload(types.FETCH_METRICS),
   setMetrics: withPayload(types.SET_METRICS),
   setMetricsErrors: withPayload(types.SET_METRICS_ERRORS),
@@ -42,6 +44,8 @@ export const State = Record({
 
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
+    case types.CLEAR_METRICS:
+      return state.set('metrics', List());
     case types.FETCH_METRICS:
       return state.set('loading', true);
     case types.SET_METRICS:

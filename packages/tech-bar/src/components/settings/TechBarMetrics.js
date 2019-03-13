@@ -17,6 +17,7 @@ import {
   selectHasRoleSchedulerAdmin,
 } from 'common';
 import { MetricsSummary } from './metrics/MetricsSummary';
+import { MetricsTrend } from './metrics/MetricsTrend';
 import {
   actions,
   DATE_FORMAT,
@@ -26,6 +27,7 @@ import { I18n } from '../../../../app/src/I18nProvider';
 import moment from 'moment';
 
 export const TechBarMetricsComponent = ({
+  clearMetrics,
   mode,
   schedulerId,
   setSchedulerId,
@@ -76,6 +78,7 @@ export const TechBarMetricsComponent = ({
                     onChange={e => {
                       setSchedulerId(e.target.value);
                       setEventType('');
+                      clearMetrics();
                     }}
                   >
                     <option value="">{translate('All Tech Bars')}</option>
@@ -127,7 +130,10 @@ export const TechBarMetricsComponent = ({
                 to={'/settings/metrics'}
                 activeClassName="active"
                 onClick={() => {
-                  setSelectedRange('last30Days');
+                  if (selectedRange !== 'last30Days') {
+                    setSelectedRange('last30Days');
+                    clearMetrics();
+                  }
                 }}
               >
                 <I18n>
@@ -135,18 +141,21 @@ export const TechBarMetricsComponent = ({
                 </I18n>
               </NavLink>
             </li>
-            {/*<li role="presentation">
+            <li role="presentation">
               <NavLink
                 exact
                 to={'/settings/metrics/trend'}
                 activeClassName="active"
                 onClick={() => {
-                  setSelectedRange('last12Months');
+                  if (selectedRange !== 'last12Months') {
+                    setSelectedRange('last12Months');
+                    clearMetrics();
+                  }
                 }}
               >
                 <I18n>Trend</I18n>
               </NavLink>
-            </li>*/}
+            </li>
           </ul>
           <div className="form p-0 my-3">
             <div className="row">
@@ -168,6 +177,7 @@ export const TechBarMetricsComponent = ({
                             .add(-1, 'day')
                             .format(DATE_FORMAT),
                         );
+                        clearMetrics();
                       }}
                     >
                       {mode === 'summary' && (
@@ -210,6 +220,7 @@ export const TechBarMetricsComponent = ({
                     value={selectedDate}
                     onChange={e => {
                       setSelectedDate(e.target.value);
+                      clearMetrics();
                     }}
                   />
                 </div>
@@ -225,7 +236,24 @@ export const TechBarMetricsComponent = ({
               />
             </div>
           )}
-          {mode === 'trend' && <div />}
+          {mode === 'trend' && (
+            <div>
+              <MetricsTrend
+                schedulerId={schedulerId}
+                eventType={eventType}
+                techBars={techBars}
+                dates={dateRanges[selectedRange] || [selectedDate]}
+                formatDate={date =>
+                  moment(date).format(
+                    selectedRange === 'last12Months' ||
+                      selectedRange === 'yearToDate'
+                      ? 'MMM, YYYY'
+                      : 'll',
+                  )
+                }
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -287,16 +315,19 @@ export const mapStateToProps = (state, props) => {
 export const mapDispatchToProps = {
   push,
   fetchMetrics: actions.fetchMetrics,
+  clearMetrics: actions.clearMetrics,
 };
 
 const handleFetch = ({
+  clearMetrics,
   fetchMetrics,
   schedulerId,
   techBars = [],
   dateRanges,
   selectedRange,
   selectedDate,
-}) => () =>
+}) => () => {
+  clearMetrics();
   fetchMetrics({
     schedulerIds: schedulerId
       ? [schedulerId]
@@ -304,6 +335,7 @@ const handleFetch = ({
     monthly: selectedRange === 'last12Months' || selectedRange === 'yearToDate',
     dates: dateRanges[selectedRange] || [selectedDate],
   });
+};
 
 export const TechBarMetrics = compose(
   connect(
