@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { bundle } from 'react-kinetic-lib';
+import { bundle } from '@kineticdata/react';
 import { List } from 'immutable';
 
 export const DEFAULT_MESSAGE_LIMIT = 25;

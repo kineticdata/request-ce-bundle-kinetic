@@ -8,7 +8,7 @@ import {
   fetchKapp,
   updateForm,
   createForm,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import { toastActions } from 'common';
 import axios from 'axios';
 import {

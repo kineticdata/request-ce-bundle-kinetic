@@ -2,7 +2,7 @@ import React from 'react';
 import { Avatar } from 'common';
 import { Link } from 'react-router-dom';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
-import { bundle } from 'react-kinetic-lib';
+import { bundle } from '@kineticdata/react';
 import { I18n } from '../I18nProvider';
 
 export const Profile = ({

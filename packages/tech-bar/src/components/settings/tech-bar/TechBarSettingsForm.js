@@ -11,7 +11,7 @@ import {
   ErrorUnauthorized,
   selectHasRoleSchedulerAdmin,
 } from 'common';
-import { CoreForm } from 'react-kinetic-lib';
+import { CoreForm } from '@kineticdata/react';
 import {
   actions,
   TECH_BAR_SETTINGS_FORM_SLUG,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
-import { CoreForm } from 'react-kinetic-lib';
+import { CoreForm } from '@kineticdata/react';
 import { AssignmentSelector } from '../shared/AssignmentSelector';
 import { I18n } from '../../../../app/src/I18nProvider';
 

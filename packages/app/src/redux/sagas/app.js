@@ -7,7 +7,7 @@ import {
   fetchVersion,
   fetchProfile,
   fetchDefaultLocale,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import {
   actions as configActions,
   types as configTypes,

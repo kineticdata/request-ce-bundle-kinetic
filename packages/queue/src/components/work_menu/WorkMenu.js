@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, withProps, withState } from 'recompose';
 import { actions } from '../../redux/modules/workMenu';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
-import { CoreForm } from 'react-kinetic-lib';
+import { CoreForm } from '@kineticdata/react';
 import { I18n } from '../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');

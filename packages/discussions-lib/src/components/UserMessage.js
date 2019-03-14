@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { bundle } from 'react-kinetic-lib';
+import { bundle } from '@kineticdata/react';
 import Markdown from 'react-markdown';
 import classnames from 'classnames';
 

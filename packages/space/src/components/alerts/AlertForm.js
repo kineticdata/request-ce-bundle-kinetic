@@ -1,5 +1,5 @@
 import React from 'react';
-import { CoreForm } from 'react-kinetic-lib';
+import { CoreForm } from '@kineticdata/react';
 import { Utils, commonActions, PageTitle } from 'common';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';

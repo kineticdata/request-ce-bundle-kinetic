@@ -19,7 +19,7 @@ import {
   deleteTranslations,
   fetchStagedTranslations,
   clearTranslationsCache,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import { List } from 'immutable';
 import { toastActions } from 'common';
 

@@ -10,7 +10,7 @@ import {
   AttributeSelectors,
   selectCurrentKapp,
 } from 'common';
-import { fetchKapp, updateKapp } from 'react-kinetic-lib';
+import { fetchKapp, updateKapp } from '@kineticdata/react';
 import isarray from 'isarray';
 import { I18n } from '../../../../../app/src/I18nProvider';
 

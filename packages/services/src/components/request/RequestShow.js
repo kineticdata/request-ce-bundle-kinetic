@@ -9,7 +9,7 @@ import {
   TimeAgo,
   Utils as CommonUtils,
 } from 'common';
-import { bundle, CoreForm } from 'react-kinetic-lib';
+import { bundle, CoreForm } from '@kineticdata/react';
 import { RequestShowConfirmationContainer } from './RequestShowConfirmation';
 import { RequestDiscussion } from './RequestDiscussion';
 import { RequestActivityList } from './RequestActivityList';

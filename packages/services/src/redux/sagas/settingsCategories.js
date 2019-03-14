@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { fetchCategories } from 'react-kinetic-lib';
+import { fetchCategories } from '@kineticdata/react';
 import { toastActions } from 'common';
 import { actions, types } from '../modules/settingsCategories';
 

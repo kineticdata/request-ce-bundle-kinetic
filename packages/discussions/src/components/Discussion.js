@@ -3,7 +3,7 @@ import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import {
   Discussion as KineticDiscussion,
   MessageHistory,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import { ParticipantsHeaderContainer } from './ParticipantsHeader';
 import { ArchivedBanner } from './ArchivedBanner';
 import { connect } from 'react-redux';

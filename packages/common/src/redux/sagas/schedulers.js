@@ -8,7 +8,7 @@ import {
   createMembership,
   deleteMembership,
   SubmissionSearch,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import md5 from 'md5';
 import moment from 'moment';
 import { actions as toastActions } from '../modules/toasts';

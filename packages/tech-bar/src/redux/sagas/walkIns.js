@@ -3,7 +3,7 @@ import {
   fetchSubmission,
   searchSubmissions,
   SubmissionSearch,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import { actions, types, WALK_IN_FORM_SLUG } from '../modules/walkIns';
 import moment from 'moment';
 

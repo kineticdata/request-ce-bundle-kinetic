@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
 import uuid from 'uuid';
-import { fetchUsers } from 'react-kinetic-lib';
+import { fetchUsers } from '@kineticdata/react';
 import ReactAvatar from 'react-avatar';
 import { Popover } from 'reactstrap';
 

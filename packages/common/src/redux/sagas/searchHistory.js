@@ -4,7 +4,7 @@ import {
   types,
   SEARCH_HISTORY_FORM_SLUG,
 } from '../modules/searchHistory';
-import { createSubmission, fetchForm } from 'react-kinetic-lib';
+import { createSubmission, fetchForm } from '@kineticdata/react';
 
 export function* recordSearchHistorySaga({ payload }) {
   const searchHistoryExists = yield select(

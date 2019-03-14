@@ -12,7 +12,7 @@ const {
   fetchSubmission,
   updateSubmission,
   SubmissionSearch,
-} = require('react-kinetic-lib');
+} = require('@kineticdata/react');
 const { Filter, Profile } = require('../../records');
 const {
   ERROR_STATUS_STRING,

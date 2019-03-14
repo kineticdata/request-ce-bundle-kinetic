@@ -22,7 +22,7 @@ import {
   searchSubmissions,
   SubmissionSearch,
   CoreForm,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import moment from 'moment';
 import { LoadingMessage, ErrorMessage, InfoMessage } from './Schedulers';
 import { SchedulerManagers } from './SchedulerManagers';

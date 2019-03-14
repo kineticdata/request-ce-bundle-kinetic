@@ -1,4 +1,4 @@
-import { createSubmission } from 'react-kinetic-lib';
+import { createSubmission } from '@kineticdata/react';
 
 export const ACTIONS_FORM_SLUG = 'actions';
 

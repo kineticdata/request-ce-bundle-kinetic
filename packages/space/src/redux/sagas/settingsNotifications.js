@@ -7,7 +7,7 @@ import {
   fetchForms,
   searchSubmissions,
   SubmissionSearch,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import { Seq, Map } from 'immutable';
 import { push } from 'connected-react-router';
 

@@ -17,7 +17,7 @@ import {
   createRelatedItem,
   createDiscussion,
   sendMessage,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import { Map, Seq } from 'immutable';
 import { push } from 'connected-react-router';
 

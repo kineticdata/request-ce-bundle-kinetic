@@ -13,7 +13,7 @@ import {
   searchSubmissions,
   fetchForm,
   SubmissionSearch,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 
 const SERVICES_SETTING_INCLUDES = 'formTypes,attributesMap,forms,forms.details';
 const TEAMS_SETTING_INCLUDES = 'teams';

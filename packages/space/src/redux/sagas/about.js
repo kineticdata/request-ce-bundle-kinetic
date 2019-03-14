@@ -1,7 +1,7 @@
 import { takeEvery, all, call, put } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
-import { fetchTeams, fetchUsers } from 'react-kinetic-lib';
+import { fetchTeams, fetchUsers } from '@kineticdata/react';
 
 import { types, actions } from '../modules/about';
 import { actions as systemErrorActions } from '../modules/errors';

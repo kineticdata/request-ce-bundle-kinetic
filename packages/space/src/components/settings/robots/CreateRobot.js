@@ -4,7 +4,7 @@ import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { ROBOT_FORM_SLUG } from '../../../redux/modules/settingsRobots';
-import { CoreForm } from 'react-kinetic-lib';
+import { CoreForm } from '@kineticdata/react';
 import { toastActions } from 'common';
 import { I18n } from '../../../../../app/src/I18nProvider';
 

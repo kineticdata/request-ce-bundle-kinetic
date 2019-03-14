@@ -1,5 +1,5 @@
 import { takeEvery, put, call, select } from 'redux-saga/effects';
-import { searchSubmissions, SubmissionSearch } from 'react-kinetic-lib';
+import { searchSubmissions, SubmissionSearch } from '@kineticdata/react';
 import { actions, types, METRICS_FORM_SLUG } from '../modules/metrics';
 import isarray from 'isarray';
 

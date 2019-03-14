@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
-import { bundle } from 'react-kinetic-lib';
+import { bundle } from '@kineticdata/react';
 import { actions as socketActions } from 'discussions/src/redux/modules/socket';
 
 import { OAuthPopup } from './OAuthPopup';

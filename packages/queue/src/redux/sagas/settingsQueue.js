@@ -13,7 +13,7 @@ import {
   updateKapp,
   searchSubmissions,
   SubmissionSearch,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 
 const QUEUE_SETTING_INCLUDES = 'formTypes,attributesMap,forms,forms.details';
 const TEAMS_SETTING_INCLUDES = 'teams';

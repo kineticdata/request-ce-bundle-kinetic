@@ -14,7 +14,7 @@ import {
   addResponseInterceptor,
   setDefaultAuthAssumed,
   Socket,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import AuthInterceptor from './utils/AuthInterceptor';
 import { actions as layoutActions } from './redux/modules/layout';
 import { actions as configActions } from './redux/modules/config';

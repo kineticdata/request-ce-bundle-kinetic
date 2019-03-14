@@ -1,5 +1,5 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
-import { fetchCategories } from 'react-kinetic-lib';
+import { fetchCategories } from '@kineticdata/react';
 
 import { actions, types } from '../modules/categories';
 import { actions as systemErrorActions } from '../modules/systemError';

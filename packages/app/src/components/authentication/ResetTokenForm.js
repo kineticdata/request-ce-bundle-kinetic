@@ -3,7 +3,7 @@ import { compose, withState, withHandlers } from 'recompose';
 import { parse, stringify } from 'qs';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { bundle } from 'react-kinetic-lib';
+import { bundle } from '@kineticdata/react';
 import { I18n } from '../../I18nProvider';
 
 const ResetToken = ({

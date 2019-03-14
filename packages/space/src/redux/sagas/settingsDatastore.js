@@ -21,7 +21,7 @@ import {
   deleteSubmission,
   updateSubmission,
   SubmissionSearch,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'connected-react-router';
 import { selectToken } from 'discussions/src/redux/modules/socket';

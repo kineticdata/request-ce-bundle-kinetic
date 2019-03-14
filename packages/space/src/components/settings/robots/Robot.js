@@ -15,7 +15,7 @@ import {
   actions,
   ROBOT_FORM_SLUG,
 } from '../../../redux/modules/settingsRobots';
-import { CoreForm } from 'react-kinetic-lib';
+import { CoreForm } from '@kineticdata/react';
 import { Button } from 'reactstrap';
 import { toastActions, Loading, PageTitle } from 'common';
 import { RobotExecutionsList } from './RobotExecutionsList';

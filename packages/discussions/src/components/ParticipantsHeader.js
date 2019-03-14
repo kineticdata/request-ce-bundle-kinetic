@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { bundle } from 'react-kinetic-lib';
+import { bundle } from '@kineticdata/react';
 import { isPresent } from '../helpers';
 import { Avatar } from 'common';
 import { types as detailsTypes } from '../redux/modules/discussionsDetails';

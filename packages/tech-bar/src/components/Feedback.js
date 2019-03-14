@@ -5,7 +5,7 @@ import { compose, withHandlers, withState, withProps } from 'recompose';
 import { DisplayTabs } from './Display';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { selectCurrentKapp, toastActions } from 'common';
-import { createSubmission } from 'react-kinetic-lib';
+import { createSubmission } from '@kineticdata/react';
 import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
 import { I18n } from '../../../app/src/I18nProvider';

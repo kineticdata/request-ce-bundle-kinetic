@@ -7,7 +7,7 @@ import {
   fetchForms,
   createMembership,
   deleteMembership,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import {
   actions,
   types,

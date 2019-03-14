@@ -5,7 +5,7 @@ import {
   searchSubmissions,
   fetchSubmission,
   updateSubmission,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import isFunction from 'is-function';
 import { selectToken } from 'discussions/src/redux/modules/socket';
 

@@ -17,7 +17,7 @@ import { DisplayTabs } from './Display';
 import { TIME_FORMAT } from '../App';
 import { actions } from '../redux/modules/appointments';
 import moment from 'moment';
-import { CoreForm } from 'react-kinetic-lib';
+import { CoreForm } from '@kineticdata/react';
 import { I18n } from '../../../app/src/I18nProvider';
 
 // Asynchronously import the global dependencies that are used in the embedded

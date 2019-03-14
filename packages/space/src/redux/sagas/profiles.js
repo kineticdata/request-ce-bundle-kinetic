@@ -1,6 +1,6 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import { actions, types } from '../modules/profiles';
-import { fetchUser, fetchProfile, updateProfile } from 'react-kinetic-lib';
+import { fetchUser, fetchProfile, updateProfile } from '@kineticdata/react';
 
 const PROFILE_INCLUDES =
   'attributes,profileAttributes,memberships,memberships.team,memberships.team.attributes,memberships.team.memberships,memberships.team.memberships.user';

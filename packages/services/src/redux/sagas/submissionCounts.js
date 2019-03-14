@@ -1,5 +1,5 @@
 import { all, call, put, takeEvery, select } from 'redux-saga/effects';
-import { searchSubmissions, SubmissionSearch } from 'react-kinetic-lib';
+import { searchSubmissions, SubmissionSearch } from '@kineticdata/react';
 import * as constants from '../../constants';
 import { actions, types } from '../modules/submissionCounts';
 import { actions as systemErrorActions } from '../modules/systemError';

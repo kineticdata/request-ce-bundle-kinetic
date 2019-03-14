@@ -7,7 +7,7 @@ import {
   updateTeam,
   createTeam,
   deleteTeam,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import { selectToken } from 'discussions/src/redux/modules/socket';
 
 import {

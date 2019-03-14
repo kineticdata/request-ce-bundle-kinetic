@@ -3,7 +3,7 @@ import {
   fetchSubmission,
   searchSubmissions,
   SubmissionSearch,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import { actions, types, APPOINTMENT_FORM_SLUG } from '../modules/appointments';
 import moment from 'moment';
 import isarray from 'isarray';

@@ -12,7 +12,7 @@ import {
   fetchForms,
   fetchTeams,
   updateProfile,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import { actions, types } from '../modules/queueApp';
 import { filterReviver } from '../../records';
 

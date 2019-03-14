@@ -9,7 +9,7 @@ import {
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import isMatch from 'lodash.ismatch';
-import { fetchUsers, fetchTeams } from 'react-kinetic-lib';
+import { fetchUsers, fetchTeams } from '@kineticdata/react';
 import { Cache } from './Cache';
 
 const EMAIL_PATTERN = /^.+@.+\..+$/;

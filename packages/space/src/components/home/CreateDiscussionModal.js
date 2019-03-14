@@ -8,7 +8,7 @@ import {
   InvitationForm,
   createDiscussion,
   sendInvites,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 import { toastActions } from 'common';
 import { actions } from '../../redux/modules/spaceApp';
 import { PeopleSelect } from 'discussions/src/components/PeopleSelect';

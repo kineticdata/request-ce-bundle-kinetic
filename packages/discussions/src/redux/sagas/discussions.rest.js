@@ -17,7 +17,7 @@ import {
   createDiscussionList,
   createRelatedItem,
   sortByLastMessageAt,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 
 export function* fetchRelatedDiscussionsTask(action) {
   const { type, key, loadCallback } = action.payload;

@@ -4,7 +4,7 @@ import {
   fetchSubmission,
   deleteSubmission,
   SubmissionSearch,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 
 import { actions as systemErrorActions } from '../modules/errors';
 import {

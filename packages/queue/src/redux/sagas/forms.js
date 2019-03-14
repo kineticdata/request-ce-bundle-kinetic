@@ -1,5 +1,5 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
-import { fetchForms } from 'react-kinetic-lib';
+import { fetchForms } from '@kineticdata/react';
 
 import { actions, types } from '../modules/forms';
 import { actions as systemErrorActions } from '../modules/systemError';

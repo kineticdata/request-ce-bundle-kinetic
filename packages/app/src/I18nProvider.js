@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { bundle, fetchSubmission } from 'react-kinetic-lib';
+import { bundle, fetchSubmission } from '@kineticdata/react';
 import { Map, Set } from 'immutable';
 import isarray from 'isarray';
 import semver from 'semver';

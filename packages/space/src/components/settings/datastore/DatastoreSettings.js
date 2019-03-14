@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { lifecycle, compose, withHandlers, withState } from 'recompose';
-import { bundle } from 'react-kinetic-lib';
+import { bundle } from '@kineticdata/react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { List } from 'immutable';
 import { PageTitle } from 'common';

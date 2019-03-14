@@ -13,7 +13,7 @@ import classNames from 'classnames';
 import ContentEditable from './ContentEditable';
 import { Provider, connect } from '../redux/store';
 import { actions } from '../redux/reducer';
-import { bundle } from 'react-kinetic-lib';
+import { bundle } from '@kineticdata/react';
 
 const VALID_IMG_TYPES = [
   'image/jpeg',

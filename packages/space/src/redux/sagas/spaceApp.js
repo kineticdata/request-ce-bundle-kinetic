@@ -1,11 +1,11 @@
 import { takeEvery, put, all, call, select } from 'redux-saga/effects';
-import { fetchUsers, fetchSpace, deleteSubmission } from 'react-kinetic-lib';
+import { fetchUsers, fetchSpace, deleteSubmission } from '@kineticdata/react';
 import moment from 'moment';
 import { List } from 'immutable';
 import { commonActions, toastActions } from 'common';
 import { actions, types } from '../modules/spaceApp';
 import { actions as errorActions } from '../modules/errors';
-import { fetchDiscussions, createDiscussionList } from 'react-kinetic-lib';
+import { fetchDiscussions, createDiscussionList } from '@kineticdata/react';
 import { calculateDateRange } from 'common/src/utils';
 
 export function* fetchAppSettingsSaga() {

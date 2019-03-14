@@ -5,7 +5,7 @@ import {
   updateUser,
   createUser,
   deleteUser,
-} from 'react-kinetic-lib';
+} from '@kineticdata/react';
 
 import { commonActions } from 'common';
 import { types, actions } from '../modules/settingsUsers';

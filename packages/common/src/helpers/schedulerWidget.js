@@ -1,5 +1,9 @@
 import { List, Map, Record } from 'immutable';
-import { SubmissionSearch, searchSubmissions, bundle } from 'react-kinetic-lib';
+import {
+  SubmissionSearch,
+  searchSubmissions,
+  bundle,
+} from '@kineticdata/react';
 import moment from 'moment-timezone';
 import { namespace, noPayload, withPayload } from '../utils';
 import { DatastoreSubmission } from '../../records';

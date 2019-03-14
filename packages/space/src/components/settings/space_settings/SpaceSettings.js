@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
-import { fetchSpace, updateSpace } from 'react-kinetic-lib';
+import { fetchSpace, updateSpace } from '@kineticdata/react';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 import {

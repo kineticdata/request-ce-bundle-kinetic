@@ -10,7 +10,7 @@ import { Map, List } from 'immutable';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import memoize from 'memoize-one';
-import { fetchSpace } from 'react-kinetic-lib';
+import { fetchSpace } from '@kineticdata/react';
 
 import { Cache } from '../../cache';
 import { I18n } from '../../../../app/src/I18nProvider';

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { ModalBody, ModalFooter } from 'reactstrap';
-import { DiscussionForm } from 'react-kinetic-lib';
+import { DiscussionForm } from '@kineticdata/react';
 import { PeopleSelect } from './PeopleSelect';
 import { types } from '../redux/modules/discussionsDetails';
 

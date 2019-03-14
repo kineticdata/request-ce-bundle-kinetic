@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import axios from 'axios';
-import { bundle } from 'react-kinetic-lib';
+import { bundle } from '@kineticdata/react';
 
 export class DiscussionForm extends React.Component {
   constructor(props) {
