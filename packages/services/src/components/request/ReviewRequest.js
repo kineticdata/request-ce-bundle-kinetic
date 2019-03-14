@@ -6,7 +6,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { CoreForm } from 'react-kinetic-core';
+import { CoreForm } from '@kineticdata/react';
 import classNames from 'classnames';
 import { I18n } from '../../../../app/src/I18nProvider';
 

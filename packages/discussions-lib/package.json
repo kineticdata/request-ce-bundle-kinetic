@@ -13,8 +13,6 @@
     "react-avatar": "^3.5.0",
     "react-bootstrap-typeahead": "^3.2.3",
     "react-dom": "^16.2.0",
-    "react-dropzone": "^4.2.3",
-    "react-kinetic-core": "^0.7.0",
     "react-markdown": "^3.2.0",
     "react-redux": "^5.0.7",
     "react-svg-inline": "^2.0.1",
