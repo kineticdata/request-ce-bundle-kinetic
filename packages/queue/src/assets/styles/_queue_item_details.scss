@@ -11,10 +11,10 @@
     display: flex;
     flex-direction: column;
 
-    h1 {
+    h4 {
       color: $black;
+      font-weight: 600;
       margin: 0;
-      line-height: 3rem;
     }
 
     .summary {
@@ -88,17 +88,25 @@
   }
 
   .general .timestamps {
-    margin: 1.5rem 0 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0.25rem 0 1.5rem 0;
     .timestamp {
       @include ms-respond(font-size, -1);
       line-height: 1.5rem;
-      padding: 0 2rem;
+      padding: 0;
       .label {
-        color: $gray;
-        width: 70px;
+        color: rgba($black, 0.5);
       }
       .value {
         color: $blue-lake;
+        margin-left: 0.25rem;
+      }
+      &:not(:last-child):after {
+        content: '\2022';
+        color: rgba(52, 52, 52, 0.25);
+        margin: 0 0.3125rem;
       }
     }
   }

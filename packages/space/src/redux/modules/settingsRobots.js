@@ -80,6 +80,7 @@ export const State = Record({
   // Robots List
   robots: new List(),
   robotsLoading: false,
+  robotsLoaded: false,
   robotsErrors: [],
   // Robot
   robot: null,
@@ -112,6 +113,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_ROBOTS:
       return state
         .set('robotsLoading', false)
+        .set('robotsLoaded', true)
         .set('robotsErrors', [])
         .set('robots', List(payload));
     case types.SET_FETCH_ROBOT_ERROR:

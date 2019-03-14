@@ -82,17 +82,45 @@ export const QueueItemDetails = ({
         <div className="submission__meta">
           <StatusContent queueItem={queueItem} prevAndNext={prevAndNext} />
         </div>
-        <h1>
-          <I18n
-            context={`kapps.${queueItem.form.kapp.slug}.forms.${
-              queueItem.form.slug
-            }`}
-          >
-            {queueItem.form.name}
-          </I18n>{' '}
-          ({queueItem.handle})
-        </h1>
-        <p className="summary">{queueItem.values.Summary}</p>
+        <h4>{queueItem.values.Summary}</h4>
+        <ul className="list-group timestamps">
+          <li className="list-group-item timestamp">
+            <span className="label">
+              <I18n
+                context={`kapps.${queueItem.form.kapp.slug}.forms.${
+                  queueItem.form.slug
+                }`}
+              >
+                {queueItem.form.name}
+              </I18n>{' '}
+              ({queueItem.handle})
+            </span>
+          </li>
+          <li className="list-group-item timestamp">
+            <span className="label">
+              <I18n>Due</I18n>
+            </span>
+            <span className="value">
+              <TimeAgo timestamp={queueItem.values['Due Date']} id="due-date" />
+            </span>
+          </li>
+          <li className="list-group-item timestamp">
+            <span className="label">
+              <I18n>Updated</I18n>
+            </span>
+            <span className="value">
+              <TimeAgo timestamp={queueItem.updatedAt} id="updated-at" />
+            </span>
+          </li>
+          <li className="list-group-item timestamp">
+            <span className="label">
+              <I18n>Created</I18n>
+            </span>
+            <span className="value">
+              <TimeAgo timestamp={queueItem.createdAt} id="created-at" />
+            </span>
+          </li>
+        </ul>
         <pre>{queueItem.values.Details}</pre>
         <div className="actions">
           {!isAssigning && (
@@ -130,32 +158,6 @@ export const QueueItemDetails = ({
             <I18n>View Parent</I18n>
           </Link>
         )}
-        <ul className="list-group timestamps">
-          <li className="list-group-item timestamp">
-            <span className="label">
-              <I18n>Due</I18n>
-            </span>
-            <span className="value">
-              <TimeAgo timestamp={queueItem.values['Due Date']} id="due-date" />
-            </span>
-          </li>
-          <li className="list-group-item timestamp">
-            <span className="label">
-              <I18n>Updated</I18n>
-            </span>
-            <span className="value">
-              <TimeAgo timestamp={queueItem.updatedAt} id="updated-at" />
-            </span>
-          </li>
-          <li className="list-group-item timestamp">
-            <span className="label">
-              <I18n>Created</I18n>
-            </span>
-            <span className="value">
-              <TimeAgo timestamp={queueItem.createdAt} id="created-at" />
-            </span>
-          </li>
-        </ul>
       </div>
 
       {!prohibitSubtasks && (

@@ -373,12 +373,14 @@ export const FormSubmissionsContainer = ({
                             {visibleColumns.map(c => {
                               if (c.name !== 'Discussion Id') {
                                 return (
-                                  <option
+                                  <I18n
                                     key={`${c.name}::${c.type}`}
-                                    value={`${c.name}::${c.type}`}
-                                  >
-                                    <I18n>{c.label}</I18n>
-                                  </option>
+                                    render={translate => (
+                                      <option value={`${c.name}::${c.type}`}>
+                                        {translate(c.label)}
+                                      </option>
+                                    )}
+                                  />
                                 );
                               } else {
                                 return null;
@@ -386,26 +388,31 @@ export const FormSubmissionsContainer = ({
                             })}
                           </select>
                           {clientSortInfo && (
-                            <select
-                              className="form-control"
-                              value={
-                                (clientSortInfo && clientSortInfo.direction) ||
-                                ''
-                              }
-                              onChange={e => {
-                                sortTable({
-                                  ...clientSortInfo,
-                                  direction: e.target.value,
-                                });
-                              }}
-                            >
-                              <option value="ASC">
-                                <I18n>Asc</I18n>
-                              </option>
-                              <option value="DESC">
-                                <I18n>Desc</I18n>
-                              </option>
-                            </select>
+                            <I18n
+                              render={translate => (
+                                <select
+                                  className="form-control"
+                                  value={
+                                    (clientSortInfo &&
+                                      clientSortInfo.direction) ||
+                                    ''
+                                  }
+                                  onChange={e => {
+                                    sortTable({
+                                      ...clientSortInfo,
+                                      direction: e.target.value,
+                                    });
+                                  }}
+                                >
+                                  <option value="ASC">
+                                    {translate('Asc')}
+                                  </option>
+                                  <option value="DESC">
+                                    {translate('Desc')}
+                                  </option>
+                                </select>
+                              )}
+                            />
                           )}
                         </div>
                       </th>
@@ -522,34 +529,41 @@ export const FormSubmissionsContainer = ({
                             </div>
                           ))}
                         <div className="input-group">
-                          <select
-                            name="properties"
-                            value={property.name}
-                            className="form-control"
-                            onChange={event => {
-                              setProperty({
-                                name: event.target.value,
-                                label:
-                                  event.target[event.target.selectedIndex].text,
-                              });
-                            }}
-                          >
-                            <option />
-                            <option
-                              value="handle"
-                              disabled={filter.properties.handle !== undefined}
-                            >
-                              <I18n>Handle</I18n>
-                            </option>
-                            <option
-                              value="submittedBy"
-                              disabled={
-                                filter.properties.submittedBy !== undefined
-                              }
-                            >
-                              <I18n>Submitted By</I18n>
-                            </option>
-                          </select>
+                          <I18n
+                            render={translate => (
+                              <select
+                                name="properties"
+                                value={property.name}
+                                className="form-control"
+                                onChange={event => {
+                                  setProperty({
+                                    name: event.target.value,
+                                    label:
+                                      event.target[event.target.selectedIndex]
+                                        .text,
+                                  });
+                                }}
+                              >
+                                <option />
+                                <option
+                                  value="handle"
+                                  disabled={
+                                    filter.properties.handle !== undefined
+                                  }
+                                >
+                                  {translate('Handle')}
+                                </option>
+                                <option
+                                  value="submittedBy"
+                                  disabled={
+                                    filter.properties.submittedBy !== undefined
+                                  }
+                                >
+                                  {translate('Submitted By')}
+                                </option>
+                              </select>
+                            )}
+                          />
                           <div className="input-group-append">
                             <button
                               className="btn btn-primary"
@@ -617,37 +631,37 @@ export const FormSubmissionsContainer = ({
                             </div>
                           ))}
                         <div className="input-group">
-                          <select
-                            name="values"
-                            value={fieldValue.name}
-                            className="form-control"
-                            onChange={event => {
-                              setFieldValue({
-                                name: event.target.value,
-                                label:
-                                  event.target[event.target.selectedIndex].text,
-                              });
-                            }}
-                          >
-                            <option />
-                            {form.fields.map(field => (
-                              <option
-                                key={field.name}
-                                value={field.name}
-                                disabled={
-                                  filter.values[field.name] !== undefined
-                                }
+                          <I18n
+                            context={`kapps.${kappSlug}.forms.${form.slug}`}
+                            render={translate => (
+                              <select
+                                name="values"
+                                value={fieldValue.name}
+                                className="form-control"
+                                onChange={event => {
+                                  setFieldValue({
+                                    name: event.target.value,
+                                    label:
+                                      event.target[event.target.selectedIndex]
+                                        .text,
+                                  });
+                                }}
                               >
-                                <I18n
-                                  context={`kapps.${kappSlug}.forms.${
-                                    form.slug
-                                  }`}
-                                >
-                                  {field.name}
-                                </I18n>
-                              </option>
-                            ))}
-                          </select>
+                                <option />
+                                {form.fields.map(field => (
+                                  <option
+                                    key={field.name}
+                                    value={field.name}
+                                    disabled={
+                                      filter.values[field.name] !== undefined
+                                    }
+                                  >
+                                    {translate(field.name)}
+                                  </option>
+                                ))}
+                              </select>
+                            )}
+                          />
                           <div className="input-group-append">
                             <button
                               className="btn btn-primary"

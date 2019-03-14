@@ -87,24 +87,31 @@ export const SettingsComponent = ({
               <label htmlFor="Record Search History">
                 <I18n>Record Search History</I18n>
               </label>
-              <select
-                id="Record Search History"
-                value={
-                  attributesMap.getIn(['Record Search History', 'value', 0]) ||
-                  'Off'
-                }
-                onChange={handleAttributeChange}
-              >
-                <option value="All">
-                  <I18n>All (always recorded)</I18n>
-                </option>
-                <option value="None">
-                  <I18n>None (only recorded if no results found)</I18n>
-                </option>
-                <option value="Off">
-                  <I18n>Off (never recorded)</I18n>
-                </option>
-              </select>
+              <I18n
+                render={translate => (
+                  <select
+                    id="Record Search History"
+                    value={
+                      attributesMap.getIn([
+                        'Record Search History',
+                        'value',
+                        0,
+                      ]) || 'Off'
+                    }
+                    onChange={handleAttributeChange}
+                  >
+                    <option value="All">
+                      {translate('All (always recorded)')}
+                    </option>
+                    <option value="None">
+                      {translate('None (only recorded if no results found)')}
+                    </option>
+                    <option value="Off">
+                      {translate('Off (never recorded)')}
+                    </option>
+                  </select>
+                )}
+              />
               <small>
                 <I18n>
                   Controls when searches made from this kapp are recorded.

@@ -27,14 +27,18 @@ export const DateRangeSection = ({
         </small>
       )}
     </h5>
-    <select
-      value={filter.dateRange.timeline}
-      onChange={setDateRangeTimelineHandler}
-    >
-      <option value="createdAt">Created At</option>
-      <option value="updatedAt">Updated At</option>
-      <option value="completedAt">Completed At</option>
-    </select>
+    <I18n
+      render={translate => (
+        <select
+          value={filter.dateRange.timeline}
+          onChange={setDateRangeTimelineHandler}
+        >
+          <option value="createdAt">{translate('Created At')}</option>
+          <option value="updatedAt">{translate('Updated At')}</option>
+          <option value="completedAt">{translate('Completed At')}</option>
+        </select>
+      )}
+    />
     <DateRangeSelector
       allowNone
       value={convertDateRangeValue(filter.dateRange)}

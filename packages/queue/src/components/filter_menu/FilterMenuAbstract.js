@@ -120,9 +120,9 @@ const FilterMenuAbstractComponent = props => (
               value={props.currentFilter.dateRange.timeline}
               onChange={props.changeTimeline}
             >
-              <option value="createdAt">Created At</option>
-              <option value="updatedAt">Updated At</option>
-              <option value="completedAt">Completed At</option>
+              <option value="createdAt">{translate('Created At')}</option>
+              <option value="updatedAt">{translate('Updated At')}</option>
+              <option value="completedAt">{translate('Completed At')}</option>
             </select>
             <DateRangeSelector
               allowNone

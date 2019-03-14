@@ -92,15 +92,17 @@ export const Form = ({
         )}
       </div>
       <div className="embedded-core-form--wrapper">
-        <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
-          {submissionId ? (
+        {submissionId ? (
+          <I18n submissionId={submissionId}>
             <CoreForm
               submission={submissionId}
               globals={globals}
               loaded={handleLoaded}
               completed={handleCompleted}
             />
-          ) : (
+          </I18n>
+        ) : (
+          <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
             <CoreForm
               kapp={kappSlug}
               form={form.slug}
@@ -113,8 +115,8 @@ export const Form = ({
               unauthorizedComponent={ErrorUnauthorized}
               unexpectedErrorComponent={ErrorUnexpected}
             />
-          )}
-        </I18n>
+          </I18n>
+        )}
       </div>
     </div>
   </Fragment>
