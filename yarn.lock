@@ -24,10 +24,10 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@kineticdata/react@0.1.0-RC6":
-  version "0.1.0-RC6"
-  resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-0.1.0-RC6.tgz#16572766ac1471e6423e35400db2e1f16d672810"
-  integrity sha512-ohiUg1Sy838PTOPEZtCL8Uk6uQ18kZTzSkMTGDJGsUhnZLyqDYJ47tHQnSwI8BI+ZG+RjqgppuioEvlgICsGTQ==
+"@kineticdata/react@0.1.0-RC7":
+  version "0.1.0-RC7"
+  resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-0.1.0-RC7.tgz#d43840e87999c6d233cc3bd2f8201053b3a354b6"
+  integrity sha512-MGZLo7A8R5Wwe3QwJri6OBO2J2yxaw8LyTXvLoqYNMn0PASRRbx6n0onCaMUNcJM9EvvJo5lLXA/ppHTPzMxUg==
   dependencies:
     actiontyper "^0.0.4"
     axios "^0.18.0"

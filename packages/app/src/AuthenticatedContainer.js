@@ -8,7 +8,6 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { bundle } from '@kineticdata/react';
 import { login } from './utils/authentication';
-import { actions as socketActions } from 'discussions/src/redux/modules/socket';
 import { actions as authActions } from './redux/modules/auth';
 import logoImage from './assets/images/login-background.png';
 import logoName from './assets/images/login-name.png';
@@ -148,7 +147,7 @@ const mapStateToProps = state => ({
   location: state.router.location,
   pathname: state.router.location.pathname,
   isPublic: state.router.location.search.includes('public'),
-  token: state.discussions.socket.token,
+  token: state.app.auth.token,
   destinationRoute: state.app.auth.destinationRoute,
   invitationToken: parse(state.router.location.search).invitationToken,
   invitationEmail: parse(state.router.location.search).email || '',
@@ -156,7 +155,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   push,
-  setToken: socketActions.setToken,
+  setToken: authActions.setToken,
   setDestinationRoute: authActions.setDestinationRoute,
 };
 

@@ -6,7 +6,6 @@ import { push } from 'connected-react-router';
 import { parse } from 'query-string';
 import { PageTitle } from 'common';
 import { Discussion as KinopsDiscussion } from 'discussions';
-import { SOCKET_STAGE } from 'discussions/src/api/socket';
 import { I18n } from '../../../../app/src/I18nProvider';
 
 const buildRelatedItemLink = relatedItem => {
@@ -70,35 +69,18 @@ const DiscussionHeader = props => {
 };
 export const DiscussionComponent = ({
   discussionId,
-  socketStage,
   handleLeave,
   invitationToken,
 }) => (
   <div className="page-panel page-panel--discussions">
     {discussionId ? (
-      socketStage === SOCKET_STAGE.IDENTIFIED ||
-      socketStage === SOCKET_STAGE.RECONNECTING ? (
-        <KinopsDiscussion
-          fullPage
-          id={discussionId}
-          invitationToken={invitationToken}
-          onLeave={handleLeave}
-          renderHeader={DiscussionHeader}
-        />
-      ) : (
-        <Fragment>
-          <DiscussionHeader />
-
-          <div className="empty-state empty-state--discussions">
-            <h6 className="empty-state__title">
-              <I18n>
-                Real-time connection to server has been interrupted. Please
-                refresh and try again.
-              </I18n>
-            </h6>
-          </div>
-        </Fragment>
-      )
+      <KinopsDiscussion
+        fullPage
+        id={discussionId}
+        invitationToken={invitationToken}
+        onLeave={handleLeave}
+        renderHeader={DiscussionHeader}
+      />
     ) : (
       <Fragment>
         <DiscussionHeader />
@@ -117,7 +99,6 @@ const handleLeave = ({ push }) => () => {
 };
 
 const mapStateToProps = (state, props) => ({
-  socketStage: state.discussions.socket.status.stage,
   discussionId: props.match.params.id,
   invitationToken: parse(props.location.search).invitationToken,
 });

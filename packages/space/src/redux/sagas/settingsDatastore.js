@@ -24,7 +24,6 @@ import {
 } from '@kineticdata/react';
 import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'connected-react-router';
-import { selectToken } from 'discussions/src/redux/modules/socket';
 
 import { actions as systemErrorActions } from '../modules/errors';
 import { toastActions } from 'common';
@@ -414,8 +413,6 @@ export function* fetchSubmissionsAdvancedSaga() {
 }
 
 export function* fetchSubmissionSaga(action) {
-  const token = yield select(selectToken);
-  const profile = yield select(state => state.app.profile);
   const include =
     'details,values,form,form.attributes,form.fields,activities,activities.details';
   const { submission, serverError } = yield call(fetchSubmission, {
@@ -601,20 +598,19 @@ export function* executeImportSaga(action) {
 
   const responses = yield all(
     head
-      .map(
-        record =>
-          record.id
-            ? call(updateSubmission, {
-                datastore: true,
-                formSlug: form.slug,
-                values: record.values,
-                id: record.id,
-              })
-            : call(createSubmission, {
-                datastore: true,
-                formSlug: form.slug,
-                values: record.values,
-              }),
+      .map(record =>
+        record.id
+          ? call(updateSubmission, {
+              datastore: true,
+              formSlug: form.slug,
+              values: record.values,
+              id: record.id,
+            })
+          : call(createSubmission, {
+              datastore: true,
+              formSlug: form.slug,
+              values: record.values,
+            }),
       )
       .toJS(),
   );

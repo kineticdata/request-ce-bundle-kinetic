@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "./src/index.js",
   "dependencies": {
-    "@kineticdata/react": "0.1.0-RC6",
+    "@kineticdata/react": "0.1.0-RC7",
     "bootstrap": "^4.3.1",
     "font-awesome": "^4.7.0",
     "immutable": "4.0.0-rc.9",

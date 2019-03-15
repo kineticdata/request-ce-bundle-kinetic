@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "src/index.js",
   "dependencies": {
-    "@kineticdata/react": "0.1.0-RC6",
+    "@kineticdata/react": "0.1.0-RC7",
     "immutable": "4.0.0-rc.9",
     "lodash.ismatch": "^4.4.0",
     "memoize-one": "^4.0.2",

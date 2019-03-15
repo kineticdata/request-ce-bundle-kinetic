@@ -8,7 +8,6 @@ import {
   createTeam,
   deleteTeam,
 } from '@kineticdata/react';
-import { selectToken } from 'discussions/src/redux/modules/socket';
 
 import {
   actions as listActions,
@@ -49,9 +48,6 @@ export function* fetchTeamsSaga() {
 }
 
 export function* fetchTeamSaga(action) {
-  const token = yield select(selectToken);
-  const profile = yield select(state => state.app.profile);
-
   const { team, serverError } = yield call(fetchTeam, {
     teamSlug: action.payload,
     include:

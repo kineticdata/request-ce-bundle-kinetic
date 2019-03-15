@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { bundle } from '@kineticdata/react';
-import { actions as socketActions } from 'discussions/src/redux/modules/socket';
 
 import { OAuthPopup } from './OAuthPopup';
 import { RetrieveJwtIframe } from './RetrieveJwtIframe';
@@ -153,7 +152,7 @@ export const mapStateToProps = state => ({
 const mapDispatchToProps = {
   cancelled: actions.modalLoginCancelled,
   success: actions.modalLoginSuccess,
-  setToken: socketActions.setToken,
+  setToken: actions.setToken,
 };
 
 const handleLogin = props => event => {
