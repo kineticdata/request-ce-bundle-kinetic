@@ -10,7 +10,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import isMatch from 'lodash.ismatch';
 import memoize from 'memoize-one';
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchUsers, fetchTeams } from '@kineticdata/react';
 import { Cache } from '../../cache';
 
 const EMAIL_PATTERN = /^.+@.+\..+$/;
@@ -111,7 +111,7 @@ const renderToken = (option, props, index) => (
 );
 
 const userCache = new Cache(() =>
-  CoreAPI.fetchUsers().then(response =>
+  fetchUsers().then(response =>
     response.users.map(user => ({
       label: user.displayName || user.username,
       user,
@@ -119,7 +119,7 @@ const userCache = new Cache(() =>
   ),
 );
 const teamCache = new Cache(() =>
-  CoreAPI.fetchTeams({ include: 'memberships' }).then(response =>
+  fetchTeams({ include: 'memberships' }).then(response =>
     response.teams.map(team => ({
       label: team.name,
       team,

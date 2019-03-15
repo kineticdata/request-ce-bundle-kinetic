@@ -18,7 +18,11 @@ import {
   DropdownMenu,
 } from 'reactstrap';
 import { PageTitle, Constants, Moment } from 'common';
-import { CoreAPI, CoreForm } from 'react-kinetic-core';
+import {
+  searchSubmissions,
+  SubmissionSearch,
+  CoreForm,
+} from '@kineticdata/react';
 import moment from 'moment';
 import { LoadingMessage, ErrorMessage, InfoMessage } from './Schedulers';
 import { SchedulerManagers } from './SchedulerManagers';
@@ -458,8 +462,8 @@ const handleSchedulerDelete = ({
   push,
 }) => () => {
   setOpenConfirm(false);
-  CoreAPI.searchSubmissions({
-    search: new CoreAPI.SubmissionSearch(true)
+  searchSubmissions({
+    search: new SubmissionSearch(true)
       .limit(1000)
       .index('values[Scheduler Id],values[Date],values[Time]')
       .eq('values[Scheduler Id]', scheduler.values['Id'])

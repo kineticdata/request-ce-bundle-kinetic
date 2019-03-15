@@ -1,6 +1,13 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
-import { CoreAPI } from 'react-kinetic-core';
+import {
+  fetchUsers,
+  fetchTeams,
+  fetchTeam,
+  updateTeam,
+  createTeam,
+  deleteTeam,
+} from '@kineticdata/react';
 import { selectToken } from 'discussions/src/redux/modules/socket';
 
 import {
@@ -14,7 +21,7 @@ import {
 import { actions as errorActions } from '../modules/errors';
 
 export function* fetchUsersSaga() {
-  const { users, serverError } = yield call(CoreAPI.fetchUsers);
+  const { users, serverError } = yield call(fetchUsers);
 
   if (serverError) {
     yield put(errorActions.setSystemError(serverError));
@@ -28,7 +35,7 @@ export function* fetchUsersSaga() {
 }
 
 export function* fetchTeamsSaga() {
-  const { teams, serverError } = yield call(CoreAPI.fetchTeams, {
+  const { teams, serverError } = yield call(fetchTeams, {
     include:
       'attributes,memberships.user,memberships.user.attributes,memberships.user.profileAttributes',
   });
@@ -45,7 +52,7 @@ export function* fetchTeamSaga(action) {
   const token = yield select(selectToken);
   const profile = yield select(state => state.app.profile);
 
-  const { team, serverError } = yield call(CoreAPI.fetchTeam, {
+  const { team, serverError } = yield call(fetchTeam, {
     teamSlug: action.payload,
     include:
       'attributes,memberships.user,memberships.user.attributes,memberships.user.profileAttributes',
@@ -59,7 +66,7 @@ export function* fetchTeamSaga(action) {
 }
 
 export function* updateTeamSaga(action) {
-  const { team, serverError } = yield call(CoreAPI.updateTeam, {
+  const { team, serverError } = yield call(updateTeam, {
     teamSlug: action.payload.slug,
     team: action.payload,
     include:
@@ -76,7 +83,7 @@ export function* updateTeamSaga(action) {
 }
 
 export function* createTeamSaga(action) {
-  const { team, serverError } = yield call(CoreAPI.createTeam, {
+  const { team, serverError } = yield call(createTeam, {
     team: action.payload,
     include:
       'attributes,memberships.user,memberships.user.attributes,memberships.user.profileAttributes',
@@ -93,7 +100,7 @@ export function* createTeamSaga(action) {
 
 export function* deleteTeamSaga(action) {
   const teamSlug = action.payload.slug;
-  const { serverError } = yield call(CoreAPI.deleteTeam, {
+  const { serverError } = yield call(deleteTeam, {
     teamSlug,
   });
 

@@ -28,7 +28,7 @@ export function combineSagas(allSagas) {
  * Should return undefined if attributes are missing or there is no attribute
  * value for the given attrName. It supports both attribute structures (arrays
  * that are returned directly from the API and objects that are returned by the
- * helpers in react-kinetic-core).
+ * helpers in @kineticdata/react).
  *
  * @param model: { attributes }
  * @param attrName

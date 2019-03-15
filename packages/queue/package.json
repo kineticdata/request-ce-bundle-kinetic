@@ -4,6 +4,7 @@
   "main": "./src/index.js",
   "dependencies": {
     "@reach/router": "^1.2.1",
+    "@kineticdata/react": "0.1.0-RC6",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.5",
     "immutable": "4.0.0-rc.9",
@@ -15,7 +16,6 @@
     "react-autocomplete": "^1.8.1",
     "react-document-title": "^2.0.3",
     "react-dom": "^16.2.0",
-    "react-kinetic-core": "^0.11.0",
     "react-popper": "^0.8.2",
     "react-redux": "^6.0.1",
     "react-svg-inline": "^2.0.0",

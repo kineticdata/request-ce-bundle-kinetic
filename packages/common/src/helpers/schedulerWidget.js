@@ -1,5 +1,9 @@
 import { List, Map, Record } from 'immutable';
-import { CoreAPI, bundle } from 'react-kinetic-core';
+import {
+  SubmissionSearch,
+  searchSubmissions,
+  bundle,
+} from '@kineticdata/react';
 import moment from 'moment-timezone';
 import { namespace, noPayload, withPayload } from '../utils';
 import { DatastoreSubmission } from '../../records';
@@ -19,13 +23,13 @@ export const TIME_FORMAT = 'HH:mm';
 export const TIME_DISPLAY_FORMAT = 'LT';
 
 export const fetchSchedulerBySchedulerId = id => {
-  const schedulerQuery = new CoreAPI.SubmissionSearch(true);
+  const schedulerQuery = new SubmissionSearch(true);
   schedulerQuery
     .include('details,values')
     .limit('1')
     .index('values[Id]')
     .eq('values[Id]', id);
-  return CoreAPI.searchSubmissions({
+  return searhSubmissions({
     search: schedulerQuery.build(),
     datastore: true,
     form: SCHEDULER_FORM_SLUG,
@@ -34,14 +38,14 @@ export const fetchSchedulerBySchedulerId = id => {
 };
 
 export const fetchSchedulerConfigsBySchedulerId = id => {
-  const query = new CoreAPI.SubmissionSearch(true);
+  const query = new SubmissionSearch(true);
   query
     .include('details,values')
     .limit('1000')
     .index('values[Scheduler Id],values[Status],values[Event Type]')
     .eq('values[Scheduler Id]', id)
     .eq('values[Status]', 'Active');
-  return CoreAPI.searchSubmissions({
+  return searchSubmissions({
     search: query.build(),
     datastore: true,
     form: SCHEDULER_CONFIG_FORM_SLUG,
@@ -50,7 +54,7 @@ export const fetchSchedulerConfigsBySchedulerId = id => {
 };
 
 export const fetchSchedulerAvailabilityBySchedulerId = id => {
-  const query = new CoreAPI.SubmissionSearch(true);
+  const query = new SubmissionSearch(true);
   query
     .include('details,values')
     .limit('1000')
@@ -58,7 +62,7 @@ export const fetchSchedulerAvailabilityBySchedulerId = id => {
       'values[Scheduler Id],values[Day],values[Start Time],values[End Time]',
     )
     .eq('values[Scheduler Id]', id);
-  return CoreAPI.searchSubmissions({
+  return searchSubmissions({
     search: query.build(),
     datastore: true,
     form: SCHEDULER_AVAILABILITY_FORM_SLUG,
@@ -71,7 +75,7 @@ export const fetchSchedulerOverridesBySchedulerIdAndDate = (id, date, days) => {
   if (!momentDate.isValid()) {
     throw new Error('Invalid date provided when fetching scheduler overrides.');
   }
-  const query = new CoreAPI.SubmissionSearch(true);
+  const query = new SubmissionSearch(true);
   query
     .include('details,values')
     .limit('1000')
@@ -86,7 +90,7 @@ export const fetchSchedulerOverridesBySchedulerIdAndDate = (id, date, days) => {
   } else {
     query.eq('values[Date]', momentDate.format(DATE_FORMAT));
   }
-  return CoreAPI.searchSubmissions({
+  return searchSubmissions({
     search: query.build(),
     datastore: true,
     form: SCHEDULER_OVERRIDE_FORM_SLUG,
@@ -99,7 +103,7 @@ export const fetchScheduledEventsBySchedulerIdAndDate = (id, date, days) => {
   if (!momentDate.isValid()) {
     throw new Error('Invalid date provided when fetching scheduled events.');
   }
-  const query = new CoreAPI.SubmissionSearch(true);
+  const query = new SubmissionSearch(true);
   query
     .include('details,values')
     .limit('1000')
@@ -112,7 +116,7 @@ export const fetchScheduledEventsBySchedulerIdAndDate = (id, date, days) => {
   } else {
     query.eq('values[Date]', momentDate.format(DATE_FORMAT));
   }
-  return CoreAPI.searchSubmissions({
+  return searchSubmissions({
     search: query.build(),
     datastore: true,
     form: SCHEDULED_EVENT_FORM_SLUG,
@@ -120,43 +124,39 @@ export const fetchScheduledEventsBySchedulerIdAndDate = (id, date, days) => {
   });
 };
 
-export const fetchScheduledEventById = id => {
-  return CoreAPI.fetchSubmission({
+export const fetchScheduledEventById = id =>
+  fetchSubmission({
     id,
     datastore: true,
     include: 'details,values',
   });
-};
 
-export const createScheduledEvent = values => {
-  return CoreAPI.createSubmission({
+export const createScheduledEvent = values =>
+  createSubmission({
     datastore: true,
     formSlug: SCHEDULED_EVENT_FORM_SLUG,
     values,
     completed: false,
     include: 'details,values',
   });
-};
 
-export const updateScheduledEvent = (id, values = {}, submit) => {
-  return CoreAPI.updateSubmission({
+export const updateScheduledEvent = (id, values = {}, submit) =>
+  updateSubmission({
     id,
     datastore: true,
     values,
     include: 'details,values',
     ...(submit ? { coreState: 'Submitted' } : {}),
   });
-};
 
-export const createScheduledEventAction = values => {
-  return CoreAPI.createSubmission({
+export const createScheduledEventAction = values =>
+  createSubmission({
     datastore: true,
     formSlug: SCHEDULED_EVENT_ACTION_FORM_SLUG,
     values,
     completed: false,
     include: 'details,values',
   });
-};
 
 const handleErrors = error => {
   if (error instanceof Error && !error.response) {
@@ -221,21 +221,19 @@ const submitSubmission = options => {
   );
 };
 
-export const submitScheduledEvent = ({ id, values }, page) => {
-  return submitSubmission({
+export const submitScheduledEvent = ({ id, values }, page) =>
+  submitSubmission({
     id,
     values,
     page,
     include: 'details,values',
   });
-};
 
-export const deleteScheduledEvent = id => {
-  return CoreAPI.deleteSubmission({
+export const deleteScheduledEvent = id =>
+  deleteSubmission({
     id,
     datastore: true,
   });
-};
 
 export const types = {
   SET_STATE: namespace('schedulerWidget', 'SET_STATE'),

@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose, withState, withHandlers } from 'recompose';
 import { Link } from 'react-router-dom';
-import { CoreAPI } from 'react-kinetic-core';
+import { createSubmission } from '@kineticdata/react';
 import { I18n } from '../../I18nProvider';
 
 const ResetPassword = ({
@@ -81,7 +81,7 @@ const handleResetPassword = ({
   e.preventDefault();
 
   try {
-    await CoreAPI.createSubmission({
+    await createSubmission({
       kappSlug: 'admin',
       formSlug: 'account-password-reset',
       values: {

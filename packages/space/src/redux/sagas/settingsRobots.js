@@ -1,5 +1,10 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
+import {
+  searchSubmissions,
+  fetchSubmission,
+  deleteSubmission,
+  SubmissionSearch,
+} from '@kineticdata/react';
 
 import { actions as systemErrorActions } from '../modules/errors';
 import {
@@ -11,18 +16,15 @@ import {
 } from '../modules/settingsRobots';
 
 export function* fetchRobotsSaga(action) {
-  const query = new CoreAPI.SubmissionSearch(true);
+  const query = new SubmissionSearch(true);
   query.include('details,values');
   query.limit('1000');
 
-  const { submissions, errors, serverError } = yield call(
-    CoreAPI.searchSubmissions,
-    {
-      search: query.build(),
-      datastore: true,
-      form: ROBOT_FORM_SLUG,
-    },
-  );
+  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+    search: query.build(),
+    datastore: true,
+    form: ROBOT_FORM_SLUG,
+  });
 
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
@@ -35,14 +37,11 @@ export function* fetchRobotsSaga(action) {
 
 export function* fetchRobotSaga(action) {
   const include = 'details,values';
-  const { submission, errors, serverError } = yield call(
-    CoreAPI.fetchSubmission,
-    {
-      id: action.payload,
-      include,
-      datastore: true,
-    },
-  );
+  const { submission, errors, serverError } = yield call(fetchSubmission, {
+    id: action.payload,
+    include,
+    datastore: true,
+  });
 
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
@@ -54,7 +53,7 @@ export function* fetchRobotSaga(action) {
 }
 
 export function* deleteRobotSaga(action) {
-  const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
+  const { errors, serverError } = yield call(deleteSubmission, {
     id: action.payload.id,
     datastore: true,
   });
@@ -75,7 +74,7 @@ export function* fetchRobotExecutionsSaga({ payload: { scheduleId } }) {
   const pageToken = yield select(
     state => state.space.settingsRobots.robotExecutionsCurrentPageToken,
   );
-  const query = new CoreAPI.SubmissionSearch(true);
+  const query = new SubmissionSearch(true);
   if (pageToken) {
     query.pageToken(pageToken);
   }
@@ -86,7 +85,7 @@ export function* fetchRobotExecutionsSaga({ payload: { scheduleId } }) {
   query.index('values[Robot ID],values[Start]');
 
   const { submissions, nextPageToken, errors, serverError } = yield call(
-    CoreAPI.searchSubmissions,
+    searchSubmissions,
     {
       search: query.build(),
       datastore: true,
@@ -105,14 +104,11 @@ export function* fetchRobotExecutionsSaga({ payload: { scheduleId } }) {
 
 export function* fetchRobotExecutionSaga(action) {
   const include = 'details,values';
-  const { submission, errors, serverError } = yield call(
-    CoreAPI.fetchSubmission,
-    {
-      id: action.payload,
-      include,
-      datastore: true,
-    },
-  );
+  const { submission, errors, serverError } = yield call(fetchSubmission, {
+    id: action.payload,
+    include,
+    datastore: true,
+  });
 
   if (serverError) {
     yield put(systemErrorActions.setSystemError(serverError));
@@ -124,19 +120,16 @@ export function* fetchRobotExecutionSaga(action) {
 }
 
 export function* fetchNextExecutionsSaga(action) {
-  const query = new CoreAPI.SubmissionSearch(true);
+  const query = new SubmissionSearch(true);
 
   query.include('details,values');
   query.limit('1000');
 
-  const { submissions, errors, serverError } = yield call(
-    CoreAPI.searchSubmissions,
-    {
-      search: query.build(),
-      datastore: true,
-      form: 'robot-next-execution',
-    },
-  );
+  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+    search: query.build(),
+    datastore: true,
+    form: 'robot-next-execution',
+  });
 
   if (serverError) {
   } else if (errors) {

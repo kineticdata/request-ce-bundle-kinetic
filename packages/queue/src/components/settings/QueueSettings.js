@@ -9,23 +9,16 @@ import {
   PageTitle,
   AttributeSelectors,
 } from 'common';
-import {
-  Menu,
-  Token,
-  Typeahead,
-  Highlighter,
-  MenuItem,
-} from 'react-bootstrap-typeahead';
+import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchKapp, updateKapp } from '@kineticdata/react';
 import { I18n } from '../../../../app/src/I18nProvider';
 import { context } from '../../redux/store';
 
 export const SettingsComponent = ({
   attributesMap,
   handleAttributeChange,
-  requiredKapps,
   currentKapp,
   updateSettings,
   attributesMapDifferences,
@@ -255,7 +248,7 @@ const fetchSettings = ({
   setPreviousKappName,
   currentKapp,
 }) => async () => {
-  const { kapp } = await CoreAPI.fetchKapp({
+  const { kapp } = await fetchKapp({
     kappSlug: currentKapp.slug,
     include: KAPP_INCLUDES,
   });
@@ -284,7 +277,7 @@ const updateSettings = ({
   reloadApp,
   currentKapp,
 }) => async () => {
-  const { kapp, serverError } = await CoreAPI.updateKapp({
+  const { kapp, serverError } = await updateKapp({
     kappSlug: currentKapp.slug,
     include: KAPP_INCLUDES,
     kapp: {

@@ -9,6 +9,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@kineticdata/react": "0.1.0-RC6",
     "autobind-decorator": "2.1.0",
     "bootstrap": "^4.3.1",
     "connected-react-router": "^4.3.0",
@@ -26,12 +27,11 @@
     "react-avatar": "^3.5.0",
     "react-dom": "^16.2.0",
     "react-helmet": "^5.2.0",
-    "react-kinetic-core": "^0.11.0",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-sidebar": "^2.3.2",
-    "react-sortable-tree": "^2.2.0",
+    "react-sortable-tree": "~2.2.0",
     "react-transition-group": "^2.2.1",
     "reactstrap": "^7.1.0",
     "recompose": "^0.30.0",

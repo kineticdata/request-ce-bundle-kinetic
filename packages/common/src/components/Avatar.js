@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
 import uuid from 'uuid';
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchUsers } from '@kineticdata/react';
 import ReactAvatar from 'react-avatar';
 import { Popover } from 'reactstrap';
 
@@ -22,9 +22,7 @@ const AvatarIcon = ({ target, user, size, onClick }) => (
   </span>
 );
 const userCache = new Cache(() =>
-  CoreAPI.fetchUsers({ include: 'profileAttributes' }).then(
-    ({ users }) => users,
-  ),
+  fetchUsers({ include: 'profileAttributes' }).then(({ users }) => users),
 );
 
 export class AvatarComponent extends React.Component {

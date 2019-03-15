@@ -4,7 +4,7 @@ import { push } from 'connected-react-router';
 import { compose, withHandlers } from 'recompose';
 import { Link } from 'react-router-dom';
 import { PageTitle } from 'common';
-import { CoreForm } from 'react-kinetic-core';
+import { CoreForm } from '@kineticdata/react';
 import { ErrorUnauthorized } from '../ErrorUnauthorized';
 import { SCHEDULER_FORM_SLUG } from '../../redux/modules/schedulers';
 import { actions as toastActions } from '../../redux/modules/toasts';

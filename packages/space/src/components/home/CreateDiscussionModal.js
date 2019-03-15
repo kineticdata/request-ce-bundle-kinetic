@@ -3,7 +3,12 @@ import { connect } from 'react-redux';
 import { Modal, ModalFooter } from 'reactstrap';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { push } from 'connected-react-router';
-import { DiscussionForm, InvitationForm, DiscussionAPI } from 'discussions-lib';
+import {
+  DiscussionForm,
+  InvitationForm,
+  createDiscussion,
+  sendInvites,
+} from '@kineticdata/react';
 import { toastActions } from 'common';
 import { actions } from '../../redux/modules/spaceApp';
 import { PeopleSelect } from 'discussions/src/components/PeopleSelect';
@@ -113,11 +118,11 @@ const next = props => (values, completeSubmit) => {
   completeSubmit();
 };
 const submit = props => async (values, completeSubmit) => {
-  const { discussion, error } = await DiscussionAPI.createDiscussion({
+  const { discussion, error } = await createDiscussion({
     ...props.discussion,
   });
   if (discussion) {
-    const responses = await DiscussionAPI.sendInvites(discussion, values);
+    const responses = await sendInvites(discussion, values);
     if (!responses.some(response => response.error)) {
       props.addSuccess('Successfully created discussion and sent invitations.');
     } else {

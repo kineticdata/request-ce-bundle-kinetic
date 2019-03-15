@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchSpace, updateSpace } from '@kineticdata/react';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 import {
@@ -380,7 +380,7 @@ const fetchSettings = ({
   setDefaultTimezone,
   setPreviousDefaultTimezone,
 }) => async () => {
-  const { space } = await CoreAPI.fetchSpace({
+  const { space } = await fetchSpace({
     include: SPACE_INCLUDES,
   });
   const { attributes, kapps, requiredKapps } = spaceMapping(space);
@@ -417,7 +417,7 @@ const updateSettings = ({
   setPreviousDefaultTimezone,
   reloadApp,
 }) => async () => {
-  const { space, serverError } = await CoreAPI.updateSpace({
+  const { space, serverError } = await updateSpace({
     include: SPACE_INCLUDES,
     space: {
       name: spaceName,

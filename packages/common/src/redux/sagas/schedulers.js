@@ -1,7 +1,14 @@
-import axios from 'axios';
-import { Map } from 'immutable';
 import { all, call, put, select, takeEvery } from 'redux-saga/effects';
-import { bundle, CoreAPI } from 'react-kinetic-core';
+import {
+  fetchSubmission,
+  deleteSubmission,
+  searchSubmissions,
+  fetchTeam,
+  createUser,
+  createMembership,
+  deleteMembership,
+  SubmissionSearch,
+} from '@kineticdata/react';
 import md5 from 'md5';
 import moment from 'moment';
 import { actions as toastActions } from '../modules/toasts';
@@ -13,106 +20,12 @@ import {
   SCHEDULER_AVAILABILITY_FORM_SLUG,
   SCHEDULER_OVERRIDE_FORM_SLUG,
   SCHEDULER_OVERRIDES_PAGE_SIZE,
-  SCHEDULED_EVENT_FORM_SLUG,
 } from '../modules/schedulers';
-
-/* TODO: Move membership API calls to react-kinetic-core */
-
-const handleErrors = error => {
-  if (error instanceof Error && !error.response) {
-    // When the error is an Error object an exception was thrown in the process.
-    // so we'll just 'convert' it to a 400 error to be handled downstream.
-    return { serverError: { status: 400, statusText: error.message } };
-  }
-
-  // Destructure out the information needed.
-  const { data, status, statusText } = error.response;
-  if (status === 400 && typeof data === 'object') {
-    // If the errors returned are from server-side validations or constraints.
-    return data.errors ? { errors: data.errors } : data;
-  }
-
-  // For all other server-side errors.
-  return { serverError: { status, statusText, error: data && data.error } };
-};
-
-const paramBuilder = options => {
-  const params = {};
-
-  if (options.include) {
-    params.include = options.include;
-  }
-
-  if (options.limit) {
-    params.limit = options.limit;
-  }
-
-  if (options.manage) {
-    params.manage = options.manage;
-  }
-
-  return params;
-};
-
-export const createMembership = (options = {}) => {
-  const { team, user } = options;
-
-  if (!team) {
-    throw new Error('createMembership failed! The option "team" is required.');
-  }
-  if (!user) {
-    throw new Error('createMembership failed! The option "user" is required.');
-  }
-
-  let promise = axios.post(
-    `${bundle.apiLocation()}/memberships`,
-    {
-      team,
-      user,
-    },
-    {
-      params: paramBuilder(options),
-    },
-  );
-  promise = promise.then(response => ({
-    membership: response.data.membership,
-  }));
-
-  promise = promise.catch(handleErrors);
-
-  return promise;
-};
-
-export const deleteMembership = (options = {}) => {
-  const { teamSlug, username } = options;
-
-  if (!teamSlug) {
-    throw new Error(
-      'deleteMembership failed! The option "teamSlug" is required.',
-    );
-  }
-  if (!username) {
-    throw new Error(
-      'deleteMembership failed! The option "username" is required.',
-    );
-  }
-
-  let promise = axios.delete(
-    `${bundle.apiLocation()}/memberships/${teamSlug}_${username}`,
-    {
-      params: paramBuilder(options),
-    },
-  );
-
-  promise = promise.catch(handleErrors);
-
-  return promise;
-};
 
 export function* fetchSchedulersSaga({
   payload: { isSchedulerAdmin = false, type },
 }) {
-  const query = new CoreAPI.SubmissionSearch(true);
+  const query = new SubmissionSearch(true);
   query.include('details,values');
   query.limit('1000');
   if (type) {
@@ -134,14 +47,11 @@ export function* fetchSchedulersSaga({
     query.in('values[Name]', schedulerNames);
   }
 
-  const { submissions, errors, serverError } = yield call(
-    CoreAPI.searchSubmissions,
-    {
-      search: query.build(),
-      datastore: true,
-      form: SCHEDULER_FORM_SLUG,
-    },
-  );
+  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+    search: query.build(),
+    datastore: true,
+    form: SCHEDULER_FORM_SLUG,
+  });
 
   if (serverError) {
     yield put(
@@ -157,14 +67,11 @@ export function* fetchSchedulersSaga({
 }
 
 export function* fetchSchedulerSaga({ payload: { id } }) {
-  const { submission, errors, serverError } = yield call(
-    CoreAPI.fetchSubmission,
-    {
-      id,
-      include: 'details,values',
-      datastore: true,
-    },
-  );
+  const { submission, errors, serverError } = yield call(fetchSubmission, {
+    id,
+    include: 'details,values',
+    datastore: true,
+  });
 
   if (serverError) {
     yield put(
@@ -190,7 +97,7 @@ export function* fetchSchedulerSaga({ payload: { id } }) {
 }
 
 export function* deleteSchedulerSaga({ payload: { id, successCallback } }) {
-  const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
+  const { errors, serverError } = yield call(deleteSubmission, {
     id,
     datastore: true,
   });
@@ -214,7 +121,7 @@ export function* deleteSchedulerSaga({ payload: { id, successCallback } }) {
 export function* fetchSchedulerManagersTeamSaga({
   payload: { schedulerName },
 }) {
-  const { team } = yield call(CoreAPI.fetchTeam, {
+  const { team } = yield call(fetchTeam, {
     teamSlug: md5(`Role::Scheduler::${schedulerName}`),
     include:
       'attributes,memberships.user,memberships.user.attributes,memberships.user.profileAttributes',
@@ -223,7 +130,7 @@ export function* fetchSchedulerManagersTeamSaga({
 }
 
 export function* fetchSchedulerAgentsTeamSaga({ payload: { schedulerName } }) {
-  const { team } = yield call(CoreAPI.fetchTeam, {
+  const { team } = yield call(fetchTeam, {
     teamSlug: md5(`Scheduler::${schedulerName}`),
     include:
       'attributes,memberships.user,memberships.user.attributes,memberships.user.profileAttributes',
@@ -277,9 +184,9 @@ export function* addSchedulerMembershipSaga({
 }
 
 export function* createUserWithSchedulerMembershipSaga({
-  payload: { user, teamName, managers, schedulerName },
+  payload: { user, managers, schedulerName },
 }) {
-  const { errors, serverError } = yield call(CoreAPI.createUser, {
+  const { errors, serverError } = yield call(createUser, {
     user: {
       username: user.email,
       email: user.email,
@@ -348,20 +255,17 @@ export function* fetchSchedulerConfigSaga() {
     state => state.common.schedulers.scheduler.data.values['Id'],
   );
 
-  const query = new CoreAPI.SubmissionSearch(true);
+  const query = new SubmissionSearch(true);
   query.include('details,values');
   query.limit('1000');
   query.index('values[Scheduler Id],values[Event Type]:UNIQUE');
   query.eq('values[Scheduler Id]', schedulerId);
 
-  const { submissions, errors, serverError } = yield call(
-    CoreAPI.searchSubmissions,
-    {
-      search: query.build(),
-      datastore: true,
-      form: SCHEDULER_CONFIG_FORM_SLUG,
-    },
-  );
+  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+    search: query.build(),
+    datastore: true,
+    form: SCHEDULER_CONFIG_FORM_SLUG,
+  });
 
   if (serverError) {
     yield put(
@@ -377,7 +281,7 @@ export function* fetchSchedulerConfigSaga() {
 }
 
 export function* deleteSchedulerConfigSaga({ payload: { id } }) {
-  const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
+  const { errors, serverError } = yield call(deleteSubmission, {
     id,
     datastore: true,
   });
@@ -401,7 +305,7 @@ export function* fetchSchedulerAvailabilitySaga() {
     state => state.common.schedulers.scheduler.data.values['Id'],
   );
 
-  const query = new CoreAPI.SubmissionSearch(true);
+  const query = new SubmissionSearch(true);
   query.include('details,values');
   query.limit('1000');
   query.index(
@@ -409,14 +313,11 @@ export function* fetchSchedulerAvailabilitySaga() {
   );
   query.eq('values[Scheduler Id]', schedulerId);
 
-  const { submissions, errors, serverError } = yield call(
-    CoreAPI.searchSubmissions,
-    {
-      search: query.build(),
-      datastore: true,
-      form: SCHEDULER_AVAILABILITY_FORM_SLUG,
-    },
-  );
+  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+    search: query.build(),
+    datastore: true,
+    form: SCHEDULER_AVAILABILITY_FORM_SLUG,
+  });
 
   if (serverError) {
     yield put(
@@ -432,7 +333,7 @@ export function* fetchSchedulerAvailabilitySaga() {
 }
 
 export function* deleteSchedulerAvailabilitySaga({ payload: { id } }) {
-  const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
+  const { errors, serverError } = yield call(deleteSubmission, {
     id,
     datastore: true,
   });
@@ -462,7 +363,7 @@ export function* fetchSchedulerOverridesSaga() {
     state => state.common.schedulers.scheduler.includePastOverrides,
   );
 
-  const query = new CoreAPI.SubmissionSearch(true);
+  const query = new SubmissionSearch(true);
   query.index(
     'values[Scheduler Id],values[Date],values[Start Time],values[End Time]',
   );
@@ -478,7 +379,7 @@ export function* fetchSchedulerOverridesSaga() {
   }
 
   const { submissions, errors, serverError, nextPageToken } = yield call(
-    CoreAPI.searchSubmissions,
+    searchSubmissions,
     {
       search: query.build(),
       datastore: true,
@@ -505,7 +406,7 @@ export function* fetchSchedulerOverridesSaga() {
 }
 
 export function* deleteSchedulerOverrideSaga({ payload: { id } }) {
-  const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
+  const { errors, serverError } = yield call(deleteSubmission, {
     id,
     datastore: true,
   });

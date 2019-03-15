@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { ModalBody, ModalFooter } from 'reactstrap';
 import { connect } from 'react-redux';
-import { InvitationForm } from 'discussions-lib';
+import { InvitationForm } from '@kineticdata/react';
 import { PeopleSelect } from './PeopleSelect';
 import { types } from '../redux/modules/discussionsDetails';
 
@@ -28,11 +28,7 @@ export const InvitationDialogComponent = props => (
             {props.error && (
               <div className="text-danger">
                 <h6>Failed to invite the following</h6>
-                <ul>
-                  {props.error.map(e => (
-                    <li key={e}>{e}</li>
-                  ))}
-                </ul>
+                <ul>{props.error.map(e => <li key={e}>{e}</li>)}</ul>
               </div>
             )}
             {formElement}

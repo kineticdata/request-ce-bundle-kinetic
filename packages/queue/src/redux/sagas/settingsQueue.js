@@ -3,20 +3,30 @@ import { all, takeEvery, call, put } from 'redux-saga/effects';
 import { actions, types } from '../modules/settingsQueue';
 import { toastActions, commonActions } from 'common';
 
-import { CoreAPI } from 'react-kinetic-core';
+import {
+  fetchKapp,
+  fetchForms,
+  fetchForm,
+  fetchTeams,
+  fetchUsers,
+  fetchSpace,
+  updateKapp,
+  searchSubmissions,
+  SubmissionSearch,
+} from '@kineticdata/react';
 
 const QUEUE_SETTING_INCLUDES = 'formTypes,attributesMap,forms,forms.details';
 const TEAMS_SETTING_INCLUDES = 'teams';
 const SPACE_SETTING_INCLUDES = 'kapps,kapps.forms,attributesMap';
 const FORM_INCLUDES = 'details,fields,attributesMap,categorizations,kapp';
 
-export function* fetchQueueSettingsSaga({ payload }) {
+export function* fetchQueueSettingsSaga() {
   const [{ serverError, kapp }, manageableForms] = yield all([
-    call(CoreAPI.fetchKapp, {
+    call(fetchKapp, {
       include: QUEUE_SETTING_INCLUDES,
       kappSlug: 'queue',
     }),
-    call(CoreAPI.fetchForms, {
+    call(fetchForms, {
       kappSlug: 'queue',
       manage: 'true',
     }),
@@ -41,7 +51,7 @@ export function* fetchQueueSettingsSaga({ payload }) {
 }
 
 export function* fetchTeamsSaga({ payload }) {
-  const { serverError, teams } = yield call(CoreAPI.fetchTeams, {
+  const { serverError, teams } = yield call(fetchTeams, {
     include: TEAMS_SETTING_INCLUDES,
     teams: payload,
   });
@@ -53,8 +63,8 @@ export function* fetchTeamsSaga({ payload }) {
   }
 }
 
-export function* fetchUsersSaga({ payload }) {
-  const { serverError, users } = yield call(CoreAPI.fetchUsers, {
+export function* fetchUsersSaga() {
+  const { serverError, users } = yield call(fetchUsers, {
     include: 'details',
   });
 
@@ -66,7 +76,7 @@ export function* fetchUsersSaga({ payload }) {
 }
 
 export function* fetchSpaceSaga({ payload }) {
-  const { serverError, space } = yield call(CoreAPI.fetchSpace, {
+  const { serverError, space } = yield call(fetchSpace, {
     include: SPACE_SETTING_INCLUDES,
     space: payload,
   });
@@ -84,7 +94,7 @@ export function* updateQueueSettingsSaga({ payload }) {
     .map(value => (value.constructor === Array ? value : [value]))
     .toJS();
 
-  const { serverError, kapp } = yield call(CoreAPI.updateKapp, {
+  const { serverError } = yield call(updateKapp, {
     include: QUEUE_SETTING_INCLUDES,
     kapp: {
       attributesMap: attributes,
@@ -109,12 +119,12 @@ export function* updateQueueSettingsSaga({ payload }) {
 }
 
 export function* fetchNotificationsSaga() {
-  const search = new CoreAPI.SubmissionSearch(true)
+  const search = new SubmissionSearch(true)
     .index('values[Name]')
     .includes(['details', 'values'])
     .build();
 
-  const { serverError, submissions } = yield call(CoreAPI.searchSubmissions, {
+  const { serverError, submissions } = yield call(searchSubmissions, {
     search,
     form: 'notification-data',
     datastore: true,
@@ -128,7 +138,7 @@ export function* fetchNotificationsSaga() {
 }
 
 export function* fetchFormSaga(action) {
-  const { serverError, form } = yield call(CoreAPI.fetchForm, {
+  const { serverError, form } = yield call(fetchForm, {
     kappSlug: action.payload.kappSlug,
     formSlug: action.payload.formSlug,
     include: FORM_INCLUDES,

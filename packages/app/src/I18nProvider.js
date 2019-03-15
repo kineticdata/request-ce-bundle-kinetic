@@ -1,9 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { bundle } from 'react-kinetic-core';
+import { bundle, fetchSubmission } from '@kineticdata/react';
 import { Map, Set } from 'immutable';
-import { CoreAPI } from 'react-kinetic-core';
 import isarray from 'isarray';
 import semver from 'semver';
 const MINIMUM_CE_VERSION = '2.3.0';
@@ -140,7 +139,7 @@ export class I18n extends React.Component {
           }));
         } else {
           // Otherwise fetch the submission
-          CoreAPI.fetchSubmission({
+          fetchSubmission({
             id: this.props.submissionId,
             datastore: !!this.props.datastore,
             include: 'form,form.kapp',

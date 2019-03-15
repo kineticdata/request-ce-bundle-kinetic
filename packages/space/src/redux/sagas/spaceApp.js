@@ -1,17 +1,17 @@
 import { takeEvery, put, all, call, select } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchUsers, fetchSpace, deleteSubmission } from '@kineticdata/react';
 import moment from 'moment';
 import { List } from 'immutable';
 import { commonActions, toastActions } from 'common';
 import { actions, types } from '../modules/spaceApp';
 import { actions as errorActions } from '../modules/errors';
-import { DiscussionAPI, createDiscussionList } from 'discussions-lib';
+import { fetchDiscussions, createDiscussionList } from '@kineticdata/react';
 import { calculateDateRange } from 'common/src/utils';
 
 export function* fetchAppSettingsSaga() {
   const [{ users, usersServerError }, { space, spaceServerError }] = yield all([
-    call(CoreAPI.fetchUsers),
-    call(CoreAPI.fetchSpace, {
+    call(fetchUsers),
+    call(fetchSpace, {
       include: 'userAttributeDefinitions,userProfileAttributeDefinitions',
     }),
   ]);
@@ -44,7 +44,7 @@ export function* fetchAppSettingsSaga() {
 }
 
 export function* deleteAlertSaga(action) {
-  const { errors, serverError } = yield call(CoreAPI.deleteSubmission, {
+  const { errors, serverError } = yield call(deleteSubmission, {
     datastore: true,
     id: action.payload,
   });
@@ -71,16 +71,13 @@ export function* fetchRecentDiscussionsSaga() {
     ? calculateDateRange(yield call(() => moment()), dateRange)
     : {};
 
-  const { error, discussions, nextPageToken } = yield call(
-    DiscussionAPI.fetchDiscussions,
-    {
-      pageToken,
-      user,
-      title: search,
-      isArchived,
-      ...dateParams,
-    },
-  );
+  const { error, discussions, nextPageToken } = yield call(fetchDiscussions, {
+    pageToken,
+    user,
+    title: search,
+    isArchived,
+    ...dateParams,
+  });
 
   if (error) {
     yield put(actions.setDiscussionsError(error));

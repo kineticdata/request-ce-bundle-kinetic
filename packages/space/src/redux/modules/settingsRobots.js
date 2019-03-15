@@ -1,6 +1,5 @@
 import { List, Record } from 'immutable';
 import { Utils } from 'common';
-import { CoreAPI } from 'react-kinetic-core';
 
 const { namespace, noPayload, withPayload } = Utils;
 

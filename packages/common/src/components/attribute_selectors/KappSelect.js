@@ -9,7 +9,7 @@ import {
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import memoize from 'memoize-one';
-import { CoreAPI } from 'react-kinetic-core';
+import { fetchSpace } from '@kineticdata/react';
 
 import { Cache } from '../../cache';
 import { I18n } from '../../../../app/src/I18nProvider';
@@ -58,12 +58,11 @@ const renderToken = (option, props, index) => (
 );
 
 const kappCache = new Cache(() =>
-  CoreAPI.fetchSpace({ include: 'kapps,kapps.attributesMap' }).then(
-    ({ space }) =>
-      space.kapps.map(kapp => ({
-        label: kapp.name,
-        kapp,
-      })),
+  fetchSpace({ include: 'kapps,kapps.attributesMap' }).then(({ space }) =>
+    space.kapps.map(kapp => ({
+      label: kapp.name,
+      kapp,
+    })),
   ),
 );
 

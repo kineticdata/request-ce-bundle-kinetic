@@ -3,10 +3,11 @@ import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import {
   Discussion as KineticDiscussion,
   MessageHistory,
-} from 'discussions-lib';
+} from '@kineticdata/react';
 import { ParticipantsHeaderContainer } from './ParticipantsHeader';
 import { ArchivedBanner } from './ArchivedBanner';
 import { connect } from 'react-redux';
+import { TIME_FORMAT } from 'common/src/constants';
 import { DiscussionDetails } from './DiscussionDetails';
 import { types as detailsTypes } from '../redux/modules/discussionsDetails';
 import {
@@ -58,6 +59,8 @@ export const DiscussionComponent = props => (
               <MessageHistory
                 discussion={discussion}
                 message={props.messageHistory}
+                profile={props.profile}
+                timeFormat={TIME_FORMAT}
               />
             </ModalBody>
           </Modal>
