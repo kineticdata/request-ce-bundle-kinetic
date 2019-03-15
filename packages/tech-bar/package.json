@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "main": "./src/index.js",
   "dependencies": {
+    "@kineticdata/react": "0.1.0-RC6",
     "bootstrap": "^4.3.1",
     "font-awesome": "^4.7.0",
     "immutable": "4.0.0-rc.9",
@@ -13,7 +14,6 @@
     "react": "^16.2.0",
     "react-document-title": "^2.0.3",
     "react-dom": "^16.2.0",
-    "@kineticdata/react": "0.1.0-RC4",
     "react-popper": "^0.8.2",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",

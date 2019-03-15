@@ -24,10 +24,10 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@kineticdata/react@0.1.0-RC4":
-  version "0.1.0-RC4"
-  resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-0.1.0-RC4.tgz#44d53ec785c74375823e8cb9bd15046efe963064"
-  integrity sha512-LWIlm+QA6mza4dkojfcFFUBWuKyTP81nKxDQeGmCNY7N2RWL2ve3967+jCUN0h+2sBfzgdTQyohlUML3xt2EoQ==
+"@kineticdata/react@0.1.0-RC6":
+  version "0.1.0-RC6"
+  resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-0.1.0-RC6.tgz#16572766ac1471e6423e35400db2e1f16d672810"
+  integrity sha512-ohiUg1Sy838PTOPEZtCL8Uk6uQ18kZTzSkMTGDJGsUhnZLyqDYJ47tHQnSwI8BI+ZG+RjqgppuioEvlgICsGTQ==
   dependencies:
     actiontyper "^0.0.4"
     axios "^0.18.0"
@@ -5359,7 +5359,7 @@ isarray@1.0.0, isarray@^1.0.0, isarray@~1.0.0:
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
   integrity sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=
 
-isarray@^2.0.2, isarray@^2.0.4:
+isarray@^2.0.2:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-2.0.4.tgz#38e7bcbb0f3ba1b7933c86ba1894ddfc3781bbb7"
   integrity sha512-GMxXOiUirWg1xTKRipM0Ek07rX+ubx4nNVElTJdNLYmNO/2YrDkgJGw9CljXn+r4EWiDQg/8lsRdHyg2PJuUaA==
@@ -8755,20 +8755,6 @@ react@^16.2.0:
     prop-types "^15.6.2"
     scheduler "^0.13.4"
 
-reactstrap@^6.5.0:
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/reactstrap/-/reactstrap-6.5.0.tgz#ba655e32646e2621829f61faa033e607ec6624e5"
-  integrity sha512-dWb3fB/wBAiQloteKlf+j9Nl2VLe6BMZgTEt6hpeTt0t9TwtkeU+2v2NBYONZaF4FZATfMiIKozhWpc2HmLW1g==
-  dependencies:
-    classnames "^2.2.3"
-    lodash.isfunction "^3.0.9"
-    lodash.isobject "^3.0.2"
-    lodash.tonumber "^4.0.3"
-    prop-types "^15.5.8"
-    react-lifecycles-compat "^3.0.4"
-    react-popper "^0.10.4"
-    react-transition-group "^2.3.1"
-
 reactstrap@^7.1.0:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/reactstrap/-/reactstrap-7.1.0.tgz#fd7125901737a3001c8564c0f8b40e319eec23b2"
@@ -8857,16 +8843,6 @@ readdirp@^2.0.0, readdirp@^2.2.1:
     graceful-fs "^4.1.11"
     micromatch "^3.1.10"
     readable-stream "^2.0.2"
-
-recompose@^0.26.0:
-  version "0.26.0"
-  resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.26.0.tgz#9babff039cb72ba5bd17366d55d7232fbdfb2d30"
-  integrity sha512-KwOu6ztO0mN5vy3+zDcc45lgnaUoaQse/a5yLVqtzTK13czSWnFGmXbQVmnoMgDkI5POd1EwIKSbjU1V7xdZog==
-  dependencies:
-    change-emitter "^0.1.2"
-    fbjs "^0.8.1"
-    hoist-non-react-statics "^2.3.1"
-    symbol-observable "^1.0.4"
 
 recompose@^0.30.0:
   version "0.30.0"

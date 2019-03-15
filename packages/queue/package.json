@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "main": "./src/index.js",
   "dependencies": {
+    "@kineticdata/react": "0.1.0-RC6",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.5",
     "connected-react-router": "^4.2.3",
@@ -16,7 +17,6 @@
     "react-autocomplete": "^1.8.1",
     "react-document-title": "^2.0.3",
     "react-dom": "^16.2.0",
-    "@kineticdata/react": "0.1.0-RC4",
     "react-popper": "^0.8.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",

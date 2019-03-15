@@ -9,6 +9,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@kineticdata/react": "0.1.0-RC6",
     "autobind-decorator": "2.1.0",
     "bootstrap": "^4.3.1",
     "connected-react-router": "^4.3.0",
@@ -26,7 +27,6 @@
     "react-avatar": "^3.5.0",
     "react-dom": "^16.2.0",
     "react-helmet": "^5.2.0",
-    "@kineticdata/react": "0.1.0-RC4",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",

@@ -59,6 +59,7 @@ export const DiscussionComponent = props => (
               <MessageHistory
                 discussion={discussion}
                 message={props.messageHistory}
+                profile={props.profile}
                 timeFormat={TIME_FORMAT}
               />
             </ModalBody>
