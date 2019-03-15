@@ -89,8 +89,34 @@
     margin-top: 0;
     margin-right: 0.5rem;
   }
+  &__meta {
+    dl {
+      flex-direction: row;
+      display: flex;
+      justify-content: flex-start;
+      margin: 0;
+      span {
+        margin-left: 1rem;
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+    dt,
+    dd {
+      font-size: 0.75rem;
+    }
+    dd {
+      color: $black-50;
+      margin-bottom: 0;
+    }
+  }
   &__header {
     margin: 1rem 0;
+    img {
+      max-width: 100%;
+      height: auto;
+    }
     &--team {
       height: 3rem;
       width: 100%;
@@ -157,6 +183,9 @@
     color: $white;
     @include setBgColorAndHover($green-grass);
   }
+  &--no-padding {
+    padding: 0;
+  }
   &--appt {
     flex-direction: row;
   }
@@ -170,6 +199,17 @@
     text-align: center;
     word-break: break-all;
     max-width: 216px;
+  }
+  &--import {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 2px dashed $black-16;
+    flex: 0 1 50%;
+    .fa-upload {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
   }
 }
 

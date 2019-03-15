@@ -269,10 +269,14 @@ export const CardsPage = () => (
           </h6>
         </div>
         <hr />
+
         {/* -- Card 14 -- */}
         <h2>Card Example</h2>
         <div className="card p-4">
-          <div className="card__header d-flex flex-row-reverse">
+          <div
+            className="card__header d-flex flex-row-reverse"
+            style={{ width: '10rem' }}
+          >
             <span className="tag tag--active tag--small">Tag Small</span>
           </div>
           <span className="card__date">November 2018</span>
@@ -285,6 +289,42 @@ export const CardsPage = () => (
             bay that lies between the mouths of the Po and the Piave rivers.
           </p>
           <div className="card__footer">
+            <button className="btn btn-link text-sm-left pl-0">
+              View place→
+            </button>
+          </div>
+        </div>
+        <hr />
+        {/* -- Image Top -- */}
+        <div className="card card--no-padding">
+          <div className="card__header position-relative  m-0">
+            <img
+              src="https://tailwindcss.com/img/card-top.jpg"
+              title="Mountain"
+              alt=""
+              className="text-center overflow-hidden"
+            />
+            <span
+              className="tag tag--active tag--small position-absolute"
+              style={{ top: '1rem', right: '1rem' }}
+            >
+              Tag
+            </span>
+          </div>
+          <div className="card__body pt-4 px-4  pb-0">
+            <span className="card__date">November 2018</span>
+            <h1 className="card__title">Venice Islands</h1>
+            <p className="card__text">
+              Venice is a city in northeastern Italy and the capital of the
+              Veneto region. It is situated across a group of 118 small islands
+              that are separated by canals and linked by bridges, of which there
+              are 400. The islands are located in the shallow Venetian Lagoon,
+              an enclosed bay that lies between the mouths of the Po and the
+              Piave rivers.
+            </p>
+          </div>
+
+          <div className="card__footer px-4">
             <button className="btn btn-link text-sm-left pl-0">
               View place→
             </button>
@@ -292,34 +332,8 @@ export const CardsPage = () => (
         </div>
         <hr />
 
-        <div className="card p-4">
-          <div className="card__header d-flex flex-row-reverse">
-            <div
-              title="Woman holding a mug"
-              className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
-              style={{
-                backgroundImage:
-                  "url('https://tailwindcss.com/img/card-left.jpg')",
-              }}
-            />
-            <span className="tag tag--active tag--small">Tag Small</span>
-          </div>
-          <span className="card__date">November 2018</span>
-          <h1 className="card__title">Venice Islands</h1>
-          <p>
-            Venice is a city in northeastern Italy and the capital of the Veneto
-            region. It is situated across a group of 118 small islands that are
-            separated by canals and linked by bridges, of which there are 400.
-            The islands are located in the shallow Venetian Lagoon, an enclosed
-            bay that lies between the mouths of the Po and the Piave rivers.
-          </p>
-          <div className="card__footer">
-            <button className="btn btn-link text-sm-left pl-0">
-              View place→
-            </button>
-          </div>
-        </div>
         <hr />
+        <h2>Blank Card</h2>
         {/* -- Blank Card -- */}
         <div className="card">
           <p>This is some text within a card</p>
@@ -422,35 +436,64 @@ export const CardsPage = () => (
             </div>
           </div>
         </div>
+        {/* -- Import Card -- */}
+        <hr />
+        <h2>Import</h2>
+        <div className="card card--import">
+          <div className="card__body">
+            <div aria-disabled="false" style={{ position: 'relative' }}>
+              <i className="fa fa-2x fa-upload" />
+              <h2>Upload a .csv file</h2>
+              <p>
+                Drag a file to attach or{' '}
+                <span className="text-primary">browse</span>
+              </p>
+              <input
+                type="file"
+                multiple=""
+                autoComplete="off"
+                style={{
+                  position: 'absolute',
+                  top: '0px',
+                  right: '0px',
+                  bottom: '0px',
+                  left: '0px',
+                  opacity: '1e-05',
+                  pointerEvents: 'none',
+                }}
+              />
+            </div>
+          </div>
+        </div>
         <hr />
         <h2>Meta Information</h2>
         <div className="card">
-          <p>This is some text within a card</p>
-          <p>A second row of text within a card</p>
-          <span className="meta">
-            <dl className="row">
-              <div className="col">
-                <dt className="">Confirmation</dt>
-                <dd className="">7CA127</dd>
-              </div>
-              <div className="col">
-                <dt className="">Submitted</dt>
-                <dd className="">
-                  <span className="time-ago">
-                    <span className="time-ago__text">16 days ago</span>
-                  </span>
-                </dd>
-              </div>
-              <div className="col">
-                <dt className="">Est. Completion</dt>
-                <dd className="">
-                  <span className="time-ago">
-                    <span className="time-ago__text">9 days ago</span>
-                  </span>
-                </dd>
-              </div>
-            </dl>
-          </span>
+          <div className="card__body">
+            <span className="card__meta">
+              <dl>
+                <span>
+                  <dt className="">Confirmation</dt>
+                  <dd className="">7CA127</dd>
+                </span>
+                <span>
+                  <dt className="">Submitted</dt>
+                  <dd className="">
+                    <span className="time-ago">
+                      <span className="time-ago__text">16 days ago</span>
+                    </span>
+                  </dd>
+                </span>
+                <span>
+                  <dt className="">Est. Completion</dt>
+                  <dd className="">
+                    <span className="time-ago">
+                      <span className="time-ago__text">9 days ago</span>
+                    </span>
+                  </dd>
+                </span>
+              </dl>
+            </span>
+          </div>
         </div>
         {/* -- Appointments -- */}
         <hr />
@@ -460,27 +503,33 @@ export const CardsPage = () => (
             className="fa fa-calendar fa-fw card-icon"
             style={{ background: 'rgb(255, 74, 94)' }}
           />
-          <div className="card__body">
-            <h1 className="card__title">
-              Thursday, January 31, 2019
-              <span className="submission-status submission-status--complete">
-                Completed
-              </span>
-            </h1>
-            <p className="card__subtitle">1:00 PM - 1:30 PM</p>
-            <p className="card__text">Testing cancel button</p>
-            <a className="btn btn-link text-left pl-0" href="/">
-              View Details →
-            </a>
+          <div className="flex-column flex-fill">
+            <div className="card__body">
+              <h1 className="card__title flex-row">
+                <span>Thursday, January 31, 2019</span>
+                <span className="submission-status submission-status--complete ml-auto">
+                  Completed
+                </span>
+              </h1>
+              <p className="card__subtitle">1:00 PM - 1:30 PM</p>
+              <p className="card__text">Testing cancel button</p>
+            </div>
+            <div className="card__footer">
+              <a className="btn btn-link text-left m-0 p-0" href="/">
+                View Details →
+              </a>
+            </div>
           </div>
         </div>
         <hr />
         {/* -- Advanced Cards -- */}
         <h2>Advanced Card</h2>
-        <div className="card card--request">
-          <h1 className="card__title">
-            <i className="fa fa-file-text-o fa-fw card-icon" />
-            <span>Card Title</span>
+        <div className="card">
+          <h1 className="card__title mb-2">
+            <span style={{ display: 'flex', alignContent: 'center' }}>
+              <i className="fa fa-file-text-o fa-fw card-icon" />
+              Card Title
+            </span>
             <span className="status submission-status submission-status--open">
               Submitted
             </span>
@@ -491,7 +540,7 @@ export const CardsPage = () => (
                 aria-expanded="false"
                 className="btn-sm btn btn-icon"
               >
-                <span className="fa fa-ellipsis-h fa-2x" />
+                <span className="fa fa-ellipsis-v fa-2x" />
               </button>
               <div
                 tabIndex="-1"
@@ -510,28 +559,20 @@ export const CardsPage = () => (
             </div>
           </h1>
           <p className="card__text">Basic description</p>
-          <span className="meta">
-            <dl className="row">
-              <div className="col">
+          <span className="card__meta">
+            <dl>
+              <span>
                 <dt className="">Confirmation</dt>
                 <dd className="">7CA127</dd>
-              </div>
-              <div className="col">
+              </span>
+              <span>
                 <dt className="">Submitted</dt>
-                <dd className="">
-                  <span className="time-ago">
-                    <span className="time-ago__text">16 days ago</span>
-                  </span>
-                </dd>
-              </div>
-              <div className="col">
+                <dd className="">16 days ago</dd>
+              </span>
+              <span>
                 <dt className="">Est. Completion</dt>
-                <dd className="">
-                  <span className="time-ago">
-                    <span className="time-ago__text">9 days ago</span>
-                  </span>
-                </dd>
-              </div>
+                <dd className="">9 days ago</dd>
+              </span>
             </dl>
           </span>
         </div>
