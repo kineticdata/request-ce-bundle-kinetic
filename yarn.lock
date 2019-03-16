@@ -6682,7 +6682,7 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdi
   dependencies:
     minimist "0.0.8"
 
-modularscale-sass@^3.0.4, modularscale-sass@^3.0.5, modularscale-sass@^3.0.8:
+modularscale-sass@^3.0.5, modularscale-sass@^3.0.8:
   version "3.0.8"
   resolved "https://registry.yarnpkg.com/modularscale-sass/-/modularscale-sass-3.0.8.tgz#57c92ee0750f6807e37359699ef2ce63a4997db6"
   integrity sha512-NOO6NLXPiVG8T/ZkXImxSj1YtvzF37suAGxc9ty0pmQrU998fmJqR6kNqs+HmFqOjeCRJ3roBfA9Arohta2sBQ==
@@ -8323,7 +8323,7 @@ react-beautiful-dnd@^8.0.4:
     redux "^4.0.0"
     tiny-invariant "^0.0.3"
 
-react-bootstrap-typeahead@^3.2.3, react-bootstrap-typeahead@^3.2.4:
+react-bootstrap-typeahead@^3.2.4:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/react-bootstrap-typeahead/-/react-bootstrap-typeahead-3.4.1.tgz#484c3c1be635c49898ca8dce59a6c71f2fce5888"
   integrity sha512-Isutst1PaIO+GSlyDfoAskCdvp5biyUIL/VdDjfSYFaFmZ89W8pSCJ6rALowkvTlCVxoRHJMrmhxb/5KOTAPzQ==
@@ -8485,18 +8485,6 @@ react-lifecycles-compat@^3.0.0, react-lifecycles-compat@^3.0.2, react-lifecycles
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
-
-react-markdown@^3.2.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/react-markdown/-/react-markdown-3.6.0.tgz#29f6aaab5270c8ef0a5e234093a873ec3e01722b"
-  integrity sha512-TV0wQDHHPCEeKJHWXFfEAKJ8uSEsJ9LgrMERkXx05WV/3q6Ig+59KDNaTmjcoqlCpE/sH5PqqLMh4t0QWKrJ8Q==
-  dependencies:
-    mdast-add-list-metadata "1.0.1"
-    prop-types "^15.6.1"
-    remark-parse "^5.0.0"
-    unified "^6.1.5"
-    unist-util-visit "^1.3.0"
-    xtend "^4.0.1"
 
 react-markdown@^4.0.6:
   version "4.0.6"
@@ -8673,7 +8661,7 @@ react-sortable-tree@~2.2.0:
     react-lifecycles-compat "^3.0.4"
     react-virtualized "^9.19.1"
 
-react-svg-inline@^2.0.0, react-svg-inline@^2.0.1:
+react-svg-inline@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/react-svg-inline/-/react-svg-inline-2.1.1.tgz#532664006bf5b4f9ca2879d185e546df9a7476ef"
   integrity sha512-mN7/qwq133dHMMQdtJRMtZ6tK1ynzOJMZBKR34blzv3HqQpNBsaOKXkEe1kN14hcJJhzrUbsB+uix2ZOpF4kQg==

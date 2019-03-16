@@ -1,6 +1,5 @@
 import { Record, List } from 'immutable';
-import { Utils } from 'common';
-const { namespace, withPayload } = Utils;
+import { namespace, withPayload } from '../../utils';
 
 export const types = {
   FETCH_RELATED_DISCUSSIONS: namespace(

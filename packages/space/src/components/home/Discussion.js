@@ -1,11 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { List } from 'immutable';
-import { MessagesGroup } from 'discussions';
 
 import { getTeamColor } from '../../utils';
 
-import { Avatar } from 'common';
+import { Avatar, MessagesGroup } from 'common';
 import { I18n } from '../../../../app/src/I18nProvider';
 
 const getTeamHeaderStyle = (discussion, teams) => {

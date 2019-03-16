@@ -1,7 +1,7 @@
 import React from 'react';
 import Avatar from 'react-avatar';
 import moment from 'moment';
-import { isPresent } from '../helpers';
+import isPresent from '../../helpers/isPresent';
 
 export const ParticipantCard = ({ discussion, participant, button }) => {
   return (

@@ -13,8 +13,12 @@ import { parse } from 'query-string';
 import { ButtonGroup, Button } from 'reactstrap';
 import { CoreForm } from '@kineticdata/react';
 import { LinkContainer } from 'react-router-bootstrap';
-
-import { PageTitle, toastActions } from 'common';
+import {
+  DiscussionsPanel,
+  PageTitle,
+  toastActions,
+  ViewDiscussionsModal,
+} from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 
 import {
@@ -23,7 +27,6 @@ import {
   actions,
 } from '../../../redux/modules/settingsDatastore';
 
-import { DiscussionsPanel, ViewDiscussionsModal } from 'discussions';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');

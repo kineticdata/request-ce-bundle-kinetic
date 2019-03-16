@@ -146,7 +146,6 @@ export const LoginModalComponent = props =>
 
 export const mapStateToProps = state => ({
   showing: state.app.auth.modalLogin,
-  // token: state.discussions.socket.token,
 });
 
 const mapDispatchToProps = {

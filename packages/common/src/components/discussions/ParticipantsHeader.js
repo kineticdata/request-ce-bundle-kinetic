@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { bundle } from '@kineticdata/react';
-import { isPresent } from '../helpers';
+import isPresent from '../../helpers/isPresent';
 import { Avatar } from 'common';
-import { types as detailsTypes } from '../redux/modules/discussionsDetails';
+import { types as detailsTypes } from '../../redux/modules/discussionsDetails';
 
 const participantComparator = (p1, p2) =>
   p1.user.username.localeCompare(p2.user.username);

@@ -1,5 +1,5 @@
 import { List, Map } from 'immutable';
-import { namespace } from 'common/src/utils';
+import { namespace } from '../../utils';
 
 const invitationType = invitation => (invitation.user ? 'user' : 'email');
 const invitationKey = invitation =>

@@ -5,7 +5,7 @@ import { compose } from 'recompose';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { DiscussionsList } from './DiscussionsList';
 import { Discussion } from '../Discussion';
-import { actions as discussionsActions } from '../../redux/modules/discussions';
+import { actions as discussionsActions } from '../../../redux/modules/discussions';
 
 export const getDisplayClasses = props =>
   props.isModal === true

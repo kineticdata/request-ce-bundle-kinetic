@@ -7,10 +7,6 @@ import commonReducers from 'common/src/redux/reducers';
 import servicesReducers from 'services/src/redux/reducers';
 import spaceReducers from 'space/src/redux/reducers';
 import techBarReducers from 'tech-bar/src/redux/reducers';
-import {
-  sagas as discussionSagas,
-  reducers as discussionReducers,
-} from 'discussions';
 import { sagas } from './sagas';
 import commonSagas from 'common/src/redux/sagas';
 import servicesSagas from 'services/src/redux/sagas';
@@ -36,7 +32,6 @@ export const configureStore = history => {
         common: combineReducers(commonReducers),
         services: combineReducers(servicesReducers),
         space: combineReducers(spaceReducers),
-        discussions: combineReducers(discussionReducers),
         techBar: combineReducers(techBarReducers),
       }),
     ),
@@ -54,7 +49,6 @@ export const configureStore = history => {
       commonSagas,
       servicesSagas,
       spaceSagas,
-      discussionSagas,
       techBarSagas,
     ]),
   );

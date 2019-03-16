@@ -1,9 +1,12 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { getTeamColor, getTeamIcon } from '../../utils';
-import { ViewDiscussionsModal, DiscussionsPanel } from 'discussions';
-import { PageTitle, Avatar } from 'common';
-import { ServiceCard } from '../shared/ServiceCard';
+import {
+  Avatar,
+  DiscussionsPanel,
+  PageTitle,
+  ViewDiscussionsModal,
+} from 'common';
 import { I18n } from '../../../../app/src/I18nProvider';
 
 const CreationForm = ({ onChange, values, errors }) => (

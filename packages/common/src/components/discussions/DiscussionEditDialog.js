@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { ModalBody, ModalFooter } from 'reactstrap';
 import { DiscussionForm } from '@kineticdata/react';
 import { PeopleSelect } from './PeopleSelect';
-import { types } from '../redux/modules/discussionsDetails';
+import { types } from '../../redux/modules/discussionsDetails';
 
 export const DiscussionEditDialogComponent = props => (
   <DiscussionForm
@@ -54,11 +54,8 @@ export const DiscussionEditDialogComponent = props => (
 export const mapStateToProps = (state, props) => {
   const id = props.discussion.id;
   return {
-    saving: state.discussions.discussionsDetails.getIn([id, 'saving']),
-    errorMessage: state.discussions.discussionsDetails.getIn([
-      id,
-      'errorMessage',
-    ]),
+    saving: state.common.discussionsDetails.getIn([id, 'saving']),
+    errorMessage: state.common.discussionsDetails.getIn([id, 'errorMessage']),
   };
 };
 

@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { Avatar } from 'common';
-import { isPresent } from '../helpers';
-import { types } from '../redux/modules/discussionsDetails';
+import isPresent from '../../helpers/isPresent';
+import { types } from '../../redux/modules/discussionsDetails';
 import { Popover, PopoverBody } from 'reactstrap';
 
 export const ParticipantsList = props => (
@@ -179,26 +179,23 @@ export const ParticipantsList = props => (
 export const mapStateToProps = (state, props) => {
   const id = props.discussion.id;
   return {
-    userReinvites: state.discussions.discussionsDetails.getIn(
+    userReinvites: state.common.discussionsDetails.getIn(
       [id, 'reinvites', 'user'],
       Map(),
     ),
-    emailReinvites: state.discussions.discussionsDetails.getIn(
+    emailReinvites: state.common.discussionsDetails.getIn(
       [id, 'reinvites', 'email'],
       Map(),
     ),
-    userUninvites: state.discussions.discussionsDetails.getIn(
+    userUninvites: state.common.discussionsDetails.getIn(
       [id, 'uninvites', 'user'],
       Map(),
     ),
-    emailUninvites: state.discussions.discussionsDetails.getIn(
+    emailUninvites: state.common.discussionsDetails.getIn(
       [id, 'uninvites', 'email'],
       Map(),
     ),
-    removals: state.discussions.discussionsDetails.getIn(
-      [id, 'removals'],
-      Map(),
-    ),
+    removals: state.common.discussionsDetails.getIn([id, 'removals'], Map()),
   };
 };
 export const mapDispatchToProps = (dispatch, props) => {

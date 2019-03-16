@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { getGroupedDiscussions } from '@kineticdata/react';
 import { DiscussionCard } from './DiscussionCard';
-import { actions as listActions } from '../../redux/modules/discussionsList';
-import { actions as discussionsActions } from '../../redux/modules/discussions';
+import { actions as listActions } from '../../../redux/modules/discussionsList';
+import { actions as discussionsActions } from '../../../redux/modules/discussions';
 
 export const DiscussionsListComponent = ({
   handleCreateDiscussion,
@@ -55,7 +55,7 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = state => ({
-  discussions: state.discussions.discussionsList.relatedDiscussions,
+  discussions: state.common.discussionsList.relatedDiscussions,
 });
 export const DiscussionsList = compose(
   connect(

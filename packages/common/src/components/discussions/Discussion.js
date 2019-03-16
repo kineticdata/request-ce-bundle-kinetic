@@ -9,7 +9,7 @@ import { ArchivedBanner } from './ArchivedBanner';
 import { connect } from 'react-redux';
 import { TIME_FORMAT } from 'common/src/constants';
 import { DiscussionDetails } from './DiscussionDetails';
-import { types as detailsTypes } from '../redux/modules/discussionsDetails';
+import { types as detailsTypes } from '../../redux/modules/discussionsDetails';
 import {
   DiscussionFullPageError,
   DiscussionPanelError,
@@ -72,7 +72,7 @@ export const DiscussionComponent = props => (
 
 export const mapStateToProps = (state, props) => ({
   profile: state.app.profile,
-  messageHistory: state.discussions.discussionsDetails.getIn([
+  messageHistory: state.common.discussionsDetails.getIn([
     props.id,
     'messageHistory',
   ]),

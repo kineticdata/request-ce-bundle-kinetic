@@ -4,8 +4,7 @@ import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { parse } from 'query-string';
-import { PageTitle } from 'common';
-import { Discussion as KinopsDiscussion } from 'discussions';
+import { Discussion as KinopsDiscussion, PageTitle } from 'common';
 import { I18n } from '../../../../app/src/I18nProvider';
 
 const buildRelatedItemLink = relatedItem => {

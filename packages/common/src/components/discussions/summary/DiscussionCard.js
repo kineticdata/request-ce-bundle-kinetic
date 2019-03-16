@@ -1,7 +1,6 @@
 import React from 'react';
 import { List } from 'immutable';
-import { Avatar } from 'common';
-import { MessagesGroup } from 'discussions';
+import { Avatar, MessagesGroup } from 'common';
 export const DiscussionCard = ({ discussion, me, onDiscussionClick }) => {
   const displayableMessages = discussion
     ? discussion.messages.filter(m => m.type !== 'System').slice(-1)

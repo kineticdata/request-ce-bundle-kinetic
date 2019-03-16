@@ -18,6 +18,12 @@ import { WallySpinner } from './components/WallySpinner';
 import { Schedulers } from './components/scheduler/Schedulers';
 import { Table, PaginationControl, FilterControl } from './components/Table';
 import { GroupDivider } from './components/GroupDivider';
+import { Discussion } from './components/discussions/Discussion';
+import { UserMessageGroup as MessagesGroup } from '@kineticdata/react';
+import { DiscussionCard } from './components/discussions/summary/DiscussionCard';
+import { DiscussionsList } from './components/discussions/summary/DiscussionsList';
+import { DiscussionsPanel } from './components/discussions/summary/DiscussionsPanel';
+import { ViewDiscussionsModal } from './components/discussions/summary/ViewDiscussionsModal';
 
 import {
   selectCurrentKapp,
@@ -83,4 +89,10 @@ export {
   PaginationControl,
   FilterControl,
   GroupDivider,
+  Discussion,
+  MessagesGroup,
+  DiscussionsList,
+  DiscussionsPanel,
+  DiscussionCard,
+  ViewDiscussionsModal,
 };

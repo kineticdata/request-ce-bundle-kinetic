@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalHeader } from 'reactstrap';
-import { types } from '../redux/modules/discussionsDetails';
+import { types } from '../../redux/modules/discussionsDetails';
 import { DiscussionDetailsRoot } from './DiscussionDetailsRoot';
 import { InvitationDialog } from './InvitationDialog';
 import { DiscussionEditDialog } from './DiscussionEditDialog';
@@ -36,7 +36,7 @@ export const DiscussionDetailsComponent = props => (
 export const mapStateToProps = (state, props) => {
   const id = props.discussion.id;
   return {
-    view: state.discussions.discussionsDetails.getIn([id, 'view']),
+    view: state.common.discussionsDetails.getIn([id, 'view']),
   };
 };
 
