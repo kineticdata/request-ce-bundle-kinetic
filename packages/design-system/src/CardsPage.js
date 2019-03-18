@@ -303,6 +303,7 @@ export const CardsPage = () => (
               title="Mountain"
               alt=""
               className="text-center overflow-hidden"
+              style={{ width: '100%' }}
             />
             <span
               className="tag tag--active tag--small position-absolute"
