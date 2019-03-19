@@ -85,8 +85,8 @@ const renderMenu = memoize(disabledFn => (results, props) => (
       const CurrentMenuItem = option.user
         ? UserMenuItem
         : option.team
-          ? TeamMenuItem
-          : EmailMenuItem;
+        ? TeamMenuItem
+        : EmailMenuItem;
       return (
         <CurrentMenuItem
           key={i}
@@ -187,6 +187,7 @@ export class PeopleSelect extends React.Component {
           }
           onChange={this.handleChange}
           placeholder={this.props.placeholder}
+          {...this.props.props}
         />
       )
     );

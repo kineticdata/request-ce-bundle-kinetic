@@ -16,12 +16,6 @@ const fields = {
   Status: {
     required: true,
   },
-  Language: {
-    required: true,
-  },
-  Region: {
-    required: true,
-  },
   Subject: {
     required: values => values.get('Type') === 'Template',
     visible: values => values.get('Type') === 'Template',
@@ -41,8 +35,8 @@ const evaluate = (condition, values) =>
   typeof condition === 'boolean'
     ? condition
     : typeof condition === 'function'
-      ? condition(values)
-      : false;
+    ? condition(values)
+    : false;
 
 const isRequired = (name, values) => evaluate(fields[name].required, values);
 
@@ -89,8 +83,7 @@ const NotificationComponent = ({
             <Link to={`/settings/notifications/${type}`}>
               <I18n>notification {type}</I18n>
             </Link>
-            {` `}
-            /
+            {` `}/
           </h3>
           {!loading && (
             <h1>
@@ -99,150 +92,120 @@ const NotificationComponent = ({
           )}
         </div>
       </div>
-      {!loading &&
-        values && (
-          <form onSubmit={handleSubmit}>
-            <Fragment>
-              <NotificationMenu
-                selection={selection}
-                onSelect={handleVariableSelection}
-              />
-            </Fragment>
-            <div className="form-group required">
-              <label className="field-label" htmlFor="name">
-                <I18n>Name</I18n>
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="Name"
-                onChange={handleFieldChange}
-                onBlur={handleFieldBlur}
-                value={values.get('Name')}
-              />
-            </div>
+      {!loading && values && (
+        <form onSubmit={handleSubmit}>
+          <Fragment>
+            <NotificationMenu
+              selection={selection}
+              onSelect={handleVariableSelection}
+            />
+          </Fragment>
+          <div className="form-group required">
+            <label className="field-label" htmlFor="name">
+              <I18n>Name</I18n>
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="Name"
+              onChange={handleFieldChange}
+              onBlur={handleFieldBlur}
+              value={values.get('Name')}
+            />
+          </div>
 
-            <div className="radio required">
-              <label className="field-label">
-                <I18n>Status</I18n>
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="Status"
-                  value="Active"
-                  onChange={handleFieldChange}
-                  onBlur={handleFieldBlur}
-                  checked={values.get('Status') === 'Active'}
-                />
-                Active
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="Status"
-                  value="Inactive"
-                  onChange={handleFieldChange}
-                  onBlur={handleFieldBlur}
-                  checked={values.get('Status') === 'Inactive'}
-                />
-                Inactive
-              </label>
-            </div>
-            <div className="form-group required">
-              <label className="field-label" htmlFor="language">
-                <I18n>Language</I18n>
-              </label>
+          <div className="radio required">
+            <label className="field-label">
+              <I18n>Status</I18n>
+            </label>
+            <label>
               <input
-                type="text"
-                id="language"
-                name="Language"
+                type="radio"
+                name="Status"
+                value="Active"
                 onChange={handleFieldChange}
                 onBlur={handleFieldBlur}
-                value={values.get('Language')}
+                checked={values.get('Status') === 'Active'}
               />
-            </div>
-            <div className="form-group required">
-              <label className="field-label" htmlFor="region">
-                <I18n>Region</I18n>
-              </label>
+              Active
+            </label>
+            <label>
               <input
-                type="text"
-                id="region"
-                name="Region"
+                type="radio"
+                name="Status"
+                value="Inactive"
                 onChange={handleFieldChange}
                 onBlur={handleFieldBlur}
-                value={values.get('Region')}
+                checked={values.get('Status') === 'Inactive'}
               />
-            </div>
-            {isVisible('Subject', values) && (
-              <div className="form-group required">
-                <label className="field-label" htmlFor="subject">
-                  <I18n>Subject</I18n>
-                </label>
-                <textarea
-                  id="subject"
-                  name="Subject"
-                  rows="2"
-                  onChange={handleFieldChange}
-                  onBlur={handleFieldBlur}
-                  value={values.get('Subject')}
-                />
-              </div>
-            )}
+              Inactive
+            </label>
+          </div>
+          {isVisible('Subject', values) && (
             <div className="form-group required">
-              <label className="field-label" htmlFor="htmlContent">
-                <I18n>HTML Content</I18n>
+              <label className="field-label" htmlFor="subject">
+                <I18n>Subject</I18n>
               </label>
               <textarea
-                id="htmlContent"
-                name="HTML Content"
-                rows="8"
+                id="subject"
+                name="Subject"
+                rows="2"
                 onChange={handleFieldChange}
                 onBlur={handleFieldBlur}
-                value={values.get('HTML Content')}
+                value={values.get('Subject')}
               />
             </div>
-            <div
-              className={`form-group ${
-                isRequired('Text Content', values) ? 'required' : ''
-              }`}
-            >
-              <label className="field-label" htmlFor="textContent">
-                <I18n>Text Content</I18n>
-              </label>
-              <textarea
-                id="textContent"
-                name="Text Content"
-                rows="8"
-                onChange={handleFieldChange}
-                onBlur={handleFieldBlur}
-                value={values.get('Text Content')}
-              />
+          )}
+          <div className="form-group required">
+            <label className="field-label" htmlFor="htmlContent">
+              <I18n>HTML Content</I18n>
+            </label>
+            <textarea
+              id="htmlContent"
+              name="HTML Content"
+              rows="8"
+              onChange={handleFieldChange}
+              onBlur={handleFieldBlur}
+              value={values.get('HTML Content')}
+            />
+          </div>
+          <div
+            className={`form-group ${
+              isRequired('Text Content', values) ? 'required' : ''
+            }`}
+          >
+            <label className="field-label" htmlFor="textContent">
+              <I18n>Text Content</I18n>
+            </label>
+            <textarea
+              id="textContent"
+              name="Text Content"
+              rows="8"
+              onChange={handleFieldChange}
+              onBlur={handleFieldBlur}
+              value={values.get('Text Content')}
+            />
+          </div>
+          <div className="form__footer">
+            <div className="form__footer__right">
+              <Link to="/settings/notifications" className="btn btn-link mb-0">
+                <I18n>Cancel</I18n>
+              </Link>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={!dirty || !isValid(values)}
+              >
+                {submission ? (
+                  <I18n>Save Changes</I18n>
+                ) : (
+                  <I18n>{`Create ${title}`}</I18n>
+                )}
+              </button>
             </div>
-            <div className="form__footer">
-              <div className="form__footer__right">
-                <Link
-                  to="/settings/notifications"
-                  className="btn btn-link mb-0"
-                >
-                  <I18n>Cancel</I18n>
-                </Link>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={!dirty || !isValid(values)}
-                >
-                  {submission ? (
-                    <I18n>Save Changes</I18n>
-                  ) : (
-                    <I18n>{`Create ${title}`}</I18n>
-                  )}
-                </button>
-              </div>
-            </div>
-          </form>
-        )}
+          </div>
+        </form>
+      )}
     </div>
     <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--settings-sidebar">
       <h3>

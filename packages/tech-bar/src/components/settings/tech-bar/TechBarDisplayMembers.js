@@ -44,117 +44,112 @@ const TechBarDisplayMembersComponent = ({
   processRemove,
 }) => (
   <div className="list-wrapper list-wrapper--users">
-    {loading &&
-      !team && (
-        <div className="loading-state">
-          <h4>
-            <i className="fa fa-spinner fa-spin fa-lg fa-fw" />
-          </h4>
+    {loading && !team && (
+      <div className="loading-state">
+        <h4>
+          <i className="fa fa-spinner fa-spin fa-lg fa-fw" />
+        </h4>
+        <h5>
+          <I18n>Loading</I18n>
+        </h5>
+      </div>
+    )}
+    {!loading && !team && (
+      <Fragment>
+        <div className="info-state">
           <h5>
-            <I18n>Loading</I18n>
+            <I18n>The team for front desk users is being created.</I18n>
           </h5>
+          <h6>
+            <I18n>This may take a few minutes.</I18n>
+          </h6>
         </div>
-      )}
-    {!loading &&
-      !team && (
-        <Fragment>
-          <div className="info-state">
-            <h5>
-              <I18n>The team for front desk users is being created.</I18n>
-            </h5>
-            <h6>
-              <I18n>This may take a few minutes.</I18n>
-            </h6>
-          </div>
+        <div className="text-center">
+          <button
+            className="btn btn-primary"
+            onClick={() => {
+              fetchDisplayTeam({
+                techBarName,
+              });
+            }}
+          >
+            <span className="fa fa-refresh" />
+          </button>
+        </div>
+      </Fragment>
+    )}
+    {!loading && team && team.memberships.length === 0 && (
+      <Fragment>
+        <div className="empty-state">
+          <h5>
+            <I18n>No Front Desk Users Found</I18n>
+          </h5>
+          <h6>
+            <I18n>
+              Front Desk Users are the users who have access to the check-in,
+              feedback, and overhead display pages.
+            </I18n>
+          </h6>
+        </div>
+        {hasManagerAccess && (
           <div className="text-center">
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                fetchDisplayTeam({
-                  techBarName,
-                });
-              }}
-            >
-              <span className="fa fa-refresh" />
+            <button className="btn btn-primary" onClick={handleAdd}>
+              <I18n>Add User</I18n>
             </button>
           </div>
-        </Fragment>
-      )}
-    {!loading &&
-      team &&
-      team.memberships.length === 0 && (
-        <Fragment>
-          <div className="empty-state">
-            <h5>
-              <I18n>No Front Desk Users Found</I18n>
-            </h5>
-            <h6>
-              <I18n>
-                Front Desk Users are the users who have access to the check-in,
-                feedback, and overhead display pages.
-              </I18n>
-            </h6>
-          </div>
-          {hasManagerAccess && (
-            <div className="text-center">
-              <button className="btn btn-primary" onClick={handleAdd}>
-                <I18n>Add User</I18n>
-              </button>
-            </div>
-          )}
-        </Fragment>
-      )}
-    {team &&
-      team.memberships.length > 0 && (
-        <table className="table table-sm table-striped table-users table--settings">
-          <thead className="header">
-            <tr>
-              <th scope="col">
-                <I18n>Display Name</I18n>
+        )}
+      </Fragment>
+    )}
+    {team && team.memberships.length > 0 && (
+      <table className="table table-sm table-striped table-users table--settings">
+        <thead className="header">
+          <tr>
+            <th scope="col">
+              <I18n>Display Name</I18n>
+            </th>
+            <th scope="col">
+              <I18n>Username</I18n>
+            </th>
+            {hasManagerAccess && (
+              <th className="text-right" width="1%">
+                <button className="btn btn-primary" onClick={handleAdd}>
+                  <I18n>Add User</I18n>
+                </button>
               </th>
-              <th scope="col">
-                <I18n>Username</I18n>
-              </th>
-              {hasManagerAccess && (
-                <th className="text-right" width="1%">
-                  <button className="btn btn-primary" onClick={handleAdd}>
-                    <I18n>Add User</I18n>
-                  </button>
-                </th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {List(team.memberships)
-              .sortBy(a => a.user.displayName)
-              .map(displayUser => (
-                <tr key={displayUser.user.username}>
-                  <td scope="row">{displayUser.user.displayName}</td>
-                  <td>{displayUser.user.username}</td>
-                  {hasManagerAccess && (
-                    <td className="text-right">
-                      <Dropdown
-                        toggle={toggleDropdown(displayUser.user.username)}
-                        isOpen={openDropdown === displayUser.user.username}
-                      >
-                        <DropdownToggle color="link" className="btn-sm">
-                          <span className="fa fa-ellipsis-h fa-2x" />
-                        </DropdownToggle>
-                        <DropdownMenu right>
-                          <DropdownItem
-                            onClick={handleRemove(displayUser.user.username)}
-                          >
-                            <I18n>Remove</I18n>
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </td>
-                  )}
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      )}
+            )}
+          </tr>
+        </thead>
+        <tbody>
+          {List(team.memberships)
+            .sortBy(a => a.user.displayName)
+            .map(displayUser => (
+              <tr key={displayUser.user.username}>
+                <td scope="row">{displayUser.user.displayName}</td>
+                <td>{displayUser.user.username}</td>
+                {hasManagerAccess && (
+                  <td className="text-right">
+                    <Dropdown
+                      toggle={toggleDropdown(displayUser.user.username)}
+                      isOpen={openDropdown === displayUser.user.username}
+                    >
+                      <DropdownToggle color="link" className="btn-sm">
+                        <span className="fa fa-ellipsis-h fa-2x" />
+                      </DropdownToggle>
+                      <DropdownMenu right>
+                        <DropdownItem
+                          onClick={handleRemove(displayUser.user.username)}
+                        >
+                          <I18n>Remove</I18n>
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </td>
+                )}
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    )}
 
     {openModal && (
       <Modal isOpen={!!openModal} toggle={toggleModal}>
@@ -185,6 +180,7 @@ const TechBarDisplayMembersComponent = ({
                   value={usernames}
                   valueMapper={value => value.user.username}
                   onChange={e => setUsernames(e.target.value)}
+                  props={{ minLength: 3 }}
                 />
               </div>
               <div className="form-group text-center">
