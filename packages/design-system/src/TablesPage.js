@@ -547,6 +547,159 @@ export const TablesPage = () => (
           </tfoot>
         </table>
         <hr />
+        <h2>Empty State Tables</h2>
+
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Summary</th>
+              <th className="text-right">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row" colSpan="2" className="text-center">
+                <em>
+                  No summaries found. This is an example empty state. Your
+                  language should be relevant to the user.
+                </em>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td scope="row" className="text-center" colSpan="2" />
+            </tr>
+          </tfoot>
+        </table>
+        <hr />
+        <h2>Inline-Editing Table</h2>
+
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Summary</th>
+              <th width="10%">Status</th>
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row" className="">
+                <em>Body Row 1, Col 1</em>
+              </td>
+              <td>
+                {' '}
+                <span className="submission-status submission-status--pending">
+                  Pending
+                </span>
+              </td>
+              <td className="text-right">
+                <div className="btn-group btn-group-sm">
+                  <button className="btn btn-danger">
+                    <span className="fa fa-fw fa-close" />
+                  </button>
+                  <a className="btn btn-primary" href="">
+                    <span className="fa fa-fw fa-pencil" />
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td scope="row" className="" colSpan="3" />
+            </tr>
+          </tfoot>
+        </table>
+        <hr />
+        <h2>Addition Table</h2>
+
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Summary</th>
+              <th width="10%">Status</th>
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row" className="">
+                <em>Body Row 1, Col 1</em>
+              </td>
+              <td>
+                <span className="submission-status submission-status--open">
+                  Open
+                </span>
+              </td>
+              <td className="text-right">
+                <button className="btn btn-sm btn-danger">
+                  <span className="fa fa-fw fa-close" />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td scope="row">
+                <input type="text" className="form-control" />
+              </td>
+              <td className="" width="20%">
+                <select
+                  name="addition-select"
+                  id="addition-select"
+                  className="form-control"
+                >
+                  <option value="one">One</option>
+                  <option value="two">Two</option>
+                  <option value="one">One</option>
+                  <option value="two">Two</option>
+                </select>
+              </td>
+              <td className="text-right">
+                <button className="btn btn-sm btn-success">
+                  <span className="fa fa-fw fa-plus" />
+                </button>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        <hr />
+        <h2>View Item Table</h2>
+
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Summary</th>
+              <th width="10%">Status</th>
+              <th className="ml-auto">&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row" className="">
+                <a href="/">Body Row 1, Col 1</a>
+              </td>
+              <td>
+                <span className="submission-status submission-status--complete">
+                  Test
+                </span>
+              </td>
+              <td className="text-right">
+                <button className="btn btn-sm btn-danger">
+                  <span className="fa fa-fw fa-close" />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td scope="row" className="" colSpan="3" />
+            </tr>
+          </tfoot>
+        </table>
+        <hr />
       </div>
     </div>
   </Fragment>
