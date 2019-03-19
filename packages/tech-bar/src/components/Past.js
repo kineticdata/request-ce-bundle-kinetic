@@ -23,7 +23,7 @@ export const PastComponent = ({
 }) => (
   <Fragment>
     <PageTitle parts={['Past Appointments']} />
-    <div className="page-container page-container--tech-bar">
+    <div className="page-container page-container--tech-bar container">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
@@ -49,27 +49,24 @@ export const PastComponent = ({
               .clone()
               .add(appt.values['Event Duration'], 'minute');
             return (
-              <div className="card card--appt" key={appt.id}>
+              <Link
+                to={`/past/appointment/${appt.values['Scheduler Id']}/${
+                  appt.id
+                }`}
+                className="card card--long card--appt"
+                key={appt.id}
+              >
                 <i
                   className="fa fa-calendar fa-fw card-icon"
                   style={{ background: 'rgb(255, 74, 94)' }}
                 />
                 <div className="card-body">
-                  <h1 className="card-title">
+                  <span className="card-title">
                     <Moment
                       timestamp={date}
                       format={Constants.MOMENT_FORMATS.dateWithDay}
                     />
-                    <span
-                      className={`badge ${
-                        appt.coreState === 'Closed'
-                          ? 'badge-dark'
-                          : 'badge-success'
-                      }`}
-                    >
-                      <I18n>{appt.values['Status']}</I18n>
-                    </span>
-                  </h1>
+                  </span>
                   <p className="card-subtitle">
                     <Moment
                       timestamp={start}
@@ -81,37 +78,41 @@ export const PastComponent = ({
                       format={Constants.MOMENT_FORMATS.time}
                     />
                   </p>
-                  <p className="card-text">
-                    {techBar && (
-                      <I18n
-                        render={translate => (
-                          <strong>{`${translate(
-                            techBar.values['Name'],
-                          )}: `}</strong>
-                        )}
-                      />
-                    )}
-                    {appt.values['Summary']}
-                  </p>
-                  <Link
-                    to={`/past/forms/appointment/${appt.id}`}
-                    className="btn btn-link text-left pl-0"
+                  {techBar && (
+                    <span className="card-meta">
+                      <strong>
+                        <I18n>{techBar.values['Name']}</I18n>
+                      </strong>
+                    </span>
+                  )}
+                  <span
+                    className={`badge ${
+                      appt.coreState === 'Closed'
+                        ? 'badge-dark'
+                        : 'badge-success'
+                    }`}
                   >
-                    <I18n>View Details</I18n> →
-                  </Link>
+                    <I18n>{appt.values['Status']}</I18n>
+                  </span>
+                  <p className="card-text">{appt.values['Summary']}</p>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
         {pastAppointments.size === 0 &&
           !loadingPast &&
           pastErrors.length === 0 && (
-            <h6 className="text-muted">
-              <em>
-                <I18n>You do not have any past appointments.</I18n>
-              </em>
-            </h6>
+            <div className="text-center mx-auto text-muted">
+              <h3 className="mb-3">
+                <I18n>You have no past appointments.</I18n>
+              </h3>
+              <p>
+                <I18n>
+                  Your completed and cancelled appointments will appear here.
+                </I18n>
+              </p>
+            </div>
           )}
       </section>
     </div>
