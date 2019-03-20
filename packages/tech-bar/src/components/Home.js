@@ -77,7 +77,7 @@ export const HomeComponent = ({
                 <div className="content">
                   <span className="title">
                     <I18n>{selectedTechBar.values['Name']}</I18n>
-                    {techBars.size > 0 && (
+                    {techBars.size > 1 && (
                       <button
                         className="btn btn-inverse btn-sm"
                         onClick={() => setModalOpen(true)}

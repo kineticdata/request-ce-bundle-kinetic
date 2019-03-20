@@ -7,7 +7,6 @@
     width: 100%;
     padding: 3rem 0;
     display: flex;
-    justify-content: center;
     flex-direction: row;
     flex: 0 0 auto;
     background-color: #0c384f;
@@ -59,11 +58,16 @@
         display: flex;
         flex-direction: column;
         .card {
-          flex: 0 0 100%;
+          flex: 1;
+          min-height: 0px;
           width: 330px;
           margin: 0 0 0 auto;
           border-top-color: $sunflower;
           box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+
+          .card-body {
+            flex-basis: 0;
+          }
         }
       }
     }
@@ -72,20 +76,23 @@
       height: auto;
       padding: 1rem 0;
       .container {
-        flex-direction: column;
-        .hero-welcome,
-        .hero-card {
-          flex-basis: auto;
-        }
+        display: block;
         .hero-welcome {
           .title {
             margin: 0.75rem 0;
+          }
+          .subtitle {
+            flex-basis: auto;
           }
         }
         .hero-card {
           margin-top: 1.5rem;
           .card {
             width: 100%;
+            flex-basis: auto;
+            .card-body {
+              flex-basis: auto;
+            }
           }
         }
       }
@@ -272,12 +279,15 @@
         &:not(&--long) {
           @media all and (min-width: 0) {
             flex-basis: 100%;
+            @media all and (max-width: 767px) {
+              margin-right: 0;
+            }
             @media all and (-ms-high-contrast: none) {
               width: 100%;
               flex-basis: auto;
             }
           }
-          @media all and (min-width: 768) {
+          @media all and (min-width: 768px) {
           }
           @media all and (min-width: 992px) {
             flex-basis: 47%;
@@ -295,7 +305,8 @@
           }
         }
         &--long {
-          flex-basis: 100%;
+          flex: 1;
+          margin-right: 0;
         }
       }
     }
