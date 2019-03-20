@@ -21,6 +21,8 @@ export const UserFormComponent = ({
   error,
   roles,
   teams,
+  locales,
+  timezones,
   fieldValues,
   handleFieldChange,
   handleOptionChange,
@@ -30,8 +32,6 @@ export const UserFormComponent = ({
   handleSubmit,
   handleDelete,
   userProfileAttributes,
-  locales,
-  timezones,
 }) => (
   <div className="page-container page-container--panels page-container--space-profile-edit">
     <PageTitle parts={['Users', 'Settings']} />
@@ -131,57 +131,6 @@ export const UserFormComponent = ({
                     value={fieldValues.email}
                   />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="preferredLocale">
-                    <I18n>Preferred Locale</I18n>
-                  </label>
-                  <select
-                    type="text"
-                    id="preferredLocale"
-                    name="preferredLocale"
-                    className="form-control"
-                    onChange={handleFieldChange}
-                    value={fieldValues.preferredLocale}
-                  >
-                    <I18n
-                      render={translate => (
-                        <option value="">{translate('None Selected')}</option>
-                      )}
-                    />
-                    {locales.map(locale => (
-                      <option
-                        value={locale.code}
-                        key={`${locale.code}+${locale.name}`}
-                      >
-                        {locale.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="timezone">
-                    <I18n>Timezone</I18n>
-                  </label>
-                  <select
-                    type="text"
-                    id="timezone"
-                    name="timezone"
-                    className="form-control"
-                    onChange={handleFieldChange}
-                    value={fieldValues.timezone}
-                  >
-                    <I18n
-                      render={translate => (
-                        <option value="">{translate('None Selected')}</option>
-                      )}
-                    />
-                    {timezones.map(timezone => (
-                      <option value={timezone.id} key={timezone.id}>
-                        {timezone.name} ({timezone.id})
-                      </option>
-                    ))}
-                  </select>
-                </div>
                 <div>
                   <h2 className="section__title">
                     <I18n>Profile Attributes</I18n>
@@ -278,6 +227,57 @@ export const UserFormComponent = ({
                         value={fieldValues.site}
                       />
                     </div>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="preferredLocale">
+                      <I18n>Preferred Locale</I18n>
+                    </label>
+                    <select
+                      type="text"
+                      id="preferredLocale"
+                      name="preferredLocale"
+                      className="form-control"
+                      onChange={handleFieldChange}
+                      value={fieldValues.preferredLocale}
+                    >
+                      <I18n
+                        render={translate => (
+                          <option value="">{translate('None Selected')}</option>
+                        )}
+                      />
+                      {locales.map(locale => (
+                        <option
+                          value={locale.code}
+                          key={`${locale.code}+${locale.name}`}
+                        >
+                          {locale.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="timezone">
+                      <I18n>Timezone</I18n>
+                    </label>
+                    <select
+                      type="text"
+                      id="timezone"
+                      name="timezone"
+                      className="form-control"
+                      onChange={handleFieldChange}
+                      value={fieldValues.timezone}
+                    >
+                      <I18n
+                        render={translate => (
+                          <option value="">{translate('None Selected')}</option>
+                        )}
+                      />
+                      {timezones.map(timezone => (
+                        <option value={timezone.id} key={timezone.id}>
+                          {timezone.name} ({timezone.id})
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div>
                     <h2 className="section__title">

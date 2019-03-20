@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose, withHandlers, withState } from 'recompose';
 import {
   KappLink as Link,
   KappNavLink as NavLink,
@@ -8,8 +9,15 @@ import {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
   selectHasRoleSchedulerAgent,
+  Utils,
 } from 'common';
-import { Nav, NavItem } from 'reactstrap';
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  Nav,
+  NavItem,
+} from 'reactstrap';
 import moment from 'moment';
 import { DATE_FORMAT, TIME_FORMAT } from '../App';
 import { I18n } from '../../../app/src/I18nProvider';
@@ -19,64 +27,123 @@ export const SidebarComponent = ({
   upcomingErrors,
   upcomingAppointments,
   hasSettingsAccess,
+  techBars,
+  openDropdown,
+  toggleDropdown,
+  hasTechBarDisplayRole,
 }) => (
   <div className="sidebar sidebar--tech-bar">
     <div className="sidebar-group--content-wrapper">
       <div className="sidebar-group">
         <h1>
-          <I18n>Upcoming Appointments</I18n>
+          <I18n>Appointments</I18n>
         </h1>
-        {upcomingAppointments.size > 0 && (
-          <Nav vertical>
-            {upcomingAppointments.map(appt => {
-              const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
-              const start = moment.utc(appt.values['Event Time'], TIME_FORMAT);
-              const end = start
-                .clone()
-                .add(appt.values['Event Duration'], 'minute');
-              return (
-                <NavItem key={appt.id}>
-                  <NavLink
-                    to={`/forms/appointment/${appt.id}`}
-                    activeClassName="active"
-                    className="nav-link"
-                    exact
-                  >
-                    <div>
-                      <div>
-                        <strong>{appt.values['Summary']}</strong>
-                      </div>
-                      <div>
-                        <Moment
-                          timestamp={date}
-                          format={Constants.MOMENT_FORMATS.date}
-                        />
-                      </div>
-                      <div>
-                        <Moment
-                          timestamp={start}
-                          format={Constants.MOMENT_FORMATS.time}
-                        />
-                        {` - `}
-                        <Moment
-                          timestamp={end}
-                          format={Constants.MOMENT_FORMATS.time}
-                        />
-                      </div>
-                    </div>
-                  </NavLink>
-                </NavItem>
-              );
-            })}
-          </Nav>
-        )}
-        {upcomingAppointments.size === 0 &&
-          !loadingUpcoming &&
-          upcomingErrors.length === 0 && (
-            <div className="empty-state">
-              <I18n>You do not have any upcoming appointments.</I18n>
-            </div>
-          )}
+        <Nav vertical>
+          <NavItem>
+            <NavLink
+              to={`/`}
+              activeClassName="active"
+              className="nav-link"
+              exact
+            >
+              <div>
+                <div>
+                  <I18n>Upcoming Appointments</I18n>
+                </div>
+              </div>
+            </NavLink>
+            <NavLink
+              to={`/past`}
+              activeClassName="active"
+              className="nav-link"
+              exact
+            >
+              <div>
+                <div>
+                  <I18n>Past Appointments</I18n>
+                </div>
+              </div>
+            </NavLink>
+          </NavItem>
+        </Nav>
+      </div>
+      <div className="sidebar-group sidebar-group--tech-bars">
+        <h1>
+          <I18n>Tech Bars</I18n>
+          <Link to="/tech-bars" className="view-all">
+            <I18n>View All</I18n>
+          </Link>
+        </h1>
+        <Nav vertical>
+          {techBars.map(techBar => (
+            <NavItem key={techBar.id}>
+              <NavLink
+                to={`/appointment/${techBar.values['Id']}`}
+                activeClassName="active"
+                className="nav-link"
+                exact
+              >
+                <div>
+                  <div>
+                    <I18n>{techBar.values['Name']}</I18n>
+                  </div>
+                </div>
+              </NavLink>
+              {hasTechBarDisplayRole(techBar.values['Name']) && (
+                <Dropdown
+                  toggle={toggleDropdown(techBar.id)}
+                  isOpen={openDropdown === techBar.id}
+                >
+                  <DropdownToggle color="link" className="btn-sm">
+                    <span className="fa fa-ellipsis-v fa-lg" />
+                  </DropdownToggle>
+                  <DropdownMenu right>
+                    <Link
+                      to={`/display/${techBar.values['Id']}/checkin`}
+                      className="dropdown-item"
+                      target="_blank"
+                    >
+                      <span className="fa fa-fw fa-external-link mr-2" />
+                      <span>
+                        <I18n>Check In</I18n>
+                      </span>
+                    </Link>
+                    <Link
+                      to={`/display/${techBar.values['Id']}/feedback`}
+                      className="dropdown-item"
+                      target="_blank"
+                    >
+                      <span className="fa fa-external-link fa-fw mr-2" />
+                      <span>
+                        <I18n>Feedback</I18n>
+                      </span>
+                    </Link>
+                    <Link
+                      to={`/display/${techBar.values['Id']}/checkin?crosslink`}
+                      className="dropdown-item"
+                      target="_blank"
+                    >
+                      <span className="fa fa-external-link fa-fw mr-2" />
+                      <span>
+                        <I18n>Check In</I18n> / <I18n>Feedback</I18n>
+                      </span>
+                    </Link>
+                    <Link
+                      to={`/display/${techBar.values['Id']}/overhead`}
+                      className="dropdown-item"
+                      target="_blank"
+                    >
+                      <span className="fa fa-external-link fa-fw mr-2" />
+                      <span>
+                        <I18n>Overhead</I18n>
+                      </span>
+                    </Link>
+                  </DropdownMenu>
+                </Dropdown>
+              )}
+            </NavItem>
+          ))}
+        </Nav>
       </div>
     </div>
     {hasSettingsAccess && (
@@ -93,6 +160,9 @@ export const SidebarComponent = ({
 );
 
 export const mapStateToProps = state => ({
+  techBars: state.techBar.techBarApp.schedulers.filter(
+    s => s.values['Status'] === 'Active',
+  ),
   loadingUpcoming: state.techBar.appointments.upcoming.loading,
   upcomingErrors: state.techBar.appointments.upcoming.errors,
   upcomingAppointments: state.techBar.appointments.upcoming.data,
@@ -100,6 +170,20 @@ export const mapStateToProps = state => ({
     selectHasRoleSchedulerManager(state) ||
     selectHasRoleSchedulerAdmin(state) ||
     selectHasRoleSchedulerAgent(state),
+  profile: state.app.profile,
 });
 
-export const Sidebar = connect(mapStateToProps)(SidebarComponent);
+const toggleDropdown = ({
+  setOpenDropdown,
+  openDropdown,
+}) => dropdownSlug => () =>
+  setOpenDropdown(dropdownSlug === openDropdown ? false : dropdownSlug);
+
+const hasTechBarDisplayRole = ({ profile }) => techBarName =>
+  Utils.isMemberOf(profile, `Role::Tech Bar Display::${techBarName}`);
+
+export const Sidebar = compose(
+  connect(mapStateToProps),
+  withState('openDropdown', 'setOpenDropdown', false),
+  withHandlers({ toggleDropdown, hasTechBarDisplayRole }),
+)(SidebarComponent);

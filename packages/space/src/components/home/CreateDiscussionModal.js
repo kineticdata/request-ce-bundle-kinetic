@@ -113,6 +113,7 @@ const next = props => (values, completeSubmit) => {
   completeSubmit();
 };
 const submit = props => async (values, completeSubmit) => {
+  console.log(...props.discussion);
   const { discussion, error } = await DiscussionAPI.createDiscussion({
     ...props.discussion,
   });

@@ -23,13 +23,11 @@ export const prepareStatusFilter = (searcher, filter) => {
   // There is at least one status add the criteria.
   if (filter.status.size > 0) {
     if (filter.status.size === 1) {
-      searcher = searcher.eq('values[Status]', filter.status.first());
+      searcher.eq('values[Status]', filter.status.first());
     } else {
-      searcher = searcher.in('values[Status]', filter.status.toJS());
+      searcher.in('values[Status]', filter.status.toJS());
     }
   }
-
-  return searcher;
 };
 
 export const prepareDateRangeFilter = (searcher, filter, now) => {
@@ -81,6 +79,7 @@ const calculateTeams = (myTeams, teams) =>
 export const prepareUnassignedFilter = (searcher, filter, appSettings) => {
   if (filter.assignments.unassigned && appSettings.myTeams.size > 0) {
     searcher.and();
+    prepareStatusFilter(searcher, filter);
     searcher.eq('values[Assigned Individual]', null);
     searcher.in(
       'values[Assigned Team]',
@@ -93,6 +92,7 @@ export const prepareUnassignedFilter = (searcher, filter, appSettings) => {
 export const prepareMineFilter = (searcher, filter, appSettings) => {
   if (filter.assignments.mine) {
     searcher.and();
+    prepareStatusFilter(searcher, filter);
     if (filter.teams.size > 0) {
       searcher.in('values[Assigned Team]', filter.teams.toJS());
     }
@@ -104,6 +104,7 @@ export const prepareMineFilter = (searcher, filter, appSettings) => {
 export const prepareTeammatesFilter = (searcher, filter, appSettings) => {
   if (filter.assignments.teammates && appSettings.myTeammates.size > 0) {
     searcher.and();
+    prepareStatusFilter(searcher, filter);
     searcher.in(
       'values[Assigned Individual]',
       appSettings.myTeammates.map(u => u.username).toJS(),
@@ -119,6 +120,7 @@ export const prepareTeammatesFilter = (searcher, filter, appSettings) => {
 export const prepareCreatedByMeFilter = (searcher, filter, appSettings) => {
   if (filter.createdByMe) {
     searcher.and();
+    prepareStatusFilter(searcher, filter);
     searcher.eq('createdBy', appSettings.profile.username);
     searcher.end();
   }
@@ -127,7 +129,6 @@ export const prepareCreatedByMeFilter = (searcher, filter, appSettings) => {
 export const buildSearch = (filter, appSettings) => {
   let searcher = new CoreAPI.SubmissionSearch();
 
-  searcher = prepareStatusFilter(searcher, filter);
   searcher = prepareDateRangeFilter(searcher, filter, moment());
 
   searcher.or();
@@ -205,12 +206,19 @@ export function* fetchListTask(action) {
   if (assignmentContext.length === 0) {
     yield put(actions.setListItems(filter, []));
   } else {
-    const { submissions, messages, nextPageToken, serverError } = yield call(
-      CoreAPI.searchSubmissions,
-      { kapp: kappSlug, search, limit: 1000 },
-    );
+    const {
+      submissions,
+      messages,
+      nextPageToken,
+      serverError,
+      error,
+    } = yield call(CoreAPI.searchSubmissions, {
+      kapp: kappSlug,
+      search,
+      limit: 1000,
+    });
 
-    if (serverError || (messages && messages.length > 0)) {
+    if (serverError || error || (messages && messages.length > 0)) {
       yield put(actions.setListStatus(filter, ERROR_STATUS_STRING));
       yield put(errorActions.addError('Failed to retrieve items!'));
     } else if (nextPageToken) {

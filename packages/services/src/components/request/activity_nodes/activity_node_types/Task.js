@@ -11,7 +11,11 @@ export const TaskHeader = ({ activity }) => {
         <I18n>{activity.label}</I18n>
         <span
           className={`status ${
-            data.Status === 'Complete' ? 'status--gray' : 'status--green'
+            data.Status === 'Complete'
+              ? 'status--gray'
+              : data.Status === 'In Progress'
+                ? 'status--yellow'
+                : 'status--green'
           }`}
         >
           <I18n>{data.Status}</I18n>

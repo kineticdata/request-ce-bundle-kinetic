@@ -14,8 +14,11 @@ import { actions } from './redux/modules/techBarApp';
 import { actions as appointmentActions } from './redux/modules/appointments';
 import { Sidebar } from './components/Sidebar';
 import { Home } from './components/Home';
+import { Past } from './components/Past';
+import { TechBars } from './components/TechBars';
 import { Display } from './components/Display';
 import { Form } from './components/Form';
+import { AppointmentForm } from './components/AppointmentForm';
 import { Settings } from './components/settings/Settings';
 import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { I18n } from '../../app/src/I18nProvider';
@@ -55,10 +58,22 @@ export const AppComponent = props => {
         <I18n>
           <main className={`package-layout package-layout--tech-bar`}>
             <Route path="/" exact component={Home} />
+            <Route path="/past" exact component={Past} />
+            <Route path="/tech-bars" exact component={TechBars} />
             <Route
               path="/forms/:formSlug/submissions/:id"
               exact
               component={Form}
+            />
+            <Route
+              path="/appointment/:techBarId?/:id?"
+              exact
+              component={AppointmentForm}
+            />
+            <Route
+              path="/past/appointment/:techBarId/:id?"
+              exact
+              render={props => <AppointmentForm {...props} isPast={true} />}
             />
             <Route path="/forms/:formSlug/:id?" exact component={Form} />
             <Route path="/display/:id/:mode?" exact component={Display} />

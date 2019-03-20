@@ -324,25 +324,31 @@ bundle.helpers.schedulerWidget = (div, props = {}, form, fieldMap = {}) => {
  *        Passed a list of user objects if multiple=true.
  * }
  */
-bundle.helpers.peopleSelect = (options = {}) => {
-  if (options.container) {
-    const multiple = options.multiple !== false;
+bundle.helpers.peopleSelect = ({
+  container,
+  multiple = false,
+  onChange,
+  ...props
+} = {}) => {
+  if (container) {
     renderIntoDom(
       <PeopleSelect
         multiple={multiple}
         users={true}
         valueMapper={value => value.user}
         onChange={
-          typeof options.onChange === 'function'
-            ? e =>
-                options.onChange(multiple ? e.target.value : e.target.value[0])
+          typeof onChange === 'function'
+            ? e => onChange(multiple ? e.target.value : e.target.value[0])
             : undefined
         }
+        props={props || {}}
       />,
-      options.container,
+      container,
     );
   } else {
-    console.warn('bundle.helpers.peopleSelect must pass container as an option');
+    console.warn(
+      'bundle.helpers.peopleSelect must pass container as an option',
+    );
   }
 };
 /**

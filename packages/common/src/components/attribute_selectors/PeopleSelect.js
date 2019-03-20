@@ -187,6 +187,7 @@ export class PeopleSelect extends React.Component {
           }
           onChange={this.handleChange}
           placeholder={this.props.placeholder}
+          {...this.props.props}
         />
       )
     );
