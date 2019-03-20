@@ -20,7 +20,7 @@ export class DiscussionForm extends React.Component {
             title: (props.defaults && props.defaults.title) || '',
             description: (props.defaults && props.defaults.description) || '',
             isPrivate: false,
-            joinPolicy: '',
+            joinPolicy: null,
             owningUsers: (props.defaults && props.defaults.owningUsers) || [],
             owningTeams: [],
             isArchived: false,
