@@ -5,6 +5,7 @@
 .package-layout--tech-bar {
   .card {
     flex: 0 0 auto;
+    min-height: 0;
     border: 1px solid $black-16;
 
     &--tech-bar-loc {
@@ -12,8 +13,10 @@
       border-top-width: 12px;
       border-top-color: $gray2;
       padding: 1rem;
+
       .card-body {
         flex: 1 1 auto;
+        min-height: 0px;
         display: flex;
         padding: 0;
 
@@ -23,7 +26,7 @@
           font-size: 2.5rem;
         }
         .content {
-          flex: 1 1 auto;
+          flex: 1;
           display: flex;
           flex-direction: column;
           font-size: 0.875rem;
@@ -46,7 +49,7 @@
             font-size: 0.75rem;
           }
           .details {
-            flex: 1 1 auto;
+            flex: 0 1 auto;
             overflow: auto;
             p {
               font-size: 0.75rem;
