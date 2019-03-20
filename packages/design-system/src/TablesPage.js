@@ -277,8 +277,230 @@ export const TablesPage = () => (
         </nav>
 
         <hr />
+        <h2>
+          Example Table <small>with filtering</small>
+        </h2>
+        <div className="d-flex justify-content-end pb-1">
+          <button className="btn btn-inverse  mr-1">
+            <i className="fa fa-fw fa-filter" /> Filter
+          </button>{' '}
+          <Dropdown>
+            <DropdownToggle color="link" className="btn btn-inverse">
+              <span className="fa fa-filter fa-fw" />
+            </DropdownToggle>
+            <DropdownMenu right>
+              <DropdownItem to={` `}>New</DropdownItem>
+              <DropdownItem to={` `}>Edit</DropdownItem>
+              <DropdownItem to={` `}>Clone</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+        <table className="table table-hover">
+          <thead className="sortable">
+            <tr>
+              <th scope="col">Title</th>
+              <th scope="col">Description</th>
+              <th width="10%" className="sort-disabled">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row">Body Title 1</td>
+              <td>Description goes here</td>
+              <td>
+                <div className="btn-group">
+                  <div className="btn btn-primary btn-sm" title="Edit">
+                    <i className="fa fa-pencil" />
+                  </div>
+                  <div className="btn btn-danger btn-sm" title="Delete">
+                    <i className="fa fa-times" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td scope="row">
+                Body Title 2{' '}
+                <span className="badge badge-pill badge-primary">Active</span>
+              </td>
+              <td>Description goes here</td>
+              <td>
+                <div className="btn-group">
+                  <div className="btn btn-primary btn-sm" title="Edit">
+                    <i className="fa fa-pencil" />
+                  </div>
+                  <div className="btn btn-danger btn-sm" title="Delete">
+                    <i className="fa fa-times" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr className="table-active">
+              <td scope="row">Body Title 3</td>
+              <td>Description goes here</td>
+              <td>
+                <div className="btn-group">
+                  <div className="btn btn-primary btn-sm" title="Edit">
+                    <i className="fa fa-pencil" />
+                  </div>
+                  <div className="btn btn-danger btn-sm" title="Delete">
+                    <i className="fa fa-times" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td scope="row">Body Title 4</td>
+              <td>Description goes here</td>
+              <td>
+                <div className="btn-group">
+                  <div className="btn btn-primary btn-sm" title="Edit">
+                    <i className="fa fa-pencil" />
+                  </div>
+                  <div className="btn btn-danger btn-sm" title="Delete">
+                    <i className="fa fa-times" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td scope="row">Body Title 5</td>
+              <td>Description goes here</td>
+              <td>
+                <div className="btn-group">
+                  <div className="btn btn-primary btn-sm" title="Edit">
+                    <i className="fa fa-pencil" />
+                  </div>
+                  <div className="btn btn-danger btn-sm" title="Delete">
+                    <i className="fa fa-times" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colSpan="3">Footer</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <hr />
+        <h2>
+          Example Table <small>with search</small>
+        </h2>
+        <div className="d-flex justify-content-end pb-1">
+          <div className="search-box col-3">
+            <form className="search-box__form search-box__form--sm">
+              <input type="text" placeholder="Search..." value="" />
+              <button type="submit">
+                <span className="fa fa-search" />
+              </button>
+            </form>
+          </div>
+        </div>
+        <table className="table table-hover">
+          <thead className="sortable">
+            <tr>
+              <th scope="col">Title</th>
+              <th scope="col">Description</th>
+              <th width="10%" className="sort-disabled">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row">Body Title 1</td>
+              <td>Description goes here</td>
+              <td>
+                <div className="btn-group">
+                  <div className="btn btn-primary btn-sm" title="Edit">
+                    <i className="fa fa-pencil" />
+                  </div>
+                  <div className="btn btn-danger btn-sm" title="Delete">
+                    <i className="fa fa-times" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td scope="row">
+                Body Title 2{' '}
+                <span className="badge badge-pill badge-primary">Active</span>
+              </td>
+              <td>Description goes here</td>
+              <td>
+                <div className="btn-group">
+                  <div className="btn btn-primary btn-sm" title="Edit">
+                    <i className="fa fa-pencil" />
+                  </div>
+                  <div className="btn btn-danger btn-sm" title="Delete">
+                    <i className="fa fa-times" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td scope="row">Body Title 3</td>
+              <td>Description goes here</td>
+              <td>
+                <div className="btn-group">
+                  <div className="btn btn-primary btn-sm" title="Edit">
+                    <i className="fa fa-pencil" />
+                  </div>
+                  <div className="btn btn-danger btn-sm" title="Delete">
+                    <i className="fa fa-times" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr className="table-active">
+              <td scope="row">Body Title 4</td>
+              <td>Description goes here</td>
+              <td>
+                <div className="btn-group">
+                  <div className="btn btn-primary btn-sm" title="Edit">
+                    <i className="fa fa-pencil" />
+                  </div>
+                  <div className="btn btn-danger btn-sm" title="Delete">
+                    <i className="fa fa-times" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td scope="row">Body Title 5</td>
+              <td>Description goes here</td>
+              <td>
+                <div className="btn-group">
+                  <div className="btn btn-primary btn-sm" title="Edit">
+                    <i className="fa fa-pencil" />
+                  </div>
+                  <div className="btn btn-danger btn-sm" title="Delete">
+                    <i className="fa fa-times" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colSpan="3" />
+            </tr>
+          </tfoot>
+        </table>
+
+        <hr />
 
         <h2>Striped Rows </h2>
+        <p>
+          There are multiple studys that yielded no evidence that zebra striping
+          consistently improves the accuracy or speed of tasks. Use striped rows
+          when you know it doesn't make things aesthetically worse.
+        </p>
 
         <table className="table table-striped">
           <thead>
@@ -367,7 +589,11 @@ export const TablesPage = () => (
             </tr>
           </tfoot>
         </table>
-
+        <p>
+          When the amount of actions or triggers is larger than two, place them
+          into an "ellipsis" dropdown to save on space and reduct cognative
+          overload.
+        </p>
         <hr />
 
         <h2>Captions</h2>
@@ -596,11 +822,37 @@ export const TablesPage = () => (
               </td>
               <td className="text-right">
                 <div className="btn-group btn-group-sm">
-                  <button className="btn btn-danger">
+                  <a className="btn btn-primary" href="" title="Edit">
+                    <span className="fa fa-fw fa-pencil" />
+                  </a>
+                  <button className="btn btn-danger" title="Delete">
                     <span className="fa fa-fw fa-close" />
                   </button>
-                  <a className="btn btn-primary" href="">
-                    <span className="fa fa-fw fa-pencil" />
+                </div>
+              </td>
+            </tr>
+            <tr className="is-editing">
+              <td scope="row" className="">
+                <input
+                  className="form-control form-control-sm"
+                  type="text"
+                  value="Body Row 1, Col 1"
+                />
+              </td>
+              <td>
+                <select name="" id="" className="form-control form-control-sm">
+                  <option value="pending">Pending</option>
+                  <option value="open">Open</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </td>
+              <td className="text-right">
+                <div className="btn-group btn-group-sm">
+                  <button className="btn btn-danger" title="Close">
+                    <span className="fa fa-fw fa-close" />
+                  </button>
+                  <a className="btn btn-success" href="" title="Save">
+                    <span className="fa fa-fw fa-check" />
                   </a>
                 </div>
               </td>
@@ -634,22 +886,22 @@ export const TablesPage = () => (
                 </span>
               </td>
               <td className="text-right">
-                <button className="btn btn-sm btn-danger">
+                <button className="btn btn-sm btn-danger" title="Remove">
                   <span className="fa fa-fw fa-close" />
                 </button>
               </td>
             </tr>
           </tbody>
           <tfoot>
-            <tr>
+            <tr className="tr--edit">
               <td scope="row">
-                <input type="text" className="form-control" />
+                <input type="text" className="form-control form-control-sm" />
               </td>
               <td className="" width="20%">
                 <select
                   name="addition-select"
                   id="addition-select"
-                  className="form-control"
+                  className="form-control form-control-sm"
                 >
                   <option value="one">One</option>
                   <option value="two">Two</option>
@@ -658,7 +910,7 @@ export const TablesPage = () => (
                 </select>
               </td>
               <td className="text-right">
-                <button className="btn btn-sm btn-success">
+                <button className="btn btn-sm btn-success" title="Add">
                   <span className="fa fa-fw fa-plus" />
                 </button>
               </td>
@@ -671,31 +923,25 @@ export const TablesPage = () => (
         <table className="table">
           <thead>
             <tr>
-              <th>Summary</th>
               <th width="10%">Status</th>
-              <th className="ml-auto">&nbsp;</th>
+              <th>Summary</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td scope="row" className="">
-                <a href="/">Body Row 1, Col 1</a>
-              </td>
               <td>
                 <span className="submission-status submission-status--complete">
                   Test
                 </span>
               </td>
-              <td className="text-right">
-                <button className="btn btn-sm btn-danger">
-                  <span className="fa fa-fw fa-close" />
-                </button>
+              <td scope="row" className="">
+                <a href="/">Body Row 1, Col 1</a>
               </td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
-              <td scope="row" className="" colSpan="3" />
+              <td scope="row" className="" colSpan="2" />
             </tr>
           </tfoot>
         </table>
