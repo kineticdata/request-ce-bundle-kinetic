@@ -194,7 +194,7 @@ export const HomeComponent = ({
               return (
                 <Link
                   to={`/appointment/${appt.values['Scheduler Id']}/${appt.id}`}
-                  className="card card--long card--appt"
+                  className="card card--appt"
                   key={appt.id}
                 >
                   <i
