@@ -27,18 +27,28 @@
 .navbar .nav-item {
   display: flex;
 
-  #header-kapp-dropdown .nav-link {
-    max-width: 204px;
-    display: flex;
-    justify-content: space-between;
-    > span {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    > .fa {
-      line-height: 1.5rem;
-      margin-left: 0.25rem;
+  #header-kapp-dropdown {
+    .nav-link {
+      color: $black;
+      border-right: 1px solid #d5d5d5;
+      max-width: 204px;
+      display: flex;
+      justify-content: space-between;
+      &:hover {
+        color: $primary;
+        box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3),
+          0 2px 12px 3px rgba(60, 64, 67, 0.15);
+      }
+      
+      > span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      > .fa {
+        line-height: 1.5rem;
+        margin-left: 0.25rem;
+      }
     }
   }
 }

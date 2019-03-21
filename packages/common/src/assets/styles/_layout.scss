@@ -2,26 +2,93 @@
  *   Layout ~ Common
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.sidebar-layout-wrapper {
-  top: $header-height !important;
+ .app-wrapper {
+   display: flex;
+   flex-direction: column;
+   // height: 100vh;
+   position: absolute;
+   top: 0;
+   right: 0;
+   left: 0;
+   bottom: 0;
+ }
 
-  .app-sidebar-container {
-    z-index: 4 !important;
-  }
-}
+ .app-header {
+   flex: 0 0 auto;
+ }
 
-// .main-container {
-//   display: flex;
-//   overflow-y: auto !important;
-//
-//   &--no-sidebar {
-//     position: absolute;
-//     top: $header-height;
-//     left: 0px;
-//     right: 0px;
-//     bottom: 0px;
-//   }
-// }
+ .app-body {
+   flex: 1;
+   min-height: 0;
+   position: relative;
+   display: flex;
+   flex-direction: row;
+   transition: margin 0.3s;
+
+   &.closed-sidebar {
+     margin-left: -252px;
+   }
+
+   .app-sidebar-container {
+     flex: 0 0 auto;
+     position: relative;
+   }
+
+   .app-main-container {
+     flex: 1;
+     min-height: 0;
+     position: relative;
+     display: block;
+     overflow-y: auto !important;
+   }
+ }
+
+ @media all and (max-width: 767px) {
+   .app-body {
+     &.open-sidebar,
+     &.closed-sidebar {
+       margin-left: 0;
+
+       .app-main-container:after {
+         content: '';
+         position: fixed;
+         top: 0;
+         left: 0;
+         bottom: 0;
+         right: 0;
+         background-color: rgba(0, 0, 0, 0.3);
+         opacity: 1;
+         visibility: visible;
+         transition: opacity 0.3s, visibility 0.3s;
+       }
+     }
+
+     &.closed-sidebar {
+       .app-main-container:after {
+         opacity: 0;
+         visibility: hidden;
+       }
+       .app-sidebar-container {
+         left: -252px;
+       }
+     }
+
+     &.open-sidebar {
+       .app-main-container {
+         overflow: hidden;
+       }
+     }
+
+     .app-sidebar-container {
+       position: absolute;
+       top: 0;
+       left: 0;
+       bottom: 0;
+       z-index: 1022;
+       transition: left 0.3s;
+     }
+   }
+ }
 
 .package-layout {
   display: flex;
