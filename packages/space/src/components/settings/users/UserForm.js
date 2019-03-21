@@ -131,49 +131,6 @@ export const UserFormComponent = ({
                     value={fieldValues.email}
                   />
                 </div>
-                {locales && (
-                  <div className="form-group required">
-                    <label htmlFor="preferredLocale">Preferred Locale</label>
-                    <select
-                      type="text"
-                      id="preferredLocale"
-                      name="preferredLocale"
-                      className="form-control"
-                      onChange={handleFieldChange}
-                      value={fieldValues.preferredLocale}
-                    >
-                      <option value="">None Selected</option>
-                      {locales.map(locale => (
-                        <option
-                          value={locale.code}
-                          key={`${locale.code}+${locale.name}`}
-                        >
-                          {locale.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-                {timezones && (
-                  <div className="form-group required">
-                    <label htmlFor="timezone">Timezone</label>
-                    <select
-                      type="text"
-                      id="timezone"
-                      name="timezone"
-                      className="form-control"
-                      onChange={handleFieldChange}
-                      value={fieldValues.timezone}
-                    >
-                      <option value="">None Selected</option>
-                      {timezones.map(timezone => (
-                        <option value={timezone.id} key={timezone.id}>
-                          {timezone.name} ({timezone.id})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
                 <div>
                   <h2 className="section__title">
                     <I18n>Profile Attributes</I18n>

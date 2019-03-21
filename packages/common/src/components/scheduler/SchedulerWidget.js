@@ -365,7 +365,7 @@ const SchedulerWidgetComponent = ({
                   <I18n>Date and Time</I18n>
                 </label>
                 <div className="cards__wrapper cards__wrapper--appt pb-0">
-                  <div className="card card--long card--appt">
+                  <div className="card card--appt">
                     <i
                       className="fa fa-calendar fa-fw card-icon"
                       style={{ background: 'rgb(255, 74, 94)' }}
