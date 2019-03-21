@@ -286,7 +286,7 @@ const buildTableBodyCell = ({
         {...tdProps}
         {...(index === 0 ? { scope: 'row' } : {})}
       >
-        {row[value]}
+        <I18n>{row[value]}</I18n>
       </td>
     )}
   </KeyWrapper>

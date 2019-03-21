@@ -579,6 +579,10 @@ export function* deleteAllSubmissionsSaga(action) {
 export function* executeImportSaga(action) {
   const { form, records, recordsLength } = action.payload;
   let recordsChunk = null;
+  // This variable keeps the current row number for use with error display.
+  let currentRecordCount = action.currentRecordCount
+    ? action.currentRecordCount
+    : 0;
   const CHUNK_SIZE = 10;
 
   // abstract chunking requirement from function call.
@@ -598,28 +602,52 @@ export function* executeImportSaga(action) {
 
   const responses = yield all(
     head
-      .map(record =>
-        record.id
-          ? call(updateSubmission, {
-              datastore: true,
-              formSlug: form.slug,
-              values: record.values,
-              id: record.id,
-            })
-          : call(createSubmission, {
-              datastore: true,
-              formSlug: form.slug,
-              values: record.values,
-            }),
+      .map(
+        record =>
+          record.id
+            ? call(updateSubmission, {
+                datastore: true,
+                formSlug: form.slug,
+                values: record.values,
+                id: record.id,
+              })
+            : call(createSubmission, {
+                datastore: true,
+                formSlug: form.slug,
+                values: record.values,
+              }),
       )
       .toJS(),
   );
 
-  for (let x = 0; x < responses.length; x++) {
-    const { serverError, errors } = responses[x];
+  // for (let x = 0; x < responses.length; x++) {
+  //   currentRecordCount++;
+  //   const { serverError, errors } = responses[x];
+  //   // Not handling nonconforming errors from CoreAPI.
+  //   if (serverError || errors) {
+  //     const failedRow = {
+  //       rowNumber: currentRecordCount,
+  //       errors: errors ? errors : [serverError.statusText],
+  //     };
+  //     yield put(actions.setImportFailedCall(failedRow));
+  //   }
+  // }
+
+  const errorsArray = responses.reduce((acc, response) => {
+    currentRecordCount++;
+    const { serverError, errors } = response;
+
+    // Not handling nonconforming errors from CoreAPI.
     if (serverError || errors) {
-      yield put(actions.setImportFailedCall(errors ? errors : serverError));
+      acc.push({
+        rowNumber: currentRecordCount,
+        errors: errors ? errors : [serverError.statusText],
+      });
     }
+    return acc;
+  }, []);
+  if (errorsArray.length > 0) {
+    yield put(actions.setImportFailedCalls(errorsArray));
   }
 
   if (tail.size > 0) {
@@ -630,6 +658,7 @@ export function* executeImportSaga(action) {
         records: tail,
       },
       beenChunked: true,
+      currentRecordCount,
     });
   } else {
     yield put(actions.setImportComplete());

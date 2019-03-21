@@ -365,7 +365,7 @@ const SchedulerWidgetComponent = ({
                   <I18n>Date and Time</I18n>
                 </label>
                 <div className="cards__wrapper cards__wrapper--appt pb-0">
-                  <div className="card card--appt">
+                  <div className="card card--long card--appt">
                     <i
                       className="fa fa-calendar fa-fw card-icon"
                       style={{ background: 'rgb(255, 74, 94)' }}
@@ -374,7 +374,7 @@ const SchedulerWidgetComponent = ({
                       <div className="card-body">
                         {rescheduleEvent || event ? (
                           <Fragment>
-                            <h1 className="card-title">
+                            <span className="card-title">
                               <Moment
                                 timestamp={moment.tz(
                                   (rescheduleEvent || event).values['Date'],
@@ -383,7 +383,7 @@ const SchedulerWidgetComponent = ({
                                 )}
                                 format={Constants.MOMENT_FORMATS.dateWithDay}
                               />
-                            </h1>
+                            </span>
                             <p className="card-subtitle">
                               <Moment
                                 timestamp={moment.tz(
@@ -412,16 +412,16 @@ const SchedulerWidgetComponent = ({
                             </p>
                           </Fragment>
                         ) : (
-                          <h1 className="card-title">
+                          <span className="card-title">
                             <I18n>Date and time not selected</I18n>
-                          </h1>
+                          </span>
                         )}
                         {!isScheduled &&
                           !scheduling && (
-                            <div className="actions">
+                            <div className="card-actions">
                               <button
                                 type="button"
-                                className={`btn ${
+                                className={`btn btn-sm ${
                                   isReserved ? 'btn-primary' : 'btn-inverse'
                                 }`}
                                 onClick={() => {
@@ -442,7 +442,7 @@ const SchedulerWidgetComponent = ({
                               {canReschedule && (
                                 <button
                                   type="button"
-                                  className="btn btn-primary"
+                                  className="btn btn-sm btn-primary"
                                   onClick={() => {
                                     toggleModal(true);
                                   }}

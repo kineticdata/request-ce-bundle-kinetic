@@ -54,18 +54,18 @@ const Appointments = ({ appointments }) => (
         />
         <VictoryContainer
           className="VictoryContainer max-height-250"
-          height={100}
-          width={100}
+          height={250}
+          width={250}
           style={{ height: 'auto' }}
         >
           {' '}
           <VictoryPie
             standalone={false}
             colorScale={[Constants.COLORS.blueSky, Constants.COLORS.sunflower]}
-            height={100}
-            width={100}
-            radius={40}
-            innerRadius={25}
+            height={250}
+            width={250}
+            radius={100}
+            innerRadius={62}
             labels={() => null}
             data={[{ y: appointments.scheduled }, { y: appointments.walkins }]}
           />
@@ -76,10 +76,10 @@ const Appointments = ({ appointments }) => (
               'whitesmoke',
               'transparent',
             ]}
-            height={100}
-            width={100}
-            radius={22}
-            innerRadius={17}
+            height={250}
+            width={250}
+            radius={55}
+            innerRadius={42}
             labels={() => null}
             data={[
               { y: appointments.sameDay },
@@ -143,14 +143,16 @@ const Feedback = ({ feedback }) => (
           containerComponent={
             <VictoryContainer
               className="VictoryContainer max-height-250"
+              height={250}
+              width={250}
               style={{ height: 'auto' }}
             />
           }
           colorScale={[Constants.COLORS.green, Constants.COLORS.red]}
-          height={100}
-          width={100}
-          radius={40}
-          innerRadius={25}
+          height={250}
+          width={250}
+          radius={100}
+          innerRadius={62}
           labels={() => null}
           data={[{ y: feedback.positive }, { y: feedback.negative }]}
         />
@@ -192,18 +194,18 @@ const Utilization = ({ utilization }) => (
         </div>
         <VictoryContainer
           className="VictoryContainer max-height-250"
-          height={100}
-          width={100}
+          height={250}
+          width={250}
           style={{ height: 'auto' }}
         >
           }
           <VictoryPie
             standalone={false}
             colorScale={[Constants.COLORS.greenGrass, 'whitesmoke']}
-            height={100}
-            width={100}
-            radius={40}
-            innerRadius={25}
+            height={250}
+            width={250}
+            radius={100}
+            innerRadius={62}
             labels={() => null}
             data={[
               { y: utilization.actual },
@@ -213,10 +215,10 @@ const Utilization = ({ utilization }) => (
           <VictoryPie
             standalone={false}
             colorScale={[Constants.COLORS.blueSky, 'whitesmoke']}
-            height={100}
-            width={100}
-            radius={22}
-            innerRadius={7}
+            height={250}
+            width={250}
+            radius={55}
+            innerRadius={17}
             labels={() => null}
             data={[
               { y: utilization.scheduled },
@@ -262,20 +264,20 @@ const TimeOfVisit = ({ timeOfVisit }) => {
                     zoomDimension="x"
                   />
                 }
-                width={750}
-                height={300}
-                domainPadding={12}
+                width={900}
+                height={350}
+                domainPadding={14}
               >
                 <VictoryGroup
                   colorScale={[
                     Constants.COLORS.blueSky,
                     Constants.COLORS.sunflower,
                   ]}
-                  offset={12}
+                  offset={14}
                   labelComponent={<VictoryTooltip />}
                 >
                   <VictoryBar
-                    barWidth={12}
+                    barWidth={14}
                     data={scheduledData.map((count, index) => ({
                       x: moment(index, 'H').format('LT'),
                       y: count,
@@ -283,7 +285,7 @@ const TimeOfVisit = ({ timeOfVisit }) => {
                     }))}
                   />
                   <VictoryBar
-                    barWidth={12}
+                    barWidth={14}
                     data={walkinsData.map((count, index) => ({
                       x: moment(index, 'H').format('LT'),
                       y: count,
@@ -314,6 +316,7 @@ const TimeOfVisit = ({ timeOfVisit }) => {
                       padding: 5,
                       fontSize: 14,
                     },
+                    ticks: { stroke: Constants.COLORS.black, size: 5 },
                   }}
                 />
               </VictoryChart>
@@ -544,7 +547,7 @@ export const MetricsSummary = compose(
             s.utilization.scheduled +=
               parseInt(event.scheduledAppointments, 10) * toInt(event.duration);
             s.utilization.actual += toInt(event.scheduledTotalDuration);
-            // Add time ov visit counts for scheduled appointments
+            // Add time of visit counts for scheduled appointments
             Object.keys(event.scheduledAppointmentTimes).forEach(time => {
               if (!s.timeOfVisit.scheduled[time]) {
                 s.timeOfVisit.scheduled[time] = toInt(
@@ -556,7 +559,7 @@ export const MetricsSummary = compose(
                 );
               }
             });
-            // Add time ov visit counts for walkin appointments
+            // Add time of visit counts for walkin appointments
             Object.keys(event.walkinAppointmentTimes).forEach(time => {
               if (!s.timeOfVisit.walkins[time]) {
                 s.timeOfVisit.walkins[time] = toInt(
@@ -605,6 +608,7 @@ export const MetricsSummary = compose(
       summary.appointments.scheduled + summary.appointments.walkins;
     summary.feedback.total =
       summary.feedback.positive + summary.feedback.negative;
+    console.log(summary);
     return { summary };
   }),
 )(MetricsSummaryComponent);

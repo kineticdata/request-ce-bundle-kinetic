@@ -149,9 +149,10 @@ const RobotExecutionsListComponent = ({
                       )}
                     </td>
                     <td>
-                      {moment(execution.values['End']).format(
-                        Constants.TIME_FORMAT,
-                      )}
+                      {execution.values['Status'].toLowerCase() !== 'running' &&
+                        moment(execution.values['End']).format(
+                          Constants.TIME_FORMAT,
+                        )}
                     </td>
                     <td>
                       <Link

@@ -8,10 +8,7 @@ import {
   fetchProfile,
   fetchDefaultLocale,
 } from '@kineticdata/react';
-import {
-  actions as configActions,
-  types as configTypes,
-} from '../modules/config';
+import { actions as configActions } from '../modules/config';
 import { actions as kappActions } from '../modules/kapps';
 import {
   actions as loadingActions,

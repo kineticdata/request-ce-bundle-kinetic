@@ -184,6 +184,16 @@ const SchedulerComponent = ({
                       </div>
                     </div>
                   )}
+                  {scheduler.values['Details'] && (
+                    <div className="form-group">
+                      <label>
+                        <I18n>Details</I18n>
+                      </label>
+                      <div style={{ whiteSpace: 'pre' }}>
+                        <I18n>{scheduler.values['Details']}</I18n>
+                      </div>
+                    </div>
+                  )}
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-group">
@@ -265,7 +275,14 @@ const SchedulerComponent = ({
                         <I18n>Location</I18n>
                       </label>
                       <div>
-                        <I18n>{scheduler.values['Location']}</I18n>
+                        <I18n>{scheduler.values['Location']}</I18n>{' '}
+                        {scheduler.values['Latitude'] && (
+                          <span className="text-muted">
+                            {`(${scheduler.values['Latitude']}, ${
+                              scheduler.values['Longitude']
+                            })`}
+                          </span>
+                        )}
                       </div>
                     </div>
                   )}

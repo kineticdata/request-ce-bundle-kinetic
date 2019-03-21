@@ -3,21 +3,29 @@ import { TimeAgo } from 'common';
 import { activityData } from '../../RequestActivityList';
 import { I18n } from '../../../../../../app/src/I18nProvider';
 
-const getStatusColor = status =>
-  status === 'In Progress'
-    ? 'status-yellow'
-    : status === 'Denied'
-      ? 'status-red'
-      : 'status--green';
+const getStatusColor = status => {
+  switch (status) {
+    case 'Approved':
+      return 'status--green';
+    case 'Denied':
+      return 'status--red';
+    case 'In Progress':
+      return 'status--yellow';
+    default:
+      return 'status--grey';
+  }
+};
 
 export const ApprovalHeader = ({ activity }) => {
   const data = activityData(activity);
+  // If the activity has a Decision use its value otherwise use Status.
+  const displayOpt = data.Decision ? data.Decision : data.Status;
   return (
     <Fragment>
       <h1>
         <I18n>{activity.label}</I18n>
-        <span className={`status ${getStatusColor(data.Status)}`}>
-          <I18n>{data.Status}</I18n>
+        <span className={`status ${getStatusColor(displayOpt)}`}>
+          <I18n>{displayOpt}</I18n>
         </span>
       </h1>
     </Fragment>
@@ -68,7 +76,7 @@ export const ApprovalBody = ({ activity }) => {
             </dl>
           </div>
         )}
-        {data.Status !== 'In Progress' &&
+        {data.Decision !== 'In Progress' &&
           data.Decision && (
             <div className="data-list-row__col">
               <dl>

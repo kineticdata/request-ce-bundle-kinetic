@@ -6,5 +6,6 @@
 
 # ignore file types that prettier does not support
 *.png
+*.jpg
 *.snap
 *.svg

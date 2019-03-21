@@ -62,7 +62,7 @@ export const validateDateRange = filter => {
       return 'Select a start date';
     } else if (filter.dateRange.start !== '' && filter.dateRange.end === '') {
       return 'Select an end date';
-    } else if (filter.dateRange.end <= filter.dateRange.start) {
+    } else if (filter.dateRange.end < filter.dateRange.start) {
       return 'Select an end date after the start date';
     }
   }

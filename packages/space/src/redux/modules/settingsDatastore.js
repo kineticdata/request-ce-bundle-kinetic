@@ -113,7 +113,7 @@ export const types = {
     'datastore',
     'DEBOUNCE_PERCENT_COMPLETE',
   ),
-  SET_IMPORT_FAILED_CALL: namespace('datastore', 'SET_IMPORT_FAILED_CALL'),
+  SET_IMPORT_FAILED_CALLS: namespace('datastore', 'SET_IMPORT_FAILED_CALLS'),
   SET_IMPORT_COMPLETE: namespace('datastore', 'SET_IMPORT_COMPLETE'),
   RESET_IMPORT_FAILED_CALL: namespace('datastore', 'RESET_IMPORT_FAILED_CALL'),
 };
@@ -180,7 +180,7 @@ export const actions = {
   executeImport: withPayload(types.EXECUTE_IMPORT),
   setImportPercentComplete: withPayload(types.SET_IMPORT_PERCENT_COMPLETE),
   debouncePercentComplete: withPayload(types.DEBOUNCE_PERCENT_COMPLETE),
-  setImportFailedCall: withPayload(types.SET_IMPORT_FAILED_CALL),
+  setImportFailedCalls: withPayload(types.SET_IMPORT_FAILED_CALLS),
   setImportComplete: noPayload(types.SET_IMPORT_COMPLETE),
   resetImportFailedCall: noPayload(types.RESET_IMPORT_FAILED_CALL),
 };
@@ -446,12 +446,13 @@ export const reducer = (state = State(), { type, payload }) => {
               }),
             ),
           )
-          .map((part, index) =>
-            index > partIndex && operation !== 'Is Equal To'
-              ? part
-                  .set('operation', 'All')
-                  .set('value', IndexValues({ values: List() }))
-              : part,
+          .map(
+            (part, index) =>
+              index > partIndex && operation !== 'Is Equal To'
+                ? part
+                    .set('operation', 'All')
+                    .set('value', IndexValues({ values: List() }))
+                : part,
           ),
       );
     }
@@ -578,8 +579,14 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('importProcessing', true).set('importComplete', false);
     case types.SET_IMPORT_PERCENT_COMPLETE:
       return state.set('importPercentComplete', payload);
-    case types.SET_IMPORT_FAILED_CALL:
-      return state.update('importFailedCalls', acc => acc.push(payload));
+    case types.SET_IMPORT_FAILED_CALLS:
+      return state.update('importFailedCalls', acc => {
+        if (Array.isArray(payload)) {
+          return acc.concat(payload);
+        } else {
+          return acc.push(payload);
+        }
+      });
     case types.SET_IMPORT_COMPLETE:
       return state
         .set('importProcessing', false)

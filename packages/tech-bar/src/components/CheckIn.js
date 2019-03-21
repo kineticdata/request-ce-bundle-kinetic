@@ -37,8 +37,6 @@ export const CheckInComponent = ({
   toggleShowDetails,
   input,
   setInput,
-  walkInUser,
-  setWalkInUser,
   getFilteredAppointments,
   addSuccess,
   addError,
@@ -97,6 +95,13 @@ export const CheckInComponent = ({
               <div className="body">
                 <h1>
                   <I18n>I have an appointment</I18n>
+                  <button
+                    type="button"
+                    className="btn btn-outline-danger"
+                    onClick={() => toggleShowDetails(null)}
+                  >
+                    <I18n>Cancel</I18n>
+                  </button>
                 </h1>
 
                 <div className="form">
@@ -181,13 +186,6 @@ export const CheckInComponent = ({
                       ))}
                   </div>
                 )}
-                <button
-                  type="button"
-                  className="btn btn-outline-danger"
-                  onClick={() => toggleShowDetails(null)}
-                >
-                  <I18n>Cancel</I18n>
-                </button>
               </div>
             </div>
           )}
@@ -202,60 +200,34 @@ export const CheckInComponent = ({
               )}
               <div className="header bg-info" />
               <div className="body">
-                <h1>I am a walk-in</h1>
-                {!walkInUser && (
-                  <div className="form">
-                    <div className="form-group">
-                      <label htmlFor="walkin-account-select">
-                        <I18n>Find Your Account</I18n>
-                      </label>
-                      <AttributeSelectors.PeopleSelect
-                        id="walkin-account-select"
-                        users={true}
-                        value={[]}
-                        valueMapper={value => value.user.username}
-                        onChange={e => setWalkInUser(e.target.value)}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={() => setWalkInUser(true)}
-                      >
-                        <I18n>I do not have an account</I18n>
-                      </button>
-                    </div>
-                  </div>
-                )}
-                {walkInUser && (
-                  <I18n context={`kapps.${kapp.slug}.forms.walk-in`}>
-                    <CoreForm
-                      className="body"
-                      kapp={kapp.slug}
-                      form="walk-in"
-                      globals={globals}
-                      values={{
-                        'Scheduler Id': techBarId,
-                        'Requested For': walkInUser !== true ? walkInUser : '',
-                      }}
-                      completed={() => {
-                        toggleShowDetails(null);
-                        addSuccess(`You have successfully checked in.`);
-                      }}
-                      notFoundComponent={ErrorNotFound}
-                      unauthorizedComponent={ErrorUnauthorized}
-                      unexpectedErrorComponent={ErrorUnexpected}
-                    />
-                  </I18n>
-                )}
-                <button
-                  type="button"
-                  className="btn btn-outline-danger"
-                  onClick={() => toggleShowDetails(null)}
-                >
-                  <I18n>Cancel</I18n>
-                </button>
+                <h1>
+                  <I18n>I am a walk-in</I18n>
+                  <button
+                    type="button"
+                    className="btn btn-outline-danger"
+                    onClick={() => toggleShowDetails(null)}
+                  >
+                    <I18n>Cancel</I18n>
+                  </button>
+                </h1>
+                <I18n context={`kapps.${kapp.slug}.forms.walk-in`}>
+                  <CoreForm
+                    className="body"
+                    kapp={kapp.slug}
+                    form="walk-in"
+                    globals={globals}
+                    values={{
+                      'Scheduler Id': techBarId,
+                    }}
+                    completed={() => {
+                      toggleShowDetails(null);
+                      addSuccess(`You have successfully checked in.`);
+                    }}
+                    notFoundComponent={ErrorNotFound}
+                    unauthorizedComponent={ErrorUnauthorized}
+                    unexpectedErrorComponent={ErrorUnexpected}
+                  />
+                </I18n>
               </div>
             </div>
           )}
@@ -283,13 +255,11 @@ const toggleShowDetails = ({
   showDetails,
   setShowDetails,
   setInput,
-  setWalkInUser,
   fetchTodayAppointments,
   techBarId,
 }) => name => {
   setShowDetails(showDetails === name ? null : name);
   setInput('');
-  setWalkInUser(null);
   if (name === 'appointment') {
     fetchTodayAppointments({ schedulerId: techBarId, status: 'Scheduled' });
   }
@@ -314,7 +284,6 @@ export const CheckIn = compose(
   ),
   withState('showDetails', 'setShowDetails', null),
   withState('input', 'setInput', ''),
-  withState('walkInUser', 'setWalkInUser', null),
   withHandlers({
     toggleShowDetails,
     getFilteredAppointments,

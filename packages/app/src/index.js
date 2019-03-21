@@ -13,7 +13,6 @@ import {
   configure,
   addResponseInterceptor,
   setDefaultAuthAssumed,
-  Socket,
 } from '@kineticdata/react';
 import AuthInterceptor from './utils/AuthInterceptor';
 import { actions as layoutActions } from './redux/modules/layout';

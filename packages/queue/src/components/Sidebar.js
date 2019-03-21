@@ -4,7 +4,8 @@ import { Nav, NavItem } from 'reactstrap';
 import { I18n } from '../../../app/src/I18nProvider';
 import { isActiveClass } from '../utils';
 
-const formatCount = count => (count >= 1000 ? '999+' : `${count}`);
+const formatCount = count =>
+  count || count === 0 ? (count >= 1000 ? '(999+)' : `(${count})`) : '';
 
 export const Sidebar = ({
   counts,

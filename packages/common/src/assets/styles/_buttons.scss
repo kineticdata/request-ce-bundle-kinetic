@@ -69,6 +69,10 @@ input[type='button'],
 .btn-link {
   @extend .btn;
   @include setButtonColorAndHover(transparent);
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active {
+    @include setButtonColorAndHover($primary);
+  }
   color: $link-color;
   &:hover,
   &:focus,
@@ -182,8 +186,8 @@ input[type='button'],
 // Button Small
 .btn-sm,
 .btn-group-sm > .btn {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.6125rem;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }

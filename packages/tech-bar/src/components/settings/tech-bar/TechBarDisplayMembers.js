@@ -185,6 +185,7 @@ const TechBarDisplayMembersComponent = ({
                   value={usernames}
                   valueMapper={value => value.user.username}
                   onChange={e => setUsernames(e.target.value)}
+                  props={{ minLength: 3 }}
                 />
               </div>
               <div className="form-group text-center">
