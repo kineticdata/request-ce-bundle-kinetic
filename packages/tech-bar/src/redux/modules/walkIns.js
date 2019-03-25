@@ -11,6 +11,12 @@ export const types = {
   FETCH_TODAY_WALK_INS: namespace('walkIns', 'FETCH_TODAY_WALK_INS'),
   SET_TODAY_WALK_INS: namespace('walkIns', 'SET_TODAY_WALK_INS'),
   SET_TODAY_WALK_IN_ERRORS: namespace('walkIns', 'SET_TODAY_WALK_IN_ERRORS'),
+  FETCH_WALK_INS_OVERVIEW: namespace('appointments', 'FETCH_WALK_INS_OVERVIEW'),
+  SET_WALK_INS_OVERVIEW: namespace('appointments', 'SET_WALK_INS_OVERVIEW'),
+  SET_WALK_INS_OVERVIEW_ERRORS: namespace(
+    'appointments',
+    'SET_WALK_INS_OVERVIEW_ERRORS',
+  ),
 };
 
 export const actions = {
@@ -20,6 +26,9 @@ export const actions = {
   fetchTodayWalkIns: withPayload(types.FETCH_TODAY_WALK_INS),
   setTodayWalkIns: withPayload(types.SET_TODAY_WALK_INS),
   setTodayWalkInErrors: withPayload(types.SET_TODAY_WALK_IN_ERRORS),
+  fetchWalkInsOverview: withPayload(types.FETCH_WALK_INS_OVERVIEW),
+  setWalkInsOverview: withPayload(types.SET_WALK_INS_OVERVIEW),
+  setWalkInsOverviewErrors: withPayload(types.SET_WALK_INS_OVERVIEW_ERRORS),
 };
 
 export const State = Record({
@@ -30,6 +39,12 @@ export const State = Record({
     loading: true,
     errors: [],
     data: new List(),
+  },
+  overview: {
+    loading: false,
+    errors: [],
+    data: new List(),
+    count: 0,
   },
 });
 
@@ -57,6 +72,17 @@ export const reducer = (state = State(), { type, payload }) => {
       return state
         .setIn(['today', 'errors'], payload)
         .setIn(['today', 'loading'], false);
+    case types.FETCH_WALK_INS_OVERVIEW:
+      return state.setIn(['overview', 'loading'], true);
+    case types.SET_WALK_INS_OVERVIEW:
+      return state
+        .setIn(['overview', 'data'], List(payload))
+        .setIn(['overview', 'count'], payload.length || 0)
+        .setIn(['overview', 'loading'], false);
+    case types.SET_WALK_INS_OVERVIEW_ERRORS:
+      return state
+        .setIn(['overview', 'errors'], payload)
+        .setIn(['overview', 'loading'], false);
     default:
       return state;
   }

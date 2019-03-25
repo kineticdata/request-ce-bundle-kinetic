@@ -161,6 +161,26 @@ export function* fetchAppointmentsListSaga({ payload: { schedulerId } }) {
   }
 }
 
+export function* fetchAppointmentsOverviewSaga({ payload: { id } }) {
+  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const { records, serverError } = yield call(CoreAPI.fetchBridgedResource, {
+    kappSlug,
+    formSlug: 'bridged-resources',
+    bridgedResourceName: 'Tech Bar Appointments Overview',
+    values: { Id: id, Date: moment().format('YYYY-MM-DD') },
+  });
+
+  if (serverError) {
+    yield put(
+      actions.setAppointmentsOverviewErrors([
+        serverError.error || serverError.statusText,
+      ]),
+    );
+  } else {
+    yield put(actions.setAppointmentsOverview(records));
+  }
+}
+
 export function* watchAppointments() {
   yield takeEvery(types.FETCH_APPOINTMENT, fetchAppointmentSaga);
   yield takeEvery(
@@ -172,5 +192,9 @@ export function* watchAppointments() {
   yield takeEvery(
     [types.FETCH_APPOINTMENTS_LIST, types.SET_APPOINTMENTS_DATE],
     fetchAppointmentsListSaga,
+  );
+  yield takeEvery(
+    types.FETCH_APPOINTMENTS_OVERVIEW,
+    fetchAppointmentsOverviewSaga,
   );
 }
