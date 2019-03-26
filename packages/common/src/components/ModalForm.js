@@ -39,9 +39,9 @@ export const ModalForm = ({
         <ModalBody>
           {isCompleted ? (
             <div className="modal-confirmation">
-              <h5>
+              <p>
                 <I18n>{form.confirmationMessage}</I18n>
-              </h5>
+              </p>
             </div>
           ) : (
             <CoreForm

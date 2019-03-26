@@ -6,7 +6,6 @@ import './assets/styles/master.scss';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
-import Sidebar from 'react-sidebar';
 import {
   Utils,
   ToastsContainer,
@@ -29,58 +28,43 @@ export const AppComponent = props =>
       <ToastsContainer />
       <LoginModal />
       <ModalFormContainer />
-      {!props.headerHidden ? (
-        <Fragment>
-          <HeaderContainer
-            hasSidebar={!props.sidebarHidden}
-            toggleSidebarOpen={props.toggleSidebarOpen}
-          />
-          <props.AppProvider
-            appState={{
-              space: props.space,
-              kapp: props.kapp,
-              profile: props.profile,
-              kappSlug: props.kappSlug,
-              layoutSize: props.layoutSize,
-              location: `/kapps/${props.kappSlug}`,
-            }}
-            appRefresh={props.refreshApp}
-            history={props.history}
-            render={({ main, sidebar, header }) =>
-              !props.sidebarHidden && sidebar ? (
-                <Sidebar
-                  sidebar={sidebar}
-                  shadow={false}
-                  open={props.sidebarOpen && props.layoutSize === 'small'}
-                  docked={props.sidebarOpen && props.layoutSize !== 'small'}
-                  onSetOpen={props.setSidebarOpen}
-                  rootClassName="sidebar-layout-wrapper"
-                  sidebarClassName={`sidebar-container ${
-                    true ? 'drawer' : 'overlay'
-                  }`}
-                  contentClassName={`main-container ${
-                    props.sidebarOpen ? 'open' : 'closed'
-                  }`}
-                >
-                  {main}
-                </Sidebar>
-              ) : (
-                <div className="main-container main-container--no-sidebar">
-                  {main}
-                </div>
-              )
-            }
-          />
-        </Fragment>
-      ) : (
+      <div className="app-wrapper">
+        {!props.headerHidden && (
+          <div className="app-header">
+            <HeaderContainer
+              hasSidebar={!props.sidebarHidden}
+              toggleSidebarOpen={props.toggleSidebarOpen}
+            />
+          </div>
+        )}
         <props.AppProvider
-          render={({ main }) => (
-            <div className="main-container main-container--no-header">
-              {main}
+          render={({ main, sidebar, header }) => (
+            <div
+              className={`app-body ${
+                sidebar
+                  ? props.sidebarOpen
+                    ? 'open-sidebar'
+                    : 'closed-sidebar'
+                  : ''
+              }`}
+            >
+              {sidebar && (
+                <div className="app-sidebar-container">{sidebar}</div>
+              )}
+              <div
+                className="app-main-container"
+                onClick={
+                  sidebar && props.sidebarOpen && props.layoutSize === 'small'
+                    ? props.toggleSidebarOpen
+                    : undefined
+                }
+              >
+                {main}
+              </div>
             </div>
           )}
         />
-      )}
+      </div>
     </Fragment>
   );
 

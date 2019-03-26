@@ -97,6 +97,11 @@
       > .modal-confirmation {
         padding: 1.5rem;
       }
+      > .modal-confirmation {
+        p {
+          margin: 0;
+        }
+      }
       .embedded-core-form .container,
       form {
         padding: 0;

@@ -16,7 +16,7 @@ import { ProfileContainer } from './ProfileContainer';
 import { I18n } from '../I18nProvider';
 
 export const dropdownTitleName = currentKapp => (
-  <I18n>{currentKapp ? currentKapp.name : 'Home'}</I18n>
+  <I18n>{currentKapp ? currentKapp.name : 'Discussions'}</I18n>
 );
 
 export const dropdownIcon = currentKapp =>
@@ -47,7 +47,7 @@ export const Header = ({
   kappDropdownOpen,
   kappDropdownToggle,
 }) => (
-  <Navbar color="faded" light fixed="top">
+  <Navbar color="faded" light>
     <Nav className="nav-header">
       {hasSidebar &&
         !isGuest && (
@@ -63,12 +63,6 @@ export const Header = ({
           </NavItem>
         )}
       <NavItem>
-        <KappLink className="nav-link" to="/">
-          <span className={`fa fa-fw ${dropdownIcon(currentKapp)}`} />{' '}
-          {dropdownTitleName(currentKapp)}
-        </KappLink>
-      </NavItem>
-      <div className="nav-item-right">
         {!isGuest && (
           <Dropdown
             id="header-kapp-dropdown"
@@ -76,7 +70,8 @@ export const Header = ({
             toggle={kappDropdownToggle}
           >
             <DropdownToggle nav role="button">
-              <i className="fa fa-fw fa-th" />
+              <span>{dropdownTitleName(currentKapp)}</span>{' '}
+              <i className="fa fa-caret-down" />
             </DropdownToggle>
             <DropdownMenu>
               <Link
@@ -84,8 +79,8 @@ export const Header = ({
                 to="/"
                 onClick={kappDropdownToggle}
               >
-                <span className="fa fa-fw fa-home" />
-                <I18n>Home</I18n>
+                <span className="fa fa-fw fa-comments" />
+                <I18n>Discussions</I18n>
               </Link>
               <DropdownItem divider />
               {predefinedKapps.map(thisKapp => (
@@ -102,9 +97,14 @@ export const Header = ({
                   onClick={kappDropdownToggle}
                 />
               ))}
+              <DropdownItem divider />
+              <DropdownItem>Datastore</DropdownItem>
+              <DropdownItem>Robots</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         )}
+      </NavItem>
+      <div className="nav-item-right">
         {!isGuest && <AlertsContainer />}
         <ProfileContainer />
       </div>

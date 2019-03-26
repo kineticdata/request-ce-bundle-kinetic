@@ -3,3 +3,55 @@
  *     -Used for development
  *     -Move css into appropriate sass files when ready
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.submission-status {
+  font-weight: 600;
+  @include ms-respond(font-size, -2);
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.25rem;
+  padding: 0.125rem 0.75rem;
+  border-radius: 1rem;
+  // display: block;
+  &--cancelled {
+    color: $red;
+    background-color: rgba($red, 0.2);
+  }
+  &--complete {
+    color: $blue;
+    background-color: rgba($blue, 0.2);
+  }
+  &--open {
+    color: $green-teal;
+    background-color: rgba($green-teal, 0.2);
+  }
+  &--pending {
+    color: $orange;
+    background-color: rgba($orange, 0.2);
+  }
+  &--reason {
+    color: $blue-sky;
+    @include ms-respond(font-size, -1);
+    margin-left: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: none;
+    white-space: nowrap;
+    flex: 1;
+  }
+}
+.tag {
+  border-radius: 0.25rem;
+  font-size: 0.625rem;
+  background-color: $gray3;
+  padding: 0.125rem 1rem;
+  font-weight: 600;
+  text-align: center;
+  &--active {
+    background-color: $blue-slate;
+    color: $white;
+  }
+  &--small {
+    padding: 0 0.75rem;
+  }
+}

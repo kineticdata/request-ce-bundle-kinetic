@@ -45,15 +45,12 @@ const HomeComponent = ({
     <PageTitle parts={['Home']} />
     {createModalOpen && <CreateDiscussionModal />}
     <div className="page-panel page-panel--space-home">
-      <h4 className="space-home-title">
-        <I18n>Welcome to kinops for</I18n> {spaceName}
-      </h4>
       {discussionsEnabled ? (
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
               <Link onClick={handleHomeLinkClick} to="/">
-                <I18n>home</I18n>
+                <I18n>discussions</I18n>
               </Link>{' '}
               /{' '}
               {discussionsSearchTerm !== '' ? <I18n>search results</I18n> : ''}
@@ -62,9 +59,9 @@ const HomeComponent = ({
               {discussionsSearchTerm !== '' ? (
                 `${discussionsSearchTerm}`
               ) : showingArchived ? (
-                <I18n>Archived Discussions</I18n>
+                <I18n>Archived</I18n>
               ) : (
-                <I18n>Recent Discussions</I18n>
+                <I18n>Recent</I18n>
               )}
               <button
                 className="btn btn-link"

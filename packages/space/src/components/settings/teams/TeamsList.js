@@ -22,7 +22,7 @@ const WallyEmptyMessage = ({ me }) => {
 };
 
 export const TeamsList = ({ loading, teams, me }) => (
-  <div className="space-teams--container page--container">
+  <div className="space-teams--container page-container">
     <PageTitle parts={['Teams']} />
     {!loading && (
       <div className="page-panel">
