@@ -6,12 +6,13 @@
   background-color: $black-3;
   border-right: 1px solid $black-16;
   // margin-top: $header-height;
-  min-height: calc(100vh - 120px);
+  //min-height: calc(100vh - 120px);
   @supports not (-webkit-overflow-scrolling: touch) {
     /* CSS for other than iOS devices */
 
-    min-height: $page-height;
+    //min-height: $page-height;
   }
+  height: 100%;
 
   display: flex;
   flex-direction: column;
@@ -19,7 +20,7 @@
   // padding: 0 0 3rem 0;
   width: 252px;
   overflow: hidden;
-  height: $page-height;
+  //height: $page-height;
   position: relative;
   // Major action button for kapp
   .btn {

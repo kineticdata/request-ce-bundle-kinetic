@@ -173,117 +173,111 @@ export const RequestShow = ({
         },
       )}
     >
-      <div className="scroll-wrapper">
-        <PageTitle
-          parts={[submission && `#${submission.handle}`, 'Requests']}
-        />
-        {sendMessageModalOpen && <SendMessageModal submission={submission} />}
-        <span className="services-color-bar services-color-bar__blue-slate" />
-        <Link className="nav-return" to={`/requests/${listType || ''}`}>
-          <span className="fa fa-fw fa-chevron-left" />
-          <I18n>{listType || 'All'} Requests</I18n>
-        </Link>
-        {submission && (
-          <Fragment>
-            <div className="submission__meta">
-              <div className="data-list-row">
-                <StatusItem submission={submission} />
-                <div className="data-list-row__col">
-                  <dl>
-                    <dt>
-                      <I18n>Confirmation #</I18n>
-                    </dt>
-                    <dd>{submission.handle}</dd>
-                  </dl>
-                </div>
-                <DisplayDateItem submission={submission} />
-                <ServiceOwnerItem submission={submission} />
-                <EstCompletionItem submission={submission} />
-                <CompletedInItem submission={submission} />
-                <div className="col-lg-auto btn-group-col">
-                  <ViewDiscussionButtonContainer
-                    openDiscussion={openDiscussion}
-                  />
-                  <CloneButtonContainer submission={submission} />
-                  {submission.coreState === constants.CORE_STATE_SUBMITTED &&
-                    !discussion && (
-                      <CommentButtonContainer submission={submission} />
-                    )}
-                  {submission.coreState === constants.CORE_STATE_CLOSED && (
-                    <FeedbackButtonContainer submission={submission} />
-                  )}
-
-                  <CancelButtonContainer submission={submission} />
-                </div>
+      <PageTitle parts={[submission && `#${submission.handle}`, 'Requests']} />
+      {sendMessageModalOpen && <SendMessageModal submission={submission} />}
+      <span className="services-color-bar services-color-bar__blue-slate" />
+      <Link className="nav-return" to={`/requests/${listType || ''}`}>
+        <span className="fa fa-fw fa-chevron-left" />
+        <I18n>{listType || 'All'} Requests</I18n>
+      </Link>
+      {submission && (
+        <Fragment>
+          <div className="submission__meta">
+            <div className="data-list-row">
+              <StatusItem submission={submission} />
+              <div className="data-list-row__col">
+                <dl>
+                  <dt>
+                    <I18n>Confirmation #</I18n>
+                  </dt>
+                  <dd>{submission.handle}</dd>
+                </dl>
               </div>
-            </div>
-            <div className="page-container page-container--submission">
-              <div className="page-content">
-                <div className="submission-title">
-                  <h1>
-                    <Icon
-                      image={getIcon(submission.form)}
-                      background="greenGrass"
-                    />
-                    <I18n
-                      context={`kapps.${kappSlug}.forms.${
-                        submission.form.slug
-                      }`}
-                    >
-                      {submission.form.name}
-                    </I18n>
-                  </h1>
-                  {submission.form.name !== submission.label && (
-                    <p>{submission.label}</p>
+              <DisplayDateItem submission={submission} />
+              <ServiceOwnerItem submission={submission} />
+              <EstCompletionItem submission={submission} />
+              <CompletedInItem submission={submission} />
+              <div className="col-lg-auto btn-group-col">
+                <ViewDiscussionButtonContainer
+                  openDiscussion={openDiscussion}
+                />
+                <CloneButtonContainer submission={submission} />
+                {submission.coreState === constants.CORE_STATE_SUBMITTED &&
+                  !discussion && (
+                    <CommentButtonContainer submission={submission} />
                   )}
-                </div>
-
-                {mode === 'confirmation' && (
-                  <div className="card card--submission-confirmation">
-                    <RequestShowConfirmationContainer submission={submission} />
-                  </div>
+                {submission.coreState === constants.CORE_STATE_CLOSED && (
+                  <FeedbackButtonContainer submission={submission} />
                 )}
 
-                <div className="submission-tabs">
-                  <ul className="nav nav-tabs">
-                    <li role="presentation">
-                      <NavLink
-                        to={getSubmissionPath(submission, null, listType)}
-                        activeClassName="active"
-                      >
-                        <I18n>Timeline</I18n>
-                      </NavLink>
-                    </li>
+                <CancelButtonContainer submission={submission} />
+              </div>
+            </div>
+          </div>
+          <div className="page-container page-container--submission">
+            <div className="page-content">
+              <div className="submission-title">
+                <h1>
+                  <Icon
+                    image={getIcon(submission.form)}
+                    background="greenGrass"
+                  />
+                  <I18n
+                    context={`kapps.${kappSlug}.forms.${submission.form.slug}`}
+                  >
+                    {submission.form.name}
+                  </I18n>
+                </h1>
+                {submission.form.name !== submission.label && (
+                  <p>{submission.label}</p>
+                )}
+              </div>
 
-                    <li role="presentation">
-                      <NavLink
-                        to={`${getSubmissionPath(
-                          submission,
-                          'review',
-                          listType,
-                        )}`}
-                        activeClassName="active"
-                      >
-                        <I18n>Review Request</I18n>
-                      </NavLink>
-                    </li>
-                  </ul>
-                  <div className="submission-tabs__content">
-                    {mode === 'review' ? (
-                      <ReviewRequest
-                        kappSlug={kappSlug}
-                        submission={submission}
-                      />
-                    ) : (
-                      <RequestActivityList submission={submission} />
-                    )}
-                  </div>
+              {mode === 'confirmation' && (
+                <div className="card card--submission-confirmation">
+                  <RequestShowConfirmationContainer submission={submission} />
+                </div>
+              )}
+
+              <div className="submission-tabs">
+                <ul className="nav nav-tabs">
+                  <li role="presentation">
+                    <NavLink
+                      to={getSubmissionPath(submission, null, listType)}
+                      activeClassName="active"
+                    >
+                      <I18n>Timeline</I18n>
+                    </NavLink>
+                  </li>
+
+                  <li role="presentation">
+                    <NavLink
+                      to={`${getSubmissionPath(
+                        submission,
+                        'review',
+                        listType,
+                      )}`}
+                      activeClassName="active"
+                    >
+                      <I18n>Review Request</I18n>
+                    </NavLink>
+                  </li>
+                </ul>
+                <div className="submission-tabs__content">
+                  {mode === 'review' ? (
+                    <ReviewRequest
+                      kappSlug={kappSlug}
+                      submission={submission}
+                    />
+                  ) : (
+                    <RequestActivityList submission={submission} />
+                  )}
                 </div>
               </div>
             </div>
-          </Fragment>
-        )}
-      </div>
+          </div>
+        </Fragment>
+      )}
     </div>
     {discussion && (
       <RequestDiscussion

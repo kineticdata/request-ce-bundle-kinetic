@@ -8,11 +8,12 @@
   border-bottom: 1px solid $gray2;
   flex-direction: column;
   align-items: stretch;
+  margin-bottom: -1px;
+  z-index: 1024;
 }
 
 .nav.nav-header {
   justify-content: space-between;
-  padding-right: 5px;
   .dropdown {
     display: flex;
   }
@@ -25,6 +26,31 @@
 
 .navbar .nav-item {
   display: flex;
+
+  #header-kapp-dropdown {
+    .nav-link {
+      color: $black;
+      border-right: 1px solid #d5d5d5;
+      max-width: 204px;
+      display: flex;
+      justify-content: space-between;
+      &:hover {
+        color: $primary;
+        box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3),
+          0 2px 12px 3px rgba(60, 64, 67, 0.15);
+      }
+      
+      > span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      > .fa {
+        line-height: 1.5rem;
+        margin-left: 0.25rem;
+      }
+    }
+  }
 }
 
 .nav.nav-header .dropdown-menu {
@@ -61,8 +87,11 @@
 .navbar .nav-link {
   font-size: 1rem;
   color: $gray;
-  padding: 1rem;
-  line-height: 1;
+  line-height: 1.5rem;
+  padding: 0.75rem;
+  min-height: 3rem;
+  min-width: 3rem;
+  text-align: center;
   &:hover {
     color: $blue-lake;
   }
