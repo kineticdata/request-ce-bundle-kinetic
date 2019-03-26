@@ -142,20 +142,22 @@ export const TechBarsComponent = ({
               >
                 <I18n>Schedule Now</I18n> →
               </Link>
-              <div className="card-actions">
-                {currentTechBar && techBar.id === currentTechBar.id ? (
-                  <button className="btn btn-sm btn-success" disabled>
-                    <I18n>Current Tech Bar</I18n>
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-link btn-sm"
-                    onClick={() => selectCurrentTechBar(techBar.id)}
-                  >
-                    <I18n>Set as Current Tech Bar</I18n>
-                  </button>
-                )}
-              </div>
+              {techBars.size > 1 && (
+                <div className="card-actions">
+                  {currentTechBar && techBar.id === currentTechBar.id ? (
+                    <button className="btn btn-sm btn-success" disabled>
+                      <I18n>Current Tech Bar</I18n>
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-link btn-sm"
+                      onClick={() => selectCurrentTechBar(techBar.id)}
+                    >
+                      <I18n>Set as Current Tech Bar</I18n>
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>

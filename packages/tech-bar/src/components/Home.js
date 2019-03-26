@@ -23,6 +23,7 @@ import { actions as walkInActions } from '../redux/modules/walkIns';
 import {
   SESSION_ITEM_USER_LOCATION,
   SESSION_ITEM_CURRENT_TECH_BAR,
+  enableLocationServices,
   mapTechBarsForDistance,
   sortTechBarsByDistance,
 } from '../redux/modules/techBarApp';
@@ -41,6 +42,7 @@ export const HomeComponent = ({
   setModalOpen,
   currentTechBar,
   selectCurrentTechBar,
+  useLocationServices,
   userLocation,
   getUserLocation,
   openDropdown,
@@ -117,26 +119,17 @@ export const HomeComponent = ({
               </Link>
               <div
                 className={`waiting-users-message ${
-                  waitingUsers === 0 ? 'collapse' : ''
+                  waitingUsers === 0 ? '' : ''
                 }`}
               >
-                {waitingUsers === 1 ? (
-                  <I18n
-                    render={translate =>
-                      translate(
-                        'There is currently # person waiting for assistance.',
-                      ).replace('#', waitingUsers)
-                    }
-                  />
-                ) : (
-                  <I18n
-                    render={translate =>
-                      translate(
-                        'There are currently # people waiting for assistance.',
-                      ).replace('#', waitingUsers)
-                    }
-                  />
-                )}
+                <I18n>Currently awaiting assistance</I18n>: {waitingUsers}{' '}
+                <I18n
+                  render={translate =>
+                    waitingUsers === 1
+                      ? translate('person')
+                      : translate('people')
+                  }
+                />
               </div>
             </div>
           </div>
@@ -316,16 +309,17 @@ export const HomeComponent = ({
               </Link>
             </h4>
           </div>
-          {!userLocation && (
-            <div className="modal-header">
-              <div className="px-3 py-1 text-center">
-                <button className="btn btn-link" onClick={getUserLocation}>
-                  <span className="fa fa-fw fa-map-marker" />{' '}
-                  <I18n>use my current location</I18n>
-                </button>
+          {useLocationServices &&
+            !userLocation && (
+              <div className="modal-header">
+                <div className="px-3 py-1 text-center">
+                  <button className="btn btn-link" onClick={getUserLocation}>
+                    <span className="fa fa-fw fa-map-marker" />{' '}
+                    <I18n>use my current location</I18n>
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
           <ModalBody>
             <ul>
               {techBars.map(techBar => (
@@ -377,16 +371,18 @@ export const HomeComponent = ({
 };
 
 export const mapStateToProps = (state, props) => {
+  const techBars = state.techBar.techBarApp.schedulers.filter(
+    s => s.values['Status'] === 'Active',
+  );
+  const useLocationServices = enableLocationServices(techBars);
   return {
     kapp: selectCurrentKapp(state),
-    techBars: state.techBar.techBarApp.schedulers
-      .filter(s => s.values['Status'] === 'Active')
-      .map(
-        props.userLocation
-          ? mapTechBarsForDistance(props.userLocation)
-          : t => t,
-      )
-      .sort(props.userLocation ? sortTechBarsByDistance : () => 0),
+    techBars:
+      useLocationServices && props.userLocation
+        ? techBars
+            .map(mapTechBarsForDistance(props.userLocation))
+            .sort(sortTechBarsByDistance)
+        : techBars,
     loadingUpcoming: state.techBar.appointments.upcoming.loading,
     upcomingErrors: state.techBar.appointments.upcoming.errors,
     upcomingAppointments: state.techBar.appointments.upcoming.data,
@@ -395,6 +391,7 @@ export const mapStateToProps = (state, props) => {
     waitingUsers:
       state.techBar.appointments.overview.count +
       state.techBar.walkIns.overview.count,
+    useLocationServices,
   };
 };
 
@@ -474,7 +471,7 @@ export const Home = compose(
       if (!this.props.loadingUpcoming) {
         this.props.fetchUpcomingAppointments();
       }
-      if (this.props.techBars.size > 1 && this.props.userLocation === null) {
+      if (this.props.useLocationServices && this.props.userLocation === null) {
         this.props.getUserLocation();
       }
       if (this.props.techBars.size > 0) {
