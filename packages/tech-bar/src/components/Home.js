@@ -135,28 +135,76 @@ export const HomeComponent = ({
           </div>
         </div>
       </div>
-      {/*<div className="status-bar">
-        <div className="container">
-          <div>
-            <small>
-              <strong>Waiting</strong>:
-            </small>
-            <div>4 users</div>
-          </div>
-          <div>
-            <small>
-              <strong>Now Serving</strong>:
-            </small>
-            <div>4 users</div>
-          </div>
-        </div>
-      </div>*/}
       <div className="page-container page-container--tech-bar container">
-        {upcomingAppointments.size > 0 && (
-          <section className="mt-4">
-            <h2 className="section__title">
-              <I18n>Upcoming Appointments</I18n>
-            </h2>
+        <section className="mt-4">
+          <div className="info-tile__wrapper">
+            <Link
+              to={`/appointment/${selectedTechBar.values['Id']}`}
+              className="info-tile"
+            >
+              <div className="icon">
+                <span className="fa fa-calendar-o fa-fw" />
+              </div>
+              <div className="title">
+                <span className="fa fa-calendar-o fa-fw" />
+                <I18n>Schedule</I18n>
+              </div>
+              <p className="description">
+                <I18n>
+                  Schedule an appointment.
+                </I18n>
+              </p>
+            </Link>
+            <Link to="/past" className="info-tile">
+              <div className="icon">
+                <span className="fa fa-clock-o fa-fw" />
+              </div>
+              <div className="title">
+                <span className="fa fa-clock-o fa-fw" />
+                <I18n>History</I18n>
+              </div>
+              <p className="description">
+                <I18n>View all of your past appointments.</I18n>
+              </p>
+            </Link>
+            <I18n
+              render={translate => (
+                <div
+                  className="info-tile actionable"
+                  onClick={() =>
+                    openForm({
+                      formSlug: 'general-feedback',
+                      kappSlug: kapp.slug,
+                      values: { 'Scheduler Id': selectedTechBar.values['Id'] },
+                      title: `${translate(
+                        selectedTechBar.values['Name'],
+                      )} ${translate('Feedback')}`,
+                      confirmationMessage: translate(
+                        'Thank you for your feedback.',
+                      ),
+                    })
+                  }
+                >
+                  <div className="icon">
+                    <span className="fa fa-comment-o fa-fw" />
+                  </div>
+                  <div className="title">
+                    <span className="fa fa-comment-o fa-fw" />
+                    <I18n>Feedback</I18n>
+                  </div>
+                  <p className="description">
+                    <I18n>Questions, comments, or concerns.</I18n>
+                  </p>
+                </div>
+              )}
+            />
+          </div>
+        </section>
+        <section className="mt-4">
+          <h2 className="section__title">
+            <I18n>Upcoming Appointments</I18n>
+          </h2>
+          {upcomingAppointments.size > 0 && (
             <div className="cards__wrapper cards__wrapper--appt mb-3">
               {upcomingAppointments.map(appt => {
                 const techBar = techBars.find(
@@ -222,69 +270,21 @@ export const HomeComponent = ({
                 );
               })}
             </div>
-          </section>
-        )}
-        <section className="mt-4">
-          <div className="info-tile__wrapper">
-            <Link
-              to={`/appointment/${selectedTechBar.values['Id']}`}
-              className="info-tile"
-            >
-              <div className="icon">
-                <span className="fa fa-calendar-o fa-fw" />
+          )}
+          {upcomingAppointments.size === 0 &&
+            !loadingUpcoming &&
+            upcomingErrors.length === 0 && (
+              <div className="text-center mx-auto text-muted">
+                <h5 className="mb-3">
+                  <I18n>You have no upcoming appointments.</I18n>
+                </h5>
+                <p>
+                  <I18n>
+                    As you schedule appointments, they'll appear here.
+                  </I18n>
+                </p>
               </div>
-              <div className="title">
-                <I18n>Schedule</I18n>
-              </div>
-              <p className="description">
-                <I18n>
-                  Schedule an appointment to see one of our techs about your
-                  issue.
-                </I18n>
-              </p>
-            </Link>
-            <Link to="/past" className="info-tile">
-              <div className="icon">
-                <span className="fa fa-clock-o fa-fw" />
-              </div>
-              <div className="title">
-                <I18n>History</I18n>
-              </div>
-              <p className="description">
-                <I18n>View all of your past appointments.</I18n>
-              </p>
-            </Link>
-            <I18n
-              render={translate => (
-                <div
-                  className="info-tile actionable"
-                  onClick={() =>
-                    openForm({
-                      formSlug: 'general-feedback',
-                      kappSlug: kapp.slug,
-                      values: { 'Scheduler Id': selectedTechBar.values['Id'] },
-                      title: `${translate(
-                        selectedTechBar.values['Name'],
-                      )} ${translate('Feedback')}`,
-                      confirmationMessage: translate(
-                        'Thank you for your feedback.',
-                      ),
-                    })
-                  }
-                >
-                  <div className="icon">
-                    <span className="fa fa-comment-o fa-fw" />
-                  </div>
-                  <div className="title">
-                    <I18n>Feedback</I18n>
-                  </div>
-                  <p className="description">
-                    <I18n>Let us know any feedback you have for us.</I18n>
-                  </p>
-                </div>
-              )}
-            />
-          </div>
+            )}
         </section>
       </div>
       {modalOpen && (
