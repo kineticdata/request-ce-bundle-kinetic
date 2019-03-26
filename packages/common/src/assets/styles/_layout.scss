@@ -104,12 +104,12 @@
 
 .page-container {
   // display: flex;
-  // flex: 1 1 auto;
+  flex: 1;
   &--panels {
     display: flex;
     height: 100%;
   }
-  min-height: 100%;
+  // min-height: 100%;
 }
 
 .page-panel {

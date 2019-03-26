@@ -57,13 +57,16 @@
     display: flex;
     @media all and (min-width: 0) {
       flex-direction: column;
+      .page-panel {
+        flex: 1 1 auto;
+      }
     }
-    @media all and (min-width: 576px) {
-      flex-direction: column;
-    }
-    @media all and (min-width: 768px) {
-      flex-direction: column;
-    }
+    // @media all and (min-width: 576px) {
+    //   flex-direction: column;
+    // }
+    // @media all and (min-width: 768px) {
+    //   flex-direction: column;
+    // }
     @media all and (min-width: 992px) {
       flex-direction: row;
     }

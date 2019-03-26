@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
@@ -393,7 +393,7 @@ export const CategoriesContainer = ({
   setSubcategory,
   editCategory,
 }) => (
-  <div>
+  <Fragment>
     <PageTitle parts={['Space Settings']} />
     <div className="page-container page-container--space-settings">
       <div className="page-panel page-panel--scrollable page-panel--space-profile-edit">
@@ -620,7 +620,7 @@ export const CategoriesContainer = ({
         )}
       </div>
     </div>
-  </div>
+  </Fragment>
 );
 
 const mapStateToProps = state => ({
