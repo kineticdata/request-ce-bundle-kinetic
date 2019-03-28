@@ -5,8 +5,7 @@
 .sidebar {
   background-color: $black-3;
   border-right: 1px solid $black-16;
-  // margin-top: $header-height;
-  //min-height: calc(100vh - 120px);
+  min-height: calc(100vh - 160px);
   @supports not (-webkit-overflow-scrolling: touch) {
     /* CSS for other than iOS devices */
 
