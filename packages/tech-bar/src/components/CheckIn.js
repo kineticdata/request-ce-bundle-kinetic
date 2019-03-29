@@ -124,7 +124,7 @@ export const CheckInComponent = ({
                 {filteredAppointments && (
                   <div className="form-group">
                     {filteredAppointments.map(appt => (
-                      <div className="card--appointment" key={appt.id}>
+                      <div className="tech-bar-appointment-card" key={appt.id}>
                         <div className="details">
                           <div>{appt.values['Requested For Display Name']}</div>
                           <div className="text-muted">

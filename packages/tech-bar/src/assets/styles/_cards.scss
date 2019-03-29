@@ -127,31 +127,6 @@
         }
       }
     }
-    &--appointment {
-      display: flex;
-      flex-direction: row;
-      @include border-radius();
-      background-color: $gray4;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
-
-      &.selected {
-        background-color: $primary;
-        color: $white;
-
-        .text-muted {
-          color: $gray2 !important;
-        }
-      }
-
-      .details {
-        padding: 0.25rem 0.5rem;
-      }
-
-      button {
-        @include border-left-radius(0);
-      }
-    }
     &--appt {
       @include setBgColorAndHover($white);
       border: 1px solid $black-16;
@@ -315,5 +290,31 @@
         }
       }
     }
+  }
+}
+
+.tech-bar-appointment-card {
+  display: flex;
+  flex-direction: row;
+  @include border-radius();
+  background-color: $gray4;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+
+  &.selected {
+    background-color: $primary;
+    color: $white;
+
+    .text-muted {
+      color: $gray2 !important;
+    }
+  }
+
+  .details {
+    padding: 0.25rem 0.5rem;
+  }
+
+  button {
+    @include border-left-radius(0);
   }
 }
