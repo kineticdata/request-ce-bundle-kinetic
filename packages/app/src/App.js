@@ -38,6 +38,16 @@ export const AppComponent = props =>
           </div>
         )}
         <props.AppProvider
+          appState={{
+            space: props.space,
+            kapp: props.kapp,
+            profile: props.profile,
+            kappSlug: props.kappSlug,
+            layoutSize: props.layoutSize,
+            location: `/kapps/${props.kappSlug}`,
+          }}
+          appRefresh={props.refreshApp}
+          history={props.history}
           render={({ main, sidebar, header }) => (
             <div
               className={`app-body ${

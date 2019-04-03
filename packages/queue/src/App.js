@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Router, Redirect } from '@reach/router';
+import { Redirect } from '@reach/router';
+import { Router } from './QueueApp';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { List } from 'immutable';
 import { Loading } from 'common';

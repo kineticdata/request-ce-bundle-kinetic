@@ -1,10 +1,16 @@
 import { is } from 'immutable';
-import { LocationProvider, Router } from '@reach/router';
-import React, { Component } from 'react';
+import { LocationProvider, Router as ReachRouter } from '@reach/router';
+import React, { Component, Fragment } from 'react';
 import { configureStore, history, context, store } from './redux/store';
 import { types } from './redux/modules/app';
 import { App } from './App';
 import { Provider } from 'react-redux';
+
+export const Router = ({ children, ...props }) => (
+  <ReachRouter {...props} primary={false} component={Fragment}>
+    {children}
+  </ReachRouter>
+);
 
 export const syncAppState = ([key, value]) => {
   store.dispatch({ type: types.SYNC_APP_STATE, payload: { key, value } });
@@ -18,7 +24,7 @@ export class QueueApp extends Component {
     // otherwise it will be null. We call it here to make the API of this
     // embeddable app a little nicer (history can be passed to the component
     // rather than calling an additional `configure` function).
-    configureStore(this.props.history);
+    configureStore(props.history);
     // Listen to the local store to see if the embedded app is ready to be
     // re-rendered. Currently this just means that the required props have been
     // synced into the local store.
