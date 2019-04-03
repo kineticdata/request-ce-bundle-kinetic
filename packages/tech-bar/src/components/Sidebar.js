@@ -4,8 +4,6 @@ import { compose, withHandlers, withState } from 'recompose';
 import {
   KappLink as Link,
   KappNavLink as NavLink,
-  Constants,
-  Moment,
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
   selectHasRoleSchedulerAgent,
@@ -18,8 +16,6 @@ import {
   Nav,
   NavItem,
 } from 'reactstrap';
-import moment from 'moment';
-import { DATE_FORMAT, TIME_FORMAT } from '../App';
 import { I18n } from '../../../app/src/I18nProvider';
 
 export const SidebarComponent = ({
@@ -35,23 +31,8 @@ export const SidebarComponent = ({
   <div className="sidebar sidebar--tech-bar">
     <div className="sidebar-group--content-wrapper">
       <div className="sidebar-group">
-        <h1>
-          <I18n>Appointments</I18n>
-        </h1>
         <Nav vertical>
           <NavItem>
-            <NavLink
-              to={`/`}
-              activeClassName="active"
-              className="nav-link"
-              exact
-            >
-              <div>
-                <div>
-                  <I18n>Upcoming Appointments</I18n>
-                </div>
-              </div>
-            </NavLink>
             <NavLink
               to={`/past`}
               activeClassName="active"

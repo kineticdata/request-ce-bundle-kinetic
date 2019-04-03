@@ -126,6 +126,7 @@ export const QueueList = ({
   isGrouped,
   isMobile,
   filterValidations,
+  setQueueListRef,
 }) => {
   const paginationProps = {
     hasPrevPage,
@@ -156,7 +157,7 @@ export const QueueList = ({
         <FilterMenuToolbar filter={filter} refresh={refresh} />
       )}
       {filterValidations.length <= 0 ? (
-        <div className="queue-list-content submissions">
+        <div className="queue-list-content submissions" ref={setQueueListRef}>
           {statusMessage ? (
             <WallyErrorMessage message={statusMessage} />
           ) : queueItems && queueItems.size > 0 ? (

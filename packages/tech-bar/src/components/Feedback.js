@@ -4,11 +4,13 @@ import { push } from 'connected-react-router';
 import { compose, withHandlers, withState, withProps } from 'recompose';
 import { DisplayTabs } from './Display';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
-import { selectCurrentKapp, toastActions } from 'common';
 import { createSubmission } from '@kineticdata/react';
+import { selectCurrentKapp, toastActions, Constants, Moment } from 'common';
+import { TIME_FORMAT } from '../App';
 import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
 import { I18n } from '../../../app/src/I18nProvider';
+import moment from 'moment';
 
 const FEEDBACK_FORM_SLUG = 'feedback';
 
@@ -119,7 +121,7 @@ export const FeedbackComponent = ({
                 <div className="form-group">
                   {filteredAppointments.map(appt => (
                     <div
-                      className={`card--appointment ${
+                      className={`tech-bar-appointment-card ${
                         appointment && appointment.id === appt.id
                           ? 'selected'
                           : ''
@@ -127,11 +129,17 @@ export const FeedbackComponent = ({
                       key={appt.id}
                     >
                       <div className="details">
-                        <div>{appt.displayName}</div>
+                        <div>{appt.displayName} <span className="text-muted">(<I18n>{appt.type}</I18n>)</span></div>
                         <div className="text-muted">
-                          <I18n>{appt.eventType}</I18n>
+                          <Moment
+                            timestamp={moment(
+                              appt.eventTime,
+                              TIME_FORMAT,
+                            )}
+                            format={Constants.MOMENT_FORMATS.time}
+                          />
                           {' - '}
-                          <I18n>{appt.type}</I18n>
+                          <I18n>{appt.eventType}</I18n>
                         </div>
                       </div>
                       {(!appointment || appointment.id !== appt.id) && (
@@ -195,6 +203,7 @@ export const mapStateToProps = (state, props) => ({
       schedulerId: a.values['Scheduler Id'],
       eventType: a.values['Event Type'],
       eventDate: a.values['Event Date'],
+      eventTime: a.values['Event Time'],
     }))
     .concat(
       state.techBar.walkIns.today.data.map(w => ({
@@ -207,6 +216,7 @@ export const mapStateToProps = (state, props) => ({
         schedulerId: w.values['Scheduler Id'],
         eventType: w.values['Event Type'],
         eventDate: w.values['Date'],
+        eventTime: w.values['Time'],
       })),
     ),
 });

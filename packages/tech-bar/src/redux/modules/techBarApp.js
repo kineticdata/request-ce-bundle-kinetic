@@ -12,6 +12,11 @@ export const TECH_BAR_SETTINGS_FORM_SLUG = 'tech-bar-settings';
 export const SESSION_ITEM_USER_LOCATION = 'user-location';
 export const SESSION_ITEM_CURRENT_TECH_BAR = 'current-tech-bar';
 
+export const enableLocationServices = techBars =>
+  techBars.size > 1 &&
+  techBars.filter(t => !!t.values['Latitude'] && !!t.values['Longitude']).size >
+    0;
+
 export const mapTechBarsForDistance = userLocation => techBar => {
   const distance =
     techBar.values['Latitude'] && techBar.values['Longitude']

@@ -421,9 +421,7 @@ const SchedulerWidgetComponent = ({
                             <div className="card-actions">
                               <button
                                 type="button"
-                                className={`btn btn-sm ${
-                                  isReserved ? 'btn-primary' : 'btn-inverse'
-                                }`}
+                                className="btn btn-sm btn-primary"
                                 onClick={() => {
                                   toggleModal(true);
                                   setExpired(false);

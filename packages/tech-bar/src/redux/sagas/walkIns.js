@@ -59,7 +59,31 @@ export function* fetchTodayWalkInsSaga({ payload: { schedulerId, status } }) {
   }
 }
 
+export function* fetchWalkInsOverviewSaga({ payload: { id } }) {
+  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const { records, serverError } = yield call(CoreAPI.fetchBridgedResource, {
+    kappSlug,
+    formSlug: 'bridged-resources',
+    bridgedResourceName: 'Tech Bar Walk-Ins Overview',
+    values: { Id: id, Date: moment().format('YYYY-MM-DD') },
+  });
+
+  if (serverError) {
+    yield put(
+      actions.setWalkInsOverviewErrors([
+        serverError.error || serverError.statusText,
+      ]),
+    );
+  } else {
+    yield put(actions.setWalkInsOverview(records));
+  }
+}
+
 export function* watchWalkIns() {
   yield takeEvery(types.FETCH_WALK_IN, fetchWalkInSaga);
   yield takeEvery(types.FETCH_TODAY_WALK_INS, fetchTodayWalkInsSaga);
+  yield takeEvery(
+    types.FETCH_WALK_INS_OVERVIEW,
+    fetchWalkInsOverviewSaga,
+  );
 }
