@@ -5,12 +5,10 @@ import { Utils } from 'common';
 import reducers from './reducers';
 import commonReducers from 'common/src/redux/reducers';
 import servicesReducers from 'services/src/redux/reducers';
-import spaceReducers from 'space/src/redux/reducers';
 import techBarReducers from 'tech-bar/src/redux/reducers';
 import { sagas } from './sagas';
 import commonSagas from 'common/src/redux/sagas';
 import servicesSagas from 'services/src/redux/sagas';
-import spaceSagas from 'space/src/redux/sagas';
 import techBarSagas from 'tech-bar/src/redux/sagas';
 
 export const configureStore = history => {
@@ -31,7 +29,6 @@ export const configureStore = history => {
         app: combineReducers(reducers),
         common: combineReducers(commonReducers),
         services: combineReducers(servicesReducers),
-        space: combineReducers(spaceReducers),
         techBar: combineReducers(techBarReducers),
       }),
     ),
@@ -44,13 +41,7 @@ export const configureStore = history => {
   // the run it and pass it the saga watcher so that it can start watching
   // for applicable actions.
   sagaMiddleware.run(
-    Utils.combineSagas([
-      sagas,
-      commonSagas,
-      servicesSagas,
-      spaceSagas,
-      techBarSagas,
-    ]),
+    Utils.combineSagas([sagas, commonSagas, servicesSagas, techBarSagas]),
   );
 
   // Enable hot module replacement so that file changes are automatically

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { push } from 'connected-react-router';
+import { Link } from '@reach/router';
+import { push } from 'redux-first-history';
 import { connect } from 'react-redux';
 import {
   Badge,
@@ -11,10 +11,10 @@ import {
 } from 'reactstrap';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { actions } from '../../../redux/modules/settingsTranslations';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const LocalesListComponent = ({
-  pathPrefix,
   defaultLocale,
   enabledLocales,
   availableLocales,
@@ -46,7 +46,7 @@ export const LocalesListComponent = ({
           return (
             <tr key={locale.code}>
               <td scope="row">
-                <Link to={`${pathPrefix}/locale/${locale.code}`}>
+                <Link to={`/settings/translations/locale/${locale.code}`}>
                   {availableLocalesMap[locale.code]}
                 </Link>
               </td>
@@ -128,12 +128,12 @@ export const LocalesListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.space.settingsTranslations.locales.loading,
-  errors: state.space.settingsTranslations.locales.errors,
-  defaultLocale: state.space.settingsTranslations.locales.default,
-  enabledLocales: state.space.settingsTranslations.locales.enabled,
-  availableLocales: state.space.settingsTranslations.locales.available,
-  availableLocalesMap: state.space.settingsTranslations.locales.available.reduce(
+  loading: state.settingsTranslations.locales.loading,
+  errors: state.settingsTranslations.locales.errors,
+  defaultLocale: state.settingsTranslations.locales.default,
+  enabledLocales: state.settingsTranslations.locales.enabled,
+  availableLocales: state.settingsTranslations.locales.available,
+  availableLocalesMap: state.settingsTranslations.locales.available.reduce(
     (map, locale) => ({ ...map, [locale.code]: locale.name }),
     {},
   ),
@@ -177,6 +177,8 @@ export const LocalesList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('openDropdown', 'setOpenDropdown', ''),
   withState('localeToEnable', 'setLocaleToEnable', ''),

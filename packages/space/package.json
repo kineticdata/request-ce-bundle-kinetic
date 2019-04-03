@@ -4,12 +4,11 @@
   "main": "src/index.js",
   "dependencies": {
     "@kineticdata/react": "0.1.0-RC7",
+    "@reach/router": "^1.2.1",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.5",
-    "connected-react-router": "^4.2.3",
     "downloadjs": "^1.4.7",
     "font-awesome": "^4.7.0",
-    "history": "^4.7.2",
     "immutable": "4.0.0-rc.9",
     "moment": "^2.22.2",
     "papaparse": "^4.4.0",
@@ -22,12 +21,13 @@
     "react-beautiful-dnd": "^8.0.4",
     "react-dom": "^16.2.0",
     "react-dropzone": "^7.0.1",
-    "react-redux": "^5.0.7",
-    "react-router-dom": "^4.2.2",
+    "react-redux": "^6.0.1",
     "react-transition-group": "^1.1.2",
     "reactstrap": "^7.1.0",
     "recompose": "^0.30.0",
     "redux": "^3.7.2",
-    "redux-saga": "^0.15.6"
+    "redux-first-history": "^4.0.0-alpha.7",
+    "redux-saga": "^0.15.6",
+    "rudy-match-path": "^0.3.0"
   }
 }

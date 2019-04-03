@@ -28,9 +28,9 @@ export const State = Record({
 });
 
 export const selectParentTeams = state => {
-  const team = state.space.team;
+  const team = state.team;
 
-  return state.space.teamList.data.filter(
+  return state.teamList.data.filter(
     parent =>
       !team.loading &&
       team.data !== null &&
@@ -40,13 +40,13 @@ export const selectParentTeams = state => {
 };
 
 export const selectSubTeams = state => {
-  const team = state.space.team;
+  const team = state.team;
 
   if (team.loading || team.data === null) {
     return List();
   }
 
-  return state.space.teamList.data.filter(t =>
+  return state.teamList.data.filter(t =>
     t.name.startsWith(`${team.data.name}::`),
   );
 };

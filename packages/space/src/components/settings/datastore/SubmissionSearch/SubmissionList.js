@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { actions } from '../../../../redux/modules/settingsDatastore';
+import { context } from '../../../../redux/store';
 import { SubmissionListItem } from './SubmissionListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { I18n } from '../../../../../../app/src/I18nProvider';
@@ -124,14 +125,11 @@ const SubmissionListComponent = ({
         <div>
           {submissions.size > 0 && (
             <div>
-              {nextPageToken === null &&
-                pageTokens.size === 0 &&
-                !searching && (
-                  <div className="alert alert-success mt-3">
-                    <strong>{submissions.size}</strong>{' '}
-                    <I18n>results found</I18n>
-                  </div>
-                )}
+              {nextPageToken === null && pageTokens.size === 0 && !searching && (
+                <div className="alert alert-success mt-3">
+                  <strong>{submissions.size}</strong> <I18n>results found</I18n>
+                </div>
+              )}
               {clientSortInfo &&
                 (nextPageToken !== null || pageTokens.size > 0) && (
                   <div className="text-info mb-2">
@@ -271,14 +269,12 @@ const SubmissionListComponent = ({
             </div>
           )}
           {searching && <WallySearching />}
-          {!searching &&
-            hasStartedSearching &&
-            submissions.size === 0 && (
-              <WallyNoResultsFoundMessage form={form} />
-            )}
-          {!searching &&
-            !hasStartedSearching &&
-            submissions.size === 0 && <WallyEnterSearchTerm form={form} />}
+          {!searching && hasStartedSearching && submissions.size === 0 && (
+            <WallyNoResultsFoundMessage form={form} />
+          )}
+          {!searching && !hasStartedSearching && submissions.size === 0 && (
+            <WallyEnterSearchTerm form={form} />
+          )}
         </div>
       )}
     </div>
@@ -286,18 +282,18 @@ const SubmissionListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.space.settingsDatastore.currentFormLoading,
-  form: state.space.settingsDatastore.currentForm,
-  submissions: state.space.settingsDatastore.submissions,
-  clientSortInfo: state.space.settingsDatastore.clientSortInfo,
-  searching: state.space.settingsDatastore.searching,
-  nextPageToken: state.space.settingsDatastore.nextPageToken,
-  pageTokens: state.space.settingsDatastore.pageTokens,
-  columns: state.space.settingsDatastore.currentForm.columns,
-  hasStartedSearching: state.space.settingsDatastore.hasStartedSearching,
+  loading: state.settingsDatastore.currentFormLoading,
+  form: state.settingsDatastore.currentForm,
+  submissions: state.settingsDatastore.submissions,
+  clientSortInfo: state.settingsDatastore.clientSortInfo,
+  searching: state.settingsDatastore.searching,
+  nextPageToken: state.settingsDatastore.nextPageToken,
+  pageTokens: state.settingsDatastore.pageTokens,
+  columns: state.settingsDatastore.currentForm.columns,
+  hasStartedSearching: state.settingsDatastore.hasStartedSearching,
   path: state.router.location.pathname.replace(/\/$/, ''),
-  isMobile: state.app.layout.size === 'small',
-  simpleSearchActive: state.space.settingsDatastore.simpleSearchActive,
+  isMobile: state.app.layoutSize === 'small',
+  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
 });
 
 export const mapDispatchToProps = {
@@ -313,6 +309,8 @@ export const SubmissionList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({
     sortTable,

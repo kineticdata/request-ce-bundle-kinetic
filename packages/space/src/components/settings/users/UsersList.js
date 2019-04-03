@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import papaparse from 'papaparse';
@@ -10,6 +10,7 @@ import { PageTitle } from 'common';
 import downloadjs from 'downloadjs';
 
 import { actions } from '../../../redux/modules/settingsUsers';
+import { context } from '../../../redux/store';
 
 import { UsersListItem } from './UsersListItem';
 import { I18n } from '../../../../../app/src/I18nProvider';
@@ -40,7 +41,6 @@ const WallyEmptyMessage = ({ filter }) => {
 const UsersListComponent = ({
   users,
   loading,
-  match,
   handleChange,
   handleDownload,
 }) => {
@@ -85,7 +85,7 @@ const UsersListComponent = ({
             <button className="btn btn-secondary" onClick={handleDownload}>
               <I18n>Export Users</I18n>
             </button>
-            <Link to={`${match.path}/new`} className="btn btn-primary">
+            <Link to="new" className="btn btn-primary">
               <I18n>New User</I18n>
             </Link>
           </div>
@@ -171,17 +171,14 @@ const handleChange = props => () => {
               .map(user => {
                 return user
                   .update('allowedIps', val => (val ? val : ''))
-                  .update(
-                    'attributesMap',
-                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                  .update('attributesMap', val =>
+                    IsJsonString(val) ? fromJS(JSON.parse(val)) : {},
                   )
-                  .update(
-                    'profileAttributesMap',
-                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                  .update('profileAttributesMap', val =>
+                    IsJsonString(val) ? fromJS(JSON.parse(val)) : {},
                   )
-                  .update(
-                    'memberships',
-                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                  .update('memberships', val =>
+                    IsJsonString(val) ? fromJS(JSON.parse(val)) : {},
                   );
               })
               .toSet();
@@ -221,8 +218,8 @@ export const handleDownload = props => () => {
 };
 
 export const mapStateToProps = state => ({
-  loading: state.space.settingsUsers.loading,
-  users: state.space.settingsUsers.users,
+  loading: state.settingsUsers.loading,
+  users: state.settingsUsers.users,
 });
 
 export const mapDispatchToProps = {
@@ -236,6 +233,8 @@ export const UsersList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('data', 'setData', ''),
   withHandlers({ handleChange, handleDownload }),

@@ -1,7 +1,7 @@
 import React from 'react';
 import { CoreForm } from '@kineticdata/react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { compose, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
 import { PageTitle } from 'common';

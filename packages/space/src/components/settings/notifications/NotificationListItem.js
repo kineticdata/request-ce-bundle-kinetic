@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
 import {
@@ -9,6 +9,8 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import { actions } from '../../../redux/modules/settingsNotifications';
+import { context } from '../../../redux/store';
+
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const NotificationListItemComponent = ({
@@ -62,8 +64,8 @@ const NotificationListItemComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.space.settingsNotifications.loading,
-  snippets: state.space.settingsNotifications.notificationSnippets.reduce(
+  loading: state.settingsNotifications.loading,
+  snippets: state.settingsNotifications.notificationSnippets.reduce(
     (obj, item) => {
       obj[item.label] = item;
       return obj;
@@ -117,6 +119,8 @@ export const NotificationListItem = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('openDropdown', 'setOpenDropdown', ''),
   withState('modalIsOpen', 'setModalVisible', true),

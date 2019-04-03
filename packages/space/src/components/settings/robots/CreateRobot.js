@@ -1,12 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { push } from 'connected-react-router';
+import { Link } from '@reach/router';
+import { push } from 'redux-first-history';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { ROBOT_FORM_SLUG } from '../../../redux/modules/settingsRobots';
 import { CoreForm } from '@kineticdata/react';
 import { toastActions } from 'common';
+
 import { I18n } from '../../../../../app/src/I18nProvider';
+import { context } from '../../../redux/store';
 
 const globals = import('common/globals');
 
@@ -83,7 +85,7 @@ export const handleError = props => response => {
 };
 
 export const mapStateToProps = state => ({
-  robot: state.space.settingsRobots.robot,
+  robot: state.settingsRobots.robot,
 });
 
 export const mapDispatchToProps = {
@@ -96,6 +98,8 @@ export const CreateRobot = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({
     handleLoaded,

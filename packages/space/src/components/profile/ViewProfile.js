@@ -1,9 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { PageTitle } from 'common';
 import { actions, selectIsMyProfile } from '../../redux/modules/profiles';
+import { context } from '../../redux/store';
 import { TeamCard } from '../shared/TeamCard';
 import { Avatar } from 'common';
 import { I18n } from '../../../../app/src/I18nProvider';
@@ -180,31 +181,29 @@ const getProfilePhone = profile =>
   );
 
 export const mapStateToProps = state => ({
-  loading: state.space.profiles.loading,
-  profile: state.space.profiles.profile,
-  error: state.space.profiles.error,
+  loading: state.profiles.loading,
+  profile: state.profiles.profile,
+  error: state.profiles.error,
   department:
-    state.space.profiles.profile &&
-    state.space.profiles.profile.attributes['Department'] &&
-    state.space.profiles.profile.attributes['Department'][0],
-  departmentEnabled:
-    state.space.spaceApp.userAttributeDefinitions['Department'],
+    state.profiles.profile &&
+    state.profiles.profile.attributes['Department'] &&
+    state.profiles.profile.attributes['Department'][0],
+  departmentEnabled: state.spaceApp.userAttributeDefinitions['Department'],
   manager:
-    state.space.profiles.profile &&
-    state.space.profiles.profile.attributes['Manager'] &&
-    state.space.profiles.profile.attributes['Manager'][0],
-  managerEnabled: state.space.spaceApp.userAttributeDefinitions['Manager'],
+    state.profiles.profile &&
+    state.profiles.profile.attributes['Manager'] &&
+    state.profiles.profile.attributes['Manager'][0],
+  managerEnabled: state.spaceApp.userAttributeDefinitions['Manager'],
   organization:
-    state.space.profiles.profile &&
-    state.space.profiles.profile.attributes['Organization'] &&
-    state.space.profiles.profile.attributes['Organization'][0],
-  organizationEnabled:
-    state.space.spaceApp.userAttributeDefinitions['Organization'],
+    state.profiles.profile &&
+    state.profiles.profile.attributes['Organization'] &&
+    state.profiles.profile.attributes['Organization'][0],
+  organizationEnabled: state.spaceApp.userAttributeDefinitions['Organization'],
   site:
-    state.space.profiles.profile &&
-    state.space.profiles.profile.attributes['Site'] &&
-    state.space.profiles.profile.attributes['Site'][0],
-  siteEnabled: state.space.spaceApp.userAttributeDefinitions['Site'],
+    state.profiles.profile &&
+    state.profiles.profile.attributes['Site'] &&
+    state.profiles.profile.attributes['Site'][0],
+  siteEnabled: state.spaceApp.userAttributeDefinitions['Site'],
   isMyProfile: selectIsMyProfile(state),
 });
 
@@ -216,16 +215,16 @@ export const ViewProfile = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentWillMount() {
-      this.props.fetchProfile(this.props.match.params.username);
+      this.props.fetchProfile(this.props.username);
     },
     componentWillReceiveProps(nextProps) {
-      if (
-        this.props.match.params.username !== nextProps.match.params.username
-      ) {
-        this.props.fetchProfile(nextProps.match.params.username);
+      if (this.props.username !== nextProps.username) {
+        this.props.fetchProfile(nextProps.username);
       }
     },
   }),

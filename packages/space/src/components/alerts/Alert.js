@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers } from 'recompose';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { PopConfirm } from '../shared/PopConfirm';
 import { Button } from 'reactstrap';
 import { actions as appActions } from '../../redux/modules/spaceApp';
+import { context } from '../../redux/store';
 import { I18n } from '../../../../app/src/I18nProvider';
 
 const AlertComponent = ({
@@ -81,6 +82,8 @@ export const Alert = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('openDeleteConfirm', 'setOpenDeleteConfirm', null),
   withHandlers({

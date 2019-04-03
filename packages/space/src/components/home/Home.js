@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 import { getGroupedDiscussions } from '@kineticdata/react';
@@ -14,6 +14,7 @@ import { bundle } from '@kineticdata/react';
 import { Popover } from 'reactstrap';
 import { DateRangeDropdown } from './DateRangeDropdown';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 const HomeComponent = ({
   spaceName,
@@ -178,39 +179,37 @@ const HomeComponent = ({
             </div>
           </div>
         )}
-      {!discussionsError &&
-        !discussionsLoading &&
-        discussionGroups.size === 0 && (
-          <div className="empty-state empty-state--wally">
-            <h5>
-              <I18n>No discussions found</I18n>
-            </h5>
-            <img src={wallyMissingImage} alt="Missing Wally" />
-            <h6>
-              <I18n>You are not involved in any discussions!</I18n>
-            </h6>
-          </div>
-        )}
+      {!discussionsError && !discussionsLoading && discussionGroups.size === 0 && (
+        <div className="empty-state empty-state--wally">
+          <h5>
+            <I18n>No discussions found</I18n>
+          </h5>
+          <img src={wallyMissingImage} alt="Missing Wally" />
+          <h6>
+            <I18n>You are not involved in any discussions!</I18n>
+          </h6>
+        </div>
+      )}
     </div>
   </div>
 );
 
 export const mapStateToProps = state => ({
   spaceName: state.app.space.name,
-  discussionGroups: getGroupedDiscussions(state.space.spaceApp.discussions),
-  discussionsError: state.space.spaceApp.discussionsError,
-  discussionsLoading: state.space.spaceApp.discussionsLoading,
-  discussionsPageToken: state.space.spaceApp.discussionsPageToken,
-  discussionsPageTokens: state.space.spaceApp.discussionsPageTokens,
-  discussionsSearchInputValue: state.space.spaceApp.discussionsSearchInputValue,
-  discussionsSearchTerm: state.space.spaceApp.discussionsSearchTerm,
+  discussionGroups: getGroupedDiscussions(state.spaceApp.discussions),
+  discussionsError: state.spaceApp.discussionsError,
+  discussionsLoading: state.spaceApp.discussionsLoading,
+  discussionsPageToken: state.spaceApp.discussionsPageToken,
+  discussionsPageTokens: state.spaceApp.discussionsPageTokens,
+  discussionsSearchInputValue: state.spaceApp.discussionsSearchInputValue,
+  discussionsSearchTerm: state.spaceApp.discussionsSearchTerm,
   discussionServerUrl: `${bundle.spaceLocation()}/kinetic-response`,
   discussionsEnabled: selectDiscussionsEnabled(state),
-  createModalOpen: state.space.spaceApp.isCreateDiscussionModalOpen,
+  createModalOpen: state.spaceApp.isCreateDiscussionModalOpen,
   me: state.app.profile,
-  teams: state.space.teamList.data,
-  headerDropdownOpen: state.space.spaceApp.headerDropdownOpen,
-  showingArchived: state.space.spaceApp.showingArchived,
+  teams: state.teamList.data,
+  headerDropdownOpen: state.spaceApp.headerDropdownOpen,
+  showingArchived: state.spaceApp.showingArchived,
 });
 
 export const mapDispatchToProps = {
@@ -231,6 +230,8 @@ export const Home = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({
     handleCreateDiscussionButtonClick: props => event =>

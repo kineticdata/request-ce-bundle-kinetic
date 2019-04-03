@@ -8,7 +8,10 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
+
 import { actions } from '../../../redux/modules/settingsNotifications';
+import { context } from '../../../redux/store';
+
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const wrapVar = type => property => `\${${type}('${property}')}`;
@@ -395,16 +398,16 @@ export const mapStateToProps = state => ({
   space: state.app.space,
   kapps: state.app.kapps,
   forms:
-    state.space.settingsNotifications.variables &&
-    state.space.settingsNotifications.variables.forms,
-  dateFormats: state.space.settingsNotifications.dateFormats
+    state.settingsNotifications.variables &&
+    state.settingsNotifications.variables.forms,
+  dateFormats: state.settingsNotifications.dateFormats
     .filter(submission => submission.values.Status === 'Active')
     .map(submission => submission.values.Name),
-  snippets: state.space.settingsNotifications.notificationSnippets.filter(
+  snippets: state.settingsNotifications.notificationSnippets.filter(
     submission => submission.values.Status === 'Active',
   ),
   hasDatastore: semver.satisfies(
-    semver.coerce(state.app.config.version),
+    semver.coerce(state.app.version),
     `>=${MINIMUM_CE_VERSION_FOR_DATASTORE}`,
   ),
 });
@@ -419,6 +422,8 @@ export const NotificationMenu = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('selectedKapp', 'setSelectedKapp', null),
   withState('selectedForm', 'setSelectedForm', null),

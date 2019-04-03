@@ -1,17 +1,16 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
 import md5 from 'md5';
 import { fromJS } from 'immutable';
-import { Utils, PageTitle } from 'common';
+import { Utils, PageTitle, Avatar } from 'common';
+
 import { AddMemberModal } from './AddMemberModal';
 import { buildHierarchy } from '../../../utils';
 import { IconPicker } from '../../shared/IconPicker';
 import { TeamCard } from '../../shared/TeamCard';
-import { Avatar } from 'common';
-import { I18n } from '../../../../../app/src/I18nProvider';
 
 import {
   actions as teamListActions,
@@ -21,6 +20,8 @@ import {
   actions as teamActions,
   selectTeamMemberships,
 } from '../../../redux/modules/team';
+import { context } from '../../../redux/store';
+import { I18n } from '../../../../../app/src/I18nProvider';
 
 const TeamFormComponent = ({
   editing,
@@ -312,12 +313,12 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state, props) => {
   return {
-    editing: props.match.params.slug !== undefined,
+    editing: props.slug !== undefined,
     loading:
-      state.space.teamList.loading ||
-      (props.match.params.slug !== undefined && state.space.team.loading),
-    teams: state.space.teamList.data,
-    team: state.space.team.data || {},
+      state.teamList.loading ||
+      (props.slug !== undefined && state.team.loading),
+    teams: state.teamList.data,
+    team: state.team.data || {},
     memberships: selectTeamMemberships(state).map(member => member.user),
     subteams: selectSubTeams(state),
   };
@@ -327,6 +328,8 @@ export const TeamForm = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('fieldValues', 'setFieldValues', translateTeamToFieldValues({})),
   withHandlers({
@@ -373,7 +376,7 @@ export const TeamForm = compose(
   lifecycle({
     componentWillMount() {
       if (this.props.editing) {
-        this.props.fetchTeam(this.props.match.params.slug);
+        this.props.fetchTeam(this.props.slug);
       } else {
         const parentParameter = parse(this.props.location.search).parent;
         this.props.setFieldValues({
@@ -383,8 +386,8 @@ export const TeamForm = compose(
       }
     },
     componentWillReceiveProps(nextProps) {
-      if (this.props.match.params.slug !== nextProps.match.params.slug) {
-        this.props.fetchTeam(nextProps.match.params.slug);
+      if (this.props.slug !== nextProps.slug) {
+        this.props.fetchTeam(nextProps.slug);
       }
       if (this.props.editing && this.props.team !== nextProps.team) {
         this.props.setFieldValues(translateTeamToFieldValues(nextProps.team));

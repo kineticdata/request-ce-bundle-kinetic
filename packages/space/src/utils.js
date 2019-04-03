@@ -2,6 +2,10 @@ import md5 from 'md5';
 import { Utils, Constants } from 'common';
 import { Range } from 'immutable';
 
+export const isActiveClass = defaultClass => props => ({
+  className: props.isCurrent ? `${defaultClass} active` : defaultClass,
+});
+
 const COLORS = [
   Constants.COLORS.blue,
   Constants.COLORS.blueSky,

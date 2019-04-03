@@ -133,8 +133,8 @@ const AddMemberModalComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  isOpen: state.space.team.isAddMemberModalOpen,
-  users: state.space.team.users,
+  isOpen: state.team.isAddMemberModalOpen,
+  users: state.team.users,
   currentMembers: selectTeamMemberships(state).map(member => member.user),
   team: selectTeam(state),
 });

@@ -1,12 +1,16 @@
 import React, { Fragment } from 'react';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { fromJS } from 'immutable';
 import { modalFormActions, PageTitle } from 'common';
-import { actions } from '../../../redux/modules/profiles';
+
 import { ProfileCard } from 'common';
 import { TeamCard } from '../../shared/TeamCard';
+
+import { actions } from '../../../redux/modules/profiles';
+import { context } from '../../../redux/store';
+
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const EditProfileComponent = ({
@@ -433,35 +437,26 @@ const openChangeManagerForm = ({ spaceAttributes, openForm }) => config => {
 };
 
 const mapStateToProps = state => ({
-  loading: state.space.profiles.loading,
-  profile: state.space.profiles.profile,
-  error: state.space.profiles.error,
-  editingPassword: state.space.profiles.isChangePasswordVisible,
+  loading: state.profiles.loading,
+  profile: state.profiles.profile,
+  error: state.profiles.error,
+  editingPassword: state.profiles.isChangePasswordVisible,
   department:
-    state.space.profiles.profile &&
-    state.space.profiles.profile.attributes['Department'],
-  departmentEnabled:
-    state.space.spaceApp.userAttributeDefinitions['Department'],
+    state.profiles.profile && state.profiles.profile.attributes['Department'],
+  departmentEnabled: state.spaceApp.userAttributeDefinitions['Department'],
   manager:
-    state.space.profiles.profile &&
-    state.space.profiles.profile.attributes['Manager'],
-  managerEnabled: state.space.spaceApp.userAttributeDefinitions['Manager'],
+    state.profiles.profile && state.profiles.profile.attributes['Manager'],
+  managerEnabled: state.spaceApp.userAttributeDefinitions['Manager'],
   organization:
-    state.space.profiles.profile &&
-    state.space.profiles.profile.attributes['Organization'],
-  organizationEnabled:
-    state.space.spaceApp.userAttributeDefinitions['Organization'],
-  site:
-    state.space.profiles.profile &&
-    state.space.profiles.profile.attributes['Site'],
-  siteEnabled: state.space.spaceApp.userAttributeDefinitions['Site'],
+    state.profiles.profile && state.profiles.profile.attributes['Organization'],
+  organizationEnabled: state.spaceApp.userAttributeDefinitions['Organization'],
+  site: state.profiles.profile && state.profiles.profile.attributes['Site'],
+  siteEnabled: state.spaceApp.userAttributeDefinitions['Site'],
   defaultKappDisplay:
-    state.space.profiles.profile &&
-    state.space.profiles.profile.profileAttributes['Default Kapp Display'],
+    state.profiles.profile &&
+    state.profiles.profile.profileAttributes['Default Kapp Display'],
   defaultKappDisplayEnabled:
-    state.space.spaceApp.userProfileAttributeDefinitions[
-      'Default Kapp Display'
-    ],
+    state.spaceApp.userProfileAttributeDefinitions['Default Kapp Display'],
   spaceAttributes:
     state.app.space &&
     state.app.space.attributes.reduce((memo, item) => {
@@ -469,8 +464,8 @@ const mapStateToProps = state => ({
       return memo;
     }, {}),
   kapps: state.app.kapps,
-  locales: state.app.config.locales,
-  timezones: state.app.config.timezones,
+  locales: state.app.locales,
+  timezones: state.app.timezones,
 });
 
 const mapDispatchToProps = {
@@ -484,6 +479,8 @@ export const Profile = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('fieldValues', 'setFieldValues', translateProfileToFieldValues({})),
   withHandlers({

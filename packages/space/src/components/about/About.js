@@ -1,10 +1,11 @@
 import React from 'react';
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { TimeAgo, PageTitle } from 'common';
 import { Avatar } from 'common';
 import { actions } from '../../redux/modules/about';
+import { context } from '../../redux/store';
 import { I18n } from '../../../../app/src/I18nProvider';
 
 const AboutComponent = ({ space, about, loading }) => (
@@ -100,8 +101,8 @@ const AboutComponent = ({ space, about, loading }) => (
 
 const mapStateToProps = state => ({
   space: state.app.space,
-  about: state.space.about.data,
-  loading: state.space.about.loading,
+  about: state.about.data,
+  loading: state.about.loading,
 });
 
 const mapDispatchToProps = {
@@ -112,6 +113,8 @@ export const About = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentWillMount() {

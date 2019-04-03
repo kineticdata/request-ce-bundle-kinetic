@@ -15,6 +15,7 @@ import {
   selectTeamMemberships,
   selectIsTeamMember,
 } from '../../redux/modules/team';
+import { context } from '../../redux/store';
 import { actions as teamListActions } from '../../redux/modules/teamList';
 
 import { Team } from './Team';
@@ -30,13 +31,13 @@ const mapStateToProps = state => {
   const me = state.app.profile;
 
   const heirarchy = buildHierarchy((team && team.name) || '');
-  const teamsMap = state.space.teamList.data.reduce((memo, item) => {
+  const teamsMap = state.teamList.data.reduce((memo, item) => {
     memo[item.name] = item;
     return memo;
   }, {});
 
   return {
-    loading: state.space.team.loading || state.space.teamList.loading,
+    loading: state.team.loading || state.teamList.loading,
     space: state.app.space,
     me,
     team,
@@ -50,12 +51,12 @@ const mapStateToProps = state => {
     parent: heirarchy.parent && teamsMap[heirarchy.parent.name],
     subteams:
       team &&
-      (state.space.teamList.data || []).filter(
+      (state.teamList.data || []).filter(
         item =>
           item.name !== team.name &&
           item.name.replace(/::[^:]+$/, '') === team.name,
       ),
-    isSmallLayout: state.app.layout.get('size') === 'small',
+    isSmallLayout: state.app.layoutSize === 'small',
   };
 };
 
@@ -102,16 +103,18 @@ export const TeamContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('viewDiscussionsModal', 'setViewDiscussionsModal', false),
   lifecycle({
     componentWillMount() {
-      this.props.fetchTeam(this.props.match.params.slug);
+      this.props.fetchTeam(this.props.slug);
       this.props.fetchTeams();
     },
     componentWillReceiveProps(nextProps) {
-      if (this.props.match.params.slug !== nextProps.match.params.slug) {
-        this.props.fetchTeam(nextProps.match.params.slug);
+      if (this.props.slug !== nextProps.slug) {
+        this.props.fetchTeam(nextProps.slug);
       }
     },
     componentWillUnmount() {

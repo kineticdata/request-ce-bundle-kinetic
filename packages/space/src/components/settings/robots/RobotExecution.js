@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { push } from 'connected-react-router';
+import { Link } from '@reach/router';
+import { push } from 'redux-first-history';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import {
@@ -9,6 +9,8 @@ import {
 } from '../../../redux/modules/settingsRobots';
 import { CoreForm } from '@kineticdata/react';
 import { toastActions } from 'common';
+
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
@@ -62,8 +64,8 @@ export const handleError = props => response => {
 };
 
 export const mapStateToProps = state => ({
-  robot: state.space.settingsRobots.robot,
-  robotExecution: state.space.settingsRobots.robotExecution,
+  robot: state.settingsRobots.robot,
+  robotExecution: state.settingsRobots.robotExecution,
 });
 
 export const mapDispatchToProps = {
@@ -76,13 +78,15 @@ export const RobotExecution = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({
     handleError,
   }),
   lifecycle({
     componentWillMount() {
-      this.props.fetchRobotExecution(this.props.match.params.executionId);
+      this.props.fetchRobotExecution(this.props.executionId);
     },
   }),
 )(RobotExecutionComponent);

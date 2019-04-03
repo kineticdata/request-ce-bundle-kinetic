@@ -1,15 +1,11 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import { push } from 'connected-react-router';
+import { Link } from '@reach/router';
+import { push } from 'redux-first-history';
 import { connect } from 'react-redux';
 import { compose, withState, withHandlers } from 'recompose';
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from 'reactstrap';
+
 import { getTeamColor, getTeamIcon } from '../../../utils';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const TeamsListItemComponent = ({ team, openDropdown, toggleDropdown }) => {
@@ -73,6 +69,8 @@ export const TeamsListItem = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('openDropdown', 'setOpenDropdown', ''),
   withHandlers({ toggleDropdown }),

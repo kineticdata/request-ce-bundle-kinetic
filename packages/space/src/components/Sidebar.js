@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { getTeamColor } from '../utils';
 import { I18n } from '../../../app/src/I18nProvider';
 
-export const Sidebar = ({ kapps, teams, isSpaceAdmin, openSettings }) => (
+export const Sidebar = ({ teams, isSpaceAdmin, openSettings }) => (
   <div className="sidebar space-sidebar">
     <div className="sidebar-group--content-wrapper">
       <div className="sidebar-group sidebar-group--my-teams">

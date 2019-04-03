@@ -59,10 +59,10 @@ export function* deleteAlertSaga(action) {
 
 export function* fetchRecentDiscussionsSaga() {
   const { pageToken, search, isArchived, dateRange } = yield select(state => ({
-    pageToken: state.space.spaceApp.discussionsPageToken,
-    search: state.space.spaceApp.discussionsSearchTerm,
-    isArchived: state.space.spaceApp.showingArchived,
-    dateRange: state.space.spaceApp.searchDateRange,
+    pageToken: state.spaceApp.discussionsPageToken,
+    search: state.spaceApp.discussionsSearchTerm,
+    isArchived: state.spaceApp.showingArchived,
+    dateRange: state.spaceApp.searchDateRange,
   }));
 
   const user = yield select(state => state.app.profile.username);

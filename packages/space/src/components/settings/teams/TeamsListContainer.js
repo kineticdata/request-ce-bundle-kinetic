@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { modalFormActions, Utils } from 'common';
 
 import { actions } from '../../../redux/modules/teamList';
+import { context } from '../../../redux/store';
 
 import { TeamsList } from './TeamsList';
 
 export const mapStateToProps = state => ({
-  loading: state.space.teamList.loading,
-  teams: state.space.teamList.data,
+  loading: state.teamList.loading,
+  teams: state.teamList.data,
   me: state.app.profile,
   adminKappSlug: Utils.getAttributeValue(
     state.app.space,
@@ -38,6 +39,8 @@ export const TeamsListContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentWillMount() {

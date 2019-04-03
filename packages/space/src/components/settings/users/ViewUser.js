@@ -1,11 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import { PageTitle } from 'common';
+import { PageTitle, Avatar } from 'common';
+
 import { actions } from '../../../redux/modules/settingsUsers';
+import { context } from '../../../redux/store';
+
 import { TeamCard } from '../../shared/TeamCard';
-import { Avatar } from 'common';
 
 const ViewUserComponent = ({ loading, profile }) => (
   <div className="page-container page-container--users">
@@ -84,9 +86,9 @@ const getProfilePhone = profile =>
     : 'No phone number';
 
 export const mapStateToProps = state => ({
-  loading: state.space.settingsUsers.userLoading,
-  profile: state.space.settingsUsers.user,
-  error: state.space.settingsUsers.error,
+  loading: state.settingsUsers.userLoading,
+  profile: state.settingsUsers.user,
+  error: state.settingsUsers.error,
 });
 
 export const mapDispatchToProps = {
@@ -97,16 +99,16 @@ export const ViewUser = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentWillMount() {
-      this.props.fetchUser(this.props.match.params.username);
+      this.props.fetchUser(this.props.username);
     },
     componentWillReceiveProps(nextProps) {
-      if (
-        this.props.match.params.username !== nextProps.match.params.username
-      ) {
-        this.props.fetchUser(nextProps.match.params.username);
+      if (this.props.username !== nextProps.username) {
+        this.props.fetchUser(nextProps.username);
       }
     },
   }),

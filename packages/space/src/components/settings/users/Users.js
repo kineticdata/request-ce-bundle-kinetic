@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Router } from '@reach/router';
 import { UsersList } from './UsersList';
 import { UserForm } from './UserForm';
 import { I18n } from '../../../../../app/src/I18nProvider';
@@ -16,11 +16,11 @@ const ImportUsers = () => (
 );
 
 export const Users = ({ match }) => (
-  <Switch>
-    <Route exact path={`${match.path}/new`} component={UserForm} />
-    <Route exact path={`${match.path}/import`} component={ImportUsers} />
-    <Route exact path={`${match.path}/error`} component={UsersError} />
-    <Route exact path={`${match.path}/:username/:mode`} component={UserForm} />
-    <Route component={UsersList} />
-  </Switch>
+  <Router>
+    <UserForm path="new" />
+    <ImportUsers path="import" />
+    <UsersError path="/error" />
+    <UserForm path=":username/:mode" />
+    <UsersList default />
+  </Router>
 );

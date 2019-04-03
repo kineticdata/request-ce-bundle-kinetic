@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import {
   Dropdown,
@@ -12,6 +12,7 @@ import {
 import { TimeAgo, PageTitle } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/settingsDatastore';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const WallyEmptyMessage = ({ filter }) => {
@@ -43,7 +44,6 @@ const Timestamp = ({ slug, label, value }) =>
 const FormListComponent = ({
   datastoreForms,
   loading,
-  match,
   toggleDropdown,
   openDropdown,
 }) => {
@@ -54,11 +54,11 @@ const FormListComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">
+              <Link to="../..">
                 <I18n>home</I18n>
               </Link>{' '}
               /{` `}
-              <Link to="/settings">
+              <Link to="../">
                 <I18n>settings</I18n>
               </Link>{' '}
               /{` `}
@@ -67,7 +67,7 @@ const FormListComponent = ({
               <I18n>Datastore Forms</I18n>
             </h1>
           </div>
-          <Link to={`${match.path}/new`} className="btn btn-primary">
+          <Link to="new" className="btn btn-primary">
             <I18n>New Datastore Form</I18n>
           </Link>
         </div>
@@ -107,7 +107,7 @@ const FormListComponent = ({
                     >
                       <tr>
                         <td scope="row">
-                          <Link to={`${match.path}/${form.slug}`}>
+                          <Link to={form.slug}>
                             <span>
                               <I18n>{form.name}</I18n>
                             </span>
@@ -132,22 +132,16 @@ const FormListComponent = ({
                               <span className="fa fa-ellipsis-h fa-2x" />
                             </DropdownToggle>
                             <DropdownMenu right>
-                              <DropdownItem
-                                tag={Link}
-                                to={`${match.path}/${form.slug}`}
-                              >
+                              <DropdownItem tag={Link} to={form.slug}>
                                 <I18n>View</I18n>
                               </DropdownItem>
-                              <DropdownItem
-                                tag={Link}
-                                to={`${match.path}/${form.slug}/new`}
-                              >
+                              <DropdownItem tag={Link} to={`${form.slug}/new`}>
                                 <I18n>New Record</I18n>
                               </DropdownItem>
                               {canManage && (
                                 <DropdownItem
                                   tag={Link}
-                                  to={`${match.path}/${form.slug}/settings`}
+                                  to={`${form.slug}/settings`}
                                 >
                                   <I18n>Configure</I18n>
                                 </DropdownItem>
@@ -191,8 +185,8 @@ const FormListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.space.settingsDatastore.loading,
-  datastoreForms: state.space.settingsDatastore.forms.filter(f => !f.isHidden),
+  loading: state.settingsDatastore.loading,
+  datastoreForms: state.settingsDatastore.forms.filter(f => !f.isHidden),
 });
 
 export const mapDispatchToProps = {
@@ -211,6 +205,8 @@ export const FormList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('openDropdown', 'setOpenDropdown', ''),
   withHandlers({ toggleDropdown }),

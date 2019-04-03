@@ -2,12 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { commonActions, PageTitle } from 'common';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { List } from 'immutable';
 import moment from 'moment';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { Alert } from './Alert';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 const WallyEmptyMessage = ({ canEdit }) => {
   return (
@@ -144,6 +145,8 @@ export const Alerts = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentWillMount() {

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { actions } from '../../redux/modules/errors';
+import { context } from '../../redux/store';
 import { I18n } from '../../../../app/src/I18nProvider';
 
 const defaultTitle = {
@@ -37,7 +38,7 @@ const NotificationsComponent = ({ notifications, dismiss }) => (
 );
 
 const mapStateToProps = state => ({
-  notifications: state.space.errors.notifications,
+  notifications: state.errors.notifications,
 });
 
 const mapDispatchToProps = {
@@ -48,6 +49,8 @@ export const Notifications = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({
     dismiss: ({ removeNotification }) => id => () => removeNotification(id),

@@ -3,6 +3,7 @@ import { Modal, ModalBody } from 'reactstrap';
 import { connect } from 'react-redux';
 
 import { actions } from '../../../redux/modules/settingsDatastore';
+import { context } from '../../../redux/store';
 
 import { Export } from './Export';
 import { Import } from './Import';
@@ -29,8 +30,8 @@ const DatastoreModalComponent = ({ modalIsOpen, closeModal, modalName }) => (
 );
 
 const mapStateToProps = state => ({
-  modalIsOpen: state.space.settingsDatastore.modalIsOpen,
-  modalName: state.space.settingsDatastore.modalName,
+  modalIsOpen: state.settingsDatastore.modalIsOpen,
+  modalName: state.settingsDatastore.modalName,
 });
 
 const mapDispatchToProps = {
@@ -40,4 +41,6 @@ const mapDispatchToProps = {
 export const DatastoreModal = connect(
   mapStateToProps,
   mapDispatchToProps,
+  null,
+  { context },
 )(DatastoreModalComponent);

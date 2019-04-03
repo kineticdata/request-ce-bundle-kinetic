@@ -1,9 +1,13 @@
 import React from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { RobotContainer } from './RobotContainer';
-import { I18n } from '../../../../../app/src/I18nProvider';
 import semver from 'semver';
+
+import { RobotContainer } from './RobotContainer';
+
+import { context } from '../../../redux/store';
+import { I18n } from '../../../../../app/src/I18nProvider';
+
 const MINIMUM_CE_VERSION = '2.1.0';
 
 const RobotsError = () => (
@@ -55,4 +59,9 @@ export const mapStateToProps = state => ({
   ),
 });
 
-export const RobotsWrapper = connect(mapStateToProps)(RobotsRouter);
+export const RobotsWrapper = connect(
+  mapStateToProps,
+  null,
+  null,
+  { context },
+)(RobotsRouter);

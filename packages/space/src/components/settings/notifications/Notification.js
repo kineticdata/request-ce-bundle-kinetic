@@ -1,13 +1,16 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { Map, Seq } from 'immutable';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { toastActions, PageTitle } from 'common';
+
 import { actions } from '../../../redux/modules/settingsNotifications';
-import { NotificationMenu } from './NotificationMenu';
+import { context } from '../../../redux/store';
+
 import { I18n } from '../../../../../app/src/I18nProvider';
+import { NotificationMenu } from './NotificationMenu';
 
 const fields = {
   Name: {
@@ -35,8 +38,8 @@ const evaluate = (condition, values) =>
   typeof condition === 'boolean'
     ? condition
     : typeof condition === 'function'
-      ? condition(values)
-      : false;
+    ? condition(values)
+    : false;
 
 const isRequired = (name, values) => evaluate(fields[name].required, values);
 
@@ -92,124 +95,120 @@ const NotificationComponent = ({
           )}
         </div>
       </div>
-      {!loading &&
-        values && (
-          <form onSubmit={handleSubmit}>
-            <Fragment>
-              <NotificationMenu
-                selection={selection}
-                onSelect={handleVariableSelection}
-              />
-            </Fragment>
-            <div className="form-group required">
-              <label className="field-label" htmlFor="name">
-                <I18n>Name</I18n>
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="Name"
-                onChange={handleFieldChange}
-                onBlur={handleFieldBlur}
-                value={values.get('Name')}
-              />
-            </div>
+      {!loading && values && (
+        <form onSubmit={handleSubmit}>
+          <Fragment>
+            <NotificationMenu
+              selection={selection}
+              onSelect={handleVariableSelection}
+            />
+          </Fragment>
+          <div className="form-group required">
+            <label className="field-label" htmlFor="name">
+              <I18n>Name</I18n>
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="Name"
+              onChange={handleFieldChange}
+              onBlur={handleFieldBlur}
+              value={values.get('Name')}
+            />
+          </div>
 
-            <div className="radio required">
-              <label className="field-label">
-                <I18n>Status</I18n>
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="Status"
-                  value="Active"
-                  onChange={handleFieldChange}
-                  onBlur={handleFieldBlur}
-                  checked={values.get('Status') === 'Active'}
-                />
-                Active
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="Status"
-                  value="Inactive"
-                  onChange={handleFieldChange}
-                  onBlur={handleFieldBlur}
-                  checked={values.get('Status') === 'Inactive'}
-                />
-                Inactive
-              </label>
-            </div>
-            {isVisible('Subject', values) && (
-              <div className="form-group required">
-                <label className="field-label" htmlFor="subject">
-                  <I18n>Subject</I18n>
-                </label>
-                <textarea
-                  id="subject"
-                  name="Subject"
-                  rows="2"
-                  onChange={handleFieldChange}
-                  onBlur={handleFieldBlur}
-                  value={values.get('Subject')}
-                />
-              </div>
-            )}
+          <div className="radio required">
+            <label className="field-label">
+              <I18n>Status</I18n>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="Status"
+                value="Active"
+                onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
+                checked={values.get('Status') === 'Active'}
+              />
+              Active
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="Status"
+                value="Inactive"
+                onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
+                checked={values.get('Status') === 'Inactive'}
+              />
+              Inactive
+            </label>
+          </div>
+          {isVisible('Subject', values) && (
             <div className="form-group required">
-              <label className="field-label" htmlFor="htmlContent">
-                <I18n>HTML Content</I18n>
+              <label className="field-label" htmlFor="subject">
+                <I18n>Subject</I18n>
               </label>
               <textarea
-                id="htmlContent"
-                name="HTML Content"
-                rows="8"
+                id="subject"
+                name="Subject"
+                rows="2"
                 onChange={handleFieldChange}
                 onBlur={handleFieldBlur}
-                value={values.get('HTML Content')}
+                value={values.get('Subject')}
               />
             </div>
-            <div
-              className={`form-group ${
-                isRequired('Text Content', values) ? 'required' : ''
-              }`}
-            >
-              <label className="field-label" htmlFor="textContent">
-                <I18n>Text Content</I18n>
-              </label>
-              <textarea
-                id="textContent"
-                name="Text Content"
-                rows="8"
-                onChange={handleFieldChange}
-                onBlur={handleFieldBlur}
-                value={values.get('Text Content')}
-              />
+          )}
+          <div className="form-group required">
+            <label className="field-label" htmlFor="htmlContent">
+              <I18n>HTML Content</I18n>
+            </label>
+            <textarea
+              id="htmlContent"
+              name="HTML Content"
+              rows="8"
+              onChange={handleFieldChange}
+              onBlur={handleFieldBlur}
+              value={values.get('HTML Content')}
+            />
+          </div>
+          <div
+            className={`form-group ${
+              isRequired('Text Content', values) ? 'required' : ''
+            }`}
+          >
+            <label className="field-label" htmlFor="textContent">
+              <I18n>Text Content</I18n>
+            </label>
+            <textarea
+              id="textContent"
+              name="Text Content"
+              rows="8"
+              onChange={handleFieldChange}
+              onBlur={handleFieldBlur}
+              value={values.get('Text Content')}
+            />
+          </div>
+          <div className="form__footer">
+            <div className="form__footer__right">
+              <Link to="/settings/notifications" className="btn btn-link mb-0">
+                <I18n>Cancel</I18n>
+              </Link>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={!dirty || !isValid(values)}
+              >
+                {submission ? (
+                  <I18n>Save Changes</I18n>
+                ) : (
+                  <I18n>{`Create ${title}`}</I18n>
+                )}
+              </button>
             </div>
-            <div className="form__footer">
-              <div className="form__footer__right">
-                <Link
-                  to="/settings/notifications"
-                  className="btn btn-link mb-0"
-                >
-                  <I18n>Cancel</I18n>
-                </Link>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={!dirty || !isValid(values)}
-                >
-                  {submission ? (
-                    <I18n>Save Changes</I18n>
-                  ) : (
-                    <I18n>{`Create ${title}`}</I18n>
-                  )}
-                </button>
-              </div>
-            </div>
-          </form>
-        )}
+          </div>
+        </form>
+      )}
     </div>
     <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--settings-sidebar">
       <h3>
@@ -289,11 +288,11 @@ export const handleVariableSelection = props => variable => {
 };
 
 export const mapStateToProps = (state, props) => ({
-  submission: state.space.settingsNotifications.notification,
-  type: props.match.params.type,
-  title: props.match.params.type === 'templates' ? 'Template' : 'Snippet',
-  loading: state.space.settingsNotifications.notificationLoading,
-  saving: state.space.settingsNotifications.saving,
+  submission: state.settingsNotifications.notification,
+  type: props.type,
+  title: props.type === 'templates' ? 'Template' : 'Snippet',
+  loading: state.settingsNotifications.notificationLoading,
+  saving: state.settingsNotifications.saving,
 });
 
 export const mapDispatchToProps = {
@@ -309,6 +308,8 @@ export const Notification = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('dirty', 'setDirty', false),
   withState('values', 'setValues', props =>
@@ -324,11 +325,11 @@ export const Notification = compose(
   }),
   lifecycle({
     componentWillMount() {
-      this.props.fetchNotification(this.props.match.params.id);
+      this.props.fetchNotification(this.props.id);
     },
     componentWillReceiveProps(nextProps) {
-      if (this.props.match.params.id !== nextProps.match.params.id) {
-        this.props.fetchNotification(nextProps.match.params.id);
+      if (this.props.id !== nextProps.id) {
+        this.props.fetchNotification(nextProps.id);
       }
       if (this.props.submission !== nextProps.submission) {
         this.props.setValues(

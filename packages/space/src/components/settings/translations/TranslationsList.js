@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import {
@@ -22,6 +22,9 @@ import { LocalesList } from './LocalesList';
 import { Table, PaginationControl, FilterControl } from 'common';
 import { I18n } from '../../../../../app/src/I18nProvider';
 import { actions } from '../../../redux/modules/settingsTranslations';
+import { context } from '../../../redux/store';
+
+import { isActiveClass } from '../../../utils';
 
 export const UnpublishedChanges = ({ stagedEntries, link }) =>
   stagedEntries.size > 0 ? (
@@ -76,10 +79,7 @@ const ConfirmDeleteModal = ({
 
 export const TranslationsListComponent = ({
   pathPrefix,
-  match: {
-    path,
-    params: { mode },
-  },
+  mode,
   loading,
   errors,
   formContexts,
@@ -116,7 +116,7 @@ export const TranslationsListComponent = ({
         </div>
         <UnpublishedChanges
           stagedEntries={stagedEntries}
-          link={`${pathPrefix}/staged`}
+          link={`/settings/translations/staged`}
         />
         <div className="list-wrapper list-wrapper--locales mb-5">
           <h2 className="section__title">
@@ -131,7 +131,7 @@ export const TranslationsListComponent = ({
 
           <ul className="nav nav-tabs">
             <li role="presentation">
-              <Link to={`${pathPrefix}/context/shared`}>
+              <Link to="/settings/translations/context/shared">
                 <I18n>Shared Translations</I18n>
               </Link>
             </li>
@@ -144,27 +144,28 @@ export const TranslationsListComponent = ({
 
           <ul className="nav nav-tabs">
             <li role="presentation">
-              <NavLink exact to={`${pathPrefix}`} activeClassName="active">
+              <Link
+                to="/settings/translations"
+                getProps={isActiveClass('nav-link')}
+              >
                 <I18n>Form Contexts</I18n>
-              </NavLink>
+              </Link>
             </li>
             <li role="presentation">
-              <NavLink
-                exact
-                to={`${pathPrefix}/datastore`}
-                activeClassName="active"
+              <Link
+                to="/settings/translations/datastore"
+                getProps={isActiveClass('nav-link')}
               >
                 <I18n>Datastore Contexts</I18n>
-              </NavLink>
+              </Link>
             </li>
             <li role="presentation">
-              <NavLink
-                exact
-                to={`${pathPrefix}/custom`}
-                activeClassName="active"
+              <Link
+                to="/settings/translations/custom"
+                getProps={isActiveClass('nav-link')}
               >
                 <I18n>Custom Contexts</I18n>
-              </NavLink>
+              </Link>
             </li>
           </ul>
           <div className="mb-2">
@@ -249,13 +250,13 @@ export const TranslationsListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.space.settingsTranslations.contexts.loading,
-  errors: state.space.settingsTranslations.contexts.errors,
-  formContexts: state.space.settingsTranslations.contexts.form,
-  datastoreContexts: state.space.settingsTranslations.contexts.datastore,
-  customContexts: state.space.settingsTranslations.contexts.custom,
-  unexpectedContexts: state.space.settingsTranslations.contexts.unexpected,
-  stagedEntries: state.space.settingsTranslations.staged.entries,
+  loading: state.settingsTranslations.contexts.loading,
+  errors: state.settingsTranslations.contexts.errors,
+  formContexts: state.settingsTranslations.contexts.form,
+  datastoreContexts: state.settingsTranslations.contexts.datastore,
+  customContexts: state.settingsTranslations.contexts.custom,
+  unexpectedContexts: state.settingsTranslations.contexts.unexpected,
+  stagedEntries: state.settingsTranslations.staged.entries,
 });
 
 export const mapDispatchToProps = {
@@ -350,7 +351,7 @@ const renderContextNameCell = ({
         />
       </div>
     ) : (
-      <Link to={`${pathPrefix}/context/${value}`}>{value}</Link>
+      <Link to={`/settings/translations/context/${value}`}>{value}</Link>
     )}
   </td>
 );
@@ -438,9 +439,11 @@ export const TranslationsList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
-  withProps(({ match: { path } }) => ({
-    pathPrefix: path.replace(/\/:mode\?/, ``),
+  withProps(({ uri }) => ({
+    pathPrefix: uri.replace(/\/:mode\?/, ``),
   })),
   withState('openDropdown', 'setOpenDropdown', ''),
   withState('openUpdate', 'setOpenUpdate', ''),

@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import { Route, Switch } from 'react-router-dom';
+import { Link, Router } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import {
@@ -21,34 +20,30 @@ import { Teams } from './teams/Teams';
 import { Translations } from './translations/Translations';
 import { actions as datastoreActions } from '../../redux/modules/settingsDatastore';
 import { actions as teamActions } from '../../redux/modules/teamList';
+import { context } from '../../redux/store';
 import { I18n } from '../../../../app/src/I18nProvider';
 
 export const SettingsComponent = () => (
-  <Switch>
-    <Route path="/settings/profile" component={Profile} />
-    <Route path="/settings/system" component={SpaceSettings} />
-    <Route path="/settings/datastore" component={Datastore} />
-    <Route path="/settings/robots" component={RobotsWrapper} />
-    <Route path="/settings/users" component={Users} />
-    <Route path="/settings/notifications" component={Notifications} />
-    <Route path="/settings/teams" component={Teams} />
-    <Route
-      path="/settings/schedulers"
-      render={props => (
-        <Schedulers
-          {...props}
-          breadcrumbs={
-            <Fragment>
-              <Link to="/">home</Link> /{` `}
-              <Link to="/settings">settings</Link> /{` `}
-            </Fragment>
-          }
-        />
-      )}
+  <Router>
+    <Profile path="profile" />
+    <SpaceSettings path="system" />
+    <Datastore path="datastore/*" />
+    <RobotsWrapper path="robots/*" />
+    <Users path="users/*" />
+    <Notifications path="notifications/*" />
+    <Teams path="teams/*" />
+    <Schedulers
+      path="schedulers/*"
+      breadcrumbs={
+        <Fragment>
+          <Link to="/">home</Link> /{` `}
+          <Link to="/settings">settings</Link> /{` `}
+        </Fragment>
+      }
     />
-    <Route path="/settings/translations" component={Translations} />
-    <Route component={SettingsNavigation} />
-  </Switch>
+    <Translations path="translations/*" />
+    <SettingsNavigation default />
+  </Router>
 );
 
 const mapDispatchToProps = {
@@ -60,6 +55,8 @@ export const Settings = compose(
   connect(
     null,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentWillMount(prev, next) {
@@ -190,5 +187,7 @@ export const SettingsNavigation = compose(
   connect(
     mapStateToProps,
     {},
+    null,
+    { context },
   ),
 )(SettingsNavigationComponent);

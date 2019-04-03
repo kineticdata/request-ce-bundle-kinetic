@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { getTeamColor, getTeamIcon } from '../../utils';
 import {
   Avatar,
@@ -171,17 +171,16 @@ export const Team = ({
           )}
         </div>
         <Fragment>
-          {viewDiscussionsModal &&
-            isSmallLayout && (
-              <ViewDiscussionsModal
-                close={closeDiscussions}
-                itemType="Team"
-                itemKey={team.slug}
-                creationFields={creationFields}
-                CreationForm={CreationForm}
-                me={me}
-              />
-            )}
+          {viewDiscussionsModal && isSmallLayout && (
+            <ViewDiscussionsModal
+              close={closeDiscussions}
+              itemType="Team"
+              itemKey={team.slug}
+              creationFields={creationFields}
+              CreationForm={CreationForm}
+              me={me}
+            />
+          )}
           <DiscussionsPanel
             itemType="Team"
             itemKey={team.slug}

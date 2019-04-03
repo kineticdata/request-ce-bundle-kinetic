@@ -19,8 +19,8 @@ export const actions = {
 };
 
 export const selectIsMyProfile = state =>
-  state.space.profiles.profile &&
-  state.space.profiles.profile.username === state.app.profile.username;
+  state.profiles.profile &&
+  state.profiles.profile.username === state.app.profile.username;
 
 export const State = Record({
   loading: true,

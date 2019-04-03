@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import {
   compose,
   withHandlers,
@@ -8,7 +8,7 @@ import {
   withState,
   lifecycle,
 } from 'recompose';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { parse } from 'query-string';
 import { ButtonGroup, Button } from 'reactstrap';
 import { CoreForm } from '@kineticdata/react';
@@ -26,6 +26,7 @@ import {
   selectFormBySlug,
   actions,
 } from '../../../redux/modules/settingsDatastore';
+import { context } from '../../../redux/store';
 
 import { I18n } from '../../../../../app/src/I18nProvider';
 
@@ -109,34 +110,32 @@ const DatastoreSubmissionComponent = ({
             </h1>
           </div>
           <div className="page-title__actions">
-            {showPrevAndNext &&
-              !isEditing && (
-                <ButtonGroup className="datastore-prev-next">
-                  <LinkContainer to={prevAndNext.prev || ''}>
-                    <Button color="inverse" disabled={!prevAndNext.prev}>
-                      <span className="icon">
-                        <span className="fa fa-fw fa-caret-left" />
-                      </span>
-                    </Button>
-                  </LinkContainer>
-                  <LinkContainer to={prevAndNext.next || ''}>
-                    <Button color="inverse" disabled={!prevAndNext.next}>
-                      <span className="icon">
-                        <span className="fa fa-fw fa-caret-right" />
-                      </span>
-                    </Button>
-                  </LinkContainer>
-                </ButtonGroup>
-              )}
-            {submissionId &&
-              !isEditing && (
-                <Link
-                  to={`/settings/datastore/${form.slug}/${submissionId}/edit`}
-                  className="btn btn-primary ml-3 datastore-edit"
-                >
-                  <I18n>Edit Record</I18n>
-                </Link>
-              )}
+            {showPrevAndNext && !isEditing && (
+              <ButtonGroup className="datastore-prev-next">
+                <LinkContainer to={prevAndNext.prev || ''}>
+                  <Button color="inverse" disabled={!prevAndNext.prev}>
+                    <span className="icon">
+                      <span className="fa fa-fw fa-caret-left" />
+                    </span>
+                  </Button>
+                </LinkContainer>
+                <LinkContainer to={prevAndNext.next || ''}>
+                  <Button color="inverse" disabled={!prevAndNext.next}>
+                    <span className="icon">
+                      <span className="fa fa-fw fa-caret-right" />
+                    </span>
+                  </Button>
+                </LinkContainer>
+              </ButtonGroup>
+            )}
+            {submissionId && !isEditing && (
+              <Link
+                to={`/settings/datastore/${form.slug}/${submissionId}/edit`}
+                className="btn btn-primary ml-3 datastore-edit"
+              >
+                <I18n>Edit Record</I18n>
+              </Link>
+            )}
             {discussionsEnabled && (
               <button
                 onClick={openDiscussions}
@@ -174,27 +173,25 @@ const DatastoreSubmissionComponent = ({
           )}
         </div>
       </div>
-      {discussionsEnabled &&
-        submission && (
-          <DiscussionsPanel
-            creationFields={creationFields}
-            CreationForm={CreationForm}
-            itemType="Datastore Submission"
-            itemKey={submissionId}
-            me={profile}
-          />
-        )}
-      {viewDiscussionsModal &&
-        isSmallLayout && (
-          <ViewDiscussionsModal
-            creationFields={creationFields}
-            CreationForm={CreationForm}
-            close={closeDiscussions}
-            itemType="Datastore Submission"
-            itemKey={submissionId}
-            me={profile}
-          />
-        )}
+      {discussionsEnabled && submission && (
+        <DiscussionsPanel
+          creationFields={creationFields}
+          CreationForm={CreationForm}
+          itemType="Datastore Submission"
+          itemKey={submissionId}
+          me={profile}
+        />
+      )}
+      {viewDiscussionsModal && isSmallLayout && (
+        <ViewDiscussionsModal
+          creationFields={creationFields}
+          CreationForm={CreationForm}
+          close={closeDiscussions}
+          itemType="Datastore Submission"
+          itemKey={submissionId}
+          me={profile}
+        />
+      )}
     </div>
   </I18n>
 );
@@ -214,8 +211,8 @@ export const getRandomKey = () =>
   Math.floor(Math.random() * (100000 - 100 + 1)) + 100;
 
 export const shouldPrevNextShow = state =>
-  state.space.settingsDatastore.submission !== null &&
-  state.space.settingsDatastore.submissions.size > 0;
+  state.settingsDatastore.submission !== null &&
+  state.settingsDatastore.submissions.size > 0;
 
 export const handleUpdated = props => response => {
   if (props.submissionId) {
@@ -244,16 +241,16 @@ export const openDiscussions = props => () =>
 export const closeDiscussions = props => () =>
   props.setViewDiscussionsModal(false);
 
-export const mapStateToProps = (state, { match: { params } }) => ({
-  submissionId: params.id,
-  submission: state.space.settingsDatastore.submission,
+export const mapStateToProps = (state, { id, mode, slug }) => ({
+  submissionId: id,
+  submission: state.settingsDatastore.submission,
   showPrevAndNext: shouldPrevNextShow(state),
   prevAndNext: selectPrevAndNext(state),
-  form: selectFormBySlug(state, params.slug),
+  form: selectFormBySlug(state, slug),
   values: valuesFromQueryParams(state.router.location.search),
-  isEditing: params.mode && params.mode === 'edit' ? true : false,
+  isEditing: mode && mode === 'edit' ? true : false,
   discussionsEnabled: selectDiscussionsEnabled(state),
-  isSmallLayout: state.app.layout.get('size') === 'small',
+  isSmallLayout: state.app.layoutSize === 'small',
   profile: state.app.profile,
 });
 
@@ -269,6 +266,8 @@ export const DatastoreSubmission = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('formKey', 'setFormKey', getRandomKey),
   withState('viewDiscussionsModal', 'setViewDiscussionsModal', false),
@@ -290,16 +289,13 @@ export const DatastoreSubmission = compose(
   ),
   lifecycle({
     componentWillMount() {
-      if (this.props.match.params.id) {
-        this.props.fetchSubmission(this.props.match.params.id);
+      if (this.props.id) {
+        this.props.fetchSubmission(this.props.id);
       }
     },
     componentWillReceiveProps(nextProps) {
-      if (
-        nextProps.match.params.id &&
-        this.props.match.params.id !== nextProps.match.params.id
-      ) {
-        this.props.fetchSubmission(nextProps.match.params.id);
+      if (nextProps.id && this.props.id !== nextProps.id) {
+        this.props.fetchSubmission(nextProps.id);
       }
     },
     componentWillUnmount() {

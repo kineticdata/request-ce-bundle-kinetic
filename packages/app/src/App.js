@@ -19,7 +19,7 @@ import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';
 import { App as ServicesApp } from 'services/src/App';
 import { QueueApp } from 'queue/src/QueueApp';
-import { App as SpaceApp } from 'space/src/App';
+import { SpaceApp } from 'space/src/SpaceApp';
 import { App as TechBarApp } from 'tech-bar/src/App';
 
 export const AppComponent = props =>
@@ -38,6 +38,22 @@ export const AppComponent = props =>
           </div>
         )}
         <props.AppProvider
+          appState={{
+            space: props.space,
+            kapp: props.kapp,
+            kapps: props.kapps,
+            profile: props.profile,
+            kappSlug: props.kappSlug,
+            layoutSize: props.layoutSize,
+            version: props.version,
+            location: `${
+              props.kappSlug === null ? '' : `/kapps/${props.kappSlug}`
+            }`,
+            locales: props.locales,
+            timezones: props.timezones,
+          }}
+          appRefresh={props.refreshApp}
+          history={props.history}
           render={({ main, sidebar, header }) => (
             <div
               className={`app-body ${
@@ -80,6 +96,9 @@ export const mapStateToProps = state => ({
   locale: state.app.config.locale,
   profile: state.app.profile,
   space: state.app.space,
+  locales: state.app.config.locales,
+  timezones: state.app.config.timezones,
+  version: state.app.config.version,
 });
 export const mapDispatchToProps = {
   loadApp: loadingActions.loadApp,

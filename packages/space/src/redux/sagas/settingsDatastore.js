@@ -23,7 +23,7 @@ import {
   SubmissionSearch,
 } from '@kineticdata/react';
 import { fromJS, Seq, Map, List } from 'immutable';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 
 import { actions as systemErrorActions } from '../modules/errors';
 import { toastActions } from 'common';
@@ -202,15 +202,14 @@ export function* createFormSaga(action) {
 }
 
 export const selectSearchParams = state => ({
-  searchParams: state.space.settingsDatastore.searchParams,
-  form: state.space.settingsDatastore.currentForm,
-  pageToken: state.space.settingsDatastore.nextPageToken,
-  pageTokens: state.space.settingsDatastore.pageTokens,
-  simpleSearchActive: state.space.settingsDatastore.simpleSearchActive,
-  simpleSearchParam: state.space.settingsDatastore.simpleSearchParam,
-  simpleSearchNextPageIndex:
-    state.space.settingsDatastore.simpleSearchNextPageIndex,
-  sortDirection: state.space.settingsDatastore.sortDirection,
+  searchParams: state.settingsDatastore.searchParams,
+  form: state.settingsDatastore.currentForm,
+  pageToken: state.settingsDatastore.nextPageToken,
+  pageTokens: state.settingsDatastore.pageTokens,
+  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
+  simpleSearchParam: state.settingsDatastore.simpleSearchParam,
+  simpleSearchNextPageIndex: state.settingsDatastore.simpleSearchNextPageIndex,
+  sortDirection: state.settingsDatastore.sortDirection,
 });
 
 export function* fetchSubmissionsSimpleSaga() {
@@ -602,20 +601,19 @@ export function* executeImportSaga(action) {
 
   const responses = yield all(
     head
-      .map(
-        record =>
-          record.id
-            ? call(updateSubmission, {
-                datastore: true,
-                formSlug: form.slug,
-                values: record.values,
-                id: record.id,
-              })
-            : call(createSubmission, {
-                datastore: true,
-                formSlug: form.slug,
-                values: record.values,
-              }),
+      .map(record =>
+        record.id
+          ? call(updateSubmission, {
+              datastore: true,
+              formSlug: form.slug,
+              values: record.values,
+              id: record.id,
+            })
+          : call(createSubmission, {
+              datastore: true,
+              formSlug: form.slug,
+              values: record.values,
+            }),
       )
       .toJS(),
   );

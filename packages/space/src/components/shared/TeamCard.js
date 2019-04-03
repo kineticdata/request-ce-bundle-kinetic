@@ -1,6 +1,6 @@
 import React from 'react';
 import { compose, withState, withHandlers } from 'recompose';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { getTeamColor, getTeamIcon } from '../../utils';
 import { Avatar } from 'common';
 import { I18n } from '../../../../app/src/I18nProvider';

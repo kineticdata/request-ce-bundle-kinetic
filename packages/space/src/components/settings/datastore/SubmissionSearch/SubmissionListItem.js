@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { compose, withHandlers, withState } from 'recompose';
 import {
   Dropdown,
@@ -194,8 +194,8 @@ const getSubmissionData = (submission, column) =>
   column.type === 'value'
     ? submission.values[column.name]
     : column.name.includes('At')
-      ? moment(submission[column.name]).format(Constants.TIME_FORMAT)
-      : submission[column.name];
+    ? moment(submission[column.name]).format(Constants.TIME_FORMAT)
+    : submission[column.name];
 
 const handleClone = ({ cloneSubmission, fetchSubmissions }) => id => () =>
   cloneSubmission({ id: id, callback: fetchSubmissions });

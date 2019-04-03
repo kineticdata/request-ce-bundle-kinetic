@@ -1,21 +1,23 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import moment from 'moment';
 import { Constants, Loading, PageTitle } from 'common';
 import { NavLink } from 'react-router-dom';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
+
 import { actions } from '../../../redux/modules/settingsRobots';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const getStatusColor = status =>
   status === 'Queued'
     ? 'status--yellow'
     : status === 'Running'
-      ? 'status--green'
-      : 'status--gray';
+    ? 'status--green'
+    : 'status--gray';
 
 const WallyEmptyMessage = () => {
   return (
@@ -96,20 +98,19 @@ const RobotExecutionsListComponent = ({
             </li>
           </ul>
         </div>
-        {robotExecutions.size <= 0 &&
-          robotExecutionsErrors.length > 0 && (
-            <div className="text-center text-danger">
-              <h1>
-                <I18n>Oops!</I18n>
-              </h1>
-              <h2>
-                <I18n>Robot Executions Not Found</I18n>
-              </h2>
-              {robotExecutionsErrors.map(error => (
-                <p className="error-details">{error}</p>
-              ))}
-            </div>
-          )}
+        {robotExecutions.size <= 0 && robotExecutionsErrors.length > 0 && (
+          <div className="text-center text-danger">
+            <h1>
+              <I18n>Oops!</I18n>
+            </h1>
+            <h2>
+              <I18n>Robot Executions Not Found</I18n>
+            </h2>
+            {robotExecutionsErrors.map(error => (
+              <p className="error-details">{error}</p>
+            ))}
+          </div>
+        )}
         {robotExecutions.size > 0 && (
           <table className="table table-sm table-striped table-robots">
             <thead className="header">
@@ -172,8 +173,9 @@ const RobotExecutionsListComponent = ({
             </tbody>
           </table>
         )}
-        {robotExecutionsErrors.length <= 0 &&
-          robotExecutions.size === 0 && <WallyEmptyMessage />}
+        {robotExecutionsErrors.length <= 0 && robotExecutions.size === 0 && (
+          <WallyEmptyMessage />
+        )}
         <div className="robots-pagination">
           <div className="btn-group">
             <button
@@ -218,12 +220,12 @@ const RobotExecutionsListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  robot: state.space.settingsRobots.robot,
-  robotExecutions: state.space.settingsRobots.robotExecutions,
-  robotExecutionsLoading: state.space.settingsRobots.robotExecutionsLoading,
-  robotExecutionsErrors: state.space.settingsRobots.robotExecutionsErrors,
-  hasNextPage: !!state.space.settingsRobots.robotExecutionsNextPageToken,
-  hasPreviousPage: !state.space.settingsRobots.robotExecutionsPreviousPageTokens.isEmpty(),
+  robot: state.settingsRobots.robot,
+  robotExecutions: state.settingsRobots.robotExecutions,
+  robotExecutionsLoading: state.settingsRobots.robotExecutionsLoading,
+  robotExecutionsErrors: state.settingsRobots.robotExecutionsErrors,
+  hasNextPage: !!state.settingsRobots.robotExecutionsNextPageToken,
+  hasPreviousPage: !state.settingsRobots.robotExecutionsPreviousPageTokens.isEmpty(),
 });
 
 export const mapDispatchToProps = {
@@ -237,18 +239,19 @@ export const RobotExecutionsList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({
     handleNextPage: props => () =>
-      props.fetchRobotExecutionsNextPage(props.match.params.robotId),
+      props.fetchRobotExecutionsNextPage(props.robotId),
     handlePreviousPage: props => () =>
-      props.fetchRobotExecutionsPreviousPage(props.match.params.robotId),
-    handleReload: props => () =>
-      props.fetchRobotExecutions(props.match.params.robotId),
+      props.fetchRobotExecutionsPreviousPage(props.robotId),
+    handleReload: props => () => props.fetchRobotExecutions(props.robotId),
   }),
   lifecycle({
     componentWillMount() {
-      this.props.fetchRobotExecutions(this.props.match.params.robotId);
+      this.props.fetchRobotExecutions(this.props.robotId);
     },
   }),
 )(RobotExecutionsListComponent);

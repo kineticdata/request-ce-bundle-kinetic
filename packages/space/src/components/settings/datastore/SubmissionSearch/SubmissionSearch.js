@@ -1,18 +1,13 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { lifecycle, compose, withState } from 'recompose';
 import { PageTitle } from 'common';
-import {
-  ButtonGroup,
-  ButtonDropdown,
-  DropdownItem,
-  DropdownToggle,
-  DropdownMenu,
-} from 'reactstrap';
+import { ButtonDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 
 import { actions } from '../../../../redux/modules/settingsDatastore';
+import { context } from '../../../../redux/store';
 import { Searchbar } from './Searchbar';
 import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
@@ -22,7 +17,7 @@ import { I18n } from '../../../../../../app/src/I18nProvider';
 const SubmissionSearchComponent = ({
   form,
   loading,
-  match,
+  slug,
   openModal,
   optionsOpen,
   setOptionsOpen,
@@ -96,7 +91,7 @@ const SubmissionSearchComponent = ({
               </ButtonDropdown>
             </div>
           </div>
-          <Searchbar formSlug={match.params.slug} />
+          <Searchbar formSlug={slug} />
           <Paging />
           <SubmissionList />
         </div>
@@ -107,10 +102,10 @@ const SubmissionSearchComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.space.settingsDatastore.currentFormLoading,
-  form: state.space.settingsDatastore.currentForm,
-  simpleSearchActive: state.space.settingsDatastore.simpleSearchActive,
-  submissions: state.space.settingsDatastore.submissions,
+  loading: state.settingsDatastore.currentFormLoading,
+  form: state.settingsDatastore.currentForm,
+  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
+  submissions: state.settingsDatastore.submissions,
 });
 
 export const mapDispatchToProps = {
@@ -124,15 +119,17 @@ export const SubmissionSearch = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('optionsOpen', 'setOptionsOpen', false),
   lifecycle({
     componentWillMount() {
-      this.props.fetchForm(this.props.match.params.slug);
+      this.props.fetchForm(this.props.slug);
     },
     componentWillReceiveProps(nextProps) {
-      if (this.props.match.params.slug !== nextProps.match.params.slug) {
-        this.props.fetchForm(nextProps.match.params.slug);
+      if (this.props.slug !== nextProps.slug) {
+        this.props.fetchForm(nextProps.slug);
         this.props.resetSearch();
       }
     },

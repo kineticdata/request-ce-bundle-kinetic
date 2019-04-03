@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { PageTitle } from 'common';
 import { TeamCard } from '../shared/TeamCard';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';

@@ -1,20 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { compose, lifecycle } from 'recompose';
 import moment from 'moment';
 import { Constants, Loading, PageTitle } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
+
 import { actions } from '../../../redux/modules/settingsRobots';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const getStatusColor = status =>
   status === 'Inactive'
     ? 'status--red'
     : status === 'Expired'
-      ? 'status--yellow'
-      : 'status--green';
+    ? 'status--yellow'
+    : 'status--green';
 
 const getNextExecution = (nextExecutions, robotId) => {
   let nextExecution;
@@ -79,20 +81,19 @@ const RobotsListComponent = ({
             <I18n>Create Robot</I18n>
           </Link>
         </div>
-        {robots.size <= 0 &&
-          robotsErrors.length > 0 && (
-            <div className="text-center text-danger">
-              <h1>
-                <I18n>Oops!</I18n>
-              </h1>
-              <h2>
-                <I18n>Robots Not Found</I18n>
-              </h2>
-              {robotsErrors.map(error => (
-                <p className="error-details">{error}</p>
-              ))}
-            </div>
-          )}
+        {robots.size <= 0 && robotsErrors.length > 0 && (
+          <div className="text-center text-danger">
+            <h1>
+              <I18n>Oops!</I18n>
+            </h1>
+            <h2>
+              <I18n>Robots Not Found</I18n>
+            </h2>
+            {robotsErrors.map(error => (
+              <p className="error-details">{error}</p>
+            ))}
+          </div>
+        )}
         {robots.size > 0 && (
           <table className="table table-sm table-striped table-robots">
             <thead className="header">
@@ -167,13 +168,13 @@ const RobotsListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  robot: state.space.settingsRobots.robot,
-  robots: state.space.settingsRobots.robots,
-  robotsLoading: state.space.settingsRobots.robotsLoading,
-  robotsLoaded: state.space.settingsRobots.robotsLoaded,
-  robotsErrors: state.space.settingsRobots.robotsErrors,
-  nextExecutions: state.space.settingsRobots.nextExecutions,
-  nextExecutionsLoading: state.space.settingsRobots.nextExecutionsLoading,
+  robot: state.settingsRobots.robot,
+  robots: state.settingsRobots.robots,
+  robotsLoading: state.settingsRobots.robotsLoading,
+  robotsLoaded: state.settingsRobots.robotsLoaded,
+  robotsErrors: state.settingsRobots.robotsErrors,
+  nextExecutions: state.settingsRobots.nextExecutions,
+  nextExecutionsLoading: state.settingsRobots.nextExecutionsLoading,
 });
 
 export const mapDispatchToProps = {
@@ -186,6 +187,8 @@ export const RobotsList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentWillMount() {

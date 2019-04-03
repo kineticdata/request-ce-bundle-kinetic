@@ -1,3 +1,4 @@
+import { reducer as app } from './modules/app';
 import { reducer as errors } from './modules/errors';
 import { reducer as about } from './modules/about';
 import { reducer as spaceApp } from './modules/spaceApp';
@@ -12,6 +13,7 @@ import { reducer as settingsUsers } from './modules/settingsUsers';
 import { reducer as settingsTranslations } from './modules/settingsTranslations';
 
 export default {
+  app,
   errors,
   spaceApp,
   about,

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { toastActions } from 'common';
@@ -9,6 +9,8 @@ import { Robot } from './Robot';
 import { RobotExecution } from './RobotExecution';
 import { RobotExecutionsList } from './RobotExecutionsList';
 import { RobotsList } from './RobotsList';
+
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const RobotError = () => (
@@ -39,9 +41,9 @@ const RobotContainerComponent = ({ match }) => (
 );
 
 export const mapStateToProps = state => ({
-  robot: state.space.settingsRobots.robot,
-  robotLoading: state.space.settingsRobots.robotLoading,
-  robotErrors: state.space.settingsRobots.robotErrors,
+  robot: state.settingsRobots.robot,
+  robotLoading: state.settingsRobots.robotLoading,
+  robotErrors: state.settingsRobots.robotErrors,
 });
 
 export const mapDispatchToProps = {
@@ -54,5 +56,7 @@ export const RobotContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
 )(RobotContainerComponent);

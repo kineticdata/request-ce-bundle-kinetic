@@ -269,8 +269,8 @@ const sortSubmissions = (submissions, sortInfo) => {
 };
 
 export const selectPrevAndNext = state => {
-  const submissions = state.space.settingsDatastore.submissions || List();
-  const submission = state.space.settingsDatastore.submission;
+  const submissions = state.settingsDatastore.submissions || List();
+  const submission = state.settingsDatastore.submission;
   if (submission !== null) {
     const currentItemIndex = submissions.findIndex(
       item => item.id === submission.id,
@@ -302,14 +302,12 @@ export const selectBridgeNameByModel = model => {
   }
 };
 export const selectUpdatedFormActiveBridge = state =>
-  state.space.settingsDatastore.currentFormChanges.bridgeModelMapping
-    .bridgeName;
-export const selectCurrentForm = state =>
-  state.space.settingsDatastore.currentForm;
+  state.settingsDatastore.currentFormChanges.bridgeModelMapping.bridgeName;
+export const selectCurrentForm = state => state.settingsDatastore.currentForm;
 export const selectCurrentFormChanges = state =>
-  state.space.settingsDatastore.currentFormChanges;
+  state.settingsDatastore.currentFormChanges;
 export const selectFormBySlug = (state, formSlug) =>
-  state.space.settingsDatastore.forms.find(form => form.slug === formSlug);
+  state.settingsDatastore.forms.find(form => form.slug === formSlug);
 
 export const State = Record({
   loading: true,
@@ -446,13 +444,12 @@ export const reducer = (state = State(), { type, payload }) => {
               }),
             ),
           )
-          .map(
-            (part, index) =>
-              index > partIndex && operation !== 'Is Equal To'
-                ? part
-                    .set('operation', 'All')
-                    .set('value', IndexValues({ values: List() }))
-                : part,
+          .map((part, index) =>
+            index > partIndex && operation !== 'Is Equal To'
+              ? part
+                  .set('operation', 'All')
+                  .set('value', IndexValues({ values: List() }))
+              : part,
           ),
       );
     }

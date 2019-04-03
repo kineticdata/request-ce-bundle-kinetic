@@ -1,12 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { push } from 'connected-react-router';
+import { Link } from '@reach/router';
+import { push } from 'redux-first-history';
 import { connect } from 'react-redux';
 import { Badge, UncontrolledTooltip } from 'reactstrap';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { Table, PaginationControl, FilterControl } from 'common';
 import md5 from 'md5';
+
 import { actions } from '../../../redux/modules/settingsTranslations';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const StagedListComponent = ({
@@ -107,10 +109,10 @@ export const StagedListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.space.settingsTranslations.staged.loading,
-  errors: state.space.settingsTranslations.staged.errors,
-  stagedEntries: state.space.settingsTranslations.staged.entries,
-  availableLocalesMap: state.space.settingsTranslations.locales.available.reduce(
+  loading: state.settingsTranslations.staged.loading,
+  errors: state.settingsTranslations.staged.errors,
+  stagedEntries: state.settingsTranslations.staged.entries,
+  availableLocalesMap: state.settingsTranslations.locales.available.reduce(
     (map, locale) => ({ ...map, [locale.code]: locale.name }),
     {},
   ),
@@ -171,6 +173,8 @@ export const StagedList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({
     handlePublish,
@@ -182,13 +186,13 @@ export const StagedList = compose(
   lifecycle({
     componentDidMount() {
       this.props.fetchStagedTranslations({
-        contextName: this.props.match.params.context,
+        contextName: this.props.context,
       });
     },
     componentDidUpdate(prevProps) {
-      if (this.props.match.params.context !== prevProps.match.params.context) {
+      if (this.props.context !== prevProps.context) {
         this.props.fetchStagedTranslations({
-          contextName: this.props.match.params.context,
+          contextName: this.props.context,
         });
       }
     },

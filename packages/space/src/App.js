@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers } from 'recompose';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Router, Redirect } from '@reach/router';
 import { Utils, Loading, ErrorNotFound } from 'common';
 import { actions } from './redux/modules/spaceApp';
 import * as selectors from 'app/src/redux/selectors';
@@ -21,6 +21,7 @@ import { IsolatedForm } from './components/shared/IsolatedForm';
 import { FormList } from './components/default_kapp/FormList';
 import { I18n } from '../../app/src/I18nProvider';
 import './assets/styles/master.scss';
+import { context } from './redux/store';
 
 export const AppComponent = props => {
   if (props.loading) {
@@ -28,24 +29,18 @@ export const AppComponent = props => {
   }
   return props.render({
     sidebar: !props.isGuest && (
-      <Switch>
-        <Route
-          path="/settings"
-          render={() => (
-            <SettingsSidebar settingsBackPath={props.settingsBackPath} />
-          )}
+      <Router>
+        <SettingsSidebar
+          settingsBackPath={props.settingsBackPath}
+          path="settings/*"
         />
-        <Route
-          render={() => (
-            <Sidebar
-              kapps={props.kapps}
-              teams={props.teams}
-              isSpaceAdmin={props.isSpaceAdmin}
-              openSettings={props.openSettings}
-            />
-          )}
+        <Sidebar
+          teams={props.teams}
+          isSpaceAdmin={props.isSpaceAdmin}
+          openSettings={props.openSettings}
+          path="*"
         />
-      </Switch>
+      </Router>
     ),
     main: (
       <I18n>
@@ -55,34 +50,25 @@ export const AppComponent = props => {
             props.isGuest ? 'package-layout--guest' : ''
           }`}
         >
-          <Switch>
-            <Route path="/" exact component={Home} />
-            <Route path="/about" exact component={About} />
-            <Route path="/alerts" exact component={Alerts} />
-            <Route path="/alerts/:id" exact component={AlertForm} />
-            <Route path="/discussions/:id" exact component={Discussion} />
-            <Route path="/profile/:username" exact component={ViewProfile} />
-            <Route path="/settings" component={Settings} />
-            <Route path="/teams" exact component={TeamsContainer} />
-            <Route path="/teams/:slug" exact component={TeamContainer} />
-            <Route path="/kapps/:kappSlug" exact component={FormList} />
-            <Route
-              path="/kapps/:kappSlug/forms/:formSlug"
-              exact
-              component={IsolatedForm}
-            />
-            <Route
-              path="/kapps/:kappSlug/submissions/:id"
-              exact
-              component={IsolatedForm}
-            />
-            <Route
-              path="/kapps/:kappSlug/forms/:formSlug/submissions/:id"
-              exact
-              component={IsolatedForm}
-            />
-            <Route
-              path="/datastore/forms/:slug/submissions/:id"
+          <Router>
+            <Settings path="settings/*" />
+
+            <Home path="/" />
+            <About path="/about" />
+            <Alerts path="/alerts" />
+            <AlertForm path="/alerts/:id" />
+            <Discussion path="/discussions/:id" />
+            <ViewProfile path="/profile/:username" />
+
+            <TeamsContainer path="/teams" />
+            <TeamContainer path="/teams/:slug" />
+            <FormList path="/kapps/:kappSlug" />
+            <IsolatedForm path="/kapps/:kappSlug/forms/:formSlug" />
+            <IsolatedForm path="/kapps/:kappSlug/submissions/:id" />
+            <IsolatedForm path="/kapps/:kappSlug/forms/:formSlug/submissions/:id" />
+
+            {/* <Route
+              path=
               render={({ match }) => (
                 <Redirect
                   to={`/settings/datastore/${match.params.slug}/${
@@ -98,8 +84,8 @@ export const AppComponent = props => {
               )}
             />
             <Route path="/reset-password" render={() => <Redirect to="/" />} />
-            <Route component={ErrorNotFound} />
-          </Switch>
+            <Route component={ErrorNotFound} /> */}
+          </Router>
         </main>
       </I18n>
     ),
@@ -107,27 +93,26 @@ export const AppComponent = props => {
 };
 
 export const mapStateToProps = state => ({
-  loading: state.space.spaceApp.appLoading,
-  kapps: state.app.kapps
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .filter(kapp => kapp.slug !== 'admin'),
+  loading: state.spaceApp.appLoading,
   teams: Utils.getTeams(state.app.profile).sort((a, b) =>
     a.name.localeCompare(b.name),
   ),
   isSpaceAdmin: state.app.profile.spaceAdmin,
   isGuest: selectors.selectIsGuest(state),
   pathname: state.router.location.pathname,
-  settingsBackPath: state.space.spaceApp.settingsBackPath || '/',
+  settingsBackPath: state.spaceApp.settingsBackPath || '/',
 });
 const mapDispatchToProps = {
   fetchSettings: actions.fetchAppSettings,
   setSettingsBackPath: actions.setSettingsBackPath,
 };
 
-export const App = compose(
+const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({
     openSettings: props => () => props.setSettingsBackPath(props.pathname),
@@ -137,4 +122,6 @@ export const App = compose(
       this.props.fetchSettings();
     },
   }),
-)(AppComponent);
+);
+
+export const App = enhance(AppComponent);

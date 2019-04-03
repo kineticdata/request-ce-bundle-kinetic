@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Router, Redirect } from '@reach/router';
 import { Notification } from './Notification';
 import { DateFormat } from './DateFormat';
 import { NotificationsNotFound } from './NotificationsNotFound';
@@ -9,26 +9,37 @@ import {
   NOTIFICATIONS_FORM_SLUG,
   NOTIFICATIONS_DATE_FORMAT_FORM_SLUG,
 } from '../../../redux/modules/settingsNotifications';
+import { context } from '../../../redux/store';
 
-export const NotificationsComponent = ({ match, showNotifications }) =>
+export const NotificationsComponent = ({ appLocation, showNotifications }) =>
   showNotifications ? (
-    <Switch>
-      <Route path={`${match.path}/date-formats/:id`} component={DateFormat} />
-      <Route path={`${match.path}/:type/:id`} component={Notification} />
-      <Route path={`${match.path}/:type`} component={NotificationsList} />
-      <Route render={() => <Redirect to={`${match.path}/templates`} />} />
-    </Switch>
+    <Router>
+      <DateFormat path="date-formats/:id" />
+      <Notification path=":type/:id" />
+      <NotificationsList path=":type" />
+      <Redirect
+        from="/"
+        to={`${appLocation}/settings/notifications/templates`}
+        noThrow
+      />
+    </Router>
   ) : (
     <NotificationsNotFound />
   );
 
 export const mapStateToProps = state => ({
   showNotifications:
-    state.space.settingsDatastore.forms
+    state.settingsDatastore.forms
       .map(form => form.slug)
       .toSet()
       .intersect([NOTIFICATIONS_FORM_SLUG, NOTIFICATIONS_DATE_FORMAT_FORM_SLUG])
       .size === 2,
+  appLocation: state.app.location,
 });
 
-export const Notifications = connect(mapStateToProps)(NotificationsComponent);
+export const Notifications = connect(
+  mapStateToProps,
+  null,
+  null,
+  { context },
+)(NotificationsComponent);

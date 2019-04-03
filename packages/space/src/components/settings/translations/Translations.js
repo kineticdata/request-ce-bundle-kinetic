@@ -1,11 +1,12 @@
 import React from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
+import { Router, Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { TranslationsList } from './TranslationsList';
 import { EntriesList } from './EntriesList';
 import { StagedList } from './StagedList';
 import { actions } from '../../../redux/modules/settingsTranslations';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 import semver from 'semver';
 const MINIMUM_CE_VERSION = '2.3.0';
@@ -20,11 +21,11 @@ const TranslationsVersionError = ({ version }) => (
     <div className="page-title">
       <div className="page-title__wrapper">
         <h3>
-          <Link to="/">
+          <Link to="../..">
             <I18n>home</I18n>
           </Link>{' '}
           /{` `}
-          <Link to="/settings">
+          <Link to="..">
             <I18n>settings</I18n>
           </Link>{' '}
           /{` `}
@@ -55,52 +56,29 @@ export const TranslationsRouter = ({
   ) : (
     !localesLoading &&
     !contextsLoading && (
-      <Switch>
-        <Route
-          exact
-          path={`${match.path}/error`}
-          component={TranslationsError}
-        />
-        <Route
-          exact
-          path={`${match.path}/context/:context`}
-          component={EntriesList}
-        />
-        <Route
-          exact
-          path={`${match.path}/locale/:locale`}
-          component={EntriesList}
-        />
-        <Route
-          exact
-          path={`${match.path}/context/:context/locale/:locale`}
-          component={EntriesList}
-        />
-        <Route
-          exact
-          path={`${match.path}/context/:context/key/:keyHash`}
-          component={EntriesList}
-        />
-        <Route
-          exact
-          path={`${match.path}/staged/:context?`}
-          component={StagedList}
-        />
-        <Route path={`${match.path}/:mode?`} component={TranslationsList} />
-      </Switch>
+      <Router>
+        <TranslationsError path="error" />
+        <EntriesList path="context/:context" />
+        <EntriesList path="locale/:locale" />
+        <EntriesList path="context/:context/locale/:locale" />
+        <EntriesList path="context/:context/key/:keyHash" />
+        <StagedList path="staged/:context?" />
+        <TranslationsList path=":mode" />
+        <TranslationsList path="/" />
+      </Router>
     )
   );
 
 export const mapStateToProps = state => ({
-  version: state.app.config.version,
+  version: state.app.version,
   validVersion: semver.satisfies(
-    semver.coerce(state.app.config.version),
+    semver.coerce(state.app.version),
     `>=${MINIMUM_CE_VERSION}`,
   ),
-  localesLoading: state.space.settingsTranslations.locales.loading,
-  localeErrors: state.space.settingsTranslations.locales.errors,
-  contextsLoading: state.space.settingsTranslations.contexts.loading,
-  contextErrors: state.space.settingsTranslations.contexts.errors,
+  localesLoading: state.settingsTranslations.locales.loading,
+  localeErrors: state.settingsTranslations.locales.errors,
+  contextsLoading: state.settingsTranslations.contexts.loading,
+  contextErrors: state.settingsTranslations.contexts.errors,
   preferredLocale: state.app.profile.preferredLocale,
 });
 
@@ -113,6 +91,8 @@ export const Translations = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentDidMount() {

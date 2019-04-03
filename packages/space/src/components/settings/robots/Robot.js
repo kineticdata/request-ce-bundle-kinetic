@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import { push } from 'connected-react-router';
+import { Link } from '@reach/router';
+import { push } from 'redux-first-history';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import {
@@ -11,15 +11,19 @@ import {
   withState,
 } from 'recompose';
 import { NavLink } from 'react-router-dom';
+import { CoreForm } from '@kineticdata/react';
+import { Button } from 'reactstrap';
+import { toastActions, Loading, PageTitle } from 'common';
+
+import { RobotExecutionsList } from './RobotExecutionsList';
+import { PopConfirm } from '../../shared/PopConfirm';
+
 import {
   actions,
   ROBOT_FORM_SLUG,
 } from '../../../redux/modules/settingsRobots';
-import { CoreForm } from '@kineticdata/react';
-import { Button } from 'reactstrap';
-import { toastActions, Loading, PageTitle } from 'common';
-import { RobotExecutionsList } from './RobotExecutionsList';
-import { PopConfirm } from '../../shared/PopConfirm';
+import { context } from '../../../redux/store';
+
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const globals = import('common/globals');
@@ -74,20 +78,19 @@ const RobotComponent = ({
           <Loading />
         ) : (
           <Fragment>
-            {robot === null &&
-              robotErrors.length > 0 && (
-                <div className="text-center text-danger">
-                  <h1>
-                    <I18n>Oops!</I18n>
-                  </h1>
-                  <h2>
-                    <I18n>Robot Not Found</I18n>
-                  </h2>
-                  {robotErrors.map(error => (
-                    <p className="error-details">{error}</p>
-                  ))}
-                </div>
-              )}
+            {robot === null && robotErrors.length > 0 && (
+              <div className="text-center text-danger">
+                <h1>
+                  <I18n>Oops!</I18n>
+                </h1>
+                <h2>
+                  <I18n>Robot Not Found</I18n>
+                </h2>
+                {robotErrors.map(error => (
+                  <p className="error-details">{error}</p>
+                ))}
+              </div>
+            )}
             {robot !== null && (
               <Fragment>
                 <div className="tab-navigation tab-navigation--robots">
@@ -123,12 +126,9 @@ const RobotComponent = ({
                             <I18n>Inactive</I18n>
                           </strong>
                         )}
-                        {isInactive &&
-                          isExpired && (
-                            <I18n
-                              render={translate => ` ${translate('and')} `}
-                            />
-                          )}
+                        {isInactive && isExpired && (
+                          <I18n render={translate => ` ${translate('and')} `} />
+                        )}
                         {isExpired && (
                           <strong>
                             <I18n>Expired</I18n>
@@ -226,9 +226,9 @@ export const processDelete = props => () => {
 };
 
 export const mapStateToProps = state => ({
-  robot: state.space.settingsRobots.robot,
-  robotLoading: state.space.settingsRobots.robotLoading,
-  robotErrors: state.space.settingsRobots.robotErrors,
+  robot: state.settingsRobots.robot,
+  robotLoading: state.settingsRobots.robotLoading,
+  robotErrors: state.settingsRobots.robotErrors,
 });
 
 export const mapDispatchToProps = {
@@ -243,9 +243,11 @@ export const Robot = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(props => {
-    switch (props.match.params.mode) {
+    switch (props.mode) {
       case 'executions':
         return { type: 'executions' };
       default:
@@ -264,7 +266,7 @@ export const Robot = compose(
   }),
   lifecycle({
     componentWillMount() {
-      this.props.fetchRobot(this.props.match.params.robotId);
+      this.props.fetchRobot(this.props.robotId);
     },
   }),
 )(RobotComponent);

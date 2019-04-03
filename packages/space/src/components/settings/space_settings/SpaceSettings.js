@@ -1,9 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { fetchSpace, updateSpace } from '@kineticdata/react';
+
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 import {
@@ -183,64 +185,61 @@ export const SettingsComponent = ({
           <h2 className="section__title">
             <I18n>Form Mapping</I18n>
           </h2>
-          {requiredKapps.queue &&
-            attributesMap.has('Approval Form Slug') && (
-              <I18n
-                render={translate => (
-                  <AttributeSelectors.FormSelect
-                    id="Approval Form Slug"
-                    value={attributesMap.getIn(['Approval Form Slug', 'value'])}
-                    onChange={handleAttributeChange}
-                    valueMapper={value => value.slug}
-                    kappSlug={requiredKapps.queue.slug}
-                    label={translate('Default Approval Form')}
-                    style={{ width: '50%' }}
-                    description={attributesMap.getIn([
-                      'Approval Form Slug',
-                      'description',
-                    ])}
-                  />
-                )}
-              />
-            )}
-          {requiredKapps.admin &&
-            attributesMap.has('Feedback Form Slug') && (
-              <I18n
-                render={translate => (
-                  <AttributeSelectors.FormSelect
-                    id="Feedback Form Slug"
-                    value={attributesMap.getIn(['Feedback Form Slug', 'value'])}
-                    onChange={handleAttributeChange}
-                    valueMapper={value => value.slug}
-                    kappSlug={requiredKapps.admin.slug}
-                    label={translate('Feedback Form Slug')}
-                    description={attributesMap.getIn([
-                      'Feedback Form Slug',
-                      'description',
-                    ])}
-                  />
-                )}
-              />
-            )}
-          {requiredKapps.admin &&
-            attributesMap.has('Help Form Slug') && (
-              <I18n
-                render={translate => (
-                  <AttributeSelectors.FormSelect
-                    id="Help Form Slug"
-                    value={attributesMap.getIn(['Help Form Slug', 'value'])}
-                    onChange={handleAttributeChange}
-                    valueMapper={value => value.slug}
-                    kappSlug={requiredKapps.admin.slug}
-                    label={translate('Help Form Slug')}
-                    description={attributesMap.getIn([
-                      'Help Form Slug',
-                      'description',
-                    ])}
-                  />
-                )}
-              />
-            )}
+          {requiredKapps.queue && attributesMap.has('Approval Form Slug') && (
+            <I18n
+              render={translate => (
+                <AttributeSelectors.FormSelect
+                  id="Approval Form Slug"
+                  value={attributesMap.getIn(['Approval Form Slug', 'value'])}
+                  onChange={handleAttributeChange}
+                  valueMapper={value => value.slug}
+                  kappSlug={requiredKapps.queue.slug}
+                  label={translate('Default Approval Form')}
+                  style={{ width: '50%' }}
+                  description={attributesMap.getIn([
+                    'Approval Form Slug',
+                    'description',
+                  ])}
+                />
+              )}
+            />
+          )}
+          {requiredKapps.admin && attributesMap.has('Feedback Form Slug') && (
+            <I18n
+              render={translate => (
+                <AttributeSelectors.FormSelect
+                  id="Feedback Form Slug"
+                  value={attributesMap.getIn(['Feedback Form Slug', 'value'])}
+                  onChange={handleAttributeChange}
+                  valueMapper={value => value.slug}
+                  kappSlug={requiredKapps.admin.slug}
+                  label={translate('Feedback Form Slug')}
+                  description={attributesMap.getIn([
+                    'Feedback Form Slug',
+                    'description',
+                  ])}
+                />
+              )}
+            />
+          )}
+          {requiredKapps.admin && attributesMap.has('Help Form Slug') && (
+            <I18n
+              render={translate => (
+                <AttributeSelectors.FormSelect
+                  id="Help Form Slug"
+                  value={attributesMap.getIn(['Help Form Slug', 'value'])}
+                  onChange={handleAttributeChange}
+                  valueMapper={value => value.slug}
+                  kappSlug={requiredKapps.admin.slug}
+                  label={translate('Help Form Slug')}
+                  description={attributesMap.getIn([
+                    'Help Form Slug',
+                    'description',
+                  ])}
+                />
+              )}
+            />
+          )}
           {requiredKapps.admin &&
             attributesMap.has('Request Alert Form Slug') && (
               <I18n
@@ -285,25 +284,24 @@ export const SettingsComponent = ({
                 )}
               />
             )}
-          {requiredKapps.queue &&
-            attributesMap.has('Task Form Slug') && (
-              <I18n
-                render={translate => (
-                  <AttributeSelectors.FormSelect
-                    id="Task Form Slug"
-                    value={attributesMap.getIn(['Task Form Slug', 'value'])}
-                    onChange={handleAttributeChange}
-                    valueMapper={value => value.slug}
-                    kappSlug={requiredKapps.queue.slug}
-                    label={translate('Default Task Form Slug')}
-                    description={attributesMap.getIn([
-                      'Task Form Slug',
-                      'description',
-                    ])}
-                  />
-                )}
-              />
-            )}
+          {requiredKapps.queue && attributesMap.has('Task Form Slug') && (
+            <I18n
+              render={translate => (
+                <AttributeSelectors.FormSelect
+                  id="Task Form Slug"
+                  value={attributesMap.getIn(['Task Form Slug', 'value'])}
+                  onChange={handleAttributeChange}
+                  valueMapper={value => value.slug}
+                  kappSlug={requiredKapps.queue.slug}
+                  label={translate('Default Task Form Slug')}
+                  description={attributesMap.getIn([
+                    'Task Form Slug',
+                    'description',
+                  ])}
+                />
+              )}
+            />
+          )}
         </form>
         <div className="form__footer">
           <span className="form__footer__right">
@@ -492,8 +490,8 @@ const isFormDisabled = ({
     defaultTimezone !== previousDefaultTimezone
   );
 const mapStateToProps = state => ({
-  locales: state.app.config.locales,
-  timezones: state.app.config.timezones,
+  locales: state.app.locales,
+  timezones: state.app.timezones,
 });
 
 const mapDispatchToProps = {
@@ -506,6 +504,8 @@ export const SpaceSettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('attributesMap', 'setAttributesMap', Map()),
   withState('previousAttributesMap', 'setPreviousAttributesMap', Map()),

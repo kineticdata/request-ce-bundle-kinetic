@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import papaparse from 'papaparse';
 
 import { actions } from '../../../redux/modules/settingsDatastore';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const ExportComponent = ({
@@ -121,9 +122,9 @@ const handleDownload = props => () => {
 };
 
 const mapStateToProps = state => ({
-  form: state.space.settingsDatastore.currentForm,
-  submissions: state.space.settingsDatastore.exportSubmissions,
-  submissionsCount: state.space.settingsDatastore.exportCount,
+  form: state.settingsDatastore.currentForm,
+  submissions: state.settingsDatastore.exportSubmissions,
+  submissionsCount: state.settingsDatastore.exportCount,
 });
 
 const mapDispatchToProps = {
@@ -135,6 +136,8 @@ export const Export = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('exportStatus', 'setExportStatus', 'NOT_STARTED'),
   withHandlers({

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalFooter } from 'reactstrap';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import {
   DiscussionForm,
   InvitationForm,
@@ -11,6 +11,7 @@ import {
 } from '@kineticdata/react';
 import { toastActions } from 'common';
 import { actions } from '../../redux/modules/spaceApp';
+import { context } from '../../redux/store';
 import { PeopleSelect } from 'common/src/components/discussions/PeopleSelect';
 import { I18n } from '../../../../app/src/I18nProvider';
 
@@ -141,6 +142,8 @@ export const CreateDiscussionModal = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('step', 'setStep', 'discussion'),
   withState('discussion', 'setDiscussion', null),

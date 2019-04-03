@@ -72,7 +72,7 @@ export function* deleteRobotSaga(action) {
 
 export function* fetchRobotExecutionsSaga({ payload: { scheduleId } }) {
   const pageToken = yield select(
-    state => state.space.settingsRobots.robotExecutionsCurrentPageToken,
+    state => state.settingsRobots.robotExecutionsCurrentPageToken,
   );
   const query = new SubmissionSearch(true);
   if (pageToken) {

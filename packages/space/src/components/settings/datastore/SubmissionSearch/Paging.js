@@ -1,13 +1,14 @@
 import React, { Fragment } from 'react';
 
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { compose, withHandlers } from 'recompose';
 
 import {
   actions,
   DATASTORE_LIMIT,
 } from '../../../../redux/modules/settingsDatastore';
+import { context } from '../../../../redux/store';
 import { I18n } from '../../../../../../app/src/I18nProvider';
 
 const getPageText = (pageTokens, nextPageToken, submissions) => {
@@ -56,11 +57,11 @@ const PagingComponent = ({
   );
 
 export const mapStateToProps = state => ({
-  submissions: state.space.settingsDatastore.submissions,
-  pageTokens: state.space.settingsDatastore.pageTokens,
-  nextPageToken: state.space.settingsDatastore.nextPageToken,
-  simpleSearchActive: state.space.settingsDatastore.simpleSearchActive,
-  searching: state.space.settingsDatastore.searching,
+  submissions: state.settingsDatastore.submissions,
+  pageTokens: state.settingsDatastore.pageTokens,
+  nextPageToken: state.settingsDatastore.nextPageToken,
+  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
+  searching: state.settingsDatastore.searching,
 });
 
 export const mapDispatchToProps = {
@@ -94,6 +95,8 @@ export const Paging = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({
     handlePrevThousandPage,

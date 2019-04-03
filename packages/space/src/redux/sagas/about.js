@@ -1,5 +1,5 @@
 import { takeEvery, all, call, put } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 
 import { fetchTeams, fetchUsers } from '@kineticdata/react';
 

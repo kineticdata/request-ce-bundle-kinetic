@@ -9,8 +9,8 @@ const getDisplayValue = value =>
   typeof value === 'object'
     ? 'Custom Date Range'
     : value === ''
-      ? 'None'
-      : `Last ${value.replace('days', '')} Days`;
+    ? 'None'
+    : `Last ${value.replace('days', '')} Days`;
 
 export const DateRangeDropdownComponent = props => (
   <Fragment>
@@ -60,11 +60,10 @@ export const DateRangeDropdownComponent = props => (
 export const DateRangeDropdown = compose(
   connect(
     state => ({
-      dateRangeDropdownOpen: state.space.spaceApp.dateRangeDropdownOpen,
-      searchDateRange: state.space.spaceApp.searchDateRange,
-      dirtySearchDateRange: state.space.spaceApp.dirtySearchDateRange,
-      searchDateRangeValidations:
-        state.space.spaceApp.searchDateRangeValidations,
+      dateRangeDropdownOpen: state.spaceApp.dateRangeDropdownOpen,
+      searchDateRange: state.spaceApp.searchDateRange,
+      dirtySearchDateRange: state.spaceApp.dirtySearchDateRange,
+      searchDateRangeValidations: state.spaceApp.searchDateRangeValidations,
     }),
     {
       openDateRangeDropdown: actions.openDateRangeDropdown,

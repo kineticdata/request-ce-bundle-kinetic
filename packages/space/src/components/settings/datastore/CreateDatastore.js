@@ -1,13 +1,14 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { compose, withHandlers, withState } from 'recompose';
 import { PageTitle } from 'common';
 
 import { DatastoreForm } from '../../../records';
 import { actions } from '../../../redux/modules/settingsDatastore';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const CreateDatastoreComponent = ({
@@ -166,9 +167,9 @@ const handleNameChange = ({ setNewForm, newForm }) => value => {
   }
 };
 
-export const mapStateToProps = (state, { match: { params } }) => ({
+export const mapStateToProps = state => ({
   spaceAdmin: state.app.profile.spaceAdmin,
-  bridges: state.space.settingsDatastore.bridges,
+  bridges: state.settingsDatastore.bridges,
 });
 
 export const mapDispatchToProps = {
@@ -180,6 +181,8 @@ export const CreateDatastore = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('newForm', 'setNewForm', DatastoreForm()),
   withState('creating', 'setCreating', false),

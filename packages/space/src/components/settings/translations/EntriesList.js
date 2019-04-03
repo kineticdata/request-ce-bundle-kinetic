@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import { push } from 'connected-react-router';
+import { Link } from '@reach/router';
+import { push } from 'redux-first-history';
 import { connect } from 'react-redux';
 import { bundle } from '@kineticdata/react';
 import {
@@ -25,6 +25,7 @@ import { Table, PaginationControl, FilterControl } from 'common';
 import { UnpublishedChanges } from './TranslationsList';
 import md5 from 'md5';
 import { actions } from '../../../redux/modules/settingsTranslations';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const ImportModal = ({
@@ -300,10 +301,9 @@ const EditModal = ({
 );
 
 export const EntriesListComponent = ({
-  match: {
-    path,
-    params: { context, locale, keyHash },
-  },
+  context,
+  locale,
+  keyHash,
   push,
   loading,
   errors,
@@ -452,40 +452,39 @@ export const EntriesListComponent = ({
                 />
               </div>
             )}
-            {keyHash &&
-              translations.size > 0 && (
-                <table className="table table-sm table-striped table--settings">
-                  <thead className="header">
-                    <tr>
-                      <th scope="col">
-                        <I18n>Key</I18n>
-                      </th>
-                      <th width="1%" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td scope="row">{currentKey}</td>
-                      <td className="text-right">
-                        <ButtonGroup>
-                          <button
-                            className="btn btn-sm btn-primary"
-                            onClick={toggleEdit(translations.get(0), 'key')}
-                          >
-                            <span className="fa fa-fw fa-pencil" />
-                          </button>
-                          <button
-                            className="btn btn-sm btn-danger"
-                            onClick={toggleDelete(translations.get(0), 'key')}
-                          >
-                            <span className="fa fa-fw fa-times" />
-                          </button>
-                        </ButtonGroup>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              )}
+            {keyHash && translations.size > 0 && (
+              <table className="table table-sm table-striped table--settings">
+                <thead className="header">
+                  <tr>
+                    <th scope="col">
+                      <I18n>Key</I18n>
+                    </th>
+                    <th width="1%" />
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td scope="row">{currentKey}</td>
+                    <td className="text-right">
+                      <ButtonGroup>
+                        <button
+                          className="btn btn-sm btn-primary"
+                          onClick={toggleEdit(translations.get(0), 'key')}
+                        >
+                          <span className="fa fa-fw fa-pencil" />
+                        </button>
+                        <button
+                          className="btn btn-sm btn-danger"
+                          onClick={toggleDelete(translations.get(0), 'key')}
+                        >
+                          <span className="fa fa-fw fa-times" />
+                        </button>
+                      </ButtonGroup>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            )}
             <Table
               class="table--settings"
               data={translations.toJS()}
@@ -567,15 +566,15 @@ export const EntriesListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.space.settingsTranslations.translations.loading,
-  errors: state.space.settingsTranslations.translations.errors,
-  translations: state.space.settingsTranslations.translations.entries,
-  enabledLocales: state.space.settingsTranslations.locales.enabled,
-  availableLocalesMap: state.space.settingsTranslations.locales.available.reduce(
+  loading: state.settingsTranslations.translations.loading,
+  errors: state.settingsTranslations.translations.errors,
+  translations: state.settingsTranslations.translations.entries,
+  enabledLocales: state.settingsTranslations.locales.enabled,
+  availableLocalesMap: state.settingsTranslations.locales.available.reduce(
     (map, locale) => ({ ...map, [locale.code]: locale.name }),
     {},
   ),
-  stagedEntries: state.space.settingsTranslations.staged.entries,
+  stagedEntries: state.settingsTranslations.staged.entries,
 });
 
 export const mapDispatchToProps = {
@@ -606,10 +605,9 @@ const handleEditEntry = ({
   upsertTranslations,
   updateContextKey,
   push,
-  match: {
-    path,
-    params: { context, locale, keyHash },
-  },
+  context,
+  locale,
+  keyHash,
 }) => () => {
   entryToEdit.property !== 'key'
     ? upsertTranslations({
@@ -736,9 +734,9 @@ const handleImport = ({
   setImportOpen,
   setFile,
   file,
-  match: {
-    params: { context, locale, keyHash },
-  },
+  context,
+  locale,
+  keyHash,
   upsertTranslations,
 }) => () => {
   upsertTranslations({
@@ -791,11 +789,7 @@ const renderLocaleFooterCell = ({
   </td>
 );
 
-const renderContextCell = ({
-  match: {
-    params: { locale },
-  },
-}) => ({ value, row, index }) => (
+const renderContextCell = ({ locale }) => ({ value, row, index }) => (
   <td>
     <Link
       to={`/settings/translations/context/${value}${
@@ -836,19 +830,20 @@ const renderKeyFooterCell = ({ entryToCreate, handleCreateEntryChange }) => ({
 
 const renderUsageCell = () => ({ value, row, index }) => (
   <td>
-    {value &&
-      value.length > 0 && (
-        <div id={`entry-usages-${index}`}>
-          <span className="fa fa-info" />
-          <UncontrolledTooltip
-            target={`entry-usages-${index}`}
-            placement="top"
-            style={{ textAlign: 'left' }}
-          >
-            {value.map((u, i) => <div key={`usage-${i}`}>{u}</div>)}
-          </UncontrolledTooltip>
-        </div>
-      )}
+    {value && value.length > 0 && (
+      <div id={`entry-usages-${index}`}>
+        <span className="fa fa-info" />
+        <UncontrolledTooltip
+          target={`entry-usages-${index}`}
+          placement="top"
+          style={{ textAlign: 'left' }}
+        >
+          {value.map((u, i) => (
+            <div key={`usage-${i}`}>{u}</div>
+          ))}
+        </UncontrolledTooltip>
+      </div>
+    )}
   </td>
 );
 
@@ -916,31 +911,22 @@ export const EntriesList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
-  withProps(
-    ({
-      match: {
-        params: { keyHash },
-      },
-      translations,
-    }) =>
-      keyHash && translations.size > 0
-        ? {
-            currentKey: translations.get(0).key,
-          }
-        : {},
+  withProps(({ keyHash, translations }) =>
+    keyHash && translations.size > 0
+      ? {
+          currentKey: translations.get(0).key,
+        }
+      : {},
   ),
   withState('entryToDelete', 'setEntryToDelete', null),
   withState('entryToEdit', 'setEntryToEdit', null),
   withState(
     'entryToCreate',
     'setEntryToCreate',
-    ({
-      match: {
-        params: { context, locale },
-      },
-      currentKey,
-    }) => ({
+    ({ context, locale, currentKey }) => ({
       locale: locale || '',
       context: context || '',
       key: currentKey || '',
@@ -978,21 +964,21 @@ export const EntriesList = compose(
   lifecycle({
     componentDidMount() {
       this.props.fetchTranslations({
-        contextName: this.props.match.params.context,
-        localeCode: this.props.match.params.locale,
-        keyHash: this.props.match.params.keyHash,
+        contextName: this.props.context,
+        localeCode: this.props.locale,
+        keyHash: this.props.keyHash,
       });
     },
     componentDidUpdate(prevProps) {
       if (
-        this.props.match.params.context !== prevProps.match.params.context ||
-        this.props.match.params.locale !== prevProps.match.params.locale ||
-        this.props.match.params.keyHash !== prevProps.match.params.keyHash
+        this.props.context !== prevProps.context ||
+        this.props.locale !== prevProps.locale ||
+        this.props.keyHash !== prevProps.keyHash
       ) {
         this.props.fetchTranslations({
-          contextName: this.props.match.params.context,
-          localeCode: this.props.match.params.locale,
-          keyHash: this.props.match.params.keyHash,
+          contextName: this.props.context,
+          localeCode: this.props.locale,
+          keyHash: this.props.keyHash,
         });
       }
       if (this.props.currentKey !== prevProps.currentKey) {

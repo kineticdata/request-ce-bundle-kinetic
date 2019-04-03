@@ -1,13 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withProps, withState } from 'recompose';
 import { NavLink } from 'react-router-dom';
 import { PageTitle } from 'common';
 import { Modal, ModalBody } from 'reactstrap';
+
 import { NotificationListItem } from './NotificationListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
+
 import { actions } from '../../../redux/modules/settingsNotifications';
+import { context } from '../../../redux/store';
+
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const WallyNoResultsFoundMessage = ({ type }) => {
@@ -27,7 +31,6 @@ const WallyNoResultsFoundMessage = ({ type }) => {
 const NotificationsListComponent = ({
   submissions,
   type,
-  match,
   previewModal,
   setPreviewModal,
 }) => (
@@ -50,33 +53,24 @@ const NotificationsListComponent = ({
             <I18n>Notifications</I18n>
           </h1>
         </div>
-        <Link to={`${match.url}/new`} className="btn btn-primary">
+        <Link to="/new" className="btn btn-primary">
           <I18n>New {type}</I18n>
         </Link>
       </div>
       <div className="notifications-tabs">
         <ul className="nav nav-tabs">
           <li role="presentation">
-            <NavLink
-              to="/settings/notifications/templates"
-              activeClassName="active"
-            >
+            <NavLink to="templates" activeClassName="active">
               <I18n>Templates</I18n>
             </NavLink>
           </li>
           <li role="presentation">
-            <NavLink
-              to="/settings/notifications/snippets"
-              activeClassName="active"
-            >
+            <NavLink to="snippets" activeClassName="active">
               <I18n>Snippets</I18n>
             </NavLink>
           </li>
           <li role="presentation">
-            <NavLink
-              to="/settings/notifications/date-formats"
-              activeClassName="active"
-            >
+            <NavLink to="date-formats" activeClassName="active">
               <I18n>Date Formats</I18n>
             </NavLink>
           </li>
@@ -107,7 +101,7 @@ const NotificationsListComponent = ({
               <NotificationListItem
                 key={`trow-${s.id}`}
                 notification={s}
-                path={`${match.url}/${s.id}`}
+                path={s.id}
                 type={type}
                 previewModal={previewModal}
                 setPreviewModal={setPreviewModal}
@@ -150,11 +144,11 @@ const NotificationsListComponent = ({
 
 export const mapStateToProps = (state, props) => ({
   loading:
-    state.space.settingsNotifications.loading ||
-    state.space.settingsNotifications.dateFormatsLoading,
-  templates: state.space.settingsNotifications.notificationTemplates,
-  snippets: state.space.settingsNotifications.notificationSnippets,
-  dateFormats: state.space.settingsNotifications.dateFormats,
+    state.settingsNotifications.loading ||
+    state.settingsNotifications.dateFormatsLoading,
+  templates: state.settingsNotifications.notificationTemplates,
+  snippets: state.settingsNotifications.notificationSnippets,
+  dateFormats: state.settingsNotifications.dateFormats,
 });
 
 export const mapDispatchToProps = {
@@ -166,16 +160,20 @@ export const NotificationsList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('previewModal', 'setPreviewModal', null),
   withProps(props => {
-    switch (props.match.params.type) {
+    switch (props.type) {
       case 'templates':
         return { type: 'Template', submissions: props.templates };
       case 'snippets':
         return { type: 'Snippet', submissions: props.snippets };
       case 'date-formats':
         return { type: 'Date Format', submissions: props.dateFormats };
+      default:
+        return { type: 'Template', submissions: props.templates };
     }
   }),
   lifecycle({

@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import { Modal } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { lifecycle, compose, withHandlers, withState } from 'recompose';
 import { bundle } from '@kineticdata/react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -20,6 +20,7 @@ import {
 } from '../../../records';
 
 import { actions } from '../../../redux/modules/settingsDatastore';
+import { context } from '../../../redux/store';
 
 const SettingsComponent = ({
   canManage,
@@ -1307,15 +1308,15 @@ const windowFocusListener = ({ setStaleFields, origForm }) => () => {
 };
 
 export const mapStateToProps = (state, { match: { params } }) => ({
-  loading: state.space.settingsDatastore.currentFormLoading,
-  canManage: state.space.settingsDatastore.currentForm.canManage,
-  origForm: state.space.settingsDatastore.currentForm,
-  updatedForm: state.space.settingsDatastore.currentFormChanges,
+  loading: state.settingsDatastore.currentFormLoading,
+  canManage: state.settingsDatastore.currentForm.canManage,
+  origForm: state.settingsDatastore.currentForm,
+  updatedForm: state.settingsDatastore.currentFormChanges,
   formSlug: params.slug,
-  hasChanged: !state.space.settingsDatastore.currentForm.equals(
-    state.space.settingsDatastore.currentFormChanges,
+  hasChanged: !state.settingsDatastore.currentForm.equals(
+    state.settingsDatastore.currentFormChanges,
   ),
-  bridges: state.space.settingsDatastore.bridges,
+  bridges: state.settingsDatastore.bridges,
   bridgeName: '',
 });
 
@@ -1331,6 +1332,8 @@ export const DatastoreSettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('newQualification', 'setNewQualification', null),
   withState('newAttribute', 'setNewAttribute', new BridgeAttribute()),

@@ -10,7 +10,7 @@ import {
   NavLink,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { KappLink, Utils } from 'common';
+import { Utils } from 'common';
 import { AlertsContainer } from './AlertsContainer';
 import { ProfileContainer } from './ProfileContainer';
 import { I18n } from '../I18nProvider';
@@ -49,19 +49,18 @@ export const Header = ({
 }) => (
   <Navbar color="faded" light>
     <Nav className="nav-header">
-      {hasSidebar &&
-        !isGuest && (
-          <NavItem id="header-sidebar-toggle">
-            <NavLink
-              className="drawer-button"
-              role="button"
-              tabIndex="0"
-              onClick={toggleSidebarOpen}
-            >
-              <i className="fa fa-fw fa-bars" />
-            </NavLink>
-          </NavItem>
-        )}
+      {hasSidebar && !isGuest && (
+        <NavItem id="header-sidebar-toggle">
+          <NavLink
+            className="drawer-button"
+            role="button"
+            tabIndex="0"
+            onClick={toggleSidebarOpen}
+          >
+            <i className="fa fa-fw fa-bars" />
+          </NavLink>
+        </NavItem>
+      )}
       <NavItem>
         {!isGuest && (
           <Dropdown

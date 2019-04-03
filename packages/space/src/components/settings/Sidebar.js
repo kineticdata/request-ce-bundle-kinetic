@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, withProps } from 'recompose';
 import { bundle } from '@kineticdata/react';
@@ -11,6 +11,9 @@ import {
 import { NOTIFICATIONS_FORM_SLUG } from '../../redux/modules/settingsNotifications';
 import { ROBOT_DEFINITIONS_FORM_SLUG } from '../../redux/modules/settingsRobots';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
+
+import { isActiveClass } from '../../utils';
 
 export const SidebarComponent = ({
   settingsBackPath,
@@ -31,93 +34,57 @@ export const SidebarComponent = ({
       {!loading && (
         <ul className="nav flex-column sidebar-group">
           <li className="nav-item">
-            <NavLink
-              to="/settings/profile"
-              className="nav-link"
-              activeClassName="active"
-            >
+            <Link to="profile" getProps={isActiveClass('nav-link')}>
               <I18n>Profile</I18n>
               <span className="fa fa-fw fa-angle-right" />
-            </NavLink>
+            </Link>
             {spaceAdmin && (
-              <NavLink
-                to="/settings/system"
-                className="nav-link"
-                activeClassName="active"
-              >
+              <Link to="system" getProps={isActiveClass('nav-link')}>
                 <I18n>System</I18n>
                 <span className="fa fa-fw fa-angle-right" />
-              </NavLink>
+              </Link>
             )}
             {showDatastore && (
-              <NavLink
-                to="/settings/datastore"
-                className="nav-link"
-                activeClassName="active"
-              >
+              <Link to="datastore" getProps={isActiveClass('nav-link')}>
                 <I18n>Datastore</I18n>
                 <span className="fa fa-fw fa-angle-right" />
-              </NavLink>
+              </Link>
             )}
             {showNotifications && (
-              <NavLink
-                to="/settings/notifications"
-                className="nav-link"
-                activeClassName="active"
-              >
+              <Link to="notifications" getProps={isActiveClass('nav-link')}>
                 <I18n>Notifications</I18n>
                 <span className="fa fa-fw fa-angle-right" />
-              </NavLink>
+              </Link>
             )}
             {showRobots && (
-              <NavLink
-                to="/settings/robots"
-                className="nav-link"
-                activeClassName="active"
-              >
+              <Link to="robots" getProps={isActiveClass('nav-link')}>
                 <I18n>Robots</I18n>
                 <span className="fa fa-fw fa-angle-right" />
-              </NavLink>
+              </Link>
             )}
             {spaceAdmin && (
-              <NavLink
-                to="/settings/users"
-                className="nav-link"
-                activeClassName="active"
-              >
+              <Link to="users" getProps={isActiveClass('nav-link')}>
                 <I18n>Users</I18n>
                 <span className="fa fa-fw fa-angle-right" />
-              </NavLink>
+              </Link>
             )}
             {spaceAdmin && (
-              <NavLink
-                to="/settings/teams"
-                className="nav-link"
-                activeClassName="active"
-              >
+              <Link to="teams" getProps={isActiveClass('nav-link')}>
                 <I18n>Teams</I18n>
                 <span className="fa fa-fw fa-angle-right" />
-              </NavLink>
+              </Link>
             )}
             {showSchedulers && (
-              <NavLink
-                to="/settings/schedulers"
-                className="nav-link"
-                activeClassName="active"
-              >
+              <Link to="schedulers" getProps={isActiveClass('nav-link')}>
                 <I18n>Schedulers</I18n>
                 <span className="fa fa-fw fa-angle-right" />
-              </NavLink>
+              </Link>
             )}
             {spaceAdmin && (
-              <NavLink
-                to="/settings/translations"
-                className="nav-link"
-                activeClassName="active"
-              >
+              <Link to="translations" getProps={isActiveClass('nav-link')}>
                 <I18n>Translations</I18n>
                 <span className="fa fa-fw fa-angle-right" />
-              </NavLink>
+              </Link>
             )}
           </li>
         </ul>
@@ -155,8 +122,8 @@ export const SidebarComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.space.settingsDatastore.loading,
-  forms: state.space.settingsDatastore.forms,
+  loading: state.settingsDatastore.loading,
+  forms: state.settingsDatastore.forms,
   spaceAdmin: state.app.profile.spaceAdmin,
   pathname: state.router.location.pathname,
   hasSharedTaskEngine: selectHasSharedTaskEngine(state),
@@ -165,7 +132,12 @@ export const mapStateToProps = state => ({
 });
 
 export const Sidebar = compose(
-  connect(mapStateToProps),
+  connect(
+    mapStateToProps,
+    null,
+    null,
+    { context },
+  ),
   withProps(props => ({
     showDatastore: props.spaceAdmin || !props.forms.isEmpty(),
     showNotifications: !!props.forms.find(

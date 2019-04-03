@@ -9,7 +9,7 @@ import {
   SubmissionSearch,
 } from '@kineticdata/react';
 import { Seq, Map } from 'immutable';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 
 import { actions as systemErrorActions } from '../modules/errors';
 import {
@@ -121,8 +121,8 @@ export function* cloneNotificationSaga(action) {
         submission.form.slug === NOTIFICATIONS_DATE_FORMAT_FORM_SLUG
           ? 'date-formats'
           : submission.values.Type === 'Template'
-            ? 'templates'
-            : 'snippets';
+          ? 'templates'
+          : 'snippets';
       yield put(actions.setCloneSuccess());
       yield put(actions.fetchNotifications());
       yield put(push(`/settings/notifications/${type}/${cloneSubmission.id}`));

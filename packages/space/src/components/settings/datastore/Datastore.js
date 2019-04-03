@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
+import { Router, Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { DatastoreSubmission } from './Submission';
 import { FormList } from './FormList';
@@ -7,6 +7,8 @@ import { SubmissionSearch } from './SubmissionSearch/SubmissionSearch';
 import { DatastoreSettings } from './DatastoreSettings';
 import { CreateDatastore } from './CreateDatastore';
 import { I18n } from '../../../../../app/src/I18nProvider';
+import { context } from '../../../redux/store';
+
 import semver from 'semver';
 const MINIMUM_CE_VERSION = '2.1.0';
 
@@ -46,46 +48,31 @@ export const DatastoreRouter = ({ match, loading, validVersion, version }) =>
     <DatastoreVersionError version={version} />
   ) : (
     !loading && (
-      <Switch>
-        <Route exact path={`${match.path}/new`} component={CreateDatastore} />
-        <Route exact path={`${match.path}/error`} component={DatastoreError} />
-        <Route
-          exact
-          path={`${match.path}/:slug`}
-          component={SubmissionSearch}
-        />
-        <Route
-          exact
-          path={`${match.path}/:slug/settings`}
-          component={DatastoreSettings}
-        />
-        <Route
-          exact
-          path={`${match.path}/:slug/new`}
-          component={DatastoreSubmission}
-        />
-        <Route
-          exact
-          path={`${match.path}/:slug/:id`}
-          component={DatastoreSubmission}
-        />
-        <Route
-          exact
-          path={`${match.path}/:slug/:id/:mode`}
-          component={DatastoreSubmission}
-        />
-        <Route component={FormList} />
-      </Switch>
+      <Router>
+        <CreateDatastore path="new" />
+        <DatastoreError path="error" />
+        <SubmissionSearch path=":slug" />
+        <DatastoreSettings path=":slug/settings" />
+        <DatastoreSubmission path=":slug/new" />
+        <DatastoreSubmission path=":slug/:id/:mode" />
+        <DatastoreSubmission path=":slug/:id" />
+        <FormList default />
+      </Router>
     )
   );
 
 export const mapStateToProps = state => ({
-  loading: state.space.settingsDatastore.loading,
-  version: state.app.config.version,
+  loading: state.settingsDatastore.loading,
+  version: state.app.version,
   validVersion: semver.satisfies(
-    semver.coerce(state.app.config.version),
+    semver.coerce(state.app.version),
     `>=${MINIMUM_CE_VERSION}`,
   ),
 });
 
-export const Datastore = connect(mapStateToProps)(DatastoreRouter);
+export const Datastore = connect(
+  mapStateToProps,
+  null,
+  null,
+  { context },
+)(DatastoreRouter);

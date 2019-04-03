@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { PageTitle } from 'common';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { FormCard } from './FormCard';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions as spaceFormActions } from '../../redux/modules/spaceForms';
@@ -49,7 +49,9 @@ export const FormListComponent = ({ forms, loading, kapp }) =>
                 path: `/forms/${form.slug}`,
                 key: form.slug,
               }))
-              .map(props => <FormCard {...props} />)}
+              .map(props => (
+                <FormCard {...props} />
+              ))}
           </div>
         ) : (
           <WallyEmptyMessage />
@@ -59,8 +61,8 @@ export const FormListComponent = ({ forms, loading, kapp }) =>
   );
 
 const mapStateToProps = state => ({
-  loading: state.space.spaceForms.loading,
-  forms: state.space.spaceForms.data,
+  loading: state.spaceForms.loading,
+  forms: state.spaceForms.data,
   kappSlug: state.app.config.kappSlug,
   kapp: state.app.kapps.find(kapp => kapp.slug === state.app.config.kappSlug),
 });

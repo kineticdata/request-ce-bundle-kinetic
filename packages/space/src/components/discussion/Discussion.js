@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { compose, withState, withHandlers, lifecycle } from 'recompose';
-import { Link } from 'react-router-dom';
-import { push } from 'connected-react-router';
+import { compose, withHandlers } from 'recompose';
+import { Link } from '@reach/router';
+import { push } from 'redux-first-history';
 import { parse } from 'query-string';
 import { Discussion as KinopsDiscussion, PageTitle } from 'common';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 const buildRelatedItemLink = relatedItem => {
   let label = relatedItem.type;
@@ -97,8 +98,8 @@ const handleLeave = ({ push }) => () => {
   push('/');
 };
 
-const mapStateToProps = (state, props) => ({
-  discussionId: props.match.params.id,
+const mapStateToProps = props => ({
+  discussionId: props.id,
   invitationToken: parse(props.location.search).invitationToken,
 });
 
@@ -110,6 +111,8 @@ export const Discussion = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({
     handleLeave,

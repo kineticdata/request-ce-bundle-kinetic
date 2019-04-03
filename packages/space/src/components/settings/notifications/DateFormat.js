@@ -1,11 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { CoreForm } from '@kineticdata/react';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import { toastActions, PageTitle } from 'common';
+
 import { NOTIFICATIONS_DATE_FORMAT_FORM_SLUG } from '../../../redux/modules/settingsNotifications';
+import { context } from '../../../redux/store';
+
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const DateFormatComponent = props => (
@@ -26,8 +29,7 @@ export const DateFormatComponent = props => (
             <Link to="/settings/notifications/date-formats">
               <I18n>notification date formats</I18n>
             </Link>
-            {` `}
-            /
+            {` `}/
           </h3>
           <h1>
             <I18n>{props.submissionId ? 'Edit' : 'New'} Date Format</I18n>
@@ -74,10 +76,11 @@ export const DateFormat = compose(
   connect(
     null,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(props => ({
-    submissionId:
-      props.match.params.id !== 'new' ? props.match.params.id : null,
+    submissionId: props.id !== 'new' ? props.id : null,
   })),
   withHandlers({ handleCreated, handleUpdated }),
 )(DateFormatComponent);

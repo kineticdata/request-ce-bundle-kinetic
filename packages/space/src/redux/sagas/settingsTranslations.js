@@ -370,7 +370,7 @@ export function* fetchTranslationsSaga({ payload = {} }) {
     }),
     payload.contextName &&
       call(fetchContextKeys, { contextName: payload.contextName }),
-    select(state => state.space.settingsTranslations.locales.enabled),
+    select(state => state.settingsTranslations.locales.enabled),
   ]);
 
   if (serverError) {
