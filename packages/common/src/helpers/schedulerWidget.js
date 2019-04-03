@@ -29,7 +29,7 @@ export const fetchSchedulerBySchedulerId = id => {
     .limit('1')
     .index('values[Id]')
     .eq('values[Id]', id);
-  return searhSubmissions({
+  return searchSubmissions({
     search: schedulerQuery.build(),
     datastore: true,
     form: SCHEDULER_FORM_SLUG,

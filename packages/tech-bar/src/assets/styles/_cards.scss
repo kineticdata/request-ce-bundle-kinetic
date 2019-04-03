@@ -54,8 +54,11 @@
             p {
               font-size: 0.75rem;
               line-height: 1rem;
-              margin: 0.25rem 0;
+              margin: 0;
               white-space: pre-wrap;
+              + p {
+                margin-top: 0.5rem;
+              }
             }
           }
         }
@@ -122,31 +125,6 @@
           flex-grow: 1;
           white-space: pre-wrap;
         }
-      }
-    }
-    &--appointment {
-      display: flex;
-      flex-direction: row;
-      @include border-radius();
-      background-color: $gray4;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
-
-      &.selected {
-        background-color: $primary;
-        color: $white;
-
-        .text-muted {
-          color: $gray2 !important;
-        }
-      }
-
-      .details {
-        padding: 0.25rem 0.5rem;
-      }
-
-      button {
-        @include border-left-radius(0);
       }
     }
     &--appt {
@@ -240,5 +218,103 @@
         margin-left: auto;
       }
     }
+  }
+
+  .info-tile__wrapper {
+    display: flex;
+    justify-content: space-around;
+
+    a.info-tile,
+    .info-tile.actionable {
+      cursor: pointer;
+      color: $black;
+      text-decoration: none;
+      transition: box-shadow 0.3s, background-color 0.3s;
+      &:hover,
+      &:focus {
+        color: $black;
+        text-decoration: none;
+        box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.25);
+        background-color: rgba(0, 0, 0, 0.025);
+      }
+    }
+
+    .info-tile {
+      flex: 1 0 33%;
+      text-align: center;
+      padding: 1rem;
+      margin: 0 1rem;
+      max-width: 282px;
+
+      .icon {
+        font-size: 3rem;
+        color: $text-color;
+      }
+      .title {
+        font-weight: 700;
+        margin: 0.5rem 0;
+
+        .fa {
+          display: none;
+        }
+      }
+      .description {
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+        color: $text-color;
+      }
+    }
+  }
+
+  @media all and (max-width: 767px) {
+    .info-tile__wrapper {
+      flex-direction: column;
+      align-items: center;
+
+      .info-tile {
+        flex: 1 1 auto;
+
+        .icon {
+          display: none;
+        }
+        .title {
+          .fa {
+            display: inline-block;
+            font-size: 1.25rem;
+            color: $text-color;
+            margin-right: 0.25rem;
+          }
+        }
+        .description {
+          margin-bottom: 0.5rem;
+        }
+      }
+    }
+  }
+}
+
+.tech-bar-appointment-card {
+  display: flex;
+  flex-direction: row;
+  @include border-radius();
+  background-color: $gray4;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+
+  &.selected {
+    background-color: $primary;
+    color: $white;
+
+    .text-muted {
+      color: $gray2 !important;
+    }
+  }
+
+  .details {
+    padding: 0.25rem 0.5rem;
+  }
+
+  button {
+    @include border-left-radius(0);
   }
 }

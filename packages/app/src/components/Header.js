@@ -16,7 +16,7 @@ import { ProfileContainer } from './ProfileContainer';
 import { I18n } from '../I18nProvider';
 
 export const dropdownTitleName = currentKapp => (
-  <I18n>{currentKapp ? currentKapp.name : 'Discussions'}</I18n>
+  <I18n>{currentKapp ? currentKapp.name : 'Home'}</I18n>
 );
 
 export const dropdownIcon = currentKapp =>
@@ -78,8 +78,8 @@ export const Header = ({
                 to="/"
                 onClick={kappDropdownToggle}
               >
-                <span className="fa fa-fw fa-comments" />
-                <I18n>Discussions</I18n>
+                <span className="fa fa-fw fa-home" />
+                <I18n>Home</I18n>
               </Link>
               <DropdownItem divider />
               {predefinedKapps.map(thisKapp => (
@@ -96,9 +96,6 @@ export const Header = ({
                   onClick={kappDropdownToggle}
                 />
               ))}
-              <DropdownItem divider />
-              <DropdownItem>Datastore</DropdownItem>
-              <DropdownItem>Robots</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         )}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
@@ -91,8 +91,8 @@ export const mapCatgories = ({ rawCategories, setCategories }) => () => {
       ? 1
       : parseInt(b.attributes['Sort Order'][0]) >
         parseInt(a.attributes['Sort Order'][0])
-        ? -1
-        : 0;
+      ? -1
+      : 0;
   });
   const mapped = {};
   for (let i = 0; i < rawCategories.length; i++) {
@@ -116,8 +116,8 @@ export const mapCatgories = ({ rawCategories, setCategories }) => () => {
         return parseInt(a.sort[0]) > parseInt(b.sort[0])
           ? 1
           : parseInt(b.sort[0]) > parseInt(a.sort[0])
-            ? -1
-            : 0;
+          ? -1
+          : 0;
       });
     } else {
       mapped[slug] = cat;
@@ -393,7 +393,7 @@ export const CategoriesContainer = ({
   setSubcategory,
   editCategory,
 }) => (
-  <div>
+  <Fragment>
     <PageTitle parts={['Space Settings']} />
     <div className="page-container page-container--space-settings">
       <div className="page-panel page-panel--scrollable page-panel--space-profile-edit">
@@ -620,7 +620,7 @@ export const CategoriesContainer = ({
         )}
       </div>
     </div>
-  </div>
+  </Fragment>
 );
 
 const mapStateToProps = state => ({

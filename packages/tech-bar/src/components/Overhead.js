@@ -30,27 +30,64 @@ export const OverheadComponent = ({ errors, records }) => {
               </span>
             </h1>
             <ol className="overhead-display-list">
-              {records.map(r => (
-                <li key={r.id}>
-                  {r.displayName}
-                  {r.isWalkIn ? (
-                    <small>
-                      <I18n
-                        render={translate => ` (${translate('Walk-In')})`}
-                      />
-                    </small>
-                  ) : (
-                    <small>
-                      {' ('}
-                      <Moment
-                        timestamp={r.appointmentTime}
-                        format={Constants.MOMENT_FORMATS.time}
-                      />
-                      {')'}
-                    </small>
-                  )}
-                </li>
-              ))}
+              {records
+                .filter(r => r.status === 'Checked In')
+                .map(r => (
+                  <li key={r.id}>
+                    {r.displayName}{' '}
+                    {r.isWalkIn ? (
+                      <small>
+                        <I18n
+                          render={translate => `(${translate('Walk-In')})`}
+                        />
+                      </small>
+                    ) : (
+                      <small>
+                        {'('}
+                        <Moment
+                          timestamp={r.appointmentTime}
+                          format={Constants.MOMENT_FORMATS.time}
+                        />
+                        {')'}
+                      </small>
+                    )}
+                  </li>
+                ))}
+            </ol>
+          </div>
+          <div className="form">
+            <h1>
+              {errors.length > 0 && (
+                <span className="fa fa-fw fa-exclamation-triangle text-danger mr-2" />
+              )}
+              <span>
+                <I18n>Now Serving</I18n>
+              </span>
+            </h1>
+            <ol className="overhead-display-list">
+              {records
+                .filter(r => r.status === 'In Progress')
+                .map(r => (
+                  <li key={r.id}>
+                    {r.displayName}{' '}
+                    {r.isWalkIn ? (
+                      <small>
+                        <I18n
+                          render={translate => `(${translate('Walk-In')})`}
+                        />
+                      </small>
+                    ) : (
+                      <small>
+                        {'('}
+                        <Moment
+                          timestamp={r.appointmentTime}
+                          format={Constants.MOMENT_FORMATS.time}
+                        />
+                        {')'}
+                      </small>
+                    )}
+                  </li>
+                ))}
             </ol>
           </div>
         </div>
@@ -102,8 +139,14 @@ const fetchData = ({
   fetchTodayAppointments,
   fetchTodayWalkIns,
 }) => () => {
-  fetchTodayAppointments({ schedulerId: techBarId, status: 'Checked In' });
-  fetchTodayWalkIns({ schedulerId: techBarId, status: 'Checked In' });
+  fetchTodayAppointments({
+    schedulerId: techBarId,
+    status: ['Checked In', 'In Progress'],
+  });
+  fetchTodayWalkIns({
+    schedulerId: techBarId,
+    status: ['Checked In', 'In Progress'],
+  });
 };
 
 export const Overhead = compose(

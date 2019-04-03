@@ -1,5 +1,6 @@
 import React from 'react';
-import { Router, Link } from '@reach/router';
+import { Link } from '@reach/router';
+import { Router } from '../../QueueApp';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { Icon } from 'common';

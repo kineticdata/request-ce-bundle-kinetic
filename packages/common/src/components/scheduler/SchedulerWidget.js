@@ -89,34 +89,33 @@ const Timer = compose(
       clearInterval(this.props.timer);
     },
   }),
-)(
-  ({ isScheduled, time, handleEventDelete }) =>
-    !isScheduled ? (
-      <div className={time === 0 ? 'text-danger' : ''}>
-        <div>
-          <span>
-            <I18n>You have</I18n>{' '}
-          </span>
-          <strong>
-            {Math.floor(time / 60)}:{time % 60 < 10 ? 0 : ''}
-            {time % 60}
-          </strong>
-          <span>
-            {' '}
-            <I18n>
-              remaining to complete your request to guarantee your time slot.
-            </I18n>{' '}
-          </span>
-        </div>
-        {time > 0 && (
-          <div>
-            <button onClick={handleEventDelete} className="btn btn-link">
-              <I18n>Cancel Reservation</I18n>
-            </button>
-          </div>
-        )}
+)(({ isScheduled, time, handleEventDelete }) =>
+  !isScheduled ? (
+    <div className={time === 0 ? 'text-danger' : ''}>
+      <div>
+        <span>
+          <I18n>You have</I18n>{' '}
+        </span>
+        <strong>
+          {Math.floor(time / 60)}:{time % 60 < 10 ? 0 : ''}
+          {time % 60}
+        </strong>
+        <span>
+          {' '}
+          <I18n>
+            remaining to complete your request to guarantee your time slot.
+          </I18n>{' '}
+        </span>
       </div>
-    ) : null,
+      {time > 0 && (
+        <div>
+          <button onClick={handleEventDelete} className="btn btn-link">
+            <I18n>Cancel Reservation</I18n>
+          </button>
+        </div>
+      )}
+    </div>
+  ) : null,
 );
 
 const SchedulerWidgetComponent = ({
@@ -249,17 +248,17 @@ const SchedulerWidgetComponent = ({
     ? // If invalid date set, make empty array for options
       []
     : // If at least 2 days available in each direction, show 5 with selected date in the middle
-      availableBefore > 1 && availableAfter > 1
-      ? Array(5).fill(selectedDate.add(-2, 'days'))
-      : // If fewer than 5 total days around selected date available, show them all
-        availableBefore + availableAfter < 5
-        ? Array(availableBefore + availableAfter + 1).fill(
-            selectedDate.add(-availableBefore, 'days'),
-          )
-        : // Otherwise show range with one endpoint, so date won't be in the middle
-          availableBefore < 2
-          ? Array(5).fill(selectedDate.add(-availableBefore, 'days'))
-          : Array(5).fill(selectedDate.add(-(4 - availableAfter), 'days'))
+    availableBefore > 1 && availableAfter > 1
+    ? Array(5).fill(selectedDate.add(-2, 'days'))
+    : // If fewer than 5 total days around selected date available, show them all
+    availableBefore + availableAfter < 5
+    ? Array(availableBefore + availableAfter + 1).fill(
+        selectedDate.add(-availableBefore, 'days'),
+      )
+    : // Otherwise show range with one endpoint, so date won't be in the middle
+    availableBefore < 2
+    ? Array(5).fill(selectedDate.add(-availableBefore, 'days'))
+    : Array(5).fill(selectedDate.add(-(4 - availableAfter), 'days'))
   ).map((d, i) => d.clone().add(i, 'days'));
 
   const isScheduled = event && event.coreState !== 'Draft';
@@ -268,228 +267,215 @@ const SchedulerWidgetComponent = ({
   return (
     <div className="scheduler-widget">
       {loading && <LoadingMessage />}
-      {!loading &&
-        errors.size > 0 && (
-          <ErrorMessage
-            heading="The Scheduling Component Failed to Load"
-            text={
-              <ul>{errors.map((e, i) => <li key={`error-${i}`}>{e}</li>)}</ul>
-            }
-          />
-        )}
-      {!openModal &&
-        schedulingErrors.size > 0 && (
-          <div className="alert alert-danger">
-            {schedulingErrors.map((e, i) => (
-              <div key={`error-${i}`}>
-                <I18n>{e}</I18n>
-              </div>
-            ))}
-          </div>
-        )}
-      {!loading &&
-        errors.size === 0 && (
-          <div>
-            {showTypeSelector && (
-              <div className="form-group required">
-                <label htmlFor="type-select" className="field-label">
-                  <I18n>Event Type</I18n>
-                </label>
-                <select
-                  name="type-select"
-                  id="type-select"
-                  value={type}
-                  className="form-control"
-                  onChange={handleTypeChange}
-                  disabled={scheduling || isScheduled}
-                >
-                  <option />
-                  {configs.map((c, i) => {
-                    const duration =
-                      interval * parseInt(c.values['Duration Multiplier'], 10);
-                    return (
-                      <I18n
-                        render={translate => (
-                          <option
-                            value={c.values['Event Type']}
-                            key={c.values['Event Type']}
-                          >
-                            {`${translate(
-                              c.values['Event Type'],
-                            )} (${duration} ${translate('minutes')})`}
-                          </option>
-                        )}
-                      />
-                    );
-                  })}
-                </select>
-              </div>
-            )}
-            {type && (
-              <div className="form-group required">
-                {expired && (
-                  <Alert color="danger" toggle={() => setExpired(false)}>
-                    <I18n>Your selected time has expired.</I18n>
-                  </Alert>
-                )}
-                {cancelled && (
-                  <Alert color="info">
-                    <span>
-                      <I18n>Your event has been successfully cancelled.</I18n>{' '}
-                    </span>
-                    <em>
-                      <I18n>
-                        It may take several minutes for your list to reflect the
-                        changes.
-                      </I18n>
-                    </em>
-                  </Alert>
-                )}
-                {rescheduled &&
-                  !cancelled && (
-                    <Alert color="info">
-                      <span>
-                        <I18n>
-                          Your event has been successfully rescheduled.
-                        </I18n>{' '}
-                      </span>
-                      <em>
-                        <I18n>
-                          It may take several minutes for your list to reflect
-                          the changes.
-                        </I18n>
-                      </em>
-                    </Alert>
-                  )}
-                <label className="field-label">
-                  <I18n>Date and Time</I18n>
-                </label>
-                <div className="cards__wrapper cards__wrapper--appt pb-0">
-                  <div className="card card--appt">
-                    <i
-                      className="fa fa-calendar fa-fw card-icon"
-                      style={{ background: 'rgb(255, 74, 94)' }}
+      {!loading && errors.size > 0 && (
+        <ErrorMessage
+          heading="The Scheduling Component Failed to Load"
+          text={
+            <ul>
+              {errors.map((e, i) => (
+                <li key={`error-${i}`}>{e}</li>
+              ))}
+            </ul>
+          }
+        />
+      )}
+      {!openModal && schedulingErrors.size > 0 && (
+        <div className="alert alert-danger">
+          {schedulingErrors.map((e, i) => (
+            <div key={`error-${i}`}>
+              <I18n>{e}</I18n>
+            </div>
+          ))}
+        </div>
+      )}
+      {!loading && errors.size === 0 && (
+        <div>
+          {showTypeSelector && (
+            <div className="form-group required">
+              <label htmlFor="type-select" className="field-label">
+                <I18n>Event Type</I18n>
+              </label>
+              <select
+                name="type-select"
+                id="type-select"
+                value={type}
+                className="form-control"
+                onChange={handleTypeChange}
+                disabled={scheduling || isScheduled}
+              >
+                <option />
+                {configs.map((c, i) => {
+                  const duration =
+                    interval * parseInt(c.values['Duration Multiplier'], 10);
+                  return (
+                    <I18n
+                      render={translate => (
+                        <option
+                          value={c.values['Event Type']}
+                          key={c.values['Event Type']}
+                        >
+                          {`${translate(
+                            c.values['Event Type'],
+                          )} (${duration} ${translate('minutes')})`}
+                        </option>
+                      )}
                     />
-                    {!eventCancelled ? (
-                      <div className="card-body">
-                        {rescheduleEvent || event ? (
-                          <Fragment>
-                            <span className="card-title">
-                              <Moment
-                                timestamp={moment.tz(
-                                  (rescheduleEvent || event).values['Date'],
-                                  DATE_FORMAT,
-                                  timezone,
-                                )}
-                                format={Constants.MOMENT_FORMATS.dateWithDay}
-                              />
-                            </span>
-                            <p className="card-subtitle">
-                              <Moment
-                                timestamp={moment.tz(
+                  );
+                })}
+              </select>
+            </div>
+          )}
+          {type && (
+            <div className="form-group required">
+              {expired && (
+                <Alert color="danger" toggle={() => setExpired(false)}>
+                  <I18n>Your selected time has expired.</I18n>
+                </Alert>
+              )}
+              {cancelled && (
+                <Alert color="info">
+                  <span>
+                    <I18n>Your event has been successfully cancelled.</I18n>{' '}
+                  </span>
+                  <em>
+                    <I18n>
+                      It may take several minutes for your list to reflect the
+                      changes.
+                    </I18n>
+                  </em>
+                </Alert>
+              )}
+              {rescheduled && !cancelled && (
+                <Alert color="info">
+                  <span>
+                    <I18n>Your event has been successfully rescheduled.</I18n>{' '}
+                  </span>
+                  <em>
+                    <I18n>
+                      It may take several minutes for your list to reflect the
+                      changes.
+                    </I18n>
+                  </em>
+                </Alert>
+              )}
+              <label className="field-label">
+                <I18n>Date and Time</I18n>
+              </label>
+              <div className="cards__wrapper cards__wrapper--appt pb-0">
+                <div className="card card--appt">
+                  <i
+                    className="fa fa-calendar fa-fw card-icon"
+                    style={{ background: 'rgb(255, 74, 94)' }}
+                  />
+                  {!eventCancelled ? (
+                    <div className="card-body">
+                      {rescheduleEvent || event ? (
+                        <Fragment>
+                          <span className="card-title">
+                            <Moment
+                              timestamp={moment.tz(
+                                (rescheduleEvent || event).values['Date'],
+                                DATE_FORMAT,
+                                timezone,
+                              )}
+                              format={Constants.MOMENT_FORMATS.dateWithDay}
+                            />
+                          </span>
+                          <p className="card-subtitle">
+                            <Moment
+                              timestamp={moment.tz(
+                                (rescheduleEvent || event).values['Time'],
+                                TIME_FORMAT,
+                                timezone,
+                              )}
+                              format={Constants.MOMENT_FORMATS.time}
+                            />
+                            {` - `}
+                            <Moment
+                              timestamp={moment
+                                .tz(
                                   (rescheduleEvent || event).values['Time'],
                                   TIME_FORMAT,
                                   timezone,
+                                )
+                                .add(
+                                  (rescheduleEvent || event).values['Duration'],
+                                  'minute',
                                 )}
-                                format={Constants.MOMENT_FORMATS.time}
-                              />
-                              {` - `}
-                              <Moment
-                                timestamp={moment
-                                  .tz(
-                                    (rescheduleEvent || event).values['Time'],
-                                    TIME_FORMAT,
-                                    timezone,
-                                  )
-                                  .add(
-                                    (rescheduleEvent || event).values[
-                                      'Duration'
-                                    ],
-                                    'minute',
-                                  )}
-                                format={Constants.MOMENT_FORMATS.time}
-                              />
-                            </p>
-                          </Fragment>
-                        ) : (
-                          <span className="card-title">
-                            <I18n>Date and time not selected</I18n>
-                          </span>
-                        )}
-                        {!isScheduled &&
-                          !scheduling && (
-                            <div className="card-actions">
-                              <button
-                                type="button"
-                                className={`btn btn-sm ${
-                                  isReserved ? 'btn-primary' : 'btn-inverse'
-                                }`}
-                                onClick={() => {
-                                  toggleModal(true);
-                                  setExpired(false);
-                                }}
-                              >
-                                <I18n>
-                                  {isReserved ? 'Change' : 'Select'} Date and
-                                  Time
-                                </I18n>
-                              </button>
-                            </div>
+                              format={Constants.MOMENT_FORMATS.time}
+                            />
+                          </p>
+                        </Fragment>
+                      ) : (
+                        <span className="card-title">
+                          <I18n>Date and time not selected</I18n>
+                        </span>
+                      )}
+                      {!isScheduled && !scheduling && (
+                        <div className="card-actions">
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-primary"
+                            onClick={() => {
+                              toggleModal(true);
+                              setExpired(false);
+                            }}
+                          >
+                            <I18n>
+                              {isReserved ? 'Change' : 'Select'} Date and Time
+                            </I18n>
+                          </button>
+                        </div>
+                      )}
+                      {isScheduled && !scheduling && (
+                        <div className="card-actions">
+                          {canReschedule && (
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-primary"
+                              onClick={() => {
+                                toggleModal(true);
+                              }}
+                            >
+                              <I18n>Reschedule</I18n>
+                            </button>
                           )}
-                        {isScheduled &&
-                          !scheduling && (
-                            <div className="card-actions">
-                              {canReschedule && (
-                                <button
-                                  type="button"
-                                  className="btn btn-sm btn-primary"
-                                  onClick={() => {
-                                    toggleModal(true);
-                                  }}
-                                >
-                                  <I18n>Reschedule</I18n>
-                                </button>
-                              )}
-                            </div>
-                          )}
-                      </div>
-                    ) : (
-                      <div className="card-body">
-                        <h1 className="card-message text-danger">
-                          <I18n>Cancelled</I18n>
-                        </h1>
-                      </div>
-                    )}
-                  </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="card-body">
+                      <h1 className="card-message text-danger">
+                        <I18n>Cancelled</I18n>
+                      </h1>
+                    </div>
+                  )}
                 </div>
-                {!eventCancelled &&
-                  isScheduled &&
-                  !scheduling &&
-                  canCancel && (
-                    <button
-                      type="button"
-                      className="btn btn-danger mt-3"
-                      onClick={() => {
-                        toggleCancel(true);
-                      }}
-                    >
-                      <I18n>Cancel Reservation</I18n>
-                    </button>
-                  )}
-                {!scheduling &&
-                  isReserved && (
-                    <Timer
-                      event={event}
-                      isScheduled={isScheduled}
-                      timeout={timeout}
-                      timeoutCallback={() => setExpired(true)}
-                      handleEventDelete={handleEventDelete}
-                    />
-                  )}
               </div>
-            )}
-          </div>
-        )}
+              {!eventCancelled && isScheduled && !scheduling && canCancel && (
+                <button
+                  type="button"
+                  className="btn btn-danger mt-3"
+                  onClick={() => {
+                    toggleCancel(true);
+                  }}
+                >
+                  <I18n>Cancel Reservation</I18n>
+                </button>
+              )}
+              {!scheduling && isReserved && (
+                <Timer
+                  event={event}
+                  isScheduled={isScheduled}
+                  timeout={timeout}
+                  timeoutCallback={() => setExpired(true)}
+                  handleEventDelete={handleEventDelete}
+                />
+              )}
+            </div>
+          )}
+        </div>
+      )}
       {openModal && (
         <Modal
           isOpen={!!openModal}
@@ -609,23 +595,21 @@ const SchedulerWidgetComponent = ({
                           ))}
                         </div>
                       )}
-                      {!scheduling &&
-                        loadingData && (
-                          <div className="text-center">
-                            <span className="fa fa-spinner fa-spin fa-lg" />
-                          </div>
-                        )}
-                      {!loadingData &&
-                        timeOptions.length === 0 && (
-                          <div className="text-center text-muted">
-                            <strong>
-                              <I18n>
-                                There are no available time slots for the
-                                selected date.
-                              </I18n>
-                            </strong>
-                          </div>
-                        )}
+                      {!scheduling && loadingData && (
+                        <div className="text-center">
+                          <span className="fa fa-spinner fa-spin fa-lg" />
+                        </div>
+                      )}
+                      {!loadingData && timeOptions.length === 0 && (
+                        <div className="text-center text-muted">
+                          <strong>
+                            <I18n>
+                              There are no available time slots for the selected
+                              date.
+                            </I18n>
+                          </strong>
+                        </div>
+                      )}
                       {(scheduling || !loadingData) &&
                         timeOptions.length > 0 &&
                         timeOptions}
@@ -1135,13 +1119,12 @@ const verifyScheduledEvent = ({
                     eventTimeIndexEnd > timeIndex + index
                   );
                 })
-                .sort(
-                  (a, b) =>
-                    a.updatedAt < b.updatedAt
-                      ? 1
-                      : b.updatedAt < a.updatedAt
-                        ? -1
-                        : 0,
+                .sort((a, b) =>
+                  a.updatedAt < b.updatedAt
+                    ? 1
+                    : b.updatedAt < a.updatedAt
+                    ? -1
+                    : 0,
                 )
                 .slice(0, overbookedBy)
                 .map(e => e.id === event.id)

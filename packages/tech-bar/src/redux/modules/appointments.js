@@ -43,6 +43,18 @@ export const types = {
     'SET_APPOINTMENTS_LIST_ERRORS',
   ),
   SET_APPOINTMENTS_DATE: namespace('appointments', 'SET_APPOINTMENTS_DATE'),
+  FETCH_APPOINTMENTS_OVERVIEW: namespace(
+    'appointments',
+    'FETCH_APPOINTMENTS_OVERVIEW',
+  ),
+  SET_APPOINTMENTS_OVERVIEW: namespace(
+    'appointments',
+    'SET_APPOINTMENTS_OVERVIEW',
+  ),
+  SET_APPOINTMENTS_OVERVIEW_ERRORS: namespace(
+    'appointments',
+    'SET_APPOINTMENTS_OVERVIEW_ERRORS',
+  ),
 };
 
 export const actions = {
@@ -64,6 +76,11 @@ export const actions = {
   setAppointmentsList: withPayload(types.SET_APPOINTMENTS_LIST),
   setAppointmentsListErrors: withPayload(types.SET_APPOINTMENTS_LIST_ERRORS),
   setAppointmentsDate: withPayload(types.SET_APPOINTMENTS_DATE),
+  fetchAppointmentsOverview: withPayload(types.FETCH_APPOINTMENTS_OVERVIEW),
+  setAppointmentsOverview: withPayload(types.SET_APPOINTMENTS_OVERVIEW),
+  setAppointmentsOverviewErrors: withPayload(
+    types.SET_APPOINTMENTS_OVERVIEW_ERRORS,
+  ),
 };
 
 export const State = Record({
@@ -90,6 +107,12 @@ export const State = Record({
     loading: false,
     errors: [],
     data: new List(),
+  },
+  overview: {
+    loading: false,
+    errors: [],
+    data: new List(),
+    count: 0,
   },
 });
 
@@ -165,6 +188,17 @@ export const reducer = (state = State(), { type, payload }) => {
         .setIn(['list', 'loading'], false);
     case types.SET_APPOINTMENTS_DATE:
       return state.setIn(['list', 'date'], moment(payload.date));
+    case types.FETCH_APPOINTMENTS_OVERVIEW:
+      return state.setIn(['overview', 'loading'], true);
+    case types.SET_APPOINTMENTS_OVERVIEW:
+      return state
+        .setIn(['overview', 'data'], List(payload))
+        .setIn(['overview', 'count'], payload.length || 0)
+        .setIn(['overview', 'loading'], false);
+    case types.SET_APPOINTMENTS_OVERVIEW_ERRORS:
+      return state
+        .setIn(['overview', 'errors'], payload)
+        .setIn(['overview', 'loading'], false);
     default:
       return state;
   }

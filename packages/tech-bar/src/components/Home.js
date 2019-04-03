@@ -8,13 +8,7 @@ import {
   withProps,
   withState,
 } from 'recompose';
-import {
-  Modal,
-  ModalBody,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-} from 'reactstrap';
+import { Modal, ModalBody } from 'reactstrap';
 import {
   KappLink as Link,
   PageTitle,
@@ -22,11 +16,14 @@ import {
   Moment,
   Constants,
   Utils,
+  modalFormActions,
 } from 'common';
 import { actions } from '../redux/modules/appointments';
+import { actions as walkInActions } from '../redux/modules/walkIns';
 import {
   SESSION_ITEM_USER_LOCATION,
   SESSION_ITEM_CURRENT_TECH_BAR,
+  enableLocationServices,
   mapTechBarsForDistance,
   sortTechBarsByDistance,
 } from '../redux/modules/techBarApp';
@@ -45,11 +42,14 @@ export const HomeComponent = ({
   setModalOpen,
   currentTechBar,
   selectCurrentTechBar,
+  useLocationServices,
   userLocation,
   getUserLocation,
   openDropdown,
   toggleDropdown,
   hasTechBarDisplayRole,
+  openForm,
+  waitingUsers,
 }) => {
   const selectedTechBar = currentTechBar || techBars.get(0);
   return (
@@ -62,12 +62,23 @@ export const HomeComponent = ({
         <div className="container">
           <div className="hero-welcome">
             <div className="title">
-              <I18n>Welcome to {kapp ? kapp.name : 'Tech Bar'}</I18n>
+              <I18n>Welcome to</I18n>{' '}
+              <I18n>
+                {selectedTechBar
+                  ? selectedTechBar.values['Name']
+                  : kapp
+                  ? kapp.name
+                  : 'Tech Bar'}
+              </I18n>
             </div>
             <div className="subtitle">
-              <I18n>
-                We deliver in-person service that gets people back on track.
-              </I18n>
+              {selectedTechBar ? (
+                <I18n>{selectedTechBar.values['Description']}</I18n>
+              ) : (
+                <I18n>
+                  We deliver in-person service that gets people back on track.
+                </I18n>
+              )}
             </div>
           </div>
           <div className="hero-card">
@@ -92,11 +103,6 @@ export const HomeComponent = ({
                     </div>
                   )}
                   <div className="details">
-                    {selectedTechBar.values['Description'] && (
-                      <p>
-                        <I18n>{selectedTechBar.values['Description']}</I18n>
-                      </p>
-                    )}
                     {selectedTechBar.values['Details'] && (
                       <p>
                         <I18n>{selectedTechBar.values['Details']}</I18n>
@@ -104,60 +110,6 @@ export const HomeComponent = ({
                     )}
                   </div>
                 </div>
-                {/*hasTechBarDisplayRole(selectedTechBar.values['Name']) && (
-                  <Dropdown
-                    toggle={toggleDropdown(selectedTechBar.id)}
-                    isOpen={openDropdown === selectedTechBar.id}
-                  >
-                    <DropdownToggle color="link" className="btn-sm">
-                      <span className="fa fa-ellipsis-v fa-2x" />
-                    </DropdownToggle>
-                    <DropdownMenu right>
-                      <Link
-                        to={`/display/${selectedTechBar.values['Id']}/checkin`}
-                        className="dropdown-item"
-                        target="_blank"
-                      >
-                        <span className="fa fa-fw fa-external-link mr-2" />
-                        <span>
-                          <I18n>Check In</I18n>
-                        </span>
-                      </Link>
-                      <Link
-                        to={`/display/${selectedTechBar.values['Id']}/feedback`}
-                        className="dropdown-item"
-                        target="_blank"
-                      >
-                        <span className="fa fa-external-link fa-fw mr-2" />
-                        <span>
-                          <I18n>Feedback</I18n>
-                        </span>
-                      </Link>
-                      <Link
-                        to={`/display/${
-                          selectedTechBar.values['Id']
-                        }/checkin?crosslink`}
-                        className="dropdown-item"
-                        target="_blank"
-                      >
-                        <span className="fa fa-external-link fa-fw mr-2" />
-                        <span>
-                          <I18n>Check In</I18n> / <I18n>Feedback</I18n>
-                        </span>
-                      </Link>
-                      <Link
-                        to={`/display/${selectedTechBar.values['Id']}/overhead`}
-                        className="dropdown-item"
-                        target="_blank"
-                      >
-                        <span className="fa fa-external-link fa-fw mr-2" />
-                        <span>
-                          <I18n>Overhead</I18n>
-                        </span>
-                      </Link>
-                    </DropdownMenu>
-                  </Dropdown>
-                )*/}
               </div>
               <Link
                 to={`/appointment/${selectedTechBar.values['Id']}`}
@@ -165,99 +117,172 @@ export const HomeComponent = ({
               >
                 <I18n>Schedule Now</I18n> →
               </Link>
+              <div
+                className={`waiting-users-message ${
+                  waitingUsers === 0 ? '' : ''
+                }`}
+              >
+                <I18n>Currently awaiting assistance</I18n>: {waitingUsers}{' '}
+                <I18n
+                  render={translate =>
+                    waitingUsers === 1
+                      ? translate('person')
+                      : translate('people')
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div className="page-container page-container--tech-bar container">
-        <section>
-          <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
-                <I18n>tech bar</I18n> /{' '}
-              </h3>
-              <h1>
-                <I18n>Upcoming Appointments</I18n>
-              </h1>
-            </div>
-          </div>
-          <div className="cards__wrapper cards__wrapper--appt mb-3">
-            {upcomingAppointments.map(appt => {
-              const techBar = techBars.find(
-                t => t.values['Id'] === appt.values['Scheduler Id'],
-              );
-              const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
-              const start = moment.utc(appt.values['Event Time'], TIME_FORMAT);
-              const end = start
-                .clone()
-                .add(appt.values['Event Duration'], 'minute');
-              return (
-                <Link
-                  to={`/appointment/${appt.values['Scheduler Id']}/${appt.id}`}
-                  className="card card--appt"
-                  key={appt.id}
+        <section className="mt-4">
+          <div className="info-tile__wrapper">
+            <Link
+              to={`/appointment/${selectedTechBar.values['Id']}`}
+              className="info-tile"
+            >
+              <div className="icon">
+                <span className="fa fa-calendar-o fa-fw" />
+              </div>
+              <div className="title">
+                <span className="fa fa-calendar-o fa-fw" />
+                <I18n>Schedule</I18n>
+              </div>
+              <p className="description">
+                <I18n>Schedule an appointment.</I18n>
+              </p>
+            </Link>
+            <Link to="/past" className="info-tile">
+              <div className="icon">
+                <span className="fa fa-clock-o fa-fw" />
+              </div>
+              <div className="title">
+                <span className="fa fa-clock-o fa-fw" />
+                <I18n>History</I18n>
+              </div>
+              <p className="description">
+                <I18n>View all of your past appointments.</I18n>
+              </p>
+            </Link>
+            <I18n
+              render={translate => (
+                <div
+                  className="info-tile actionable"
+                  onClick={() =>
+                    openForm({
+                      formSlug: 'general-feedback',
+                      kappSlug: kapp.slug,
+                      values: { 'Scheduler Id': selectedTechBar.values['Id'] },
+                      title: `${translate(
+                        selectedTechBar.values['Name'],
+                      )} ${translate('Feedback')}`,
+                      confirmationMessage: translate(
+                        'Thank you for your feedback.',
+                      ),
+                    })
+                  }
                 >
-                  <i
-                    className="fa fa-calendar fa-fw card-icon"
-                    style={{ background: 'rgb(255, 74, 94)' }}
-                  />
-                  <div className="card-body">
-                    <span className="card-title">
-                      <Moment
-                        timestamp={date}
-                        format={Constants.MOMENT_FORMATS.dateWithDay}
-                      />
-                    </span>
-                    <p className="card-subtitle">
-                      <Moment
-                        timestamp={start}
-                        format={Constants.MOMENT_FORMATS.time}
-                      />
-                      {` - `}
-                      <Moment
-                        timestamp={end}
-                        format={Constants.MOMENT_FORMATS.time}
-                      />
-                    </p>
-                    {techBar && (
-                      <p className="card-meta">
-                        <strong>
-                          <I18n>{techBar.values['Name']}</I18n>
-                        </strong>
-                      </p>
-                    )}
-                    <span
-                      className={`badge ${
-                        appt.coreState === 'Closed'
-                          ? 'badge-dark'
-                          : 'badge-success'
-                      }`}
-                    >
-                      <I18n>{appt.values['Status']}</I18n>
-                    </span>
-                    <p className="card-text">{appt.values['Summary']}</p>
+                  <div className="icon">
+                    <span className="fa fa-comment-o fa-fw" />
                   </div>
-                </Link>
-              );
-            })}
-            {upcomingAppointments.size === 0 &&
-              !loadingUpcoming &&
-              upcomingErrors.length === 0 && (
-                <div className="text-center mx-auto text-muted">
-                  <h3 className="mb-3">
-                    <I18n>You have no upcoming appointments.</I18n>
-                  </h3>
-                  <p>
-                    <I18n>
-                      As you schedule appointments, they'll appear here.
-                    </I18n>
+                  <div className="title">
+                    <span className="fa fa-comment-o fa-fw" />
+                    <I18n>Feedback</I18n>
+                  </div>
+                  <p className="description">
+                    <I18n>Questions, comments, or concerns.</I18n>
                   </p>
                 </div>
               )}
+            />
           </div>
-          <Link to="/past" className="btn btn-link">
-            <I18n>View Past Appointments</I18n>
-          </Link>
+        </section>
+        <section className="mt-4">
+          <h2 className="section__title">
+            <I18n>Upcoming Appointments</I18n>
+          </h2>
+          {upcomingAppointments.size > 0 && (
+            <div className="cards__wrapper cards__wrapper--appt mb-3">
+              {upcomingAppointments.map(appt => {
+                const techBar = techBars.find(
+                  t => t.values['Id'] === appt.values['Scheduler Id'],
+                );
+                const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
+                const start = moment.utc(
+                  appt.values['Event Time'],
+                  TIME_FORMAT,
+                );
+                const end = start
+                  .clone()
+                  .add(appt.values['Event Duration'], 'minute');
+                return (
+                  <Link
+                    to={`/appointment/${appt.values['Scheduler Id']}/${
+                      appt.id
+                    }`}
+                    className="card card--appt"
+                    key={appt.id}
+                  >
+                    <i
+                      className="fa fa-calendar fa-fw card-icon"
+                      style={{ background: 'rgb(255, 74, 94)' }}
+                    />
+                    <div className="card-body">
+                      <span className="card-title">
+                        <Moment
+                          timestamp={date}
+                          format={Constants.MOMENT_FORMATS.dateWithDay}
+                        />
+                      </span>
+                      <p className="card-subtitle">
+                        <Moment
+                          timestamp={start}
+                          format={Constants.MOMENT_FORMATS.time}
+                        />
+                        {` - `}
+                        <Moment
+                          timestamp={end}
+                          format={Constants.MOMENT_FORMATS.time}
+                        />
+                      </p>
+                      {techBar && (
+                        <p className="card-meta">
+                          <strong>
+                            <I18n>{techBar.values['Name']}</I18n>
+                          </strong>
+                        </p>
+                      )}
+                      <span
+                        className={`badge ${
+                          appt.coreState === 'Closed'
+                            ? 'badge-dark'
+                            : 'badge-success'
+                        }`}
+                      >
+                        <I18n>{appt.values['Status']}</I18n>
+                      </span>
+                      <p className="card-text">{appt.values['Summary']}</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+          {upcomingAppointments.size === 0 &&
+            !loadingUpcoming &&
+            upcomingErrors.length === 0 && (
+              <div className="text-center mx-auto text-muted">
+                <h5 className="mb-3">
+                  <I18n>You have no upcoming appointments.</I18n>
+                </h5>
+                <p>
+                  <I18n>
+                    As you schedule appointments, they'll appear here.
+                  </I18n>
+                </p>
+              </div>
+            )}
         </section>
       </div>
       {modalOpen && (
@@ -282,7 +307,7 @@ export const HomeComponent = ({
               </Link>
             </h4>
           </div>
-          {!userLocation && (
+          {useLocationServices && !userLocation && (
             <div className="modal-header">
               <div className="px-3 py-1 text-center">
                 <button className="btn btn-link" onClick={getUserLocation}>
@@ -343,26 +368,36 @@ export const HomeComponent = ({
 };
 
 export const mapStateToProps = (state, props) => {
+  const techBars = state.techBar.techBarApp.schedulers.filter(
+    s => s.values['Status'] === 'Active',
+  );
+  const useLocationServices = enableLocationServices(techBars);
   return {
     kapp: selectCurrentKapp(state),
-    techBars: state.techBar.techBarApp.schedulers
-      .filter(s => s.values['Status'] === 'Active')
-      .map(
-        props.userLocation
-          ? mapTechBarsForDistance(props.userLocation)
-          : t => t,
-      )
-      .sort(props.userLocation ? sortTechBarsByDistance : () => 0),
+    techBars:
+      useLocationServices && props.userLocation
+        ? techBars
+            .map(mapTechBarsForDistance(props.userLocation))
+            .sort(sortTechBarsByDistance)
+        : techBars,
     loadingUpcoming: state.techBar.appointments.upcoming.loading,
     upcomingErrors: state.techBar.appointments.upcoming.errors,
     upcomingAppointments: state.techBar.appointments.upcoming.data,
     profile: state.app.profile,
+    kappSlug: state.app.config.kappSlug,
+    waitingUsers:
+      state.techBar.appointments.overview.count +
+      state.techBar.walkIns.overview.count,
+    useLocationServices,
   };
 };
 
 export const mapDispatchToProps = {
   push,
   fetchUpcomingAppointments: actions.fetchUpcomingAppointments,
+  fetchAppointmentsOverview: actions.fetchAppointmentsOverview,
+  fetchWalkInsOverview: walkInActions.fetchWalkInsOverview,
+  openForm: modalFormActions.openForm,
 };
 
 const selectCurrentTechBar = ({
@@ -433,8 +468,33 @@ export const Home = compose(
       if (!this.props.loadingUpcoming) {
         this.props.fetchUpcomingAppointments();
       }
-      if (this.props.userLocation === null) {
+      if (this.props.useLocationServices && this.props.userLocation === null) {
         this.props.getUserLocation();
+      }
+      if (this.props.techBars.size > 0) {
+        const selectedTechBar =
+          this.props.currentTechBar || this.props.techBars.get(0);
+        this.props.fetchAppointmentsOverview({
+          id: selectedTechBar.values['Id'],
+        });
+        this.props.fetchWalkInsOverview({
+          id: selectedTechBar.values['Id'],
+        });
+      }
+    },
+    componentDidUpdate(prevProps) {
+      if (
+        this.props.techBars.size > 0 &&
+        this.props.currentTechBar !== prevProps.currentTechBar
+      ) {
+        const selectedTechBar =
+          this.props.currentTechBar || this.props.techBars.get(0);
+        this.props.fetchAppointmentsOverview({
+          id: selectedTechBar.values['Id'],
+        });
+        this.props.fetchWalkInsOverview({
+          id: selectedTechBar.values['Id'],
+        });
       }
     },
   }),

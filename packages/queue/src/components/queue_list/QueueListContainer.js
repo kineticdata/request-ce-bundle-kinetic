@@ -129,6 +129,16 @@ export const QueueListContainer = compose(
       };
     },
   ),
+  withHandlers(() => {
+    let queueListRef = null;
+    return {
+      setQueueListRef: () => ref => (queueListRef = ref),
+      setOffsetWithScroll: ({ setOffset }) => offset => {
+        setOffset(offset);
+        queueListRef.scrollTop = 0;
+      },
+    };
+  }),
   withHandlers({
     openFilterMenu: props => section => () => {
       props.openFilterMenu(props.filter);
@@ -139,27 +149,29 @@ export const QueueListContainer = compose(
     toggleSortDirection: ({
       sortDirection,
       setSortDirection,
-      setOffset,
+      setOffsetWithScroll,
     }) => () => {
       setSortDirection(sortDirection === 'ASC' ? 'DESC' : 'ASC');
-      setOffset(0);
+      setOffsetWithScroll(0);
     },
     toggleGroupDirection: ({
       groupDirection,
       setGroupDirection,
-      setOffset,
+      setOffsetWithScroll,
     }) => () => {
       setGroupDirection(groupDirection === 'ASC' ? 'DESC' : 'ASC');
-      setOffset(0);
+      setOffsetWithScroll(0);
     },
-    refresh: ({ filter, fetchList, setOffset }) => () => {
+    refresh: ({ filter, fetchList, setOffsetWithScroll }) => () => {
       fetchList(filter);
-      setOffset(0);
+      setOffsetWithScroll(0);
     },
-    gotoPrevPage: ({ limit, offset, setOffset }) => () =>
-      setOffset(offset - limit),
-    gotoNextPage: ({ limit, offset, setOffset }) => () =>
-      setOffset(offset + limit),
+    gotoPrevPage: ({ limit, offset, setOffsetWithScroll }) => () => {
+      setOffsetWithScroll(offset - limit);
+    },
+    gotoNextPage: ({ limit, offset, setOffsetWithScroll }) => () => {
+      setOffsetWithScroll(offset + limit);
+    },
   }),
   lifecycle({
     componentWillMount() {
