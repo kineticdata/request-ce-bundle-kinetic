@@ -1,11 +1,13 @@
 import React from 'react';
-import { KappLink as Link, PageTitle } from 'common';
+import { PageTitle } from 'common';
+import { Link } from '@reach/router';
+
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 import { ServiceCard } from '../shared/ServiceCard';
 import { CatalogSearchContainer } from '../shared/CatalogSearchContainer';
 import { I18n } from '../../../../app/src/I18nProvider';
 
-export const CatalogSearchResults = ({ query, forms }) => (
+export const CatalogSearchResults = ({ query, forms, appLocation }) => (
   <div>
     <PageTitle parts={[query, 'Search']} />
     <span className="services-color-bar services-color-bar__blue-slate" />
@@ -13,7 +15,7 @@ export const CatalogSearchResults = ({ query, forms }) => (
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">
+            <Link to="../">
               <I18n>services</I18n>
             </Link>{' '}
             / <I18n>search results</I18n>
@@ -30,7 +32,10 @@ export const CatalogSearchResults = ({ query, forms }) => (
             <ul>
               {forms.map(form => (
                 <li key={form.slug}>
-                  <ServiceCard path={`/forms/${form.slug}`} form={form} />
+                  <ServiceCard
+                    path={`${appLocation}/forms/${form.slug}`}
+                    form={form}
+                  />
                 </li>
               ))}
             </ul>

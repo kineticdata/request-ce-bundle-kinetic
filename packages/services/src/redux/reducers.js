@@ -1,3 +1,4 @@
+import { reducer as app } from './modules/app';
 import categoriesReducer from './modules/categories';
 import formsReducer from './modules/forms';
 import searchReducer from './modules/search';
@@ -10,6 +11,7 @@ import settingsFormsReducer from './modules/settingsForms';
 import settingsCategoriesReducer from './modules/settingsCategories';
 
 export default {
+  app,
   categories: categoriesReducer,
   forms: formsReducer,
   search: searchReducer,

@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
-import { KappLink as Link, PageTitle } from 'common';
+import { PageTitle } from 'common';
 import { ServiceCard } from '../shared/ServiceCard';
+import { Link } from '@reach/router';
+
 import { I18n } from '../../../../app/src/I18nProvider';
 
 export const FormList = ({ forms }) => (
@@ -11,7 +13,7 @@ export const FormList = ({ forms }) => (
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">
+            <Link to="../">
               <I18n>services</I18n>
             </Link>{' '}
             /
@@ -25,10 +27,12 @@ export const FormList = ({ forms }) => (
         {forms
           .map(form => ({
             form,
-            path: `/forms/${form.slug}`,
+            path: form.slug,
             key: form.slug,
           }))
-          .map(props => <ServiceCard {...props} />)}
+          .map(props => (
+            <ServiceCard {...props} />
+          ))}
       </div>
     </div>
   </Fragment>

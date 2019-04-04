@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
+import { Link } from '@reach/router';
+
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
-import { KappLink as Link, PageTitle } from 'common';
+import { PageTitle } from 'common';
 import { RequestCard } from '../shared/RequestCard';
 import { getSubmissionPath } from '../../utils';
 import { I18n } from '../../../../app/src/I18nProvider';
@@ -31,6 +33,7 @@ export const RequestList = ({
   handleNextPage,
   handlePreviousPage,
   refreshPage,
+  appLocation,
 }) => (
   <Fragment>
     <PageTitle parts={['My Requests']} />
@@ -39,12 +42,12 @@ export const RequestList = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">
+            <Link to={appLocation}>
               <I18n>services</I18n>
             </Link>{' '}
             /{' '}
             {type && (
-              <Link to="/requests">
+              <Link to={`${appLocation}/requests`}>
                 <I18n>requests</I18n>
               </Link>
             )}
@@ -84,7 +87,7 @@ export const RequestList = ({
               submission,
               forms,
               key: submission.id,
-              path: getSubmissionPath(submission, null, type),
+              path: getSubmissionPath(appLocation, submission, null, type),
               deleteCallback: refreshPage,
             }))
             .map(props => <RequestCard {...props} />)

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { actions } from '../../redux/modules/submission';
+import { context } from '../../redux/store';
 import { modalFormActions, Utils } from 'common';
 import { I18n } from '../../../../app/src/I18nProvider';
 
@@ -26,6 +27,8 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(props => {
     const disabledAttribute = Utils.getAttributeValue(

@@ -4,13 +4,15 @@ import { RequestList } from './RequestList';
 import * as constants from '../../constants';
 import { actions as submissionsActions } from '../../redux/modules/submissions';
 import { actions as submissionCountActions } from '../../redux/modules/submissionCounts';
+import { context } from '../../redux/store';
 
 const mapStateToProps = (state, props) => ({
-  submissions: state.services.submissions.data,
-  hasNextPage: !!state.services.submissions.next,
-  hasPreviousPage: !state.services.submissions.previous.isEmpty(),
-  counts: state.services.submissionCounts.data,
-  type: props.match.params.type,
+  submissions: state.submissions.data,
+  hasNextPage: !!state.submissions.next,
+  hasPreviousPage: !state.submissions.previous.isEmpty(),
+  counts: state.submissionCounts.data,
+  type: props.type,
+  appLocation: state.app.location,
 });
 
 const mapDispatchToProps = {
@@ -25,6 +27,8 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(props => ({
     coreState:

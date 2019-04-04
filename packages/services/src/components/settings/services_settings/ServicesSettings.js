@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
@@ -8,11 +8,11 @@ import {
   toastActions,
   PageTitle,
   AttributeSelectors,
-  selectCurrentKapp,
 } from 'common';
 import { fetchKapp, updateKapp } from '@kineticdata/react';
 import isarray from 'isarray';
 import { I18n } from '../../../../../app/src/I18nProvider';
+import { context } from '../../../redux/store';
 
 export const SettingsComponent = ({
   attributesMap,
@@ -24,6 +24,7 @@ export const SettingsComponent = ({
   kappName,
   handleNameChange,
   previousKappName,
+  appLocation,
 }) => (
   <div className="page-container page-container--space-settings">
     <PageTitle parts={['Kapp Settings', currentKapp.name]} />
@@ -31,11 +32,11 @@ export const SettingsComponent = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to={`/kapps/${currentKapp.slug}`}>
+            <Link to={appLocation}>
               <I18n>services</I18n>
             </Link>{' '}
             /{` `}
-            <Link to={`/kapps/${currentKapp.slug}/settings`}>
+            <Link to={`${appLocation}/settings`}>
               <I18n>settings</I18n>
             </Link>{' '}
             /{` `}
@@ -160,36 +161,34 @@ export const SettingsComponent = ({
           <h2 className="section__title">
             <I18n>Form Mapping</I18n>
           </h2>
-          {requiredKapps.queue &&
-            attributesMap.has('Approval Form Slug') && (
-              <AttributeSelectors.FormSelect
-                id="Approval Form Slug"
-                value={attributesMap.getIn(['Approval Form Slug', 'value'])}
-                onChange={handleAttributeChange}
-                valueMapper={value => value.slug}
-                kappSlug={requiredKapps.queue.slug}
-                label="Default Kapp Approval Form"
-                description={attributesMap.getIn([
-                  'Approval Form Slug',
-                  'description',
-                ])}
-              />
-            )}
-          {requiredKapps.queue &&
-            attributesMap.has('Task Form Slug') && (
-              <AttributeSelectors.FormSelect
-                id="Task Form Slug"
-                value={attributesMap.getIn(['Task Form Slug', 'value'])}
-                onChange={handleAttributeChange}
-                valueMapper={value => value.slug}
-                kappSlug={requiredKapps.queue.slug}
-                label="Default Task Form Slug"
-                description={attributesMap.getIn([
-                  'Task Form Slug',
-                  'description',
-                ])}
-              />
-            )}
+          {requiredKapps.queue && attributesMap.has('Approval Form Slug') && (
+            <AttributeSelectors.FormSelect
+              id="Approval Form Slug"
+              value={attributesMap.getIn(['Approval Form Slug', 'value'])}
+              onChange={handleAttributeChange}
+              valueMapper={value => value.slug}
+              kappSlug={requiredKapps.queue.slug}
+              label="Default Kapp Approval Form"
+              description={attributesMap.getIn([
+                'Approval Form Slug',
+                'description',
+              ])}
+            />
+          )}
+          {requiredKapps.queue && attributesMap.has('Task Form Slug') && (
+            <AttributeSelectors.FormSelect
+              id="Task Form Slug"
+              value={attributesMap.getIn(['Task Form Slug', 'value'])}
+              onChange={handleAttributeChange}
+              valueMapper={value => value.slug}
+              kappSlug={requiredKapps.queue.slug}
+              label="Default Task Form Slug"
+              description={attributesMap.getIn([
+                'Task Form Slug',
+                'description',
+              ])}
+            />
+          )}
 
           {attributesMap.has('Notification Template Name - Complete') && (
             <AttributeSelectors.NotificationTemplateSelect
@@ -405,9 +404,10 @@ const handleNameChange = ({ setKappName }) => event => {
 };
 
 const mapStateToProps = state => ({
-  currentKapp: selectCurrentKapp(state),
-  servicesSettings: state.services.servicesSettings,
-  forms: state.services.forms.data,
+  currentKapp: state.app.kapp,
+  servicesSettings: state.servicesSettings,
+  forms: state.forms.data,
+  appLocation: state.app.location,
 });
 
 const mapDispatchToProps = {
@@ -419,6 +419,8 @@ export const ServicesSettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('attributesMap', 'setAttributesMap', Map()),
   withState('previousAttributesMap', 'setPreviousAttributesMap', Map()),

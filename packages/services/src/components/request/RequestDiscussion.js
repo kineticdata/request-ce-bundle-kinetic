@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { ViewDiscussionsModal, Discussion } from 'common';
+import { context } from '../../redux/store';
 
 export const RequestDiscussionComponent = ({
   discussion,
@@ -27,7 +28,7 @@ export const RequestDiscussionComponent = ({
 
 export const mapStateToProps = state => ({
   me: state.app.profile,
-  isSmallLayout: state.app.layout.get('size') === 'small',
+  isSmallLayout: state.app.layoutSize === 'small',
 });
 
 export const mapDispatchToProps = {};
@@ -36,6 +37,8 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
 );
 

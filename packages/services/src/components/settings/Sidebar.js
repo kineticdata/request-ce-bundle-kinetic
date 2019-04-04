@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
-import { KappNavLink as NavLink, selectCurrentKapp } from 'common';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
+import { isActiveClass } from '../../utils';
 
 export const SidebarComponent = ({
   settingsBackPath,
@@ -22,32 +23,20 @@ export const SidebarComponent = ({
         <ul className="nav flex-column sidebar-group">
           <li className="nav-item">
             {spaceAdmin && (
-              <NavLink
-                to="/settings/general"
-                className="nav-link"
-                activeClassName="active"
-              >
+              <Link to="general" getProps={isActiveClass('nav-link')}>
                 <I18n>General</I18n>
                 <span className="fa fa-fw fa-angle-right" />
-              </NavLink>
+              </Link>
             )}
-            <NavLink
-              to="/settings/forms"
-              className="nav-link"
-              activeClassName="active"
-            >
+            <Link to="forms" getProps={isActiveClass('nav-link')}>
               <I18n>Forms</I18n>
               <span className="fa fa-fw fa-angle-right" />
-            </NavLink>
+            </Link>
             {spaceAdmin && (
-              <NavLink
-                to="/settings/categories"
-                className="nav-link"
-                activeClassName="active"
-              >
+              <Link to="categories" getProps={isActiveClass('nav-link')}>
                 <I18n>Categories</I18n>
                 <span className="fa fa-fw fa-angle-right" />
-              </NavLink>
+              </Link>
             )}
           </li>
         </ul>
@@ -57,11 +46,17 @@ export const SidebarComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.services.servicesSettings.loading,
-  forms: state.services.forms.data,
+  loading: state.servicesSettings.loading,
+  forms: state.forms.data,
   spaceAdmin: state.app.profile.spaceAdmin,
-  pathname: state.router.location.pathname,
-  kapp: selectCurrentKapp(state),
+  kapp: state.app.kapp,
 });
 
-export const Sidebar = compose(connect(mapStateToProps))(SidebarComponent);
+export const Sidebar = compose(
+  connect(
+    mapStateToProps,
+    null,
+    null,
+    { context },
+  ),
+)(SidebarComponent);

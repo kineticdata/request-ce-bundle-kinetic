@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
+import { context } from '../../redux/store';
 
 const ViewDiscussionButton = props =>
   props.isSmallLayout &&
@@ -15,14 +16,18 @@ const ViewDiscussionButton = props =>
   );
 
 export const mapStateToProps = state => ({
-  isSmallLayout: state.app.layout.get('size') === 'small',
-  hasDiscussions: state.services.submission.discussion !== null,
+  isSmallLayout: state.app.layoutSize === 'small',
+  hasDiscussions: state.submission.discussion !== null,
 });
 
 const enhance = compose(
   connect(
     mapStateToProps,
     null,
+    null,
+    {
+      context,
+    },
   ),
   withHandlers({
     handleClick: props => () => {

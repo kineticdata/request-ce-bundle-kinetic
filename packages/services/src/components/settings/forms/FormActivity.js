@@ -1,10 +1,12 @@
 import React from 'react';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import { PageTitle } from 'common';
+
 import { actions } from '../../../redux/modules/settingsForms';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 export const FormActivityContainer = ({
@@ -12,6 +14,7 @@ export const FormActivityContainer = ({
   submission,
   space,
   kappSlug,
+  appLocation,
 }) =>
   !loading && (
     <div>
@@ -21,20 +24,20 @@ export const FormActivityContainer = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to="/kapps/services">
+                <Link to={appLocation}>
                   <I18n>services</I18n>
                 </Link>{' '}
                 /{` `}
-                <Link to="/kapps/services/settings">
+                <Link to={`${appLocation}/settings`}>
                   <I18n>settings</I18n>
                 </Link>{' '}
                 /{` `}
-                <Link to="/kapps/services/settings/forms">
+                <Link to={`${appLocation}/settings/forms`}>
                   <I18n>forms</I18n>
                 </Link>{' '}
                 /{` `}
                 <Link
-                  to={`/kapps/services/settings/forms/${submission.form.slug}`}
+                  to={`${appLocation}/settings/forms/${submission.form.slug}`}
                 >
                   <I18n
                     context={`kapps.${kappSlug}.forms.${submission.form.slug}`}
@@ -274,12 +277,13 @@ export const FormActivityContainer = ({
     </div>
   );
 
-const mapStateToProps = (state, { match: { params } }) => ({
-  loading: state.services.settingsForms.submissionLoading,
-  submission: state.services.settingsForms.formSubmission,
+const mapStateToProps = state => ({
+  loading: state.settingsForms.submissionLoading,
+  submission: state.settingsForms.formSubmission,
   space: state.app.space,
-  activityLoading: state.services.settingsForms.submissionActivityLoading,
-  kappSlug: state.app.config.kappSlug,
+  activityLoading: state.settingsForms.submissionActivityLoading,
+  kappSlug: state.app.kappSlug,
+  appLocation: state.app.location,
 });
 
 const mapDispatchToProps = {
@@ -290,11 +294,13 @@ export const FormActivity = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentWillMount() {
       this.props.fetchFormSubmission({
-        id: this.props.match.params.id,
+        id: this.props.id,
       });
     },
   }),

@@ -45,7 +45,7 @@ export function* fetchSubmissionSaga(action) {
 
 export function* cloneSubmissionSaga(action) {
   const include = 'details,values,form,form.fields.details,form.kapp';
-  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const kappSlug = yield select(state => state.app.kappSlug);
   const { submission, errors, serverError } = yield call(fetchSubmission, {
     id: action.payload,
     include,
@@ -133,12 +133,12 @@ export function* fetchDiscussionSaga(action) {
 }
 
 export function* sendMessageSaga(action) {
-  const kappSlug = yield select(state => state.app.config.kappSlug);
-  const submission = yield select(state => state.services.submission.data);
-  let discussion = yield select(state => state.services.submission.discussion);
+  const kappSlug = yield select(state => state.app.kappSlug);
+  const submission = yield select(state => state.submission.data);
+  let discussion = yield select(state => state.submission.discussion);
   const profile = yield select(state => state.app.profile);
   const sendMessageType = yield select(
-    state => state.services.submission.sendMessageType,
+    state => state.submission.sendMessageType,
   );
   // Create the Discussion if it doesn't exist for the submission
   if (discussion === null) {

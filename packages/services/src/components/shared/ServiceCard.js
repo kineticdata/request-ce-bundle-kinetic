@@ -1,5 +1,7 @@
 import React from 'react';
-import { KappLink as Link, Icon } from 'common';
+import { Icon } from 'common';
+import { Link } from '@reach/router';
+
 import { I18n } from '../../../../app/src/I18nProvider';
 
 export const ServiceCard = ({ path, form }) => (

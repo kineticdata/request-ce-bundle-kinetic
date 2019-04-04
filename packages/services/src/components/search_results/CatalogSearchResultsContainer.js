@@ -3,6 +3,7 @@ import { lifecycle, compose } from 'recompose';
 import { CatalogSearchResults } from './CatalogSearchResults';
 import { displayableFormPredicate } from '../../utils';
 import { searchHistoryActions } from 'common';
+import { context } from '../../redux/store';
 
 const matches = (form, term) =>
   form.name.toLowerCase().includes(term.toLowerCase()) ||
@@ -10,15 +11,16 @@ const matches = (form, term) =>
     form.description.toLowerCase().includes(term.toLowerCase()));
 
 const mapStateToProps = (state, props) => {
-  const query = props.match.params.query || '';
+  const query = props.query || '';
 
   return {
     query,
-    forms: state.services.forms.data
+    forms: state.forms.data
       .filter(displayableFormPredicate)
       .filter(form => matches(form, query)),
-    kappSlug: state.app.config.kappSlug,
-    searchResultsFormExists: state.services.search.searchResultsFormExists,
+    kappSlug: state.app.kappSlug,
+    searchResultsFormExists: state.search.searchResultsFormExists,
+    appLocation: state.app.location,
   };
 };
 
@@ -30,6 +32,8 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentDidMount() {

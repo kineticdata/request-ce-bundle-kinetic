@@ -5,7 +5,7 @@ import { actions, types } from '../modules/forms';
 import { actions as systemErrorActions } from '../modules/systemError';
 
 export function* fetchFormsSaga() {
-  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const kappSlug = yield select(state => state.app.kappSlug);
   const { forms, errors, serverError } = yield call(fetchForms, {
     kappSlug,
     include: 'details,categorizations,attributes,kapp',

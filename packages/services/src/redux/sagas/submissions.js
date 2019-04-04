@@ -6,9 +6,9 @@ import { actions, types } from '../modules/submissions';
 import { actions as systemErrorActions } from '../modules/systemError';
 
 export function* fetchSubmissionsSaga({ payload: { coreState } }) {
-  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const kappSlug = yield select(state => state.app.kappSlug);
   const username = yield select(state => state.app.profile.username);
-  const pageToken = yield select(state => state.services.submissions.current);
+  const pageToken = yield select(state => state.submissions.current);
   const searchBuilder = new SubmissionSearch()
     .type(constants.SUBMISSION_FORM_TYPE)
     .limit(constants.PAGE_SIZE)

@@ -28,7 +28,7 @@ const buildSearch = (coreState, username) => {
 };
 
 export function* fetchSubmissionCountsSaga() {
-  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const kappSlug = yield select(state => state.app.kappSlug);
   const username = yield select(state => state.app.profile.username);
   const [draft, submitted, closed] = yield all([
     call(searchSubmissions, {

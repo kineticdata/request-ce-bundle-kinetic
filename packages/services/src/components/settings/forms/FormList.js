@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, withState, withHandlers } from 'recompose';
@@ -12,6 +12,8 @@ import {
 import { TimeAgo } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/forms';
+import { context } from '../../../redux/store';
+
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const WallyEmptyMessage = ({ filter }) => {
@@ -73,7 +75,7 @@ const FormListComponent = ({
             </h1>
           </div>
           {isSpaceAdmin && (
-            <Link to={`${match.path}/new`} className="btn btn-primary">
+            <Link to={`new`} className="btn btn-primary">
               <I18n>New Form</I18n>
             </Link>
           )}
@@ -118,7 +120,7 @@ const FormListComponent = ({
                     return (
                       <tr key={form.slug}>
                         <td scope="row">
-                          <Link to={`${match.path}/${form.slug}`}>
+                          <Link to={`${form.slug}`}>
                             <span>{form.name}</span>
                           </Link>
                         </td>
@@ -148,21 +150,18 @@ const FormListComponent = ({
                                 <span className="fa fa-ellipsis-h fa-2x" />
                               </DropdownToggle>
                               <DropdownMenu right>
-                                <DropdownItem
-                                  tag={Link}
-                                  to={`${match.path}/${form.slug}`}
-                                >
+                                <DropdownItem tag={Link} to={`${form.slug}`}>
                                   <I18n>View</I18n>
                                 </DropdownItem>
                                 <DropdownItem
                                   tag={Link}
-                                  to={`${match.path}/${form.slug}/settings`}
+                                  to={`${form.slug}/settings`}
                                 >
                                   <I18n>Configure</I18n>
                                 </DropdownItem>
                                 <DropdownItem
                                   tag={Link}
-                                  to={`${match.path}/clone/${form.slug}/`}
+                                  to={`clone/${form.slug}/`}
                                 >
                                   <I18n>Clone</I18n>
                                 </DropdownItem>
@@ -230,8 +229,8 @@ const FormListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.services.servicesSettings.loading,
-  kapp: state.services.servicesSettings.servicesSettingsKapp,
+  loading: state.servicesSettings.loading,
+  kapp: state.servicesSettings.servicesSettingsKapp,
   formsPerPage: 10,
   isSpaceAdmin: state.app.profile.spaceAdmin,
 });
@@ -251,6 +250,8 @@ export const FormList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('openDropdown', 'setOpenDropdown', ''),
   withState('currentPage', 'setCurrentPage', 1),

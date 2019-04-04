@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import papaparse from 'papaparse';
 
 import { actions } from '../../../redux/modules/settingsForms';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const ExportComponent = ({
@@ -109,12 +110,12 @@ const handleDownload = props => () => {
 };
 
 const mapStateToProps = state => ({
-  form: state.services.settingsForms.currentForm,
-  kappSlug: state.app.config.kappSlug,
-  submissions: state.services.settingsForms.exportSubmissions,
-  submissionsCount: state.services.settingsForms.exportCount,
-  downloaded: state.services.settingsForms.downloaded,
-  fetchingAll: state.services.settingsForms.fetchingAll,
+  form: state.settingsForms.currentForm,
+  kappSlug: state.app.kappSlug,
+  submissions: state.settingsForms.exportSubmissions,
+  submissionsCount: state.settingsForms.exportCount,
+  downloaded: state.settingsForms.downloaded,
+  fetchingAll: state.settingsForms.fetchingAll,
 });
 
 const mapDispatchToProps = {
@@ -126,6 +127,8 @@ export const Export = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('exportStatus', 'setExportStatus', 'NOT_STARTED'),
   withHandlers({

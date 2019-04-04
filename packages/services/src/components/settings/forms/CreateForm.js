@@ -1,18 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { actions } from '../../../redux/modules/settingsForms';
 import { actions as servicesActions } from '../../../redux/modules/settingsServices';
 import { I18n } from '../../../../../app/src/I18nProvider';
+import { context } from '../../../redux/store';
 
 export const teamOptions = teams => {
   let optionElements = '<option></option>';
   let options;
-  options = teams.filter(team => !team.name.includes('Role')).map(team => {
-    return { value: team.name, label: team.name };
-  });
+  options = teams
+    .filter(team => !team.name.includes('Role'))
+    .map(team => {
+      return { value: team.name, label: team.name };
+    });
   optionElements = options.map(option => {
     return (
       <option key={option.value} value={option.value}>
@@ -59,15 +62,15 @@ export const CreateFormComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/kapps/services">
+              <Link to="../../..">
                 <I18n>services</I18n>
               </Link>{' '}
               /{` `}
-              <Link to="/kapps/services/settings">
+              <Link to="../..">
                 <I18n>settings</I18n>
               </Link>{' '}
               /{` `}
-              <Link to="/kapps/services/settings/forms">
+              <Link to="..">
                 <I18n>forms</I18n>
               </Link>{' '}
               /{` `}
@@ -273,14 +276,12 @@ export const CreateFormComponent = ({
     </div>
   );
 
-export const mapStateToProps = (state, { match: { params } }) => ({
-  loading: state.services.forms.loading,
-  templateForms: state.services.forms.data.filter(
-    form => form.type === 'Template',
-  ),
-  servicesSettings: state.services.servicesSettings,
-  kappSlug: state.app.config.kappSlug,
-  clone: params.id,
+export const mapStateToProps = (state, { id }) => ({
+  loading: state.forms.loading,
+  templateForms: state.forms.data.filter(form => form.type === 'Template'),
+  servicesSettings: state.servicesSettings,
+  kappSlug: state.app.kappSlug,
+  clone: id,
 });
 
 export const mapDispatchToProps = {
@@ -295,6 +296,8 @@ export const CreateForm = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('inputs', 'setInputs', { Type: 'Service', Status: 'Active' }),
   withState('slugEntered', 'setSlugEntered', false),

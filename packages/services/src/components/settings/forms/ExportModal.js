@@ -3,6 +3,7 @@ import { Modal, ModalBody } from 'reactstrap';
 import { connect } from 'react-redux';
 
 import { actions } from '../../../redux/modules/settingsForms';
+import { context } from '../../../redux/store';
 
 import { Export } from './Export';
 import { I18n } from '../../../../../app/src/I18nProvider';
@@ -35,8 +36,8 @@ const ExportModalComponent = ({
 );
 
 const mapStateToProps = state => ({
-  modalIsOpen: state.services.settingsForms.modalIsOpen,
-  modalName: state.services.settingsForms.modalName,
+  modalIsOpen: state.settingsForms.modalIsOpen,
+  modalName: state.settingsForms.modalName,
 });
 
 const mapDispatchToProps = {
@@ -46,4 +47,6 @@ const mapDispatchToProps = {
 export const ExportModal = connect(
   mapStateToProps,
   mapDispatchToProps,
+  null,
+  { context },
 )(ExportModalComponent);

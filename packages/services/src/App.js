@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { matchPath, Switch, Route } from 'react-router-dom';
+import matchPath from 'rudy-match-path';
 import {
   compose,
   lifecycle,
@@ -8,12 +8,11 @@ import {
   withProps,
   withState,
 } from 'recompose';
-import {
-  KappRoute,
-  KappRedirect as Redirect,
-  Loading,
-  selectCurrentKappSlug,
-} from 'common';
+import { Redirect } from '@reach/router';
+import { Loading } from 'common';
+import { context } from './redux/store';
+
+import { Router } from './ServicesApp';
 import { actions as categoriesActions } from './redux/modules/categories';
 import { actions as formsActions } from './redux/modules/forms';
 import { actions as submissionsActions } from './redux/modules/submissions';
@@ -34,114 +33,72 @@ import { I18n } from '../../app/src/I18nProvider';
 
 import './assets/styles/master.scss';
 
+const CustomRedirect = props => (
+  <Redirect
+    to={`${props.appLocation}/request/:id/${
+      props.location.search.includes('review') ? 'review' : 'activity'
+    }`}
+    noThrow
+  />
+);
+
 export const AppComponent = props => {
   if (props.loading) {
     return <Loading text="App is loading ..." />;
   }
   return props.render({
     sidebar: (
-      <Switch>
-        <Route
-          path={`/kapps/${props.kappSlug}/settings`}
-          render={() => (
-            <SettingsSidebar settingsBackPath={props.settingsBackPath} />
-          )}
+      <Router>
+        <SettingsSidebar
+          path="settings/*"
+          settingsBackPath={props.settingsBackPath}
         />
-        <Route
-          render={() => (
-            <Sidebar
-              counts={props.submissionCounts}
-              homePageMode={props.homePageMode}
-              homePageItems={props.homePageItems}
-              openSettings={props.openSettings}
-            />
-          )}
+
+        <Sidebar
+          path="*"
+          counts={props.submissionCounts}
+          homePageMode={props.homePageMode}
+          homePageItems={props.homePageItems}
+          openSettings={props.openSettings}
         />
-      </Switch>
+      </Router>
     ),
     main: (
       <I18n>
         <main className="package-layout package-layout--services">
-          <KappRoute path="/settings" component={Settings} />
-          <KappRoute
-            path="/submissions/:id"
-            exact
-            render={({ match, location }) => (
-              <Redirect
-                to={`/requests/request/${match.params.id}/${
-                  location.search.includes('review') ? 'review' : 'activity'
-                }`}
-              />
-            )}
-          />
-          <KappRoute
-            path="/forms/:formSlug/submissions/:id"
-            exact
-            render={({ match, location }) => (
-              <Redirect
-                to={`/requests/request/${match.params.id}/${
-                  location.search.includes('review') ? 'review' : 'activity'
-                }`}
-              />
-            )}
-          />
-          <KappRoute
-            exact
-            path="/"
-            render={() => (
-              <CatalogContainer
-                homePageMode={props.homePageMode}
-                homePageItems={props.homePageItems}
-              />
-            )}
-          />
-          <KappRoute
-            exact
-            path="/categories"
-            component={CategoryListContainer}
-          />
-          <KappRoute
-            exact
-            path="/categories/:categorySlug"
-            component={CategoryContainer}
-          />
-          <KappRoute
-            exact
-            path="/categories/:categorySlug/:formSlug"
-            component={FormContainer}
-          />
-          <KappRoute
-            exact
-            path="/categories/:categorySlug/:formSlug/:submissionId"
-            component={FormContainer}
-          />
-          <KappRoute exact path="/forms" component={FormListContainer} />
-          <KappRoute path="/forms/:formSlug" component={FormContainer} />
-          <KappRoute
-            exact
-            path="/search"
-            component={CatalogSearchResultsContainer}
-          />
-          <KappRoute
-            exact
-            path="/search/:query"
-            component={CatalogSearchResultsContainer}
-          />
-          <KappRoute
-            exact
-            path="/requests/:type?"
-            component={RequestListContainer}
-          />
-          <KappRoute
-            exact
-            path="/requests/:type?/request/:submissionId"
-            component={FormContainer}
-          />
-          <KappRoute
-            exact
-            path="/requests/:type?/request/:submissionId/:mode"
-            component={RequestShowContainer}
-          />
+          <Router>
+            <Settings path="settings/*" />
+            <Redirect
+              from="submissions/:id"
+              to={`requests/request/:id/${
+                props.location.search.includes('review') ? 'review' : 'activity'
+              }`}
+            />
+            <CustomRedirect
+              path="forms/:formSlug/submissions/:id"
+              appLocation={props.appLocation}
+            />
+
+            <CatalogContainer
+              path="/"
+              homePageMode={props.homePageMode}
+              homePageItems={props.homePageItems}
+            />
+            <CategoryListContainer path="categories" />
+            <CategoryContainer path="categories/:categorySlug" />
+            <FormContainer path="categories/:categorySlug/:formSlug" />
+            <FormContainer path="categories/:categorySlug/:formSlug/:submissionId" />
+            <FormListContainer path="forms" />
+            <FormContainer path="forms/:formSlug" />
+            <CatalogSearchResultsContainer path="search" />
+            <CatalogSearchResultsContainer path="search/:query" />
+            <RequestListContainer path="requests" />
+            <RequestListContainer path="requests/:type" />
+            <FormContainer path="requests/request/:submissionId" />
+            <FormContainer path="requests/:type/request/:submissionId" />
+            <RequestShowContainer path="/requests/request/:submissionId/:mode" />
+            <RequestShowContainer path="/requests/:type/request/:submissionId/:mode" />
+          </Router>
         </main>
       </I18n>
     ),
@@ -150,17 +107,15 @@ export const AppComponent = props => {
 
 const mapStateToProps = state => {
   return {
-    categories: state.services.categories.data,
-    forms: state.services.forms.data,
-    submissionCounts: state.services.submissionCounts.data,
-    loading: state.services.categories.loading || state.services.forms.loading,
-    errors: [
-      ...state.services.categories.errors,
-      ...state.services.forms.errors,
-    ],
-    systemError: state.services.systemError,
+    categories: state.categories.data,
+    forms: state.forms.data,
+    submissionCounts: state.submissionCounts.data,
+    loading: state.categories.loading || state.forms.loading,
+    errors: [...state.categories.errors, ...state.forms.errors],
+    systemError: state.systemError,
     pathname: state.router.location.pathname,
-    kappSlug: selectCurrentKappSlug(state),
+    kappSlug: state.app.kappSlug,
+    appLocation: state.app.location,
   };
 };
 
@@ -174,6 +129,8 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(props => {
     return props.categories.isEmpty()

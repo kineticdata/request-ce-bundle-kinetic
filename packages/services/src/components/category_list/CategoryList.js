@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
-import { KappLink as Link, PageTitle } from 'common';
+import { Link } from '@reach/router';
+import { PageTitle } from 'common';
+
 import { CategoryCard } from '../shared/CategoryCard';
 import { I18n } from '../../../../app/src/I18nProvider';
 
@@ -11,7 +13,7 @@ export const CategoryList = ({ categories }) => (
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">
+            <Link to="../">
               <I18n>services</I18n>
             </Link>{' '}
             /
@@ -28,7 +30,7 @@ export const CategoryList = ({ categories }) => (
             <CategoryCard
               key={category.slug}
               category={category}
-              path={`/categories/${category.slug}`}
+              path={category.slug}
               countOfMatchingForms={category.forms.length}
             />
           ))}

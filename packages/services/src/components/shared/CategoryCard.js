@@ -1,5 +1,6 @@
 import React from 'react';
-import { KappLink as Link, Icon } from 'common';
+import { Link } from '@reach/router';
+import { Icon } from 'common';
 import { I18n } from '../../../../app/src/I18nProvider';
 
 export const CategoryCard = props => (

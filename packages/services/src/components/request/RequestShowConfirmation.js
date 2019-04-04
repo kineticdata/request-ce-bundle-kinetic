@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { modalFormActions } from 'common';
 import { selectAdminKapp } from 'app/src/redux/selectors';
+import { context } from '../../redux/store';
 
 import { getFeedbackFormConfig } from '../../utils';
 import { I18n } from '../../../../app/src/I18nProvider';
@@ -35,6 +36,8 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({
     handleOpenFeedback: props => () =>

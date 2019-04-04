@@ -11,6 +11,7 @@ import { parse } from 'query-string';
 import { Form } from './Form';
 import { actions } from '../../redux/modules/submission';
 import { actions as submissionsActions } from '../../redux/modules/submissions';
+import { context } from '../../redux/store';
 
 const valuesFromQueryParams = queryParams => {
   const params = parse(queryParams);
@@ -23,10 +24,12 @@ const valuesFromQueryParams = queryParams => {
   }, {});
 };
 
-export const getSubmissionId = props =>
-  props.match.isExact
-    ? props.match.params.submissionId
-    : props.location.pathname.replace(props.match.url, '').replace('/', '');
+// export const getSubmissionId = props =>
+//   props.match.isExact
+//     ? props.submissionId
+//     : props.location.pathname.replace(props.match.url, '').replace('/', '');
+
+export const getSubmissionId = props => props.submissionId;
 
 export const handleCompleted = props => response => {
   if (!response.submission.currentPage) {
@@ -42,7 +45,7 @@ export const handleCompleted = props => response => {
 export const handleCreated = props => response => {
   props.push(
     response.submission.coreState === 'Submitted'
-      ? `/kapps/${props.kappSlug}/requests/request/${
+      ? `${props.appLocation}/requests/request/${
           response.submission.id
         }/confirmation`
       : `${props.match.url}/${response.submission.id}`,
@@ -56,20 +59,19 @@ export const handleLoaded = props => form => {
 export const handleDelete = props => () => {
   const deleteCallback = () => {
     props.fetchCurrentPage();
-    props.push(`/kapps/${props.kappSlug}`);
+    props.push(props.appLocation);
   };
   props.deleteSubmission(props.submissionId, deleteCallback);
 };
 
-export const mapStateToProps = (state, { match: { params } }) => ({
-  category: params.categorySlug
-    ? state.services.categories.data.find(
-        category => category.slug === params.categorySlug,
-      )
+export const mapStateToProps = (state, { categorySlug }) => ({
+  category: categorySlug
+    ? state.categories.data.find(category => category.slug === categorySlug)
     : null,
-  forms: state.services.forms.data,
+  forms: state.forms.data,
   values: valuesFromQueryParams(state.router.location.search),
-  kappSlug: state.app.config.kappSlug,
+  kappSlug: state.app.kappSlug,
+  appLocation: state.app.location,
 });
 
 export const mapDispatchToProps = {
@@ -82,25 +84,22 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('submissionId', 'setSubmissionId', getSubmissionId),
-  withState('formSlug', 'setFormSlug', props => props.match.params.formSlug),
+  withState('formSlug', 'setFormSlug', props => props.formSlug),
   withProps(props => ({
     form: props.forms.find(form => form.slug === props.formSlug),
   })),
   withHandlers({ handleCompleted, handleCreated, handleLoaded, handleDelete }),
   lifecycle({
     componentWillReceiveProps(nextProps) {
-      if (
-        this.props.match.params.formSlug !== nextProps.match.params.formSlug
-      ) {
-        this.props.setFormSlug(nextProps.match.params.formSlug);
+      if (this.props.formSlug !== nextProps.formSlug) {
+        this.props.setFormSlug(nextProps.formSlug);
       }
-      if (
-        this.props.match.params.submissionId !==
-        nextProps.match.params.submissionId
-      ) {
-        this.props.setSubmissionId(nextProps.match.params.submissionId);
+      if (this.props.submissionId !== nextProps.submissionId) {
+        this.props.setSubmissionId(nextProps.submissionId);
       }
     },
   }),

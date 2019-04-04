@@ -1,9 +1,10 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import { KappLink as Link, Icon, selectCurrentKappSlug } from 'common';
+import { Icon } from 'common';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 
+import { Router } from '../../ServicesApp';
 import { ServicesSettings } from './services_settings/ServicesSettings';
 import { actions } from '../../redux/modules/settingsServices';
 import { FormList } from './forms/FormList';
@@ -13,55 +14,24 @@ import { CreateForm } from './forms/CreateForm';
 import { CategoriesSettings } from './categories/Categories';
 import { FormSubmissions } from './forms/FormSubmissions';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
 
 export const SettingsComponent = ({ kappSlug }) => (
-  <Switch>
-    <Route
-      exact
-      path={`/kapps/${kappSlug}/settings/general`}
-      component={ServicesSettings}
-    />
-    <Route
-      exact
-      path={`/kapps/${kappSlug}/settings/forms`}
-      component={FormList}
-    />
-    <Route
-      exact
-      path={`/kapps/${kappSlug}/settings/forms/new`}
-      component={CreateForm}
-    />
-    <Route
-      exact
-      path={`/kapps/${kappSlug}/settings/forms/clone/:id`}
-      component={CreateForm}
-    />
-    <Route
-      exact
-      path={`/kapps/${kappSlug}/settings/forms/:id/settings`}
-      component={FormSettings}
-    />
-    <Route
-      exact
-      path={`/kapps/${kappSlug}/settings/forms/:id/`}
-      component={FormSubmissions}
-    />
-    <Route
-      exact
-      path={`/kapps/${kappSlug}/settings/forms/:id/activity`}
-      component={FormActivity}
-    />
-    <Route
-      exact
-      path={`/kapps/${kappSlug}/settings/categories`}
-      component={CategoriesSettings}
-    />
-    <Route component={SettingsNavigation} />
-  </Switch>
+  <Router>
+    <ServicesSettings path="general" />
+    <FormList path="forms" />
+    <CreateForm path="forms/new" />
+    <CreateForm path="forms/clone/:id" />
+    <FormSettings path="forms/:id/settings" />
+    <FormActivity path="forms/:id/activity" />
+    <FormSubmissions path="forms/:id" />
+    <CategoriesSettings path="categories" />
+    <SettingsNavigation default />
+  </Router>
 );
 
 const mapStateToProps = (state, props) => ({
-  kappSlug: selectCurrentKappSlug(state),
+  kappSlug: state.app.kappSlug,
 });
 
 const mapDispatchToProps = {
@@ -72,6 +42,8 @@ export const Settings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentWillMount(prev, next) {
@@ -98,7 +70,7 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">
+            <Link to="../">
               <I18n>services</I18n>
             </Link>{' '}
             /{` `}
@@ -113,21 +85,21 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
         {isSpaceAdmin && (
           <SettingsCard
             name="General Settings"
-            path={`/settings/general`}
+            path="general"
             icon="fa-gear"
             description="View and Modify all Services Settings"
           />
         )}
         <SettingsCard
           name="Forms"
-          path={`/settings/forms`}
+          path="forms"
           icon="fa-gear"
           description="View Forms and their Submissions."
         />
         {isSpaceAdmin && (
           <SettingsCard
             name="Categories"
-            path={`/settings/categories`}
+            path="categories"
             icon="fa-gear"
             description="View and Modify Categories"
           />
@@ -145,5 +117,7 @@ export const SettingsNavigation = compose(
   connect(
     mapStateToPropsNav,
     {},
+    null,
+    { context },
   ),
 )(SettingsNavigationComponent);

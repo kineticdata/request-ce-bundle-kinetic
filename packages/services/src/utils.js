@@ -1,7 +1,10 @@
 import moment from 'moment';
 import { Utils } from 'common';
 import * as constants from './constants';
-import { selectCurrentKapp } from 'app/src/redux/selectors';
+
+export const isActiveClass = defaultClass => props => ({
+  className: props.isCurrent ? `${defaultClass} active` : defaultClass,
+});
 
 export const getDueDate = (submission, attrName) => {
   const daysDue = Utils.getConfig({ submission, name: attrName });
@@ -95,9 +98,10 @@ export const getStatusClass = ({ values, form, coreState }) => {
   }
 };
 
-export const getSubmissionPath = (submission, mode, listType) => {
+export const getSubmissionPath = (appLocation, submission, mode, listType) => {
   return [
-    '/requests',
+    appLocation,
+    'requests',
     listType,
     'request',
     submission.id,

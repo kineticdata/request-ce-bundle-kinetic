@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { bundle } from '@kineticdata/react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
@@ -9,6 +9,8 @@ import {
   actions,
   buildFormConfigurationObject,
 } from '../../../redux/modules/settingsForms';
+import { context } from '../../../redux/store';
+
 import { actions as servicesActions } from '../../../redux/modules/settingsServices';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
@@ -46,9 +48,11 @@ export const Select = ({
   let options;
   if (data) {
     if (type === 'teams') {
-      options = data.filter(team => !team.name.includes('Role')).map(team => {
-        return { value: team.name, label: team.name };
-      });
+      options = data
+        .filter(team => !team.name.includes('Role'))
+        .map(team => {
+          return { value: team.name, label: team.name };
+        });
     } else if (type === 'notifications') {
       options = data.map(notification => {
         return {
@@ -57,9 +61,11 @@ export const Select = ({
         };
       });
     } else {
-      options = data.kapps.find(kapp => kapp.slug === type).forms.map(form => {
-        return { value: form.slug, label: form.name };
-      });
+      options = data.kapps
+        .find(kapp => kapp.slug === type)
+        .forms.map(form => {
+          return { value: form.slug, label: form.name };
+        });
     }
     optionElements = options.map(option => {
       const kappName = type.charAt(0).toUpperCase() + type.slice(1);
@@ -131,7 +137,7 @@ export const FormContainer = ({
   handleAddCategory,
   handleRemoveCategory,
   categoryDefinitions,
-  availableCategories,
+  appLocation,
   loading,
   form,
   kappLoading,
@@ -163,19 +169,19 @@ export const FormContainer = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to={`/kapps/${kappSlug}`}>
+              <Link to={appLocation}>
                 <I18n>services</I18n>
               </Link>{' '}
               /{` `}
-              <Link to={`/kapps/${kappSlug}/settings`}>
+              <Link to={`${appLocation}/settings`}>
                 <I18n>settings</I18n>
               </Link>{' '}
               /{` `}
-              <Link to={`/kapps/${kappSlug}/settings/forms`}>
+              <Link to={`${appLocation}/settings/forms`}>
                 <I18n>forms</I18n>
               </Link>{' '}
               /{` `}
-              <Link to={`/kapps/${kappSlug}/settings/forms/${form.slug}`}>
+              <Link to={`${appLocation}/settings/forms/${form.slug}`}>
                 <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
                   {form.name}
                 </I18n>
@@ -750,7 +756,7 @@ export const FormContainer = ({
         <div className="form__footer">
           <span className="form__footer__right">
             <Link
-              to="/kapps/services/settings/forms"
+              to={`${appLocation}/settings/forms`}
               className="btn btn-link mb-0"
             >
               <I18n>Cancel</I18n>
@@ -908,27 +914,24 @@ const handleWorkflowToggle = ({ setInputs, inputs }) => event => {
   setInputs({ ...inputs, [event.target.name]: event.target.value });
 };
 
-const mapStateToProps = (state, { match: { params } }) => {
-  const formCategorizations = state.services.settingsForms.currentForm
-    ? state.services.settingsForms.currentForm.categorizations
-    : [];
-
-  const categoryDefinitions = state.services.settingsForms.servicesKapp
-    ? state.services.settingsForms.servicesKapp.categories
+const mapStateToProps = state => {
+  const categoryDefinitions = state.settingsForms.servicesKapp
+    ? state.settingsForms.servicesKapp.categories
     : [];
 
   return {
-    form: state.services.settingsForms.currentForm,
-    formChanges: state.services.settingsForms.currentFormChanges,
-    loading: state.services.settingsForms.loading,
-    kappLoading: state.services.settingsForms.kappLoading,
-    notificationsLoading: state.services.settingsForms.notificationsLoading,
-    notifications: state.services.settingsForms.notifications,
-    settingsForms: state.services.settingsForms,
-    servicesSettings: state.services.servicesSettings,
-    kappSlug: state.app.config.kappSlug,
+    form: state.settingsForms.currentForm,
+    formChanges: state.settingsForms.currentFormChanges,
+    loading: state.settingsForms.loading,
+    kappLoading: state.settingsForms.kappLoading,
+    notificationsLoading: state.settingsForms.notificationsLoading,
+    notifications: state.settingsForms.notifications,
+    settingsForms: state.settingsForms,
+    servicesSettings: state.servicesSettings,
+    kappSlug: state.app.kappSlug,
     categoryDefinitions,
     taskServerUrl: state.app.space.attributesMap['Task Server Url'][0],
+    appLocation: state.app.location,
   };
 };
 const mapDispatchToProps = {
@@ -945,6 +948,8 @@ export const FormSettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('inputs', 'setInputs', {}),
   withState('categoryInput', 'setCategoryInput', ''),
@@ -960,7 +965,7 @@ export const FormSettings = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchFormSettings({
-        formSlug: this.props.match.params.id,
+        formSlug: this.props.id,
         kappSlug: this.props.kappSlug,
       });
       this.props.fetchKapp(this.props.kappSlug);

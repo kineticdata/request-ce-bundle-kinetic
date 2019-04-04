@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { CoreForm } from '@kineticdata/react';
+import { Link } from '@reach/router';
 import {
-  KappLink as Link,
   ErrorNotFound,
   ErrorUnauthorized,
   ErrorUnexpected,
@@ -17,15 +17,17 @@ const globals = import('common/globals');
 
 export const Form = ({
   form,
+  type,
   category,
   submissionId,
-  match,
   handleCreated,
   handleCompleted,
   handleLoaded,
   handleDelete,
   values,
   kappSlug,
+  path,
+  appLocation,
 }) => (
   <Fragment>
     <PageTitle parts={[form ? form.name : '']} />
@@ -34,31 +36,30 @@ export const Form = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">
+            <Link to={appLocation}>
               <I18n>services</I18n>
             </Link>{' '}
             /{' '}
-            {match.url.startsWith('/request') && (
-              <Link to="/requests">
+            {path.startsWith('request') && (
+              <Link to={`${appLocation}/requests`}>
                 <I18n>requests</I18n>
               </Link>
             )}
-            {match.url.startsWith('/request') && ' / '}
-            {match.url.startsWith('/request') &&
-              match.params.type && (
-                <Link to={`/requests/${match.params.type || ''}`}>
-                  <I18n>{match.params.type}</I18n>
-                </Link>
-              )}
-            {match.url.startsWith('/request') && match.params.type && ' / '}
+            {path.startsWith('/request') && ' / '}
+            {path.startsWith('/request') && type && (
+              <Link to={`${appLocation}/requests/${type || ''}`}>
+                <I18n>{type}</I18n>
+              </Link>
+            )}
+            {path.startsWith('/request') && type && ' / '}
             {category && (
-              <Link to="/categories">
+              <Link to={`${appLocation}/categories`}>
                 <I18n>categories</I18n>
               </Link>
             )}
             {category && ' / '}
             {category && (
-              <Link to={`/categories/${category.slug}`}>
+              <Link to={`${appLocation}/categories/${category.slug}`}>
                 <I18n>{category.name}</I18n>
               </Link>
             )}

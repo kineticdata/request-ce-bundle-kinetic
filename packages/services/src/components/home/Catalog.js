@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
-import { KappLink as Link, PageTitle } from 'common';
+import { PageTitle } from 'common';
+import { Link } from '@reach/router';
 import { CatalogSearchContainer } from '../shared/CatalogSearchContainer';
 import { CategoryCard } from '../shared/CategoryCard';
 import { ServiceCard } from '../shared/ServiceCard';
@@ -14,6 +15,7 @@ export const Catalog = ({
   homePageMode,
   homePageItems,
   fetchSubmissions,
+  appLocation,
 }) => {
   return (
     <Fragment>
@@ -39,7 +41,7 @@ export const Catalog = ({
                 <I18n>Recent Requests</I18n>
               </h1>
             </div>
-            <Link to="/requests">
+            <Link to="requests">
               <I18n>View All</I18n>
             </Link>
           </div>
@@ -52,7 +54,7 @@ export const Catalog = ({
                   submission,
                   forms,
                   key: submission.id,
-                  path: getSubmissionPath(submission),
+                  path: getSubmissionPath(appLocation, submission),
                   deleteCallback: fetchSubmissions,
                 }))
                 .map(props => <RequestCard {...props} />)
@@ -80,21 +82,20 @@ export const Catalog = ({
             </div>
           </div>
           <div className="cards__wrapper cards__wrapper--categories">
-            {homePageItems.map(
-              item =>
-                homePageMode === 'Categories' ? (
-                  <CategoryCard
-                    key={item.slug}
-                    category={item}
-                    path={`/categories/${item.slug}`}
-                  />
-                ) : (
-                  <ServiceCard
-                    key={item.slug}
-                    form={item}
-                    path={`/forms/${item.slug}`}
-                  />
-                ),
+            {homePageItems.map(item =>
+              homePageMode === 'Categories' ? (
+                <CategoryCard
+                  key={item.slug}
+                  category={item}
+                  path={`categories/${item.slug}`}
+                />
+              ) : (
+                <ServiceCard
+                  key={item.slug}
+                  form={item}
+                  path={`forms/${item.slug}`}
+                />
+              ),
             )}
           </div>
         </div>

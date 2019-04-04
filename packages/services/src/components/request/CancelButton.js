@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { Utils } from 'common';
 import { actions } from '../../redux/modules/submission';
+import { context } from '../../redux/store';
+
 import * as constants from '../../constants';
 import { I18n } from '../../../../app/src/I18nProvider';
 
@@ -22,7 +24,7 @@ const CancelButton = props =>
   );
 
 export const mapStateToProps = state => ({
-  kappSlug: state.app.config.kappSlug,
+  kappSlug: state.app.kappSlug,
 });
 
 export const mapDispatchToProps = {
@@ -34,6 +36,8 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(props => {
     const disabledAttribute = Utils.getAttributeValue(
@@ -48,8 +52,8 @@ const enhance = compose(
           : disabledAttribute === 'true' ||
             disabledAttribute === 'yes' ||
             props.submission.coreState === constants.CORE_STATE_CLOSED
-            ? false
-            : true,
+          ? false
+          : true,
     };
   }),
   withHandlers({

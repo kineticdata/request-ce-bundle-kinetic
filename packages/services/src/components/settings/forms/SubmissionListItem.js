@@ -1,12 +1,7 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { compose, withHandlers, withState } from 'recompose';
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from 'reactstrap';
+
 import moment from 'moment';
 
 import { Constants } from 'common';
@@ -146,8 +141,8 @@ const getSubmissionData = (submission, column) =>
   column.type === 'value'
     ? submission.values[column.name]
     : column.name.includes('At')
-      ? moment(submission[column.name]).format(Constants.TIME_FORMAT)
-      : submission[column.name];
+    ? moment(submission[column.name]).format(Constants.TIME_FORMAT)
+    : submission[column.name];
 
 const toggleDropdown = ({
   setOpenDropdown,

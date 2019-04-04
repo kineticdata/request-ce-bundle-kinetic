@@ -1,13 +1,15 @@
 import React from 'react';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { PageTitle } from 'common';
 import { Modal } from 'reactstrap';
 import { SubmissionListItem } from './SubmissionListItem';
 import { ExportModal } from './ExportModal';
+
 import { actions } from '../../../redux/modules/settingsForms';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const DiscussionIcon = () => (
@@ -149,18 +151,9 @@ export const FormSubmissionsContainer = ({
   submissions,
   nextPageToken,
   currentPage,
-  previousPageTokens,
-  setPreviousPageToken,
-  fetchFormSubmissions,
   submissionColumns,
   clientSortInfo,
   kappSlug,
-  formSlug,
-  setCurrentPage,
-  openDropdown,
-  toggleDropdown,
-  visibleFields,
-  setVisibleFields,
   setFilter,
   filter,
   filterColumns,
@@ -171,12 +164,10 @@ export const FormSubmissionsContainer = ({
   removeFilter,
   nextPage,
   previousPage,
-  path,
   isMobile,
   sortTable,
   openModal,
-  optionsOpen,
-  setOptionsOpen,
+  appLocation,
 }) => {
   const visibleColumns = submissionColumns.filter(c => c.visible);
   return (
@@ -189,15 +180,15 @@ export const FormSubmissionsContainer = ({
             <div className="page-title">
               <div className="page-title__wrapper">
                 <h3>
-                  <Link to="/kapps/services">
+                  <Link to={appLocation}>
                     <I18n>services</I18n>
                   </Link>{' '}
                   /{` `}
-                  <Link to="/kapps/services/settings">
+                  <Link to={`${appLocation}/settings`}>
                     <I18n>settings</I18n>
                   </Link>{' '}
                   /{` `}
-                  <Link to="/kapps/services/settings/forms">
+                  <Link to={`${appLocation}/settings/forms`}>
                     <I18n>forms</I18n>
                   </Link>{' '}
                   /{` `}
@@ -291,19 +282,18 @@ export const FormSubmissionsContainer = ({
               </div>
 
               <div className="mt-3">
-                {clientSortInfo &&
-                  (nextPageToken || currentPage >= 2) && (
-                    <div className="text-info mb-2">
-                      <small>
-                        <em>
-                          <I18n>
-                            Sorting the table columns will only sort the visible
-                            records on the current page.
-                          </I18n>
-                        </em>
-                      </small>
-                    </div>
-                  )}
+                {clientSortInfo && (nextPageToken || currentPage >= 2) && (
+                  <div className="text-info mb-2">
+                    <small>
+                      <em>
+                        <I18n>
+                          Sorting the table columns will only sort the visible
+                          records on the current page.
+                        </I18n>
+                      </em>
+                    </small>
+                  </div>
+                )}
                 <table className="table table-sm table-striped table--settings">
                   <thead className="d-none d-md-table-header-group sortable">
                     <tr>
@@ -418,23 +408,20 @@ export const FormSubmissionsContainer = ({
                       </th>
                     </tr>
                   </thead>
-                  {!submissionsLoading &&
-                    submissions.size > 0 && (
-                      <tbody>
-                        {submissions.map(s => (
-                          <SubmissionListItem
-                            key={`trow-${s.id}`}
-                            submission={s}
-                            form={form}
-                            columns={visibleColumns}
-                            to={`/kapps/${kappSlug}/settings/forms/${
-                              s.id
-                            }/activity`}
-                            isMobile={isMobile}
-                          />
-                        ))}
-                      </tbody>
-                    )}
+                  {!submissionsLoading && submissions.size > 0 && (
+                    <tbody>
+                      {submissions.map(s => (
+                        <SubmissionListItem
+                          key={`trow-${s.id}`}
+                          submission={s}
+                          form={form}
+                          columns={visibleColumns}
+                          to={`${appLocation}/settings/forms/${s.id}/activity`}
+                          isMobile={isMobile}
+                        />
+                      ))}
+                    </tbody>
+                  )}
                 </table>
                 <ul className="pagination">
                   {currentPage >= 2 && (
@@ -720,18 +707,19 @@ export const FormSubmissionsContainer = ({
   );
 };
 
-const mapStateToProps = (state, { match: { params } }) => ({
-  form: state.services.settingsForms.currentForm,
-  kappSlug: state.app.config.kappSlug,
-  loading: state.services.settingsForms.loading,
-  nextPageToken: state.services.settingsForms.nextPageToken,
-  submissionsLoading: state.services.settingsForms.submissionsLoading,
-  submissions: state.services.settingsForms.currentFormSubmissions,
-  submissionColumns: state.services.settingsForms.submissionColumns,
-  clientSortInfo: state.services.settingsForms.clientSortInfo,
+const mapStateToProps = state => ({
+  form: state.settingsForms.currentForm,
+  kappSlug: state.app.kappSlug,
+  loading: state.settingsForms.loading,
+  nextPageToken: state.settingsForms.nextPageToken,
+  submissionsLoading: state.settingsForms.submissionsLoading,
+  submissions: state.settingsForms.currentFormSubmissions,
+  submissionColumns: state.settingsForms.submissionColumns,
+  clientSortInfo: state.settingsForms.clientSortInfo,
   path: state.router.location.pathname.replace(/\/$/, ''),
-  isMobile: state.app.layout.size === 'small',
-  downloaded: state.services.settingsForms.downloaded,
+  isMobile: state.app.layoutSize === 'small',
+  downloaded: state.settingsForms.downloaded,
+  appLocation: state.app.location,
 });
 
 const mapDispatchToProps = {
@@ -747,6 +735,8 @@ export const FormSubmissions = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('previousPageTokens', 'setPreviousPageToken', []),
   withState('currentPage', 'setCurrentPage', 1),
@@ -771,11 +761,11 @@ export const FormSubmissions = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchFormSettings({
-        formSlug: this.props.match.params.id,
+        formSlug: this.props.id,
         kappSlug: this.props.kappSlug,
       });
       this.props.fetchFormSubmissions({
-        formSlug: this.props.match.params.id,
+        formSlug: this.props.id,
         kappSlug: this.props.kappSlug,
         pageToken: this.props.nextPageToken,
       });

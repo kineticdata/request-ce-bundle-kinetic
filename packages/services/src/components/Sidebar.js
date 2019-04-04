@@ -1,13 +1,15 @@
 import React from 'react';
-import { KappLink as Link, KappNavLink as NavLink } from 'common';
+import { Link } from '@reach/router';
+
 import { Nav, NavItem } from 'reactstrap';
 import { I18n } from '../../../app/src/I18nProvider';
+import { isActiveClass } from '../utils';
 
 const formatCount = count =>
   !count ? '' : count >= 1000 ? '(999+)' : `(${count})`;
 
 const itemLink = (mode, slug) =>
-  `${mode === 'Categories' ? '/categories' : '/forms'}/${slug}`;
+  `${mode === 'Categories' ? 'categories' : 'forms'}/${slug}`;
 
 export const Sidebar = props => (
   <div className="sidebar services-sidebar">
@@ -18,48 +20,28 @@ export const Sidebar = props => (
         </h1>
         <Nav vertical>
           <NavItem>
-            <NavLink
-              to="/requests"
-              activeClassName="active"
-              className="nav-link"
-              exact
-            >
+            <Link to="requests" getProps={isActiveClass('nav-link')}>
               <span className="fa fa-fw fa-star" />
               <I18n>All</I18n>
-            </NavLink>
+            </Link>
           </NavItem>
           <NavItem>
-            <NavLink
-              to="/requests/Open"
-              activeClassName="active"
-              className="nav-link"
-              exact
-            >
+            <Link to="requests/Open" getProps={isActiveClass('nav-link')}>
               <span className="fa fa-fw fa-book" />
               <I18n>Open</I18n> {formatCount(props.counts.Submitted)}
-            </NavLink>
+            </Link>
           </NavItem>
           <NavItem>
-            <NavLink
-              to="/requests/Closed"
-              activeClassName="active"
-              className="nav-link"
-              exact
-            >
+            <Link to="requests/Closed" getProps={isActiveClass('nav-link')}>
               <span className="fa fa-fw fa-times" />
               <I18n>Closed</I18n> {formatCount(props.counts.Closed)}
-            </NavLink>
+            </Link>
           </NavItem>
           <NavItem>
-            <NavLink
-              to="/requests/Draft"
-              activeClassName="active"
-              className="nav-link"
-              exact
-            >
+            <Link to="requests/Draft" getProps={isActiveClass('nav-link')}>
               <span className="fa fa-fw fa-inbox" />
               <I18n>Draft</I18n> {formatCount(props.counts.Draft)}
-            </NavLink>
+            </Link>
           </NavItem>
         </Nav>
       </div>
@@ -67,7 +49,7 @@ export const Sidebar = props => (
         <h1>
           <I18n>{props.homePageMode}</I18n>
           <Link
-            to={props.homePageMode === 'Categories' ? '/categories' : '/forms'}
+            to={props.homePageMode === 'Categories' ? 'categories' : 'forms'}
           >
             <I18n>View All</I18n>
           </Link>
@@ -75,14 +57,12 @@ export const Sidebar = props => (
         <Nav vertical>
           {props.homePageItems.map(item => (
             <NavItem key={item.slug}>
-              <NavLink
+              <Link
                 to={itemLink(props.homePageMode, item.slug)}
-                className="nav-link"
-                activeClassName="active"
-                exact
+                getProps={isActiveClass('nav-link')}
               >
                 <I18n>{item.name}</I18n>
-              </NavLink>
+              </Link>
             </NavItem>
           ))}
         </Nav>
@@ -90,7 +70,7 @@ export const Sidebar = props => (
     </div>
     <div className="sidebar-group sidebar-group--settings">
       <ul className="nav flex-column settings-group">
-        <Link to="/settings/" onClick={props.openSettings} className="nav-link">
+        <Link to="settings/" onClick={props.openSettings} className="nav-link">
           <I18n>Settings</I18n>
           <span className="fa fa-fw fa-angle-right" />
         </Link>

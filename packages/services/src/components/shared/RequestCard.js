@@ -1,5 +1,6 @@
 import React from 'react';
-import { KappLink as Link, Icon, TimeAgo } from 'common';
+import { Link } from '@reach/router';
+import { Icon, TimeAgo } from 'common';
 import { StatusPill } from './StatusPill';
 import * as helpers from '../../utils';
 import * as constants from '../../constants';

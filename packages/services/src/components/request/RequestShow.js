@@ -1,14 +1,7 @@
 import React, { Fragment } from 'react';
-import { Link as SpaceLink } from 'react-router-dom';
 import classNames from 'classnames';
-import {
-  KappLink as Link,
-  KappNavLink as NavLink,
-  PageTitle,
-  Icon,
-  TimeAgo,
-  Utils as CommonUtils,
-} from 'common';
+import { Link } from '@reach/router';
+import { PageTitle, Icon, TimeAgo, Utils as CommonUtils } from 'common';
 import { bundle } from '@kineticdata/react';
 import { RequestShowConfirmationContainer } from './RequestShowConfirmation';
 import { RequestDiscussion } from './RequestDiscussion';
@@ -28,6 +21,7 @@ import {
 } from '../../utils';
 import { ReviewRequest } from './ReviewRequest';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { isActiveClass } from '../../utils';
 
 const getIcon = form =>
   CommonUtils.getAttributeValue(
@@ -37,9 +31,9 @@ const getIcon = form =>
   );
 
 const ProfileLink = ({ submitter }) => (
-  <SpaceLink to={`/profile/${encodeURIComponent(submitter)}`}>
+  <Link to={`/profile/${encodeURIComponent(submitter)}`}>
     {submitter === bundle.identity() ? <I18n>you</I18n> : submitter}
-  </SpaceLink>
+  </Link>
 );
 
 const StatusItem = ({ submission }) => (
@@ -163,6 +157,7 @@ export const RequestShow = ({
   openDiscussion,
   closeDiscussion,
   kappSlug,
+  appLocation,
 }) => (
   <div className="page-container page-container--panels page-container--services-submission page-container--no-padding">
     <div
@@ -176,7 +171,10 @@ export const RequestShow = ({
       <PageTitle parts={[submission && `#${submission.handle}`, 'Requests']} />
       {sendMessageModalOpen && <SendMessageModal submission={submission} />}
       <span className="services-color-bar services-color-bar__blue-slate" />
-      <Link className="nav-return" to={`/requests/${listType || ''}`}>
+      <Link
+        className="nav-return"
+        to={`${appLocation}/requests/${listType || ''}`}
+      >
         <span className="fa fa-fw fa-chevron-left" />
         <I18n>{listType || 'All'} Requests</I18n>
       </Link>
@@ -242,25 +240,31 @@ export const RequestShow = ({
               <div className="submission-tabs">
                 <ul className="nav nav-tabs">
                   <li role="presentation">
-                    <NavLink
-                      to={getSubmissionPath(submission, null, listType)}
-                      activeClassName="active"
+                    <Link
+                      to={getSubmissionPath(
+                        appLocation,
+                        submission,
+                        null,
+                        listType,
+                      )}
+                      getProps={isActiveClass('nav-link')}
                     >
                       <I18n>Timeline</I18n>
-                    </NavLink>
+                    </Link>
                   </li>
 
                   <li role="presentation">
-                    <NavLink
+                    <Link
                       to={`${getSubmissionPath(
+                        appLocation,
                         submission,
                         'review',
                         listType,
                       )}`}
-                      activeClassName="active"
+                      getProps={isActiveClass('nav-link')}
                     >
                       <I18n>Review Request</I18n>
-                    </NavLink>
+                    </Link>
                   </li>
                 </ul>
                 <div className="submission-tabs__content">

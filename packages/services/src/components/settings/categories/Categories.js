@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { Utils, PageTitle } from 'common';
@@ -15,6 +15,8 @@ import SortableTree, {
 import axios from 'axios';
 import 'react-sortable-tree/style.css';
 import { actions } from '../../../redux/modules/settingsCategories';
+import { context } from '../../../redux/store';
+
 import { setInitialInputs } from '../forms/FormSettings';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
@@ -180,6 +182,7 @@ export const addSubCategory = ({
   setCategories,
   subcategory,
   setSubcategory,
+  setInputs,
 }) => rowInfo => {
   // Check for inputs
   if (!subcategory.name || !subcategory.slug) {
@@ -400,11 +403,11 @@ export const CategoriesContainer = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/kapps/services">
+              <Link to="../..">
                 <I18n>services</I18n>
               </Link>{' '}
               /{` `}
-              <Link to="/kapps/services/settings">
+              <Link to="..">
                 <I18n>settings</I18n>
               </Link>{' '}
               /{` `}
@@ -624,9 +627,9 @@ export const CategoriesContainer = ({
 );
 
 const mapStateToProps = state => ({
-  rawCategories: state.services.settingsCategories.rawCategories,
-  loading: state.services.settingsCategories.loading,
-  kappSlug: state.app.config.kappSlug,
+  rawCategories: state.settingsCategories.rawCategories,
+  loading: state.settingsCategories.loading,
+  kappSlug: state.app.kappSlug,
 });
 
 const mapDispatchToProps = {
@@ -637,6 +640,8 @@ export const CategoriesSettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('categories', 'setCategories', []),
   withState('inputs', 'setInputs', {}),

@@ -5,7 +5,7 @@ import { actions, types } from '../modules/categories';
 import { actions as systemErrorActions } from '../modules/systemError';
 
 export function* fetchCategoriesSaga() {
-  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const kappSlug = yield select(state => state.app.kappSlug);
 
   const { categories, errors, serverError } = yield call(fetchCategories, {
     kappSlug,

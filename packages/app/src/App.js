@@ -17,7 +17,7 @@ import { HeaderContainer } from './components/HeaderContainer';
 import { actions as loadingActions } from './redux/modules/loading';
 import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';
-import { App as ServicesApp } from 'services/src/App';
+import { ServicesApp } from 'services/src/ServicesApp';
 import { QueueApp } from 'queue/src/QueueApp';
 import { SpaceApp } from 'space/src/SpaceApp';
 import { App as TechBarApp } from 'tech-bar/src/App';
