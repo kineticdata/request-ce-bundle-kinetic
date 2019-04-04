@@ -171,6 +171,7 @@ export class PeopleSelect extends React.Component {
     return (
       this.state.options && (
         <Typeahead
+          id={`${this.props.id}-user-typeahead`}
           multiple={this.props.multiple !== false}
           allowNew={this.props.emails}
           options={this.state.options}

@@ -147,6 +147,7 @@ export class FormSelect extends React.Component {
           <I18n
             render={translate => (
               <Typeahead
+                id={`${this.props.id}-form-typeahead`}
                 className={this.props.className}
                 kappSlug={this.props.kappSlug}
                 multiple={this.props.multiple}
