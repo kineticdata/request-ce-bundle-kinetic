@@ -116,12 +116,12 @@ const renderMenu = memoize(disabledFn => (results, props) => (
       const CurrentMenuItem = option.user
         ? UserMenuItem
         : option.team
-          ? TeamMenuItem
-          : option.manager
-            ? ManagerMenuItem
-            : option.none
-              ? NoneMenuItem
-              : EmailMenuItem;
+        ? TeamMenuItem
+        : option.manager
+        ? ManagerMenuItem
+        : option.none
+        ? NoneMenuItem
+        : EmailMenuItem;
       return (
         <CurrentMenuItem
           key={i}
@@ -143,12 +143,12 @@ const renderToken = (option, props, index) => (
       option.user
         ? 'user'
         : option.team
-          ? 'team'
-          : option.manager
-            ? 'manager'
-            : option.none
-              ? 'none'
-              : 'new'
+        ? 'team'
+        : option.manager
+        ? 'manager'
+        : option.none
+        ? 'none'
+        : 'new'
     }
   >
     {option.label}
@@ -253,6 +253,7 @@ export class ApproverSelect extends React.Component {
           <I18n
             render={translate => (
               <Typeahead
+                id={`${this.props.id}-approver-typeahead`}
                 options={this.state.options}
                 renderMenu={this.state.renderMenu}
                 renderToken={renderToken}

@@ -148,6 +148,7 @@ export class NotificationTemplateSelect extends React.Component {
             <I18n
               render={translate => (
                 <Typeahead
+                  id={`${this.props.id}-notification-template-typeahead`}
                   className={this.props.className}
                   multiple={this.props.multiple}
                   options={this.state.options}

@@ -154,6 +154,7 @@ export class IconSelect extends React.Component {
             <I18n
               render={translate => (
                 <Typeahead
+                  id={`${this.props.id}-icon-typeahead`}
                   filterBy={filterByCallback}
                   className={this.props.className}
                   multiple={this.props.multiple}
