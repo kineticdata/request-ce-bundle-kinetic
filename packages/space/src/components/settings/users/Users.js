@@ -1,5 +1,6 @@
 import React from 'react';
-import { Router } from '@reach/router';
+
+import { Router } from '../../../SpaceApp';
 import { UsersList } from './UsersList';
 import { UserForm } from './UserForm';
 import { I18n } from '../../../../../app/src/I18nProvider';

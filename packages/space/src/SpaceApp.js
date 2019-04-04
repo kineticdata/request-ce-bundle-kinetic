@@ -1,6 +1,6 @@
 import { is } from 'immutable';
-import { LocationProvider, Router } from '@reach/router';
-import React, { Component } from 'react';
+import { LocationProvider, Router as ReachRouter } from '@reach/router';
+import React, { Component, Fragment } from 'react';
 import { configureStore, history, context, store } from './redux/store';
 import { types } from './redux/modules/app';
 import { App } from './App';
@@ -9,6 +9,12 @@ import { Provider } from 'react-redux';
 export const syncAppState = ([key, value]) => {
   store.dispatch({ type: types.SYNC_APP_STATE, payload: { key, value } });
 };
+
+export const Router = ({ children, ...props }) => (
+  <ReachRouter {...props} primary={false} component={Fragment}>
+    {children}
+  </ReachRouter>
+);
 
 export class SpaceApp extends Component {
   constructor(props) {

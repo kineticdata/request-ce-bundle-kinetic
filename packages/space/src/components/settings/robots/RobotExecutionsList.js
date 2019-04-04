@@ -5,9 +5,9 @@ import { push } from 'redux-first-history';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import moment from 'moment';
 import { Constants, Loading, PageTitle } from 'common';
-import { NavLink } from 'react-router-dom';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 
+import { isActiveClass } from '../../../utils';
 import { actions } from '../../../redux/modules/settingsRobots';
 import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
@@ -16,8 +16,8 @@ const getStatusColor = status =>
   status === 'Queued'
     ? 'status--yellow'
     : status === 'Running'
-    ? 'status--green'
-    : 'status--gray';
+      ? 'status--green'
+      : 'status--gray';
 
 const WallyEmptyMessage = () => {
   return (
@@ -38,7 +38,6 @@ const RobotExecutionsListComponent = ({
   robotExecutionsLoading,
   robotExecutionsErrors,
   robotId,
-  match,
   hasNextPage,
   hasPreviousPage,
   handleNextPage,
@@ -80,37 +79,37 @@ const RobotExecutionsListComponent = ({
         <div className="tab-navigation tab-navigation--robots">
           <ul className="nav nav-tabs">
             <li role="presentation">
-              <NavLink
-                exact
-                to={`/settings/robots/${match.params.robotId}`}
-                activeClassName="active"
+              <Link
+                to={`/settings/robots/${robotId}`}
+                getProps={isActiveClass('nav-link')}
               >
                 <I18n>Details</I18n>
-              </NavLink>
+              </Link>
             </li>
             <li role="presentation">
-              <NavLink
-                to={`/settings/robots/${match.params.robotId}/executions`}
-                activeClassName="active"
+              <Link
+                to={`/settings/robots/${robotId}/executions`}
+                getProps={isActiveClass('nav-link')}
               >
                 <I18n>Executions</I18n>
-              </NavLink>
+              </Link>
             </li>
           </ul>
         </div>
-        {robotExecutions.size <= 0 && robotExecutionsErrors.length > 0 && (
-          <div className="text-center text-danger">
-            <h1>
-              <I18n>Oops!</I18n>
-            </h1>
-            <h2>
-              <I18n>Robot Executions Not Found</I18n>
-            </h2>
-            {robotExecutionsErrors.map(error => (
-              <p className="error-details">{error}</p>
-            ))}
-          </div>
-        )}
+        {robotExecutions.size <= 0 &&
+          robotExecutionsErrors.length > 0 && (
+            <div className="text-center text-danger">
+              <h1>
+                <I18n>Oops!</I18n>
+              </h1>
+              <h2>
+                <I18n>Robot Executions Not Found</I18n>
+              </h2>
+              {robotExecutionsErrors.map(error => (
+                <p className="error-details">{error}</p>
+              ))}
+            </div>
+          )}
         {robotExecutions.size > 0 && (
           <table className="table table-sm table-striped table-robots">
             <thead className="header">
@@ -173,9 +172,8 @@ const RobotExecutionsListComponent = ({
             </tbody>
           </table>
         )}
-        {robotExecutionsErrors.length <= 0 && robotExecutions.size === 0 && (
-          <WallyEmptyMessage />
-        )}
+        {robotExecutionsErrors.length <= 0 &&
+          robotExecutions.size === 0 && <WallyEmptyMessage />}
         <div className="robots-pagination">
           <div className="btn-group">
             <button

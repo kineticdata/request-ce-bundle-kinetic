@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Link, Router } from '@reach/router';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import {
@@ -10,6 +10,7 @@ import {
   selectHasRoleSchedulerManager,
 } from 'common';
 
+import { Router } from '../../SpaceApp';
 import { SpaceSettings } from './space_settings/SpaceSettings';
 import { Notifications } from './notifications/Notifications';
 import { Datastore } from './datastore/Datastore';

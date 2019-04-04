@@ -1,7 +1,7 @@
 import React from 'react';
 import { Utils } from 'common';
-import { Link, NavLink } from 'react-router-dom';
-import { getTeamColor } from '../utils';
+import { Link } from '@reach/router';
+import { getTeamColor, isActiveClass } from '../utils';
 import { I18n } from '../../../app/src/I18nProvider';
 
 export const Sidebar = ({ teams, isSpaceAdmin, openSettings }) => (
@@ -35,10 +35,9 @@ export const Sidebar = ({ teams, isSpaceAdmin, openSettings }) => (
           {teams.length > 0 &&
             teams.map(team => (
               <li key={team.slug} className="nav-item">
-                <NavLink
+                <Link
                   to={`/teams/${team.slug}`}
-                  className="nav-link"
-                  activeClassName="active"
+                  getProps={isActiveClass('nav-link')}
                 >
                   <span
                     style={{ background: getTeamColor(team) }}
@@ -49,7 +48,7 @@ export const Sidebar = ({ teams, isSpaceAdmin, openSettings }) => (
                     )} fa-fw card-icon`}
                   />
                   <I18n>{`${team.name}`}</I18n>
-                </NavLink>
+                </Link>
               </li>
             ))}
         </ul>

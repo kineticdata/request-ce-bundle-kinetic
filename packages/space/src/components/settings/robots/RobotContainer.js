@@ -1,9 +1,10 @@
-import React, { Fragment } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import React from 'react';
 import { push } from 'redux-first-history';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { toastActions } from 'common';
+
+import { Router } from '../../../SpaceApp';
 import { CreateRobot } from './CreateRobot';
 import { Robot } from './Robot';
 import { RobotExecution } from './RobotExecution';
@@ -19,25 +20,15 @@ const RobotError = () => (
   </h1>
 );
 
-const RobotContainerComponent = ({ match }) => (
-  <Fragment>
-    <Switch>
-      <Route exact path={`${match.path}/error`} component={RobotError} />
-      <Route exact path={`${match.path}/robots/new`} component={CreateRobot} />
-      <Route exact path={`${match.path}/:robotId`} component={Robot} />
-      <Route
-        exact
-        path={`${match.path}/:robotId/executions`}
-        component={RobotExecutionsList}
-      />
-      <Route
-        exact
-        path={`${match.path}/:robotId/executions/:executionId`}
-        component={RobotExecution}
-      />
-      <Route exact path={`${match.path}`} component={RobotsList} />
-    </Switch>
-  </Fragment>
+const RobotContainerComponent = () => (
+  <Router>
+    <RobotError path="error" />
+    <CreateRobot path="robots/new" />
+    <Robot path=":robotId" />
+    <RobotExecutionsList path=":robotId/executions" />
+    <RobotExecution path=":robotId/executions/:executionId" />
+    <RobotsList default />
+  </Router>
 );
 
 export const mapStateToProps = state => ({

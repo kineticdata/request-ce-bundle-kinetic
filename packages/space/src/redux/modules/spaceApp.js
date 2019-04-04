@@ -105,7 +105,6 @@ export const State = Record({
   discussionsSearchInputValue: '',
   isCreateDiscussionModalOpen: false,
   sidebarOpen: true,
-  spaceAdmins: List(),
   userAttributeDefinitions: {},
   userProfileAttributeDefinitions: {},
   settingsBackPath: null,
@@ -123,7 +122,6 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('appLoading', true);
     case types.SET_APP_SETTINGS:
       return state
-        .set('spaceAdmins', List(payload.spaceAdmins))
         .set('userAttributeDefinitions', payload.userAttributeDefinitions)
         .set(
           'userProfileAttributeDefinitions',

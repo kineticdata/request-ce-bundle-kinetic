@@ -1,8 +1,9 @@
 import React from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import semver from 'semver';
 
+import { Router } from '../../../SpaceApp';
 import { RobotContainer } from './RobotContainer';
 
 import { context } from '../../../redux/store';
@@ -45,16 +46,16 @@ export const RobotsRouter = ({ match, loading, validVersion, version }) =>
   !validVersion ? (
     <RobotsVersionError version={version} />
   ) : (
-    <Switch>
-      <Route exact path={`${match.path}/error`} component={RobotsError} />
-      <Route path={`${match.path}`} component={RobotContainer} />
-    </Switch>
+    <Router>
+      <RobotsError path="error" />
+      <RobotContainer default />
+    </Router>
   );
 
 export const mapStateToProps = state => ({
-  version: state.app.config.version,
+  version: state.app.version,
   validVersion: semver.satisfies(
-    semver.coerce(state.app.config.version),
+    semver.coerce(state.app.version),
     `>=${MINIMUM_CE_VERSION}`,
   ),
 });

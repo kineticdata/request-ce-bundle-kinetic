@@ -1307,12 +1307,12 @@ const windowFocusListener = ({ setStaleFields, origForm }) => () => {
     });
 };
 
-export const mapStateToProps = (state, { match: { params } }) => ({
+export const mapStateToProps = (state, { slug }) => ({
   loading: state.settingsDatastore.currentFormLoading,
   canManage: state.settingsDatastore.currentForm.canManage,
   origForm: state.settingsDatastore.currentForm,
   updatedForm: state.settingsDatastore.currentFormChanges,
-  formSlug: params.slug,
+  formSlug: slug,
   hasChanged: !state.settingsDatastore.currentForm.equals(
     state.settingsDatastore.currentFormChanges,
   ),

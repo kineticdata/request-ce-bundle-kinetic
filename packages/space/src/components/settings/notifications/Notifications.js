@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Router, Redirect } from '@reach/router';
+import { Redirect } from '@reach/router';
+
+import { Router } from '../../../SpaceApp';
 import { Notification } from './Notification';
 import { DateFormat } from './DateFormat';
 import { NotificationsNotFound } from './NotificationsNotFound';

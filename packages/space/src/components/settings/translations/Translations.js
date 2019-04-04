@@ -1,14 +1,17 @@
 import React from 'react';
-import { Router, Link } from '@reach/router';
+import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
+import semver from 'semver';
+
+import { Router } from '../../../SpaceApp';
 import { TranslationsList } from './TranslationsList';
 import { EntriesList } from './EntriesList';
 import { StagedList } from './StagedList';
 import { actions } from '../../../redux/modules/settingsTranslations';
 import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
-import semver from 'semver';
+
 const MINIMUM_CE_VERSION = '2.3.0';
 
 const TranslationsError = () => (

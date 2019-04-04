@@ -2,16 +2,15 @@ import React from 'react';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withProps, withState } from 'recompose';
-import { NavLink } from 'react-router-dom';
 import { PageTitle } from 'common';
 import { Modal, ModalBody } from 'reactstrap';
 
 import { NotificationListItem } from './NotificationListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 
+import { isActiveClass } from '../../../utils';
 import { actions } from '../../../redux/modules/settingsNotifications';
 import { context } from '../../../redux/store';
-
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 const WallyNoResultsFoundMessage = ({ type }) => {
@@ -60,19 +59,28 @@ const NotificationsListComponent = ({
       <div className="notifications-tabs">
         <ul className="nav nav-tabs">
           <li role="presentation">
-            <NavLink to="templates" activeClassName="active">
+            <Link
+              to="/settings/notifications/templates"
+              getProps={isActiveClass('nav-link')}
+            >
               <I18n>Templates</I18n>
-            </NavLink>
+            </Link>
           </li>
           <li role="presentation">
-            <NavLink to="snippets" activeClassName="active">
+            <Link
+              to="/settings/notifications/snippets"
+              getProps={isActiveClass('nav-link')}
+            >
               <I18n>Snippets</I18n>
-            </NavLink>
+            </Link>
           </li>
           <li role="presentation">
-            <NavLink to="date-formats" activeClassName="active">
+            <Link
+              to="/settings/notifications/date-formats"
+              getProps={isActiveClass('nav-link')}
+            >
               <I18n>Date Formats</I18n>
-            </NavLink>
+            </Link>
           </li>
         </ul>
       </div>

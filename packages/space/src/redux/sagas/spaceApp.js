@@ -1,7 +1,6 @@
-import { takeEvery, put, all, call, select } from 'redux-saga/effects';
-import { fetchUsers, fetchSpace, deleteSubmission } from '@kineticdata/react';
+import { takeEvery, put, call, select } from 'redux-saga/effects';
+import { fetchSpace, deleteSubmission } from '@kineticdata/react';
 import moment from 'moment';
-import { List } from 'immutable';
 import { commonActions, toastActions } from 'common';
 import { actions, types } from '../modules/spaceApp';
 import { actions as errorActions } from '../modules/errors';
@@ -9,21 +8,15 @@ import { fetchDiscussions, createDiscussionList } from '@kineticdata/react';
 import { calculateDateRange } from 'common/src/utils';
 
 export function* fetchAppSettingsSaga() {
-  const [{ users, usersServerError }, { space, spaceServerError }] = yield all([
-    call(fetchUsers),
-    call(fetchSpace, {
-      include: 'userAttributeDefinitions,userProfileAttributeDefinitions',
-    }),
-  ]);
+  const { space, spaceServerError } = yield call(fetchSpace, {
+    include: 'userAttributeDefinitions,userProfileAttributeDefinitions',
+  });
 
-  if (usersServerError || spaceServerError) {
-    yield put(
-      errorActions.setSystemError(usersServerError || spaceServerError),
-    );
+  if (spaceServerError) {
+    yield put(errorActions.setSystemError(spaceServerError));
   } else {
     yield put(
       actions.setAppSettings({
-        spaceAdmins: List(users).filter(u => u.spaceAdmin),
         userAttributeDefinitions: space.userAttributeDefinitions.reduce(
           (memo, item) => {
             memo[item.name] = item;

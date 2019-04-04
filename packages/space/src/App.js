@@ -1,7 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers } from 'recompose';
-import { Router, Redirect } from '@reach/router';
+import { Redirect } from '@reach/router';
+import { Router } from './SpaceApp';
 import { Utils, Loading, ErrorNotFound } from 'common';
 import { actions } from './redux/modules/spaceApp';
 import * as selectors from 'app/src/redux/selectors';
@@ -67,24 +68,18 @@ export const AppComponent = props => {
             <IsolatedForm path="/kapps/:kappSlug/submissions/:id" />
             <IsolatedForm path="/kapps/:kappSlug/forms/:formSlug/submissions/:id" />
 
-            {/* <Route
-              path=
-              render={({ match }) => (
-                <Redirect
-                  to={`/settings/datastore/${match.params.slug}/${
-                    match.params.id
-                  }`}
-                />
-              )}
+            <Redirect
+              from="/datastore/forms/:slug/submissions/:id"
+              to="/settings/datastore/:slug/:id"
+              noThrow
             />
-            <Route
-              path="/datastore/forms/:slug"
-              render={({ match }) => (
-                <Redirect to={`/settings/datastore/${match.params.slug}/new`} />
-              )}
+            <Redirect
+              from="/datastore/forms/:slug"
+              to="/settings/datastore/:slug"
+              noThrow
             />
-            <Route path="/reset-password" render={() => <Redirect to="/" />} />
-            <Route component={ErrorNotFound} /> */}
+            <Redirect from="/reset-password" to="/" noThrow />
+            <ErrorNotFound default />
           </Router>
         </main>
       </I18n>

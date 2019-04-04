@@ -10,11 +10,11 @@ import {
   withProps,
   withState,
 } from 'recompose';
-import { NavLink } from 'react-router-dom';
 import { CoreForm } from '@kineticdata/react';
 import { Button } from 'reactstrap';
 import { toastActions, Loading, PageTitle } from 'common';
 
+import { isActiveClass } from '../../../utils';
 import { RobotExecutionsList } from './RobotExecutionsList';
 import { PopConfirm } from '../../shared/PopConfirm';
 
@@ -30,9 +30,9 @@ const globals = import('common/globals');
 
 const RobotComponent = ({
   robot,
+  robotId,
   robotLoading,
   robotErrors,
-  match,
   type,
   handleLoaded,
   handleUpdated,
@@ -41,8 +41,7 @@ const RobotComponent = ({
   setConfirmDelete,
   processDelete,
 }) => {
-  const loading =
-    robotLoading && (robot === null || robot.id !== match.params.robotId);
+  const loading = robotLoading && (robot === null || robot.id !== robotId);
   const isInactive =
     !loading && robot && robot.values['Status'].toLowerCase() === 'inactive';
   const isExpired =
@@ -78,41 +77,39 @@ const RobotComponent = ({
           <Loading />
         ) : (
           <Fragment>
-            {robot === null && robotErrors.length > 0 && (
-              <div className="text-center text-danger">
-                <h1>
-                  <I18n>Oops!</I18n>
-                </h1>
-                <h2>
-                  <I18n>Robot Not Found</I18n>
-                </h2>
-                {robotErrors.map(error => (
-                  <p className="error-details">{error}</p>
-                ))}
-              </div>
-            )}
+            {robot === null &&
+              robotErrors.length > 0 && (
+                <div className="text-center text-danger">
+                  <h1>
+                    <I18n>Oops!</I18n>
+                  </h1>
+                  <h2>
+                    <I18n>Robot Not Found</I18n>
+                  </h2>
+                  {robotErrors.map(error => (
+                    <p className="error-details">{error}</p>
+                  ))}
+                </div>
+              )}
             {robot !== null && (
               <Fragment>
                 <div className="tab-navigation tab-navigation--robots">
                   <ul className="nav nav-tabs">
                     <li role="presentation">
-                      <NavLink
-                        exact
-                        to={`/settings/robots/${match.params.robotId}`}
-                        activeClassName="active"
+                      <Link
+                        to={`/settings/robots/${robotId}`}
+                        getProps={isActiveClass('nav-link')}
                       >
                         <I18n>Details</I18n>
-                      </NavLink>
+                      </Link>
                     </li>
                     <li role="presentation">
-                      <NavLink
-                        to={`/settings/robots/${
-                          match.params.robotId
-                        }/executions`}
-                        activeClassName="active"
+                      <Link
+                        to={`/settings/robots/${robotId}/executions`}
+                        getProps={isActiveClass('nav-link')}
                       >
                         <I18n>Executions</I18n>
-                      </NavLink>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -126,9 +123,12 @@ const RobotComponent = ({
                             <I18n>Inactive</I18n>
                           </strong>
                         )}
-                        {isInactive && isExpired && (
-                          <I18n render={translate => ` ${translate('and')} `} />
-                        )}
+                        {isInactive &&
+                          isExpired && (
+                            <I18n
+                              render={translate => ` ${translate('and')} `}
+                            />
+                          )}
                         {isExpired && (
                           <strong>
                             <I18n>Expired</I18n>
@@ -140,7 +140,7 @@ const RobotComponent = ({
                     <I18n context={`datastore.forms.${ROBOT_FORM_SLUG}`}>
                       <CoreForm
                         datastore
-                        submission={match.params.robotId}
+                        submission={robotId}
                         loaded={handleLoaded}
                         updated={handleUpdated}
                         error={handleError}
@@ -173,7 +173,7 @@ const RobotComponent = ({
                   </div>
                 )}
                 {type === 'executions' && (
-                  <RobotExecutionsList robotId={match.params.robotId} />
+                  <RobotExecutionsList robotId={robotId} />
                 )}
               </Fragment>
             )}
