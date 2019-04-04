@@ -98,7 +98,7 @@ const handleLeave = ({ push }) => () => {
   push('/');
 };
 
-const mapStateToProps = props => ({
+const mapStateToProps = (state, props) => ({
   discussionId: props.id,
   invitationToken: parse(props.location.search).invitationToken,
 });
