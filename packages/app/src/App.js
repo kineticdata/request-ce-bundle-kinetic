@@ -52,7 +52,9 @@ export const AppComponent = props =>
             locales: props.locales,
             timezones: props.timezones,
           }}
-          appRefresh={props.refreshApp}
+          actions={{
+            refreshApp: props.refreshApp,
+          }}
           history={props.history}
           render={({ main, sidebar, header }) => (
             <div
