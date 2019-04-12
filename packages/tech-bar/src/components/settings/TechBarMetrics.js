@@ -173,9 +173,13 @@ export const TechBarMetricsComponent = ({
                       onChange={e => {
                         setSelectedRange(e.target.value);
                         setSelectedDate(
-                          moment()
-                            .add(-1, 'day')
-                            .format(DATE_FORMAT),
+                          e.target.value === 'singleMonth'
+                            ? moment()
+                                .startOf('month')
+                                .format(DATE_FORMAT)
+                            : moment()
+                                .add(-1, 'day')
+                                .format(DATE_FORMAT),
                         );
                         clearMetrics();
                       }}
@@ -190,6 +194,9 @@ export const TechBarMetricsComponent = ({
                       </option>
                       <option value="last30Days">
                         {translate('Last 30 Days')}
+                      </option>
+                      <option value="singleMonth">
+                        {translate('Single Month')}
                       </option>
                       <option value="monthToDate">
                         {translate('Month to Date')}
@@ -208,7 +215,8 @@ export const TechBarMetricsComponent = ({
                   )}
                 />
               </div>
-              {selectedRange === 'singleDay' && (
+              {(selectedRange === 'singleDay' ||
+                selectedRange === 'singleMonth') && (
                 <div className="form-group col-md-6">
                   <label htmlFor="date-select">
                     <I18n>Date</I18n>
@@ -219,8 +227,17 @@ export const TechBarMetricsComponent = ({
                     className="form-control"
                     value={selectedDate}
                     onChange={e => {
-                      setSelectedDate(e.target.value);
-                      clearMetrics();
+                      const date = moment(e.target.value);
+                      const newDate =
+                        date.isValid() && selectedRange === 'singleMonth'
+                          ? moment(e.target.value)
+                              .startOf('month')
+                              .format(DATE_FORMAT)
+                          : e.target.value;
+                      setSelectedDate(newDate);
+                      if (selectedDate !== newDate) {
+                        clearMetrics();
+                      }
                     }}
                   />
                 </div>
@@ -242,7 +259,13 @@ export const TechBarMetricsComponent = ({
                 schedulerId={schedulerId}
                 eventType={eventType}
                 techBars={techBars}
-                dates={dateRanges[selectedRange] || [selectedDate]}
+                dates={
+                  dateRanges[selectedRange]
+                    ? dateRanges[selectedRange]
+                    : selectedRange === 'singleMonth'
+                      ? buildDateRangeForSelectedMonth(selectedDate)
+                      : [selectedDate]
+                }
                 formatDate={date =>
                   moment(date).format(
                     selectedRange === 'last12Months' ||
@@ -294,6 +317,13 @@ const buildDateRanges = () => {
   };
 };
 
+const buildDateRangeForSelectedMonth = selectedDate => {
+  const month = moment(selectedDate).endOf('month');
+  return month.isValid()
+    ? fillDateArray(month, month.daysInMonth(), 'day', DATE_FORMAT, true)
+    : [null];
+};
+
 export const mapStateToProps = (state, props) => {
   const techBars = selectHasRoleSchedulerAdmin(state)
     ? state.techBar.techBarApp.schedulers
@@ -328,12 +358,17 @@ const handleFetch = ({
   selectedDate,
 }) => () => {
   clearMetrics();
+  const dates = dateRanges[selectedRange]
+    ? dateRanges[selectedRange]
+    : selectedRange === 'singleMonth'
+      ? buildDateRangeForSelectedMonth(selectedDate)
+      : [selectedDate];
   fetchMetrics({
     schedulerIds: schedulerId
       ? [schedulerId]
       : techBars.map(techBar => techBar.values['Scheduler Id']),
     monthly: selectedRange === 'last12Months' || selectedRange === 'yearToDate',
-    dates: dateRanges[selectedRange] || [selectedDate],
+    dates,
   });
 };
 

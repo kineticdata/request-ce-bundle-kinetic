@@ -628,7 +628,6 @@ const TimeOfVisit = ({
   timeOfVisitData,
   toggleTimeOfVisitData,
 }) => {
-  console.log('render timeofvisit');
   const sourceData = timeOfVisitData
     ? timeOfVisit.scheduled
     : timeOfVisit.walkins;
@@ -1027,7 +1026,6 @@ const buildTrend = ({
     setSelectedDuration(null);
   }
 
-  console.log(trend);
   setTrend(trend);
 };
 
