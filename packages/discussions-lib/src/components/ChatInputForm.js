@@ -26,7 +26,7 @@ const VALID_IMG_TYPES = [
 
 const canShowPreview = attachment =>
   (attachment.preview && VALID_IMG_TYPES.includes(attachment.type)) ||
-  VALID_IMG_TYPES.includes(attachment.value.contentType);
+  (attachment.value && VALID_IMG_TYPES.includes(attachment.value.contentType));
 
 const getThumbnailUrl = (discussion, message, attachment) =>
   `${bundle.spaceLocation()}/app/discussions/api/v1/discussions/${
