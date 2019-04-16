@@ -23,7 +23,6 @@ const ExportModalComponent = ({
         <span>
           <I18n>{modalName === 'import' ? 'Import' : 'Export'} Records</I18n>
         </span>
-        <span>&nbsp;</span>
       </h4>
     </div>
     <ModalBody>

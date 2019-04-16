@@ -26,7 +26,6 @@ const PopupForm = props => (
         <span>
           <I18n>Sign In</I18n>
         </span>
-        <span />
       </h4>
     </div>
     <div className="login-form-container">
@@ -76,7 +75,6 @@ const LoginForm = props => (
         <span>
           <I18n>Sign In</I18n>
         </span>
-        <span />
       </h4>
     </div>
     {props.popupBlocked ? (

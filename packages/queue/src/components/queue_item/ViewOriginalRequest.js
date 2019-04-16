@@ -29,7 +29,6 @@ export const ViewOriginalRequestComponent = ({
             <span>
               <I18n>Original Request</I18n>
             </span>
-            <span />
           </h4>
         </div>
         <ModalBody>

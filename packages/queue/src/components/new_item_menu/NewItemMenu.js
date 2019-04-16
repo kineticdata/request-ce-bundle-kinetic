@@ -107,7 +107,6 @@ export const NewItemMenu = ({
             <I18n>Task</I18n>
           )}
         </span>
-        <span>&nbsp;</span>
       </h4>
       {currentForm !== null &&
         currentAssignment === null && (
