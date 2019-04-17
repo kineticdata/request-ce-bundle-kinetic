@@ -196,6 +196,7 @@ export const EditProfileComponent = ({
                   )}
                   <div>
                     <button
+                      type="button"
                       onClick={handleTogglePassword}
                       className="btn btn-secondary btn-sm"
                     >
@@ -206,6 +207,7 @@ export const EditProfileComponent = ({
                 </div>
               ) : (
                 <button
+                  type="button"
                   onClick={handleTogglePassword}
                   className="change-password btn btn-secondary btn-sm"
                 >
@@ -215,6 +217,7 @@ export const EditProfileComponent = ({
               <div className="form__footer">
                 <div className="form__footer__right">
                   <button
+                    type="submit"
                     disabled={!fieldValuesValid(fieldValues)}
                     className="btn btn-primary"
                     // TODO: Disable until a change is made. Save Changes
