@@ -14,7 +14,7 @@ export function* fetchSubmissionsSaga({ payload }) {
   if (typeof queryBuilder === 'function') {
     queryBuilder(searcher);
   }
-  const { submissions, nextPageToken = null, serverError } = yield call(
+  const { submissions, nextPageToken = null, error, serverError } = yield call(
     CoreAPI.searchSubmissions,
     {
       search: searcher.build(),
@@ -28,7 +28,13 @@ export function* fetchSubmissionsSaga({ payload }) {
     yield call(fetchSubmissionsSaga, { payload, pageToken: nextPageToken });
   } else {
     if (serverError) {
-      yield put(actions.setSubmissionsError(serverError));
+      yield put(
+        actions.setSubmissionsError(
+          serverError.error || serverError.statusText,
+        ),
+      );
+    } else if (error) {
+      yield put(actions.setSubmissionsError(error));
     } else {
       yield put(actions.setSubmissions({ submissions, completed: true }));
     }

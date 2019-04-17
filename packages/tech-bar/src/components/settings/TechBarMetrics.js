@@ -413,7 +413,7 @@ const handleFetch = ({
   fetchMetrics({
     schedulerIds: schedulerId
       ? [schedulerId]
-      : techBars.map(techBar => techBar.values['Scheduler Id']),
+      : techBars.toJS().map(techBar => techBar.values['Id']),
     monthly: selectedRange === 'last12Months' || selectedRange === 'yearToDate',
     dates,
   });

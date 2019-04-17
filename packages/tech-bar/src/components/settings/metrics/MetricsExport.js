@@ -73,8 +73,7 @@ export const MetricsExportComponent = ({
               <span className="fa fa-exclamation-triangle fa-fw" />
               <I18n
                 render={translate =>
-                  `${translate('Export failed:')} ${exportError.error ||
-                    exportError.statusText}`
+                  `${translate('Export failed:')} ${exportError}`
                 }
               />
             </Fragment>
@@ -318,6 +317,7 @@ export const processExport = ({
   schedulerId,
   eventType,
   selectedDate,
+  techBars,
 }) => (formSlug, month) => {
   const date = moment(selectedDate);
   switch (formSlug) {
@@ -341,6 +341,11 @@ export const processExport = ({
           searcher.coreState('Closed');
           if (schedulerId) {
             searcher.eq('values[Scheduler Id]', schedulerId);
+          } else if (techBars.size > 0) {
+            searcher.in(
+              'values[Scheduler Id]',
+              techBars.toJS().map(techBar => techBar.values['Id']),
+            );
           }
           if (eventType) {
             searcher.eq('values[Event Type]', eventType);
@@ -359,6 +364,11 @@ export const processExport = ({
         queryBuilder: searcher => {
           if (schedulerId) {
             searcher.eq('values[Scheduler Id]', schedulerId);
+          } else if (techBars.size > 0) {
+            searcher.in(
+              'values[Scheduler Id]',
+              techBars.toJS().map(techBar => techBar.values['Id']),
+            );
           }
           if (month) {
             searcher.startDate(date.startOf('month').toDate());
