@@ -337,16 +337,11 @@ export const processExport = ({
         : [selectedDate];
       exportSubmissions({
         formSlug,
+        schedulerIds: schedulerId
+          ? [schedulerId]
+          : techBars.toJS().map(techBar => techBar.values['Id']),
         queryBuilder: searcher => {
           searcher.coreState('Closed');
-          if (schedulerId) {
-            searcher.eq('values[Scheduler Id]', schedulerId);
-          } else if (techBars.size > 0) {
-            searcher.in(
-              'values[Scheduler Id]',
-              techBars.toJS().map(techBar => techBar.values['Id']),
-            );
-          }
           if (eventType) {
             searcher.eq('values[Event Type]', eventType);
           }
@@ -362,14 +357,6 @@ export const processExport = ({
       exportSubmissions({
         formSlug,
         queryBuilder: searcher => {
-          if (schedulerId) {
-            searcher.eq('values[Scheduler Id]', schedulerId);
-          } else if (techBars.size > 0) {
-            searcher.in(
-              'values[Scheduler Id]',
-              techBars.toJS().map(techBar => techBar.values['Id']),
-            );
-          }
           if (month) {
             searcher.startDate(date.startOf('month').toDate());
             searcher.endDate(

@@ -1,6 +1,6 @@
 import { Record, List } from 'immutable';
 import { Utils } from 'common';
-const { namespace, withPayload } = Utils;
+const { namespace, noPayload, withPayload } = Utils;
 
 export const FEEDBACK_FORM_SLUG = 'feedback';
 export const GENERAL_FEEDBACK_FORM_SLUG = 'general-feedback';
@@ -12,12 +12,14 @@ export const types = {
     'techBarMetricsExport',
     'SET_SUBMISSIONS_ERROR',
   ),
+  COMPLETE_EXPORT: namespace('techBarMetricsExport', 'COMPLETE_EXPORT'),
 };
 
 export const actions = {
   exportSubmissions: withPayload(types.EXPORT_SUBMISSIONS),
   setSubmissions: withPayload(types.SET_SUBMISSIONS),
   setSubmissionsError: withPayload(types.SET_SUBMISSIONS_ERROR),
+  completeExport: noPayload(types.COMPLETE_EXPORT),
 };
 
 export const State = Record({
@@ -34,13 +36,13 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('error', false)
         .set('exporting', true);
     case types.SET_SUBMISSIONS:
-      return state
-        .update('submissions', submissions =>
-          submissions.push(...payload.submissions),
-        )
-        .set('exporting', !payload.completed);
+      return state.update('submissions', submissions =>
+        submissions.push(...payload),
+      );
     case types.SET_SUBMISSIONS_ERROR:
       return state.set('error', payload).set('exporting', false);
+    case types.COMPLETE_EXPORT:
+      return state.set('exporting', false);
     default:
       return state;
   }
