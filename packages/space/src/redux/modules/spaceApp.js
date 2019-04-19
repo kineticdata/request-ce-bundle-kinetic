@@ -27,7 +27,6 @@ export const types = {
     'app',
     'SET_DISCUSSIONS_SEARCH_INPUT_VALUE',
   ),
-  DELETE_ALERT: namespace('app', 'DELETE_ALERT'),
   SET_SETTINGS_BACK_PATH: namespace('app', 'SET_SETTINGS_BACK_PATH'),
   TOGGLE_HEADER_DROPDOWN: namespace('app', 'TOGGLE_HEADER_DROPDOWN'),
   TOGGLE_SHOWING_ARCHIVED: namespace('app', 'TOGGLE_SHOWING_ARCHIVED'),
@@ -56,7 +55,6 @@ export const actions = {
   setDiscussionsSearchInputValue: withPayload(
     types.SET_DISCUSSIONS_SEARCH_INPUT_VALUE,
   ),
-  deleteAlert: withPayload(types.DELETE_ALERT),
   setSettingsBackPath: withPayload(types.SET_SETTINGS_BACK_PATH),
   toggleHeaderDropdown: noPayload(types.TOGGLE_HEADER_DROPDOWN),
   toggleShowingArchived: noPayload(types.TOGGLE_SHOWING_ARCHIVED),

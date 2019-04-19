@@ -3,16 +3,11 @@ import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
-import {
-  commonActions,
-  toastActions,
-  PageTitle,
-  AttributeSelectors,
-} from 'common';
+import { toastActions, PageTitle, AttributeSelectors } from 'common';
 import { fetchKapp, updateKapp } from '@kineticdata/react';
 import isarray from 'isarray';
 import { I18n } from '../../../../../app/src/I18nProvider';
-import { context } from '../../../redux/store';
+import { context, actions as appActions } from '../../../redux/store';
 
 export const SettingsComponent = ({
   attributesMap,
@@ -161,34 +156,36 @@ export const SettingsComponent = ({
           <h2 className="section__title">
             <I18n>Form Mapping</I18n>
           </h2>
-          {requiredKapps.queue && attributesMap.has('Approval Form Slug') && (
-            <AttributeSelectors.FormSelect
-              id="Approval Form Slug"
-              value={attributesMap.getIn(['Approval Form Slug', 'value'])}
-              onChange={handleAttributeChange}
-              valueMapper={value => value.slug}
-              kappSlug={requiredKapps.queue.slug}
-              label="Default Kapp Approval Form"
-              description={attributesMap.getIn([
-                'Approval Form Slug',
-                'description',
-              ])}
-            />
-          )}
-          {requiredKapps.queue && attributesMap.has('Task Form Slug') && (
-            <AttributeSelectors.FormSelect
-              id="Task Form Slug"
-              value={attributesMap.getIn(['Task Form Slug', 'value'])}
-              onChange={handleAttributeChange}
-              valueMapper={value => value.slug}
-              kappSlug={requiredKapps.queue.slug}
-              label="Default Task Form Slug"
-              description={attributesMap.getIn([
-                'Task Form Slug',
-                'description',
-              ])}
-            />
-          )}
+          {requiredKapps.queue &&
+            attributesMap.has('Approval Form Slug') && (
+              <AttributeSelectors.FormSelect
+                id="Approval Form Slug"
+                value={attributesMap.getIn(['Approval Form Slug', 'value'])}
+                onChange={handleAttributeChange}
+                valueMapper={value => value.slug}
+                kappSlug={requiredKapps.queue.slug}
+                label="Default Kapp Approval Form"
+                description={attributesMap.getIn([
+                  'Approval Form Slug',
+                  'description',
+                ])}
+              />
+            )}
+          {requiredKapps.queue &&
+            attributesMap.has('Task Form Slug') && (
+              <AttributeSelectors.FormSelect
+                id="Task Form Slug"
+                value={attributesMap.getIn(['Task Form Slug', 'value'])}
+                onChange={handleAttributeChange}
+                valueMapper={value => value.slug}
+                kappSlug={requiredKapps.queue.slug}
+                label="Default Task Form Slug"
+                description={attributesMap.getIn([
+                  'Task Form Slug',
+                  'description',
+                ])}
+              />
+            )}
 
           {attributesMap.has('Notification Template Name - Complete') && (
             <AttributeSelectors.NotificationTemplateSelect
@@ -412,7 +409,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   ...toastActions,
-  reloadApp: commonActions.loadApp,
+  reloadApp: appActions.refreshApp,
 };
 
 export const ServicesSettings = compose(

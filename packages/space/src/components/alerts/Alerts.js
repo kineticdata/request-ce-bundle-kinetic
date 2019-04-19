@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import { commonActions, PageTitle } from 'common';
+import { PageTitle } from 'common';
 import { Link } from '@reach/router';
 import { List } from 'immutable';
 import moment from 'moment';
@@ -9,6 +9,7 @@ import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { Alert } from './Alert';
 import { I18n } from '../../../../app/src/I18nProvider';
 import { context } from '../../redux/store';
+import { actions as appActions } from '../../redux/modules/spaceApp';
 
 const WallyEmptyMessage = ({ canEdit }) => {
   return (
@@ -138,7 +139,7 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = {
-  fetchAlerts: commonActions.fetchAlerts,
+  fetchAlerts: appActions.fetchAlerts,
 };
 
 export const Alerts = compose(

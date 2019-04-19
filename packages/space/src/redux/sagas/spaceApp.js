@@ -1,7 +1,6 @@
 import { takeEvery, put, call, select } from 'redux-saga/effects';
-import { fetchSpace, deleteSubmission } from '@kineticdata/react';
+import { fetchSpace } from '@kineticdata/react';
 import moment from 'moment';
-import { commonActions, toastActions } from 'common';
 import { actions, types } from '../modules/spaceApp';
 import { actions as errorActions } from '../modules/errors';
 import { fetchDiscussions, createDiscussionList } from '@kineticdata/react';
@@ -33,20 +32,6 @@ export function* fetchAppSettingsSaga() {
         ),
       }),
     );
-  }
-}
-
-export function* deleteAlertSaga(action) {
-  const { errors, serverError } = yield call(deleteSubmission, {
-    datastore: true,
-    id: action.payload,
-  });
-
-  if (serverError || errors) {
-    yield put(errorActions.setSystemError(serverError));
-  } else {
-    yield put(toastActions.addSuccess('Deleted alert.'));
-    yield put(commonActions.fetchAlerts());
   }
 }
 
@@ -91,5 +76,4 @@ export function* watchSpaceApp() {
     ],
     fetchRecentDiscussionsSaga,
   );
-  yield takeEvery(types.DELETE_ALERT, deleteAlertSaga);
 }

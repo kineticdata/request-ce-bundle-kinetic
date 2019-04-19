@@ -28,10 +28,7 @@ import { ViewDiscussionsModal } from './components/discussions/summary/ViewDiscu
 import {
   selectCurrentKapp,
   selectCurrentKappSlug,
-} from './redux/modules/common';
-import {
-  types as commonTypes,
-  actions as commonActions,
+  selectDiscussionsEnabled,
 } from './redux/modules/common';
 import {
   actions as toastActions,
@@ -65,14 +62,13 @@ export {
   Icon,
   Loading,
   PageTitle,
-  commonActions,
-  commonTypes,
   toastActions,
   toastTypes,
   modalFormActions,
   searchHistoryActions,
   selectCurrentKapp,
   selectCurrentKappSlug,
+  selectDiscussionsEnabled,
   Utils,
   Constants,
   ErrorNotFound,

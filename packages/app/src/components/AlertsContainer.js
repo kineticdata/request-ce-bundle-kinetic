@@ -1,26 +1,11 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
-import { List } from 'immutable';
-import moment from 'moment';
 import { Alerts } from './Alerts';
 import { actions } from '../redux/modules/alerts';
 
 export const mapStateToProps = state => ({
-  alerts: List(state.app.alerts.get('data'))
-    .filter(
-      alert =>
-        !alert.values['End Date Time'] ||
-        moment(alert.values['End Date Time']).isAfter(),
-    )
-    .filter(
-      alert =>
-        !alert.values['Start Date Time'] ||
-        moment(alert.values['Start Date Time']).isBefore(),
-    )
-    .sortBy(alert =>
-      moment(alert.values['Start Date Time'] || alert.createdAt).unix(),
-    )
-    .reverse(),
+  alerts: state.app.alerts.data,
+  error: state.app.alerts.error,
   isSpaceAdmin: state.app.profile.spaceAdmin,
 });
 

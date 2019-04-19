@@ -1,3 +1,4 @@
+import { reducer as alerts } from './modules/alerts';
 import { reducer as app } from './modules/app';
 import { reducer as errors } from './modules/errors';
 import { reducer as about } from './modules/about';
@@ -13,6 +14,7 @@ import { reducer as settingsUsers } from './modules/settingsUsers';
 import { reducer as settingsTranslations } from './modules/settingsTranslations';
 
 export default {
+  alerts,
   app,
   errors,
   spaceApp,

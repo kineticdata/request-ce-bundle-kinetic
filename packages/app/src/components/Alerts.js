@@ -5,6 +5,7 @@ import { I18n } from '../I18nProvider';
 
 export const Alerts = ({
   alerts,
+  error,
   fetchAlerts,
   isSpaceAdmin,
   isOpen,
@@ -13,9 +14,11 @@ export const Alerts = ({
   <Dropdown isOpen={isOpen} toggle={toggle}>
     <DropdownToggle nav role="button">
       <i className="fa fa-fw fa-bell" />
-      {alerts.size > 0 && (
-        <span className="badge badge-secondary">{alerts.size}</span>
-      )}
+      {alerts &&
+        alerts.size > 0 && (
+          <span className="badge badge-secondary">{alerts.size}</span>
+        )}
+      {error && <span className="badge badge-secondary">!</span>}
     </DropdownToggle>
     <DropdownMenu right className="alerts-menu">
       <div className="alerts-header">
@@ -41,33 +44,40 @@ export const Alerts = ({
         </div>
       </div>
       <ul className="alerts-list">
-        {alerts.map(alert => (
-          <li key={alert.id} className="alert-item">
-            <h1>
-              <Link to={`/alerts/${alert.id}`}>
-                <small className="source">
-                  <I18n>{alert.values.Source}</I18n>
-                </small>
-                <I18n>{alert.values.Title}</I18n>
-              </Link>
-            </h1>
-            <I18n
-              render={translate => (
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: translate(alert.values.Content),
-                  }}
-                />
-              )}
-            />
-            <span className="meta">{alert.values.CreatedAt}</span>
-          </li>
-        ))}
-        {alerts.size < 1 && (
+        {error && (
           <h6 className="empty-alerts">
-            <I18n>There are no active alerts.</I18n>
+            <I18n>There was an error fetching alerts.</I18n>
           </h6>
         )}
+        {alerts &&
+          alerts.map(alert => (
+            <li key={alert.id} className="alert-item">
+              <h1>
+                <Link to={`/alerts/${alert.id}`}>
+                  <small className="source">
+                    <I18n>{alert.values.Source}</I18n>
+                  </small>
+                  <I18n>{alert.values.Title}</I18n>
+                </Link>
+              </h1>
+              <I18n
+                render={translate => (
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: translate(alert.values.Content),
+                    }}
+                  />
+                )}
+              />
+              <span className="meta">{alert.values.CreatedAt}</span>
+            </li>
+          ))}
+        {alerts &&
+          alerts.size < 1 && (
+            <h6 className="empty-alerts">
+              <I18n>There are no active alerts.</I18n>
+            </h6>
+          )}
       </ul>
     </DropdownMenu>
   </Dropdown>

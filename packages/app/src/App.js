@@ -14,7 +14,7 @@ import {
 } from 'common';
 import { LoginModal } from './components/authentication/LoginModal';
 import { HeaderContainer } from './components/HeaderContainer';
-import { actions as loadingActions } from './redux/modules/loading';
+import { actions } from './redux/modules/app';
 import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';
 import { ServicesApp } from 'services/src/ServicesApp';
@@ -92,18 +92,18 @@ export const mapStateToProps = state => ({
   sidebarOpen: state.app.layout.sidebarOpen,
   suppressedSidebarOpen: state.app.layout.suppressedSidebarOpen,
   layoutSize: state.app.layout.size,
-  kappSlug: state.app.config.kappSlug,
+  kappSlug: state.app.app.kappSlug,
   kapp: selectCurrentKapp(state),
   pathname: state.router.location.pathname,
-  locale: state.app.config.locale,
+  locale: state.app.app.locale,
   profile: state.app.profile,
   space: state.app.space,
-  locales: state.app.config.locales,
-  timezones: state.app.config.timezones,
-  version: state.app.config.version,
+  locales: state.app.app.locales,
+  timezones: state.app.app.timezones,
+  version: state.app.app.coreVersion,
 });
 export const mapDispatchToProps = {
-  loadApp: loadingActions.loadApp,
+  loadApp: actions.fetchApp,
   fetchAlerts: alertsActions.fetchAlerts,
   setSidebarOpen: layoutActions.setSidebarOpen,
   setSuppressedSidebarOpen: layoutActions.setSuppressedSidebarOpen,
@@ -159,7 +159,7 @@ export const App = compose(
       props.shouldSuppressSidebar
         ? props.setSuppressedSidebarOpen(!props.sidebarOpen)
         : props.setSidebarOpen(!props.sidebarOpen),
-    refreshApp: props => () => props.loadApp(true),
+    refreshApp: props => () => props.loadApp(),
   }),
   lifecycle({
     componentDidMount() {

@@ -16,7 +16,7 @@ import {
 } from '@kineticdata/react';
 import AuthInterceptor from './utils/AuthInterceptor';
 import { actions as layoutActions } from './redux/modules/layout';
-import { actions as configActions } from './redux/modules/config';
+import { actions } from './redux/modules/app';
 import {
   actions as authActions,
   selectors as authSelectors,
@@ -72,7 +72,7 @@ ReactDOM.render(
 const match = matchPath(history.location.pathname, {
   path: '/kapps/:kappSlug',
 });
-store.dispatch(configActions.setKappSlug(match && match.params.kappSlug));
+store.dispatch(actions.setKappSlug(match && match.params.kappSlug));
 
 // Add global listeners
 [

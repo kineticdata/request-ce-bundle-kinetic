@@ -1,11 +1,12 @@
 import React from 'react';
 import { CoreForm } from '@kineticdata/react';
-import { Utils, commonActions, PageTitle } from 'common';
+import { Utils, PageTitle } from 'common';
 import { connect } from 'react-redux';
 import { Link } from '@reach/router';
 import { push } from 'redux-first-history';
 import { compose, withHandlers } from 'recompose';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { actions } from '../../redux/modules/alerts';
 import { context } from '../../redux/store';
 
 // Asynchronously import the global dependencies that are used in the embedded
@@ -90,7 +91,7 @@ const handleCreateOrUpdate = props => response => {
 
 const mapDispatchToProps = {
   push,
-  fetchAlerts: commonActions.fetchAlerts,
+  fetchAlerts: actions.fetchAlerts,
 };
 
 export const AlertForm = compose(

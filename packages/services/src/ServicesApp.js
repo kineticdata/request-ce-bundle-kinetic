@@ -1,7 +1,12 @@
 import { is } from 'immutable';
 import { LocationProvider, Router as ReachRouter } from '@reach/router';
 import React, { Component, Fragment } from 'react';
-import { configureStore, history, context, store } from './redux/store';
+import {
+  configureStore,
+  history,
+  context,
+  store,
+} from 'services/src/redux/store';
 import { types } from './redux/modules/app';
 import { App } from './App';
 import { Provider } from 'react-redux';
@@ -24,7 +29,7 @@ export class ServicesApp extends Component {
     // otherwise it will be null. We call it here to make the API of this
     // embeddable app a little nicer (history can be passed to the component
     // rather than calling an additional `configure` function).
-    configureStore(props.history);
+    configureStore(props.history, props.actions);
     // Listen to the local store to see if the embedded app is ready to be
     // re-rendered. Currently this just means that the required props have been
     // synced into the local store.

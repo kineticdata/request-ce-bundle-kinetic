@@ -1,8 +1,8 @@
 import { Map } from 'immutable';
 import { all, takeEvery, call, put } from 'redux-saga/effects';
 import { actions, types } from '../modules/settingsQueue';
-import { toastActions, commonActions } from 'common';
-
+import { toastActions } from 'common';
+import { actions as appActions } from '../store';
 import {
   fetchKapp,
   fetchForms,
@@ -114,7 +114,7 @@ export function* updateQueueSettingsSaga({ payload }) {
         'Update Settings',
       ),
     );
-    yield put(commonActions.loadApp());
+    yield put(appActions.refreshApp());
   }
 }
 

@@ -3,18 +3,13 @@ import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
-import {
-  commonActions,
-  toastActions,
-  PageTitle,
-  AttributeSelectors,
-} from 'common';
+import { toastActions, PageTitle, AttributeSelectors } from 'common';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import { fetchKapp, updateKapp } from '@kineticdata/react';
 import { I18n } from '../../../../app/src/I18nProvider';
-import { context } from '../../redux/store';
+import { context, actions as appActions } from '../../redux/store';
 
 export const SettingsComponent = ({
   attributesMap,
@@ -337,7 +332,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   ...toastActions,
-  reloadApp: commonActions.loadApp,
+  reloadApp: appActions.refreshApp,
 };
 
 export const QueueSettings = compose(
