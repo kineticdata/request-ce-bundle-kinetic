@@ -320,6 +320,9 @@ export const processExport = ({
   techBars,
 }) => (formSlug, month) => {
   const date = moment(selectedDate);
+  const schedulerIds = schedulerId
+    ? [schedulerId]
+    : techBars.toJS().map(techBar => techBar.values['Id']);
   switch (formSlug) {
     case APPOINTMENT_FORM_SLUG:
     case WALK_IN_FORM_SLUG:
@@ -337,18 +340,12 @@ export const processExport = ({
         : [selectedDate];
       exportSubmissions({
         formSlug,
-        schedulerIds: schedulerId
-          ? [schedulerId]
-          : techBars.toJS().map(techBar => techBar.values['Id']),
+        schedulerIds,
+        eventType,
+        dates,
+        dateFieldName: isAppointment ? 'Event Date' : 'Date',
         queryBuilder: searcher => {
           searcher.coreState('Closed');
-          if (eventType) {
-            searcher.eq('values[Event Type]', eventType);
-          }
-          searcher.in(
-            `values[${isAppointment ? 'Event Date' : 'Date'}]`,
-            dates,
-          );
         },
       });
       break;
@@ -356,6 +353,7 @@ export const processExport = ({
     case GENERAL_FEEDBACK_FORM_SLUG:
       exportSubmissions({
         formSlug,
+        schedulerIds,
         queryBuilder: searcher => {
           if (month) {
             searcher.startDate(date.startOf('month').toDate());
