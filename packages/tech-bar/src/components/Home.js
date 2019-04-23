@@ -301,7 +301,9 @@ export const HomeComponent = ({
               >
                 <I18n>Cancel</I18n>
               </button>
-              <span>Location</span>
+              <span>
+                <I18n>Location</I18n>
+              </span>
               <Link to="/tech-bars" className="btn btn-sm btn-link">
                 <I18n>View All</I18n>
               </Link>

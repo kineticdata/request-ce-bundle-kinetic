@@ -87,6 +87,14 @@
           }
         }
       }
+
+      .form-group {
+        margin-top: 1rem;
+        label {
+          display: block;
+          font-weight: 600;
+        }
+      }
     }
   }
 }

@@ -134,7 +134,6 @@ const NotificationsListComponent = ({
               <span>
                 <I18n>Template Preview</I18n>
               </span>
-              <span>&nbsp;</span>
             </h4>
           </div>
           <ModalBody>

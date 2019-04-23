@@ -77,7 +77,7 @@ export const Team = ({
           {userIsMember && (
             <button
               onClick={openDiscussions}
-              className="btn btn-primary btn-inverse btn-discussion d-md-none d-lg-none d-xl-none"
+              className="btn btn-inverse btn-discussion d-md-none d-lg-none d-xl-none"
             >
               <span className="fa fa-comments fa-fw icon" />
               <I18n>View Discussions</I18n>

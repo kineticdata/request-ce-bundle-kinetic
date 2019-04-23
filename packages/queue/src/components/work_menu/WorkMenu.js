@@ -33,7 +33,6 @@ export const WorkMenu = ({
           <span>
             <I18n>{`${mode} It`}</I18n>
           </span>
-          <span />
         </h4>
       </div>
       <ModalBody>

@@ -167,7 +167,7 @@ export const Overhead = compose(
       this.props.setPoller(
         setInterval(() => {
           this.props.fetchData();
-        }, 30000),
+        }, 10000),
       );
     },
     componentWillUnmount() {

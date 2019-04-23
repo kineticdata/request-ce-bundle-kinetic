@@ -18,6 +18,7 @@ import {
 } from 'common';
 import { MetricsSummary } from './metrics/MetricsSummary';
 import { MetricsTrend } from './metrics/MetricsTrend';
+import { MetricsExport } from './metrics/MetricsExport';
 import {
   actions,
   DATE_FORMAT,
@@ -156,59 +157,113 @@ export const TechBarMetricsComponent = ({
                 <I18n>Trend</I18n>
               </NavLink>
             </li>
+            <li role="presentation">
+              <NavLink
+                exact
+                to={'/settings/metrics/export'}
+                activeClassName="active"
+                onClick={() => {
+                  clearMetrics();
+                  setSelectedDate(
+                    moment()
+                      .add(-1, 'day')
+                      .format(DATE_FORMAT),
+                  );
+                }}
+              >
+                <I18n>Export</I18n>
+              </NavLink>
+            </li>
           </ul>
           <div className="form p-0 my-3">
-            <div className="row">
-              <div className="form-group col-md-6">
-                <label htmlFor="date-range-select">
-                  <I18n>Date Range</I18n>
-                </label>
-                <I18n
-                  render={translate => (
-                    <select
-                      name="date-range-select"
-                      id="date-range-select"
+            {mode !== 'export' ? (
+              <div className="row">
+                <div className="form-group col-md-6">
+                  <label htmlFor="date-range-select">
+                    <I18n>Date Range</I18n>
+                  </label>
+                  <I18n
+                    render={translate => (
+                      <select
+                        name="date-range-select"
+                        id="date-range-select"
+                        className="form-control"
+                        value={selectedRange}
+                        onChange={e => {
+                          setSelectedRange(e.target.value);
+                          setSelectedDate(
+                            e.target.value === 'singleMonth'
+                              ? moment()
+                                  .startOf('month')
+                                  .format(DATE_FORMAT)
+                              : moment()
+                                  .add(-1, 'day')
+                                  .format(DATE_FORMAT),
+                          );
+                          clearMetrics();
+                        }}
+                      >
+                        {mode === 'summary' && (
+                          <option value="singleDay">
+                            {translate('Single Day')}
+                          </option>
+                        )}
+                        <option value="last7Days">
+                          {translate('Last 7 Days')}
+                        </option>
+                        <option value="last30Days">
+                          {translate('Last 30 Days')}
+                        </option>
+                        <option value="singleMonth">
+                          {translate('Single Month')}
+                        </option>
+                        <option value="monthToDate">
+                          {translate('Month to Date')}
+                        </option>
+                        {mode === 'trend' && (
+                          <option value="last12Months">
+                            {translate('Last 12 Months')}
+                          </option>
+                        )}
+                        {mode === 'trend' && (
+                          <option value="yearToDate">
+                            {translate('Year To Date')}
+                          </option>
+                        )}
+                      </select>
+                    )}
+                  />
+                </div>
+                {(selectedRange === 'singleDay' ||
+                  selectedRange === 'singleMonth') && (
+                  <div className="form-group col-md-6">
+                    <label htmlFor="date-select">
+                      <I18n>Date</I18n>
+                    </label>
+                    <input
+                      type="date"
+                      id="date-select"
                       className="form-control"
-                      value={selectedRange}
+                      value={selectedDate}
                       onChange={e => {
-                        setSelectedRange(e.target.value);
-                        setSelectedDate(
-                          moment()
-                            .add(-1, 'day')
-                            .format(DATE_FORMAT),
-                        );
-                        clearMetrics();
+                        const date = moment(e.target.value);
+                        const newDate =
+                          date.isValid() && selectedRange === 'singleMonth'
+                            ? moment(e.target.value)
+                                .startOf('month')
+                                .format(DATE_FORMAT)
+                            : e.target.value;
+                        setSelectedDate(newDate);
+                        if (selectedDate !== newDate) {
+                          clearMetrics();
+                        }
                       }}
-                    >
-                      {mode === 'summary' && (
-                        <option value="singleDay">
-                          {translate('Single Day')}
-                        </option>
-                      )}
-                      <option value="last7Days">
-                        {translate('Last 7 Days')}
-                      </option>
-                      <option value="last30Days">
-                        {translate('Last 30 Days')}
-                      </option>
-                      <option value="monthToDate">
-                        {translate('Month to Date')}
-                      </option>
-                      {mode === 'trend' && (
-                        <option value="last12Months">
-                          {translate('Last 12 Months')}
-                        </option>
-                      )}
-                      {mode === 'trend' && (
-                        <option value="yearToDate">
-                          {translate('Year To Date')}
-                        </option>
-                      )}
-                    </select>
-                  )}
-                />
+                    />
+                  </div>
+                )}
               </div>
-              {selectedRange === 'singleDay' && (
+            ) : (
+              <div className="row">
                 <div className="form-group col-md-6">
                   <label htmlFor="date-select">
                     <I18n>Date</I18n>
@@ -220,12 +275,11 @@ export const TechBarMetricsComponent = ({
                     value={selectedDate}
                     onChange={e => {
                       setSelectedDate(e.target.value);
-                      clearMetrics();
                     }}
                   />
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
           {mode === 'summary' && (
             <div>
@@ -242,7 +296,13 @@ export const TechBarMetricsComponent = ({
                 schedulerId={schedulerId}
                 eventType={eventType}
                 techBars={techBars}
-                dates={dateRanges[selectedRange] || [selectedDate]}
+                dates={
+                  dateRanges[selectedRange]
+                    ? dateRanges[selectedRange]
+                    : selectedRange === 'singleMonth'
+                      ? buildDateRangeForSelectedMonth(selectedDate)
+                      : [selectedDate]
+                }
                 formatDate={date =>
                   moment(date).format(
                     selectedRange === 'last12Months' ||
@@ -251,6 +311,16 @@ export const TechBarMetricsComponent = ({
                       : 'll',
                   )
                 }
+              />
+            </div>
+          )}
+          {mode === 'export' && (
+            <div>
+              <MetricsExport
+                selectedDate={selectedDate}
+                schedulerId={schedulerId}
+                eventType={eventType}
+                techBars={techBars}
               />
             </div>
           )}
@@ -294,6 +364,13 @@ const buildDateRanges = () => {
   };
 };
 
+const buildDateRangeForSelectedMonth = selectedDate => {
+  const month = moment(selectedDate).endOf('month');
+  return month.isValid()
+    ? fillDateArray(month, month.daysInMonth(), 'day', DATE_FORMAT, true)
+    : [null];
+};
+
 export const mapStateToProps = (state, props) => {
   const techBars = selectHasRoleSchedulerAdmin(state)
     ? state.techBar.techBarApp.schedulers
@@ -328,12 +405,17 @@ const handleFetch = ({
   selectedDate,
 }) => () => {
   clearMetrics();
+  const dates = dateRanges[selectedRange]
+    ? dateRanges[selectedRange]
+    : selectedRange === 'singleMonth'
+      ? buildDateRangeForSelectedMonth(selectedDate)
+      : [selectedDate];
   fetchMetrics({
     schedulerIds: schedulerId
       ? [schedulerId]
-      : techBars.map(techBar => techBar.values['Scheduler Id']),
+      : techBars.toJS().map(techBar => techBar.values['Id']),
     monthly: selectedRange === 'last12Months' || selectedRange === 'yearToDate',
-    dates: dateRanges[selectedRange] || [selectedDate],
+    dates,
   });
 };
 
@@ -343,7 +425,7 @@ export const TechBarMetrics = compose(
     mapDispatchToProps,
   ),
   withProps(({ match: { params: { mode = 'summary' } } }) => ({
-    mode: ['summary', 'trend'].includes(mode) ? mode : 'summary',
+    mode: ['summary', 'trend', 'export'].includes(mode) ? mode : 'summary',
   })),
   withState('schedulerId', 'setSchedulerId', ''),
   withState('eventType', 'setEventType', ''),

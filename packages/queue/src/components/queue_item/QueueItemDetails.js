@@ -153,8 +153,8 @@ export const QueueItemDetails = ({
         )}
         {queueLink(queueItem, kappSlug) && (
           <Link
-            to={`item/${queueItem.parent.id}`}
-            className="btn btn-primary btn-inverse request-button"
+            to={`/item/${queueItem.parent.id}`}
+            className="btn btn-inverse request-button"
           >
             <I18n>View Parent</I18n>
           </Link>
