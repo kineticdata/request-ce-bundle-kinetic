@@ -608,7 +608,6 @@ export const MetricsSummary = compose(
       summary.appointments.scheduled + summary.appointments.walkins;
     summary.feedback.total =
       summary.feedback.positive + summary.feedback.negative;
-    console.log(summary);
     return { summary };
   }),
 )(MetricsSummaryComponent);

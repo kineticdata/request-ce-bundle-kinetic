@@ -33,7 +33,6 @@ export const ModalForm = ({
             <span>
               <I18n>{form.title}</I18n>
             </span>
-            <span />
           </h4>
         </div>
         <ModalBody>

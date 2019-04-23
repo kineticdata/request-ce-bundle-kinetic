@@ -24,7 +24,6 @@ export const ViewDiscussionsModal = ({
         <span>
           <I18n>{discussionId ? 'View Discussion' : 'View Discussions'}</I18n>
         </span>
-        <span />
       </h4>
     </div>
     <ModalBody className={modalBodyClassName}>

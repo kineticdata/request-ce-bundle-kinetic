@@ -291,6 +291,30 @@
         }
       }
     }
+
+    &--tech-bar-metrics {
+      .export-title {
+        justify-content: flex-start;
+        align-items: baseline;
+        small {
+          margin-left: 0.25rem;
+        }
+      }
+      .export-buttons {
+        display: flex;
+        justify-content: space-between;
+
+        button {
+          flex: 1 1 auto;
+          &:not(:first-child) {
+            margin-left: 0.5rem;
+          }
+          &:not(:last-child) {
+            margin-right: 0.5rem;
+          }
+        }
+      }
+    }
   }
 
   // Card Wrapper

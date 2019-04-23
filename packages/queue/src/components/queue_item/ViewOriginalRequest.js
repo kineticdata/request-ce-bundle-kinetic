@@ -14,7 +14,7 @@ export const ViewOriginalRequestComponent = ({
   originId && (
     <div>
       <button
-        className="btn btn-primary btn-inverse request-button"
+        className="btn btn-inverse request-button"
         type="button"
         onClick={toggleOpen}
       >
@@ -29,7 +29,6 @@ export const ViewOriginalRequestComponent = ({
             <span>
               <I18n>Original Request</I18n>
             </span>
-            <span />
           </h4>
         </div>
         <ModalBody>

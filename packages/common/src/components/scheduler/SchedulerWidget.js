@@ -136,6 +136,7 @@ const SchedulerWidgetComponent = ({
         'Time Interval': timeInterval,
         'Reservation Timeout': reservationTimeout,
         Timezone: timezone = moment.tz.guess(),
+        'Cancellation Reasons': cancellationReasons = [],
       },
     },
     minAvailableDate,
@@ -165,6 +166,10 @@ const SchedulerWidgetComponent = ({
   cancelled,
   scheduleEvent,
   cancelEvent,
+  cancelReason,
+  setCancelReason,
+  cancelReasonOther,
+  setCancelReasonOther,
 }) => {
   const interval = parseInt(timeInterval, 10);
   const timeout = parseInt(reservationTimeout, 10);
@@ -660,13 +665,71 @@ const SchedulerWidgetComponent = ({
                 <I18n>Close</I18n>
               </button>
               <span>
-                <I18n>Confirm</I18n>
+                <I18n>Confirm Cancel</I18n>
               </span>
             </h4>
           </div>
           <ModalBody className="modal-body--padding">
             <div className="body-content">
-              <I18n>Are you sure you want to cancel this event?</I18n>
+              {cancellationReasons.length > 0 ? (
+                <I18n>Why are you canceling?</I18n>
+              ) : (
+                <I18n>Are you sure you want to cancel this event?</I18n>
+              )}
+              {cancellationReasons.length > 0 && (
+                <Fragment>
+                  <div className="form-group">
+                    {cancellationReasons.map((reason, i) => (
+                      <label htmlFor={`cancel-reason-${i}`} key={reason}>
+                        <input
+                          type="radio"
+                          name="cancel-reason"
+                          id={`cancel-reason-${i}`}
+                          value={reason}
+                          onChange={e => {
+                            setCancelReason(e.target.value);
+                            setCancelReasonOther('');
+                          }}
+                        />
+                        <span>
+                          {' '}
+                          <I18n>{reason}</I18n>
+                        </span>
+                      </label>
+                    ))}
+                    <label htmlFor="cancel-reason-other">
+                      <input
+                        type="radio"
+                        name="cancel-reason"
+                        id="cancel-reason-other"
+                        value="Other"
+                        onChange={e => setCancelReason(e.target.value)}
+                      />
+                      <span>
+                        {' '}
+                        <I18n>Other</I18n>
+                      </span>
+                    </label>
+                  </div>
+                  {cancelReason === 'Other' && (
+                    <div className="form-group">
+                      <I18n
+                        render={translate => (
+                          <textarea
+                            name="cancel-reason-other-value"
+                            id="cancel-reason-other-value"
+                            className="form-control"
+                            rows="2"
+                            value={cancelReasonOther}
+                            onChange={e => setCancelReasonOther(e.target.value)}
+                            placeholder={translate('Please enter a reason')}
+                          />
+                        )}
+                      />
+                    </div>
+                  )}
+                </Fragment>
+              )}
             </div>
           </ModalBody>
           <ModalFooter>
@@ -674,6 +737,11 @@ const SchedulerWidgetComponent = ({
               type="button"
               className="btn btn-primary"
               onClick={cancelEvent}
+              disabled={
+                cancellationReasons.length > 0 &&
+                (!cancelReason ||
+                  (cancelReason === 'Other' && !cancelReasonOther.trim()))
+              }
             >
               <I18n>Cancel Event</I18n>
             </button>
@@ -1029,12 +1097,20 @@ const cancelEvent = ({
   appointmentRequestId,
   toggleCancel,
   setCancelled,
+  cancelReason,
+  cancelReasonOther,
 }) => () => {
   deleteScheduledEvent(event.id).then(() => {
     createScheduledEventAction({
       Action: 'Cancel',
       'Scheduled Event Id': event.id,
       'Request Id': appointmentRequestId,
+      'Data Map': !!cancelReason
+        ? JSON.stringify({
+            'Cancellation Reason': cancelReason,
+            'Cancellation Reason Other': cancelReasonOther,
+          })
+        : undefined,
     }).then(({ serverError: se, errors: e }) => {
       if (se || e) {
         dispatch(
@@ -1394,9 +1470,15 @@ const toggleCancel = ({
   dispatch,
   stateData: { scheduling },
   setOpenCancel,
+  setCancelReason,
+  setCancelReasonOther,
 }) => open => {
   if (!scheduling) {
     setOpenCancel(open);
+    if (!open) {
+      setCancelReason('');
+      setCancelReasonOther('');
+    }
   }
 };
 
@@ -1426,6 +1508,8 @@ export const SchedulerWidget = compose(
   withState('cancelled', 'setCancelled', false),
   withState('openModal', 'setOpenModal', false),
   withState('openCancel', 'setOpenCancel', false),
+  withState('cancelReason', 'setCancelReason', ''),
+  withState('cancelReasonOther', 'setCancelReasonOther', ''),
   withState('openCalendar', 'setOpenCalendar', false),
   withReducer(
     'stateData',
