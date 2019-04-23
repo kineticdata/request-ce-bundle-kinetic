@@ -10,10 +10,9 @@ export const selectDiscussionsEnabled = state =>
 
 // Get Current Kapp
 export const selectCurrentKapp = state =>
-  !state.app.loading && state.app.config.kappSlug
-    ? state.app.kapps.find(kapp => kapp.slug === state.app.config.kappSlug) ||
-      null
+  !state.app.loading && state.app.kappSlug
+    ? state.app.kapps.find(kapp => kapp.slug === state.app.kappSlug) || null
     : null;
 
 // Get Current Kapp Slug
-export const selectCurrentKappSlug = state => state.app.config.kappSlug;
+export const selectCurrentKappSlug = state => state.app.kappSlug;

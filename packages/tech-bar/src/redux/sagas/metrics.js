@@ -6,7 +6,7 @@ import isarray from 'isarray';
 export function* fetchMetricsSaga({
   payload: { schedulerIds, monthly = false, dates },
 }) {
-  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const kappSlug = yield select(state => state.app.kappSlug);
   const searchBuilder = new SubmissionSearch()
     .limit(1000)
     .include('details,values')

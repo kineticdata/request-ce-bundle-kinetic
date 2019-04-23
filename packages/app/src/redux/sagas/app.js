@@ -55,12 +55,12 @@ export function* fetchAppTask({ payload }) {
       errors,
       coreVersion,
     } = yield select(state => ({
-      errors: state.app.app.errors,
+      errors: state.app.errors,
       currentRoute: state.router.location.pathname,
-      space: state.app.app.space,
-      profile: state.app.app.profile,
-      kapps: state.app.app.kapps,
-      coreVersion: state.app.app.coreVersion,
+      space: state.app.space,
+      profile: state.app.profile,
+      kapps: state.app.kapps,
+      coreVersion: state.app.coreVersion,
     }));
     // Make sure there were no errors fetching metadata
     if (errors.isEmpty()) {

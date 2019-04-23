@@ -24,7 +24,7 @@ export class QueueApp extends Component {
     // otherwise it will be null. We call it here to make the API of this
     // embeddable app a little nicer (history can be passed to the component
     // rather than calling an additional `configure` function).
-    configureStore(props.history, props.actions);
+    configureStore(props.history);
     // Listen to the local store to see if the embedded app is ready to be
     // re-rendered. Currently this just means that the required props have been
     // synced into the local store.

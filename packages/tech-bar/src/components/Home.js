@@ -67,8 +67,8 @@ export const HomeComponent = ({
                 {selectedTechBar
                   ? selectedTechBar.values['Name']
                   : kapp
-                  ? kapp.name
-                  : 'Tech Bar'}
+                    ? kapp.name
+                    : 'Tech Bar'}
               </I18n>
             </div>
             <div className="subtitle">
@@ -307,16 +307,17 @@ export const HomeComponent = ({
               </Link>
             </h4>
           </div>
-          {useLocationServices && !userLocation && (
-            <div className="modal-header">
-              <div className="px-3 py-1 text-center">
-                <button className="btn btn-link" onClick={getUserLocation}>
-                  <span className="fa fa-fw fa-map-marker" />{' '}
-                  <I18n>use my current location</I18n>
-                </button>
+          {useLocationServices &&
+            !userLocation && (
+              <div className="modal-header">
+                <div className="px-3 py-1 text-center">
+                  <button className="btn btn-link" onClick={getUserLocation}>
+                    <span className="fa fa-fw fa-map-marker" />{' '}
+                    <I18n>use my current location</I18n>
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
           <ModalBody>
             <ul>
               {techBars.map(techBar => (
@@ -384,7 +385,7 @@ export const mapStateToProps = (state, props) => {
     upcomingErrors: state.techBar.appointments.upcoming.errors,
     upcomingAppointments: state.techBar.appointments.upcoming.data,
     profile: state.app.profile,
-    kappSlug: state.app.config.kappSlug,
+    kappSlug: state.app.kappSlug,
     waitingUsers:
       state.techBar.appointments.overview.count +
       state.techBar.walkIns.overview.count,

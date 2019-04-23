@@ -9,7 +9,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import { fetchKapp, updateKapp } from '@kineticdata/react';
 import { I18n } from '../../../../app/src/I18nProvider';
-import { context, actions as appActions } from '../../redux/store';
+import { context } from '../../redux/store';
 
 export const SettingsComponent = ({
   attributesMap,
@@ -328,11 +328,11 @@ const mapStateToProps = state => ({
   currentKapp: state.app.kapp,
   queueSettings: state.queueSettings,
   forms: state.forms.data,
+  reloadApp: state.app.actions.refreshApp,
 });
 
 const mapDispatchToProps = {
   ...toastActions,
-  reloadApp: appActions.refreshApp,
 };
 
 export const QueueSettings = compose(

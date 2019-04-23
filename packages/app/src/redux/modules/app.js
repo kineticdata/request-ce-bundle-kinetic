@@ -1,6 +1,8 @@
 import { Record, List } from 'immutable';
 import moment from 'moment';
 import * as Utils from 'common/src/utils';
+import { LOCATION_CHANGE } from 'connected-react-router';
+import { matchPath } from 'react-router';
 
 const { namespace, noPayload, withPayload } = Utils;
 const MODULE_NAME = 'app';
@@ -35,7 +37,7 @@ export const types = {
     'FETCH_LOCALE_META_FAILURE',
   ),
   SET_USER_LOCALE: namespace(MODULE_NAME, 'SET_USER_LOCALE'),
-  SET_KAPP_SLUG: namespace(MODULE_NAME, 'SET_USER_LOCALE'),
+  SET_KAPP_SLUG: namespace(MODULE_NAME, 'SET_KAPP_SLUG'),
   SET_CORE_VERSION: namespace(MODULE_NAME, 'SET_CORE_VERSION'),
 };
 
@@ -71,7 +73,7 @@ export const State = Record({
   timezones: null,
   locale: moment.locale(),
   space: null,
-  kapps: null,
+  kapps: List(),
   profile: null,
   errors: List(),
   kappSlug: null,
@@ -112,6 +114,10 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('kappSlug', payload);
     case types.SET_CORE_VERSION:
       return state.set('coreVersion', payload);
+    case LOCATION_CHANGE:
+      const path = '/kapps/:kappSlug';
+      const match = matchPath(payload.location.pathname, { path });
+      return state.set('kappSlug', match && match.params.kappSlug);
     default:
       return state;
   }

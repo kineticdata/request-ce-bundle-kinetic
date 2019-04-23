@@ -30,7 +30,7 @@ export function* fetchAppSettingsSaga() {
   settingsQuery.limit('1000');
   settingsQuery.index('values[Scheduler Id]:UNIQUE');
 
-  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const kappSlug = yield select(state => state.app.kappSlug);
 
   const [
     { submissions: schedulers, serverError: schedulersServerError },

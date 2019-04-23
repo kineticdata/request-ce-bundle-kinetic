@@ -118,7 +118,7 @@ export const handleCreated = props => response => {
 
 export const mapStateToProps = (state, { match: { params } }) => {
   return {
-    kappSlug: state.app.config.kappSlug,
+    kappSlug: state.app.kappSlug,
     techBar: state.techBar.techBarApp.schedulers.find(
       scheduler => scheduler.values['Id'] === params.techBarId,
     ),

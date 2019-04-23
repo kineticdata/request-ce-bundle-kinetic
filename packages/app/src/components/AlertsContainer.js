@@ -4,8 +4,8 @@ import { Alerts } from './Alerts';
 import { actions } from '../redux/modules/alerts';
 
 export const mapStateToProps = state => ({
-  alerts: state.app.alerts.data,
-  error: state.app.alerts.error,
+  alerts: state.alerts.data,
+  error: state.alerts.error,
   isSpaceAdmin: state.app.profile.spaceAdmin,
 });
 

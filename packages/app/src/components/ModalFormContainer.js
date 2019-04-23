@@ -4,8 +4,8 @@ import { ModalForm } from './ModalForm';
 import { actions } from '../redux/modules/modalForm';
 
 export const mapStateToProps = state => ({
-  form: state.common.modalForm.form,
-  isCompleted: state.common.modalForm.formIsCompleted,
+  form: state.modalForm.form,
+  isCompleted: state.modalForm.formIsCompleted,
 });
 
 const mapDispatchToProps = {

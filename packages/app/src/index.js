@@ -31,7 +31,7 @@ const history = createHashHistory();
 // Create the redux store with the configureStore helper found in redux/store.js
 export const store = configureStore(history);
 
-configure(() => store.getState().app.auth.token);
+configure(() => store.getState().auth.token);
 
 const authInterceptor = new AuthInterceptor(
   store,

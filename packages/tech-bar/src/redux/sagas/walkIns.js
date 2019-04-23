@@ -26,7 +26,7 @@ export function* fetchWalkInSaga({ payload }) {
 }
 
 export function* fetchTodayWalkInsSaga({ payload: { schedulerId, status } }) {
-  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const kappSlug = yield select(state => state.app.kappSlug);
   const searchBuilder = new SubmissionSearch()
     .limit(1000)
     .include('details,values')
@@ -60,7 +60,7 @@ export function* fetchTodayWalkInsSaga({ payload: { schedulerId, status } }) {
 }
 
 export function* fetchWalkInsOverviewSaga({ payload: { id } }) {
-  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const kappSlug = yield select(state => state.app.kappSlug);
   const { records, serverError } = yield call(CoreAPI.fetchBridgedResource, {
     kappSlug,
     formSlug: 'bridged-resources',

@@ -19,7 +19,7 @@ const DatastoreError = () => (
     <I18n>Error loading Datastore</I18n>
   </h1>
 );
-const DatastoreVersionError = ({ version }) => (
+const DatastoreVersionError = ({ coreVersion }) => (
   <div className="page-panel page-panel--scrollable">
     <div className="page-title">
       <div className="page-title__wrapper">
@@ -39,15 +39,20 @@ const DatastoreVersionError = ({ version }) => (
       </div>
     </div>
     <p>
-      {`You are currently running Kinetic CE ${version.version}. Datastore
+      {`You are currently running Kinetic CE ${coreVersion}. Datastore
       requires Kinetic CE ${MINIMUM_CE_VERSION} or greater.`}
     </p>
   </div>
 );
 
-export const DatastoreRouter = ({ match, loading, validVersion, version }) =>
+export const DatastoreRouter = ({
+  match,
+  loading,
+  validVersion,
+  coreVersion,
+}) =>
   !validVersion ? (
-    <DatastoreVersionError version={version} />
+    <DatastoreVersionError version={coreVersion} />
   ) : (
     !loading && (
       <Router>
@@ -65,9 +70,9 @@ export const DatastoreRouter = ({ match, loading, validVersion, version }) =>
 
 export const mapStateToProps = state => ({
   loading: state.settingsDatastore.loading,
-  version: state.app.version,
+  version: state.app.coreVersion,
   validVersion: semver.satisfies(
-    semver.coerce(state.app.version),
+    semver.coerce(state.app.coreVersion),
     `>=${MINIMUM_CE_VERSION}`,
   ),
 });

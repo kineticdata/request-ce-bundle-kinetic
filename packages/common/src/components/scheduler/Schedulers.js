@@ -172,9 +172,9 @@ export const SchedulersRouter = ({
   );
 
 export const mapStateToProps = state => ({
-  version: state.app.config.version,
+  version: state.app.version,
   validVersion: semver.satisfies(
-    semver.coerce(state.app.config.version),
+    semver.coerce(state.app.version),
     `>=${MINIMUM_CE_VERSION}`,
   ),
   isSchedulerAdmin: selectHasRoleSchedulerAdmin(state),

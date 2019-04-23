@@ -7,7 +7,6 @@ import {
   deleteUser,
 } from '@kineticdata/react';
 
-import { actions as appActions } from 'space/src/redux/store';
 import { types, actions } from '../modules/settingsUsers';
 import { actions as errorActions } from '../modules/errors';
 
@@ -38,6 +37,7 @@ export function* updateUserSaga({ payload }) {
   } else {
     const username = yield select(state => state.app.profile.username);
     if (username === user.username) {
+      const appActions = yield select(state => state.app.actions);
       yield put(appActions.refreshApp());
     }
     yield put(actions.setUser(user));

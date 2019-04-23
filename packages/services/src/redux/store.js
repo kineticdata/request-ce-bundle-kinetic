@@ -7,13 +7,10 @@ import saga from './sagas';
 
 export let store = null;
 export let history = null;
-export let actions = null;
 
-export const configureStore = (hashHistory, appActions) => {
-  if (!store && !history && !actions) {
+export const configureStore = hashHistory => {
+  if (!store && !history) {
     console.log('Configuring services package redux store');
-
-    actions = appActions;
 
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
       ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ name: 'SERVICES' })

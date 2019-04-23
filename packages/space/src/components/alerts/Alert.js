@@ -4,9 +4,9 @@ import { compose, withState, withHandlers } from 'recompose';
 import { Link } from '@reach/router';
 import { PopConfirm } from '../shared/PopConfirm';
 import { Button } from 'reactstrap';
-import { actions as appActions } from '../../redux/modules/spaceApp';
 import { context } from '../../redux/store';
 import { I18n } from '../../../../app/src/I18nProvider';
+import { actions } from '../../redux/modules/alerts';
 
 const AlertComponent = ({
   alert,
@@ -75,7 +75,7 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = {
-  deleteAlert: appActions.deleteAlert,
+  deleteAlert: actions.deleteAlert,
 };
 
 export const Alert = compose(

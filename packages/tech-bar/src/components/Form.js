@@ -137,7 +137,7 @@ export const handleCreated = props => response => {
 };
 
 export const mapStateToProps = (state, { match: { params } }) => ({
-  kappSlug: state.app.config.kappSlug,
+  kappSlug: state.app.kappSlug,
   forms: state.techBar.techBarApp.forms,
   values: valuesFromQueryParams(state.router.location.search),
 });

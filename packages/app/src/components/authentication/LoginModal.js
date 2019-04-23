@@ -145,7 +145,7 @@ export const LoginModalComponent = props =>
   );
 
 export const mapStateToProps = state => ({
-  showing: state.app.auth.modalLogin,
+  showing: state.auth.modalLogin,
 });
 
 const mapDispatchToProps = {

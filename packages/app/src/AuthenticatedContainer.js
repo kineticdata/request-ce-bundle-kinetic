@@ -147,8 +147,8 @@ const mapStateToProps = state => ({
   location: state.router.location,
   pathname: state.router.location.pathname,
   isPublic: state.router.location.search.includes('public'),
-  token: state.app.auth.token,
-  destinationRoute: state.app.auth.destinationRoute,
+  token: state.auth.token,
+  destinationRoute: state.auth.destinationRoute,
   invitationToken: parse(state.router.location.search).invitationToken,
   invitationEmail: parse(state.router.location.search).email || '',
 });

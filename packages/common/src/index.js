@@ -2,10 +2,6 @@ import { Avatar } from './components/Avatar';
 import { ProfileCard } from './components/ProfileCard';
 import { ToastsContainer } from './components/ToastsContainer';
 import { ModalFormContainer } from './components/ModalFormContainer';
-import { KappLink } from './components/KappLink';
-import { KappNavLink } from './components/KappNavLink';
-import { KappRedirect } from './components/KappRedirect';
-import { KappRoute } from './components/KappRoute';
 import { TimeAgo } from './components/TimeAgo';
 import { Moment, importLocale } from './components/Moment';
 import { Icon } from './components/Icon';
@@ -50,10 +46,6 @@ import * as TaskActions from './helpers/taskActions';
 export {
   Avatar,
   ProfileCard,
-  KappLink,
-  KappNavLink,
-  KappRedirect,
-  KappRoute,
   ToastsContainer,
   ModalFormContainer,
   TimeAgo,

@@ -21,10 +21,11 @@ export const configureStore = history => {
   // Create the redux store using reducers imported from our 'redux/reducers'
   // module.  Note that we also have some connected react router and redux form
   // setup going on here as well.
+
   const store = createStore(
     connectRouter(history)(
       combineReducers({
-        app: combineReducers(reducers),
+        ...reducers,
         common: combineReducers(commonReducers),
         techBar: combineReducers(techBarReducers),
       }),

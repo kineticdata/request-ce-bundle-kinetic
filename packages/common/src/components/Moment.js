@@ -125,7 +125,7 @@ const format = locale => (timestamp, format) => {
 };
 
 export const mapStateToProps = state => ({
-  locale: state.app.config.locale,
+  locale: state.app.locale,
 });
 
 export const Moment = connect(mapStateToProps)(MomentComponent);

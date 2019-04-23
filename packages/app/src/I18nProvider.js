@@ -99,12 +99,12 @@ export class I18nProvider extends React.Component {
 }
 
 export const ConnectedI18nProvider = connect(state => ({
-  locale: state.app.config.locale,
-  version: state.app.config.version,
+  locale: state.app.locale,
+  version: state.app.coreVersion,
   validVersion:
-    state.app.config.version &&
+    state.app.coreVersion &&
     semver.satisfies(
-      semver.coerce(state.app.config.version),
+      semver.coerce(state.app.coreVersion),
       `>=${MINIMUM_CE_VERSION}`,
     ),
 }))(({ children, ...props }) => (

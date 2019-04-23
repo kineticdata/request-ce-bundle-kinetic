@@ -26,7 +26,7 @@ export const PageTitleComponent = ({ space, kapp, parts }) => {
 
 export const mapStateToProps = state => ({
   space: state.app.space || 'Home',
-  kapp: state.app.kapps.find(kapp => kapp.slug === state.app.config.kappSlug),
+  kapp: state.app.kapps.find(kapp => kapp.slug === state.app.kappSlug),
 });
 
 export const mapDispatchToProps = {};

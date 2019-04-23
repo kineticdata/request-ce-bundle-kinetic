@@ -7,7 +7,7 @@ import { toastActions, PageTitle, AttributeSelectors } from 'common';
 import { fetchKapp, updateKapp } from '@kineticdata/react';
 import isarray from 'isarray';
 import { I18n } from '../../../../../app/src/I18nProvider';
-import { context, actions as appActions } from '../../../redux/store';
+import { context } from '../../../redux/store';
 
 export const SettingsComponent = ({
   attributesMap,
@@ -405,11 +405,11 @@ const mapStateToProps = state => ({
   servicesSettings: state.servicesSettings,
   forms: state.forms.data,
   appLocation: state.app.location,
+  reloadApp: state.app.actions.refreshApp,
 });
 
 const mapDispatchToProps = {
   ...toastActions,
-  reloadApp: appActions.refreshApp,
 };
 
 export const ServicesSettings = compose(

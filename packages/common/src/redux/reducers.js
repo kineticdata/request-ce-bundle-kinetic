@@ -1,4 +1,3 @@
-import { reducer as modalForm } from './modules/modalForm';
 import { reducer as schedulers } from './modules/schedulers';
 import { reducer as searchHistory } from './modules/searchHistory';
 import { reducer as discussions } from './modules/discussions';
@@ -10,7 +9,6 @@ export default {
   discussions,
   discussionsDetails,
   discussionsList,
-  modalForm,
   schedulers,
   searchHistory,
   toasts,

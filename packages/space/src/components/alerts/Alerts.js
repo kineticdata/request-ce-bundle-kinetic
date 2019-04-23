@@ -9,7 +9,7 @@ import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { Alert } from './Alert';
 import { I18n } from '../../../../app/src/I18nProvider';
 import { context } from '../../redux/store';
-import { actions as appActions } from '../../redux/modules/spaceApp';
+import { actions } from '../../redux/modules/alerts';
 
 const WallyEmptyMessage = ({ canEdit }) => {
   return (
@@ -139,7 +139,7 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = {
-  fetchAlerts: appActions.fetchAlerts,
+  fetchAlerts: actions.fetchAlerts,
 };
 
 export const Alerts = compose(

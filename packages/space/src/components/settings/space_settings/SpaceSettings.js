@@ -5,7 +5,7 @@ import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { fetchSpace, updateSpace } from '@kineticdata/react';
 
-import { context, actions as appActions } from '../../../redux/store';
+import { context } from '../../../redux/store';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
 import { toastActions, PageTitle, AttributeSelectors } from 'common';
@@ -491,10 +491,10 @@ const isFormDisabled = ({
 const mapStateToProps = state => ({
   locales: state.app.locales,
   timezones: state.app.timezones,
+  reloadApp: state.app.actions.refreshApp,
 });
 
 const mapDispatchToProps = {
-  reloadApp: appActions.refreshApp,
   ...toastActions,
 };
 

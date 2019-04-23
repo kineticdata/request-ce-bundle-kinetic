@@ -39,21 +39,14 @@ export const AppComponent = props =>
         )}
         <props.AppProvider
           appState={{
-            space: props.space,
-            kapp: props.kapp,
-            kapps: props.kapps,
-            profile: props.profile,
-            kappSlug: props.kappSlug,
-            layoutSize: props.layoutSize,
-            version: props.version,
+            ...props.app.toJS(),
             location: `${
               props.kappSlug === null ? '' : `/kapps/${props.kappSlug}`
             }`,
-            locales: props.locales,
-            timezones: props.timezones,
-          }}
-          actions={{
-            refreshApp: props.refreshApp,
+            actions: {
+              refreshApp: props.refreshApp,
+            },
+            layoutSize: props.layoutSize,
           }}
           history={props.history}
           render={({ main, sidebar, header }) => (
@@ -89,18 +82,19 @@ export const AppComponent = props =>
 export const mapStateToProps = state => ({
   loading: state.app.loading,
   kapps: state.app.kapps,
-  sidebarOpen: state.app.layout.sidebarOpen,
-  suppressedSidebarOpen: state.app.layout.suppressedSidebarOpen,
-  layoutSize: state.app.layout.size,
-  kappSlug: state.app.app.kappSlug,
+  sidebarOpen: state.layout.sidebarOpen,
+  suppressedSidebarOpen: state.layout.suppressedSidebarOpen,
+  layoutSize: state.layout.size,
+  kappSlug: state.app.kappSlug,
   kapp: selectCurrentKapp(state),
   pathname: state.router.location.pathname,
-  locale: state.app.app.locale,
+  locale: state.app.locale,
   profile: state.app.profile,
   space: state.app.space,
-  locales: state.app.app.locales,
-  timezones: state.app.app.timezones,
-  version: state.app.app.coreVersion,
+  locales: state.app.locales,
+  timezones: state.app.timezones,
+  version: state.app.coreVersion,
+  app: state.app,
 });
 export const mapDispatchToProps = {
   loadApp: actions.fetchApp,

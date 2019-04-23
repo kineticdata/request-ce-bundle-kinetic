@@ -26,7 +26,7 @@ describe('selectors', () => {
     });
 
     it('returns null when there is no current kapp', () => {
-      state.app.config.kappSlug = null;
+      state.app.kappSlug = null;
       expect(selectCurrentKapp(state)).toBeNull();
     });
   });

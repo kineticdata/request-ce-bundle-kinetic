@@ -49,9 +49,7 @@ export const FormListComponent = ({ forms, loading, kapp }) =>
                 path: `/forms/${form.slug}`,
                 key: form.slug,
               }))
-              .map(props => (
-                <FormCard {...props} />
-              ))}
+              .map(props => <FormCard {...props} />)}
           </div>
         ) : (
           <WallyEmptyMessage />
@@ -63,8 +61,8 @@ export const FormListComponent = ({ forms, loading, kapp }) =>
 const mapStateToProps = state => ({
   loading: state.spaceForms.loading,
   forms: state.spaceForms.data,
-  kappSlug: state.app.config.kappSlug,
-  kapp: state.app.kapps.find(kapp => kapp.slug === state.app.config.kappSlug),
+  kappSlug: state.app.kappSlug,
+  kapp: state.app.kapps.find(kapp => kapp.slug === state.app.kappSlug),
 });
 
 const mapDispatchToProps = {

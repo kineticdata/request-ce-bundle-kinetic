@@ -1,10 +1,10 @@
 import { Utils } from 'common';
 
 const selectAppIsReady = state =>
-  state.app.app.errors.isEmpty() &&
-  state.app.app.kapps !== null &&
-  state.app.app.space !== null &&
-  state.app.app.profile !== null
+  state.app.errors.isEmpty() &&
+  state.app.kapps !== null &&
+  state.app.space !== null &&
+  state.app.profile !== null
     ? true
     : false;
 
@@ -20,9 +20,8 @@ const kappBySpaceAttribute = (state, slugAttributeName) =>
 
 // Kapp Selectors
 export const selectCurrentKapp = state =>
-  !state.app.loading && state.app.config.kappSlug
-    ? state.app.kapps.find(kapp => kapp.slug === state.app.config.kappSlug) ||
-      null
+  !state.app.loading && state.app.kappSlug
+    ? state.app.kapps.find(kapp => kapp.slug === state.app.kappSlug) || null
     : null;
 
 export const selectAdminKapp = state =>
