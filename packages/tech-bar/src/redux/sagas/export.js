@@ -1,6 +1,7 @@
 import { takeEvery, all, put, call, select } from 'redux-saga/effects';
 import { CoreAPI } from 'react-kinetic-core';
 import { actions, types } from '../modules/export';
+import isarray from 'isarray';
 
 export function* fetchSubmissionsSaga({
   payload: {
@@ -23,27 +24,35 @@ export function* fetchSubmissionsSaga({
   yield call(fetchSubmissions, {
     kappSlug,
     formSlug,
-    searchers: schedulerIds.map(schedulerId => {
-      if (dateParts.length > 0) {
-        return dateParts.map(datePart =>
-          buildSearcher({
+    searchers: schedulerIds
+      .map(schedulerId => {
+        if (dateParts.length > 0) {
+          return dateParts.map(datePart =>
+            buildSearcher({
+              queryBuilder,
+              schedulerId,
+              eventType,
+              dates: datePart,
+              dateFieldName,
+            }),
+          );
+        } else {
+          return buildSearcher({
             queryBuilder,
             schedulerId,
             eventType,
-            dates: datePart,
+            dates,
             dateFieldName,
-          }),
-        );
-      } else {
-        return buildSearcher({
-          queryBuilder,
-          schedulerId,
-          eventType,
-          dates,
-          dateFieldName,
-        });
-      }
-    }).flat(),
+          });
+        }
+      })
+      .reduce((searchers, query) => {
+        if (isarray(query)) {
+          return [...searchers, ...query];
+        } else {
+          return [...searchers, query];
+        }
+      }, []),
   });
 }
 
