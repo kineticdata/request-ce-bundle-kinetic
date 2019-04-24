@@ -93,14 +93,30 @@ const mapStateToProps = (state, { match: { params } }) => ({
   showHeader: showHeader(state.router.location.search),
   values: valuesFromQueryParams(state.router.location.search),
   isPublic: state.router.location.search.includes('public'),
+  isEmbedded: state.router.location.search.includes('embedded'),
+  isCrossDomain: state.router.location.search.includes('cross_domain'),
 });
 
 export const handleCreated = props => response => {
-  props.push(
-    `/kapps/${props.kappSlug}/submissions/${response.submission.id}${
-      props.isPublic ? '?public' : ''
-    }`,
-  );
+  /*
+   * Only modify the route if the router location does not
+   * contain the embedded & cross_domain parameters. If these
+   * headers are present it is an indication that the form
+   * will implement it's own submitPage() callback function.
+   * This was necessary to support unauthenticated forms inside
+   * of iframes when using Safari. Safari will not send cookies
+   * to a server if they cookie did not originate in a main parent
+   * window request (third party cookies). This includes the
+   * JSESSIONID cookie which is used to validate the submitter
+   * access with an unauthenticated form.
+   */
+  if (!props.isEmbedded && !props.isCrossDomain) {
+    props.push(
+      `/kapps/${props.kappSlug}/submissions/${response.submission.id}${
+        props.isPublic ? '?public' : ''
+      }`,
+    );
+  }
 };
 
 export const handleLoaded = props => form => {
