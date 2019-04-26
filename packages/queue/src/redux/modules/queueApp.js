@@ -222,7 +222,7 @@ export const reducer = (state = State(), { type, payload }) => {
                 }),
               });
             }
-          }),
+          }).sortBy(filter => filter.name),
         )
         .set('myFilters', List(payload.myFilters))
         .set(
