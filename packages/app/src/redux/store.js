@@ -13,7 +13,7 @@ export const configureStore = history => {
   // exist we use the build-in redux 'compose' method.
   // eslint-disable-next-line no-underscore-dangle
   const composeEnhancers =
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ name: 'APP' }) || compose;
   // To enable the Saga Middleware to run we need to first create it.
   const sagaMiddleware = createSagaMiddleware();
   // Create the redux store using reducers imported from our 'redux/reducers'
