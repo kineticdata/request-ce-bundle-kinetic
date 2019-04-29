@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import papaparse from 'papaparse';
 
 import { actions } from '../../../redux/modules/settingsForms';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../../redux/store';
 
 const ExportComponent = ({

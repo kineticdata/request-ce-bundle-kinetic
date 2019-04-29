@@ -4,13 +4,14 @@ import { bundle } from '@kineticdata/react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { PageTitle } from 'common';
 import {
   actions,
   buildFormConfigurationObject,
 } from '../../../redux/modules/settingsForms';
+import { PageTitle } from '../../shared/PageTitle';
+
 import { actions as queueActions } from '../../../redux/modules/settingsQueue';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../../redux/store';
 
 export const TextInput = ({ value, name, setInputs, inputs, className }) => (

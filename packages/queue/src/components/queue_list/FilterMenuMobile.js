@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { FilterMenuContainer } from '../filter_menu/FilterMenuContainer';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 // Define some simple button components just to cleanup the toolbar component.
 const ShortcutButton = props => (

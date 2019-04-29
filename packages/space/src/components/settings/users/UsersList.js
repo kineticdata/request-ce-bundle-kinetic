@@ -6,14 +6,14 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import papaparse from 'papaparse';
 import { fromJS } from 'immutable';
-import { PageTitle } from 'common';
 import downloadjs from 'downloadjs';
+import { PageTitle } from '../../shared/PageTitle';
 
 import { actions } from '../../../redux/modules/settingsUsers';
 import { context } from '../../../redux/store';
 
 import { UsersListItem } from './UsersListItem';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const IsJsonString = str => {
   try {
@@ -171,14 +171,17 @@ const handleChange = props => () => {
               .map(user => {
                 return user
                   .update('allowedIps', val => (val ? val : ''))
-                  .update('attributesMap', val =>
-                    IsJsonString(val) ? fromJS(JSON.parse(val)) : {},
+                  .update(
+                    'attributesMap',
+                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
                   )
-                  .update('profileAttributesMap', val =>
-                    IsJsonString(val) ? fromJS(JSON.parse(val)) : {},
+                  .update(
+                    'profileAttributesMap',
+                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
                   )
-                  .update('memberships', val =>
-                    IsJsonString(val) ? fromJS(JSON.parse(val)) : {},
+                  .update(
+                    'memberships',
+                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
                   );
               })
               .toSet();

@@ -4,19 +4,20 @@ import { connect } from 'react-redux';
 import { push } from 'redux-first-history';
 import { compose, lifecycle } from 'recompose';
 import moment from 'moment';
-import { Constants, Loading, PageTitle } from 'common';
+import { Constants, Loading } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
+import { PageTitle } from '../../shared/PageTitle';
 
 import { actions } from '../../../redux/modules/settingsRobots';
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const getStatusColor = status =>
   status === 'Inactive'
     ? 'status--red'
     : status === 'Expired'
-    ? 'status--yellow'
-    : 'status--green';
+      ? 'status--yellow'
+      : 'status--green';
 
 const getNextExecution = (nextExecutions, robotId) => {
   let nextExecution;
@@ -81,19 +82,20 @@ const RobotsListComponent = ({
             <I18n>Create Robot</I18n>
           </Link>
         </div>
-        {robots.size <= 0 && robotsErrors.length > 0 && (
-          <div className="text-center text-danger">
-            <h1>
-              <I18n>Oops!</I18n>
-            </h1>
-            <h2>
-              <I18n>Robots Not Found</I18n>
-            </h2>
-            {robotsErrors.map(error => (
-              <p className="error-details">{error}</p>
-            ))}
-          </div>
-        )}
+        {robots.size <= 0 &&
+          robotsErrors.length > 0 && (
+            <div className="text-center text-danger">
+              <h1>
+                <I18n>Oops!</I18n>
+              </h1>
+              <h2>
+                <I18n>Robots Not Found</I18n>
+              </h2>
+              {robotsErrors.map(error => (
+                <p className="error-details">{error}</p>
+              ))}
+            </div>
+          )}
         {robots.size > 0 && (
           <table className="table table-sm table-striped table-robots">
             <thead className="header">

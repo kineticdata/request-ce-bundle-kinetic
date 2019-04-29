@@ -11,7 +11,7 @@ import { CoreForm } from '@kineticdata/react';
 import { toastActions } from 'common';
 
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const globals = import('common/globals');
 

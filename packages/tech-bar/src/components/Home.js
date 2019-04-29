@@ -10,14 +10,13 @@ import {
 } from 'recompose';
 import { Modal, ModalBody } from 'reactstrap';
 import {
-  KappLink as Link,
   PageTitle,
   selectCurrentKapp,
-  Moment,
   Constants,
   Utils,
   modalFormActions,
 } from 'common';
+import { Link } from '@reach/router';
 import { actions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
 import {
@@ -28,8 +27,9 @@ import {
   sortTechBarsByDistance,
 } from '../redux/modules/techBarApp';
 import moment from 'moment';
-import { I18n } from '../../../app/src/I18nProvider';
+import { I18n, Moment } from '@kineticdata/react';
 import { DATE_FORMAT, TIME_FORMAT } from '../App';
+import { context } from '../redux/store';
 import heroImage from '../assets/images/tech-bar-hero.jpg';
 
 export const HomeComponent = ({
@@ -371,7 +371,7 @@ export const HomeComponent = ({
 };
 
 export const mapStateToProps = (state, props) => {
-  const techBars = state.techBar.techBarApp.schedulers.filter(
+  const techBars = state.techBarApp.schedulers.filter(
     s => s.values['Status'] === 'Active',
   );
   const useLocationServices = enableLocationServices(techBars);
@@ -383,14 +383,13 @@ export const mapStateToProps = (state, props) => {
             .map(mapTechBarsForDistance(props.userLocation))
             .sort(sortTechBarsByDistance)
         : techBars,
-    loadingUpcoming: state.techBar.appointments.upcoming.loading,
-    upcomingErrors: state.techBar.appointments.upcoming.errors,
-    upcomingAppointments: state.techBar.appointments.upcoming.data,
+    loadingUpcoming: state.appointments.upcoming.loading,
+    upcomingErrors: state.appointments.upcoming.errors,
+    upcomingAppointments: state.appointments.upcoming.data,
     profile: state.app.profile,
     kappSlug: state.app.kappSlug,
     waitingUsers:
-      state.techBar.appointments.overview.count +
-      state.techBar.walkIns.overview.count,
+      state.appointments.overview.count + state.walkIns.overview.count,
     useLocationServices,
   };
 };
@@ -453,6 +452,8 @@ export const Home = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('currentTechBar', 'setCurrentTechBar', ({ techBars }) => {
     const techBarId = sessionStorage.getItem(SESSION_ITEM_CURRENT_TECH_BAR);

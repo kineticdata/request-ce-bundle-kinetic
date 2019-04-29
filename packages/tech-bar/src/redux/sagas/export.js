@@ -1,5 +1,5 @@
 import { takeEvery, all, put, call, select } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
+import { SubmissionSearch, searchSubmissions } from '@kineticdata/react';
 import { actions, types } from '../modules/export';
 
 export function* fetchSubmissionsSaga({
@@ -23,27 +23,29 @@ export function* fetchSubmissionsSaga({
   yield call(fetchSubmissions, {
     kappSlug,
     formSlug,
-    searchers: schedulerIds.map(schedulerId => {
-      if (dateParts.length > 0) {
-        return dateParts.map(datePart =>
-          buildSearcher({
+    searchers: schedulerIds
+      .map(schedulerId => {
+        if (dateParts.length > 0) {
+          return dateParts.map(datePart =>
+            buildSearcher({
+              queryBuilder,
+              schedulerId,
+              eventType,
+              dates: datePart,
+              dateFieldName,
+            }),
+          );
+        } else {
+          return buildSearcher({
             queryBuilder,
             schedulerId,
             eventType,
-            dates: datePart,
+            dates,
             dateFieldName,
-          }),
-        );
-      } else {
-        return buildSearcher({
-          queryBuilder,
-          schedulerId,
-          eventType,
-          dates,
-          dateFieldName,
-        });
-      }
-    }).flat(),
+          });
+        }
+      })
+      .flat(),
   });
 }
 
@@ -54,7 +56,7 @@ const buildSearcher = ({
   dates,
   dateFieldName,
 }) => {
-  const searcher = new CoreAPI.SubmissionSearch();
+  const searcher = new SubmissionSearch();
   searcher.include('details,values,form.fields');
   searcher.limit(1000);
   if (typeof queryBuilder === 'function') {
@@ -87,7 +89,7 @@ const buildSearcher = ({
 function* fetchSubmissions({ kappSlug, formSlug, searchers }) {
   const results = yield all(
     searchers.map(searcher =>
-      call(CoreAPI.searchSubmissions, {
+      call(searchSubmissions, {
         search: searcher.build(),
         kapp: kappSlug,
         form: formSlug,

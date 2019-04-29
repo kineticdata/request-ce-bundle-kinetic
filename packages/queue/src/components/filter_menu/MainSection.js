@@ -3,7 +3,7 @@ import moment from 'moment';
 import { ModalBody } from 'reactstrap';
 import { SORT_OPTIONS } from './SortedBySection';
 import { CreatedByMeContainer } from './CreatedByMe';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const ListSummary = ({ type, list }) =>
   list.size > 0 &&

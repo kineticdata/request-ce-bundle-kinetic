@@ -12,7 +12,7 @@ import { QueueListItemSmall } from '../queue_list/QueueListItem';
 import { AssignmentSelector } from '../shared/AssignmentSelector';
 import { StatusContent } from '../shared/StatusContent';
 import { WallyButtonContainer } from '../shared/WallyButton';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
 
 const nonQueueLink = (queueItem, kappSlug) =>

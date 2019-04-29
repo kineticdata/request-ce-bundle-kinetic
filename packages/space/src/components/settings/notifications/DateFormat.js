@@ -4,12 +4,13 @@ import { compose, withHandlers, withProps } from 'recompose';
 import { Link } from '@reach/router';
 import { CoreForm } from '@kineticdata/react';
 import { push } from 'redux-first-history';
-import { toastActions, PageTitle } from 'common';
+import { toastActions } from 'common';
+import { PageTitle } from '../../shared/PageTitle';
 
 import { NOTIFICATIONS_DATE_FORMAT_FORM_SLUG } from '../../../redux/modules/settingsNotifications';
 import { context } from '../../../redux/store';
 
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const DateFormatComponent = props => (
   <div className="page-container page-container--notifications">

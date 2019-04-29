@@ -9,7 +9,7 @@ import {
   withState,
 } from 'recompose';
 import { Redirect } from '@reach/router';
-import { Loading } from 'common';
+import { Loading, ModalFormContainer } from 'common';
 import { context } from './redux/store';
 
 import { Router } from './ServicesApp';
@@ -29,7 +29,7 @@ import { RequestListContainer } from './components/request_list/RequestListConta
 import { RequestShowContainer } from './components/request/RequestShowContainer';
 import { Settings } from './components/settings/Settings';
 import { displayableFormPredicate } from './utils';
-import { I18n } from '../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 import './assets/styles/master.scss';
 
@@ -66,6 +66,7 @@ export const AppComponent = props => {
     main: (
       <I18n>
         <main className="package-layout package-layout--services">
+          <ModalFormContainer />
           <Router>
             <Settings path="settings/*" />
             <Redirect

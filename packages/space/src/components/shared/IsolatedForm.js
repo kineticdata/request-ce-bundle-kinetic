@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { push } from 'redux-first-history';
 import { compose, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
-import { PageTitle } from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
+import { PageTitle } from '../shared/PageTitle';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start

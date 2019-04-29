@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon } from 'common';
 import { Link } from '@reach/router';
 
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const ServiceCard = ({ path, form }) => (
   <I18n context={`kapps.${form.kapp && form.kapp.slug}.forms.${form.slug}`}>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { getStatus, getStatusClass } from '../../utils';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const StatusPill = props => (
   <span className={`status ${getStatusClass(props.submission)}`}>

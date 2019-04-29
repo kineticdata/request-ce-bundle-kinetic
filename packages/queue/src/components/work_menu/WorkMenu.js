@@ -4,7 +4,7 @@ import { compose, withHandlers, withProps, withState } from 'recompose';
 import { actions } from '../../redux/modules/workMenu';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { CoreForm } from '@kineticdata/react';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
 
 const globals = import('common/globals');

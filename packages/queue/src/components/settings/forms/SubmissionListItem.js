@@ -10,7 +10,7 @@ import {
 import moment from 'moment';
 
 import { Constants } from 'common';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const DiscussionIcon = () => (
   <span className="icon">

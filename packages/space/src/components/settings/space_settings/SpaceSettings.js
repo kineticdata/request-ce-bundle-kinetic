@@ -6,9 +6,11 @@ import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { fetchSpace, updateSpace } from '@kineticdata/react';
 
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
-import { toastActions, PageTitle, AttributeSelectors } from 'common';
+import { toastActions, AttributeSelectors } from 'common';
+
+import { PageTitle } from '../../shared/PageTitle';
 
 export const SettingsComponent = ({
   attributesMap,

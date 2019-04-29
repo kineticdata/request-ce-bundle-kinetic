@@ -4,10 +4,8 @@ import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { Utils } from 'common';
 import reducers from './reducers';
 import commonReducers from 'common/src/redux/reducers';
-import techBarReducers from 'tech-bar/src/redux/reducers';
 import { sagas } from './sagas';
 import commonSagas from 'common/src/redux/sagas';
-import techBarSagas from 'tech-bar/src/redux/sagas';
 
 export const configureStore = history => {
   // To enable the redux dev tools in the browser we need to conditionally use a
@@ -27,7 +25,6 @@ export const configureStore = history => {
       combineReducers({
         ...reducers,
         common: combineReducers(commonReducers),
-        techBar: combineReducers(techBarReducers),
       }),
     ),
     composeEnhancers(
@@ -38,7 +35,7 @@ export const configureStore = history => {
   // After we've created the store using the saga middleware we will start
   // the run it and pass it the saga watcher so that it can start watching
   // for applicable actions.
-  sagaMiddleware.run(Utils.combineSagas([sagas, commonSagas, techBarSagas]));
+  sagaMiddleware.run(Utils.combineSagas([sagas, commonSagas]));
 
   // Enable hot module replacement so that file changes are automatically
   // communicated to the browser when running in development mode

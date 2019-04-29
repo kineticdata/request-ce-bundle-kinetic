@@ -13,7 +13,7 @@ import {
 import { Avatar } from 'common';
 import { actions } from '../../../redux/modules/settingsUsers';
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
   return (

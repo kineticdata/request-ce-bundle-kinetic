@@ -1,9 +1,11 @@
+import React from 'react';
+import { Provider } from 'react-redux';
 import { Avatar } from './components/Avatar';
 import { ProfileCard } from './components/ProfileCard';
 import { ToastsContainer } from './components/ToastsContainer';
 import { ModalFormContainer } from './components/ModalFormContainer';
 import { TimeAgo } from './components/TimeAgo';
-import { Moment, importLocale } from './components/Moment';
+import { importLocale } from './components/Moment';
 import { Icon } from './components/Icon';
 import { Loading } from './components/Loading';
 import { PageTitle } from './components/PageTitle';
@@ -20,6 +22,7 @@ import { DiscussionCard } from './components/discussions/summary/DiscussionCard'
 import { DiscussionsList } from './components/discussions/summary/DiscussionsList';
 import { DiscussionsPanel } from './components/discussions/summary/DiscussionsPanel';
 import { ViewDiscussionsModal } from './components/discussions/summary/ViewDiscussionsModal';
+import { store, context } from './redux/store';
 
 import {
   selectCurrentKapp,
@@ -43,13 +46,19 @@ import * as Constants from './constants';
 import * as AttributeSelectors from './components/attribute_selectors';
 import * as TaskActions from './helpers/taskActions';
 
+const CommonProvider = props => (
+  <Provider store={store} context={context}>
+    {props.children}
+  </Provider>
+);
+
 export {
+  CommonProvider,
   Avatar,
   ProfileCard,
   ToastsContainer,
   ModalFormContainer,
   TimeAgo,
-  Moment,
   importLocale,
   Icon,
   Loading,

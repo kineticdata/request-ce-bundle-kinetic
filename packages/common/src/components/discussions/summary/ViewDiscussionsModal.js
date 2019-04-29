@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import { DiscussionsPanel } from './DiscussionsPanel';
 import { Discussion } from '../Discussion';
-import { I18n } from 'app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const ViewDiscussionsModal = ({
   close,

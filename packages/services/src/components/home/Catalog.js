@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
-import { PageTitle } from 'common';
 import { Link } from '@reach/router';
 import { CatalogSearchContainer } from '../shared/CatalogSearchContainer';
 import { CategoryCard } from '../shared/CategoryCard';
 import { ServiceCard } from '../shared/ServiceCard';
 import { RequestCard } from '../shared/RequestCard';
+import { PageTitle } from '../shared/PageTitle';
+
 import { getSubmissionPath } from '../../utils';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const Catalog = ({
   kapp,
@@ -82,20 +83,21 @@ export const Catalog = ({
             </div>
           </div>
           <div className="cards__wrapper cards__wrapper--categories">
-            {homePageItems.map(item =>
-              homePageMode === 'Categories' ? (
-                <CategoryCard
-                  key={item.slug}
-                  category={item}
-                  path={`categories/${item.slug}`}
-                />
-              ) : (
-                <ServiceCard
-                  key={item.slug}
-                  form={item}
-                  path={`forms/${item.slug}`}
-                />
-              ),
+            {homePageItems.map(
+              item =>
+                homePageMode === 'Categories' ? (
+                  <CategoryCard
+                    key={item.slug}
+                    category={item}
+                    path={`categories/${item.slug}`}
+                  />
+                ) : (
+                  <ServiceCard
+                    key={item.slug}
+                    form={item}
+                    path={`forms/${item.slug}`}
+                  />
+                ),
             )}
           </div>
         </div>

@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
-import { PageTitle } from 'common';
 import { ServiceCard } from '../shared/ServiceCard';
 import { Link } from '@reach/router';
+import { PageTitle } from '../shared/PageTitle';
 
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const FormList = ({ forms }) => (
   <Fragment>
@@ -30,9 +30,7 @@ export const FormList = ({ forms }) => (
             path: form.slug,
             key: form.slug,
           }))
-          .map(props => (
-            <ServiceCard {...props} />
-          ))}
+          .map(props => <ServiceCard {...props} />)}
       </div>
     </div>
   </Fragment>

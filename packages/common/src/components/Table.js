@@ -9,7 +9,7 @@ import {
 } from 'recompose';
 import { List } from 'immutable';
 import isarray from 'isarray';
-import { I18n } from '../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const KeyWrapper = ({ children }) => children;
 

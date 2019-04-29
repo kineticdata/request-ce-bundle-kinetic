@@ -16,7 +16,7 @@ import { AttributeSelectors } from 'common';
 import { LoadingMessage, EmptyMessage, InfoMessage } from './Schedulers';
 import { actions as toastActions } from '../../redux/modules/toasts';
 import { actions } from '../../redux/modules/schedulers';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const SchedulerAgentsComponent = ({
   loading,

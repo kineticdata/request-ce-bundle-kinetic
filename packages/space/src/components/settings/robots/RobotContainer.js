@@ -12,7 +12,7 @@ import { RobotExecutionsList } from './RobotExecutionsList';
 import { RobotsList } from './RobotsList';
 
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const RobotError = () => (
   <h1>

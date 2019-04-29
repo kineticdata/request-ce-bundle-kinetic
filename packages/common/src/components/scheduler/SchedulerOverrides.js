@@ -20,8 +20,8 @@ import {
   SCHEDULER_OVERRIDES_PAGE_SIZE,
 } from '../../redux/modules/schedulers';
 import { actions as toastActions } from '../../redux/modules/toasts';
-import { Moment, Constants } from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { Constants } from 'common';
+import { I18n, Moment } from '@kineticdata/react';
 
 const globals = import('common/globals');
 

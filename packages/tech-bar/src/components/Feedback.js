@@ -5,11 +5,12 @@ import { compose, withHandlers, withState, withProps } from 'recompose';
 import { DisplayTabs } from './Display';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { createSubmission } from '@kineticdata/react';
-import { selectCurrentKapp, toastActions, Constants, Moment } from 'common';
+import { selectCurrentKapp, toastActions, Constants } from 'common';
 import { TIME_FORMAT } from '../App';
 import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
-import { I18n } from '../../../app/src/I18nProvider';
+import { I18n, Moment } from '@kineticdata/react';
+import { context } from '../redux/store';
 import moment from 'moment';
 
 const FEEDBACK_FORM_SLUG = 'feedback';
@@ -187,16 +188,11 @@ export const FeedbackComponent = ({
 
 export const mapStateToProps = (state, props) => ({
   kapp: selectCurrentKapp(state),
-  loading:
-    state.techBar.appointments.today.loading ||
-    state.techBar.walkIns.today.loading,
-  errors: [
-    ...state.techBar.appointments.today.errors,
-    ...state.techBar.walkIns.today.errors,
-  ],
-  appointments: state.techBar.appointments.today.data,
-  walkIns: state.techBar.walkIns.today.data,
-  records: state.techBar.appointments.today.data
+  loading: state.appointments.today.loading || state.walkIns.today.loading,
+  errors: [...state.appointments.today.errors, ...state.walkIns.today.errors],
+  appointments: state.appointments.today.data,
+  walkIns: state.walkIns.today.data,
+  records: state.appointments.today.data
     .map(a => ({
       id: a.id,
       type: 'Appointment',
@@ -208,7 +204,7 @@ export const mapStateToProps = (state, props) => ({
       eventTime: a.values['Event Time'],
     }))
     .concat(
-      state.techBar.walkIns.today.data.map(w => ({
+      state.walkIns.today.data.map(w => ({
         id: w.id,
         type: 'Walk-In',
         username: w.values['Requested For'] || w.values['Email'],
@@ -313,6 +309,8 @@ export const Feedback = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(({ techBar, kapp }) => {
     return {

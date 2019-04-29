@@ -7,7 +7,7 @@ import { Router } from '../../../SpaceApp';
 import { RobotContainer } from './RobotContainer';
 
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const MINIMUM_CE_VERSION = '2.1.0';
 

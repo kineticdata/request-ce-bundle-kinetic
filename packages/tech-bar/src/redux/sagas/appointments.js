@@ -123,7 +123,7 @@ export function* fetchTodayAppointmentsSaga({
 
 export function* fetchAppointmentsListSaga({ payload: { schedulerId } }) {
   const kappSlug = yield select(state => state.app.kappSlug);
-  const date = yield select(state => state.techBar.appointments.list.date);
+  const date = yield select(state => state.appointments.list.date);
   const searchBuilder = new SubmissionSearch()
     .limit(1000)
     .include('details,values')

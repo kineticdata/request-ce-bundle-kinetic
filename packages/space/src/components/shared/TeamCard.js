@@ -3,7 +3,7 @@ import { compose, withState, withHandlers } from 'recompose';
 import { Link } from '@reach/router';
 import { getTeamColor, getTeamIcon } from '../../utils';
 import { Avatar } from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const TeamCardComponent = props => {
   const { team, showMembers, toggleShowMembers } = props;

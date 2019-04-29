@@ -7,6 +7,7 @@ import {
   context,
   store,
 } from 'services/src/redux/store';
+import { CommonProvider } from 'common';
 import { types } from './redux/modules/app';
 import { App } from './App';
 import { Provider } from 'react-redux';
@@ -60,14 +61,16 @@ export class ServicesApp extends Component {
     return (
       this.state.ready && (
         <Provider store={store} context={context}>
-          <LocationProvider history={history}>
-            <Router>
-              <App
-                render={this.props.render}
-                path={`${this.props.appState.location}/*`}
-              />
-            </Router>
-          </LocationProvider>
+          <CommonProvider>
+            <LocationProvider history={history}>
+              <Router>
+                <App
+                  render={this.props.render}
+                  path={`${this.props.appState.location}/*`}
+                />
+              </Router>
+            </LocationProvider>
+          </CommonProvider>
         </Provider>
       )
     );

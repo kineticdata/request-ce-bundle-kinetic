@@ -1,14 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { Link } from '@reach/router';
 import {
-  KappNavLink as NavLink,
   selectCurrentKapp,
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
 } from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { isActiveClass } from '../../utils';
+import { I18n } from '@kineticdata/react';
+import { context } from '../../redux/store';
 
 export const SidebarComponent = ({
   settingsBackPath,
@@ -26,31 +27,31 @@ export const SidebarComponent = ({
       {!loading && (
         <ul className="nav flex-column sidebar-group">
           <li className="nav-item">
-            <NavLink
+            <Link
               to="/settings/metrics"
               className="nav-link"
-              activeClassName="active"
+              getProps={isActiveClass('nav-link')}
             >
               <I18n>Metrics</I18n>
               <span className="fa fa-fw fa-angle-right" />
-            </NavLink>
-            <NavLink
+            </Link>
+            <Link
               to="/settings/general"
               className="nav-link"
-              activeClassName="active"
+              getProps={isActiveClass('nav-link')}
             >
               <I18n>Tech Bars</I18n>
               <span className="fa fa-fw fa-angle-right" />
-            </NavLink>
+            </Link>
             {hasManagerAccess && (
-              <NavLink
+              <Link
                 to="/settings/schedulers"
                 className="nav-link"
-                activeClassName="active"
+                getProps={isActiveClass('nav-link')}
               >
                 <I18n>Schedulers</I18n>
                 <span className="fa fa-fw fa-angle-right" />
-              </NavLink>
+              </Link>
             )}
           </li>
         </ul>
@@ -67,4 +68,11 @@ export const mapStateToProps = state => ({
     selectHasRoleSchedulerManager(state) || selectHasRoleSchedulerAdmin(state),
 });
 
-export const Sidebar = compose(connect(mapStateToProps))(SidebarComponent);
+export const Sidebar = compose(
+  connect(
+    mapStateToProps,
+    null,
+    null,
+    { context },
+  ),
+)(SidebarComponent);

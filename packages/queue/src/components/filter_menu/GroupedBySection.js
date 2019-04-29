@@ -4,7 +4,7 @@ import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
 import { AttributeSelectors } from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
 
 export const GroupedBySection = ({ filter, forms, setGroupedByHandler }) => (

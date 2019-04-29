@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import { PageTitle } from 'common';
 import { actions, selectIsMyProfile } from '../../redux/modules/profiles';
 import { context } from '../../redux/store';
 import { TeamCard } from '../shared/TeamCard';
 import { Avatar } from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
+import { PageTitle } from '../shared/PageTitle';
 
 const ViewProfileComponent = ({
   loading,

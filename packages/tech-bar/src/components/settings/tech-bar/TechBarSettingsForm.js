@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, withHandlers, withProps } from 'recompose';
 import {
-  KappLink as Link,
   PageTitle,
   selectCurrentKapp,
   Utils,
@@ -11,12 +10,14 @@ import {
   ErrorUnauthorized,
   selectHasRoleSchedulerAdmin,
 } from 'common';
+import { Link } from '@reach/router';
 import { CoreForm } from '@kineticdata/react';
 import {
   actions,
   TECH_BAR_SETTINGS_FORM_SLUG,
 } from '../../../redux/modules/techBarApp';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { context } from '../../../redux/store';
+import { I18n } from '@kineticdata/react';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -103,7 +104,7 @@ export const TechBarSettingsFormComponent = ({
 
 export const mapStateToProps = (state, props) => {
   const isSchedulerAdmin = selectHasRoleSchedulerAdmin(state);
-  const techBar = state.techBar.techBarApp.schedulers.find(
+  const techBar = state.techBarApp.schedulers.find(
     scheduler =>
       scheduler.id === props.techBarId &&
       (isSchedulerAdmin ||
@@ -141,6 +142,8 @@ export const TechBarSettingsForm = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({
     handleSaved: ({ push, kapp, techBarId, updateTechBarSettings }) => ({

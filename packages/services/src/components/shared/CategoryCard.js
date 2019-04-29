@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from '@reach/router';
 import { Icon } from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const CategoryCard = props => (
   <Link to={props.path} className="card card--category">

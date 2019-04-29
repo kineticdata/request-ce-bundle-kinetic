@@ -3,7 +3,7 @@ import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
 import { isActiveClass } from '../../utils';
 

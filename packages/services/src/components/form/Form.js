@@ -1,13 +1,10 @@
 import React, { Fragment } from 'react';
 import { CoreForm } from '@kineticdata/react';
 import { Link } from '@reach/router';
-import {
-  ErrorNotFound,
-  ErrorUnauthorized,
-  ErrorUnexpected,
-  PageTitle,
-} from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
+import { PageTitle } from '../shared/PageTitle';
+
+import { I18n } from '@kineticdata/react';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -46,11 +43,12 @@ export const Form = ({
               </Link>
             )}
             {path.startsWith('/request') && ' / '}
-            {path.startsWith('/request') && type && (
-              <Link to={`${appLocation}/requests/${type || ''}`}>
-                <I18n>{type}</I18n>
-              </Link>
-            )}
+            {path.startsWith('/request') &&
+              type && (
+                <Link to={`${appLocation}/requests/${type || ''}`}>
+                  <I18n>{type}</I18n>
+                </Link>
+              )}
             {path.startsWith('/request') && type && ' / '}
             {category && (
               <Link to={`${appLocation}/categories`}>

@@ -7,7 +7,7 @@ import papaparse from 'papaparse';
 
 import { actions } from '../../../redux/modules/settingsDatastore';
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const ExportComponent = ({
   submissions,

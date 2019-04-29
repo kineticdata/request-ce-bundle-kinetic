@@ -14,7 +14,7 @@ import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/forms';
 import { context } from '../../../redux/store';
 
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const WallyEmptyMessage = ({ filter }) => {
   return (

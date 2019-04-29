@@ -5,7 +5,7 @@ import { StatusPill } from './StatusPill';
 import * as helpers from '../../utils';
 import * as constants from '../../constants';
 import { Form } from '../../models';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const DisplayDateListItem = ({ submission }) => {
   const isDraft = submission.coreState === constants.CORE_STATE_DRAFT;

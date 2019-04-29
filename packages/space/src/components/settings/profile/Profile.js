@@ -3,15 +3,16 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from '@reach/router';
 import { fromJS } from 'immutable';
-import { modalFormActions, PageTitle } from 'common';
+import { modalFormActions } from 'common';
 
 import { ProfileCard } from 'common';
 import { TeamCard } from '../../shared/TeamCard';
 
 import { actions } from '../../../redux/modules/profiles';
 import { context } from '../../../redux/store';
+import { PageTitle } from '../../shared/PageTitle';
 
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const EditProfileComponent = ({
   loading,

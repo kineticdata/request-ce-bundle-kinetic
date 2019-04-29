@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import isarray from 'isarray';
 import { actions } from '../redux/modules/toasts';
-import { I18n } from '../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const defaultTitle = {
   success: 'Success',

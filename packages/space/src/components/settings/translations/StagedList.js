@@ -9,7 +9,7 @@ import md5 from 'md5';
 
 import { actions } from '../../../redux/modules/settingsTranslations';
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const StagedListComponent = ({
   match: {

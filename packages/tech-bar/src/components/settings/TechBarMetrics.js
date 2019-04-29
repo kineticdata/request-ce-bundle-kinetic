@@ -9,13 +9,13 @@ import {
   withState,
 } from 'recompose';
 import {
-  KappLink as Link,
-  KappNavLink as NavLink,
   PageTitle,
   selectCurrentKapp,
   Utils,
   selectHasRoleSchedulerAdmin,
 } from 'common';
+import { isActiveClass } from '../../utils';
+import { Link } from '@reach/router';
 import { MetricsSummary } from './metrics/MetricsSummary';
 import { MetricsTrend } from './metrics/MetricsTrend';
 import { MetricsExport } from './metrics/MetricsExport';
@@ -24,7 +24,8 @@ import {
   DATE_FORMAT,
   MONTH_FORMAT,
 } from '../../redux/modules/metrics';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
+import { I18n } from '@kineticdata/react';
 import moment from 'moment';
 
 export const TechBarMetricsComponent = ({
@@ -126,10 +127,9 @@ export const TechBarMetricsComponent = ({
         <div>
           <ul className="nav nav-tabs">
             <li role="presentation">
-              <NavLink
-                exact
+              <Link
                 to={'/settings/metrics'}
-                activeClassName="active"
+                getProps={isActiveClass('nav-link')}
                 onClick={() => {
                   if (selectedRange !== 'last30Days') {
                     setSelectedRange('last30Days');
@@ -140,13 +140,12 @@ export const TechBarMetricsComponent = ({
                 <I18n>
                   <I18n>Summary</I18n>
                 </I18n>
-              </NavLink>
+              </Link>
             </li>
             <li role="presentation">
-              <NavLink
-                exact
+              <Link
                 to={'/settings/metrics/trend'}
-                activeClassName="active"
+                getProps={isActiveClass('nav-link')}
                 onClick={() => {
                   if (selectedRange !== 'last12Months') {
                     setSelectedRange('last12Months');
@@ -155,13 +154,12 @@ export const TechBarMetricsComponent = ({
                 }}
               >
                 <I18n>Trend</I18n>
-              </NavLink>
+              </Link>
             </li>
             <li role="presentation">
-              <NavLink
-                exact
+              <Link
                 to={'/settings/metrics/export'}
-                activeClassName="active"
+                getProps={isActiveClass('nav-link')}
                 onClick={() => {
                   clearMetrics();
                   setSelectedDate(
@@ -172,7 +170,7 @@ export const TechBarMetricsComponent = ({
                 }}
               >
                 <I18n>Export</I18n>
-              </NavLink>
+              </Link>
             </li>
           </ul>
           <div className="form p-0 my-3">
@@ -373,8 +371,8 @@ const buildDateRangeForSelectedMonth = selectedDate => {
 
 export const mapStateToProps = (state, props) => {
   const techBars = selectHasRoleSchedulerAdmin(state)
-    ? state.techBar.techBarApp.schedulers
-    : state.techBar.techBarApp.schedulers.filter(
+    ? state.techBarApp.schedulers
+    : state.techBarApp.schedulers.filter(
         s =>
           Utils.isMemberOf(
             state.app.profile,
@@ -385,7 +383,7 @@ export const mapStateToProps = (state, props) => {
   return {
     kapp: selectCurrentKapp(state),
     techBars,
-    metrics: state.techBar.metrics.metrics,
+    metrics: state.metrics.metrics,
   };
 };
 
@@ -423,6 +421,8 @@ export const TechBarMetrics = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(({ match: { params: { mode = 'summary' } } }) => ({
     mode: ['summary', 'trend', 'export'].includes(mode) ? mode : 'summary',

@@ -2,10 +2,8 @@ import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
-import { Utils, PageTitle } from 'common';
 import { Modal } from 'reactstrap';
 import SortableTree, {
-  removeNode,
   removeNodeAtPath,
   getNodeAtPath,
   addNodeUnderParent,
@@ -14,11 +12,12 @@ import SortableTree, {
 } from 'react-sortable-tree';
 import axios from 'axios';
 import 'react-sortable-tree/style.css';
+import { PageTitle } from '../../shared/PageTitle';
+
 import { actions } from '../../../redux/modules/settingsCategories';
 import { context } from '../../../redux/store';
 
-import { setInitialInputs } from '../forms/FormSettings';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 /**
  * AXIOS Calls
@@ -93,8 +92,8 @@ export const mapCatgories = ({ rawCategories, setCategories }) => () => {
       ? 1
       : parseInt(b.attributes['Sort Order'][0]) >
         parseInt(a.attributes['Sort Order'][0])
-      ? -1
-      : 0;
+        ? -1
+        : 0;
   });
   const mapped = {};
   for (let i = 0; i < rawCategories.length; i++) {
@@ -118,8 +117,8 @@ export const mapCatgories = ({ rawCategories, setCategories }) => () => {
         return parseInt(a.sort[0]) > parseInt(b.sort[0])
           ? 1
           : parseInt(b.sort[0]) > parseInt(a.sort[0])
-          ? -1
-          : 0;
+            ? -1
+            : 0;
       });
     } else {
       mapped[slug] = cat;

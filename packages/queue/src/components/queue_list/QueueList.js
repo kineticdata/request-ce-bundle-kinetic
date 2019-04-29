@@ -3,12 +3,14 @@ import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 import { QueueListItemSmall } from './QueueListItem';
 import { TOO_MANY_STATUS_STRING } from '../../redux/sagas/queue';
-import { PageTitle, Moment, Constants, GroupDivider } from 'common';
+import { Constants, GroupDivider } from 'common';
 import { FilterMenuToolbar } from './FilterMenuToolbar';
 import { FilterMenuMobile } from './FilterMenuMobile';
 import { QueueListPagination } from './QueueListPagination';
+import { PageTitle } from '../shared/PageTitle';
+
 import moment from 'moment';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n, Moment } from '@kineticdata/react';
 
 const WallyEmptyMessage = ({ filter }) => {
   if (filter.type === 'adhoc') {
@@ -201,9 +203,7 @@ export const QueueList = ({
         </div>
       ) : (
         <WallyBadFilter
-          message={filterValidations.map((v, i) => (
-            <p key={i}>{v}</p>
-          ))}
+          message={filterValidations.map((v, i) => <p key={i}>{v}</p>)}
         />
       )}
       <QueueListPagination filter={filter} paginationProps={paginationProps} />

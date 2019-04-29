@@ -11,7 +11,7 @@ import { Table as CommonTable, PaginationControl } from 'common';
 import { actions } from '../../../redux/modules/settingsDatastore';
 import { context } from '../../../redux/store';
 
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const FailedImportTable = ({ records }) => (
   <CommonTable
@@ -28,11 +28,7 @@ export const FailedImportTable = ({ records }) => (
       },
       {
         renderBodyCell: ({ value }) => (
-          <td>
-            {value.map((val, idx) => (
-              <span key={idx}>{val}</span>
-            ))}
-          </td>
+          <td>{value.map((val, idx) => <span key={idx}>{val}</span>)}</td>
         ),
         value: 'errors',
         title: 'Failed Reason',
@@ -373,41 +369,42 @@ export class ImportComponent extends Component {
       <Fragment>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {/* // Upload CSV */}
-          {!this.readFile && !this.state.postResult && (
-            <Fragment>
-              <div className="text-center">
-                <h2>
-                  <I18n>Only .csv files are permitted to be uploaded.</I18n>
-                </h2>
-                <h4>
-                  <I18n>Size is limited to 20mb</I18n>
-                </h4>
-              </div>
-              <div className="dropzone">
-                <I18n
-                  render={translate => (
-                    <Dropzone
-                      onDrop={this.handleChange}
-                      className="dropzone__area"
-                      acceptClassName="dropzone__area--active"
-                      rejectClassName="dropzone__area--disabled"
-                    >
-                      {({ isDragActive, isDragReject }) => {
-                        if (isDragReject) {
-                          return translate('Only .csv files are vaild');
-                        }
-                        if (isDragActive) {
-                          return <DropzoneContent />;
-                        }
+          {!this.readFile &&
+            !this.state.postResult && (
+              <Fragment>
+                <div className="text-center">
+                  <h2>
+                    <I18n>Only .csv files are permitted to be uploaded.</I18n>
+                  </h2>
+                  <h4>
+                    <I18n>Size is limited to 20mb</I18n>
+                  </h4>
+                </div>
+                <div className="dropzone">
+                  <I18n
+                    render={translate => (
+                      <Dropzone
+                        onDrop={this.handleChange}
+                        className="dropzone__area"
+                        acceptClassName="dropzone__area--active"
+                        rejectClassName="dropzone__area--disabled"
+                      >
+                        {({ isDragActive, isDragReject }) => {
+                          if (isDragReject) {
+                            return translate('Only .csv files are vaild');
+                          }
+                          if (isDragActive) {
+                            return <DropzoneContent />;
+                          }
 
-                        return <DropzoneContent />;
-                      }}
-                    </Dropzone>
-                  )}
-                />
-              </div>
-            </Fragment>
-          )}
+                          return <DropzoneContent />;
+                        }}
+                      </Dropzone>
+                    )}
+                  />
+                </div>
+              </Fragment>
+            )}
 
           {/* // Missing Fields */}
           {this.state.missingFields.size > 0 && (
@@ -533,15 +530,16 @@ export class ImportComponent extends Component {
           )}
 
           {/* // Reset or upload a new file */}
-          {this.readFile && !this.state.postResult && (
-            <button
-              className="btn btn-link"
-              style={{ alignSelf: 'flex-end' }}
-              onClick={this.handleReset}
-            >
-              <I18n>Upload a new file</I18n>
-            </button>
-          )}
+          {this.readFile &&
+            !this.state.postResult && (
+              <button
+                className="btn btn-link"
+                style={{ alignSelf: 'flex-end' }}
+                onClick={this.handleReset}
+              >
+                <I18n>Upload a new file</I18n>
+              </button>
+            )}
 
           {/* // Review records that match */}
           {!this.props.processing &&
@@ -591,11 +589,12 @@ export class ImportComponent extends Component {
             )}
 
           {/* // Import Records Button   */}
-          {this.state.records.size > 0 && this.state.missingFields.size <= 0 && (
-            <button className="btn btn-secondary" onClick={this.handleImport}>
-              <I18n>Import Records</I18n>
-            </button>
-          )}
+          {this.state.records.size > 0 &&
+            this.state.missingFields.size <= 0 && (
+              <button className="btn btn-secondary" onClick={this.handleImport}>
+                <I18n>Import Records</I18n>
+              </button>
+            )}
         </div>
       </Fragment>
     );

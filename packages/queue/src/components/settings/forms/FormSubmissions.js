@@ -3,13 +3,13 @@ import moment from 'moment';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
-import { PageTitle } from 'common';
 import { Modal } from 'reactstrap';
 import { SubmissionListItem } from './SubmissionListItem';
 import { ExportModal } from './ExportModal';
 import { actions } from '../../../redux/modules/settingsForms';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../../redux/store';
+import { PageTitle } from '../../shared/PageTitle';
 
 const DiscussionIcon = () => (
   <span className="icon">

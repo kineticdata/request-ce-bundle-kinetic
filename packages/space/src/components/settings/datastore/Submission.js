@@ -13,14 +13,9 @@ import { parse } from 'query-string';
 import { ButtonGroup, Button } from 'reactstrap';
 import { CoreForm } from '@kineticdata/react';
 import { LinkContainer } from 'react-router-bootstrap';
-import {
-  DiscussionsPanel,
-  PageTitle,
-  toastActions,
-  ViewDiscussionsModal,
-} from 'common';
+import { DiscussionsPanel, toastActions, ViewDiscussionsModal } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
-
+import { PageTitle } from '../../shared/PageTitle';
 import {
   selectPrevAndNext,
   selectFormBySlug,
@@ -28,7 +23,7 @@ import {
 } from '../../../redux/modules/settingsDatastore';
 import { context } from '../../../redux/store';
 
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const globals = import('common/globals');
 
@@ -110,32 +105,34 @@ const DatastoreSubmissionComponent = ({
             </h1>
           </div>
           <div className="page-title__actions">
-            {showPrevAndNext && !isEditing && (
-              <ButtonGroup className="datastore-prev-next">
-                <LinkContainer to={prevAndNext.prev || ''}>
-                  <Button color="inverse" disabled={!prevAndNext.prev}>
-                    <span className="icon">
-                      <span className="fa fa-fw fa-caret-left" />
-                    </span>
-                  </Button>
-                </LinkContainer>
-                <LinkContainer to={prevAndNext.next || ''}>
-                  <Button color="inverse" disabled={!prevAndNext.next}>
-                    <span className="icon">
-                      <span className="fa fa-fw fa-caret-right" />
-                    </span>
-                  </Button>
-                </LinkContainer>
-              </ButtonGroup>
-            )}
-            {submissionId && !isEditing && (
-              <Link
-                to={`/settings/datastore/${form.slug}/${submissionId}/edit`}
-                className="btn btn-primary ml-3 datastore-edit"
-              >
-                <I18n>Edit Record</I18n>
-              </Link>
-            )}
+            {showPrevAndNext &&
+              !isEditing && (
+                <ButtonGroup className="datastore-prev-next">
+                  <LinkContainer to={prevAndNext.prev || ''}>
+                    <Button color="inverse" disabled={!prevAndNext.prev}>
+                      <span className="icon">
+                        <span className="fa fa-fw fa-caret-left" />
+                      </span>
+                    </Button>
+                  </LinkContainer>
+                  <LinkContainer to={prevAndNext.next || ''}>
+                    <Button color="inverse" disabled={!prevAndNext.next}>
+                      <span className="icon">
+                        <span className="fa fa-fw fa-caret-right" />
+                      </span>
+                    </Button>
+                  </LinkContainer>
+                </ButtonGroup>
+              )}
+            {submissionId &&
+              !isEditing && (
+                <Link
+                  to={`/settings/datastore/${form.slug}/${submissionId}/edit`}
+                  className="btn btn-primary ml-3 datastore-edit"
+                >
+                  <I18n>Edit Record</I18n>
+                </Link>
+              )}
             {discussionsEnabled && (
               <button
                 onClick={openDiscussions}
@@ -173,25 +170,27 @@ const DatastoreSubmissionComponent = ({
           )}
         </div>
       </div>
-      {discussionsEnabled && submission && (
-        <DiscussionsPanel
-          creationFields={creationFields}
-          CreationForm={CreationForm}
-          itemType="Datastore Submission"
-          itemKey={submissionId}
-          me={profile}
-        />
-      )}
-      {viewDiscussionsModal && isSmallLayout && (
-        <ViewDiscussionsModal
-          creationFields={creationFields}
-          CreationForm={CreationForm}
-          close={closeDiscussions}
-          itemType="Datastore Submission"
-          itemKey={submissionId}
-          me={profile}
-        />
-      )}
+      {discussionsEnabled &&
+        submission && (
+          <DiscussionsPanel
+            creationFields={creationFields}
+            CreationForm={CreationForm}
+            itemType="Datastore Submission"
+            itemKey={submissionId}
+            me={profile}
+          />
+        )}
+      {viewDiscussionsModal &&
+        isSmallLayout && (
+          <ViewDiscussionsModal
+            creationFields={creationFields}
+            CreationForm={CreationForm}
+            close={closeDiscussions}
+            itemType="Datastore Submission"
+            itemKey={submissionId}
+            me={profile}
+          />
+        )}
     </div>
   </I18n>
 );

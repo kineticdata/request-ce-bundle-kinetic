@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { actions } from '../../redux/modules/workMenu';
 import { actions as queueActions } from '../../redux/modules/queue';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
 
 const getButtonMode = (queueItem, profile) => {

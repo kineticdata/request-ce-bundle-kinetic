@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { actions } from '../../../redux/modules/settingsForms';
 
 import { Export } from './Export';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../../redux/store';
 
 const ExportModalComponent = ({

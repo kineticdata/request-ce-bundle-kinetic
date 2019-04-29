@@ -8,7 +8,7 @@ import {
 } from 'reactstrap';
 import { CoreForm } from '@kineticdata/react';
 import classNames from 'classnames';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const globals = import('common/globals');
 

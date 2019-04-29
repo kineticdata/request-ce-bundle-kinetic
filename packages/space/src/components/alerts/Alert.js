@@ -5,7 +5,7 @@ import { Link } from '@reach/router';
 import { PopConfirm } from '../shared/PopConfirm';
 import { Button } from 'reactstrap';
 import { context } from '../../redux/store';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { actions } from '../../redux/modules/alerts';
 
 const AlertComponent = ({

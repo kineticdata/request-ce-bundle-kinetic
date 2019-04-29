@@ -2,15 +2,16 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, withProps } from 'recompose';
 import {
-  KappLink as Link,
   PageTitle,
   selectCurrentKapp,
   Utils,
   ErrorNotFound,
   selectHasRoleSchedulerAdmin,
 } from 'common';
+import { Link } from '@reach/router';
 import { CoreForm } from '@kineticdata/react';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
+import { context } from '../../../redux/store';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -76,7 +77,7 @@ export const AppointmentFormComponent = ({
 
 export const mapStateToProps = (state, props) => {
   const isSchedulerAdmin = selectHasRoleSchedulerAdmin(state);
-  const techBar = state.techBar.techBarApp.schedulers.find(
+  const techBar = state.techBarApp.schedulers.find(
     scheduler =>
       scheduler.id === props.techBarId &&
       (isSchedulerAdmin ||
@@ -99,5 +100,10 @@ export const AppointmentForm = compose(
   withProps(({ match: { params: { id } } }) => ({
     techBarId: id,
   })),
-  connect(mapStateToProps),
+  connect(
+    mapStateToProps,
+    null,
+    null,
+    { context },
+  ),
 )(AppointmentFormComponent);

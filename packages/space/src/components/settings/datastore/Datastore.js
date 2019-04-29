@@ -8,7 +8,7 @@ import { DatastoreSettings } from './DatastoreSettings';
 import { CreateDatastore } from './CreateDatastore';
 
 import { Router } from '../../../SpaceApp';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../../redux/store';
 
 import semver from 'semver';

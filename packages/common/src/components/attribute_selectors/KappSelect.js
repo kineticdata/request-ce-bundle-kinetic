@@ -12,7 +12,7 @@ import memoize from 'memoize-one';
 import { fetchSpace } from '@kineticdata/react';
 
 import { Cache } from '../../cache';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const KappMenuItem = props => {
   const disabledReason = props.disabledFn && props.disabledFn(props.option);

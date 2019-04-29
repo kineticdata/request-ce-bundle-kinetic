@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { Moment, Constants } from 'common';
+import { Constants } from 'common';
 import {
   compose,
   lifecycle,
@@ -11,8 +11,10 @@ import {
 } from 'recompose';
 import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
-import { I18n } from '../../../app/src/I18nProvider';
+import { I18n, Moment } from '@kineticdata/react';
+
 import moment from 'moment';
+import { context } from '../redux/store';
 
 export const OverheadComponent = ({ errors, records }) => {
   return (
@@ -30,29 +32,25 @@ export const OverheadComponent = ({ errors, records }) => {
               </span>
             </h1>
             <ol className="overhead-display-list">
-              {records
-                .filter(r => r.status === 'Checked In')
-                .map(r => (
-                  <li key={r.id}>
-                    {r.displayName}{' '}
-                    {r.isWalkIn ? (
-                      <small>
-                        <I18n
-                          render={translate => `(${translate('Walk-In')})`}
-                        />
-                      </small>
-                    ) : (
-                      <small>
-                        {'('}
-                        <Moment
-                          timestamp={r.appointmentTime}
-                          format={Constants.MOMENT_FORMATS.time}
-                        />
-                        {')'}
-                      </small>
-                    )}
-                  </li>
-                ))}
+              {records.filter(r => r.status === 'Checked In').map(r => (
+                <li key={r.id}>
+                  {r.displayName}{' '}
+                  {r.isWalkIn ? (
+                    <small>
+                      <I18n render={translate => `(${translate('Walk-In')})`} />
+                    </small>
+                  ) : (
+                    <small>
+                      {'('}
+                      <Moment
+                        timestamp={r.appointmentTime}
+                        format={Constants.MOMENT_FORMATS.time}
+                      />
+                      {')'}
+                    </small>
+                  )}
+                </li>
+              ))}
             </ol>
           </div>
           <div className="form">
@@ -65,29 +63,25 @@ export const OverheadComponent = ({ errors, records }) => {
               </span>
             </h1>
             <ol className="overhead-display-list">
-              {records
-                .filter(r => r.status === 'In Progress')
-                .map(r => (
-                  <li key={r.id}>
-                    {r.displayName}{' '}
-                    {r.isWalkIn ? (
-                      <small>
-                        <I18n
-                          render={translate => `(${translate('Walk-In')})`}
-                        />
-                      </small>
-                    ) : (
-                      <small>
-                        {'('}
-                        <Moment
-                          timestamp={r.appointmentTime}
-                          format={Constants.MOMENT_FORMATS.time}
-                        />
-                        {')'}
-                      </small>
-                    )}
-                  </li>
-                ))}
+              {records.filter(r => r.status === 'In Progress').map(r => (
+                <li key={r.id}>
+                  {r.displayName}{' '}
+                  {r.isWalkIn ? (
+                    <small>
+                      <I18n render={translate => `(${translate('Walk-In')})`} />
+                    </small>
+                  ) : (
+                    <small>
+                      {'('}
+                      <Moment
+                        timestamp={r.appointmentTime}
+                        format={Constants.MOMENT_FORMATS.time}
+                      />
+                      {')'}
+                    </small>
+                  )}
+                </li>
+              ))}
             </ol>
           </div>
         </div>
@@ -97,11 +91,8 @@ export const OverheadComponent = ({ errors, records }) => {
 };
 
 export const mapStateToProps = (state, props) => ({
-  errors: [
-    ...state.techBar.appointments.today.errors,
-    ...state.techBar.walkIns.today.errors,
-  ],
-  records: state.techBar.appointments.today.data
+  errors: [...state.appointments.today.errors, ...state.walkIns.today.errors],
+  records: state.appointments.today.data
     .map(a => ({
       id: a.id,
       updatedAt: `${a.values['Event Date']} ${a.values['Event Time']}`,
@@ -111,7 +102,7 @@ export const mapStateToProps = (state, props) => ({
       status: a.values['Status'],
     }))
     .concat(
-      state.techBar.walkIns.today.data.map(w => ({
+      state.walkIns.today.data.map(w => ({
         id: w.id,
         updatedAt: moment
           .utc(w.updatedAt)
@@ -156,6 +147,8 @@ export const Overhead = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('poller', 'setPoller', null),
   withHandlers({

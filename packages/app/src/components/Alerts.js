@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
-import { I18n } from '../I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const Alerts = ({
   alerts,

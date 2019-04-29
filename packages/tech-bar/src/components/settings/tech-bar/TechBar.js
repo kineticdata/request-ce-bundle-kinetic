@@ -3,20 +3,20 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import {
-  KappLink as Link,
   PageTitle,
   selectCurrentKapp,
   Utils,
   ErrorNotFound,
   selectHasRoleSchedulerAdmin,
-  Moment,
   Constants,
   Table,
 } from 'common';
+import { Link } from '@reach/router';
 import moment from 'moment';
 import { actions } from '../../../redux/modules/techBarApp';
+import { context } from '../../../redux/store';
 import { actions as appointmentActions } from '../../../redux/modules/appointments';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n, Moment } from '@kineticdata/react';
 import { TechBarDisplayMembers } from './TechBarDisplayMembers';
 import { TIME_FORMAT } from '../../../App';
 
@@ -228,7 +228,7 @@ export const TechBarComponent = ({
 
 export const mapStateToProps = (state, props) => {
   const isSchedulerAdmin = selectHasRoleSchedulerAdmin(state);
-  const techBar = state.techBar.techBarApp.schedulers.find(
+  const techBar = state.techBarApp.schedulers.find(
     scheduler =>
       scheduler.id === props.techBarId &&
       (isSchedulerAdmin ||
@@ -251,12 +251,12 @@ export const mapStateToProps = (state, props) => {
           state.app.profile,
           `Role::Scheduler::${techBar.values['Name']}`,
         )),
-    loadingAppointments: state.techBar.appointments.list.loading,
-    appointmentErrors: state.techBar.appointments.list.errors,
-    appointments: state.techBar.appointments.list.data,
-    appointmentDate: state.techBar.appointments.list.date,
-    displayTeamLoading: state.techBar.techBarApp.displayTeamLoading,
-    displayTeam: state.techBar.techBarApp.displayTeam,
+    loadingAppointments: state.appointments.list.loading,
+    appointmentErrors: state.appointments.list.errors,
+    appointments: state.appointments.list.data,
+    appointmentDate: state.appointments.list.date,
+    displayTeamLoading: state.techBarApp.displayTeamLoading,
+    displayTeam: state.techBarApp.displayTeam,
   };
 };
 
@@ -272,6 +272,8 @@ export const TechBar = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(({ appointmentDate }) => ({
     isToday:

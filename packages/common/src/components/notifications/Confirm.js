@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { Alert, Button } from 'reactstrap';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const ConfirmComponent = ({
   color,

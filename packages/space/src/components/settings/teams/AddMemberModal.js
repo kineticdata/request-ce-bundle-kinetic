@@ -12,7 +12,7 @@ import {
   selectTeamMemberships,
 } from '../../../redux/modules/team';
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const getAvailableUsers = (allUsers, currentMembers, addedMembers) => {
   const excludedUsers = Set(

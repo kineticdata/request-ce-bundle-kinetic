@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { actions } from '../../redux/modules/submission';
 import { context } from '../../redux/store';
-import { modalFormActions, Utils } from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { Utils } from 'common';
+import { I18n } from '@kineticdata/react';
 
 const CommentButton = props =>
   props.enableButton && (

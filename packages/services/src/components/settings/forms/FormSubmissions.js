@@ -3,14 +3,15 @@ import moment from 'moment';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
-import { PageTitle } from 'common';
 import { Modal } from 'reactstrap';
 import { SubmissionListItem } from './SubmissionListItem';
 import { ExportModal } from './ExportModal';
 
 import { actions } from '../../../redux/modules/settingsForms';
+import { PageTitle } from '../../shared/PageTitle';
+
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const DiscussionIcon = () => (
   <span className="icon">
@@ -282,18 +283,19 @@ export const FormSubmissionsContainer = ({
               </div>
 
               <div className="mt-3">
-                {clientSortInfo && (nextPageToken || currentPage >= 2) && (
-                  <div className="text-info mb-2">
-                    <small>
-                      <em>
-                        <I18n>
-                          Sorting the table columns will only sort the visible
-                          records on the current page.
-                        </I18n>
-                      </em>
-                    </small>
-                  </div>
-                )}
+                {clientSortInfo &&
+                  (nextPageToken || currentPage >= 2) && (
+                    <div className="text-info mb-2">
+                      <small>
+                        <em>
+                          <I18n>
+                            Sorting the table columns will only sort the visible
+                            records on the current page.
+                          </I18n>
+                        </em>
+                      </small>
+                    </div>
+                  )}
                 <table className="table table-sm table-striped table--settings">
                   <thead className="d-none d-md-table-header-group sortable">
                     <tr>
@@ -408,20 +410,23 @@ export const FormSubmissionsContainer = ({
                       </th>
                     </tr>
                   </thead>
-                  {!submissionsLoading && submissions.size > 0 && (
-                    <tbody>
-                      {submissions.map(s => (
-                        <SubmissionListItem
-                          key={`trow-${s.id}`}
-                          submission={s}
-                          form={form}
-                          columns={visibleColumns}
-                          to={`${appLocation}/settings/forms/${s.id}/activity`}
-                          isMobile={isMobile}
-                        />
-                      ))}
-                    </tbody>
-                  )}
+                  {!submissionsLoading &&
+                    submissions.size > 0 && (
+                      <tbody>
+                        {submissions.map(s => (
+                          <SubmissionListItem
+                            key={`trow-${s.id}`}
+                            submission={s}
+                            form={form}
+                            columns={visibleColumns}
+                            to={`${appLocation}/settings/forms/${
+                              s.id
+                            }/activity`}
+                            isMobile={isMobile}
+                          />
+                        ))}
+                      </tbody>
+                    )}
                 </table>
                 <ul className="pagination">
                   {currentPage >= 2 && (

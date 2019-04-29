@@ -2,7 +2,7 @@ import React from 'react';
 import { compose, withHandlers, withProps, withState } from 'recompose';
 import { Modal, ModalBody } from 'reactstrap';
 import { CoreForm } from '@kineticdata/react';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const globals = import('common/globals');
 

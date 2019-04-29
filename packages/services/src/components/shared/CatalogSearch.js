@@ -1,5 +1,5 @@
 import React from 'react';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const CatalogSearch = props => (
   <form onSubmit={props.submitHandler(props)} className="search-box__form">

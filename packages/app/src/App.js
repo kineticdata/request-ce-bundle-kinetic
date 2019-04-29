@@ -9,7 +9,7 @@ import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import {
   Utils,
   ToastsContainer,
-  ModalFormContainer,
+  // ModalFormContainer,
   selectCurrentKapp,
 } from 'common';
 import { LoginModal } from './components/authentication/LoginModal';
@@ -20,14 +20,14 @@ import { actions as layoutActions } from './redux/modules/layout';
 import { ServicesApp } from 'services/src/ServicesApp';
 import { QueueApp } from 'queue/src/QueueApp';
 import { SpaceApp } from 'space/src/SpaceApp';
-import { App as TechBarApp } from 'tech-bar/src/App';
+import { TechbarApp } from 'tech-bar/src/TechbarApp';
 
 export const AppComponent = props =>
   !props.loading && (
     <Fragment>
       <ToastsContainer />
       <LoginModal />
-      <ModalFormContainer />
+      {/* <ModalFormContainer /> */}
       <div className="app-wrapper">
         {!props.headerHidden && (
           <div className="app-header">
@@ -113,7 +113,7 @@ const getAppProvider = kapp => {
     case 'queue':
       return QueueApp;
     case 'tech-bar':
-      return TechBarApp;
+      return TechbarApp;
     default:
       return SpaceApp;
   }

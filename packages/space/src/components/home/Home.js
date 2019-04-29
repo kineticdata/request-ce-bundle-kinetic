@@ -3,7 +3,7 @@ import { Link } from '@reach/router';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 import { getGroupedDiscussions } from '@kineticdata/react';
-import { GroupDivider, PageTitle } from 'common';
+import { GroupDivider } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { actions } from '../../redux/modules/spaceApp';
 import { actions as teamListActions } from '../../redux/modules/teamList';
@@ -13,8 +13,9 @@ import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 import { bundle } from '@kineticdata/react';
 import { Popover } from 'reactstrap';
 import { DateRangeDropdown } from './DateRangeDropdown';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
+import { PageTitle } from '../shared/PageTitle';
 
 const HomeComponent = ({
   spaceName,
@@ -179,17 +180,19 @@ const HomeComponent = ({
             </div>
           </div>
         )}
-      {!discussionsError && !discussionsLoading && discussionGroups.size === 0 && (
-        <div className="empty-state empty-state--wally">
-          <h5>
-            <I18n>No discussions found</I18n>
-          </h5>
-          <img src={wallyMissingImage} alt="Missing Wally" />
-          <h6>
-            <I18n>You are not involved in any discussions!</I18n>
-          </h6>
-        </div>
-      )}
+      {!discussionsError &&
+        !discussionsLoading &&
+        discussionGroups.size === 0 && (
+          <div className="empty-state empty-state--wally">
+            <h5>
+              <I18n>No discussions found</I18n>
+            </h5>
+            <img src={wallyMissingImage} alt="Missing Wally" />
+            <h6>
+              <I18n>You are not involved in any discussions!</I18n>
+            </h6>
+          </div>
+        )}
     </div>
   </div>
 );

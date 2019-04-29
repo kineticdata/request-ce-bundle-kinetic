@@ -12,7 +12,8 @@ import {
   VictoryAxis,
 } from 'victory';
 import { Constants, Table } from 'common';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
+import { context } from '../../../redux/store';
 import moment from 'moment';
 import { Record } from 'immutable';
 
@@ -481,9 +482,9 @@ export const MetricsSummaryComponent = ({
 };
 
 export const mapStateToProps = (state, props) => ({
-  loading: state.techBar.metrics.loading,
-  errors: state.techBar.metrics.errors,
-  metrics: state.techBar.metrics.metrics,
+  loading: state.metrics.loading,
+  errors: state.metrics.errors,
+  metrics: state.metrics.metrics,
 });
 
 export const mapDispatchToProps = {
@@ -513,6 +514,8 @@ export const MetricsSummary = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(({ schedulerId, eventType, loading, metrics }) => {
     if (loading) {

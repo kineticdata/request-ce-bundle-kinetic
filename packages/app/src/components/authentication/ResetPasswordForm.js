@@ -2,7 +2,7 @@ import React from 'react';
 import { compose, withState, withHandlers } from 'recompose';
 import { Link } from 'react-router-dom';
 import { createSubmission } from '@kineticdata/react';
-import { I18n } from '../../I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const ResetPassword = ({
   handleResetPassword,

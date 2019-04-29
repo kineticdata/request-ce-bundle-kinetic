@@ -4,15 +4,15 @@ import { bundle } from '@kineticdata/react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { PageTitle } from 'common';
 import {
   actions,
   buildFormConfigurationObject,
 } from '../../../redux/modules/settingsForms';
 import { context } from '../../../redux/store';
+import { PageTitle } from '../../shared/PageTitle';
 
 import { actions as servicesActions } from '../../../redux/modules/settingsServices';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const TextInput = ({ value, name, setInputs, inputs, className }) => (
   <input
@@ -48,11 +48,9 @@ export const Select = ({
   let options;
   if (data) {
     if (type === 'teams') {
-      options = data
-        .filter(team => !team.name.includes('Role'))
-        .map(team => {
-          return { value: team.name, label: team.name };
-        });
+      options = data.filter(team => !team.name.includes('Role')).map(team => {
+        return { value: team.name, label: team.name };
+      });
     } else if (type === 'notifications') {
       options = data.map(notification => {
         return {
@@ -61,11 +59,9 @@ export const Select = ({
         };
       });
     } else {
-      options = data.kapps
-        .find(kapp => kapp.slug === type)
-        .forms.map(form => {
-          return { value: form.slug, label: form.name };
-        });
+      options = data.kapps.find(kapp => kapp.slug === type).forms.map(form => {
+        return { value: form.slug, label: form.name };
+      });
     }
     optionElements = options.map(option => {
       const kappName = type.charAt(0).toUpperCase() + type.slice(1);

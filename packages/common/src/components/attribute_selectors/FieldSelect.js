@@ -7,7 +7,7 @@ import {
   MenuItem,
 } from 'react-bootstrap-typeahead';
 import { Set } from 'immutable';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 

@@ -2,13 +2,8 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, withHandlers, withProps, withState } from 'recompose';
-import {
-  KappLink as Link,
-  PageTitle,
-  selectCurrentKapp,
-  Constants,
-  Utils,
-} from 'common';
+import { PageTitle, selectCurrentKapp, Constants, Utils } from 'common';
+import { Link } from '@reach/router';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import {
   SESSION_ITEM_USER_LOCATION,
@@ -16,7 +11,8 @@ import {
   mapTechBarsForDistance,
   sortTechBarsByDistance,
 } from '../redux/modules/techBarApp';
-import { I18n } from '../../../app/src/I18nProvider';
+import { context } from '../redux/store';
+import { I18n } from '@kineticdata/react';
 
 export const TechBarsComponent = ({
   kapp,
@@ -168,7 +164,7 @@ export const TechBarsComponent = ({
 
 export const mapStateToProps = (state, props) => ({
   kapp: selectCurrentKapp(state),
-  techBars: state.techBar.techBarApp.schedulers
+  techBars: state.techBarApp.schedulers
     .filter(s => s.values['Status'] === 'Active')
     .map(
       props.userLocation ? mapTechBarsForDistance(props.userLocation) : t => t,
@@ -210,6 +206,8 @@ export const TechBars = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('currentTechBar', 'setCurrentTechBar', ({ techBars }) => {
     const techBarId = sessionStorage.getItem(SESSION_ITEM_CURRENT_TECH_BAR);

@@ -16,7 +16,7 @@ import { QueueListContainer } from './components/queue_list/QueueListContainer';
 import { NewItemMenuContainer } from './components/new_item_menu/NewItemMenuContainer';
 import { WorkMenuContainer } from './components/work_menu/WorkMenu';
 import { Settings } from './components/settings/Settings';
-import { I18n } from '../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import './assets/styles/master.scss';
 import { context } from './redux/store';
 

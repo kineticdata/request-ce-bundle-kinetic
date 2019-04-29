@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { TimeAgo } from 'common';
 import { activityData } from '../../RequestActivityList';
-import { I18n } from '../../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const SubmissionCompletedHeader = ({ activity }) => {
   const data = activityData(activity);

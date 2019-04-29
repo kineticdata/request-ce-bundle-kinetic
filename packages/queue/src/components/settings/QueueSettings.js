@@ -3,13 +3,14 @@ import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
-import { toastActions, PageTitle, AttributeSelectors } from 'common';
+import { toastActions, AttributeSelectors } from 'common';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import { fetchKapp, updateKapp } from '@kineticdata/react';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
+import { PageTitle } from '../shared/PageTitle';
 
 export const SettingsComponent = ({
   attributesMap,

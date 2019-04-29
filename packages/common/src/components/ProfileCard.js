@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar } from './Avatar';
-import { I18n } from '../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const getProfilePhone = profile =>
   profile.profileAttributes['Phone Number']

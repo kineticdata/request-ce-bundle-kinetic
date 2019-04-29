@@ -6,7 +6,7 @@ import { parse } from 'query-string';
 import { withRouter } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { push } from 'connected-react-router';
-import { bundle } from '@kineticdata/react';
+import { bundle, I18n } from '@kineticdata/react';
 import { login } from './utils/authentication';
 import { actions as authActions } from './redux/modules/auth';
 import logoImage from './assets/images/login-background.png';
@@ -20,7 +20,6 @@ import { RequestAccountForm } from './components/authentication/RequestAccountFo
 import { UnauthenticatedForm } from './components/authentication/UnauthenticatedForm';
 import { RetrieveJwtIframe } from './components/authentication/RetrieveJwtIframe';
 import { OAuthPopup } from './components/authentication/OAuthPopup';
-import { I18n } from './I18nProvider';
 
 const LoginLogo = () => (
   <div

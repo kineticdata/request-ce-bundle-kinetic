@@ -8,9 +8,9 @@ import { lifecycle, compose, withHandlers, withState } from 'recompose';
 import { bundle } from '@kineticdata/react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { List } from 'immutable';
-import { PageTitle } from 'common';
 import { isBlank } from '../../../utils';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { PageTitle } from '../../shared/PageTitle';
+import { I18n } from '@kineticdata/react';
 
 import {
   BridgeQualification,

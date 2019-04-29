@@ -6,7 +6,7 @@ import { Link } from '@reach/router';
 import { FormCard } from './FormCard';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions as spaceFormActions } from '../../redux/modules/spaceForms';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const WallyEmptyMessage = () => {
   return (

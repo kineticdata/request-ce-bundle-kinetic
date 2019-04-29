@@ -10,15 +10,14 @@ import {
   toastActions,
   TaskActions,
   AttributeSelectors,
-  Moment,
   Constants,
 } from 'common';
+
 import { DisplayTabs } from './Display';
 import { TIME_FORMAT } from '../App';
 import { actions } from '../redux/modules/appointments';
 import moment from 'moment';
-import { CoreForm } from '@kineticdata/react';
-import { I18n } from '../../../app/src/I18nProvider';
+import { CoreForm, Moment, I18n } from '@kineticdata/react';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -239,9 +238,9 @@ export const CheckInComponent = ({
 
 export const mapStateToProps = (state, props) => ({
   kapp: selectCurrentKapp(state),
-  loading: state.techBar.appointments.today.loading,
-  errors: state.techBar.appointments.today.errors,
-  appointments: state.techBar.appointments.today.data,
+  loading: state.appointments.today.loading,
+  errors: state.appointments.today.errors,
+  appointments: state.appointments.today.data,
 });
 
 export const mapDispatchToProps = {
@@ -281,6 +280,8 @@ export const CheckIn = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { connect },
   ),
   withState('showDetails', 'setShowDetails', null),
   withState('input', 'setInput', ''),

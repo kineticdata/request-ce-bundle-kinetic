@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Autocomplete from 'react-autocomplete';
 import { AssignmentItem } from './AssignmentItem';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 /* eslint-disable class-methods-use-this */
 export class AssignmentSelector extends Component {

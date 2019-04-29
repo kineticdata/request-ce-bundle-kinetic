@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { Alert } from 'reactstrap';
-import { Moment } from 'common';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n, Moment } from '@kineticdata/react';
 import {
   actions,
   FEEDBACK_FORM_SLUG,
@@ -13,6 +12,7 @@ import {
 import { APPOINTMENT_FORM_SLUG } from '../../../redux/modules/appointments';
 import { WALK_IN_FORM_SLUG } from '../../../redux/modules/walkIns';
 import { DATE_FORMAT } from '../../../redux/modules/metrics';
+import { context } from '../../../redux/store';
 import moment from 'moment';
 import downloadjs from 'downloadjs';
 import papaparse from 'papaparse';
@@ -415,12 +415,12 @@ export const downloadFile = ({
 };
 
 export const mapStateToProps = (state, props) => ({
-  scheduler: state.techBar.techBarApp.schedulers.find(
+  scheduler: state.techBarApp.schedulers.find(
     scheduler => scheduler.values['Id'] === props.schedulerId,
   ),
-  exporting: state.techBar.export.exporting,
-  exportedSubmissions: state.techBar.export.submissions,
-  exportError: state.techBar.export.error,
+  exporting: state.export.exporting,
+  exportedSubmissions: state.export.submissions,
+  exportError: state.export.error,
 });
 
 export const mapDispatchToProps = {
@@ -432,6 +432,8 @@ export const MetricsExport = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withState('exportStatus', 'setExportStatus', null), // Exporting, Empty, Completed
   withState('exportMessage', 'setExportMessage', null),

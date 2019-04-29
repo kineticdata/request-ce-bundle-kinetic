@@ -9,7 +9,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "@kineticdata/react": "0.1.0-RC8",
+    "@kineticdata/react": "0.1.0-RC9",
     "autobind-decorator": "2.1.0",
     "bootstrap": "^4.3.1",
     "connected-react-router": "^4.3.0",

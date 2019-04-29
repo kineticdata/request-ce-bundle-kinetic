@@ -12,7 +12,7 @@ import {
 import { actions } from '../../../redux/modules/settingsNotifications';
 import { context } from '../../../redux/store';
 
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const wrapVar = type => property => `\${${type}('${property}')}`;
 const MINIMUM_CE_VERSION_FOR_DATASTORE = '2.1.0';

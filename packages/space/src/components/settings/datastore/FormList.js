@@ -9,11 +9,12 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { TimeAgo, PageTitle } from 'common';
+import { TimeAgo } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/settingsDatastore';
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { PageTitle } from '../../shared/PageTitle';
+import { I18n } from '@kineticdata/react';
 
 const WallyEmptyMessage = ({ filter }) => {
   return (

@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
-import { PageTitle } from 'common';
 
 import { CategoryCard } from '../shared/CategoryCard';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { PageTitle } from '../shared/PageTitle';
+import { I18n } from '@kineticdata/react';
 
 export const CategoryList = ({ categories }) => (
   <Fragment>

@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import { push } from 'redux-first-history';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import moment from 'moment';
-import { Constants, Loading, PageTitle } from 'common';
+import { Constants, Loading } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 
 import { isActiveClass } from '../../../utils';
 import { actions } from '../../../redux/modules/settingsRobots';
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
+import { PageTitle } from '../../shared/PageTitle';
 
 const getStatusColor = status =>
   status === 'Queued'

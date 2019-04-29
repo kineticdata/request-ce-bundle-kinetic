@@ -10,7 +10,7 @@ import {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
 } from '../../redux/selectors';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const getStatusColor = status =>
   status === 'Inactive' ? 'status--red' : 'status--green';

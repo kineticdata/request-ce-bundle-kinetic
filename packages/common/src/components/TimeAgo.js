@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
 import uuid from 'uuid';
 import { MOMENT_FORMATS } from '../constants';
-import { Moment } from './Moment';
+import { Moment } from '@kineticdata/react';
 
 export class TimeAgo extends Component {
   constructor(props) {

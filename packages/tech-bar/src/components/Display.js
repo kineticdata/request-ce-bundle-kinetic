@@ -8,13 +8,13 @@ import {
   ErrorNotFound,
   ErrorUnauthorized,
   Utils,
-  KappLink as Link,
 } from 'common';
+import { Link } from '@reach/router';
 import { CheckIn } from './CheckIn';
 import { Feedback } from './Feedback';
 import { Overhead } from './Overhead';
-import { I18n } from '../../../app/src/I18nProvider';
-
+import { I18n } from '@kineticdata/react';
+import { context } from '../redux/store';
 export const DisplayTabs = ({
   techBarId,
   checkInClassName = '',
@@ -84,7 +84,7 @@ export const DisplayComponent = ({
 };
 
 export const mapStateToProps = (state, props) => {
-  const techBar = state.techBar.techBarApp.schedulers.find(
+  const techBar = state.techBarApp.schedulers.find(
     scheduler => scheduler.values['Id'] === props.techBarId,
   );
   return {
@@ -113,5 +113,7 @@ export const Display = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
 )(DisplayComponent);

@@ -12,7 +12,8 @@ import {
 } from 'recompose';
 import { CoreForm } from '@kineticdata/react';
 import { Button } from 'reactstrap';
-import { toastActions, Loading, PageTitle } from 'common';
+import { toastActions, Loading } from 'common';
+import { PageTitle } from '../../shared/PageTitle';
 
 import { isActiveClass } from '../../../utils';
 import { RobotExecutionsList } from './RobotExecutionsList';
@@ -24,7 +25,7 @@ import {
 } from '../../../redux/modules/settingsRobots';
 import { context } from '../../../redux/store';
 
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const globals = import('common/globals');
 

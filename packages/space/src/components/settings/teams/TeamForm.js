@@ -5,12 +5,13 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
 import md5 from 'md5';
 import { fromJS } from 'immutable';
-import { Utils, PageTitle, Avatar } from 'common';
+import { Utils, Avatar } from 'common';
 
 import { AddMemberModal } from './AddMemberModal';
 import { buildHierarchy } from '../../../utils';
 import { IconPicker } from '../../shared/IconPicker';
 import { TeamCard } from '../../shared/TeamCard';
+import { PageTitle } from '../../shared/PageTitle';
 
 import {
   actions as teamListActions,
@@ -21,7 +22,7 @@ import {
   selectTeamMemberships,
 } from '../../../redux/modules/team';
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const TeamFormComponent = ({
   editing,

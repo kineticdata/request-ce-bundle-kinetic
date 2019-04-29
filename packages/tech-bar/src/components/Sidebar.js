@@ -2,13 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
 import {
-  KappLink as Link,
-  KappNavLink as NavLink,
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
   selectHasRoleSchedulerAgent,
   Utils,
 } from 'common';
+import { Link } from '@reach/router';
 import {
   Dropdown,
   DropdownToggle,
@@ -16,7 +15,9 @@ import {
   Nav,
   NavItem,
 } from 'reactstrap';
-import { I18n } from '../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
+import { context } from '../redux/store';
+import { isActiveClass } from '../utils';
 
 export const SidebarComponent = ({
   loadingUpcoming,
@@ -33,9 +34,9 @@ export const SidebarComponent = ({
       <div className="sidebar-group">
         <Nav vertical>
           <NavItem>
-            <NavLink
+            <Link
               to={`/past`}
-              activeClassName="active"
+              getProps={isActiveClass('nav-link')}
               className="nav-link"
               exact
             >
@@ -44,7 +45,7 @@ export const SidebarComponent = ({
                   <I18n>Past Appointments</I18n>
                 </div>
               </div>
-            </NavLink>
+            </Link>
           </NavItem>
         </Nav>
       </div>
@@ -58,18 +59,16 @@ export const SidebarComponent = ({
         <Nav vertical>
           {techBars.map(techBar => (
             <NavItem key={techBar.id}>
-              <NavLink
+              <Link
                 to={`/appointment/${techBar.values['Id']}`}
-                activeClassName="active"
                 className="nav-link"
-                exact
               >
                 <div>
                   <div>
                     <I18n>{techBar.values['Name']}</I18n>
                   </div>
                 </div>
-              </NavLink>
+              </Link>
               {hasTechBarDisplayRole(techBar.values['Name']) && (
                 <Dropdown
                   toggle={toggleDropdown(techBar.id)}
@@ -141,12 +140,12 @@ export const SidebarComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  techBars: state.techBar.techBarApp.schedulers.filter(
+  techBars: state.techBarApp.schedulers.filter(
     s => s.values['Status'] === 'Active',
   ),
-  loadingUpcoming: state.techBar.appointments.upcoming.loading,
-  upcomingErrors: state.techBar.appointments.upcoming.errors,
-  upcomingAppointments: state.techBar.appointments.upcoming.data,
+  loadingUpcoming: state.appointments.upcoming.loading,
+  upcomingErrors: state.appointments.upcoming.errors,
+  upcomingAppointments: state.appointments.upcoming.data,
   hasSettingsAccess:
     selectHasRoleSchedulerManager(state) ||
     selectHasRoleSchedulerAdmin(state) ||
@@ -164,7 +163,12 @@ const hasTechBarDisplayRole = ({ profile }) => techBarName =>
   Utils.isMemberOf(profile, `Role::Tech Bar Display::${techBarName}`);
 
 export const Sidebar = compose(
-  connect(mapStateToProps),
+  connect(
+    mapStateToProps,
+    null,
+    null,
+    { context },
+  ),
   withState('openDropdown', 'setOpenDropdown', false),
   withHandlers({ toggleDropdown, hasTechBarDisplayRole }),
 )(SidebarComponent);

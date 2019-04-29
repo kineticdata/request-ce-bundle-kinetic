@@ -3,10 +3,10 @@ import moment from 'moment';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import { PageTitle } from 'common';
 import { actions } from '../../../redux/modules/settingsForms';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../../redux/store';
+import { PageTitle } from '../../shared/PageTitle';
 
 export const FormActivityContainer = ({ loading, submission, space }) =>
   !loading && (

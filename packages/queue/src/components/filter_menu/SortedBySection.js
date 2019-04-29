@@ -4,7 +4,7 @@ import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { OrderedMap } from 'immutable';
 import { actions } from '../../redux/modules/filterMenu';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
 
 export const SORT_OPTIONS = OrderedMap([

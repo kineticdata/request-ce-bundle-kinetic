@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { matchPath } from 'react-router';
 import { Route } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { createHashHistory } from 'history';
 import { configureStore } from './redux/store';
@@ -23,7 +23,6 @@ import {
 } from './redux/modules/auth';
 import { AuthenticatedContainer } from './AuthenticatedContainer';
 import { App } from './App';
-import { ConnectedI18nProvider } from './I18nProvider';
 
 // Create the history instance that enables client-side application routing.
 const history = createHashHistory();
@@ -43,6 +42,10 @@ axios.interceptors.response.use(null, authInterceptor.handleRejected);
 addResponseInterceptor(null, authInterceptor.handleRejected);
 setDefaultAuthAssumed(true);
 
+const ConnectedKineticLib = connect(state => ({
+  locale: state.app.locale,
+}))(KineticLib);
+
 ReactDOM.render(
   <Fragment>
     <Helmet>
@@ -52,15 +55,13 @@ ReactDOM.render(
       />
     </Helmet>
     <Provider store={store}>
-      <KineticLib>
-        <ConnectedI18nProvider>
-          <ConnectedRouter history={history}>
-            <AuthenticatedContainer>
-              <Route path="/" render={() => <App history={history} />} />
-            </AuthenticatedContainer>
-          </ConnectedRouter>
-        </ConnectedI18nProvider>
-      </KineticLib>
+      <ConnectedKineticLib>
+        <ConnectedRouter history={history}>
+          <AuthenticatedContainer>
+            <Route path="/" render={() => <App history={history} />} />
+          </AuthenticatedContainer>
+        </ConnectedRouter>
+      </ConnectedKineticLib>
     </Provider>
   </Fragment>,
   document.getElementById('root'),

@@ -4,7 +4,7 @@ import { Map } from 'immutable';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { bundle } from '@kineticdata/react';
-import { I18n } from '../../I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const CreateAccount = ({
   location,

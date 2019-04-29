@@ -2,14 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { matchPath, Switch } from 'react-router-dom';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
-import {
-  KappRoute as Route,
-  KappRedirect as Redirect,
-  Loading,
-  ErrorNotFound,
-  ErrorUnexpected,
-  selectCurrentKappSlug,
-} from 'common';
+import { Redirect } from '@reach/router';
+import { Router } from './TechbarApp';
+import { Loading, ErrorUnexpected, selectCurrentKappSlug } from 'common';
+
+import { context } from './redux/store';
 import { actions } from './redux/modules/techBarApp';
 import { actions as appointmentActions } from './redux/modules/appointments';
 import { Sidebar } from './components/Sidebar';
@@ -21,7 +18,7 @@ import { Form } from './components/Form';
 import { AppointmentForm } from './components/AppointmentForm';
 import { Settings } from './components/settings/Settings';
 import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
-import { I18n } from '../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import './assets/styles/master.scss';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
@@ -35,49 +32,48 @@ export const AppComponent = props => {
   } else {
     return props.render({
       sidebar: (
-        <Switch>
-          <Route
-            path={`/kapps/${props.kappSlug}/settings`}
-            render={() => (
-              <SettingsSidebar settingsBackPath={props.settingsBackPath} />
-            )}
+        <Router>
+          <SettingsSidebar
+            settingsBackPath={props.settingsBackPath}
+            path="settings/*"
           />
-          <Route
-            render={() => (
-              <Sidebar
-                counts={props.submissionCounts}
-                homePageMode={props.homePageMode}
-                homePageItems={props.homePageItems}
-                openSettings={props.openSettings}
-              />
-            )}
+          <Sidebar
+            counts={props.submissionCounts}
+            homePageMode={props.homePageMode}
+            homePageItems={props.homePageItems}
+            openSettings={props.openSettings}
+            path="*"
           />
-        </Switch>
+          />
+        </Router>
       ),
       main: (
         <I18n>
           <main className={`package-layout package-layout--tech-bar`}>
-            <Route path="/" exact component={Home} />
-            <Route path="/past" exact component={Past} />
-            <Route path="/tech-bars" exact component={TechBars} />
-            <Route
-              path="/forms/:formSlug/submissions/:id"
-              exact
-              component={Form}
-            />
-            <Route
-              path="/appointment/:techBarId?/:id?"
-              exact
-              component={AppointmentForm}
-            />
-            <Route
-              path="/past/appointment/:techBarId/:id?"
-              exact
-              render={props => <AppointmentForm {...props} isPast={true} />}
-            />
-            <Route path="/forms/:formSlug/:id?" exact component={Form} />
-            <Route path="/display/:id/:mode?" exact component={Display} />
-            <Route path="/settings" component={Settings} />
+            <Router>
+              <Settings path="settings/*" />
+              <Home path="/" />
+              <Past path="/past" />
+              <TechBars path="/tech-bars" />
+              <Form path="/forms/:formSlug/submissions/:id" />
+              <AppointmentForm path="/appointment/:techBarId/:id?" />
+              <AppointmentForm path="/appointment/:id?" />
+
+              <AppointmentForm
+                {...props}
+                isPast={true}
+                path="/past/appointment/:techBarId/:id?"
+              />
+              <AppointmentForm
+                {...props}
+                isPast={true}
+                path="/past/appointment/:techBarId"
+              />
+              <Form path="/forms/:formSlug/:id" />
+              <Form path="/forms/:formSlug" />
+              <Display path="/display/:id" />
+              <Display path="/display/:id/:mode" />
+            </Router>
           </main>
         </I18n>
       ),
@@ -91,8 +87,8 @@ const mapStateToProps = (state, props) => {
     pathname: state.router.location.pathname,
     kappSlug: currentKapp,
     settingsBackPath: `/kapps/${currentKapp}`,
-    loading: state.techBar.techBarApp.appLoading,
-    errors: state.techBar.techBarApp.appErrors,
+    loading: state.techBarApp.appLoading,
+    errors: state.techBarApp.appErrors,
     fullScreen: matchPath(state.router.location.pathname, {
       path: `/kapps/${currentKapp}/display`,
     }),
@@ -108,6 +104,8 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentDidMount() {

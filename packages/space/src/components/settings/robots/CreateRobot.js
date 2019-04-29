@@ -7,7 +7,7 @@ import { ROBOT_FORM_SLUG } from '../../../redux/modules/settingsRobots';
 import { CoreForm } from '@kineticdata/react';
 import { toastActions } from 'common';
 
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../../redux/store';
 
 const globals = import('common/globals');

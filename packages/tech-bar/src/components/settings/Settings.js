@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Switch, Route } from 'react-router-dom';
+import { Link } from '@reach/router';
 import {
-  KappLink as Link,
   Icon,
   ErrorUnauthorized,
   selectCurrentKappSlug,
@@ -17,7 +17,8 @@ import { TechBarSettings } from './TechBarSettings';
 import { TechBar } from './tech-bar/TechBar';
 import { TechBarSettingsForm } from './tech-bar/TechBarSettingsForm';
 import { AppointmentForm } from './tech-bar/AppointmentForm';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
+import { context } from '../../redux/store';
 
 export const SettingsComponent = ({ kappSlug, hasSettingsAccess }) =>
   hasSettingsAccess ? (
@@ -159,5 +160,7 @@ export const SettingsNavigation = compose(
   connect(
     mapStateToPropsNav,
     {},
+    null,
+    { context },
   ),
 )(SettingsNavigationComponent);

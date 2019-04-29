@@ -2,16 +2,12 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, lifecycle } from 'recompose';
-import {
-  KappLink as Link,
-  PageTitle,
-  selectCurrentKapp,
-  Moment,
-  Constants,
-} from 'common';
+import { PageTitle, selectCurrentKapp, Constants } from 'common';
+import { Link } from '@reach/router';
 import { actions } from '../redux/modules/appointments';
+import { context } from '../redux/store';
 import moment from 'moment';
-import { I18n } from '../../../app/src/I18nProvider';
+import { I18n, Moment } from '@kineticdata/react';
 import { DATE_FORMAT, TIME_FORMAT } from '../App';
 
 export const PastComponent = ({
@@ -121,12 +117,12 @@ export const PastComponent = ({
 
 export const mapStateToProps = state => ({
   kapp: selectCurrentKapp(state),
-  techBars: state.techBar.techBarApp.schedulers.filter(
+  techBars: state.techBarApp.schedulers.filter(
     s => s.values['Status'] === 'Active',
   ),
-  loadingPast: state.techBar.appointments.past.loading,
-  pastErrors: state.techBar.appointments.past.errors,
-  pastAppointments: state.techBar.appointments.past.data,
+  loadingPast: state.appointments.past.loading,
+  pastErrors: state.appointments.past.errors,
+  pastAppointments: state.appointments.past.data,
   profile: state.app.profile,
 });
 
@@ -139,6 +135,8 @@ export const Past = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentDidMount() {

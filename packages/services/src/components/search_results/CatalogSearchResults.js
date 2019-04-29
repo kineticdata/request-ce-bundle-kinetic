@@ -1,11 +1,11 @@
 import React from 'react';
-import { PageTitle } from 'common';
 import { Link } from '@reach/router';
 
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 import { ServiceCard } from '../shared/ServiceCard';
+import { PageTitle } from '../shared/PageTitle';
 import { CatalogSearchContainer } from '../shared/CatalogSearchContainer';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const CatalogSearchResults = ({ query, forms, appLocation }) => (
   <div>

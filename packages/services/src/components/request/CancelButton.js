@@ -6,7 +6,7 @@ import { actions } from '../../redux/modules/submission';
 import { context } from '../../redux/store';
 
 import * as constants from '../../constants';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const CancelButton = props =>
   props.enableButton && (
@@ -52,8 +52,8 @@ const enhance = compose(
           : disabledAttribute === 'true' ||
             disabledAttribute === 'yes' ||
             props.submission.coreState === constants.CORE_STATE_CLOSED
-          ? false
-          : true,
+            ? false
+            : true,
     };
   }),
   withHandlers({

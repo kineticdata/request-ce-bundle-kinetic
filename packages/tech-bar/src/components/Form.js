@@ -10,14 +10,15 @@ import {
 } from 'recompose';
 import { CoreForm } from '@kineticdata/react';
 import {
-  KappLink as Link,
   ErrorNotFound,
   ErrorUnauthorized,
   ErrorUnexpected,
   PageTitle,
 } from 'common';
+import { Link } from '@reach/router';
 import { parse } from 'query-string';
-import { I18n } from '../../../app/src/I18nProvider';
+import { context } from '../redux/store';
+import { I18n } from '@kineticdata/react';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -138,7 +139,7 @@ export const handleCreated = props => response => {
 
 export const mapStateToProps = (state, { match: { params } }) => ({
   kappSlug: state.app.kappSlug,
-  forms: state.techBar.techBarApp.forms,
+  forms: state.techBarApp.forms,
   values: valuesFromQueryParams(state.router.location.search),
 });
 
@@ -150,6 +151,8 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(props => ({
     form: props.forms.find(form => form.slug === props.match.params.formSlug),

@@ -6,7 +6,7 @@ import { compose, withState, withHandlers } from 'recompose';
 
 import { getTeamColor, getTeamIcon } from '../../../utils';
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const TeamsListItemComponent = ({ team, openDropdown, toggleDropdown }) => {
   return (

@@ -17,11 +17,12 @@ import {
   DropdownToggle,
   DropdownMenu,
 } from 'reactstrap';
-import { PageTitle, Constants, Moment } from 'common';
+import { PageTitle, Constants } from 'common';
 import {
   searchSubmissions,
   SubmissionSearch,
   CoreForm,
+  Moment,
 } from '@kineticdata/react';
 import moment from 'moment';
 import { LoadingMessage, ErrorMessage, InfoMessage } from './Schedulers';
@@ -41,7 +42,7 @@ import {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
 } from '../../redux/selectors';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const globals = import('common/globals');
 

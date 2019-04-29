@@ -5,7 +5,7 @@ import { Link } from '@reach/router';
 import { push } from 'redux-first-history';
 import { parse } from 'query-string';
 import { Discussion as KinopsDiscussion, PageTitle } from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
 
 const buildRelatedItemLink = relatedItem => {

@@ -1,13 +1,10 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 import { getTeamColor, getTeamIcon } from '../../utils';
-import {
-  Avatar,
-  DiscussionsPanel,
-  PageTitle,
-  ViewDiscussionsModal,
-} from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { Avatar, DiscussionsPanel, ViewDiscussionsModal } from 'common';
+import { PageTitle } from '../shared/PageTitle';
+
+import { I18n } from '@kineticdata/react';
 
 const CreationForm = ({ onChange, values, errors }) => (
   <div className="form-group">
@@ -171,16 +168,17 @@ export const Team = ({
           )}
         </div>
         <Fragment>
-          {viewDiscussionsModal && isSmallLayout && (
-            <ViewDiscussionsModal
-              close={closeDiscussions}
-              itemType="Team"
-              itemKey={team.slug}
-              creationFields={creationFields}
-              CreationForm={CreationForm}
-              me={me}
-            />
-          )}
+          {viewDiscussionsModal &&
+            isSmallLayout && (
+              <ViewDiscussionsModal
+                close={closeDiscussions}
+                itemType="Team"
+                itemKey={team.slug}
+                creationFields={creationFields}
+                CreationForm={CreationForm}
+                me={me}
+              />
+            )}
           <DiscussionsPanel
             itemType="Team"
             itemKey={team.slug}

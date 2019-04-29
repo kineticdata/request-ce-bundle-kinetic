@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import {
   Icon,
-  PageTitle,
   Schedulers,
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
 } from 'common';
+import { PageTitle } from '../shared/PageTitle';
 
 import { Router } from '../../SpaceApp';
 import { SpaceSettings } from './space_settings/SpaceSettings';
@@ -22,7 +22,7 @@ import { Translations } from './translations/Translations';
 import { actions as datastoreActions } from '../../redux/modules/settingsDatastore';
 import { actions as teamActions } from '../../redux/modules/teamList';
 import { context } from '../../redux/store';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const SettingsComponent = () => (
   <Router>

@@ -17,10 +17,10 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@kineticdata/react@0.1.0-RC8":
-  version "0.1.0-RC8"
-  resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-0.1.0-RC8.tgz#9717b782fc1e0f1252de292b9b17609e3b25a11b"
-  integrity sha512-yTk6mJZSwIVUtI94h2g9G30icqrKUt4qo2Q8sTaAQGcnnhEM40o+zKq0TXY6oyEWqNd7/4Ch5i5owDUz5xE35g==
+"@kineticdata/react@0.1.0-RC9":
+  version "0.1.0-RC9"
+  resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-0.1.0-RC9.tgz#c6829a889975928dd56342478fb07be625fad6c3"
+  integrity sha512-yh824GIrZqewzaQjCnUoUo0ZKHCO4ZTZe8owsgBA9GKI7K5R27mF4znvwaMwKwzRmJ3HqI9sytg1Vs1XjuLBwA==
   dependencies:
     actiontyper "^0.0.4"
     axios "^0.18.0"
@@ -32,6 +32,7 @@
     lodash.isstring "^4.0.1"
     modularscale-sass "^3.0.8"
     moment "^2.21.0"
+    prop-types "^15.7.2"
     react-avatar "^3.5.0"
     react-dropzone "^4.2.3"
     react-markdown "^4.0.6"

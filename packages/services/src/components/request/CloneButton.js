@@ -4,7 +4,7 @@ import { compose, withHandlers, withProps } from 'recompose';
 import { Utils } from 'common';
 import { actions } from '../../redux/modules/submission';
 import { context } from '../../redux/store';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const CloneButton = props =>
   props.enableButton && (

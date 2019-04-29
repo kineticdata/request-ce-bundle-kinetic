@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import classNames from 'classnames';
 import { Link } from '@reach/router';
-import { PageTitle, Icon, TimeAgo, Utils as CommonUtils } from 'common';
+import { Icon, TimeAgo, Utils as CommonUtils } from 'common';
 import { bundle } from '@kineticdata/react';
 import { RequestShowConfirmationContainer } from './RequestShowConfirmation';
 import { RequestDiscussion } from './RequestDiscussion';
@@ -20,7 +20,9 @@ import {
   getSubmissionPath,
 } from '../../utils';
 import { ReviewRequest } from './ReviewRequest';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { PageTitle } from '../shared/PageTitle';
+
+import { I18n } from '@kineticdata/react';
 import { isActiveClass } from '../../utils';
 
 const getIcon = form =>

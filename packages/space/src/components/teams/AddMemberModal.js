@@ -5,7 +5,7 @@ import { List, Set } from 'immutable';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import Autocomplete from 'react-autocomplete';
 import { Avatar } from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 import {
   actions,

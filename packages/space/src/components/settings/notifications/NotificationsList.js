@@ -2,16 +2,16 @@ import React from 'react';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withProps, withState } from 'recompose';
-import { PageTitle } from 'common';
 import { Modal, ModalBody } from 'reactstrap';
 
 import { NotificationListItem } from './NotificationListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
+import { PageTitle } from '../../shared/PageTitle';
 
 import { isActiveClass } from '../../../utils';
 import { actions } from '../../../redux/modules/settingsNotifications';
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const WallyNoResultsFoundMessage = ({ type }) => {
   return (

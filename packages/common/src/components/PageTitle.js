@@ -1,20 +1,13 @@
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
-import { I18n } from '../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
-export const PageTitleComponent = ({ space, kapp, parts }) => {
+export const PageTitle = ({ pageTitleParts }) => {
   return (
     <I18n
       render={translate => {
-        const title = parts
+        const title = (pageTitleParts || [])
           .map(p => translate(p))
-          .concat([
-            kapp && translate(kapp.name),
-            translate(space.name),
-            'kinops',
-          ])
           .filter(item => !!item)
           .join(' | ');
 
@@ -23,17 +16,3 @@ export const PageTitleComponent = ({ space, kapp, parts }) => {
     />
   );
 };
-
-export const mapStateToProps = state => ({
-  space: state.app.space || 'Home',
-  kapp: state.app.kapps.find(kapp => kapp.slug === state.app.kappSlug),
-});
-
-export const mapDispatchToProps = {};
-
-export const PageTitle = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
-)(PageTitleComponent);

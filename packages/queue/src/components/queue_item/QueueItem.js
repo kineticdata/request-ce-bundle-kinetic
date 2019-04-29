@@ -2,13 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withProps } from 'recompose';
 import { Link } from '@reach/router';
-import { DiscussionsPanel, PageTitle } from 'common';
+import { DiscussionsPanel } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { actions } from '../../redux/modules/queue';
 import { QueueItemDetailsContainer } from './QueueItemDetails';
 import { getFilterByPath } from '../../redux/modules/queueApp';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
+import { PageTitle } from '../shared/PageTitle';
 
 const CreationForm = ({ onChange, values, errors }) => (
   <React.Fragment>

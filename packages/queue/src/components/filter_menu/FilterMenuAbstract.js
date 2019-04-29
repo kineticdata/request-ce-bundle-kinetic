@@ -10,7 +10,7 @@ import { DateRangeSelector } from 'common/src/components/DateRangeSelector';
 import { validateAssignments, validateDateRange } from './FilterMenuContainer';
 import moment from 'moment';
 import { AttributeSelectors } from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
 
 const VALID_STATUSES = List(['Open', 'Pending', 'Cancelled', 'Complete']);

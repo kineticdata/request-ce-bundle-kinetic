@@ -3,14 +3,15 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, lifecycle } from 'recompose';
 import {
-  KappLink as Link,
   PageTitle,
   selectCurrentKapp,
   Utils,
   selectHasRoleSchedulerAdmin,
 } from 'common';
+import { Link } from '@reach/router';
 import { actions } from '../../redux/modules/techBarApp';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
+import { I18n } from '@kineticdata/react';
 
 const getStatusColor = status =>
   status === 'Inactive' ? 'status--red' : 'status--green';
@@ -95,8 +96,8 @@ export const TechBarSettingsComponent = ({ techBars }) => (
 
 export const mapStateToProps = (state, props) => {
   const techBars = selectHasRoleSchedulerAdmin(state)
-    ? state.techBar.techBarApp.schedulers
-    : state.techBar.techBarApp.schedulers.filter(
+    ? state.techBarApp.schedulers
+    : state.techBarApp.schedulers.filter(
         s =>
           Utils.isMemberOf(
             state.app.profile,
@@ -119,6 +120,8 @@ export const TechBarSettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentDidMount() {

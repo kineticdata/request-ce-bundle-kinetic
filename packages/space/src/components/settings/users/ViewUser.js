@@ -2,12 +2,13 @@ import React from 'react';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import { PageTitle, Avatar } from 'common';
+import { Avatar } from 'common';
 
 import { actions } from '../../../redux/modules/settingsUsers';
 import { context } from '../../../redux/store';
 
 import { TeamCard } from '../../shared/TeamCard';
+import { PageTitle } from '../../shared/PageTitle';
 
 const ViewUserComponent = ({ loading, profile }) => (
   <div className="page-container page-container--users">

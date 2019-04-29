@@ -12,7 +12,7 @@ import { FormSettings } from './forms/FormSettings';
 import { FormActivity } from './forms/FormActivity';
 import { CreateForm } from './forms/CreateForm';
 import { FormSubmissions } from './forms/FormSubmissions';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
 
 export const SettingsComponent = () => (

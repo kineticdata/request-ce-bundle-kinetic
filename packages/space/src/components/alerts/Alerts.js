@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import { PageTitle } from 'common';
 import { Link } from '@reach/router';
 import { List } from 'immutable';
 import moment from 'moment';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { Alert } from './Alert';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
 import { actions } from '../../redux/modules/alerts';
+import { PageTitle } from '../shared/PageTitle';
 
 const WallyEmptyMessage = ({ canEdit }) => {
   return (
@@ -34,8 +34,9 @@ const AlertsComponent = ({
   match,
   error,
   canEdit,
+  id,
 }) => {
-  const selectedAlert = match.params.id;
+  const selectedAlert = id;
   return (
     <div className="page-container page-container--space-alerts">
       <PageTitle parts={['Alerts']} />
@@ -113,13 +114,13 @@ const AlertsComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.app.alerts.loading,
-  spaceAdminAlerts: List(state.app.alerts.get('data'))
+  loading: state.app.loading,
+  spaceAdminAlerts: List(state.alerts.data)
     .sortBy(alert =>
       moment(alert.values['Start Date Time'] || alert.createdAt).unix(),
     )
     .reverse(),
-  alerts: List(state.app.alerts.get('data'))
+  alerts: List(state.alerts.data)
     .filter(
       alert =>
         !alert.values['End Date Time'] ||
@@ -134,7 +135,7 @@ export const mapStateToProps = state => ({
       moment(alert.values['Start Date Time'] || alert.createdAt).unix(),
     )
     .reverse(),
-  error: state.app.alerts.error,
+  error: state.alerts.error,
   canEdit: state.app.profile.spaceAdmin ? true : false,
 });
 

@@ -20,7 +20,7 @@ import {
 } from 'reactstrap';
 import { LocalesList } from './LocalesList';
 import { Table, PaginationControl, FilterControl } from 'common';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { actions } from '../../../redux/modules/settingsTranslations';
 import { context } from '../../../redux/store';
 

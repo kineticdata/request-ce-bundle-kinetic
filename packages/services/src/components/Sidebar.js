@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from '@reach/router';
 
 import { Nav, NavItem } from 'reactstrap';
-import { I18n } from '../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { isActiveClass } from '../utils';
 
 const formatCount = count =>

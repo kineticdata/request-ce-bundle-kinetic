@@ -2,7 +2,7 @@ import React from 'react';
 import { Utils } from 'common';
 import { Link } from '@reach/router';
 import { getTeamColor, isActiveClass } from '../utils';
-import { I18n } from '../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const Sidebar = ({ teams, isSpaceAdmin, openSettings }) => (
   <div className="sidebar space-sidebar">

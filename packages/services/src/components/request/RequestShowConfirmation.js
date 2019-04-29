@@ -6,7 +6,7 @@ import { selectAdminKapp } from 'app/src/redux/selectors';
 import { context } from '../../redux/store';
 
 import { getFeedbackFormConfig } from '../../utils';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const RequestShowConfirmation = ({ handleOpenFeedback }) => (
   <Fragment>

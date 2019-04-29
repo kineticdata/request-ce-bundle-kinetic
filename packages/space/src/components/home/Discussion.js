@@ -5,7 +5,7 @@ import { List } from 'immutable';
 import { getTeamColor } from '../../utils';
 
 import { Avatar, MessagesGroup } from 'common';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const getTeamHeaderStyle = (discussion, teams) => {
   const teamRI = discussion.relatedItems.find(ri => ri.type === 'Team');

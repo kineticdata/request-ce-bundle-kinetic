@@ -11,7 +11,7 @@ import {
   selectHasRoleSchedulerManager,
 } from '../../redux/selectors';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import semver from 'semver';
 const MINIMUM_CE_VERSION = '2.1.0';
 

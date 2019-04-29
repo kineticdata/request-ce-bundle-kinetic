@@ -3,16 +3,17 @@ import React from 'react';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { lifecycle, compose, withState } from 'recompose';
-import { PageTitle } from 'common';
 import { ButtonDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 
 import { actions } from '../../../../redux/modules/settingsDatastore';
 import { context } from '../../../../redux/store';
+import { PageTitle } from '../../../shared/PageTitle';
+
 import { Searchbar } from './Searchbar';
 import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
 import { DatastoreModal } from '../DatastoreModal';
-import { I18n } from '../../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const SubmissionSearchComponent = ({
   form,

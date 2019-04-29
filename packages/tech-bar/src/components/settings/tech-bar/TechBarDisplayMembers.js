@@ -20,7 +20,8 @@ import {
 import { List } from 'immutable';
 import { AttributeSelectors, toastActions } from 'common';
 import { actions } from '../../../redux/modules/techBarApp';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { context } from '../../../redux/store';
+import { I18n } from '@kineticdata/react';
 
 const TechBarDisplayMembersComponent = ({
   hasManagerAccess,
@@ -317,8 +318,8 @@ const TechBarDisplayMembersComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.techBar.techBarApp.displayTeamLoading,
-  team: state.techBar.techBarApp.displayTeam,
+  loading: state.techBarApp.displayTeamLoading,
+  team: state.techBarApp.displayTeam,
 });
 
 export const mapDispatchToProps = {
@@ -374,6 +375,8 @@ export const TechBarDisplayMembers = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withProps(({ techBar }) => ({
     techBarName: techBar ? techBar.values['Name'] : '',

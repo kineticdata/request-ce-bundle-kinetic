@@ -26,7 +26,7 @@ import { UnpublishedChanges } from './TranslationsList';
 import md5 from 'md5';
 import { actions } from '../../../redux/modules/settingsTranslations';
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const ImportModal = ({
   importOpen,
@@ -452,39 +452,40 @@ export const EntriesListComponent = ({
                 />
               </div>
             )}
-            {keyHash && translations.size > 0 && (
-              <table className="table table-sm table-striped table--settings">
-                <thead className="header">
-                  <tr>
-                    <th scope="col">
-                      <I18n>Key</I18n>
-                    </th>
-                    <th width="1%" />
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td scope="row">{currentKey}</td>
-                    <td className="text-right">
-                      <ButtonGroup>
-                        <button
-                          className="btn btn-sm btn-primary"
-                          onClick={toggleEdit(translations.get(0), 'key')}
-                        >
-                          <span className="fa fa-fw fa-pencil" />
-                        </button>
-                        <button
-                          className="btn btn-sm btn-danger"
-                          onClick={toggleDelete(translations.get(0), 'key')}
-                        >
-                          <span className="fa fa-fw fa-times" />
-                        </button>
-                      </ButtonGroup>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            )}
+            {keyHash &&
+              translations.size > 0 && (
+                <table className="table table-sm table-striped table--settings">
+                  <thead className="header">
+                    <tr>
+                      <th scope="col">
+                        <I18n>Key</I18n>
+                      </th>
+                      <th width="1%" />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td scope="row">{currentKey}</td>
+                      <td className="text-right">
+                        <ButtonGroup>
+                          <button
+                            className="btn btn-sm btn-primary"
+                            onClick={toggleEdit(translations.get(0), 'key')}
+                          >
+                            <span className="fa fa-fw fa-pencil" />
+                          </button>
+                          <button
+                            className="btn btn-sm btn-danger"
+                            onClick={toggleDelete(translations.get(0), 'key')}
+                          >
+                            <span className="fa fa-fw fa-times" />
+                          </button>
+                        </ButtonGroup>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              )}
             <Table
               class="table--settings"
               data={translations.toJS()}
@@ -830,20 +831,19 @@ const renderKeyFooterCell = ({ entryToCreate, handleCreateEntryChange }) => ({
 
 const renderUsageCell = () => ({ value, row, index }) => (
   <td>
-    {value && value.length > 0 && (
-      <div id={`entry-usages-${index}`}>
-        <span className="fa fa-info" />
-        <UncontrolledTooltip
-          target={`entry-usages-${index}`}
-          placement="top"
-          style={{ textAlign: 'left' }}
-        >
-          {value.map((u, i) => (
-            <div key={`usage-${i}`}>{u}</div>
-          ))}
-        </UncontrolledTooltip>
-      </div>
-    )}
+    {value &&
+      value.length > 0 && (
+        <div id={`entry-usages-${index}`}>
+          <span className="fa fa-info" />
+          <UncontrolledTooltip
+            target={`entry-usages-${index}`}
+            placement="top"
+            style={{ textAlign: 'left' }}
+          >
+            {value.map((u, i) => <div key={`usage-${i}`}>{u}</div>)}
+          </UncontrolledTooltip>
+        </div>
+      )}
   </td>
 );
 
@@ -914,12 +914,13 @@ export const EntriesList = compose(
     null,
     { context },
   ),
-  withProps(({ keyHash, translations }) =>
-    keyHash && translations.size > 0
-      ? {
-          currentKey: translations.get(0).key,
-        }
-      : {},
+  withProps(
+    ({ keyHash, translations }) =>
+      keyHash && translations.size > 0
+        ? {
+            currentKey: translations.get(0).key,
+          }
+        : {},
   ),
   withState('entryToDelete', 'setEntryToDelete', null),
   withState('entryToEdit', 'setEntryToEdit', null),

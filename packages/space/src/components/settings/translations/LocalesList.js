@@ -12,7 +12,7 @@ import {
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { actions } from '../../../redux/modules/settingsTranslations';
 import { context } from '../../../redux/store';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const LocalesListComponent = ({
   defaultLocale,

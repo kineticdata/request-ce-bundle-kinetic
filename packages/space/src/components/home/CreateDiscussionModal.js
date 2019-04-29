@@ -13,7 +13,7 @@ import { toastActions } from 'common';
 import { actions } from '../../redux/modules/spaceApp';
 import { context } from '../../redux/store';
 import { PeopleSelect } from 'common/src/components/discussions/PeopleSelect';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const CreateDiscussionModalComponent = props => (
   <Modal size="lg" isOpen toggle={props.close}>

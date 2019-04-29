@@ -2,11 +2,12 @@ import React from 'react';
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from '@reach/router';
-import { TimeAgo, PageTitle } from 'common';
+import { TimeAgo } from 'common';
 import { Avatar } from 'common';
 import { actions } from '../../redux/modules/about';
 import { context } from '../../redux/store';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
+import { PageTitle } from '../shared/PageTitle';
 
 const AboutComponent = ({ space, about, loading }) => (
   <div className="page-container page-container--space-about">

@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { I18n } from '../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const handleRadioChange = props => event => {
   props.onChange(

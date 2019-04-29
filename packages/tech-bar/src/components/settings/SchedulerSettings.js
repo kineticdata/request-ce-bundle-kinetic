@@ -2,9 +2,11 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, lifecycle, withProps } from 'recompose';
-import { KappLink as Link, selectCurrentKapp, Utils, Schedulers } from 'common';
+import { Link } from '@reach/router';
+import { selectCurrentKapp, Utils, Schedulers } from 'common';
 import { actions } from '../../redux/modules/techBarApp';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { context } from '../../redux/store';
+import { I18n } from '@kineticdata/react';
 
 export const SchedulerSettingsComponent = props => (
   <Schedulers
@@ -27,7 +29,7 @@ export const SchedulerSettingsComponent = props => (
 
 export const mapStateToProps = (state, props) => ({
   kapp: selectCurrentKapp(state),
-  techBar: state.techBar.techBarApp.schedulers.find(
+  techBar: state.techBarApp.schedulers.find(
     scheduler => scheduler.values['Id'] === props.techBarId,
   ),
 });
@@ -44,6 +46,8 @@ export const SchedulerSettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   lifecycle({
     componentWillUnmount() {

@@ -1,6 +1,6 @@
 import React from 'react';
 import wallyMissingIMage from 'common/src/assets/images/wally-missing.svg';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const NotificationsNotFound = () => (
   <div className="empty-state empty-state--wally">

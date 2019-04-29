@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Popover, PopoverBody, UncontrolledTooltip } from 'reactstrap';
 import { FilterMenuAbstract } from '../filter_menu/FilterMenuAbstract';
 import isarray from 'isarray';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const Menu = props => {
   const toggle = props.toggleShowing(props.name);

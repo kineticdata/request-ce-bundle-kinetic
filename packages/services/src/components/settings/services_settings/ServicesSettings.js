@@ -3,11 +3,12 @@ import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
-import { toastActions, PageTitle, AttributeSelectors } from 'common';
+import { toastActions, AttributeSelectors } from 'common';
 import { fetchKapp, updateKapp } from '@kineticdata/react';
 import isarray from 'isarray';
-import { I18n } from '../../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../../redux/store';
+import { PageTitle } from '../../shared/PageTitle';
 
 export const SettingsComponent = ({
   attributesMap,

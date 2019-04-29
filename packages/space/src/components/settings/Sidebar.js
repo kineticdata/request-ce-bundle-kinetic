@@ -10,7 +10,7 @@ import {
 } from 'common';
 import { NOTIFICATIONS_FORM_SLUG } from '../../redux/modules/settingsNotifications';
 import { ROBOT_DEFINITIONS_FORM_SLUG } from '../../redux/modules/settingsRobots';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
 
 import { isActiveClass } from '../../utils';

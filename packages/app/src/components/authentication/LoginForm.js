@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { compose, withState } from 'recompose';
 import { Link } from 'react-router-dom';
-import { I18n } from '../../I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const Login = ({
   invitationToken,

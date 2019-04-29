@@ -2,10 +2,11 @@ import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
-import { PageTitle } from 'common';
 import { RequestCard } from '../shared/RequestCard';
+import { PageTitle } from '../shared/PageTitle';
+
 import { getSubmissionPath } from '../../utils';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const emptyStateMessage = type => {
   switch (type) {

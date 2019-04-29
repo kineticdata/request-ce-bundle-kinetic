@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
-import { PageTitle } from 'common';
 import { Link } from '@reach/router';
 import { ServiceCard } from '../shared/ServiceCard';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
+import { PageTitle } from '../shared/PageTitle';
 
 export const Category = ({ category }) => (
   <Fragment>
@@ -33,9 +33,7 @@ export const Category = ({ category }) => (
             path: form.slug,
             key: form.slug,
           }))
-          .map(props => (
-            <ServiceCard {...props} />
-          ))}
+          .map(props => <ServiceCard {...props} />)}
       </div>
     </div>
   </Fragment>

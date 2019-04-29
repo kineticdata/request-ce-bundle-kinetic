@@ -11,7 +11,7 @@ import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import memoize from 'memoize-one';
 
 import { Cache } from '../../cache';
-import { I18n } from '../../../../app/src/I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 export const IconMenuItem = props => {
   const disabledReason = props.disabledFn && props.disabledFn(props.option);

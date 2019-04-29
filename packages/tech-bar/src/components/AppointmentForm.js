@@ -10,13 +10,14 @@ import {
 } from 'recompose';
 import { CoreForm } from '@kineticdata/react';
 import {
-  KappLink as Link,
   ErrorNotFound,
   ErrorUnauthorized,
   ErrorUnexpected,
   PageTitle,
 } from 'common';
-import { I18n } from '../../../app/src/I18nProvider';
+import { Link } from '@reach/router';
+import { context } from '../redux/store';
+import { I18n } from '@kineticdata/react';
 
 const APPOINTMENT_FORM_SLUG = 'appointment';
 
@@ -119,7 +120,7 @@ export const handleCreated = props => response => {
 export const mapStateToProps = (state, { match: { params } }) => {
   return {
     kappSlug: state.app.kappSlug,
-    techBar: state.techBar.techBarApp.schedulers.find(
+    techBar: state.techBarApp.schedulers.find(
       scheduler => scheduler.values['Id'] === params.techBarId,
     ),
   };
@@ -133,6 +134,8 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
+    null,
+    { context },
   ),
   withHandlers({ handleCompleted, handleCreated }),
 );

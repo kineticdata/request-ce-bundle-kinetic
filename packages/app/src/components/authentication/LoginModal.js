@@ -9,7 +9,7 @@ import { RetrieveJwtIframe } from './RetrieveJwtIframe';
 
 import { login } from '../../utils/authentication';
 import { actions } from '../../redux/modules/auth';
-import { I18n } from '../../I18nProvider';
+import { I18n } from '@kineticdata/react';
 
 const PopupForm = props => (
   <Fragment>
