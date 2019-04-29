@@ -115,21 +115,21 @@ export const selectAssignments = (allTeams, form, queueItem) => {
         : // Otherwise allow reassignment to any team
           filteredTeams;
 
-  return availableTeams
-    .flatMap(t =>
-      t.memberships.map(m => {
+  return availableTeams.flatMap(t =>
+    t.memberships
+      .map(m => {
         const user = m.user;
         user.team = t.name;
         return user;
-      }),
-    )
-    .concat(
-      availableTeams.map(t => ({
-        username: null,
-        displayName: 'Unassigned',
-        team: t.name,
-      })),
-    );
+      })
+      .concat([
+        {
+          username: null,
+          displayName: 'Unassigned',
+          team: t.name,
+        },
+      ]),
+  );
 };
 
 export const getTeamIcon = team => {
@@ -195,34 +195,36 @@ export const reducer = (state = State(), { type, payload }) => {
         .set('myTeammates', payload.myTeammates)
         .set(
           'teamFilters',
-          List(payload.myTeams).map(team => {
-            const filter = filterReviver(
-              getAttributeValue(team, 'Default Queue Filter'),
-            );
-            if (filter) {
-              return filter
-                .set('type', 'team')
-                .update('name', name => name || team.name)
-                .update('icon', icon => icon || getTeamIcon(team))
-                .update(
-                  'teams',
-                  teams =>
-                    teams.includes(team.name) ? teams : teams.push(team.name),
-                );
-            } else {
-              return Filter({
-                name: team.name,
-                type: 'team',
-                icon: getTeamIcon(team),
-                teams: List([team.name]),
-                assignments: AssignmentCriteria({
-                  mine: true,
-                  teammates: true,
-                  unassigned: true,
-                }),
-              });
-            }
-          }).sortBy(filter => filter.name),
+          List(payload.myTeams)
+            .map(team => {
+              const filter = filterReviver(
+                getAttributeValue(team, 'Default Queue Filter'),
+              );
+              if (filter) {
+                return filter
+                  .set('type', 'team')
+                  .update('name', name => name || team.name)
+                  .update('icon', icon => icon || getTeamIcon(team))
+                  .update(
+                    'teams',
+                    teams =>
+                      teams.includes(team.name) ? teams : teams.push(team.name),
+                  );
+              } else {
+                return Filter({
+                  name: team.name,
+                  type: 'team',
+                  icon: getTeamIcon(team),
+                  teams: List([team.name]),
+                  assignments: AssignmentCriteria({
+                    mine: true,
+                    teammates: true,
+                    unassigned: true,
+                  }),
+                });
+              }
+            })
+            .sortBy(filter => filter.name),
         )
         .set('myFilters', List(payload.myFilters))
         .set(
