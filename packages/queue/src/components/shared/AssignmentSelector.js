@@ -108,7 +108,7 @@ export class AssignmentSelector extends Component {
             wrapperStyle={{}}
             menuStyle={{}}
             items={this.props.assignments}
-            getItemValue={item => item.username}
+            getItemValue={item => item.username || ''}
             shouldItemRender={this.shouldItemRender}
             renderItem={this.renderItem}
             renderMenu={this.renderMenu}
