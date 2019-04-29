@@ -69,7 +69,7 @@ export function* fetchAppSettingsTask() {
   const allTeams = teams.filter(isAssignable);
   const myTeams = List(
     profile.memberships.map(membership => membership.team).filter(isAssignable),
-  );
+  ).sortBy(team => team.name);
   const myTeammates = myTeams
     // Get all of the users from all of the teams.
     .flatMap(t => t.memberships)
