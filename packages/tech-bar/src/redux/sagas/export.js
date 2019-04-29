@@ -1,6 +1,7 @@
 import { takeEvery, all, put, call, select } from 'redux-saga/effects';
 import { SubmissionSearch, searchSubmissions } from '@kineticdata/react';
 import { actions, types } from '../modules/export';
+import isarray from 'isarray';
 
 export function* fetchSubmissionsSaga({
   payload: {
@@ -45,7 +46,13 @@ export function* fetchSubmissionsSaga({
           });
         }
       })
-      .flat(),
+      .reduce((searchers, query) => {
+        if (isarray(query)) {
+          return [...searchers, ...query];
+        } else {
+          return [...searchers, query];
+        }
+      }, []),
   });
 }
 
