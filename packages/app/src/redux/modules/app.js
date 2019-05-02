@@ -73,6 +73,7 @@ export const State = Record({
   timezones: null,
   locale: moment.locale(),
   space: null,
+  kapp: null,
   kapps: List(),
   profile: null,
   errors: List(),
@@ -95,7 +96,9 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.FETCH_SPACE_FAILURE:
       return state.update('errors', errors => errors.push(payload));
     case types.FETCH_KAPPS_SUCCESS:
-      return state.set('kapps', payload);
+      return state
+        .set('kapps', payload)
+        .set('kapp', payload.find(kapp => kapp.slug === state.kappSlug));
     case types.FETCH_KAPPS_FAILURE:
       return state.update('errors', errors => errors.push(payload));
     case types.FETCH_PROFILE_SUCCESS:
@@ -111,13 +114,18 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.SET_USER_LOCALE:
       return state.set('locale', payload || moment.locale());
     case types.SET_KAPP_SLUG:
-      return state.set('kappSlug', payload);
+      return state
+        .set('kappSlug', payload)
+        .set('kapp', state.kapps.find(kapp => kapp.slug === payload));
     case types.SET_CORE_VERSION:
       return state.set('coreVersion', payload);
     case LOCATION_CHANGE:
       const path = '/kapps/:kappSlug';
       const match = matchPath(payload.location.pathname, { path });
-      return state.set('kappSlug', match && match.params.kappSlug);
+      const kappSlug = match && match.params.kappSlug;
+      return state
+        .set('kappSlug', kappSlug)
+        .set('kapp', state.kapps.find(kapp => kapp.slug === kappSlug));
     default:
       return state;
   }

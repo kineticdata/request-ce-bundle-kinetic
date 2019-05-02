@@ -1,22 +1,17 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
-import { compose, withHandlers, withProps } from 'recompose';
+import { connect } from '../../../redux/store';
+import { compose, withHandlers } from 'recompose';
 import {
-  PageTitle,
-  selectCurrentKapp,
   Utils,
   ErrorNotFound,
   ErrorUnauthorized,
   selectHasRoleSchedulerAdmin,
 } from 'common';
+import { PageTitle } from '../../shared/PageTitle';
 import { Link } from '@reach/router';
 import { CoreForm } from '@kineticdata/react';
-import {
-  actions,
-  TECH_BAR_SETTINGS_FORM_SLUG,
-} from '../../../redux/modules/techBarApp';
-import { context } from '../../../redux/store';
+import { actions } from '../../../redux/modules/techBarApp';
+import { TECH_BAR_SETTINGS_FORM_SLUG } from '../../../constants';
 import { I18n } from '@kineticdata/react';
 
 // Asynchronously import the global dependencies that are used in the embedded
@@ -41,19 +36,19 @@ export const TechBarSettingsFormComponent = ({
             <div className="page-title">
               <div className="page-title__wrapper">
                 <h3>
-                  <Link to="/">
+                  <Link to="../../../../">
                     <I18n>tech bar</I18n>
                   </Link>{' '}
                   /{` `}
-                  <Link to="/settings">
+                  <Link to="../../../">
                     <I18n>settings</I18n>
                   </Link>{' '}
                   /{` `}
-                  <Link to="/settings/general">
+                  <Link to="../../">
                     <I18n>tech bars</I18n>
                   </Link>{' '}
                   /{` `}
-                  <Link to={`/settings/general/${techBar.id}`}>
+                  <Link to="../">
                     <I18n>{techBar.values['Name']}</I18n>
                   </Link>{' '}
                   /{` `}
@@ -62,10 +57,7 @@ export const TechBarSettingsFormComponent = ({
                   <I18n>Edit Settings</I18n>
                 </h1>
               </div>
-              <Link
-                to={`/settings/general/${techBar.id}`}
-                className="btn btn-secondary"
-              >
+              <Link to={`../`} className="btn btn-secondary">
                 <I18n>Cancel Edit</I18n>
               </Link>
             </div>
@@ -118,7 +110,7 @@ export const mapStateToProps = (state, props) => {
         )),
   );
   return {
-    kapp: selectCurrentKapp(state),
+    kapp: state.app.kapp,
     techBar,
     hasManagerAccess:
       isSchedulerAdmin ||
@@ -131,29 +123,23 @@ export const mapStateToProps = (state, props) => {
 };
 
 export const mapDispatchToProps = {
-  push,
   updateTechBarSettings: actions.updateTechBarSettings,
 };
 
 export const TechBarSettingsForm = compose(
-  withProps(({ match: { params: { id } } }) => ({
-    techBarId: id,
-  })),
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withHandlers({
-    handleSaved: ({ push, kapp, techBarId, updateTechBarSettings }) => ({
+    handleSaved: ({ navigate, kapp, techBarId, updateTechBarSettings }) => ({
       submission,
     }) => {
       updateTechBarSettings({
         techBarId,
         submission,
       });
-      push(`/kapps/${kapp.slug}/settings/general/${techBarId}`);
+      navigate(`../`);
     },
   }),
 )(TechBarSettingsFormComponent);

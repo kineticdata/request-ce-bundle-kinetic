@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../redux/store';
 import { compose, withHandlers, withState, withProps } from 'recompose';
 import {
   selectCurrentKapp,
@@ -9,12 +8,10 @@ import {
   ErrorUnexpected,
   toastActions,
   TaskActions,
-  AttributeSelectors,
-  Constants,
 } from 'common';
 
 import { DisplayTabs } from './Display';
-import { TIME_FORMAT } from '../App';
+import { TIME_FORMAT } from '../constants';
 import { actions } from '../redux/modules/appointments';
 import moment from 'moment';
 import { CoreForm, Moment, I18n } from '@kineticdata/react';
@@ -132,7 +129,7 @@ export const CheckInComponent = ({
                                 appt.values['Event Time'],
                                 TIME_FORMAT,
                               )}
-                              format={Constants.MOMENT_FORMATS.time}
+                              format={Moment.formats.time}
                             />
                             {' - '}
                             <I18n>{appt.values['Event Type']}</I18n>
@@ -244,7 +241,6 @@ export const mapStateToProps = (state, props) => ({
 });
 
 export const mapDispatchToProps = {
-  push,
   fetchTodayAppointments: actions.fetchTodayAppointments,
   addSuccess: toastActions.addSuccess,
   addError: toastActions.addError,
@@ -280,8 +276,6 @@ export const CheckIn = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { connect },
   ),
   withState('showDetails', 'setShowDetails', null),
   withState('input', 'setInput', ''),

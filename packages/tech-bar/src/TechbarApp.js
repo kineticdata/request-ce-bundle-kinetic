@@ -1,15 +1,17 @@
-import { is } from 'immutable';
-import { LocationProvider, Router as ReachRouter } from '@reach/router';
 import React, { Component, Fragment } from 'react';
+import { Provider } from 'react-redux';
+import { matchPath } from 'react-router-dom';
+import { LocationProvider, Router as ReachRouter } from '@reach/router';
 import {
   configureStore,
   history,
   context,
   store,
 } from 'tech-bar/src/redux/store';
+import { CommonProvider } from 'common';
 import { types } from './redux/modules/app';
 import { App } from './App';
-import { Provider } from 'react-redux';
+import { is } from 'immutable';
 
 export const Router = ({ children, ...props }) => (
   <ReachRouter {...props} primary={false} component={Fragment}>
@@ -21,11 +23,10 @@ export const syncAppState = ([key, value]) => {
   store.dispatch({ type: types.SYNC_APP_STATE, payload: { key, value } });
 };
 
-export class TechbarApp extends Component {
+export class TechBarApp extends Component {
   constructor(props) {
     super(props);
     this.state = { ready: false };
-    console.log('In Techbar App');
     // This needs to be called before we attempt to use the store below
     // otherwise it will be null. We call it here to make the API of this
     // embeddable app a little nicer (history can be passed to the component
@@ -60,16 +61,23 @@ export class TechbarApp extends Component {
     return (
       this.state.ready && (
         <Provider store={store} context={context}>
-          <LocationProvider history={history}>
-            <Router>
-              <App
-                render={this.props.render}
-                path={`${this.props.appState.location}/*`}
-              />
-            </Router>
-          </LocationProvider>
+          <CommonProvider>
+            <LocationProvider history={history}>
+              <Router>
+                <App
+                  render={this.props.render}
+                  path={`${this.props.appState.location}/*`}
+                />
+              </Router>
+            </LocationProvider>
+          </CommonProvider>
         </Provider>
       )
     );
   }
+
+  static shouldSuppressSidebar = (pathname, kappSlug) =>
+    matchPath(pathname, { path: `/kapps/${kappSlug}` });
+  static shouldHideHeader = (pathname, kappSlug) =>
+    matchPath(pathname, { path: `/kapps/${kappSlug}/display` });
 }

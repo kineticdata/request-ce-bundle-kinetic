@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../../redux/store';
 import {
   compose,
   lifecycle,
@@ -8,29 +7,22 @@ import {
   withProps,
   withState,
 } from 'recompose';
-import {
-  PageTitle,
-  selectCurrentKapp,
-  Utils,
-  selectHasRoleSchedulerAdmin,
-} from 'common';
+import { selectCurrentKapp, Utils, selectHasRoleSchedulerAdmin } from 'common';
+import { PageTitle } from '../shared/PageTitle';
 import { isActiveClass } from '../../utils';
 import { Link } from '@reach/router';
 import { MetricsSummary } from './metrics/MetricsSummary';
 import { MetricsTrend } from './metrics/MetricsTrend';
 import { MetricsExport } from './metrics/MetricsExport';
-import {
-  actions,
-  DATE_FORMAT,
-  MONTH_FORMAT,
-} from '../../redux/modules/metrics';
-import { context } from '../../redux/store';
+import { actions } from '../../redux/modules/metrics';
+import { DATE_FORMAT, MONTH_FORMAT } from '../../constants';
 import { I18n } from '@kineticdata/react';
 import moment from 'moment';
 
 export const TechBarMetricsComponent = ({
   clearMetrics,
   mode,
+  tabMode,
   schedulerId,
   setSchedulerId,
   eventType,
@@ -50,11 +42,11 @@ export const TechBarMetricsComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">
+              <Link to={`../../${mode ? '../' : ''}`}>
                 <I18n>tech bar</I18n>
               </Link>{' '}
               /{` `}
-              <Link to="/settings">
+              <Link to={`../${mode ? '../' : ''}`}>
                 <I18n>settings</I18n>
               </Link>{' '}
               /{` `}
@@ -128,8 +120,8 @@ export const TechBarMetricsComponent = ({
           <ul className="nav nav-tabs">
             <li role="presentation">
               <Link
-                to={'/settings/metrics'}
-                getProps={isActiveClass('nav-link')}
+                to={`${mode ? '../' : ''}`}
+                getProps={isActiveClass()}
                 onClick={() => {
                   if (selectedRange !== 'last30Days') {
                     setSelectedRange('last30Days');
@@ -144,8 +136,8 @@ export const TechBarMetricsComponent = ({
             </li>
             <li role="presentation">
               <Link
-                to={'/settings/metrics/trend'}
-                getProps={isActiveClass('nav-link')}
+                to={`${mode ? '../' : ''}trend`}
+                getProps={isActiveClass()}
                 onClick={() => {
                   if (selectedRange !== 'last12Months') {
                     setSelectedRange('last12Months');
@@ -158,10 +150,11 @@ export const TechBarMetricsComponent = ({
             </li>
             <li role="presentation">
               <Link
-                to={'/settings/metrics/export'}
-                getProps={isActiveClass('nav-link')}
+                to={`${mode ? '../' : ''}export`}
+                getProps={isActiveClass()}
                 onClick={() => {
                   clearMetrics();
+                  setSelectedRange('singleDay');
                   setSelectedDate(
                     moment()
                       .add(-1, 'day')
@@ -174,7 +167,7 @@ export const TechBarMetricsComponent = ({
             </li>
           </ul>
           <div className="form p-0 my-3">
-            {mode !== 'export' ? (
+            {tabMode !== 'export' ? (
               <div className="row">
                 <div className="form-group col-md-6">
                   <label htmlFor="date-range-select">
@@ -201,7 +194,7 @@ export const TechBarMetricsComponent = ({
                           clearMetrics();
                         }}
                       >
-                        {mode === 'summary' && (
+                        {tabMode === 'summary' && (
                           <option value="singleDay">
                             {translate('Single Day')}
                           </option>
@@ -218,12 +211,12 @@ export const TechBarMetricsComponent = ({
                         <option value="monthToDate">
                           {translate('Month to Date')}
                         </option>
-                        {mode === 'trend' && (
+                        {tabMode === 'trend' && (
                           <option value="last12Months">
                             {translate('Last 12 Months')}
                           </option>
                         )}
-                        {mode === 'trend' && (
+                        {tabMode === 'trend' && (
                           <option value="yearToDate">
                             {translate('Year To Date')}
                           </option>
@@ -279,7 +272,7 @@ export const TechBarMetricsComponent = ({
               </div>
             )}
           </div>
-          {mode === 'summary' && (
+          {tabMode === 'summary' && (
             <div>
               <MetricsSummary
                 schedulerId={schedulerId}
@@ -288,7 +281,7 @@ export const TechBarMetricsComponent = ({
               />
             </div>
           )}
-          {mode === 'trend' && (
+          {tabMode === 'trend' && (
             <div>
               <MetricsTrend
                 schedulerId={schedulerId}
@@ -312,7 +305,7 @@ export const TechBarMetricsComponent = ({
               />
             </div>
           )}
-          {mode === 'export' && (
+          {tabMode === 'export' && (
             <div>
               <MetricsExport
                 selectedDate={selectedDate}
@@ -388,7 +381,6 @@ export const mapStateToProps = (state, props) => {
 };
 
 export const mapDispatchToProps = {
-  push,
   fetchMetrics: actions.fetchMetrics,
   clearMetrics: actions.clearMetrics,
 };
@@ -421,11 +413,9 @@ export const TechBarMetrics = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
-  withProps(({ match: { params: { mode = 'summary' } } }) => ({
-    mode: ['summary', 'trend', 'export'].includes(mode) ? mode : 'summary',
+  withProps(({ mode = 'summary' }) => ({
+    tabMode: ['summary', 'trend', 'export'].includes(mode) ? mode : 'summary',
   })),
   withState('schedulerId', 'setSchedulerId', ''),
   withState('eventType', 'setEventType', ''),

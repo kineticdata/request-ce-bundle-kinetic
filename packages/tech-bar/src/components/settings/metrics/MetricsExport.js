@@ -1,18 +1,16 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../../../redux/store';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { Alert } from 'reactstrap';
 import { I18n, Moment } from '@kineticdata/react';
+import { actions } from '../../../redux/modules/export';
 import {
-  actions,
+  APPOINTMENT_FORM_SLUG,
+  DATE_FORMAT,
   FEEDBACK_FORM_SLUG,
   GENERAL_FEEDBACK_FORM_SLUG,
-} from '../../../redux/modules/export';
-import { APPOINTMENT_FORM_SLUG } from '../../../redux/modules/appointments';
-import { WALK_IN_FORM_SLUG } from '../../../redux/modules/walkIns';
-import { DATE_FORMAT } from '../../../redux/modules/metrics';
-import { context } from '../../../redux/store';
+  WALK_IN_FORM_SLUG,
+} from '../../../constants';
 import moment from 'moment';
 import downloadjs from 'downloadjs';
 import papaparse from 'papaparse';
@@ -424,7 +422,6 @@ export const mapStateToProps = (state, props) => ({
 });
 
 export const mapDispatchToProps = {
-  push,
   exportSubmissions: actions.exportSubmissions,
 };
 
@@ -432,8 +429,6 @@ export const MetricsExport = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('exportStatus', 'setExportStatus', null), // Exporting, Empty, Completed
   withState('exportMessage', 'setExportMessage', null),

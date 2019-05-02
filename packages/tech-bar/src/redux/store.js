@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import { connect as connectRedux } from 'react-redux';
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { createReduxHistoryContext, reachify } from 'redux-first-history';
@@ -39,3 +40,14 @@ export const configureStore = hashHistory => {
 };
 
 export const context = createContext(null);
+
+export const connect = (
+  mapStateToProps = null,
+  mapDispatchToProps = null,
+  mergeProps = null,
+  options = {},
+) =>
+  connectRedux(mapStateToProps, mapDispatchToProps, mergeProps, {
+    ...options,
+    context,
+  });

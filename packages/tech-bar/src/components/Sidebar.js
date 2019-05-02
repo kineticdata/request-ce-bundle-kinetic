@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect } from '../redux/store';
 import { compose, withHandlers, withState } from 'recompose';
 import {
   selectHasRoleSchedulerAdmin,
@@ -16,7 +16,7 @@ import {
   NavItem,
 } from 'reactstrap';
 import { I18n } from '@kineticdata/react';
-import { context } from '../redux/store';
+
 import { isActiveClass } from '../utils';
 
 export const SidebarComponent = ({
@@ -35,10 +35,9 @@ export const SidebarComponent = ({
         <Nav vertical>
           <NavItem>
             <Link
-              to={`/past`}
+              to={`past`}
               getProps={isActiveClass('nav-link')}
               className="nav-link"
-              exact
             >
               <div>
                 <div>
@@ -52,7 +51,7 @@ export const SidebarComponent = ({
       <div className="sidebar-group sidebar-group--tech-bars">
         <h1>
           <I18n>Tech Bars</I18n>
-          <Link to="/tech-bars" className="view-all">
+          <Link to="tech-bars" className="view-all">
             <I18n>View All</I18n>
           </Link>
         </h1>
@@ -60,7 +59,7 @@ export const SidebarComponent = ({
           {techBars.map(techBar => (
             <NavItem key={techBar.id}>
               <Link
-                to={`/appointment/${techBar.values['Id']}`}
+                to={`appointment/${techBar.values['Id']}`}
                 className="nav-link"
               >
                 <div>
@@ -79,7 +78,7 @@ export const SidebarComponent = ({
                   </DropdownToggle>
                   <DropdownMenu right>
                     <Link
-                      to={`/display/${techBar.values['Id']}/checkin`}
+                      to={`display/${techBar.values['Id']}/checkin`}
                       className="dropdown-item"
                       target="_blank"
                     >
@@ -89,7 +88,7 @@ export const SidebarComponent = ({
                       </span>
                     </Link>
                     <Link
-                      to={`/display/${techBar.values['Id']}/feedback`}
+                      to={`display/${techBar.values['Id']}/feedback`}
                       className="dropdown-item"
                       target="_blank"
                     >
@@ -99,7 +98,7 @@ export const SidebarComponent = ({
                       </span>
                     </Link>
                     <Link
-                      to={`/display/${techBar.values['Id']}/checkin?crosslink`}
+                      to={`display/${techBar.values['Id']}/checkin?crosslink`}
                       className="dropdown-item"
                       target="_blank"
                     >
@@ -109,7 +108,7 @@ export const SidebarComponent = ({
                       </span>
                     </Link>
                     <Link
-                      to={`/display/${techBar.values['Id']}/overhead`}
+                      to={`display/${techBar.values['Id']}/overhead`}
                       className="dropdown-item"
                       target="_blank"
                     >
@@ -129,7 +128,7 @@ export const SidebarComponent = ({
     {hasSettingsAccess && (
       <div className="sidebar-group sidebar-group--settings">
         <ul className="nav flex-column settings-group">
-          <Link to="/settings/general" className="nav-link">
+          <Link to="settings/general" className="nav-link">
             <I18n>Settings</I18n>
             <span className="fa fa-fw fa-angle-right" />
           </Link>
@@ -163,12 +162,7 @@ const hasTechBarDisplayRole = ({ profile }) => techBarName =>
   Utils.isMemberOf(profile, `Role::Tech Bar Display::${techBarName}`);
 
 export const Sidebar = compose(
-  connect(
-    mapStateToProps,
-    null,
-    null,
-    { context },
-  ),
+  connect(mapStateToProps),
   withState('openDropdown', 'setOpenDropdown', false),
   withHandlers({ toggleDropdown, hasTechBarDisplayRole }),
 )(SidebarComponent);

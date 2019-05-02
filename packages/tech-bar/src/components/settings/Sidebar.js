@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect } from '../../redux/store';
 import { compose } from 'recompose';
 import { Link } from '@reach/router';
 import {
@@ -9,7 +9,6 @@ import {
 } from 'common';
 import { isActiveClass } from '../../utils';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../redux/store';
 
 export const SidebarComponent = ({
   settingsBackPath,
@@ -28,7 +27,7 @@ export const SidebarComponent = ({
         <ul className="nav flex-column sidebar-group">
           <li className="nav-item">
             <Link
-              to="/settings/metrics"
+              to="metrics"
               className="nav-link"
               getProps={isActiveClass('nav-link')}
             >
@@ -36,7 +35,7 @@ export const SidebarComponent = ({
               <span className="fa fa-fw fa-angle-right" />
             </Link>
             <Link
-              to="/settings/general"
+              to="general"
               className="nav-link"
               getProps={isActiveClass('nav-link')}
             >
@@ -45,7 +44,7 @@ export const SidebarComponent = ({
             </Link>
             {hasManagerAccess && (
               <Link
-                to="/settings/schedulers"
+                to="schedulers"
                 className="nav-link"
                 getProps={isActiveClass('nav-link')}
               >
@@ -68,11 +67,4 @@ export const mapStateToProps = state => ({
     selectHasRoleSchedulerManager(state) || selectHasRoleSchedulerAdmin(state),
 });
 
-export const Sidebar = compose(
-  connect(
-    mapStateToProps,
-    null,
-    null,
-    { context },
-  ),
-)(SidebarComponent);
+export const Sidebar = compose(connect(mapStateToProps))(SidebarComponent);

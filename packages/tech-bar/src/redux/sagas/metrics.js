@@ -1,6 +1,7 @@
 import { takeEvery, put, call, select } from 'redux-saga/effects';
 import { searchSubmissions, SubmissionSearch } from '@kineticdata/react';
-import { actions, types, METRICS_FORM_SLUG } from '../modules/metrics';
+import { actions, types } from '../modules/metrics';
+import { METRICS_FORM_SLUG } from '../../constants';
 import isarray from 'isarray';
 
 export function* fetchMetricsSaga({

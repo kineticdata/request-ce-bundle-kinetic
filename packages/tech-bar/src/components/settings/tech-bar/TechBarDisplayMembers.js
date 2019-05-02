@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../../../redux/store';
 import {
   compose,
   lifecycle,
@@ -20,7 +19,6 @@ import {
 import { List } from 'immutable';
 import { AttributeSelectors, toastActions } from 'common';
 import { actions } from '../../../redux/modules/techBarApp';
-import { context } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 
 const TechBarDisplayMembersComponent = ({
@@ -323,7 +321,6 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = {
-  push,
   addDisplayTeamUser: actions.addDisplayTeamMembership,
   removeDisplayTeamUser: actions.removeDisplayTeamMembership,
   createUserAsDisplayTeamUser: actions.createUserWithDisplayTeamMembership,
@@ -375,8 +372,6 @@ export const TechBarDisplayMembers = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withProps(({ techBar }) => ({
     techBarName: techBar ? techBar.values['Name'] : '',

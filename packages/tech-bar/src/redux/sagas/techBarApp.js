@@ -8,12 +8,8 @@ import {
   createMembership,
   deleteMembership,
 } from '@kineticdata/react';
-import {
-  actions,
-  types,
-  Settings,
-  SCHEDULER_FORM_SLUG,
-} from '../modules/techBarApp';
+import { actions, types, Settings } from '../modules/techBarApp';
+import { SCHEDULER_FORM_SLUG } from '../../constants';
 import md5 from 'md5';
 
 const TECH_BAR_SETTINGS_FORM_SLUG = 'tech-bar-settings';

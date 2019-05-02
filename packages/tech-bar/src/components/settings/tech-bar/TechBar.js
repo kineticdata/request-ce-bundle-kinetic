@@ -1,24 +1,20 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../../../redux/store';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import {
-  PageTitle,
-  selectCurrentKapp,
   Utils,
   ErrorNotFound,
   selectHasRoleSchedulerAdmin,
-  Constants,
   Table,
 } from 'common';
+import { PageTitle } from '../../shared/PageTitle';
 import { Link } from '@reach/router';
 import moment from 'moment';
 import { actions } from '../../../redux/modules/techBarApp';
-import { context } from '../../../redux/store';
 import { actions as appointmentActions } from '../../../redux/modules/appointments';
 import { I18n, Moment } from '@kineticdata/react';
 import { TechBarDisplayMembers } from './TechBarDisplayMembers';
-import { TIME_FORMAT } from '../../../App';
+import { TIME_FORMAT } from '../../../constants';
 
 export const TechBarComponent = ({
   techBar,
@@ -31,7 +27,6 @@ export const TechBarComponent = ({
   handleNextDay,
   handleToday,
   isToday,
-  push,
 }) => {
   return techBar ? (
     <Fragment>
@@ -41,15 +36,15 @@ export const TechBarComponent = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to="/">
+                <Link to="../../../">
                   <I18n>tech bar</I18n>
                 </Link>{' '}
                 /{` `}
-                <Link to="/settings">
+                <Link to="../../">
                   <I18n>settings</I18n>
                 </Link>{' '}
                 /{` `}
-                <Link to="/settings/general">
+                <Link to="../">
                   <I18n>tech bars</I18n>
                 </Link>{' '}
                 /{` `}
@@ -59,10 +54,7 @@ export const TechBarComponent = ({
               </h1>
             </div>
             {hasManagerAccess && (
-              <Link
-                to={`/settings/general/${techBar.id}/edit`}
-                className="btn btn-primary"
-              >
+              <Link to="edit" className="btn btn-primary">
                 <I18n>Edit Settings</I18n>
               </Link>
             )}
@@ -124,7 +116,7 @@ export const TechBarComponent = ({
                 <span className="ml-3">
                   <Moment
                     timestamp={appointmentDate}
-                    format={Constants.MOMENT_FORMATS.dateWithDay}
+                    format={Moment.formats.dateWithDay}
                   />
                 </span>
               </div>
@@ -148,13 +140,7 @@ export const TechBarComponent = ({
                     title: 'Summary',
                     renderBodyCell: ({ content, row }) => (
                       <td>
-                        <Link
-                          to={`/settings/general/${techBar.id}/appointment/${
-                            row._id
-                          }`}
-                        >
-                          {content}
-                        </Link>
+                        <Link to={`appointment/${row._id}`}>{content}</Link>
                       </td>
                     ),
                   },
@@ -174,12 +160,12 @@ export const TechBarComponent = ({
                         <td>
                           <Moment
                             timestamp={start}
-                            format={Constants.MOMENT_FORMATS.time}
+                            format={Moment.formats.time}
                           />
                           {` - `}
                           <Moment
                             timestamp={end}
-                            format={Constants.MOMENT_FORMATS.time}
+                            format={Moment.formats.time}
                           />
                         </td>
                       );
@@ -242,7 +228,7 @@ export const mapStateToProps = (state, props) => {
         )),
   );
   return {
-    kapp: selectCurrentKapp(state),
+    kapp: state.app.kapp,
     techBar,
     hasManagerAccess:
       isSchedulerAdmin ||
@@ -261,19 +247,15 @@ export const mapStateToProps = (state, props) => {
 };
 
 export const mapDispatchToProps = {
-  push,
   fetchAppointmentsList: appointmentActions.fetchAppointmentsList,
   setAppointmentsDate: appointmentActions.setAppointmentsDate,
   fetchDisplayTeam: actions.fetchDisplayTeam,
 };
 
 export const TechBar = compose(
-  withProps(({ match: { params: { id } } }) => ({ techBarId: id })),
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withProps(({ appointmentDate }) => ({
     isToday:

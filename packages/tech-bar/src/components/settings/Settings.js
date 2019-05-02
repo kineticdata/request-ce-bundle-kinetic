@@ -1,16 +1,15 @@
 import React, { Fragment } from 'react';
-import { Switch, Route } from 'react-router-dom';
 import { Link } from '@reach/router';
+import { Router } from '../../TechBarApp';
+import { connect } from '../../redux/store';
+import { compose } from 'recompose';
 import {
   Icon,
   ErrorUnauthorized,
-  selectCurrentKappSlug,
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
   selectHasRoleSchedulerAgent,
 } from 'common';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { SchedulerSettings } from './SchedulerSettings';
 import { TechBarMetrics } from './TechBarMetrics';
 import { TechBarSettings } from './TechBarSettings';
@@ -18,65 +17,40 @@ import { TechBar } from './tech-bar/TechBar';
 import { TechBarSettingsForm } from './tech-bar/TechBarSettingsForm';
 import { AppointmentForm } from './tech-bar/AppointmentForm';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../redux/store';
 
 export const SettingsComponent = ({ kappSlug, hasSettingsAccess }) =>
   hasSettingsAccess ? (
-    <Switch>
-      <Route
-        exact
-        path={`/kapps/${kappSlug}/settings/metrics/:mode?`}
-        component={TechBarMetrics}
+    <Router>
+      <TechBarMetrics path="metrics/:mode" />
+      <TechBarMetrics path="metrics" />
+      <AppointmentForm path="general/:techBarId/appointment/:id" />
+      <TechBarSettingsForm path="general/:techBarId/edit" />
+      <TechBar path="general/:techBarId" />
+      <TechBarSettings path="general" />
+      <SchedulerSettings
+        path="schedulers"
+        breadcrumbs={
+          <Fragment>
+            <Link to="">
+              <I18n>tech bar</I18n>
+            </Link>{' '}
+            /{` `}
+            <Link to="settings">
+              <I18n>settings</I18n>
+            </Link>{' '}
+            /{` `}
+          </Fragment>
+        }
       />
-      <Route
-        exact
-        path={`/kapps/${kappSlug}/settings/general`}
-        component={TechBarSettings}
-      />
-      <Route
-        exact
-        path={`/kapps/${kappSlug}/settings/general/:id`}
-        component={TechBar}
-      />
-      <Route
-        exact
-        path={`/kapps/${kappSlug}/settings/general/:id/edit`}
-        component={TechBarSettingsForm}
-      />
-      <Route
-        exact
-        path={`/kapps/${kappSlug}/settings/general/:id/appointment/:apptid`}
-        component={AppointmentForm}
-      />
-      <Route
-        path={`/kapps/${kappSlug}/settings/schedulers`}
-        render={props => (
-          <SchedulerSettings
-            {...props}
-            breadcrumbs={
-              <Fragment>
-                <Link to="/">
-                  <I18n>tech bar</I18n>
-                </Link>{' '}
-                /{` `}
-                <Link to="/settings">
-                  <I18n>settings</I18n>
-                </Link>{' '}
-                /{` `}
-              </Fragment>
-            }
-          />
-        )}
-      />
-      <Route component={SettingsNavigation} />
-    </Switch>
+      <SettingsNavigation default />
+    </Router>
   ) : (
     <ErrorUnauthorized />
   );
 
 const mapStateToProps = (state, props) => {
   return {
-    kappSlug: selectCurrentKappSlug(state),
+    kappSlug: state.app.kappSlug,
     hasSettingsAccess:
       selectHasRoleSchedulerAgent(state) ||
       selectHasRoleSchedulerManager(state) ||
@@ -111,7 +85,7 @@ const SettingsNavigationComponent = ({ hasManagerAccess }) => (
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">
+            <Link to="../">
               <I18n>tech bar</I18n>
             </Link>{' '}
             /{` `}
@@ -125,20 +99,20 @@ const SettingsNavigationComponent = ({ hasManagerAccess }) => (
       <div className="cards__wrapper cards__wrapper--tech-bar">
         <SettingsCard
           name="Metrics"
-          path={`/settings/metrics`}
+          path={`metrics`}
           icon="fa-bar-chart"
           description="View metrics for the Tech Bars."
         />
         <SettingsCard
           name="Tech Bars"
-          path={`/settings/general`}
+          path={`general`}
           icon="fa-gear"
           description="View and modify Tech Bar settings."
         />
         {hasManagerAccess && (
           <SettingsCard
             name="Schedulers"
-            path={`/settings/schedulers`}
+            path={`schedulers`}
             icon="fa-calendar"
             description="View and modify scheduler settings, including event types and availability."
           />
@@ -156,11 +130,6 @@ const mapStateToPropsNav = state => {
   };
 };
 
-export const SettingsNavigation = compose(
-  connect(
-    mapStateToPropsNav,
-    {},
-    null,
-    { context },
-  ),
-)(SettingsNavigationComponent);
+export const SettingsNavigation = compose(connect(mapStateToPropsNav))(
+  SettingsNavigationComponent,
+);

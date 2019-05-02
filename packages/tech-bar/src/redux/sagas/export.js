@@ -13,7 +13,7 @@ export function* fetchSubmissionsSaga({
     dateFieldName = 'Event Date',
   },
 }) {
-  const kappSlug = yield select(state => state.app.config.kappSlug);
+  const kappSlug = yield select(state => state.app.kappSlug);
   const dateParts = [];
   if (dates && dates.length > 8) {
     for (let i = 0; i <= dates.length; i += 8) {

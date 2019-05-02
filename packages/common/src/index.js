@@ -52,6 +52,8 @@ const CommonProvider = props => (
   </Provider>
 );
 
+export { openModalForm } from './redux/modules/modalForm';
+
 export {
   CommonProvider,
   Avatar,

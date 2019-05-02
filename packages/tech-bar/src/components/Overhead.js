@@ -1,7 +1,5 @@
-import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
-import { Constants } from 'common';
+import React from 'react';
+import { connect } from '../redux/store';
 import {
   compose,
   lifecycle,
@@ -12,9 +10,7 @@ import {
 import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
 import { I18n, Moment } from '@kineticdata/react';
-
 import moment from 'moment';
-import { context } from '../redux/store';
 
 export const OverheadComponent = ({ errors, records }) => {
   return (
@@ -44,7 +40,7 @@ export const OverheadComponent = ({ errors, records }) => {
                       {'('}
                       <Moment
                         timestamp={r.appointmentTime}
-                        format={Constants.MOMENT_FORMATS.time}
+                        format={Moment.formats.time}
                       />
                       {')'}
                     </small>
@@ -75,7 +71,7 @@ export const OverheadComponent = ({ errors, records }) => {
                       {'('}
                       <Moment
                         timestamp={r.appointmentTime}
-                        format={Constants.MOMENT_FORMATS.time}
+                        format={Moment.formats.time}
                       />
                       {')'}
                     </small>
@@ -120,7 +116,6 @@ export const mapStateToProps = (state, props) => ({
 });
 
 export const mapDispatchToProps = {
-  push,
   fetchTodayAppointments: appointmentActions.fetchTodayAppointments,
   fetchTodayWalkIns: walkInActions.fetchTodayWalkIns,
 };
@@ -147,8 +142,6 @@ export const Overhead = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('poller', 'setPoller', null),
   withHandlers({

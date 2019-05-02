@@ -1,16 +1,6 @@
-import { Record, List } from 'immutable';
+import { Record, List, Map } from 'immutable';
 import { Utils } from 'common';
 const { namespace, noPayload, withPayload } = Utils;
-
-export const SCHEDULER_FORM_SLUG = 'scheduler';
-export const SCHEDULER_CONFIG_FORM_SLUG = 'scheduler-config';
-export const SCHEDULER_AVAILABILITY_FORM_SLUG = 'scheduler-availability';
-export const SCHEDULER_OVERRIDE_FORM_SLUG = 'scheduler-override';
-export const SCHEDULED_EVENT_FORM_SLUG = 'scheduled-event';
-export const TECH_BAR_SETTINGS_FORM_SLUG = 'tech-bar-settings';
-
-export const SESSION_ITEM_USER_LOCATION = 'user-location';
-export const SESSION_ITEM_CURRENT_TECH_BAR = 'current-tech-bar';
 
 export const enableLocationServices = techBars =>
   techBars.size > 1 &&

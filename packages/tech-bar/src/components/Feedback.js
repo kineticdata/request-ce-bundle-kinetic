@@ -1,16 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../redux/store';
 import { compose, withHandlers, withState, withProps } from 'recompose';
 import { DisplayTabs } from './Display';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { createSubmission } from '@kineticdata/react';
-import { selectCurrentKapp, toastActions, Constants } from 'common';
-import { TIME_FORMAT } from '../App';
+import { selectCurrentKapp, toastActions } from 'common';
+import { TIME_FORMAT } from '../constants';
 import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
 import { I18n, Moment } from '@kineticdata/react';
-import { context } from '../redux/store';
+
 import moment from 'moment';
 
 const FEEDBACK_FORM_SLUG = 'feedback';
@@ -139,7 +138,7 @@ export const FeedbackComponent = ({
                         <div className="text-muted">
                           <Moment
                             timestamp={moment(appt.eventTime, TIME_FORMAT)}
-                            format={Constants.MOMENT_FORMATS.time}
+                            format={Moment.formats.time}
                           />
                           {' - '}
                           <I18n>{appt.eventType}</I18n>
@@ -220,7 +219,6 @@ export const mapStateToProps = (state, props) => ({
 });
 
 export const mapDispatchToProps = {
-  push,
   fetchTodayAppointments: appointmentActions.fetchTodayAppointments,
   fetchTodayWalkIns: walkInActions.fetchTodayWalkIns,
   addSuccess: toastActions.addSuccess,
@@ -309,8 +307,6 @@ export const Feedback = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withProps(({ techBar, kapp }) => {
     return {

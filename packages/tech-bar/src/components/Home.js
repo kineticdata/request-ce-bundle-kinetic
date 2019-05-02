@@ -1,35 +1,26 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
-import {
-  compose,
-  lifecycle,
-  withHandlers,
-  withProps,
-  withState,
-} from 'recompose';
+import { connect } from '../redux/store';
+import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { Modal, ModalBody } from 'reactstrap';
-import {
-  PageTitle,
-  selectCurrentKapp,
-  Constants,
-  Utils,
-  modalFormActions,
-} from 'common';
+import { selectCurrentKapp, Utils, openModalForm } from 'common';
+import { PageTitle } from './shared/PageTitle';
 import { Link } from '@reach/router';
 import { actions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
 import {
-  SESSION_ITEM_USER_LOCATION,
-  SESSION_ITEM_CURRENT_TECH_BAR,
   enableLocationServices,
   mapTechBarsForDistance,
   sortTechBarsByDistance,
 } from '../redux/modules/techBarApp';
+import {
+  SESSION_ITEM_USER_LOCATION,
+  SESSION_ITEM_CURRENT_TECH_BAR,
+  DATE_FORMAT,
+  TIME_FORMAT,
+} from '../constants';
 import moment from 'moment';
 import { I18n, Moment } from '@kineticdata/react';
-import { DATE_FORMAT, TIME_FORMAT } from '../App';
-import { context } from '../redux/store';
+
 import heroImage from '../assets/images/tech-bar-hero.jpg';
 
 export const HomeComponent = ({
@@ -48,7 +39,6 @@ export const HomeComponent = ({
   openDropdown,
   toggleDropdown,
   hasTechBarDisplayRole,
-  openForm,
   waitingUsers,
 }) => {
   const selectedTechBar = currentTechBar || techBars.get(0);
@@ -112,7 +102,7 @@ export const HomeComponent = ({
                 </div>
               </div>
               <Link
-                to={`/appointment/${selectedTechBar.values['Id']}`}
+                to={`appointment/${selectedTechBar.values['Id']}`}
                 className="btn btn-primary card-button"
               >
                 <I18n>Schedule Now</I18n> →
@@ -139,7 +129,7 @@ export const HomeComponent = ({
         <section className="mt-4">
           <div className="info-tile__wrapper">
             <Link
-              to={`/appointment/${selectedTechBar.values['Id']}`}
+              to={`appointment/${selectedTechBar.values['Id']}`}
               className="info-tile"
             >
               <div className="icon">
@@ -153,7 +143,7 @@ export const HomeComponent = ({
                 <I18n>Schedule an appointment.</I18n>
               </p>
             </Link>
-            <Link to="/past" className="info-tile">
+            <Link to="past" className="info-tile">
               <div className="icon">
                 <span className="fa fa-clock-o fa-fw" />
               </div>
@@ -170,7 +160,7 @@ export const HomeComponent = ({
                 <div
                   className="info-tile actionable"
                   onClick={() =>
-                    openForm({
+                    openModalForm({
                       formSlug: 'general-feedback',
                       kappSlug: kapp.slug,
                       values: { 'Scheduler Id': selectedTechBar.values['Id'] },
@@ -218,9 +208,7 @@ export const HomeComponent = ({
                   .add(appt.values['Event Duration'], 'minute');
                 return (
                   <Link
-                    to={`/appointment/${appt.values['Scheduler Id']}/${
-                      appt.id
-                    }`}
+                    to={`appointment/${appt.values['Scheduler Id']}/${appt.id}`}
                     className="card card--appt"
                     key={appt.id}
                   >
@@ -232,19 +220,16 @@ export const HomeComponent = ({
                       <span className="card-title">
                         <Moment
                           timestamp={date}
-                          format={Constants.MOMENT_FORMATS.dateWithDay}
+                          format={Moment.formats.dateWithDay}
                         />
                       </span>
                       <p className="card-subtitle">
                         <Moment
                           timestamp={start}
-                          format={Constants.MOMENT_FORMATS.time}
+                          format={Moment.formats.time}
                         />
                         {` - `}
-                        <Moment
-                          timestamp={end}
-                          format={Constants.MOMENT_FORMATS.time}
-                        />
+                        <Moment timestamp={end} format={Moment.formats.time} />
                       </p>
                       {techBar && (
                         <p className="card-meta">
@@ -304,7 +289,7 @@ export const HomeComponent = ({
               <span>
                 <I18n>Location</I18n>
               </span>
-              <Link to="/tech-bars" className="btn btn-sm btn-link">
+              <Link to="tech-bars" className="btn btn-sm btn-link">
                 <I18n>View All</I18n>
               </Link>
             </h4>
@@ -395,11 +380,9 @@ export const mapStateToProps = (state, props) => {
 };
 
 export const mapDispatchToProps = {
-  push,
   fetchUpcomingAppointments: actions.fetchUpcomingAppointments,
   fetchAppointmentsOverview: actions.fetchAppointmentsOverview,
   fetchWalkInsOverview: walkInActions.fetchWalkInsOverview,
-  openForm: modalFormActions.openForm,
 };
 
 const selectCurrentTechBar = ({
@@ -452,8 +435,6 @@ export const Home = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('currentTechBar', 'setCurrentTechBar', ({ techBars }) => {
     const techBarId = sessionStorage.getItem(SESSION_ITEM_CURRENT_TECH_BAR);

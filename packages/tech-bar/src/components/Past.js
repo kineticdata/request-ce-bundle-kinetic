@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
+import { connect } from '../redux/store';
 import { push } from 'connected-react-router';
 import { compose, lifecycle } from 'recompose';
-import { PageTitle, selectCurrentKapp, Constants } from 'common';
+import { selectCurrentKapp, Constants } from 'common';
+import { PageTitle } from './shared/PageTitle';
 import { Link } from '@reach/router';
 import { actions } from '../redux/modules/appointments';
-import { context } from '../redux/store';
 import moment from 'moment';
 import { I18n, Moment } from '@kineticdata/react';
-import { DATE_FORMAT, TIME_FORMAT } from '../App';
+import { DATE_FORMAT, TIME_FORMAT } from '../constants';
 
 export const PastComponent = ({
   kapp,
@@ -23,7 +23,7 @@ export const PastComponent = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">
+            <Link to="../">
               <I18n>tech bar</I18n>
             </Link>{' '}
             /{' '}
@@ -46,7 +46,7 @@ export const PastComponent = ({
               .add(appt.values['Event Duration'], 'minute');
             return (
               <Link
-                to={`/past/appointment/${appt.values['Scheduler Id']}/${
+                to={`past/appointment/${appt.values['Scheduler Id']}/${
                   appt.id
                 }`}
                 className="card card--appt"
@@ -135,8 +135,6 @@ export const Past = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   lifecycle({
     componentDidMount() {

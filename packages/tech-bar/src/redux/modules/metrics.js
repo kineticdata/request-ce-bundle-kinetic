@@ -2,10 +2,6 @@ import { Record, List } from 'immutable';
 import { Utils } from 'common';
 const { namespace, noPayload, withPayload } = Utils;
 
-export const METRICS_FORM_SLUG = 'tech-bar-metrics';
-export const DATE_FORMAT = 'YYYY-MM-DD';
-export const MONTH_FORMAT = 'YYYY-MM';
-
 export const types = {
   CLEAR_METRICS: namespace('techBarMetrics', 'CLEAR_METRICS'),
   FETCH_METRICS: namespace('techBarMetrics', 'FETCH_METRICS'),

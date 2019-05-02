@@ -2,9 +2,6 @@ import { Record, List } from 'immutable';
 import { Utils } from 'common';
 const { namespace, noPayload, withPayload } = Utils;
 
-export const FEEDBACK_FORM_SLUG = 'feedback';
-export const GENERAL_FEEDBACK_FORM_SLUG = 'general-feedback';
-
 export const types = {
   EXPORT_SUBMISSIONS: namespace('techBarMetricsExport', 'EXPORT_SUBMISSIONS'),
   SET_SUBMISSIONS: namespace('techBarMetricsExport', 'SET_SUBMISSIONS'),

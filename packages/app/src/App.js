@@ -9,7 +9,7 @@ import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import {
   Utils,
   ToastsContainer,
-  // ModalFormContainer,
+  ModalFormContainer,
   selectCurrentKapp,
 } from 'common';
 import { LoginModal } from './components/authentication/LoginModal';
@@ -20,36 +20,36 @@ import { actions as layoutActions } from './redux/modules/layout';
 import { ServicesApp } from 'services/src/ServicesApp';
 import { QueueApp } from 'queue/src/QueueApp';
 import { SpaceApp } from 'space/src/SpaceApp';
-import { TechbarApp } from 'tech-bar/src/TechbarApp';
+import { TechBarApp } from 'tech-bar/src/TechBarApp';
 
 export const AppComponent = props =>
   !props.loading && (
     <Fragment>
       <ToastsContainer />
       <LoginModal />
-      {/* <ModalFormContainer /> */}
-      <div className="app-wrapper">
-        {!props.headerHidden && (
-          <div className="app-header">
-            <HeaderContainer
-              hasSidebar={!props.sidebarHidden}
-              toggleSidebarOpen={props.toggleSidebarOpen}
-            />
-          </div>
-        )}
-        <props.AppProvider
-          appState={{
-            ...props.app.toJS(),
-            location: `${
-              props.kappSlug === null ? '' : `/kapps/${props.kappSlug}`
-            }`,
-            actions: {
-              refreshApp: props.refreshApp,
-            },
-            layoutSize: props.layoutSize,
-          }}
-          history={props.history}
-          render={({ main, sidebar, header }) => (
+      <ModalFormContainer />
+      <props.AppProvider
+        appState={{
+          ...props.app.toJS(),
+          location: `${
+            props.kappSlug === null ? '' : `/kapps/${props.kappSlug}`
+          }`,
+          actions: {
+            refreshApp: props.refreshApp,
+          },
+          layoutSize: props.layoutSize,
+        }}
+        history={props.history}
+        render={({ main, sidebar, header }) => (
+          <div className="app-wrapper">
+            {!props.headerHidden && (
+              <div className="app-header">
+                <HeaderContainer
+                  hasSidebar={!props.sidebarHidden}
+                  toggleSidebarOpen={props.toggleSidebarOpen}
+                />
+              </div>
+            )}
             <div
               className={`app-body ${
                 sidebar
@@ -73,9 +73,9 @@ export const AppComponent = props =>
                 {main}
               </div>
             </div>
-          )}
-        />
-      </div>
+          </div>
+        )}
+      />
     </Fragment>
   );
 
@@ -113,7 +113,7 @@ const getAppProvider = kapp => {
     case 'queue':
       return QueueApp;
     case 'tech-bar':
-      return TechbarApp;
+      return TechBarApp;
     default:
       return SpaceApp;
   }

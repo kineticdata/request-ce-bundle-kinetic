@@ -1,17 +1,19 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
-import { compose, withHandlers, withProps, withState } from 'recompose';
-import { PageTitle, selectCurrentKapp, Constants, Utils } from 'common';
+import { connect } from '../redux/store';
+import { compose, withHandlers, withState } from 'recompose';
+import { selectCurrentKapp, Constants, Utils } from 'common';
+import { PageTitle } from './shared/PageTitle';
 import { Link } from '@reach/router';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import {
-  SESSION_ITEM_USER_LOCATION,
-  SESSION_ITEM_CURRENT_TECH_BAR,
   mapTechBarsForDistance,
   sortTechBarsByDistance,
 } from '../redux/modules/techBarApp';
-import { context } from '../redux/store';
+import {
+  SESSION_ITEM_USER_LOCATION,
+  SESSION_ITEM_CURRENT_TECH_BAR,
+} from '../constants';
+
 import { I18n } from '@kineticdata/react';
 
 export const TechBarsComponent = ({
@@ -29,7 +31,7 @@ export const TechBarsComponent = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">
+            <Link to="../">
               <I18n>tech bar</I18n>
             </Link>{' '}
             /{' '}
@@ -86,7 +88,7 @@ export const TechBarsComponent = ({
                       </DropdownToggle>
                       <DropdownMenu right>
                         <Link
-                          to={`/display/${techBar.values['Id']}/checkin`}
+                          to={`display/${techBar.values['Id']}/checkin`}
                           className="dropdown-item"
                           target="_blank"
                         >
@@ -96,7 +98,7 @@ export const TechBarsComponent = ({
                           </span>
                         </Link>
                         <Link
-                          to={`/display/${techBar.values['Id']}/feedback`}
+                          to={`display/${techBar.values['Id']}/feedback`}
                           className="dropdown-item"
                           target="_blank"
                         >
@@ -106,7 +108,7 @@ export const TechBarsComponent = ({
                           </span>
                         </Link>
                         <Link
-                          to={`/display/${
+                          to={`display/${
                             techBar.values['Id']
                           }/checkin?crosslink`}
                           className="dropdown-item"
@@ -118,7 +120,7 @@ export const TechBarsComponent = ({
                           </span>
                         </Link>
                         <Link
-                          to={`/display/${techBar.values['Id']}/overhead`}
+                          to={`display/${techBar.values['Id']}/overhead`}
                           className="dropdown-item"
                           target="_blank"
                         >
@@ -133,7 +135,7 @@ export const TechBarsComponent = ({
                 )}
               </div>
               <Link
-                to={`/appointment/${techBar.values['Id']}`}
+                to={`appointment/${techBar.values['Id']}`}
                 className="btn btn-primary card-button"
               >
                 <I18n>Schedule Now</I18n> →
@@ -173,10 +175,6 @@ export const mapStateToProps = (state, props) => ({
   profile: state.app.profile,
 });
 
-export const mapDispatchToProps = {
-  push,
-};
-
 const toggleDropdown = ({
   setOpenDropdown,
   openDropdown,
@@ -203,12 +201,7 @@ export const TechBars = compose(
     } catch (e) {}
     return null;
   }),
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-    null,
-    { context },
-  ),
+  connect(mapStateToProps),
   withState('currentTechBar', 'setCurrentTechBar', ({ techBars }) => {
     const techBarId = sessionStorage.getItem(SESSION_ITEM_CURRENT_TECH_BAR);
     return techBarId ? techBars.find(t => t.id === techBarId) : null;

@@ -1,12 +1,14 @@
-import { connect } from 'react-redux';
+import { connect } from '../redux/store';
 import { compose, withHandlers } from 'recompose';
 import { ModalForm } from './ModalForm';
 import { actions } from '../redux/modules/modalForm';
 
-export const mapStateToProps = state => ({
-  form: state.modalForm.form,
-  isCompleted: state.modalForm.formIsCompleted,
-});
+export const mapStateToProps = state => {
+  return {
+    form: state.modalForm.form,
+    isCompleted: state.modalForm.formIsCompleted,
+  };
+};
 
 const mapDispatchToProps = {
   closeForm: actions.closeForm,

@@ -1,23 +1,13 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
+import { connect } from '../redux/store';
 import { push } from 'connected-react-router';
-import {
-  compose,
-  lifecycle,
-  withHandlers,
-  withState,
-  withProps,
-} from 'recompose';
+import { compose, withHandlers, withProps } from 'recompose';
 import { CoreForm } from '@kineticdata/react';
-import {
-  ErrorNotFound,
-  ErrorUnauthorized,
-  ErrorUnexpected,
-  PageTitle,
-} from 'common';
+import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
+import { PageTitle } from './shared/PageTitle';
 import { Link } from '@reach/router';
 import { parse } from 'query-string';
-import { context } from '../redux/store';
+
 import { I18n } from '@kineticdata/react';
 
 // Asynchronously import the global dependencies that are used in the embedded
@@ -27,12 +17,10 @@ import { I18n } from '@kineticdata/react';
 const globals = import('common/globals');
 
 export const FormComponent = ({
-  match: {
-    params: { formSlug, id, mode },
-  },
-  isPast,
+  formSlug,
+  id,
   form,
-  match,
+  relativeHomePath,
   handleCreated,
   handleCompleted,
   handleLoaded,
@@ -46,18 +34,10 @@ export const FormComponent = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/">
+            <Link to={relativeHomePath}>
               <I18n>tech bar</I18n>
             </Link>{' '}
             /{' '}
-            {isPast && (
-              <Fragment>
-                <Link to="/past">
-                  <I18n>past appointments</I18n>
-                </Link>{' '}
-                /{' '}
-              </Fragment>
-            )}
           </h3>
           {form && (
             <h1>
@@ -69,25 +49,20 @@ export const FormComponent = ({
         </div>
       </div>
       <div className="form-description">
-        {form && (
-          <p>
-            <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
-              {form.description}
-            </I18n>
-          </p>
-        )}
+        {form &&
+          form.description && (
+            <p>
+              <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+                {form.description}
+              </I18n>
+            </p>
+          )}
       </div>
       <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
         <div className="embedded-core-form--wrapper">
-          {mode === 'confirmation' && (
-            <h3>
-              <I18n>Thank You</I18n>
-            </h3>
-          )}
           {id ? (
             <CoreForm
               submission={id}
-              review={true}
               globals={globals}
               loaded={handleLoaded}
               completed={handleCompleted}
@@ -125,19 +100,19 @@ const valuesFromQueryParams = queryParams => {
 
 export const handleCompleted = props => response => {
   if (!response.submission.currentPage) {
-    props.push(`/kapps/${props.kappSlug}`);
+    props.navigate(props.relativeHomePath);
   }
 };
 
 export const handleCreated = props => response => {
-  props.push(
+  props.navigate(
     response.submission.coreState === 'Submitted'
-      ? `/kapps/${props.kappSlug}`
-      : `${props.match.url}/submissions/${response.submission.id}`,
+      ? props.relativeHomePath
+      : `submissions/${response.submission.id}`,
   );
 };
 
-export const mapStateToProps = (state, { match: { params } }) => ({
+export const mapStateToProps = state => ({
   kappSlug: state.app.kappSlug,
   forms: state.techBarApp.forms,
   values: valuesFromQueryParams(state.router.location.search),
@@ -151,11 +126,10 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withProps(props => ({
-    form: props.forms.find(form => form.slug === props.match.params.formSlug),
+    form: props.forms.find(form => form.slug === props.formSlug),
+    relativeHomePath: `../../${props.id ? '../../' : ''}`,
   })),
   withHandlers({ handleCompleted, handleCreated }),
 );

@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../../../redux/store';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import {
   VictoryContainer,
@@ -13,15 +12,13 @@ import {
   VictoryLine,
   VictoryScatter,
 } from 'victory';
-import { Constants, Moment, Table } from 'common';
+import { Constants } from 'common';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../../redux/store';
 import moment from 'moment';
 import { Map } from 'immutable';
 
 const toInt = value => parseInt(value, 10) || 0;
 const toPercentNumber = (a, b) => (b !== 0 ? Math.round((a / b) * 100) : 0);
-const toPercent = (a, b) => (b !== 0 ? `${Math.round((a / b) * 100)}%` : '');
 
 const Appointments = ({ appointments, formatDate }) => {
   const { scheduled, walkins, labelHeaders } = Object.keys(appointments.total)
@@ -845,10 +842,6 @@ export const mapStateToProps = (state, props) => ({
   metrics: state.metrics.metrics,
 });
 
-export const mapDispatchToProps = {
-  push,
-};
-
 const TrendSummary = (dates = [], techBars) => {
   const defaultMap = dates.reduce((map, date) => {
     return map.set(date, 0);
@@ -1031,12 +1024,7 @@ const buildTrend = ({
 };
 
 export const MetricsTrend = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-    null,
-    { context },
-  ),
+  connect(mapStateToProps),
   withState('trend', 'setTrend', TrendSummary()),
   withState('timeOfVisitData', 'toggleTimeOfVisitData', true),
   withState('selectedDuration', 'setSelectedDuration', null),

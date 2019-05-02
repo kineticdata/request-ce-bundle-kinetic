@@ -1,17 +1,10 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { compose, withProps } from 'recompose';
-import {
-  PageTitle,
-  selectCurrentKapp,
-  Utils,
-  ErrorNotFound,
-  selectHasRoleSchedulerAdmin,
-} from 'common';
+import { connect } from '../../../redux/store';
+import { compose } from 'recompose';
+import { Utils, ErrorNotFound, selectHasRoleSchedulerAdmin } from 'common';
+import { PageTitle } from '../../shared/PageTitle';
 import { Link } from '@reach/router';
-import { CoreForm } from '@kineticdata/react';
-import { I18n } from '@kineticdata/react';
-import { context } from '../../../redux/store';
+import { CoreForm, I18n } from '@kineticdata/react';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -19,13 +12,7 @@ import { context } from '../../../redux/store';
 // before users nagivate to the actual forms.
 const globals = import('common/globals');
 
-export const AppointmentFormComponent = ({
-  match: {
-    params: { apptid },
-  },
-  kapp,
-  techBar,
-}) => {
+export const AppointmentFormComponent = ({ id, kapp, techBar }) => {
   return techBar ? (
     <Fragment>
       <PageTitle
@@ -40,19 +27,19 @@ export const AppointmentFormComponent = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to="/">
+                <Link to="../../../../../">
                   <I18n>tech bar</I18n>
                 </Link>{' '}
                 /{` `}
-                <Link to="/settings">
+                <Link to="../../../../">
                   <I18n>settings</I18n>
                 </Link>{' '}
                 /{` `}
-                <Link to="/settings/general">
+                <Link to="../../../">
                   <I18n>tech bars</I18n>
                 </Link>{' '}
                 /{` `}
-                <Link to={`/settings/general/${techBar.id}`}>
+                <Link to={`../../`}>
                   <I18n>{techBar.values['Name']}</I18n>
                 </Link>{' '}
                 /{` `}
@@ -64,7 +51,7 @@ export const AppointmentFormComponent = ({
           </div>
           <div className="content-wrapper">
             <I18n context={`kapps.${kapp.slug}.forms.appointment`}>
-              <CoreForm submission={apptid} review={true} globals={globals} />
+              <CoreForm submission={id} review={true} globals={globals} />
             </I18n>
           </div>
         </div>
@@ -91,19 +78,11 @@ export const mapStateToProps = (state, props) => {
         )),
   );
   return {
-    kapp: selectCurrentKapp(state),
+    kapp: state.app.kapp,
     techBar,
   };
 };
 
-export const AppointmentForm = compose(
-  withProps(({ match: { params: { id } } }) => ({
-    techBarId: id,
-  })),
-  connect(
-    mapStateToProps,
-    null,
-    null,
-    { context },
-  ),
-)(AppointmentFormComponent);
+export const AppointmentForm = compose(connect(mapStateToProps))(
+  AppointmentFormComponent,
+);

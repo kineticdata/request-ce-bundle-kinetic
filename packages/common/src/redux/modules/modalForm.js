@@ -1,5 +1,6 @@
 import { Record } from 'immutable';
 import * as Utils from '../../utils';
+import { store } from '../store';
 
 const { namespace, noPayload, withPayload } = Utils;
 
@@ -32,3 +33,6 @@ export const reducer = (state = State(), { type, payload }) => {
       return state;
   }
 };
+
+export const openModalForm = payload =>
+  store.dispatch(actions.openForm(payload));

@@ -2,8 +2,6 @@ import { Record, List } from 'immutable';
 import { Utils } from 'common';
 const { namespace, withPayload } = Utils;
 
-export const WALK_IN_FORM_SLUG = 'walk-in';
-
 export const types = {
   FETCH_WALK_IN: namespace('walkIns', 'FETCH_WALK_IN'),
   SET_WALK_IN: namespace('walkIns', 'SET_WALK_IN'),

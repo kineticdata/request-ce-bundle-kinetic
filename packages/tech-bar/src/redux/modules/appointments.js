@@ -3,8 +3,6 @@ import { Utils } from 'common';
 import moment from 'moment';
 const { namespace, noPayload, withPayload } = Utils;
 
-export const APPOINTMENT_FORM_SLUG = 'appointment';
-
 export const types = {
   FETCH_APPOINTMENT: namespace('appointments', 'FETCH_APPOINTMENT'),
   SET_APPOINTMENT: namespace('appointments', 'SET_APPOINTMENT'),

@@ -1,3 +1,5 @@
+import { createContext } from 'react';
+import { connect as connectRedux } from 'react-redux';
 import { compose, createStore, combineReducers, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
@@ -8,6 +10,7 @@ import { sagas } from './sagas';
 import commonSagas from 'common/src/redux/sagas';
 
 export const configureStore = history => {
+  console.log('Configuring app package redux store');
   // To enable the redux dev tools in the browser we need to conditionally use a
   // special compose method, below we are looking for that and if it does not
   // exist we use the build-in redux 'compose' method.
@@ -21,12 +24,11 @@ export const configureStore = history => {
   // setup going on here as well.
 
   const store = createStore(
-    connectRouter(history)(
-      combineReducers({
-        ...reducers,
-        common: combineReducers(commonReducers),
-      }),
-    ),
+    combineReducers({
+      ...reducers,
+      common: combineReducers(commonReducers),
+      router: connectRouter(history),
+    }),
     composeEnhancers(
       applyMiddleware(routerMiddleware(history), sagaMiddleware),
     ),
@@ -46,3 +48,16 @@ export const configureStore = history => {
   }
   return store;
 };
+
+export const context = createContext(null);
+
+export const connect = (
+  mapStateToProps = null,
+  mapDispatchToProps = null,
+  mergeProps = null,
+  options = {},
+) =>
+  connectRedux(mapStateToProps, mapDispatchToProps, mergeProps, {
+    ...options,
+    context,
+  });

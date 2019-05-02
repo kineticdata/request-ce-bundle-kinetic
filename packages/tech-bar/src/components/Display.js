@@ -1,20 +1,19 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
-import { compose, withProps } from 'recompose';
+import { connect } from '../redux/store';
+import { compose } from 'recompose';
 import {
-  PageTitle,
   selectCurrentKapp,
   ErrorNotFound,
   ErrorUnauthorized,
   Utils,
 } from 'common';
+import { PageTitle } from './shared/PageTitle';
 import { Link } from '@reach/router';
 import { CheckIn } from './CheckIn';
 import { Feedback } from './Feedback';
 import { Overhead } from './Overhead';
 import { I18n } from '@kineticdata/react';
-import { context } from '../redux/store';
+
 export const DisplayTabs = ({
   techBarId,
   checkInClassName = '',
@@ -23,7 +22,8 @@ export const DisplayTabs = ({
 }) => (
   <div className="display-tabs">
     <Link
-      to={`/display/${techBarId}/checkin?crosslink`}
+      to={`../checkin?crosslink`}
+      replace
       className={`display-tab-link ${checkInClassName}`}
       onClick={onClick}
     >
@@ -32,7 +32,8 @@ export const DisplayTabs = ({
       </span>
     </Link>
     <Link
-      to={`/display/${techBarId}/feedback?crosslink`}
+      to={`../feedback?crosslink`}
+      replace
       className={`display-tab-link ${feedbackClassName}`}
       onClick={onClick}
     >
@@ -44,10 +45,11 @@ export const DisplayTabs = ({
 );
 
 export const DisplayComponent = ({
-  location: { search },
+  navigate,
+  location: { search, pathname },
   kapp,
   techBar,
-  displayMode,
+  mode,
   hasTechBarDisplayRole,
 }) => {
   return !hasTechBarDisplayRole ? (
@@ -62,19 +64,77 @@ export const DisplayComponent = ({
               <span className="fa fa-fw fa-map-marker" />
               <I18n>{techBar.values['Name']}</I18n>
             </div>
-            {displayMode === 'checkin' && (
-              <CheckIn
-                techBar={techBar}
-                crosslink={search.includes('crosslink')}
-              />
+            {mode ? (
+              <Fragment>
+                {mode === 'checkin' && (
+                  <CheckIn
+                    techBar={techBar}
+                    crosslink={
+                      search.includes('crosslink') ||
+                      pathname.includes('crosslink')
+                    }
+                  />
+                )}
+                {mode === 'feedback' && (
+                  <Feedback
+                    techBar={techBar}
+                    crosslink={
+                      search.includes('crosslink') ||
+                      pathname.includes('crosslink')
+                    }
+                  />
+                )}
+                {mode === 'overhead' && <Overhead techBar={techBar} />}
+              </Fragment>
+            ) : (
+              <section className="tech-bar-display tech-bar-display--checkin">
+                <div className="full-screen-container">
+                  <div className="header bg-dark" />
+                  <div className="body">
+                    <div className="row">
+                      <div className="col-3">
+                        <button
+                          className="btn btn-outline-dark btn-block"
+                          onClick={() => navigate('checkin', { replace: true })}
+                        >
+                          <I18n>Check In</I18n>
+                        </button>
+                      </div>
+                      <div className="col-3">
+                        <button
+                          className="btn btn-outline-dark btn-block"
+                          onClick={() =>
+                            navigate('feedback', { replace: true })
+                          }
+                        >
+                          <I18n>Feedback</I18n>
+                        </button>
+                      </div>
+                      <div className="col-3">
+                        <button
+                          className="btn btn-outline-dark btn-block"
+                          onClick={() =>
+                            navigate('checkin?crosslink', { replace: true })
+                          }
+                        >
+                          <I18n>Check In</I18n> / <I18n>Feedback</I18n>
+                        </button>
+                      </div>
+                      <div className="col-3">
+                        <button
+                          className="btn btn-outline-dark btn-block"
+                          onClick={() =>
+                            navigate('overhead', { replace: true })
+                          }
+                        >
+                          <I18n>Overhead</I18n>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
             )}
-            {displayMode === 'feedback' && (
-              <Feedback
-                techBar={techBar}
-                crosslink={search.includes('crosslink')}
-              />
-            )}
-            {displayMode === 'overhead' && <Overhead techBar={techBar} />}
           </Fragment>
         )}
         {!techBar && <ErrorNotFound />}
@@ -99,21 +159,4 @@ export const mapStateToProps = (state, props) => {
   };
 };
 
-export const mapDispatchToProps = {
-  push,
-};
-
-export const Display = compose(
-  withProps(({ match: { params: { id, mode } } }) => ({
-    techBarId: id,
-    displayMode: ['checkin', 'feedback', 'overhead'].includes(mode)
-      ? mode
-      : 'checkin',
-  })),
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-    null,
-    { context },
-  ),
-)(DisplayComponent);
+export const Display = compose(connect(mapStateToProps))(DisplayComponent);

@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../../../redux/store';
 import { compose, withProps } from 'recompose';
 import {
   VictoryContainer,
@@ -13,7 +12,6 @@ import {
 } from 'victory';
 import { Constants, Table } from 'common';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../../redux/store';
 import moment from 'moment';
 import { Record } from 'immutable';
 
@@ -487,10 +485,6 @@ export const mapStateToProps = (state, props) => ({
   metrics: state.metrics.metrics,
 });
 
-export const mapDispatchToProps = {
-  push,
-};
-
 const Summary = Record({
   appointments: {
     walkins: 0,
@@ -511,12 +505,7 @@ const Summary = Record({
 });
 
 export const MetricsSummary = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-    null,
-    { context },
-  ),
+  connect(mapStateToProps),
   withProps(({ schedulerId, eventType, loading, metrics }) => {
     if (loading) {
       return { summary: Summary() };

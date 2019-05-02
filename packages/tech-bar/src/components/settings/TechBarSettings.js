@@ -1,16 +1,11 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
+import { connect } from '../../redux/store';
 import { push } from 'connected-react-router';
 import { compose, lifecycle } from 'recompose';
-import {
-  PageTitle,
-  selectCurrentKapp,
-  Utils,
-  selectHasRoleSchedulerAdmin,
-} from 'common';
+import { selectCurrentKapp, Utils, selectHasRoleSchedulerAdmin } from 'common';
+import { PageTitle } from '../shared/PageTitle';
 import { Link } from '@reach/router';
 import { actions } from '../../redux/modules/techBarApp';
-import { context } from '../../redux/store';
 import { I18n } from '@kineticdata/react';
 
 const getStatusColor = status =>
@@ -24,11 +19,11 @@ export const TechBarSettingsComponent = ({ techBars }) => (
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/">
+              <Link to="../../">
                 <I18n>tech bar</I18n>
               </Link>{' '}
               /{` `}
-              <Link to="/settings">
+              <Link to="../">
                 <I18n>settings</I18n>
               </Link>{' '}
               /{` `}
@@ -59,7 +54,7 @@ export const TechBarSettingsComponent = ({ techBars }) => (
                   return (
                     <tr key={scheduler.id}>
                       <td scope="row">
-                        <Link to={`/settings/general/${scheduler.id}`}>
+                        <Link to={`${scheduler.id}`}>
                           <I18n>{scheduler.values['Name']}</I18n>
                         </Link>
                       </td>
@@ -120,8 +115,6 @@ export const TechBarSettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   lifecycle({
     componentDidMount() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect } from '../redux/store';
 import { compose, withHandlers } from 'recompose';
 import isarray from 'isarray';
 import { actions } from '../redux/modules/toasts';
@@ -54,7 +54,7 @@ const Toasts = ({ toasts, dismiss }) => (
 );
 
 const mapStateToProps = state => ({
-  toasts: state.common.toasts,
+  toasts: state.toasts,
 });
 
 const mapDispatchToProps = {

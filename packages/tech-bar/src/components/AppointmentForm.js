@@ -1,25 +1,11 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
-import {
-  compose,
-  lifecycle,
-  withHandlers,
-  withState,
-  withProps,
-} from 'recompose';
-import { CoreForm } from '@kineticdata/react';
-import {
-  ErrorNotFound,
-  ErrorUnauthorized,
-  ErrorUnexpected,
-  PageTitle,
-} from 'common';
+import { connect } from '../redux/store';
+import { compose, withHandlers, withProps } from 'recompose';
+import { CoreForm, I18n } from '@kineticdata/react';
 import { Link } from '@reach/router';
-import { context } from '../redux/store';
-import { I18n } from '@kineticdata/react';
-
-const APPOINTMENT_FORM_SLUG = 'appointment';
+import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
+import { PageTitle } from './shared/PageTitle';
+import { APPOINTMENT_FORM_SLUG } from '../constants';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -28,12 +14,11 @@ const APPOINTMENT_FORM_SLUG = 'appointment';
 const globals = import('common/globals');
 
 export const AppointmentFormComponent = ({
-  match: {
-    params: { id },
-  },
+  techBarId,
+  id,
   techBar,
-  isPast,
-  match,
+  past,
+  relativeHomePath,
   handleCreated,
   handleCompleted,
   handleLoaded,
@@ -48,13 +33,13 @@ export const AppointmentFormComponent = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to="/">
+                <Link to={relativeHomePath}>
                   <I18n>tech bar</I18n>
                 </Link>{' '}
                 /{' '}
-                {isPast && (
+                {past && (
                   <Fragment>
-                    <Link to="/past">
+                    <Link to={`${relativeHomePath}/past`}>
                       <I18n>past appointments</I18n>
                     </Link>{' '}
                     /{' '}
@@ -104,39 +89,38 @@ export const AppointmentFormComponent = ({
 );
 
 export const handleCompleted = props => response => {
+  console.log('handleCompleted', response.submission.id);
   if (!response.submission.currentPage) {
-    props.push(`/kapps/${props.kappSlug}`);
+    props.navigate(`/kapps/${props.kappSlug}`);
   }
 };
 
 export const handleCreated = props => response => {
-  props.push(
+  console.log('handleCreated', response.submission.id);
+  props.navigate(
     response.submission.coreState === 'Submitted'
       ? `/kapps/${props.kappSlug}`
-      : `${props.match.url}/submissions/${response.submission.id}`,
+      : response.submission.id,
   );
 };
 
-export const mapStateToProps = (state, { match: { params } }) => {
+export const mapStateToProps = (state, props) => {
+  const past = !!props.path.match(/^\/kapps/);
+  const relativeHomePath = `../${props.techBarId ? '../' : ''}${
+    props.id ? '../' : ''
+  }${past ? '../' : ''}`;
   return {
     kappSlug: state.app.kappSlug,
     techBar: state.techBarApp.schedulers.find(
-      scheduler => scheduler.values['Id'] === params.techBarId,
+      scheduler => scheduler.values['Id'] === props.techBarId,
     ),
+    past,
+    relativeHomePath,
   };
 };
 
-export const mapDispatchToProps = {
-  push,
-};
-
 const enhance = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-    null,
-    { context },
-  ),
+  connect(mapStateToProps),
   withHandlers({ handleCompleted, handleCreated }),
 );
 

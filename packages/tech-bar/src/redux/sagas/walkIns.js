@@ -1,10 +1,12 @@
 import { takeEvery, put, call, select } from 'redux-saga/effects';
 import {
+  fetchBridgedResource,
   fetchSubmission,
   searchSubmissions,
   SubmissionSearch,
 } from '@kineticdata/react';
-import { actions, types, WALK_IN_FORM_SLUG } from '../modules/walkIns';
+import { actions, types } from '../modules/walkIns';
+import { WALK_IN_FORM_SLUG } from '../../constants';
 import moment from 'moment';
 import isarray from 'isarray';
 
@@ -61,7 +63,7 @@ export function* fetchTodayWalkInsSaga({ payload: { schedulerId, status } }) {
 
 export function* fetchWalkInsOverviewSaga({ payload: { id } }) {
   const kappSlug = yield select(state => state.app.kappSlug);
-  const { records, serverError } = yield call(CoreAPI.fetchBridgedResource, {
+  const { records, serverError } = yield call(fetchBridgedResource, {
     kappSlug,
     formSlug: 'bridged-resources',
     bridgedResourceName: 'Tech Bar Walk-Ins Overview',
