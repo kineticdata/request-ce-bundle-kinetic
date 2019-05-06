@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../../redux/store';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
-import { CoreForm } from '@kineticdata/react';
+import { CoreForm, I18n, Moment } from '@kineticdata/react';
 import moment from 'moment';
 import {
   Modal,
@@ -13,29 +12,21 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { LoadingMessage, ErrorMessage, EmptyMessage } from './Schedulers';
+import { LoadingMessage, ErrorMessage, EmptyMessage } from '../StateMessages';
 import {
   actions,
   SCHEDULER_OVERRIDE_FORM_SLUG,
   SCHEDULER_OVERRIDES_PAGE_SIZE,
 } from '../../redux/modules/schedulers';
 import { actions as toastActions } from '../../redux/modules/toasts';
-import { Constants } from 'common';
-import { I18n, Moment } from '@kineticdata/react';
 
 const globals = import('common/globals');
 
 const formatDate = date => (
-  <Moment
-    timestamp={moment(date, 'YYYY/MM/DD')}
-    format={Constants.MOMENT_FORMATS.date}
-  />
+  <Moment timestamp={moment(date, 'YYYY/MM/DD')} format={Moment.formats.date} />
 );
 const formatTime = time => (
-  <Moment
-    timestamp={moment(time, 'HH:mm')}
-    format={Constants.MOMENT_FORMATS.time}
-  />
+  <Moment timestamp={moment(time, 'HH:mm')} format={Moment.formats.time} />
 );
 
 const SchedulerOverridesComponent = ({
@@ -277,7 +268,7 @@ const SchedulerOverridesComponent = ({
   </div>
 );
 
-export const mapStateToProps = ({ common: { schedulers } }) => ({
+export const mapStateToProps = ({ schedulers }) => ({
   includePastOverrides: schedulers.scheduler.includePastOverrides,
   loading: schedulers.scheduler.overrides.loading,
   errors: schedulers.scheduler.overrides.errors,
@@ -295,7 +286,6 @@ export const mapStateToProps = ({ common: { schedulers } }) => ({
 });
 
 export const mapDispatchToProps = {
-  push,
   fetchSchedulerOverrides: actions.fetchSchedulerOverrides,
   fetchNextSchedulerOverrides: actions.fetchNextSchedulerOverrides,
   fetchPreviousSchedulerOverrides: actions.fetchPreviousSchedulerOverrides,

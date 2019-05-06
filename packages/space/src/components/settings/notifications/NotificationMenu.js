@@ -407,7 +407,7 @@ export const mapStateToProps = state => ({
     submission => submission.values.Status === 'Active',
   ),
   hasDatastore: semver.satisfies(
-    semver.coerce(state.app.version),
+    semver.coerce(state.app.coreVersion),
     `>=${MINIMUM_CE_VERSION_FOR_DATASTORE}`,
   ),
 });

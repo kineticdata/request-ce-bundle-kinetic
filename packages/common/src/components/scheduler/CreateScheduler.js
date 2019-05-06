@@ -1,5 +1,5 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { Fragment } from 'react';
+import { connect } from '../../redux/store';
 import { push } from 'connected-react-router';
 import { compose, withHandlers } from 'recompose';
 import { Link } from 'react-router-dom';
@@ -25,8 +25,8 @@ export const handleError = props => response => {
 };
 
 const CreateSchedulerComponent = ({
-  breadcrumbs,
-  match,
+  pathPrefix = '',
+  breadcrumbs = [],
   handleCreated,
   handleError,
   isSchedulerAdmin,
@@ -38,15 +38,21 @@ const CreateSchedulerComponent = ({
       <div className="page-panel page-panel--scrollable page-panel--scheduler-content">
         <div className="page-title">
           <div className="page-title__wrapper">
-            <h3>{breadcrumbs}</h3>
+            <h3>
+              {breadcrumbs.map(breadcrumb => (
+                <Fragment key={breadcrumb.label}>
+                  <Link to={breadcrumb.path}>
+                    <I18n>{breadcrumb.label}</I18n>
+                  </Link>{' '}
+                  /{` `}
+                </Fragment>
+              ))}
+            </h3>
             <h1>
               <I18n>Create Scheduler</I18n>
             </h1>
           </div>
-          <Link
-            to={match.path.replace(/\/new$/, '')}
-            className="btn btn-secondary"
-          >
+          <Link to={pathPrefix} className="btn btn-secondary">
             <I18n>Cancel Create</I18n>
           </Link>
         </div>
@@ -68,10 +74,10 @@ const CreateSchedulerComponent = ({
     <ErrorUnauthorized />
   );
 
-export const mapStateToProps = state => ({
+export const mapStateToProps = (state, props) => ({
   addSuccess: toastActions.addSuccess,
   addError: toastActions.addError,
-  isSchedulerAdmin: selectHasRoleSchedulerAdmin(state),
+  isSchedulerAdmin: selectHasRoleSchedulerAdmin(props.profile),
 });
 
 export const mapDispatchToProps = {

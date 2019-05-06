@@ -4,12 +4,10 @@ import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 import {
   Icon,
-  Schedulers,
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
 } from 'common';
 import { PageTitle } from '../shared/PageTitle';
-
 import { Router } from '../../SpaceApp';
 import { SpaceSettings } from './space_settings/SpaceSettings';
 import { Notifications } from './notifications/Notifications';
@@ -19,6 +17,7 @@ import { Users } from './users/Users';
 import { Profile } from './profile/Profile';
 import { Teams } from './teams/Teams';
 import { Translations } from './translations/Translations';
+import { SchedulerSettings } from './SchedulerSettings';
 import { actions as datastoreActions } from '../../redux/modules/settingsDatastore';
 import { actions as teamActions } from '../../redux/modules/teamList';
 import { context } from '../../redux/store';
@@ -33,15 +32,7 @@ export const SettingsComponent = () => (
     <Users path="users/*" />
     <Notifications path="notifications/*" />
     <Teams path="teams/*" />
-    <Schedulers
-      path="schedulers/*"
-      breadcrumbs={
-        <Fragment>
-          <Link to="/">home</Link> /{` `}
-          <Link to="/settings">settings</Link> /{` `}
-        </Fragment>
-      }
-    />
+    <SchedulerSettings path="schedulers/*" />
     <Translations path="translations/*" />
     <SettingsNavigation default />
   </Router>
@@ -180,8 +171,8 @@ const SettingsNavigationComponent = ({
 
 const mapStateToProps = state => ({
   isSpaceAdmin: state.app.profile.spaceAdmin,
-  isSchedulerAdmin: selectHasRoleSchedulerAdmin(state),
-  isSchedulerManager: selectHasRoleSchedulerManager(state),
+  isSchedulerAdmin: selectHasRoleSchedulerAdmin(state.app.profile),
+  isSchedulerManager: selectHasRoleSchedulerManager(state.app.profile),
 });
 
 export const SettingsNavigation = compose(

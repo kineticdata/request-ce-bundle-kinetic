@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../../redux/store';
 import { compose, withHandlers, withProps, withState } from 'recompose';
 import {
   Modal,
@@ -13,7 +12,7 @@ import {
 } from 'reactstrap';
 import { List } from 'immutable';
 import { AttributeSelectors } from 'common';
-import { LoadingMessage, EmptyMessage, InfoMessage } from './Schedulers';
+import { LoadingMessage, EmptyMessage, InfoMessage } from '../StateMessages';
 import { actions as toastActions } from '../../redux/modules/toasts';
 import { actions } from '../../redux/modules/schedulers';
 import { I18n } from '@kineticdata/react';
@@ -286,13 +285,12 @@ const SchedulerAgentsComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.common.schedulers.scheduler.loading,
-  scheduler: state.common.schedulers.scheduler.data,
-  agents: state.common.schedulers.scheduler.teams.agents,
+  loading: state.schedulers.scheduler.loading,
+  scheduler: state.schedulers.scheduler.data,
+  agents: state.schedulers.scheduler.teams.agents,
 });
 
 export const mapDispatchToProps = {
-  push,
   addSchedulerAgent: actions.addSchedulerMembership,
   removeSchedulerAgent: actions.removeSchedulerMembership,
   createUserAsSchedulerAgent: actions.createUserWithSchedulerMembership,

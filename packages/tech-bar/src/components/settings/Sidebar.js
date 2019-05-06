@@ -64,7 +64,8 @@ export const mapStateToProps = state => ({
   pathname: state.router.location.pathname,
   kapp: selectCurrentKapp(state),
   hasManagerAccess:
-    selectHasRoleSchedulerManager(state) || selectHasRoleSchedulerAdmin(state),
+    selectHasRoleSchedulerManager(state.app.profile) ||
+    selectHasRoleSchedulerAdmin(state.app.profile),
 });
 
 export const Sidebar = compose(connect(mapStateToProps))(SidebarComponent);

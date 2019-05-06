@@ -252,7 +252,7 @@ export function* removeSchedulerMembershipSaga({
 
 export function* fetchSchedulerConfigSaga() {
   const schedulerId = yield select(
-    state => state.common.schedulers.scheduler.data.values['Id'],
+    state => state.schedulers.scheduler.data.values['Id'],
   );
 
   const query = new SubmissionSearch(true);
@@ -302,7 +302,7 @@ export function* deleteSchedulerConfigSaga({ payload: { id } }) {
 
 export function* fetchSchedulerAvailabilitySaga() {
   const schedulerId = yield select(
-    state => state.common.schedulers.scheduler.data.values['Id'],
+    state => state.schedulers.scheduler.data.values['Id'],
   );
 
   const query = new SubmissionSearch(true);
@@ -354,13 +354,13 @@ export function* deleteSchedulerAvailabilitySaga({ payload: { id } }) {
 
 export function* fetchSchedulerOverridesSaga() {
   const schedulerId = yield select(
-    state => state.common.schedulers.scheduler.data.values['Id'],
+    state => state.schedulers.scheduler.data.values['Id'],
   );
   const pageToken = yield select(
-    state => state.common.schedulers.scheduler.overrides.currentPageToken,
+    state => state.schedulers.scheduler.overrides.currentPageToken,
   );
   const includePastOverrides = yield select(
-    state => state.common.schedulers.scheduler.includePastOverrides,
+    state => state.schedulers.scheduler.includePastOverrides,
   );
 
   const query = new SubmissionSearch(true);

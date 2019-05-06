@@ -127,8 +127,8 @@ export const mapStateToProps = state => ({
   spaceAdmin: state.app.profile.spaceAdmin,
   pathname: state.router.location.pathname,
   hasSharedTaskEngine: selectHasSharedTaskEngine(state),
-  isSchedulerAdmin: selectHasRoleSchedulerAdmin(state),
-  isSchedulerManager: selectHasRoleSchedulerManager(state),
+  isSchedulerAdmin: selectHasRoleSchedulerAdmin(state.app.profile),
+  isSchedulerManager: selectHasRoleSchedulerManager(state.app.profile),
 });
 
 export const Sidebar = compose(

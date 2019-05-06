@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
-import semver from 'semver';
 
 import { Router } from '../../../SpaceApp';
 import { TranslationsList } from './TranslationsList';
@@ -12,72 +11,27 @@ import { actions } from '../../../redux/modules/settingsTranslations';
 import { context } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 
-const MINIMUM_CE_VERSION = '2.3.0';
-
-const TranslationsError = () => (
-  <h1>
-    <I18n>Error loading Translations</I18n>
-  </h1>
-);
-const TranslationsVersionError = ({ version }) => (
-  <div className="page-panel page-panel--scrollable">
-    <div className="page-title">
-      <div className="page-title__wrapper">
-        <h3>
-          <Link to="../..">
-            <I18n>home</I18n>
-          </Link>{' '}
-          /{` `}
-          <Link to="..">
-            <I18n>settings</I18n>
-          </Link>{' '}
-          /{` `}
-        </h3>
-        <h1>
-          <I18n>Invalid CE Version</I18n>
-        </h1>
-      </div>
-    </div>
-    <p>
-      {`You are currently running Kinetic CE ${version.version}. Translations
-      require Kinetic CE ${MINIMUM_CE_VERSION} or greater.`}
-    </p>
-  </div>
-);
-
 export const TranslationsRouter = ({
   match,
-  validVersion,
-  version,
   localesLoading,
   localeErrors,
   contextsLoading,
   contextErrors,
 }) =>
-  !validVersion ? (
-    <TranslationsVersionError version={version} />
-  ) : (
-    !localesLoading &&
-    !contextsLoading && (
-      <Router>
-        <TranslationsError path="error" />
-        <EntriesList path="context/:context" />
-        <EntriesList path="locale/:locale" />
-        <EntriesList path="context/:context/locale/:locale" />
-        <EntriesList path="context/:context/key/:keyHash" />
-        <StagedList path="staged/:context?" />
-        <TranslationsList path=":mode" />
-        <TranslationsList path="/" />
-      </Router>
-    )
+  !localesLoading &&
+  !contextsLoading && (
+    <Router>
+      <EntriesList path="context/:context" />
+      <EntriesList path="locale/:locale" />
+      <EntriesList path="context/:context/locale/:locale" />
+      <EntriesList path="context/:context/key/:keyHash" />
+      <StagedList path="staged/:context?" />
+      <TranslationsList path=":mode" />
+      <TranslationsList default />
+    </Router>
   );
 
 export const mapStateToProps = state => ({
-  version: state.app.version,
-  validVersion: semver.satisfies(
-    semver.coerce(state.app.version),
-    `>=${MINIMUM_CE_VERSION}`,
-  ),
   localesLoading: state.settingsTranslations.locales.loading,
   localeErrors: state.settingsTranslations.locales.errors,
   contextsLoading: state.settingsTranslations.contexts.loading,

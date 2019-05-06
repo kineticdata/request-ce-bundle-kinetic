@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link } from '@reach/router';
 import { Router } from '../../TechBarApp';
 import { connect } from '../../redux/store';
@@ -27,21 +27,7 @@ export const SettingsComponent = ({ kappSlug, hasSettingsAccess }) =>
       <TechBarSettingsForm path="general/:techBarId/edit" />
       <TechBar path="general/:techBarId" />
       <TechBarSettings path="general" />
-      <SchedulerSettings
-        path="schedulers"
-        breadcrumbs={
-          <Fragment>
-            <Link to="">
-              <I18n>tech bar</I18n>
-            </Link>{' '}
-            /{` `}
-            <Link to="settings">
-              <I18n>settings</I18n>
-            </Link>{' '}
-            /{` `}
-          </Fragment>
-        }
-      />
+      <SchedulerSettings path="schedulers/*" />
       <SettingsNavigation default />
     </Router>
   ) : (
@@ -52,9 +38,9 @@ const mapStateToProps = (state, props) => {
   return {
     kappSlug: state.app.kappSlug,
     hasSettingsAccess:
-      selectHasRoleSchedulerAgent(state) ||
-      selectHasRoleSchedulerManager(state) ||
-      selectHasRoleSchedulerAdmin(state),
+      selectHasRoleSchedulerAgent(state.app.profile) ||
+      selectHasRoleSchedulerManager(state.app.profile) ||
+      selectHasRoleSchedulerAdmin(state.app.profile),
   };
 };
 
@@ -125,8 +111,8 @@ const SettingsNavigationComponent = ({ hasManagerAccess }) => (
 const mapStateToPropsNav = state => {
   return {
     hasManagerAccess:
-      selectHasRoleSchedulerManager(state) ||
-      selectHasRoleSchedulerAdmin(state),
+      selectHasRoleSchedulerManager(state.app.profile) ||
+      selectHasRoleSchedulerAdmin(state.app.profile),
   };
 };
 

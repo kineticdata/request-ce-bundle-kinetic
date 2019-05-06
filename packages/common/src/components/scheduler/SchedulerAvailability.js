@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../../redux/store';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
-import { CoreForm } from '@kineticdata/react';
+import { CoreForm, I18n, Moment } from '@kineticdata/react';
 import moment from 'moment';
 import {
   Modal,
@@ -13,14 +12,12 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { LoadingMessage, ErrorMessage, EmptyMessage } from './Schedulers';
+import { LoadingMessage, ErrorMessage, EmptyMessage } from '../StateMessages';
 import {
   actions,
   SCHEDULER_AVAILABILITY_FORM_SLUG,
 } from '../../redux/modules/schedulers';
 import { actions as toastActions } from '../../redux/modules/toasts';
-import { Constants } from 'common';
-import { I18n, Moment } from '@kineticdata/react';
 
 const globals = import('common/globals');
 
@@ -28,10 +25,7 @@ const formatDayName = day => (
   <Moment timestamp={moment(day, 'd')} format="dddd" />
 );
 const formatTime = time => (
-  <Moment
-    timestamp={moment(time, 'HH:mm')}
-    format={Constants.MOMENT_FORMATS.time}
-  />
+  <Moment timestamp={moment(time, 'HH:mm')} format={Moment.formats.time} />
 );
 
 const SchedulerAvailabilityComponent = ({
@@ -224,13 +218,12 @@ const SchedulerAvailabilityComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.common.schedulers.scheduler.availability.loading,
-  errors: state.common.schedulers.scheduler.availability.errors,
-  availability: state.common.schedulers.scheduler.availability.data,
+  loading: state.schedulers.scheduler.availability.loading,
+  errors: state.schedulers.scheduler.availability.errors,
+  availability: state.schedulers.scheduler.availability.data,
 });
 
 export const mapDispatchToProps = {
-  push,
   fetchSchedulerAvailability: actions.fetchSchedulerAvailability,
   deleteSchedulerAvailability: actions.deleteSchedulerAvailability,
   addError: toastActions.addError,

@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../../redux/store';
 import { compose, withHandlers, withProps, withState } from 'recompose';
 import {
   Modal,
@@ -13,7 +12,7 @@ import {
 } from 'reactstrap';
 import { List } from 'immutable';
 import { AttributeSelectors, selectHasRoleSchedulerAdmin } from 'common';
-import { LoadingMessage, EmptyMessage, InfoMessage } from './Schedulers';
+import { LoadingMessage, EmptyMessage, InfoMessage } from '../StateMessages';
 import { actions as toastActions } from '../../redux/modules/toasts';
 import { actions } from '../../redux/modules/schedulers';
 import { I18n } from '@kineticdata/react';
@@ -292,15 +291,14 @@ const SchedulerManagersComponent = ({
   </div>
 );
 
-export const mapStateToProps = state => ({
-  loading: state.common.schedulers.scheduler.loading,
-  scheduler: state.common.schedulers.scheduler.data,
-  managers: state.common.schedulers.scheduler.teams.managers,
-  isSchedulerAdmin: selectHasRoleSchedulerAdmin(state),
+export const mapStateToProps = (state, props) => ({
+  loading: state.schedulers.scheduler.loading,
+  scheduler: state.schedulers.scheduler.data,
+  managers: state.schedulers.scheduler.teams.managers,
+  isSchedulerAdmin: selectHasRoleSchedulerAdmin(props.profile),
 });
 
 export const mapDispatchToProps = {
-  push,
   addSchedulerManager: actions.addSchedulerMembership,
   removeSchedulerManager: actions.removeSchedulerMembership,
   createUserAsSchedulerManager: actions.createUserWithSchedulerMembership,

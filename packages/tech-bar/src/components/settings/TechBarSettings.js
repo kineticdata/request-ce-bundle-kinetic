@@ -90,7 +90,7 @@ export const TechBarSettingsComponent = ({ techBars }) => (
 );
 
 export const mapStateToProps = (state, props) => {
-  const techBars = selectHasRoleSchedulerAdmin(state)
+  const techBars = selectHasRoleSchedulerAdmin(state.app.profile)
     ? state.techBarApp.schedulers
     : state.techBarApp.schedulers.filter(
         s =>

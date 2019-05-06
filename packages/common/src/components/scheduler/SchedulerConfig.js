@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../../redux/store';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
-import { CoreForm } from '@kineticdata/react';
+import { CoreForm, I18n } from '@kineticdata/react';
 import {
   Modal,
   ModalBody,
@@ -12,13 +11,12 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { LoadingMessage, ErrorMessage, EmptyMessage } from './Schedulers';
+import { LoadingMessage, ErrorMessage, EmptyMessage } from '../StateMessages';
 import {
   actions,
   SCHEDULER_CONFIG_FORM_SLUG,
 } from '../../redux/modules/schedulers';
 import { actions as toastActions } from '../../redux/modules/toasts';
-import { I18n } from '@kineticdata/react';
 
 const globals = import('common/globals');
 
@@ -223,13 +221,12 @@ const SchedulerConfigComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.common.schedulers.scheduler.config.loading,
-  errors: state.common.schedulers.scheduler.config.errors,
-  configs: state.common.schedulers.scheduler.config.data,
+  loading: state.schedulers.scheduler.config.loading,
+  errors: state.schedulers.scheduler.config.errors,
+  configs: state.schedulers.scheduler.config.data,
 });
 
 export const mapDispatchToProps = {
-  push,
   fetchSchedulerConfig: actions.fetchSchedulerConfig,
   deleteSchedulerConfig: actions.deleteSchedulerConfig,
   addError: toastActions.addError,

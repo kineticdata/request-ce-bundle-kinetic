@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from '../../redux/store';
 import { compose, lifecycle } from 'recompose';
-import { Router } from '../../TechBarApp';
+import { Router } from '../../SpaceApp';
 import {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
@@ -10,10 +10,8 @@ import {
   Scheduler,
   SchedulersList,
 } from 'common';
-import { actions } from '../../redux/modules/techBarApp';
 
 export const SchedulerSettingsComponent = ({
-  kapp,
   isSchedulerAdmin,
   isSchedulerManager,
   profile,
@@ -24,53 +22,53 @@ export const SchedulerSettingsComponent = ({
         path="new"
         profile={profile}
         type="TechBar"
-        pathPrefix={`/kapps/${kapp.slug}/settings/schedulers`}
+        pathPrefix={`/settings/schedulers`}
         breadcrumbs={[
           {
             label: 'tech bar',
-            path: `/kapps/${kapp.slug}`,
+            path: '/',
           },
           {
             label: 'settings',
-            path: `/kapps/${kapp.slug}/settings`,
+            path: '/settings',
           },
           {
             label: 'schedulers',
-            path: `/kapps/${kapp.slug}/settings/schedulers`,
+            path: '/settings/schedulers',
           },
         ]}
       />
       <Scheduler
         path=":id"
         profile={profile}
-        pathPrefix={`/kapps/${kapp.slug}/settings/schedulers`}
+        pathPrefix={`/settings/schedulers`}
         breadcrumbs={[
           {
             label: 'tech bar',
-            path: `/kapps/${kapp.slug}`,
+            path: '/',
           },
           {
             label: 'settings',
-            path: `/kapps/${kapp.slug}/settings`,
+            path: '/settings',
           },
           {
             label: 'schedulers',
-            path: `/kapps/${kapp.slug}/settings/schedulers`,
+            path: '/settings/schedulers',
           },
         ]}
       />
       <SchedulersList
         default
         profile={profile}
-        pathPrefix={`/kapps/${kapp.slug}/settings/schedulers`}
+        pathPrefix={`/settings/schedulers`}
         breadcrumbs={[
           {
             label: 'tech bar',
-            path: `/kapps/${kapp.slug}`,
+            path: '/',
           },
           {
             label: 'settings',
-            path: `/kapps/${kapp.slug}/settings`,
+            path: '/settings',
           },
         ]}
       />
@@ -80,24 +78,14 @@ export const SchedulerSettingsComponent = ({
   );
 
 export const mapStateToProps = (state, props) => ({
-  kapp: state.app.kapp,
   isSchedulerAdmin: selectHasRoleSchedulerAdmin(state.app.profile),
   isSchedulerManager: selectHasRoleSchedulerManager(state.app.profile),
   profile: state.app.profile,
 });
 
-export const mapDispatchToProps = {
-  fetchAppSettings: actions.fetchAppSettings,
-};
-
 export const SchedulerSettings = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps),
   lifecycle({
-    componentWillUnmount() {
-      this.props.fetchAppSettings(true);
-    },
+    componentWillUnmount() {},
   }),
 )(SchedulerSettingsComponent);

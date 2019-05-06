@@ -8,8 +8,7 @@ import {
 } from 'recompose';
 import moment from 'moment';
 import { Alert, Modal, ModalBody, ModalFooter } from 'reactstrap';
-import { Constants } from 'common';
-import { LoadingMessage, ErrorMessage } from './Schedulers';
+import { LoadingMessage, ErrorMessage } from '../StateMessages';
 import {
   DATE_FORMAT,
   TIME_FORMAT,
@@ -223,12 +222,12 @@ const SchedulerWidgetComponent = ({
                 >
                   <Moment
                     timestamp={availableTimeStart}
-                    format={Constants.MOMENT_FORMATS.time}
+                    format={Moment.formats.time}
                   />
                   {' - '}
                   <Moment
                     timestamp={availableTimeEnd}
-                    format={Constants.MOMENT_FORMATS.time}
+                    format={Moment.formats.time}
                   />
                 </button>
               );
@@ -386,7 +385,7 @@ const SchedulerWidgetComponent = ({
                                   DATE_FORMAT,
                                   timezone,
                                 )}
-                                format={Constants.MOMENT_FORMATS.dateWithDay}
+                                format={Moment.formats.dateWithDay}
                               />
                             </span>
                             <p className="card-subtitle">
@@ -396,7 +395,7 @@ const SchedulerWidgetComponent = ({
                                   TIME_FORMAT,
                                   timezone,
                                 )}
-                                format={Constants.MOMENT_FORMATS.time}
+                                format={Moment.formats.time}
                               />
                               {` - `}
                               <Moment
@@ -412,7 +411,7 @@ const SchedulerWidgetComponent = ({
                                     ],
                                     'minute',
                                   )}
-                                format={Constants.MOMENT_FORMATS.time}
+                                format={Moment.formats.time}
                               />
                             </p>
                           </Fragment>

@@ -63,7 +63,7 @@ export const AppointmentFormComponent = ({ id, kapp, techBar }) => {
 };
 
 export const mapStateToProps = (state, props) => {
-  const isSchedulerAdmin = selectHasRoleSchedulerAdmin(state);
+  const isSchedulerAdmin = selectHasRoleSchedulerAdmin(state.app.profile);
   const techBar = state.techBarApp.schedulers.find(
     scheduler =>
       scheduler.id === props.techBarId &&

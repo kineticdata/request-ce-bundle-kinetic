@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect } from '../../redux/store';
 import { push } from 'connected-react-router';
 import {
   compose,
@@ -17,15 +17,16 @@ import {
   DropdownToggle,
   DropdownMenu,
 } from 'reactstrap';
-import { PageTitle, Constants } from 'common';
+import { PageTitle } from 'common';
 import {
   searchSubmissions,
   SubmissionSearch,
   CoreForm,
+  I18n,
   Moment,
 } from '@kineticdata/react';
 import moment from 'moment';
-import { LoadingMessage, ErrorMessage, InfoMessage } from './Schedulers';
+import { LoadingMessage, ErrorMessage } from '../StateMessages';
 import { SchedulerManagers } from './SchedulerManagers';
 import { SchedulerAgents } from './SchedulerAgents';
 import { SchedulerConfig } from './SchedulerConfig';
@@ -42,39 +43,36 @@ import {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
 } from '../../redux/selectors';
-import { I18n } from '@kineticdata/react';
 
 const globals = import('common/globals');
 
 export const handleUpdated = props => response => {
   props.fetchScheduler({ id: response.submission.id, clear: true });
-  props.push(props.match.url.replace('/edit', ''));
   props.addSuccess(
     ['Successfully updated scheduler', response.submission.values['Name']],
     'Scheduler Updated!',
   );
+  props.setMode(props.previousMode);
 };
 export const handleError = props => response => {
   props.addError(response.error, 'Error');
 };
 
-const TabPill = ({ match, id, name, path }) => (
+const TabPill = ({ label, onClick, active }) => (
   <li role="presentation">
-    <NavLink
-      exact
-      to={match.path.replace(/:id\/:mode\?/, `${id}${path}`)}
-      activeClassName="active"
-    >
-      <I18n>{name}</I18n>
+    <NavLink className={active ? 'active' : ''} onClick={onClick} to="#">
+      <I18n>{label}</I18n>
     </NavLink>
   </li>
 );
 
 const SchedulerComponent = ({
-  breadcrumbs,
-  match,
+  profile,
+  pathPrefix = '',
+  breadcrumbs = [],
   id,
   mode,
+  setMode,
   previousMode,
   setPreviousMode,
   pageName,
@@ -101,7 +99,17 @@ const SchedulerComponent = ({
       <div className="page-panel page-panel--scrollable page-panel--scheduler-content">
         <div className="page-title">
           <div className="page-title__wrapper">
-            <h3>{breadcrumbs}</h3>
+            <h3>
+              {' '}
+              {breadcrumbs.map(breadcrumb => (
+                <Fragment key={breadcrumb.label}>
+                  <Link to={breadcrumb.path}>
+                    <I18n>{breadcrumb.label}</I18n>
+                  </Link>{' '}
+                  /{` `}
+                </Fragment>
+              ))}
+            </h3>
             <h1>
               <I18n>{pageName}</I18n>
             </h1>
@@ -110,15 +118,15 @@ const SchedulerComponent = ({
             {currentLoaded &&
               (mode !== 'edit' ? (
                 <Fragment>
-                  <Link
-                    onClick={() =>
-                      setPreviousMode(mode === 'managers' ? '' : mode)
-                    }
-                    to={match.path.replace(/:id\/:mode\?/, `${id}/edit`)}
+                  <button
+                    onClick={() => {
+                      setPreviousMode(mode);
+                      setMode('edit');
+                    }}
                     className="btn btn-primary"
                   >
                     <I18n>Edit Scheduler</I18n>
-                  </Link>
+                  </button>
                   {isSchedulerAdmin && (
                     <ButtonDropdown
                       isOpen={optionsOpen}
@@ -142,15 +150,14 @@ const SchedulerComponent = ({
                   )}
                 </Fragment>
               ) : (
-                <Link
-                  to={match.path.replace(
-                    /:id\/:mode\?/,
-                    `${id}/${previousMode}`,
-                  )}
+                <button
+                  onClick={() => {
+                    setMode(previousMode);
+                  }}
                   className="btn btn-secondary"
                 >
                   <I18n>Cancel Edit</I18n>
-                </Link>
+                </button>
               ))}
           </div>
         </div>
@@ -301,7 +308,7 @@ const SchedulerComponent = ({
                                 scheduler.values['Scheduling Range Start Date'],
                                 DATE_FORMAT,
                               )}
-                              format={Constants.MOMENT_FORMATS.date}
+                              format={Moment.formats.date}
                             />
                           </div>
                         </div>
@@ -319,7 +326,7 @@ const SchedulerComponent = ({
                                 scheduler.values['Scheduling Range End Date'],
                                 DATE_FORMAT,
                               )}
-                              format={Constants.MOMENT_FORMATS.date}
+                              format={Moment.formats.date}
                             />
                           </div>
                         </div>
@@ -329,33 +336,35 @@ const SchedulerComponent = ({
                 </div>
                 <div>
                   <ul className="nav nav-tabs">
-                    <TabPill match={match} id={id} name="Managers" path="" />
                     <TabPill
-                      match={match}
-                      id={id}
-                      name="Agents"
-                      path="/agents"
+                      active={mode === 'managers'}
+                      onClick={() => setMode('managers')}
+                      label="Managers"
                     />
                     <TabPill
-                      match={match}
-                      id={id}
-                      name="Event Types"
-                      path="/config"
+                      active={mode === 'agents'}
+                      onClick={() => setMode('agents')}
+                      label="Agents"
                     />
                     <TabPill
-                      match={match}
-                      id={id}
-                      name="Availability"
-                      path="/availability"
+                      active={mode === 'config'}
+                      onClick={() => setMode('config')}
+                      label="Event Types"
                     />
                     <TabPill
-                      match={match}
-                      id={id}
-                      name="Availability Overrides"
-                      path="/overrides"
+                      active={mode === 'availability'}
+                      onClick={() => setMode('availability')}
+                      label="Availability"
+                    />
+                    <TabPill
+                      active={mode === 'overrides'}
+                      onClick={() => setMode('overrides')}
+                      label="Availability Overrides"
                     />
                   </ul>
-                  {mode === 'managers' && <SchedulerManagers />}
+                  {mode === 'managers' && (
+                    <SchedulerManagers profile={profile} />
+                  )}
                   {mode === 'agents' && <SchedulerAgents />}
                   {mode === 'config' && (
                     <SchedulerConfig
@@ -428,14 +437,14 @@ const SchedulerComponent = ({
   );
 };
 
-export const mapStateToProps = state => ({
-  loading: state.common.schedulers.scheduler.loading,
-  errors: state.common.schedulers.scheduler.errors,
-  scheduler: state.common.schedulers.scheduler.data,
-  managers: state.common.schedulers.scheduler.teams.managers,
-  agents: state.common.schedulers.scheduler.teams.agents,
-  isSchedulerAdmin: selectHasRoleSchedulerAdmin(state),
-  isSchedulerManager: selectHasRoleSchedulerManager(state),
+export const mapStateToProps = (state, props) => ({
+  loading: state.schedulers.scheduler.loading,
+  errors: state.schedulers.scheduler.errors,
+  scheduler: state.schedulers.scheduler.data,
+  managers: state.schedulers.scheduler.teams.managers,
+  agents: state.schedulers.scheduler.teams.agents,
+  isSchedulerAdmin: selectHasRoleSchedulerAdmin(props.profile),
+  isSchedulerManager: selectHasRoleSchedulerManager(props.profile),
 });
 
 export const mapDispatchToProps = {
@@ -471,12 +480,12 @@ const confirmSchedulerDelete = ({
 };
 
 const handleSchedulerDelete = ({
+  pathPrefix,
   setOpenConfirm,
   scheduler,
   deleteScheduler,
   addError,
   addSuccess,
-  match,
   push,
 }) => () => {
   setOpenConfirm(false);
@@ -514,7 +523,7 @@ const handleSchedulerDelete = ({
             'The Scheduler was sucessfully deleted.',
             'Delete Successful',
           );
-          push(match.path.replace(/:id\/:mode\?/, ``));
+          push(pathPrefix);
         },
       });
     }
@@ -528,6 +537,7 @@ export const Scheduler = compose(
   ),
   withState('openConfirm', 'setOpenConfirm', false),
   withState('optionsOpen', 'setOptionsOpen', false),
+  withState('mode', 'setMode', 'managers'),
   withState('previousMode', 'setPreviousMode', ''),
   withHandlers({
     handleUpdated,
@@ -536,23 +546,12 @@ export const Scheduler = compose(
     confirmSchedulerDelete,
     handleSchedulerDelete,
   }),
-  withProps(({ match: { params: { id, mode = 'managers' } }, scheduler }) => ({
-    id,
+  withProps(({ id, mode, scheduler }) => ({
     currentLoaded: scheduler.id === id,
     pageName: `
       ${mode === 'edit' ? 'Edit ' : ''}
       ${scheduler && scheduler.id === id ? scheduler.values['Name'] : ''}
     `,
-    mode: [
-      'edit',
-      'agents',
-      'availability',
-      'config',
-      'overrides',
-      'managers',
-    ].includes(mode)
-      ? mode
-      : null,
   })),
   lifecycle({
     componentDidMount() {

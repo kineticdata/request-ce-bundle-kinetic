@@ -13,7 +13,9 @@ import { ErrorNotFound } from './components/ErrorNotFound';
 import { ErrorUnauthorized } from './components/ErrorUnauthorized';
 import { ErrorUnexpected } from './components/ErrorUnexpected';
 import { WallySpinner } from './components/WallySpinner';
-import { Schedulers } from './components/scheduler/Schedulers';
+import { SchedulersList } from './components/scheduler/SchedulersList';
+import { Scheduler } from './components/scheduler/Scheduler';
+import { CreateScheduler } from './components/scheduler/CreateScheduler';
 import { Table, PaginationControl, FilterControl } from './components/Table';
 import { GroupDivider } from './components/GroupDivider';
 import { Discussion } from './components/discussions/Discussion';
@@ -22,7 +24,7 @@ import { DiscussionCard } from './components/discussions/summary/DiscussionCard'
 import { DiscussionsList } from './components/discussions/summary/DiscussionsList';
 import { DiscussionsPanel } from './components/discussions/summary/DiscussionsPanel';
 import { ViewDiscussionsModal } from './components/discussions/summary/ViewDiscussionsModal';
-import { store, context } from './redux/store';
+import { store, context, connect } from './redux/store';
 
 import {
   selectCurrentKapp,
@@ -79,7 +81,9 @@ export {
   ErrorUnexpected,
   WallySpinner,
   AttributeSelectors,
-  Schedulers,
+  SchedulersList,
+  Scheduler,
+  CreateScheduler,
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
   selectHasRoleSchedulerAgent,

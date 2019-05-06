@@ -146,9 +146,9 @@ export const mapStateToProps = state => ({
   upcomingErrors: state.appointments.upcoming.errors,
   upcomingAppointments: state.appointments.upcoming.data,
   hasSettingsAccess:
-    selectHasRoleSchedulerManager(state) ||
-    selectHasRoleSchedulerAdmin(state) ||
-    selectHasRoleSchedulerAgent(state),
+    selectHasRoleSchedulerManager(state.app.profile) ||
+    selectHasRoleSchedulerAdmin(state.app.profile) ||
+    selectHasRoleSchedulerAgent(state.app.profile),
   profile: state.app.profile,
 });
 

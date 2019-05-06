@@ -53,9 +53,9 @@ export const RobotsRouter = ({ match, loading, validVersion, version }) =>
   );
 
 export const mapStateToProps = state => ({
-  version: state.app.version,
+  version: state.app.coreVersion,
   validVersion: semver.satisfies(
-    semver.coerce(state.app.version),
+    semver.coerce(state.app.coreVersion),
     `>=${MINIMUM_CE_VERSION}`,
   ),
 });

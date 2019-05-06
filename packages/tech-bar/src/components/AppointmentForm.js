@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from '../redux/store';
-import { compose, withHandlers, withProps } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 import { CoreForm, I18n } from '@kineticdata/react';
 import { Link } from '@reach/router';
 import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';

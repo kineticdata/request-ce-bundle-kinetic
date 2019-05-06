@@ -1,28 +1,23 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { connect } from '../../redux/store';
 import { compose, lifecycle } from 'recompose';
 import { PageTitle } from 'common';
-import { LoadingMessage, EmptyMessage, ErrorMessage } from './Schedulers';
+import { LoadingMessage, EmptyMessage, ErrorMessage } from '../StateMessages';
 import { actions } from '../../redux/modules/schedulers';
-import {
-  selectHasRoleSchedulerAdmin,
-  selectHasRoleSchedulerManager,
-} from '../../redux/selectors';
+import { selectHasRoleSchedulerAdmin } from '../../redux/selectors';
 import { I18n } from '@kineticdata/react';
 
 const getStatusColor = status =>
   status === 'Inactive' ? 'status--red' : 'status--green';
 
 const SchedulersListComponent = ({
-  breadcrumbs,
-  match,
+  pathPrefix = '',
+  breadcrumbs = [],
   schedulers,
   loading,
   errors,
   isSchedulerAdmin,
-  isSchedulerManager,
 }) => {
   return (
     <div className="page-container page-container--schedulers">
@@ -30,13 +25,22 @@ const SchedulersListComponent = ({
       <div className="page-panel page-panel--scrollable page-panel--schedulers-content">
         <div className="page-title">
           <div className="page-title__wrapper">
-            <h3>{breadcrumbs}</h3>
+            <h3>
+              {breadcrumbs.map(breadcrumb => (
+                <Fragment key={breadcrumb.label}>
+                  <Link to={breadcrumb.path}>
+                    <I18n>{breadcrumb.label}</I18n>
+                  </Link>{' '}
+                  /{` `}
+                </Fragment>
+              ))}
+            </h3>
             <h1>
               <I18n>Schedulers</I18n>
             </h1>
           </div>
           {isSchedulerAdmin && (
-            <Link to={`${match.path}/new`} className="btn btn-primary">
+            <Link to={`${pathPrefix}/new`} className="btn btn-primary">
               <I18n>Create Scheduler</I18n>
             </Link>
           )}
@@ -67,7 +71,7 @@ const SchedulersListComponent = ({
                   return (
                     <tr key={scheduler.id}>
                       <td scope="row">
-                        <Link to={`${match.path}/${scheduler.id}`}>
+                        <Link to={`${pathPrefix}/${scheduler.id}`}>
                           <span>
                             <I18n>{scheduler.values['Name']}</I18n>
                           </span>
@@ -119,16 +123,14 @@ const SchedulersListComponent = ({
   );
 };
 
-export const mapStateToProps = state => ({
-  loading: state.common.schedulers.list.loading,
-  errors: state.common.schedulers.list.errors,
-  schedulers: state.common.schedulers.list.data,
-  isSchedulerAdmin: selectHasRoleSchedulerAdmin(state),
-  isSchedulerManager: selectHasRoleSchedulerManager(state),
+export const mapStateToProps = (state, props) => ({
+  loading: state.schedulers.list.loading,
+  errors: state.schedulers.list.errors,
+  schedulers: state.schedulers.list.data,
+  isSchedulerAdmin: selectHasRoleSchedulerAdmin(props.profile),
 });
 
 export const mapDispatchToProps = {
-  push,
   fetchSchedulers: actions.fetchSchedulers,
 };
 
