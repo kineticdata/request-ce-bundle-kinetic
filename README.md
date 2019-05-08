@@ -1,3 +1,7 @@
+[![Codefresh build status]( https://g.codefresh.io/api/badges/pipeline/kineticdata/Kinetic%20Bundles%2Frequest-ce-bundle-kinetic?key=eyJhbGciOiJIUzI1NiJ9.NWM4MTdjOTMzNmYzZWI0ODQ3MGM4OTc0.3A0zi0w5eM5Brye5ViYi7v6XjIvoHCB59LMR4EYz9Lw&type=cf-2)]( https://g.codefresh.io/pipelines/request-ce-bundle-kinetic/builds?filter=trigger:build~Build;pipeline:5ccc7635c73e2fbdf4772400~request-ce-bundle-kinetic)
+
+# Kinetic Bundle
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
