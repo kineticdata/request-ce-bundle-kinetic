@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { ROBOT_FORM_SLUG } from '../../../redux/modules/settingsRobots';
 import { CoreForm } from '@kineticdata/react';
-import { toastActions } from 'common';
+import { addSuccess, addError } from 'common';
 
 import { I18n } from '@kineticdata/react';
 import { context } from '../../../redux/store';
@@ -73,7 +73,7 @@ export const handleLoaded = props => form => {
 };
 
 export const handleCreated = props => response => {
-  props.addSuccess(
+  addSuccess(
     `Successfully created robot (${response.submission.values['Name']})`,
     'Robot Created!',
   );
@@ -81,7 +81,7 @@ export const handleCreated = props => response => {
 };
 
 export const handleError = props => response => {
-  props.addError(response.error, 'Error');
+  addError(response.error, 'Error');
 };
 
 export const mapStateToProps = state => ({
@@ -90,8 +90,6 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = {
   push,
-  addSuccess: toastActions.addSuccess,
-  addError: toastActions.addError,
 };
 
 export const CreateRobot = compose(

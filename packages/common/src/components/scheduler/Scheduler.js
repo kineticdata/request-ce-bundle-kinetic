@@ -37,7 +37,7 @@ import {
   SCHEDULER_FORM_SLUG,
   SCHEDULED_EVENT_FORM_SLUG,
 } from '../../redux/modules/schedulers';
-import { actions as toastActions } from '../../redux/modules/toasts';
+import { addSuccess, addError } from '../../redux/modules/toasts';
 import { DATE_FORMAT } from '../../helpers/schedulerWidget';
 import {
   selectHasRoleSchedulerAdmin,
@@ -48,14 +48,14 @@ const globals = import('common/globals');
 
 export const handleUpdated = props => response => {
   props.fetchScheduler({ id: response.submission.id, clear: true });
-  props.addSuccess(
+  addSuccess(
     ['Successfully updated scheduler', response.submission.values['Name']],
     'Scheduler Updated!',
   );
   props.setMode(props.previousMode);
 };
 export const handleError = props => response => {
-  props.addError(response.error, 'Error');
+  addError(response.error, 'Error');
 };
 
 const TabPill = ({ label, onClick, active }) => (
@@ -449,8 +449,6 @@ export const mapStateToProps = (state, props) => ({
 
 export const mapDispatchToProps = {
   push,
-  addSuccess: toastActions.addSuccess,
-  addError: toastActions.addError,
   fetchScheduler: actions.fetchScheduler,
   deleteScheduler: actions.deleteScheduler,
 };
@@ -461,7 +459,6 @@ const confirmSchedulerDelete = ({
   setOptionsOpen,
   setOpenConfirm,
   scheduler,
-  addError,
 }) => e => {
   setOptionsOpen(false);
   const timezone = scheduler.values['Timezone'] || moment.tz.guess();
@@ -484,8 +481,6 @@ const handleSchedulerDelete = ({
   setOpenConfirm,
   scheduler,
   deleteScheduler,
-  addError,
-  addSuccess,
   push,
 }) => () => {
   setOpenConfirm(false);

@@ -1,7 +1,7 @@
 import { Map } from 'immutable';
 import { all, takeEvery, call, put, select } from 'redux-saga/effects';
 import { actions, types } from '../modules/settingsServices';
-import { toastActions } from 'common';
+import { addSuccess, addError } from 'common';
 
 import {
   fetchKapp,
@@ -33,12 +33,7 @@ export function* fetchServicesSettingsSaga() {
   ]);
 
   if (serverError) {
-    yield put(
-      toastActions.addError(
-        'Failed to fetch Services settings.',
-        'Fetch Settings',
-      ),
-    );
+    yield put(addError('Failed to fetch Services settings.', 'Fetch Settings'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     const manageableFormsSlugs = (manageableForms.forms || []).map(
@@ -63,7 +58,7 @@ export function* fetchTeamsSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Failed to fetch teams.', 'Fetch Teams'));
+    yield put(addError('Failed to fetch teams.', 'Fetch Teams'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setServicesSettingsTeams(teams));
@@ -76,7 +71,7 @@ export function* fetchUsersSaga() {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Failed to fetch users.', 'Fetch Users'));
+    yield put(addError('Failed to fetch users.', 'Fetch Users'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setServicesSettingsUsers(users));
@@ -90,7 +85,7 @@ export function* fetchSpaceSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Failed to fetch space.', 'Fetch Space'));
+    yield put(addError('Failed to fetch space.', 'Fetch Space'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setServicesSettingsSpace(space));
@@ -112,17 +107,10 @@ export function* updateServicesSettingsSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(
-      toastActions.addError('Failed to update settings.', 'Update Settings'),
-    );
+    yield put(addError('Failed to update settings.', 'Update Settings'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
-    yield put(
-      toastActions.addSuccess(
-        'Updated settings successfully.',
-        'Update Settings',
-      ),
-    );
+    yield put(addSuccess('Updated settings successfully.', 'Update Settings'));
     const appActions = yield select(state => state.app.actions);
     yield put(appActions.refreshApp());
   }
@@ -142,10 +130,7 @@ export function* fetchNotificationsSaga() {
 
   if (serverError) {
     yield put(
-      toastActions.addError(
-        'Failed to fetch notifications.',
-        'Fetch Notifications',
-      ),
+      addError('Failed to fetch notifications.', 'Fetch Notifications'),
     );
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
@@ -161,7 +146,7 @@ export function* fetchFormSaga(action) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Failed to fetch form.', 'Fetch Form'));
+    yield put(addError('Failed to fetch form.', 'Fetch Form'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
     yield put(actions.setForm(form));

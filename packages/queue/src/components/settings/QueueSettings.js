@@ -3,7 +3,7 @@ import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
-import { toastActions, AttributeSelectors } from 'common';
+import { addSuccess, addError, AttributeSelectors } from 'common';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
@@ -259,8 +259,6 @@ const fetchSettings = ({
 
 // Updates the Settings and Refetches the App
 const updateSettings = ({
-  addSuccess,
-  addError,
   attributesMapDifferences,
   setAttributesMapDifferences,
   kappName,
@@ -332,14 +330,10 @@ const mapStateToProps = state => ({
   reloadApp: state.app.actions.refreshApp,
 });
 
-const mapDispatchToProps = {
-  ...toastActions,
-};
-
 export const QueueSettings = compose(
   connect(
     mapStateToProps,
-    mapDispatchToProps,
+    null,
     null,
     { context },
   ),

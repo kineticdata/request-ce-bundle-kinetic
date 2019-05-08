@@ -7,7 +7,7 @@ import { PageTitle } from 'common';
 import { CoreForm } from '@kineticdata/react';
 import { ErrorUnauthorized } from '../ErrorUnauthorized';
 import { SCHEDULER_FORM_SLUG } from '../../redux/modules/schedulers';
-import { actions as toastActions } from '../../redux/modules/toasts';
+import { addSuccess, addError } from '../../redux/modules/toasts';
 import { selectHasRoleSchedulerAdmin } from '../../redux/selectors';
 import { I18n } from '@kineticdata/react';
 
@@ -15,13 +15,13 @@ const globals = import('common/globals');
 
 export const handleCreated = props => response => {
   props.push(props.match.url.replace(/new$/, response.submission.id));
-  props.addSuccess(
+  addSuccess(
     `Successfully created scheduler (${response.submission.values['Name']})`,
     'Scheduler Created!',
   );
 };
 export const handleError = props => response => {
-  props.addError(response.error, 'Error');
+  addError(response.error, 'Error');
 };
 
 const CreateSchedulerComponent = ({
@@ -75,8 +75,6 @@ const CreateSchedulerComponent = ({
   );
 
 export const mapStateToProps = (state, props) => ({
-  addSuccess: toastActions.addSuccess,
-  addError: toastActions.addError,
   isSchedulerAdmin: selectHasRoleSchedulerAdmin(props.profile),
 });
 

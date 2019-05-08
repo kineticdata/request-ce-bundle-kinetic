@@ -11,7 +11,7 @@ import {
 } from '@kineticdata/react';
 import md5 from 'md5';
 import moment from 'moment';
-import { actions as toastActions } from '../modules/toasts';
+import { addError } from '../modules/toasts';
 import {
   actions,
   types,
@@ -104,13 +104,10 @@ export function* deleteSchedulerSaga({ payload: { id, successCallback } }) {
 
   if (serverError) {
     yield put(
-      toastActions.addError(
-        serverError.error || serverError.statusText,
-        'Delete Failed',
-      ),
+      addError(serverError.error || serverError.statusText, 'Delete Failed'),
     );
   } else if (errors) {
-    yield put(toastActions.addError(errors.join(' '), 'Delete Failed'));
+    yield put(addError(errors.join(' '), 'Delete Failed'));
   } else {
     if (typeof successCallback === 'function') {
       successCallback();
@@ -143,7 +140,7 @@ export function* addSchedulerMembershipSaga({
 }) {
   const toAdd = username ? [username] : usernames;
   if (toAdd.length === 0) {
-    yield put(toastActions.addError('No users selected to add.', 'Error'));
+    yield put(addError('No users selected to add.', 'Error'));
     return;
   }
 
@@ -171,7 +168,7 @@ export function* addSchedulerMembershipSaga({
   }, []);
 
   if (errorList.length > 0) {
-    yield put(toastActions.addError(errorList.join(' '), 'Error'));
+    yield put(addError(errorList.join(' '), 'Error'));
   }
 
   if (success) {
@@ -207,14 +204,9 @@ export function* createUserWithSchedulerMembershipSaga({
     },
   });
   if (serverError) {
-    yield put(
-      toastActions.addError(
-        serverError.error || serverError.statusText,
-        'Error',
-      ),
-    );
+    yield put(addError(serverError.error || serverError.statusText, 'Error'));
   } else if (errors) {
-    yield put(toastActions.addError(errors.join(' '), 'Error'));
+    yield put(addError(errors.join(' '), 'Error'));
   } else {
     if (managers) {
       yield put(actions.fetchSchedulerManagersTeam({ schedulerName }));
@@ -233,14 +225,9 @@ export function* removeSchedulerMembershipSaga({
   });
 
   if (serverError) {
-    yield put(
-      toastActions.addError(
-        serverError.error || serverError.statusText,
-        'Error',
-      ),
-    );
+    yield put(addError(serverError.error || serverError.statusText, 'Error'));
   } else if (errors) {
-    yield put(toastActions.addError(errors.join(' '), 'Error'));
+    yield put(addError(errors.join(' '), 'Error'));
   } else {
     if (managers) {
       yield put(actions.fetchSchedulerManagersTeam({ schedulerName }));
@@ -287,14 +274,9 @@ export function* deleteSchedulerConfigSaga({ payload: { id } }) {
   });
 
   if (serverError) {
-    yield put(
-      toastActions.addError(
-        serverError.error || serverError.statusText,
-        'Error',
-      ),
-    );
+    yield put(addError(serverError.error || serverError.statusText, 'Error'));
   } else if (errors) {
-    yield put(toastActions.addError(errors.join(' '), 'Error'));
+    yield put(addError(errors.join(' '), 'Error'));
   } else {
     yield put(actions.fetchSchedulerConfig());
   }
@@ -339,14 +321,9 @@ export function* deleteSchedulerAvailabilitySaga({ payload: { id } }) {
   });
 
   if (serverError) {
-    yield put(
-      toastActions.addError(
-        serverError.error || serverError.statusText,
-        'Error',
-      ),
-    );
+    yield put(addError(serverError.error || serverError.statusText, 'Error'));
   } else if (errors) {
-    yield put(toastActions.addError(errors.join(' '), 'Error'));
+    yield put(addError(errors.join(' '), 'Error'));
   } else {
     yield put(actions.fetchSchedulerAvailability());
   }
@@ -412,14 +389,9 @@ export function* deleteSchedulerOverrideSaga({ payload: { id } }) {
   });
 
   if (serverError) {
-    yield put(
-      toastActions.addError(
-        serverError.error || serverError.statusText,
-        'Error',
-      ),
-    );
+    yield put(addError(serverError.error || serverError.statusText, 'Error'));
   } else if (errors) {
-    yield put(toastActions.addError(errors.join(' '), 'Error'));
+    yield put(addError(errors.join(' '), 'Error'));
   } else {
     yield put(actions.fetchCurrentSchedulerOverrides());
   }

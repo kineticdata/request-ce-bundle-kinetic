@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { lifecycle, compose } from 'recompose';
 import { CatalogSearchResults } from './CatalogSearchResults';
 import { displayableFormPredicate } from '../../utils';
-import { searchHistoryActions } from 'common';
+import { recordSearchHistory } from 'common';
 import { context } from '../../redux/store';
 
 const matches = (form, term) =>
@@ -24,20 +24,16 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-const mapDispatchToProps = {
-  recordSearchHistory: searchHistoryActions.recordSearchHistory,
-};
-
 const enhance = compose(
   connect(
     mapStateToProps,
-    mapDispatchToProps,
+    null,
     null,
     { context },
   ),
   lifecycle({
     componentDidMount() {
-      this.props.recordSearchHistory({
+      recordSearchHistory({
         kappSlug: this.props.kappSlug,
         searchTerm: this.props.query,
         resultsCount: this.props.forms.size,
@@ -45,7 +41,7 @@ const enhance = compose(
     },
     componentDidUpdate(prevProps) {
       if (this.props.query !== prevProps.query) {
-        this.props.recordSearchHistory({
+        recordSearchHistory({
           kappSlug: this.props.kappSlug,
           searchTerm: this.props.query,
           resultsCount: this.props.forms.size,

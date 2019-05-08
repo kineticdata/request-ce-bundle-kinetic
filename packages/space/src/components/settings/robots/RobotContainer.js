@@ -2,8 +2,6 @@ import React from 'react';
 import { push } from 'redux-first-history';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { toastActions } from 'common';
-
 import { Router } from '../../../SpaceApp';
 import { CreateRobot } from './CreateRobot';
 import { Robot } from './Robot';
@@ -39,8 +37,6 @@ export const mapStateToProps = state => ({
 
 export const mapDispatchToProps = {
   push,
-  addSuccess: toastActions.addSuccess,
-  addError: toastActions.addError,
 };
 
 export const RobotContainer = compose(

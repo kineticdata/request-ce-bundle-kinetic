@@ -8,7 +8,7 @@ import { fetchSpace, updateSpace } from '@kineticdata/react';
 import { context } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 
-import { toastActions, AttributeSelectors } from 'common';
+import { addSuccess, addError, AttributeSelectors } from 'common';
 
 import { PageTitle } from '../../shared/PageTitle';
 
@@ -397,8 +397,6 @@ const fetchSettings = ({
 
 // Updates the Settings and Re
 const updateSettings = ({
-  addSuccess,
-  addError,
   attributesMapDifferences,
   setAttributesMapDifferences,
   setAttributesMap,
@@ -496,15 +494,11 @@ const mapStateToProps = state => ({
   reloadApp: state.app.actions.refreshApp,
 });
 
-const mapDispatchToProps = {
-  ...toastActions,
-};
-
 // Settings Container
 export const SpaceSettings = compose(
   connect(
     mapStateToProps,
-    mapDispatchToProps,
+    null,
     null,
     { context },
   ),

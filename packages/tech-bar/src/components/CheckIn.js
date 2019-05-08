@@ -6,8 +6,9 @@ import {
   ErrorNotFound,
   ErrorUnauthorized,
   ErrorUnexpected,
-  toastActions,
   TaskActions,
+  addSuccess,
+  addError,
 } from 'common';
 
 import { DisplayTabs } from './Display';
@@ -34,8 +35,6 @@ export const CheckInComponent = ({
   input,
   setInput,
   getFilteredAppointments,
-  addSuccess,
-  addError,
 }) => {
   const filteredAppointments =
     showDetails === 'appointment' && input.length > 2
@@ -242,8 +241,6 @@ export const mapStateToProps = (state, props) => ({
 
 export const mapDispatchToProps = {
   fetchTodayAppointments: actions.fetchTodayAppointments,
-  addSuccess: toastActions.addSuccess,
-  addError: toastActions.addError,
 };
 
 const toggleShowDetails = ({

@@ -4,7 +4,6 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from '@reach/router';
 import { fromJS, List } from 'immutable';
-import { modalFormActions } from 'common';
 
 import { actions as usersActions } from '../../../redux/modules/settingsUsers';
 import { actions as teamsActions } from '../../../redux/modules/teamList';
@@ -480,7 +479,6 @@ const mapDispatchToProps = {
   updateUser: usersActions.updateUser,
   createUser: usersActions.createUser,
   deleteUser: usersActions.deleteUser,
-  openForm: modalFormActions.openForm,
   push,
 };
 

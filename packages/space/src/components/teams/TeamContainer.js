@@ -6,7 +6,7 @@ import {
   withState,
 } from 'recompose';
 import { connect } from 'react-redux';
-import { modalFormActions, Utils } from 'common';
+import { openModalForm, Utils } from 'common';
 import { buildHierarchy } from '../../utils';
 
 import {
@@ -61,19 +61,13 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  openForm: modalFormActions.openForm,
   fetchTeam: actions.fetchTeam,
   fetchTeams: teamListActions.fetchTeams,
   resetTeam: actions.resetTeam,
 };
 
-const openRequestToJoinForm = ({
-  space,
-  adminKappSlug,
-  team,
-  openForm,
-}) => config =>
-  openForm({
+const openRequestToJoinForm = ({ space, adminKappSlug, team }) => config =>
+  openModalForm({
     kappSlug: adminKappSlug,
     formSlug: 'join-team-request',
     title: 'Request to Join',
@@ -83,13 +77,8 @@ const openRequestToJoinForm = ({
     },
   });
 
-const openRequestToLeaveForm = ({
-  space,
-  adminKappSlug,
-  team,
-  openForm,
-}) => config =>
-  openForm({
+const openRequestToLeaveForm = ({ space, adminKappSlug, team }) => config =>
+  openModalForm({
     kappSlug: adminKappSlug,
     formSlug: 'leave-team-request',
     title: 'Request to Leave',

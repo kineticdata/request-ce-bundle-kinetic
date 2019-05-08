@@ -21,7 +21,7 @@ import {
   clearTranslationsCache,
 } from '@kineticdata/react';
 import { List } from 'immutable';
-import { toastActions } from 'common';
+import { addSuccess, addError } from 'common';
 
 import { types, actions } from '../modules/settingsTranslations';
 
@@ -84,18 +84,13 @@ export function* setDefaultLocaleSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Failed to set default locale.', 'Error'));
+    yield put(addError('Failed to set default locale.', 'Error'));
   } else if (errors) {
-    yield put(
-      toastActions.addError(
-        `Failed to set default locale. ${errors[0]}`,
-        'Error',
-      ),
-    );
+    yield put(addError(`Failed to set default locale. ${errors[0]}`, 'Error'));
   } else {
     yield all([
       put(
-        toastActions.addSuccess(
+        addSuccess(
           `The ${
             payload.localeCode
           } locale was successfully set as the default locale.`,
@@ -120,15 +115,13 @@ export function* enableLocaleSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Failed to enable locale.', 'Error'));
+    yield put(addError('Failed to enable locale.', 'Error'));
   } else if (errors) {
-    yield put(
-      toastActions.addError(`Failed to enable locale. ${errors[0]}`, 'Error'),
-    );
+    yield put(addError(`Failed to enable locale. ${errors[0]}`, 'Error'));
   } else {
     yield all([
       put(
-        toastActions.addSuccess(
+        addSuccess(
           `The ${payload.localeCode} locale was successfully enabled.`,
           'Locale Enabled',
         ),
@@ -151,15 +144,13 @@ export function* disableLocaleSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Failed to disable locale.', 'Error'));
+    yield put(addError('Failed to disable locale.', 'Error'));
   } else if (errors) {
-    yield put(
-      toastActions.addError(`Failed to disable locale. ${errors[0]}`, 'Error'),
-    );
+    yield put(addError(`Failed to disable locale. ${errors[0]}`, 'Error'));
   } else {
     yield all([
       put(
-        toastActions.addSuccess(
+        addSuccess(
           `The ${payload.localeCode} locale was successfully disabled.`,
           'Locale Disabled',
         ),
@@ -260,15 +251,13 @@ export function* createContextSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Failed to create context.', 'Error'));
+    yield put(addError('Failed to create context.', 'Error'));
   } else if (errors) {
-    yield put(
-      toastActions.addError(`Failed to create context. ${errors[0]}`, 'Error'),
-    );
+    yield put(addError(`Failed to create context. ${errors[0]}`, 'Error'));
   } else {
     yield all([
       put(
-        toastActions.addSuccess(
+        addSuccess(
           `The ${context.name} context was successfully created.`,
           'Context Created',
         ),
@@ -288,15 +277,13 @@ export function* updateContextSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Failed to update context.', 'Error'));
+    yield put(addError('Failed to update context.', 'Error'));
   } else if (errors) {
-    yield put(
-      toastActions.addError(`Failed to update context. ${errors[0]}`, 'Error'),
-    );
+    yield put(addError(`Failed to update context. ${errors[0]}`, 'Error'));
   } else {
     yield all([
       put(
-        toastActions.addSuccess(
+        addSuccess(
           `The ${payload.contextName} context was successfully updated to ${
             payload.context.name
           }`,
@@ -314,15 +301,13 @@ export function* deleteContextSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Failed to delete context.', 'Error'));
+    yield put(addError('Failed to delete context.', 'Error'));
   } else if (errors) {
-    yield put(
-      toastActions.addError(`Failed to delete context. ${errors[0]}`, 'Error'),
-    );
+    yield put(addError(`Failed to delete context. ${errors[0]}`, 'Error'));
   } else {
     yield all([
       put(
-        toastActions.addSuccess(
+        addSuccess(
           `The ${payload.contextName} context was successfully deleted.`,
           'Context Deleted',
         ),
@@ -340,14 +325,12 @@ export function* updateContextKeySaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Failed to update key.', 'Error'));
+    yield put(addError('Failed to update key.', 'Error'));
   } else if (errors) {
-    yield put(
-      toastActions.addError(`Failed to update key. ${errors[0]}`, 'Error'),
-    );
+    yield put(addError(`Failed to update key. ${errors[0]}`, 'Error'));
   } else {
     yield put(
-      toastActions.addSuccess(
+      addSuccess(
         `The key was successfully updated to ${payload.key}`,
         'Context Updated',
       ),
@@ -408,18 +391,13 @@ export function* upsertTranslationsSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Failed to save translation.', 'Error'));
+    yield put(addError('Failed to save translation.', 'Error'));
   } else if (errors) {
-    yield put(
-      toastActions.addError(
-        `Failed to save translation. ${errors[0]}`,
-        'Error',
-      ),
-    );
+    yield put(addError(`Failed to save translation. ${errors[0]}`, 'Error'));
   } else {
     yield all([
       put(
-        toastActions.addSuccess(
+        addSuccess(
           `The translation was successfully saved.`,
           'Translation Saved',
         ),
@@ -443,18 +421,13 @@ export function* deleteTranslationsSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(toastActions.addError('Failed to delete translation.', 'Error'));
+    yield put(addError('Failed to delete translation.', 'Error'));
   } else if (errors) {
-    yield put(
-      toastActions.addError(
-        `Failed to delete translation. ${errors[0]}`,
-        'Error',
-      ),
-    );
+    yield put(addError(`Failed to delete translation. ${errors[0]}`, 'Error'));
   } else {
     yield all([
       put(
-        toastActions.addSuccess(
+        addSuccess(
           `The translation was successfully deleted.`,
           'Translation Deleted',
         ),
@@ -490,20 +463,15 @@ export function* clearTranslationsCacheSaga({ payload = {} }) {
   const { errors, serverError } = yield call(clearTranslationsCache, {});
 
   if (serverError) {
-    yield put(
-      toastActions.addError('Failed to publish translations.', 'Error'),
-    );
+    yield put(addError('Failed to publish translations.', 'Error'));
   } else if (errors) {
     yield put(
-      toastActions.addError(
-        `Failed to publish translations. ${errors[0]}`,
-        'Error',
-      ),
+      addError(`Failed to publish translations. ${errors[0]}`, 'Error'),
     );
   } else {
     yield all([
       put(
-        toastActions.addSuccess(
+        addSuccess(
           `Translations were successfully published.`,
           'Translations Published',
         ),

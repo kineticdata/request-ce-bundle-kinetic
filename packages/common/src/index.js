@@ -24,19 +24,13 @@ import { DiscussionCard } from './components/discussions/summary/DiscussionCard'
 import { DiscussionsList } from './components/discussions/summary/DiscussionsList';
 import { DiscussionsPanel } from './components/discussions/summary/DiscussionsPanel';
 import { ViewDiscussionsModal } from './components/discussions/summary/ViewDiscussionsModal';
-import { store, context, connect } from './redux/store';
+import { store, context } from './redux/store';
 
 import {
   selectCurrentKapp,
   selectCurrentKappSlug,
   selectDiscussionsEnabled,
 } from './redux/modules/common';
-import {
-  actions as toastActions,
-  types as toastTypes,
-} from './redux/modules/toasts';
-import { actions as modalFormActions } from './redux/modules/modalForm';
-import { actions as searchHistoryActions } from './redux/modules/searchHistory';
 import {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
@@ -54,7 +48,19 @@ const CommonProvider = props => (
   </Provider>
 );
 
+// Common Actions
 export { openModalForm } from './redux/modules/modalForm';
+export {
+  enableSearchHistory,
+  recordSearchHistory,
+} from './redux/modules/searchHistory';
+export {
+  addSuccess,
+  addError,
+  addInfo,
+  addNormal,
+  addWarn,
+} from './redux/modules/toasts';
 
 export {
   CommonProvider,
@@ -67,10 +73,6 @@ export {
   Icon,
   Loading,
   PageTitle,
-  toastActions,
-  toastTypes,
-  modalFormActions,
-  searchHistoryActions,
   selectCurrentKapp,
   selectCurrentKappSlug,
   selectDiscussionsEnabled,

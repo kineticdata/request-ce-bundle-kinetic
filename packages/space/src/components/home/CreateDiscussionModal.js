@@ -9,7 +9,7 @@ import {
   createDiscussion,
   sendInvites,
 } from '@kineticdata/react';
-import { toastActions } from 'common';
+import { addSuccess, addError } from 'common';
 import { actions } from '../../redux/modules/spaceApp';
 import { context } from '../../redux/store';
 import { PeopleSelect } from 'common/src/components/discussions/PeopleSelect';
@@ -106,8 +106,6 @@ const mapStateToProps = state => ({
 
 export const mapDispatchToProps = {
   setModalOpen: actions.setCreateDiscussionModalOpen,
-  addError: toastActions.addError,
-  addSuccess: toastActions.addSuccess,
   push,
 };
 
@@ -125,15 +123,15 @@ const submit = props => async (values, completeSubmit) => {
   if (discussion) {
     const responses = await sendInvites(discussion, values);
     if (!responses.some(response => response.error)) {
-      props.addSuccess('Successfully created discussion and sent invitations.');
+      addSuccess('Successfully created discussion and sent invitations.');
     } else {
-      props.addSuccess('Successfully created discussion.');
-      props.addError('There was an error inviting users and/or teams.');
+      addSuccess('Successfully created discussion.');
+      addError('There was an error inviting users and/or teams.');
     }
     props.push(`/discussions/${discussion.id}`);
     props.close();
   } else {
-    props.addError(error.response.data.message);
+    addError(error.response.data.message);
     completeSubmit();
   }
 };

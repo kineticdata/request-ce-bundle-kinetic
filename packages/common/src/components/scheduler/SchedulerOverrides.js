@@ -18,7 +18,7 @@ import {
   SCHEDULER_OVERRIDE_FORM_SLUG,
   SCHEDULER_OVERRIDES_PAGE_SIZE,
 } from '../../redux/modules/schedulers';
-import { actions as toastActions } from '../../redux/modules/toasts';
+import { addError } from '../../redux/modules/toasts';
 
 const globals = import('common/globals');
 
@@ -290,7 +290,6 @@ export const mapDispatchToProps = {
   fetchNextSchedulerOverrides: actions.fetchNextSchedulerOverrides,
   fetchPreviousSchedulerOverrides: actions.fetchPreviousSchedulerOverrides,
   deleteSchedulerOverride: actions.deleteSchedulerOverride,
-  addError: toastActions.addError,
 };
 
 const toggleDropdown = ({
@@ -317,7 +316,7 @@ const handleSaved = ({ fetchSchedulerOverrides, setOpenModal }) => () => {
   setOpenModal(false);
 };
 const handleError = props => response => {
-  props.addError(response.error, 'Error');
+  addError(response.error, 'Error');
 };
 
 const togglePastOverrides = ({ fetchSchedulerOverrides }) => include => {

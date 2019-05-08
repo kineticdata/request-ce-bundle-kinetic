@@ -1,6 +1,6 @@
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
-import { modalFormActions, Utils } from 'common';
+import { openModalForm, Utils } from 'common';
 
 import { actions } from '../../redux/modules/teamList';
 import { context } from '../../redux/store';
@@ -19,16 +19,10 @@ export const mapStateToProps = state => ({
 });
 export const mapDispatchToProps = {
   fetchTeams: actions.fetchTeams,
-  openForm: modalFormActions.openForm,
 };
 
-const openRequestNewTeam = ({
-  space,
-  adminKappSlug,
-  team,
-  openForm,
-}) => config =>
-  openForm({
+const openRequestNewTeam = ({ space, adminKappSlug, team }) => config =>
+  openModalForm({
     kappSlug: adminKappSlug,
     formSlug: 'new-team-request',
     title: 'Request New Team',

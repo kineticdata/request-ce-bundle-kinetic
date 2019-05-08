@@ -12,7 +12,7 @@ import {
 } from 'recompose';
 import { CoreForm } from '@kineticdata/react';
 import { Button } from 'reactstrap';
-import { toastActions, Loading } from 'common';
+import { addSuccess, addError, Loading } from 'common';
 import { PageTitle } from '../../shared/PageTitle';
 
 import { isActiveClass } from '../../../utils';
@@ -198,14 +198,14 @@ export const handleLoaded = props => form => {
 
 export const handleUpdated = props => response => {
   props.fetchRobot(response.submission.id);
-  props.addSuccess(
+  addSuccess(
     `Successfully updated robot (${response.submission.values['Robot Name']})`,
     'Robot Updated!',
   );
 };
 
 export const handleError = props => response => {
-  props.addError(response.error, 'Error');
+  addError(response.error, 'Error');
 };
 
 export const handleDelete = props => () => {
@@ -218,10 +218,7 @@ export const processDelete = props => () => {
     id: props.robot.id,
     callback: () => {
       props.push(`/settings/robots`);
-      props.addSuccess(
-        `Successfully deleted robot (${robotName})`,
-        'Robot Deleted!',
-      );
+      addSuccess(`Successfully deleted robot (${robotName})`, 'Robot Deleted!');
     },
   });
 };
@@ -236,8 +233,6 @@ export const mapDispatchToProps = {
   push,
   fetchRobot: actions.fetchRobot,
   deleteRobot: actions.deleteRobot,
-  addSuccess: toastActions.addSuccess,
-  addError: toastActions.addError,
 };
 
 export const Robot = compose(

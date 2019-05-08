@@ -26,7 +26,7 @@ import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'redux-first-history';
 
 import { actions as systemErrorActions } from '../modules/errors';
-import { toastActions } from 'common';
+import { addSuccess, addError } from 'common';
 import {
   actions,
   types,
@@ -168,9 +168,9 @@ export function* updateFormSaga() {
   }
 
   if (updateError) {
-    yield put(toastActions.addError(updateError));
+    yield put(addError(updateError));
   } else {
-    yield put(toastActions.addSuccess('Form updated.'));
+    yield put(addSuccess('Form updated.'));
     yield put(actions.fetchForm(slug));
     yield put(actions.fetchForms());
   }
@@ -192,7 +192,7 @@ export function* createFormSaga(action) {
     include: FORM_INCLUDES,
   });
   if (serverError || error) {
-    yield put(toastActions.addError(error || serverError.statusText));
+    yield put(addError(error || serverError.statusText));
   } else {
     yield put(actions.fetchForms());
     if (typeof action.payload.callback === 'function') {
@@ -289,7 +289,7 @@ export function* fetchSubmissionsSimpleSaga() {
         put(actions.setSubmissions(List())),
         put(actions.setAdvancedSearchOpen(true)),
         put(
-          toastActions.addError(
+          addError(
             'There were too many matching results. You will need to use an advanced search to create a better query.',
             'Too many results.',
           ),
@@ -481,7 +481,7 @@ export function* cloneSubmissionSaga(action) {
       yield put(actions.cloneSubmissionErrors(postErrors));
     } else {
       yield put(actions.cloneSubmissionSuccess());
-      yield put(toastActions.addSuccess('Submission Cloned'));
+      yield put(addSuccess('Submission Cloned'));
       if (typeof action.payload.callback === 'function') {
         action.payload.callback();
       }
@@ -502,7 +502,7 @@ export function* deleteSubmissionSaga(action) {
     yield put(actions.deleteSubmissionErrors(errors));
   } else {
     yield put(actions.deleteSubmissionSuccess());
-    yield put(toastActions.addSuccess('Submission Deleted'));
+    yield put(addSuccess('Submission Deleted'));
     if (typeof action.payload.callback === 'function') {
       action.payload.callback();
     }
@@ -601,19 +601,20 @@ export function* executeImportSaga(action) {
 
   const responses = yield all(
     head
-      .map(record =>
-        record.id
-          ? call(updateSubmission, {
-              datastore: true,
-              formSlug: form.slug,
-              values: record.values,
-              id: record.id,
-            })
-          : call(createSubmission, {
-              datastore: true,
-              formSlug: form.slug,
-              values: record.values,
-            }),
+      .map(
+        record =>
+          record.id
+            ? call(updateSubmission, {
+                datastore: true,
+                formSlug: form.slug,
+                values: record.values,
+                id: record.id,
+              })
+            : call(createSubmission, {
+                datastore: true,
+                formSlug: form.slug,
+                values: record.values,
+              }),
       )
       .toJS(),
   );

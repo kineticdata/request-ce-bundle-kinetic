@@ -899,8 +899,8 @@ const setScheduledEvent = ({ dispatch }) => ({ submission }) => {
   dispatch(
     actions.setState({
       event: submission,
-      schedulerId: submission.values['Scheduler Id'],
-      type: submission.values['Event Type'],
+      schedulerId: submission && submission.values['Scheduler Id'],
+      type: submission && submission.values['Event Type'],
     }),
   );
 };

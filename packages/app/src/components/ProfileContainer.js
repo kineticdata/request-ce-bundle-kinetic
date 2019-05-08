@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
 
 import { Profile } from './Profile';
-import { modalFormActions } from 'common';
+import { openModalForm } from 'common';
 import * as selectors from '../redux/selectors';
 
 const HELP_FORM_CONFIG = {
@@ -39,32 +39,25 @@ export const mapStateToProps = state => ({
   isGuest: selectors.selectIsGuest(state),
 });
 
-const mapDispatchToProps = {
-  openForm: modalFormActions.openForm,
-};
-
 export const ProfileContainer = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps),
   withState('isOpen', 'setIsOpen', false),
   withHandlers({
     openHelpForm: props => () => {
       props.setIsOpen(false);
-      props.openForm(HELP_FORM_CONFIG);
+      openModalForm(HELP_FORM_CONFIG);
     },
     openFeedbackForm: props => () => {
       props.setIsOpen(false);
-      props.openForm(FEEDBACK_FORM_CONFIG);
+      openModalForm(FEEDBACK_FORM_CONFIG);
     },
     openInviteOthersForm: props => () => {
       props.setIsOpen(false);
-      props.openForm(INVITE_OTHERS_FORM_CONFIG);
+      openModalForm(INVITE_OTHERS_FORM_CONFIG);
     },
     openKitchenSinkForm: props => () => {
       props.setIsOpen(false);
-      props.openForm(KITCHEN_SINK_FORM_CONFIG);
+      openModalForm(KITCHEN_SINK_FORM_CONFIG);
     },
     toggle: props => () => props.setIsOpen(open => !open),
   }),

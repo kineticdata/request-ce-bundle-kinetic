@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { modalFormActions } from 'common';
+import { openModalForm } from 'common';
 import { selectAdminKapp } from 'app/src/redux/selectors';
 import { context } from '../../redux/store';
 
@@ -28,20 +28,16 @@ export const mapStateToProps = state => ({
   adminKappSlug: selectAdminKapp(state).slug,
 });
 
-export const mapDispatchToProps = {
-  openForm: modalFormActions.openForm,
-};
-
 const enhance = compose(
   connect(
     mapStateToProps,
-    mapDispatchToProps,
+    null,
     null,
     { context },
   ),
   withHandlers({
     handleOpenFeedback: props => () =>
-      props.openForm(
+      openModalForm(
         getFeedbackFormConfig(props.adminKappSlug, props.submission.id),
       ),
   }),

@@ -4,7 +4,7 @@ import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import { Link } from '@reach/router';
 import { Map, Seq } from 'immutable';
 import { push } from 'redux-first-history';
-import { toastActions } from 'common';
+import { addSuccess } from 'common';
 import { PageTitle } from '../../shared/PageTitle';
 
 import { actions } from '../../../redux/modules/settingsNotifications';
@@ -253,7 +253,7 @@ export const handleSubmit = props => event => {
     submission => {
       const action = props.submission ? 'Updated' : 'Created';
       props.push(`/settings/notifications/${props.type}`);
-      props.addSuccess(
+      addSuccess(
         `Successfully ${action.toLowerCase()} ${props.title.toLowerCase()} (${
           submission.handle
         })`,
@@ -305,7 +305,6 @@ export const mapDispatchToProps = {
   resetNotification: actions.resetNotification,
   saveNotification: actions.saveNotification,
   fetchVariables: actions.fetchVariables,
-  addSuccess: toastActions.addSuccess,
   push,
 };
 

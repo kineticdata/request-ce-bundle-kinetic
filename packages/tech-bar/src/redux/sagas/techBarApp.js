@@ -10,6 +10,7 @@ import {
 } from '@kineticdata/react';
 import { actions, types, Settings } from '../modules/techBarApp';
 import { SCHEDULER_FORM_SLUG } from '../../constants';
+import { addError } from 'common';
 import md5 from 'md5';
 
 const TECH_BAR_SETTINGS_FORM_SLUG = 'tech-bar-settings';
@@ -91,7 +92,7 @@ export function* addDisplayTeamMembershipSaga({
 }) {
   const toAdd = username ? [username] : usernames;
   if (toAdd.length === 0) {
-    yield put(toastActions.addError('No users selected to add.', 'Error'));
+    yield put(addError('No users selected to add.', 'Error'));
     return;
   }
 
@@ -119,7 +120,7 @@ export function* addDisplayTeamMembershipSaga({
   }, []);
 
   if (errorList.length > 0) {
-    yield put(toastActions.addError(errorList.join(' '), 'Error'));
+    yield put(addError(errorList.join(' '), 'Error'));
   }
 
   if (success) {
@@ -151,14 +152,9 @@ export function* createUserWithDisplayTeamMembershipSaga({
     },
   });
   if (serverError) {
-    yield put(
-      toastActions.addError(
-        serverError.error || serverError.statusText,
-        'Error',
-      ),
-    );
+    yield put(addError(serverError.error || serverError.statusText, 'Error'));
   } else if (errors) {
-    yield put(toastActions.addError(errors.join(' '), 'Error'));
+    yield put(addError(errors.join(' '), 'Error'));
   } else {
     yield put(actions.fetchDisplayTeam({ techBarName }));
   }
@@ -173,14 +169,9 @@ export function* removeSchedulerDisplayTeamSaga({
   });
 
   if (serverError) {
-    yield put(
-      toastActions.addError(
-        serverError.error || serverError.statusText,
-        'Error',
-      ),
-    );
+    yield put(addError(serverError.error || serverError.statusText, 'Error'));
   } else if (errors) {
-    yield put(toastActions.addError(errors.join(' '), 'Error'));
+    yield put(addError(errors.join(' '), 'Error'));
   } else {
     yield put(actions.fetchDisplayTeam({ techBarName }));
   }

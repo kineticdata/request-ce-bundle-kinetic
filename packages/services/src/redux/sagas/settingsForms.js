@@ -9,7 +9,7 @@ import {
   updateForm,
   createForm,
 } from '@kineticdata/react';
-import { toastActions } from 'common';
+import { addSuccess, addError } from 'common';
 import axios from 'axios';
 import {
   actions,
@@ -164,9 +164,7 @@ export function* updateFormSaga(action) {
     include: FORM_INCLUDES,
   });
   if (!serverError) {
-    yield put(
-      toastActions.addSuccess('Updated the form successfully.', 'Updated Form'),
-    );
+    yield put(addSuccess('Updated the form successfully.', 'Updated Form'));
     yield put(
       actions.fetchForm({
         kappSlug: action.payload.kappSlug,
@@ -190,7 +188,7 @@ export function* fetchNotificationsSaga() {
 
   if (serverError) {
     yield put(
-      toastActions.addError(
+      addError(
         'There was a problem retrieving notifications.',
         'Retrieving Notifications',
       ),
@@ -232,13 +230,11 @@ export function* createFormSaga(action) {
   });
   if (createdForm.serverError || createdForm.error) {
     yield put(
-      toastActions.addError(
-        createdForm.error || createdForm.serverError.statusText,
-      ),
+      addError(createdForm.error || createdForm.serverError.statusText),
     );
   } else {
     yield put(
-      toastActions.addSuccess(
+      addSuccess(
         `Form "${action.payload.inputs.Name}" was successfully created.`,
         'Created Form',
       ),

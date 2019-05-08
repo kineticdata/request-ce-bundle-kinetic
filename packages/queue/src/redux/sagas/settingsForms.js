@@ -9,7 +9,7 @@ import {
   updateForm,
   createForm,
 } from '@kineticdata/react';
-import { toastActions } from 'common';
+import { addSuccess, addError } from 'common';
 import axios from 'axios';
 import {
   actions,
@@ -161,10 +161,7 @@ export function* updateFormSaga(action) {
   });
   if (!serverError) {
     yield put(
-      toastActions.addSuccess(
-        'The form was successfully updated.',
-        'Update Successful',
-      ),
+      addSuccess('The form was successfully updated.', 'Update Successful'),
     );
     yield put(
       actions.fetchForm({
@@ -225,9 +222,7 @@ export function* createFormSaga(action) {
   });
   if (createdForm.serverError || createdForm.error) {
     yield put(
-      toastActions.addError(
-        createdForm.error || createdForm.serverError.statusText,
-      ),
+      addError(createdForm.error || createdForm.serverError.statusText),
     );
   } else {
     if (typeof action.payload.callback === 'function') {

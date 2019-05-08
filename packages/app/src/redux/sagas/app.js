@@ -10,7 +10,7 @@ import {
   fetchDefaultLocale,
 } from '@kineticdata/react';
 import semver from 'semver';
-import { importLocale, searchHistoryActions, Utils } from 'common';
+import { importLocale, enableSearchHistory, Utils } from 'common';
 
 import { actions, types } from '../modules/app';
 
@@ -68,7 +68,7 @@ export function* fetchAppTask({ payload }) {
       yield all([
         ...kapps.map(kapp => {
           return put(
-            searchHistoryActions.enableSearchHistory({
+            enableSearchHistory({
               kappSlug: kapp.slug,
               value: Utils.getAttributeValue(kapp, 'Record Search History', ''),
             }),

@@ -1,5 +1,6 @@
 import { List } from 'immutable';
 import * as Utils from '../../utils';
+import { store } from '../store';
 
 const { namespace, withPayload } = Utils;
 
@@ -95,3 +96,11 @@ export const reducer = (state = List(), { type, payload }) => {
       return state;
   }
 };
+
+export const addSuccess = (...args) =>
+  store.dispatch(actions.addSuccess(...args));
+export const addInfo = (...args) => store.dispatch(actions.addInfo(...args));
+export const addWarn = (...args) => store.dispatch(actions.addWarn(...args));
+export const addError = (...args) => store.dispatch(actions.addError(...args));
+export const addNormal = (...args) =>
+  store.dispatch(actions.addNormal(...args));

@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { fetchCategories } from '@kineticdata/react';
-import { toastActions } from 'common';
+import { addError } from 'common';
 import { actions, types } from '../modules/settingsCategories';
 
 export function* fetchCategoriesSaga(action) {
@@ -10,9 +10,7 @@ export function* fetchCategoriesSaga(action) {
   });
 
   if (serverError) {
-    yield put(
-      toastActions.addError('Failed to fetch categories.', 'Fetch Categories'),
-    );
+    yield put(addError('Failed to fetch categories.', 'Fetch Categories'));
     yield put(actions.setCategoriesErrors(serverError));
   } else {
     yield put(actions.setCategories(categories));

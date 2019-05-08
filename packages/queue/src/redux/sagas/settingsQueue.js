@@ -1,7 +1,7 @@
 import { Map } from 'immutable';
 import { all, takeEvery, call, put, select } from 'redux-saga/effects';
 import { actions, types } from '../modules/settingsQueue';
-import { toastActions } from 'common';
+import { addSuccess, addError } from 'common';
 import {
   fetchKapp,
   fetchForms,
@@ -102,17 +102,10 @@ export function* updateQueueSettingsSaga({ payload }) {
   });
 
   if (serverError) {
-    yield put(
-      toastActions.addError('Failed to update settings.', 'Update Settings'),
-    );
+    yield put(addError('Failed to update settings.', 'Update Settings'));
     yield put(actions.updateServicesSettingsError(serverError));
   } else {
-    yield put(
-      toastActions.addSuccess(
-        'Updated settings successfully.',
-        'Update Settings',
-      ),
-    );
+    yield put(addSuccess('Updated settings successfully.', 'Update Settings'));
     const appActions = yield select(state => state.app.actions);
     yield put(appActions.refreshApp());
   }

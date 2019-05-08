@@ -8,7 +8,7 @@ import {
   ROBOT_EXECUTIONS_FORM_SLUG,
 } from '../../../redux/modules/settingsRobots';
 import { CoreForm } from '@kineticdata/react';
-import { toastActions } from 'common';
+import { addError } from 'common';
 
 import { context } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
@@ -60,7 +60,7 @@ const RobotExecutionComponent = ({ robotExecution, match, handleError }) => {
 };
 
 export const handleError = props => response => {
-  props.addError(response.error, 'Error');
+  addError(response.error, 'Error');
 };
 
 export const mapStateToProps = state => ({
@@ -71,7 +71,6 @@ export const mapStateToProps = state => ({
 export const mapDispatchToProps = {
   push,
   fetchRobotExecution: actions.fetchRobotExecution,
-  addError: toastActions.addError,
 };
 
 export const RobotExecution = compose(

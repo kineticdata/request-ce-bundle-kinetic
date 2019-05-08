@@ -3,7 +3,7 @@ import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
-import { toastActions, AttributeSelectors } from 'common';
+import { addSuccess, addError, AttributeSelectors } from 'common';
 import { fetchKapp, updateKapp } from '@kineticdata/react';
 import isarray from 'isarray';
 import { I18n } from '@kineticdata/react';
@@ -333,8 +333,6 @@ const fetchSettings = ({
 
 // Updates the Settings and Refetches the App
 const updateSettings = ({
-  addSuccess,
-  addError,
   attributesMapDifferences,
   setAttributesMapDifferences,
   kappName,
@@ -409,14 +407,10 @@ const mapStateToProps = state => ({
   reloadApp: state.app.actions.refreshApp,
 });
 
-const mapDispatchToProps = {
-  ...toastActions,
-};
-
 export const ServicesSettings = compose(
   connect(
     mapStateToProps,
-    mapDispatchToProps,
+    null,
     null,
     { context },
   ),

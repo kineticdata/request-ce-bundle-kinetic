@@ -3,7 +3,7 @@ import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from '@reach/router';
 import { fromJS } from 'immutable';
-import { modalFormActions } from 'common';
+import { openModalForm } from 'common';
 
 import { ProfileCard } from 'common';
 import { TeamCard } from '../../shared/TeamCard';
@@ -430,8 +430,8 @@ const translateFieldValuesToProfile = (fieldValues, profile) => {
   return result;
 };
 
-const openChangeManagerForm = ({ spaceAttributes, openForm }) => config => {
-  openForm({
+const openChangeManagerForm = ({ spaceAttributes }) => config => {
+  openModalForm({
     kappSlug: spaceAttributes['Admin Kapp Slug'] || 'admin',
     formSlug:
       spaceAttributes['Change Manager Form Slug'] || 'change-manager-request',
@@ -476,7 +476,6 @@ const mapDispatchToProps = {
   fetchProfile: actions.fetchProfile,
   toggleChangePassword: actions.setChangePasswordVisible,
   updateProfile: actions.updateProfile,
-  openForm: modalFormActions.openForm,
 };
 
 export const Profile = compose(

@@ -17,7 +17,7 @@ import {
   actions,
   SCHEDULER_AVAILABILITY_FORM_SLUG,
 } from '../../redux/modules/schedulers';
-import { actions as toastActions } from '../../redux/modules/toasts';
+import { addError } from '../../redux/modules/toasts';
 
 const globals = import('common/globals');
 
@@ -226,7 +226,6 @@ export const mapStateToProps = state => ({
 export const mapDispatchToProps = {
   fetchSchedulerAvailability: actions.fetchSchedulerAvailability,
   deleteSchedulerAvailability: actions.deleteSchedulerAvailability,
-  addError: toastActions.addError,
 };
 
 const toggleDropdown = ({
@@ -253,7 +252,7 @@ const handleSaved = ({ fetchSchedulerAvailability, setOpenModal }) => () => {
   setOpenModal(false);
 };
 const handleError = props => response => {
-  props.addError(response.error, 'Error');
+  addError(response.error, 'Error');
 };
 
 export const SchedulerAvailability = compose(

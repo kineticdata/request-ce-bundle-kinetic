@@ -4,7 +4,7 @@ import { compose, withHandlers, withState, withProps } from 'recompose';
 import { DisplayTabs } from './Display';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { createSubmission } from '@kineticdata/react';
-import { selectCurrentKapp, toastActions } from 'common';
+import { selectCurrentKapp, addSuccess, addError } from 'common';
 import { TIME_FORMAT } from '../constants';
 import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
@@ -221,8 +221,6 @@ export const mapStateToProps = (state, props) => ({
 export const mapDispatchToProps = {
   fetchTodayAppointments: appointmentActions.fetchTodayAppointments,
   fetchTodayWalkIns: walkInActions.fetchTodayWalkIns,
-  addSuccess: toastActions.addSuccess,
-  addError: toastActions.addError,
 };
 
 const getFilteredAppointments = ({ input, records }) => () =>
@@ -265,8 +263,6 @@ const handleSubmitFeedback = ({
   experience,
   appointment,
   resetExperience,
-  addError,
-  addSuccess,
   setDisabled,
 }) => values => {
   createSubmission({

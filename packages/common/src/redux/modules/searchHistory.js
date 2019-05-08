@@ -1,5 +1,6 @@
 import { Record } from 'immutable';
 import { namespace, withPayload } from '../../utils';
+import { store } from '../store';
 
 export const SEARCH_HISTORY_FORM_SLUG = 'search-history';
 
@@ -38,3 +39,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state;
   }
 };
+
+export const enableSearchHistory = payload =>
+  store.dispatch(actions.enableSearchHistory(payload));
+export const recordSearchHistory = payload =>
+  store.dispatch(actions.recordSearchHistory(payload));

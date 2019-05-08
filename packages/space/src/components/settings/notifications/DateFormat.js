@@ -4,7 +4,7 @@ import { compose, withHandlers, withProps } from 'recompose';
 import { Link } from '@reach/router';
 import { CoreForm } from '@kineticdata/react';
 import { push } from 'redux-first-history';
-import { toastActions } from 'common';
+import { addSuccess } from 'common';
 import { PageTitle } from '../../shared/PageTitle';
 
 import { NOTIFICATIONS_DATE_FORMAT_FORM_SLUG } from '../../../redux/modules/settingsNotifications';
@@ -54,7 +54,7 @@ export const DateFormatComponent = props => (
 
 export const handleCreated = props => (response, actions) => {
   props.push('/settings/notifications/date-formats');
-  props.addSuccess(
+  addSuccess(
     `Successfully created date format (${response.submission.handle})`,
     'Date Format Created!',
   );
@@ -62,7 +62,7 @@ export const handleCreated = props => (response, actions) => {
 
 export const handleUpdated = props => (response, actions) => {
   props.push('/settings/notifications/date-formats');
-  props.addSuccess(
+  addSuccess(
     `Successfully updated date format (${response.submission.handle})`,
     'Date Format Updated!',
   );
@@ -70,7 +70,6 @@ export const handleUpdated = props => (response, actions) => {
 
 export const mapDispatchToProps = {
   push,
-  addSuccess: toastActions.addSuccess,
 };
 
 export const DateFormat = compose(

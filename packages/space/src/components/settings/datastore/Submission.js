@@ -10,10 +10,14 @@ import {
 } from 'recompose';
 import { Link } from '@reach/router';
 import { parse } from 'query-string';
-import { ButtonGroup, Button } from 'reactstrap';
+import { ButtonGroup } from 'reactstrap';
 import { CoreForm } from '@kineticdata/react';
-import { LinkContainer } from 'react-router-bootstrap';
-import { DiscussionsPanel, toastActions, ViewDiscussionsModal } from 'common';
+import {
+  DiscussionsPanel,
+  addSuccess,
+  addError,
+  ViewDiscussionsModal,
+} from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { PageTitle } from '../../shared/PageTitle';
 import {
@@ -108,20 +112,24 @@ const DatastoreSubmissionComponent = ({
             {showPrevAndNext &&
               !isEditing && (
                 <ButtonGroup className="datastore-prev-next">
-                  <LinkContainer to={prevAndNext.prev || ''}>
-                    <Button color="inverse" disabled={!prevAndNext.prev}>
-                      <span className="icon">
-                        <span className="fa fa-fw fa-caret-left" />
-                      </span>
-                    </Button>
-                  </LinkContainer>
-                  <LinkContainer to={prevAndNext.next || ''}>
-                    <Button color="inverse" disabled={!prevAndNext.next}>
-                      <span className="icon">
-                        <span className="fa fa-fw fa-caret-right" />
-                      </span>
-                    </Button>
-                  </LinkContainer>
+                  <Link
+                    to={prevAndNext.prev || ''}
+                    className="btn btn-inverse"
+                    disabled={!prevAndNext.prev}
+                  >
+                    <span className="icon">
+                      <span className="fa fa-fw fa-caret-left" />
+                    </span>
+                  </Link>
+                  <Link
+                    to={prevAndNext.next || ''}
+                    className="btn btn-inverse"
+                    disabled={!prevAndNext.next}
+                  >
+                    <span className="icon">
+                      <span className="fa fa-fw fa-caret-right" />
+                    </span>
+                  </Link>
                 </ButtonGroup>
               )}
             {submissionId &&
@@ -215,7 +223,7 @@ export const shouldPrevNextShow = state =>
 
 export const handleUpdated = props => response => {
   if (props.submissionId) {
-    props.addSuccess(
+    addSuccess(
       `Successfully updated submission (${response.submission.handle})`,
       'Submission Updated!',
     );
@@ -224,11 +232,11 @@ export const handleUpdated = props => response => {
 };
 
 export const handleError = props => response => {
-  props.addError(response.error, 'Error');
+  addError(response.error, 'Error');
 };
 
 export const handleCreated = props => (response, actions) => {
-  props.addSuccess(
+  addSuccess(
     `Successfully created submission (${response.submission.handle})`,
     'Submission Created!',
   );
@@ -257,8 +265,6 @@ export const mapDispatchToProps = {
   push,
   fetchSubmission: actions.fetchSubmission,
   resetSubmission: actions.resetSubmission,
-  addSuccess: toastActions.addSuccess,
-  addError: toastActions.addError,
 };
 
 export const DatastoreSubmission = compose(

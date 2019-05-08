@@ -13,7 +13,6 @@ import {
 import { List } from 'immutable';
 import { AttributeSelectors, selectHasRoleSchedulerAdmin } from 'common';
 import { LoadingMessage, EmptyMessage, InfoMessage } from '../StateMessages';
-import { actions as toastActions } from '../../redux/modules/toasts';
 import { actions } from '../../redux/modules/schedulers';
 import { I18n } from '@kineticdata/react';
 
@@ -303,7 +302,6 @@ export const mapDispatchToProps = {
   removeSchedulerManager: actions.removeSchedulerMembership,
   createUserAsSchedulerManager: actions.createUserWithSchedulerMembership,
   fetchSchedulerManagersTeam: actions.fetchSchedulerManagersTeam,
-  addError: toastActions.addError,
 };
 
 const toggleDropdown = ({

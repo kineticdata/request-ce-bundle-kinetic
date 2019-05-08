@@ -17,7 +17,7 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import { List } from 'immutable';
-import { AttributeSelectors, toastActions } from 'common';
+import { AttributeSelectors } from 'common';
 import { actions } from '../../../redux/modules/techBarApp';
 import { I18n } from '@kineticdata/react';
 
@@ -325,7 +325,6 @@ export const mapDispatchToProps = {
   removeDisplayTeamUser: actions.removeDisplayTeamMembership,
   createUserAsDisplayTeamUser: actions.createUserWithDisplayTeamMembership,
   fetchDisplayTeam: actions.fetchDisplayTeam,
-  addError: toastActions.addError,
 };
 
 const toggleDropdown = ({
