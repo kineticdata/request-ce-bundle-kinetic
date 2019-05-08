@@ -405,7 +405,7 @@
       // in the message never wrapping and scrolling horizontally
       max-width: 100%;
       // line-height: 0.75rem;
-
+      overflow: hidden;
       &:after {
         content: ' ';
         position: absolute;
@@ -417,6 +417,9 @@
       }
 
       .message {
+        // Prevents text overflow for IE and other modern browsers
+        overflow-wrap: break-word;
+        word-wrap: break-word;
         &.is-edited {
           display: flex;
           flex-direction: row;
@@ -429,6 +432,7 @@
         h5,
         p {
           margin: 0;
+
           a {
             color: $blue-sky;
             overflow-wrap: break-word;
