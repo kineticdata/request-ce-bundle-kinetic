@@ -60,6 +60,8 @@ export {
   addInfo,
   addNormal,
   addWarn,
+  addToast,
+  addToastAlert,
 } from './redux/modules/toasts';
 
 export {

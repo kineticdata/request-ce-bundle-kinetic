@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { connect } from '../redux/store';
-import { push } from 'connected-react-router';
 import { compose, lifecycle } from 'recompose';
 import { selectCurrentKapp, Constants } from 'common';
 import { PageTitle } from './shared/PageTitle';
@@ -127,7 +126,6 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = {
-  push,
   fetchPastAppointments: actions.fetchPastAppointments,
 };
 

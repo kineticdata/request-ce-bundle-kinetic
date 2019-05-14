@@ -1,12 +1,7 @@
 import { is } from 'immutable';
 import { LocationProvider, Router as ReachRouter } from '@reach/router';
 import React, { Component, Fragment } from 'react';
-import {
-  configureStore,
-  history,
-  context,
-  store,
-} from 'services/src/redux/store';
+import { connectedHistory, context, store } from 'services/src/redux/store';
 import { CommonProvider } from 'common';
 import { types } from './redux/modules/app';
 import { App } from './App';
@@ -26,12 +21,6 @@ export class ServicesApp extends Component {
   constructor(props) {
     super(props);
     this.state = { ready: false };
-    console.log('In ServicesApp');
-    // This needs to be called before we attempt to use the store below
-    // otherwise it will be null. We call it here to make the API of this
-    // embeddable app a little nicer (history can be passed to the component
-    // rather than calling an additional `configure` function).
-    configureStore(props.history);
     // Listen to the local store to see if the embedded app is ready to be
     // re-rendered. Currently this just means that the required props have been
     // synced into the local store.
@@ -62,7 +51,7 @@ export class ServicesApp extends Component {
       this.state.ready && (
         <Provider store={store} context={context}>
           <CommonProvider>
-            <LocationProvider history={history}>
+            <LocationProvider history={connectedHistory}>
               <Router>
                 <App
                   render={this.props.render}

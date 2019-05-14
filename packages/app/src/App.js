@@ -25,7 +25,7 @@ import { TechBarApp } from 'tech-bar/src/TechBarApp';
 export const AppComponent = props =>
   !props.loading && (
     <Fragment>
-      <ToastsContainer />
+      <ToastsContainer duration={5000} />
       <LoginModal />
       <ModalFormContainer />
       <props.AppProvider
@@ -39,7 +39,6 @@ export const AppComponent = props =>
           },
           layoutSize: props.layoutSize,
         }}
-        history={props.history}
         render={({ main, sidebar, header }) => (
           <div className="app-wrapper">
             {!props.headerHidden && (

@@ -3,51 +3,48 @@ import { connect as connectRedux } from 'react-redux';
 import { compose, createStore, combineReducers, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
-import { Utils } from 'common';
+import { history } from '@kineticdata/react';
 import reducers from './reducers';
-import commonReducers from 'common/src/redux/reducers';
 import { sagas } from './sagas';
-import commonSagas from 'common/src/redux/sagas';
+// import commonReducers from 'common/src/redux/reducers';
+// import commonSagas from 'common/src/redux/sagas';
 
-export const configureStore = history => {
-  console.log('Configuring app package redux store');
-  // To enable the redux dev tools in the browser we need to conditionally use a
-  // special compose method, below we are looking for that and if it does not
-  // exist we use the build-in redux 'compose' method.
-  // eslint-disable-next-line no-underscore-dangle
-  const composeEnhancers =
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ name: 'APP' }) || compose;
-  // To enable the Saga Middleware to run we need to first create it.
-  const sagaMiddleware = createSagaMiddleware();
-  // Create the redux store using reducers imported from our 'redux/reducers'
-  // module.  Note that we also have some connected react router and redux form
-  // setup going on here as well.
+console.log('Configuring app package redux store');
 
-  const store = createStore(
-    combineReducers({
-      ...reducers,
-      common: combineReducers(commonReducers),
-      router: connectRouter(history),
-    }),
-    composeEnhancers(
-      applyMiddleware(routerMiddleware(history), sagaMiddleware),
-    ),
+// To enable the redux dev tools in the browser we need to conditionally use a
+// special compose method, below we are looking for that and if it does not
+// exist we use the build-in redux 'compose' method.
+// eslint-disable-next-line no-underscore-dangle
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ name: 'APP' })
+  : compose;
+
+// To enable the Saga Middleware to run we need to first create it.
+const sagaMiddleware = createSagaMiddleware();
+
+// Create the redux store using reducers imported from our 'redux/reducers'
+// module.  Note that we also have some connected react router and redux form
+// setup going on here as well.
+export const store = createStore(
+  combineReducers({
+    ...reducers,
+    router: connectRouter(history),
+  }),
+  composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware)),
+);
+
+// After we've created the store using the saga middleware we will start
+// the run it and pass it the saga watcher so that it can start watching
+// for applicable actions.
+sagaMiddleware.run(sagas);
+
+// Enable hot module replacement so that file changes are automatically
+// communicated to the browser when running in development mode
+if (module.hot) {
+  module.hot.accept('./reducers', () =>
+    store.replaceReducer(connectRouter(history)(combineReducers(reducers))),
   );
-
-  // After we've created the store using the saga middleware we will start
-  // the run it and pass it the saga watcher so that it can start watching
-  // for applicable actions.
-  sagaMiddleware.run(Utils.combineSagas([sagas, commonSagas]));
-
-  // Enable hot module replacement so that file changes are automatically
-  // communicated to the browser when running in development mode
-  if (module.hot) {
-    module.hot.accept('./reducers', () =>
-      store.replaceReducer(connectRouter(history)(combineReducers(reducers))),
-    );
-  }
-  return store;
-};
+}
 
 export const context = createContext(null);
 

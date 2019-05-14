@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { connect } from '../../redux/store';
-import { push } from 'connected-react-router';
 import { compose, lifecycle } from 'recompose';
 import { selectCurrentKapp, Utils, selectHasRoleSchedulerAdmin } from 'common';
 import { PageTitle } from '../shared/PageTitle';
@@ -107,7 +106,6 @@ export const mapStateToProps = (state, props) => {
 };
 
 export const mapDispatchToProps = {
-  push,
   fetchAppSettings: actions.fetchAppSettings,
 };
 

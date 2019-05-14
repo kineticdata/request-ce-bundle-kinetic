@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { connect } from '../redux/store';
-import { push } from 'connected-react-router';
 import { compose, withHandlers, withProps } from 'recompose';
 import { CoreForm } from '@kineticdata/react';
 import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
@@ -118,15 +117,8 @@ export const mapStateToProps = state => ({
   values: valuesFromQueryParams(state.router.location.search),
 });
 
-export const mapDispatchToProps = {
-  push,
-};
-
 const enhance = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps),
   withProps(props => ({
     form: props.forms.find(form => form.slug === props.formSlug),
     relativeHomePath: `../../${props.id ? '../../' : ''}`,

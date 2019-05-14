@@ -4,8 +4,7 @@ import { matchPath } from 'react-router';
 import { Route } from 'react-router-dom';
 import { Provider, connect } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-import { createHashHistory } from 'history';
-import { configureStore } from './redux/store';
+import { store } from './redux/store';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import {
@@ -13,6 +12,7 @@ import {
   configure,
   addResponseInterceptor,
   setDefaultAuthAssumed,
+  history,
 } from '@kineticdata/react';
 import { CommonProvider } from 'common';
 import AuthInterceptor from './utils/AuthInterceptor';
@@ -24,12 +24,6 @@ import {
 } from './redux/modules/auth';
 import { AuthenticatedContainer } from './AuthenticatedContainer';
 import { App } from './App';
-
-// Create the history instance that enables client-side application routing.
-const history = createHashHistory();
-
-// Create the redux store with the configureStore helper found in redux/store.js
-export const store = configureStore(history);
 
 configure(() => store.getState().auth.token);
 
@@ -60,7 +54,7 @@ ReactDOM.render(
         <ConnectedKineticLib>
           <ConnectedRouter history={history}>
             <AuthenticatedContainer>
-              <Route path="/" render={() => <App history={history} />} />
+              <Route path="/" render={() => <App />} />
             </AuthenticatedContainer>
           </ConnectedRouter>
         </ConnectedKineticLib>

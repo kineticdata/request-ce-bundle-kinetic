@@ -2,8 +2,10 @@ import { createContext } from 'react';
 import { connect as connectRedux } from 'react-redux';
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import { createReduxHistoryContext, reachify } from 'redux-first-history';
+import { history } from '@kineticdata/react';
 import reducers from './reducers';
-import saga from './sagas';
+import sagas from './sagas';
 
 console.log('Configuring common package redux store');
 
@@ -13,14 +15,23 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
 
 const sagaMiddlware = createSagaMiddleware();
 
+const {
+  createReduxHistory,
+  routerMiddleware,
+  routerReducer,
+} = createReduxHistoryContext({ history });
+
 export const store = createStore(
   combineReducers({
     ...reducers,
+    router: routerReducer,
   }),
-  composeEnhancers(applyMiddleware(sagaMiddlware)),
+  composeEnhancers(applyMiddleware(routerMiddleware, sagaMiddlware)),
 );
 
-sagaMiddlware.run(saga);
+export const connectedHistory = reachify(createReduxHistory(store));
+
+sagaMiddlware.run(sagas);
 
 export const context = createContext(null);
 

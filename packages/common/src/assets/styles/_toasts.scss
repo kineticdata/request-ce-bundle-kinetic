@@ -2,84 +2,161 @@
  *   Toasts ~ Common
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.toasts {
+// Toast and ToastAlert Containers
+.toasts,
+.toast-alerts {
   position: absolute;
-  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
   z-index: 9999;
+  pointer-events: none;
+}
+.toasts {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-  width: 100%;
 }
+.toast-alerts {
+  top: 0;
+}
+
+// Toast Component
 .toast {
-  width: 75%;
-  border: 1px solid $border-color;
-  min-height: 1rem;
-  background-color: white;
-  margin: 1% 0;
-  padding: 1rem 1.375rem;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  flex-direction: row;
+  max-width: 568px;
+  background-color: #2e2e2e;
+  color: #f7f9fb;
+  box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.1);
+  font-size: 0.875rem;
+  line-height: 1.125rem;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.25rem;
+  pointer-events: auto;
+
+  // Transition properties for sliding up/down
+  z-index: 9998;
+  opacity: 0;
+  margin-bottom: -1rem;
+  max-height: 1rem;
+  transition: all 0.3s;
+  &:not(:last-child) {
+    // Overwrites default bootstrap styling
+    margin-bottom: -1rem;
+  }
+  &.showing {
+    z-index: 9999;
+    opacity: 1;
+    margin-bottom: 0.75rem;
+    max-height: 6rem;
+  }
+
+  .toast__icon,
+  .toast__message,
+  .toast__close {
+    margin: 0 0.5rem;
+  }
+
+  .toast__close [role='button'] {
+    cursor: pointer;
+    padding: 0.5rem;
+    margin: -0.5rem;
+    width: auto;
+  }
+
+  &--info .toast__icon {
+    color: #1094c4;
+  }
+  &--warning .toast__icon {
+    color: #ffcf4a;
+  }
+  &--success .toast__icon {
+    color: #00d46a;
+  }
+  &--danger .toast__icon {
+    color: #fa3a37;
+  }
+  &--normal .toast__icon {
+    display: none;
+  }
+}
+
+// ToastAlert Component
+.toast-alert {
+  position: absolute;
+  top: 0;
+  right: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
-  opacity: 1;
-  box-shadow: inset 0 1px 0 0 rgba($black, 0.05), inset 0 0 0 0 transparent,
-    0 0 0 1px rgba($black, 0.05), 0 1px 3px 0 rgba($black, 0.15);
-  background-clip: initial;
-  border-radius: 0;
-  max-width: none;
-  &--large {
-    width: 98%;
+  justify-content: space-between;
+  width: 20rem;
+  background-color: #ffffff;
+  box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.3);
+  font-size: 0.875rem;
+  line-height: 1.125rem;
+  padding: 1rem;
+  border: none;
+  border-left: 0.25rem solid #7e8083;
+  pointer-events: auto;
+
+  // Transition properties for sliding in/out
+  z-index: 9998;
+  opacity: 0;
+  margin: 0.75rem -20rem 0.75rem 0;
+  transition: all 0.3s;
+  &.showing {
+    z-index: 9999;
+    opacity: 1;
+    margin-right: 0.75rem;
   }
-  &--small {
-    width: 50%;
-  }
-  &--rounded {
-    border-radius: 0.5rem;
-  }
-  &__wrapper {
-    flex-grow: 1;
-    color: rgba(12, 18, 28, 0.54);
-    font-size: 0.875rem;
-    line-height: 1.1875rem;
-  }
-  &__title {
-    color: rgba(12, 18, 28, 0.84);
-    font-size: 1rem;
-    font-weight: bold;
-    line-height: 1.375rem;
+
+  .toast-alert__content {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  &__actions {
-    button.btn.btn-link {
-      padding: 0;
-      color: $black;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    .toast-alert__title {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.5rem;
+    }
+
+    .toast-alert__message {
+      flex: 1;
+      overflow: auto;
+    }
+
+    .toast-alert__actions {
+      margin-top: 0.5rem;
     }
   }
 
+  .toast-alert__close [role='button'] {
+    cursor: pointer;
+    padding: 0.5rem;
+    margin: -0.5rem;
+    width: auto;
+  }
+
   &--info {
-    background-color: #1094c4;
-    border-color: transparent;
+    border-left-color: #1094c4;
   }
-
-  &--warn {
-    background-color: #ffcf4a;
-    border-color: transparent;
+  &--warning {
+    border-left-color: #ffcf4a;
   }
-
   &--success {
-    background-color: #00d46a;
-    border-color: transparent;
+    border-left-color: #00d46a;
   }
-
-  &--error {
-    background-color: #fa3a37;
-    border-color: transparent;
+  &--danger {
+    border-left-color: #fa3a37;
   }
-
   &--normal {
-    background-color: #ffffff;
   }
 }

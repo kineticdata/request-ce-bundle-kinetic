@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from '@reach/router';
-import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import {
   compose,
@@ -260,7 +259,6 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = {
-  push,
   createContext: actions.createContext,
   updateContext: actions.updateContext,
   deleteContext: actions.deleteContext,

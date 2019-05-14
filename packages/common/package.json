@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "src/index.js",
   "dependencies": {
-    "@kineticdata/react": "0.1.0-RC10",
+    "@kineticdata/react": "0.1.0-RC11",
     "bootstrap-select": "1.12.4",
     "datatables.net": "^1.10.16",
     "datatables.net-dt": "^1.10.16",

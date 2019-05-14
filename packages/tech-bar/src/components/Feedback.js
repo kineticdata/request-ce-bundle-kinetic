@@ -4,7 +4,7 @@ import { compose, withHandlers, withState, withProps } from 'recompose';
 import { DisplayTabs } from './Display';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { createSubmission } from '@kineticdata/react';
-import { selectCurrentKapp, addSuccess, addError } from 'common';
+import { selectCurrentKapp, addToastAlert } from 'common';
 import { TIME_FORMAT } from '../constants';
 import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
@@ -287,11 +287,18 @@ const handleSubmitFeedback = ({
     completed: true,
   }).then(({ submission, errors, serverError }) => {
     if (serverError || errors) {
-      addError(
-        'There was an error while submitting your feedback. Please consult an administrator.',
-      );
+      addToastAlert({
+        message:
+          'There was an error while submitting your feedback. Please consult an administrator.',
+        duration: 5000,
+      });
     } else {
-      addSuccess('Your feedback has been submitted.', 'Thank You');
+      addToastAlert({
+        title: 'Thank You',
+        message: 'Your feedback has been submitted.',
+        severity: 'success',
+        duration: 3000,
+      });
       setDisabled(true);
       setTimeout(() => setDisabled(false), 4000);
     }

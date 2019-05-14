@@ -1,6 +1,4 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
 import uuid from 'uuid';
 import { fetchUsers } from '@kineticdata/react';
@@ -25,7 +23,7 @@ const userCache = new Cache(() =>
   fetchUsers({ include: 'profileAttributes' }).then(({ users }) => users),
 );
 
-export class AvatarComponent extends React.Component {
+export class Avatar extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.getState(props);
@@ -95,11 +93,6 @@ export class AvatarComponent extends React.Component {
     }
   }
 }
-
-export const Avatar = connect(
-  null,
-  { push },
-)(AvatarComponent);
 
 Avatar.propTypes = {
   user: PropTypes.object,
