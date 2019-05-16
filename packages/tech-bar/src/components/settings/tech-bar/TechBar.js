@@ -6,6 +6,7 @@ import {
   ErrorNotFound,
   selectHasRoleSchedulerAdmin,
   Table,
+  LoadingMessage,
 } from 'common';
 import { PageTitle } from '../../shared/PageTitle';
 import { Link } from '@reach/router';
@@ -19,8 +20,6 @@ import { TIME_FORMAT } from '../../../constants';
 export const TechBarComponent = ({
   techBar,
   hasManagerAccess,
-  loadingAppointments,
-  appointmentErrors,
   appointments,
   appointmentDate,
   handlePreviousDay,
@@ -121,87 +120,94 @@ export const TechBarComponent = ({
                 </span>
               </div>
 
-              <Table
-                props={{
-                  class: 'table--settings table-hover',
-                  name: 'appointments-table',
-                  id: 'appointments-table',
-                }}
-                data={appointments
-                  .map(a => ({
-                    ...a.values,
-                    _id: a.id,
-                    _coreState: a.coreState,
-                  }))
-                  .toJS()}
-                columns={[
-                  {
-                    value: 'Summary',
-                    title: 'Summary',
-                    renderBodyCell: ({ content, row }) => (
-                      <td>
-                        <Link to={`appointment/${row._id}`}>{content}</Link>
-                      </td>
-                    ),
-                  },
-                  {
-                    value: 'Requested For Display Name',
-                    title: 'User',
-                  },
-                  {
-                    value: 'Event Time',
-                    title: 'Time',
-                    renderBodyCell: ({ content, row }) => {
-                      const start = moment.utc(row['Event Time'], TIME_FORMAT);
-                      const end = start
-                        .clone()
-                        .add(row['Event Duration'], 'minute');
-                      return (
+              {appointments ? (
+                <Table
+                  props={{
+                    class: 'table--settings table-hover',
+                    name: 'appointments-table',
+                    id: 'appointments-table',
+                  }}
+                  data={appointments
+                    .map(a => ({
+                      ...a.values,
+                      _id: a.id,
+                      _coreState: a.coreState,
+                    }))
+                    .toJS()}
+                  columns={[
+                    {
+                      value: 'Summary',
+                      title: 'Summary',
+                      renderBodyCell: ({ content, row }) => (
                         <td>
-                          <Moment
-                            timestamp={start}
-                            format={Moment.formats.time}
-                          />
-                          {` - `}
-                          <Moment
-                            timestamp={end}
-                            format={Moment.formats.time}
-                          />
+                          <Link to={`appointment/${row._id}`}>{content}</Link>
                         </td>
-                      );
+                      ),
                     },
-                  },
-                  {
-                    value: 'Event Type',
-                    title: 'Event Type',
-                  },
-                  {
-                    value: 'Status',
-                    title: 'Status',
-                    width: '1%',
-                    renderBodyCell: ({ content, row }) => (
-                      <td>
-                        <span
-                          className={`badge ${
-                            row._coreState === 'Closed'
-                              ? 'badge-dark'
-                              : 'badge-success'
-                          }`}
-                        >
-                          <I18n>{content}</I18n>
-                        </span>
-                      </td>
-                    ),
-                  },
-                ]}
-                emptyMessage="There are no appointments for the selected date."
-                filtering={false}
-                pagination={false}
-                sortOrder={2}
-                render={({ table }) => (
-                  <div className="table-wrapper">{table}</div>
-                )}
-              />
+                    {
+                      value: 'Requested For Display Name',
+                      title: 'User',
+                    },
+                    {
+                      value: 'Event Time',
+                      title: 'Time',
+                      renderBodyCell: ({ content, row }) => {
+                        const start = moment.utc(
+                          row['Event Time'],
+                          TIME_FORMAT,
+                        );
+                        const end = start
+                          .clone()
+                          .add(row['Event Duration'], 'minute');
+                        return (
+                          <td>
+                            <Moment
+                              timestamp={start}
+                              format={Moment.formats.time}
+                            />
+                            {` - `}
+                            <Moment
+                              timestamp={end}
+                              format={Moment.formats.time}
+                            />
+                          </td>
+                        );
+                      },
+                    },
+                    {
+                      value: 'Event Type',
+                      title: 'Event Type',
+                    },
+                    {
+                      value: 'Status',
+                      title: 'Status',
+                      width: '1%',
+                      renderBodyCell: ({ content, row }) => (
+                        <td>
+                          <span
+                            className={`badge ${
+                              row._coreState === 'Closed'
+                                ? 'badge-dark'
+                                : 'badge-success'
+                            }`}
+                          >
+                            <I18n>{content}</I18n>
+                          </span>
+                        </td>
+                      ),
+                    },
+                  ]}
+                  emptyMessage="There are no appointments for the selected date."
+                  filtering={false}
+                  pagination={false}
+                  sortOrder={2}
+                  render={({ table }) => (
+                    <div className="table-wrapper">{table}</div>
+                  )}
+                />
+              ) : (
+                <LoadingMessage />
+              )}
             </div>
           </div>
         </div>
@@ -237,18 +243,17 @@ export const mapStateToProps = (state, props) => {
           state.app.profile,
           `Role::Scheduler::${techBar.values['Name']}`,
         )),
-    loadingAppointments: state.appointments.list.loading,
-    appointmentErrors: state.appointments.list.errors,
-    appointments: state.appointments.list.data,
-    appointmentDate: state.appointments.list.date,
+    appointmentError: state.appointments.error,
+    appointments: state.appointments.list,
+    appointmentDate: state.appointments.listDate,
     displayTeamLoading: state.techBarApp.displayTeamLoading,
     displayTeam: state.techBarApp.displayTeam,
   };
 };
 
 export const mapDispatchToProps = {
-  fetchAppointmentsList: appointmentActions.fetchAppointmentsList,
-  setAppointmentsDate: appointmentActions.setAppointmentsDate,
+  fetchAppointmentsListRequest: appointmentActions.fetchAppointmentsListRequest,
+  setAppointmentsListDate: appointmentActions.setAppointmentsListDate,
   fetchDisplayTeam: actions.fetchDisplayTeam,
 };
 
@@ -264,26 +269,26 @@ export const TechBar = compose(
   withHandlers({
     handlePreviousDay: ({
       appointmentDate,
-      setAppointmentsDate,
+      setAppointmentsListDate,
       techBar,
     }) => () => {
-      setAppointmentsDate({
+      setAppointmentsListDate({
         date: appointmentDate.add(-1, 'day'),
         schedulerId: techBar.values['Id'],
       });
     },
     handleNextDay: ({
       appointmentDate,
-      setAppointmentsDate,
+      setAppointmentsListDate,
       techBar,
     }) => () => {
-      setAppointmentsDate({
+      setAppointmentsListDate({
         date: appointmentDate.add(1, 'day'),
         schedulerId: techBar.values['Id'],
       });
     },
-    handleToday: ({ setAppointmentsDate, techBar }) => () => {
-      setAppointmentsDate({
+    handleToday: ({ setAppointmentsListDate, techBar }) => () => {
+      setAppointmentsListDate({
         date: moment(),
         schedulerId: techBar.values['Id'],
       });
@@ -291,7 +296,7 @@ export const TechBar = compose(
   }),
   lifecycle({
     componentDidMount() {
-      this.props.fetchAppointmentsList({
+      this.props.fetchAppointmentsListRequest({
         schedulerId: this.props.techBar.values['Id'],
       });
       this.props.fetchDisplayTeam({

@@ -11,6 +11,7 @@ import { actions as appointmentActions } from '../redux/modules/appointments';
 import { actions as walkInActions } from '../redux/modules/walkIns';
 import { I18n, Moment } from '@kineticdata/react';
 import moment from 'moment';
+import { List } from 'immutable';
 
 export const OverheadComponent = ({ errors, records }) => {
   return (
@@ -87,8 +88,8 @@ export const OverheadComponent = ({ errors, records }) => {
 };
 
 export const mapStateToProps = (state, props) => ({
-  errors: [...state.appointments.today.errors, ...state.walkIns.today.errors],
-  records: state.appointments.today.data
+  errors: [state.appointments.error, state.walkIns.error].filter(e => e),
+  records: (state.appointments.today || List())
     .map(a => ({
       id: a.id,
       updatedAt: `${a.values['Event Date']} ${a.values['Event Time']}`,
@@ -98,7 +99,7 @@ export const mapStateToProps = (state, props) => ({
       status: a.values['Status'],
     }))
     .concat(
-      state.walkIns.today.data.map(w => ({
+      (state.walkIns.today || List()).map(w => ({
         id: w.id,
         updatedAt: moment
           .utc(w.updatedAt)
@@ -116,20 +117,21 @@ export const mapStateToProps = (state, props) => ({
 });
 
 export const mapDispatchToProps = {
-  fetchTodayAppointments: appointmentActions.fetchTodayAppointments,
-  fetchTodayWalkIns: walkInActions.fetchTodayWalkIns,
+  fetchTodayAppointmentsRequest:
+    appointmentActions.fetchTodayAppointmentsRequest,
+  fetchTodayWalkInsRequest: walkInActions.fetchTodayWalkInsRequest,
 };
 
 const fetchData = ({
   techBarId,
-  fetchTodayAppointments,
-  fetchTodayWalkIns,
+  fetchTodayAppointmentsRequest,
+  fetchTodayWalkInsRequest,
 }) => () => {
-  fetchTodayAppointments({
+  fetchTodayAppointmentsRequest({
     schedulerId: techBarId,
     status: ['Checked In', 'In Progress'],
   });
-  fetchTodayWalkIns({
+  fetchTodayWalkInsRequest({
     schedulerId: techBarId,
     status: ['Checked In', 'In Progress'],
   });

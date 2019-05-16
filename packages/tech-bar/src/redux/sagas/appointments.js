@@ -1,35 +1,16 @@
 import { takeEvery, put, call, select } from 'redux-saga/effects';
 import {
   fetchBridgedResource,
-  fetchSubmission,
   searchSubmissions,
   SubmissionSearch,
 } from '@kineticdata/react';
 import { actions, types } from '../modules/appointments';
+import { addToastAlert } from 'common';
 import { APPOINTMENT_FORM_SLUG } from '../../constants';
 import moment from 'moment';
 import isarray from 'isarray';
 
-export function* fetchAppointmentSaga({ payload }) {
-  const { submission, errors, serverError } = yield call(fetchSubmission, {
-    id: payload,
-    include: 'details,values',
-  });
-
-  if (serverError) {
-    yield put(
-      actions.setAppointmentErrors([
-        serverError.error || serverError.statusText,
-      ]),
-    );
-  } else if (errors) {
-    yield put(actions.setAppointmentErrors(errors));
-  } else {
-    yield put(actions.setAppointment(submission));
-  }
-}
-
-export function* fetchUpcomingAppointmentsSaga() {
+export function* fetchUpcomingAppointmentsRequestSaga() {
   const kappSlug = yield select(state => state.app.kappSlug);
   const username = yield select(state => state.app.profile.username);
   const searchBuilder = new SubmissionSearch()
@@ -38,26 +19,24 @@ export function* fetchUpcomingAppointmentsSaga() {
     .coreState('Submitted')
     .eq('values[Requested For]', username);
 
-  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+  const { submissions, error } = yield call(searchSubmissions, {
     search: searchBuilder.build(),
     form: APPOINTMENT_FORM_SLUG,
     kapp: kappSlug,
   });
 
-  if (serverError) {
-    yield put(
-      actions.setUpcomingAppointmentErrors([
-        serverError.error || serverError.statusText,
-      ]),
-    );
-  } else if (errors) {
-    yield put(actions.setUpcomingAppointmentErrors(errors));
+  if (error) {
+    yield put(actions.fetchAppointmentsFailure(error));
+    addToastAlert({
+      title: 'Failed to fetch upcoming appointments.',
+      message: error.message,
+    });
   } else {
-    yield put(actions.setUpcomingAppointments(submissions));
+    yield put(actions.fetchUpcomingAppointmentsSuccess(submissions));
   }
 }
 
-export function* fetchPastAppointmentsSaga() {
+export function* fetchPastAppointmentsRequestSaga() {
   const kappSlug = yield select(state => state.app.kappSlug);
   const username = yield select(state => state.app.profile.username);
   const searchBuilder = new SubmissionSearch()
@@ -66,26 +45,24 @@ export function* fetchPastAppointmentsSaga() {
     .coreState('Closed')
     .eq('values[Requested For]', username);
 
-  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+  const { submissions, error } = yield call(searchSubmissions, {
     search: searchBuilder.build(),
     form: APPOINTMENT_FORM_SLUG,
     kapp: kappSlug,
   });
 
-  if (serverError) {
-    yield put(
-      actions.setPastAppointmentErrors([
-        serverError.error || serverError.statusText,
-      ]),
-    );
-  } else if (errors) {
-    yield put(actions.setPastAppointmentErrors(errors));
+  if (error) {
+    yield put(actions.fetchAppointmentsFailure(error));
+    addToastAlert({
+      title: 'Failed to fetch past appointments.',
+      message: error.message,
+    });
   } else {
-    yield put(actions.setPastAppointments(submissions));
+    yield put(actions.fetchPastAppointmentsSuccess(submissions));
   }
 }
 
-export function* fetchTodayAppointmentsSaga({
+export function* fetchTodayAppointmentsRequestSaga({
   payload: { schedulerId, status },
 }) {
   const kappSlug = yield select(state => state.app.kappSlug);
@@ -100,91 +77,99 @@ export function* fetchTodayAppointmentsSaga({
     searchBuilder.eq('values[Status]', status);
   }
 
-  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+  const { submissions, error } = yield call(searchSubmissions, {
     search: searchBuilder.build(),
     form: APPOINTMENT_FORM_SLUG,
     kapp: kappSlug,
   });
 
-  if (serverError) {
-    yield put(
-      actions.setTodayAppointmentErrors([
-        serverError.error || serverError.statusText,
-      ]),
-    );
-  } else if (errors) {
-    yield put(actions.setTodayAppointmentErrors(errors));
+  if (error) {
+    yield put(actions.fetchAppointmentsFailure(error));
+    addToastAlert({
+      title: "Failed to fetch today's appointments.",
+      message: error.message,
+    });
   } else {
     yield put(
-      actions.setTodayAppointments(
+      actions.fetchTodayAppointmentsSuccess(
         submissions.filter(s => s.coreState !== 'Draft'),
       ),
     );
   }
 }
 
-export function* fetchAppointmentsListSaga({ payload: { schedulerId } }) {
+export function* setAppointmentsListDateSaga({ payload }) {
+  yield put(actions.fetchAppointmentsListRequest(payload));
+}
+
+export function* fetchAppointmentsListRequestSaga({
+  payload: { schedulerId },
+}) {
   const kappSlug = yield select(state => state.app.kappSlug);
-  const date = yield select(state => state.appointments.list.date);
+  const date = yield select(state => state.appointments.listDate);
   const searchBuilder = new SubmissionSearch()
     .limit(1000)
     .include('details,values')
     .eq('values[Scheduler Id]', schedulerId)
     .eq('values[Event Date]', date.format('YYYY-MM-DD'));
 
-  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+  const { submissions, error } = yield call(searchSubmissions, {
     search: searchBuilder.build(),
     form: APPOINTMENT_FORM_SLUG,
     kapp: kappSlug,
   });
 
-  if (serverError) {
-    yield put(
-      actions.setAppointmentsListErrors([
-        serverError.error || serverError.statusText,
-      ]),
-    );
-  } else if (errors) {
-    yield put(actions.setAppointmentsListErrors(errors));
+  if (error) {
+    yield put(actions.fetchAppointmentsFailure(error));
+    addToastAlert({
+      title: 'Failed to fetch appointments.',
+      message: error.message,
+    });
   } else {
-    yield put(actions.setAppointmentsList(submissions));
+    yield put(actions.fetchAppointmentsListSuccess(submissions));
   }
 }
 
-export function* fetchAppointmentsOverviewSaga({ payload: { id } }) {
+export function* fetchAppointmentsOverviewRequestSaga({ payload: { id } }) {
   const kappSlug = yield select(state => state.app.kappSlug);
-  const { records, serverError } = yield call(fetchBridgedResource, {
+  const { records, error } = yield call(fetchBridgedResource, {
     kappSlug,
     formSlug: 'bridged-resources',
     bridgedResourceName: 'Tech Bar Appointments Overview',
     values: { Id: id, Date: moment().format('YYYY-MM-DD') },
   });
 
-  if (serverError) {
-    yield put(
-      actions.setAppointmentsOverviewErrors([
-        serverError.error || serverError.statusText,
-      ]),
-    );
+  if (error) {
+    yield put(actions.fetchAppointmentsOverviewFailure(error));
+    console.error('Failed to fetch appointments overview.', error.message);
   } else {
-    yield put(actions.setAppointmentsOverview(records));
+    yield put(actions.fetchAppointmentsOverviewSuccess(records));
   }
 }
 
 export function* watchAppointments() {
-  yield takeEvery(types.FETCH_APPOINTMENT, fetchAppointmentSaga);
   yield takeEvery(
-    types.FETCH_UPCOMING_APPOINTMENTS,
-    fetchUpcomingAppointmentsSaga,
-  );
-  yield takeEvery(types.FETCH_PAST_APPOINTMENTS, fetchPastAppointmentsSaga);
-  yield takeEvery(types.FETCH_TODAY_APPOINTMENTS, fetchTodayAppointmentsSaga);
-  yield takeEvery(
-    [types.FETCH_APPOINTMENTS_LIST, types.SET_APPOINTMENTS_DATE],
-    fetchAppointmentsListSaga,
+    types.FETCH_UPCOMING_APPOINTMENTS_REQUEST,
+    fetchUpcomingAppointmentsRequestSaga,
   );
   yield takeEvery(
-    types.FETCH_APPOINTMENTS_OVERVIEW,
-    fetchAppointmentsOverviewSaga,
+    types.FETCH_PAST_APPOINTMENTS_REQUEST,
+    fetchPastAppointmentsRequestSaga,
+  );
+  yield takeEvery(
+    types.FETCH_TODAY_APPOINTMENTS_REQUEST,
+    fetchTodayAppointmentsRequestSaga,
+  );
+  yield takeEvery(
+    types.SET_APPOINTMENTS_LIST_DATE,
+    setAppointmentsListDateSaga,
+  );
+  yield takeEvery(
+    types.FETCH_APPOINTMENTS_LIST_REQUEST,
+    fetchAppointmentsListRequestSaga,
+  );
+  yield takeEvery(
+    types.FETCH_APPOINTMENTS_OVERVIEW_REQUEST,
+    fetchAppointmentsOverviewRequestSaga,
   );
 }

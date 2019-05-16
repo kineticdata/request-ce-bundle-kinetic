@@ -1,68 +1,102 @@
 import React from 'react';
 import { I18n } from '@kineticdata/react';
 
-export const LoadingMessage = ({ heading, text }) => {
-  return (
-    <div className="loading-state">
-      <h4>
-        <i className="fa fa-spinner fa-spin fa-lg fa-fw" />
-      </h4>
-      <h5>
-        <I18n>{heading || 'Loading'}</I18n>
-      </h5>
-      {text && (
-        <h6>
-          <I18n>{text}</I18n>
-        </h6>
-      )}
-    </div>
-  );
-};
+const GenericMessage = ({ className, heading, title, message, actions }) => (
+  <div className={className}>
+    {heading && <div className={`${className}__heading`}>{heading}</div>}
+    {title && (
+      <div className={`${className}__title`}>
+        <I18n>{title}</I18n>
+      </div>
+    )}
+    {message && (
+      <div className={`${className}__message`}>
+        <I18n>{message}</I18n>
+      </div>
+    )}
+    {actions && (
+      <div className={`${className}__actions`}>
+        <div className="btn-group">
+          {actions.filter(a => a.label && a.onClick).map((a, i) => (
+            <button
+              key={`action-${i}`}
+              className={`btn btn-outline-dark`}
+              onClick={a.onClick}
+            >
+              {a.icon && <span className={`fa fa-fw ${a.icon}`} />}
+              <I18n>{a.label}</I18n>
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+);
 
-export const EmptyMessage = ({ heading, text }) => {
-  return (
-    <div className="empty-state">
-      <h5>
-        <I18n>{heading || 'No Results Found'}</I18n>
-      </h5>
-      {text && (
-        <h6>
-          <I18n>{text}</I18n>
-        </h6>
-      )}
-    </div>
-  );
-};
+export const EmptyMessage = ({ title, ...rest }) => (
+  <GenericMessage
+    className="empty-state"
+    {...rest}
+    title={title || 'No results found.'}
+  />
+);
 
-export const ErrorMessage = ({ heading, text }) => {
-  return (
-    <div className="error-state">
-      <h4>
-        <I18n>Oops!</I18n>
-      </h4>
-      <h5>
-        <I18n>{heading || 'Error'}</I18n>
-      </h5>
-      {text && (
-        <h6>
-          <I18n>{text}</I18n>
-        </h6>
-      )}
-    </div>
-  );
-};
+export const ErrorMessage = ({ title, ...rest }) => (
+  <GenericMessage
+    className="error-state"
+    heading={<I18n>Oops!</I18n>}
+    {...rest}
+    title={title || 'An error occurred.'}
+  />
+);
 
-export const InfoMessage = ({ heading, text }) => {
-  return (
-    <div className="info-state">
-      <h5>
-        <I18n>{heading}</I18n>
-      </h5>
-      {text && (
-        <h6>
-          <I18n>{text}</I18n>
-        </h6>
-      )}
-    </div>
-  );
+export const InfoMessage = props =>
+  props.title || props.message ? (
+    <GenericMessage className="info-state" {...props} />
+  ) : null;
+
+export const LoadingMessage = ({ title, ...rest }) => (
+  <GenericMessage
+    className="loading-state"
+    heading={<span className="fa fa-spinner fa-spin fa-lg fa-fw" />}
+    {...rest}
+    title={title || 'Loading'}
+  />
+);
+
+export const StateListWrapper = ({
+  data,
+  error,
+  loading,
+  children,
+  errorTitle,
+  errorMessage,
+  errorActions,
+  loadingTitle,
+  loadingMessage,
+  emptyTitle,
+  emptyMessage,
+  emptyActions,
+}) => {
+  if (error) {
+    return (
+      <ErrorMessage
+        title={errorTitle}
+        message={errorMessage}
+        actions={errorActions}
+      />
+    );
+  } else if (loading || (typeof loading === 'undefined' && !data)) {
+    return <LoadingMessage title={loadingTitle} message={loadingMessage} />;
+  } else if (!data || data.length === 0 || data.size === 0) {
+    return (
+      <EmptyMessage
+        title={emptyTitle}
+        message={emptyMessage}
+        actions={emptyActions}
+      />
+    );
+  } else {
+    return children(data);
+  }
 };

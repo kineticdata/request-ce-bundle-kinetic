@@ -20,9 +20,6 @@ import { I18n } from '@kineticdata/react';
 import { isActiveClass } from '../utils';
 
 export const SidebarComponent = ({
-  loadingUpcoming,
-  upcomingErrors,
-  upcomingAppointments,
   hasSettingsAccess,
   techBars,
   openDropdown,
@@ -142,9 +139,6 @@ export const mapStateToProps = state => ({
   techBars: state.techBarApp.schedulers.filter(
     s => s.values['Status'] === 'Active',
   ),
-  loadingUpcoming: state.appointments.upcoming.loading,
-  upcomingErrors: state.appointments.upcoming.errors,
-  upcomingAppointments: state.appointments.upcoming.data,
   hasSettingsAccess:
     selectHasRoleSchedulerManager(state.app.profile) ||
     selectHasRoleSchedulerAdmin(state.app.profile) ||

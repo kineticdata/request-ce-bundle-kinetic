@@ -2,13 +2,11 @@ import React, { Fragment } from 'react';
 import { connect } from '../redux/store';
 import { compose, withHandlers, withState, withProps } from 'recompose';
 import {
-  selectCurrentKapp,
   ErrorNotFound,
   ErrorUnauthorized,
   ErrorUnexpected,
   TaskActions,
-  addSuccess,
-  addError,
+  addToastAlert,
 } from 'common';
 
 import { DisplayTabs } from './Display';
@@ -28,8 +26,8 @@ export const CheckInComponent = ({
   kapp,
   techBarId,
   techBar,
-  loading,
   appointments,
+  error,
   showDetails,
   toggleShowDetails,
   input,
@@ -150,17 +148,21 @@ export const CheckInComponent = ({
                               },
                               successCallback: () => {
                                 toggleShowDetails(null);
-                                addSuccess(
-                                  `${
+                                addToastAlert({
+                                  severity: 'success',
+                                  title: `${
                                     appt.values['Requested For Display Name']
                                   } has been successfully checked in.`,
-                                );
+                                  duration: 5000,
+                                });
                               },
                               errorCallback: () => {
                                 toggleShowDetails(null);
-                                addError(
-                                  `There was an error while checking you in.`,
-                                );
+                                addToastAlert({
+                                  title:
+                                    'There was an error while checking you in.',
+                                  duration: 5000,
+                                });
                               },
                             })
                           }
@@ -170,7 +172,7 @@ export const CheckInComponent = ({
                       </div>
                     ))}
                     {filteredAppointments.size === 0 &&
-                      (loading ? (
+                      (!error && !appointments ? (
                         <div className="text-center">
                           <span className="fa fa-spinner fa-spin" />
                         </div>
@@ -216,7 +218,11 @@ export const CheckInComponent = ({
                     }}
                     completed={() => {
                       toggleShowDetails(null);
-                      addSuccess(`You have successfully checked in.`);
+                      addToastAlert({
+                        severity: 'success',
+                        title: 'You have successfully checked in.',
+                        duration: 5000,
+                      });
                     }}
                     notFoundComponent={ErrorNotFound}
                     unauthorizedComponent={ErrorUnauthorized}
@@ -233,38 +239,44 @@ export const CheckInComponent = ({
 };
 
 export const mapStateToProps = (state, props) => ({
-  kapp: selectCurrentKapp(state),
-  loading: state.appointments.today.loading,
-  errors: state.appointments.today.errors,
-  appointments: state.appointments.today.data,
+  kapp: state.app.kapp,
+  error: state.appointments.error,
+  appointments: state.appointments.today,
 });
 
 export const mapDispatchToProps = {
-  fetchTodayAppointments: actions.fetchTodayAppointments,
+  fetchTodayAppointmentsRequest: actions.fetchTodayAppointmentsRequest,
 };
 
 const toggleShowDetails = ({
   showDetails,
   setShowDetails,
   setInput,
-  fetchTodayAppointments,
+  fetchTodayAppointmentsRequest,
   techBarId,
 }) => name => {
   setShowDetails(showDetails === name ? null : name);
   setInput('');
   if (name === 'appointment') {
-    fetchTodayAppointments({ schedulerId: techBarId, status: 'Scheduled' });
+    fetchTodayAppointmentsRequest({
+      schedulerId: techBarId,
+      status: 'Scheduled',
+    });
   }
 };
 
 const getFilteredAppointments = ({ input, appointments }) => () =>
-  appointments.filter(
-    appt =>
-      appt.values['Requested For Display Name']
-        .toLowerCase()
-        .includes(input.toLowerCase()) ||
-      appt.values['Requested For'].toLowerCase().includes(input.toLowerCase()),
-  );
+  appointments
+    ? appointments.filter(
+        appt =>
+          appt.values['Requested For Display Name']
+            .toLowerCase()
+            .includes(input.toLowerCase()) ||
+          appt.values['Requested For']
+            .toLowerCase()
+            .includes(input.toLowerCase()),
+      )
+    : null;
 
 export const CheckIn = compose(
   withProps(({ techBar }) => ({

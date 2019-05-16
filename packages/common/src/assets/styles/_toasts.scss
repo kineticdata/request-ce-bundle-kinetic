@@ -125,7 +125,10 @@
     .toast-alert__title {
       font-size: 1rem;
       font-weight: 700;
-      line-height: 1.5rem;
+      line-height: 1.25rem;
+      + .toast-alert__message {
+        margin-top: 0.5rem;
+      }
     }
 
     .toast-alert__message {

@@ -187,11 +187,11 @@ export const FeedbackComponent = ({
 
 export const mapStateToProps = (state, props) => ({
   kapp: selectCurrentKapp(state),
-  loading: state.appointments.today.loading || state.walkIns.today.loading,
-  errors: [...state.appointments.today.errors, ...state.walkIns.today.errors],
-  appointments: state.appointments.today.data,
-  walkIns: state.walkIns.today.data,
-  records: state.appointments.today.data
+  loading: !state.appointments.today || !state.walkIns.today,
+  errors: [state.appointments.error, state.walkIns.error].filter(e => e),
+  appointments: state.appointments.today,
+  walkIns: state.walkIns.today,
+  records: (state.appointments.today || [])
     .map(a => ({
       id: a.id,
       type: 'Appointment',
@@ -203,7 +203,7 @@ export const mapStateToProps = (state, props) => ({
       eventTime: a.values['Event Time'],
     }))
     .concat(
-      state.walkIns.today.data.map(w => ({
+      (state.walkIns.today || []).map(w => ({
         id: w.id,
         type: 'Walk-In',
         username: w.values['Requested For'] || w.values['Email'],
@@ -219,8 +219,9 @@ export const mapStateToProps = (state, props) => ({
 });
 
 export const mapDispatchToProps = {
-  fetchTodayAppointments: appointmentActions.fetchTodayAppointments,
-  fetchTodayWalkIns: walkInActions.fetchTodayWalkIns,
+  fetchTodayAppointmentsRequest:
+    appointmentActions.fetchTodayAppointmentsRequest,
+  fetchTodayWalkInsRequest: walkInActions.fetchTodayWalkInsRequest,
 };
 
 const getFilteredAppointments = ({ input, records }) => () =>
@@ -245,13 +246,13 @@ const handleExperienceClick = ({
   setExperience,
   handleSubmitFeedback,
   techBarId,
-  fetchTodayAppointments,
-  fetchTodayWalkIns,
+  fetchTodayAppointmentsRequest,
+  fetchTodayWalkInsRequest,
 }) => value => {
   if (feedbackIdentityAvailable) {
     setExperience(value);
-    fetchTodayAppointments({ schedulerId: techBarId });
-    fetchTodayWalkIns({ schedulerId: techBarId });
+    fetchTodayAppointmentsRequest({ schedulerId: techBarId });
+    fetchTodayWalkInsRequest({ schedulerId: techBarId });
   } else {
     handleSubmitFeedback({ Experience: value });
   }
@@ -285,8 +286,8 @@ const handleSubmitFeedback = ({
             : {}),
         },
     completed: true,
-  }).then(({ submission, errors, serverError }) => {
-    if (serverError || errors) {
+  }).then(({ submission, error }) => {
+    if (error) {
       addToastAlert({
         message:
           'There was an error while submitting your feedback. Please consult an administrator.',
@@ -297,7 +298,7 @@ const handleSubmitFeedback = ({
         title: 'Thank You',
         message: 'Your feedback has been submitted.',
         severity: 'success',
-        duration: 3000,
+        duration: 4000,
       });
       setDisabled(true);
       setTimeout(() => setDisabled(false), 4000);

@@ -11,31 +11,46 @@
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: 100%;
-  &__title {
-    color: $blue-lake;
-    @include ms-respond(font-size, 2);
-    font-weight: 600;
-    line-height: 1.5rem;
+  > :first-child {
+    margin-top: 1.5rem;
   }
-  &__subtitle {
-    color: $blue-gray;
-    @include ms-respond(font-size, -1);
-    line-height: 1.5rem;
-  }
-  button {
-    // color: $blue2;
-    // @include ms-respond(font-size, 0);
+  > :last-child {
     margin-bottom: 1.5rem;
+  }
+  > * + * {
+    margin-top: 1rem;
+  }
+  &__heading {
+    font-weight: 700;
+    font-size: 1.375rem;
+    line-height: 1.5rem;
+  }
+  &__title {
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+  }
+  &__message {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+  }
+  &__actions {
+    button .fa {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+.empty-state {
+  color: $gray;
+  &__message {
+    color: rgba($gray, 0.8);
   }
 }
 
 .error-state {
-  h4,
-  h5 {
-    color: $red;
-  }
-  h6 {
-    color: $red-rose;
+  color: $red;
+  &__message {
+    color: rgba($red, 0.8);
   }
 }

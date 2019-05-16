@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from '../redux/store';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { Modal, ModalBody } from 'reactstrap';
-import { selectCurrentKapp, Utils, openModalForm } from 'common';
+import { Utils, openModalForm, StateListWrapper } from 'common';
 import { PageTitle } from './shared/PageTitle';
 import { Link } from '@reach/router';
 import { actions } from '../redux/modules/appointments';
@@ -26,9 +26,8 @@ import heroImage from '../assets/images/tech-bar-hero.jpg';
 export const HomeComponent = ({
   kapp,
   techBars,
-  loadingUpcoming,
-  upcomingErrors,
   upcomingAppointments,
+  error,
   modalOpen,
   setModalOpen,
   currentTechBar,
@@ -192,82 +191,83 @@ export const HomeComponent = ({
           <h2 className="section__title">
             <I18n>Upcoming Appointments</I18n>
           </h2>
-          {upcomingAppointments.size > 0 && (
-            <div className="cards__wrapper cards__wrapper--appt mb-3">
-              {upcomingAppointments.map(appt => {
-                const techBar = techBars.find(
-                  t => t.values['Id'] === appt.values['Scheduler Id'],
-                );
-                const date = moment.utc(appt.values['Event Date'], DATE_FORMAT);
-                const start = moment.utc(
-                  appt.values['Event Time'],
-                  TIME_FORMAT,
-                );
-                const end = start
-                  .clone()
-                  .add(appt.values['Event Duration'], 'minute');
-                return (
-                  <Link
-                    to={`appointment/${appt.values['Scheduler Id']}/${appt.id}`}
-                    className="card card--appt"
-                    key={appt.id}
-                  >
-                    <i
-                      className="fa fa-calendar fa-fw card-icon"
-                      style={{ background: 'rgb(255, 74, 94)' }}
-                    />
-                    <div className="card-body">
-                      <span className="card-title">
-                        <Moment
-                          timestamp={date}
-                          format={Moment.formats.dateWithDay}
-                        />
-                      </span>
-                      <p className="card-subtitle">
-                        <Moment
-                          timestamp={start}
-                          format={Moment.formats.time}
-                        />
-                        {` - `}
-                        <Moment timestamp={end} format={Moment.formats.time} />
-                      </p>
-                      {techBar && (
-                        <p className="card-meta">
-                          <strong>
-                            <I18n>{techBar.values['Name']}</I18n>
-                          </strong>
+          <StateListWrapper
+            data={upcomingAppointments}
+            error={error}
+            emptyTitle="You have no upcoming appointments."
+            emptyMessage="As you schedule appointments, they'll appear here."
+          >
+            {data => (
+              <div className="cards__wrapper cards__wrapper--appt mb-3">
+                {data.map(appt => {
+                  const techBar = techBars.find(
+                    t => t.values['Id'] === appt.values['Scheduler Id'],
+                  );
+                  const date = moment.utc(
+                    appt.values['Event Date'],
+                    DATE_FORMAT,
+                  );
+                  const start = moment.utc(
+                    appt.values['Event Time'],
+                    TIME_FORMAT,
+                  );
+                  const end = start
+                    .clone()
+                    .add(appt.values['Event Duration'], 'minute');
+                  return (
+                    <Link
+                      to={`appointment/${appt.values['Scheduler Id']}/${
+                        appt.id
+                      }`}
+                      className="card card--appt"
+                      key={appt.id}
+                    >
+                      <i
+                        className="fa fa-calendar fa-fw card-icon"
+                        style={{ background: 'rgb(255, 74, 94)' }}
+                      />
+                      <div className="card-body">
+                        <span className="card-title">
+                          <Moment
+                            timestamp={date}
+                            format={Moment.formats.dateWithDay}
+                          />
+                        </span>
+                        <p className="card-subtitle">
+                          <Moment
+                            timestamp={start}
+                            format={Moment.formats.time}
+                          />
+                          {` - `}
+                          <Moment
+                            timestamp={end}
+                            format={Moment.formats.time}
+                          />
                         </p>
-                      )}
-                      <span
-                        className={`badge ${
-                          appt.coreState === 'Closed'
-                            ? 'badge-dark'
-                            : 'badge-success'
-                        }`}
-                      >
-                        <I18n>{appt.values['Status']}</I18n>
-                      </span>
-                      <p className="card-text">{appt.values['Summary']}</p>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-          {upcomingAppointments.size === 0 &&
-            !loadingUpcoming &&
-            upcomingErrors.length === 0 && (
-              <div className="text-center mx-auto text-muted">
-                <h5 className="mb-3">
-                  <I18n>You have no upcoming appointments.</I18n>
-                </h5>
-                <p>
-                  <I18n>
-                    As you schedule appointments, they'll appear here.
-                  </I18n>
-                </p>
+                        {techBar && (
+                          <p className="card-meta">
+                            <strong>
+                              <I18n>{techBar.values['Name']}</I18n>
+                            </strong>
+                          </p>
+                        )}
+                        <span
+                          className={`badge ${
+                            appt.coreState === 'Closed'
+                              ? 'badge-dark'
+                              : 'badge-success'
+                          }`}
+                        >
+                          <I18n>{appt.values['Status']}</I18n>
+                        </span>
+                        <p className="card-text">{appt.values['Summary']}</p>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             )}
+          </StateListWrapper>
         </section>
       </div>
       {modalOpen && (
@@ -361,28 +361,28 @@ export const mapStateToProps = (state, props) => {
   );
   const useLocationServices = enableLocationServices(techBars);
   return {
-    kapp: selectCurrentKapp(state),
+    kappSlug: state.app.kappSlug,
+    kapp: state.app.kapp,
+    profile: state.app.profile,
     techBars:
       useLocationServices && props.userLocation
         ? techBars
             .map(mapTechBarsForDistance(props.userLocation))
             .sort(sortTechBarsByDistance)
         : techBars,
-    loadingUpcoming: state.appointments.upcoming.loading,
-    upcomingErrors: state.appointments.upcoming.errors,
-    upcomingAppointments: state.appointments.upcoming.data,
-    profile: state.app.profile,
-    kappSlug: state.app.kappSlug,
+    error: state.appointments.error,
+    upcomingAppointments: state.appointments.upcoming,
     waitingUsers:
-      state.appointments.overview.count + state.walkIns.overview.count,
+      (state.appointments.overview ? state.appointments.overview.size : 0) +
+      (state.walkIns.overview ? state.walkIns.overview.size : 0),
     useLocationServices,
   };
 };
 
 export const mapDispatchToProps = {
-  fetchUpcomingAppointments: actions.fetchUpcomingAppointments,
-  fetchAppointmentsOverview: actions.fetchAppointmentsOverview,
-  fetchWalkInsOverview: walkInActions.fetchWalkInsOverview,
+  fetchUpcomingAppointmentsRequest: actions.fetchUpcomingAppointmentsRequest,
+  fetchAppointmentsOverviewRequest: actions.fetchAppointmentsOverviewRequest,
+  fetchWalkInsOverviewRequest: walkInActions.fetchWalkInsOverviewRequest,
 };
 
 const selectCurrentTechBar = ({
@@ -450,19 +450,20 @@ export const Home = compose(
   }),
   lifecycle({
     componentDidMount() {
-      if (!this.props.loadingUpcoming) {
-        this.props.fetchUpcomingAppointments();
-      }
+      // If not loading, fetch upcoming appointments
+      this.props.fetchUpcomingAppointmentsRequest();
+      // Ask for user location if enabled and not already saved
       if (this.props.useLocationServices && this.props.userLocation === null) {
         this.props.getUserLocation();
       }
+      // Fetch count of checked in customers at the current techbar
       if (this.props.techBars.size > 0) {
         const selectedTechBar =
           this.props.currentTechBar || this.props.techBars.get(0);
-        this.props.fetchAppointmentsOverview({
+        this.props.fetchAppointmentsOverviewRequest({
           id: selectedTechBar.values['Id'],
         });
-        this.props.fetchWalkInsOverview({
+        this.props.fetchWalkInsOverviewRequest({
           id: selectedTechBar.values['Id'],
         });
       }
@@ -474,10 +475,10 @@ export const Home = compose(
       ) {
         const selectedTechBar =
           this.props.currentTechBar || this.props.techBars.get(0);
-        this.props.fetchAppointmentsOverview({
+        this.props.fetchAppointmentsOverviewRequest({
           id: selectedTechBar.values['Id'],
         });
-        this.props.fetchWalkInsOverview({
+        this.props.fetchWalkInsOverviewRequest({
           id: selectedTechBar.values['Id'],
         });
       }

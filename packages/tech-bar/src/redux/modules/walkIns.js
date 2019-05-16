@@ -1,86 +1,59 @@
 import { Record, List } from 'immutable';
 import { Utils } from 'common';
-const { namespace, withPayload } = Utils;
+const { withPayload } = Utils;
+const ns = Utils.namespaceBuilder('techbar/appointments');
 
 export const types = {
-  FETCH_WALK_IN: namespace('walkIns', 'FETCH_WALK_IN'),
-  SET_WALK_IN: namespace('walkIns', 'SET_WALK_IN'),
-  SET_WALK_IN_ERRORS: namespace('walkIns', 'SET_WALK_IN_ERRORS'),
-  FETCH_TODAY_WALK_INS: namespace('walkIns', 'FETCH_TODAY_WALK_INS'),
-  SET_TODAY_WALK_INS: namespace('walkIns', 'SET_TODAY_WALK_INS'),
-  SET_TODAY_WALK_IN_ERRORS: namespace('walkIns', 'SET_TODAY_WALK_IN_ERRORS'),
-  FETCH_WALK_INS_OVERVIEW: namespace('appointments', 'FETCH_WALK_INS_OVERVIEW'),
-  SET_WALK_INS_OVERVIEW: namespace('appointments', 'SET_WALK_INS_OVERVIEW'),
-  SET_WALK_INS_OVERVIEW_ERRORS: namespace(
-    'appointments',
-    'SET_WALK_INS_OVERVIEW_ERRORS',
-  ),
+  FETCH_WALK_INS_FAILURE: ns('FETCH_WALK_INS_FAILURE'),
+  FETCH_TODAY_WALK_INS_REQUEST: ns('FETCH_TODAY_WALK_INS_REQUEST'),
+  FETCH_TODAY_WALK_INS_SUCCESS: ns('FETCH_TODAY_WALK_INS_SUCCESS'),
+  FETCH_WALK_INS_OVERVIEW_REQUEST: ns('FETCH_WALK_INS_OVERVIEW_REQUEST'),
+  FETCH_WALK_INS_OVERVIEW_SUCCESS: ns('FETCH_WALK_INS_OVERVIEW_SUCCESS'),
+  FETCH_WALK_INS_OVERVIEW_FAILURE: ns('FETCH_WALK_INS_OVERVIEW_FAILURE'),
 };
 
 export const actions = {
-  fetchWalkIn: withPayload(types.FETCH_WALK_IN),
-  setWalkIn: withPayload(types.SET_WALK_IN),
-  setWalkInErrors: withPayload(types.SET_WALK_IN_ERRORS),
-  fetchTodayWalkIns: withPayload(types.FETCH_TODAY_WALK_INS),
-  setTodayWalkIns: withPayload(types.SET_TODAY_WALK_INS),
-  setTodayWalkInErrors: withPayload(types.SET_TODAY_WALK_IN_ERRORS),
-  fetchWalkInsOverview: withPayload(types.FETCH_WALK_INS_OVERVIEW),
-  setWalkInsOverview: withPayload(types.SET_WALK_INS_OVERVIEW),
-  setWalkInsOverviewErrors: withPayload(types.SET_WALK_INS_OVERVIEW_ERRORS),
+  fetchWalkInsFailure: withPayload(types.FETCH_WALK_INS_FAILURE),
+  fetchTodayWalkInsRequest: withPayload(types.FETCH_TODAY_WALK_INS_REQUEST),
+  fetchTodayWalkInsSuccess: withPayload(types.FETCH_TODAY_WALK_INS_SUCCESS),
+  fetchWalkInsOverviewRequest: withPayload(
+    types.FETCH_WALK_INS_OVERVIEW_REQUEST,
+  ),
+  fetchWalkInsOverviewSuccess: withPayload(
+    types.FETCH_WALK_INS_OVERVIEW_SUCCESS,
+  ),
+  fetchWalkInsOverviewFailure: withPayload(
+    types.FETCH_WALK_INS_OVERVIEW_FAILURE,
+  ),
 };
 
 export const State = Record({
   loading: true,
-  errors: [],
-  walkIn: null,
-  today: {
-    loading: true,
-    errors: [],
-    data: new List(),
-  },
-  overview: {
-    loading: false,
-    errors: [],
-    data: new List(),
-    count: 0,
-  },
+  error: null,
+  today: null,
+  overview: null,
+  overviewError: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
-    case types.FETCH_WALK_IN:
-      return state.set('loading', true);
-    case types.SET_WALK_IN:
-      return state.set('walkIn', payload).set('loading', false);
-    case types.SET_WALK_IN_ERRORS:
-      return state.set('errors', payload).set('loading', false);
-    case types.FETCH_TODAY_WALK_INS:
-      return state.setIn(['today', 'loading'], true);
-    case types.SET_TODAY_WALK_INS:
-      return state
-        .setIn(['today', 'errors'], [])
-        .setIn(
-          ['today', 'data'],
-          List(payload).sortBy(
-            a => `${a.values['Event Date']} ${a.values['Event Time']}`,
-          ),
-        )
-        .setIn(['today', 'loading'], false);
-    case types.SET_TODAY_WALK_IN_ERRORS:
-      return state
-        .setIn(['today', 'errors'], payload)
-        .setIn(['today', 'loading'], false);
-    case types.FETCH_WALK_INS_OVERVIEW:
-      return state.setIn(['overview', 'loading'], true);
-    case types.SET_WALK_INS_OVERVIEW:
-      return state
-        .setIn(['overview', 'data'], List(payload))
-        .setIn(['overview', 'count'], payload.length || 0)
-        .setIn(['overview', 'loading'], false);
-    case types.SET_WALK_INS_OVERVIEW_ERRORS:
-      return state
-        .setIn(['overview', 'errors'], payload)
-        .setIn(['overview', 'loading'], false);
+    case types.FETCH_WALK_INS_FAILURE:
+      return state.set('error', payload);
+    case types.FETCH_TODAY_WALK_INS_REQUEST:
+      return state.set('error', null).set('today', null);
+    case types.FETCH_TODAY_WALK_INS_SUCCESS:
+      return state.set(
+        'today',
+        List(payload).sortBy(
+          a => `${a.values['Event Date']} ${a.values['Event Time']}`,
+        ),
+      );
+    case types.FETCH_WALK_INS_OVERVIEW_REQUEST:
+      return state.set('overviewError', null).set('overview', null);
+    case types.FETCH_WALK_INS_OVERVIEW_SUCCESS:
+      return state.set('overview', List(payload));
+    case types.FETCH_WALK_INS_OVERVIEW_FAILURE:
+      return state.set('overviewError', payload);
     default:
       return state;
   }

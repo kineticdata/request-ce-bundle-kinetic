@@ -72,7 +72,8 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = {
   fetchAppSettings: actions.fetchAppSettings,
-  fetchUpcomingAppointments: appointmentActions.fetchUpcomingAppointments,
+  fetchUpcomingAppointmentsRequest:
+    appointmentActions.fetchUpcomingAppointmentsRequest,
 };
 
 const enhance = compose(
@@ -83,7 +84,7 @@ const enhance = compose(
   lifecycle({
     componentDidMount() {
       this.props.fetchAppSettings();
-      this.props.fetchUpcomingAppointments();
+      // this.props.fetchUpcomingAppointmentsRequest();
     },
   }),
 );
