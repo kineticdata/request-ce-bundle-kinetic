@@ -78,6 +78,7 @@ export class Avatar extends React.Component {
               isOpen={this.state.visible}
               toggle={this.handleToggleVisibility}
               target={this.target}
+              trigger="legacy"
               hideArrow
               className="avatar-popover"
             >
