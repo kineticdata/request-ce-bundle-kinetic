@@ -10,7 +10,7 @@ import {
   VictoryTooltip,
   VictoryAxis,
 } from 'victory';
-import { Constants, Table } from 'common';
+import { Constants, Table, StateListWrapper } from 'common';
 import { I18n } from '@kineticdata/react';
 import moment from 'moment';
 import { Record } from 'immutable';
@@ -448,41 +448,33 @@ const Duration = ({ durations, techBars }) => (
   </Fragment>
 );
 
-export const MetricsSummaryComponent = ({
-  loading,
-  errors,
-  summary,
-  techBars,
-}) => {
-  return loading ? (
-    <div className="text-center">
-      <span className="fa fa-lg fa-spinner fa-spin" />
-    </div>
-  ) : (
-    <div className="row">
-      <div className="col-md-4 mb-5">
-        <Appointments appointments={summary.appointments} />
+export const MetricsSummaryComponent = ({ error, metrics, ...data }) => (
+  <StateListWrapper data={data} loading={!metrics} error={error}>
+    {({ summary, techBars }) => (
+      <div className="row">
+        <div className="col-md-4 mb-5">
+          <Appointments appointments={summary.appointments} />
+        </div>
+        <div className="col-md-4 mb-5">
+          <Feedback feedback={summary.feedback} />
+        </div>
+        <div className="col-md-4 mb-5">
+          <Utilization utilization={summary.utilization} />
+        </div>
+        <div className="col-xl-6 mb-5">
+          <TimeOfVisit timeOfVisit={summary.timeOfVisit} />
+        </div>
+        <div className="col-xl-6 mb-5">
+          <Duration durations={summary.durations} techBars={techBars} />
+        </div>
       </div>
-      <div className="col-md-4 mb-5">
-        <Feedback feedback={summary.feedback} />
-      </div>
-      <div className="col-md-4 mb-5">
-        <Utilization utilization={summary.utilization} />
-      </div>
-      <div className="col-xl-6 mb-5">
-        <TimeOfVisit timeOfVisit={summary.timeOfVisit} />
-      </div>
-      <div className="col-xl-6 mb-5">
-        <Duration durations={summary.durations} techBars={techBars} />
-      </div>
-    </div>
-  );
-};
+    )}
+  </StateListWrapper>
+);
 
 export const mapStateToProps = (state, props) => ({
-  loading: state.metrics.loading,
-  errors: state.metrics.errors,
-  metrics: state.metrics.metrics,
+  error: state.metrics.error,
+  metrics: state.metrics.data,
 });
 
 const Summary = Record({
@@ -506,8 +498,8 @@ const Summary = Record({
 
 export const MetricsSummary = compose(
   connect(mapStateToProps),
-  withProps(({ schedulerId, eventType, loading, metrics }) => {
-    if (loading) {
+  withProps(({ schedulerId, eventType, metrics }) => {
+    if (!metrics) {
       return { summary: Summary() };
     }
     const records = schedulerId

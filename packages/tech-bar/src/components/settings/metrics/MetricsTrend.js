@@ -12,7 +12,7 @@ import {
   VictoryLine,
   VictoryScatter,
 } from 'victory';
-import { Constants } from 'common';
+import { Constants, StateListWrapper } from 'common';
 import { I18n } from '@kineticdata/react';
 import moment from 'moment';
 import { Map } from 'immutable';
@@ -785,61 +785,59 @@ const TimeOfVisit = ({
   );
 };
 
-export const MetricsTrendComponent = ({
-  loading,
-  errors,
-  trend,
-  techBars,
-  formatDate,
-  dates,
-  selectedDuration,
-  setSelectedDuration,
-  timeOfVisitData,
-  toggleTimeOfVisitData,
-}) => {
-  return loading ? (
-    <div className="text-center">
-      <span className="fa fa-lg fa-spinner fa-spin" />
-    </div>
-  ) : (
-    <div className="row">
-      <div className="col-12 mb-5">
-        <Appointments
-          appointments={trend.appointments}
-          formatDate={formatDate}
-        />
+export const MetricsTrendComponent = ({ error, metrics, ...data }) => (
+  <StateListWrapper data={data} loading={!metrics} error={error}>
+    {({
+      trend,
+      techBars,
+      formatDate,
+      dates,
+      selectedDuration,
+      setSelectedDuration,
+      timeOfVisitData,
+      toggleTimeOfVisitData,
+    }) => (
+      <div className="row">
+        <div className="col-12 mb-5">
+          <Appointments
+            appointments={trend.appointments}
+            formatDate={formatDate}
+          />
+        </div>
+        <div className="col-12 mb-5">
+          <Feedback feedback={trend.feedback} formatDate={formatDate} />
+        </div>
+        <div className="col-12 mb-5">
+          <Utilization
+            utilization={trend.utilization}
+            formatDate={formatDate}
+          />
+        </div>
+        <div className="col-12 mb-5">
+          <Durations
+            durations={trend.durations}
+            formatDate={formatDate}
+            selectedDuration={selectedDuration}
+            setSelectedDuration={setSelectedDuration}
+          />
+        </div>
+        <div className="col-12 mb-5">
+          <TimeOfVisit
+            timeOfVisit={trend.timeOfVisit}
+            formatDate={formatDate}
+            dates={dates}
+            timeOfVisitData={timeOfVisitData}
+            toggleTimeOfVisitData={toggleTimeOfVisitData}
+          />
+        </div>
       </div>
-      <div className="col-12 mb-5">
-        <Feedback feedback={trend.feedback} formatDate={formatDate} />
-      </div>
-      <div className="col-12 mb-5">
-        <Utilization utilization={trend.utilization} formatDate={formatDate} />
-      </div>
-      <div className="col-12 mb-5">
-        <Durations
-          durations={trend.durations}
-          formatDate={formatDate}
-          selectedDuration={selectedDuration}
-          setSelectedDuration={setSelectedDuration}
-        />
-      </div>
-      <div className="col-12 mb-5">
-        <TimeOfVisit
-          timeOfVisit={trend.timeOfVisit}
-          formatDate={formatDate}
-          dates={dates}
-          timeOfVisitData={timeOfVisitData}
-          toggleTimeOfVisitData={toggleTimeOfVisitData}
-        />
-      </div>
-    </div>
-  );
-};
+    )}
+  </StateListWrapper>
+);
 
 export const mapStateToProps = (state, props) => ({
-  loading: state.metrics.loading,
-  errors: state.metrics.errors,
-  metrics: state.metrics.metrics,
+  error: state.metrics.error,
+  metrics: state.metrics.data,
 });
 
 const TrendSummary = (dates = [], techBars) => {
@@ -887,7 +885,6 @@ const TrendSummary = (dates = [], techBars) => {
 
 const buildTrend = ({
   setTrend,
-  loading,
   schedulerId,
   eventType,
   metrics,
@@ -896,7 +893,7 @@ const buildTrend = ({
   selectedDuration,
   setSelectedDuration,
 }) => () => {
-  if (loading) {
+  if (!metrics) {
     return;
   }
   const records = schedulerId

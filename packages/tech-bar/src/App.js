@@ -14,14 +14,13 @@ import { AppointmentForm } from './components/AppointmentForm';
 import { Settings } from './components/settings/Settings';
 import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { actions } from './redux/modules/techBarApp';
-import { actions as appointmentActions } from './redux/modules/appointments';
 import './assets/styles/master.scss';
 
 export const AppComponent = props => {
-  if (props.loading) {
-    return <Loading text="App is loading ..." />;
-  } else if (props.errors.length > 0) {
+  if (props.error) {
     return <ErrorUnexpected />;
+  } else if (props.loading) {
+    return <Loading text="App is loading ..." />;
   } else {
     return props.render({
       sidebar: (
@@ -65,15 +64,13 @@ export const AppComponent = props => {
 };
 
 const mapStateToProps = (state, props) => ({
-  loading: state.techBarApp.appLoading,
-  errors: state.techBarApp.appErrors,
+  loading: state.techBarApp.loading,
+  error: state.techBarApp.error,
   settingsBackPath: `/kapps/${state.app.kappSlug}`,
 });
 
 const mapDispatchToProps = {
-  fetchAppSettings: actions.fetchAppSettings,
-  fetchUpcomingAppointmentsRequest:
-    appointmentActions.fetchUpcomingAppointmentsRequest,
+  fetchAppDataRequest: actions.fetchAppDataRequest,
 };
 
 const enhance = compose(
@@ -83,8 +80,7 @@ const enhance = compose(
   ),
   lifecycle({
     componentDidMount() {
-      this.props.fetchAppSettings();
-      // this.props.fetchUpcomingAppointmentsRequest();
+      this.props.fetchAppDataRequest();
     },
   }),
 );

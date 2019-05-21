@@ -1,19 +1,19 @@
 import { Record, List } from 'immutable';
 import { Utils } from 'common';
-const { namespace, noPayload, withPayload } = Utils;
+const { namespace, withPayload } = Utils;
 
 export const types = {
-  CLEAR_METRICS: namespace('techBarMetrics', 'CLEAR_METRICS'),
-  FETCH_METRICS: namespace('techBarMetrics', 'FETCH_METRICS'),
-  SET_METRICS: namespace('techBarMetrics', 'SET_METRICS'),
-  SET_METRICS_ERRORS: namespace('techBarMetrics', 'SET_METRICS_ERRORS'),
+  FETCH_METRICS_REQUEST: namespace('techBarMetrics', 'FETCH_METRICS_REQUEST'),
+  FETCH_METRICS_SUCCESS: namespace('techBarMetrics', 'FETCH_METRICS_SUCCESS'),
+  FETCH_METRICS_FAILURE: namespace('techBarMetrics', 'FETCH_METRICS_FAILURE'),
+  FETCH_METRICS_RESET: namespace('techBarMetrics', 'FETCH_METRICS_RESET'),
 };
 
 export const actions = {
-  clearMetrics: withPayload(types.CLEAR_METRICS),
-  fetchMetrics: withPayload(types.FETCH_METRICS),
-  setMetrics: withPayload(types.SET_METRICS),
-  setMetricsErrors: withPayload(types.SET_METRICS_ERRORS),
+  fetchMetricsRequest: withPayload(types.FETCH_METRICS_REQUEST),
+  fetchMetricsSuccess: withPayload(types.FETCH_METRICS_SUCCESS),
+  fetchMetricsFailure: withPayload(types.FETCH_METRICS_FAILURE),
+  fetchMetricsReset: withPayload(types.FETCH_METRICS_RESET),
 };
 
 export const MetricsData = object => {
@@ -33,31 +33,23 @@ export const MetricsData = object => {
 };
 
 export const State = Record({
-  loading: true,
-  errors: [],
-  metrics: new List(),
+  data: null,
+  error: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
-    case types.CLEAR_METRICS:
-      return state.set('metrics', List());
-    case types.FETCH_METRICS:
-      return state.set('loading', true);
-    case types.SET_METRICS:
-      return state
-        .set(
-          'metrics',
-          List(
-            payload.map(submission => MetricsData(submission)).filter(d => d),
-          ),
-        )
-        .set('loading', false);
-    case types.SET_METRICS_ERRORS:
-      return state
-        .set('errors', payload)
-        .set('metrics', new List())
-        .set('loading', false);
+    case types.FETCH_METRICS_REQUEST:
+      return state.set('error', null).set('data', null);
+    case types.FETCH_METRICS_SUCCESS:
+      return state.set(
+        'data',
+        List(payload.map(submission => MetricsData(submission)).filter(d => d)),
+      );
+    case types.FETCH_METRICS_FAILURE:
+      return state.set('error', payload);
+    case types.FETCH_METRICS_RESET:
+      return state.set('data', null).set('error', null);
     default:
       return state;
   }

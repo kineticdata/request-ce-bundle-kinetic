@@ -30,7 +30,7 @@ export const AppComponent = props =>
       <ModalFormContainer />
       <props.AppProvider
         appState={{
-          ...props.app.toJS(),
+          ...props.app.toObject(),
           location: `${
             props.kappSlug === null ? '' : `/kapps/${props.kappSlug}`
           }`,

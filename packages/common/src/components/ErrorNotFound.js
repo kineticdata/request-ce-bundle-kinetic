@@ -2,7 +2,7 @@ import React from 'react';
 import { I18n } from '@kineticdata/react';
 
 export const ErrorNotFound = () => (
-  <div className="text-center">
+  <div className="text-center overflow-auto">
     <h1>
       <I18n>Oops!</I18n>
     </h1>

@@ -1,10 +1,11 @@
 import { takeEvery, put, call, select } from 'redux-saga/effects';
 import { searchSubmissions, SubmissionSearch } from '@kineticdata/react';
+import { addToastAlert } from 'common';
 import { actions, types } from '../modules/metrics';
 import { METRICS_FORM_SLUG } from '../../constants';
 import isarray from 'isarray';
 
-export function* fetchMetricsSaga({
+export function* fetchMetricsRequestSaga({
   payload: { schedulerIds, monthly = false, dates },
 }) {
   const kappSlug = yield select(state => state.app.kappSlug);
@@ -21,23 +22,23 @@ export function* fetchMetricsSaga({
     searchBuilder.in('values[Period]', dates);
   }
 
-  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+  const { submissions, error } = yield call(searchSubmissions, {
     search: searchBuilder.build(),
     form: METRICS_FORM_SLUG,
     kapp: kappSlug,
   });
 
-  if (serverError) {
-    yield put(
-      actions.setMetricsErrors([serverError.error || serverError.statusText]),
-    );
-  } else if (errors) {
-    yield put(actions.setMetricsErrors(errors));
+  if (error) {
+    addToastAlert({
+      title: 'Error retrieving metrics data.',
+      message: error.message,
+    });
+    yield put(actions.fetchMetricsFailure(error));
   } else {
-    yield put(actions.setMetrics(submissions));
+    yield put(actions.fetchMetricsSuccess(submissions));
   }
 }
 
 export function* watchMetrics() {
-  yield takeEvery(types.FETCH_METRICS, fetchMetricsSaga);
+  yield takeEvery(types.FETCH_METRICS_REQUEST, fetchMetricsRequestSaga);
 }

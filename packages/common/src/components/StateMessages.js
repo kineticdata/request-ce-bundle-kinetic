@@ -17,14 +17,18 @@ const GenericMessage = ({ className, heading, title, message, actions }) => (
     {actions && (
       <div className={`${className}__actions`}>
         <div className="btn-group">
-          {actions.filter(a => a.label && a.onClick).map((a, i) => (
+          {actions.filter(a => (a.label || a.icon) && a.onClick).map((a, i) => (
             <button
               key={`action-${i}`}
               className={`btn btn-outline-dark`}
               onClick={a.onClick}
             >
               {a.icon && <span className={`fa fa-fw ${a.icon}`} />}
-              <I18n>{a.label}</I18n>
+              {a.label && (
+                <span>
+                  <I18n>{a.label}</I18n>
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -77,10 +81,12 @@ export const StateListWrapper = ({
   emptyTitle,
   emptyMessage,
   emptyActions,
+  components = {},
 }) => {
   if (error) {
+    const ErrorMessageComponent = components.ErrorMessage || ErrorMessage;
     return (
-      <ErrorMessage
+      <ErrorMessageComponent
         title={errorTitle}
         message={errorMessage}
         actions={errorActions}

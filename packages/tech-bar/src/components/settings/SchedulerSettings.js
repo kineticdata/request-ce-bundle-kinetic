@@ -87,7 +87,7 @@ export const mapStateToProps = (state, props) => ({
 });
 
 export const mapDispatchToProps = {
-  fetchAppSettings: actions.fetchAppSettings,
+  fetchAppDataRequest: actions.fetchAppDataRequest,
 };
 
 export const SchedulerSettings = compose(
@@ -97,7 +97,7 @@ export const SchedulerSettings = compose(
   ),
   lifecycle({
     componentWillUnmount() {
-      this.props.fetchAppSettings(true);
+      this.props.fetchAppDataRequest(true);
     },
   }),
 )(SchedulerSettingsComponent);

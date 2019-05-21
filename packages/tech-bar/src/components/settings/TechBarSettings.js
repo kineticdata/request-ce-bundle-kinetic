@@ -106,7 +106,7 @@ export const mapStateToProps = (state, props) => {
 };
 
 export const mapDispatchToProps = {
-  fetchAppSettings: actions.fetchAppSettings,
+  fetchAppDataRequest: actions.fetchAppDataRequest,
 };
 
 export const TechBarSettings = compose(
@@ -116,7 +116,7 @@ export const TechBarSettings = compose(
   ),
   lifecycle({
     componentDidMount() {
-      // this.props.fetchAppSettings();
+      // this.props.fetchAppDataRequest();
     },
   }),
 )(TechBarSettingsComponent);

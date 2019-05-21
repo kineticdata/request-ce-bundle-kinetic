@@ -20,8 +20,8 @@ export const MetricsExportComponent = ({
   scheduler,
   eventType,
   exporting,
-  exportedSubmissions,
-  exportError,
+  data,
+  error,
   exportStatus,
   setExportStatus,
   exportMessage,
@@ -39,7 +39,7 @@ export const MetricsExportComponent = ({
           isOpen={!!exportStatus}
           toggle={!exporting ? () => setExportStatus(null) : undefined}
         >
-          {!exportError ? (
+          {!error ? (
             <Fragment>
               {exportStatus === 'Exporting' && (
                 <Fragment>
@@ -58,7 +58,7 @@ export const MetricsExportComponent = ({
                     render={translate =>
                       translate('Exported # record(s) to').replace(
                         '#',
-                        exportedSubmissions.size,
+                        data.size,
                       )
                     }
                   />{' '}
@@ -70,9 +70,7 @@ export const MetricsExportComponent = ({
             <Fragment>
               <span className="fa fa-exclamation-triangle fa-fw" />
               <I18n
-                render={translate =>
-                  `${translate('Export failed:')} ${exportError}`
-                }
+                render={translate => `${translate('Export failed:')} ${error}`}
               />
             </Fragment>
           )}
@@ -311,7 +309,7 @@ export const MetricsExportComponent = ({
 };
 
 export const processExport = ({
-  exportSubmissions,
+  fetchExportSubmissionsRequest,
   schedulerId,
   eventType,
   selectedDate,
@@ -336,7 +334,7 @@ export const processExport = ({
                 .format(DATE_FORMAT),
             )
         : [selectedDate];
-      exportSubmissions({
+      fetchExportSubmissionsRequest({
         formSlug,
         schedulerIds,
         eventType,
@@ -349,7 +347,7 @@ export const processExport = ({
       break;
     case FEEDBACK_FORM_SLUG:
     case GENERAL_FEEDBACK_FORM_SLUG:
-      exportSubmissions({
+      fetchExportSubmissionsRequest({
         formSlug,
         schedulerIds,
         queryBuilder: searcher => {
@@ -377,13 +375,9 @@ export const processExport = ({
   }
 };
 
-export const downloadFile = ({
-  exportedSubmissions,
-  filename,
-  setExportStatus,
-}) => () => {
+export const downloadFile = ({ data, filename, setExportStatus }) => () => {
   const csv = papaparse.unparse(
-    exportedSubmissions.reduce((csv, submission) => {
+    data.reduce((csv, submission) => {
       let submissionValues = submission.values;
       submission.form.fields.forEach(field => {
         // If older submissions don't have a new field then add it with a value of null.
@@ -417,12 +411,12 @@ export const mapStateToProps = (state, props) => ({
     scheduler => scheduler.values['Id'] === props.schedulerId,
   ),
   exporting: state.export.exporting,
-  exportedSubmissions: state.export.submissions,
-  exportError: state.export.error,
+  data: state.export.data,
+  error: state.export.error,
 });
 
 export const mapDispatchToProps = {
-  exportSubmissions: actions.exportSubmissions,
+  fetchExportSubmissionsRequest: actions.fetchExportSubmissionsRequest,
 };
 
 export const MetricsExport = compose(
@@ -439,12 +433,8 @@ export const MetricsExport = compose(
   }),
   lifecycle({
     componentDidUpdate(prevProps) {
-      if (
-        !this.props.exporting &&
-        prevProps.exporting &&
-        !this.props.exportError
-      ) {
-        if (this.props.exportedSubmissions.size > 0) {
+      if (!this.props.exporting && prevProps.exporting && !this.props.error) {
+        if (this.props.data.size > 0) {
           this.props.downloadFile();
         } else {
           this.props.setExportStatus('Empty');

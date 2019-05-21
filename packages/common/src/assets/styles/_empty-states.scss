@@ -35,8 +35,8 @@
     line-height: 1.5rem;
   }
   &__actions {
-    button .fa {
-      margin-right: 0.5rem;
+    button .fa:not(:last-child) {
+      margin-right: 0.25rem;
     }
   }
 }

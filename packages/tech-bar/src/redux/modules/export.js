@@ -1,44 +1,48 @@
 import { Record, List } from 'immutable';
 import { Utils } from 'common';
-const { namespace, noPayload, withPayload } = Utils;
+const { noPayload, withPayload } = Utils;
+const ns = Utils.namespaceBuilder('techbar/appointments');
 
 export const types = {
-  EXPORT_SUBMISSIONS: namespace('techBarMetricsExport', 'EXPORT_SUBMISSIONS'),
-  SET_SUBMISSIONS: namespace('techBarMetricsExport', 'SET_SUBMISSIONS'),
-  SET_SUBMISSIONS_ERROR: namespace(
-    'techBarMetricsExport',
-    'SET_SUBMISSIONS_ERROR',
-  ),
-  COMPLETE_EXPORT: namespace('techBarMetricsExport', 'COMPLETE_EXPORT'),
+  FETCH_EXPORT_SUBMISSIONS_REQUEST: ns('FETCH_EXPORT_SUBMISSIONS_REQUEST'),
+  FETCH_EXPORT_SUBMISSIONS_SUCCESS: ns('FETCH_EXPORT_SUBMISSIONS_SUCCESS'),
+  FETCH_EXPORT_SUBMISSIONS_FAILURE: ns('FETCH_EXPORT_SUBMISSIONS_FAILURE'),
+  FETCH_EXPORT_SUBMISSIONS_COMPLETE: ns('FETCH_EXPORT_SUBMISSIONS_COMPLETE'),
 };
 
 export const actions = {
-  exportSubmissions: withPayload(types.EXPORT_SUBMISSIONS),
-  setSubmissions: withPayload(types.SET_SUBMISSIONS),
-  setSubmissionsError: withPayload(types.SET_SUBMISSIONS_ERROR),
-  completeExport: noPayload(types.COMPLETE_EXPORT),
+  fetchExportSubmissionsRequest: withPayload(
+    types.FETCH_EXPORT_SUBMISSIONS_REQUEST,
+  ),
+  fetchExportSubmissionsSuccess: withPayload(
+    types.FETCH_EXPORT_SUBMISSIONS_SUCCESS,
+  ),
+  fetchExportSubmissionsFailure: withPayload(
+    types.FETCH_EXPORT_SUBMISSIONS_FAILURE,
+  ),
+  fetchExportSubmissionsComplete: noPayload(
+    types.FETCH_EXPORT_SUBMISSIONS_COMPLETE,
+  ),
 };
 
 export const State = Record({
   exporting: false,
-  submissions: List(),
-  error: false,
+  data: null,
+  error: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
-    case types.EXPORT_SUBMISSIONS:
+    case types.FETCH_EXPORT_SUBMISSIONS_REQUEST:
       return state
-        .set('submissions', List())
+        .set('data', List())
         .set('error', false)
         .set('exporting', true);
-    case types.SET_SUBMISSIONS:
-      return state.update('submissions', submissions =>
-        submissions.push(...payload),
-      );
-    case types.SET_SUBMISSIONS_ERROR:
+    case types.FETCH_EXPORT_SUBMISSIONS_SUCCESS:
+      return state.update('data', data => data.push(...payload));
+    case types.FETCH_EXPORT_SUBMISSIONS_FAILURE:
       return state.set('error', payload).set('exporting', false);
-    case types.COMPLETE_EXPORT:
+    case types.FETCH_EXPORT_SUBMISSIONS_COMPLETE:
       return state.set('exporting', false);
     default:
       return state;

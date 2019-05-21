@@ -1,6 +1,7 @@
-import { Record, List, Map } from 'immutable';
+import { Record, List } from 'immutable';
 import { Utils } from 'common';
-const { namespace, noPayload, withPayload } = Utils;
+const { withPayload } = Utils;
+const ns = Utils.namespaceBuilder('techbar/app');
 
 export const enableLocationServices = techBars =>
   techBars.size > 1 &&
@@ -66,63 +67,64 @@ export const Settings = (object = {}) => ({
 });
 
 export const types = {
-  FETCH_APP_SETTINGS: namespace('techBarApp', 'FETCH_APP_SETTINGS'),
-  SET_APP_SETTINGS: namespace('techBarApp', 'SET_APP_SETTINGS'),
-  SET_APP_ERRORS: namespace('techBarApp', 'SET_APP_ERRORS'),
-  UPDATE_TECH_BAR_SETTINGS: namespace('techBarApp', 'UPDATE_TECH_BAR_SETTINGS'),
-  FETCH_DISPLAY_TEAM: namespace('techBarApp', 'FETCH_DISPLAY_TEAM'),
-  SET_DISPLAY_TEAM: namespace('techBarApp', 'SET_DISPLAY_TEAM'),
-  ADD_DISPLAY_TEAM_MEMBERSHIP: namespace(
-    'techBarApp',
-    'ADD_DISPLAY_TEAM_MEMBERSHIP',
+  FETCH_APP_DATA_REQUEST: ns('FETCH_APP_DATA_REQUEST'),
+  FETCH_APP_DATA_SUCCESS: ns('FETCH_APP_DATA_SUCCESS'),
+  FETCH_APP_DATA_FAILURE: ns('FETCH_APP_DATA_FAILURE'),
+  UPDATE_TECH_BAR_SETTINGS_SUCCESS: ns('UPDATE_TECH_BAR_SETTINGS_SUCCESS'),
+  FETCH_DISPLAY_TEAM_REQUEST: ns('FETCH_DISPLAY_TEAM_REQUEST'),
+  FETCH_DISPLAY_TEAM_SUCCESS: ns('FETCH_DISPLAY_TEAM_SUCCESS'),
+  FETCH_DISPLAY_TEAM_FAILURE: ns('FETCH_DISPLAY_TEAM_FAILURE'),
+  CREATE_DISPLAY_TEAM_MEMBERSHIP_REQUEST: ns(
+    'CREATE_DISPLAY_TEAM_MEMBERSHIP_REQUEST',
   ),
-  CREATE_USER_WITH_DISPLAY_TEAM_MEMBERSHIP: namespace(
-    'techBarApp',
-    'CREATE_USER_WITH_DISPLAY_TEAM_MEMBERSHIP',
-  ),
-  REMOVE_DISPLAY_TEAM_MEMBERSHIP: namespace(
-    'techBarApp',
-    'REMOVE_DISPLAY_TEAM_MEMBERSHIP',
+  CREATE_DISPLAY_TEAM_USER_REQUEST: ns('CREATE_DISPLAY_TEAM_USER_REQUEST'),
+  DELETE_DISPLAY_TEAM_MEMBERSHIP_REQUEST: ns(
+    'DELETE_DISPLAY_TEAM_MEMBERSHIP_REQUEST',
   ),
 };
 
 export const actions = {
-  fetchAppSettings: withPayload(types.FETCH_APP_SETTINGS),
-  setAppSettings: withPayload(types.SET_APP_SETTINGS),
-  setAppErrors: withPayload(types.SET_APP_ERRORS),
-  updateTechBarSettings: withPayload(types.UPDATE_TECH_BAR_SETTINGS),
-  fetchDisplayTeam: withPayload(types.FETCH_DISPLAY_TEAM),
-  setDisplayTeam: withPayload(types.SET_DISPLAY_TEAM),
-  addDisplayTeamMembership: withPayload(types.ADD_DISPLAY_TEAM_MEMBERSHIP),
-  createUserWithDisplayTeamMembership: withPayload(
-    types.CREATE_USER_WITH_DISPLAY_TEAM_MEMBERSHIP,
+  fetchAppDataRequest: withPayload(types.FETCH_APP_DATA_REQUEST),
+  fetchAppDataSuccess: withPayload(types.FETCH_APP_DATA_SUCCESS),
+  fetchAppDataFailure: withPayload(types.FETCH_APP_DATA_FAILURE),
+  updateTechBarSettingsSuccess: withPayload(
+    types.UPDATE_TECH_BAR_SETTINGS_SUCCESS,
   ),
-  removeDisplayTeamMembership: withPayload(
-    types.REMOVE_DISPLAY_TEAM_MEMBERSHIP,
+  fetchDisplayTeamRequest: withPayload(types.FETCH_DISPLAY_TEAM_REQUEST),
+  fetchDisplayTeamSuccess: withPayload(types.FETCH_DISPLAY_TEAM_SUCCESS),
+  fetchDisplayTeamFailure: withPayload(types.FETCH_DISPLAY_TEAM_FAILURE),
+  createDisplayTeamMembershipRequest: withPayload(
+    types.CREATE_DISPLAY_TEAM_MEMBERSHIP_REQUEST,
+  ),
+  createDisplayTeamUserRequest: withPayload(
+    types.CREATE_DISPLAY_TEAM_USER_REQUEST,
+  ),
+  deleteDisplayTeamMembershipRequest: withPayload(
+    types.DELETE_DISPLAY_TEAM_MEMBERSHIP_REQUEST,
   ),
 };
 
 export const State = Record({
-  appLoading: true,
-  appErrors: [],
-  schedulers: new List(),
-  forms: new List(),
-  displayTeamLoading: false,
+  loading: true,
+  error: null,
+  schedulers: null,
+  forms: null,
+  displayTeamError: null,
   displayTeam: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
-    case types.FETCH_APP_SETTINGS:
-      return state.set('appLoading', !payload);
-    case types.SET_APP_SETTINGS:
+    case types.FETCH_APP_DATA_REQUEST:
+      return state.set('error', null);
+    case types.FETCH_APP_DATA_SUCCESS:
       return state
         .set('schedulers', List(payload.schedulers))
         .set('forms', List(payload.forms))
-        .set('appLoading', false);
-    case types.SET_APP_ERRORS:
-      return state.set('appErrors', payload).set('appLoading', false);
-    case types.UPDATE_TECH_BAR_SETTINGS:
+        .set('loading', false);
+    case types.FETCH_APP_DATA_FAILURE:
+      return state.set('error', payload);
+    case types.UPDATE_TECH_BAR_SETTINGS_SUCCESS:
       const index = state
         .get('schedulers')
         .findIndex(scheduler => scheduler.id === payload.techBarId);
@@ -134,10 +136,12 @@ export const reducer = (state = State(), { type, payload }) => {
       } else {
         return state;
       }
-    case types.FETCH_DISPLAY_TEAM:
-      return state.set('displayTeamLoading', true);
-    case types.SET_DISPLAY_TEAM:
-      return state.set('displayTeam', payload).set('displayTeamLoading', false);
+    case types.FETCH_DISPLAY_TEAM_REQUEST:
+      return state.set('displayTeam', null).set('displayTeamError', null);
+    case types.FETCH_DISPLAY_TEAM_SUCCESS:
+      return state.set('displayTeam', payload);
+    case types.FETCH_DISPLAY_TEAM_FAILURE:
+      return state.set('displayTeamError', payload);
     default:
       return state;
   }

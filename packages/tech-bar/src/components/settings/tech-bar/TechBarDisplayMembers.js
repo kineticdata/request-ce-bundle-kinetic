@@ -17,15 +17,15 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import { List } from 'immutable';
-import { AttributeSelectors } from 'common';
+import { AttributeSelectors, InfoMessage, StateListWrapper } from 'common';
 import { actions } from '../../../redux/modules/techBarApp';
 import { I18n } from '@kineticdata/react';
 
 const TechBarDisplayMembersComponent = ({
   hasManagerAccess,
-  loading,
   team,
-  fetchDisplayTeam,
+  error,
+  fetchDisplayTeamRequest,
   techBarName,
   openDropdown,
   toggleDropdown,
@@ -43,68 +43,30 @@ const TechBarDisplayMembersComponent = ({
   processRemove,
 }) => (
   <div className="list-wrapper list-wrapper--users">
-    {loading &&
-      !team && (
-        <div className="loading-state">
-          <h4>
-            <i className="fa fa-spinner fa-spin fa-lg fa-fw" />
-          </h4>
-          <h5>
-            <I18n>Loading</I18n>
-          </h5>
-        </div>
-      )}
-    {!loading &&
-      !team && (
-        <Fragment>
-          <div className="info-state">
-            <h5>
-              <I18n>The team for front desk users is being created.</I18n>
-            </h5>
-            <h6>
-              <I18n>This may take a few minutes.</I18n>
-            </h6>
-          </div>
-          <div className="text-center">
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                fetchDisplayTeam({
-                  techBarName,
-                });
-              }}
-            >
-              <span className="fa fa-refresh" />
-            </button>
-          </div>
-        </Fragment>
-      )}
-    {!loading &&
-      team &&
-      team.memberships.length === 0 && (
-        <Fragment>
-          <div className="empty-state">
-            <h5>
-              <I18n>No Front Desk Users Found</I18n>
-            </h5>
-            <h6>
-              <I18n>
-                Front Desk Users are the users who have access to the check-in,
-                feedback, and overhead display pages.
-              </I18n>
-            </h6>
-          </div>
-          {hasManagerAccess && (
-            <div className="text-center">
-              <button className="btn btn-primary" onClick={handleAdd}>
-                <I18n>Add User</I18n>
-              </button>
-            </div>
-          )}
-        </Fragment>
-      )}
-    {team &&
-      team.memberships.length > 0 && (
+    <StateListWrapper
+      data={team ? team.memberships : null}
+      loading={!team}
+      error={error}
+      emptyTitle="No Front Desk Users Found"
+      emptyMessage="Front Desk Users are the users who have access to the check-in, feedback, and overhead display pages."
+      emptyActions={
+        hasManagerAccess
+          ? [{ label: 'Add User', onClick: handleAdd }]
+          : undefined
+      }
+      errorTitle="The team for front desk users is being created."
+      errorMessage="This may take a few minutes."
+      errorActions={[
+        {
+          icon: 'fa-refresh',
+          onClick: () => {
+            fetchDisplayTeamRequest({ techBarName });
+          },
+        },
+      ]}
+      components={{ ErrorMessage: InfoMessage }}
+    >
+      {data => (
         <table className="table table-sm table-striped table-users table--settings">
           <thead className="header">
             <tr>
@@ -124,7 +86,7 @@ const TechBarDisplayMembersComponent = ({
             </tr>
           </thead>
           <tbody>
-            {List(team.memberships)
+            {List(data)
               .sortBy(a => a.user.displayName)
               .map(displayUser => (
                 <tr key={displayUser.user.username}>
@@ -154,6 +116,7 @@ const TechBarDisplayMembersComponent = ({
           </tbody>
         </table>
       )}
+    </StateListWrapper>
 
     {openModal && (
       <Modal isOpen={!!openModal} toggle={toggleModal}>
@@ -316,15 +279,15 @@ const TechBarDisplayMembersComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.techBarApp.displayTeamLoading,
+  error: state.techBarApp.displayTeamError,
   team: state.techBarApp.displayTeam,
 });
 
 export const mapDispatchToProps = {
-  addDisplayTeamUser: actions.addDisplayTeamMembership,
-  removeDisplayTeamUser: actions.removeDisplayTeamMembership,
-  createUserAsDisplayTeamUser: actions.createUserWithDisplayTeamMembership,
-  fetchDisplayTeam: actions.fetchDisplayTeam,
+  addDisplayTeamUser: actions.createDisplayTeamMembershipRequest,
+  removeDisplayTeamUser: actions.deleteDisplayTeamMembershipRequest,
+  createUserAsDisplayTeamUser: actions.createDisplayTeamUserRequest,
+  fetchDisplayTeamRequest: actions.fetchDisplayTeamRequest,
 };
 
 const toggleDropdown = ({
@@ -391,7 +354,7 @@ export const TechBarDisplayMembers = compose(
   }),
   lifecycle({
     componentDidMount() {
-      this.props.fetchDisplayTeam({
+      this.props.fetchDisplayTeamRequest({
         techBarName: this.props.techBarName,
       });
     },

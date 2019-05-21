@@ -11,8 +11,7 @@ import {
 import { PageTitle } from '../../shared/PageTitle';
 import { Link } from '@reach/router';
 import moment from 'moment';
-import { actions } from '../../../redux/modules/techBarApp';
-import { actions as appointmentActions } from '../../../redux/modules/appointments';
+import { actions } from '../../../redux/modules/appointments';
 import { I18n, Moment } from '@kineticdata/react';
 import { TechBarDisplayMembers } from './TechBarDisplayMembers';
 import { TIME_FORMAT } from '../../../constants';
@@ -246,15 +245,12 @@ export const mapStateToProps = (state, props) => {
     appointmentError: state.appointments.error,
     appointments: state.appointments.list,
     appointmentDate: state.appointments.listDate,
-    displayTeamLoading: state.techBarApp.displayTeamLoading,
-    displayTeam: state.techBarApp.displayTeam,
   };
 };
 
 export const mapDispatchToProps = {
-  fetchAppointmentsListRequest: appointmentActions.fetchAppointmentsListRequest,
-  setAppointmentsListDate: appointmentActions.setAppointmentsListDate,
-  fetchDisplayTeam: actions.fetchDisplayTeam,
+  fetchAppointmentsListRequest: actions.fetchAppointmentsListRequest,
+  setAppointmentsListDate: actions.setAppointmentsListDate,
 };
 
 export const TechBar = compose(
@@ -298,9 +294,6 @@ export const TechBar = compose(
     componentDidMount() {
       this.props.fetchAppointmentsListRequest({
         schedulerId: this.props.techBar.values['Id'],
-      });
-      this.props.fetchDisplayTeam({
-        techBarName: this.props.techBar.values['Name'],
       });
     },
   }),

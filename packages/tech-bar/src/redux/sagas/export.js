@@ -3,7 +3,7 @@ import { SubmissionSearch, searchSubmissions } from '@kineticdata/react';
 import { actions, types } from '../modules/export';
 import isarray from 'isarray';
 
-export function* fetchSubmissionsSaga({
+export function* fetchExportSubmissionsRequestSaga({
   payload: {
     formSlug,
     queryBuilder,
@@ -21,7 +21,7 @@ export function* fetchSubmissionsSaga({
     }
   }
 
-  yield call(fetchSubmissions, {
+  yield call(fetchExportSubmissions, {
     kappSlug,
     formSlug,
     searchers: schedulerIds
@@ -93,7 +93,7 @@ const buildSearcher = ({
   return searcher;
 };
 
-function* fetchSubmissions({ kappSlug, formSlug, searchers }) {
+function* fetchExportSubmissions({ kappSlug, formSlug, searchers }) {
   const results = yield all(
     searchers.map(searcher =>
       call(searchSubmissions, {
@@ -134,22 +134,25 @@ function* fetchSubmissions({ kappSlug, formSlug, searchers }) {
   );
 
   if (error) {
-    yield put(actions.setSubmissionsError(error));
+    yield put(actions.fetchExportSubmissionsFailure(error));
   } else {
-    yield put(actions.setSubmissions(submissions));
+    yield put(actions.fetchExportSubmissionsSuccess(submissions));
   }
 
   if (nextSearchers.length > 0) {
-    yield call(fetchSubmissions, {
+    yield call(fetchExportSubmissions, {
       kappSlug,
       formSlug,
       searchers: nextSearchers,
     });
   } else {
-    yield put(actions.completeExport());
+    yield put(actions.fetchExportSubmissionsComplete());
   }
 }
 
 export function* watchExport() {
-  yield takeEvery(types.EXPORT_SUBMISSIONS, fetchSubmissionsSaga);
+  yield takeEvery(
+    types.FETCH_EXPORT_SUBMISSIONS_REQUEST,
+    fetchExportSubmissionsRequestSaga,
+  );
 }

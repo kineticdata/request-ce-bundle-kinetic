@@ -123,7 +123,7 @@ export const mapStateToProps = (state, props) => {
 };
 
 export const mapDispatchToProps = {
-  updateTechBarSettings: actions.updateTechBarSettings,
+  updateTechBarSettingsSuccess: actions.updateTechBarSettingsSuccess,
 };
 
 export const TechBarSettingsForm = compose(
@@ -132,10 +132,13 @@ export const TechBarSettingsForm = compose(
     mapDispatchToProps,
   ),
   withHandlers({
-    handleSaved: ({ navigate, kapp, techBarId, updateTechBarSettings }) => ({
-      submission,
-    }) => {
-      updateTechBarSettings({
+    handleSaved: ({
+      navigate,
+      kapp,
+      techBarId,
+      updateTechBarSettingsSuccess,
+    }) => ({ submission }) => {
+      updateTechBarSettingsSuccess({
         techBarId,
         submission,
       });

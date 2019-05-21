@@ -7,7 +7,7 @@ import {
   withProps,
   withState,
 } from 'recompose';
-import { selectCurrentKapp, Utils, selectHasRoleSchedulerAdmin } from 'common';
+import { Utils, selectHasRoleSchedulerAdmin } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { isActiveClass } from '../../utils';
 import { Link } from '@reach/router';
@@ -20,7 +20,7 @@ import { I18n } from '@kineticdata/react';
 import moment from 'moment';
 
 export const TechBarMetricsComponent = ({
-  clearMetrics,
+  fetchMetricsReset,
   mode,
   tabMode,
   schedulerId,
@@ -72,7 +72,7 @@ export const TechBarMetricsComponent = ({
                     onChange={e => {
                       setSchedulerId(e.target.value);
                       setEventType('');
-                      clearMetrics();
+                      fetchMetricsReset();
                     }}
                   >
                     <option value="">{translate('All Tech Bars')}</option>
@@ -125,7 +125,7 @@ export const TechBarMetricsComponent = ({
                 onClick={() => {
                   if (selectedRange !== 'last30Days') {
                     setSelectedRange('last30Days');
-                    clearMetrics();
+                    fetchMetricsReset();
                   }
                 }}
               >
@@ -141,7 +141,7 @@ export const TechBarMetricsComponent = ({
                 onClick={() => {
                   if (selectedRange !== 'last12Months') {
                     setSelectedRange('last12Months');
-                    clearMetrics();
+                    fetchMetricsReset();
                   }
                 }}
               >
@@ -153,7 +153,7 @@ export const TechBarMetricsComponent = ({
                 to={`${mode ? '../' : ''}export`}
                 getProps={isActiveClass()}
                 onClick={() => {
-                  clearMetrics();
+                  fetchMetricsReset();
                   setSelectedRange('singleDay');
                   setSelectedDate(
                     moment()
@@ -191,7 +191,7 @@ export const TechBarMetricsComponent = ({
                                   .add(-1, 'day')
                                   .format(DATE_FORMAT),
                           );
-                          clearMetrics();
+                          fetchMetricsReset();
                         }}
                       >
                         {tabMode === 'summary' && (
@@ -246,7 +246,7 @@ export const TechBarMetricsComponent = ({
                             : e.target.value;
                         setSelectedDate(newDate);
                         if (selectedDate !== newDate) {
-                          clearMetrics();
+                          fetchMetricsReset();
                         }
                       }}
                     />
@@ -374,33 +374,33 @@ export const mapStateToProps = (state, props) => {
           Utils.isMemberOf(state.app.profile, `Scheduler::${s.values['Name']}`),
       );
   return {
-    kapp: selectCurrentKapp(state),
+    kapp: state.app.kapp,
     techBars,
-    metrics: state.metrics.metrics,
+    metrics: state.metrics.data,
   };
 };
 
 export const mapDispatchToProps = {
-  fetchMetrics: actions.fetchMetrics,
-  clearMetrics: actions.clearMetrics,
+  fetchMetricsRequest: actions.fetchMetricsRequest,
+  fetchMetricsReset: actions.fetchMetricsReset,
 };
 
 const handleFetch = ({
-  clearMetrics,
-  fetchMetrics,
+  fetchMetricsReset,
+  fetchMetricsRequest,
   schedulerId,
   techBars = [],
   dateRanges,
   selectedRange,
   selectedDate,
 }) => () => {
-  clearMetrics();
+  fetchMetricsReset();
   const dates = dateRanges[selectedRange]
     ? dateRanges[selectedRange]
     : selectedRange === 'singleMonth'
       ? buildDateRangeForSelectedMonth(selectedDate)
       : [selectedDate];
-  fetchMetrics({
+  fetchMetricsRequest({
     schedulerIds: schedulerId
       ? [schedulerId]
       : techBars.toJS().map(techBar => techBar.values['Id']),
