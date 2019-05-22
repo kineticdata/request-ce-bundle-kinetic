@@ -1,17 +1,16 @@
 import { Record } from 'immutable';
 import * as Utils from 'common/src/utils';
-
-const { namespace, noPayload, withPayload } = Utils;
-const MODULE_NAME = 'alerts';
+const { noPayload, withPayload } = Utils;
+const ns = Utils.namespaceBuilder('app/alerts');
 
 export const types = {
-  FETCH_ALERTS_REQUEST: namespace(MODULE_NAME, 'FETCH_ALERTS_REQUEST'),
-  FETCH_ALERTS_SUCCESS: namespace(MODULE_NAME, 'FETCH_ALERTS_SUCCESS'),
-  FETCH_ALERTS_FAILURE: namespace(MODULE_NAME, 'FETCH_ALERTS_FAILURE'),
+  FETCH_ALERTS_REQUEST: ns('FETCH_ALERTS_REQUEST'),
+  FETCH_ALERTS_SUCCESS: ns('FETCH_ALERTS_SUCCESS'),
+  FETCH_ALERTS_FAILURE: ns('FETCH_ALERTS_FAILURE'),
 };
 
 export const actions = {
-  fetchAlerts: noPayload(types.FETCH_ALERTS_REQUEST),
+  fetchAlertsRequest: noPayload(types.FETCH_ALERTS_REQUEST),
   fetchAlertsSuccess: withPayload(types.FETCH_ALERTS_SUCCESS),
   fetchAlertsFailure: withPayload(types.FETCH_ALERTS_FAILURE),
 };
@@ -23,6 +22,8 @@ export const State = Record({
 
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
+    case types.FETCH_ALERTS_REQUEST:
+      return state.set('error', null);
     case types.FETCH_ALERTS_SUCCESS:
       return state.set('error', null).set('data', payload);
     case types.FETCH_ALERTS_FAILURE:

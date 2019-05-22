@@ -97,7 +97,7 @@ export const mapStateToProps = state => ({
 });
 export const mapDispatchToProps = {
   loadApp: actions.fetchApp,
-  fetchAlerts: alertsActions.fetchAlerts,
+  fetchAlertsRequest: alertsActions.fetchAlertsRequest,
   setSidebarOpen: layoutActions.setSidebarOpen,
   setSuppressedSidebarOpen: layoutActions.setSuppressedSidebarOpen,
 };
@@ -157,7 +157,7 @@ export const App = compose(
   lifecycle({
     componentDidMount() {
       this.props.loadApp(true);
-      this.props.fetchAlerts();
+      this.props.fetchAlertsRequest();
     },
   }),
 )(AppComponent);

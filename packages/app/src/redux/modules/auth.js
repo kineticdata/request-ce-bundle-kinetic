@@ -1,15 +1,14 @@
 import { Record } from 'immutable';
 import * as Utils from 'common/src/utils';
-
-const { namespace, noPayload, withPayload } = Utils;
-const MODULE_NAME = 'auth';
+const { noPayload, withPayload } = Utils;
+const ns = Utils.namespaceBuilder('app/auth');
 
 export const types = {
-  TIMED_OUT: namespace(MODULE_NAME, 'TIMED_OUT'),
-  MODAL_LOGIN_SUCCESS: namespace(MODULE_NAME, 'MODAL_LOGIN_SUCCESS'),
-  MODAL_LOGIN_CANCELLED: namespace(MODULE_NAME, 'MODAL_LOGIN_CANCELLED'),
-  SET_DESTINATION_ROUTE: namespace(MODULE_NAME, 'SET_DESTINATION_ROUTE'),
-  SET_TOKEN: namespace(MODULE_NAME, 'SET_TOKEN'),
+  TIMED_OUT: ns('TIMED_OUT'),
+  MODAL_LOGIN_SUCCESS: ns('MODAL_LOGIN_SUCCESS'),
+  MODAL_LOGIN_CANCELLED: ns('MODAL_LOGIN_CANCELLED'),
+  SET_DESTINATION_ROUTE: ns('SET_DESTINATION_ROUTE'),
+  SET_TOKEN: ns('SET_TOKEN'),
 };
 
 export const actions = {

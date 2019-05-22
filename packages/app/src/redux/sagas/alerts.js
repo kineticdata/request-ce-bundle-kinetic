@@ -13,7 +13,7 @@ export const ALERTS_SEARCH = new SubmissionSearch(true)
   .limit(1000)
   .build();
 
-export function* fetchAlertsTask() {
+export function* fetchAlertsRequestSaga() {
   const { submissions, error } = yield call(searchSubmissions, {
     datastore: true,
     form: 'alerts',
@@ -43,5 +43,5 @@ export function* fetchAlertsTask() {
 }
 
 export function* watchAlerts() {
-  yield takeEvery(types.FETCH_ALERTS_REQUEST, fetchAlertsTask);
+  yield takeEvery(types.FETCH_ALERTS_REQUEST, fetchAlertsRequestSaga);
 }

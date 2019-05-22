@@ -6,14 +6,14 @@ import { I18n } from '@kineticdata/react';
 export const Alerts = ({
   alerts,
   error,
-  fetchAlerts,
+  fetchAlertsRequest,
   isSpaceAdmin,
   isOpen,
   toggle,
 }) => (
   <Dropdown isOpen={isOpen} toggle={toggle}>
     <DropdownToggle nav role="button">
-      <i className="fa fa-fw fa-bell" />
+      <span className="fa fa-fw fa-bell" />
       {alerts &&
         alerts.size > 0 && (
           <span className="badge badge-secondary">{alerts.size}</span>
@@ -26,7 +26,7 @@ export const Alerts = ({
           <I18n>Alerts</I18n>
         </span>
         <div className="actions">
-          <a role="button" tabIndex="0" onClick={fetchAlerts}>
+          <a role="button" tabIndex="0" onClick={fetchAlertsRequest}>
             <I18n>Refresh</I18n>
           </a>
           <span className="divider">&bull;</span>

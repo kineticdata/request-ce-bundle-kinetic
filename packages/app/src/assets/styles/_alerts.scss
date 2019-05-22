@@ -2,8 +2,6 @@
  *   Alerts ~ kinops
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .alerts-menu {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
   color: $blue-lake;
   padding: 0;
   min-width: 22.5rem;
@@ -35,8 +33,7 @@
     flex-direction: column;
     list-style: none;
     padding: 0;
-    margin: 0.5rem 0;
-    overflow: scroll;
+    overflow: auto;
     max-height: 50vh;
     -webkit-overflow-scrolling: touch;
     .alert-item {

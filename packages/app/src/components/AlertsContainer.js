@@ -10,7 +10,7 @@ export const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  fetchAlerts: actions.fetchAlerts,
+  fetchAlertsRequest: actions.fetchAlertsRequest,
 };
 
 export const AlertsContainer = compose(

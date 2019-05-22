@@ -1,15 +1,13 @@
 import { Record } from 'immutable';
 import { LOCATION_CHANGE } from 'connected-react-router';
 import * as Utils from 'common/src/utils';
-const { namespace, withPayload } = Utils;
+const { withPayload } = Utils;
+const ns = Utils.namespaceBuilder('app/layout');
 
 export const types = {
-  SET_SIZE: namespace('layout', 'SET_SIZE'),
-  SET_SIDEBAR_OPEN: namespace('layout', 'SET_SIDEBAR_OPEN'),
-  SET_SUPPRESSED_SIDEBAR_OPEN: namespace(
-    'layout',
-    'SET_SUPPRESSED_SIDEBAR_OPEN',
-  ),
+  SET_SIZE: ns('SET_SIZE'),
+  SET_SIDEBAR_OPEN: ns('SET_SIDEBAR_OPEN'),
+  SET_SUPPRESSED_SIDEBAR_OPEN: ns('SET_SUPPRESSED_SIDEBAR_OPEN'),
 };
 
 export const actions = {

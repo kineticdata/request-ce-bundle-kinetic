@@ -67,7 +67,8 @@ export class TechBarApp extends Component {
   }
 
   static shouldSuppressSidebar = (pathname, kappSlug) =>
-    matchPath(pathname, { path: `/kapps/${kappSlug}` });
+    matchPath(pathname, { path: `/kapps/${kappSlug}` }) &&
+    !matchPath(pathname, { path: `/kapps/${kappSlug}/settings` });
   static shouldHideHeader = (pathname, kappSlug) =>
     matchPath(pathname, { path: `/kapps/${kappSlug}/display` });
 }

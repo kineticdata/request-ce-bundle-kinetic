@@ -1,7 +1,7 @@
 import { Record, List } from 'immutable';
 import { Utils } from 'common';
 const { withPayload } = Utils;
-const ns = Utils.namespaceBuilder('techbar/appointments');
+const ns = Utils.namespaceBuilder('techbar/walkins');
 
 export const types = {
   FETCH_WALK_INS_FAILURE: ns('FETCH_WALK_INS_FAILURE'),

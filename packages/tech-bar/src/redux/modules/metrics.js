@@ -1,12 +1,13 @@
 import { Record, List } from 'immutable';
 import { Utils } from 'common';
-const { namespace, withPayload } = Utils;
+const { withPayload } = Utils;
+const ns = Utils.namespaceBuilder('techbar/metrics');
 
 export const types = {
-  FETCH_METRICS_REQUEST: namespace('techBarMetrics', 'FETCH_METRICS_REQUEST'),
-  FETCH_METRICS_SUCCESS: namespace('techBarMetrics', 'FETCH_METRICS_SUCCESS'),
-  FETCH_METRICS_FAILURE: namespace('techBarMetrics', 'FETCH_METRICS_FAILURE'),
-  FETCH_METRICS_RESET: namespace('techBarMetrics', 'FETCH_METRICS_RESET'),
+  FETCH_METRICS_REQUEST: ns('FETCH_METRICS_REQUEST'),
+  FETCH_METRICS_SUCCESS: ns('FETCH_METRICS_SUCCESS'),
+  FETCH_METRICS_FAILURE: ns('FETCH_METRICS_FAILURE'),
+  FETCH_METRICS_RESET: ns('FETCH_METRICS_RESET'),
 };
 
 export const actions = {

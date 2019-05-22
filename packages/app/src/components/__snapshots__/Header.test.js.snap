@@ -41,7 +41,7 @@ ShallowWrapper {
                 <span
                     className="fa fa-fw fa-book"
                 />
-                 
+
                 <I18n>
                     name
                 </I18n>
@@ -154,7 +154,7 @@ ShallowWrapper {
                         <span
                                 className="fa fa-fw fa-book"
                         />
-                         
+
                         <I18n>
                                 name
                         </I18n>
@@ -256,7 +256,7 @@ ShallowWrapper {
                         <span
                                     className="fa fa-fw fa-book"
                         />
-                         
+
                         <I18n>
                                     name
                         </I18n>
@@ -391,7 +391,7 @@ ShallowWrapper {
               <span
                             className="fa fa-fw fa-book"
               />
-               
+
               <I18n>
                             name
               </I18n>
@@ -785,7 +785,7 @@ ShallowWrapper {
                               <span
                                         className="fa fa-fw fa-book"
                               />
-                               
+
                               <I18n>
                                         name
                               </I18n>
@@ -887,7 +887,7 @@ ShallowWrapper {
                             <span
                                           className="fa fa-fw fa-book"
                             />
-                             
+
                             <I18n>
                                           name
                             </I18n>
@@ -1022,7 +1022,7 @@ ShallowWrapper {
                 <span
                                 className="fa fa-fw fa-book"
                 />
-                 
+
                 <I18n>
                                 name
                 </I18n>
@@ -1418,7 +1418,7 @@ ShallowWrapper {
             "name": "name",
           }
     }
-    fetchAlerts={[Function]}
+    fetchAlertsRequest={[Function]}
     hasSidebar={true}
     isGuest={false}
     openFeedbackForm={[Function]}
@@ -1481,7 +1481,7 @@ ShallowWrapper {
                         <span
                                 className="fa fa-fw fa-book"
                         />
-                         
+
                         <I18n>
                                 name
                         </I18n>
@@ -1587,7 +1587,7 @@ ShallowWrapper {
                         <span
                                     className="fa fa-fw fa-book"
                         />
-                         
+
                         <I18n>
                                     name
                         </I18n>
@@ -1722,7 +1722,7 @@ ShallowWrapper {
               <span
                             className="fa fa-fw fa-book"
               />
-               
+
               <I18n>
                             name
               </I18n>
@@ -2116,7 +2116,7 @@ ShallowWrapper {
                               <span
                                         className="fa fa-fw fa-book"
                               />
-                               
+
                               <I18n>
                                         name
                               </I18n>
@@ -2222,7 +2222,7 @@ ShallowWrapper {
                             <span
                                           className="fa fa-fw fa-book"
                             />
-                             
+
                             <I18n>
                                           name
                             </I18n>
@@ -2357,7 +2357,7 @@ ShallowWrapper {
                 <span
                                 className="fa fa-fw fa-book"
                 />
-                 
+
                 <I18n>
                                 name
                 </I18n>

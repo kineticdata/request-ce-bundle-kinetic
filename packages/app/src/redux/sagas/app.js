@@ -8,9 +8,10 @@ import {
   fetchSpace,
   fetchKapps,
   fetchDefaultLocale,
+  importLocale,
 } from '@kineticdata/react';
 import semver from 'semver';
-import { importLocale, enableSearchHistory, Utils } from 'common';
+import { enableSearchHistory, Utils } from 'common';
 
 import { actions, types } from '../modules/app';
 
@@ -93,25 +94,21 @@ export function* fetchAppTask({ payload }) {
 
       // Determine default kapp route
       if (initialLoad && currentRoute === '/') {
-        const defaultKappDisplaySpace =
-          space.attributesMap &&
-          space.attributesMap['Default Kapp Display'] &&
-          space.attributesMap['Default Kapp Display'].length > 0
-            ? space.attributesMap['Default Kapp Display'][0]
-            : 'NOT_SET';
-        const defaultKappDisplayProfile =
-          profile.profileAttributesMap &&
-          profile.profileAttributesMap['Default Kapp Display'] &&
-          profile.profileAttributesMap['Default Kapp Display'].length > 0
-            ? profile.profileAttributesMap['Default Kapp Display'][0]
-            : 'NOT_SET';
-        const defaultDisplayRoute =
-          defaultKappDisplayProfile !== 'NOT_SET'
-            ? defaultKappDisplayProfile
-            : defaultKappDisplaySpace;
-
-        if (defaultDisplayRoute !== 'NOT_SET' && defaultDisplayRoute !== '') {
-          yield put(push(`/kapps/${defaultDisplayRoute}`));
+        const defaultUserKapp = Utils.getAttributeValue(
+          profile,
+          'Default Kapp Display',
+        );
+        const defaultSpaceKapp = Utils.getAttributeValue(
+          space,
+          'Default Kapp Display',
+        );
+        if (defaultUserKapp && kapps.find(k => k.slug === defaultUserKapp)) {
+          yield put(push(`/kapps/${defaultUserKapp}`));
+        } else if (
+          defaultSpaceKapp &&
+          kapps.find(k => k.slug === defaultSpaceKapp)
+        ) {
+          yield put(push(`/kapps/${defaultSpaceKapp}`));
         }
       }
       yield put(actions.fetchAppSuccess());

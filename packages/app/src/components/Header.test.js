@@ -9,7 +9,7 @@ describe('<Header />', () => {
   let hasSidebar;
   let toggleSidebarOpen;
   let alerts;
-  let fetchAlerts;
+  let fetchAlertsRequest;
   let profile;
   let openFeedbackForm;
   let openHelpForm;
@@ -24,7 +24,7 @@ describe('<Header />', () => {
     hasSidebar = true;
     toggleSidebarOpen = jest.fn();
     alerts = List();
-    fetchAlerts = jest.fn();
+    fetchAlertsRequest = jest.fn();
     profile = {};
     openFeedbackForm = jest.fn();
     openHelpForm = jest.fn();
@@ -41,7 +41,7 @@ describe('<Header />', () => {
       hasSidebar={hasSidebar}
       toggleSidebarOpen={toggleSidebarOpen}
       alerts={alerts}
-      fetchAlerts={fetchAlerts}
+      fetchAlertsRequest={fetchAlertsRequest}
       profile={profile}
       openFeedbackForm={openFeedbackForm}
       openHelpForm={openHelpForm}

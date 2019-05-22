@@ -1,7 +1,7 @@
 import { Record, List } from 'immutable';
 import { Utils } from 'common';
 const { noPayload, withPayload } = Utils;
-const ns = Utils.namespaceBuilder('techbar/appointments');
+const ns = Utils.namespaceBuilder('techbar/export');
 
 export const types = {
   FETCH_EXPORT_SUBMISSIONS_REQUEST: ns('FETCH_EXPORT_SUBMISSIONS_REQUEST'),
