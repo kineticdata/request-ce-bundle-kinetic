@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from '@reach/router';
-import { Router } from '../../TechBarApp';
+import { Router } from '../../App';
 import { connect } from '../../redux/store';
 import { compose } from 'recompose';
 import {

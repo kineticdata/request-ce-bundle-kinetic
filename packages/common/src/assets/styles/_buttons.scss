@@ -71,7 +71,7 @@ input[type='button'],
   @include setButtonColorAndHover(transparent);
   &:not(:disabled):not(.disabled):active,
   &:not(:disabled):not(.disabled).active {
-    @include setButtonColorAndHover($primary);
+    @include setButtonColorAndHover(transparent);
   }
   color: $link-color;
   &:hover,

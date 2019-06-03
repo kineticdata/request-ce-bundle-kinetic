@@ -4,7 +4,8 @@ import { List } from 'immutable';
 
 import { getTeamColor } from '../../utils';
 
-import { Avatar, MessagesGroup } from 'common';
+import { Avatar } from 'common';
+import { UserMessageGroup } from '@kineticdata/react';
 import { I18n } from '@kineticdata/react';
 
 const getTeamHeaderStyle = (discussion, teams) => {
@@ -72,7 +73,7 @@ export const Discussion = ({ discussion, me, teams }) => {
 
       <div className="messages">
         {messages.size > 0 && (
-          <MessagesGroup
+          <UserMessageGroup
             discussion={discussion}
             messages={messages}
             profile={me}

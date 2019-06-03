@@ -1,5 +1,3 @@
-import { createContext } from 'react';
-import { connect as connectRedux } from 'react-redux';
 import { compose, createStore, combineReducers, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
@@ -45,16 +43,3 @@ if (module.hot) {
     store.replaceReducer(connectRouter(history)(combineReducers(reducers))),
   );
 }
-
-export const context = createContext(null);
-
-export const connect = (
-  mapStateToProps = null,
-  mapDispatchToProps = null,
-  mergeProps = null,
-  options = {},
-) =>
-  connectRedux(mapStateToProps, mapDispatchToProps, mergeProps, {
-    ...options,
-    context,
-  });

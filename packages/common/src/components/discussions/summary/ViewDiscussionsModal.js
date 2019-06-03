@@ -28,7 +28,7 @@ export const ViewDiscussionsModal = ({
     </div>
     <ModalBody className={modalBodyClassName}>
       {discussionId ? (
-        <Discussion id={discussionId} />
+        <Discussion id={discussionId} me={me} />
       ) : (
         <DiscussionsPanel
           itemKey={itemKey}

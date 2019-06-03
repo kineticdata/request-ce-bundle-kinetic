@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { ModalBody, ModalFooter } from 'reactstrap';
-import { connect } from 'react-redux';
+import { connect } from '../../redux/store';
 import { InvitationForm } from '@kineticdata/react';
 import { PeopleSelect } from './PeopleSelect';
 import { types } from '../../redux/modules/discussionsDetails';
@@ -60,9 +60,8 @@ export const InvitationDialogComponent = props => (
 const mapStateToProps = (state, props) => {
   const id = props.discussion.id;
   return {
-    profile: state.app.profile,
-    sending: state.common.discussionsDetails.getIn([id, 'sending']),
-    error: state.common.discussionsDetails.getIn([id, 'errorMessage']),
+    sending: state.discussionsDetails.getIn([id, 'sending']),
+    error: state.discussionsDetails.getIn([id, 'errorMessage']),
   };
 };
 

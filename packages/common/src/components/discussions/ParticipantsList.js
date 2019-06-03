@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
+import { connect } from '../../redux/store';
 import { Map } from 'immutable';
 import { Avatar } from 'common';
 import isPresent from '../../helpers/isPresent';
@@ -179,23 +179,23 @@ export const ParticipantsList = props => (
 export const mapStateToProps = (state, props) => {
   const id = props.discussion.id;
   return {
-    userReinvites: state.common.discussionsDetails.getIn(
+    userReinvites: state.discussionsDetails.getIn(
       [id, 'reinvites', 'user'],
       Map(),
     ),
-    emailReinvites: state.common.discussionsDetails.getIn(
+    emailReinvites: state.discussionsDetails.getIn(
       [id, 'reinvites', 'email'],
       Map(),
     ),
-    userUninvites: state.common.discussionsDetails.getIn(
+    userUninvites: state.discussionsDetails.getIn(
       [id, 'uninvites', 'user'],
       Map(),
     ),
-    emailUninvites: state.common.discussionsDetails.getIn(
+    emailUninvites: state.discussionsDetails.getIn(
       [id, 'uninvites', 'email'],
       Map(),
     ),
-    removals: state.common.discussionsDetails.getIn([id, 'removals'], Map()),
+    removals: state.discussionsDetails.getIn([id, 'removals'], Map()),
   };
 };
 export const mapDispatchToProps = (dispatch, props) => {

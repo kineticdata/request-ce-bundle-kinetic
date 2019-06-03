@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
+import { connect } from '../../redux/store';
 import { ModalBody, ModalFooter } from 'reactstrap';
 import { DiscussionForm } from '@kineticdata/react';
 import { PeopleSelect } from './PeopleSelect';
@@ -54,8 +54,8 @@ export const DiscussionEditDialogComponent = props => (
 export const mapStateToProps = (state, props) => {
   const id = props.discussion.id;
   return {
-    saving: state.common.discussionsDetails.getIn([id, 'saving']),
-    errorMessage: state.common.discussionsDetails.getIn([id, 'errorMessage']),
+    saving: state.discussionsDetails.getIn([id, 'saving']),
+    errorMessage: state.discussionsDetails.getIn([id, 'errorMessage']),
   };
 };
 

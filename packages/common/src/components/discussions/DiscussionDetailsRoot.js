@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
+import { connect } from '../../redux/store';
 import { Popover, PopoverBody, ModalBody, ModalFooter } from 'reactstrap';
 import { types } from '../../redux/modules/discussionsDetails';
 import { ParticipantsListContainer } from './ParticipantsList';
@@ -88,24 +88,21 @@ export const DiscussionDetailsRootComponent = props => (
 export const mapStateToProps = (state, props) => {
   const id = props.discussion.id;
   return {
-    successMessage: state.common.discussionsDetails.getIn([
-      id,
-      'successMessage',
-    ]),
-    leaveConfirmation: state.common.discussionsDetails.getIn([
+    successMessage: state.discussionsDetails.getIn([id, 'successMessage']),
+    leaveConfirmation: state.discussionsDetails.getIn([
       id,
       'leaveConfirmation',
     ]),
-    leaving: state.common.discussionsDetails.getIn([id, 'leaving']),
-    leaveError: state.common.discussionsDetails.getIn([id, 'leaveError']),
+    leaving: state.discussionsDetails.getIn([id, 'leaving']),
+    leaveError: state.discussionsDetails.getIn([id, 'leaveError']),
     muted:
-      state.common.discussionsDetails.getIn([id, 'muted']) ||
+      state.discussionsDetails.getIn([id, 'muted']) ||
       props.discussion.participants
         .filter(p => p.user.username === props.profile.username)
         .map(p => p.isMuted)
         .first(),
-    muting: state.common.discussionsDetails.getIn([id, 'muting']),
-    muteError: state.common.discussionsDetails.getIn([id, 'muteError']),
+    muting: state.discussionsDetails.getIn([id, 'muting']),
+    muteError: state.discussionsDetails.getIn([id, 'muteError']),
   };
 };
 export const mapDispatchToProps = (dispatch, props) => {

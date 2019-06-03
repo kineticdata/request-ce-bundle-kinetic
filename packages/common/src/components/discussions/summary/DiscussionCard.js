@@ -1,6 +1,8 @@
 import React from 'react';
 import { List } from 'immutable';
-import { Avatar, MessagesGroup } from 'common';
+import { Avatar } from 'common';
+import { UserMessageGroup } from '@kineticdata/react';
+
 export const DiscussionCard = ({ discussion, me, onDiscussionClick }) => {
   const displayableMessages = discussion
     ? discussion.messages.filter(m => m.type !== 'System').slice(-1)
@@ -8,7 +10,7 @@ export const DiscussionCard = ({ discussion, me, onDiscussionClick }) => {
   const messages = List(displayableMessages);
 
   return (
-    <div className="discussion-summary">
+    <div className="discussion__summary">
       <div className="header">
         <a className="header__title" onClick={onDiscussionClick(discussion)}>
           {discussion.title}
@@ -28,7 +30,7 @@ export const DiscussionCard = ({ discussion, me, onDiscussionClick }) => {
 
       <div className="messages">
         {messages.size > 0 && (
-          <MessagesGroup
+          <UserMessageGroup
             discussion={discussion}
             messages={messages}
             profile={me}

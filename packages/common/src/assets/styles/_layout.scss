@@ -106,6 +106,7 @@
 .page-container {
   // display: flex;
   flex: 1;
+  min-height: 0px;
   &--panels {
     display: flex;
     height: 100%;
@@ -117,8 +118,6 @@
   position: relative;
   background: rgb(255, 255, 255);
   padding: 0 1.5rem;
-  // min-height: $page-height;
-  // height: 100%;
   width: 100%;
   min-height: 100%;
   &--sidebar {
@@ -137,6 +136,12 @@
   }
   &--scrollable {
     overflow-y: auto;
+  }
+  &--no-padding {
+    padding: 0;
+  }
+  &--gray {
+    background-color: $black-3;
   }
   // Thirds
   &--two-thirds {

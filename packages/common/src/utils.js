@@ -24,6 +24,11 @@ export function combineSagas(allSagas) {
   };
 }
 
+// Used with @reach/router Link's getProps to add active class to current links
+export const addActiveLinkClass = defaultClass => ({ isCurrent }) => ({
+  className: `${defaultClass} ${isCurrent ? 'active' : ''}`,
+});
+
 /**
  * Given a model and an attribute name returns the value of that attribute.
  * Should return undefined if attributes are missing or there is no attribute

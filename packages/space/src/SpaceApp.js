@@ -61,4 +61,7 @@ export class SpaceApp extends Component {
       )
     );
   }
+
+  // Used for matching pathname to display this App
+  static location = '/settings';
 }

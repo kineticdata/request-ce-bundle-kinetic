@@ -1,8 +1,8 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 import {
-  types as listTypes,
-  actions as listActions,
-} from '../modules/discussionsList';
+  types as panelTypes,
+  actions as panelActions,
+} from '../modules/discussionsPanel';
 import { types as detailsTypes } from '../modules/discussionsDetails';
 import { types } from '../modules/discussions';
 import {
@@ -19,18 +19,22 @@ import {
   sortByLastMessageAt,
 } from '@kineticdata/react';
 
-export function* fetchRelatedDiscussionsTask(action) {
+export function* fetchRelatedDiscussionsRequestTask(action) {
   const { type, key, loadCallback } = action.payload;
   const data = {
     relatedItem: {
       type: type,
       key: key,
     },
+    limit: 1000,
   };
 
   const [discussions, archivedDiscussions] = yield all([
     call(fetchDiscussions, data),
-    call(fetchDiscussions, { ...data, isArchived: true }),
+    call(fetchDiscussions, {
+      ...data,
+      isArchived: true,
+    }),
   ]);
 
   const combinedDiscussions = []
@@ -47,7 +51,7 @@ export function* fetchRelatedDiscussionsTask(action) {
     sortByLastMessageAt,
   );
 
-  yield put(listActions.setRelatedDiscussions(discussionsList));
+  yield put(panelActions.fetchRelatedDiscussionsSuccess(discussionsList));
 
   if (typeof loadCallback === 'function') {
     yield call(loadCallback, discussionsList);
@@ -203,7 +207,10 @@ export function* muteTask(action) {
 export function* watchDiscussionRest() {
   yield all([
     takeEvery(types.CREATE_DISCUSSION, createDiscussionTask),
-    takeEvery(listTypes.FETCH_RELATED_DISCUSSIONS, fetchRelatedDiscussionsTask),
+    takeEvery(
+      panelTypes.FETCH_RELATED_DISCUSSIONS_REQUEST,
+      fetchRelatedDiscussionsRequestTask,
+    ),
     takeEvery(detailsTypes.SAVE, saveDiscussionTask),
     takeEvery(detailsTypes.INVITE, inviteTask),
     takeEvery(detailsTypes.REINVITE, reinviteTask),

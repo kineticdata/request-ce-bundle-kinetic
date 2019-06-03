@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect } from '../../redux/store';
 import { compose, withHandlers } from 'recompose';
 import { bundle } from '@kineticdata/react';
 import isPresent from '../../helpers/isPresent';
@@ -33,7 +33,7 @@ export const ParticipantsHeader = ({
             />
           </div>
         ))}
-      <div className="discussion__info">
+      {/*<div className="discussion__info">
         <button
           type="button"
           className="btn btn-icon d-md-inline-flex"
@@ -51,15 +51,17 @@ export const ParticipantsHeader = ({
             <i className="fa fa-expand fa-fw" />
           </button>
         )}
-      </div>
+      </div>*/}
     </div>
   );
 
-const mapStateToProps = state => ({
-  isFullScreen:
-    state.router.location.pathname &&
-    state.router.location.pathname.startsWith('/discussion'),
-});
+const mapStateToProps = (state, props) => {
+  return {
+    isFullScreen:
+      state.router.location.pathname &&
+      state.router.location.pathname.startsWith('/discussion'),
+  };
+};
 
 export const ParticipantsHeaderContainer = compose(
   connect(mapStateToProps),

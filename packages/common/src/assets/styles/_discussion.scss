@@ -4,136 +4,252 @@
 
 // Discussion container fixes
 .page-panel--discussions {
-  background-color: $white;
   display: flex;
   flex-direction: column;
-  // justify-content: center;
-  padding: 0 !important;
   flex-grow: 1;
   position: relative;
-  &-recent {
-    overflow-y: scroll;
-    justify-content: space-between;
-    flex-direction: column;
-    background-color: transparent;
-    // Add padding to the list of discussions but not the actual discussion.
-    padding: 0.5em 1em !important;
-    .modal-body & {
-      padding: 0 !important;
-      .discussion__messages {
-        background-color: $white;
+  padding: 0;
+  overflow-y: auto;
+}
+
+.discussion {
+  background-color: $black-3;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+
+  &--list {
+    &__header {
+      &-content {
+        padding: 1.5rem;
       }
     }
   }
-}
-.discussion__content {
-  background-color: $white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 !important;
-  flex-grow: 1;
-  position: relative;
-}
-.discussion__messages {
-  background-color: #f7f7f7;
-  flex: 1 0 auto;
-  position: relative;
-}
 
-.discussion__meta {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3rem;
-  display: flex;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 0 1.5rem;
-  z-index: 0;
-  .sb-avatar {
-    margin-right: 0.25rem;
-
-    cursor: pointer;
-    &--gravatar {
-      line-height: initial;
-      box-shadow: inset 0px 0px 10px rgba($black, 0.9);
+  &__header {
+    background-color: $white;
+    border-bottom: 1px solid $black-16;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    color: $orange-kinops;
+    a:not(.related-link) {
+      color: $orange-kinops;
+      font-weight: 600;
     }
-    .sb-avatar__text,
-    img {
-      transition: border-color 300ms;
-      z-index: -1;
+  }
+
+  &__subheader {
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 1px solid $black-16;
+
+    .btn {
+      padding: 0.5625rem 0.75rem;
+      border-radius: 0;
+      border: none;
+      flex: 0;
+      &:first-child {
+        padding-left: 1rem;
+      }
+      &:last-child {
+        padding-right: 1rem;
+      }
+      &:not(:hover) {
+        color: $black-50;
+      }
+    }
+
+    .btn-back {
+      flex: 1;
+      text-align: left;
+    }
+
+    .btn-icon {
+      font-size: 1rem;
+      .icon {
+        position: relative;
+        .badge {
+          position: absolute;
+          top: -6px;
+          left: 10px;
+          font-size: 0.625rem;
+          padding: 0.15rem;
+          border-radius: 50%;
+          background-color: $orange-kinops;
+        }
+      }
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important;
+    flex-grow: 1;
+    position: relative;
+
+    .discussion__messages {
+      background-color: #f7f7f7;
+      flex: 1;
       position: relative;
     }
-  }
-  .discussion__info {
-    margin-left: auto;
-    .btn {
-      font-size: 1rem;
-      padding-left: 0;
-      padding-right: 0;
-      + .btn {
-        margin-left: 0.5rem;
+
+    .discussion__meta {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3rem;
+      display: flex;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 0 1.5rem;
+      z-index: 0;
+
+      .participant {
+        position: relative;
+        &__status {
+          position: absolute;
+          top: 1px;
+          left: -1px;
+          display: block;
+          width: 26px;
+          height: 26px;
+          pointer-events: none;
+          border: 2px solid rgba($present, 0);
+          border-radius: 50%;
+          &.is-active {
+            border-color: rgba($present, 1);
+          }
+        }
+      }
+
+      .sb-avatar {
+        margin-right: 0.25rem;
+
+        cursor: pointer;
+        &--gravatar {
+          line-height: initial;
+          box-shadow: inset 0px 0px 10px rgba($black, 0.9);
+        }
+        .sb-avatar__text,
+        img {
+          transition: border-color 300ms;
+          z-index: -1;
+          position: relative;
+        }
+      }
+      // .discussion__info {
+      //   margin-left: auto;
+      //   .btn {
+      //     font-size: 1rem;
+      //     padding-left: 0;
+      //     padding-right: 0;
+      //     + .btn {
+      //       margin-left: 0.5rem;
+      //     }
+      //   }
+      // }
+    }
+
+    .discussion__summaries {
+      padding: 0 1.5rem;
+
+      .discussion__summary {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid $black-5;
+        border-radius: $border-radius-base;
+        background-color: $white;
+        padding: 0.5em 1em 0.5em 1em;
+        margin-bottom: 0.75rem;
+
+        .header {
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
+          margin-bottom: 1rem;
+          align-items: center;
+
+          &__title {
+            margin-right: 0.25em;
+            height: 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1 1 40%;
+            cursor: pointer;
+          }
+
+          .participants {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            flex-basis: 40%;
+            // overflow-x: scroll;
+            z-index: 1;
+            & > .avatar {
+              padding: 0;
+            }
+            .sb-avatar {
+              // line-height: initial;
+              cursor: pointer;
+
+              &--gravatar {
+                line-height: initial;
+                box-shadow: inset 0px 0px 10px rgba($black, 0.9);
+              }
+              img {
+                z-index: -1;
+                position: relative;
+              }
+            }
+
+            & > .related-link {
+              margin-right: 2rem;
+              height: auto;
+              font-weight: 400;
+              font-size: 0.6125rem;
+            }
+          }
+        }
+        .discussions__messages .messages__grouping {
+          margin-bottom: 0;
+          background-color: $white;
+        }
       }
     }
   }
-}
-.participant {
-  position: relative;
-  &__status {
+
+  .banner--archived {
     position: absolute;
-    top: 1px;
-    left: -1px;
-    display: block;
-    width: 26px;
-    height: 26px;
-    pointer-events: none;
-    border: 2px solid rgba($present, 0);
-    border-radius: 50%;
-    &.is-active {
-      border-color: rgba($present, 1);
+    top: 3rem;
+    left: 0;
+    right: 0;
+    height: 3rem;
+    background-color: rgba(240, 240, 240, 0.75);
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .message {
+      margin: 0 0.5rem;
+    }
+    a {
+      text-decoration: underline;
+    }
+    a:hover {
+      cursor: pointer;
+      text-decoration: underline;
     }
   }
-}
-.banner--archived {
-  position: absolute;
-  top: 3rem;
-  left: 0;
-  right: 0;
-  height: 3rem;
-  background-color: rgba(240, 240, 240, 0.75);
-  padding: 0 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .message {
-    margin: 0 0.5rem;
-  }
-  a {
-    text-decoration: underline;
-  }
-  a:hover {
-    cursor: pointer;
-    text-decoration: underline;
-  }
-}
-
-.empty-state--discussions {
-  // background-color: $black-3;
-  // border-radius: 0.5rem;
-  // text-align: center;
-  // justify-content: flex-start;
-}
-.btn {
-  flex: 0 0 auto;
-}
-.btn-link.btn-back {
-  border-bottom: 1px solid $black-16;
-  border-top: 0;
-  border-radius: 0;
-  padding: 0.8125rem 1rem;
-  text-align: left;
 }
 
 // People and Team selectes

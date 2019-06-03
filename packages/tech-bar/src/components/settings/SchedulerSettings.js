@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from '../../redux/store';
 import { compose, lifecycle } from 'recompose';
-import { Router } from '../../TechBarApp';
+import { Router } from '../../App';
 import {
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,

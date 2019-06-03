@@ -19,6 +19,7 @@ import { CreateScheduler } from './components/scheduler/CreateScheduler';
 import { Table, PaginationControl, FilterControl } from './components/Table';
 import { GroupDivider } from './components/GroupDivider';
 import { Discussion } from './components/discussions/Discussion';
+import { CreateDiscussionModal } from './components/discussions/CreateDiscussionModal';
 import { UserMessageGroup as MessagesGroup } from '@kineticdata/react';
 import { DiscussionCard } from './components/discussions/summary/DiscussionCard';
 import { DiscussionsList } from './components/discussions/summary/DiscussionsList';
@@ -72,6 +73,10 @@ export {
   LoadingMessage,
   StateListWrapper,
 } from './components/StateMessages';
+export {
+  DateRangeSelector,
+  DateRangeDropdown,
+} from './components/DateRangeSelector';
 
 export {
   CommonProvider,
@@ -111,4 +116,5 @@ export {
   DiscussionsPanel,
   DiscussionCard,
   ViewDiscussionsModal,
+  CreateDiscussionModal,
 };

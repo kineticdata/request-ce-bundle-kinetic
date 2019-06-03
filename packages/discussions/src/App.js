@@ -1,12 +1,21 @@
 import React, { Component, Fragment } from 'react';
 import { Provider } from 'react-redux';
-import { matchPath } from 'react-router-dom';
 import { LocationProvider, Router as ReachRouter } from '@reach/router';
-import { connectedHistory, context, store } from 'tech-bar/src/redux/store';
-import { CommonProvider } from 'common';
-import { types } from './redux/modules/app';
-import { App } from './App';
+import { compose, lifecycle } from 'recompose';
+import {
+  connectedHistory,
+  connect,
+  context,
+  store,
+} from 'discussions/src/redux/store';
+import { CommonProvider, ErrorUnexpected, Loading } from 'common';
 import { is } from 'immutable';
+import { I18n } from '@kineticdata/react';
+
+import { Discussions } from './components/Discussions';
+import { Discussion } from './components/Discussion';
+import { syncAppState } from './redux/modules/app';
+import './assets/styles/master.scss';
 
 export const Router = ({ children, ...props }) => (
   <ReachRouter {...props} primary={false} component={Fragment}>
@@ -14,11 +23,44 @@ export const Router = ({ children, ...props }) => (
   </ReachRouter>
 );
 
-export const syncAppState = ([key, value]) => {
-  store.dispatch({ type: types.SYNC_APP_STATE, payload: { key, value } });
+const AppComponent = props => {
+  if (props.error) {
+    return <ErrorUnexpected />;
+  } else if (props.loading) {
+    return <Loading text="App is loading ..." />;
+  } else {
+    return props.render({
+      main: (
+        <I18n>
+          <main className={`package-layout package-layout--discussions`}>
+            <Router>
+              <Discussions path="/" />
+              <Discussion path="/:id" />
+            </Router>
+          </main>
+        </I18n>
+      ),
+    });
+  }
 };
 
-export class TechBarApp extends Component {
+const mapStateToProps = (state, props) => ({});
+
+const mapDispatchToProps = {};
+
+const enhance = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+  lifecycle({
+    componentDidMount() {},
+  }),
+);
+
+const App = enhance(AppComponent);
+
+export class AppProvider extends Component {
   constructor(props) {
     super(props);
     this.state = { ready: false };
@@ -66,9 +108,7 @@ export class TechBarApp extends Component {
     );
   }
 
-  static shouldSuppressSidebar = (pathname, kappSlug) =>
-    matchPath(pathname, { path: `/kapps/${kappSlug}` }) &&
-    !matchPath(pathname, { path: `/kapps/${kappSlug}/settings` });
-  static shouldHideHeader = (pathname, kappSlug) =>
-    matchPath(pathname, { path: `/kapps/${kappSlug}/display` });
+  // Used for matching pathname to display this App
+  // Not used if package is set as Bundle Package of a Kapp
+  static location = '/discussions';
 }

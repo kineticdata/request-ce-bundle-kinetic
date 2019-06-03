@@ -5,13 +5,9 @@ import 'common/src/assets/styles/master.scss';
 import './assets/styles/master.scss';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
+import { matchPath } from 'react-router-dom';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
-import {
-  Utils,
-  ToastsContainer,
-  ModalFormContainer,
-  selectCurrentKapp,
-} from 'common';
+import { Utils, ToastsContainer, ModalFormContainer } from 'common';
 import { LoginModal } from './components/authentication/LoginModal';
 import { HeaderContainer } from './components/HeaderContainer';
 import { actions } from './redux/modules/app';
@@ -20,7 +16,36 @@ import { actions as layoutActions } from './redux/modules/layout';
 import { ServicesApp } from 'services/src/ServicesApp';
 import { QueueApp } from 'queue/src/QueueApp';
 import { SpaceApp } from 'space/src/SpaceApp';
-import { TechBarApp } from 'tech-bar/src/TechBarApp';
+import TechBarApp from 'tech-bar';
+import DiscussionsApp from 'discussions';
+// TODO Remove ScaffoldApp
+import ScaffoldApp from 'scaffold';
+import { DefaultAppProvider } from './DefaultAppProvider';
+
+// Mapping of Bundle Package kapp attribute values to App Components
+const BUNDLE_PACKAGE_PROVIDERS = {
+  services: ServicesApp,
+  queue: QueueApp,
+  'tech-bar': TechBarApp,
+};
+
+const getAppProvider = (kapp, pathname) => {
+  if (kapp) {
+    return (
+      BUNDLE_PACKAGE_PROVIDERS[
+        Utils.getAttributeValue(kapp, 'Bundle Package', kapp.slug)
+      ] || DefaultAppProvider
+    );
+  } else if (matchPath(pathname, { path: SpaceApp.location })) {
+    return SpaceApp;
+  } else if (matchPath(pathname, { path: DiscussionsApp.location })) {
+    return DiscussionsApp;
+  } else if (matchPath(pathname, { path: ScaffoldApp.location })) {
+    return ScaffoldApp;
+  } else {
+    return DefaultAppProvider;
+  }
+};
 
 export const AppComponent = props =>
   !props.loading && (
@@ -32,7 +57,9 @@ export const AppComponent = props =>
         appState={{
           ...props.app.toObject(),
           location: `${
-            props.kappSlug === null ? '' : `/kapps/${props.kappSlug}`
+            props.kappSlug !== null
+              ? `/kapps/${props.kappSlug}`
+              : props.AppProvider.location
           }`,
           actions: {
             refreshApp: props.refreshApp,
@@ -44,7 +71,7 @@ export const AppComponent = props =>
             {!props.headerHidden && (
               <div className="app-header">
                 <HeaderContainer
-                  hasSidebar={!props.sidebarHidden}
+                  hasSidebar={sidebar && !props.sidebarHidden}
                   toggleSidebarOpen={props.toggleSidebarOpen}
                 />
               </div>
@@ -85,7 +112,7 @@ export const mapStateToProps = state => ({
   suppressedSidebarOpen: state.layout.suppressedSidebarOpen,
   layoutSize: state.layout.size,
   kappSlug: state.app.kappSlug,
-  kapp: selectCurrentKapp(state),
+  kapp: state.app.kapp,
   pathname: state.router.location.pathname,
   locale: state.app.locale,
   profile: state.app.profile,
@@ -95,27 +122,12 @@ export const mapStateToProps = state => ({
   version: state.app.coreVersion,
   app: state.app,
 });
+
 export const mapDispatchToProps = {
   loadApp: actions.fetchApp,
   fetchAlertsRequest: alertsActions.fetchAlertsRequest,
   setSidebarOpen: layoutActions.setSidebarOpen,
   setSuppressedSidebarOpen: layoutActions.setSuppressedSidebarOpen,
-};
-
-const getAppProvider = kapp => {
-  const bundlePackage = kapp
-    ? Utils.getAttributeValue(kapp, 'Bundle Package', kapp.slug)
-    : SpaceApp;
-  switch (bundlePackage) {
-    case 'services':
-      return ServicesApp;
-    case 'queue':
-      return QueueApp;
-    case 'tech-bar':
-      return TechBarApp;
-    default:
-      return SpaceApp;
-  }
 };
 
 export const App = compose(
@@ -124,9 +136,7 @@ export const App = compose(
     mapDispatchToProps,
   ),
   withProps(props => {
-    const AppProvider = getAppProvider(
-      props.kapps.find(kapp => kapp.slug === props.kappSlug),
-    );
+    const AppProvider = getAppProvider(props.kapp, props.pathname);
     const shouldSuppressSidebar =
       AppProvider.shouldSuppressSidebar &&
       AppProvider.shouldSuppressSidebar(props.pathname, props.kappSlug);

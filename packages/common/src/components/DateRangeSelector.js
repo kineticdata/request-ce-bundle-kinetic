@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
+import { Popover, PopoverBody } from 'reactstrap';
 import { I18n } from '@kineticdata/react';
 
 const handleRadioChange = props => event => {
@@ -108,3 +109,110 @@ export const DateRangeSelector = props => {
     </Fragment>
   );
 };
+
+const getDateRangeDisplayValue = value =>
+  typeof value === 'object'
+    ? 'Custom Date Range'
+    : value === ''
+      ? 'None'
+      : `Last ${value.replace('days', '')} Days`;
+
+const validateDateRange = dateRange => {
+  const result = [];
+  if (typeof dateRange === 'object') {
+    if (dateRange.start === '') {
+      result.push({ field: 'start', error: 'Start Date is required' });
+    }
+    if (dateRange.end !== '' && dateRange.end <= dateRange.start) {
+      result.push({
+        field: 'end',
+        error: 'End Date must be after Start Date',
+      });
+    }
+  }
+  return result;
+};
+
+export class DateRangeDropdown extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dropdown: false,
+      dateRange: this.props.value,
+      validations: [],
+    };
+    this.toggleDropdown = this.toggleDropdown.bind(this);
+    this.setDateRange = this.setDateRange.bind(this);
+    this.saveDateRange = this.saveDateRange.bind(this);
+  }
+
+  toggleDropdown() {
+    this.setState({
+      dropdown: !this.state.dropdown,
+      dateRange: this.props.value,
+      validations: [],
+    });
+  }
+
+  setDateRange(value) {
+    this.setState({ dateRange: value, validations: validateDateRange(value) });
+  }
+
+  saveDateRange(e) {
+    e.preventDefault();
+    this.props.onChange(this.state.dateRange);
+    this.setState({
+      dropdown: false,
+      dateRange: this.props.value,
+      validations: [],
+    });
+  }
+
+  render() {
+    return (
+      <Fragment>
+        <button
+          id="date-range-dropdown"
+          className="btn btn-inverse"
+          onClick={this.toggleDropdown}
+        >
+          {getDateRangeDisplayValue(this.props.value)}&nbsp;
+          <i className="fa fa-fw fa-caret-down" />
+        </button>
+        <Popover
+          isOpen={this.state.dropdown}
+          toggle={this.toggleDropdown}
+          target="date-range-dropdown"
+          placement="bottom-end"
+        >
+          <PopoverBody className="date-range-filter">
+            <form onSubmit={this.saveDateRange}>
+              <DateRangeSelector
+                allowNone={this.props.allowNone}
+                value={this.state.dateRange}
+                onChange={this.setDateRange}
+                validations={this.state.validations}
+              />
+              <div className="date-range-buttons">
+                <button
+                  type="button"
+                  className="btn btn-link"
+                  onClick={this.toggleDropdown}
+                >
+                  Reset
+                </button>
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                  disabled={this.state.validations.length > 0}
+                >
+                  Apply
+                </button>
+              </div>
+            </form>
+          </PopoverBody>
+        </Popover>
+      </Fragment>
+    );
+  }
+}

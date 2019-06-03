@@ -20,7 +20,7 @@ const GenericMessage = ({ className, heading, title, message, actions }) => (
           {actions.filter(a => (a.label || a.icon) && a.onClick).map((a, i) => (
             <button
               key={`action-${i}`}
-              className={`btn btn-outline-dark`}
+              className={`btn btn-inverse`}
               onClick={a.onClick}
             >
               {a.icon && <span className={`fa fa-fw ${a.icon}`} />}
@@ -93,10 +93,14 @@ export const StateListWrapper = ({
       />
     );
   } else if (loading || (typeof loading === 'undefined' && !data)) {
-    return <LoadingMessage title={loadingTitle} message={loadingMessage} />;
-  } else if (!data || data.length === 0 || data.size === 0) {
+    const LoadingMessageComponent = components.LoadingMessage || LoadingMessage;
     return (
-      <EmptyMessage
+      <LoadingMessageComponent title={loadingTitle} message={loadingMessage} />
+    );
+  } else if (!data || data.length === 0 || data.size === 0) {
+    const EmptyMessageComponent = components.EmptyMessage || EmptyMessage;
+    return (
+      <EmptyMessageComponent
         title={emptyTitle}
         message={emptyMessage}
         actions={emptyActions}

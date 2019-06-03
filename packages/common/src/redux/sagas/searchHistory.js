@@ -8,7 +8,7 @@ import { createSubmission, fetchForm } from '@kineticdata/react';
 
 export function* recordSearchHistorySaga({ payload }) {
   const searchHistoryExists = yield select(
-    state => state.common.searchHistory.searchHistoryExists,
+    state => state.searchHistory.searchHistoryExists,
   );
   // If searchHistoryExists is undefined, check if Search History form exists
   if (typeof searchHistoryExists === 'undefined') {
@@ -25,7 +25,7 @@ export function* recordSearchHistorySaga({ payload }) {
   // If searchHistoryExists is true, and searchTerm is not empty, record search
   else if (searchHistoryExists && payload.searchTerm) {
     const searchHistoryEnabled = yield select(
-      state => state.common.searchHistory.searchHistoryEnabled,
+      state => state.searchHistory.searchHistoryEnabled,
     );
     if (
       searchHistoryEnabled[payload.kappSlug] === 'All' ||

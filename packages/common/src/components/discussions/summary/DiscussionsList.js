@@ -1,74 +1,62 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
 import { getGroupedDiscussions } from '@kineticdata/react';
 import { DiscussionCard } from './DiscussionCard';
-import { actions as listActions } from '../../../redux/modules/discussionsList';
-import { actions as discussionsActions } from '../../../redux/modules/discussions';
+import { StateListWrapper } from '../../StateMessages';
 
-export const DiscussionsListComponent = ({
-  handleCreateDiscussion,
-  handleDiscussionClick,
+export const DiscussionsList = ({
   discussions,
+  error,
+  handleCreateDiscussionClick,
+  handleDiscussionClick,
+  renderHeader,
   me,
-}) => {
-  return discussions && discussions.size > 0 ? (
-    <Fragment>
-      <button onClick={handleCreateDiscussion} className="btn btn-inverse">
-        New Discussion
-      </button>
-
-      {getGroupedDiscussions(discussions)
-        .map((discussions, dateGroup) => (
-          <div className="discussion__messages" key={dateGroup}>
-            <div className="date-divider">
-              <hr />
-              <span>{dateGroup}</span>
-              <hr />
+}) => (
+  <div className="discussion discussion--list">
+    <div className="discussion--list__header">
+      {renderHeader
+        ? renderHeader()
+        : handleCreateDiscussionClick && (
+            <div className="discussion--list__header-content">
+              <button
+                onClick={handleCreateDiscussionClick}
+                className="btn btn-inverse btn-block"
+              >
+                New Discussion
+              </button>
             </div>
-            {discussions.map(discussion => (
-              <DiscussionCard
-                key={discussion.id}
-                me={me}
-                discussion={discussion}
-                onDiscussionClick={handleDiscussionClick}
-              />
-            ))}
-          </div>
-        ))
-        .toList()}
-    </Fragment>
-  ) : (
-    <div className="empty-state empty-state--discussions">
-      <h5 className="empty-state__title">No discussion to display</h5>
-
-      <button onClick={handleCreateDiscussion} className="btn btn-inverse">
-        Create a new discussion
-      </button>
+          )}
     </div>
-  );
-};
-
-const mapDispatchToProps = {
-  fetchRelatedDiscussions: listActions.fetchRelatedDiscussions,
-  createDiscussion: discussionsActions.createDiscussion,
-};
-
-const mapStateToProps = state => ({
-  discussions: state.common.discussionsList.relatedDiscussions,
-});
-export const DiscussionsList = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
-  lifecycle({
-    componentWillMount() {
-      this.props.fetchRelatedDiscussions(
-        this.props.itemType,
-        this.props.itemKey,
-        this.props.onLoad,
-      );
-    },
-  }),
-)(DiscussionsListComponent);
+    <div className="discussion__content">
+      <StateListWrapper
+        data={discussions}
+        error={error}
+        loadingTitle="Loading Discussions"
+        emptyTitle="No discussions to display"
+      >
+        {data => (
+          <Fragment>
+            {getGroupedDiscussions(data)
+              .map((discussions, dateGroup) => (
+                <div className="discussion__summaries" key={dateGroup}>
+                  <div className="date-divider">
+                    <hr />
+                    <span>{dateGroup}</span>
+                    <hr />
+                  </div>
+                  {discussions.map(discussion => (
+                    <DiscussionCard
+                      key={discussion.id}
+                      me={me}
+                      discussion={discussion}
+                      onDiscussionClick={handleDiscussionClick}
+                    />
+                  ))}
+                </div>
+              ))
+              .toList()}
+          </Fragment>
+        )}
+      </StateListWrapper>
+    </div>
+  </div>
+);

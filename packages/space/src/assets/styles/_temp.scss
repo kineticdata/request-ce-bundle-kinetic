@@ -22,20 +22,6 @@ textarea {
   }
 }
 
-// Forms layout
-.discussions-input-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  flex-basis: 50%;
-  :first-child {
-    padding-right: 1rem;
-  }
-  .form-group {
-    flex: 1 1 auto;
-  }
-}
-
 .profile-content .user-admin {
   display: flex;
   margin-bottom: 1rem;

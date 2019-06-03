@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect } from '../../redux/store';
 import { Modal, ModalHeader } from 'reactstrap';
 import { types } from '../../redux/modules/discussionsDetails';
 import { DiscussionDetailsRoot } from './DiscussionDetailsRoot';
@@ -26,7 +26,7 @@ export const DiscussionDetailsComponent = props => (
         onLeave={props.onLeave}
       />
     ) : props.view === 'invitations' ? (
-      <InvitationDialog discussion={props.discussion} />
+      <InvitationDialog discussion={props.discussion} profile={props.profile} />
     ) : props.view === 'edit' ? (
       <DiscussionEditDialog discussion={props.discussion} />
     ) : null}
@@ -36,7 +36,7 @@ export const DiscussionDetailsComponent = props => (
 export const mapStateToProps = (state, props) => {
   const id = props.discussion.id;
   return {
-    view: state.common.discussionsDetails.getIn([id, 'view']),
+    view: state.discussionsDetails.getIn([id, 'view']),
   };
 };
 
