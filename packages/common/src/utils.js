@@ -1,6 +1,8 @@
 import isarray from 'isarray';
 import { all, fork } from 'redux-saga/effects';
 import moment from 'moment';
+import md5 from 'md5';
+import { COLORS } from './constants';
 
 export const zip = (array1, array2) =>
   array1.reduce(
@@ -40,17 +42,92 @@ export const addActiveLinkClass = defaultClass => ({ isCurrent }) => ({
  * @param attrName
  * @param defaultValue
  */
-export const getAttributeValue = ({ attributes }, attrName, defaultValue) =>
-  (isarray(attributes)
-    ? attributes.filter(a => a.name === attrName).map(a => a.values[0])[0]
-    : attributes && attributes[attrName] && attributes[attrName][0]) ||
+export const getAttributeValue = (
+  { attributes, attributesMap },
+  attrName,
+  defaultValue,
+) =>
+  (attributesMap
+    ? attributesMap[attrName] && attributesMap[attrName][0]
+    : isarray(attributes)
+      ? attributes.filter(a => a.name === attrName).map(a => a.values[0])[0]
+      : attributes && attributes[attrName] && attributes[attrName][0]) ||
   defaultValue;
 
-export const getAttributeValues = ({ attributes }, attrName, defaultValue) => {
-  const valuesArray = isarray(attributes)
-    ? attributes.filter(a => a.name === attrName).map(a => a.values)[0]
-    : attributes && attributes[attrName] && attributes[attrName];
+export const getProfileAttributeValue = (
+  { profileAttributes, profileAttributesMap },
+  ...args
+) =>
+  getAttributeValue(
+    { attributes: profileAttributes, attributesMap: profileAttributesMap },
+    ...args,
+  );
+
+export const getAttributeValues = (
+  { attributes, attributesMap },
+  attrName,
+  defaultValue,
+) => {
+  const valuesArray = attributesMap
+    ? attributesMap[attrName]
+    : isarray(attributes)
+      ? attributes.filter(a => a.name === attrName).map(a => a.values)[0]
+      : attributes && attributes[attrName];
   return !valuesArray || valuesArray.length === 0 ? defaultValue : valuesArray;
+};
+
+export const getProfileAttributeValues = (
+  { profileAttributes, profileAttributesMap },
+  ...args
+) =>
+  getAttributeValues(
+    { attributes: profileAttributes, attributesMap: profileAttributesMap },
+    ...args,
+  );
+
+export const hasAttributeValue = (
+  { attributes, attributesMap },
+  attrName,
+  value,
+  ignoreCase,
+  matchAll,
+) => {
+  const valuesArray = attributesMap
+    ? attributesMap[attrName]
+    : isarray(attributes)
+      ? attributes.filter(a => a.name === attrName).map(a => a.values)[0]
+      : attributes && attributes[attrName];
+  if (!valuesArray || valuesArray.length === 0) {
+    return false;
+  }
+  const hasValue = (a, v) =>
+    !!ignoreCase
+      ? a.map(i => i.toLowerCase()).includes(v.toLowerCase())
+      : a.includes(v);
+  if (typeof value === 'function') {
+    return value(valuesArray);
+  } else if (isarray(value)) {
+    return !!matchAll
+      ? value.every(v => hasValue(valuesArray, v))
+      : value.some(v => hasValue(valuesArray, v));
+  } else {
+    return hasValue(valuesArray, value);
+  }
+};
+
+export const hasProfileAttributeValue = (
+  { profileAttributes, profileAttributesMap },
+  ...args
+) =>
+  hasAttributeValue(
+    { attributes: profileAttributes, attributesMap: profileAttributesMap },
+    ...args,
+  );
+
+export const hasAttributeDefinition = (attributeDefinitions, attrName) => {
+  return isarray(attributeDefinitions)
+    ? !!attributeDefinitions.find(a => a.name === attrName)
+    : !!(attributeDefinitions && attributeDefinitions[attrName]);
 };
 
 export const isMemberOf = (profile, name) => {
@@ -216,4 +293,61 @@ export const calculateDateRange = (now, range) => {
   } else {
     throw `Invalid range specified ${range}`;
   }
+};
+
+export const getColorValue = string => {
+  const colors = [
+    COLORS.blue,
+    COLORS.blueSky,
+    COLORS.blueLake,
+    COLORS.blueSlate,
+    COLORS.green,
+    COLORS.greenGrass,
+    COLORS.greenTeal,
+    COLORS.orange,
+    COLORS.orangeKinops,
+    COLORS.purple,
+    COLORS.redPurple,
+    COLORS.red,
+    COLORS.redRose,
+    COLORS.sunflower,
+    COLORS.yellow,
+  ];
+  return string ? colors[parseInt(md5(string), 16) % colors.length] : colors[5];
+};
+
+export const getColor = (object, defaultValue) =>
+  getAttributeValue(
+    object,
+    'Color',
+    defaultValue || object.slug ? getColorValue(object.slug) : COLORS.default,
+  );
+
+export const getIcon = (object, defaultValue) => {
+  const iconAttribute = getAttributeValue(
+    object,
+    'Icon',
+    defaultValue || 'square-o',
+  );
+  return iconAttribute.indexOf('fa-') === 0
+    ? iconAttribute.slice('fa-'.length)
+    : iconAttribute;
+};
+
+export const buildTeamHierarchy = name => {
+  const segments = name.split('::');
+  let parent = null;
+  let ancestors = [];
+  segments.forEach(segment => {
+    const item = {
+      localName: segment,
+      name: parent ? `${parent.name}::${segment}` : segment,
+      slug: md5(parent ? `${parent.name}::${segment}` : segment),
+      parent,
+      ancestors,
+    };
+    parent = item;
+    ancestors = [...ancestors, item];
+  });
+  return parent;
 };

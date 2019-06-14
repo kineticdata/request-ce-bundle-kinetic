@@ -1,5 +1,10 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
-import { searchSubmissions, SubmissionSearch } from '@kineticdata/react';
+import {
+  deleteSubmission,
+  searchSubmissions,
+  SubmissionSearch,
+} from '@kineticdata/react';
+import { addToast, addToastAlert } from 'common';
 import { List } from 'immutable';
 import moment from 'moment';
 
@@ -42,6 +47,21 @@ export function* fetchAlertsRequestSaga() {
   }
 }
 
+export function* deleteAlertRequestSaga(action) {
+  const { error } = yield call(deleteSubmission, {
+    datastore: true,
+    id: action.payload,
+  });
+
+  if (error) {
+    addToastAlert({ title: 'Alert delete failed', message: error.message });
+  } else {
+    addToast('Alert deleted successfully');
+    yield put(actions.fetchAlertsRequest());
+  }
+}
+
 export function* watchAlerts() {
   yield takeEvery(types.FETCH_ALERTS_REQUEST, fetchAlertsRequestSaga);
+  yield takeEvery(types.DELETE_ALERT_REQUEST, deleteAlertRequestSaga);
 }

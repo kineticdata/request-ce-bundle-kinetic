@@ -175,6 +175,10 @@
           margin-bottom: 1rem;
           align-items: center;
 
+          &:last-child {
+            margin-bottom: 0;
+          }
+
           &__title {
             margin-right: 0.25em;
             height: 1.5rem;
@@ -220,9 +224,8 @@
             }
           }
         }
-        .discussions__messages .messages__grouping {
+        .messages .messages__grouping:last-child {
           margin-bottom: 0;
-          background-color: $white;
         }
       }
     }

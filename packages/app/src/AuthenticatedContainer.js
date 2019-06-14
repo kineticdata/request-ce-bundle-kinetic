@@ -257,11 +257,11 @@ const shouldOverridePath = pathname =>
   INVALID_PUSH_ROUTES.find(p => pathname.startsWith(p));
 
 export const AuthenticatedContainer = compose(
+  withRouter,
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withRouter,
   withState('error', 'setError', ''),
   withState('email', 'setEmail', props => props.invitationEmail),
   withState('password', 'setPassword', ''),

@@ -12,6 +12,9 @@
     font-size: 2rem;
     font-weight: 300;
     line-height: 3rem;
+    &:first-child {
+      margin-top: 1.5rem;
+    }
     small,
     .small {
       font-size: 1.6rem;

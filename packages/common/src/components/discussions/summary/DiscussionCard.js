@@ -28,15 +28,15 @@ export const DiscussionCard = ({ discussion, me, onDiscussionClick }) => {
         </div>
       </div>
 
-      <div className="messages">
-        {messages.size > 0 && (
+      {messages.size > 0 && (
+        <div className="messages">
           <UserMessageGroup
             discussion={discussion}
             messages={messages}
             profile={me}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

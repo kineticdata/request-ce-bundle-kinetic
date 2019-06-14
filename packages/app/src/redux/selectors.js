@@ -81,3 +81,19 @@ export const selectAdditionalKapps = state =>
         )
         .filter(kapp => kapp !== selectCurrentKapp(state))
     : [];
+
+export const selectVisibleKapps = state => {
+  if (state.app.loading) {
+    return [];
+  }
+  const adminKappSlug = Utils.getAttributeValue(
+    state.app.space,
+    'Admin Kapp Slug',
+    'admin',
+  );
+  return state.app.kapps.filter(
+    k =>
+      k.slug !== adminKappSlug &&
+      !Utils.hasAttributeValue(k, 'Hidden', ['True', 'Yes'], true),
+  );
+};

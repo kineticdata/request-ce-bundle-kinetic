@@ -77,6 +77,7 @@ export {
   DateRangeSelector,
   DateRangeDropdown,
 } from './components/DateRangeSelector';
+export { TeamCard } from './components/TeamCard';
 
 export {
   CommonProvider,

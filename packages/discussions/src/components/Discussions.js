@@ -46,15 +46,20 @@ const DiscussionsComponent = ({
       />
       {discussions && (
         <div className="pagination-bar">
-          <button
-            className="btn btn-link icon-wrapper"
-            onClick={loadPreviousHandler}
-            disabled={paging || !hasPreviousPage}
-          >
-            <span className="icon">
-              <span className="fa fa-fw fa-caret-left" />
-            </span>
-          </button>
+          <I18n
+            render={translate => (
+              <button
+                className="btn btn-link icon-wrapper"
+                onClick={loadPreviousHandler}
+                disabled={paging || !hasPreviousPage}
+                title={translate('Previous Page')}
+              >
+                <span className="icon">
+                  <span className="fa fa-fw fa-caret-left" />
+                </span>
+              </button>
+            )}
+          />
           <small>
             {paging ? (
               <span className="fa fa-spinner fa-spin" />
@@ -62,15 +67,20 @@ const DiscussionsComponent = ({
               <strong>{`${pageIndexStart}-${pageIndexEnd}`}</strong>
             )}
           </small>
-          <button
-            className="btn btn-link icon-wrapper"
-            onClick={loadNextHandler}
-            disabled={paging || !hasNextPage}
-          >
-            <span className="icon">
-              <span className="fa fa-fw fa-caret-right" />
-            </span>
-          </button>
+          <I18n
+            render={translate => (
+              <button
+                className="btn btn-link icon-wrapper"
+                onClick={loadNextHandler}
+                disabled={paging || !hasNextPage}
+                title={translate('Next Page')}
+              >
+                <span className="icon">
+                  <span className="fa fa-fw fa-caret-right" />
+                </span>
+              </button>
+            )}
+          />
         </div>
       )}
     </div>
@@ -81,42 +91,50 @@ const renderHeaderHandler = props => () => {
   return (
     <Fragment>
       <div className="header">
-        <div className="d-flex">
-          <I18n>
-            {props.archived ? 'Archived Discussions' : 'Recent Discussions'}{' '}
-          </I18n>
+        <div>
+          <span>
+            <I18n>
+              {props.archived ? 'Archived Discussions' : 'Recent Discussions'}
+            </I18n>
+          </span>
           {props.title && (
-            <span
-              className="badge badge-search"
-              onClick={() => props.performSearchHandler(true)}
-              role="button"
-            >
-              {props.title}
+            <span className="search-query">
+              <I18n
+                render={translate =>
+                  ` / ${translate('search results for')} "${props.title}"`
+                }
+              />
             </span>
           )}
         </div>
-        <div className="btn-group">
-          {!props.archived && (
-            <button
-              type="button"
-              className="btn btn-icon"
-              onClick={props.toggleCreateDiscussionHandler}
-            >
-              <span className="icon">
-                <span className="fa fa-plus" />
-              </span>
-            </button>
+        <I18n
+          render={translate => (
+            <div className="btn-group">
+              {!props.archived && (
+                <button
+                  type="button"
+                  className="btn btn-icon"
+                  onClick={props.toggleCreateDiscussionHandler}
+                  title={translate('New Discussion')}
+                >
+                  <span className="icon">
+                    <span className="fa fa-plus" />
+                  </span>
+                </button>
+              )}
+              <button
+                type="button"
+                className="btn btn-icon"
+                onClick={props.reloadHandler}
+                title={translate('Reload Discussions')}
+              >
+                <span className="icon">
+                  <span className="fa fa-refresh" />
+                </span>
+              </button>
+            </div>
           )}
-          <button
-            type="button"
-            className="btn btn-icon"
-            onClick={props.reloadHandler}
-          >
-            <span className="icon">
-              <span className="fa fa-refresh" />
-            </span>
-          </button>
-        </div>
+        />
       </div>
       <div className="subheader">
         {props.archived && (
@@ -137,9 +155,9 @@ const renderHeaderHandler = props => () => {
             props.performSearchHandler();
           }}
         >
-          <div className="input-group">
-            <I18n
-              render={translate => (
+          <I18n
+            render={translate => (
+              <div className="input-group">
                 <input
                   type="text"
                   placeholder={translate('Search discussions')}
@@ -147,25 +165,30 @@ const renderHeaderHandler = props => () => {
                   className="form-control"
                   value={props.query}
                 />
-              )}
-            />
-            {props.query && (
-              <div className="input-group-append">
-                <button
-                  className="btn btn-inverse"
-                  type="button"
-                  onClick={() => props.performSearchHandler(true)}
-                >
-                  <span className="fa fa-times text-danger" />
-                </button>
+                {props.query && (
+                  <div className="input-group-append">
+                    <button
+                      className="btn btn-inverse"
+                      type="button"
+                      onClick={() => props.performSearchHandler(true)}
+                      title={translate('Clear Search')}
+                    >
+                      <span className="fa fa-times text-danger" />
+                    </button>
+                  </div>
+                )}
+                <div className="input-group-append">
+                  <button
+                    className="btn btn-inverse"
+                    type="submit"
+                    title={translate('Search')}
+                  >
+                    <span className="fa fa-search" />
+                  </button>
+                </div>
               </div>
             )}
-            <div className="input-group-append">
-              <button className="btn btn-inverse" type="submit">
-                <span className="fa fa-search" />
-              </button>
-            </div>
-          </div>
+          />
         </form>
       </div>
     </Fragment>

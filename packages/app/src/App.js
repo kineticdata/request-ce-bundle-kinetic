@@ -9,18 +9,18 @@ import { matchPath } from 'react-router-dom';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { Utils, ToastsContainer, ModalFormContainer } from 'common';
 import { LoginModal } from './components/authentication/LoginModal';
-import { HeaderContainer } from './components/HeaderContainer';
+import { Header } from './components/header/Header';
 import { actions } from './redux/modules/app';
 import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';
 import { ServicesApp } from 'services/src/ServicesApp';
 import { QueueApp } from 'queue/src/QueueApp';
-import { SpaceApp } from 'space/src/SpaceApp';
 import TechBarApp from 'tech-bar';
 import DiscussionsApp from 'discussions';
+import SettingsApp from 'settings';
 // TODO Remove ScaffoldApp
 import ScaffoldApp from 'scaffold';
-import { DefaultAppProvider } from './DefaultAppProvider';
+import { AppProvider } from './AppProvider';
 
 // Mapping of Bundle Package kapp attribute values to App Components
 const BUNDLE_PACKAGE_PROVIDERS = {
@@ -34,16 +34,16 @@ const getAppProvider = (kapp, pathname) => {
     return (
       BUNDLE_PACKAGE_PROVIDERS[
         Utils.getAttributeValue(kapp, 'Bundle Package', kapp.slug)
-      ] || DefaultAppProvider
+      ] || AppProvider
     );
-  } else if (matchPath(pathname, { path: SpaceApp.location })) {
-    return SpaceApp;
+  } else if (matchPath(pathname, { path: SettingsApp.location })) {
+    return SettingsApp;
   } else if (matchPath(pathname, { path: DiscussionsApp.location })) {
     return DiscussionsApp;
   } else if (matchPath(pathname, { path: ScaffoldApp.location })) {
     return ScaffoldApp;
   } else {
-    return DefaultAppProvider;
+    return AppProvider;
   }
 };
 
@@ -59,7 +59,7 @@ export const AppComponent = props =>
           location: `${
             props.kappSlug !== null
               ? `/kapps/${props.kappSlug}`
-              : props.AppProvider.location
+              : props.AppProvider.location || '/'
           }`,
           actions: {
             refreshApp: props.refreshApp,
@@ -70,7 +70,7 @@ export const AppComponent = props =>
           <div className="app-wrapper">
             {!props.headerHidden && (
               <div className="app-header">
-                <HeaderContainer
+                <Header
                   hasSidebar={sidebar && !props.sidebarHidden}
                   toggleSidebarOpen={props.toggleSidebarOpen}
                 />

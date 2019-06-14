@@ -7,12 +7,14 @@ export const types = {
   FETCH_ALERTS_REQUEST: ns('FETCH_ALERTS_REQUEST'),
   FETCH_ALERTS_SUCCESS: ns('FETCH_ALERTS_SUCCESS'),
   FETCH_ALERTS_FAILURE: ns('FETCH_ALERTS_FAILURE'),
+  DELETE_ALERT_REQUEST: ns('DELETE_ALERT_REQUEST'),
 };
 
 export const actions = {
   fetchAlertsRequest: noPayload(types.FETCH_ALERTS_REQUEST),
   fetchAlertsSuccess: withPayload(types.FETCH_ALERTS_SUCCESS),
   fetchAlertsFailure: withPayload(types.FETCH_ALERTS_FAILURE),
+  deleteAlertRequest: withPayload(types.DELETE_ALERT_REQUEST),
 };
 
 export const State = Record({

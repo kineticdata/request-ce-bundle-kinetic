@@ -33,40 +33,9 @@
           }
         }
 
-        .badge-search {
-          position: relative;
-          background-color: $black-3;
-          color: $text-color;
-          border: 1px solid $black-16;
-          padding: 0.25rem 1.25rem;
-          margin-left: 0.5rem;
-
-          &:before {
-            font-family: 'FontAwesome';
-            content: '\F002';
-            font-weight: 400;
-            position: absolute;
-            top: calc(50% - 5px);
-            left: 0;
-            margin: 0 0.25rem;
-          }
-          &:after {
-            font-family: 'FontAwesome';
-            content: '\F00D';
-            color: $red;
-            font-weight: 400;
-            position: absolute;
-            top: calc(50% - 5px);
-            right: 0;
-            margin: 0 0.25rem;
-            opacity: 0.5;
-          }
-          &:hover {
-            cursor: pointer;
-            &:after {
-              opacity: 1;
-            }
-          }
+        .search-query {
+          overflow-wrap: break-word;
+          word-wrap: break-word;
         }
       }
 

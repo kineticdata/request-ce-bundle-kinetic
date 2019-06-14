@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import { set, setIn } from 'immutable';
 import { connect } from '../../../redux/store';
-import { compose, lifecycle } from 'recompose';
+import { compose } from 'recompose';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { DiscussionsList } from './DiscussionsList';
 import { Discussion } from '../Discussion';
@@ -102,6 +102,32 @@ export class DiscussionsPanelComponent extends Component {
     }
   };
 
+  componentDidMount() {
+    this.props.fetchRelatedDiscussionsRequest({
+      type: this.props.itemType,
+      key: this.props.itemKey,
+      loadCallback: this.handleInitialLoad,
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.itemType !== prevProps.itemType ||
+      this.props.itemKey !== prevProps.itemKey
+    ) {
+      this.setState({
+        initialLoad: true,
+        currentDiscussion: null,
+        creationForm: null,
+      });
+      this.props.fetchRelatedDiscussionsRequest({
+        type: this.props.itemType,
+        key: this.props.itemKey,
+        loadCallback: this.handleInitialLoad,
+      });
+    }
+  }
+
   render() {
     const { CreationForm } = this.props;
     return (
@@ -189,13 +215,4 @@ export const DiscussionsPanel = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  lifecycle({
-    componentDidMount() {
-      this.props.fetchRelatedDiscussionsRequest({
-        type: this.props.itemType,
-        key: this.props.itemKey,
-        loadCallback: this.handleInitialLoad,
-      });
-    },
-  }),
 )(DiscussionsPanelComponent);

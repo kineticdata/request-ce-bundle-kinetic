@@ -1,85 +1,238 @@
 import React from 'react';
-import { Avatar } from 'common';
+import { connect } from 'react-redux';
+import { compose, lifecycle, withProps } from 'recompose';
 import { Link } from 'react-router-dom';
-import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
-import { bundle } from '@kineticdata/react';
+import { Avatar, ErrorMessage, LoadingMessage, TeamCard, Utils } from 'common';
+import { actions } from '../redux/modules/profile';
+import { PageTitle } from './shared/PageTitle';
 import { I18n } from '@kineticdata/react';
 
-export const Profile = ({
+const ProfileComponent = ({
+  me,
   profile,
-  openFeedbackForm,
-  openHelpForm,
-  openInviteOthersForm,
-  isOpen,
-  toggle,
-  isGuest,
+  error,
+  department,
+  departmentEnabled,
+  organization,
+  organizationEnabled,
+  site,
+  siteEnabled,
+  manager,
+  managerEnabled,
 }) => (
-  <Dropdown isOpen={isOpen} toggle={toggle}>
-    <DropdownToggle
-      nav
-      role="button"
-      className="icon-wrapper"
-      style={{ padding: '0 0.75rem' }}
-    >
-      <Avatar size={24} user={profile} previewable={false} />
-    </DropdownToggle>
-    <DropdownMenu right className="profile-menu">
-      <div className="profile-header">
-        <h6>
-          {profile.displayName}
-          <br />
-          <small>{profile.email}</small>
-        </h6>
+  <div className="page-container page-container--panels">
+    <PageTitle parts={['Profile']} />
+    {!error && !profile && <LoadingMessage />}
+    {error && (
+      <ErrorMessage title="Could not load profile" message={error.message} />
+    )}
+    {profile && (
+      <div className="page-panel">
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h1>
+              <I18n>Profile</I18n>
+            </h1>
+          </div>
+          {profile.username === me.username ? (
+            <Link to="/profile/edit" className="btn btn-secondary">
+              <I18n>Edit Profile</I18n>
+            </Link>
+          ) : null}
+        </div>
+        <div className="card card--profile">
+          <Avatar user={profile} size={96} previewable={false} />
+          <h3>{profile.displayName}</h3>
+          {profile.email ? (
+            <p>{profile.email}</p>
+          ) : (
+            <p className="text-muted">
+              <em>
+                <I18n>No Email Address</I18n>
+              </em>
+            </p>
+          )}
+          {profile.profileAttributesMap['Phone Number'].length > 0 ? (
+            <p>{profile.profileAttributesMap['Phone Number'].join(', ')}</p>
+          ) : (
+            <p className="text-muted">
+              <em>
+                <I18n>No Phone Number</I18n>
+              </em>
+            </p>
+          )}
+          <UserRoles roles={profile.memberships} />
+          {(managerEnabled ||
+            siteEnabled ||
+            departmentEnabled ||
+            organizationEnabled) && (
+            <dl>
+              {managerEnabled && (
+                <span>
+                  <dt>
+                    <I18n>Manager</I18n>
+                  </dt>
+                  <dd>
+                    {manager ? (
+                      <I18n>{manager}</I18n>
+                    ) : (
+                      <em className="text-muted">
+                        <I18n>No Manager</I18n>
+                      </em>
+                    )}
+                  </dd>
+                </span>
+              )}
+              {departmentEnabled && (
+                <span>
+                  <dt>
+                    <I18n>Department</I18n>
+                  </dt>
+                  <dd>
+                    {department ? (
+                      <I18n>{department}</I18n>
+                    ) : (
+                      <em className="text-muted">
+                        <I18n>No Department</I18n>
+                      </em>
+                    )}
+                  </dd>
+                </span>
+              )}
+              {organizationEnabled && (
+                <span>
+                  <dt>
+                    <I18n>Organization</I18n>
+                  </dt>
+                  <dd>
+                    {organization ? (
+                      <I18n>{organization}</I18n>
+                    ) : (
+                      <em className="text-muted">
+                        <I18n>No Organization</I18n>
+                      </em>
+                    )}
+                  </dd>
+                </span>
+              )}
+              {siteEnabled && (
+                <span>
+                  <dt>
+                    <I18n>Site</I18n>
+                  </dt>
+                  <dd>
+                    {site ? (
+                      <I18n>{site}</I18n>
+                    ) : (
+                      <em className="text-muted">
+                        <I18n>No Site</I18n>
+                      </em>
+                    )}
+                  </dd>
+                </span>
+              )}
+            </dl>
+          )}
+        </div>
+        <section>
+          <h2 className="section__title">
+            <I18n>Teams</I18n>
+          </h2>
+          <UserTeams teams={profile.memberships} />
+        </section>
       </div>
-      <div className="profile-links">
-        <div className="dropdown-divider" />
-        <Link to="/settings/profile" className="dropdown-item" onClick={toggle}>
-          <I18n>Profile</I18n>
-        </Link>
-        {profile.spaceAdmin && (
-          <a
-            role="button"
-            tabIndex="0"
-            onClick={openInviteOthersForm}
-            className="dropdown-item"
-          >
-            <I18n>Invite Others</I18n>
-          </a>
-        )}
-        {!isGuest && (
-          <a
-            role="button"
-            tabIndex="0"
-            onClick={openHelpForm}
-            className="dropdown-item"
-          >
-            <I18n>Get Help</I18n>
-          </a>
-        )}
-        {!isGuest && (
-          <a
-            role="button"
-            tabIndex="0"
-            onClick={openFeedbackForm}
-            className="dropdown-item"
-          >
-            <I18n>Give Feedback</I18n>
-          </a>
-        )}
-        {!isGuest && (
-          <Link to="/about" className="dropdown-item" onClick={toggle}>
-            <I18n>About My Space</I18n>
-          </Link>
-        )}
-        <div className="dropdown-divider" />
-        <a
-          onClick={() => localStorage.removeItem('token')}
-          href={`${bundle.spaceLocation()}/app/logout`}
-          className="dropdown-item"
-        >
-          <I18n>Logout</I18n>
-        </a>
-      </div>
-    </DropdownMenu>
-  </Dropdown>
+    )}
+  </div>
 );
+
+const UserRoles = ({ roles }) => {
+  const filteredTeams = roles.filter(item =>
+    item.team.name.startsWith('Role::'),
+  );
+
+  return filteredTeams.length > 0 ? (
+    <div className="profile-roles-wrapper">
+      {filteredTeams.map(item => (
+        <span className="profile-role" key={item.team.name}>
+          <I18n>{item.team.name.replace(/^Role::(.*?)/, '$1')}</I18n>
+        </span>
+      ))}
+    </div>
+  ) : (
+    <p>
+      <I18n>No user roles assigned</I18n>
+    </p>
+  );
+};
+
+const UserTeams = ({ teams }) => {
+  const filteredTeams = teams.filter(
+    item => !item.team.name.startsWith('Role::'),
+  );
+  return filteredTeams.length > 0 ? (
+    <div className="cards__wrapper cards__wrapper--team">
+      {filteredTeams.map(item => (
+        <TeamCard key={item.team.name} team={item.team} components={{ Link }} />
+      ))}
+    </div>
+  ) : (
+    <p>
+      <I18n>No teams assigned</I18n>
+    </p>
+  );
+};
+
+const selectAttributes = profile =>
+  profile
+    ? {
+        departmentEnabled: Utils.hasAttributeDefinition(
+          profile.space.userAttributeDefinitions,
+          'Department',
+        ),
+        department: Utils.getAttributeValue(profile, 'Department'),
+        managerEnabled: Utils.hasAttributeDefinition(
+          profile.space.userAttributeDefinitions,
+          'Manager',
+        ),
+        manager: Utils.getAttributeValue(profile, 'Manager'),
+        organizationEnabled: Utils.hasAttributeDefinition(
+          profile.space.userAttributeDefinitions,
+          'Organization',
+        ),
+        organization: Utils.getAttributeValue(profile, 'Organization'),
+        siteEnabled: Utils.hasAttributeDefinition(
+          profile.space.userAttributeDefinitions,
+          'Site',
+        ),
+        site: Utils.getAttributeValue(profile, 'Site'),
+      }
+    : {};
+
+export const mapStateToProps = state => ({
+  me: state.app.profile,
+  profile: state.profile.data,
+  error: state.profile.error,
+  ...selectAttributes(state.profile.data),
+});
+
+export const mapDispatchToProps = {
+  fetchProfileRequest: actions.fetchProfileRequest,
+};
+
+export const Profile = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+  withProps(({ match: { params: { username } } }) => ({ username })),
+  lifecycle({
+    componentDidMount() {
+      this.props.fetchProfileRequest(this.props.username);
+    },
+    componentDidUpdate(prevProps) {
+      if (this.props.username !== prevProps.username) {
+        this.props.fetchProfileRequest(this.props.username);
+      }
+    },
+  }),
+)(ProfileComponent);

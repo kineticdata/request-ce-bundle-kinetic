@@ -6,7 +6,7 @@ import { compose, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
 import { I18n } from '@kineticdata/react';
 
-import { PageTitle } from '../PageTitle';
+import { PageTitle } from '../shared/PageTitle';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start

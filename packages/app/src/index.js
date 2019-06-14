@@ -54,7 +54,7 @@ ReactDOM.render(
         <ConnectedKineticLib>
           <ConnectedRouter history={history}>
             <AuthenticatedContainer>
-              <Route path="/" render={() => <App />} />
+              <Route path="/" component={App} />
             </AuthenticatedContainer>
           </ConnectedRouter>
         </ConnectedKineticLib>
