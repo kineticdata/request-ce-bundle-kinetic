@@ -1,0 +1,24 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Tables Overrides ~ Design System
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.table {
+  .is-editing {
+    td {
+      background-color: rgba(245, 166, 35, 0.15);
+      vertical-align: middle;
+    }
+  }
+}
+
+.search-box__form {
+  input[type='text'] {
+    flex: 1 1 0%;
+  }
+  &--sm {
+    input[type='text'] {
+      line-height: 1;
+      padding: 0.5rem;
+    }
+  }
+}
