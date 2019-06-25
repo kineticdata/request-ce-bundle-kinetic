@@ -3,7 +3,12 @@ import { connect } from '../redux/store';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { actions } from '../redux/modules/toasts';
 import { I18n } from '@kineticdata/react';
-const { removeToast, removeToastAlert, setToastDuration } = actions;
+const {
+  removeToast,
+  clearToasts,
+  removeToastAlert,
+  setToastDuration,
+} = actions;
 
 const icon = {
   success: 'check-circle',
@@ -130,7 +135,7 @@ const ToastAlert = compose(
 export const ToastsContainer = compose(
   connect(
     ({ toasts }) => ({ toasts: toasts.list, toastAlerts: toasts.alerts }),
-    { setToastDuration },
+    { setToastDuration, clearToasts },
   ),
   lifecycle({
     componentDidMount() {
@@ -141,6 +146,9 @@ export const ToastsContainer = compose(
           30000,
         ),
       );
+    },
+    componentWillUnmount() {
+      this.props.clearToasts();
     },
   }),
 )(({ toasts, toastAlerts }) => (

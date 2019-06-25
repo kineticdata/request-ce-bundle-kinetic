@@ -28,6 +28,8 @@ const PROFILE_INCLUDES = [
   'memberships.team',
   'memberships.team.attributes',
   'memberships.team.attributesMap',
+  'memberships.team.memberships',
+  'memberships.team.memberships.user',
 ];
 
 // Fetch Entire App

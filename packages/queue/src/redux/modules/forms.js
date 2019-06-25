@@ -1,37 +1,40 @@
 import { List } from 'immutable';
 import { Form } from '../../models';
+import { Utils } from 'common';
+const { withPayload, noPayload } = Utils;
+const ns = Utils.namespaceBuilder('queue/forms');
 
 export const types = {
-  FETCH_FORMS: '@kd/queue/FETCH_FORMS',
-  SET_FORMS: '@kd/queue/SET_FORMS',
-  SET_FORMS_ERRORS: '@kd/queue/SET_FORMS_ERRORS',
+  FETCH_FORMS_REQUEST: ns('FETCH_FORMS_REQUEST'),
+  FETCH_FORMS_SUCCESS: ns('FETCH_FORMS_SUCCESS'),
+  FETCH_FORMS_FAILURE: ns('FETCH_FORMS_FAILURE'),
 };
 
 export const actions = {
-  fetchForms: () => ({ type: types.FETCH_FORMS }),
-  setForms: forms => ({ type: types.SET_FORMS, payload: forms }),
-  setFormsErrors: errors => ({ type: types.SET_FORMS_ERRORS, payload: errors }),
+  fetchFormsRequest: noPayload(types.FETCH_FORMS_REQUEST),
+  fetchFormsSuccess: withPayload(types.FETCH_FORMS_SUCCESS),
+  fetchFormsFailure: withPayload(types.FETCH_FORMS_FAILURE),
 };
 
 export const defaultState = {
   loading: true,
-  errors: [],
+  error: null,
   data: List(),
 };
 
 export const reducer = (state = defaultState, action) => {
   switch (action.type) {
-    case types.FETCH_FORMS:
-      return { ...state, loading: true, errors: [] };
-    case types.SET_FORMS:
+    case types.FETCH_FORMS_REQUEST:
+      return { ...state, loading: true, error: null };
+    case types.FETCH_FORMS_SUCCESS:
       return {
         ...state,
         loading: false,
-        errors: [],
+        error: null,
         data: List(action.payload).map(Form),
       };
-    case types.SET_FORMS_ERRORS:
-      return { ...state, loading: false, errors: action.payload };
+    case types.FETCH_FORMS_FAILURE:
+      return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }

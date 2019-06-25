@@ -226,7 +226,7 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = {
-  fetchForms: actions.fetchForms,
+  fetchFormsRequest: actions.fetchFormsRequest,
 };
 
 const toggleDropdown = ({

@@ -14,7 +14,6 @@ import {
   setDefaultAuthAssumed,
   history,
 } from '@kineticdata/react';
-import { CommonProvider } from 'common';
 import AuthInterceptor from './utils/AuthInterceptor';
 import { actions as layoutActions } from './redux/modules/layout';
 import { actions } from './redux/modules/app';
@@ -50,15 +49,13 @@ ReactDOM.render(
       />
     </Helmet>
     <Provider store={store}>
-      <CommonProvider>
-        <ConnectedKineticLib>
-          <ConnectedRouter history={history}>
-            <AuthenticatedContainer>
-              <Route path="/" component={App} />
-            </AuthenticatedContainer>
-          </ConnectedRouter>
-        </ConnectedKineticLib>
-      </CommonProvider>
+      <ConnectedKineticLib>
+        <ConnectedRouter history={history}>
+          <AuthenticatedContainer>
+            <Route path="/" component={App} />
+          </AuthenticatedContainer>
+        </ConnectedRouter>
+      </ConnectedKineticLib>
     </Provider>
   </Fragment>,
   document.getElementById('root'),

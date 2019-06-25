@@ -2,7 +2,7 @@ import { List } from 'immutable';
 import moment from 'moment';
 import { select, call, put } from 'redux-saga/effects';
 import { actions } from '../modules/queue';
-import { types as errorTypes } from '../modules/errors';
+import { addError } from 'common';
 
 global.bundle = {
   apiLocation: () => '/acme/app/api/v1',
@@ -587,7 +587,6 @@ describe('queue saga', () => {
           call(updateSubmission, { id, values, include }),
         );
         const effect = saga.next({ serverError: 'error' }).value;
-        expect(effect.PUT.action.type).toEqual(errorTypes.ADD_NOTIFICATION);
         expect(effect.PUT.action.payload.msg).toEqual('Failed to update item!');
       });
     });

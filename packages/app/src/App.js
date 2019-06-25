@@ -7,14 +7,14 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { matchPath } from 'react-router-dom';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
-import { Utils, ToastsContainer, ModalFormContainer } from 'common';
+import { Utils } from 'common';
 import { LoginModal } from './components/authentication/LoginModal';
 import { Header } from './components/header/Header';
 import { actions } from './redux/modules/app';
 import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';
 import { ServicesApp } from 'services/src/ServicesApp';
-import { QueueApp } from 'queue/src/QueueApp';
+import QueueApp from 'queue';
 import TechBarApp from 'tech-bar';
 import DiscussionsApp from 'discussions';
 import SettingsApp from 'settings';
@@ -50,9 +50,7 @@ const getAppProvider = (kapp, pathname) => {
 export const AppComponent = props =>
   !props.loading && (
     <Fragment>
-      <ToastsContainer duration={5000} />
       <LoginModal />
-      <ModalFormContainer />
       <props.AppProvider
         appState={{
           ...props.app.toObject(),

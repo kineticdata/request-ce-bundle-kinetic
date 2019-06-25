@@ -66,7 +66,7 @@ export const getProfileAttributeValue = (
 export const getAttributeValues = (
   { attributes, attributesMap },
   attrName,
-  defaultValue,
+  defaultValue = [],
 ) => {
   const valuesArray = attributesMap
     ? attributesMap[attrName]

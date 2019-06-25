@@ -4,10 +4,10 @@ import { fetchTeams, fetchUsers } from '@kineticdata/react';
 import { types, actions } from '../modules/about';
 
 export function* fetchAboutRequestSaga() {
-  const [{ teams, teamsError }, { users, usersError }] = yield all([
-    call(fetchTeams),
-    call(fetchUsers),
-  ]);
+  const [
+    { teams, error: teamsError },
+    { users, error: usersError },
+  ] = yield all([call(fetchTeams), call(fetchUsers)]);
   if (teamsError || usersError) {
     addToastAlert({
       message: `Failed to load ${teamsError ? 'Teams' : ''}${

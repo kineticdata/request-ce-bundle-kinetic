@@ -1,4 +1,5 @@
 import * as Utils from '../../utils';
+// TODO remove after all instances are removed
 
 // Discussion Server
 export const selectDiscussionsEnabled = state =>

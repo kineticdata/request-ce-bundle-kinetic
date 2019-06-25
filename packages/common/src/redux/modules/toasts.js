@@ -21,6 +21,7 @@ export const NOTICE_TYPES = {
 export const types = {
   ADD_TOAST: namespace('toasts', 'ADD_TOAST'),
   REMOVE_TOAST: namespace('toasts', 'REMOVE_TOAST'),
+  CLEAR_TOASTS: namespace('toasts', 'CLEAR_TOASTS'),
   ADD_TOAST_ALERT: namespace('toasts', 'ADD_TOAST_ALERT'),
   REMOVE_TOAST_ALERT: namespace('toasts', 'REMOVE_TOAST_ALERT'),
   CLEAR_TOAST_ALERTS: namespace('toasts', 'CLEAR_TOAST_ALERTS'),
@@ -36,6 +37,7 @@ export const actions = {
     },
   }),
   removeToast: withPayload(types.REMOVE_TOAST),
+  clearToasts: noPayload(types.CLEAR_TOASTS),
   addToastAlert: payload => ({
     type: types.ADD_TOAST_ALERT,
     payload: {
@@ -111,6 +113,8 @@ export const reducer = (state = State(), { type, payload }) => {
       );
     case types.REMOVE_TOAST:
       return state.update('list', l => l.filterNot(n => n.id === payload));
+    case types.CLEAR_TOASTS:
+      return state.set('list', List());
     case types.ADD_TOAST_ALERT:
       return state.update('alerts', alerts =>
         alerts.push({

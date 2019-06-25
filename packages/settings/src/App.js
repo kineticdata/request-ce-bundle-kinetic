@@ -8,7 +8,13 @@ import {
   context,
   store,
 } from 'settings/src/redux/store';
-import { CommonProvider, ErrorUnexpected, Loading } from 'common';
+import {
+  CommonProvider,
+  ErrorUnexpected,
+  Loading,
+  ModalFormContainer,
+  ToastsContainer,
+} from 'common';
 import { is } from 'immutable';
 import { I18n } from '@kineticdata/react';
 
@@ -124,6 +130,8 @@ export class AppProvider extends Component {
         <Provider store={store} context={context}>
           <CommonProvider>
             <LocationProvider history={connectedHistory}>
+              <ToastsContainer duration={5000} />
+              <ModalFormContainer />
               <Router>
                 <App
                   render={this.props.render}

@@ -7,9 +7,9 @@ import {
   updateSubmission,
 } from '@kineticdata/react';
 import isFunction from 'is-function';
+import { addToastAlert } from 'common';
 
 import { types, actions } from '../modules/queue';
-import { actions as errorActions } from '../modules/errors';
 
 export const ERROR_STATUS_STRING = 'There was a problem retrieving items.';
 export const TOO_MANY_STATUS_STRING =
@@ -210,14 +210,14 @@ export function* fetchListTask(action) {
   if (assignmentContext.length === 0) {
     yield put(actions.setListItems(filter, []));
   } else {
-    const { submissions, messages, nextPageToken, serverError } = yield call(
+    const { submissions, messages, nextPageToken, error } = yield call(
       searchSubmissions,
       { kapp: kappSlug, search, limit: 1000 },
     );
 
-    if (serverError || (messages && messages.length > 0)) {
+    if (error || (messages && messages.length > 0)) {
       yield put(actions.setListStatus(filter, ERROR_STATUS_STRING));
-      yield put(errorActions.addError('Failed to retrieve items!'));
+      yield put(addToastAlert('Failed to retrieve items!'));
     } else if (nextPageToken) {
       yield put(actions.setListStatus(filter, TOO_MANY_STATUS_STRING));
     } else {
@@ -242,7 +242,7 @@ export function* fetchCurrentItemTask(action) {
   if (!serverError) {
     yield put(actions.setCurrentItem(submission));
   } else {
-    yield put(errorActions.addError('Failed to retrieve item!'));
+    yield put(addToastAlert('Failed to retrieve item!'));
   }
 }
 
@@ -258,7 +258,7 @@ export function* updateQueueItemTask(action) {
       action.payload.onSuccess(submission);
     }
   } else {
-    yield put(errorActions.addError('Failed to update item!'));
+    yield put(addToastAlert('Failed to update item!'));
   }
 }
 

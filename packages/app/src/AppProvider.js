@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-import { compose } from 'recompose';
-import { ErrorNotFound, ErrorUnexpected, Loading } from 'common';
+import {
+  CommonProvider,
+  ErrorNotFound,
+  ErrorUnexpected,
+  Loading,
+  ModalFormContainer,
+  ToastsContainer,
+} from 'common';
 import { I18n } from '@kineticdata/react';
 
 import { Home } from './components/Home';
@@ -59,4 +65,23 @@ const mapStateToProps = (state, props) => ({
   pathname: state.router.location.pathname,
 });
 
-export const AppProvider = compose(connect(mapStateToProps))(AppComponent);
+export const App = connect(mapStateToProps)(AppComponent);
+
+export class AppProvider extends Component {
+  render() {
+    return (
+      <CommonProvider>
+        <ToastsContainer duration={5000} />
+        <ModalFormContainer />
+        <App
+          render={this.props.render}
+          path={`${this.props.appState.location}/*`}
+        />
+      </CommonProvider>
+    );
+  }
+
+  // Used for matching pathname to display this App
+  // Not used if package is set as Bundle Package of a Kapp
+  static location = '/';
+}

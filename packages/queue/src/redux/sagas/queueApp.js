@@ -13,14 +13,12 @@ import {
   fetchTeams,
   updateProfile,
 } from '@kineticdata/react';
+import { Utils } from 'common';
 import { actions, types } from '../modules/queueApp';
 import { filterReviver } from '../../records';
 
 const PROFILE_INCLUDES =
-  'attributes,profileAttributes,memberships,memberships.team,memberships.team.attributes,memberships.team.memberships,memberships.team.memberships.user';
-
-export const selectPersonalFilters = state => state.queueApp.myFilters;
-export const selectProfile = state => state.queueApp.profile;
+  'attributes,profileAttributes,profileAttributesMap,memberships,memberships.team,memberships.team.attributes,memberships.team.memberships,memberships.team.memberships.user';
 
 // We'll implicitly believe teams to be assignable.
 export const isAssignable = team => {
@@ -49,9 +47,9 @@ export const isAssignable = team => {
 export function* fetchAppSettingsTask() {
   const kappSlug = yield select(state => state.app.kappSlug);
   const {
-    profile: { profile },
-    forms: { forms },
-    teams: { teams },
+    profile: { profile, error: profileError },
+    forms: { forms, error: formsError },
+    teams: { teams, error: teamsError },
   } = yield all({
     profile: call(fetchProfile, {
       include: PROFILE_INCLUDES,
@@ -66,45 +64,59 @@ export function* fetchAppSettingsTask() {
     }),
   });
 
-  const allTeams = teams.filter(isAssignable);
-  const myTeams = List(
-    profile.memberships.map(membership => membership.team).filter(isAssignable),
-  ).sortBy(team => team.name);
-  const myTeammates = myTeams
-    // Get all of the users from all of the teams.
-    .flatMap(t => t.memberships)
-    // Clean up the odd 'memberships' wrapper on user.
-    .map(u => u.user)
-    // Ditch any of those users that are me.
-    .filter(u => u.username !== profile.username);
+  if (profileError || formsError || teamsError) {
+    yield put(
+      actions.fetchAppDataFailure(
+        List([profileError, formsError, teamsError]).filter(e => e),
+      ),
+    );
+  } else {
+    const allTeams = teams.filter(isAssignable);
+    const myTeams = List(
+      profile.memberships
+        .map(membership => membership.team)
+        .filter(isAssignable),
+    ).sortBy(team => team.name);
+    const myTeammates = myTeams
+      // Get all of the users from all of the teams.
+      .flatMap(t => t.memberships)
+      // Clean up the odd 'memberships' wrapper on user.
+      .map(u => u.user)
+      // Remove duplicates
+      .groupBy(u => u.username)
+      .map(g => g.first())
+      .toList()
+      // Ditch any of those users that are me.
+      .filter(u => u.username !== profile.username);
 
-  const myFilters = profile.profileAttributes['Queue Personal Filters']
-    ? profile.profileAttributes['Queue Personal Filters']
-        .map(filterReviver)
-        .filter(f => f)
-    : List();
+    const myFilters = Utils.getProfileAttributeValues(
+      profile,
+      'Queue Personal Filters',
+    )
+      .map(filterReviver)
+      .filter(f => f);
 
-  const appSettings = {
-    profile,
-    myTeams,
-    myTeammates,
-    myFilters,
-    forms,
-    allTeams,
-  };
+    const appSettings = {
+      profile,
+      myTeams,
+      myTeammates,
+      myFilters,
+      forms,
+      allTeams,
+    };
 
-  yield put(actions.setAppSettings(appSettings));
+    yield put(actions.fetchAppDataSuccess(appSettings));
+  }
 }
 
 export function* updatePersonalFilterTask() {
-  const myFilters = yield select(selectPersonalFilters);
-  const profile = yield select(selectProfile);
+  const myFilters = yield select(state => state.queueApp.myFilters);
+  const profile = yield select(state => state.queueApp.profile);
 
-  const { serverError } = yield call(updateProfile, {
+  const { error } = yield call(updateProfile, {
     profile: {
-      ...profile,
-      profileAttributes: {
-        ...profile.profileAttributes,
+      profileAttributesMap: {
+        ...profile.profileAttributesMap,
         'Queue Personal Filters': myFilters
           .toJS()
           .map(filter => JSON.stringify(filter)),
@@ -112,8 +124,8 @@ export function* updatePersonalFilterTask() {
     },
     include: PROFILE_INCLUDES,
   });
-  if (!serverError) {
-    // TODO: What should we do on success?
+  if (!error) {
+    // TODO: What should we do on success/error?
     // const newFilters = newProfile.profileAttributes['Queue Personal Filters']
     //   ? newProfile.profileAttributes['Queue Personal Filters'].map(f => f)
     //   : List();
@@ -121,7 +133,7 @@ export function* updatePersonalFilterTask() {
 }
 
 export function* watchApp() {
-  yield takeEvery(types.LOAD_APP_SETTINGS, fetchAppSettingsTask);
+  yield takeEvery(types.FETCH_APP_DATA_REQUEST, fetchAppSettingsTask);
   yield takeLatest(
     [
       types.ADD_PERSONAL_FILTER,

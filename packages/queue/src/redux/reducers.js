@@ -1,5 +1,4 @@
 import { reducer as app } from './modules/app';
-import errorsReducer from './modules/errors';
 import { reducer as queueApp } from './modules/queueApp';
 import { reducer as queue } from './modules/queue';
 import { reducer as filterMenu } from './modules/filterMenu';
@@ -10,7 +9,6 @@ import { reducer as forms } from './modules/forms';
 
 export default {
   app,
-  errors: errorsReducer,
   queueApp,
   queue,
   filterMenu,

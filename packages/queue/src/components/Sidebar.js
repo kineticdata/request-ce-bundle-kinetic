@@ -35,16 +35,14 @@ export const Sidebar = ({
           <NavItem>
             <Link to="list/Mine" getProps={isActiveClass('nav-link')}>
               <span className="fa fa-fw fa-user" />
-              <I18n>Mine</I18n> ({formatCount(counts.get('Mine', 0))})
+              <I18n>Mine</I18n> {formatCount(counts.get('Mine', 0))}
             </Link>
           </NavItem>
           {hasTeammates && (
             <NavItem>
               <Link to="list/Teammates" getProps={isActiveClass('nav-link')}>
                 <span className="fa fa-fw fa-users" />
-                <I18n>Teammates</I18n> ({formatCount(
-                  counts.get('Teammates', 0),
-                )})
+                <I18n>Teammates</I18n> {formatCount(counts.get('Teammates', 0))}
               </Link>
             </NavItem>
           )}
@@ -52,18 +50,16 @@ export const Sidebar = ({
             <NavItem>
               <Link to="list/Unassigned" getProps={isActiveClass('nav-link')}>
                 <span className="fa fa-fw fa-inbox" />
-                <I18n>Unassigned</I18n> ({formatCount(
-                  counts.get('Unassigned', 0),
-                )})
+                <I18n>Unassigned</I18n>{' '}
+                {formatCount(counts.get('Unassigned', 0))}
               </Link>
             </NavItem>
           )}
           <NavItem>
             <Link to="list/Created By Me" getProps={isActiveClass('nav-link')}>
               <span className="fa fa-fw fa-user-circle-o" />
-              <I18n>Created By Me</I18n> ({formatCount(
-                counts.get('Created By Me', 0),
-              )})
+              <I18n>Created By Me</I18n>{' '}
+              {formatCount(counts.get('Created By Me', 0))}
             </Link>
           </NavItem>
         </Nav>

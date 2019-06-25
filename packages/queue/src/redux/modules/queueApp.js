@@ -1,6 +1,5 @@
 import { Record, List, Set } from 'immutable';
 import matchPath from 'rudy-match-path';
-import { LOCATION_CHANGE } from 'redux-first-history';
 import { Utils } from 'common';
 import {
   Profile,
@@ -8,28 +7,26 @@ import {
   AssignmentCriteria,
   filterReviver,
 } from '../../records';
-const { namespace, withPayload, noPayload, getAttributeValue } = Utils;
+const { withPayload, noPayload, getAttributeValue } = Utils;
+const ns = Utils.namespaceBuilder('queue/app');
 
 export const types = {
-  LOAD_APP_SETTINGS: namespace('queueApp', 'LOAD_APP_SETTINGS'),
-  SET_APP_SETTINGS: namespace('queueApp', 'SET_APP_SETTINGS'),
-  SET_PROFILE: namespace('queueApp', 'SET_PROFILE'),
-  ADD_PERSONAL_FILTER: namespace('queueApp', 'ADD_PERSONAL_FILTER'),
-  UPDATE_PERSONAL_FILTER: namespace('queueApp', 'UPDATE_PERSONAL_FILTER'),
-  REMOVE_PERSONAL_FILTER: namespace('queueApp', 'REMOVE_PERSONAL_FILTER'),
-  SET_LAYOUT_SIZE: namespace('queueApp', 'SET_LAYOUT_SIZE'),
-  SET_SIDEBAR_OPEN: namespace('queueApp', 'SET_SIDEBAR_OPEN'),
+  FETCH_APP_DATA_REQUEST: ns('FETCH_APP_DATA_REQUEST'),
+  FETCH_APP_DATA_SUCCESS: ns('FETCH_APP_DATA_SUCCESS'),
+  FETCH_APP_DATA_FAILURE: ns('FETCH_APP_DATA_FAILURE'),
+  SET_PROFILE: ns('SET_PROFILE'),
+  ADD_PERSONAL_FILTER: ns('ADD_PERSONAL_FILTER'),
+  UPDATE_PERSONAL_FILTER: ns('UPDATE_PERSONAL_FILTER'),
+  REMOVE_PERSONAL_FILTER: ns('REMOVE_PERSONAL_FILTER'),
 };
 
 export const actions = {
-  loadAppSettings: noPayload(types.LOAD_APP_SETTINGS),
-  setAppSettings: withPayload(types.SET_APP_SETTINGS),
+  fetchAppDataRequest: noPayload(types.FETCH_APP_DATA_REQUEST),
+  fetchAppDataSuccess: withPayload(types.FETCH_APP_DATA_SUCCESS),
   setProfile: withPayload(types.SET_PROFILE),
   addPersonalFilter: withPayload(types.ADD_PERSONAL_FILTER),
   updatePersonalFilter: withPayload(types.UPDATE_PERSONAL_FILTER),
   removePersonalFilter: withPayload(types.REMOVE_PERSONAL_FILTER),
-  setLayoutSize: withPayload(types.SET_LAYOUT_SIZE),
-  setSidebarOpen: withPayload(types.SET_SIDEBAR_OPEN),
 };
 
 const ADHOC_PATH = { path: '*/adhoc', exact: false };
@@ -118,13 +115,6 @@ export const selectAssignments = (allTeams, form, queueItem) => {
   );
 };
 
-export const getTeamIcon = team => {
-  const iconAttribute = Utils.getAttributeValue(team, 'Icon', 'fa-users');
-  return iconAttribute.indexOf('fa-') === 0
-    ? iconAttribute.slice('fa-'.length)
-    : iconAttribute;
-};
-
 /*
  *
  * Mine (only assigned to me)
@@ -165,15 +155,14 @@ export const State = Record({
   myFilters: List(),
   forms: List(),
   loading: true,
-  layoutSize: 'small',
-  sidebarOpen: true,
+  error: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
-    case types.LOAD_APP_SETTINGS:
-      return state.set('loading', true);
-    case types.SET_APP_SETTINGS:
+    case types.FETCH_APP_DATA_REQUEST:
+      return state.set('loading', true).set('error', null);
+    case types.FETCH_APP_DATA_SUCCESS:
       return state
         .set('profile', payload.profile)
         .set('allTeams', List(payload.allTeams))
@@ -190,7 +179,7 @@ export const reducer = (state = State(), { type, payload }) => {
                 return filter
                   .set('type', 'team')
                   .update('name', name => name || team.name)
-                  .update('icon', icon => icon || getTeamIcon(team))
+                  .update('icon', icon => icon || Utils.getIcon(team, 'users'))
                   .update(
                     'teams',
                     teams =>
@@ -200,7 +189,7 @@ export const reducer = (state = State(), { type, payload }) => {
                 return Filter({
                   name: team.name,
                   type: 'team',
-                  icon: getTeamIcon(team),
+                  icon: Utils.getIcon(team, 'users'),
                   teams: List([team.name]),
                   assignments: AssignmentCriteria({
                     mine: true,
@@ -220,6 +209,8 @@ export const reducer = (state = State(), { type, payload }) => {
           ),
         )
         .set('loading', false);
+    case types.FETCH_APP_DATA_FAILURE:
+      return state.set('error', payload).set('loading', false);
     case types.SET_PROFILE:
       return state.set('profile', payload);
     case types.ADD_PERSONAL_FILTER:
@@ -232,14 +223,6 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.update('myFilters', myFilters =>
         myFilters.filterNot(f => f.name === payload.name),
       );
-    case LOCATION_CHANGE:
-      return state.layoutSize === 'small'
-        ? state.set('sidebarOpen', false)
-        : state;
-    case types.SET_LAYOUT_SIZE:
-      return state.set('layoutSize', payload);
-    case types.SET_SIDEBAR_OPEN:
-      return state.set('sidebarOpen', payload);
     default:
       return state;
   }
