@@ -1,9 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { Utils } from 'common';
 import { actions } from '../../redux/modules/submission';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 import { I18n } from '@kineticdata/react';
 
 const CloneButton = props =>
@@ -20,15 +19,13 @@ const CloneButton = props =>
 export const mapStateToProps = () => ({});
 
 export const mapDispatchToProps = {
-  cloneSubmission: actions.cloneSubmission,
+  cloneSubmission: actions.cloneSubmissionRequest,
 };
 
 const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withProps(props => {
     const disabledAttribute = Utils.getAttributeValue(

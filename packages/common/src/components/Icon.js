@@ -8,6 +8,6 @@ export const Icon = props => (
         ? { background: COLORS[props.background] || COLORS.default }
         : undefined
     }
-    className={`fa ${props.image} fa-fw card-icon`}
+    className={`fa fa-${props.image} fa-fw card-icon`}
   />
 );

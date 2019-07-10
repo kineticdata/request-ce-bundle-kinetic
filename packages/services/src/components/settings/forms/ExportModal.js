@@ -1,9 +1,8 @@
 import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
-import { connect } from 'react-redux';
 
 import { actions } from '../../../redux/modules/settingsForms';
-import { context } from '../../../redux/store';
+import { connect } from '../../../redux/store';
 
 import { Export } from './Export';
 import { I18n } from '@kineticdata/react';
@@ -46,6 +45,4 @@ const mapDispatchToProps = {
 export const ExportModal = connect(
   mapStateToProps,
   mapDispatchToProps,
-  null,
-  { context },
 )(ExportModalComponent);

@@ -1,6 +1,7 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { Component, Fragment } from 'react';
+import { Provider } from 'react-redux';
 import matchPath from 'rudy-match-path';
+import { LocationProvider, Router as ReachRouter } from '@reach/router';
 import {
   compose,
   lifecycle,
@@ -9,13 +10,18 @@ import {
   withState,
 } from 'recompose';
 import { Redirect } from '@reach/router';
-import { Loading, ModalFormContainer } from 'common';
-import { context } from './redux/store';
+import {
+  CommonProvider,
+  ErrorUnexpected,
+  Loading,
+  ModalFormContainer,
+  ToastsContainer,
+} from 'common';
+import { is } from 'immutable';
+import { connectedHistory, connect, context, store } from './redux/store';
+import { syncAppState } from './redux/modules/app';
 
-import { Router } from './ServicesApp';
-import { actions as categoriesActions } from './redux/modules/categories';
-import { actions as formsActions } from './redux/modules/forms';
-import { actions as submissionsActions } from './redux/modules/submissions';
+import { actions as categoriesActions } from './redux/modules/servicesApp';
 import { actions as submissionCountActions } from './redux/modules/submissionCounts';
 import { CatalogContainer } from './components/home/CatalogContainer';
 import { CategoryListContainer } from './components/category_list/CategoryListContainer';
@@ -28,10 +34,15 @@ import { FormListContainer } from './components/form_list/FormListContainer';
 import { RequestListContainer } from './components/request_list/RequestListContainer';
 import { RequestShowContainer } from './components/request/RequestShowContainer';
 import { Settings } from './components/settings/Settings';
-import { displayableFormPredicate } from './utils';
 import { I18n } from '@kineticdata/react';
 
 import './assets/styles/master.scss';
+
+export const Router = ({ children, ...props }) => (
+  <ReachRouter {...props} primary={false} component={Fragment}>
+    {children}
+  </ReachRouter>
+);
 
 const CustomRedirect = props => (
   <Redirect
@@ -43,77 +54,79 @@ const CustomRedirect = props => (
 );
 
 export const AppComponent = props => {
-  if (props.loading) {
+  if (props.error) {
+    return <ErrorUnexpected />;
+  } else if (props.loading) {
     return <Loading text="App is loading ..." />;
+  } else {
+    return props.render({
+      sidebar: (
+        <Router>
+          <SettingsSidebar
+            path="settings/*"
+            settingsBackPath={props.settingsBackPath}
+          />
+          <Sidebar
+            path="*"
+            counts={props.submissionCounts}
+            homePageMode={props.homePageMode}
+            homePageItems={props.homePageItems}
+            openSettings={props.openSettings}
+          />
+        </Router>
+      ),
+      main: (
+        <I18n>
+          <main className="package-layout package-layout--services">
+            <Router>
+              <Settings path="settings/*" />
+              <Redirect
+                from="submissions/:id"
+                to={`requests/request/:id/${
+                  props.location.search.includes('review')
+                    ? 'review'
+                    : 'activity'
+                }`}
+              />
+              <CustomRedirect
+                path="forms/:formSlug/submissions/:id"
+                appLocation={props.appLocation}
+              />
+
+              <CatalogContainer
+                path="/"
+                homePageMode={props.homePageMode}
+                homePageItems={props.homePageItems}
+              />
+              <CategoryListContainer path="categories" />
+              <CategoryContainer path="categories/:categorySlug" />
+              <FormContainer path="categories/:categorySlug/:formSlug" />
+              <FormContainer path="categories/:categorySlug/:formSlug/:submissionId" />
+              <FormListContainer path="forms" />
+              <FormContainer path="forms/:formSlug" />
+              <CatalogSearchResultsContainer path="search" />
+              <CatalogSearchResultsContainer path="search/:query" />
+              <RequestListContainer path="requests" />
+              <RequestListContainer path="requests/:type" />
+              <FormContainer path="requests/request/:submissionId" />
+              <FormContainer path="requests/:type/request/:submissionId" />
+              <RequestShowContainer path="/requests/request/:submissionId/:mode" />
+              <RequestShowContainer path="/requests/:type/request/:submissionId/:mode" />
+            </Router>
+          </main>
+        </I18n>
+      ),
+    });
   }
-  return props.render({
-    sidebar: (
-      <Router>
-        <SettingsSidebar
-          path="settings/*"
-          settingsBackPath={props.settingsBackPath}
-        />
-
-        <Sidebar
-          path="*"
-          counts={props.submissionCounts}
-          homePageMode={props.homePageMode}
-          homePageItems={props.homePageItems}
-          openSettings={props.openSettings}
-        />
-      </Router>
-    ),
-    main: (
-      <I18n>
-        <main className="package-layout package-layout--services">
-          <ModalFormContainer />
-          <Router>
-            <Settings path="settings/*" />
-            <Redirect
-              from="submissions/:id"
-              to={`requests/request/:id/${
-                props.location.search.includes('review') ? 'review' : 'activity'
-              }`}
-            />
-            <CustomRedirect
-              path="forms/:formSlug/submissions/:id"
-              appLocation={props.appLocation}
-            />
-
-            <CatalogContainer
-              path="/"
-              homePageMode={props.homePageMode}
-              homePageItems={props.homePageItems}
-            />
-            <CategoryListContainer path="categories" />
-            <CategoryContainer path="categories/:categorySlug" />
-            <FormContainer path="categories/:categorySlug/:formSlug" />
-            <FormContainer path="categories/:categorySlug/:formSlug/:submissionId" />
-            <FormListContainer path="forms" />
-            <FormContainer path="forms/:formSlug" />
-            <CatalogSearchResultsContainer path="search" />
-            <CatalogSearchResultsContainer path="search/:query" />
-            <RequestListContainer path="requests" />
-            <RequestListContainer path="requests/:type" />
-            <FormContainer path="requests/request/:submissionId" />
-            <FormContainer path="requests/:type/request/:submissionId" />
-            <RequestShowContainer path="/requests/request/:submissionId/:mode" />
-            <RequestShowContainer path="/requests/:type/request/:submissionId/:mode" />
-          </Router>
-        </main>
-      </I18n>
-    ),
-  });
 };
 
 const mapStateToProps = state => {
   return {
-    categories: state.categories.data,
-    forms: state.forms.data,
+    loading: state.servicesApp.loading,
+    error: state.servicesApp.error,
+    categories: state.servicesApp.categories,
+    forms: state.servicesApp.homeForms,
     submissionCounts: state.submissionCounts.data,
-    loading: state.categories.loading || state.forms.loading,
-    errors: [...state.categories.errors, ...state.forms.errors],
-    systemError: state.systemError,
     pathname: state.router.location.pathname,
     kappSlug: state.app.kappSlug,
     appLocation: state.app.location,
@@ -121,25 +134,21 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  fetchCategories: categoriesActions.fetchCategories,
-  fetchForms: formsActions.fetchForms,
-  fetchSubmissionCounts: submissionCountActions.fetchSubmissionCounts,
+  fetchAppDataRequest: categoriesActions.fetchAppDataRequest,
+  fetchSubmissionCountsRequest:
+    submissionCountActions.fetchSubmissionCountsRequest,
 };
 
 const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withProps(props => {
-    return props.categories.isEmpty()
+    return !props.categories || props.categories.isEmpty()
       ? {
           homePageMode: 'Forms',
-          homePageItems: props.forms
-            .filter(displayableFormPredicate)
-            .filter(form => form.categories.indexOf('home-page-services') > -1),
+          homePageItems: props.forms,
         }
       : {
           homePageMode: 'Categories',
@@ -155,15 +164,65 @@ const enhance = compose(
     openSettings: props => () => props.setSettingsBackPath(props.pathname),
   }),
   lifecycle({
-    componentWillMount() {
-      this.props.fetchCategories();
-      this.props.fetchForms();
-      this.props.fetchSubmissionCounts();
+    componentDidMount() {
+      this.props.fetchAppDataRequest();
+      this.props.fetchSubmissionCountsRequest();
     },
   }),
 );
 
-export const App = enhance(AppComponent);
+const App = enhance(AppComponent);
 
-App.shouldSuppressSidebar = (pathname, kappSlug) =>
-  matchPath(pathname, { path: `/kapps/${kappSlug}`, exact: true });
+export class AppProvider extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { ready: false };
+    // Listen to the local store to see if the embedded app is ready to be
+    // re-rendered. Currently this just means that the required props have been
+    // synced into the local store.
+    this.unsubscribe = store.subscribe(() => {
+      const ready = store.getState().app.ready;
+      if (ready !== this.state.ready) {
+        this.setState({ ready });
+      }
+    });
+  }
+
+  componentDidMount() {
+    Object.entries(this.props.appState).forEach(syncAppState);
+  }
+
+  componentDidUpdate(prevProps) {
+    Object.entries(this.props.appState)
+      .filter(([key, value]) => !is(value, prevProps.appState[key]))
+      .forEach(syncAppState);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  render() {
+    return (
+      this.state.ready && (
+        <Provider store={store} context={context}>
+          <CommonProvider>
+            <LocationProvider history={connectedHistory}>
+              <ToastsContainer duration={5000} />
+              <ModalFormContainer />
+              <Router>
+                <App
+                  render={this.props.render}
+                  path={`${this.props.appState.location}/*`}
+                />
+              </Router>
+            </LocationProvider>
+          </CommonProvider>
+        </Provider>
+      )
+    );
+  }
+
+  static shouldSuppressSidebar = (pathname, kappSlug) =>
+    matchPath(pathname, { path: `/kapps/${kappSlug}`, exact: true });
+}

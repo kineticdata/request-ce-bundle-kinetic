@@ -1,14 +1,26 @@
-import { List } from 'immutable';
+import { List, Record } from 'immutable';
+import { Utils } from 'common';
+import * as constants from '../../constants';
+const { noPayload, withPayload } = Utils;
+const ns = Utils.namespaceBuilder('services/submissions');
 
 export const types = {
-  FETCH_SUBMISSIONS: '@kd/catalog/FETCH_SUBMISSIONS',
-  FETCH_NEXT_PAGE: '@kd/catalog/FETCH_NEXT_PAGE',
-  FETCH_PREVIOUS_PAGE: '@kd/catalog/FETCH_PREVIOUS_PAGE',
-  FETCH_CURRENT_PAGE: '@kd/catalog/FETCH_CURRENT_PAGE',
-  SET_SUBMISSIONS: '@kd/catalog/SET_SUBMISSIONS',
+  FETCH_SUBMISSIONS_REQUEST: ns('FETCH_SUBMISSIONS_REQUEST'),
+  FETCH_SUBMISSIONS_NEXT: ns('FETCH_SUBMISSIONS_NEXT'),
+  FETCH_SUBMISSIONS_PREVIOUS: ns('FETCH_SUBMISSIONS_PREVIOUS'),
+  FETCH_SUBMISSIONS_CURRENT: ns('FETCH_SUBMISSIONS_CURRENT'),
+  FETCH_SUBMISSIONS_SUCCESS: ns('FETCH_SUBMISSIONS_SUCCESS'),
+  FETCH_SUBMISSIONS_FAILURE: ns('FETCH_SUBMISSIONS_FAILURE'),
 };
 
 export const actions = {
+  fetchSubmissionsRequest: withPayload(types.FETCH_SUBMISSIONS_REQUEST),
+  fetchSubmissionsNext: noPayload(types.FETCH_SUBMISSIONS_NEXT),
+  fetchSubmissionsPrevious: noPayload(types.FETCH_SUBMISSIONS_PREVIOUS),
+  fetchSubmissionsCurrent: noPayload(types.FETCH_SUBMISSIONS_CURRENT),
+  fetchSubmissionsSuccess: withPayload(types.FETCH_SUBMISSIONS_SUCCESS),
+  fetchSubmissionsFailure: withPayload(types.FETCH_SUBMISSIONS_FAILURE),
+
   fetchSubmissions: coreState => ({
     type: types.FETCH_SUBMISSIONS,
     payload: { coreState },
@@ -31,50 +43,49 @@ export const actions = {
   }),
 };
 
-export const defaultState = {
-  loading: true,
-  data: List(),
-  // page token tracking
-  previous: List(),
-  current: null,
-  next: null,
-};
+export const State = Record({
+  error: null,
+  data: null,
+  coreState: null,
+  limit: constants.PAGE_SIZE,
+  paging: false,
+  pageToken: null,
+  nextPageToken: null,
+  previousPageTokens: List(),
+});
 
-const reducer = (state = defaultState, action) => {
-  switch (action.type) {
-    case types.FETCH_SUBMISSIONS:
-      return {
-        ...state,
-        loading: true,
-        previous: List(),
-        current: null,
-      };
-    case types.FETCH_NEXT_PAGE:
-      return {
-        ...state,
-        loading: true,
-        previous: state.previous.push(state.current),
-        current: state.next,
-      };
-    case types.FETCH_PREVIOUS_PAGE:
-      return {
-        ...state,
-        loading: true,
-        previous: state.previous.pop(),
-        current: state.previous.last(),
-      };
-    case types.FETCH_CURRENT_PAGE:
-      return {
-        ...state,
-        loading: true,
-      };
-    case types.SET_SUBMISSIONS:
-      return {
-        ...state,
-        loading: false,
-        data: List(action.payload.submissions),
-        next: action.payload.nextPageToken,
-      };
+const reducer = (state = State(), { type, payload = {} }) => {
+  switch (type) {
+    case types.FETCH_SUBMISSIONS_REQUEST:
+      return state
+        .set('data', null)
+        .set('error', null)
+        .set('coreState', payload.coreState)
+        .set('limit', payload.limit || constants.PAGE_SIZE)
+        .set('pageToken', null)
+        .set('nextPageToken', null)
+        .set('previousPageTokens', List());
+    case types.FETCH_SUBMISSIONS_NEXT:
+      return state
+        .update('previousPageTokens', t => t.push(state.pageToken))
+        .set('pageToken', state.nextPageToken)
+        .set('nextPageToken', null)
+        .set('paging', true);
+    case types.FETCH_SUBMISSIONS_PREVIOUS:
+      return state
+        .set('nextPageToken', null)
+        .set('pageToken', state.previousPageTokens.last())
+        .update('previousPageTokens', t => t.pop())
+        .set('paging', true);
+    case types.FETCH_SUBMISSIONS_CURRENT:
+      return state.set('paging', true);
+    case types.FETCH_SUBMISSIONS_SUCCESS:
+      return state
+        .set('data', List(payload.submissions))
+        .set('nextPageToken', payload.nextPageToken)
+        .set('paging', false);
+    case types.FETCH_SUBMISSIONS_FAILURE:
+      return state.set('error', payload).set('paging', false);
     default:
       return state;
   }

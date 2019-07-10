@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
-
-import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
+import { StateListWrapper } from 'common';
 import { RequestCard } from '../shared/RequestCard';
 import { PageTitle } from '../shared/PageTitle';
 
@@ -28,9 +27,13 @@ const emptyStateMessage = type => {
 export const RequestList = ({
   forms,
   submissions,
+  error,
   type,
+  paging,
   hasNextPage,
   hasPreviousPage,
+  pageIndexStart,
+  pageIndexEnd,
   handleNextPage,
   handlePreviousPage,
   refreshPage,
@@ -58,51 +61,65 @@ export const RequestList = ({
             <I18n>{type || 'All Requests'}</I18n>
           </h1>
         </div>
-        <div className="btn-group">
-          <button
-            type="button"
-            className="btn btn-inverse"
-            disabled={!hasPreviousPage}
-            onClick={handlePreviousPage}
-          >
-            <span className="icon">
-              <span className="fa fa-fw fa-caret-left" />
-            </span>
-          </button>
-          <button
-            type="button"
-            className="btn btn-inverse"
-            disabled={!hasNextPage}
-            onClick={handleNextPage}
-          >
-            <span className="icon">
-              <span className="fa fa-fw fa-caret-right" />
-            </span>
-          </button>
-        </div>
       </div>
       <div className="cards__wrapper cards__wrapper--requests">
-        {submissions.size > 0 ? (
-          submissions
-            .map(submission => ({
-              submission,
-              forms,
-              key: submission.id,
-              path: getSubmissionPath(appLocation, submission, null, type),
-              deleteCallback: refreshPage,
-            }))
-            .map(props => <RequestCard {...props} />)
-        ) : (
-          <div className="empty-state empty-state--wally">
-            <h5>
-              <I18n>No {type !== 'All' ? type : ''} Requests Found...</I18n>
-            </h5>
-            <img src={wallyHappyImage} alt="Happy Wally" />
-            <h6>
-              <I18n>{emptyStateMessage(type)}</I18n>
-            </h6>
-          </div>
-        )}
+        <StateListWrapper
+          data={submissions}
+          error={error}
+          emptyTitle={`No ${type !== 'All' ? `${type} ` : ''}Requests Found`}
+          emptyMessage={emptyStateMessage(type)}
+        >
+          {data => (
+            <Fragment>
+              {data
+                .map(submission => ({
+                  submission,
+                  forms,
+                  key: submission.id,
+                  path: getSubmissionPath(appLocation, submission, null, type),
+                  deleteCallback: refreshPage,
+                }))
+                .map(props => <RequestCard {...props} />)}
+              <div className="pagination-bar">
+                <I18n
+                  render={translate => (
+                    <button
+                      className="btn btn-link icon-wrapper"
+                      onClick={handlePreviousPage}
+                      disabled={paging || !hasPreviousPage}
+                      title={translate('Previous Page')}
+                    >
+                      <span className="icon">
+                        <span className="fa fa-fw fa-caret-left" />
+                      </span>
+                    </button>
+                  )}
+                />
+                <small>
+                  {paging ? (
+                    <span className="fa fa-spinner fa-spin" />
+                  ) : (
+                    <strong>{`${pageIndexStart}-${pageIndexEnd}`}</strong>
+                  )}
+                </small>
+                <I18n
+                  render={translate => (
+                    <button
+                      className="btn btn-link icon-wrapper"
+                      onClick={handleNextPage}
+                      disabled={paging || !hasNextPage}
+                      title={translate('Next Page')}
+                    >
+                      <span className="icon">
+                        <span className="fa fa-fw fa-caret-right" />
+                      </span>
+                    </button>
+                  )}
+                />
+              </div>
+            </Fragment>
+          )}
+        </StateListWrapper>
       </div>
     </div>
   </Fragment>

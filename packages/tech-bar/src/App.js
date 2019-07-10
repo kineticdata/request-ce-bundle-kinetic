@@ -3,12 +3,7 @@ import { Provider } from 'react-redux';
 import { matchPath } from 'react-router-dom';
 import { LocationProvider, Router as ReachRouter } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
-import {
-  connectedHistory,
-  connect,
-  context,
-  store,
-} from 'tech-bar/src/redux/store';
+import { connectedHistory, connect, context, store } from './redux/store';
 import {
   CommonProvider,
   ErrorUnexpected,

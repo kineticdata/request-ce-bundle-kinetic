@@ -1,8 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { actions } from '../../redux/modules/submission';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 import { Utils } from 'common';
 import { I18n } from '@kineticdata/react';
 
@@ -27,8 +26,6 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withProps(props => {
     const disabledAttribute = Utils.getAttributeValue(
@@ -44,7 +41,8 @@ const enhance = compose(
     };
   }),
   withHandlers({
-    handleClick: props => () => props.setSendMessageModalOpen(true, 'comment'),
+    handleClick: props => () =>
+      props.setSendMessageModalOpen({ isOpen: true, type: 'comment' }),
   }),
 );
 

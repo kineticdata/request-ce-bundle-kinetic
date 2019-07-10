@@ -1,13 +1,11 @@
-import { connect } from 'react-redux';
 import { CategoryList } from './CategoryList';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
+
 const mapStateToProps = state => ({
-  categories: state.categories.data,
+  categories: state.servicesApp.categories,
 });
 
 export const CategoryListContainer = connect(
   mapStateToProps,
   null,
-  null,
-  { context },
 )(CategoryList);

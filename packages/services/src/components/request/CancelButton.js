@@ -1,9 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { Utils } from 'common';
 import { actions } from '../../redux/modules/submission';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 import * as constants from '../../constants';
 import { I18n } from '@kineticdata/react';
@@ -28,7 +27,7 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = {
-  deleteSubmission: actions.deleteSubmission,
+  deleteSubmission: actions.deleteSubmissionRequest,
   setSendMessageModalOpen: actions.setSendMessageModalOpen,
 };
 
@@ -36,8 +35,6 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withProps(props => {
     const disabledAttribute = Utils.getAttributeValue(
@@ -59,9 +56,12 @@ const enhance = compose(
   withHandlers({
     handleClick: props => () => {
       if (props.submission.coreState === constants.CORE_STATE_DRAFT) {
-        props.deleteSubmission(props.submission.id, props.deleteCallback);
+        props.deleteSubmission({
+          id: props.submission.id,
+          callback: props.deleteCallback,
+        });
       } else {
-        props.setSendMessageModalOpen(true, 'cancel');
+        props.setSendMessageModalOpen({ isOpen: true, type: 'cancel' });
       }
     },
   }),

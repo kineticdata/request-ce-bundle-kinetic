@@ -1,8 +1,7 @@
-import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { CatalogSearch } from './CatalogSearch';
 import { actions } from '../../redux/modules/search';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 const mapStateToProps = state => ({
   searchTerm: state.search.inputValue,
@@ -21,6 +20,4 @@ const mapDispatchToProps = {
 export const CatalogSearchContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
-  null,
-  { context },
 )(CatalogSearch);

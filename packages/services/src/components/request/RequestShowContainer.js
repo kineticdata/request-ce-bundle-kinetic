@@ -1,8 +1,7 @@
-import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
-
+import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { actions } from '../../redux/modules/submission';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 import { RequestShow } from './RequestShow';
 
@@ -13,28 +12,28 @@ export const closeDiscussion = props => () =>
 
 export const mapStateToProps = (state, props) => ({
   submission: state.submission.data,
+  error: state.submission.error,
   listType: props.type,
   mode: props.mode,
   discussion: state.submission.discussion,
   sendMessageModalOpen: state.submission.isSendMessageModalOpen,
   kappSlug: state.app.kappSlug,
   appLocation: state.app.location,
+  discussionsEnabled: selectDiscussionsEnabled(state),
 });
 
 export const mapDispatchToProps = {
-  clearSubmission: actions.clearSubmission,
-  fetchSubmission: actions.fetchSubmission,
+  clearSubmission: actions.clearSubmissionRequest,
+  fetchSubmission: actions.fetchSubmissionRequest,
   startPoller: actions.startSubmissionPoller,
   stopPoller: actions.stopSubmissionPoller,
-  fetchDiscussion: actions.fetchDiscussion,
+  fetchDiscussion: actions.fetchDiscussionRequest,
 };
 
 const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('viewDiscussionModal', 'setViewDiscussionModal', false),
   lifecycle({

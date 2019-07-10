@@ -6,12 +6,7 @@ import {
   Router as ReachRouter,
 } from '@reach/router';
 import { compose, lifecycle, withHandlers } from 'recompose';
-import {
-  connectedHistory,
-  connect,
-  context,
-  store,
-} from 'queue/src/redux/store';
+import { connectedHistory, connect, context, store } from './redux/store';
 import { syncAppState } from './redux/modules/app';
 import {
   CommonProvider,

@@ -1,7 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 const ViewDiscussionButton = props =>
   props.isSmallLayout &&
@@ -21,14 +20,7 @@ export const mapStateToProps = state => ({
 });
 
 const enhance = compose(
-  connect(
-    mapStateToProps,
-    null,
-    null,
-    {
-      context,
-    },
-  ),
+  connect(mapStateToProps),
   withHandlers({
     handleClick: props => () => {
       props.openDiscussion();

@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { ViewDiscussionsModal, Discussion } from 'common';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 export const RequestDiscussionComponent = ({
   discussion,
@@ -17,10 +16,11 @@ export const RequestDiscussionComponent = ({
         close={closeDiscussion}
         discussionId={discussion.id}
         modalBodyClassName="services-submission-discussion"
+        me={me}
       />
     ) : (
       <div className="page-panel page-panel--two-fifths page-panel--scrollable page-panel--discussions d-none d-md-flex">
-        <Discussion id={discussion.id} />
+        <Discussion id={discussion.id} me={me} />
       </div>
     )}
   </Fragment>
@@ -37,8 +37,6 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
 );
 

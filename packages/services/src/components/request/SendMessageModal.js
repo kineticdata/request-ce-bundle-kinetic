@@ -1,10 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Modal, ModalFooter } from 'reactstrap';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { push } from 'connected-react-router';
 import { actions } from '../../redux/modules/submission';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 const SendMessageModalComponent = props => {
   const title =
@@ -55,16 +54,15 @@ const SendMessageModalComponent = props => {
 const mapStateToProps = state => ({
   profile: state.app.profile,
   actionType: state.submission.sendMessageType,
-  discussions: state.submission.discussions,
 });
 
 export const mapDispatchToProps = {
   setModalOpen: actions.setSendMessageModalOpen,
-  sendMessage: actions.sendMessage,
+  sendMessage: actions.sendMessageRequest,
   push,
 };
 
-const close = props => () => props.setModalOpen(false);
+const close = props => () => props.setModalOpen({ isOpen: false });
 
 const submit = props => () => {
   props.sendMessage(props.comment);
@@ -74,8 +72,6 @@ export const SendMessageModal = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('comment', 'setComment', ''),
   withHandlers({ close, submit }),

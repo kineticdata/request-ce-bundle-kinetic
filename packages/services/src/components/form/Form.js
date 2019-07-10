@@ -23,6 +23,7 @@ export const Form = ({
   handleDelete,
   values,
   kappSlug,
+  formSlug,
   path,
   appLocation,
 }) => (
@@ -71,15 +72,16 @@ export const Form = ({
             </h1>
           )}
         </div>
-        {submissionId && (
-          <button
-            type="button"
-            onClick={handleDelete}
-            className="btn btn-outline-danger"
-          >
-            <I18n>Cancel Request</I18n>
-          </button>
-        )}
+        {submissionId &&
+          form && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="btn btn-outline-danger"
+            >
+              <I18n>Cancel Request</I18n>
+            </button>
+          )}
       </div>
       <div className="form-description">
         {form && (
@@ -101,10 +103,10 @@ export const Form = ({
             />
           </I18n>
         ) : (
-          <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
+          <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
             <CoreForm
               kapp={kappSlug}
-              form={form.slug}
+              form={formSlug}
               globals={globals}
               loaded={handleLoaded}
               created={handleCreated}

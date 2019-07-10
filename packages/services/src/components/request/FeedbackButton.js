@@ -1,9 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { openModalForm } from 'common';
 import { selectAdminKapp } from 'app/src/redux/selectors';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 import { getFeedbackFormConfig } from '../../utils';
 import { I18n } from '@kineticdata/react';
 
@@ -21,8 +20,6 @@ const enhance = compose(
   connect(
     mapStateToProps,
     null,
-    null,
-    { context },
   ),
   withHandlers({
     handleClick: props => () =>

@@ -3,12 +3,6 @@ import { Provider } from 'react-redux';
 import { LocationProvider, Router as ReachRouter } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
 import {
-  connectedHistory,
-  connect,
-  context,
-  store,
-} from 'scaffold/src/redux/store';
-import {
   CommonProvider,
   ErrorUnexpected,
   Loading,
@@ -17,13 +11,14 @@ import {
 } from 'common';
 import { is } from 'immutable';
 import { I18n } from '@kineticdata/react';
+import { connectedHistory, connect, context, store } from './redux/store';
+import { syncAppState } from './redux/modules/app';
 
 import { Sidebar } from './components/Sidebar';
 import { Home } from './components/Home';
 import { Form } from './components/Form';
 import { Settings } from './components/settings/Settings';
 import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
-import { syncAppState } from './redux/modules/app';
 import { actions } from './redux/modules/scaffoldApp';
 import './assets/styles/master.scss';
 

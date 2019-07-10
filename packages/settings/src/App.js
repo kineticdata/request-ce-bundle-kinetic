@@ -2,12 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Provider } from 'react-redux';
 import { LocationProvider, Router as ReachRouter } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
-import {
-  connectedHistory,
-  connect,
-  context,
-  store,
-} from 'settings/src/redux/store';
+import { connectedHistory, connect, context, store } from './redux/store';
 import {
   CommonProvider,
   ErrorUnexpected,

@@ -1,11 +1,10 @@
 import React from 'react';
 import moment from 'moment';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 
 import { actions } from '../../../redux/modules/settingsForms';
-import { context } from '../../../redux/store';
+import { connect } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 import { PageTitle } from '../../shared/PageTitle';
 
@@ -294,8 +293,6 @@ export const FormActivity = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   lifecycle({
     componentWillMount() {

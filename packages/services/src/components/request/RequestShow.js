@@ -1,7 +1,12 @@
 import React, { Fragment } from 'react';
-import classNames from 'classnames';
 import { Link } from '@reach/router';
-import { Icon, TimeAgo, Utils as CommonUtils } from 'common';
+import {
+  Icon,
+  TimeAgo,
+  Utils as CommonUtils,
+  ErrorMessage,
+  LoadingMessage,
+} from 'common';
 import { bundle } from '@kineticdata/react';
 import { RequestShowConfirmationContainer } from './RequestShowConfirmation';
 import { RequestDiscussion } from './RequestDiscussion';
@@ -151,25 +156,19 @@ const CompletedInItem = ({ submission }) => {
 
 export const RequestShow = ({
   submission,
+  error,
   listType,
   mode,
+  discussion,
   sendMessageModalOpen,
   viewDiscussionModal,
-  discussion,
   openDiscussion,
   closeDiscussion,
   kappSlug,
   appLocation,
 }) => (
   <div className="page-container page-container--panels page-container--services-submission page-container--no-padding">
-    <div
-      className={classNames(
-        'page-panel page-panel--services-submission page-panel--scrollable',
-        {
-          'page-panel--three-fifths page-panel--no-padding ': discussion,
-        },
-      )}
-    >
+    <div className="page-panel page-panel--three-fifths page-panel--scrollable page-panel--services-submission">
       <PageTitle parts={[submission && `#${submission.handle}`, 'Requests']} />
       {sendMessageModalOpen && <SendMessageModal submission={submission} />}
       <span className="services-color-bar services-color-bar__blue-slate" />
@@ -180,41 +179,48 @@ export const RequestShow = ({
         <span className="fa fa-fw fa-chevron-left" />
         <I18n>{listType || 'All'} Requests</I18n>
       </Link>
-      {submission && (
-        <Fragment>
-          <div className="submission__meta">
-            <div className="data-list-row">
-              <StatusItem submission={submission} />
-              <div className="data-list-row__col">
-                <dl>
-                  <dt>
-                    <I18n>Confirmation #</I18n>
-                  </dt>
-                  <dd>{submission.handle}</dd>
-                </dl>
-              </div>
-              <DisplayDateItem submission={submission} />
-              <ServiceOwnerItem submission={submission} />
-              <EstCompletionItem submission={submission} />
-              <CompletedInItem submission={submission} />
-              <div className="col-lg-auto btn-group-col">
-                <ViewDiscussionButtonContainer
-                  openDiscussion={openDiscussion}
-                />
-                <CloneButtonContainer submission={submission} />
-                {submission.coreState === constants.CORE_STATE_SUBMITTED &&
-                  !discussion && (
-                    <CommentButtonContainer submission={submission} />
+      {error && (
+        <ErrorMessage
+          title="Failed to load submission"
+          message={error.message}
+        />
+      )}
+      {!error && !submission && <LoadingMessage />}
+      {!error &&
+        submission && (
+          <Fragment>
+            <div className="submission__meta">
+              <div className="data-list-row">
+                <StatusItem submission={submission} />
+                <div className="data-list-row__col">
+                  <dl>
+                    <dt>
+                      <I18n>Confirmation #</I18n>
+                    </dt>
+                    <dd>{submission.handle}</dd>
+                  </dl>
+                </div>
+                <DisplayDateItem submission={submission} />
+                <ServiceOwnerItem submission={submission} />
+                <EstCompletionItem submission={submission} />
+                <CompletedInItem submission={submission} />
+                <div className="col-lg-auto btn-group-col">
+                  <ViewDiscussionButtonContainer
+                    openDiscussion={openDiscussion}
+                  />
+                  <CloneButtonContainer submission={submission} />
+                  {submission.coreState === constants.CORE_STATE_SUBMITTED &&
+                    !discussion && (
+                      <CommentButtonContainer submission={submission} />
+                    )}
+                  {submission.coreState === constants.CORE_STATE_CLOSED && (
+                    <FeedbackButtonContainer submission={submission} />
                   )}
-                {submission.coreState === constants.CORE_STATE_CLOSED && (
-                  <FeedbackButtonContainer submission={submission} />
-                )}
 
-                <CancelButtonContainer submission={submission} />
+                  <CancelButtonContainer submission={submission} />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="page-container page-container--submission">
             <div className="page-content">
               <div className="submission-title">
                 <h1>
@@ -249,7 +255,7 @@ export const RequestShow = ({
                         null,
                         listType,
                       )}
-                      getProps={isActiveClass('nav-link')}
+                      getProps={isActiveClass()}
                     >
                       <I18n>Timeline</I18n>
                     </Link>
@@ -263,7 +269,7 @@ export const RequestShow = ({
                         'review',
                         listType,
                       )}`}
-                      getProps={isActiveClass('nav-link')}
+                      getProps={isActiveClass()}
                     >
                       <I18n>Review Request</I18n>
                     </Link>
@@ -281,16 +287,16 @@ export const RequestShow = ({
                 </div>
               </div>
             </div>
-          </div>
-        </Fragment>
-      )}
+          </Fragment>
+        )}
     </div>
-    {discussion && (
-      <RequestDiscussion
-        discussion={discussion}
-        viewDiscussionModal={viewDiscussionModal}
-        closeDiscussion={closeDiscussion}
-      />
-    )}
+    {submission &&
+      discussion && (
+        <RequestDiscussion
+          discussion={discussion}
+          viewDiscussionModal={viewDiscussionModal}
+          closeDiscussion={closeDiscussion}
+        />
+      )}
   </div>
 );

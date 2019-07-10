@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link } from '@reach/router';
 import { bundle } from '@kineticdata/react';
-import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import {
   actions,
   buildFormConfigurationObject,
 } from '../../../redux/modules/settingsForms';
-import { context } from '../../../redux/store';
+import { connect } from '../../../redux/store';
 import { PageTitle } from '../../shared/PageTitle';
 
 import { actions as servicesActions } from '../../../redux/modules/settingsServices';
@@ -944,8 +943,6 @@ export const FormSettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('inputs', 'setInputs', {}),
   withState('categoryInput', 'setCategoryInput', ''),

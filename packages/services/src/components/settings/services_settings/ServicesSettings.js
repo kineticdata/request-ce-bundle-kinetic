@@ -1,13 +1,12 @@
 import React from 'react';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { addSuccess, addError, AttributeSelectors } from 'common';
 import { fetchKapp, updateKapp } from '@kineticdata/react';
 import isarray from 'isarray';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../../redux/store';
+import { connect } from '../../../redux/store';
 import { PageTitle } from '../../shared/PageTitle';
 
 export const SettingsComponent = ({
@@ -402,18 +401,12 @@ const handleNameChange = ({ setKappName }) => event => {
 const mapStateToProps = state => ({
   currentKapp: state.app.kapp,
   servicesSettings: state.servicesSettings,
-  forms: state.forms.data,
   appLocation: state.app.location,
   reloadApp: state.app.actions.refreshApp,
 });
 
 export const ServicesSettings = compose(
-  connect(
-    mapStateToProps,
-    null,
-    null,
-    { context },
-  ),
+  connect(mapStateToProps),
   withState('attributesMap', 'setAttributesMap', Map()),
   withState('previousAttributesMap', 'setPreviousAttributesMap', Map()),
   withState('attributesMapDifferences', 'setAttributesMapDifferences', Map()),

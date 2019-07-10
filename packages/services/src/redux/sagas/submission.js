@@ -18,43 +18,42 @@ import {
   createDiscussion,
   sendMessage,
 } from '@kineticdata/react';
+import { addToast, addToastAlert } from 'common';
 import { Map, Seq } from 'immutable';
 import { push } from 'connected-react-router';
 
 import { actions, types } from '../modules/submission';
-import { actions as systemErrorActions } from '../modules/systemError';
 import { getCancelFormConfig, getCommentFormConfig } from '../../utils';
 
-export function* fetchSubmissionSaga(action) {
+export function* fetchSubmissionRequestSaga(action) {
   const include =
     'details,values,form,form.attributes,form.kapp.attributes,' +
     'form.kapp.space.attributes,activities,activities.details';
-  const { submission, errors, serverError } = yield call(fetchSubmission, {
+  const { submission, error } = yield call(fetchSubmission, {
     id: action.payload,
     include,
   });
 
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
-  } else if (errors) {
-    yield put(actions.setSubmissionErrors(errors));
+  if (error) {
+    yield put(actions.fetchSubmissionFailure(error));
   } else {
-    yield put(actions.setSubmission(submission));
+    yield put(actions.fetchSubmissionSuccess(submission));
   }
 }
 
-export function* cloneSubmissionSaga(action) {
+export function* cloneSubmissionRequestSaga(action) {
   const include = 'details,values,form,form.fields.details,form.kapp';
   const kappSlug = yield select(state => state.app.kappSlug);
-  const { submission, errors, serverError } = yield call(fetchSubmission, {
+  const { submission, error } = yield call(fetchSubmission, {
     id: action.payload,
     include,
   });
 
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
-  } else if (errors) {
-    yield put(actions.cloneSubmissionErrors(errors));
+  if (error) {
+    addToastAlert({
+      title: 'Failed to clone submission',
+      message: error.message,
+    });
   } else {
     // The values of attachment fields cannot be cloned so we will filter them out
     // of the values POSTed to the new submission.
@@ -78,23 +77,23 @@ export function* cloneSubmissionSaga(action) {
       .toJS();
 
     // Make the call to create the clone.
-    const {
-      submission: cloneSubmission,
-      postErrors,
-      postServerError,
-    } = yield call(createSubmission, {
-      kappSlug: submission.form.kapp.slug,
-      formSlug: submission.form.slug,
-      values,
-      completed: false,
-    });
+    const { submission: cloneSubmission, error: cloneError } = yield call(
+      createSubmission,
+      {
+        kappSlug: submission.form.kapp.slug,
+        formSlug: submission.form.slug,
+        values,
+        completed: false,
+      },
+    );
 
-    if (postServerError) {
-      yield put(systemErrorActions.setSystemError(serverError));
-    } else if (postErrors) {
-      yield put(actions.cloneSubmissionErrors(postErrors));
+    if (cloneError) {
+      addToastAlert({
+        title: 'Failed to clone submission',
+        message: cloneError.message,
+      });
     } else {
-      yield put(actions.cloneSubmissionSuccess());
+      addToast('Submission cloned successfully');
       yield put(
         push(`/kapps/${kappSlug}/requests/Draft/request/${cloneSubmission.id}`),
       );
@@ -102,37 +101,40 @@ export function* cloneSubmissionSaga(action) {
   }
 }
 
-export function* deleteSubmissionSaga(action) {
-  const { errors, serverError } = yield call(deleteSubmission, {
+export function* deleteSubmissionRequestSaga(action) {
+  const { error } = yield call(deleteSubmission, {
     id: action.payload.id,
   });
 
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
-  } else if (errors) {
-    yield put(actions.deleteSubmissionErrors(errors));
+  if (error) {
+    addToastAlert({
+      title: 'Failed to delete submission',
+      message: error.message,
+    });
   } else {
-    yield put(actions.deleteSubmissionSuccess());
+    addToast('Submission deleted successfully');
     if (typeof action.payload.callback === 'function') {
       action.payload.callback();
     }
   }
 }
 
-export function* fetchDiscussionSaga(action) {
-  const { discussions } = yield call(fetchDiscussions, {
+export function* fetchDiscussionRequestSaga(action) {
+  const { discussions, error } = yield call(fetchDiscussions, {
     relatedItem: {
       type: 'Submission',
       key: action.payload,
     },
   });
 
-  if (discussions && discussions.length > 0) {
-    yield put(actions.setDiscussion(discussions[0]));
+  if (error) {
+    addToast({ severity: 'danger', message: 'Discussion failed to load' });
+  } else if (discussions && discussions.length > 0) {
+    yield put(actions.fetchDiscussionSuccess(discussions[0]));
   }
 }
 
-export function* sendMessageSaga(action) {
+export function* sendMessageRequestSaga(action) {
   const kappSlug = yield select(state => state.app.kappSlug);
   const submission = yield select(state => state.submission.data);
   let discussion = yield select(state => state.submission.discussion);
@@ -140,17 +142,20 @@ export function* sendMessageSaga(action) {
   const sendMessageType = yield select(
     state => state.submission.sendMessageType,
   );
+
+  // If discussion is null, fetch again to make sure
+  if (discussion === null) {
+    yield* fetchDiscussionRequestSaga({ payload: submission.id });
+    discussion = yield select(state => state.submission.discussion);
+  }
+
   // Create the Discussion if it doesn't exist for the submission
   if (discussion === null) {
-    const discussionProps = {
+    const { discussion: newDiscussion } = yield call(createDiscussion, {
       title: submission.label,
       description: `Global discussion for ${submission.label}`,
       owningUsers: [{ username: profile.username }],
-    };
-    const { discussion: newDiscussion } = yield call(
-      createDiscussion,
-      discussionProps,
-    );
+    });
 
     if (newDiscussion) {
       discussion = newDiscussion;
@@ -175,23 +180,26 @@ export function* sendMessageSaga(action) {
         values: { 'Discussion Id': discussion.id },
       });
 
-      yield put(actions.setDiscussion(discussion));
+      yield put(actions.fetchDiscussionSuccess(discussion));
     }
   }
-  // Send the Comment/Cancel Request Message
-  const commentMessage =
-    sendMessageType === 'comment'
-      ? action.payload
-      : `I would like to cancel my ${submission.form.name} - ${
-          submission.label
-        } request (with confirmation ${submission.handle}) 
-        
+
+  if (discussion !== null) {
+    // Send the Comment/Cancel Request Message
+    const commentMessage =
+      sendMessageType === 'comment'
+        ? action.payload
+        : `I would like to cancel my ${submission.form.name} - ${
+            submission.label
+          } request (with confirmation ${submission.handle})
+
         ${action.payload}`;
 
-  yield call(sendMessage, {
-    id: discussion.id,
-    message: commentMessage,
-  });
+    yield call(sendMessage, {
+      id: discussion.id,
+      message: commentMessage,
+    });
+  }
 
   const formConfig =
     sendMessageType === 'comment'
@@ -199,7 +207,7 @@ export function* sendMessageSaga(action) {
       : getCancelFormConfig(kappSlug, submission.id, action.payload);
 
   yield call(createSubmission, formConfig);
-  yield put(actions.setSendMessageModalOpen(false));
+  yield put(actions.setSendMessageModalOpen({ isOpen: false }));
 }
 
 export function* pollerTask(id) {
@@ -212,18 +220,18 @@ export function* pollerTask(id) {
     // Wait
     yield delay(pollDelay);
     // Query
-    const { submission, serverError } = yield call(fetchSubmission, {
+    const { submission, error } = yield call(fetchSubmission, {
       id,
       include,
     });
     // If there is a server error dispatch the appropriate action and break out
     // of the while loop to stop polling.
-    if (serverError) {
-      yield put(systemErrorActions.setSystemError(serverError));
+    if (error) {
+      addToast({ severity: 'danger', message: 'Failed to refresh submission' });
       yield put(actions.stopSubmissionPoller());
       break;
     } else {
-      yield put(actions.setSubmission(submission));
+      yield put(actions.fetchSubmissionSuccess(submission));
       pollDelay = Math.min(pollDelay + 5000, 30000);
     }
   }
@@ -243,9 +251,9 @@ export function* watchSubmissionPoller() {
 }
 
 export function* watchSubmission() {
-  yield takeEvery(types.FETCH_SUBMISSION, fetchSubmissionSaga);
-  yield takeEvery(types.CLONE_SUBMISSION, cloneSubmissionSaga);
-  yield takeEvery(types.DELETE_SUBMISSION, deleteSubmissionSaga);
-  yield takeEvery(types.FETCH_DISCUSSION, fetchDiscussionSaga);
-  yield takeEvery(types.SEND_MESSAGE, sendMessageSaga);
+  yield takeEvery(types.FETCH_SUBMISSION_REQUEST, fetchSubmissionRequestSaga);
+  yield takeEvery(types.CLONE_SUBMISSION_REQUEST, cloneSubmissionRequestSaga);
+  yield takeEvery(types.DELETE_SUBMISSION_REQUEST, deleteSubmissionRequestSaga);
+  yield takeEvery(types.FETCH_DISCUSSION_REQUEST, fetchDiscussionRequestSaga);
+  yield takeEvery(types.SEND_MESSAGE_REQUEST, sendMessageRequestSaga);
 }

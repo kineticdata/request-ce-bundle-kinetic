@@ -5,7 +5,7 @@ import { CategoryCard } from '../shared/CategoryCard';
 import { ServiceCard } from '../shared/ServiceCard';
 import { RequestCard } from '../shared/RequestCard';
 import { PageTitle } from '../shared/PageTitle';
-
+import { StateListWrapper } from 'common';
 import { getSubmissionPath } from '../../utils';
 import { I18n } from '@kineticdata/react';
 
@@ -13,6 +13,7 @@ export const Catalog = ({
   kapp,
   forms,
   submissions,
+  submissionsError,
   homePageMode,
   homePageItems,
   fetchSubmissions,
@@ -48,27 +49,25 @@ export const Catalog = ({
           </div>
 
           <div className="cards__wrapper cards__wrapper--requests">
-            {submissions.size > 0 ? (
-              submissions
-                .take(5)
-                .map(submission => ({
-                  submission,
-                  forms,
-                  key: submission.id,
-                  path: getSubmissionPath(appLocation, submission),
-                  deleteCallback: fetchSubmissions,
-                }))
-                .map(props => <RequestCard {...props} />)
-            ) : (
-              <div className="card card--empty-state">
-                <h1>
-                  <I18n>You have no requests yet.</I18n>
-                </h1>
-                <p>
-                  <I18n>As you request new services, they’ll appear here.</I18n>
-                </p>
-              </div>
-            )}
+            <StateListWrapper
+              data={submissions}
+              error={submissionsError}
+              emptyTitle="You have no requests yet"
+              emptyMessage="As you request new services, they’ll appear here"
+            >
+              {data =>
+                data
+                  .take(5)
+                  .map(submission => ({
+                    submission,
+                    forms,
+                    key: submission.id,
+                    path: getSubmissionPath(appLocation, submission),
+                    deleteCallback: fetchSubmissions,
+                  }))
+                  .map(props => <RequestCard {...props} />)
+              }
+            </StateListWrapper>
           </div>
         </div>
         <div className="page-panel page-panel--transparent page-panel--two-thirds page-panel--services">

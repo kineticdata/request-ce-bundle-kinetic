@@ -1,132 +1,62 @@
+import { Record } from 'immutable';
+import { Utils } from 'common';
+const { noPayload, withPayload } = Utils;
+const ns = Utils.namespaceBuilder('services/submission');
+
 export const types = {
-  FETCH_SUBMISSION: '@kd/catalog/FETCH_SUBMISSION',
-  SET_SUBMISSION: '@kd/catalog/SET_SUBMISSION',
-  SET_SUBMISSION_ERRORS: '@kd/catalog/SET_SUBMISSION_ERRORS',
-  SET_SEND_MESSAGE_MODAL_OPEN: '@kd/catalog/SET_SEND_MESSAGE_MODAL_OPEN',
-  FETCH_DISCUSSION: '@kd/catalog/FETCH_DISCUSSION',
-  SET_DISCUSSION: '@kd/catalog/SET_DISCUSSION',
-  SEND_MESSAGE: '@kd/catalog/SEND_MESSAGE',
-  CLEAR_SUBMISSION: '@kd/catalog/CLEAR_SUBMISSION',
-  CLONE_SUBMISSION: '@kd/catalog/CLONE_SUBMISSION',
-  CLONE_SUBMISSION_SUCCESS: '@kd/catalog/CLONE_SUBMISSION_SUCCESS',
-  CLONE_SUBMISSION_ERROR: '@kd/catalog/CLONE_SUBMISSION_ERROR',
-  DELETE_SUBMISSION: '@kd/catalog/DELETE_SUBMISSION',
-  DELETE_SUBMISSION_SUCCESS: '@kd/catalog/DELETE_SUBMISSION_SUCCESS',
-  DELETE_SUBMISSION_ERROR: '@kd/catalog/DELETE_SUBMISSION_ERROR',
-  START_SUBMISSION_POLLER: '@kd/catalog/START_SUBMISSION_POLLER',
-  STOP_SUBMISSION_POLLER: '@kd/catalog/STOP_SUBMISSION_POLLER',
+  FETCH_SUBMISSION_REQUEST: ns('FETCH_SUBMISSION_REQUEST'),
+  FETCH_SUBMISSION_SUCCESS: ns('FETCH_SUBMISSION_SUCCESS'),
+  FETCH_SUBMISSION_FAILURE: ns('FETCH_SUBMISSION_FAILURE'),
+  CLEAR_SUBMISSION_REQUEST: ns('CLEAR_SUBMISSION_REQUEST'),
+  CLONE_SUBMISSION_REQUEST: ns('CLONE_SUBMISSION_REQUEST'),
+  DELETE_SUBMISSION_REQUEST: ns('DELETE_SUBMISSION_REQUEST'),
+  START_SUBMISSION_POLLER: ns('START_SUBMISSION_POLLER'),
+  STOP_SUBMISSION_POLLER: ns('STOP_SUBMISSION_POLLER'),
+  FETCH_DISCUSSION_REQUEST: ns('FETCH_DISCUSSION_REQUEST'),
+  FETCH_DISCUSSION_SUCCESS: ns('FETCH_DISCUSSION_SUCCESS'),
+  SET_SEND_MESSAGE_MODAL_OPEN: ns('SET_SEND_MESSAGE_MODAL_OPEN'),
+  SEND_MESSAGE_REQUEST: ns('SEND_MESSAGE_REQUEST'),
 };
 
 export const actions = {
-  fetchSubmission: id => ({ type: types.FETCH_SUBMISSION, payload: id }),
-  setSubmission: submissions => ({
-    type: types.SET_SUBMISSION,
-    payload: submissions,
-  }),
-  setSubmissionErrors: errors => ({
-    type: types.SET_SUBMISSION_ERRORS,
-    payload: errors,
-  }),
-  fetchDiscussion: submissionId => ({
-    type: types.FETCH_DISCUSSION,
-    payload: submissionId,
-  }),
-  setDiscussion: discussion => ({
-    type: types.SET_DISCUSSION,
-    payload: discussion,
-  }),
-  setSendMessageModalOpen: (isOpen, type) => ({
-    type: types.SET_SEND_MESSAGE_MODAL_OPEN,
-    payload: { isOpen, type },
-  }),
-  sendMessage: message => ({
-    type: types.SEND_MESSAGE,
-    payload: message,
-  }),
-  clearSubmission: () => ({ type: types.CLEAR_SUBMISSION }),
-  cloneSubmission: id => ({ type: types.CLONE_SUBMISSION, payload: id }),
-  cloneSubmissionSuccess: () => ({ type: types.CLONE_SUBMISSION_SUCCESS }),
-  cloneSubmissionErrors: errors => ({
-    type: types.CLONE_SUBMISSION_ERROR,
-    payload: errors,
-  }),
-  deleteSubmission: (id, callback) => ({
-    type: types.DELETE_SUBMISSION,
-    payload: { id, callback },
-  }),
-  deleteSubmissionSuccess: () => ({ type: types.DELETE_SUBMISSION_SUCCESS }),
-  deleteSubmissionErrors: errors => ({
-    type: types.DELETE_SUBMISSION_ERROR,
-    payload: errors,
-  }),
-  startSubmissionPoller: id => ({
-    type: types.START_SUBMISSION_POLLER,
-    payload: id,
-  }),
-  stopSubmissionPoller: () => ({ type: types.STOP_SUBMISSION_POLLER }),
+  fetchSubmissionRequest: withPayload(types.FETCH_SUBMISSION_REQUEST),
+  fetchSubmissionSuccess: withPayload(types.FETCH_SUBMISSION_SUCCESS),
+  fetchSubmissionFailure: withPayload(types.FETCH_SUBMISSION_FAILURE),
+  clearSubmissionRequest: noPayload(types.CLEAR_SUBMISSION_REQUEST),
+  cloneSubmissionRequest: withPayload(types.CLONE_SUBMISSION_REQUEST),
+  deleteSubmissionRequest: withPayload(types.DELETE_SUBMISSION_REQUEST),
+  startSubmissionPoller: withPayload(types.START_SUBMISSION_POLLER),
+  stopSubmissionPoller: noPayload(types.STOP_SUBMISSION_POLLER),
+  fetchDiscussionRequest: withPayload(types.FETCH_DISCUSSION_REQUEST),
+  fetchDiscussionSuccess: withPayload(types.FETCH_DISCUSSION_SUCCESS),
+  setSendMessageModalOpen: withPayload(types.SET_SEND_MESSAGE_MODAL_OPEN),
+  sendMessageRequest: withPayload(types.SEND_MESSAGE_REQUEST),
 };
 
-export const defaultState = {
-  loading: true,
-  cloning: false,
-  deleting: false,
-  errors: [],
+export const State = Record({
+  error: null,
   data: null,
   discussion: null,
   isSendMessageModalOpen: false,
   sendMessageType: 'comment',
-};
+});
 
-const reducer = (state = defaultState, action) => {
-  switch (action.type) {
-    case types.FETCH_SUBMISSION:
-      return { ...state, loading: true, errors: [] };
-    case types.SET_SUBMISSION:
-      return {
-        ...state,
-        loading: false,
-        errors: [],
-        data: action.payload,
-      };
-    case types.SET_DISCUSSION:
-      return {
-        ...state,
-        discussion: action.payload,
-      };
-    case types.SET_SUBMISSION_ERRORS:
-      return {
-        ...state,
-        loading: false,
-        errors: state.errors.concat(action.payload),
-      };
+const reducer = (state = State(), { type, payload }) => {
+  switch (type) {
+    case types.FETCH_SUBMISSION_REQUEST:
+      return state.set('error', null);
+    case types.FETCH_SUBMISSION_SUCCESS:
+      return state.set('data', payload);
+    case types.FETCH_SUBMISSION_FAILURE:
+      return state.set('error', payload);
+    case types.CLEAR_SUBMISSION_REQUEST:
+      return State();
+    case types.FETCH_DISCUSSION_SUCCESS:
+      return state.set('discussion', payload);
     case types.SET_SEND_MESSAGE_MODAL_OPEN:
-      return {
-        ...state,
-        isSendMessageModalOpen: action.payload.isOpen,
-        sendMessageType: action.payload.type || 'comment',
-      };
-    case types.CLEAR_SUBMISSION:
-      return defaultState;
-    case types.CLONE_SUBMISSION:
-      return { ...state, cloning: true };
-    case types.CLONE_SUBMISSION_SUCCESS:
-      return { ...state, cloning: false };
-    case types.CLONE_SUBMISSION_ERROR:
-      return {
-        ...state,
-        cloning: false,
-        errors: state.errors.concat(action.payload),
-      };
-    case types.DELETE_SUBMISSION:
-      return { ...state, deleting: true };
-    case types.DELETE_SUBMISSION_SUCCESS:
-      return { ...state, deleting: false };
-    case types.DELETE_SUBMISSION_ERROR:
-      return {
-        ...state,
-        deleting: false,
-        errors: state.errors.concat(action.payload),
-      };
+      return state
+        .set('isSendMessageModalOpen', payload.isOpen)
+        .set('sendMessageType', payload.type || 'comment');
     default:
       return state;
   }

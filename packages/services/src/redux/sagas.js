@@ -1,7 +1,7 @@
 import { all } from 'redux-saga/effects';
 
 import { watchApp } from './sagas/app';
-import { watchCategories } from './sagas/categories';
+import { watchServicesApp } from './sagas/servicesApp';
 import { watchForms } from './sagas/forms';
 import { watchSubmissions } from './sagas/submissions';
 import { watchSubmission, watchSubmissionPoller } from './sagas/submission';
@@ -13,8 +13,8 @@ import { watchSettingsCategories } from './sagas/settingsCategories';
 export default function*() {
   yield all([
     watchApp(),
-    watchCategories(),
     watchForms(),
+    watchServicesApp(),
     watchSubmissions(),
     watchSubmission(),
     watchSubmissionPoller(),

@@ -1,6 +1,5 @@
-import { connect } from 'react-redux';
 import { compose, withProps } from 'recompose';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 import { PageTitle as CommonPageTitle, selectCurrentKapp } from 'common';
 
 export const mapStateToProps = state => ({
@@ -14,8 +13,6 @@ export const PageTitle = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withProps(props => {
     return {

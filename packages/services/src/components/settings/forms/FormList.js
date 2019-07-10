@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { compose, withState, withHandlers } from 'recompose';
 import {
@@ -12,7 +11,7 @@ import {
 import { TimeAgo } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/forms';
-import { context } from '../../../redux/store';
+import { connect } from '../../../redux/store';
 
 import { I18n } from '@kineticdata/react';
 
@@ -250,8 +249,6 @@ export const FormList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('openDropdown', 'setOpenDropdown', ''),
   withState('currentPage', 'setCurrentPage', 1),

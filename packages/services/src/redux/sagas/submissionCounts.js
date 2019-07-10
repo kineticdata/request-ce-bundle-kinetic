@@ -2,7 +2,6 @@ import { all, call, put, takeEvery, select } from 'redux-saga/effects';
 import { searchSubmissions, SubmissionSearch } from '@kineticdata/react';
 import * as constants from '../../constants';
 import { actions, types } from '../modules/submissionCounts';
-import { actions as systemErrorActions } from '../modules/systemError';
 
 const buildSearch = (coreState, username) => {
   const searchBuilder = new SubmissionSearch()
@@ -27,9 +26,10 @@ const buildSearch = (coreState, username) => {
   return searchBuilder.build();
 };
 
-export function* fetchSubmissionCountsSaga() {
+export function* fetchSubmissionCountsRequestSaga() {
   const kappSlug = yield select(state => state.app.kappSlug);
   const username = yield select(state => state.app.profile.username);
+
   const [draft, submitted, closed] = yield all([
     call(searchSubmissions, {
       search: buildSearch(constants.CORE_STATE_DRAFT, username),
@@ -45,21 +45,18 @@ export function* fetchSubmissionCountsSaga() {
     }),
   ]);
 
-  const serverError =
-    draft.serverError || submitted.serverError || closed.serverError;
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
-  } else {
-    yield put(
-      actions.setSubmissionCounts({
-        Draft: draft.submissions.length,
-        Submitted: submitted.submissions.length,
-        Closed: closed.submissions.length,
-      }),
-    );
-  }
+  yield put(
+    actions.fetchSubmissionCountsComplete({
+      Draft: draft.submissions ? draft.submissions.length : null,
+      Submitted: submitted.submissions ? submitted.submissions.length : null,
+      Closed: closed.submissions ? closed.submissions.length : null,
+    }),
+  );
 }
 
 export function* watchSubmissionCounts() {
-  yield takeEvery(types.FETCH_SUBMISSION_COUNTS, fetchSubmissionCountsSaga);
+  yield takeEvery(
+    types.FETCH_SUBMISSION_COUNTS_REQUEST,
+    fetchSubmissionCountsRequestSaga,
+  );
 }

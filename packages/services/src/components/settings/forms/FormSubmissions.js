@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { Modal } from 'reactstrap';
 import { SubmissionListItem } from './SubmissionListItem';
@@ -10,7 +9,7 @@ import { ExportModal } from './ExportModal';
 import { actions } from '../../../redux/modules/settingsForms';
 import { PageTitle } from '../../shared/PageTitle';
 
-import { context } from '../../../redux/store';
+import { connect } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 
 const DiscussionIcon = () => (
@@ -740,8 +739,6 @@ export const FormSubmissions = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('previousPageTokens', 'setPreviousPageToken', []),
   withState('currentPage', 'setCurrentPage', 1),

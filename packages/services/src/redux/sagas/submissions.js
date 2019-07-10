@@ -3,15 +3,16 @@ import { searchSubmissions, SubmissionSearch } from '@kineticdata/react';
 
 import * as constants from '../../constants';
 import { actions, types } from '../modules/submissions';
-import { actions as systemErrorActions } from '../modules/systemError';
 
-export function* fetchSubmissionsSaga({ payload: { coreState } }) {
+export function* fetchSubmissionsRequestSaga({ payload }) {
   const kappSlug = yield select(state => state.app.kappSlug);
   const username = yield select(state => state.app.profile.username);
-  const pageToken = yield select(state => state.submissions.current);
+  const pageToken = yield select(state => state.submissions.pageToken);
+  const coreState = yield select(state => state.submissions.coreState);
+  const limit = yield select(state => state.submissions.limit);
   const searchBuilder = new SubmissionSearch()
     .type(constants.SUBMISSION_FORM_TYPE)
-    .limit(constants.PAGE_SIZE)
+    .limit(limit)
     .includes([
       'details',
       'values',
@@ -42,18 +43,18 @@ export function* fetchSubmissionsSaga({ payload: { coreState } }) {
   if (pageToken) searchBuilder.pageToken(pageToken);
   const search = searchBuilder.build();
 
-  const { submissions, nextPageToken, serverError } = yield call(
-    searchSubmissions,
-    { search, kapp: kappSlug },
-  );
+  const { submissions, nextPageToken, error } = yield call(searchSubmissions, {
+    search,
+    kapp: kappSlug,
+  });
 
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
+  if (error) {
+    yield put(actions.fetchSubmissionsFailure(error));
   } else {
-    if (pageToken && submissions.length === 0) {
-      yield put(actions.fetchPreviousPage(coreState));
-    } else if (coreState) {
-      yield put(actions.setSubmissions(submissions, nextPageToken));
+    if (coreState) {
+      yield put(
+        actions.fetchSubmissionsSuccess({ submissions, nextPageToken }),
+      );
     } else {
       // This is needed because we need to filter out Draft Submissions that were Requested For Someone Else but Requested By or Created By me
       const filterDraftNotCreatorOrRequestedBy = submissions.filter(
@@ -64,10 +65,10 @@ export function* fetchSubmissionsSaga({ payload: { coreState } }) {
               s.values[`${constants.REQUESTED_BY_FIELD}`] === username)),
       );
       yield put(
-        actions.setSubmissions(
-          filterDraftNotCreatorOrRequestedBy,
+        actions.fetchSubmissionsSuccess({
+          submissions: filterDraftNotCreatorOrRequestedBy,
           nextPageToken,
-        ),
+        }),
       );
     }
   }
@@ -76,11 +77,11 @@ export function* fetchSubmissionsSaga({ payload: { coreState } }) {
 export function* watchSubmissions() {
   yield takeEvery(
     [
-      types.FETCH_SUBMISSIONS,
-      types.FETCH_NEXT_PAGE,
-      types.FETCH_PREVIOUS_PAGE,
-      types.FETCH_CURRENT_PAGE,
+      types.FETCH_SUBMISSIONS_REQUEST,
+      types.FETCH_SUBMISSIONS_NEXT,
+      types.FETCH_SUBMISSIONS_PREVIOUS,
+      types.FETCH_SUBMISSIONS_CURRENT,
     ],
-    fetchSubmissionsSaga,
+    fetchSubmissionsRequestSaga,
   );
 }

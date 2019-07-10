@@ -1,9 +1,8 @@
-import { connect } from 'react-redux';
 import { Category } from './Category';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 const mapStateToProps = (state, props) => ({
-  category: state.categories.data
+  category: state.servicesApp.categories
     .filter(category => category.slug === props.categorySlug)
     .first(),
 });
@@ -11,6 +10,4 @@ const mapStateToProps = (state, props) => ({
 export const CategoryContainer = connect(
   mapStateToProps,
   null,
-  null,
-  { context },
 )(Category);

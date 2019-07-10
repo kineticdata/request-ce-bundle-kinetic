@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { Modal } from 'reactstrap';
 import SortableTree, {
@@ -15,7 +14,7 @@ import 'react-sortable-tree/style.css';
 import { PageTitle } from '../../shared/PageTitle';
 
 import { actions } from '../../../redux/modules/settingsCategories';
-import { context } from '../../../redux/store';
+import { connect } from '../../../redux/store';
 
 import { I18n } from '@kineticdata/react';
 
@@ -90,8 +89,8 @@ export const mapCatgories = ({ rawCategories, setCategories }) => () => {
     b.attributes['Sort Order'] = b.attributes['Sort Order'] || [0];
     return a.attributes['Sort Order'][0] > b.attributes['Sort Order'][0]
       ? 1
-      : parseInt(b.attributes['Sort Order'][0]) >
-        parseInt(a.attributes['Sort Order'][0])
+      : parseInt(b.attributes['Sort Order'][0], 10) >
+        parseInt(a.attributes['Sort Order'][0], 10)
         ? -1
         : 0;
   });
@@ -114,9 +113,9 @@ export const mapCatgories = ({ rawCategories, setCategories }) => () => {
         a.attributes['Sort Order'] = a.attributes['Sort Order'] || [0];
         b.attributes = b.attributes || {};
         b.attributes['Sort Order'] = b.attributes['Sort Order'] || [0];
-        return parseInt(a.sort[0]) > parseInt(b.sort[0])
+        return parseInt(a.sort[0], 10) > parseInt(b.sort[0], 10)
           ? 1
-          : parseInt(b.sort[0]) > parseInt(a.sort[0])
+          : parseInt(b.sort[0], 10) > parseInt(a.sort[0], 10)
             ? -1
             : 0;
       });
@@ -220,7 +219,7 @@ export const addSubCategory = ({
     return number;
   };
   let parentKey = getNodeKey(parentNode);
-  if (parentKey == -1) {
+  if (parentKey === -1) {
     parentKey = null;
   }
   let newTree = addNodeUnderParent({
@@ -639,8 +638,6 @@ export const CategoriesSettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('categories', 'setCategories', []),
   withState('inputs', 'setInputs', {}),

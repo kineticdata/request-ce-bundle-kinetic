@@ -1,10 +1,9 @@
 import React from 'react';
 import { Icon } from 'common';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 
-import { Router } from '../../ServicesApp';
+import { Router } from '../../App';
 import { ServicesSettings } from './services_settings/ServicesSettings';
 import { actions } from '../../redux/modules/settingsServices';
 import { FormList } from './forms/FormList';
@@ -14,7 +13,7 @@ import { CreateForm } from './forms/CreateForm';
 import { CategoriesSettings } from './categories/Categories';
 import { FormSubmissions } from './forms/FormSubmissions';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 export const SettingsComponent = ({ kappSlug }) => (
   <Router>
@@ -42,8 +41,6 @@ export const Settings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   lifecycle({
     componentWillMount(prev, next) {
@@ -113,11 +110,6 @@ const mapStateToPropsNav = state => ({
   isSpaceAdmin: state.app.profile.spaceAdmin,
 });
 
-export const SettingsNavigation = compose(
-  connect(
-    mapStateToPropsNav,
-    {},
-    null,
-    { context },
-  ),
-)(SettingsNavigationComponent);
+export const SettingsNavigation = compose(connect(mapStateToPropsNav))(
+  SettingsNavigationComponent,
+);
