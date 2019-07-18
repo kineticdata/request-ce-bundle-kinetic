@@ -1,4 +1,3 @@
-import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 import { is, List, Map } from 'immutable';
 import { push } from 'redux-first-history';
@@ -6,7 +5,7 @@ import { FilterMenu } from './FilterMenu';
 import { actions } from '../../redux/modules/filterMenu';
 import { actions as queueActions } from '../../redux/modules/queue';
 import { actions as appActions } from '../../redux/modules/queueApp';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 const selectAppliedAssignments = state => {
   if (state.filterMenu.get('currentFilter')) {
@@ -93,8 +92,6 @@ export const FilterMenuContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withProps(({ appliedAssignments, currentFilter, filterName }) => ({
     errors: !currentFilter

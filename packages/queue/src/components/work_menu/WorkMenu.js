@@ -1,11 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { compose, withHandlers, withProps, withState } from 'recompose';
 import { actions } from '../../redux/modules/workMenu';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { CoreForm } from '@kineticdata/react';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 const globals = import('common/globals');
 
@@ -85,8 +84,6 @@ export const WorkMenuContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('complete', 'setComplete', false),
   withProps(({ queueItem }) => ({

@@ -214,7 +214,7 @@ const TeamFormComponent = ({
                   <tbody>
                     {memberships.map(user => (
                       <tr key={user.username}>
-                        <td scope="row">
+                        <td>
                           <Avatar user={user} />
                         </td>
                         <td>

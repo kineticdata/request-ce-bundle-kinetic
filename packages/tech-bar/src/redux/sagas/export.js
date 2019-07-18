@@ -105,15 +105,9 @@ function* fetchExportSubmissions({ kappSlug, formSlug, searchers }) {
   );
 
   const { submissions, error, nextSearchers } = results.reduce(
-    (
-      data,
-      { submissions, nextPageToken = null, error, serverError },
-      index,
-    ) => {
+    (data, { submissions, nextPageToken = null, error }, index) => {
       if (!data.error) {
-        if (serverError) {
-          data.error = serverError.error || serverError.statusText;
-        } else if (error) {
+        if (error) {
           data.error = error;
         } else {
           data.submissions.push(...submissions);

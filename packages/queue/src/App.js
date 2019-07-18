@@ -44,7 +44,7 @@ export const Router = ({ children, ...props }) => (
 );
 
 const AppComponent = props => {
-  if (props.errors) {
+  if (props.error) {
     return <ErrorUnexpected />;
   } else if (props.loading) {
     return <Loading text="App is loading ..." />;
@@ -110,7 +110,7 @@ const AppComponent = props => {
 
 const mapStateToProps = (state, props) => ({
   loading: state.queueApp.loading,
-  errors: state.queueApp.errors,
+  error: state.queueApp.error,
   defaultFilters: state.queueApp.filters,
   teamFilters: state.queueApp.teamFilters,
   myFilters: state.queueApp.myFilters,
@@ -139,8 +139,6 @@ const enhance = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withHandlers({
     handleOpenNewItemMenu: ({ openNewItemMenu }) => () => openNewItemMenu(),

@@ -52,7 +52,7 @@ export const TechBarSettingsComponent = ({ techBars }) => (
                 {techBars.map(scheduler => {
                   return (
                     <tr key={scheduler.id}>
-                      <td scope="row">
+                      <td>
                         <Link to={`${scheduler.id}`}>
                           <I18n>{scheduler.values['Name']}</I18n>
                         </Link>

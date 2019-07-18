@@ -25,7 +25,7 @@ const NotificationListItemComponent = ({
 }) => {
   return (
     <tr>
-      <td scope="row">
+      <td>
         <Link to={path}>{notification.values['Name']}</Link>
       </td>
       <td>{notification.values['Status']}</td>

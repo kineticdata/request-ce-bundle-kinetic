@@ -103,7 +103,7 @@ const FormListComponent = ({
                       key={form.slug}
                     >
                       <tr>
-                        <td scope="row">
+                        <td>
                           <Link to={form.slug}>
                             <span>
                               <I18n>{form.name}</I18n>

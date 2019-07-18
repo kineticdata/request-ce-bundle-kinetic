@@ -11,7 +11,7 @@ import {
 } from '@kineticdata/react';
 import md5 from 'md5';
 import moment from 'moment';
-import { addError } from '../modules/toasts';
+import { addToast, addToastAlert } from '../modules/toasts';
 import {
   actions,
   types,
@@ -47,48 +47,38 @@ export function* fetchSchedulersSaga({
     query.in('values[Name]', schedulerNames);
   }
 
-  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+  const { submissions, error } = yield call(searchSubmissions, {
     search: query.build(),
     datastore: true,
     form: SCHEDULER_FORM_SLUG,
   });
 
-  if (serverError) {
-    yield put(
-      actions.setSchedulersErrors([
-        serverError.error || serverError.statusText,
-      ]),
-    );
-  } else if (errors) {
-    yield put(actions.setSchedulersErrors(errors));
+  if (error) {
+    yield put(actions.fetchSchedulersFailure(error));
   } else {
-    yield put(actions.setSchedulers(submissions));
+    yield put(actions.fetchSchedulersSuccess(submissions));
   }
 }
 
 export function* fetchSchedulerSaga({ payload: { id } }) {
-  const { submission, errors, serverError } = yield call(fetchSubmission, {
+  const { submission, error } = yield call(fetchSubmission, {
     id,
     include: 'details,values',
     datastore: true,
   });
 
-  if (serverError) {
-    yield put(
-      actions.setSchedulerErrors([serverError.error || serverError.statusText]),
-    );
-  } else if (errors) {
-    yield put(actions.setSchedulerErrors(errors));
+  if (error) {
+    yield put(actions.fetchSchedulerFailure(error));
   } else {
-    yield put(actions.setScheduler(submission));
+    yield put(actions.fetchSchedulerSuccess(submission));
     yield all([
       put(
-        actions.fetchSchedulerManagersTeam({
+        actions.fetchSchedulerManagersTeamRequest({
           schedulerName: submission.values['Name'],
         }),
       ),
       put(
-        actions.fetchSchedulerAgentsTeam({
+        actions.fetchSchedulerAgentsTeamRequest({
           schedulerName: submission.values['Name'],
         }),
       ),
@@ -97,18 +87,15 @@ export function* fetchSchedulerSaga({ payload: { id } }) {
 }
 
 export function* deleteSchedulerSaga({ payload: { id, successCallback } }) {
-  const { errors, serverError } = yield call(deleteSubmission, {
+  const { error } = yield call(deleteSubmission, {
     id,
     datastore: true,
   });
 
-  if (serverError) {
-    yield put(
-      addError(serverError.error || serverError.statusText, 'Delete Failed'),
-    );
-  } else if (errors) {
-    yield put(addError(errors.join(' '), 'Delete Failed'));
+  if (error) {
+    addToastAlert({ title: 'Delete failed', message: error.message });
   } else {
+    addToast('Scheduler was deleted successfully');
     if (typeof successCallback === 'function') {
       successCallback();
     }
@@ -123,7 +110,7 @@ export function* fetchSchedulerManagersTeamSaga({
     include:
       'attributes,memberships.user,memberships.user.attributes,memberships.user.profileAttributes',
   });
-  yield put(actions.setSchedulerTeams({ managers: team }));
+  yield put(actions.fetchSchedulerTeamSuccess({ managers: team }));
 }
 
 export function* fetchSchedulerAgentsTeamSaga({ payload: { schedulerName } }) {
@@ -132,15 +119,15 @@ export function* fetchSchedulerAgentsTeamSaga({ payload: { schedulerName } }) {
     include:
       'attributes,memberships.user,memberships.user.attributes,memberships.user.profileAttributes',
   });
-  yield put(actions.setSchedulerTeams({ agents: team }));
+  yield put(actions.fetchSchedulerTeamSuccess({ agents: team }));
 }
 
-export function* addSchedulerMembershipSaga({
+export function* createSchedulerMembershipSaga({
   payload: { username, usernames = [], managers, schedulerName },
 }) {
   const toAdd = username ? [username] : usernames;
   if (toAdd.length === 0) {
-    yield put(addError('No users selected to add.', 'Error'));
+    addToast({ severity: 'danger', message: 'No users selected to add.' });
     return;
   }
 
@@ -156,11 +143,9 @@ export function* addSchedulerMembershipSaga({
   );
 
   let success = false;
-  const errorList = results.reduce((errorList, { errors, serverError }) => {
-    if (serverError) {
-      return [...errorList, serverError.error || serverError.statusText];
-    } else if (errors) {
-      return [...errorList, ...errors];
+  const errorList = results.reduce((errorList, { error }) => {
+    if (error) {
+      return [...errorList, error.message];
     } else {
       success = true;
       return errorList;
@@ -168,14 +153,23 @@ export function* addSchedulerMembershipSaga({
   }, []);
 
   if (errorList.length > 0) {
-    yield put(addError(errorList.join(' '), 'Error'));
+    addToastAlert({
+      title: `Failed to add ${managers ? 'manager(s)' : 'agent(s)'}`,
+      message: errorList.join('\n'),
+    });
+  } else {
+    addToast(
+      managers
+        ? 'Manager(s) added successfully'
+        : 'Agent(s) added successfully',
+    );
   }
 
   if (success) {
     if (managers) {
-      yield put(actions.fetchSchedulerManagersTeam({ schedulerName }));
+      yield put(actions.fetchSchedulerManagersTeamRequest({ schedulerName }));
     } else {
-      yield put(actions.fetchSchedulerAgentsTeam({ schedulerName }));
+      yield put(actions.fetchSchedulerAgentsTeamRequest({ schedulerName }));
     }
   }
 }
@@ -183,7 +177,7 @@ export function* addSchedulerMembershipSaga({
 export function* createUserWithSchedulerMembershipSaga({
   payload: { user, managers, schedulerName },
 }) {
-  const { errors, serverError } = yield call(createUser, {
+  const { error } = yield call(createUser, {
     user: {
       username: user.email,
       email: user.email,
@@ -203,36 +197,44 @@ export function* createUserWithSchedulerMembershipSaga({
       },
     },
   });
-  if (serverError) {
-    yield put(addError(serverError.error || serverError.statusText, 'Error'));
-  } else if (errors) {
-    yield put(addError(errors.join(' '), 'Error'));
+  if (error) {
+    addToastAlert({
+      title: `Failed to create new ${managers ? 'manager' : 'agent'}`,
+      message: error.message,
+    });
   } else {
+    addToast(
+      managers ? 'Manager created successfully' : 'Agent created successfully',
+    );
     if (managers) {
-      yield put(actions.fetchSchedulerManagersTeam({ schedulerName }));
+      yield put(actions.fetchSchedulerManagersTeamRequest({ schedulerName }));
     } else {
-      yield put(actions.fetchSchedulerAgentsTeam({ schedulerName }));
+      yield put(actions.fetchSchedulerAgentsTeamRequest({ schedulerName }));
     }
   }
 }
 
-export function* removeSchedulerMembershipSaga({
+export function* deleteSchedulerMembershipSaga({
   payload: { username, managers, schedulerName },
 }) {
-  const { errors, serverError } = yield call(deleteMembership, {
+  const { error } = yield call(deleteMembership, {
     teamSlug: md5(`${managers ? 'Role::' : ''}Scheduler::${schedulerName}`),
     username,
   });
 
-  if (serverError) {
-    yield put(addError(serverError.error || serverError.statusText, 'Error'));
-  } else if (errors) {
-    yield put(addError(errors.join(' '), 'Error'));
+  if (error) {
+    addToastAlert({
+      title: `Failed to remove ${managers ? 'manager' : 'agent'}`,
+      message: error.message,
+    });
   } else {
+    addToast(
+      managers ? 'Manager removed successfully' : 'Agent removed successfully',
+    );
     if (managers) {
-      yield put(actions.fetchSchedulerManagersTeam({ schedulerName }));
+      yield put(actions.fetchSchedulerManagersTeamRequest({ schedulerName }));
     } else {
-      yield put(actions.fetchSchedulerAgentsTeam({ schedulerName }));
+      yield put(actions.fetchSchedulerAgentsTeamRequest({ schedulerName }));
     }
   }
 }
@@ -248,37 +250,33 @@ export function* fetchSchedulerConfigSaga() {
   query.index('values[Scheduler Id],values[Event Type]:UNIQUE');
   query.eq('values[Scheduler Id]', schedulerId);
 
-  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+  const { submissions, error } = yield call(searchSubmissions, {
     search: query.build(),
     datastore: true,
     form: SCHEDULER_CONFIG_FORM_SLUG,
   });
 
-  if (serverError) {
-    yield put(
-      actions.setSchedulerConfigErrors([
-        serverError.error || serverError.statusText,
-      ]),
-    );
-  } else if (errors) {
-    yield put(actions.setSchedulerConfigErrors(errors));
+  if (error) {
+    yield put(actions.fetchSchedulerConfigFailure(error));
   } else {
-    yield put(actions.setSchedulerConfig(submissions));
+    yield put(actions.fetchSchedulerConfigSuccess(submissions));
   }
 }
 
 export function* deleteSchedulerConfigSaga({ payload: { id } }) {
-  const { errors, serverError } = yield call(deleteSubmission, {
+  const { error } = yield call(deleteSubmission, {
     id,
     datastore: true,
   });
 
-  if (serverError) {
-    yield put(addError(serverError.error || serverError.statusText, 'Error'));
-  } else if (errors) {
-    yield put(addError(errors.join(' '), 'Error'));
+  if (error) {
+    addToastAlert({
+      title: `Failed to remove event type`,
+      message: error.message,
+    });
   } else {
-    yield put(actions.fetchSchedulerConfig());
+    addToast('Event type removed successfully');
+    yield put(actions.fetchSchedulerConfigRequest());
   }
 }
 
@@ -295,36 +293,32 @@ export function* fetchSchedulerAvailabilitySaga() {
   );
   query.eq('values[Scheduler Id]', schedulerId);
 
-  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+  const { submissions, error } = yield call(searchSubmissions, {
     search: query.build(),
     datastore: true,
     form: SCHEDULER_AVAILABILITY_FORM_SLUG,
   });
 
-  if (serverError) {
-    yield put(
-      actions.setSchedulerAvailabilityErrors([
-        serverError.error || serverError.statusText,
-      ]),
-    );
-  } else if (errors) {
-    yield put(actions.setSchedulerAvailabilityErrors(errors));
+  if (error) {
+    yield put(actions.fetchSchedulerAvailabilityFailure(error));
   } else {
-    yield put(actions.setSchedulerAvailability(submissions));
+    yield put(actions.fetchSchedulerAvailabilitySuccess(submissions));
   }
 }
 
 export function* deleteSchedulerAvailabilitySaga({ payload: { id } }) {
-  const { errors, serverError } = yield call(deleteSubmission, {
+  const { error } = yield call(deleteSubmission, {
     id,
     datastore: true,
   });
 
-  if (serverError) {
-    yield put(addError(serverError.error || serverError.statusText, 'Error'));
-  } else if (errors) {
-    yield put(addError(errors.join(' '), 'Error'));
+  if (error) {
+    addToastAlert({
+      title: `Failed to remove availability`,
+      message: error.message,
+    });
   } else {
+    addToast('Availability removed successfully');
     yield put(actions.fetchSchedulerAvailability());
   }
 }
@@ -334,7 +328,7 @@ export function* fetchSchedulerOverridesSaga() {
     state => state.schedulers.scheduler.data.values['Id'],
   );
   const pageToken = yield select(
-    state => state.schedulers.scheduler.overrides.currentPageToken,
+    state => state.schedulers.scheduler.overrides.pageToken,
   );
   const includePastOverrides = yield select(
     state => state.schedulers.scheduler.includePastOverrides,
@@ -355,26 +349,17 @@ export function* fetchSchedulerOverridesSaga() {
     query.gteq('values[Date]', moment().format('YYYY-MM-DD'));
   }
 
-  const { submissions, errors, serverError, nextPageToken } = yield call(
-    searchSubmissions,
-    {
-      search: query.build(),
-      datastore: true,
-      form: SCHEDULER_OVERRIDE_FORM_SLUG,
-    },
-  );
+  const { submissions, error, nextPageToken } = yield call(searchSubmissions, {
+    search: query.build(),
+    datastore: true,
+    form: SCHEDULER_OVERRIDE_FORM_SLUG,
+  });
 
-  if (serverError) {
-    yield put(
-      actions.setSchedulerOverridesErrors([
-        serverError.error || serverError.statusText,
-      ]),
-    );
-  } else if (errors) {
-    yield put(actions.setSchedulerOverridesErrors(errors));
+  if (error) {
+    yield put(actions.fetchSchedulerOverridesFailure(error));
   } else {
     yield put(
-      actions.setSchedulerOverrides({
+      actions.fetchSchedulerOverridesSuccess({
         data: submissions,
         nextPageToken,
       }),
@@ -383,59 +368,73 @@ export function* fetchSchedulerOverridesSaga() {
 }
 
 export function* deleteSchedulerOverrideSaga({ payload: { id } }) {
-  const { errors, serverError } = yield call(deleteSubmission, {
+  const { error } = yield call(deleteSubmission, {
     id,
     datastore: true,
   });
 
-  if (serverError) {
-    yield put(addError(serverError.error || serverError.statusText, 'Error'));
-  } else if (errors) {
-    yield put(addError(errors.join(' '), 'Error'));
+  if (error) {
+    addToastAlert({
+      title: `Failed to remove availability override`,
+      message: error.message,
+    });
   } else {
-    yield put(actions.fetchCurrentSchedulerOverrides());
+    addToast('Availability override removed successfully');
+    yield put(actions.fetchSchedulerOverridesCurrent());
   }
 }
 
 export function* watchSchedulers() {
-  yield takeEvery(types.FETCH_SCHEDULERS, fetchSchedulersSaga);
-  yield takeEvery(types.FETCH_SCHEDULER, fetchSchedulerSaga);
-  yield takeEvery(types.DELETE_SCHEDULER, deleteSchedulerSaga);
+  yield takeEvery(types.FETCH_SCHEDULERS_REQUEST, fetchSchedulersSaga);
+  yield takeEvery(types.FETCH_SCHEDULER_REQUEST, fetchSchedulerSaga);
+  yield takeEvery(types.DELETE_SCHEDULER_REQUEST, deleteSchedulerSaga);
   yield takeEvery(
-    types.FETCH_SCHEDULER_MANAGERS_TEAM,
+    types.FETCH_SCHEDULER_MANAGERS_TEAM_REQUEST,
     fetchSchedulerManagersTeamSaga,
   );
   yield takeEvery(
-    types.FETCH_SCHEDULER_AGENTS_TEAM,
+    types.FETCH_SCHEDULER_AGENTS_TEAM_REQUEST,
     fetchSchedulerAgentsTeamSaga,
   );
-  yield takeEvery(types.ADD_SCHEDULER_MEMBERSHIP, addSchedulerMembershipSaga);
   yield takeEvery(
-    types.CREATE_USER_WITH_SCHEDULER_MEMBERSHIP,
+    types.CREATE_SCHEDULER_MEMBERSHIP_REQUEST,
+    createSchedulerMembershipSaga,
+  );
+  yield takeEvery(
+    types.DELETE_SCHEDULER_MEMBERSHIP_REQUEST,
+    deleteSchedulerMembershipSaga,
+  );
+  yield takeEvery(
+    types.CREATE_USER_WITH_SCHEDULER_MEMBERSHIP_REQUEST,
     createUserWithSchedulerMembershipSaga,
   );
   yield takeEvery(
-    types.REMOVE_SCHEDULER_MEMBERSHIP,
-    removeSchedulerMembershipSaga,
+    types.FETCH_SCHEDULER_CONFIG_REQUEST,
+    fetchSchedulerConfigSaga,
   );
-  yield takeEvery(types.FETCH_SCHEDULER_CONFIG, fetchSchedulerConfigSaga);
-  yield takeEvery(types.DELETE_SCHEDULER_CONFIG, deleteSchedulerConfigSaga);
   yield takeEvery(
-    types.FETCH_SCHEDULER_AVAILABILITY,
+    types.DELETE_SCHEDULER_CONFIG_REQUEST,
+    deleteSchedulerConfigSaga,
+  );
+  yield takeEvery(
+    types.FETCH_SCHEDULER_AVAILABILITY_REQUEST,
     fetchSchedulerAvailabilitySaga,
   );
   yield takeEvery(
-    types.DELETE_SCHEDULER_AVAILABILITY,
+    types.DELETE_SCHEDULER_AVAILABILITY_REQUEST,
     deleteSchedulerAvailabilitySaga,
   );
   yield takeEvery(
     [
-      types.FETCH_SCHEDULER_OVERRIDES,
-      types.FETCH_CURRENT_SCHEDULER_OVERRIDES,
-      types.FETCH_NEXT_SCHEDULER_OVERRIDES,
-      types.FETCH_PREVIOUS_SCHEDULER_OVERRIDES,
+      types.FETCH_SCHEDULER_OVERRIDES_REQUEST,
+      types.FETCH_SCHEDULER_OVERRIDES_CURRENT,
+      types.FETCH_SCHEDULER_OVERRIDES_NEXT,
+      types.FETCH_SCHEDULER_OVERRIDES_PREVIOUS,
     ],
     fetchSchedulerOverridesSaga,
   );
-  yield takeEvery(types.DELETE_SCHEDULER_OVERRIDE, deleteSchedulerOverrideSaga);
+  yield takeEvery(
+    types.DELETE_SCHEDULER_OVERRIDE_REQUEST,
+    deleteSchedulerOverrideSaga,
+  );
 }

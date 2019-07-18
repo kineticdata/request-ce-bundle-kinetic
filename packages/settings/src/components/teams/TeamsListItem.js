@@ -12,7 +12,7 @@ const TeamsListItemComponent = ({ team, openDropdown, toggleDropdown }) => {
   return (
     <tr key={team.slug}>
       <Fragment>
-        <td scope="row" className="d-md-none d-table-cell">
+        <td className="d-md-none d-table-cell">
           <div className="card card--team">
             <div
               className="card--team__header"
@@ -41,7 +41,7 @@ const TeamsListItemComponent = ({ team, openDropdown, toggleDropdown }) => {
           </div>
         </td>
       </Fragment>
-      <td scope="row">
+      <td>
         <Link to={`/settings/teams/${team.slug}/edit`}>
           <I18n>{team.name}</I18n>
         </Link>

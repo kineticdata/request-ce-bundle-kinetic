@@ -294,7 +294,7 @@ export const FormContainer = ({
                                   snapshot.isDragging ? 'dragging' : ''
                                 }`}
                               >
-                                <td scope="row">
+                                <td>
                                   {col.type === 'value' ? (
                                     <I18n>{col.label}</I18n>
                                   ) : (
@@ -541,7 +541,7 @@ export const FormContainer = ({
                   )
                   .map(val => (
                     <tr key={val.slug}>
-                      <td scope="row">{val.name}</td>
+                      <td>{val.name}</td>
                       <td>{val.slug}</td>
                       <td>
                         <button
@@ -555,7 +555,7 @@ export const FormContainer = ({
                     </tr>
                   ))}
                 <tr>
-                  <td scope="row" colSpan="2">
+                  <td colSpan="2">
                     <select
                       className="form-control form-control-sm"
                       onChange={handleCategoryInput}

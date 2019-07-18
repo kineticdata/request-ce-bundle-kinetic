@@ -118,7 +118,7 @@ const FormListComponent = ({
                   {currentForms.map(form => {
                     return (
                       <tr key={form.slug}>
-                        <td scope="row">
+                        <td>
                           <Link to={`${form.slug}`}>
                             <span>{form.name}</span>
                           </Link>

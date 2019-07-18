@@ -126,7 +126,7 @@ const RobotsListComponent = ({
                   moment(robot.values['End Date']).isBefore(moment());
                 return (
                   <tr key={robot.id}>
-                    <td scope="row">
+                    <td>
                       <Link to={`/settings/robots/${robot.id}`}>
                         <span>{robot.values['Robot Name']}</span>
                       </Link>

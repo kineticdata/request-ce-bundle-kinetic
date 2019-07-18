@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from '../../redux/store';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { CoreForm, I18n } from '@kineticdata/react';
@@ -11,7 +11,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { LoadingMessage, ErrorMessage, EmptyMessage } from '../StateMessages';
+import { StateListWrapper } from '../StateMessages';
 import {
   actions,
   SCHEDULER_CONFIG_FORM_SLUG,
@@ -24,8 +24,7 @@ const SchedulerConfigComponent = ({
   schedulerId,
   timeInterval,
   configs,
-  loading,
-  errors,
+  error,
   openDropdown,
   toggleDropdown,
   openModal,
@@ -41,91 +40,72 @@ const SchedulerConfigComponent = ({
   processDelete,
 }) => (
   <div className="list-wrapper list-wrapper--config">
-    {loading && configs.size === 0 && <LoadingMessage />}
-    {!loading &&
-      errors.length > 0 && (
-        <ErrorMessage
-          heading="Failed to retrieve event types."
-          text={errors.map((e, i) => (
-            <div key={`error-${i}`}>
-              <I18n>{e}</I18n>
-            </div>
-          ))}
-        />
-      )}
-    {!loading &&
-      errors.length === 0 &&
-      configs.size === 0 && (
-        <Fragment>
-          <EmptyMessage
-            heading="No Event Types Found"
-            text="Event Types define the duration of the various events customers can schedule."
-          />
-
-          <div className="text-center">
-            <button className="btn btn-primary" onClick={handleAdd}>
-              <I18n>Add Event Type</I18n>
-            </button>
-          </div>
-        </Fragment>
-      )}
-    {configs.size > 0 && (
-      <table className="table table-sm table-striped table-configs table--settings">
-        <thead className="header">
-          <tr>
-            <th scope="col">
-              <I18n>Event Type</I18n>
-            </th>
-            <th scope="col">
-              <I18n>Duration</I18n>
-            </th>
-            <th scope="col">
-              <I18n>Status</I18n>
-            </th>
-            <th className="text-right">
-              <button className="btn btn-primary" onClick={handleAdd}>
-                <I18n>Add Event Type</I18n>
-              </button>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {configs.map(config => (
-            <tr key={config.values['Event Type']}>
-              <td scope="row">
-                <I18n>{config.values['Event Type']}</I18n>
-              </td>
-              <td>
-                {parseInt(config.values['Duration Multiplier'], 10) *
-                  timeInterval}{' '}
-                <I18n>minutes</I18n>
-              </td>
-              <td>
-                <I18n>{config.values['Status']}</I18n>
-              </td>
-              <td className="text-right">
-                <Dropdown
-                  toggle={toggleDropdown(config.id)}
-                  isOpen={openDropdown === config.id}
-                >
-                  <DropdownToggle color="link" className="btn-sm">
-                    <span className="fa fa-ellipsis-h fa-2x" />
-                  </DropdownToggle>
-                  <DropdownMenu right>
-                    <DropdownItem onClick={handleEdit(config.id)}>
-                      <I18n>Edit</I18n>
-                    </DropdownItem>
-                    <DropdownItem onClick={handleDelete(config.id)}>
-                      <I18n>Delete</I18n>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              </td>
+    <StateListWrapper
+      error={error}
+      data={configs}
+      emptyTitle="No event types found"
+      emptyMessage="Event types define the duration of the various events customers can schedule"
+      errorTitle="Failed to retrieve event types"
+      errorMessage={true}
+    >
+      {data => (
+        <table className="table table-sm table-striped table-configs table--settings">
+          <thead className="header">
+            <tr>
+              <th scope="col">
+                <I18n>Event Type</I18n>
+              </th>
+              <th scope="col">
+                <I18n>Duration</I18n>
+              </th>
+              <th scope="col">
+                <I18n>Status</I18n>
+              </th>
+              <th className="text-right">
+                <button className="btn btn-primary" onClick={handleAdd}>
+                  <I18n>Add Event Type</I18n>
+                </button>
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    )}
+          </thead>
+          <tbody>
+            {data.map(config => (
+              <tr key={config.values['Event Type']}>
+                <td>
+                  <I18n>{config.values['Event Type']}</I18n>
+                </td>
+                <td>
+                  {parseInt(config.values['Duration Multiplier'], 10) *
+                    timeInterval}{' '}
+                  <I18n>minutes</I18n>
+                </td>
+                <td>
+                  <I18n>{config.values['Status']}</I18n>
+                </td>
+                <td className="text-right">
+                  <Dropdown
+                    toggle={toggleDropdown(config.id)}
+                    isOpen={openDropdown === config.id}
+                  >
+                    <DropdownToggle color="link" className="btn-sm">
+                      <span className="fa fa-ellipsis-h fa-2x" />
+                    </DropdownToggle>
+                    <DropdownMenu right>
+                      <DropdownItem onClick={handleEdit(config.id)}>
+                        <I18n>Edit</I18n>
+                      </DropdownItem>
+                      <DropdownItem onClick={handleDelete(config.id)}>
+                        <I18n>Delete</I18n>
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </StateListWrapper>
 
     {openModal && (
       <Modal isOpen={!!openModal} toggle={toggleModal}>
@@ -146,7 +126,7 @@ const SchedulerConfigComponent = ({
           </h4>
         </div>
         <ModalBody>
-          <I18n context={`datastore.form.SCHEDULER_CONFIG_FORM_SLUG`}>
+          <I18n context={`datastore.forms.${SCHEDULER_CONFIG_FORM_SLUG}`}>
             {openModal === true ? (
               <CoreForm
                 datastore
@@ -221,14 +201,13 @@ const SchedulerConfigComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.schedulers.scheduler.config.loading,
-  errors: state.schedulers.scheduler.config.errors,
+  error: state.schedulers.scheduler.config.error,
   configs: state.schedulers.scheduler.config.data,
 });
 
 export const mapDispatchToProps = {
-  fetchSchedulerConfig: actions.fetchSchedulerConfig,
-  deleteSchedulerConfig: actions.deleteSchedulerConfig,
+  fetchSchedulerConfig: actions.fetchSchedulerConfigRequest,
+  deleteSchedulerConfig: actions.deleteSchedulerConfigRequest,
 };
 
 const toggleDropdown = ({

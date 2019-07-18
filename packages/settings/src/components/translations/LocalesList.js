@@ -45,7 +45,7 @@ export const LocalesListComponent = ({
           const isDefault = locale.code === defaultLocale.code;
           return (
             <tr key={locale.code}>
-              <td scope="row">
+              <td>
                 <Link to={`/settings/translations/locale/${locale.code}`}>
                   {availableLocalesMap[locale.code]}
                 </Link>

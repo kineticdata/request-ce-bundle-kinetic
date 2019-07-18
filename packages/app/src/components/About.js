@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -89,7 +89,7 @@ const AboutComponent = ({ space, users, teams, loading }) => (
                 <tbody>
                   {users.filter(u => u.spaceAdmin).map(user => (
                     <tr key={user.username}>
-                      <td scope="row">
+                      <td>
                         <Avatar username={user.username} />
                       </td>
                       <td>{user.displayName}</td>

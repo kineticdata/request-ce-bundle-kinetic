@@ -98,7 +98,7 @@ const SchedulerAgentsComponent = ({
               .sortBy(a => a.user.displayName)
               .map(agent => (
                 <tr key={agent.user.username}>
-                  <td scope="row">{agent.user.displayName}</td>
+                  <td>{agent.user.displayName}</td>
                   <td>{agent.user.username}</td>
                   <td className="text-right">
                     <Dropdown
@@ -290,10 +290,10 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = {
-  addSchedulerAgent: actions.addSchedulerMembership,
-  removeSchedulerAgent: actions.removeSchedulerMembership,
-  createUserAsSchedulerAgent: actions.createUserWithSchedulerMembership,
-  fetchSchedulerAgentsTeam: actions.fetchSchedulerAgentsTeam,
+  addSchedulerAgent: actions.createSchedulerMembershipRequest,
+  removeSchedulerAgent: actions.deleteSchedulerMembershipRequest,
+  createUserAsSchedulerAgent: actions.createUserWithSchedulerMembershipRequest,
+  fetchSchedulerAgentsTeam: actions.fetchSchedulerAgentsTeamRequest,
 };
 
 const toggleDropdown = ({

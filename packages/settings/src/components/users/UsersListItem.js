@@ -19,7 +19,7 @@ const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
   return (
     <tr key={user.username}>
       <Fragment>
-        <td scope="row" className="d-md-none d-table-cell">
+        <td className="d-md-none d-table-cell">
           <div className="card">
             <div className="card-body">
               <strong className="card-title">
@@ -65,7 +65,7 @@ const UsersListItemComponent = ({ user, openDropdown, toggleDropdown }) => {
             </div>
           </div>
         </td>
-        <td scope="row" className="d-none d-md-table-cell">
+        <td className="d-none d-md-table-cell">
           <Avatar username={user.username} size={18} />
         </td>
       </Fragment>

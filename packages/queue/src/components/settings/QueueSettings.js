@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
 import { addSuccess, addError, AttributeSelectors } from 'common';
@@ -9,7 +8,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css';
 import { fetchKapp, updateKapp } from '@kineticdata/react';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 import { PageTitle } from '../shared/PageTitle';
 
 export const SettingsComponent = ({
@@ -271,7 +270,7 @@ const updateSettings = ({
   reloadApp,
   currentKapp,
 }) => async () => {
-  const { kapp, serverError } = await updateKapp({
+  const { kapp, error } = await updateKapp({
     kappSlug: currentKapp.slug,
     include: KAPP_INCLUDES,
     kapp: {
@@ -291,10 +290,7 @@ const updateSettings = ({
     setAttributesMapDifferences(Map());
     reloadApp();
   } else {
-    addError(
-      serverError.error || 'Error Updating Kapp',
-      serverError.statusText || 'Please contact your system administrator',
-    );
+    addError('Error Updating Kapp', error.message);
   }
 };
 
@@ -331,12 +327,7 @@ const mapStateToProps = state => ({
 });
 
 export const QueueSettings = compose(
-  connect(
-    mapStateToProps,
-    null,
-    null,
-    { context },
-  ),
+  connect(mapStateToProps),
   withState('attributesMap', 'setAttributesMap', Map()),
   withState('previousAttributesMap', 'setPreviousAttributesMap', Map()),
   withState('attributesMapDifferences', 'setAttributesMapDifferences', Map()),

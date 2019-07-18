@@ -90,7 +90,7 @@ const TechBarDisplayMembersComponent = ({
               .sortBy(a => a.user.displayName)
               .map(displayUser => (
                 <tr key={displayUser.user.username}>
-                  <td scope="row">{displayUser.user.displayName}</td>
+                  <td>{displayUser.user.displayName}</td>
                   <td>{displayUser.user.username}</td>
                   {hasManagerAccess && (
                     <td className="text-right">

@@ -458,7 +458,7 @@ describe('queue saga', () => {
           }),
         );
         // Return an error.
-        expect(saga.next({ serverError: 'some error' }).value).toEqual(
+        expect(saga.next({ error: 'some error' }).value).toEqual(
           put(actions.setListStatus(action.payload, ERROR_STATUS_STRING)),
         );
       });
@@ -586,7 +586,7 @@ describe('queue saga', () => {
         expect(saga.next().value).toEqual(
           call(updateSubmission, { id, values, include }),
         );
-        const effect = saga.next({ serverError: 'error' }).value;
+        const effect = saga.next({ error: 'error' }).value;
         expect(effect.PUT.action.payload.msg).toEqual('Failed to update item!');
       });
     });

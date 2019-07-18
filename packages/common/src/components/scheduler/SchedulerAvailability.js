@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from '../../redux/store';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { CoreForm, I18n, Moment } from '@kineticdata/react';
@@ -12,7 +12,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { LoadingMessage, ErrorMessage, EmptyMessage } from '../StateMessages';
+import { StateListWrapper } from '../StateMessages';
 import {
   actions,
   SCHEDULER_AVAILABILITY_FORM_SLUG,
@@ -31,8 +31,7 @@ const formatTime = time => (
 const SchedulerAvailabilityComponent = ({
   schedulerId,
   availability,
-  loading,
-  errors,
+  error,
   openDropdown,
   toggleDropdown,
   openModal,
@@ -46,86 +45,68 @@ const SchedulerAvailabilityComponent = ({
   processDelete,
 }) => (
   <div className="list-wrapper list-wrapper--availability">
-    {loading && availability.size === 0 && <LoadingMessage />}
-    {!loading &&
-      errors.length > 0 && (
-        <ErrorMessage
-          heading="Failed to retrieve availability"
-          text={errors.map((e, i) => (
-            <div key={`error-${i}`}>
-              <I18n>{e}</I18n>
-            </div>
-          ))}
-        />
-      )}
-    {!loading &&
-      errors.length === 0 &&
-      availability.size === 0 && (
-        <Fragment>
-          <EmptyMessage
-            heading="No Availability Found"
-            text="Availability is the times during which customers can request appointments and how many appointments are available at each time."
-          />
-          <div className="text-center">
-            <button className="btn btn-primary" onClick={handleAdd}>
-              <I18n>Add Availability</I18n>
-            </button>
-          </div>
-        </Fragment>
-      )}
-    {availability.size > 0 && (
-      <table className="table table-sm table-striped table-availability table--settings">
-        <thead className="header">
-          <tr>
-            <th scope="col">
-              <I18n>Day</I18n>
-            </th>
-            <th scope="col">
-              <I18n>Start Time</I18n>
-            </th>
-            <th scope="col">
-              <I18n>End Time</I18n>
-            </th>
-            <th scope="col">
-              <I18n>Simultaneous Slots</I18n>
-            </th>
-            <th className="text-right">
-              <button className="btn btn-primary" onClick={handleAdd}>
-                <I18n>Add Availability</I18n>
-              </button>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {availability.map((a, index) => (
-            <tr key={`availability-${index}`}>
-              <td scope="row">{formatDayName(a.values['Day'])}</td>
-              <td>{formatTime(a.values['Start Time'])}</td>
-              <td>{formatTime(a.values['End Time'])}</td>
-              <td>{a.values['Slots']}</td>
-              <td className="text-right">
-                <Dropdown
-                  toggle={toggleDropdown(a.id)}
-                  isOpen={openDropdown === a.id}
-                >
-                  <DropdownToggle color="link" className="btn-sm">
-                    <span className="fa fa-ellipsis-h fa-2x" />
-                  </DropdownToggle>
-                  <DropdownMenu right>
-                    <DropdownItem onClick={handleEdit(a.id)}>
-                      <I18n>Edit</I18n>
-                    </DropdownItem>
-                    <DropdownItem onClick={handleDelete(a.id)}>
-                      <I18n>Delete</I18n>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              </td>
+    <StateListWrapper
+      error={error}
+      data={availability}
+      emptyTitle="No availability found"
+      emptyMessage="Availability is the times during which customers can request appointments and how many appointments are available at each time"
+      errorTitle="Failed to retrieve availability"
+      errorMessage={true}
+    >
+      {data => (
+        <table className="table table-sm table-striped table-availability table--settings">
+          <thead className="header">
+            <tr>
+              <th scope="col">
+                <I18n>Day</I18n>
+              </th>
+              <th scope="col">
+                <I18n>Start Time</I18n>
+              </th>
+              <th scope="col">
+                <I18n>End Time</I18n>
+              </th>
+              <th scope="col">
+                <I18n>Simultaneous Slots</I18n>
+              </th>
+              <th className="text-right">
+                <button className="btn btn-primary" onClick={handleAdd}>
+                  <I18n>Add Availability</I18n>
+                </button>
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    )}
+          </thead>
+          <tbody>
+            {data.map((a, index) => (
+              <tr key={`availability-${index}`}>
+                <td>{formatDayName(a.values['Day'])}</td>
+                <td>{formatTime(a.values['Start Time'])}</td>
+                <td>{formatTime(a.values['End Time'])}</td>
+                <td>{a.values['Slots']}</td>
+                <td className="text-right">
+                  <Dropdown
+                    toggle={toggleDropdown(a.id)}
+                    isOpen={openDropdown === a.id}
+                  >
+                    <DropdownToggle color="link" className="btn-sm">
+                      <span className="fa fa-ellipsis-h fa-2x" />
+                    </DropdownToggle>
+                    <DropdownMenu right>
+                      <DropdownItem onClick={handleEdit(a.id)}>
+                        <I18n>Edit</I18n>
+                      </DropdownItem>
+                      <DropdownItem onClick={handleDelete(a.id)}>
+                        <I18n>Delete</I18n>
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </StateListWrapper>
 
     {openModal && (
       <Modal isOpen={!!openModal} toggle={toggleModal}>
@@ -218,14 +199,13 @@ const SchedulerAvailabilityComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.schedulers.scheduler.availability.loading,
-  errors: state.schedulers.scheduler.availability.errors,
+  error: state.schedulers.scheduler.availability.error,
   availability: state.schedulers.scheduler.availability.data,
 });
 
 export const mapDispatchToProps = {
-  fetchSchedulerAvailability: actions.fetchSchedulerAvailability,
-  deleteSchedulerAvailability: actions.deleteSchedulerAvailability,
+  fetchSchedulerAvailability: actions.fetchSchedulerAvailabilityRequest,
+  deleteSchedulerAvailability: actions.deleteSchedulerAvailabilityRequest,
 };
 
 const toggleDropdown = ({

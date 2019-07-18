@@ -1,159 +1,158 @@
 import { List, Record } from 'immutable';
-import { namespace, noPayload, withPayload } from '../../utils';
+import { namespaceBuilder, noPayload, withPayload } from '../../utils';
 import { DatastoreSubmission } from '../../../records';
+const ns = namespaceBuilder('common/schedulers');
 
 export const SCHEDULER_FORM_SLUG = 'scheduler';
 export const SCHEDULER_CONFIG_FORM_SLUG = 'scheduler-config';
 export const SCHEDULER_AVAILABILITY_FORM_SLUG = 'scheduler-availability';
 export const SCHEDULER_OVERRIDE_FORM_SLUG = 'scheduler-override';
-export const SCHEDULER_OVERRIDES_PAGE_SIZE = 10;
+export const SCHEDULER_OVERRIDES_PAGE_SIZE = 2;
 export const SCHEDULED_EVENT_FORM_SLUG = 'scheduled-event';
 export const SCHEDULED_EVENT_ACTION_FORM_SLUG = 'scheduled-event-action';
 
 export const types = {
   // Schedulers List
-  FETCH_SCHEDULERS: namespace('schedulers', 'FETCH_SCHEDULERS'),
-  SET_SCHEDULERS: namespace('schedulers', 'SET_SCHEDULERS'),
-  SET_SCHEDULERS_ERRORS: namespace('schedulers', 'SET_SCHEDULERS_ERRORS'),
+  FETCH_SCHEDULERS_REQUEST: ns('FETCH_SCHEDULERS_REQUEST'),
+  FETCH_SCHEDULERS_SUCCESS: ns('FETCH_SCHEDULERS_SUCCESS'),
+  FETCH_SCHEDULERS_FAILURE: ns('FETCH_SCHEDULERS_FAILURE'),
   // Scheduler
-  FETCH_SCHEDULER: namespace('schedulers', 'FETCH_SCHEDULER'),
-  SET_SCHEDULER: namespace('schedulers', 'SET_SCHEDULER'),
-  SET_SCHEDULER_ERRORS: namespace('schedulers', 'SET_SCHEDULER_ERRORS'),
-  DELETE_SCHEDULER: namespace('schedulers', 'DELETE_SCHEDULER'),
-  FETCH_SCHEDULER_MANAGERS_TEAM: namespace(
-    'schedulers',
-    'FETCH_SCHEDULER_MANAGERS_TEAM',
+  FETCH_SCHEDULER_REQUEST: ns('FETCH_SCHEDULER_REQUEST'),
+  FETCH_SCHEDULER_SUCCESS: ns('FETCH_SCHEDULER_SUCCESS'),
+  FETCH_SCHEDULER_FAILURE: ns('FETCH_SCHEDULER_FAILURE'),
+  DELETE_SCHEDULER_REQUEST: ns('DELETE_SCHEDULER_REQUEST'),
+  FETCH_SCHEDULER_MANAGERS_TEAM_REQUEST: ns(
+    'FETCH_SCHEDULER_MANAGERS_TEAM_REQUEST',
   ),
-  FETCH_SCHEDULER_AGENTS_TEAM: namespace(
-    'schedulers',
-    'FETCH_SCHEDULER_AGENTS_TEAM',
+  FETCH_SCHEDULER_AGENTS_TEAM_REQUEST: ns(
+    'FETCH_SCHEDULER_AGENTS_TEAM_REQUEST',
   ),
-  ADD_SCHEDULER_MEMBERSHIP: namespace('schedulers', 'ADD_SCHEDULER_MEMBERSHIP'),
-  CREATE_USER_WITH_SCHEDULER_MEMBERSHIP: namespace(
-    'schedulers',
-    'CREATE_USER_WITH_SCHEDULER_MEMBERSHIP',
+  FETCH_SCHEDULER_TEAM_SUCCESS: ns('FETCH_SCHEDULER_TEAM_SUCCESS'),
+  CREATE_SCHEDULER_MEMBERSHIP_REQUEST: ns(
+    'CREATE_SCHEDULER_MEMBERSHIP_REQUEST',
   ),
-  REMOVE_SCHEDULER_MEMBERSHIP: namespace(
-    'schedulers',
-    'REMOVE_SCHEDULER_MEMBERSHIP',
+  DELETE_SCHEDULER_MEMBERSHIP_REQUEST: ns(
+    'DELETE_SCHEDULER_MEMBERSHIP_REQUEST',
   ),
-  SET_SCHEDULER_TEAMS: namespace('schedulers', 'SET_SCHEDULER_TEAMS'),
+  CREATE_USER_WITH_SCHEDULER_MEMBERSHIP_REQUEST: ns(
+    'CREATE_USER_WITH_SCHEDULER_MEMBERSHIP_REQUEST',
+  ),
   // Scheduler Config
-  FETCH_SCHEDULER_CONFIG: namespace('schedulers', 'FETCH_SCHEDULER_CONFIG'),
-  SET_SCHEDULER_CONFIG: namespace('schedulers', 'SET_SCHEDULER_CONFIG'),
-  SET_SCHEDULER_CONFIG_ERRORS: namespace(
-    'schedulers',
-    'SET_SCHEDULER_CONFIG_ERRORS',
-  ),
-  DELETE_SCHEDULER_CONFIG: namespace('schedulers', 'DELETE_SCHEDULER_CONFIG'),
+  FETCH_SCHEDULER_CONFIG_REQUEST: ns('FETCH_SCHEDULER_CONFIG_REQUEST'),
+  FETCH_SCHEDULER_CONFIG_SUCCESS: ns('FETCH_SCHEDULER_CONFIG_SUCCESS'),
+  FETCH_SCHEDULER_CONFIG_FAILURE: ns('FETCH_SCHEDULER_CONFIG_FAILURE'),
+  DELETE_SCHEDULER_CONFIG_REQUEST: ns('DELETE_SCHEDULER_CONFIG_REQUEST'),
   // Scheduler Availability
-  FETCH_SCHEDULER_AVAILABILITY: namespace(
-    'schedulers',
-    'FETCH_SCHEDULER_AVAILABILITY',
+  FETCH_SCHEDULER_AVAILABILITY_REQUEST: ns(
+    'FETCH_SCHEDULER_AVAILABILITY_REQUEST',
   ),
-  SET_SCHEDULER_AVAILABILITY: namespace(
-    'schedulers',
-    'SET_SCHEDULER_AVAILABILITY',
+  FETCH_SCHEDULER_AVAILABILITY_SUCCESS: ns(
+    'FETCH_SCHEDULER_AVAILABILITY_SUCCESS',
   ),
-  SET_SCHEDULER_AVAILABILITY_ERRORS: namespace(
-    'schedulers',
-    'SET_SCHEDULER_AVAILABILITY_ERRORS',
+  FETCH_SCHEDULER_AVAILABILITY_FAILURE: ns(
+    'FETCH_SCHEDULER_AVAILABILITY_FAILURE',
   ),
-  DELETE_SCHEDULER_AVAILABILITY: namespace(
-    'schedulers',
-    'DELETE_SCHEDULER_AVAILABILITY',
+  DELETE_SCHEDULER_AVAILABILITY_REQUEST: ns(
+    'DELETE_SCHEDULER_AVAILABILITY_REQUEST',
   ),
   // Scheduler Overrides
-  FETCH_SCHEDULER_OVERRIDES: namespace(
-    'schedulers',
-    'FETCH_SCHEDULER_OVERRIDES',
-  ),
-  FETCH_CURRENT_SCHEDULER_OVERRIDES: namespace(
-    'schedulers',
-    'FETCH_CURRENT_SCHEDULER_OVERRIDES',
-  ),
-  FETCH_NEXT_SCHEDULER_OVERRIDES: namespace(
-    'schedulers',
-    'FETCH_NEXT_SCHEDULER_OVERRIDES',
-  ),
-  FETCH_PREVIOUS_SCHEDULER_OVERRIDES: namespace(
-    'schedulers',
-    'FETCH_PREVIOUS_SCHEDULER_OVERRIDES',
-  ),
-  SET_SCHEDULER_OVERRIDES: namespace('schedulers', 'SET_SCHEDULER_OVERRIDES'),
-  SET_SCHEDULERS_ERROR_OVERRIDES: namespace(
-    'schedulers',
-    'SET_SCHEDULER_OVERRIDES_ERRORS',
-  ),
-  DELETE_SCHEDULER_OVERRIDE: namespace(
-    'schedulers',
-    'DELETE_SCHEDULER_OVERRIDE',
-  ),
+  FETCH_SCHEDULER_OVERRIDES_REQUEST: ns('FETCH_SCHEDULER_OVERRIDES_REQUEST'),
+  FETCH_SCHEDULER_OVERRIDES_CURRENT: ns('FETCH_SCHEDULER_OVERRIDES_CURRENT'),
+  FETCH_SCHEDULER_OVERRIDES_NEXT: ns('FETCH_SCHEDULER_OVERRIDES_NEXT'),
+  FETCH_SCHEDULER_OVERRIDES_PREVIOUS: ns('FETCH_SCHEDULER_OVERRIDES_PREVIOUS'),
+  FETCH_SCHEDULER_OVERRIDES_SUCCESS: ns('FETCH_SCHEDULER_OVERRIDES_SUCCESS'),
+  FETCH_SCHEDULER_OVERRIDES_FAILURE: ns('FETCH_SCHEDULER_OVERRIDES_FAILURE'),
+  DELETE_SCHEDULER_OVERRIDE_REQUEST: ns('DELETE_SCHEDULER_OVERRIDE_REQUEST'),
 };
 
 export const actions = {
   // Schedulers List
-  fetchSchedulers: withPayload(types.FETCH_SCHEDULERS),
-  setSchedulers: withPayload(types.SET_SCHEDULERS),
-  setSchedulersErrors: withPayload(types.SET_SCHEDULERS_ERRORS),
+  fetchSchedulersRequest: withPayload(types.FETCH_SCHEDULERS_REQUEST),
+  fetchSchedulersSuccess: withPayload(types.FETCH_SCHEDULERS_SUCCESS),
+  fetchSchedulersFailure: withPayload(types.FETCH_SCHEDULERS_FAILURE),
   // Scheduler
-  fetchScheduler: withPayload(types.FETCH_SCHEDULER),
-  setScheduler: withPayload(types.SET_SCHEDULER),
-  setSchedulerErrors: withPayload(types.SET_SCHEDULER_ERRORS),
-  deleteScheduler: withPayload(types.DELETE_SCHEDULER),
-  fetchSchedulerManagersTeam: withPayload(types.FETCH_SCHEDULER_MANAGERS_TEAM),
-  fetchSchedulerAgentsTeam: withPayload(types.FETCH_SCHEDULER_AGENTS_TEAM),
-  addSchedulerMembership: withPayload(types.ADD_SCHEDULER_MEMBERSHIP),
-  createUserWithSchedulerMembership: withPayload(
-    types.CREATE_USER_WITH_SCHEDULER_MEMBERSHIP,
+  fetchSchedulerRequest: withPayload(types.FETCH_SCHEDULER_REQUEST),
+  fetchSchedulerSuccess: withPayload(types.FETCH_SCHEDULER_SUCCESS),
+  fetchSchedulerFailure: withPayload(types.FETCH_SCHEDULER_FAILURE),
+  deleteSchedulerRequest: withPayload(types.DELETE_SCHEDULER_REQUEST),
+  fetchSchedulerManagersTeamRequest: withPayload(
+    types.FETCH_SCHEDULER_MANAGERS_TEAM_REQUEST,
   ),
-  removeSchedulerMembership: withPayload(types.REMOVE_SCHEDULER_MEMBERSHIP),
-  setSchedulerTeams: withPayload(types.SET_SCHEDULER_TEAMS),
+  fetchSchedulerAgentsTeamRequest: withPayload(
+    types.FETCH_SCHEDULER_AGENTS_TEAM_REQUEST,
+  ),
+  fetchSchedulerTeamSuccess: withPayload(types.FETCH_SCHEDULER_TEAM_SUCCESS),
+  createSchedulerMembershipRequest: withPayload(
+    types.CREATE_SCHEDULER_MEMBERSHIP_REQUEST,
+  ),
+  deleteSchedulerMembershipRequest: withPayload(
+    types.DELETE_SCHEDULER_MEMBERSHIP_REQUEST,
+  ),
+  createUserWithSchedulerMembershipRequest: withPayload(
+    types.CREATE_USER_WITH_SCHEDULER_MEMBERSHIP_REQUEST,
+  ),
   // Scheduler Config
-  fetchSchedulerConfig: noPayload(types.FETCH_SCHEDULER_CONFIG),
-  setSchedulerConfig: withPayload(types.SET_SCHEDULER_CONFIG),
-  setSchedulerConfigErrors: withPayload(types.SET_SCHEDULER_CONFIG_ERRORS),
-  deleteSchedulerConfig: withPayload(types.DELETE_SCHEDULER_CONFIG),
+  fetchSchedulerConfigRequest: noPayload(types.FETCH_SCHEDULER_CONFIG_REQUEST),
+  fetchSchedulerConfigSuccess: withPayload(
+    types.FETCH_SCHEDULER_CONFIG_SUCCESS,
+  ),
+  fetchSchedulerConfigFailure: withPayload(
+    types.FETCH_SCHEDULER_CONFIG_REQUEST_FAILURE,
+  ),
+  deleteSchedulerConfigRequest: withPayload(
+    types.DELETE_SCHEDULER_CONFIG_REQUEST,
+  ),
   // Scheduler Availability
-  fetchSchedulerAvailability: noPayload(types.FETCH_SCHEDULER_AVAILABILITY),
-  setSchedulerAvailability: withPayload(types.SET_SCHEDULER_AVAILABILITY),
-  setSchedulerAvailabilityErrors: withPayload(
-    types.SET_SCHEDULER_AVAILABILITY_ERRORS,
+  fetchSchedulerAvailabilityRequest: noPayload(
+    types.FETCH_SCHEDULER_AVAILABILITY_REQUEST,
   ),
-  deleteSchedulerAvailability: withPayload(types.DELETE_SCHEDULER_AVAILABILITY),
+  fetchSchedulerAvailabilitySuccess: withPayload(
+    types.FETCH_SCHEDULER_AVAILABILITY_SUCCESS,
+  ),
+  fetchSchedulerAvailabilityFailure: withPayload(
+    types.FETCH_SCHEDULER_AVAILABILITY_FAILURE,
+  ),
+  deleteSchedulerAvailabilityRequest: withPayload(
+    types.DELETE_SCHEDULER_AVAILABILITY_REQUEST,
+  ),
   // Scheduler Overrides
-  fetchSchedulerOverrides: withPayload(types.FETCH_SCHEDULER_OVERRIDES),
-  fetchCurrentSchedulerOverrides: noPayload(
-    types.FETCH_CURRENT_SCHEDULER_OVERRIDES,
+  fetchSchedulerOverridesRequest: withPayload(
+    types.FETCH_SCHEDULER_OVERRIDES_REQUEST,
   ),
-  fetchNextSchedulerOverrides: noPayload(types.FETCH_NEXT_SCHEDULER_OVERRIDES),
-  fetchPreviousSchedulerOverrides: noPayload(
-    types.FETCH_PREVIOUS_SCHEDULER_OVERRIDES,
+  fetchSchedulerOverridesCurrent: noPayload(
+    types.FETCH_SCHEDULER_OVERRIDES_CURRENT,
   ),
-  setSchedulerOverrides: withPayload(types.SET_SCHEDULER_OVERRIDES),
-  setSchedulerOverridesErrors: withPayload(
-    types.SET_SCHEDULER_OVERRIDES_ERRORS,
+  fetchSchedulerOverridesNext: noPayload(types.FETCH_SCHEDULER_OVERRIDES_NEXT),
+  fetchSchedulerOverridesPrevious: noPayload(
+    types.FETCH_SCHEDULER_OVERRIDES_PREVIOUS,
   ),
-  deleteSchedulerOverride: withPayload(types.DELETE_SCHEDULER_OVERRIDE),
+  fetchSchedulerOverridesSuccess: withPayload(
+    types.FETCH_SCHEDULER_OVERRIDES_SUCCESS,
+  ),
+  fetchSchedulerOverridesFailure: withPayload(
+    types.FETCH_SCHEDULER_OVERRIDES_FAILURE,
+  ),
+  deleteSchedulerOverrideRequest: withPayload(
+    types.DELETE_SCHEDULER_OVERRIDE_REQUEST,
+  ),
 };
 
 const listDefaultsForState = {
-  loading: true,
-  errors: [],
-  data: new List(),
+  error: null,
+  data: null,
 };
 const pagingDefaultsForState = {
-  currentPageToken: null,
+  paging: false,
+  pageToken: null,
   nextPageToken: null,
-  previousPageTokens: new List(),
+  previousPageTokens: List(),
 };
 
 export const State = Record({
   list: { ...listDefaultsForState },
   scheduler: {
-    loading: true,
-    errors: [],
-    data: new DatastoreSubmission(),
+    error: null,
+    data: null,
     teams: {},
     config: { ...listDefaultsForState },
     availability: { ...listDefaultsForState },
@@ -168,24 +167,16 @@ export const State = Record({
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     // Schedulers List
-    case types.FETCH_SCHEDULERS:
+    case types.FETCH_SCHEDULERS_REQUEST:
+      return state.setIn(['list', 'error'], null);
+    case types.FETCH_SCHEDULERS_SUCCESS:
+      return state.setIn(['list', 'data'], List(payload));
+    case types.FETCH_SCHEDULERS_FAILURE:
+      return state.setIn(['list', 'error'], payload);
+    // Scheduler
+    case types.FETCH_SCHEDULER_REQUEST:
       return state
-        .setIn(['list', 'loading'], true)
-        .setIn(['list', 'errors'], []);
-    case types.SET_SCHEDULERS:
-      return state
-        .setIn(['list', 'loading'], false)
-        .setIn(['list', 'errors'], [])
-        .setIn(['list', 'data'], List(payload));
-    case types.SET_SCHEDULERS_ERRORS:
-      return state
-        .setIn(['list', 'loading'], false)
-        .setIn(['list', 'errors'], payload);
-    // Scheduler List
-    case types.FETCH_SCHEDULER:
-      return state
-        .setIn(['scheduler', 'loading'], true)
-        .setIn(['scheduler', 'errors'], [])
+        .setIn(['scheduler', 'error'], null)
         .setIn(
           ['scheduler', 'config'],
           payload.clear ? { ...listDefaultsForState } : state.scheduler.config,
@@ -205,127 +196,115 @@ export const reducer = (state = State(), { type, payload }) => {
               }
             : state.scheduler.overrides,
         );
-    case types.SET_SCHEDULER:
+    case types.FETCH_SCHEDULER_SUCCESS:
       return state
-        .setIn(['scheduler', 'loading'], false)
-        .setIn(['scheduler', 'errors'], [])
         .setIn(['scheduler', 'data'], DatastoreSubmission(payload))
         .setIn(
           ['scheduler', 'config'],
-          state.scheduler.data.id !== payload.id
+          state.scheduler.data && state.scheduler.data.id !== payload.id
             ? { ...listDefaultsForState }
             : state.scheduler.config,
         )
         .setIn(
           ['scheduler', 'availability'],
-          state.scheduler.data.id !== payload.id
+          state.scheduler.data && state.scheduler.data.id !== payload.id
             ? { ...listDefaultsForState }
             : state.scheduler.availability,
         )
         .setIn(
           ['scheduler', 'overrides'],
-          state.scheduler.data.id !== payload.id
+          state.scheduler.data && state.scheduler.data.id !== payload.id
             ? {
                 ...listDefaultsForState,
                 ...pagingDefaultsForState,
               }
             : state.scheduler.overrides,
         );
-    case types.SET_SCHEDULER_ERRORS:
-      return state
-        .setIn(['scheduler', 'loading'], false)
-        .setIn(['scheduler', 'errors'], payload);
-    case types.FETCH_SCHEDULER_MANAGERS_TEAM:
+    case types.FETCH_SCHEDULER_FAILURE:
+      return state.setIn(['scheduler', 'error'], payload);
+    case types.FETCH_SCHEDULER_MANAGERS_TEAM_REQUEST:
       return state.setIn(['scheduler', 'loading'], true);
-    case types.FETCH_SCHEDULER_AGENTS_TEAM:
+    case types.FETCH_SCHEDULER_AGENTS_TEAM_REQUEST:
       return state.setIn(['scheduler', 'loading'], true);
-    case types.SET_SCHEDULER_TEAMS:
+    case types.FETCH_SCHEDULER_TEAM_SUCCESS:
       return state
         .setIn(['scheduler', 'loading'], false)
         .updateIn(['scheduler', 'teams'], teams => ({ ...teams, ...payload }));
     // Scheduler Config
-    case types.FETCH_SCHEDULER_CONFIG:
-      return state
-        .setIn(['scheduler', 'config', 'loading'], true)
-        .setIn(['scheduler', 'config', 'errors'], []);
-    case types.SET_SCHEDULER_CONFIG:
-      return state
-        .setIn(['scheduler', 'config', 'loading'], false)
-        .setIn(['scheduler', 'config', 'errors'], [])
-        .setIn(['scheduler', 'config', 'data'], List(payload));
-    case types.SET_SCHEDULER_CONFIG_ERRORS:
-      return state
-        .setIn(['scheduler', 'config', 'loading'], false)
-        .setIn(['scheduler', 'config', 'errors'], payload);
+    case types.FETCH_SCHEDULER_CONFIG_REQUEST:
+      return state.setIn(['scheduler', 'config', 'error'], null);
+    case types.FETCH_SCHEDULER_CONFIG_SUCCESS:
+      return state.setIn(['scheduler', 'config', 'data'], List(payload));
+    case types.FETCH_SCHEDULER_CONFIG_FAILURE:
+      return state.setIn(['scheduler', 'config', 'error'], payload);
     // Scheduler Availability
-    case types.FETCH_SCHEDULER_AVAILABILITY:
-      return state
-        .setIn(['scheduler', 'availability', 'loading'], true)
-        .setIn(['scheduler', 'availability', 'errors'], []);
-    case types.SET_SCHEDULER_AVAILABILITY:
-      return state
-        .setIn(['scheduler', 'availability', 'loading'], false)
-        .setIn(['scheduler', 'availability', 'errors'], [])
-        .setIn(['scheduler', 'availability', 'data'], List(payload));
-    case types.SET_SCHEDULER_AVAILABILITY_ERRORS:
-      return state
-        .setIn(['scheduler', 'availability', 'loading'], false)
-        .setIn(['scheduler', 'availability', 'errors'], payload);
+    case types.FETCH_SCHEDULER_AVAILABILITY_REQUEST:
+      return state.setIn(['scheduler', 'availability', 'error'], null);
+    case types.FETCH_SCHEDULER_AVAILABILITY_SUCCESS:
+      return state.setIn(['scheduler', 'availability', 'data'], List(payload));
+    case types.FETCH_SCHEDULER_AVAILABILITY_FAILURE:
+      return state.setIn(['scheduler', 'availability', 'error'], payload);
     // Scheduler Overrides
-    case types.FETCH_SCHEDULER_OVERRIDES:
+    case types.FETCH_SCHEDULER_OVERRIDES_REQUEST:
       return state
-        .setIn(['scheduler', 'overrides', 'loading'], true)
-        .setIn(['scheduler', 'overrides', 'currentPageToken'], null)
+        .setIn(['scheduler', 'overrides', 'pageToken'], null)
         .setIn(['scheduler', 'overrides', 'nextPageToken'], null)
-        .setIn(['scheduler', 'overrides', 'previousPageTokens'], new List())
-        .setIn(['scheduler', 'overrides', 'errors'], [])
+        .setIn(['scheduler', 'overrides', 'previousPageTokens'], List())
+        .setIn(['scheduler', 'overrides', 'error'], null)
         .setIn(
           ['scheduler', 'includePastOverrides'],
           payload && typeof payload.past === 'boolean'
             ? payload.past
             : state.scheduler.includePastOverrides,
-        );
-    case types.FETCH_CURRENT_SCHEDULER_OVERRIDES:
-      return state
-        .setIn(['scheduler', 'overrides', 'loading'], true)
-        .setIn(['scheduler', 'overrides', 'errors'], []);
-    case types.FETCH_NEXT_SCHEDULER_OVERRIDES:
-      return state
-        .setIn(['scheduler', 'overrides', 'loading'], true)
-        .updateIn(['scheduler', 'overrides', 'previousPageTokens'], prev =>
-          prev.push(state.scheduler.overrides.currentPageToken),
         )
         .setIn(
-          ['scheduler', 'overrides', 'currentPageToken'],
+          ['scheduler', 'overrides', 'data'],
+          payload &&
+          typeof payload.past === 'boolean' &&
+          payload.past !== state.scheduler.includePastOverrides
+            ? null
+            : state.scheduler.overrides.data,
+        );
+    case types.FETCH_SCHEDULER_OVERRIDES_CURRENT:
+      return state
+        .setIn(['scheduler', 'overrides', 'paging'], true)
+        .setIn(['scheduler', 'overrides', 'error'], null);
+    case types.FETCH_SCHEDULER_OVERRIDES_NEXT:
+      return state
+        .setIn(['scheduler', 'overrides', 'paging'], true)
+        .updateIn(['scheduler', 'overrides', 'previousPageTokens'], prev =>
+          prev.push(state.scheduler.overrides.pageToken),
+        )
+        .setIn(
+          ['scheduler', 'overrides', 'pageToken'],
           state.scheduler.overrides.nextPageToken,
         )
         .setIn(['scheduler', 'overrides', 'nextPageToken'], null)
-        .setIn(['scheduler', 'overrides', 'errors'], []);
-    case types.FETCH_PREVIOUS_SCHEDULER_OVERRIDES:
+        .setIn(['scheduler', 'overrides', 'error'], null);
+    case types.FETCH_SCHEDULER_OVERRIDES_PREVIOUS:
       return state
-        .setIn(['scheduler', 'overrides', 'loading'], true)
+        .setIn(['scheduler', 'overrides', 'paging'], true)
         .setIn(
-          ['scheduler', 'overrides', 'currentPageToken'],
+          ['scheduler', 'overrides', 'pageToken'],
           state.scheduler.overrides.previousPageTokens.last(),
         )
         .updateIn(['scheduler', 'overrides', 'previousPageTokens'], prev =>
           prev.pop(),
         )
         .setIn(['scheduler', 'overrides', 'nextPageToken'], null)
-        .setIn(['scheduler', 'overrides', 'errors'], []);
-    case types.SET_SCHEDULER_OVERRIDES:
+        .setIn(['scheduler', 'overrides', 'error'], null);
+    case types.FETCH_SCHEDULER_OVERRIDES_SUCCESS:
       return state
-        .setIn(['scheduler', 'overrides', 'loading'], false)
-        .setIn(['scheduler', 'overrides', 'errors'], [])
+        .setIn(['scheduler', 'overrides', 'paging'], false)
         .setIn(
           ['scheduler', 'overrides', 'nextPageToken'],
           payload.nextPageToken,
         )
         .setIn(['scheduler', 'overrides', 'data'], List(payload.data));
-    case types.SET_SCHEDULER_OVERRIDES_ERRORS:
+    case types.FETCH_SCHEDULER_OVERRIDES_FAILURE:
       return state
-        .setIn(['scheduler', 'overrides', 'loading'], false)
-        .setIn(['scheduler', 'overrides', 'errors'], payload);
+        .setIn(['scheduler', 'overrides', 'paging'], false)
+        .setIn(['scheduler', 'overrides', 'error'], payload);
     default:
       return state;
   }

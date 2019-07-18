@@ -129,7 +129,7 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <td scope="row">Body Title 1</td>
+              <td>Body Title 1</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -143,7 +143,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td scope="row">
+              <td>
                 Body Title 2{' '}
                 <span className="badge badge-pill badge-primary">Active</span>
               </td>
@@ -160,7 +160,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td scope="row">Body Title 3</td>
+              <td>Body Title 3</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -174,7 +174,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr className="table-active">
-              <td scope="row">Body Title 4</td>
+              <td>Body Title 4</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -188,7 +188,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td scope="row">Body Title 5</td>
+              <td>Body Title 5</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -202,7 +202,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td scope="row">Body Title 6</td>
+              <td>Body Title 6</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -216,7 +216,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td scope="row">Body Title 7</td>
+              <td>Body Title 7</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -307,7 +307,7 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <td scope="row">Body Title 1</td>
+              <td>Body Title 1</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -321,7 +321,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td scope="row">
+              <td>
                 Body Title 2{' '}
                 <span className="badge badge-pill badge-primary">Active</span>
               </td>
@@ -338,7 +338,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr className="table-active">
-              <td scope="row">Body Title 3</td>
+              <td>Body Title 3</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -352,7 +352,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td scope="row">Body Title 4</td>
+              <td>Body Title 4</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -366,7 +366,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td scope="row">Body Title 5</td>
+              <td>Body Title 5</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -413,7 +413,7 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <td scope="row">Body Title 1</td>
+              <td>Body Title 1</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -427,7 +427,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td scope="row">
+              <td>
                 Body Title 2{' '}
                 <span className="badge badge-pill badge-primary">Active</span>
               </td>
@@ -444,7 +444,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td scope="row">Body Title 3</td>
+              <td>Body Title 3</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -458,7 +458,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr className="table-active">
-              <td scope="row">Body Title 4</td>
+              <td>Body Title 4</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -472,7 +472,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr>
-              <td scope="row">Body Title 5</td>
+              <td>Body Title 5</td>
               <td>Description goes here</td>
               <td>
                 <div className="btn-group">
@@ -720,19 +720,19 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <td scope="row">Body Row 1, Col 1</td>
+              <td>Body Row 1, Col 1</td>
               <td>Body Row 1, Col 2</td>
             </tr>
             <tr>
-              <td scope="row">Body Row 2, Col 1</td>
+              <td>Body Row 2, Col 1</td>
               <td>Body Row 2,Col 2</td>
             </tr>
             <tr>
-              <td scope="row">Body Row 3, Col 1</td>
+              <td>Body Row 3, Col 1</td>
               <td>Body Row 3, Col 2</td>
             </tr>
             <tr>
-              <td scope="row">Body Row 4, Col 1</td>
+              <td>Body Row 4, Col 1</td>
               <td>Body Row 4,Col 2</td>
             </tr>
           </tbody>
@@ -755,19 +755,17 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <td scope="row">January</td>
+              <td>January</td>
               <td className="text-right">$100</td>
             </tr>
             <tr>
-              <td scope="row">February</td>
+              <td>February</td>
               <td className="text-right">$80</td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
-              <td scope="row" className="font-weight-bold">
-                Sum
-              </td>
+              <td className="font-weight-bold">Sum</td>
               <td className="text-right text-danger font-weight-bold">$180</td>
             </tr>
           </tfoot>
@@ -784,7 +782,7 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <td scope="row" colSpan="2" className="text-center">
+              <td colSpan="2" className="text-center">
                 <em>
                   No summaries found. This is an example empty state. Your
                   language should be relevant to the user.
@@ -794,7 +792,7 @@ export const TablesPage = () => (
           </tbody>
           <tfoot>
             <tr>
-              <td scope="row" className="text-center" colSpan="2" />
+              <td className="text-center" colSpan="2" />
             </tr>
           </tfoot>
         </table>
@@ -811,7 +809,7 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <td scope="row" className="">
+              <td className="">
                 <em>Body Row 1, Col 1</em>
               </td>
               <td>
@@ -832,7 +830,7 @@ export const TablesPage = () => (
               </td>
             </tr>
             <tr className="is-editing">
-              <td scope="row" className="">
+              <td className="">
                 <input
                   className="form-control form-control-sm"
                   type="text"
@@ -860,7 +858,7 @@ export const TablesPage = () => (
           </tbody>
           <tfoot>
             <tr>
-              <td scope="row" className="" colSpan="3" />
+              <td className="" colSpan="3" />
             </tr>
           </tfoot>
         </table>
@@ -877,7 +875,7 @@ export const TablesPage = () => (
           </thead>
           <tbody>
             <tr>
-              <td scope="row" className="">
+              <td className="">
                 <em>Body Row 1, Col 1</em>
               </td>
               <td>
@@ -894,7 +892,7 @@ export const TablesPage = () => (
           </tbody>
           <tfoot>
             <tr className="tr--edit">
-              <td scope="row">
+              <td>
                 <input type="text" className="form-control form-control-sm" />
               </td>
               <td className="" width="20%">
@@ -934,14 +932,14 @@ export const TablesPage = () => (
                   Test
                 </span>
               </td>
-              <td scope="row" className="">
+              <td className="">
                 <a href="/">Body Row 1, Col 1</a>
               </td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
-              <td scope="row" className="" colSpan="2" />
+              <td className="" colSpan="2" />
             </tr>
           </tfoot>
         </table>

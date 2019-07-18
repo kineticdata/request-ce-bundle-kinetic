@@ -77,9 +77,8 @@ const SchedulerComponent = ({
   setPreviousMode,
   pageName,
   scheduler,
-  loading,
   currentLoaded,
-  errors,
+  error,
   managers,
   agents,
   handleUpdated,
@@ -163,19 +162,15 @@ const SchedulerComponent = ({
         </div>
 
         <div className="content-wrapper">
-          {loading && !currentLoaded && <LoadingMessage />}
-          {!loading &&
-            errors.length > 0 && (
-              <ErrorMessage
-                heading="Failed to retrieve scheduler."
-                text={errors.map((e, i) => (
-                  <div key={`error-${i}`}>
-                    <I18n>{e}</I18n>
-                  </div>
-                ))}
-              />
-            )}
-          {currentLoaded &&
+          {error && (
+            <ErrorMessage
+              title="Failed to retrieve scheduler"
+              message={error.message}
+            />
+          )}
+          {!error && (!scheduler || !currentLoaded) && <LoadingMessage />}
+          {scheduler &&
+            currentLoaded &&
             (mode !== 'edit' ? (
               <Fragment>
                 <div className="form">
@@ -438,8 +433,7 @@ const SchedulerComponent = ({
 };
 
 export const mapStateToProps = (state, props) => ({
-  loading: state.schedulers.scheduler.loading,
-  errors: state.schedulers.scheduler.errors,
+  error: state.schedulers.scheduler.error,
   scheduler: state.schedulers.scheduler.data,
   managers: state.schedulers.scheduler.teams.managers,
   agents: state.schedulers.scheduler.teams.agents,
@@ -449,8 +443,8 @@ export const mapStateToProps = (state, props) => ({
 
 export const mapDispatchToProps = {
   push,
-  fetchScheduler: actions.fetchScheduler,
-  deleteScheduler: actions.deleteScheduler,
+  fetchScheduler: actions.fetchSchedulerRequest,
+  deleteScheduler: actions.deleteSchedulerRequest,
 };
 
 const toggleConfirm = ({ setOpenConfirm }) => () => setOpenConfirm(false);
@@ -500,8 +494,8 @@ const handleSchedulerDelete = ({
     datastore: true,
     form: SCHEDULED_EVENT_FORM_SLUG,
     include: 'details,values',
-  }).then(({ submissions, serverError, errors }) => {
-    if (serverError || errors) {
+  }).then(({ submissions, error }) => {
+    if (error) {
       addError(
         'There was an error deleting the scheduler. Please contact an administrator.',
         'Delete Failed',
@@ -542,7 +536,7 @@ export const Scheduler = compose(
     handleSchedulerDelete,
   }),
   withProps(({ id, mode, scheduler }) => ({
-    currentLoaded: scheduler.id === id,
+    currentLoaded: scheduler && scheduler.id === id,
     pageName: `
       ${mode === 'edit' ? 'Edit ' : ''}
       ${scheduler && scheduler.id === id ? scheduler.values['Name'] : ''}

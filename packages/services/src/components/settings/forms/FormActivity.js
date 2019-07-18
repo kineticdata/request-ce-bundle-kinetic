@@ -178,7 +178,7 @@ export const FormActivityContainer = ({
                       const data = JSON.parse(activity.data);
                       return (
                         <tr key={`task-activity-${index}`}>
-                          <td scope="row">{activity.type}</td>
+                          <td>{activity.type}</td>
                           <td>{activity.label}</td>
                           <td>{activity.description}</td>
                           <td>
@@ -226,7 +226,7 @@ export const FormActivityContainer = ({
                       const data = JSON.parse(activity.data);
                       return (
                         <tr key={`activity-${index}`}>
-                          <td scope="row">{activity.type}</td>
+                          <td>{activity.type}</td>
                           <td>{activity.label}</td>
                           <td>{activity.description}</td>
                           <td>
@@ -262,7 +262,7 @@ export const FormActivityContainer = ({
               <tbody>
                 {submission.form.fields.map(field => (
                   <tr key={field.name}>
-                    <td scope="row">
+                    <td>
                       <I18n>{field.name}</I18n>
                     </td>
                     <td>{submission.values[field.name]}</td>

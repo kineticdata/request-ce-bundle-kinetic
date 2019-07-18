@@ -24,14 +24,10 @@ export const createAction = ({
       'Display Text': displayText,
     },
     completed: true,
-  }).then(({ submission, errors, serverError }) => {
-    if (serverError) {
+  }).then(({ submission, error }) => {
+    if (error) {
       if (typeof errorCallback === 'function') {
-        errorCallback([serverError.error || serverError.statusText]);
-      }
-    } else if (errors) {
-      if (typeof errorCallback === 'function') {
-        errorCallback(errors);
+        errorCallback(error);
       }
     } else {
       if (typeof successCallback === 'function') {

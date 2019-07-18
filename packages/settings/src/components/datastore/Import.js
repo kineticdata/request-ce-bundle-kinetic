@@ -459,7 +459,7 @@ export class ImportComponent extends Component {
                     )
                     .map((obj, idx) => (
                       <tr key={obj.header + idx}>
-                        <td scope="row">
+                        <td>
                           <input
                             type="checkbox"
                             id="omit"
@@ -478,7 +478,7 @@ export class ImportComponent extends Component {
                     if (obj.header.toLowerCase() !== 'datastore record id') {
                       return (
                         <tr key={obj.header + idx}>
-                          <td scope="row">
+                          <td>
                             <input
                               type="checkbox"
                               id="omit"

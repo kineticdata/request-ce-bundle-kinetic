@@ -234,12 +234,12 @@ export function* fetchListTask(action) {
 }
 
 export function* fetchCurrentItemTask(action) {
-  const { submission, serverError } = yield call(fetchSubmission, {
+  const { submission, error } = yield call(fetchSubmission, {
     id: action.payload,
     include: SUBMISSION_INCLUDES,
   });
 
-  if (!serverError) {
+  if (!error) {
     yield put(actions.setCurrentItem(submission));
   } else {
     yield put(addToastAlert('Failed to retrieve item!'));

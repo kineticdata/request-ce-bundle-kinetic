@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from '../../redux/store';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { CoreForm, I18n, Moment } from '@kineticdata/react';
@@ -12,7 +12,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { LoadingMessage, ErrorMessage, EmptyMessage } from '../StateMessages';
+import { StateListWrapper } from '../StateMessages';
 import {
   actions,
   SCHEDULER_OVERRIDE_FORM_SLUG,
@@ -32,12 +32,12 @@ const formatTime = time => (
 const SchedulerOverridesComponent = ({
   schedulerId,
   overrides,
-  loading,
-  errors,
+  error,
+  paging,
   hasPreviousPage,
   hasNextPage,
-  startIndex,
-  endIndex,
+  pageIndexStart,
+  pageIndexEnd,
   fetchPreviousSchedulerOverrides,
   fetchNextSchedulerOverrides,
   includePastOverrides,
@@ -67,116 +67,111 @@ const SchedulerOverridesComponent = ({
         <span>Show Past Overrides</span>
       </label>
     </div>
-    {loading && overrides.size === 0 && <LoadingMessage />}
-    {!loading &&
-      errors.length > 0 && (
-        <ErrorMessage
-          heading="Failed to retrieve overrides"
-          text={errors.map((e, i) => (
-            <div key={`error-${i}`}>
-              <I18n>{e}</I18n>
-            </div>
-          ))}
-        />
-      )}
-    {!loading &&
-      errors.length === 0 &&
-      overrides.size === 0 && (
-        <Fragment>
-          <EmptyMessage
-            heading="No Overrides Found"
-            text="Overrides overwrite the standard availability for a given date."
-          />
-          <div className="text-center">
-            <button className="btn btn-primary" onClick={handleAdd}>
-              <I18n>Add Override</I18n>
-            </button>
-          </div>
-        </Fragment>
-      )}
-    {overrides.size > 0 && (
-      <table className="table table-sm table-striped table-overrides table--settings">
-        <thead className="header">
-          <tr>
-            <th scope="col">
-              <I18n>Date</I18n>
-            </th>
-            <th scope="col">
-              <I18n>Start Time</I18n>
-            </th>
-            <th scope="col">
-              <I18n>End Time</I18n>
-            </th>
-            <th scope="col">
-              <I18n>Slots</I18n>
-            </th>
-            <th className="text-right">
-              <button className="btn btn-primary" onClick={handleAdd}>
-                <I18n>Add Override</I18n>
-              </button>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {overrides.map((a, index) => (
-            <tr key={`overrides-${index}`}>
-              <td scope="row">{formatDate(a.values['Date'])}</td>
-              <td>{formatTime(a.values['Start Time'])}</td>
-              <td>{formatTime(a.values['End Time'])}</td>
-              <td>{a.values['Slots']}</td>
-              <td className="text-right">
-                <Dropdown
-                  toggle={toggleDropdown(a.id)}
-                  isOpen={openDropdown === a.id}
-                >
-                  <DropdownToggle color="link" className="btn-sm">
-                    <span className="fa fa-ellipsis-h fa-2x" />
-                  </DropdownToggle>
-                  <DropdownMenu right>
-                    <DropdownItem onClick={handleEdit(a.id)}>
-                      <I18n>Edit</I18n>
-                    </DropdownItem>
-                    <DropdownItem onClick={handleDelete(a.id)}>
-                      <I18n>Delete</I18n>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              </td>
+    <StateListWrapper
+      error={error}
+      data={overrides}
+      emptyTitle="No overrides found"
+      emptyMessage="Overrides overwrite the standard availability for a given date"
+      errorTitle="Failed to retrieve overrides"
+      errorMessage={true}
+    >
+      {data => (
+        <table className="table table-sm table-striped table-overrides table--settings">
+          <thead className="header">
+            <tr>
+              <th scope="col">
+                <I18n>Date</I18n>
+              </th>
+              <th scope="col">
+                <I18n>Start Time</I18n>
+              </th>
+              <th scope="col">
+                <I18n>End Time</I18n>
+              </th>
+              <th scope="col">
+                <I18n>Slots</I18n>
+              </th>
+              <th className="text-right">
+                <button className="btn btn-primary" onClick={handleAdd}>
+                  <I18n>Add Override</I18n>
+                </button>
+              </th>
             </tr>
-          ))}
-        </tbody>
-        {!loading && (
+          </thead>
+          <tbody>
+            {data.map((a, index) => (
+              <tr key={`overrides-${index}`}>
+                <td>{formatDate(a.values['Date'])}</td>
+                <td>{formatTime(a.values['Start Time'])}</td>
+                <td>{formatTime(a.values['End Time'])}</td>
+                <td>{a.values['Slots']}</td>
+                <td className="text-right">
+                  <Dropdown
+                    toggle={toggleDropdown(a.id)}
+                    isOpen={openDropdown === a.id}
+                  >
+                    <DropdownToggle color="link" className="btn-sm">
+                      <span className="fa fa-ellipsis-h fa-2x" />
+                    </DropdownToggle>
+                    <DropdownMenu right>
+                      <DropdownItem onClick={handleEdit(a.id)}>
+                        <I18n>Edit</I18n>
+                      </DropdownItem>
+                      <DropdownItem onClick={handleDelete(a.id)}>
+                        <I18n>Delete</I18n>
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </td>
+              </tr>
+            ))}
+          </tbody>
           <tfoot>
             <tr>
               <td colSpan="5" className="text-center">
-                {hasPreviousPage && (
-                  <button
-                    className="btn btn-sm btn-secondary pull-left"
-                    onClick={() => fetchPreviousSchedulerOverrides()}
-                  >
-                    <I18n>Previous</I18n>
-                    {` ${SCHEDULER_OVERRIDES_PAGE_SIZE}`}
-                  </button>
-                )}
-                <span>
-                  <I18n>Viewing Overrides</I18n> {startIndex} <I18n>to</I18n>{' '}
-                  {endIndex}
-                </span>
-                {hasNextPage && (
-                  <button
-                    className="btn btn-sm btn-secondary pull-right"
-                    onClick={() => fetchNextSchedulerOverrides()}
-                  >
-                    <I18n>Next</I18n>
-                    {` ${SCHEDULER_OVERRIDES_PAGE_SIZE}`}
-                  </button>
-                )}
+                <div className="pagination-bar">
+                  <I18n
+                    render={translate => (
+                      <button
+                        className="btn btn-link icon-wrapper"
+                        onClick={() => fetchPreviousSchedulerOverrides()}
+                        disabled={paging || !hasPreviousPage}
+                        title={translate('Previous Page')}
+                      >
+                        <span className="icon">
+                          <span className="fa fa-fw fa-caret-left" />
+                        </span>
+                      </button>
+                    )}
+                  />
+                  <small>
+                    {paging ? (
+                      <span className="fa fa-spinner fa-spin" />
+                    ) : (
+                      <strong>{`${pageIndexStart}-${pageIndexEnd}`}</strong>
+                    )}
+                  </small>
+                  <I18n
+                    render={translate => (
+                      <button
+                        className="btn btn-link icon-wrapper"
+                        onClick={() => fetchNextSchedulerOverrides()}
+                        disabled={paging || !hasNextPage}
+                        title={translate('Next Page')}
+                      >
+                        <span className="icon">
+                          <span className="fa fa-fw fa-caret-right" />
+                        </span>
+                      </button>
+                    )}
+                  />
+                </div>
               </td>
             </tr>
           </tfoot>
-        )}
-      </table>
-    )}
+        </table>
+      )}
+    </StateListWrapper>
 
     {openModal && (
       <Modal isOpen={!!openModal} toggle={toggleModal}>
@@ -270,26 +265,31 @@ const SchedulerOverridesComponent = ({
 
 export const mapStateToProps = ({ schedulers }) => ({
   includePastOverrides: schedulers.scheduler.includePastOverrides,
-  loading: schedulers.scheduler.overrides.loading,
-  errors: schedulers.scheduler.overrides.errors,
+  error: schedulers.scheduler.overrides.error,
   overrides: schedulers.scheduler.overrides.data,
+  paging: schedulers.scheduler.overrides.paging,
   hasNextPage: !!schedulers.scheduler.overrides.nextPageToken,
   hasPreviousPage: !!schedulers.scheduler.overrides.previousPageTokens.size,
-  startIndex:
+  pageIndexStart:
     schedulers.scheduler.overrides.previousPageTokens.size *
       SCHEDULER_OVERRIDES_PAGE_SIZE +
-    1,
-  endIndex:
+    (schedulers.scheduler.overrides.data &&
+    schedulers.scheduler.overrides.data.size > 0
+      ? 1
+      : 0),
+  pageIndexEnd:
     schedulers.scheduler.overrides.previousPageTokens.size *
       SCHEDULER_OVERRIDES_PAGE_SIZE +
-    schedulers.scheduler.overrides.data.size,
+    (schedulers.scheduler.overrides.data
+      ? schedulers.scheduler.overrides.data.size
+      : 0),
 });
 
 export const mapDispatchToProps = {
-  fetchSchedulerOverrides: actions.fetchSchedulerOverrides,
-  fetchNextSchedulerOverrides: actions.fetchNextSchedulerOverrides,
-  fetchPreviousSchedulerOverrides: actions.fetchPreviousSchedulerOverrides,
-  deleteSchedulerOverride: actions.deleteSchedulerOverride,
+  fetchSchedulerOverrides: actions.fetchSchedulerOverridesRequest,
+  fetchNextSchedulerOverrides: actions.fetchSchedulerOverridesNext,
+  fetchPreviousSchedulerOverrides: actions.fetchSchedulerOverridesPrevious,
+  deleteSchedulerOverride: actions.deleteSchedulerOverrideRequest,
 };
 
 const toggleDropdown = ({

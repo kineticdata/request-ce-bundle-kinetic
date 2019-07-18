@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { Link } from 'react-router-dom';
-import { fromJS } from 'immutable';
 import {
   TeamCard,
   ErrorMessage,
@@ -243,7 +242,7 @@ export const EditProfileComponent = ({
                   <tbody>
                     {managerEnabled && (
                       <tr>
-                        <td scope="row" className="name">
+                        <td className="name">
                           <I18n>Manager</I18n>
                         </td>
                         <td>
@@ -263,7 +262,7 @@ export const EditProfileComponent = ({
                     )}
                     {departmentEnabled && (
                       <tr>
-                        <td scope="row" className="name">
+                        <td className="name">
                           <I18n>Department</I18n>
                         </td>
                         <td>
@@ -277,7 +276,7 @@ export const EditProfileComponent = ({
                     )}
                     {organizationEnabled && (
                       <tr>
-                        <td scope="row" className="name">
+                        <td className="name">
                           <I18n>Organization</I18n>
                         </td>
                         <td>
@@ -291,7 +290,7 @@ export const EditProfileComponent = ({
                     )}
                     {siteEnabled && (
                       <tr>
-                        <td scope="row" className="name">
+                        <td className="name">
                           <I18n>Site</I18n>
                         </td>
                         <td>

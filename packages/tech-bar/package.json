@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "./src/index.js",
   "dependencies": {
-    "@kineticdata/react": "0.1.0-RC11",
+    "@kineticdata/react": "^0.1.0-alpha.2",
     "@reach/router": "^1.2.1",
     "bootstrap": "^4.3.1",
     "downloadjs": "^1.4.7",

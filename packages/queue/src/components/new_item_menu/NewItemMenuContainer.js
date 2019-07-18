@@ -1,4 +1,3 @@
-import { connect } from 'react-redux';
 import { compose, withState, withHandlers, withProps } from 'recompose';
 
 import {
@@ -7,7 +6,7 @@ import {
 } from '../../redux/modules/queueApp';
 import { actions } from '../../redux/modules/queue';
 import { NewItemMenu } from './NewItemMenu';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 const mapStateToProps = state => ({
   myTeamForms: !state.queue.newItemMenuOptions.get('parentId')
@@ -73,8 +72,6 @@ export const NewItemMenuContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('currentAssignment', 'setAssignment', null),
   withState('currentForm', 'setCurrentForm', null),

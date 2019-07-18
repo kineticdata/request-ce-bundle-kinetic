@@ -819,28 +819,24 @@ const fetchSchedulerData = ({
 };
 
 const setResultToState = ({ dispatch }) => (result, set) => {
-  const { serverError, errors } = result;
-  if (serverError) {
-    dispatch(actions.addErrors([serverError.error || serverError.statusText]));
-  } else if (errors) {
-    dispatch(actions.addErrors(errors));
+  const { error } = result;
+  if (error) {
+    dispatch(actions.addErrors([error.message]));
   } else {
     set(result);
   }
 };
 
 const setEventResultToState = ({ dispatch }) => (result, set) => {
-  const { serverError, errors } = result;
-  if (serverError && serverError.status === 404) {
+  const { error } = result;
+  if (error.statusCode === 404) {
     dispatch(
       actions.setState({
         eventCancelled: true,
       }),
     );
-  } else if (serverError) {
-    dispatch(actions.addErrors([serverError.error || serverError.statusText]));
-  } else if (errors) {
-    dispatch(actions.addErrors(errors));
+  } else if (error) {
+    dispatch(actions.addErrors([error.message]));
   } else {
     set(result);
   }
@@ -1046,56 +1042,34 @@ const scheduleEvent = ({
 
   if (event) {
     if (event.coreState === 'Draft') {
-      updateScheduledEvent(event.id, values).then(
-        ({ submission, serverError, errors }) => {
-          if (serverError) {
-            dispatch(
-              actions.addSchedulingErrors([
-                serverError.error || serverError.statusText,
-              ]),
-            );
-          } else if (errors) {
-            dispatch(actions.addSchedulingErrors(errors));
-          } else {
-            dispatch(actions.setState({ event: submission }));
-            fetchSchedulerData(verifyScheduledEvent);
-          }
-        },
-      );
+      updateScheduledEvent(event.id, values).then(({ submission, error }) => {
+        if (error) {
+          dispatch(actions.addSchedulingErrors([error.message]));
+        } else {
+          dispatch(actions.setState({ event: submission }));
+          fetchSchedulerData(verifyScheduledEvent);
+        }
+      });
     } else {
       // Reschedule event: create new, verify, update existing, delete new
-      createScheduledEvent(values).then(
-        ({ submission, serverError, errors }) => {
-          if (serverError) {
-            dispatch(
-              actions.addSchedulingErrors([
-                serverError.error || serverError.statusText,
-              ]),
-            );
-          } else if (errors) {
-            dispatch(actions.addSchedulingErrors(errors));
-          } else {
-            dispatch(
-              actions.setState({
-                event: submission,
-                rescheduleEvent: event,
-              }),
-            );
-            fetchSchedulerData(() => verifyScheduledEvent(completeReschedule));
-          }
-        },
-      );
+      createScheduledEvent(values).then(({ submission, error }) => {
+        if (error) {
+          dispatch(actions.addSchedulingErrors([error.message]));
+        } else {
+          dispatch(
+            actions.setState({
+              event: submission,
+              rescheduleEvent: event,
+            }),
+          );
+          fetchSchedulerData(() => verifyScheduledEvent(completeReschedule));
+        }
+      });
     }
   } else {
-    createScheduledEvent(values).then(({ submission, serverError, errors }) => {
-      if (serverError) {
-        dispatch(
-          actions.addSchedulingErrors([
-            serverError.error || serverError.statusText,
-          ]),
-        );
-      } else if (errors) {
-        dispatch(actions.addSchedulingErrors(errors));
+    createScheduledEvent(values).then(({ submission, error }) => {
+      if (error) {
+        dispatch(actions.addSchedulingErrors([error.message]));
       } else {
         dispatch(actions.setState({ event: submission }));
         fetchSchedulerData(verifyScheduledEvent);
@@ -1124,8 +1098,8 @@ const cancelEvent = ({
             'Cancellation Reason Other': cancelReasonOther,
           })
         : undefined,
-    }).then(({ serverError: se, errors: e }) => {
-      if (se || e) {
+    }).then(({ error }) => {
+      if (error) {
         dispatch(
           actions.addSchedulingErrors([
             'Your event was cancelled, but the details failed to update. Please contact an administrator.',
@@ -1295,8 +1269,8 @@ const completeReschedule = ({
     Timestamp: moment
       .tz(`${event.values['Date']}T${event.values['Time']}`, timezone)
       .toISOString(),
-  }).then(({ submission, serverError, errors }) => {
-    if (serverError || errors) {
+  }).then(({ submission, error }) => {
+    if (error) {
       dispatch(
         actions.addSchedulingErrors(['Failed to update your current event.']),
       );
@@ -1312,8 +1286,8 @@ const completeReschedule = ({
         'Scheduled Event Id': submission.id,
         'Request Id': appointmentRequestId,
         'Data Map': JSON.stringify(rescheduleDataMap),
-      }).then(({ serverError: se, errors: e }) => {
-        if (se || e) {
+      }).then(({ error }) => {
+        if (error) {
           dispatch(
             actions.addSchedulingErrors([
               'Your event was rescheduled, but the details failed to update. Please contact an administrator.',

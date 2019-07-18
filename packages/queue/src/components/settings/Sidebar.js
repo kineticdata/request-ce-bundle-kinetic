@@ -1,9 +1,8 @@
 import React from 'react';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 import { isActiveClass } from '../../utils';
 
 export const SidebarComponent = ({ loading, spaceAdmin }) => (
@@ -40,11 +39,4 @@ export const mapStateToProps = state => ({
   pathname: state.router.location.pathname,
 });
 
-export const Sidebar = compose(
-  connect(
-    mapStateToProps,
-    null,
-    null,
-    { context },
-  ),
-)(SidebarComponent);
+export const Sidebar = compose(connect(mapStateToProps))(SidebarComponent);

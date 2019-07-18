@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { push } from 'redux-first-history';
 import { isImmutable, List, Map, OrderedMap } from 'immutable';
@@ -11,7 +10,7 @@ import { validateAssignments, validateDateRange } from './FilterMenuContainer';
 import moment from 'moment';
 import { AttributeSelectors } from 'common';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 const VALID_STATUSES = List(['Open', 'Pending', 'Cancelled', 'Complete']);
 
@@ -314,8 +313,6 @@ export const FilterMenuAbstract = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withHandlers({ applyFilter }),
   withHandlers({

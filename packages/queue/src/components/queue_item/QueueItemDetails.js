@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { compose, withState, withHandlers, withProps } from 'recompose';
 import { Link } from '@reach/router';
 import { TimeAgo, ViewDiscussionsModal } from 'common';
@@ -13,7 +12,7 @@ import { AssignmentSelector } from '../shared/AssignmentSelector';
 import { StatusContent } from '../shared/StatusContent';
 import { WallyButtonContainer } from '../shared/WallyButton';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 const nonQueueLink = (queueItem, kappSlug) =>
   queueItem.parent &&
@@ -235,8 +234,6 @@ export const QueueItemDetailsContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withProps(({ queueItem }) => {
     const prohibit = getAttr(queueItem.form, 'Prohibit Subtasks');

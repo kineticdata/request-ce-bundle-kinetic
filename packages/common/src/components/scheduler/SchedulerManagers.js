@@ -103,7 +103,7 @@ const SchedulerManagersComponent = ({
               .sortBy(a => a.user.displayName)
               .map(manager => (
                 <tr key={manager.user.username}>
-                  <td scope="row">{manager.user.displayName}</td>
+                  <td>{manager.user.displayName}</td>
                   <td>{manager.user.username}</td>
                   {isSchedulerAdmin && (
                     <td className="text-right">
@@ -298,10 +298,11 @@ export const mapStateToProps = (state, props) => ({
 });
 
 export const mapDispatchToProps = {
-  addSchedulerManager: actions.addSchedulerMembership,
-  removeSchedulerManager: actions.removeSchedulerMembership,
-  createUserAsSchedulerManager: actions.createUserWithSchedulerMembership,
-  fetchSchedulerManagersTeam: actions.fetchSchedulerManagersTeam,
+  addSchedulerManager: actions.createSchedulerMembershipRequest,
+  removeSchedulerManager: actions.deleteSchedulerMembershipRequest,
+  createUserAsSchedulerManager:
+    actions.createUserWithSchedulerMembershipRequest,
+  fetchSchedulerManagersTeam: actions.fetchSchedulerManagersTeamRequest,
 };
 
 const toggleDropdown = ({

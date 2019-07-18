@@ -461,7 +461,7 @@ export const EntriesListComponent = ({
                   </thead>
                   <tbody>
                     <tr>
-                      <td scope="row">{currentKey}</td>
+                      <td>{currentKey}</td>
                       <td className="text-right">
                         <ButtonGroup>
                           <button

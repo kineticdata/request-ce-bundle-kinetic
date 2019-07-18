@@ -70,7 +70,9 @@ export const MetricsExportComponent = ({
             <Fragment>
               <span className="fa fa-exclamation-triangle fa-fw" />
               <I18n
-                render={translate => `${translate('Export failed:')} ${error}`}
+                render={translate =>
+                  `${translate('Export failed:')} ${error.message}`
+                }
               />
             </Fragment>
           )}

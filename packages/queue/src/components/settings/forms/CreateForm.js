@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
 import { push } from 'redux-first-history';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import { actions } from '../../../redux/modules/settingsForms';
 import { actions as queueActions } from '../../../redux/modules/settingsQueue';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../../redux/store';
+import { connect } from '../../../redux/store';
 
 export const teamOptions = teams => {
   let optionElements = '<option></option>';
@@ -282,8 +281,6 @@ export const CreateForm = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('inputs', 'setInputs', { Type: 'Service', Status: 'Active' }),
   withState('slugEntered', 'setSlugEntered', false),

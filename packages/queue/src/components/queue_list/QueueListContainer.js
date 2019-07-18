@@ -1,5 +1,4 @@
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
-import { connect } from 'react-redux';
 import { is, List } from 'immutable';
 import { getFilterByPath } from '../../redux/modules/queueApp';
 import { actions as queueActions } from '../../redux/modules/queue';
@@ -9,7 +8,7 @@ import {
   validateAssignments,
   validateDateRange,
 } from '../filter_menu/FilterMenuContainer';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 const mapStateToProps = (state, props) => {
   const filter = getFilterByPath(state, props.location.pathname);
@@ -87,8 +86,6 @@ export const QueueListContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withProps(
     ({

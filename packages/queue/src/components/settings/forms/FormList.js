@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
 import { compose, withState, withHandlers } from 'recompose';
 import {
   Dropdown,
@@ -12,7 +11,7 @@ import { TimeAgo } from 'common';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import { actions } from '../../../redux/modules/forms';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../../redux/store';
+import { connect } from '../../../redux/store';
 
 const WallyEmptyMessage = ({ filter }) => {
   return (
@@ -239,8 +238,6 @@ export const FormList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('openDropdown', 'setOpenDropdown', ''),
   withState('currentPage', 'setCurrentPage', 1),

@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { compose, lifecycle, withProps } from 'recompose';
 import { Link } from '@reach/router';
 import { DiscussionsPanel } from 'common';
@@ -8,7 +7,7 @@ import { actions } from '../../redux/modules/queue';
 import { QueueItemDetailsContainer } from './QueueItemDetails';
 import { getFilterByPath } from '../../redux/modules/queueApp';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 import { PageTitle } from '../shared/PageTitle';
 
 const CreationForm = ({ onChange, values, errors }) => (
@@ -106,8 +105,6 @@ export const QueueItemContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withProps(
     props =>

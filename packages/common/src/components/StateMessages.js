@@ -88,7 +88,7 @@ export const StateListWrapper = ({
     return (
       <ErrorMessageComponent
         title={errorTitle}
-        message={errorMessage}
+        message={errorMessage === true ? error.message || error : errorMessage}
         actions={errorActions}
       />
     );

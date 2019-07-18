@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
 
-import { connect } from 'react-redux';
 import papaparse from 'papaparse';
 
 import { actions } from '../../../redux/modules/settingsForms';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../../redux/store';
+import { connect } from '../../../redux/store';
 
 const ExportComponent = ({
   submissions,
@@ -142,8 +141,6 @@ export const Export = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('exportStatus', 'setExportStatus', 'NOT_STARTED'),
   withHandlers({

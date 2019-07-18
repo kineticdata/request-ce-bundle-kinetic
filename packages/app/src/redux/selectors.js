@@ -1,13 +1,5 @@
 import { Utils } from 'common';
 
-const selectAppIsReady = state =>
-  state.app.errors.isEmpty() &&
-  state.app.kapps !== null &&
-  state.app.space !== null &&
-  state.app.profile !== null
-    ? true
-    : false;
-
 // Find a Kapp by Space Attribute Value
 const kappBySpaceAttribute = (state, slugAttributeName) =>
   state.app.loading

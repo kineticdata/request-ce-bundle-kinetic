@@ -1,10 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 export const AssignmentSection = ({
   filter,
@@ -61,8 +60,6 @@ export const AssignmentSectionContainer = compose(
     {
       toggleAssignment: actions.toggleAssignment,
     },
-    null,
-    { context },
   ),
   withHandlers({
     toggleAssignmentHandler: props => event =>

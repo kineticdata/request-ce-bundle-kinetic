@@ -1,11 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
 import { ModalBody } from 'reactstrap';
 import { actions } from '../../redux/modules/filterMenu';
 import { DateRangeSelector } from 'common/src/components/DateRangeSelector';
 import { I18n } from '@kineticdata/react';
-import { context } from '../../redux/store';
+import { connect } from '../../redux/store';
 
 const convertDateRangeValue = dateRange =>
   !dateRange.custom
@@ -55,8 +54,6 @@ export const DateRangeSectionContainer = compose(
       setDateRangeTimeline: actions.setDateRangeTimeline,
       setDateRange: actions.setDateRange,
     },
-    null,
-    { context },
   ),
   withHandlers({
     setDateRangeTimelineHandler: props => event =>

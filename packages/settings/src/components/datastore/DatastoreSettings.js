@@ -260,7 +260,7 @@ const SettingsComponent = ({
                                       snapshot.isDragging ? 'dragging' : ''
                                     }`}
                                   >
-                                    <td scope="row">
+                                    <td>
                                       {col.type === 'value' ? (
                                         <I18n>{col.label}</I18n>
                                       ) : (
@@ -502,7 +502,7 @@ const QualificationTable = ({
       <tbody>
         {updatedForm.bridgeModel.qualifications.map((qual, index) => (
           <tr key={qual.name}>
-            <td scope="row">{qual.name}</td>
+            <td>{qual.name}</td>
             <td>
               <I18n>{qual.resultType}</I18n>
             </td>
@@ -541,7 +541,7 @@ const QualificationTable = ({
         ))}
         {updatedForm.bridgeModel.qualifications.size === 0 && (
           <tr>
-            <td scope="row" colSpan="4" className="text-center">
+            <td colSpan="4" className="text-center">
               <I18n>No qualifications.</I18n>
             </td>
           </tr>
@@ -644,7 +644,7 @@ const QualificationModal = ({
               <tbody>
                 {newQualification.parameters.map((parameter, index) => (
                   <tr key={parameter.name}>
-                    <td scope="row">{parameter.name}</td>
+                    <td>{parameter.name}</td>
                     <td>{parameter.notes}</td>
                     <td className="text-right">
                       <div className="btn-group btn-group-sm pull-right">
@@ -871,7 +871,7 @@ const AttributeTable = ({
             ) || {};
           return (
             <tr key={attr.name}>
-              <td scope="row">
+              <td>
                 {editAttribute.index === index ? (
                   <input
                     id="editAttributeName"
@@ -971,7 +971,7 @@ const AttributeTable = ({
         })}
         {updatedForm.bridgeModel.attributes.size === 0 && (
           <tr>
-            <td scope="row" colSpan="3" className="text-center">
+            <td colSpan="3" className="text-center">
               <I18n>No attributes.</I18n>
             </td>
           </tr>
@@ -980,13 +980,13 @@ const AttributeTable = ({
       <tfoot>
         {newAttribute.error && (
           <tr className="alert alert-danger" role="alert">
-            <td scope="row" colSpan="3">
+            <td colSpan="3">
               <I18n>{newAttribute.error}</I18n>
             </td>
           </tr>
         )}
         <tr>
-          <td scope="row">
+          <td>
             <input
               id="newAttributeName"
               name="newAttributeName"

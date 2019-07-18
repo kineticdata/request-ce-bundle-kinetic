@@ -130,7 +130,7 @@ const RobotExecutionsListComponent = ({
               {robotExecutions.map(execution => {
                 return (
                   <tr key={execution.id}>
-                    <td scope="row">{execution.values['Robot Name']}</td>
+                    <td>{execution.values['Robot Name']}</td>
                     <td>
                       <span
                         className={`status ${getStatusColor(
