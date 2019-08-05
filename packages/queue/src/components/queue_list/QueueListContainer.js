@@ -9,6 +9,7 @@ import {
   validateDateRange,
 } from '../filter_menu/FilterMenuContainer';
 import { connect } from '../../redux/store';
+import { refreshFilter } from '../../utils';
 
 const mapStateToProps = (state, props) => {
   const filter = getFilterByPath(state, props.location.pathname);
@@ -159,10 +160,7 @@ export const QueueListContainer = compose(
       setGroupDirection(groupDirection === 'ASC' ? 'DESC' : 'ASC');
       setOffsetWithScroll(0);
     },
-    refresh: ({ filter, fetchList, setOffsetWithScroll }) => () => {
-      fetchList(filter);
-      setOffsetWithScroll(0);
-    },
+    refresh: refreshFilter,
     gotoPrevPage: ({ limit, offset, setOffsetWithScroll }) => () => {
       setOffsetWithScroll(offset - limit);
     },
