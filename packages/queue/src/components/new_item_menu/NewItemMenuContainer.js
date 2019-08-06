@@ -40,13 +40,27 @@ const handleFormClick = ({ setCurrentForm }) => form => () =>
   setCurrentForm(form);
 const handleAssignmentClick = ({ setAssignment }) => form => () =>
   setAssignment(form);
-const handleSave = ({ kForm }) => () => {
+const handleSave = ({
+  kForm,
+  setCurrentForm,
+  setKForm,
+  setAssignment,
+}) => () => {
   kForm.submitPage();
-};
-const handleClosed = ({ setCurrentForm, setKForm, setAssignment }) => () => {
   setAssignment(null);
   setCurrentForm(null);
   setKForm(null);
+};
+const handleClosed = ({
+  setCurrentForm,
+  setKForm,
+  setAssignment,
+  closeNewItemMenu,
+}) => () => {
+  setAssignment(null);
+  setCurrentForm(null);
+  setKForm(null);
+  closeNewItemMenu();
 };
 const handleSelect = ({ setAssignment }) => (_value, state) => {
   const teamParts = state.team.split('::');
