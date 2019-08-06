@@ -15,6 +15,7 @@ export const Menu = props => {
         target={id}
         isOpen={props.showing === props.name}
         toggle={toggle}
+        trigger="legacy"
       >
         <PopoverBody className="filter-menu-popover">
           {(isarray(props.renderContent)
