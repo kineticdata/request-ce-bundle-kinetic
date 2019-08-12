@@ -45,10 +45,9 @@
     redux "^4.0.1"
     redux-saga "^1.0.1"
 
-"@reach/router@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@reach/router/-/router-1.2.1.tgz#34ae3541a5ac44fa7796e5506a5d7274a162be4e"
-  integrity sha512-kTaX08X4g27tzIFQGRukaHmNbtMYDS3LEWIS8+l6OayGIw6Oyo1HIF/JzeuR2FoF9z6oV+x/wJSVSq4v8tcUGQ==
+"@reach/router@git://github.com/kineticdata/router.git":
+  version "1.3.0-RC1"
+  resolved "git://github.com/kineticdata/router.git#6498c1afb6c1a251e8599c38137b46cd3d9e63d2"
   dependencies:
     create-react-context "^0.2.1"
     invariant "^2.2.3"

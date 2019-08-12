@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Router } from '../../App';
+import { Router } from '@reach/router';
 import { UsersList } from './UsersList';
 import { UserForm } from './UserForm';
 import { I18n } from '@kineticdata/react';

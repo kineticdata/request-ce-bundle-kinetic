@@ -2,7 +2,7 @@ import React from 'react';
 import { push } from 'redux-first-history';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { Router } from '../../App';
+import { Router } from '@reach/router';
 import { CreateRobot } from './CreateRobot';
 import { Robot } from './Robot';
 import { RobotExecution } from './RobotExecution';

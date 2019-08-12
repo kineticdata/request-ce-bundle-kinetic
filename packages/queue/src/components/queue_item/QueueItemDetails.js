@@ -173,7 +173,11 @@ export const QueueItemDetails = ({
           {queueItem.children.length > 0 && (
             <ul className="list-group submissions">
               {queueItem.children.map(child => (
-                <QueueListItemSmall key={child.id} queueItem={child} />
+                <QueueListItemSmall
+                  key={child.id}
+                  queueItem={child}
+                  path={`../${child.id}`}
+                />
               ))}
             </ul>
           )}

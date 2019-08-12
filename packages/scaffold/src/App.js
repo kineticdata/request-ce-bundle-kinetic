@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { LocationProvider, Router as ReachRouter } from '@reach/router';
+import { LocationProvider, Router } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
 import {
   CommonProvider,
@@ -21,12 +21,6 @@ import { Settings } from './components/settings/Settings';
 import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { actions } from './redux/modules/scaffoldApp';
 import './assets/styles/master.scss';
-
-export const Router = ({ children, ...props }) => (
-  <ReachRouter {...props} primary={false} component={Fragment}>
-    {children}
-  </ReachRouter>
-);
 
 const AppComponent = props => {
   if (props.error) {
@@ -117,7 +111,7 @@ export class AppProvider extends Component {
       this.state.ready && (
         <Provider store={store} context={context}>
           <CommonProvider>
-            <LocationProvider history={connectedHistory}>
+            <LocationProvider hashRouting history={connectedHistory}>
               <ToastsContainer duration={5000} />
               <ModalFormContainer />
               <Router>

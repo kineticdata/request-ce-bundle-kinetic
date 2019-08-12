@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from '@reach/router';
-import { Router } from '../../App';
+import { Link, Router } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
 import { Icon } from 'common';
 

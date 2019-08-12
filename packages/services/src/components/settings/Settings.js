@@ -1,9 +1,8 @@
 import React from 'react';
 import { Icon } from 'common';
-import { Link } from '@reach/router';
+import { Link, Router } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
 
-import { Router } from '../../App';
 import { ServicesSettings } from './services_settings/ServicesSettings';
 import { actions } from '../../redux/modules/settingsServices';
 import { FormList } from './forms/FormList';

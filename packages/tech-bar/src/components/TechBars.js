@@ -88,7 +88,7 @@ export const TechBarsComponent = ({
                       </DropdownToggle>
                       <DropdownMenu right>
                         <Link
-                          to={`display/${techBar.values['Id']}/checkin`}
+                          to={`../display/${techBar.values['Id']}/checkin`}
                           className="dropdown-item"
                           target="_blank"
                         >
@@ -98,7 +98,7 @@ export const TechBarsComponent = ({
                           </span>
                         </Link>
                         <Link
-                          to={`display/${techBar.values['Id']}/feedback`}
+                          to={`../display/${techBar.values['Id']}/feedback`}
                           className="dropdown-item"
                           target="_blank"
                         >
@@ -108,7 +108,7 @@ export const TechBarsComponent = ({
                           </span>
                         </Link>
                         <Link
-                          to={`display/${
+                          to={`../display/${
                             techBar.values['Id']
                           }/checkin?crosslink`}
                           className="dropdown-item"
@@ -120,7 +120,7 @@ export const TechBarsComponent = ({
                           </span>
                         </Link>
                         <Link
-                          to={`display/${techBar.values['Id']}/overhead`}
+                          to={`../display/${techBar.values['Id']}/overhead`}
                           className="dropdown-item"
                           target="_blank"
                         >

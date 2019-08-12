@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Router } from '../../App';
+import { Router } from '@reach/router';
 import { Notification } from './Notification';
 import { DateFormat } from './DateFormat';
 import { NotificationsNotFound } from './NotificationsNotFound';

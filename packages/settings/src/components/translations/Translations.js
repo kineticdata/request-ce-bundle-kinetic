@@ -1,15 +1,13 @@
 import React from 'react';
-import { Link } from '@reach/router';
+import { Router } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 
-import { Router } from '../../App';
 import { TranslationsList } from './TranslationsList';
 import { EntriesList } from './EntriesList';
 import { StagedList } from './StagedList';
 import { actions } from '../../redux/modules/settingsTranslations';
 import { context } from '../../redux/store';
-import { I18n } from '@kineticdata/react';
 
 export const TranslationsRouter = ({
   match,

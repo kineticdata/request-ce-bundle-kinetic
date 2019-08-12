@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from '@reach/router';
-import { Router } from '../../App';
+import { Link, Router } from '@reach/router';
 import { connect } from '../../redux/store';
 import { compose } from 'recompose';
 import {

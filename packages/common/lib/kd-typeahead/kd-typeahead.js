@@ -57,7 +57,9 @@
         var input = $(this);
         var typeaheadConfig = $.extend(
           {},
-          typeaheadConfigurations['defaultConfiguration'],
+          typeof typeaheadConfigurations['defaultConfiguration'] === 'function'
+            ? typeaheadConfigurations['defaultConfiguration']()
+            : typeaheadConfigurations['defaultConfiguration'],
         );
         //_.extend(typeaheadConfig, typeaheadConfigurations['defaultConfiguration'])
         typeaheadConfig['typeaheadForm'] = typeaheadForm;
@@ -173,9 +175,12 @@
             if (value.split('::')[0].toLowerCase() === 'string') {
               addtlParam = '&values[' + name + ']=' + valToSet;
             } else if (value.split('::')[0].toLowerCase() === 'field') {
-              var field = typeaheadConfig['typeaheadForm'].getFieldByName(valToSet);
+              var field = typeaheadConfig['typeaheadForm'].getFieldByName(
+                valToSet,
+              );
               if (field != null) {
-                addtlParam = '&values[' + name + ']=' + 'field[' + valToSet + ']';
+                addtlParam =
+                  '&values[' + name + ']=' + 'field[' + valToSet + ']';
               } else {
                 console.log(
                   'KD Typeahead Error! When adding additional bridge parameters (typeahead-additional-params), could not find field with the name: ' +
@@ -224,16 +229,25 @@
             url: typeaheadConfig['bridgeUrl'],
             prepare: function(query, settings) {
               // Replace %query string with search value
-              settings.url = settings.url.replace('%QUERY', encodeURIComponent(query));
+              settings.url = settings.url.replace(
+                '%QUERY',
+                encodeURIComponent(query),
+              );
               // Build regexp for finding additional params that need to be replaced
-              var re = RegExp("(&values\\\[.+?\\\]=)field\\\[(.+?)\\\]");
+              var re = RegExp('(&values\\[.+?\\]=)field\\[(.+?)\\]');
               var reMatch = settings.url.match(re);
               // While additional params need to be replaced
               while (reMatch) {
                 // Replace the param with the value from the appropriate field
-                settings.url = settings.url.replace(re, reMatch[1] +
-                  encodeURIComponent(typeaheadConfig['typeaheadForm']
-                    .getFieldByName(reMatch[2]).value()));
+                settings.url = settings.url.replace(
+                  re,
+                  reMatch[1] +
+                    encodeURIComponent(
+                      typeaheadConfig['typeaheadForm']
+                        .getFieldByName(reMatch[2])
+                        .value(),
+                    ),
+                );
                 reMatch = settings.url.match(re);
               }
               return settings;
@@ -298,7 +312,6 @@
         });
         $(input).bind('typeahead:change', function(ev) {
           // Change Event on Typeahead goes here
-
         });
         // Prevent Submitting of form when hitting enter
         $(input).keydown(function(event) {
@@ -313,51 +326,56 @@
 
 // CONFIGURATION Object
 typeaheadConfigurations = {
-  defaultConfiguration: {
-    faClass: 'fa-search', // Font awesom icon to append to typeahead search and results
-    placeholder: K.translate('shared', 'Start typing to begin your search...'), // Placholder text to put into the search field
-    emptyMessage: K.translate('shared', 'No results found'), // Message to display if no results are found
-    userIdAttribute: null, // If filtering results to not include logged in user (for person searching) bridge attribute for the user's Id
-    queryField: null, // Name field the Bridged Resource is expecting to be passed as a parameter - Defaults to the typeahead search field
-    additionalParams: null, // JS Object with name value pairs of additinal parameters to be provided to the bridge
-    // The values should be prefixed with STRING:: or FIELD:: depending on if you are passing a
-    // hard coded string, or want the system to get a Field's Value)  (e.g {"Bridge Param 1":"STRING::XYZ","Bridge Param 2":"FIELD::FieldName"} )
-    minLength: 3, // Minium Length to begin search
-    bridgedResource: null, // Name of Bridged Resource to Use - must match a valid bridge resource on the current or shared-resource form
-    bridgeLocation: null, // If the search uses a shared-resource form specify it's slug - Defaults to current form
-    attrsToShow: null, // Comma separated List of Bridge Attributes to Show in Typeahead Search dropdown. (e.g. Login Id,Name)
-    attrToSet: null, // Name of Bridge Attribute to Set in Typeahead Search Field
-    fieldsToSet: null, // JS Object with name value pairs of Fields on Form to Bridge Attribute (e.g. {"Login Id Field":"Login Id","Name Field"="Name"})
-    suggestionHtml: function(data, config) {
-      // Data is the Data Records Returned from the Bridge Call, Config is the typeaheadConfiguration Object
-      var suggestionDetails = $('<div class="tt-details"/>');
-      $.each(config['attrsToShow'], function(i, attr) {
-        $(suggestionDetails).append(
-          '<div class="tt-attribute col-sm-6">' + data[attr] + '</div>',
-        );
-      });
-      var suggestion = $('<div class="tt-suggestion"/>').append(
-        $(suggestionDetails),
-      );
-      return suggestion;
-    },
-    selectedCallback: function(data, config) {
-      // Data is the row that was selected, all attributes returned from the bridge are available
-      // Loop over the Fields to Set and Set them
-      $.each(config['fieldsToSet'], function(key, value) {
-        var field = config['typeaheadForm'].select('field[' + key + ']');
-        if (field != null) {
-          field.value(data[value]);
-          // Fire change event on field that was set
-          $(field.element()).change();
-        } else {
-          console.log(
-            'KD Typeahead Error! When setting fields (typeahead-fields-to-set), could not find field with the name: ' +
-              key,
+  defaultConfiguration: function() {
+    return {
+      faClass: 'fa-search', // Font awesom icon to append to typeahead search and results
+      placeholder: K.translate(
+        'shared',
+        'Start typing to begin your search...',
+      ), // Placholder text to put into the search field
+      emptyMessage: K.translate('shared', 'No results found'), // Message to display if no results are found
+      userIdAttribute: null, // If filtering results to not include logged in user (for person searching) bridge attribute for the user's Id
+      queryField: null, // Name field the Bridged Resource is expecting to be passed as a parameter - Defaults to the typeahead search field
+      additionalParams: null, // JS Object with name value pairs of additinal parameters to be provided to the bridge
+      // The values should be prefixed with STRING:: or FIELD:: depending on if you are passing a
+      // hard coded string, or want the system to get a Field's Value)  (e.g {"Bridge Param 1":"STRING::XYZ","Bridge Param 2":"FIELD::FieldName"} )
+      minLength: 3, // Minium Length to begin search
+      bridgedResource: null, // Name of Bridged Resource to Use - must match a valid bridge resource on the current or shared-resource form
+      bridgeLocation: null, // If the search uses a shared-resource form specify it's slug - Defaults to current form
+      attrsToShow: null, // Comma separated List of Bridge Attributes to Show in Typeahead Search dropdown. (e.g. Login Id,Name)
+      attrToSet: null, // Name of Bridge Attribute to Set in Typeahead Search Field
+      fieldsToSet: null, // JS Object with name value pairs of Fields on Form to Bridge Attribute (e.g. {"Login Id Field":"Login Id","Name Field"="Name"})
+      suggestionHtml: function(data, config) {
+        // Data is the Data Records Returned from the Bridge Call, Config is the typeaheadConfiguration Object
+        var suggestionDetails = $('<div class="tt-details"/>');
+        $.each(config['attrsToShow'], function(i, attr) {
+          $(suggestionDetails).append(
+            '<div class="tt-attribute col-sm-6">' + data[attr] + '</div>',
           );
-        }
-      });
-    },
+        });
+        var suggestion = $('<div class="tt-suggestion"/>').append(
+          $(suggestionDetails),
+        );
+        return suggestion;
+      },
+      selectedCallback: function(data, config) {
+        // Data is the row that was selected, all attributes returned from the bridge are available
+        // Loop over the Fields to Set and Set them
+        $.each(config['fieldsToSet'], function(key, value) {
+          var field = config['typeaheadForm'].select('field[' + key + ']');
+          if (field != null) {
+            field.value(data[value]);
+            // Fire change event on field that was set
+            $(field.element()).change();
+          } else {
+            console.log(
+              'KD Typeahead Error! When setting fields (typeahead-fields-to-set), could not find field with the name: ' +
+                key,
+            );
+          }
+        });
+      },
+    };
   },
 };
 

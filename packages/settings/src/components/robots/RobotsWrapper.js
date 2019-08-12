@@ -1,9 +1,8 @@
 import React from 'react';
-import { Link } from '@reach/router';
+import { Link, Router } from '@reach/router';
 import { connect } from 'react-redux';
 import semver from 'semver';
 
-import { Router } from '../../App';
 import { RobotContainer } from './RobotContainer';
 
 import { context } from '../../redux/store';
