@@ -22,9 +22,11 @@ const ToastComponent = ({ toast, dismiss, showing, duration }) => (
     <div className="toast__icon">
       <span className={`fa fa-${icon[toast.severity]}`} />
     </div>
-    <div className="toast__message">
-      <I18n>{toast.message}</I18n>
-    </div>
+    {toast.message && (
+      <div className="toast__message">
+        <I18n>{toast.message}</I18n>
+      </div>
+    )}
     <div className="toast__close">
       <span className="fa fa-fw fa-times" role="button" onClick={dismiss} />
     </div>
@@ -80,7 +82,10 @@ const ToastAlertComponent = ({ alert, dismiss, showing }) => (
               <button
                 key={`action-${i}`}
                 className={`btn btn-sm btn-outline-dark`}
-                onClick={a.onClick}
+                onClick={() => {
+                  a.onClick();
+                  dismiss();
+                }}
               >
                 <I18n>{a.label}</I18n>
               </button>
