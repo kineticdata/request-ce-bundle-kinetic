@@ -24,6 +24,9 @@ import {
 import { AuthenticatedContainer } from './AuthenticatedContainer';
 import { App } from './App';
 
+// Shared Components
+import { FormComponents, TableComponents } from 'common';
+
 configure(() => store.getState().auth.token);
 
 const authInterceptor = new AuthInterceptor(
@@ -49,7 +52,14 @@ ReactDOM.render(
       />
     </Helmet>
     <Provider store={store}>
-      <ConnectedKineticLib>
+      <ConnectedKineticLib
+        components={{
+          fields: {
+            ...FormComponents,
+          },
+          ...TableComponents,
+        }}
+      >
         <ConnectedRouter history={history}>
           <AuthenticatedContainer>
             <Route path="/" component={App} />

@@ -7,10 +7,10 @@ import { history } from '@kineticdata/react';
 import reducers from './reducers';
 import sagas from './sagas';
 
-console.log('Configuring space package redux store');
+console.log('Configuring settings package redux store');
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-  ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ name: 'SPACE' })
+  ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ name: 'SETTINGS' })
   : compose;
 
 const sagaMiddlware = createSagaMiddleware();

@@ -23,6 +23,7 @@ import { Teams } from './components/teams/Teams';
 import { Translations } from './components/translations/Translations';
 import { SchedulerSettings } from './components/SchedulerSettings';
 import { SpaceSettings } from './components/space_settings/SpaceSettings';
+import { SpaceSettings2 } from './components/space_settings/SpaceSettings2';
 import { syncAppState } from './redux/modules/app';
 import './assets/styles/master.scss';
 
@@ -46,6 +47,7 @@ const AppComponent = props => {
           <main className={`package-layout package-layout--settings`}>
             <Router>
               <SpaceSettings path="system" />
+              <SpaceSettings2 path="system2" />
               <Datastore path="datastore/*" />
               <RobotsWrapper path="robots/*" />
               <Users path="users/*" />

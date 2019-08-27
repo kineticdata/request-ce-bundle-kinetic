@@ -42,6 +42,8 @@ import * as Utils from './utils';
 import * as Constants from './constants';
 import * as AttributeSelectors from './components/attribute_selectors';
 import * as TaskActions from './helpers/taskActions';
+import FormComponents from './components/forms';
+import TableComponents from './components/tables';
 
 const CommonProvider = props => (
   <Provider store={store} context={context}>
@@ -78,6 +80,7 @@ export {
   DateRangeDropdown,
 } from './components/DateRangeSelector';
 export { TeamCard } from './components/TeamCard';
+export { FormComponents, TableComponents };
 
 export {
   CommonProvider,
