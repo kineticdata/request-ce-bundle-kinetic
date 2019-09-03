@@ -38,9 +38,9 @@ import { I18n } from '@kineticdata/react';
 
 import './assets/styles/master.scss';
 
-const CustomRedirect = props => (
+const SubmissionRedirect = props => (
   <Redirect
-    to={`${props.appLocation}/request/:id/${
+    to={`${props.appLocation}/requests/request/${props.id}/${
       props.location.search.includes('review') ? 'review' : 'activity'
     }`}
     noThrow
@@ -74,15 +74,11 @@ export const AppComponent = props => {
           <main className="package-layout package-layout--services">
             <Router>
               <Settings path="settings/*" />
-              <Redirect
-                from="submissions/:id"
-                to={`requests/request/:id/${
-                  props.location.search.includes('review')
-                    ? 'review'
-                    : 'activity'
-                }`}
+              <SubmissionRedirect
+                path="submissions/:id"
+                appLocation={props.appLocation}
               />
-              <CustomRedirect
+              <SubmissionRedirect
                 path="forms/:formSlug/submissions/:id"
                 appLocation={props.appLocation}
               />
