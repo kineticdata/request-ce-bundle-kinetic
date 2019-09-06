@@ -34,12 +34,12 @@ export const UserFormComponent = ({
   handleDelete,
   userProfileAttributes,
 }) => (
-  <div className="page-container page-container--panels page-container--space-profile-edit">
+  <div className="page-container page-container--panels">
     <PageTitle parts={['Users', 'Settings']} />
     {!loading &&
       (!userLoading || !mode) && (
         <Fragment>
-          <div className="page-panel page-panel--three-fifths page-panel--scrollable page-panel--space-profile-edit">
+          <div className="page-panel page-panel--three-fifths page-panel--white">
             <div className="page-title">
               <div className="page-title__wrapper">
                 <h3>
@@ -340,7 +340,7 @@ export const UserFormComponent = ({
             </div>
           </div>
           {mode === 'edit' && (
-            <div className="page-panel page-panel--two-fifths page-panel--sidebar page-panel--space-profile-edit-sidebar ">
+            <div className="page-panel page-panel--two-fifths page-panel--sidebar">
               <ProfileCard user={buildProfile(fieldValues, user)} />
             </div>
           )}

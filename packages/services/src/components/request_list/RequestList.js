@@ -41,85 +41,91 @@ export const RequestList = ({
 }) => (
   <Fragment>
     <PageTitle parts={['My Requests']} />
-    <span className="services-color-bar services-color-bar__blue-slate" />
-    <div className="page-container page-container--request-list">
-      <div className="page-title">
-        <div className="page-title__wrapper">
-          <h3>
-            <Link to={appLocation}>
-              <I18n>services</I18n>
-            </Link>{' '}
-            /{' '}
-            {type && (
-              <Link to={`${appLocation}/requests`}>
-                <I18n>requests</I18n>
-              </Link>
-            )}
-            {type && ' / '}
-          </h3>
-          <h1>
-            <I18n>{type || 'All Requests'}</I18n>
-          </h1>
+    <div className="page-container page-container--color-bar">
+      <div className="page-panel">
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h3>
+              <Link to={appLocation}>
+                <I18n>services</I18n>
+              </Link>{' '}
+              /{' '}
+              {type && (
+                <Link to={`${appLocation}/requests`}>
+                  <I18n>requests</I18n>
+                </Link>
+              )}
+              {type && ' / '}
+            </h3>
+            <h1>
+              <I18n>{type || 'All Requests'}</I18n>
+            </h1>
+          </div>
         </div>
-      </div>
-      <div className="cards__wrapper cards__wrapper--requests">
-        <StateListWrapper
-          data={submissions}
-          error={error}
-          emptyTitle={`No ${type !== 'All' ? `${type} ` : ''}Requests Found`}
-          emptyMessage={emptyStateMessage(type)}
-        >
-          {data => (
-            <Fragment>
-              {data
-                .map(submission => ({
-                  submission,
-                  forms,
-                  key: submission.id,
-                  path: getSubmissionPath(appLocation, submission, null, type),
-                  deleteCallback: refreshPage,
-                }))
-                .map(props => <RequestCard {...props} />)}
-              <div className="pagination-bar">
-                <I18n
-                  render={translate => (
-                    <button
-                      className="btn btn-link icon-wrapper"
-                      onClick={handlePreviousPage}
-                      disabled={paging || !hasPreviousPage}
-                      title={translate('Previous Page')}
-                    >
-                      <span className="icon">
-                        <span className="fa fa-fw fa-caret-left" />
-                      </span>
-                    </button>
-                  )}
-                />
-                <small>
-                  {paging ? (
-                    <span className="fa fa-spinner fa-spin" />
-                  ) : (
-                    <strong>{`${pageIndexStart}-${pageIndexEnd}`}</strong>
-                  )}
-                </small>
-                <I18n
-                  render={translate => (
-                    <button
-                      className="btn btn-link icon-wrapper"
-                      onClick={handleNextPage}
-                      disabled={paging || !hasNextPage}
-                      title={translate('Next Page')}
-                    >
-                      <span className="icon">
-                        <span className="fa fa-fw fa-caret-right" />
-                      </span>
-                    </button>
-                  )}
-                />
-              </div>
-            </Fragment>
-          )}
-        </StateListWrapper>
+        <div className="cards__wrapper">
+          <StateListWrapper
+            data={submissions}
+            error={error}
+            emptyTitle={`No ${type !== 'All' ? `${type} ` : ''}Requests Found`}
+            emptyMessage={emptyStateMessage(type)}
+          >
+            {data => (
+              <Fragment>
+                {data
+                  .map(submission => ({
+                    submission,
+                    forms,
+                    key: submission.id,
+                    path: getSubmissionPath(
+                      appLocation,
+                      submission,
+                      null,
+                      type,
+                    ),
+                    deleteCallback: refreshPage,
+                  }))
+                  .map(props => <RequestCard {...props} />)}
+                <div className="pagination-bar">
+                  <I18n
+                    render={translate => (
+                      <button
+                        className="btn btn-link icon-wrapper"
+                        onClick={handlePreviousPage}
+                        disabled={paging || !hasPreviousPage}
+                        title={translate('Previous Page')}
+                      >
+                        <span className="icon">
+                          <span className="fa fa-fw fa-caret-left" />
+                        </span>
+                      </button>
+                    )}
+                  />
+                  <small>
+                    {paging ? (
+                      <span className="fa fa-spinner fa-spin" />
+                    ) : (
+                      <strong>{`${pageIndexStart}-${pageIndexEnd}`}</strong>
+                    )}
+                  </small>
+                  <I18n
+                    render={translate => (
+                      <button
+                        className="btn btn-link icon-wrapper"
+                        onClick={handleNextPage}
+                        disabled={paging || !hasNextPage}
+                        title={translate('Next Page')}
+                      >
+                        <span className="icon">
+                          <span className="fa fa-fw fa-caret-right" />
+                        </span>
+                      </button>
+                    )}
+                  />
+                </div>
+              </Fragment>
+            )}
+          </StateListWrapper>
+        </div>
       </div>
     </div>
   </Fragment>

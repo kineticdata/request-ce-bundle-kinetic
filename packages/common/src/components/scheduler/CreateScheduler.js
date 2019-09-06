@@ -33,9 +33,9 @@ const CreateSchedulerComponent = ({
   type,
 }) =>
   isSchedulerAdmin ? (
-    <div className="page-container page-container--scheduler">
+    <div className="page-container">
       <PageTitle parts={['Create Scheduler', 'Schedulers', 'Settings']} />
-      <div className="page-panel page-panel--scrollable page-panel--scheduler-content">
+      <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>

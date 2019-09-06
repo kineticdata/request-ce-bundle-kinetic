@@ -48,7 +48,7 @@ export const QueueItemDetails = ({
   onCreated,
   CreationForm,
 }) => (
-  <div className="page-panel page-panel--three-fifths page-panel--queue-details">
+  <div className="queue-item-details">
     {viewDiscussionsModal &&
       isSmallLayout && (
         <ViewDiscussionsModal
@@ -61,7 +61,7 @@ export const QueueItemDetails = ({
           me={profile}
         />
       )}
-    <div className="scroll-wrapper">
+    <div className="">
       <div className="general">
         {discussionsEnabled && (
           <button

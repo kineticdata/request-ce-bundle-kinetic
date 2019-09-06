@@ -1,70 +1,7 @@
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Layout ~ Services
- *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  *   Layout ~ Services
+//  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-// Services top border bar
-.services-color-bar {
-  height: 1.5rem;
-  width: 100%;
-  display: flex;
-  flex: 0 0 auto;
-  &__blue-slate {
-    background-color: $blue-slate;
-  }
-  &__green-grass {
-    background-color: $green-grass;
-  }
-}
-
-.package-layout--services {
-  // Services Page Container
-  .page-container {
-    width: 100%;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    margin-right: auto;
-    margin-left: auto;
-    &--no-padding {
-      padding-left: 0;
-      padding-right: 0;
-    }
-    // @media all and (min-width: 576px) {
-    //   max-width: 540px;
-    // }
-    // @media all and (min-width: 768px) {
-    //   max-width: 720px;
-    // }
-    // @media all and (min-width: 992px) {
-    //   max-width: 960px;
-    // }
-    // @media all and (min-width: 1200px) {
-    //   max-width: 1140px;
-    // }
-
-    // Layout width fix for settings views only
-    &--space-settings,
-    &--kapp-settings,
-    &--datastore {
-      padding: 0;
-      margin: 0;
-      max-width: 100%;
-    }
-    &--kapp-settings form {
-      padding: 0;
-    }
-  }
-  // Services Card Wrapper
-  .cards__wrapper {
-    padding: 0 0 3rem;
-    margin: 0;
-    list-style: none;
-    flex-direction: column;
-    &--services,
-    &--categories {
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      // align-items: flex-start;
-    }
-  }
+.page-container--color-bar {
+  border-top: 1.5rem solid $blue-slate;
 }

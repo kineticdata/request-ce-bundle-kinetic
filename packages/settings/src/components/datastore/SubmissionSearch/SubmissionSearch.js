@@ -25,9 +25,9 @@ const SubmissionSearchComponent = ({
 }) => (
   <I18n context={`datastore.forms.${form.slug}`}>
     {!loading ? (
-      <div className="page-container page-container--datastore">
+      <div className="page-container">
         <PageTitle parts={['Search', form.name, 'Datastore']} />
-        <div className="page-panel page-panel--scrollable page-panel--datastore-content">
+        <div className="page-panel page-panel--white">
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>

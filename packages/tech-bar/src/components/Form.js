@@ -30,58 +30,60 @@ export const FormComponent = ({
   <Fragment>
     <PageTitle parts={[form ? form.name : '']} />
     <div className="page-container page-container--tech-bar container">
-      <div className="page-title">
-        <div className="page-title__wrapper">
-          <h3>
-            <Link to={relativeHomePath}>
-              <I18n>tech bar</I18n>
-            </Link>{' '}
-            /{' '}
-          </h3>
-          {form && (
-            <h1>
-              <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
-                {form.name}
-              </I18n>
-            </h1>
-          )}
+      <div className="page-panel">
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h3>
+              <Link to={relativeHomePath}>
+                <I18n>tech bar</I18n>
+              </Link>{' '}
+              /{' '}
+            </h3>
+            {form && (
+              <h1>
+                <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+                  {form.name}
+                </I18n>
+              </h1>
+            )}
+          </div>
         </div>
-      </div>
-      <div className="form-description">
-        {form &&
-          form.description && (
-            <p>
-              <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
-                {form.description}
-              </I18n>
-            </p>
-          )}
-      </div>
-      <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
-        <div className="embedded-core-form--wrapper">
-          {id ? (
-            <CoreForm
-              submission={id}
-              globals={globals}
-              loaded={handleLoaded}
-              completed={handleCompleted}
-            />
-          ) : (
-            <CoreForm
-              kapp={kappSlug}
-              form={formSlug}
-              globals={globals}
-              loaded={handleLoaded}
-              created={handleCreated}
-              completed={handleCompleted}
-              values={values}
-              notFoundComponent={ErrorNotFound}
-              unauthorizedComponent={ErrorUnauthorized}
-              unexpectedErrorComponent={ErrorUnexpected}
-            />
-          )}
+        <div className="form-description">
+          {form &&
+            form.description && (
+              <p>
+                <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+                  {form.description}
+                </I18n>
+              </p>
+            )}
         </div>
-      </I18n>
+        <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+          <div className="embedded-core-form--wrapper">
+            {id ? (
+              <CoreForm
+                submission={id}
+                globals={globals}
+                loaded={handleLoaded}
+                completed={handleCompleted}
+              />
+            ) : (
+              <CoreForm
+                kapp={kappSlug}
+                form={formSlug}
+                globals={globals}
+                loaded={handleLoaded}
+                created={handleCreated}
+                completed={handleCompleted}
+                values={values}
+                notFoundComponent={ErrorNotFound}
+                unauthorizedComponent={ErrorUnauthorized}
+                unexpectedErrorComponent={ErrorUnexpected}
+              />
+            )}
+          </div>
+        </I18n>
+      </div>
     </div>
   </Fragment>
 );

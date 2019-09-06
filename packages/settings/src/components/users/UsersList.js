@@ -45,9 +45,9 @@ const UsersListComponent = ({
   handleDownload,
 }) => {
   return (
-    <div className="page-container page-container--settings-users">
+    <div className="page-container">
       <PageTitle parts={['Users', 'Settings']} />
-      <div className="page-panel page-panel--scrollable">
+      <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>

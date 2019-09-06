@@ -15,10 +15,10 @@
 .page-link {
   color: $blue-lake;
   background-color: $white;
-  border-color: $gray3;
+  border-color: $gray10;
   &:hover {
-    border-color: $black-16;
+    border-color: $gray16;
     // background-color: $white;
-    box-shadow: 0 1px 2px 0 rgba($black, 0.1);
+    box-shadow: 0 1px 2px 0 rgba($gray80, 0.1);
   }
 }

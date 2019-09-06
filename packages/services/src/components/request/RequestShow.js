@@ -167,28 +167,20 @@ export const RequestShow = ({
   kappSlug,
   appLocation,
 }) => (
-  <div className="page-container page-container--panels page-container--services-submission page-container--no-padding">
-    <div className="page-panel page-panel--three-fifths page-panel--scrollable page-panel--services-submission">
+  <div className="page-container page-container--panels page-container--color-bar">
+    <div className="page-panel page-panel--three-fifths">
       <PageTitle parts={[submission && `#${submission.handle}`, 'Requests']} />
       {sendMessageModalOpen && <SendMessageModal submission={submission} />}
-      <span className="services-color-bar services-color-bar__blue-slate" />
-      <Link
-        className="nav-return"
-        to={`${appLocation}/requests/${listType || ''}`}
-      >
-        <span className="fa fa-fw fa-chevron-left" />
-        <I18n>{listType || 'All'} Requests</I18n>
-      </Link>
-      {error && (
-        <ErrorMessage
-          title="Failed to load submission"
-          message={error.message}
-        />
-      )}
-      {!error && !submission && <LoadingMessage />}
-      {!error &&
-        submission && (
-          <Fragment>
+      <div className="page-panel__header">
+        <Link
+          className="nav-return"
+          to={`${appLocation}/requests/${listType || ''}`}
+        >
+          <span className="fa fa-fw fa-chevron-left" />
+          <I18n>{listType || 'All'} Requests</I18n>
+        </Link>
+        {!error &&
+          submission && (
             <div className="submission__meta">
               <div className="data-list-row">
                 <StatusItem submission={submission} />
@@ -221,7 +213,19 @@ export const RequestShow = ({
                 </div>
               </div>
             </div>
-            <div className="page-content">
+          )}
+      </div>
+      <div className="page-panel__body">
+        {error && (
+          <ErrorMessage
+            title="Failed to load submission"
+            message={error.message}
+          />
+        )}
+        {!error && !submission && <LoadingMessage />}
+        {!error &&
+          submission && (
+            <Fragment>
               <div className="submission-title">
                 <h1>
                   <Icon
@@ -286,9 +290,9 @@ export const RequestShow = ({
                   )}
                 </div>
               </div>
-            </div>
-          </Fragment>
-        )}
+            </Fragment>
+          )}
+      </div>
     </div>
     {submission &&
       discussion && (

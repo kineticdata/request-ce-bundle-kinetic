@@ -94,8 +94,8 @@ export const TranslationsListComponent = ({
   stagedEntries,
 }) => {
   return (
-    <div className="page-container page-container--translations">
-      <div className="page-panel page-panel--scrollable page-panel--translations">
+    <div className="page-container">
+      <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -139,17 +139,14 @@ export const TranslationsListComponent = ({
 
           <ul className="nav nav-tabs">
             <li role="presentation">
-              <Link
-                to="/settings/translations"
-                getProps={isActiveClass('nav-link')}
-              >
+              <Link to="/settings/translations" getProps={isActiveClass()}>
                 <I18n>Form Contexts</I18n>
               </Link>
             </li>
             <li role="presentation">
               <Link
                 to="/settings/translations/datastore"
-                getProps={isActiveClass('nav-link')}
+                getProps={isActiveClass()}
               >
                 <I18n>Datastore Contexts</I18n>
               </Link>
@@ -157,7 +154,7 @@ export const TranslationsListComponent = ({
             <li role="presentation">
               <Link
                 to="/settings/translations/custom"
-                getProps={isActiveClass('nav-link')}
+                getProps={isActiveClass()}
               >
                 <I18n>Custom Contexts</I18n>
               </Link>

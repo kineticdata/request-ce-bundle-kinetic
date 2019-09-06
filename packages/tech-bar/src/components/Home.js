@@ -44,231 +44,243 @@ export const HomeComponent = ({
   return (
     <Fragment>
       <PageTitle parts={[]} />
-      <div
-        className="hero--tech-bar"
-        style={{ backgroundImage: `url(${heroImage})` }}
-      >
-        <div className="container">
-          <div className="hero-welcome">
-            <div className="title">
-              <I18n>Welcome to</I18n>{' '}
-              <I18n>
-                {selectedTechBar
-                  ? selectedTechBar.values['Name']
-                  : kapp
-                    ? kapp.name
-                    : 'Tech Bar'}
-              </I18n>
-            </div>
-            <div className="subtitle">
-              {selectedTechBar ? (
-                <I18n>{selectedTechBar.values['Description']}</I18n>
-              ) : (
-                <I18n>
-                  We deliver in-person service that gets people back on track.
-                </I18n>
-              )}
-            </div>
-          </div>
-          <div className="hero-card">
-            <div className="card card--tech-bar-loc">
-              <div className="card-body">
-                <span className="icon fa fa-map-marker" />
-                <div className="content">
-                  <span className="title">
-                    <I18n>{selectedTechBar.values['Name']}</I18n>
-                    {techBars.size > 1 && (
-                      <button
-                        className="btn btn-inverse btn-sm"
-                        onClick={() => setModalOpen(true)}
-                      >
-                        <I18n>Change</I18n>
-                      </button>
-                    )}
-                  </span>
-                  {selectedTechBar.values['Location'] && (
-                    <div className="subtitle">
-                      <I18n>{selectedTechBar.values['Location']}</I18n>
-                    </div>
-                  )}
-                  <div className="details">
-                    {selectedTechBar.values['Details'] && (
-                      <p>
-                        <I18n>{selectedTechBar.values['Details']}</I18n>
-                      </p>
+      <div className="page-container">
+        <div className="page-panel">
+          <div className="page-panel__header">
+            <div
+              className="hero--tech-bar"
+              style={{ backgroundImage: `url(${heroImage})` }}
+            >
+              <div className="container">
+                <div className="hero-welcome">
+                  <div className="title">
+                    <I18n>Welcome to</I18n>{' '}
+                    <I18n>
+                      {selectedTechBar
+                        ? selectedTechBar.values['Name']
+                        : kapp
+                          ? kapp.name
+                          : 'Tech Bar'}
+                    </I18n>
+                  </div>
+                  <div className="subtitle">
+                    {selectedTechBar ? (
+                      <I18n>{selectedTechBar.values['Description']}</I18n>
+                    ) : (
+                      <I18n>
+                        We deliver in-person service that gets people back on
+                        track.
+                      </I18n>
                     )}
                   </div>
                 </div>
-              </div>
-              <Link
-                to={`appointment/${selectedTechBar.values['Id']}`}
-                className="btn btn-primary card-button"
-              >
-                <I18n>Schedule Now</I18n> →
-              </Link>
-              <div
-                className={`waiting-users-message ${
-                  waitingUsers === 0 ? '' : ''
-                }`}
-              >
-                <I18n>Currently awaiting assistance</I18n>: {waitingUsers}{' '}
-                <I18n
-                  render={translate =>
-                    waitingUsers === 1
-                      ? translate('person')
-                      : translate('people')
-                  }
-                />
+                <div className="hero-card">
+                  <div className="card card--tech-bar-loc">
+                    <div className="card-body">
+                      <span className="icon fa fa-map-marker" />
+                      <div className="content">
+                        <span className="title">
+                          <I18n>{selectedTechBar.values['Name']}</I18n>
+                          {techBars.size > 1 && (
+                            <button
+                              className="btn btn-inverse btn-sm"
+                              onClick={() => setModalOpen(true)}
+                            >
+                              <I18n>Change</I18n>
+                            </button>
+                          )}
+                        </span>
+                        {selectedTechBar.values['Location'] && (
+                          <div className="subtitle">
+                            <I18n>{selectedTechBar.values['Location']}</I18n>
+                          </div>
+                        )}
+                        <div className="details">
+                          {selectedTechBar.values['Details'] && (
+                            <p>
+                              <I18n>{selectedTechBar.values['Details']}</I18n>
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <Link
+                      to={`appointment/${selectedTechBar.values['Id']}`}
+                      className="btn btn-primary card-button"
+                    >
+                      <I18n>Schedule Now</I18n> →
+                    </Link>
+                    <div
+                      className={`waiting-users-message ${
+                        waitingUsers === 0 ? '' : ''
+                      }`}
+                    >
+                      <I18n>Currently awaiting assistance</I18n>: {waitingUsers}{' '}
+                      <I18n
+                        render={translate =>
+                          waitingUsers === 1
+                            ? translate('person')
+                            : translate('people')
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="page-container page-container--tech-bar container">
-        <section className="mt-4">
-          <div className="info-tile__wrapper">
-            <Link
-              to={`appointment/${selectedTechBar.values['Id']}`}
-              className="info-tile"
-            >
-              <div className="icon">
-                <span className="fa fa-calendar-o fa-fw" />
-              </div>
-              <div className="title">
-                <span className="fa fa-calendar-o fa-fw" />
-                <I18n>Schedule</I18n>
-              </div>
-              <p className="description">
-                <I18n>Schedule an appointment.</I18n>
-              </p>
-            </Link>
-            <Link to="past" className="info-tile">
-              <div className="icon">
-                <span className="fa fa-clock-o fa-fw" />
-              </div>
-              <div className="title">
-                <span className="fa fa-clock-o fa-fw" />
-                <I18n>History</I18n>
-              </div>
-              <p className="description">
-                <I18n>View all of your past appointments.</I18n>
-              </p>
-            </Link>
-            <I18n
-              render={translate => (
-                <div
-                  className="info-tile actionable"
-                  onClick={() =>
-                    openModalForm({
-                      formSlug: 'general-feedback',
-                      kappSlug: kapp.slug,
-                      values: { 'Scheduler Id': selectedTechBar.values['Id'] },
-                      title: `${translate(
-                        selectedTechBar.values['Name'],
-                      )} ${translate('Feedback')}`,
-                      confirmationMessage: translate(
-                        'Thank you for your feedback.',
-                      ),
-                    })
-                  }
+
+          <div className="page-panel__body container">
+            <section className="mt-4">
+              <div className="info-tile__wrapper">
+                <Link
+                  to={`appointment/${selectedTechBar.values['Id']}`}
+                  className="info-tile"
                 >
                   <div className="icon">
-                    <span className="fa fa-comment-o fa-fw" />
+                    <span className="fa fa-calendar-o fa-fw" />
                   </div>
                   <div className="title">
-                    <span className="fa fa-comment-o fa-fw" />
-                    <I18n>Feedback</I18n>
+                    <span className="fa fa-calendar-o fa-fw" />
+                    <I18n>Schedule</I18n>
                   </div>
                   <p className="description">
-                    <I18n>Questions, comments, or concerns.</I18n>
+                    <I18n>Schedule an appointment.</I18n>
                   </p>
-                </div>
-              )}
-            />
-          </div>
-        </section>
-        <section className="mt-4">
-          <h2 className="section__title">
-            <I18n>Upcoming Appointments</I18n>
-          </h2>
-          <StateListWrapper
-            data={upcomingAppointments}
-            error={error}
-            emptyTitle="You have no upcoming appointments."
-            emptyMessage="As you schedule appointments, they'll appear here."
-          >
-            {data => (
-              <div className="cards__wrapper cards__wrapper--appt mb-3">
-                {data.map(appt => {
-                  const techBar = techBars.find(
-                    t => t.values['Id'] === appt.values['Scheduler Id'],
-                  );
-                  const date = moment.utc(
-                    appt.values['Event Date'],
-                    DATE_FORMAT,
-                  );
-                  const start = moment.utc(
-                    appt.values['Event Time'],
-                    TIME_FORMAT,
-                  );
-                  const end = start
-                    .clone()
-                    .add(appt.values['Event Duration'], 'minute');
-                  return (
-                    <Link
-                      to={`appointment/${appt.values['Scheduler Id']}/${
-                        appt.id
-                      }`}
-                      className="card card--appt"
-                      key={appt.id}
+                </Link>
+                <Link to="past" className="info-tile">
+                  <div className="icon">
+                    <span className="fa fa-clock-o fa-fw" />
+                  </div>
+                  <div className="title">
+                    <span className="fa fa-clock-o fa-fw" />
+                    <I18n>History</I18n>
+                  </div>
+                  <p className="description">
+                    <I18n>View all of your past appointments.</I18n>
+                  </p>
+                </Link>
+                <I18n
+                  render={translate => (
+                    <div
+                      className="info-tile actionable"
+                      onClick={() =>
+                        openModalForm({
+                          formSlug: 'general-feedback',
+                          kappSlug: kapp.slug,
+                          values: {
+                            'Scheduler Id': selectedTechBar.values['Id'],
+                          },
+                          title: `${translate(
+                            selectedTechBar.values['Name'],
+                          )} ${translate('Feedback')}`,
+                          confirmationMessage: translate(
+                            'Thank you for your feedback.',
+                          ),
+                        })
+                      }
                     >
-                      <i
-                        className="fa fa-calendar fa-fw card-icon"
-                        style={{ background: 'rgb(255, 74, 94)' }}
-                      />
-                      <div className="card-body">
-                        <span className="card-title">
-                          <Moment
-                            timestamp={date}
-                            format={Moment.formats.dateWithDay}
-                          />
-                        </span>
-                        <p className="card-subtitle">
-                          <Moment
-                            timestamp={start}
-                            format={Moment.formats.time}
-                          />
-                          {` - `}
-                          <Moment
-                            timestamp={end}
-                            format={Moment.formats.time}
-                          />
-                        </p>
-                        {techBar && (
-                          <p className="card-meta">
-                            <strong>
-                              <I18n>{techBar.values['Name']}</I18n>
-                            </strong>
-                          </p>
-                        )}
-                        <span
-                          className={`badge ${
-                            appt.coreState === 'Closed'
-                              ? 'badge-dark'
-                              : 'badge-success'
-                          }`}
-                        >
-                          <I18n>{appt.values['Status']}</I18n>
-                        </span>
-                        <p className="card-text">{appt.values['Summary']}</p>
+                      <div className="icon">
+                        <span className="fa fa-comment-o fa-fw" />
                       </div>
-                    </Link>
-                  );
-                })}
+                      <div className="title">
+                        <span className="fa fa-comment-o fa-fw" />
+                        <I18n>Feedback</I18n>
+                      </div>
+                      <p className="description">
+                        <I18n>Questions, comments, or concerns.</I18n>
+                      </p>
+                    </div>
+                  )}
+                />
               </div>
-            )}
-          </StateListWrapper>
-        </section>
+            </section>
+            <section className="mt-4">
+              <h2 className="section__title">
+                <I18n>Upcoming Appointments</I18n>
+              </h2>
+              <StateListWrapper
+                data={upcomingAppointments}
+                error={error}
+                emptyTitle="You have no upcoming appointments."
+                emptyMessage="As you schedule appointments, they'll appear here."
+              >
+                {data => (
+                  <div className="cards__wrapper mb-3">
+                    {data.map(appt => {
+                      const techBar = techBars.find(
+                        t => t.values['Id'] === appt.values['Scheduler Id'],
+                      );
+                      const date = moment.utc(
+                        appt.values['Event Date'],
+                        DATE_FORMAT,
+                      );
+                      const start = moment.utc(
+                        appt.values['Event Time'],
+                        TIME_FORMAT,
+                      );
+                      const end = start
+                        .clone()
+                        .add(appt.values['Event Duration'], 'minute');
+                      return (
+                        <Link
+                          to={`appointment/${appt.values['Scheduler Id']}/${
+                            appt.id
+                          }`}
+                          className="card card--appt"
+                          key={appt.id}
+                        >
+                          <i
+                            className="fa fa-calendar fa-fw card-icon"
+                            style={{ background: 'rgb(255, 74, 94)' }}
+                          />
+                          <div className="card-body">
+                            <span className="card-title">
+                              <Moment
+                                timestamp={date}
+                                format={Moment.formats.dateWithDay}
+                              />
+                            </span>
+                            <p className="card-subtitle">
+                              <Moment
+                                timestamp={start}
+                                format={Moment.formats.time}
+                              />
+                              {` - `}
+                              <Moment
+                                timestamp={end}
+                                format={Moment.formats.time}
+                              />
+                            </p>
+                            {techBar && (
+                              <p className="card-meta">
+                                <strong>
+                                  <I18n>{techBar.values['Name']}</I18n>
+                                </strong>
+                              </p>
+                            )}
+                            <span
+                              className={`badge ${
+                                appt.coreState === 'Closed'
+                                  ? 'badge-dark'
+                                  : 'badge-success'
+                              }`}
+                            >
+                              <I18n>{appt.values['Status']}</I18n>
+                            </span>
+                            <p className="card-text">
+                              {appt.values['Summary']}
+                            </p>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </StateListWrapper>
+            </section>
+          </div>
+        </div>
       </div>
       {modalOpen && (
         <Modal

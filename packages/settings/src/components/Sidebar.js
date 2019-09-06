@@ -24,7 +24,7 @@ export const SidebarComponent = ({
   showRobots,
   showSchedulers,
 }) => (
-  <div className="sidebar space-sidebar">
+  <div className="sidebar">
     <div className="sidebar-group--content-wrapper">
       {!loading && (
         <ul className="nav flex-column sidebar-group">

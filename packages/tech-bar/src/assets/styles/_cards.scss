@@ -2,293 +2,284 @@
  *   Card Overrides ~ Tech Bar
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.package-layout--tech-bar,
-#scheduler-widget-container {
-  .card {
-    flex: 1 0 auto;
-    min-height: 0;
-    border: 1px solid $black-16;
+.card {
+  border: 1px solid $gray16;
 
-    &--tech-bar-loc {
-      margin: 0 0.75rem 0.75rem 0;
-      border-top-width: 12px;
-      border-top-color: $gray2;
-      padding: 1rem;
+  &--tech-bar-loc {
+    border-top-width: 12px;
+    border-top-color: $gray16;
+    padding: 1rem;
 
-      .card-body {
-        flex: 1 1 auto;
-        min-height: 0px;
-        display: flex;
-        padding: 0;
+    .card-body {
+      flex: 1 1 auto;
+      min-height: 0px;
+      display: flex;
+      padding: 0;
 
-        .icon {
-          flex: 0 0 auto;
-          margin-right: 0.5rem;
-          font-size: 2.5rem;
-        }
-        .content {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          font-size: 0.875rem;
-          line-height: 1.25rem;
-
-          .title {
-            flex: 0 0 auto;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            line-height: 1.375rem;
-
-            .btn {
-              line-height: 1rem;
-            }
-          }
-          .subtitle {
-            flex: 0 0 auto;
-            color: rgba($black, 0.5);
-            font-size: 0.75rem;
-          }
-          .details {
-            flex: 0 1 auto;
-            overflow: auto;
-            p {
-              font-size: 0.75rem;
-              line-height: 1rem;
-              margin: 0;
-              white-space: pre-wrap;
-              + p {
-                margin-top: 0.5rem;
-              }
-            }
-          }
-        }
-        .dropdown:last-child {
-          margin-right: -1rem;
-          > button {
-            min-width: 2rem;
-          }
-        }
-      }
-      .card-button,
-      .card-actions {
+      .icon {
         flex: 0 0 auto;
-        margin-top: 0.5rem;
+        margin-right: 0.5rem;
+        font-size: 2.5rem;
       }
-      .card-actions {
+      .content {
+        flex: 1;
         display: flex;
-        justify-content: space-between;
-        > .btn-link:first-child {
-          margin-left: -0.75rem;
-          &.btn-sm {
-            margin-left: -0.5rem;
-          }
-        }
-        > .btn-link:last-child {
-          margin-right: -0.75rem;
-          &.btn-sm {
-            margin-right: -0.5rem;
-          }
-        }
-      }
-    }
-    &--tech-bar {
-      margin: 0 0.75rem 0.75rem 0;
-      border-top-width: 12px;
-      border-top-color: $gray2;
-      .card-body {
         flex-direction: column;
-        justify-content: flex-start;
-        display: flex;
-        padding: 0.6875rem 1rem;
-        .card-title {
-          margin-top: 0;
-          margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+
+        .title {
+          flex: 0 0 auto;
+          font-weight: 600;
           display: flex;
           justify-content: space-between;
-          font-weight: 600;
-          font-size: 1.375rem;
+          line-height: 1.375rem;
+
+          .btn {
+            line-height: 1rem;
+          }
         }
-        .card-subtitle {
-          margin-top: -0.25rem;
-          margin-bottom: 0.5rem;
-          color: rgba($black, 0.5);
+        .subtitle {
+          flex: 0 0 auto;
+          color: rgba($gray80, 0.5);
           font-size: 0.75rem;
         }
-        .card-text {
-          font-size: 0.875rem;
-          margin-bottom: 0.5rem;
-          flex-grow: 1;
+        .details {
+          flex: 0 1 auto;
+          overflow: auto;
+          p {
+            font-size: 0.75rem;
+            line-height: 1rem;
+            margin: 0;
+            white-space: pre-wrap;
+            + p {
+              margin-top: 0.5rem;
+            }
+          }
         }
-        .card-details {
-          font-size: 0.75rem;
-          margin-bottom: 0.5rem;
-          flex-grow: 1;
-          white-space: pre-wrap;
+      }
+      .dropdown:last-child {
+        margin-right: -1rem;
+        > button {
+          min-width: 2rem;
         }
       }
     }
-    &--appt {
-      @include setBgColorAndHover($white);
-      border: 1px solid $black-16;
-      margin: 0 0 0.75rem 0;
-      padding: 0.6875rem 1rem;
-      transition: background-color 0.3s;
-      flex-direction: row;
-      &:focus,
-      &:hover {
-        text-decoration: none;
-      }
-      .card-icon {
-        flex-direction: column;
-        margin: 0 0 auto 0;
-      }
-      .card-body {
-        padding: 0;
-        display: flex;
-        justify-content: flex-start;
-        line-height: 1.5rem;
-        > * {
-          margin-left: 1rem;
-          flex-shrink: 1;
-        }
-        @media all and (max-width: 1199px) {
-          flex-wrap: wrap;
+    .card-button,
+    .card-actions {
+      flex: 0 0 auto;
+      margin-top: 0.5rem;
+    }
+    .card-actions {
+      display: flex;
+      justify-content: space-between;
+      > .btn-link:first-child {
+        margin-left: -0.75rem;
+        &.btn-sm {
+          margin-left: -0.5rem;
         }
       }
-      .card-title {
-        display: flex;
-        justify-content: space-between;
-        color: $black;
-        font-size: 1rem;
-        // @include ms-respond(font-size, 3);
-        font-weight: 600;
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-      .badge {
-        flex-shrink: 0;
-        align-self: flex-start;
-        margin: auto 0 auto auto;
-        @media all and (min-width: 1200px) {
-          order: 10;
+      > .btn-link:last-child {
+        margin-right: -0.75rem;
+        &.btn-sm {
+          margin-right: -0.5rem;
         }
-        @media all and (max-width: 767px) {
-          margin-left: 1rem;
-        }
-      }
-      .card-message {
-        color: $black;
-        font-size: 1rem;
-        font-weight: 600;
-        line-height: 1.5rem;
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-      .card-subtitle,
-      .card-meta,
-      .card-text {
-        color: $black;
-        font-size: 0.75rem;
-        line-height: 1.5rem;
-        // @include ms-respond(font-size, 1);
-        margin-top: 0;
-        margin-bottom: 0;
-        strong {
-          font-weight: 600;
-        }
-      }
-      .card-subtitle {
-        color: rgba($black, 0.75);
-        font-size: 0.875rem;
-      }
-      .card-text {
-        flex-shrink: 1;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      @media all and (max-width: 1199px) {
-        .card-text {
-          flex-basis: 100%;
-        }
-      }
-      .card-actions {
-        display: flex;
-        justify-content: space-between;
-        margin-left: auto;
       }
     }
   }
-
-  .info-tile__wrapper {
-    display: flex;
-    justify-content: space-around;
-
-    a.info-tile,
-    .info-tile.actionable {
-      cursor: pointer;
-      color: $black;
-      text-decoration: none;
-      transition: box-shadow 0.3s, background-color 0.3s;
-      &:hover,
-      &:focus {
-        color: $black;
-        text-decoration: none;
-        box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.25);
-        background-color: rgba(0, 0, 0, 0.025);
+  &--tech-bar {
+    border-top-width: 12px;
+    border-top-color: $gray16;
+    .card-body {
+      flex-direction: column;
+      justify-content: flex-start;
+      display: flex;
+      padding: 0.6875rem 1rem;
+      .card-title {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+        font-size: 1.375rem;
+      }
+      .card-subtitle {
+        margin-top: -0.25rem;
+        margin-bottom: 0.5rem;
+        color: rgba($gray80, 0.5);
+        font-size: 0.75rem;
+      }
+      .card-text {
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+        flex-grow: 1;
+      }
+      .card-details {
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+        flex-grow: 1;
+        white-space: pre-wrap;
       }
     }
+  }
+  &--appt {
+    @include setBgColorAndHover($white);
+    border: 1px solid $gray16;
+    margin: 0 0 0.75rem 0;
+    padding: 0.6875rem 1rem;
+    transition: background-color 0.3s;
+    flex-direction: row;
+    &:focus,
+    &:hover {
+      text-decoration: none;
+    }
+    .card-icon {
+      flex-direction: column;
+      margin: 0 0 auto 0;
+    }
+    .card-body {
+      padding: 0;
+      display: flex;
+      justify-content: flex-start;
+      line-height: 1.5rem;
+      > * {
+        margin-left: 1rem;
+        flex-shrink: 1;
+      }
+      @media all and (max-width: 1199px) {
+        flex-wrap: wrap;
+      }
+    }
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      color: $gray80;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    .badge {
+      flex-shrink: 0;
+      align-self: flex-start;
+      margin: auto 0 auto auto;
+      @media all and (min-width: 1200px) {
+        order: 10;
+      }
+      @media all and (max-width: 767px) {
+        margin-left: 1rem;
+      }
+    }
+    .card-message {
+      color: $gray80;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.5rem;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    .card-subtitle,
+    .card-meta,
+    .card-text {
+      color: $gray80;
+      font-size: 0.75rem;
+      line-height: 1.5rem;
+      margin-top: 0;
+      margin-bottom: 0;
+      strong {
+        font-weight: 600;
+      }
+    }
+    .card-subtitle {
+      color: rgba($gray80, 0.75);
+      font-size: 0.875rem;
+    }
+    .card-text {
+      flex-shrink: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    @media all and (max-width: 1199px) {
+      .card-text {
+        flex-basis: 100%;
+      }
+    }
+    .card-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-left: auto;
+    }
+  }
+}
+
+.info-tile__wrapper {
+  display: flex;
+  justify-content: space-around;
+
+  a.info-tile,
+  .info-tile.actionable {
+    cursor: pointer;
+    color: $gray80;
+    text-decoration: none;
+    transition: box-shadow 0.3s, background-color 0.3s;
+    &:hover,
+    &:focus {
+      color: $gray80;
+      text-decoration: none;
+      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.25);
+      background-color: rgba(0, 0, 0, 0.025);
+    }
+  }
+
+  .info-tile {
+    flex: 1 0 33%;
+    text-align: center;
+    padding: 1rem;
+    margin: 0 1rem;
+    max-width: 282px;
+
+    .icon {
+      font-size: 3rem;
+      color: $text-color;
+    }
+    .title {
+      font-weight: 700;
+      margin: 0.5rem 0;
+
+      .fa {
+        display: none;
+      }
+    }
+    .description {
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+      color: $text-color;
+    }
+  }
+}
+
+@media all and (max-width: 767px) {
+  .info-tile__wrapper {
+    flex-direction: column;
+    align-items: center;
 
     .info-tile {
-      flex: 1 0 33%;
-      text-align: center;
-      padding: 1rem;
-      margin: 0 1rem;
-      max-width: 282px;
+      flex: 1 1 auto;
 
       .icon {
-        font-size: 3rem;
-        color: $text-color;
+        display: none;
       }
       .title {
-        font-weight: 700;
-        margin: 0.5rem 0;
-
         .fa {
-          display: none;
+          display: inline-block;
+          font-size: 1.25rem;
+          color: $text-color;
+          margin-right: 0.25rem;
         }
       }
       .description {
-        margin-bottom: 1rem;
-        font-size: 0.875rem;
-        color: $text-color;
-      }
-    }
-  }
-
-  @media all and (max-width: 767px) {
-    .info-tile__wrapper {
-      flex-direction: column;
-      align-items: center;
-
-      .info-tile {
-        flex: 1 1 auto;
-
-        .icon {
-          display: none;
-        }
-        .title {
-          .fa {
-            display: inline-block;
-            font-size: 1.25rem;
-            color: $text-color;
-            margin-right: 0.25rem;
-          }
-        }
-        .description {
-          margin-bottom: 0.5rem;
-        }
+        margin-bottom: 0.5rem;
       }
     }
   }
@@ -298,7 +289,7 @@
   display: flex;
   flex-direction: row;
   @include border-radius();
-  background-color: $gray4;
+  background-color: $gray8;
   justify-content: space-between;
   margin-bottom: 0.5rem;
 
@@ -307,7 +298,7 @@
     color: $white;
 
     .text-muted {
-      color: $gray2 !important;
+      color: $gray16 !important;
     }
   }
 

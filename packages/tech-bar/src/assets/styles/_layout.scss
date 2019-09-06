@@ -2,371 +2,308 @@
  *   Layout ~ Tech Bar
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.package-layout--tech-bar {
-  .hero--tech-bar {
-    width: 100%;
-    padding: 3rem 0;
+.hero--tech-bar {
+  width: 100%;
+  padding: 3rem 0;
+  display: flex;
+  flex-direction: row;
+  flex: 0 0 auto;
+  background-color: #0c384f;
+  background-position: center;
+  background-size: cover;
+  height: 320px;
+  position: relative;
+
+  &:before {
+    content: ' ';
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.6);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+  }
+
+  > * {
+    z-index: 1;
+  }
+
+  .container {
     display: flex;
-    flex-direction: row;
-    flex: 0 0 auto;
-    background-color: #0c384f;
-    background-position: center;
-    background-size: cover;
-    height: 320px;
-    position: relative;
 
-    &:before {
-      content: ' ';
-      position: absolute;
-      background-color: rgba(0, 0, 0, 0.6);
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 0;
-    }
-
-    > * {
-      z-index: 1;
-    }
-
-    .container {
+    .hero-welcome {
+      flex: 0 0 50%;
       display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: $white;
+      text-shadow: 0 0 8px black;
 
+      .title {
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 3rem;
+        margin: 1.5rem 0;
+      }
+      .subtitle {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+        flex-basis: 50%;
+      }
+    }
+
+    .hero-card {
+      flex: 0 0 50%;
+      display: flex;
+      flex-direction: column;
+      .card {
+        flex: 1;
+        min-height: 0px;
+        width: 330px;
+        margin: 0 0 0 auto;
+        border-top-color: $sunflower;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+
+        .card-body {
+          flex-basis: 0;
+        }
+
+        .waiting-users-message {
+          font-size: 0.75rem;
+          color: rgba($gray80, 0.75);
+          font-style: italic;
+          margin-top: 0.25rem;
+        }
+      }
+    }
+  }
+
+  @media all and (max-width: 767px) {
+    height: auto;
+    padding: 1rem 0;
+    .container {
+      display: block;
       .hero-welcome {
-        flex: 0 0 50%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        color: $white;
-        text-shadow: 0 0 8px black;
-
         .title {
-          font-size: 2rem;
-          font-weight: 600;
-          line-height: 3rem;
-          margin: 1.5rem 0;
+          margin: 0.75rem 0;
         }
         .subtitle {
-          font-size: 1.25rem;
-          line-height: 1.75rem;
-          flex-basis: 50%;
+          flex-basis: auto;
         }
       }
-
       .hero-card {
-        flex: 0 0 50%;
-        display: flex;
-        flex-direction: column;
+        margin-top: 1.5rem;
         .card {
-          flex: 1;
-          min-height: 0px;
-          width: 330px;
-          margin: 0 0 0 auto;
-          border-top-color: $sunflower;
-          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
-
+          width: 100%;
+          flex-basis: auto;
           .card-body {
-            flex-basis: 0;
-          }
-
-          .waiting-users-message {
-            font-size: 0.75rem;
-            color: rgba($black, 0.75);
-            font-style: italic;
-            margin-top: 0.25rem;
-          }
-        }
-      }
-    }
-
-    @media all and (max-width: 767px) {
-      height: auto;
-      padding: 1rem 0;
-      .container {
-        display: block;
-        .hero-welcome {
-          .title {
-            margin: 0.75rem 0;
-          }
-          .subtitle {
             flex-basis: auto;
-          }
-        }
-        .hero-card {
-          margin-top: 1.5rem;
-          .card {
-            width: 100%;
-            flex-basis: auto;
-            .card-body {
-              flex-basis: auto;
-            }
           }
         }
       }
     }
   }
+}
 
-  .status-bar {
-    background-color: $gray4;
-    .container {
+.status-bar {
+  background-color: $gray8;
+  .container {
+    display: flex;
+    justify-content: space-around;
+    min-height: 4rem;
+    > div {
+      padding: 0.25rem;
+    }
+  }
+}
+
+// Tech Bar Page Panel
+.page-panel {
+  &--display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+
+  .location-title {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    color: $gray80;
+    background-color: rgba($gray80, 0.05);
+    @include border-radius(1rem);
+    font-size: 1.5rem;
+    font-weight: 500;
+    padding: 0.5rem 1.25rem;
+    .fa {
+      color: $gray50;
+    }
+  }
+
+  .tech-bar-display {
+    .btn--checkin {
+      @include border-radius(1rem);
+      width: 100%;
+      font-size: 1.6rem;
+      line-height: 10rem;
+      &:first-child {
+        margin-bottom: 2rem;
+      }
+    }
+
+    .experience-options {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      margin: 3rem 0;
+      button {
+        @include border-radius(50%);
+        flex-basis: 35%;
+        padding: 0;
+        font-size: 22.4vw;
+        @media all and (min-width: 849px) {
+          font-size: 190px;
+        }
+
+        &:before {
+          content: '';
+          display: inline-block;
+          vertical-align: middle;
+          padding-top: 100%;
+        }
+
+        span {
+          vertical-align: middle;
+        }
+      }
+    }
+
+    .full-screen-container {
+      width: 65vw;
+
+      .header {
+        @include border-top-radius(1rem);
+        height: 1rem;
+      }
+
+      .body {
+        @include border-bottom-radius(1rem);
+        border: 1px solid $gray10;
+        border-top: none;
+        background-color: $white;
+        padding: 2rem;
+        h1 {
+          font-size: 1.75rem;
+          font-weight: bold;
+          margin: 0;
+          padding: 0 0 1rem;
+          display: flex;
+          justify-content: space-between;
+        }
+        form,
+        .form {
+          @include border-bottom-radius(1rem);
+          overflow: visible;
+          padding: 0;
+        }
+      }
+    }
+
+    &--overhead {
+      .full-screen-container {
+        width: 90vw;
+        .body {
+          height: 80vh;
+          display: flex;
+          > div {
+            flex: 0 0 50%;
+            overflow: hidden;
+            &:not(:first-child) {
+              margin-left: 1rem;
+            }
+            &:not(:last-child) {
+              margin-right: 1rem;
+            }
+          }
+        }
+      }
+      .overhead-display-list {
+        margin: 0;
+        padding: 0 0 0 5rem;
+        list-style-type: none;
+        counter-reset: my-badass-counter;
+        li {
+          font-size: 2.4rem;
+          line-height: 3rem;
+          position: relative;
+          &:before {
+            content: counter(my-badass-counter);
+            counter-increment: my-badass-counter;
+            position: absolute;
+            left: -3rem;
+            top: 0;
+            color: $gray50;
+            font-size: 3rem;
+            font-weight: bold;
+          }
+          small {
+            color: $gray50;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+
+    &--checkin {
+      margin-top: 2rem;
+      margin-bottom: 5rem;
+    }
+
+    .display-tabs {
       display: flex;
       justify-content: space-around;
-      min-height: 4rem;
-      > div {
-        padding: 0.25rem;
-      }
-    }
-  }
 
-  // Tech Bar Page Container
-  .page-container {
-    width: 100%;
-    margin-right: auto;
-    margin-left: auto;
-    &--tech-bar {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-    &--display {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
-    }
-
-    .location-title {
-      position: fixed;
-      bottom: 1rem;
-      left: 1rem;
-      color: $black;
-      background-color: rgba($black, 0.05);
-      @include border-radius(1rem);
-      font-size: 1.5rem;
-      font-weight: 500;
-      padding: 0.5rem 1.25rem;
-      .fa {
-        color: $black-50;
-      }
-    }
-
-    .tech-bar-display {
-      .btn--checkin {
-        @include border-radius(1rem);
-        width: 100%;
-        font-size: 1.6rem;
-        line-height: 10rem;
-        &:first-child {
-          margin-bottom: 2rem;
-        }
-      }
-
-      .experience-options {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        margin: 3rem 0;
-        button {
-          @include border-radius(50%);
-          flex-basis: 35%;
-          padding: 0;
-          font-size: 22.4vw;
-          @media all and (min-width: 849px) {
-            font-size: 190px;
-          }
-
-          &:before {
-            content: '';
-            display: inline-block;
-            vertical-align: middle;
-            padding-top: 100%;
-          }
-
-          span {
-            vertical-align: middle;
-          }
-        }
-      }
-
-      .full-screen-container {
-        width: 65vw;
-
-        .header {
-          @include border-top-radius(1rem);
-          height: 1rem;
-        }
-
-        .body {
-          @include border-bottom-radius(1rem);
-          border: 1px solid $gray3;
-          border-top: none;
-          background-color: $white;
-          padding: 2rem;
-          h1 {
-            font-size: 1.75rem;
-            font-weight: bold;
-            margin: 0;
-            padding: 0 0 1rem;
-            display: flex;
-            justify-content: space-between;
-          }
-          form,
-          .form {
-            @include border-bottom-radius(1rem);
-            overflow: visible;
-            padding: 0;
-          }
-        }
-      }
-
-      &--overhead {
-        .full-screen-container {
-          width: 90vw;
-          .body {
-            height: 80vh;
-            display: flex;
-            > div {
-              flex: 0 0 50%;
-              overflow: hidden;
-              &:not(:first-child) {
-                margin-left: 1rem;
-              }
-              &:not(:last-child) {
-                margin-right: 1rem;
-              }
-            }
-          }
-        }
-        .overhead-display-list {
-          margin: 0;
-          padding: 0 0 0 5rem;
-          list-style-type: none;
-          counter-reset: my-badass-counter;
-          li {
-            font-size: 2.4rem;
-            line-height: 3rem;
-            position: relative;
-            &:before {
-              content: counter(my-badass-counter);
-              counter-increment: my-badass-counter;
-              position: absolute;
-              left: -3rem;
-              top: 0;
-              color: $black-50;
-              font-size: 3rem;
-              font-weight: bold;
-            }
-            small {
-              color: $black-50;
-              white-space: nowrap;
-            }
-          }
-        }
-      }
-
-      &--checkin {
-        margin-top: 2rem;
-        margin-bottom: 5rem;
-      }
-
-      .display-tabs {
-        display: flex;
-        justify-content: space-around;
-
-        .display-tab-link {
-          padding: 1rem 4rem;
-          border-top-left-radius: 1rem;
-          border-top-right-radius: 1rem;
-          font-size: 1.2rem;
+      .display-tab-link {
+        padding: 1rem 4rem;
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+        font-size: 1.2rem;
+        color: $white;
+        text-decoration: none;
+        background-color: rgb(180, 180, 180);
+        &:active,
+        &:visited,
+        &:hover {
           color: $white;
-          text-decoration: none;
-          background-color: rgb(180, 180, 180);
-          &:active,
-          &:visited,
-          &:hover {
-            color: $white;
-          }
-        }
-      }
-    }
-
-    &--tech-bar-metrics {
-      .export-title {
-        justify-content: flex-start;
-        align-items: baseline;
-        small {
-          margin-left: 0.25rem;
-        }
-      }
-      .export-buttons {
-        display: flex;
-        justify-content: space-between;
-
-        button {
-          flex: 1 1 auto;
-          &:not(:first-child) {
-            margin-left: 0.5rem;
-          }
-          &:not(:last-child) {
-            margin-right: 0.5rem;
-          }
         }
       }
     }
   }
 
-  // Card Wrapper
-  .cards__wrapper {
-    padding: 0 0 3rem;
-    margin: 0;
-    list-style: none;
-    flex-direction: column;
-    display: flex;
-
-    &--tech-bar,
-    &--appt {
-      flex-direction: row;
-      flex-wrap: wrap;
+  &--tech-bar-metrics {
+    .export-title {
       justify-content: flex-start;
-    }
-    &--tech-bar {
-      .card {
-        @media all and (min-width: 0) {
-          flex-basis: 100%;
-          @media all and (max-width: 767px) {
-            margin-right: 0;
-          }
-          @media all and (-ms-high-contrast: none) {
-            width: 100%;
-            flex-basis: auto;
-          }
-        }
-        @media all and (min-width: 768px) {
-        }
-        @media all and (min-width: 992px) {
-          flex-basis: 47%;
-          @media all and (-ms-high-contrast: none) {
-            width: 47%;
-            flex-basis: auto;
-          }
-        }
-        @media all and (min-width: 1200px) {
-          flex-basis: 31.5%;
-          @media all and (-ms-high-contrast: none) {
-            width: 31.5%;
-            flex-basis: auto;
-          }
-        }
+      align-items: baseline;
+      small {
+        margin-left: 0.25rem;
       }
     }
-    &--appt {
-      padding-bottom: 0;
-      flex-direction: column;
-      .card {
+    .export-buttons {
+      display: flex;
+      justify-content: space-between;
+
+      button {
         flex: 1 1 auto;
-        margin-right: 0;
+        &:not(:first-child) {
+          margin-left: 0.5rem;
+        }
+        &:not(:last-child) {
+          margin-right: 0.5rem;
+        }
       }
     }
   }
@@ -396,7 +333,7 @@
         }
         .subtitle {
           font-size: 0.75rem;
-          color: rgba($black, 0.5);
+          color: rgba($gray80, 0.5);
         }
         .details {
           p {
@@ -409,37 +346,6 @@
 
         + li {
           border-top: 1px solid #ececec;
-        }
-      }
-    }
-  }
-}
-
-.sidebar-group--tech-bars {
-  .nav {
-    .nav-item {
-      display: flex;
-
-      .nav-link {
-        flex-grow: 1;
-      }
-
-      .dropdown {
-        flex-shrink: 0;
-        margin-bottom: 0.75rem;
-
-        button {
-          width: 40px;
-          height: 100%;
-          color: #7e8083;
-          border-radius: 0;
-          border-right: 3px solid transparent;
-          transition: border-right-color 0.5s, color 0.5s;
-
-          &:hover {
-            color: $blue-lake;
-            border-right-color: $blue-lake;
-          }
         }
       }
     }

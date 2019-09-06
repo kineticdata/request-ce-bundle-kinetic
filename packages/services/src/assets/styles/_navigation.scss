@@ -1,9 +1,7 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Navigation Overrides ~ services
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.package-layout--services {
-  .nav-return {
-    display: block;
-    @include setColorAndHover($blue);
-  }
+
+.nav-return {
+  @include setColorAndHover($blue);
 }

@@ -11,8 +11,8 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
   !loading && (
     <div>
       <PageTitle parts={['Queue Settings']} />
-      <div className="page-container  page-container--space-settings">
-        <div className="page-panel">
+      <div className="page-container">
+        <div className="page-panel page-panel--white">
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>

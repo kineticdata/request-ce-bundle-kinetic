@@ -6,7 +6,7 @@ import { connect } from '../../redux/store';
 import { isActiveClass } from '../../utils';
 
 export const SidebarComponent = ({ loading, spaceAdmin }) => (
-  <div className="sidebar space-sidebar">
+  <div className="sidebar">
     <Link to="/kapps/queue" className="nav-return">
       <span className="fa fa-fw fa-chevron-left" />
       <I18n>Return to Queue</I18n>

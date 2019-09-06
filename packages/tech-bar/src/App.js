@@ -25,7 +25,6 @@ import { Settings } from './components/settings/Settings';
 import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { syncAppState } from './redux/modules/app';
 import { actions } from './redux/modules/techBarApp';
-import './assets/styles/master.scss';
 
 const AppComponent = props => {
   if (props.error) {

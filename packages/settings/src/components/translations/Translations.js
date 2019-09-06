@@ -23,7 +23,8 @@ export const TranslationsRouter = ({
       <EntriesList path="locale/:locale" />
       <EntriesList path="context/:context/locale/:locale" />
       <EntriesList path="context/:context/key/:keyHash" />
-      <StagedList path="staged/:context?" />
+      <StagedList path="staged/:context" />
+      <StagedList path="staged" />
       <TranslationsList path=":mode" />
       <TranslationsList default />
     </Router>

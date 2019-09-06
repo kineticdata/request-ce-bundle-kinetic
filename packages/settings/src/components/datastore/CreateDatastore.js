@@ -23,9 +23,9 @@ const CreateDatastoreComponent = ({
   handleNameChange,
   match,
 }) => (
-  <div className="page-container page-container--panels page-container--datastore">
+  <div className="page-container page-container--panels">
     <PageTitle parts={['New Form', 'Datastore']} />
-    <div className="page-panel page-panel--two-thirds page-panel--scrollable page-panel--datastore-content">
+    <div className="page-panel page-panel--two-thirds page-panel--white">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>

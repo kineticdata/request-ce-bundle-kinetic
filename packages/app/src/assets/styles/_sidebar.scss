@@ -3,8 +3,8 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 .sidebar {
-  background-color: $black-3;
-  border-right: 1px solid $black-16;
+  background-color: $gray3;
+  border-right: 1px solid $gray16;
   min-height: calc(100vh - 160px);
   @supports not (-webkit-overflow-scrolling: touch) {
     /* CSS for other than iOS devices */
@@ -55,7 +55,7 @@
         line-height: normal;
         margin-left: auto;
         text-transform: none;
-        color: $gray;
+        color: $gray50;
         &:hover {
           color: $blue-lake;
         }
@@ -70,8 +70,8 @@
       margin-top: 0;
     }
     .nav-link {
-      border-left: 3px solid $black-3;
-      color: $gray;
+      border-left: 3px solid $gray3;
+      color: $gray50;
       line-height: normal;
       display: flex;
       align-items: center;
@@ -93,7 +93,7 @@
       padding: 0.25rem 1.5rem;
       font-size: 0.875rem;
       font-style: italic;
-      color: rgba($black, 0.75);
+      color: rgba($gray80, 0.75);
       margin-bottom: 0.75rem;
     }
     &--content-wrapper {
@@ -107,7 +107,7 @@
       max-width: 252px;
       padding: 0;
       margin-top: auto;
-      background-color: $black-5;
+      background-color: $gray6;
       z-index: 10;
       .nav-link {
         display: flex;

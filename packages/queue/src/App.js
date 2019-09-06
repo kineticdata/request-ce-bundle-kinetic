@@ -27,8 +27,6 @@ import { NewItemMenuContainer } from './components/new_item_menu/NewItemMenuCont
 import { WorkMenuContainer } from './components/work_menu/WorkMenu';
 import { Settings } from './components/settings/Settings';
 
-import './assets/styles/master.scss';
-
 const CustomRedirect = props => (
   <Redirect to={`${props.appLocation}/item/${props.id}`} noThrow />
 );

@@ -1,58 +1,106 @@
-// Variables  ~ Common
+// Default Variables - Common
+
+// Used by @kineticdata/react - Remove once no longer needed
+$blue1: rgba(84, 105, 141, 1) !default;
+$blue2: rgba(168, 183, 199, 1) !default;
+$blue3: rgba(211, 220, 231, 1) !default;
+$gray4: rgba(236, 236, 236, 1) !default;
 
 // Colors
 // --------------------------------------
 
-// Discussion colors
-$transparent-gray1: rgba(51, 51, 51, 0.15);
-$gray: rgb(126, 128, 131);
-$gray2: rgba(213, 213, 213, 1);
-$gray3: rgba(223, 226, 229, 1);
-$gray4: rgba(236, 236, 236, 1);
+$blue: rgb(16, 148, 196) !default; // #1094C4
+$blue-gray: rgb(168, 183, 199) !default; // #A8B7C7
+$blue-lake: rgb(9, 84, 130) !default; // #095482
+$blue-slate: rgb(12, 56, 79) !default; // #0C384F
+$blue-sky: rgb(11, 168, 224) !default; // #0BA8E0
+$green-grass: rgb(0, 212, 106) !default; // #00D46A
+$green: rgb(102, 225, 65) !default; // #66E041
+$green-teal: rgb(2, 212, 177) !default; // #02D4B1
+$orange: rgb(255, 153, 28) !default; // #FF991C
+$orange-kinetic: rgb(214, 105, 42) !default; // #D6692A
+$orange-kinops: rgb(255, 119, 0) !default; // #FF7700
+$purple: rgb(166, 48, 150) !default; // #A63096
+$red-purple: rgb(191, 52, 121) !default; // #BF3479
+$red: rgb(250, 58, 55) !default; // #FA3A37
+$red-rose: rgb(255, 74, 94) !default; // #FF4A5E
+$yellow: rgb(254, 233, 78) !default; // #FEE94D
+$sunflower: rgb(255, 207, 74) !default; // #FFCF4A
 
-$blue1: rgba(84, 105, 141, 1);
-$blue2: rgba(168, 183, 199, 1);
-$blue3: rgba(211, 220, 231, 1);
-$blue4: rgba(244, 246, 249, 1);
-$present: rgba(0, 212, 100, 1);
+$black: rgb(0, 0, 0) !default; // #000000
+$white: rgb(255, 255, 255) !default; // #ffffff
+$gray: rgb(126, 128, 131) !default; // #7e8083
+$primary: $blue-lake !default; // #095482
+$secondary: $orange-kinops !default; // #ff7700
+$tertiary: $blue-gray !default; // #a8b7c7
+$success: $green-grass !default; // #00d46a
+$danger: $red !default; // #fa3a37
+$warning: $sunflower !default; // #ffcf4a
+$info: $blue !default; // #1094c4
 
-// Black, grays, and whites
-$black: rgb(52, 52, 52);
-$black-3: rgb(247, 247, 247);
-$black-5: rgb(241, 241, 241);
-$black-16: rgb(213, 213, 213);
-$black-50: rgb(126, 128, 131);
-$white: rgb(255, 255, 255);
+$gray90: darken($gray, 40%) !default; // #1a1a1b
+$gray80: darken($gray, 30%) !default; // #333435 (previously $black)
+$gray70: darken($gray, 20%) !default; // #4c4d4f
+$gray60: darken($gray, 10%) !default; // #656769
+$gray50: $gray !default; // #7e8083 (previously $black-50 and $gray)
+$gray40: lighten($gray, 10%) !default; // #989a9c
+$gray30: lighten($gray, 20%) !default; // #b2b3b5
+$gray20: lighten($gray, 30%) !default; // #cccdce
+$gray16: lighten(
+  $gray,
+  33.2%
+) !default; // #d4d5d6 (previously $black-16 and $gray2)
+$gray10: lighten($gray, 40%) !default; // #e6e6e7 (previously $gray3)
+$gray8: lighten($gray, 42.2%) !default; // #ececec (previously $gray4)
+$gray6: lighten($gray, 44.1%) !default; // #f1f1f1 (previously $black-5)
+$gray3: lighten($gray, 46.5%) !default; // #f7f7f7 (previously $black-3)
+$gray2: lighten($gray, 47.75%); // #fafafa
 
-// Color range with similar hue
-$blue: rgb(16, 148, 196); // #1094C4
-$blue-gray: rgb(168, 183, 199); // #A8B7C7
-$blue-lake: rgb(9, 84, 130); // #095482
-$blue-slate: rgb(12, 56, 79); // #0C384F
-$blue-sky: rgb(11, 168, 224); // #0BA8E0
-$green-grass: rgb(0, 212, 106); // #00D46A
-$green: rgb(102, 225, 65); // #66E041
-$green-teal: rgb(2, 212, 177); // #02D4B1
-$orange: rgb(255, 153, 28); // #FF991C
-$orange-kinetic: rgb(214, 105, 42); // #D6692A
-$orange-kinops: rgb(255, 119, 0); // #FF7700
-$purple: rgb(166, 48, 150); // #A63096
-$red-purple: rgb(191, 52, 121); // #BF3479
-$red: rgb(250, 58, 55); // #FA3A37
-$red-rose: rgb(255, 74, 94); // #FF4A5E
-$yellow: rgb(254, 233, 78); // #FEE94D
-$sunflower: rgb(255, 207, 74); // #FFCF4A
+$primary70: darken($primary, 20%) !default; // #021623
+$primary60: darken($primary, 10%) !default; // #063552
+$primary50: $primary !default; // #095482
+$primary40: lighten($primary, 10%) !default; // #0c73b2
+$primary30: lighten($primary, 20%) !default; // #1092e1
+$secondary70: darken($secondary, 20%) !default; // #994700
+$secondary60: darken($secondary, 10%) !default; // #cc5f00
+$secondary50: $secondary !default; // #ff7700
+$secondary40: lighten($secondary, 10%) !default; // #ff9233
+$secondary30: lighten($secondary, 20%) !default; // #ffad66
+$tertiary70: darken($tertiary, 20%) !default; // #6a849f (previously $blue1)
+$tertiary60: darken($tertiary, 10%) !default; // #899db3
+$tertiary50: $tertiary !default; // #a8b7c7 (previously $blue2)
+$tertiary40: lighten($tertiary, 10%) !default; // #c7d1db (previously $blue3)
+$tertiary30: lighten($tertiary, 20%) !default; // #e6eaef
 
-// Button colors
-$primary: $blue-lake;
-$primary-complement: $white;
-$secondary: $orange-kinops;
-$secondary-complement: $white;
+$success70: darken($success, 20%) !default; // #006e37
+$success60: darken($success, 10%) !default; // #00a151
+$success50: $success !default; // #00d46a
+$success40: lighten($success, 10%) !default; // #08ff84
+$success30: lighten($success, 20%) !default; // #3bff9d
+$danger70: darken($danger, 20%) !default; // #c60805
+$danger60: darken($danger, 10%) !default; // #f80a06
+$danger50: $danger !default; // #fa3a37
+$danger40: lighten($danger, 10%) !default; // #fb6b69
+$danger30: lighten($danger, 20%) !default; // #fc9c9b
+$warning70: darken($warning, 20%) !default; // #e3a700
+$warning60: darken($warning, 10%) !default; // #ffc117
+$warning50: $warning !default; // #ffcf4a
+$warning40: lighten($warning, 10%) !default; // #ffdd7d
+$warning30: lighten($warning, 20%) !default; // #ffeab0
+$info70: darken($info, 20%) !default; // #084d66
+$info60: darken($info, 10%) !default; // #0c7095
+$info50: $info !default; // #1094c4
+$info40: lighten($info, 10%) !default; // #1bb4ec
+$info30: lighten($info, 20%) !default; // #4ac4f0
 
-// Text, link, border colors
-$text-color: $black-50 !default; // Global text color on `<body>`.
+// Text, link, border, background colors
+$text-color: $gray80 !default; // Global text color on `<body>`.
 $link-color: $blue-lake !default; // Global textual link color.
-$border-color: $black-16 !default; // Global border color.
+$border-color: $gray16 !default; // Global border color.
+$bg1: $gray3 !default;
+$bg2: $gray6 !default;
+$bg3: $gray8 !default;
+$present: $green-grass !default;
 
 // Typography
 // --------------------------------------
@@ -61,43 +109,11 @@ $font-family-sans-serif: 'Open Sans', sans-serif !default;
 $font-family-serif: Georgia, 'Times New Roman', Times, serif !default;
 $font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace !default; // Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-base: $font-family-sans-serif !default;
-
 $font-size-base: 1rem !default; // Default font size. Equal to 16px.
 $line-height-base: 1.5rem !default; // Default line height. Equal to 24px.
 
 // Components
 // --------------------------------------
 
-$enable-rounded: true;
+$enable-rounded: true !default;
 $border-radius-base: 0.25rem !default; // Default border radius. Equal to 4px
-
-$margin-increment: 0.5rem;
-$margin-count: 5;
-$padding-increment: 0.5rem;
-$padding-count: 5;
-
-// Image & Fonts paths variable
-$image-path: '../images';
-$font-path: '../../fonts';
-
-// Header height & Page Height
-$header-height: 48px;
-$page-height: calc(100vh - #{$header-height});
-
-// Z-index defaults
-$z-index-page: 100;
-$z-index-navigation: 200;
-$z-index-modal: 300;
-
-// Set Responsive Base sizes for Modularscale
-$modularscale: (
-  base: 12px,
-  ratio: 1.125,
-  768px: (
-    14px ratio: 1.125,
-  ),
-  1200px: (
-    base: 16px,
-    ratio: 1.125,
-  ),
-);

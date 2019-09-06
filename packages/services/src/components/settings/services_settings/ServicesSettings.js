@@ -21,9 +21,9 @@ export const SettingsComponent = ({
   previousKappName,
   appLocation,
 }) => (
-  <div className="page-container page-container--space-settings">
+  <div className="page-container">
     <PageTitle parts={['Kapp Settings', currentKapp.name]} />
-    <div className="page-panel page-panel--scrollable page-panel--space-profile-edit">
+    <div className="page-panel page-panel--white">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>

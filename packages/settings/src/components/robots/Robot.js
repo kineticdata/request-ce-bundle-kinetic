@@ -48,9 +48,9 @@ const RobotComponent = ({
     robot.values['End Date'] &&
     moment(robot.values['End Date']).isBefore(moment());
   return (
-    <div className="page-container page-container--robots">
+    <div className="page-container">
       <PageTitle parts={['Robots', 'Settings']} />
-      <div className="page-panel page-panel--scrollable page-panel--robots-content">
+      <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -92,7 +92,7 @@ const RobotComponent = ({
                     <li role="presentation">
                       <Link
                         to={`/settings/robots/${robotId}`}
-                        getProps={isActiveClass('nav-link')}
+                        getProps={isActiveClass()}
                       >
                         <I18n>Details</I18n>
                       </Link>
@@ -100,7 +100,7 @@ const RobotComponent = ({
                     <li role="presentation">
                       <Link
                         to={`/settings/robots/${robotId}/executions`}
-                        getProps={isActiveClass('nav-link')}
+                        getProps={isActiveClass()}
                       >
                         <I18n>Executions</I18n>
                       </Link>

@@ -36,8 +36,6 @@ import { RequestShowContainer } from './components/request/RequestShowContainer'
 import { Settings } from './components/settings/Settings';
 import { I18n } from '@kineticdata/react';
 
-import './assets/styles/master.scss';
-
 const SubmissionRedirect = props => (
   <Redirect
     to={`${props.appLocation}/requests/request/${props.id}/${

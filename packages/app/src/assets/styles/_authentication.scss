@@ -54,7 +54,7 @@
     flex-direction: row;
   }
   .login-image-container {
-    background-color: $black;
+    background-color: $gray80;
     background-size: cover;
     opacity: 0.85;
     display: flex;
@@ -110,17 +110,17 @@
       padding: 0.5rem 0.75rem;
     }
     hr {
-      background-color: $black-16;
+      background-color: $gray16;
       margin: 1rem 0 0.5rem 0;
       border: 0;
       height: 1px;
     }
     .submitted {
       .subtitle {
-        color: $black;
+        color: $gray80;
       }
       .explaination {
-        color: $black;
+        color: $gray80;
         font-size: 13px;
         line-height: 18px;
       }
@@ -148,7 +148,7 @@
 
     .form-group {
       label {
-        color: $black;
+        color: $gray80;
         font-size: 12px;
         line-height: 24px;
 
@@ -158,15 +158,15 @@
         }
       }
       p.form-control-static {
-        color: $black;
+        color: $gray80;
         font-size: 13px;
         line-height: 18px;
       }
       input.form-control {
         height: 30px;
-        border: 1px solid $black-16;
+        border: 1px solid $gray16;
         border-radius: $border-radius-base;
-        color: $black;
+        color: $gray80;
         font-size: 13px;
         line-height: 18px;
 

@@ -26,7 +26,7 @@ const DiscussionsComponent = ({
   pageIndexEnd,
   paging,
 }) => (
-  <Fragment>
+  <div className="page-container">
     <PageTitle parts={['Discussions']} />
     {createModal && (
       <CreateDiscussionModal
@@ -35,7 +35,7 @@ const DiscussionsComponent = ({
         profile={profile}
       />
     )}
-    <div className="page-panel page-panel--discussions">
+    <div className="page-panel page-panel--no-padding">
       <DiscussionsList
         discussions={discussions}
         error={error}
@@ -84,7 +84,7 @@ const DiscussionsComponent = ({
         </div>
       )}
     </div>
-  </Fragment>
+  </div>
 );
 
 const renderHeaderHandler = props => () => {
@@ -137,18 +137,18 @@ const renderHeaderHandler = props => () => {
         />
       </div>
       <div className="subheader">
-        {props.archived && (
-          <DateRangeDropdown
-            value={props.dateRange}
-            onChange={props.setDateRangeHandler}
-          />
-        )}
         <button
           className="btn btn-inverse"
           onClick={props.toggleArchivedHandler}
         >
           <I18n>{props.archived ? 'Show Recent' : 'Show Archived'}</I18n>
         </button>
+        {props.archived && (
+          <DateRangeDropdown
+            value={props.dateRange}
+            onChange={props.setDateRangeHandler}
+          />
+        )}
         <form
           onSubmit={e => {
             e.preventDefault();

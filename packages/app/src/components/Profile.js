@@ -20,14 +20,14 @@ const ProfileComponent = ({
   manager,
   managerEnabled,
 }) => (
-  <div className="page-container page-container--panels">
+  <div className="page-container">
     <PageTitle parts={['Profile']} />
     {!error && !profile && <LoadingMessage />}
     {error && (
       <ErrorMessage title="Could not load profile" message={error.message} />
     )}
     {profile && (
-      <div className="page-panel">
+      <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h1>
@@ -170,7 +170,7 @@ const UserTeams = ({ teams }) => {
     item => !item.team.name.startsWith('Role::'),
   );
   return filteredTeams.length > 0 ? (
-    <div className="cards__wrapper cards__wrapper--team">
+    <div className="cards__wrapper cards__wrapper--thirds">
       {filteredTeams.map(item => (
         <TeamCard key={item.team.name} team={item.team} components={{ Link }} />
       ))}

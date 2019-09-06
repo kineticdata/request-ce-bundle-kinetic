@@ -20,6 +20,13 @@ input[type='button'],
   @include border-radius();
   line-height: 1.75rem;
   padding: 0.1875rem 0.75rem;
+  border: 1px solid transparent;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   &:hover,
   &:focus,
   &:active {
@@ -38,10 +45,10 @@ input[type='button'],
   @extend .btn;
   color: $white;
   @include setButtonColorAndHover($primary);
-  &:not(:disabled):not(.disabled):active,
-  &:not(:disabled):not(.disabled).active {
-    @include setButtonColorAndHover($primary);
-  }
+  // &:not(:disabled):not(.disabled):active,
+  // &:not(:disabled):not(.disabled).active {
+  //   @include setButtonColorAndHover($primary);
+  // }
   &.disabled,
   &[disabled] {
     background-color: lighten($primary, 5%);
@@ -54,10 +61,10 @@ input[type='button'],
   @extend .btn;
   color: $white;
   @include setButtonColorAndHover($secondary);
-  &:not(:disabled):not(.disabled):active,
-  &:not(:disabled):not(.disabled).active {
-    @include setButtonColorAndHover($secondary);
-  }
+  // &:not(:disabled):not(.disabled):active,
+  // &:not(:disabled):not(.disabled).active {
+  //   @include setButtonColorAndHover($secondary);
+  // }
   &.disabled,
   &[disabled] {
     background-color: lighten($secondary, 5%);
@@ -69,10 +76,10 @@ input[type='button'],
 .btn-link {
   @extend .btn;
   @include setButtonColorAndHover(transparent);
-  &:not(:disabled):not(.disabled):active,
-  &:not(:disabled):not(.disabled).active {
-    @include setButtonColorAndHover(transparent);
-  }
+  // &:not(:disabled):not(.disabled):active,
+  // &:not(:disabled):not(.disabled).active {
+  //   @include setButtonColorAndHover(transparent);
+  // }
   color: $link-color;
   &:hover,
   &:focus,
@@ -102,8 +109,8 @@ input[type='button'],
 // Button Subtle
 .btn-subtle {
   @extend .btn;
-  @include setButtonColorAndHover($gray2);
-  color: $black;
+  @include setButtonColorAndHover($gray16);
+  color: $gray80;
 
   &:hover,
   &:focus,
@@ -119,9 +126,9 @@ input[type='button'],
 .btn-inverse {
   color: $primary;
   background-color: white;
-  border-color: $gray3;
+  border-color: $gray10;
   &:hover {
-    border-color: $gray2;
+    border-color: $gray16;
     color: $primary;
     background-color: white;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
@@ -132,14 +139,14 @@ input[type='button'],
 .btn-icon {
   border: 0;
   background-color: transparent;
-  color: $gray;
+  color: $gray50;
   &:hover {
     color: $primary;
   }
 
   &.btn-subtle {
-    background-color: $blue3;
-    color: $blue1;
+    background-color: $tertiary40;
+    color: $tertiary70;
   }
   &.btn-expand {
     padding-left: 0;

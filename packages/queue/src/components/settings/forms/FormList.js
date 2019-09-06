@@ -52,8 +52,8 @@ const FormListComponent = ({
     pageNumbers.push(i);
   }
   return (
-    <div className="page-container page-container--datastore">
-      <div className="page-panel page-panel--scrollable page-panel--datastore-content">
+    <div className="page-container">
+      <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>

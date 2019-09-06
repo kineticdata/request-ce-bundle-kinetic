@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import moment from 'moment';
 import { Link } from '@reach/router';
 import { compose, lifecycle, withState, withHandlers } from 'recompose';
@@ -173,10 +173,10 @@ export const FormSubmissionsContainer = ({
   return (
     !loading &&
     form && (
-      <div>
+      <Fragment>
         <PageTitle parts={['Services Settings']} />
-        <div className="page-container  page-container--space-settings">
-          <div className="page-panel">
+        <div className="page-container">
+          <div className="page-panel page-panel--white">
             <div className="page-title">
               <div className="page-title__wrapper">
                 <h3>
@@ -706,7 +706,7 @@ export const FormSubmissionsContainer = ({
           </div>
         </div>
         <ExportModal filter={filter} createSearchQuery={createSearchQuery} />
-      </div>
+      </Fragment>
     )
   );
 };

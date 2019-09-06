@@ -68,14 +68,14 @@ const DatastoreSubmissionComponent = ({
   creationFields,
 }) => (
   <I18n context={`datastore.forms.${form.slug}`}>
-    <div className="page-container page-container--panels page-container--datastore">
+    <div className="page-container page-container--panels">
       <PageTitle
         parts={[
           submissionId ? (submission ? submission.label : '') : ' New Record',
           'Datastore',
         ]}
       />
-      <div className="page-panel page-panel--three-fifths page-panel--space-datastore-submission page-panel--scrollable">
+      <div className="page-panel page-panel--three-fifths page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>

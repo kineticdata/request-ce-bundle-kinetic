@@ -59,9 +59,9 @@ const RobotsListComponent = ({
   return loading ? (
     <Loading />
   ) : (
-    <div className="page-container page-container--robots">
+    <div className="page-container">
       <PageTitle parts={['Robots', 'Settings']} />
-      <div className="page-panel page-panel--scrollable page-panel--robots-content">
+      <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
