@@ -1,4 +1,10 @@
-import { compose, withState, withHandlers, withProps } from 'recompose';
+import {
+  compose,
+  lifecycle,
+  withState,
+  withHandlers,
+  withProps,
+} from 'recompose';
 import { push } from 'redux-first-history';
 import {
   selectMyTeamForms,
@@ -47,9 +53,6 @@ const handleSave = ({
   setAssignment,
 }) => () => {
   kForm.submitPage();
-  setAssignment(null);
-  setCurrentForm(null);
-  setKForm(null);
 };
 const handleClosed = ({
   setCurrentForm,
@@ -57,9 +60,6 @@ const handleClosed = ({
   setAssignment,
   closeNewItemMenu,
 }) => () => {
-  setAssignment(null);
-  setCurrentForm(null);
-  setKForm(null);
   closeNewItemMenu();
 };
 const handleSelect = ({ setAssignment }) => (_value, state) => {
@@ -142,5 +142,15 @@ export const NewItemMenuContainer = compose(
     handleSelect,
     onFormLoaded,
     onCreated,
+  }),
+  lifecycle({
+    componentDidUpdate(prevProps) {
+      if (!this.props.isOpen && prevProps.isOpen) {
+        // Reset form when it is closed
+        this.props.setAssignment(null);
+        this.props.setCurrentForm(null);
+        this.props.setKForm(null);
+      }
+    },
   }),
 )(NewItemMenu);
