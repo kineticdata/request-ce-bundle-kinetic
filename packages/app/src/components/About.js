@@ -8,7 +8,7 @@ import { I18n } from '@kineticdata/react';
 import { PageTitle } from './shared/PageTitle';
 
 const AboutComponent = ({ space, users, teams, loading }) => (
-  <div className="page-container page-container--panels">
+  <div className="page-container">
     <PageTitle parts={['About']} />
     {!loading && (
       <div className="page-panel">

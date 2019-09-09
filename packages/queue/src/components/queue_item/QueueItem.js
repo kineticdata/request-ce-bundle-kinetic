@@ -52,39 +52,43 @@ export const QueueItem = ({
   profile,
 }) =>
   queueItem !== null && (
-    <div className="queue-item-container">
-      {filter && (
-        <Link to="../.." className="nav-return">
-          <span className="icon">
-            <span className="fa fa-fw fa-chevron-left" />
-          </span>
-          <I18n>{filter.name || 'Adhoc'}</I18n>
-        </Link>
-      )}
-      <div className="queue-item-content">
-        <PageTitle
-          parts={[
-            queueItem ? queueItem.handle : '',
-            filter ? filter.name || 'Adhoc' : '',
-          ]}
-        />
-        <QueueItemDetailsContainer
-          filter={filter}
-          creationFields={creationFields}
-          onCreated={onCreated}
-          CreationForm={CreationForm}
-        />
-        {discussionsEnabled && (
-          <DiscussionsPanel
-            itemType="Submission"
-            itemKey={queueItem.id}
+    <div className="page-container page-container--panels">
+      <PageTitle
+        parts={[
+          queueItem ? queueItem.handle : '',
+          filter ? filter.name || 'Adhoc' : '',
+        ]}
+      />
+      <div className="page-panel page-panel--three-fifths page-panel--white page-panel--no-padding page-panel--flex">
+        {filter && (
+          <div className="page-panel__header">
+            <Link to="../.." className="nav-return">
+              <span className="icon">
+                <span className="fa fa-fw fa-chevron-left" />
+              </span>
+              <I18n>{filter.name || 'Adhoc'}</I18n>
+            </Link>
+          </div>
+        )}
+        <div className="page-panel__body">
+          <QueueItemDetailsContainer
+            filter={filter}
             creationFields={creationFields}
             onCreated={onCreated}
             CreationForm={CreationForm}
-            me={profile}
           />
-        )}
+        </div>
       </div>
+      {discussionsEnabled && (
+        <DiscussionsPanel
+          itemType="Submission"
+          itemKey={queueItem.id}
+          creationFields={creationFields}
+          onCreated={onCreated}
+          CreationForm={CreationForm}
+          me={profile}
+        />
+      )}
     </div>
   );
 

@@ -16,7 +16,7 @@
 }
 
 .card {
-  border: 1px solid $black-16;
+  border: 1px solid $gray16;
   padding: 1rem;
   margin-top: 1rem;
   transition: background-color 0.3s;
@@ -80,7 +80,7 @@
   }
   &__subtitle {
     font-size: 0.75rem !important;
-    color: $black !important;
+    color: $gray80 !important;
   }
   .btn {
     margin: 0.5rem 0;
@@ -107,7 +107,7 @@
       font-size: 0.75rem;
     }
     dd {
-      color: $black-50;
+      color: $gray50;
       margin-bottom: 0;
     }
   }
@@ -133,7 +133,7 @@
         height: 48px;
         width: 48px;
         font-size: 1.5rem;
-        background-color: $black-16;
+        background-color: $gray16;
         line-height: 48px;
         border: 2px solid $white;
       }
@@ -150,7 +150,7 @@
     .card__footer {
       text-align: left;
       padding: 1rem 1rem 2rem;
-      border-top: 1px solid $black-16;
+      border-top: 1px solid $gray16;
     }
   }
   &__date {
@@ -204,7 +204,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    border: 2px dashed $black-16;
+    border: 2px dashed $gray16;
     flex: 0 1 50%;
     .fa-upload {
       margin-top: 1rem;
@@ -216,7 +216,7 @@
 .card--color {
   margin: 0 0 1rem 0;
   text-align: center;
-  border: 1px solid $black-16;
+  border: 1px solid $gray16;
   &__header {
     height: 3rem;
     width: 100%;

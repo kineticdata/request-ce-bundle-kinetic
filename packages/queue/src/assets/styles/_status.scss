@@ -2,54 +2,52 @@
  *   Status ~ Queue
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.package-layout--queue {
-  .status-content {
-    flex: 0 0 auto;
-    &--is-active {
-    }
-    p {
-      margin: 0;
-      padding: 0;
-    }
+.status-content {
+  flex: 0 0 auto;
+  &--is-active {
   }
-  .submission__meta {
-    display: flex;
-    align-items: center;
-  }
-  .submission-status {
-    font-weight: 600;
-    @include ms-respond(font-size, -2);
-    text-transform: uppercase;
+  p {
     margin: 0;
-    line-height: 1.0625rem;
-    padding: 0.125rem 0.625rem;
-    border-radius: 1rem;
-    // display: block;
-    &--cancelled {
-      color: $red;
-      background-color: rgba($red, 0.2);
-    }
-    &--complete {
-      color: $blue;
-      background-color: rgba($blue, 0.2);
-    }
-    &--open {
-      color: $green-teal;
-      background-color: rgba($green-teal, 0.2);
-    }
-    &--pending {
-      color: $orange;
-      background-color: rgba($orange, 0.2);
-    }
-    &--reason {
-      color: $blue-sky;
-      @include ms-respond(font-size, -1);
-      margin-left: 6px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-transform: none;
-      white-space: nowrap;
-      flex: 1;
-    }
+    padding: 0;
+  }
+}
+.submission__meta {
+  display: flex;
+  align-items: center;
+}
+.submission-status {
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.0625rem;
+  padding: 0.125rem 0.625rem;
+  border-radius: 1rem;
+  // display: block;
+  &--cancelled {
+    color: $red;
+    background-color: rgba($red, 0.2);
+  }
+  &--complete {
+    color: $blue;
+    background-color: rgba($blue, 0.2);
+  }
+  &--open {
+    color: $green-teal;
+    background-color: rgba($green-teal, 0.2);
+  }
+  &--pending {
+    color: $orange;
+    background-color: rgba($orange, 0.2);
+  }
+  &--reason {
+    color: $blue-sky;
+    font-size: 0.875rem;
+    margin-left: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: none;
+    white-space: nowrap;
+    flex: 1;
   }
 }

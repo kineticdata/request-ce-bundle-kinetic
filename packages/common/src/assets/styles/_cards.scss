@@ -3,12 +3,147 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 .cards__wrapper {
-  flex-direction: row;
-  flex-wrap: wrap;
   display: flex;
-  justify-content: space-between;
-  padding-bottom: 1rem;
+  flex-direction: column;
+  padding: 0 0 2rem;
+  margin: 0;
+  list-style: none;
+
+  .card {
+    flex: 0 0 auto;
+    margin-bottom: 0.75rem;
+  }
+
+  &--seconds,
+  &--thirds,
+  &--fourths {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  &--seconds {
+    .card {
+      flex: 0 0 auto;
+      @media all and (min-width: 0) {
+        flex-basis: 100%;
+        @media all and (-ms-high-contrast: none) {
+          width: 100%;
+          flex-basis: auto;
+        }
+      }
+      @media all and (min-width: 576px) {
+        flex-basis: calc(50% - 0.75rem);
+        @media all and (-ms-high-contrast: none) {
+          width: calc(50% - 0.75rem);
+          flex-basis: auto;
+        }
+      }
+    }
+  }
+  &--thirds {
+    .card {
+      flex: 0 0 auto;
+      @media all and (min-width: 0) {
+        flex-basis: 100%;
+        @media all and (-ms-high-contrast: none) {
+          width: 100%;
+          flex-basis: auto;
+        }
+      }
+      @media all and (min-width: 576px) {
+        flex-basis: calc(50% - 0.75rem);
+        @media all and (-ms-high-contrast: none) {
+          width: calc(50% - 0.75rem);
+          flex-basis: auto;
+        }
+      }
+      @media all and (min-width: 992px) {
+        flex-basis: calc(33.33333333% - 1rem);
+        @media all and (-ms-high-contrast: none) {
+          width: calc(33.33333333% - 1rem);
+          flex-basis: auto;
+        }
+      }
+    }
+    @media all and (min-width: 992px) {
+      &:after {
+        content: ' ';
+        flex: 0 0 calc(33.33333333% - 1rem);
+      }
+      @media all and (-ms-high-contrast: none) {
+        &:after {
+          flex-basis: auto;
+          width: calc(33.33333333% - 1rem);
+        }
+      }
+    }
+  }
+
+  &--fourths {
+    .card {
+      flex: 0 0 auto;
+      @media all and (min-width: 0) {
+        flex-basis: 100%;
+        @media all and (-ms-high-contrast: none) {
+          width: 100%;
+          flex-basis: auto;
+        }
+      }
+      @media all and (min-width: 576px) {
+        flex-basis: calc(50% - 0.75rem);
+        @media all and (-ms-high-contrast: none) {
+          width: calc(50% - 0.75rem);
+          flex-basis: auto;
+        }
+      }
+      @media all and (min-width: 992px) {
+        flex-basis: calc(33.33333333% - 1rem);
+        @media all and (-ms-high-contrast: none) {
+          width: calc(33.33333333% - 1rem);
+          flex-basis: auto;
+        }
+      }
+      @media all and (min-width: 1200px) {
+        flex-basis: calc(25% - 1.125rem);
+        @media all and (-ms-high-contrast: none) {
+          width: calc(25% - 1.125rem);
+          flex-basis: auto;
+        }
+      }
+    }
+    @media all and (min-width: 992px) {
+      &:after {
+        content: ' ';
+        flex: 0 0 calc(33.33333333% - 1rem);
+      }
+      @media all and (-ms-high-contrast: none) {
+        &:after {
+          flex-basis: auto;
+          width: calc(33.33333333% - 1rem);
+        }
+      }
+    }
+    @media all and (min-width: 1200px) {
+      &:after,
+      &:before {
+        content: ' ';
+        flex: 0 0 calc(25% - 1.125rem);
+      }
+      &:before {
+        order: 1;
+      }
+      @media all and (-ms-high-contrast: none) {
+        &:after,
+        &:before {
+          flex-basis: auto;
+          width: calc(25% - 1.125rem);
+        }
+      }
+    }
+  }
 }
+
 .fa.card-icon,
 .card-icon {
   height: 1.5rem;
@@ -22,4 +157,173 @@
   line-height: 1.5rem;
   color: $white;
   flex-shrink: 0;
+}
+
+.card--settings {
+  border: 1px solid $border-color;
+  border-radius: $border-radius-base;
+  padding: 0.625rem 1rem;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s;
+  &:focus,
+  &:hover {
+    background-color: $white;
+    text-decoration: none;
+  }
+  h1 {
+    color: $gray80;
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 2.25rem;
+    margin: 0;
+    display: inline-flex;
+  }
+  p {
+    color: $gray50;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin-bottom: 0;
+  }
+}
+
+.card--team {
+  margin: 0 0 1rem 0;
+  text-align: center;
+  border: 1px solid $gray16;
+  &__header {
+    height: 3rem;
+    width: 100%;
+    padding: 0 1rem;
+    justify-content: center;
+    border: none;
+    align-items: baseline;
+    position: relative;
+    display: flex;
+    .card-icon {
+      margin-top: 1.5rem;
+      margin-right: 0;
+      height: 48px;
+      width: 48px;
+      font-size: 1.5rem;
+      background-color: $gray16;
+      line-height: 48px;
+      border: 2px solid $white;
+    }
+  }
+  &__body {
+    padding: 1rem;
+    text-align: center;
+    h1 {
+      margin: 0.75rem 0;
+      color: $gray80;
+      word-break: break-word;
+      font-size: 1.125rem;
+      line-height: 1.5rem;
+      .fa {
+        padding: 0 0 0 1rem;
+      }
+    }
+    p {
+      color: $gray50;
+      font-size: 0.75rem;
+      line-height: 1.125rem;
+      margin-bottom: 0;
+      &.members-toggle {
+        margin-bottom: 1rem;
+      }
+    }
+    .btn {
+      margin: 1rem 0;
+    }
+    img {
+      flex-shrink: 0;
+      border-radius: 50%;
+      background-color: $gray16;
+    }
+    pre {
+      width: 100%;
+      font-family: $font-family-sans-serif;
+      word-break: keep-all;
+      white-space: pre-wrap;
+      color: $gray50;
+      font-size: 0.75rem;
+      line-height: 1.125rem;
+      &.text-truncate {
+        white-space: nowrap;
+      }
+    }
+  }
+  &__footer {
+    border-top: 1px solid $gray16;
+    text-align: left;
+    padding: 0 1rem;
+    h1 {
+      margin: 0.75rem 0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: $gray80;
+    }
+    .avatar {
+      margin-right: 0.125rem;
+    }
+    &__members {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 1rem;
+    }
+    &__member {
+      .avatar {
+        img {
+          border: 2px solid $white;
+        }
+      }
+      &.online .avatar img {
+        border-color: $present;
+      }
+    }
+  }
+}
+
+.card--profile {
+  padding: 1.4375rem;
+  margin: 0 0 1.5rem 0;
+  .page-container--space-profile-edit & {
+    margin-top: 1.5rem;
+  }
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-base;
+  text-align: center;
+  word-break: break-all;
+  min-width: 216px;
+  h1 {
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    margin-top: 0.75rem;
+  }
+  p {
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    margin-bottom: 0;
+  }
+  .sb-avatar--gravatar {
+    box-shadow: inset 0px 0px 10px rgba($gray80, 0.9);
+  }
+  img {
+    flex-shrink: 0;
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+  }
+  dl span {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+    dt {
+      margin-right: 1rem;
+    }
+  }
 }

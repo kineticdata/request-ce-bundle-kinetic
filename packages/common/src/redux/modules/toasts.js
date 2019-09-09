@@ -160,6 +160,8 @@ export const addNormal = (...args) =>
 export const addToast = (...args) => store.dispatch(actions.addToast(...args));
 export const addToastAlert = (...args) =>
   store.dispatch(actions.addToastAlert(...args));
+export const removeToastAlert = (...args) =>
+  store.dispatch(actions.removeToastAlert(...args));
 
 window.addToast = addToast;
 window.addToastAlert = addToastAlert;

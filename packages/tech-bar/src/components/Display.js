@@ -57,87 +57,91 @@ export const DisplayComponent = ({
   ) : (
     <Fragment>
       <PageTitle parts={[]} />
-      <div className="page-container page-container--tech-bar page-container--display">
-        {techBar && (
-          <Fragment>
-            <div className="location-title">
-              <span className="fa fa-fw fa-map-marker" />
-              <I18n>{techBar.values['Name']}</I18n>
-            </div>
-            {mode ? (
-              <Fragment>
-                {mode === 'checkin' && (
-                  <CheckIn
-                    techBar={techBar}
-                    crosslink={
-                      search.includes('crosslink') ||
-                      pathname.includes('crosslink')
-                    }
-                  />
-                )}
-                {mode === 'feedback' && (
-                  <Feedback
-                    techBar={techBar}
-                    crosslink={
-                      search.includes('crosslink') ||
-                      pathname.includes('crosslink')
-                    }
-                  />
-                )}
-                {mode === 'overhead' && <Overhead techBar={techBar} />}
-              </Fragment>
-            ) : (
-              <section className="tech-bar-display tech-bar-display--checkin">
-                <div className="full-screen-container">
-                  <div className="header bg-dark" />
-                  <div className="body">
-                    <div className="row">
-                      <div className="col-3">
-                        <button
-                          className="btn btn-outline-dark btn-block"
-                          onClick={() => navigate('checkin', { replace: true })}
-                        >
-                          <I18n>Check In</I18n>
-                        </button>
-                      </div>
-                      <div className="col-3">
-                        <button
-                          className="btn btn-outline-dark btn-block"
-                          onClick={() =>
-                            navigate('feedback', { replace: true })
-                          }
-                        >
-                          <I18n>Feedback</I18n>
-                        </button>
-                      </div>
-                      <div className="col-3">
-                        <button
-                          className="btn btn-outline-dark btn-block"
-                          onClick={() =>
-                            navigate('checkin?crosslink', { replace: true })
-                          }
-                        >
-                          <I18n>Check In</I18n> / <I18n>Feedback</I18n>
-                        </button>
-                      </div>
-                      <div className="col-3">
-                        <button
-                          className="btn btn-outline-dark btn-block"
-                          onClick={() =>
-                            navigate('overhead', { replace: true })
-                          }
-                        >
-                          <I18n>Overhead</I18n>
-                        </button>
+      <div className="page-container">
+        <div className="page-panel page-panel--display">
+          {techBar && (
+            <Fragment>
+              <div className="location-title">
+                <span className="fa fa-fw fa-map-marker" />
+                <I18n>{techBar.values['Name']}</I18n>
+              </div>
+              {mode ? (
+                <Fragment>
+                  {mode === 'checkin' && (
+                    <CheckIn
+                      techBar={techBar}
+                      crosslink={
+                        search.includes('crosslink') ||
+                        pathname.includes('crosslink')
+                      }
+                    />
+                  )}
+                  {mode === 'feedback' && (
+                    <Feedback
+                      techBar={techBar}
+                      crosslink={
+                        search.includes('crosslink') ||
+                        pathname.includes('crosslink')
+                      }
+                    />
+                  )}
+                  {mode === 'overhead' && <Overhead techBar={techBar} />}
+                </Fragment>
+              ) : (
+                <section className="tech-bar-display tech-bar-display--checkin">
+                  <div className="full-screen-container">
+                    <div className="header bg-dark" />
+                    <div className="body">
+                      <div className="row">
+                        <div className="col-3">
+                          <button
+                            className="btn btn-outline-dark btn-block"
+                            onClick={() =>
+                              navigate('checkin', { replace: true })
+                            }
+                          >
+                            <I18n>Check In</I18n>
+                          </button>
+                        </div>
+                        <div className="col-3">
+                          <button
+                            className="btn btn-outline-dark btn-block"
+                            onClick={() =>
+                              navigate('feedback', { replace: true })
+                            }
+                          >
+                            <I18n>Feedback</I18n>
+                          </button>
+                        </div>
+                        <div className="col-3">
+                          <button
+                            className="btn btn-outline-dark btn-block"
+                            onClick={() =>
+                              navigate('checkin?crosslink', { replace: true })
+                            }
+                          >
+                            <I18n>Check In</I18n> / <I18n>Feedback</I18n>
+                          </button>
+                        </div>
+                        <div className="col-3">
+                          <button
+                            className="btn btn-outline-dark btn-block"
+                            onClick={() =>
+                              navigate('overhead', { replace: true })
+                            }
+                          >
+                            <I18n>Overhead</I18n>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </section>
-            )}
-          </Fragment>
-        )}
-        {!techBar && <ErrorNotFound />}
+                </section>
+              )}
+            </Fragment>
+          )}
+          {!techBar && <ErrorNotFound />}
+        </div>
       </div>
     </Fragment>
   );

@@ -11,6 +11,7 @@ import { connect } from '../../redux/store';
 import { TIME_FORMAT } from 'common/src/constants';
 import { DiscussionDetails } from './DiscussionDetails';
 import { LoadingMessage } from '../StateMessages';
+import { parse } from 'query-string';
 import { types as detailsTypes } from '../../redux/modules/discussionsDetails';
 import {
   DiscussionFullPageError,
@@ -141,6 +142,7 @@ export const mapStateToProps = (state, props) => ({
   isFullScreen:
     state.router.location.pathname &&
     state.router.location.pathname.startsWith('/discussion'),
+  invitationToken: parse(state.router.location.search).invitationToken,
 });
 export const mapDispatchToProps = (dispatch, props) => ({
   openEdit: () =>

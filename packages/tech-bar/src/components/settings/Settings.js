@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from '@reach/router';
-import { Router } from '../../App';
+import { Link, Router } from '@reach/router';
 import { connect } from '../../redux/store';
 import { compose } from 'recompose';
 import {
@@ -54,7 +53,7 @@ export const Settings = compose(
 )(SettingsComponent);
 
 const SettingsCard = ({ path, icon, name, description }) => (
-  <Link to={path} className="card card--service">
+  <Link to={path} className="card card--settings">
     <h1>
       <Icon image={icon || 'fa-sticky-note-o'} background="blueSlate" />
       <I18n>{name}</I18n>
@@ -66,8 +65,8 @@ const SettingsCard = ({ path, icon, name, description }) => (
 );
 
 const SettingsNavigationComponent = ({ hasManagerAccess }) => (
-  <div className="page-container page-container--no-padding page-container--tech-bar-settings">
-    <div className="page-panel">
+  <div className="page-container">
+    <div className="page-panel page-panel--white">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
@@ -82,7 +81,7 @@ const SettingsNavigationComponent = ({ hasManagerAccess }) => (
         </div>
       </div>
 
-      <div className="cards__wrapper cards__wrapper--tech-bar">
+      <div className="cards__wrapper cards__wrapper--seconds">
         <SettingsCard
           name="Metrics"
           path={`metrics`}

@@ -158,9 +158,9 @@ export const FormContainer = ({
   !loadingServices &&
   !notificationsLoading &&
   form && (
-    <div className="page-container page-container--panels page-container--datastore">
+    <div className="page-container page-container--panels">
       <PageTitle parts={['Settings', form.name]} />
-      <div className="page-panel page-panel--two-thirds page-panel--scrollable">
+      <div className="page-panel page-panel--two-thirds page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -821,7 +821,7 @@ export const setInitialInputs = ({ setInputs, form }) => () => {
     description: form.description || '',
     type: form.type,
     status: form.status,
-    icon: form.attributesMap.Icon[0] ? form.attributesMap.Icon[0] : '',
+    icon: (form.attributesMap.Icon && form.attributesMap.Icon[0]) || '',
     categories: form.categorizations ? form.categorizations : [],
     'Owning Team': form.attributesMap['Owning Team']
       ? form.attributesMap['Owning Team']

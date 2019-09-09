@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router } from '../../App';
+import { Router } from '@reach/router';
 import { TeamsListContainer } from './TeamsListContainer';
 import { TeamForm } from './TeamForm';
 

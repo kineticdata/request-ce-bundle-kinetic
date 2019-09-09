@@ -128,9 +128,9 @@ export const FormContainer = ({
   !loadingQueue &&
   !notificationsLoading &&
   form && (
-    <div className="page-container page-container--panels page-container--datastore">
+    <div className="page-container page-container--panels">
       <PageTitle parts={['Settings', form.name]} />
-      <div className="page-panel page-panel--two-thirds page-panel--scrollable">
+      <div className="page-panel page-panel--two-thirds page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -460,7 +460,7 @@ export const FormContainer = ({
           </span>
         </div>
       </div>
-      <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
+      <div className="page-panel page-panel--one-thirds page-panel--sidebar">
         <h3>
           <I18n>Form Settings</I18n>
         </h3>

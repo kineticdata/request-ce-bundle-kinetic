@@ -1,0 +1,180 @@
+// Variables - App
+
+// Colors
+// --------------------------------------
+
+$blue: rgb(16, 148, 196); // #1094C4
+$blue-gray: rgb(168, 183, 199); // #A8B7C7
+$blue-lake: rgb(9, 84, 130); // #095482
+$blue-slate: rgb(12, 56, 79); // #0C384F
+$blue-sky: rgb(11, 168, 224); // #0BA8E0
+$green-grass: rgb(0, 212, 106); // #00D46A
+$green: rgb(102, 225, 65); // #66E041
+$green-teal: rgb(2, 212, 177); // #02D4B1
+$orange: rgb(255, 153, 28); // #FF991C
+$orange-kinetic: rgb(214, 105, 42); // #D6692A
+$orange-kinops: rgb(255, 119, 0); // #FF7700
+$purple: rgb(166, 48, 150); // #A63096
+$red-purple: rgb(191, 52, 121); // #BF3479
+$red: rgb(250, 58, 55); // #FA3A37
+$red-rose: rgb(255, 74, 94); // #FF4A5E
+$yellow: rgb(254, 233, 78); // #FEE94D
+$sunflower: rgb(255, 207, 74); // #FFCF4A
+
+$black: rgb(0, 0, 0); // #000000
+$white: rgb(255, 255, 255); // #ffffff
+$gray: rgb(126, 128, 131); // #7e8083
+$primary: $blue-lake; // #095482
+$secondary: $orange-kinops; // #ff7700
+$tertiary: $blue-gray; // #a8b7c7
+$success: $green-grass; // #00d46a
+$danger: $red; // #fa3a37
+$warning: $sunflower; // #ffcf4a
+$info: $blue; // #1094c4
+
+$gray90: darken($gray, 40%); // #1a1a1b
+$gray80: darken($gray, 30%); // #333435 (previously $black)
+$gray70: darken($gray, 20%); // #4c4d4f
+$gray60: darken($gray, 10%); // #656769
+$gray50: $gray; // #7e8083 (previously $black-50 and $gray)
+$gray40: lighten($gray, 10%); // #989a9c
+$gray30: lighten($gray, 20%); // #b2b3b5
+$gray20: lighten($gray, 30%); // #cccdce
+$gray16: lighten($gray, 33.2%); // #d4d5d6 (previously $black-16 and $gray2)
+$gray10: lighten($gray, 40%); // #e6e6e7 (previously $gray3)
+$gray8: lighten($gray, 42.2%); // #ececec (previously $gray4)
+$gray6: lighten($gray, 44.1%); // #f1f1f1 (previously $black-5)
+$gray3: lighten($gray, 46.5%); // #f7f7f7 (previously $black-3)
+$gray2: lighten($gray, 47.75%); // #fafafa
+
+$primary70: darken($primary, 20%); // #021623
+$primary60: darken($primary, 10%); // #063552
+$primary50: $primary; // #095482
+$primary40: lighten($primary, 10%); // #0c73b2
+$primary30: lighten($primary, 20%); // #1092e1
+$secondary70: darken($secondary, 20%); // #994700
+$secondary60: darken($secondary, 10%); // #cc5f00
+$secondary50: $secondary; // #ff7700
+$secondary40: lighten($secondary, 10%); // #ff9233
+$secondary30: lighten($secondary, 20%); // #ffad66
+$tertiary70: darken($tertiary, 20%); // #6a849f (previously $blue1)
+$tertiary60: darken($tertiary, 10%); // #899db3
+$tertiary50: $tertiary; // #a8b7c7 (previously $blue2)
+$tertiary40: lighten($tertiary, 10%); // #c7d1db (previously $blue3)
+$tertiary30: lighten($tertiary, 20%); // #e6eaef
+
+$success70: darken($success, 20%); // #006e37
+$success60: darken($success, 10%); // #00a151
+$success50: $success; // #00d46a
+$success40: lighten($success, 10%); // #08ff84
+$success30: lighten($success, 20%); // #3bff9d
+$danger70: darken($danger, 20%); // #c60805
+$danger60: darken($danger, 10%); // #f80a06
+$danger50: $danger; // #fa3a37
+$danger40: lighten($danger, 10%); // #fb6b69
+$danger30: lighten($danger, 20%); // #fc9c9b
+$warning70: darken($warning, 20%); // #e3a700
+$warning60: darken($warning, 10%); // #ffc117
+$warning50: $warning; // #ffcf4a
+$warning40: lighten($warning, 10%); // #ffdd7d
+$warning30: lighten($warning, 20%); // #ffeab0
+$info70: darken($info, 20%); // #084d66
+$info60: darken($info, 10%); // #0c7095
+$info50: $info; // #1094c4
+$info40: lighten($info, 10%); // #1bb4ec
+$info30: lighten($info, 20%); // #4ac4f0
+
+// Text, link, border, background colors
+$text-color: $gray80; // Global text color on `<body>`.
+$link-color: $blue-lake; // Global textual link color.
+$border-color: $gray16; // Global border color.
+$bg1: $gray3;
+$bg2: $gray6;
+$bg3: $gray8;
+$present: $green-grass;
+
+// Typography
+// --------------------------------------
+
+$font-family-sans-serif: 'Open Sans', sans-serif;
+$font-family-serif: Georgia, 'Times New Roman', Times, serif;
+$font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace; // Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
+$font-family-base: $font-family-sans-serif;
+$font-size-base: 1rem; // Default font size. Equal to 16px.
+$line-height-base: 1.5rem; // Default line height. Equal to 24px.
+
+// Components
+// --------------------------------------
+
+$enable-rounded: true;
+$border-radius-base: 0.25rem; // Default border radius. Equal to 4px
+
+$colors: (
+  black: $black,
+  white: $white,
+  gray: $gray,
+  primary: $primary,
+  secondary: $secondary,
+  tertiary: $tertiary,
+  success: $success,
+  danger: $danger,
+  warning: $warning,
+  info: $info,
+  gray90: $gray90,
+  gray80: $gray80,
+  gray70: $gray70,
+  gray60: $gray60,
+  gray50: $gray50,
+  gray40: $gray40,
+  gray30: $gray30,
+  gray20: $gray20,
+  gray16: $gray16,
+  gray10: $gray10,
+  gray8: $gray8,
+  gray6: $gray6,
+  gray3: $gray3,
+  primary70: $primary70,
+  primary60: $primary60,
+  primary50: $primary50,
+  primary40: $primary40,
+  primary30: $primary30,
+  secondary70: $secondary70,
+  secondary60: $secondary60,
+  secondary50: $secondary50,
+  secondary40: $secondary40,
+  secondary30: $secondary30,
+  tertiary70: $tertiary70,
+  tertiary60: $tertiary60,
+  tertiary50: $tertiary50,
+  tertiary40: $tertiary40,
+  tertiary30: $tertiary30,
+  success70: $success70,
+  success60: $success60,
+  success50: $success50,
+  success40: $success40,
+  success30: $success30,
+  danger70: $danger70,
+  danger60: $danger60,
+  danger50: $danger50,
+  danger40: $danger40,
+  danger30: $danger30,
+  warning70: $warning70,
+  warning60: $warning60,
+  warning50: $warning50,
+  warning40: $warning40,
+  warning30: $warning30,
+  info70: $info70,
+  info60: $info60,
+  info50: $info50,
+  info40: $info40,
+  info30: $info30,
+);
+
+@each $name, $color in $colors {
+  .color-#{$name} {
+    color: $color;
+  }
+  .bg-#{$name} {
+    background-color: $color;
+  }
+}

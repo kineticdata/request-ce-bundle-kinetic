@@ -19,9 +19,9 @@ const SchedulersListComponent = ({
   isSchedulerAdmin,
 }) => {
   return (
-    <div className="page-container page-container--schedulers">
+    <div className="page-container">
       <PageTitle parts={[' Schedulers', 'Settings']} />
-      <div className="page-panel page-panel--scrollable page-panel--schedulers-content">
+      <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>

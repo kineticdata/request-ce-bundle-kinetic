@@ -13,9 +13,9 @@ import { context } from '../../redux/store';
 import { I18n } from '@kineticdata/react';
 
 export const DateFormatComponent = props => (
-  <div className="page-container page-container--notifications">
+  <div className="page-container">
     <PageTitle parts={['Date Formats', 'Notifications', 'Settings']} />
-    <div className="page-panel page-panel--scrollable">
+    <div className="page-panel page-panel--white">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>

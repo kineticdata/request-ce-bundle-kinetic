@@ -12,9 +12,7 @@ import { context } from '../../redux/store';
 import { I18n } from '@kineticdata/react';
 
 export const StagedListComponent = ({
-  match: {
-    params: { context },
-  },
+  context,
   push,
   loading,
   errors,
@@ -26,8 +24,8 @@ export const StagedListComponent = ({
   renderStatusCell,
 }) => {
   return (
-    <div className="page-container page-container--translations">
-      <div className="page-panel page-panel--scrollable page-panel--translations">
+    <div className="page-container">
+      <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>

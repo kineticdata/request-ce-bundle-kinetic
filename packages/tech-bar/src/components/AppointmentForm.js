@@ -28,62 +28,64 @@ export const AppointmentFormComponent = ({
   <Fragment>
     <PageTitle parts={['Appointment']} />
     <div className="page-container page-container--tech-bar container">
-      {techBar ? (
-        <Fragment>
-          <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
-                <Link to={relativeHomePath}>
-                  <I18n>tech bar</I18n>
-                </Link>{' '}
-                /{' '}
-                {past && (
-                  <Fragment>
-                    <Link to={`${relativeHomePath}/past`}>
-                      <I18n>past appointments</I18n>
-                    </Link>{' '}
-                    /{' '}
-                  </Fragment>
+      <div className="page-panel">
+        {techBar ? (
+          <Fragment>
+            <div className="page-title">
+              <div className="page-title__wrapper">
+                <h3>
+                  <Link to={relativeHomePath}>
+                    <I18n>tech bar</I18n>
+                  </Link>{' '}
+                  /{' '}
+                  {past && (
+                    <Fragment>
+                      <Link to={`${relativeHomePath}past`}>
+                        <I18n>past appointments</I18n>
+                      </Link>{' '}
+                      /{' '}
+                    </Fragment>
+                  )}
+                </h3>
+                <h1>
+                  <I18n>{techBar.values['Name']}</I18n>{' '}
+                  <small>
+                    <I18n>Appointment</I18n>
+                  </small>
+                </h1>
+              </div>
+            </div>
+            <I18n context={`kapps.${kappSlug}.forms.${APPOINTMENT_FORM_SLUG}`}>
+              <div className="embedded-core-form--wrapper">
+                {id ? (
+                  <CoreForm
+                    submission={id}
+                    review={true}
+                    globals={globals}
+                    loaded={handleLoaded}
+                    completed={handleCompleted}
+                  />
+                ) : (
+                  <CoreForm
+                    kapp={kappSlug}
+                    form={APPOINTMENT_FORM_SLUG}
+                    globals={globals}
+                    loaded={handleLoaded}
+                    created={handleCreated}
+                    completed={handleCompleted}
+                    values={{ 'Scheduler Id': techBar.values['Id'] }}
+                    notFoundComponent={ErrorNotFound}
+                    unauthorizedComponent={ErrorUnauthorized}
+                    unexpectedErrorComponent={ErrorUnexpected}
+                  />
                 )}
-              </h3>
-              <h1>
-                <I18n>{techBar.values['Name']}</I18n>{' '}
-                <small>
-                  <I18n>Appointment</I18n>
-                </small>
-              </h1>
-            </div>
-          </div>
-          <I18n context={`kapps.${kappSlug}.forms.${APPOINTMENT_FORM_SLUG}`}>
-            <div className="embedded-core-form--wrapper">
-              {id ? (
-                <CoreForm
-                  submission={id}
-                  review={true}
-                  globals={globals}
-                  loaded={handleLoaded}
-                  completed={handleCompleted}
-                />
-              ) : (
-                <CoreForm
-                  kapp={kappSlug}
-                  form={APPOINTMENT_FORM_SLUG}
-                  globals={globals}
-                  loaded={handleLoaded}
-                  created={handleCreated}
-                  completed={handleCompleted}
-                  values={{ 'Scheduler Id': techBar.values['Id'] }}
-                  notFoundComponent={ErrorNotFound}
-                  unauthorizedComponent={ErrorUnauthorized}
-                  unexpectedErrorComponent={ErrorUnexpected}
-                />
-              )}
-            </div>
-          </I18n>
-        </Fragment>
-      ) : (
-        <ErrorNotFound />
-      )}
+              </div>
+            </I18n>
+          </Fragment>
+        ) : (
+          <ErrorNotFound />
+        )}
+      </div>
     </div>
   </Fragment>
 );
@@ -105,7 +107,7 @@ export const handleCreated = props => response => {
 };
 
 export const mapStateToProps = (state, props) => {
-  const past = !!props.path.match(/^\/kapps/);
+  const past = !!props.path.match(/^\/past/);
   const relativeHomePath = `../${props.techBarId ? '../' : ''}${
     props.id ? '../' : ''
   }${past ? '../' : ''}`;

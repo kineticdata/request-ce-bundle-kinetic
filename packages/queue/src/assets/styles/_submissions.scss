@@ -1,10 +1,10 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Submissions ~ Queue
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-.package-layout--queue .submissions {
+.submissions {
   // This represents the overall submission "card" in the queue list view.
   .submission {
-    border-bottom: 1px solid $gray4;
+    border-bottom: 1px solid $gray8;
     color: $blue-lake;
     display: flex;
     flex-direction: row;
@@ -24,16 +24,16 @@
       }
     }
     &__title {
-      color: $black;
+      color: $gray80;
       font-weight: 600;
       margin: 0.25rem 0;
       line-height: 1.5rem;
     }
     &__meta {
-      @include ms-respond(font-size, -1);
+      font-size: 0.875rem;
       line-height: 1.3125rem;
       margin-bottom: 0;
-      color: rgba($black, 0.5);
+      color: rgba($gray80, 0.5);
       display: flex;
       align-items: center;
     }
@@ -56,57 +56,19 @@
       flex-wrap: wrap;
       .list-group-item {
         padding: 0;
-        color: rgba($black, 0.5);
+        color: rgba($gray80, 0.5);
         background-color: transparent;
         font-weight: 400;
-        @include ms-respond(font-size, -1);
+        font-size: 0.875rem;
         &:not(:last-child):after {
           content: '•';
-          color: rgba($black, 0.25);
+          color: rgba($gray80, 0.25);
           margin: 0 0.3125rem;
         }
         .time-ago__text {
-          color: $black;
+          color: $gray80;
         }
       }
     }
-
-    // // This is for the action dropdown.
-    // .actions {
-    //   .dropdown > .dropdown-menu {
-    //     left: -5.5rem;
-    //     top: 1rem;
-    //     padding: 0;
-    //     min-width: 7rem;
-    //     border-radius: 0;
-    //     border: none;
-    //     margin-top: 15px;
-    //     position: absolute;
-    //     box-sizing: border-box;
-    //     filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 3px 4px);
-    //     // Add the up arrow.
-
-    //     &:after {
-    //       content: "";
-    //       border: 10px solid;
-    //       border-color: transparent transparent white;
-    //       content: "";
-    //       right: 10%;
-    //       margin-left: -10px;
-    //       position: absolute;
-    //       top: -20px;
-    //       z-index: 9998;
-    //     }
-
-    //     a.dropdown-item,
-    //     button.dropdown-item {
-    //       height: 24px;
-    //       color: #54698d;
-    //       font-size: 0.75rem;
-    //       line-height: 1.5rem;
-    //       padding: 3px 0.75rem;
-    //     }
-    //   }
-    // }
   }
 }

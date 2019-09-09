@@ -64,7 +64,7 @@ const NotificationComponent = ({
   handleSubmit,
   handleVariableSelection,
 }) => (
-  <div className="page-container page-container--panels page-container--notifications">
+  <div className="page-container page-container--panels">
     <PageTitle
       parts={[
         submission ? submission.label : `New ${title}`,
@@ -72,7 +72,7 @@ const NotificationComponent = ({
         'Settings',
       ]}
     />
-    <div className="page-panel page-panel--two-thirds page-panel--scrollable">
+    <div className="page-panel page-panel--two-thirds page-panel--white">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
@@ -211,7 +211,7 @@ const NotificationComponent = ({
           </form>
         )}
     </div>
-    <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--settings-sidebar">
+    <div className="page-panel page-panel--one-thirds page-panel--sidebar">
       <h3>
         <I18n>Dynamic Replacements</I18n>
       </h3>

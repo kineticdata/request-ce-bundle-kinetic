@@ -324,7 +324,11 @@ export const NotificationMenuComponent = ({
               {forms.map(form => (
                 <I18n
                   key={form.slug}
-                  context={`kapps.${selectedKapp.slug}.forms.${form.slug}`}
+                  context={
+                    selectedKapp
+                      ? `kapps.${selectedKapp.slug}.forms.${form.slug}`
+                      : `datastore.forms.${form.slug}`
+                  }
                   render={translate => (
                     <option value={form.slug}>{translate(form.name)}</option>
                   )}

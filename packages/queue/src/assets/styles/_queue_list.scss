@@ -6,7 +6,7 @@
   &__filter {
     padding: 0.75rem 1.5rem 0;
     background-color: $white;
-    border-bottom: 2px solid $gray4;
+    border-bottom: 2px solid $gray8;
     display: flex;
     flex: 1 0 auto;
     justify-content: flex-start;
@@ -23,7 +23,7 @@
     display: flex;
     align-items: center;
     flex: 0 0 auto;
-    background-color: $black-3;
+    background-color: $gray3;
     justify-content: space-between;
     padding: 0;
     .btn-subtle {
@@ -32,7 +32,7 @@
       padding: 0rem 1rem;
       &.inactive {
         background-color: transparent;
-        color: rgba($black, 0.75);
+        color: rgba($gray80, 0.75);
       }
     }
     &:after,
@@ -45,11 +45,11 @@
     }
     &:after {
       right: 0;
-      @include horizontal-gradient(rgba($black-3, 0), $black-3);
+      @include horizontal-gradient(rgba($gray3, 0), $gray3);
     }
     &:before {
       left: 0;
-      @include horizontal-gradient($black-3, rgba($black-3, 0));
+      @include horizontal-gradient($gray3, rgba($gray3, 0));
     }
   }
   &__sorting {
@@ -58,14 +58,14 @@
     flex: 0 0 auto;
     justify-content: space-between;
     padding: 0.5rem 1.5rem;
-    background-color: rgba($blue-lake, 0.015);
+    background-color: $gray3;
     .btn-subtle {
       background-color: $white;
       border: none;
       padding: 0rem 1rem;
       &.inactive {
         background-color: transparent;
-        color: rgba($black, 0.75);
+        color: rgba($gray80, 0.75);
       }
     }
     .btn-subtle--close {
@@ -78,7 +78,7 @@
     flex: 0 0 auto;
     justify-content: center;
     padding: 0.5rem 1.5rem;
-    background-color: rgba($blue-lake, 0.015);
+    background-color: $gray3;
     line-height: 1.75rem;
     button {
       font-size: 1rem;
@@ -138,7 +138,7 @@
   label {
     background-color: #f1f1f1;
     margin-bottom: 0.75rem;
-    color: $black;
+    color: $gray80;
     border: none;
     overflow: hidden;
   }
@@ -191,11 +191,11 @@
     justify-content: center;
     flex-wrap: nowrap;
     // margin-top: 1rem;
-    border-top: 1rem solid rgba($black-16, 0.5);
+    border-top: 1rem solid rgba($gray16, 0.5);
     span {
       font-size: 0.75rem;
       font-weight: 600;
-      color: $black;
+      color: $gray80;
       text-align: center;
       line-height: 24px;
       white-space: nowrap;
@@ -210,9 +210,6 @@
   }
 }
 .queue-list-content {
-  flex: 1;
-  overflow-y: auto;
-  background-color: $white;
 }
 
 .filter-menu-popover {
@@ -244,7 +241,7 @@
   }
   &__content + &__content,
   &__validations {
-    border-top: 1px solid $black-16;
+    border-top: 1px solid $gray16;
     margin: 0 -0.75rem;
     padding: 0.5rem 0.75rem 0;
   }
@@ -252,7 +249,7 @@
     margin-bottom: -1rem;
   }
   &__footer {
-    border-top: 1px solid $black-16;
+    border-top: 1px solid $gray16;
     margin: 0 -0.75rem;
     padding: 0.5rem 0.75rem 0;
     justify-content: space-between;

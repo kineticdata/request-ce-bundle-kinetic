@@ -40,14 +40,14 @@ const TeamFormComponent = ({
   handleFieldChange,
   handleSubmit,
 }) => (
-  <div className="page-container page-container--panels page-container--space-team-form">
+  <div className="page-container page-container--panels">
     <PageTitle
       parts={[editing ? team.name && `Edit: ${team.name}` : 'New', 'Teams']}
     />
 
     {!loading && (
       <Fragment>
-        <div className="page-panel page-panel--two-thirds page-panel--scrollable">
+        <div className="page-panel page-panel--two-thirds page-panel--white">
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
@@ -257,7 +257,7 @@ const TeamFormComponent = ({
           )}
         </div>
 
-        <div className="page-panel page-panel--one-thirds page-panel--sidebar page-panel--card page-panel--team-edit-sidebar">
+        <div className="page-panel page-panel--one-thirds page-panel--sidebar">
           <TeamCard
             team={Object.assign(translateFieldValuesToTeam(fieldValues, team), {
               memberships: team.memberships,

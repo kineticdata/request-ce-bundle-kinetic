@@ -1,15 +1,13 @@
 import React from 'react';
-import { Link } from '@reach/router';
+import { Router } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, lifecycle } from 'recompose';
 
-import { Router } from '../../App';
 import { TranslationsList } from './TranslationsList';
 import { EntriesList } from './EntriesList';
 import { StagedList } from './StagedList';
 import { actions } from '../../redux/modules/settingsTranslations';
 import { context } from '../../redux/store';
-import { I18n } from '@kineticdata/react';
 
 export const TranslationsRouter = ({
   match,
@@ -25,7 +23,8 @@ export const TranslationsRouter = ({
       <EntriesList path="locale/:locale" />
       <EntriesList path="context/:context/locale/:locale" />
       <EntriesList path="context/:context/key/:keyHash" />
-      <StagedList path="staged/:context?" />
+      <StagedList path="staged/:context" />
+      <StagedList path="staged" />
       <TranslationsList path=":mode" />
       <TranslationsList default />
     </Router>

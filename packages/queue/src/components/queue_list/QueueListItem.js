@@ -44,11 +44,11 @@ const DueOrCloseDate = ({ queueItem }) => {
   }
 };
 
-export const QueueListItemSmall = ({ queueItem, filter }) => {
+export const QueueListItemSmall = ({ queueItem, filter, path }) => {
   const { createdAt, createdBy, updatedAt, updatedBy, id, values } = queueItem;
   return (
     <li className="submission list-group-item">
-      <Link to={`item/${id}`} className="submission-summary">
+      <Link to={path || `item/${id}`} className="submission-summary">
         <div className="submission__meta">
           <StatusContent queueItem={queueItem} />
           <div className="submission__handler">

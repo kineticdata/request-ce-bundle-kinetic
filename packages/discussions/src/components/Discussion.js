@@ -13,7 +13,7 @@ export const DiscussionComponent = ({
   <Fragment>
     <PageTitle parts={['Discussions']} />
     <div className="page-container">
-      <div className="page-panel page-panel--discussions">
+      <div className="page-panel page-panel--flex">
         <DiscussionDisplay
           id={id}
           me={profile}

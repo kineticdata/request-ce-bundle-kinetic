@@ -1,7 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import matchPath from 'rudy-match-path';
-import { LocationProvider, Router as ReachRouter } from '@reach/router';
+import { LocationProvider, Router } from '@reach/router';
 import {
   compose,
   lifecycle,
@@ -36,17 +36,9 @@ import { RequestShowContainer } from './components/request/RequestShowContainer'
 import { Settings } from './components/settings/Settings';
 import { I18n } from '@kineticdata/react';
 
-import './assets/styles/master.scss';
-
-export const Router = ({ children, ...props }) => (
-  <ReachRouter {...props} primary={false} component={Fragment}>
-    {children}
-  </ReachRouter>
-);
-
-const CustomRedirect = props => (
+const SubmissionRedirect = props => (
   <Redirect
-    to={`${props.appLocation}/request/:id/${
+    to={`${props.appLocation}/requests/request/${props.id}/${
       props.location.search.includes('review') ? 'review' : 'activity'
     }`}
     noThrow
@@ -80,15 +72,11 @@ export const AppComponent = props => {
           <main className="package-layout package-layout--services">
             <Router>
               <Settings path="settings/*" />
-              <Redirect
-                from="submissions/:id"
-                to={`requests/request/:id/${
-                  props.location.search.includes('review')
-                    ? 'review'
-                    : 'activity'
-                }`}
+              <SubmissionRedirect
+                path="submissions/:id"
+                appLocation={props.appLocation}
               />
-              <CustomRedirect
+              <SubmissionRedirect
                 path="forms/:formSlug/submissions/:id"
                 appLocation={props.appLocation}
               />
@@ -207,7 +195,7 @@ export class AppProvider extends Component {
       this.state.ready && (
         <Provider store={store} context={context}>
           <CommonProvider>
-            <LocationProvider history={connectedHistory}>
+            <LocationProvider hashRouting history={connectedHistory}>
               <ToastsContainer duration={5000} />
               <ModalFormContainer />
               <Router>

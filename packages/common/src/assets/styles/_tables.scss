@@ -29,7 +29,7 @@
   display: table-header-group;
   font-weight: 700;
   span {
-    border-bottom: 1px solid $gray;
+    border-bottom: 1px solid $gray50;
   }
 }
 
@@ -47,14 +47,14 @@ table.table--settings {
           font-weight: 600;
         }
         > small {
-          color: $gray;
+          color: $gray50;
         }
         > .list-dropdown {
           & > button {
             padding: 0;
-            color: $black-50;
+            color: $gray50;
             &:hover {
-              color: darken($black-50, 5%);
+              color: darken($gray50, 5%);
             }
           }
         }
@@ -76,7 +76,7 @@ table.table--settings {
     tbody {
       tr {
         &.dragging {
-          background-color: $blue3;
+          background-color: $tertiary40;
           td {
             border: none;
           }
@@ -130,8 +130,8 @@ thead.sortable {
 }
 
 tfoot {
-  border-top: 1px solid $black-50;
-  background: $black-3;
+  border-top: 1px solid $gray50;
+  background: $gray3;
   padding: 1rem;
   position: relative;
 }

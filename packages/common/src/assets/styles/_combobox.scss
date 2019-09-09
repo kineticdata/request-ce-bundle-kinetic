@@ -51,7 +51,7 @@
     border-radius: $border-radius-base;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
-    color: $black;
+    color: $gray80;
     font-size: 0.875rem;
     line-height: 1.1875rem;
 
@@ -59,11 +59,11 @@
     cursor: pointer;
 
     &.item-highlighted {
-      background-color: $black-3;
+      background-color: $gray3;
     }
 
     &:hover {
-      background-color: $black-3;
+      background-color: $gray3;
     }
   }
 }

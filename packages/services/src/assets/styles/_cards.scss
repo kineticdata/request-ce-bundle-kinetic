@@ -1,10 +1,11 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Card Overrides ~ services
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 .card--category,
 .card--request,
 .card--service {
-  border: 1px solid $black-16;
+  border: 1px solid $gray16;
   margin-bottom: 0.75rem;
   padding: 0.6875rem 1rem;
   transition: background-color 0.3s;
@@ -16,20 +17,18 @@
   }
 
   h1 {
-    color: $black;
+    color: $gray80;
     display: inline-flex;
-    font-size: 1.4375rem;
-    @include ms-respond(font-size, 3);
+    font-size: 1.375rem;
     font-weight: 600;
     line-height: 2.25rem;
     margin: 0;
   }
 
   p {
-    color: $black-50;
+    color: $gray50;
     font-size: 1rem;
     line-height: 1.5rem;
-    @include ms-respond(font-size, 1);
     margin-bottom: 0;
     @include word-break;
   }
@@ -37,7 +36,7 @@
 .card--category {
   p {
     margin-left: 1.875rem;
-    @include ms-respond(font-size, 0);
+    font-size: 1rem;
   }
 }
 // Request Card
@@ -46,14 +45,12 @@
     align-items: center;
     display: flex;
     font-size: 1.125rem;
-    @include ms-respond(font-size, 1);
     line-height: 1.5rem;
   }
 
   p {
-    color: $black-50;
-    font-size: 0.875rem;
-    @include ms-respond(font-size, 0);
+    color: $gray50;
+    font-size: 0.9375rem;
     line-height: 1rem;
     padding: 0.625rem 0;
   }
@@ -63,16 +60,15 @@
   }
 
   .fa.edit {
-    color: $black-50;
+    color: $gray50;
     line-height: 1.5rem;
   }
 
   .meta dl {
-    color: $black;
-    font-size: 0.5625rem;
-    @include ms-respond(font-size, -3);
+    color: $gray80;
+    font-size: 0.75rem;
     margin-bottom: 0;
-    line-height: 0.75rem;
+    line-height: 0.875rem;
     dd {
       margin-bottom: 0;
     }
@@ -105,12 +101,12 @@
   flex: 0 0 auto;
 
   &--gray {
-    background-color: $black-50;
+    background-color: $gray50;
   }
 
   &--yellow {
     background-color: $sunflower;
-    color: $black;
+    color: $gray80;
   }
 
   &--green {

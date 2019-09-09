@@ -30,7 +30,7 @@
     padding: 1rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
-    background-color: $black-3;
+    background-color: $gray3;
     @include border-radius();
     -ms-overflow-style: -ms-autohiding-scrollbar;
 
@@ -56,7 +56,7 @@
   max-width: 25rem;
   margin-right: auto;
   margin-left: auto;
-  color: $black;
+  color: $gray80;
   &--fluid {
     max-width: none;
   }

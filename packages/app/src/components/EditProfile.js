@@ -35,7 +35,7 @@ export const EditProfileComponent = ({
   locales,
   timezones,
 }) => (
-  <div className="page-container page-container--panels">
+  <div className="page-container">
     <PageTitle parts={['Edit Profile']} />
     {!error && !profile && <LoadingMessage />}
     {error && (
@@ -43,7 +43,7 @@ export const EditProfileComponent = ({
     )}
     {profile && (
       <Fragment>
-        <div className="page-panel">
+        <div className="page-panel page-panel--white">
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
@@ -331,7 +331,7 @@ export const EditProfileComponent = ({
 );
 
 const UserTeams = ({ teams }) => (
-  <div className="cards__wrapper cards__wrapper--team">
+  <div className="cards__wrapper cards__wrapper--thirds">
     {Object.keys(teams).length > 0 ? (
       teams.map(item => (
         <TeamCard key={item.team.name} team={item.team} components={{ Link }} />

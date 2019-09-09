@@ -13,7 +13,7 @@
 }
 
 .discussion {
-  background-color: $black-3;
+  background-color: $gray3;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -29,7 +29,7 @@
 
   &__header {
     background-color: $white;
-    border-bottom: 1px solid $black-16;
+    border-bottom: 1px solid $gray16;
     font-size: 0.9375rem;
     font-weight: 600;
     letter-spacing: 1px;
@@ -45,13 +45,13 @@
   &__subheader {
     display: flex;
     justify-content: flex-end;
-    border-bottom: 1px solid $black-16;
+    border-bottom: 1px solid $gray16;
 
     .btn {
       padding: 0.5625rem 0.75rem;
       border-radius: 0;
       border: none;
-      flex: 0;
+      flex: 0 0 auto;
       &:first-child {
         padding-left: 1rem;
       }
@@ -59,7 +59,7 @@
         padding-right: 1rem;
       }
       &:not(:hover) {
-        color: $black-50;
+        color: $gray50;
       }
     }
 
@@ -134,7 +134,7 @@
         cursor: pointer;
         &--gravatar {
           line-height: initial;
-          box-shadow: inset 0px 0px 10px rgba($black, 0.9);
+          box-shadow: inset 0px 0px 10px rgba($gray80, 0.9);
         }
         .sb-avatar__text,
         img {
@@ -162,7 +162,7 @@
       .discussion__summary {
         display: flex;
         flex-direction: column;
-        border: 1px solid $black-5;
+        border: 1px solid $gray6;
         border-radius: $border-radius-base;
         background-color: $white;
         padding: 0.5em 1em 0.5em 1em;
@@ -208,7 +208,7 @@
 
               &--gravatar {
                 line-height: initial;
-                box-shadow: inset 0px 0px 10px rgba($black, 0.9);
+                box-shadow: inset 0px 0px 10px rgba($gray80, 0.9);
               }
               img {
                 z-index: -1;

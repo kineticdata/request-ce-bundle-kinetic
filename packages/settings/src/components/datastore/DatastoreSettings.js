@@ -52,9 +52,9 @@ const SettingsComponent = ({
 }) =>
   !loading && (
     <I18n context={`datastore.forms.${origForm.slug}`}>
-      <div className="page-container page-container--panels page-container--datastore">
+      <div className="page-container page-container--panels">
         <PageTitle parts={['Settings', origForm.name, 'Datastore']} />
-        <div className="page-panel page-panel--two-thirds page-panel--scrollable page-panel--datastore-content">
+        <div className="page-panel page-panel--two-thirds page-panel--white">
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>

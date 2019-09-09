@@ -49,9 +49,9 @@ const FormListComponent = ({
   openDropdown,
 }) => {
   return (
-    <div className="page-container page-container--panels page-container--datastore">
+    <div className="page-container page-container--panels">
       <PageTitle parts={['Datastore Forms']} />
-      <div className="page-panel page-panel--two-thirds page-panel--scrollable page-panel--datastore-content">
+      <div className="page-panel page-panel--two-thirds page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -157,7 +157,7 @@ const FormListComponent = ({
           )}
         </div>
       </div>
-      <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
+      <div className="page-panel page-panel--one-thirds page-panel--sidebar">
         <h3>
           <I18n>Datastore Forms</I18n>
         </h3>

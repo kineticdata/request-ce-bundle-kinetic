@@ -37,8 +37,8 @@ export const TechBarMetricsComponent = ({
 }) => (
   <Fragment>
     <PageTitle parts={['Tech Bar Metrics']} />
-    <div className="page-container page-container--tech-bar-metrics">
-      <div className="page-panel page-panel--scrollable">
+    <div className="page-container">
+      <div className="page-panel page-panel--white page-panel--tech-bar-metrics">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>

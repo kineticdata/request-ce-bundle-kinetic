@@ -1,10 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import {
-  Redirect,
-  LocationProvider,
-  Router as ReachRouter,
-} from '@reach/router';
+import { Redirect, LocationProvider, Router } from '@reach/router';
 import { compose, lifecycle, withHandlers } from 'recompose';
 import { connectedHistory, connect, context, store } from './redux/store';
 import { syncAppState } from './redux/modules/app';
@@ -31,16 +27,8 @@ import { NewItemMenuContainer } from './components/new_item_menu/NewItemMenuCont
 import { WorkMenuContainer } from './components/work_menu/WorkMenu';
 import { Settings } from './components/settings/Settings';
 
-import './assets/styles/master.scss';
-
 const CustomRedirect = props => (
   <Redirect to={`${props.appLocation}/item/${props.id}`} noThrow />
-);
-
-export const Router = ({ children, ...props }) => (
-  <ReachRouter {...props} primary={false} component={Fragment}>
-    {children}
-  </ReachRouter>
 );
 
 const AppComponent = props => {
@@ -198,7 +186,7 @@ export class AppProvider extends Component {
       this.state.ready && (
         <Provider store={store} context={context}>
           <CommonProvider>
-            <LocationProvider history={connectedHistory}>
+            <LocationProvider hashRouting history={connectedHistory}>
               <ToastsContainer duration={5000} />
               <ModalFormContainer />
               <Router>

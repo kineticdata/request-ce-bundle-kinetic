@@ -17,7 +17,7 @@ export const SidebarComponent = ({
   kapp,
   hasManagerAccess,
 }) => (
-  <div className="sidebar space-sidebar">
+  <div className="sidebar">
     <Link to={settingsBackPath} className="nav-return">
       <span className="fa fa-fw fa-chevron-left" />
       <I18n>{`Return to ${kapp.name}`}</I18n>

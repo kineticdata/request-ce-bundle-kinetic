@@ -829,14 +829,16 @@ const setResultToState = ({ dispatch }) => (result, set) => {
 
 const setEventResultToState = ({ dispatch }) => (result, set) => {
   const { error } = result;
-  if (error.statusCode === 404) {
-    dispatch(
-      actions.setState({
-        eventCancelled: true,
-      }),
-    );
-  } else if (error) {
-    dispatch(actions.addErrors([error.message]));
+  if (error) {
+    if (error.statusCode === 404) {
+      dispatch(
+        actions.setState({
+          eventCancelled: true,
+        }),
+      );
+    } else {
+      dispatch(actions.addErrors([error.message]));
+    }
   } else {
     set(result);
   }
