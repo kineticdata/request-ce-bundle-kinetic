@@ -26,6 +26,18 @@ const CreationForm = ({ onChange, values, errors }) => (
       )}
     </div>
     <div className="form-group">
+      <label htmlFor="title">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        value={values.description}
+        onChange={onChange}
+      />
+      {errors.description && (
+        <small className="form-text text-danger">{errors.description}</small>
+      )}
+    </div>
+    <div className="form-group">
       <div className="form-check-inline">
         <input
           id="relateOriginatingRequest"
