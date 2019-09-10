@@ -10,6 +10,7 @@ import {
   openModalForm,
 } from 'common';
 import { actions } from '../redux/modules/profile';
+import * as selectors from '../redux/selectors';
 import { PageTitle } from './shared/PageTitle';
 import { I18n } from '@kineticdata/react';
 
@@ -31,7 +32,7 @@ export const EditProfileComponent = ({
   handleFieldChange,
   handleSubmit,
   handleTogglePassword,
-  kapps,
+  visibleKapps,
   locales,
   timezones,
 }) => (
@@ -152,7 +153,10 @@ export const EditProfileComponent = ({
                           value={fieldValues.defaultKappDisplay}
                         >
                           <option value="" />
-                          {kapps.map(k => (
+                          <option value="discussions">
+                            {translate('Discussions')}
+                          </option>
+                          {visibleKapps.map(k => (
                             <option key={k.slug} value={k.slug}>
                               {translate(k.name)}
                             </option>
@@ -463,7 +467,7 @@ const selectAttributes = profile =>
     : {};
 
 const mapStateToProps = state => ({
-  kapps: state.app.kapps,
+  visibleKapps: selectors.selectVisibleKapps(state),
   locales: state.app.locales,
   timezones: state.app.timezones,
   profile: state.profile.data,

@@ -129,7 +129,7 @@ export const SettingsComponent = ({
                   value={attributesMap.getIn(['Default Kapp Display', 'value'])}
                   onChange={handleAttributeChange}
                   valueMapper={value => value.kapp.slug}
-                  placeholder="--Home--"
+                  placeholder="Please Select a Kapp"
                   label={translate('Default Kapp Display')}
                   description={attributesMap.getIn([
                     'Default Kapp Display',
