@@ -2,7 +2,6 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Avatar } from './components/Avatar';
 import { ProfileCard } from './components/ProfileCard';
-import { ToastsContainer } from './components/ToastsContainer';
 import { ModalFormContainer } from './components/ModalFormContainer';
 import { TimeAgo } from './components/TimeAgo';
 import { importLocale } from './components/Moment';
@@ -82,12 +81,16 @@ export { TeamCard } from './components/TeamCard';
 export { LockableCoreForm } from './components/LockableCoreForm';
 export { PromiseButton } from './components/PromiseButton';
 export { Countdown } from './components/Countdown';
+export {
+  ToastsContainer,
+  LocalToast,
+  LocalToastsContainer,
+} from './components/ToastsContainer';
 
 export {
   CommonProvider,
   Avatar,
   ProfileCard,
-  ToastsContainer,
   ModalFormContainer,
   TimeAgo,
   importLocale,

@@ -3,7 +3,7 @@ import { connect } from '../../redux/store';
 import { Popover, PopoverBody, ModalBody, ModalFooter } from 'reactstrap';
 import { types } from '../../redux/modules/discussionsDetails';
 import { ParticipantsListContainer } from './ParticipantsList';
-import { SectionToast } from 'common/src/components/SectionToast';
+import { LocalToast, LocalToastsContainer } from 'common';
 
 export const DiscussionDetailsRootComponent = props => (
   <Fragment>
@@ -40,9 +40,13 @@ export const DiscussionDetailsRootComponent = props => (
         canManage={props.canManage}
         discussion={props.discussion}
       />
-      {props.successMessage && (
-        <SectionToast>{props.successMessage}</SectionToast>
-      )}
+      <LocalToastsContainer>
+        {props.successMessage && (
+          <LocalToast
+            toast={{ severity: 'success', message: props.successMessage }}
+          />
+        )}
+      </LocalToastsContainer>
     </ModalBody>
     <ModalFooter>
       {props.leaveError ? (

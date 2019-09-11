@@ -27,7 +27,7 @@ export const InvitationDialogComponent = props => (
           <div className="discussion-dialog modal-form invitation-dialog">
             {props.error && (
               <div className="text-danger">
-                <h6>Failed to invite the following</h6>
+                <h6 className="my-1">Failed to invite the following</h6>
                 <ul>{props.error.map(e => <li key={e}>{e}</li>)}</ul>
               </div>
             )}

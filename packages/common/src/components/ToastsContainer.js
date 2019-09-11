@@ -173,3 +173,31 @@ export const ToastsContainer = compose(
     </div>
   </Fragment>
 ));
+
+export const LocalToast = compose(
+  connect(({ toasts: { duration } }) => ({ duration })),
+  withState('showing', 'setShowing', ''),
+  withState('timeoutId', 'setTimeoutId', null),
+  withHandlers({
+    dismiss: ({ toast, setShowing }) => () => {
+      setShowing('');
+    },
+  }),
+  lifecycle({
+    componentDidMount() {
+      // Delay by 100ms to make sure component renders before showing is set
+      // to true to make the animation work
+      setTimeout(() => this.props.setShowing('showing'), 100);
+      this.props.setTimeoutId(
+        setTimeout(this.props.dismiss, this.props.duration),
+      );
+    },
+    componentWillUnmount() {
+      clearTimeout(this.props.timeoutId);
+    },
+  }),
+)(ToastComponent);
+
+export const LocalToastsContainer = props => (
+  <div className="toasts">{props.children}</div>
+);
