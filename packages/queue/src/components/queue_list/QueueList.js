@@ -129,6 +129,7 @@ export const QueueList = ({
   isMobile,
   filterValidations,
   setQueueListRef,
+  hasTeams,
 }) => {
   const paginationProps = {
     hasPrevPage,
@@ -160,6 +161,7 @@ export const QueueList = ({
                 toggleSortDirection={toggleSortDirection}
                 groupDirection={groupDirection}
                 toggleGroupDirection={toggleGroupDirection}
+                hasTeams={hasTeams}
               />
             ) : (
               <FilterMenuToolbar filter={filter} refresh={refresh} />

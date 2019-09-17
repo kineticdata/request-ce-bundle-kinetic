@@ -4,10 +4,7 @@ import { getFilterByPath } from '../../redux/modules/queueApp';
 import { actions as queueActions } from '../../redux/modules/queue';
 import { actions as filterMenuActions } from '../../redux/modules/filterMenu';
 import { QueueList } from './QueueList';
-import {
-  validateAssignments,
-  validateDateRange,
-} from '../filter_menu/FilterMenuContainer';
+import { validateDateRange } from '../filter_menu/FilterMenuContainer';
 import { connect } from '../../redux/store';
 import { refreshFilter } from '../../utils';
 
@@ -24,6 +21,7 @@ const mapStateToProps = (state, props) => {
     isGrouped: filter && filter.groupBy !== '',
     statusMessage: filter && state.queue.statuses.get(filter),
     isMobile: state.app.layoutSize === 'small',
+    hasTeams: state.queueApp.myTeams.size > 0,
   };
 };
 
@@ -120,9 +118,7 @@ export const QueueListContainer = compose(
             )
           : items,
         filterValidations: filter
-          ? [validateAssignments, validateDateRange]
-              .map(fn => fn(filter))
-              .filter(v => v)
+          ? [validateDateRange].map(fn => fn(filter)).filter(v => v)
           : [],
       };
     },

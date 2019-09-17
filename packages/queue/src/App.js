@@ -46,7 +46,6 @@ const AppComponent = props => {
             teamFilters={props.teamFilters}
             myFilters={props.myFilters}
             counts={props.counts}
-            hasTeammates={props.hasTeammates}
             hasTeams={props.hasTeams}
             hasForms={props.hasForms}
             handleOpenNewItemMenu={props.handleOpenNewItemMenu}
@@ -108,7 +107,6 @@ const mapStateToProps = (state, props) => ({
       filter.name,
       state.queue.getIn(['lists', filter], List()).size,
     ]),
-  hasTeammates: state.queueApp.myTeammates.size > 0,
   hasTeams: state.queueApp.myTeams.size > 0,
   hasForms:
     selectMyTeamForms(state).filter(form => form.type === 'Task').length > 0,

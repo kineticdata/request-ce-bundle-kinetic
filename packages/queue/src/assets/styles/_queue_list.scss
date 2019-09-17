@@ -239,7 +239,7 @@
       transform: none !important;
     }
   }
-  &__content + &__content,
+  &__content + .filter-menu-popover__content,
   &__validations {
     border-top: 1px solid $gray16;
     margin: 0 -0.75rem;

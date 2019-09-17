@@ -12,7 +12,6 @@ export const Sidebar = ({
   handleOpenNewItemMenu,
   myFilters,
   teamFilters,
-  hasTeammates,
   hasTeams,
   hasForms,
 }) => (
@@ -38,14 +37,6 @@ export const Sidebar = ({
               <I18n>Mine</I18n> {formatCount(counts.get('Mine', 0))}
             </Link>
           </NavItem>
-          {hasTeammates && (
-            <NavItem>
-              <Link to="list/Teammates" getProps={isActiveClass('nav-link')}>
-                <span className="fa fa-fw fa-users" />
-                <I18n>Teammates</I18n> {formatCount(counts.get('Teammates', 0))}
-              </Link>
-            </NavItem>
-          )}
           {hasTeams && (
             <NavItem>
               <Link to="list/Unassigned" getProps={isActiveClass('nav-link')}>

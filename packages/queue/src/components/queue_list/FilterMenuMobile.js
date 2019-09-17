@@ -64,15 +64,17 @@ export const FilterMenuMobile = ({ filter, ...props }) => (
       </div>
       <div className="queue-controls__shortcuts">
         <div className="queue-filter-list queue-filter-list--mobile">
-          <ShortcutButton
-            open={props.openFilterMenu('teams')}
-            inactive={filter.teams.isEmpty()}
-          >
-            <I18n>Teams</I18n>
-          </ShortcutButton>
+          {props.hasTeams && (
+            <ShortcutButton
+              open={props.openFilterMenu('teams')}
+              inactive={filter.teams.isEmpty()}
+            >
+              <I18n>Teams</I18n>
+            </ShortcutButton>
+          )}
           <ShortcutButton
             open={props.openFilterMenu('assignment')}
-            inactive={filter.assignments.toSeq().every(b => !b)}
+            inactive={!filter.assignments}
           >
             <I18n>Assignments</I18n>
           </ShortcutButton>

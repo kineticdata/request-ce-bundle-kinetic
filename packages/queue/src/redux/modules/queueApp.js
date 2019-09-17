@@ -118,7 +118,6 @@ export const selectAssignments = (allTeams, form, queueItem) => {
 /*
  *
  * Mine (only assigned to me)
- * Teammates (members of all of my teams except me)
  * Unassigned (assigned to one of my teams but not to an individual)
  */
 
@@ -127,21 +126,11 @@ export const State = Record({
   filters: List([
     Filter({
       name: 'Mine',
-      assignments: AssignmentCriteria({
-        mine: true,
-      }),
-    }),
-    Filter({
-      name: 'Teammates',
-      assignments: AssignmentCriteria({
-        teammates: true,
-      }),
+      assignments: 'mine',
     }),
     Filter({
       name: 'Unassigned',
-      assignments: AssignmentCriteria({
-        unassigned: true,
-      }),
+      assignments: 'unassigned',
     }),
     Filter({
       name: 'Created By Me',
@@ -191,11 +180,6 @@ export const reducer = (state = State(), { type, payload }) => {
                   type: 'team',
                   icon: Utils.getIcon(team, 'users'),
                   teams: List([team.name]),
-                  assignments: AssignmentCriteria({
-                    mine: true,
-                    teammates: true,
-                    unassigned: true,
-                  }),
                 });
               }
             })
