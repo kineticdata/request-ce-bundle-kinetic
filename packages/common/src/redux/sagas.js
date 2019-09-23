@@ -2,6 +2,7 @@ import { all } from 'redux-saga/effects';
 import { watchSchedulers } from './sagas/schedulers';
 import { watchSearchHistory } from './sagas/searchHistory';
 import { watchDiscussionRest } from './sagas/discussions.rest';
+import { watchActivityFeed } from './sagas/activityFeed';
 import { watchLocationChange } from './sagas/location';
 
 export default function*() {
@@ -9,6 +10,7 @@ export default function*() {
     watchSchedulers(),
     watchSearchHistory(),
     watchDiscussionRest(),
+    watchActivityFeed(),
     watchLocationChange(),
   ]);
 }

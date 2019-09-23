@@ -86,6 +86,7 @@ export {
   LocalToast,
   LocalToastsContainer,
 } from './components/ToastsContainer';
+export { ActivityFeed } from './components/ActivityFeed';
 
 export {
   CommonProvider,
