@@ -24,6 +24,7 @@ const UnauthenticatedFormComponent = props => {
     formName,
     values,
     showHeader,
+    isPublic,
     handleUnauthorized,
   } = props;
 
@@ -49,6 +50,7 @@ const UnauthenticatedFormComponent = props => {
                 globals={globals}
                 created={handleCreated}
                 loaded={handleLoaded}
+                public={isPublic}
               />
             </Fragment>
           ) : (
@@ -61,6 +63,7 @@ const UnauthenticatedFormComponent = props => {
                 created={handleCreated}
                 loaded={handleLoaded}
                 values={values}
+                public={isPublic}
               />
             </Fragment>
           )}
