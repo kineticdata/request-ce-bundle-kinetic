@@ -113,7 +113,7 @@ export function* verifySufficientDataSaga({ payload: { feedKey } }) {
   // If there isn't enough data and some sources are still not completed,
   // fetch additional data.
   if (
-    (!feed.pageData || feed.pageData.length < feed.pageSize) &&
+    (!feed.pageStaging || feed.pageStaging.length < feed.pageSize) &&
     feed.dataSources.some(s => !s.completed || s.data.size)
   ) {
     console.log('MORE DATA REQUIRED');

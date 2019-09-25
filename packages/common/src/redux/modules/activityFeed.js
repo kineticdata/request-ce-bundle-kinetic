@@ -35,7 +35,9 @@ export const FeedState = Record({
   data: List(),
   index: 0,
   pageSize: 25,
+  pageStaging: null,
   pageData: null,
+  pageDataElements: null,
   joinByDirection: 'DESC',
 });
 
@@ -51,6 +53,7 @@ export const DataSource = Record({
   transform: null,
   result: null,
   joinValueFn: null,
+  component: null,
 });
 
 const initializeFeed = ({
@@ -72,12 +75,14 @@ const initializeDataSource = joinByDefault => ({
   params: paramsFn,
   transform,
   joinBy = joinByDefault,
+  component = () => null,
 }) =>
   DataSource({
     fn,
     paramsFn,
     params: paramsFn(),
     transform,
+    component,
     joinValueFn:
       typeof joinBy === 'function'
         ? o => {
@@ -127,7 +132,8 @@ export const reducer = (state = Map(), { type, payload }) => {
               .set('params', nextParams);
           },
         )
-        .update(payload.feedKey, mergeDataHelper);
+        .update(payload.feedKey, mergeDataHelper)
+        .update(payload.feedKey, setPageDataFromStaging);
     case types.FETCH_DATA_SOURCE_FAILURE:
       return state
         .updateIn(
@@ -139,42 +145,65 @@ export const reducer = (state = Map(), { type, payload }) => {
               .set('completed', true)
               .set('shouldFetch', false),
         )
-        .update(payload.feedKey, mergeDataHelper);
+        .update(payload.feedKey, mergeDataHelper)
+        .update(payload.feedKey, setPageDataFromStaging);
     case types.RESET_PAGING:
-      return state.update(payload.feedKey, feed => {
-        const pageSize = payload.pageSize || feed.get('pageSize');
-        return feed
-          .set('index', 0)
-          .set('pageSize', pageSize)
-          .set('pageData', feed.data.slice(0, pageSize).toJS());
-      });
+      return state
+        .update(payload.feedKey, feed => {
+          const pageSize = payload.pageSize || feed.get('pageSize');
+          return feed
+            .set('index', 0)
+            .set('pageSize', pageSize)
+            .set('pageStaging', feed.data.slice(0, pageSize).toJS());
+        })
+        .update(payload.feedKey, setPageDataFromStaging);
     case types.NEXT_PAGE:
-      return state.update(payload.feedKey, feed => {
-        const nextIndex = feed.index + feed.pageSize;
-        return feed
-          .set('index', nextIndex)
-          .set(
-            'pageData',
-            feed.data.slice(nextIndex, nextIndex + feed.pageSize).toJS(),
-          );
-      });
+      return state
+        .update(payload.feedKey, feed => {
+          const nextIndex = feed.index + feed.pageSize;
+          return feed
+            .set('index', nextIndex)
+            .set(
+              'pageStaging',
+              feed.data.slice(nextIndex, nextIndex + feed.pageSize).toJS(),
+            );
+        })
+        .update(payload.feedKey, setPageDataFromStaging);
     case types.PREVIOUS_PAGE:
-      return state.update(payload.feedKey, feed => {
-        const nextIndex = Math.max(feed.index - feed.pageSize, 0);
-        return feed
-          .set('index', nextIndex)
-          .set(
-            'pageData',
-            feed.data.slice(nextIndex, nextIndex + feed.pageSize).toJS(),
-          );
-      });
-
+      return state
+        .update(payload.feedKey, feed => {
+          const nextIndex = Math.max(feed.index - feed.pageSize, 0);
+          return feed
+            .set('index', nextIndex)
+            .set(
+              'pageStaging',
+              feed.data.slice(nextIndex, nextIndex + feed.pageSize).toJS(),
+            );
+        })
+        .update(payload.feedKey, setPageDataFromStaging);
     case types.DELETE_ACTIVITY_FEED:
       return state.delete(payload.feedKey);
     default:
       return state;
   }
 };
+
+/**
+ * Sets pageData from pageStaging if we have a full page worth of records or
+ * all of the sources are completed and have no data left.
+ */
+const setPageDataFromStaging = f =>
+  (f.pageStaging && f.pageStaging.length === f.pageSize) ||
+  f.dataSources.every(s => s.completed && !s.data.size)
+    ? f
+        .set('pageData', f.pageStaging)
+        .set(
+          'pageDataElements',
+          f.pageStaging.map(o =>
+            f.getIn(['dataSources', o.__sourceName, 'component'])(o),
+          ),
+        )
+    : f;
 
 /**
  * Filters data sources to those that are not completed,
@@ -228,12 +257,14 @@ const mergeDataHelper = originalFeed => {
 
     // Move the next value from the appropriate dataSource to the feed data List
     feed = feed
-      .update('data', d => d.push(nextValue))
+      .update('data', d =>
+        d.push({ ...nextValue, __sourceName: nextValueSource }),
+      )
       .updateIn(['dataSources', nextValueSource, 'data'], d => d.rest());
   }
   console.log('DATA MERGE END', feed.get('data').size);
   // Check if any dataSources will need to be fetched next time we query data,
-  // and update the pageData from the current index
+  // and update the pageStaging from the current index
   return feed
     .update('dataSources', dataSources =>
       dataSources.map(s =>
@@ -242,7 +273,7 @@ const mergeDataHelper = originalFeed => {
     )
     .set('loading', false)
     .set(
-      'pageData',
+      'pageStaging',
       feed.data.slice(feed.index, feed.index + feed.pageSize).toJS(),
     );
 };

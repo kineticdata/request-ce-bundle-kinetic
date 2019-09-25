@@ -1,65 +1,8 @@
 import React, { Component } from 'react';
 import t from 'prop-types';
-import {
-  generateKey,
-  searchSubmissions,
-  fetchBridgedResource,
-} from '@kineticdata/react';
+import { generateKey } from '@kineticdata/react';
 import { connect } from '../redux/store';
 import { actions } from '../redux/modules/activityFeed';
-import { is } from 'immutable';
-
-const dataSources = () => ({
-  submissions: {
-    fn: searchSubmissions,
-    params: (prevParams, prevResult) =>
-      prevParams && prevResult
-        ? prevResult.nextPageToken
-          ? {
-              ...prevParams,
-              pageToken: prevResult.nextPageToken,
-            }
-          : null
-        : {
-            kapp: '',
-            form: '',
-            limit: 200,
-            search: null,
-          },
-    transform: result => ({
-      data: result.submissions,
-      nextPageToken: result.nextPageToken,
-    }),
-  },
-  bridging: {
-    fn: fetchBridgedResource,
-    params: (prevParams, prevResult) =>
-      prevParams && prevResult
-        ? prevResult.data.length >= prevParams.metadata.pageSize
-          ? {
-              ...prevParams,
-              metadata: {
-                ...prevParams.metadata,
-                offset: prevParams.metadata.offset + prevResult.data.length,
-              },
-            }
-          : null
-        : {
-            kapp: '',
-            form: '',
-            bridgedResourceName: '',
-            values: {},
-            attributes: [],
-            metadata: {
-              pageSize: 200,
-              offset: 0,
-            },
-          },
-    transform: result => ({
-      data: result.records,
-    }),
-  },
-});
 
 export class ActivityFeed extends Component {
   constructor(props) {
@@ -96,6 +39,7 @@ export class ActivityFeedImplComponent extends Component {
             loading: feed.loading,
             errors: feed.errors,
             data: feed.pageData,
+            dataElements: feed.pageDataElements,
             startIndex:
               feed.index +
               ((feed.pageData && feed.pageData.length) || feed.index ? 1 : 0),
@@ -173,6 +117,8 @@ ActivityFeed.propTypes = {
       // Function that transforms the results of the api call into an object
       // containing a data property
       transform: t.func.isRequired,
+      // Component for rendering the element of each record in this source
+      component: t.func.isRequired,
       // Overwrite of the joinBy provided to the ActivityFeed
       joinBy: t.oneOfType([t.string, t.func]),
     }),
