@@ -36,41 +36,43 @@ export const FormComponent = ({
   <Fragment>
     <PageTitle parts={['Form']} />
     <div className="page-container container">
-      <div className="page-title">
-        <div className="page-title__wrapper">
-          <h3>
-            <Link to={`/kapps/${kappSlug}`}>
-              <I18n>{kapp.name}</I18n>
-            </Link>{' '}
-            /{' '}
-          </h3>
+      <div className="page-panel">
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h3>
+              <Link to={`/kapps/${kappSlug}`}>
+                <I18n>{kapp.name}</I18n>
+              </Link>{' '}
+              /{' '}
+            </h3>
+          </div>
         </div>
+        <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+          <div className="embedded-core-form--wrapper">
+            {id ? (
+              <CoreForm
+                submission={id}
+                globals={globals}
+                loaded={handleLoaded}
+                completed={handleCompleted}
+              />
+            ) : (
+              <CoreForm
+                kapp={kappSlug}
+                form={formSlug}
+                globals={globals}
+                loaded={handleLoaded}
+                created={handleCreated}
+                completed={handleCompleted}
+                values={values}
+                notFoundComponent={ErrorNotFound}
+                unauthorizedComponent={ErrorUnauthorized}
+                unexpectedErrorComponent={ErrorUnexpected}
+              />
+            )}
+          </div>
+        </I18n>
       </div>
-      <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
-        <div className="embedded-core-form--wrapper">
-          {id ? (
-            <CoreForm
-              submission={id}
-              globals={globals}
-              loaded={handleLoaded}
-              completed={handleCompleted}
-            />
-          ) : (
-            <CoreForm
-              kapp={kappSlug}
-              form={formSlug}
-              globals={globals}
-              loaded={handleLoaded}
-              created={handleCreated}
-              completed={handleCompleted}
-              values={values}
-              notFoundComponent={ErrorNotFound}
-              unauthorizedComponent={ErrorUnauthorized}
-              unexpectedErrorComponent={ErrorUnexpected}
-            />
-          )}
-        </div>
-      </I18n>
     </div>
   </Fragment>
 );

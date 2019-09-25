@@ -340,8 +340,8 @@ export const EntriesListComponent = ({
   renderActionsFooterCell,
 }) => {
   return (
-    <div className="page-container page-container--translations">
-      <div className="page-panel page-panel--scrollable page-panel--translations">
+    <div className="page-container">
+      <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -640,9 +640,9 @@ const handleCreateEntry = ({
   setEntryToCreate,
   entryToCreate,
   upsertTranslations,
-  match: {
-    params: { context, locale, keyHash },
-  },
+  context,
+  locale,
+  keyHash,
   currentKey,
 }) => () => {
   upsertTranslations({
@@ -673,10 +673,9 @@ const handleDeleteTranslation = ({
   entryToDelete,
   setEntryToDelete,
   deleteTranslation,
-  match: {
-    path,
-    params: { context, locale, keyHash },
-  },
+  context,
+  locale,
+  keyHash,
   push,
 }) => () => {
   entryToDelete.property !== 'key'
@@ -698,12 +697,7 @@ const handleDeleteTranslation = ({
   setEntryToDelete(null);
 };
 
-const handleExport = ({
-  setOptionsOpen,
-  match: {
-    params: { context, locale, keyHash },
-  },
-}) => () => {
+const handleExport = ({ setOptionsOpen, context, locale, keyHash }) => () => {
   let params = '';
   if (context) {
     params += `&context=${context}`;

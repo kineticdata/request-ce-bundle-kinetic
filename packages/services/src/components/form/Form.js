@@ -29,95 +29,96 @@ export const Form = ({
 }) => (
   <Fragment>
     <PageTitle parts={[form ? form.name : '']} />
-    <span className="services-color-bar services-color-bar__blue-slate" />
-    <div className="page-container page-container--services-form">
-      <div className="page-title">
-        <div className="page-title__wrapper">
-          <h3>
-            <Link to={appLocation}>
-              <I18n>services</I18n>
-            </Link>{' '}
-            /{' '}
-            {path.startsWith('request') && (
-              <Link to={`${appLocation}/requests`}>
-                <I18n>requests</I18n>
-              </Link>
-            )}
-            {path.startsWith('/request') && ' / '}
-            {path.startsWith('/request') &&
-              type && (
-                <Link to={`${appLocation}/requests/${type || ''}`}>
-                  <I18n>{type}</I18n>
+    <div className="page-container page-container--color-bar">
+      <div className="page-panel">
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h3>
+              <Link to={appLocation}>
+                <I18n>services</I18n>
+              </Link>{' '}
+              /{' '}
+              {path.startsWith('request') && (
+                <Link to={`${appLocation}/requests`}>
+                  <I18n>requests</I18n>
                 </Link>
               )}
-            {path.startsWith('/request') && type && ' / '}
-            {category && (
-              <Link to={`${appLocation}/categories`}>
-                <I18n>categories</I18n>
-              </Link>
+              {path.startsWith('/request') && ' / '}
+              {path.startsWith('/request') &&
+                type && (
+                  <Link to={`${appLocation}/requests/${type || ''}`}>
+                    <I18n>{type}</I18n>
+                  </Link>
+                )}
+              {path.startsWith('/request') && type && ' / '}
+              {category && (
+                <Link to={`${appLocation}/categories`}>
+                  <I18n>categories</I18n>
+                </Link>
+              )}
+              {category && ' / '}
+              {category && (
+                <Link to={`${appLocation}/categories/${category.slug}`}>
+                  <I18n>{category.name}</I18n>
+                </Link>
+              )}
+              {category && ' / '}
+            </h3>
+            {form && (
+              <h1>
+                <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
+                  {form.name}
+                </I18n>
+              </h1>
             )}
-            {category && ' / '}
-            {category && (
-              <Link to={`${appLocation}/categories/${category.slug}`}>
-                <I18n>{category.name}</I18n>
-              </Link>
+          </div>
+          {submissionId &&
+            form && (
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="btn btn-outline-danger"
+              >
+                <I18n>Cancel Request</I18n>
+              </button>
             )}
-            {category && ' / '}
-          </h3>
+        </div>
+        <div className="form-description">
           {form && (
-            <h1>
+            <p>
               <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
-                {form.name}
+                {form.description}
               </I18n>
-            </h1>
+            </p>
           )}
         </div>
-        {submissionId &&
-          form && (
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="btn btn-outline-danger"
-            >
-              <I18n>Cancel Request</I18n>
-            </button>
-          )}
-      </div>
-      <div className="form-description">
-        {form && (
-          <p>
-            <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
-              {form.description}
+        <div className="embedded-core-form--wrapper">
+          {submissionId ? (
+            <I18n submissionId={submissionId}>
+              <CoreForm
+                submission={submissionId}
+                globals={globals}
+                loaded={handleLoaded}
+                completed={handleCompleted}
+              />
             </I18n>
-          </p>
-        )}
-      </div>
-      <div className="embedded-core-form--wrapper">
-        {submissionId ? (
-          <I18n submissionId={submissionId}>
-            <CoreForm
-              submission={submissionId}
-              globals={globals}
-              loaded={handleLoaded}
-              completed={handleCompleted}
-            />
-          </I18n>
-        ) : (
-          <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
-            <CoreForm
-              kapp={kappSlug}
-              form={formSlug}
-              globals={globals}
-              loaded={handleLoaded}
-              created={handleCreated}
-              completed={handleCompleted}
-              values={values}
-              notFoundComponent={ErrorNotFound}
-              unauthorizedComponent={ErrorUnauthorized}
-              unexpectedErrorComponent={ErrorUnexpected}
-            />
-          </I18n>
-        )}
+          ) : (
+            <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+              <CoreForm
+                kapp={kappSlug}
+                form={formSlug}
+                globals={globals}
+                loaded={handleLoaded}
+                created={handleCreated}
+                completed={handleCompleted}
+                values={values}
+                notFoundComponent={ErrorNotFound}
+                unauthorizedComponent={ErrorUnauthorized}
+                unexpectedErrorComponent={ErrorUnexpected}
+              />
+            </I18n>
+          )}
+        </div>
       </div>
     </div>
   </Fragment>

@@ -12,7 +12,7 @@ export const SidebarComponent = ({
   spaceAdmin,
   kapp,
 }) => (
-  <div className="sidebar space-sidebar">
+  <div className="sidebar">
     <Link to={settingsBackPath} className="nav-return">
       <span className="fa fa-fw fa-chevron-left" />
       <I18n>Return to</I18n> <I18n>{kapp.name}</I18n>

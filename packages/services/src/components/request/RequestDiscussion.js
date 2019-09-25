@@ -19,7 +19,7 @@ export const RequestDiscussionComponent = ({
         me={me}
       />
     ) : (
-      <div className="page-panel page-panel--two-fifths page-panel--scrollable page-panel--discussions d-none d-md-flex">
+      <div className="page-panel page-panel--two-fifths page-panel--flex page-panel--discussions d-none d-md-flex">
         <Discussion id={discussion.id} me={me} />
       </div>
     )}

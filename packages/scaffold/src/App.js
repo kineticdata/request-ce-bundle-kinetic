@@ -20,7 +20,6 @@ import { Form } from './components/Form';
 import { Settings } from './components/settings/Settings';
 import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
 import { actions } from './redux/modules/scaffoldApp';
-import './assets/styles/master.scss';
 
 const AppComponent = props => {
   if (props.error) {

@@ -4,6 +4,7 @@ import { ModalBody } from 'reactstrap';
 import { SORT_OPTIONS } from './SortedBySection';
 import { CreatedByMeContainer } from './CreatedByMe';
 import { I18n } from '@kineticdata/react';
+import { ASSIGNMENT_LABELS } from './FilterMenuAbstract';
 
 const ListSummary = ({ type, list }) =>
   list.size > 0 &&
@@ -17,26 +18,18 @@ const ListSummary = ({ type, list }) =>
     </span>
   ));
 
-const AssignmentSummary = ({ errors, appliedAssignments }) => {
-  if (errors.get('Assignment')) {
-    return (
-      <span className="validation-error text-danger">
-        {errors.get('Assignment')}
-      </span>
-    );
-  } else if (appliedAssignments.size === 1) {
-    return (
-      <span>
-        <I18n>{appliedAssignments.get(0)}</I18n>
-      </span>
-    );
-  }
-  return (
-    <span>
-      {appliedAssignments.size} <I18n>Assignments</I18n>
+const AssignmentSummary = ({ errors, assignments }) =>
+  errors.get('Assignment') ? (
+    <span className="validation-error text-danger">
+      {errors.get('Assignment')}
     </span>
+  ) : (
+    assignments && (
+      <span>
+        <I18n>{ASSIGNMENT_LABELS.get(assignments)}</I18n>
+      </span>
+    )
   );
-};
 
 const formatTimeline = timeline => {
   const match = timeline.match(/(.)(.*)At/);
@@ -78,31 +71,33 @@ const FilterNameSummary = ({ errors }) =>
 
 export const MainSection = ({
   filter,
+  hasTeams,
   showSection,
   filterName,
   handleChangeFilterName,
   handleSaveFilter,
   handleRemoveFilter,
-  appliedAssignments,
   errors,
 }) => (
   <ModalBody>
     <ul className="list-group button-list">
-      <li className="list-group-item">
-        <button
-          type="button"
-          className="btn btn-link"
-          onClick={() => showSection('teams')}
-        >
-          <span className="button-title">
-            <I18n>Teams</I18n>
-          </span>
-          <ListSummary type="Teams" list={filter.teams} />
-          <span className="icon">
-            <span className="fa fa-angle-right" />
-          </span>
-        </button>
-      </li>
+      {hasTeams && (
+        <li className="list-group-item">
+          <button
+            type="button"
+            className="btn btn-link"
+            onClick={() => showSection('teams')}
+          >
+            <span className="button-title">
+              <I18n>Teams</I18n>
+            </span>
+            <ListSummary type="Teams" list={filter.teams} />
+            <span className="icon">
+              <span className="fa fa-angle-right" />
+            </span>
+          </button>
+        </li>
+      )}
       <li className="list-group-item">
         <button
           type="button"
@@ -112,10 +107,7 @@ export const MainSection = ({
           <span className="button-title">
             <I18n>Assignment</I18n>
           </span>
-          <AssignmentSummary
-            errors={errors}
-            appliedAssignments={appliedAssignments}
-          />
+          <AssignmentSummary errors={errors} assignments={filter.assignments} />
           <span className="icon">
             <span className="fa fa-angle-right" />
           </span>

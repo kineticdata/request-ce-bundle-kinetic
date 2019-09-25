@@ -9,7 +9,6 @@ export const AssignmentSection = ({
   filter,
   errors,
   toggleAssignmentHandler,
-  appliedAssignments,
 }) => (
   <ModalBody className="filter-section">
     <h5>
@@ -21,32 +20,35 @@ export const AssignmentSection = ({
         </small>
       )}
     </h5>
+    <label htmlFor="assignment-any">
+      <input
+        type="radio"
+        id="assignment-any"
+        name="filter-menu-assignment-radio"
+        value=""
+        checked={!filter.assignments}
+        onChange={toggleAssignmentHandler}
+      />
+      <I18n>Any</I18n>
+    </label>
     <label htmlFor="assignment-mine">
       <input
-        type="checkbox"
+        type="radio"
         id="assignment-mine"
+        name="filter-menu-assignment-radio"
         value="mine"
-        checked={filter.assignments.mine}
+        checked={filter.assignments === 'mine'}
         onChange={toggleAssignmentHandler}
       />
       <I18n>Mine</I18n>
     </label>
-    <label htmlFor="assignment-teammates">
-      <input
-        type="checkbox"
-        id="assignment-teammates"
-        value="teammates"
-        checked={filter.assignments.teammates}
-        onChange={toggleAssignmentHandler}
-      />
-      <I18n>Teammates</I18n>
-    </label>
     <label htmlFor="assignment-unassigned">
       <input
-        type="checkbox"
+        type="radio"
         id="assignment-unassigned"
+        name="filter-menu-assignment-radio"
         value="unassigned"
-        checked={filter.assignments.unassigned}
+        checked={filter.assignments === 'unassigned'}
         onChange={toggleAssignmentHandler}
       />
       <I18n>Unassigned</I18n>

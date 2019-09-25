@@ -1,5 +1,5 @@
 import { compose, withHandlers, withProps } from 'recompose';
-import { is, List, Map } from 'immutable';
+import { is, Map } from 'immutable';
 import { push } from 'redux-first-history';
 import { FilterMenu } from './FilterMenu';
 import { actions } from '../../redux/modules/filterMenu';
@@ -7,20 +7,9 @@ import { actions as queueActions } from '../../redux/modules/queue';
 import { actions as appActions } from '../../redux/modules/queueApp';
 import { connect } from '../../redux/store';
 
-const selectAppliedAssignments = state => {
-  if (state.filterMenu.get('currentFilter')) {
-    const assignments = state.filterMenu.get('currentFilter').assignments;
-    return List([
-      assignments.mine && 'Mine',
-      assignments.teammates && 'Teammates',
-      assignments.unassigned && 'Unassigned',
-    ]).filter(assignmentType => !!assignmentType);
-  }
-  return List([]);
-};
-
 export const mapStateToProps = state => ({
   teams: state.queueApp.myTeams,
+  hasTeams: state.queueApp.myTeams.size > 0,
   isOpen: state.filterMenu.get('isOpen'),
   activeSection: state.filterMenu.get('activeSection'),
   currentFilter: state.filterMenu.get('currentFilter'),
@@ -29,7 +18,6 @@ export const mapStateToProps = state => ({
     state.filterMenu.get('initialFilter'),
   ),
   filterName: state.filterMenu.get('filterName'),
-  appliedAssignments: selectAppliedAssignments(state),
   location: state.app.location,
 });
 
@@ -73,34 +61,15 @@ export const validateFilterName = filterName => {
   }
 };
 
-export const validateAssignments = filter => {
-  if (
-    List([
-      filter.assignments.mine && 'Mine',
-      filter.assignments.teammates && 'Teammates',
-      filter.assignments.unassigned && 'Unassigned',
-    ])
-      .filter(assignmentType => !!assignmentType)
-      .isEmpty() &&
-    !filter.createdByMe
-  ) {
-    return 'Select an assignment or created by me';
-  }
-};
-
 export const FilterMenuContainer = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withProps(({ appliedAssignments, currentFilter, filterName }) => ({
+  withProps(({ currentFilter, filterName }) => ({
     errors: !currentFilter
       ? Map()
       : Map({
-          Assignment:
-            appliedAssignments.isEmpty() &&
-            !currentFilter.createdByMe &&
-            'No assignments selected',
           'Date Range': validateDateRange(currentFilter),
           'Filter Name': validateFilterName(filterName),
         }).filter(value => !!value),

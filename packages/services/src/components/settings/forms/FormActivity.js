@@ -18,8 +18,8 @@ export const FormActivityContainer = ({
   !loading && (
     <div>
       <PageTitle parts={['Services Settings']} />
-      <div className="page-container  page-container--space-settings">
-        <div className="page-panel">
+      <div className="page-container">
+        <div className="page-panel page-panel--white">
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>

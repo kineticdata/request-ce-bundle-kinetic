@@ -33,9 +33,9 @@ const NotificationsListComponent = ({
   previewModal,
   setPreviewModal,
 }) => (
-  <div className="page-container page-container--notifications">
+  <div className="page-container">
     <PageTitle parts={[`${type}s`, 'Notifications', 'Settings']} />
-    <div className="page-panel page-panel--scrollable">
+    <div className="page-panel page-panel--white">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
@@ -48,7 +48,7 @@ const NotificationsListComponent = ({
             <I18n>Notifications</I18n>
           </h1>
         </div>
-        <Link to="/new" className="btn btn-primary">
+        <Link to="new" className="btn btn-primary">
           <I18n>New {type}</I18n>
         </Link>
       </div>
@@ -57,7 +57,7 @@ const NotificationsListComponent = ({
           <li role="presentation">
             <Link
               to="/settings/notifications/templates"
-              getProps={isActiveClass('nav-link')}
+              getProps={isActiveClass()}
             >
               <I18n>Templates</I18n>
             </Link>
@@ -65,7 +65,7 @@ const NotificationsListComponent = ({
           <li role="presentation">
             <Link
               to="/settings/notifications/snippets"
-              getProps={isActiveClass('nav-link')}
+              getProps={isActiveClass()}
             >
               <I18n>Snippets</I18n>
             </Link>
@@ -73,7 +73,7 @@ const NotificationsListComponent = ({
           <li role="presentation">
             <Link
               to="/settings/notifications/date-formats"
-              getProps={isActiveClass('nav-link')}
+              getProps={isActiveClass()}
             >
               <I18n>Date Formats</I18n>
             </Link>

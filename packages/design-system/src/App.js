@@ -21,9 +21,6 @@ import { Sidebar } from './Sidebar';
 import 'bootstrap/scss/bootstrap.scss';
 import 'font-awesome/css/font-awesome.css';
 import 'typeface-open-sans/index.css';
-import 'common/src/assets/styles/master.scss';
-import 'app/src/assets/styles/master.scss';
-import 'services/src/assets/styles/master.scss';
 import './assets/styles/master.scss';
 
 class App extends Component {

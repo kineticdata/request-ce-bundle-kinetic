@@ -31,8 +31,8 @@ export const TechBarSettingsFormComponent = ({
         <PageTitle
           parts={['Edit Settings', techBar.values['Name'], 'Tech Bar Settings']}
         />
-        <div className="page-container page-container--tech-bar-settings">
-          <div className="page-panel page-panel--scrollable">
+        <div className="page-container">
+          <div className="page-panel page-panel--white">
             <div className="page-title">
               <div className="page-title__wrapper">
                 <h3>

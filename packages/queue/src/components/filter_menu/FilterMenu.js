@@ -11,6 +11,7 @@ import { I18n } from '@kineticdata/react';
 
 export const FilterMenu = ({
   teams,
+  hasTeams,
   isOpen,
   isDirty,
   close,
@@ -23,7 +24,6 @@ export const FilterMenu = ({
   applyFilterHandler,
   showSection,
   currentFilter,
-  appliedAssignments,
   errors,
 }) => (
   <Modal isOpen={isOpen} toggle={close}>
@@ -66,8 +66,8 @@ export const FilterMenu = ({
           handleChangeFilterName={handleChangeFilterName}
           handleSaveFilter={handleSaveFilter}
           handleRemoveFilter={handleRemoveFilter}
-          appliedAssignments={appliedAssignments}
           errors={errors}
+          hasTeams={hasTeams}
         />
       )}
     {currentFilter &&
@@ -76,11 +76,7 @@ export const FilterMenu = ({
       )}
     {currentFilter &&
       activeSection === 'assignment' && (
-        <AssignmentSectionContainer
-          filter={currentFilter}
-          errors={errors}
-          appliedAssignments={appliedAssignments}
-        />
+        <AssignmentSectionContainer filter={currentFilter} errors={errors} />
       )}
     {currentFilter &&
       activeSection === 'status' && (

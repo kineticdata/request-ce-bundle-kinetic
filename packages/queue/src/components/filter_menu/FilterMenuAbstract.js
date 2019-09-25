@@ -6,7 +6,7 @@ import { actions as queueActions } from '../../redux/modules/queue';
 import { actions } from '../../redux/modules/filterMenu';
 import { actions as appActions } from '../../redux/modules/queueApp';
 import { DateRangeSelector } from 'common/src/components/DateRangeSelector';
-import { validateAssignments, validateDateRange } from './FilterMenuContainer';
+import { validateDateRange } from './FilterMenuContainer';
 import moment from 'moment';
 import { AttributeSelectors } from 'common';
 import { I18n } from '@kineticdata/react';
@@ -14,11 +14,11 @@ import { connect } from '../../redux/store';
 
 const VALID_STATUSES = List(['Open', 'Pending', 'Cancelled', 'Complete']);
 
-const ASSIGNMENT_LABELS = {
+export const ASSIGNMENT_LABELS = Map({
+  '': 'Any',
   mine: 'Mine',
-  teammates: 'Teammates',
   unassigned: 'Unassigned',
-};
+});
 
 const SORT_OPTIONS = OrderedMap([
   ['createdAt', { label: 'Created At', id: 'sorted-by-created-at' }],
@@ -73,6 +73,13 @@ const FilterCheckbox = props => (
   </label>
 );
 
+const FilterRadio = props => (
+  <label htmlFor={props.id}>
+    <input type="radio" {...props} />
+    <I18n>{props.label}</I18n>
+  </label>
+);
+
 const FilterMenuAbstractComponent = props => (
   <I18n
     render={translate =>
@@ -87,17 +94,17 @@ const FilterMenuAbstractComponent = props => (
             onChange: props.toggleTeam,
           }))
           .map(props => <FilterCheckbox key={props.name} {...props} />),
-        assignmentFilters: props.currentFilter.assignments
-          .toSeq()
-          .map((checked, name) => ({
-            id: `filter-menu-assignment-checkbox-${name}`,
-            name,
-            label: ASSIGNMENT_LABELS[name],
-            checked,
+        assignmentFilters: ASSIGNMENT_LABELS.toSeq()
+          .map((label, value = '') => ({
+            id: `filter-menu-assignment-radio-${value || 'any'}`,
+            name: 'filter-menu-assignment-radio',
+            value: value,
+            label,
+            checked: props.currentFilter.assignments === value,
             onChange: props.toggleAssignment,
           }))
           .valueSeq()
-          .map(props => <FilterCheckbox key={props.name} {...props} />),
+          .map(props => <FilterRadio key={props.value} {...props} />),
         createdByMeFilter: (
           <FilterCheckbox
             id="createdByMe"
@@ -165,12 +172,9 @@ const FilterMenuAbstractComponent = props => (
           </div>
         ),
         teamSummary: props.filter.teams.map(translate).join(', '),
-        assignmentSummary: props.filter.assignments
-          .toSeq()
-          .filter(b => b)
-          .keySeq()
-          .map(v => translate(ASSIGNMENT_LABELS[v]))
-          .join(', '),
+        assignmentSummary: translate(
+          ASSIGNMENT_LABELS.get(props.filter.assignments),
+        ),
         statusSummary: props.filter.status.map(translate).join(', '),
         dateRangeSummary: summarizeDateRange(props.filter.dateRange),
         dateRangeError: validateDateRange(props.currentFilter),
@@ -184,13 +188,10 @@ const FilterMenuAbstractComponent = props => (
         dirty: !props.currentFilter.equals(props.filter),
         apply: props.applyFilter,
         reset: props.resetFilter,
-        validations: [
-          validateAssignments,
-          validateDateRange,
-          validateFilterName,
-        ]
+        validations: [validateDateRange, validateFilterName]
           .map(fn => fn(props.currentFilter))
           .filter(v => v),
+        hasTeams: props.hasTeams,
         clearTeams: props.clearTeams,
         clearAssignments: props.clearAssignments,
         clearStatus: props.clearStatus,
@@ -214,6 +215,7 @@ export const mapStateToProps = (state, props) => ({
   currentFilter: state.filterMenu.get('currentFilter'),
   showing: state.filterMenu.get('activeSection'),
   teams: state.queueApp.myTeams,
+  hasTeams: state.queueApp.myTeams.size > 0,
   sortDirection: state.queue.sortDirection,
   groupDirection: state.queue.groupDirection,
   forms: state.queueApp.forms,
@@ -245,7 +247,7 @@ export const mapDispatchToProps = {
 };
 
 const toggleTeam = props => e => props.toggleTeam(e.target.name);
-const toggleAssignment = props => e => props.toggleAssignment(e.target.name);
+const toggleAssignment = props => e => props.toggleAssignment(e.target.value);
 const toggleCreatedByMe = props => e =>
   props.toggleCreatedByMe(!props.currentFilter.createdByMe);
 const toggleStatus = props => e => props.toggleStatus(e.target.name);

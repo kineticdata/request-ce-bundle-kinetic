@@ -133,7 +133,7 @@ export class DiscussionsPanelComponent extends Component {
     return (
       <Fragment>
         <div
-          className={`page-panel page-panel--discussions ${
+          className={`page-panel page-panel--flex page-panel--discussions ${
             !!this.props.isModal
               ? 'd-md-none'
               : 'page-panel--two-fifths d-none d-md-flex'

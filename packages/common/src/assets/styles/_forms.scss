@@ -7,11 +7,11 @@ form,
   padding: 0.75rem 0.75rem 3rem 0.75rem;
   font-weight: 400;
   font-size: 0.875rem;
-  overflow: hidden;
+  // overflow: hidden;
   background: $white;
   label {
     /* Make the label a block */
-    color: rgba($black, 0.75);
+    color: rgba($gray80, 0.75);
     display: block;
     font-size: 0.875rem;
     font-weight: 600;
@@ -109,13 +109,13 @@ form {
     &[type='text'],
     &[type='password'] {
       background: #fff;
-      border: 1px solid $blue3;
+      border: 1px solid $tertiary40;
       border-radius: 3px;
       width: 100%;
       outline: none;
       padding: 0.5rem;
       &::-webkit-input-placeholder {
-        color: rgba($black-50, 0.5);
+        color: rgba($gray50, 0.5);
       }
     }
     &[type='text'][disabled],
@@ -144,13 +144,13 @@ form {
   // Textarea
   textarea {
     background: #fff;
-    border: 1px solid $blue3;
+    border: 1px solid $tertiary40;
     border-radius: 3px;
     outline: none;
     width: 100%;
     padding: 0.5rem;
     &::-webkit-input-placeholder {
-      color: rgba($black-50, 0.5);
+      color: rgba($gray50, 0.5);
     }
     &[disabled] {
       cursor: not-allowed;
@@ -164,16 +164,16 @@ form {
   // Focus
   input[type='text']:focus,
   textarea:focus {
-    border-color: $blue2;
+    border-color: $tertiary50;
   }
   select {
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
     line-height: 1.5rem;
-    color: $black;
+    color: $gray80;
     background-color: $white;
     background-image: none;
-    border: 1px solid $blue3;
+    border: 1px solid $tertiary40;
     border-radius: 0.4rem;
     width: 80%;
     // Testing
@@ -302,7 +302,7 @@ section.page {
   form {
     margin: 0;
     font-weight: 400;
-    overflow: hidden;
+    // overflow: hidden;
     padding: 1.5rem;
     // background-color: #f5f5f5;
     // @include border-radius();
@@ -367,7 +367,7 @@ section.page {
 
       .file-header {
         display: table-header-group;
-        color: $black;
+        color: $gray80;
       }
       .file-row {
         display: table-row;

@@ -27,8 +27,10 @@
 
 // Return Nav
 .nav-return {
-  border-bottom: 1px solid $black-16;
+  display: block;
+  border-bottom: 1px solid $gray16;
   font-size: 0.875rem;
+  line-height: 1.25rem;
   padding: 0.8125rem 1rem;
   text-decoration: none;
   &:hover {

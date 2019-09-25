@@ -191,36 +191,6 @@ ins {
   }
 }
 
-.section-toast {
-  position: absolute;
-  left: 1%;
-  opacity: 1;
-  top: 0;
-}
-
-.section-toast-enter {
-  opacity: 0.01;
-  top: -2rem;
-}
-.section-toast-enter-active {
-  opacity: 1;
-  top: 0;
-  transition: all 300ms ease-out;
-}
-.section-toast-exit {
-  opacity: 1;
-  top: 0;
-}
-.section-toast-exit-active {
-  opacity: 0;
-  top: -2rem;
-  transition: all 300ms ease-in;
-}
-.section-toast-exit-done {
-  opacity: 0;
-  top: -2rem;
-}
-
 .rbt .form-control {
   height: auto;
 }

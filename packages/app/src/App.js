@@ -1,7 +1,6 @@
 import 'bootstrap/scss/bootstrap.scss';
 import 'font-awesome/css/font-awesome.css';
 import 'typeface-open-sans/index.css';
-import 'common/src/assets/styles/master.scss';
 import './assets/styles/master.scss';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
@@ -27,6 +26,7 @@ const BUNDLE_PACKAGE_PROVIDERS = {
   services: ServicesApp,
   queue: QueueApp,
   'tech-bar': TechBarApp,
+  scaffold: ScaffoldApp,
 };
 
 const getAppProvider = (kapp, pathname) => {

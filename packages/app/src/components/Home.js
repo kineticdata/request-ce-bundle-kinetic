@@ -18,83 +18,85 @@ export const HomeComponent = ({
   <Fragment>
     <PageTitle parts={[]} />
     <div className="page-container container">
-      <h1>
-        <I18n>{kapp ? kapp.name : space.name}</I18n>
-      </h1>
-      <section className="mt-3">
-        <hr />
-        <div>
-          <I18n>Welcome</I18n>{' '}
-          <strong>{profile.displayName || profile.username}</strong>{' '}
-        </div>
-      </section>
-      {!kapp ? (
-        <Fragment>
-          <section className="mt-5">
-            <h2 className="section__title">
-              <span>
-                <I18n>Kapps</I18n>
-              </span>
-            </h2>
-            <ul>
-              {visibleKapps.map(k => (
-                <li key={k.slug}>
-                  <Link to={`/kapps/${k.slug}`}>
-                    <I18n>{k.name}</I18n>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section className="mt-5">
-            <h2 className="section__title">
-              <span>
-                <I18n>General</I18n>
-              </span>
-            </h2>
-            <ul>
-              <li>
-                <Link to="/discussions">
-                  <I18n>Discussions</I18n>
-                </Link>
-              </li>
-              <li>
-                <Link to="/settings">
-                  <I18n>Settings</I18n>
-                </Link>
-              </li>
-            </ul>
-          </section>
-        </Fragment>
-      ) : (
-        <Fragment>
-          <section className="mt-5">
-            <div className="alert alert-warning">
-              <I18n>
-                This Kapp does not have a Bundle Package attribute set.
-              </I18n>
-            </div>
-          </section>
-          {forms && (
+      <div className="page-panel">
+        <h1>
+          <I18n>{kapp ? kapp.name : space.name}</I18n>
+        </h1>
+        <section className="mt-3">
+          <hr />
+          <div>
+            <I18n>Welcome</I18n>{' '}
+            <strong>{profile.displayName || profile.username}</strong>{' '}
+          </div>
+        </section>
+        {!kapp ? (
+          <Fragment>
             <section className="mt-5">
               <h2 className="section__title">
                 <span>
-                  <I18n>Forms</I18n>
+                  <I18n>Kapps</I18n>
                 </span>
               </h2>
               <ul>
-                {forms.map(f => (
-                  <li key={f.slug}>
-                    <Link to={`/kapps/${kapp.slug}/forms/${f.slug}`}>
-                      <I18n>{f.name}</I18n>
+                {visibleKapps.map(k => (
+                  <li key={k.slug}>
+                    <Link to={`/kapps/${k.slug}`}>
+                      <I18n>{k.name}</I18n>
                     </Link>
                   </li>
                 ))}
               </ul>
             </section>
-          )}
-        </Fragment>
-      )}
+            <section className="mt-5">
+              <h2 className="section__title">
+                <span>
+                  <I18n>General</I18n>
+                </span>
+              </h2>
+              <ul>
+                <li>
+                  <Link to="/discussions">
+                    <I18n>Discussions</I18n>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/settings">
+                    <I18n>Settings</I18n>
+                  </Link>
+                </li>
+              </ul>
+            </section>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <section className="mt-5">
+              <div className="alert alert-warning">
+                <I18n>
+                  This Kapp does not have a Bundle Package attribute set.
+                </I18n>
+              </div>
+            </section>
+            {forms && (
+              <section className="mt-5">
+                <h2 className="section__title">
+                  <span>
+                    <I18n>Forms</I18n>
+                  </span>
+                </h2>
+                <ul>
+                  {forms.map(f => (
+                    <li key={f.slug}>
+                      <Link to={`/kapps/${kapp.slug}/forms/${f.slug}`}>
+                        <I18n>{f.name}</I18n>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+          </Fragment>
+        )}
+      </div>
     </div>
   </Fragment>
 );

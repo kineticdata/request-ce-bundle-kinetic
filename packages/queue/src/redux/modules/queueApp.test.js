@@ -6,9 +6,9 @@ import { Filter } from '../../records';
 const state = {
   queue: {
     queueApp: AppState({
-      filters: List([Filter({ name: 'Mine' }), Filter({ name: 'Teammates' })]),
+      filters: List([Filter({ name: 'Mine' })]),
       myFilters: List([
-        Filter({ name: 'Facilities Teammates' }),
+        Filter({ name: 'Facilities' }),
         Filter({ name: 'Everything' }),
       ]),
     }),

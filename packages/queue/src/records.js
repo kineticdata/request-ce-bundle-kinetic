@@ -25,11 +25,30 @@ export const VALID_SORT_OPTIONS = List([
 export const isActiveStatus = status =>
   status !== 'Complete' && status !== 'Cancelled';
 
+export const VALID_ASSIGNMENT_OPTIONS = List(['mine', 'unassigned']);
+
+// Deprecated
 export const AssignmentCriteria = Record({
   mine: false,
   teammates: false,
   unassigned: false,
 });
+// Maps the deprecated AssignmentCriteria object to a valid assignment option
+const assignmentCriteriaMapper = assignments => {
+  const assignmentCriteria = AssignmentCriteria(assignments);
+  if (
+    assignmentCriteria.teammates ||
+    (assignmentCriteria.mine && assignmentCriteria.unassigned)
+  ) {
+    return '';
+  } else if (assignmentCriteria.mine) {
+    return 'mine';
+  } else if (assignmentCriteria.unassigned) {
+    return 'unassigned';
+  } else {
+    return '';
+  }
+};
 
 export const DateRangeCriteria = Record({
   // createdAt, updatedAt, closedAt
@@ -57,7 +76,7 @@ export const Filter = Record({
   // Search Criteria.
   status: VALID_STATUSES.filter(isActiveStatus),
   teams: List(),
-  assignments: AssignmentCriteria(),
+  assignments: '',
   dateRange: DateRangeCriteria(),
   createdByMe: false,
 });
@@ -74,8 +93,10 @@ export const filterReviver = filterJSON => {
     const status = isarray(filter.status) ? List(filter.status) : undefined;
     const teams = isarray(filter.teams) ? List(filter.teams) : undefined;
     const assignments = isobject(filter.assignments)
-      ? AssignmentCriteria(filter.assignments)
-      : undefined;
+      ? assignmentCriteriaMapper(filter.assignments)
+      : VALID_ASSIGNMENT_OPTIONS.includes(filter.assignments)
+        ? filter.assignments
+        : '';
     const dateRange = isobject(filter.dateRange)
       ? DateRangeCriteria(filter.dateRange)
       : undefined;

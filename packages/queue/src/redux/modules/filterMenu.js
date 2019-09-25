@@ -68,10 +68,7 @@ export const reducer = (state = defaultState, { type, payload }) => {
     case types.SHOW_SECTION:
       return state.set('activeSection', payload);
     case types.TOGGLE_ASSIGNMENT:
-      return state.updateIn(
-        ['currentFilter', 'assignments', payload],
-        bool => !bool,
-      );
+      return state.setIn(['currentFilter', 'assignments'], payload);
     case types.TOGGLE_CREATED_BY_ME:
       return state.setIn(['currentFilter', 'createdByMe'], payload);
     case types.TOGGLE_TEAM:

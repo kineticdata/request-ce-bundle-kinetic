@@ -76,6 +76,7 @@ export const SidebarComponent = ({
                   <DropdownMenu right>
                     <Link
                       to={`display/${techBar.values['Id']}/checkin`}
+                      onClick={toggleDropdown(techBar.id)}
                       className="dropdown-item"
                       target="_blank"
                     >
@@ -86,6 +87,7 @@ export const SidebarComponent = ({
                     </Link>
                     <Link
                       to={`display/${techBar.values['Id']}/feedback`}
+                      onClick={toggleDropdown(techBar.id)}
                       className="dropdown-item"
                       target="_blank"
                     >
@@ -96,6 +98,7 @@ export const SidebarComponent = ({
                     </Link>
                     <Link
                       to={`display/${techBar.values['Id']}/checkin?crosslink`}
+                      onClick={toggleDropdown(techBar.id)}
                       className="dropdown-item"
                       target="_blank"
                     >
@@ -106,6 +109,7 @@ export const SidebarComponent = ({
                     </Link>
                     <Link
                       to={`display/${techBar.values['Id']}/overhead`}
+                      onClick={toggleDropdown(techBar.id)}
                       className="dropdown-item"
                       target="_blank"
                     >

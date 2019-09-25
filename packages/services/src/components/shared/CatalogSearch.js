@@ -15,7 +15,7 @@ export const CatalogSearch = props => (
       )}
     />
     <button type="submit">
-      <span className="fa fa-search" />
+      <span className="fa fa-fw fa-search" />
     </button>
   </form>
 );

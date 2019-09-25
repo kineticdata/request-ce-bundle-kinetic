@@ -33,7 +33,7 @@ export const TeamsNavigation = compose(
 ));
 
 const TeamsComponent = ({ error, teams, me, openRequestNewTeam }) => (
-  <div className="page-container page-container--panels">
+  <div className="page-container">
     <PageTitle parts={['Teams']} />
     <div className="page-panel">
       <div className="page-title">
@@ -57,7 +57,7 @@ const TeamsComponent = ({ error, teams, me, openRequestNewTeam }) => (
         emptyMessage=""
       >
         {data => (
-          <div className="cards__wrapper cards__wrapper--team">
+          <div className="cards__wrapper cards__wrapper--thirds">
             {teams.map(team => {
               return (
                 <TeamCard key={team.slug} team={team} components={{ Link }} />

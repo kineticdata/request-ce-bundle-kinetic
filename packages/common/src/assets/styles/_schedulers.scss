@@ -16,14 +16,14 @@
         flex-wrap: nowrap;
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid $gray4;
+        border-bottom: 1px solid $gray8;
 
         .calendar-box {
           flex-basis: 15%;
           text-align: center;
           cursor: pointer;
           padding: 0.25rem 0;
-          border-right: 1px solid $gray4;
+          border-right: 1px solid $gray8;
           line-height: 3.8rem;
           font-size: 1.5rem;
           color: $primary;

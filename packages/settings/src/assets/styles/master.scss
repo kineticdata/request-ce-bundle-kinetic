@@ -1,31 +1,11 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * kinops Space v0.1
- * Copyright (c) 2017 - 2018 Kinetic Data, Inc.
+ * kinops Settings
+ * Copyright (c) 2017 - 2019 Kinetic Data, Inc.
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-@import '~common/src/assets/styles/variables';
-@import '~common/src/assets/styles/mixins';
-@import '~modularscale-sass/stylesheets/modularscale';
-
-@import 'variables';
-@import 'shared';
-@import 'cards';
-
-@import 'layout';
-@import 'sidebar';
-@import 'list-group';
-@import 'about';
-@import 'alerts';
-@import 'home';
-@import 'profile';
-@import 'teams';
-@import 'buttons';
-@import 'page-title';
-@import 'popover';
-@import 'datastore';
-@import 'robots';
-@import 'search-box';
-@import 'settings';
-
-// Temporary
-@import 'temp';
+#root ~ div,
+.package-layout--settings {
+  @import 'datastore';
+  @import 'robots';
+  @import 'temp';
+}

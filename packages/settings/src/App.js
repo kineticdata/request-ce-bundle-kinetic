@@ -24,7 +24,6 @@ import { Translations } from './components/translations/Translations';
 import { SchedulerSettings } from './components/SchedulerSettings';
 import { SpaceSettings } from './components/space_settings/SpaceSettings';
 import { syncAppState } from './redux/modules/app';
-import './assets/styles/master.scss';
 
 import { actions as datastoreActions } from './redux/modules/settingsDatastore';
 import { actions as teamActions } from './redux/modules/teamList';

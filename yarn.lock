@@ -17,10 +17,10 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@kineticdata/react@^0.1.0-alpha.8":
-  version "0.1.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-0.1.0-alpha.8.tgz#ff48d54d5d483ddfa1334ce199de606387396a91"
-  integrity sha512-uC2RNBtxX4pZPUTCUO04BHAGogiWwlenoXxmIMOFSx3We54yONrVvJUIK8smkjAZloihYiyRwGNe5GBbcvbBXw==
+"@kineticdata/react@^0.1.0-alpha.9":
+  version "0.1.0-alpha.9"
+  resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-0.1.0-alpha.9.tgz#fb57d9750f86535f51bb2086088a990beabe390d"
+  integrity sha512-b+5mw8NZq/YgnJR6DXhVSHvBstVINCiMwJNNRybdKFRe/YOK4s1GJma9nPCj+zLU8ek7DO6tiQvmuv8W+NZu8Q==
   dependencies:
     axios "^0.18.0"
     classnames "^2.2.6"

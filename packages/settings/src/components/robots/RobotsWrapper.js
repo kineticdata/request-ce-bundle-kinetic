@@ -16,7 +16,7 @@ const RobotsError = () => (
   </h1>
 );
 const RobotsVersionError = ({ version }) => (
-  <div className="page-panel page-panel--scrollable">
+  <div className="page-panel page-panel--white">
     <div className="page-title">
       <div className="page-title__wrapper">
         <h3>

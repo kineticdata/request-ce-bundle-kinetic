@@ -6,7 +6,7 @@ import { Utils } from 'common';
 import { I18n } from '@kineticdata/react';
 
 export const SidebarComponent = ({ spaceAdmin, kapp }) => (
-  <div className="sidebar space-sidebar">
+  <div className="sidebar">
     <Link to={'../'} className="nav-return">
       <span className="fa fa-fw fa-chevron-left" />
       <I18n>{`Return to ${kapp.name}`}</I18n>

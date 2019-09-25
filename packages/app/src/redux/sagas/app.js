@@ -96,7 +96,7 @@ export function* fetchAppTask({ payload }) {
 
       // Determine default kapp route
       if (initialLoad && currentRoute === '/') {
-        const defaultUserKapp = Utils.getAttributeValue(
+        const defaultUserKapp = Utils.getProfileAttributeValue(
           profile,
           'Default Kapp Display',
         );
@@ -106,6 +106,11 @@ export function* fetchAppTask({ payload }) {
         );
         if (defaultUserKapp && kapps.find(k => k.slug === defaultUserKapp)) {
           yield put(push(`/kapps/${defaultUserKapp}`));
+        } else if (
+          defaultUserKapp &&
+          ['discussions'].includes(defaultUserKapp)
+        ) {
+          yield put(push(`/${defaultUserKapp}`));
         } else if (
           defaultSpaceKapp &&
           kapps.find(k => k.slug === defaultSpaceKapp)

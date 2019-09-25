@@ -4,11 +4,9 @@ import { getFilterByPath } from '../../redux/modules/queueApp';
 import { actions as queueActions } from '../../redux/modules/queue';
 import { actions as filterMenuActions } from '../../redux/modules/filterMenu';
 import { QueueList } from './QueueList';
-import {
-  validateAssignments,
-  validateDateRange,
-} from '../filter_menu/FilterMenuContainer';
+import { validateDateRange } from '../filter_menu/FilterMenuContainer';
 import { connect } from '../../redux/store';
+import { refreshFilter } from '../../utils';
 
 const mapStateToProps = (state, props) => {
   const filter = getFilterByPath(state, props.location.pathname);
@@ -23,6 +21,7 @@ const mapStateToProps = (state, props) => {
     isGrouped: filter && filter.groupBy !== '',
     statusMessage: filter && state.queue.statuses.get(filter),
     isMobile: state.app.layoutSize === 'small',
+    hasTeams: state.queueApp.myTeams.size > 0,
   };
 };
 
@@ -119,9 +118,7 @@ export const QueueListContainer = compose(
             )
           : items,
         filterValidations: filter
-          ? [validateAssignments, validateDateRange]
-              .map(fn => fn(filter))
-              .filter(v => v)
+          ? [validateDateRange].map(fn => fn(filter)).filter(v => v)
           : [],
       };
     },
@@ -159,10 +156,7 @@ export const QueueListContainer = compose(
       setGroupDirection(groupDirection === 'ASC' ? 'DESC' : 'ASC');
       setOffsetWithScroll(0);
     },
-    refresh: ({ filter, fetchList, setOffsetWithScroll }) => () => {
-      fetchList(filter);
-      setOffsetWithScroll(0);
-    },
+    refresh: refreshFilter,
     gotoPrevPage: ({ limit, offset, setOffsetWithScroll }) => () => {
       setOffsetWithScroll(offset - limit);
     },

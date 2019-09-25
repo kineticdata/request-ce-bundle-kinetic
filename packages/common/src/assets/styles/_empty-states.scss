@@ -42,9 +42,9 @@
 }
 
 .empty-state {
-  color: $gray;
+  color: $gray50;
   &__message {
-    color: rgba($gray, 0.8);
+    color: rgba($gray50, 0.8);
   }
 }
 

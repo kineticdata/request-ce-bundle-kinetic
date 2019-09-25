@@ -80,78 +80,45 @@ const calculateTeams = (myTeams, teams) =>
     ? myTeams.map(t => t.name)
     : teams.toSet().intersect(myTeams.map(t => t.name));
 
-export const prepareUnassignedFilter = (searcher, filter, appSettings) => {
-  if (filter.assignments.unassigned && appSettings.myTeams.size > 0) {
-    searcher.and();
-    prepareStatusFilter(searcher, filter);
-    searcher.eq('values[Assigned Individual]', null);
-    searcher.in(
-      'values[Assigned Team]',
-      calculateTeams(appSettings.myTeams, filter.teams).toJS(),
-    );
-    searcher.end();
-  }
-};
-
-export const prepareMineFilter = (searcher, filter, appSettings) => {
-  if (filter.assignments.mine) {
-    searcher.and();
-    prepareStatusFilter(searcher, filter);
-    if (filter.teams.size > 0) {
-      searcher.in('values[Assigned Team]', filter.teams.toJS());
-    }
-    searcher.eq('values[Assigned Individual]', appSettings.profile.username);
-    searcher.end();
-  }
-};
-
-export const prepareTeammatesFilter = (searcher, filter, appSettings) => {
-  if (filter.assignments.teammates && appSettings.myTeammates.size > 0) {
-    searcher.and();
-    prepareStatusFilter(searcher, filter);
-    searcher.in(
-      'values[Assigned Individual]',
-      appSettings.myTeammates.map(u => u.username).toJS(),
-    );
-    searcher.in(
-      'values[Assigned Team]',
-      calculateTeams(appSettings.myTeams, filter.teams).toJS(),
-    );
-    searcher.end();
-  }
-};
-
-export const prepareCreatedByMeFilter = (searcher, filter, appSettings) => {
-  if (filter.createdByMe) {
-    searcher.and();
-    prepareStatusFilter(searcher, filter);
-    searcher.eq('createdBy', appSettings.profile.username);
-    searcher.end();
-  }
-};
-
 export const buildSearch = (filter, appSettings) => {
   let searcher = new SubmissionSearch();
 
   searcher = prepareDateRangeFilter(searcher, filter, moment());
+  prepareStatusFilter(searcher, filter);
 
-  searcher.or();
-  // Capture the context of the assignment query operations. We will use this
-  // later in the saga to determine if any of the assignment filters were
-  // able to properly prepare their query criteria.
-  let assignmentContext =
-    searcher.queryContext[searcher.queryContext.length - 1];
+  // Make sure there is a valid assignment in the searcher
+  let invalidAssignment = true;
 
-  prepareMineFilter(searcher, filter, appSettings);
-  prepareTeammatesFilter(searcher, filter, appSettings);
-  prepareUnassignedFilter(searcher, filter, appSettings);
-  prepareCreatedByMeFilter(searcher, filter, appSettings);
+  if (filter.createdByMe) {
+    searcher.eq('createdBy', appSettings.profile.username);
+    invalidAssignment = false;
+  }
 
-  searcher.end();
+  if (filter.assignments === 'mine') {
+    searcher.eq('values[Assigned Individual]', appSettings.profile.username);
+    invalidAssignment = false;
+  } else if (
+    filter.assignments === 'unassigned' &&
+    (appSettings.myTeams.size > 0 || filter.createdByMe)
+  ) {
+    searcher.eq('values[Assigned Individual]', null);
+  }
+
+  if (
+    appSettings.myTeams.size > 0 &&
+    (filter.teams.size > 0 ||
+      (filter.assignments !== 'mine' && !filter.createdByMe))
+  ) {
+    searcher.in(
+      'values[Assigned Team]',
+      calculateTeams(appSettings.myTeams, filter.teams).toJS(),
+    );
+    invalidAssignment = false;
+  }
 
   return {
     search: searcher.include('details,form,form.kapp,values').build(),
-    assignmentContext,
+    invalidAssignment,
   };
 };
 
@@ -199,15 +166,15 @@ export function* fetchListTask(action) {
   const filter = action.payload;
   const appSettings = yield select(getAppSettings);
   const kappSlug = yield select(getKappSlug);
-  const { search, assignmentContext } = yield call(
+  const { search, invalidAssignment } = yield call(
     buildSearch,
     filter,
     appSettings,
   );
 
-  // If the assignment query context has nothing then there is a problem
-  // with the query and we should immediately yield an empty list.
-  if (assignmentContext.length === 0) {
+  // If invalidAssignment is true, then there is a problem with the query
+  // and we should immediately yield an empty list.
+  if (invalidAssignment) {
     yield put(actions.setListItems(filter, []));
   } else {
     const { submissions, messages, nextPageToken, error } = yield call(

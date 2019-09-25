@@ -1,30 +1,113 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Layout ~ kinops
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-
-body {
-  font-family: $font-family-sans-serif;
-  background-color: $black-3;
-}
+// Set Responsive Base sizes for Modularscale
+$modularscale: (
+  768px: (
+    base: 14px,
+    ratio: 1.125,
+  ),
+  1200px: (
+    base: 16px,
+    ratio: 1.125,
+  ),
+);
 html {
+  @include ms-respond(font-size, 0);
   box-sizing: border-box;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
-
 *,
 *::before,
 *::after {
   box-sizing: inherit;
 }
-
 html,
 body {
   height: 100%;
 }
-
 body {
-  margin: 0;
-  // Fix for modal z-index issue in IE 11 on Windows 10
   position: relative;
+  background-color: $gray3;
+  font-family: $font-family-sans-serif;
+  margin: 0; // Fix for modal z-index issue in IE 11 on Windows 10
   z-index: 0;
+}
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  // height: 100vh;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+.app-header {
+  flex: 0 0 auto;
+}
+.app-body {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  transition: margin 0.3s;
+  &.closed-sidebar {
+    margin-left: -252px;
+  }
+  .app-sidebar-container {
+    flex: 0 0 auto;
+    position: relative;
+  }
+  .app-main-container {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    display: block;
+    overflow-y: auto !important;
+  }
+}
+@media all and (max-width: 767px) {
+  .app-body {
+    &.open-sidebar,
+    &.closed-sidebar {
+      margin-left: 0;
+      .app-main-container:after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.3);
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s, visibility 0.3s;
+        z-index: 10;
+      }
+    }
+    &.closed-sidebar {
+      .app-main-container:after {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .app-sidebar-container {
+        left: -252px;
+      }
+    }
+    &.open-sidebar {
+      .app-main-container {
+        overflow: hidden;
+      }
+    }
+    .app-sidebar-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 1022;
+      transition: left 0.3s;
+    }
+  }
 }

@@ -89,7 +89,7 @@ export const State = Record({
   currentItemLoading: false,
   adhocFilter: Filter({
     type: 'adhoc',
-    assignments: AssignmentCriteria({ mine: true }),
+    assignments: 'mine',
   }),
   lists: Map(),
   statuses: Map(),

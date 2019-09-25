@@ -69,7 +69,7 @@
     }
   }
   > a:not(.btn) {
-    color: $gray;
+    color: $gray50;
     &:hover {
       color: $blue-lake;
     }
@@ -84,7 +84,7 @@
 
 // Section Title with top bar.
 .section__title {
-  color: $black;
+  color: $gray80;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -93,14 +93,14 @@
   font-weight: 600;
   padding: 0 0.75rem;
   margin: 0 0 1rem 0;
-  border-top: 2px solid $black-16;
+  border-top: 2px solid $gray16;
   form &,
   .form & {
     margin-left: -15px;
   }
   a,
   .fa {
-    color: $gray;
+    color: $gray50;
     font-size: 0.75rem;
     &:hover {
       color: $blue-lake;

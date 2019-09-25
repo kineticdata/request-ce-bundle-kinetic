@@ -2,13 +2,13 @@
  *   Assignments ~ Queue
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.package-layout--queue .assignment-badge,
+.assignment-badge,
 .modal-body .assignment-badge {
   display: flex;
   align-items: center;
   border-top: 1px solid $border-color;
   border-bottom: 1px solid $border-color;
-  color: $gray;
+  color: $gray50;
   margin: 1.5rem 0;
   padding: 0.3125rem 1rem;
   .badge {
@@ -18,7 +18,7 @@
     align-items: center;
     background-color: $blue-gray;
     border-radius: 50%;
-    color: $black-3;
+    color: $gray3;
     font-size: 1.125rem;
     font-weight: 600;
     margin-right: 0.5rem;

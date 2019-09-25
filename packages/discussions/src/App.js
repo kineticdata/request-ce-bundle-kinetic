@@ -16,7 +16,6 @@ import { I18n } from '@kineticdata/react';
 import { Discussions } from './components/Discussions';
 import { Discussion } from './components/Discussion';
 import { syncAppState } from './redux/modules/app';
-import './assets/styles/master.scss';
 
 const AppComponent = props => {
   if (props.error) {

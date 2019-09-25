@@ -15,6 +15,7 @@ export const Menu = props => {
         target={id}
         isOpen={props.showing === props.name}
         toggle={toggle}
+        trigger="legacy"
       >
         <PopoverBody className="filter-menu-popover">
           {(isarray(props.renderContent)
@@ -110,6 +111,7 @@ const SortButton = props => {
     </button>
   );
 };
+
 export const FilterMenuToolbar = ({ filter, refresh }) => (
   <FilterMenuAbstract
     filter={filter}
@@ -139,33 +141,35 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
               <I18n>{filter.name || 'Adhoc'}</I18n>
             </h2>
             <div className="queue-filter-list">
-              <Menu
-                name="team"
-                {...popoverProps}
-                renderButton={btnProps =>
-                  filter.teams.isEmpty() ? (
-                    <MenuButton {...btnProps}>
-                      <I18n>Any Team</I18n>
-                      <i className="fa fa-fw fa-caret-down" />
-                    </MenuButton>
-                  ) : (
-                    <div className="btn-group">
+              {props.hasTeams && (
+                <Menu
+                  name="team"
+                  {...popoverProps}
+                  renderButton={btnProps =>
+                    filter.teams.isEmpty() ? (
                       <MenuButton {...btnProps}>
-                        <I18n>Team</I18n>: {props.teamSummary}
+                        <I18n>Any Team</I18n>
+                        <i className="fa fa-fw fa-caret-down" />
                       </MenuButton>
-                      <ClearButton action={props.clearTeams} />
-                    </div>
-                  )
-                }
-                renderContent={() => props.teamFilters}
-              />
+                    ) : (
+                      <div className="btn-group">
+                        <MenuButton {...btnProps}>
+                          <I18n>Team</I18n>: {props.teamSummary}
+                        </MenuButton>
+                        <ClearButton action={props.clearTeams} />
+                      </div>
+                    )
+                  }
+                  renderContent={() => props.teamFilters}
+                />
+              )}
               <I18n
                 render={translate => (
                   <Menu
                     name="assignment"
                     {...popoverProps}
                     renderButton={btnProps =>
-                      filter.assignments.toSeq().every(b => !b) ? (
+                      !filter.assignments ? (
                         <MenuButton {...btnProps}>
                           {translate('Any Assignment')}
                           {filter.createdByMe &&

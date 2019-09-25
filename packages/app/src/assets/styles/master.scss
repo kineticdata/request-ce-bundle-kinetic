@@ -3,11 +3,23 @@
  * Copyright (c) 2017 - 2018 Kinetic Data, Inc.
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-@import '~common/src/assets/styles/variables';
-@import '~common/src/assets/styles/mixins';
+// Import variables to be used by all below imports
+@import 'variables';
 
+// Import styles from common
+@import '~common/src/assets/styles/master';
+// Import styles from all other packages
+@import '~services/src/assets/styles/master';
+@import '~queue/src/assets/styles/master';
+@import '~tech-bar/src/assets/styles/master';
+@import '~discussions/src/assets/styles/master';
+@import '~settings/src/assets/styles/master';
+// etc.
+
+// Import modularscale
 @import '~modularscale-sass/stylesheets/modularscale';
 
+// Import app styles
 @import 'layout';
 @import 'sidebar';
 @import 'authentication';

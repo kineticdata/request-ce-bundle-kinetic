@@ -2,53 +2,48 @@
  *   Robots ~ Space
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.package-layout--space {
-  .robots-pagination {
-    margin-bottom: 1rem;
-    text-align: center;
-  }
+.robots-pagination {
+  margin-bottom: 1rem;
+  text-align: center;
+}
 
-  table.table-robots {
-    font-size: 0.875rem;
-    margin-top: 1.5rem;
+table.table-robots {
+  font-size: 0.875rem;
+  margin-top: 1.5rem;
 
-    tbody {
-      td {
-        > a {
-          font-weight: 600;
-        }
-        > small {
-          color: $gray;
-        }
-        > .status {
-          font-size: 85%;
-        }
-        > .list-dropdown {
-          & > button {
-            padding: 0;
-            color: $black-50;
-            &:hover {
-              color: darken($black-50, 5%);
-            }
+  tbody {
+    td {
+      > a {
+        font-weight: 600;
+      }
+      > small {
+        color: $gray50;
+      }
+      > .status {
+        font-size: 85%;
+      }
+      > .list-dropdown {
+        & > button {
+          padding: 0;
+          color: $gray50;
+          &:hover {
+            color: darken($gray50, 5%);
           }
         }
-        > .dropdown .btn {
-          background-color: transparent;
-          padding: 0rem 0.25rem;
-        }
-        & .dropdown-item {
-          padding: 0.25rem 1rem;
-        }
+      }
+      > .dropdown .btn {
+        background-color: transparent;
+        padding: 0rem 0.25rem;
+      }
+      & .dropdown-item {
+        padding: 0.25rem 1rem;
       }
     }
   }
-
-  @media (min-width: 768px) {
-    .d-md-table-header-group {
-      display: table-header-group !important;
-    }
-  }
 }
-.page-panel--robots-sidebar {
-  flex-direction: column;
+
+@media (min-width: 768px) {
+  .d-md-table-header-group {
+    display: table-header-group !important;
+  }
 }

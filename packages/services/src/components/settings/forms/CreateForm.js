@@ -54,8 +54,8 @@ export const CreateFormComponent = ({
   !loadingTeams &&
   !loadingServices &&
   (!clone || !loadingForm) && (
-    <div className="page-container page-container--datastore">
-      <div className="page-panel page-panel--scrollable page-panel--datastore-content">
+    <div className="page-container">
+      <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -99,7 +99,7 @@ export const CreateFormComponent = ({
                       'Template to Clone': event.target.value,
                     })
                   }
-                  required="true"
+                  required={true}
                 >
                   <option />
                   {templateForms.map(form => (
@@ -142,7 +142,7 @@ export const CreateFormComponent = ({
                     });
                   }
                 }}
-                required="true"
+                required={true}
               />
             </div>
             <div className="form-group">
@@ -158,7 +158,7 @@ export const CreateFormComponent = ({
                   setInputs({ ...inputs, Slug: event.target.value })
                 }
                 onKeyUp={() => setSlugEntered(true)}
-                required="true"
+                required={true}
               />
             </div>
             <div className="form-group">
@@ -233,8 +233,8 @@ export const CreateFormComponent = ({
                   }
                   setInputs({ ...inputs, 'Owning Team': value });
                 }}
-                multiple="true"
-                required="true"
+                multiple={true}
+                required={true}
               >
                 {teamOptions(teams)}
               </select>
@@ -275,7 +275,9 @@ export const CreateFormComponent = ({
 
 export const mapStateToProps = (state, { id }) => ({
   loading: state.forms.loading,
-  templateForms: state.forms.data.filter(form => form.type === 'Template'),
+  templateForms: state.forms.data
+    ? state.forms.data.filter(form => form.type === 'Template')
+    : [],
   servicesSettings: state.servicesSettings,
   kappSlug: state.app.kappSlug,
   clone: id,
