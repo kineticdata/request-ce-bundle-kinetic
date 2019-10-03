@@ -1,16 +1,7 @@
 import React from 'react';
-import { TeamSelect } from '@kineticdata/react';
+import { FormSelect } from '@kineticdata/react';
 import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { FieldWrapper } from './FieldWrapper';
-import classNames from 'classnames';
-
-const splitTeamName = team => {
-  const [local, ...parents] = team
-    .get('name')
-    .split('::')
-    .reverse();
-  return [parents.reverse().join('::'), local];
-};
 
 const Input = props => <input {...props.inputProps} className="form-control" />;
 
@@ -27,7 +18,7 @@ const Selection = ({ selection, edit, remove }) => {
       className="form-control"
       type="text"
       disabled
-      value={selection.get('name')}
+      value={selection.get('slug')}
     />
   );
   return edit || remove ? (
@@ -61,21 +52,18 @@ const Selection = ({ selection, edit, remove }) => {
   );
 };
 
-const SuggestionsContainer = ({ open, children, containerProps }) => (
-  <div {...containerProps} className={classNames('suggestions', { open })}>
-    {children}
+const Suggestion = ({ suggestion, active }) => (
+  <div className={`suggestion ${active ? 'active' : ''}`}>
+    <div className="large">{suggestion.get('name')}</div>
+    <div className="small">{suggestion.get('description')}</div>
   </div>
 );
 
-const Suggestion = ({ suggestion, active }) => {
-  const [parent, local] = splitTeamName(suggestion);
-  return (
-    <div className={classNames('suggestion', { active })}>
-      {parent && <div className="small">{parent}</div>}
-      <div className="large">{local}</div>
-    </div>
-  );
-};
+const SuggestionsContainer = ({ open, children, containerProps }) => (
+  <div {...containerProps} className={`suggestions ${open ? 'open' : ''}`}>
+    {children}
+  </div>
+);
 
 const components = {
   Input,
@@ -86,13 +74,15 @@ const components = {
   Suggestion,
 };
 
-export const TeamField = props => (
+export const FormField = props => (
   <FieldWrapper {...props}>
-    <TeamSelect
+    <FormSelect
       components={components}
       textMode
       id={props.id}
       value={props.value}
+      options={props.options}
+      search={props.search}
       onChange={props.onChange}
       onBlur={props.onBlur}
       onFocus={props.onFocus}
@@ -101,13 +91,15 @@ export const TeamField = props => (
   </FieldWrapper>
 );
 
-export const TeamMultiField = props => (
+export const FormMultiField = props => (
   <FieldWrapper {...props}>
-    <TeamSelect
+    <FormSelect
       components={components}
       multiple
       id={props.id}
       value={props.value}
+      options={props.options}
+      search={props.search}
       onChange={props.onChange}
       onBlur={props.onBlur}
       onFocus={props.onFocus}

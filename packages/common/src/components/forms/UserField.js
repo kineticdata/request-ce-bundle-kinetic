@@ -2,54 +2,55 @@ import React from 'react';
 import { UserSelect } from '@kineticdata/react';
 import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { FieldWrapper } from './FieldWrapper';
-import classNames from 'classnames';
 
 const Input = props => <input {...props.inputProps} className="form-control" />;
 
-const SelectionsContainer = ({ children, selections, multiple }) => (
-  <table className="table table-hover table-striped table-without-margin">
-    <thead>
-      <tr>
-        <th>Username</th>
-        <th>Display Name</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      {multiple && selections.isEmpty() ? (
-        <tr>
-          <td colSpan={3}>
-            <em>No users selected.</em>
-          </td>
-        </tr>
-      ) : (
-        children
-      )}
-    </tbody>
-  </table>
+const SelectionsContainer = ({ selections, input, multiple }) => (
+  <div className="kinetic-typeahead multi">
+    {selections}
+    {input}
+  </div>
 );
 
-const Selection = ({ selection, edit, remove }) => (
-  <tr className={`selection ${remove ? 'multi' : ''}`}>
-    <td>
-      <div className="large">{selection.get('username') || 'New User'}</div>
-    </td>
-    <td>
-      <div className="large">{selection.get('displayName') || 'New User'}</div>
-    </td>
-    <td>
-      {edit ? (
-        <button className="btn btn-sm btn-subtle" onClick={edit}>
-          <i className="fa fa-fw fa-pencil" />
-        </button>
-      ) : (
-        <button className="btn btn-sm btn-danger" onClick={remove}>
-          <i className="fa fa-fw fa-times" />
-        </button>
+const Selection = ({ selection, edit, remove }) => {
+  const input = (
+    <input
+      className="form-control"
+      type="text"
+      disabled
+      value={selection.get('username')}
+    />
+  );
+  return edit || remove ? (
+    <div className="input-group selection">
+      {input}
+      {edit && (
+        <div className="input-group-append">
+          <button
+            className="btn btn-sm btn-subtle"
+            onClick={edit}
+            type="button"
+          >
+            <i className="fa fa-fw fa-pencil" />
+          </button>
+        </div>
       )}
-    </td>
-  </tr>
-);
+      {remove && (
+        <div className="input-group-append">
+          <button
+            className="btn btn-sm btn-danger pull-right"
+            onClick={remove}
+            type="button"
+          >
+            <i className="fa fa-fw fa-times" />
+          </button>
+        </div>
+      )}
+    </div>
+  ) : (
+    input
+  );
+};
 
 const Suggestion = ({ suggestion, active }) => (
   <div className={`suggestion ${active ? 'active' : ''}`}>
@@ -66,10 +67,19 @@ const SuggestionsContainer = ({ open, children, containerProps }) => (
   </div>
 );
 
+const components = {
+  Input,
+  SelectionsContainer,
+  Selection,
+  Status,
+  SuggestionsContainer,
+  Suggestion,
+};
+
 export const UserField = props => (
   <FieldWrapper {...props}>
     <UserSelect
-      components={{ Input, Selection, Status, Suggestion }}
+      components={components}
       textMode
       id={props.id}
       value={props.value}
@@ -82,26 +92,9 @@ export const UserField = props => (
 );
 
 export const UserMultiField = props => (
-  <FieldWrapper {...props} omitLabel>
-    <h5>
-      <span
-        className={classNames({
-          'form-helper-popover': !!props.helpText,
-        })}
-        id={`${props.name}-helpTarget`}
-      >
-        {props.label}
-      </span>
-    </h5>
+  <FieldWrapper {...props}>
     <UserSelect
-      components={{
-        Input,
-        Selection,
-        SelectionsContainer,
-        Status,
-        Suggestion,
-        SuggestionsContainer,
-      }}
+      components={components}
       multiple
       id={props.id}
       value={props.value}

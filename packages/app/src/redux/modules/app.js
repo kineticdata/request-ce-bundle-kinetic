@@ -75,7 +75,7 @@ export const State = Record({
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.FETCH_APP_REQUEST:
-      return state.set('errors', List()).set('loading', true);
+      return state.set('errors', List());
     case types.FETCH_APP_SUCCESS:
       return state.set('errors', List()).set('loading', false);
     case types.FETCH_APP_FAILURE:

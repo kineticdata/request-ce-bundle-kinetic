@@ -8,9 +8,9 @@ import {
   LoadingMessage,
   Utils,
   openModalForm,
+  selectVisibleKapps,
 } from 'common';
 import { actions } from '../redux/modules/profile';
-import * as selectors from '../redux/selectors';
 import { PageTitle } from './shared/PageTitle';
 import { I18n } from '@kineticdata/react';
 
@@ -467,7 +467,7 @@ const selectAttributes = profile =>
     : {};
 
 const mapStateToProps = state => ({
-  visibleKapps: selectors.selectVisibleKapps(state),
+  visibleKapps: selectVisibleKapps(state),
   locales: state.app.locales,
   timezones: state.app.timezones,
   profile: state.profile.data,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { hasErrors } from './utils';
 import { FieldWrapper } from './FieldWrapper';
 
@@ -18,3 +18,57 @@ export const TextField = props => (
     />
   </FieldWrapper>
 );
+
+export class TextMultiField extends Component {
+  onEdit = index => event => {
+    this.props.onChange(
+      event.target.value
+        ? this.props.value.set(index, event.target.value)
+        : this.props.value.delete(index),
+    );
+  };
+
+  onAdd = event => {
+    this.props.onChange(this.props.value.push(event.target.value));
+  };
+
+  onRemove = index => () => {
+    this.props.onChange(this.props.value.delete(index));
+  };
+
+  // When rendering the inputs we append an empty string to the list of values,
+  // this is helpful because then the "new" input is in the keyed collection so
+  // when text is entered there we get a smooth addition of another new input.
+  render() {
+    return (
+      <FieldWrapper {...this.props}>
+        {this.props.value.push('').map((selection, i) => (
+          <div key={i} className="input-group selection mb-1">
+            <input
+              type="text"
+              className="form-control"
+              onBlur={this.props.onBlur}
+              onChange={selection ? this.onEdit(i) : this.onAdd}
+              onFocus={this.props.onFocus}
+              placeholder={this.props.placeholder}
+              value={selection}
+            />
+            {selection && (
+              <div className="input-group-append">
+                <button
+                  className="btn btn-sm btn-danger pull-right"
+                  onClick={this.onRemove(i)}
+                  onFocus={this.props.onFocus}
+                  onBlur={this.props.onBlur}
+                  type="button"
+                >
+                  <i className="fa fa-fw fa-times" />
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
+      </FieldWrapper>
+    );
+  }
+}

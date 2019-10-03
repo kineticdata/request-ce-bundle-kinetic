@@ -10,12 +10,6 @@ const kappBySpaceAttribute = (state, slugAttributeName) =>
           Utils.getAttributeValue(state.app.space, slugAttributeName),
       );
 
-// Kapp Selectors
-export const selectCurrentKapp = state =>
-  !state.app.loading && state.app.kappSlug
-    ? state.app.kapps.find(kapp => kapp.slug === state.app.kappSlug) || null
-    : null;
-
 export const selectAdminKapp = state =>
   kappBySpaceAttribute(state, 'Admin Kapp Slug');
 export const selectQueueKapp = state =>
@@ -52,40 +46,3 @@ export const selectIsGuest = state =>
     ? state.app.profile.spaceAdmin === false &&
       Utils.getRoles(state.app.profile).length === 0
     : false;
-
-// Kapp List Selectors
-export const selectPredefinedKapps = state =>
-  !state.app.loading
-    ? [
-        selectTeamsKapp(state),
-        selectServicesKapp(state),
-        selectQueueKapp(state),
-        selectTechBarKapp(state),
-      ].filter(kapp => kapp != null)
-    : [];
-export const selectAdditionalKapps = state =>
-  !state.app.loading
-    ? state.app.kapps
-        .filter(
-          kapp =>
-            kapp !== selectAdminKapp(state) &&
-            !selectPredefinedKapps(state).includes(kapp),
-        )
-        .filter(kapp => kapp !== selectCurrentKapp(state))
-    : [];
-
-export const selectVisibleKapps = state => {
-  if (state.app.loading) {
-    return [];
-  }
-  const adminKappSlug = Utils.getAttributeValue(
-    state.app.space,
-    'Admin Kapp Slug',
-    'admin',
-  );
-  return state.app.kapps.filter(
-    k =>
-      k.slug !== adminKappSlug &&
-      !Utils.hasAttributeValue(k, 'Hidden', ['True', 'Yes'], true),
-  );
-};

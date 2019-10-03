@@ -12,7 +12,7 @@ import {
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState, withProps } from 'recompose';
 import { Link } from 'react-router-dom';
-import { Utils } from 'common';
+import { Utils, selectVisibleKapps } from 'common';
 import { AlertsDropdown } from './AlertsDropdown';
 import { ProfileDropdown } from './ProfileDropdown';
 import { I18n } from '@kineticdata/react';
@@ -114,7 +114,7 @@ export const mapStateToProps = state => ({
   kapp: state.app.kapp,
   pathname: state.router.location.pathname,
   // Selectors
-  visibleKapps: selectors.selectVisibleKapps(state),
+  visibleKapps: selectVisibleKapps(state),
   hasAccessToManagement: selectors.selectHasAccessToManagement(state),
   hasAccessToSupport: selectors.selectHasAccessToSupport(state),
   isGuest: selectors.selectIsGuest(state),

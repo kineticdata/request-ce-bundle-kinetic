@@ -1,0 +1,107 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Typeahead ~ Common
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// Kinetic Typeahead
+.kinetic-typeahead {
+  position: relative;
+
+  &.multi > div:not(:last-child) {
+    margin-bottom: 0.25rem;
+  }
+
+  .suggestions {
+    position: absolute;
+    z-index: 1;
+    display: none;
+    min-width: 20rem;
+    max-height: 360px;
+    margin-top: 0.5rem;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #d5d5d5;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+
+    &.open {
+      display: block;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .suggestion {
+      padding: 8px 12px;
+      cursor: pointer;
+
+      &.active,
+      &:hover {
+        color: #1094c4;
+        background-color: #f8f9fa;
+      }
+    }
+  }
+
+  .suggestions .status.warning {
+    padding: 12px 24px;
+    color: #ff991c;
+    font-size: 14px;
+    background-color: rgba(245, 166, 35, 0.13);
+    i {
+      margin-right: 4px;
+    }
+  }
+
+  .suggestions .status.info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 8px;
+    color: #7e8083;
+    font-size: 14px;
+    background-color: #f7f9fb;
+    border-bottom: 1px solid #d5d5d5;
+
+    .btn {
+      color: #7e8083;
+    }
+  }
+
+  .large {
+    font-size: 16px;
+  }
+
+  .small {
+    font-size: 14px;
+  }
+
+  .suggestions .search-actions {
+    margin: 0.5rem 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      i {
+        margin-right: 4px;
+      }
+
+      .count {
+        margin-left: auto;
+        color: #1094c4;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .selections {
+    margin-bottom: 0.25rem;
+  }
+
+  .selection:not(.input-group) button {
+    margin-left: 1rem;
+  }
+}

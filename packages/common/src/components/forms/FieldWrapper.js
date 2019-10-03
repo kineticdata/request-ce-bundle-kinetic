@@ -1,6 +1,5 @@
 import React from 'react';
 import { I18n } from '@kineticdata/react';
-import classNames from 'classnames';
 import { hasErrors } from './utils';
 
 export const FieldWrapper = props => {
@@ -11,11 +10,7 @@ export const FieldWrapper = props => {
   return props.visible ? (
     <div className="form-group">
       {!props.omitLabel && (
-        <label
-          htmlFor={props.id}
-          id={`${props.name}-helpTarget`}
-          className={classNames({ 'form-helper-popover': !!props.helpText })}
-        >
+        <label htmlFor={props.id} id={props.name}>
           {props.label}
           {props.required && <abbr title="required">*</abbr>}
         </label>
