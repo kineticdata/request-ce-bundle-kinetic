@@ -1,428 +1,252 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
-import { Map, List, fromJS } from 'immutable';
-import { compose, lifecycle, withState, withHandlers } from 'recompose';
-import { addSuccess, addError, AttributeSelectors } from 'common';
-import { fetchKapp, updateKapp } from '@kineticdata/react';
-import isarray from 'isarray';
-import { I18n } from '@kineticdata/react';
+import { I18n, KappForm } from '@kineticdata/react';
+import { compose, withHandlers } from 'recompose';
 import { connect } from '../../../redux/store';
+import { FormComponents, addToast, selectQueueKappSlug } from 'common';
 import { PageTitle } from '../../shared/PageTitle';
 
-export const SettingsComponent = ({
-  attributesMap,
-  handleAttributeChange,
-  requiredKapps,
-  currentKapp,
-  updateSettings,
-  attributesMapDifferences,
-  kappName,
-  handleNameChange,
-  previousKappName,
-  appLocation,
-}) => (
-  <div className="page-container">
-    <PageTitle parts={['Kapp Settings', currentKapp.name]} />
-    <div className="page-panel page-panel--white">
-      <div className="page-title">
-        <div className="page-title__wrapper">
-          <h3>
-            <Link to={appLocation}>
-              <I18n>services</I18n>
-            </Link>{' '}
-            /{` `}
-            <Link to={`${appLocation}/settings`}>
-              <I18n>settings</I18n>
-            </Link>{' '}
-            /{` `}
-          </h3>
-          <h1>
-            <I18n>{currentKapp.name}</I18n> <I18n>Settings</I18n>
-          </h1>
-        </div>
-      </div>
-      <section>
-        <form>
-          <h2 className="section__title">
-            <I18n>Display Options</I18n>
-          </h2>
-          <div className="form-group">
-            <label>
-              <I18n>Kapp Name</I18n>
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              value={kappName}
-              onChange={handleNameChange}
-            />
-            <small>
-              <I18n>The Name of the Kapp Referenced Throughout the Kapp</I18n>
-            </small>
-          </div>
-          {attributesMap.has('Icon') && (
-            <AttributeSelectors.IconSelect
-              id="Icon"
-              value={attributesMap.getIn(['Icon', 'value'])}
-              onChange={handleAttributeChange}
-              label="Display Icon"
-              description={attributesMap.getIn(['Icon', 'description'])}
-            />
-          )}
-          {attributesMap.has('Hidden') && (
-            <AttributeSelectors.TrueFalseSelect
-              id="Hidden"
-              value={attributesMap.getIn(['Hidden', 'value', 0])}
-              onChange={handleAttributeChange}
-              label="Hide Kapp from Navigation"
-              description={attributesMap.getIn(['Hidden', 'description'])}
-            />
-          )}
-          {attributesMap.has('Record Search History') && (
-            <div className="form-group">
-              <label htmlFor="Record Search History">
-                <I18n>Record Search History</I18n>
-              </label>
-              <I18n
-                render={translate => (
-                  <select
-                    id="Record Search History"
-                    value={
-                      attributesMap.getIn([
-                        'Record Search History',
-                        'value',
-                        0,
-                      ]) || 'Off'
-                    }
-                    onChange={handleAttributeChange}
-                  >
-                    <option value="All">
-                      {translate('All (always recorded)')}
-                    </option>
-                    <option value="None">
-                      {translate('None (only recorded if no results found)')}
-                    </option>
-                    <option value="Off">
-                      {translate('Off (never recorded)')}
-                    </option>
-                  </select>
-                )}
-              />
-              <small>
-                <I18n>
-                  Controls when searches made from this kapp are recorded.
-                </I18n>
-              </small>
-            </div>
-          )}
-          <h2 className="section__title">
-            <I18n>Workflow Options</I18n>
-          </h2>
-          {attributesMap.has('Approver') && (
-            <AttributeSelectors.ApproverSelect
-              id="Approver"
-              value={attributesMap.getIn(['Approver', 'value'])}
-              onChange={handleAttributeChange}
-              placeholder="--None--"
-              label="Default Kapp Approver"
-              description={attributesMap.getIn(['Approver', 'description'])}
-            />
-          )}
-          {attributesMap.has('Task Assignee Team') && (
-            <AttributeSelectors.TeamSelect
-              id="Task Assignee Team"
-              value={attributesMap.getIn(['Task Assignee Team', 'value'])}
-              onChange={handleAttributeChange}
-              valueMapper={value => value.team.name}
-              label="Default Kapp Task Assignee Team"
-              description={attributesMap.getIn([
-                'Task Assignee Team',
-                'description',
-              ])}
-            />
-          )}
-          {attributesMap.has('Service Days Due') && (
-            <AttributeSelectors.IntegerSelect
-              id="Service Days Due"
-              value={attributesMap.getIn(['Service Days Due', 'value'])}
-              onChange={handleAttributeChange}
-              label="Default Kapp Service Days Due"
-              description={attributesMap.getIn([
-                'Service Days Due',
-                'description',
-              ])}
-            />
-          )}
-          <h2 className="section__title">
-            <I18n>Form Mapping</I18n>
-          </h2>
-          {requiredKapps.queue &&
-            attributesMap.has('Approval Form Slug') && (
-              <AttributeSelectors.FormSelect
-                id="Approval Form Slug"
-                value={attributesMap.getIn(['Approval Form Slug', 'value'])}
-                onChange={handleAttributeChange}
-                valueMapper={value => value.slug}
-                kappSlug={requiredKapps.queue.slug}
-                label="Default Kapp Approval Form"
-                description={attributesMap.getIn([
-                  'Approval Form Slug',
-                  'description',
-                ])}
-              />
-            )}
-          {requiredKapps.queue &&
-            attributesMap.has('Task Form Slug') && (
-              <AttributeSelectors.FormSelect
-                id="Task Form Slug"
-                value={attributesMap.getIn(['Task Form Slug', 'value'])}
-                onChange={handleAttributeChange}
-                valueMapper={value => value.slug}
-                kappSlug={requiredKapps.queue.slug}
-                label="Default Task Form Slug"
-                description={attributesMap.getIn([
-                  'Task Form Slug',
-                  'description',
-                ])}
-              />
-            )}
+const fieldSet = [
+  'name',
+  'icon',
+  'recordSearchHistory',
+  'defaultServiceDaysDue',
+  'defaultKappApprover',
+  'defaultTaskAssigneeTeam',
+  'defaultApprovalForm',
+  'defaultTaskForm',
+  'sharedBridgedResourceForm',
+  'submittedNotificationTemplate',
+  'createdNotificationTemplate',
+];
 
-          {attributesMap.has('Notification Template Name - Complete') && (
-            <AttributeSelectors.NotificationTemplateSelect
-              id="Notification Template Name - Complete"
-              value={attributesMap.getIn([
-                'Notification Template Name - Complete',
-                'value',
-              ])}
-              placeholder="None Found"
-              onChange={handleAttributeChange}
-              valueMapper={value => value.submission.values['Name']}
-              label="Default Request Submitted Notification Template"
-              description={attributesMap.getIn([
-                'Notification Template Name - Complete',
-                'description',
-              ])}
-            />
-          )}
-          {attributesMap.has('Notification Template Name - Create') && (
-            <AttributeSelectors.NotificationTemplateSelect
-              id="Notification Template Name - Create"
-              value={attributesMap.getIn([
-                'Notification Template Name - Create',
-                'value',
-              ])}
-              placeholder="None Found"
-              onChange={handleAttributeChange}
-              valueMapper={value => value.submission.values['Name']}
-              label="Default Request Created Notification Template"
-              description={attributesMap.getIn([
-                'Notification Template Name - Create',
-                'description',
-              ])}
-            />
-          )}
-          {requiredKapps.admin &&
-            attributesMap.has('Shared Bridged Resource Form Slug') && (
-              <AttributeSelectors.FormSelect
-                id="Shared Bridged Resource Form Slug"
-                value={attributesMap.getIn([
-                  'Shared Bridged Resource Form Slug',
-                  'value',
-                ])}
-                onChange={handleAttributeChange}
-                valueMapper={value => value.slug}
-                kappSlug={currentKapp.slug}
-                label="Shared Bridged Resource Form Slug"
-                description={attributesMap.getIn([
-                  'Shared Bridged Resource Form Slug',
-                  'description',
-                ])}
-              />
-            )}
-        </form>
-        <div className="form__footer">
-          <span className="form__footer__right">
-            <button
-              className="btn btn-primary"
-              onClick={updateSettings}
-              disabled={
-                !(
-                  attributesMapDifferences.size !== 0 ||
-                  kappName !== previousKappName
-                )
-              }
-            >
-              <I18n>Save Changes</I18n>
-            </button>
-          </span>
-        </div>
-      </section>
-    </div>
-  </div>
+const FormLayout = ({ fields, error, buttons }) => (
+  <Fragment>
+    <h2 className="section__title">
+      <I18n>Display Options</I18n>
+    </h2>
+    {fields.get('name')}
+    {fields.get('icon')}
+    {fields.get('recordSearchHistory')}
+    <h2 className="section__title">
+      <I18n>Workflow Options</I18n>
+    </h2>
+    {fields.get('defaultServiceDaysDue')}
+    {fields.get('defaultKappApprover')}
+    {fields.get('defaultTaskAssigneeTeam')}
+    <h2 className="section__title">
+      <I18n>Form Mapping</I18n>
+    </h2>
+    {fields.get('defaultApprovalForm')}
+    {fields.get('defaultTaskForm')}
+    {fields.get('sharedBridgedResourceForm')}
+    {fields.get('submittedNotificationTemplate')}
+    {fields.get('createdNotificationTemplate')}
+    {error}
+    {buttons}
+  </Fragment>
 );
 
-const KAPP_INCLUDES = 'attributesMap,kappAttributeDefinitions,space.kapps';
-const settingsAttribute = (definition, attributesMap) => ({
-  name: definition.name,
-  description: definition.description,
-  value: attributesMap[definition.name],
-});
-const settingsAttributes = (attributeDefinitions, attributesMap) =>
-  fromJS(
-    attributeDefinitions.reduce(
-      (acc, def) => ({
-        ...acc,
-        [def.name]: settingsAttribute(def, attributesMap),
-      }),
-      {},
-    ),
-  );
-const kappMapping = kapp => {
-  const attributes = settingsAttributes(
-    kapp.kappAttributeDefinitions,
-    kapp.attributesMap,
-  );
-  const kapps = List(kapp.space.kapps);
-  const requiredKapps = {
-    queue: kapps.find(
-      kapp =>
-        kapp.slug ===
-        attributes.getIn(['Queue Kapp Slug', 'value', 0], 'queue'),
-    ),
-    admin: kapps.find(
-      kapp =>
-        kapp.slug ===
-        attributes.getIn(['Admin Kapp Slug', 'value', 0], 'admin'),
-    ),
-    services: kapps.find(
-      kapp =>
-        kapp.slug ===
-        attributes.getIn(['Services Kapp Slug', 'value', 0], 'services'),
-    ),
-  };
-  return {
-    attributes,
-    kapps,
-    requiredKapps,
-  };
-};
+const initialFormValue = (object, attributeName) =>
+  object.hasIn(['attributesMap', attributeName, 0])
+    ? { slug: object.getIn(['attributesMap', attributeName, 0]) }
+    : null;
+const asArray = value => (value ? [value] : []);
 
-// Fetches the Settings Required for this component
-const fetchSettings = ({
-  setAttributesMap,
-  setKapps,
-  setRequiredKapps,
-  setPreviousAttributesMap,
-  setKappName,
-  setPreviousKappName,
+export const ServicesSettingsComponent = ({
   currentKapp,
-}) => async () => {
-  const { kapp } = await fetchKapp({
-    kappSlug: currentKapp.slug,
-    include: KAPP_INCLUDES,
-  });
-  const { attributes, kapps, requiredKapps } = kappMapping(kapp);
-  setAttributesMap(attributes);
-  setPreviousAttributesMap(attributes);
-  setKapps(kapps);
-  setRequiredKapps(requiredKapps);
-  setKappName(kapp.name);
-  setPreviousKappName(kapp.name);
-};
-
-// Updates the Settings and Refetches the App
-const updateSettings = ({
-  attributesMapDifferences,
-  setAttributesMapDifferences,
-  kappName,
-  setAttributesMap,
-  setKapps,
-  setRequiredKapps,
-  setPreviousAttributesMap,
-  setKappName,
-  setPreviousKappName,
-  reloadApp,
-  currentKapp,
-}) => async () => {
-  const { kapp, serverError } = await updateKapp({
-    kappSlug: currentKapp.slug,
-    include: KAPP_INCLUDES,
-    kapp: {
-      name: kappName,
-      attributesMap: attributesMapDifferences,
-    },
-  });
-  if (kapp) {
-    const { attributes, kapps, requiredKapps } = kappMapping(kapp);
-    addSuccess('Settings were successfully updated', 'Kapp Updated');
-    setAttributesMap(attributes);
-    setPreviousAttributesMap(attributes);
-    setKapps(kapps);
-    setRequiredKapps(requiredKapps);
-    setKappName(kapp.name);
-    setPreviousKappName(kapp.name);
-    setAttributesMapDifferences(Map());
-    reloadApp();
-  } else {
-    addError(
-      serverError.error || 'Error Updating Kapp',
-      serverError.statusText || 'Please contact your system administrator',
-    );
-  }
-};
-
-// Handler that is called when an attribute value is changed.
-const handleAttributeChange = ({
-  attributesMap,
-  setAttributesMap,
-  previousAttributesMap,
-  setAttributesMapDifferences,
-}) => event => {
-  const field = event.target.id;
-  const value = List(
-    isarray(event.target.value) ? event.target.value : [event.target.value],
-  );
-  const updatedAttributesMap = attributesMap.setIn([field, 'value'], value);
-  const diff = updatedAttributesMap
-    .filter((v, k) => !previousAttributesMap.get(k).equals(v))
-    .map(v => v.get('value'));
-  console.log('PREV: ', previousAttributesMap.getIn([field, 'value']).toJS());
-  console.log('UPDATED: ', updatedAttributesMap.getIn([field, 'value']).toJS());
-  console.log('DIFF: ', diff.toJS());
-  setAttributesMap(updatedAttributesMap);
-  setAttributesMapDifferences(diff);
-};
-
-// Handler that is called when name changes
-const handleNameChange = ({ setKappName }) => event => {
-  setKappName(event.target.value);
-};
+  onSave,
+  queueKappSlug,
+}) => (
+  <KappForm
+    kappSlug={currentKapp.slug}
+    fieldSet={fieldSet}
+    onSave={onSave}
+    components={{ FormLayout }}
+    addFields={() => ({ kapp }) =>
+      kapp && [
+        {
+          name: 'icon',
+          label: 'Display Icon',
+          type: 'text',
+          helpText: 'Font Awesome icon to display in Kapp links.',
+          initialValue: kapp.hasIn(['attributesMap', 'Icon', 0])
+            ? { value: kapp.getIn(['attributesMap', 'Icon', 0]) }
+            : null,
+          component: FormComponents.IconField,
+        },
+        {
+          name: 'recordSearchHistory',
+          label: 'Record Search History',
+          type: 'select',
+          helpText: 'Controls when searches made from this kapp are recorded.',
+          initialValue: kapp.getIn(
+            ['attributesMap', 'Record Search History', 0],
+            'Off',
+          ),
+          placeholder: 'Off (never recorded)',
+          options: [
+            { label: 'All (always recorded)', value: 'All' },
+            {
+              label: 'None (only recorded if no results found)',
+              value: 'None',
+            },
+          ],
+        },
+        {
+          name: 'defaultServiceDaysDue',
+          label: 'Default Service Days Due',
+          type: 'text',
+          helpText:
+            'Number of days until service is expected to be fulfilled for forms in this Kapp - This attribute is overridden if set at the form level.',
+          initialValue: kapp.getIn(['attributesMap', 'Service Days Due', 0]),
+          component: FormComponents.IntegerField,
+        },
+        {
+          name: 'defaultKappApprover',
+          label: 'Default Kapp Approver',
+          type: 'text', // TODO needs custom field for selecting users, teams, or manager
+          helpText:
+            "Options are: Team Name, Individual Name or 'Manager'. If this is set, all forms in this kapp will get approvals sent to the value set here unless specified in a form.",
+          initialValue: kapp.getIn([
+            'attributesMap',
+            'Default Kapp Approver',
+            0,
+          ]),
+        },
+        {
+          name: 'defaultTaskAssigneeTeam',
+          label: 'Default Kapp Task Assignee Team',
+          type: 'team',
+          helpText: 'Team to assign tasks to if not defined in a form.',
+          initialValue: kapp.hasIn(['attributesMap', 'Task Assignee Team', 0])
+            ? { name: kapp.getIn(['attributesMap', 'Task Assignee Team', 0]) }
+            : null,
+        },
+        {
+          name: 'defaultApprovalForm',
+          label: 'Approval Form',
+          type: 'form',
+          helpText:
+            'The Queue kapp form which approvals should be created in (Overridden by Form attributes)',
+          initialValue: initialFormValue(kapp, 'Approval Form Slug'),
+          search: { kappSlug: queueKappSlug },
+        },
+        {
+          name: 'defaultTaskForm',
+          label: 'Default Task Form',
+          type: 'form',
+          helpText:
+            'The Queue kapp form to use when creating a task item (Overridden by Form attributes)',
+          initialValue: initialFormValue(kapp, 'Task Form Slug'),
+          search: { kappSlug: queueKappSlug },
+        },
+        {
+          name: 'sharedBridgedResourceForm',
+          label: 'Shared Bridged Resource Form',
+          type: 'form',
+          helpText:
+            'Slug of the form that exposes shared bridged resources in this kapp (typically shared-resources).',
+          initialValue: initialFormValue(
+            kapp,
+            'Shared Bridged Resource Form Slug',
+          ),
+          search: { kappSlug: currentKapp.slug },
+        },
+        {
+          name: 'submittedNotificationTemplate',
+          label: 'Default Request Submitted Notification Template',
+          type: 'text', // TODO needs Form to support new datasources and then convert to static select field
+          helpText:
+            'Name of the Notification Template to use when submissions in this Kapp are Completed.',
+          initialValue: kapp.getIn([
+            'attributesMap',
+            'Notification Template Name - Complete',
+            0,
+          ]),
+        },
+        {
+          name: 'createdNotificationTemplate',
+          label: 'Default Request Created Notification Template',
+          type: 'text', // TODO needs Form to support new datasources and then convert to static select field
+          helpText:
+            'Name of the Notification Template to use when submissions in this Kapp are Submitted.',
+          initialValue: kapp.getIn([
+            'attributesMap',
+            'Notification Template Name - Create',
+            0,
+          ]),
+        },
+      ]}
+    alterFields={{
+      name: {
+        helpText: 'The name of the Kapp referenced throughout the Kapp.',
+      },
+      attributesMap: {
+        serialize: ({ values }) => ({
+          Icon: asArray(values.get('icon')),
+          'Record Search History': asArray(values.get('recordSearchHistory')),
+          'Service Days Due': asArray(values.get('defaultServiceDaysDue')),
+          'Default Kapp Approver': asArray(values.get('defaultKappApprover')),
+          'Task Assignee Team': asArray(values.get('defaultTaskAssigneeTeam')),
+          'Approval Form Slug': asArray(
+            values.getIn(['defaultApprovalForm', 'slug']),
+          ),
+          'Task Form Slug': asArray(values.getIn(['defaultTaskForm', 'slug'])),
+          'Shared Bridged Resource Form Slug': asArray(
+            values.getIn(['sharedBridgedResourceForm', 'slug']),
+          ),
+          'Notification Template Name - Complete': asArray(
+            values.getIn(['submittedNotificationTemplate', 'slug']),
+          ),
+          'Notification Template Name - Create': asArray(
+            values.getIn(['createdNotificationTemplate', 'slug']),
+          ),
+        }),
+      },
+    }}
+  >
+    {({ form, initialized }) => (
+      <div className="page-container">
+        <PageTitle parts={[`${currentKapp.name} Settings`]} />
+        <div className="page-panel page-panel--white">
+          <div className="page-title">
+            <div className="page-title__wrapper">
+              <h3>
+                <Link to="../../">
+                  <I18n>services</I18n>
+                </Link>{' '}
+                /{` `}
+                <Link to="../">
+                  <I18n>settings</I18n>
+                </Link>{' '}
+                /{` `}
+              </h3>
+              <h1>
+                <I18n>{currentKapp.name} Settings</I18n>
+              </h1>
+            </div>
+          </div>
+          {initialized && <section className="form">{form}</section>}
+        </div>
+      </div>
+    )}
+  </KappForm>
+);
 
 const mapStateToProps = state => ({
   currentKapp: state.app.kapp,
-  servicesSettings: state.servicesSettings,
-  appLocation: state.app.location,
   reloadApp: state.app.actions.refreshApp,
+  queueKappSlug: selectQueueKappSlug(state),
 });
 
+// Settings Container
 export const ServicesSettings = compose(
   connect(mapStateToProps),
-  withState('attributesMap', 'setAttributesMap', Map()),
-  withState('previousAttributesMap', 'setPreviousAttributesMap', Map()),
-  withState('attributesMapDifferences', 'setAttributesMapDifferences', Map()),
-  withState('requiredKapps', 'setRequiredKapps', List()),
-  withState('kapps', 'setKapps', List()),
-  withState('kappName', 'setKappName', ''),
-  withState('previousKappName', 'setPreviousKappName', ''),
   withHandlers({
-    handleNameChange,
-    handleAttributeChange,
-    fetchSettings,
-    updateSettings,
-  }),
-  lifecycle({
-    componentWillMount() {
-      this.props.fetchSettings();
+    onSave: props => () => () => {
+      addToast(`${this.props.currentKapp.name} settings saved successfully.`);
+      props.reloadApp();
     },
   }),
-)(SettingsComponent);
+)(ServicesSettingsComponent);

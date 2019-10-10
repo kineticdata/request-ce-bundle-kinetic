@@ -1,3 +1,4 @@
+// Default Field Types
 import { AttributesField } from './AttributesField';
 import { CheckboxField } from './CheckboxField';
 import { CodeField, CodeTemplateField } from './CodeField';
@@ -12,7 +13,9 @@ import { SelectField } from './SelectField';
 import { SelectMultiField } from './SelectMultiField';
 import { UserField, UserMultiField } from './UserField';
 import { RadioField } from './RadioField';
+// Custom Bundle Field Types
 import { IntegerField } from './IntegerField';
+import { IconField } from './IconField';
 
 export default {
   AttributesField,
@@ -23,6 +26,7 @@ export default {
   FormError,
   FormField,
   FormMultiField,
+  IconField,
   IntegerField,
   PasswordField,
   RadioField,

@@ -2,11 +2,12 @@ import React from 'react';
 import { FormSelect } from '@kineticdata/react';
 import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { FieldWrapper } from './FieldWrapper';
+import classNames from 'classnames';
 
 const Input = props => <input {...props.inputProps} className="form-control" />;
 
 const SelectionsContainer = ({ selections, input, multiple }) => (
-  <div className="kinetic-typeahead multi">
+  <div className={classNames('kinetic-typeahead', { multi: multiple })}>
     {selections}
     {input}
   </div>

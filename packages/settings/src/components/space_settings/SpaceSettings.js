@@ -3,7 +3,6 @@ import { Link } from '@reach/router';
 import { I18n, SpaceForm } from '@kineticdata/react';
 import { compose, withHandlers } from 'recompose';
 import { connect } from '../../redux/store';
-
 import {
   FormComponents,
   addToast,
@@ -18,7 +17,6 @@ const fieldSet = [
   'name',
   'defaultLocale',
   'defaultTimezone',
-  'attributesMap',
   'defaultKappDisplay',
   'defaultServiceDaysDue',
   'defaultTaskAssigneeTeam',
@@ -50,11 +48,11 @@ const Layout = ({ fields, error, buttons }) => (
       <I18n>Form Mapping</I18n>
     </h2>
     {fields.get('defaultApprovalForm')}
+    {fields.get('defaultTaskFormSlug')}
     {fields.get('feedbackFormSlug')}
     {fields.get('helpFormSlug')}
     {fields.get('requestAlertFormSlug')}
     {fields.get('suggestAServiceFormSlug')}
-    {fields.get('defaultTaskFormSlug')}
     {error}
     {buttons}
   </Fragment>
@@ -109,7 +107,7 @@ export const SpaceSettingsComponent = ({
         },
         {
           name: 'defaultTaskAssigneeTeam',
-          label: 'Task Assignee Team',
+          label: 'Default Task Assignee Team',
           type: 'team',
           helpText: 'Team to assign tasks to if not defined in a form or kapp.',
           initialValue: space.hasIn(['attributesMap', 'Task Assignee Team', 0])
@@ -118,11 +116,20 @@ export const SpaceSettingsComponent = ({
         },
         {
           name: 'defaultApprovalForm',
-          label: 'Approval Form Slug',
+          label: 'Approval Form',
           type: 'form',
           helpText:
             'The Queue kapp form which approvals should be created in (Overridden by Kapp and Form Attributes)',
           initialValue: initialFormValue(space, 'Approval Form Slug'),
+          search: { kappSlug: queueKappSlug },
+        },
+        {
+          name: 'defaultTaskFormSlug',
+          label: 'Default Task Form',
+          type: 'form',
+          helpText:
+            'The Queue kapp form to use when creating a task item (Overridden by Kapp and Form Attributes)',
+          initialValue: initialFormValue(space, 'Task Form Slug'),
           search: { kappSlug: queueKappSlug },
         },
         {
@@ -159,46 +166,47 @@ export const SpaceSettingsComponent = ({
           initialValue: initialFormValue(space, 'Suggest a Service Form Slug'),
           search: { kappSlug: servicesKappSlug },
         },
-        {
-          name: 'defaultTaskFormSlug',
-          label: 'Default Task Form Slug',
-          type: 'form',
-          helpText:
-            'The Queue kapp form to use when creating a task item (Overridden by Kapp and Form Attributes)',
-          initialValue: initialFormValue(space, 'Task Form Slug'),
-          search: { kappSlug: queueKappSlug },
-        },
       ]}
-    alterFields={{
-      name: {
-        helpText: 'The Name of the Space Referenced Throughout the System',
-      },
-      attributesMap: {
-        serialize: ({ values }) => ({
-          'Default Kapp Display': asArray(values.get('defaultKappDisplay')),
-          'Service Days Due': asArray(values.get('defaultServiceDaysDue')),
-          'Task Assignee Team': asArray(
-            values.getIn(['defaultTaskAssigneeTeam', 'name']),
-          ),
-          'Approval Form Slug': asArray(
-            values.getIn(['defaultApprovalForm', 'slug']),
-          ),
-          'Feedback Form Slug': asArray(
-            values.getIn(['feedbackFormSlug', 'slug']),
-          ),
-          'Help Form Slug': asArray(values.getIn(['helpFormSlug', 'slug'])),
-          'Request Alert Form Slug': asArray(
-            values.getIn(['requestAlertFormSlug', 'slug']),
-          ),
-          'Suggest a Service Form Slug': asArray(
-            values.getIn(['suggestAServiceFormSlug', 'slug']),
-          ),
-          'Task Form Slug': asArray(
-            values.getIn(['defaultTaskFormSlug', 'slug']),
-          ),
-        }),
-      },
-    }}
+    alterFields={() => ({ space }) =>
+      space && {
+        name: {
+          helpText: 'The Name of the Space referenced throughout the system.',
+        },
+        attributesMap: {
+          serialize: ({ values }) => ({
+            'Default Kapp Display': asArray(values.get('defaultKappDisplay')),
+            'Service Days Due': asArray(values.get('defaultServiceDaysDue')),
+            'Task Assignee Team': asArray(
+              values.getIn(['defaultTaskAssigneeTeam', 'name']),
+            ),
+            'Approval Form Slug': asArray(
+              values.getIn(['defaultApprovalForm', 'slug']),
+            ),
+            'Task Form Slug': asArray(
+              values.getIn(['defaultTaskFormSlug', 'slug']),
+            ),
+            'Feedback Form Slug': asArray(
+              values.getIn(['feedbackFormSlug', 'slug']),
+            ),
+            'Help Form Slug': asArray(values.getIn(['helpFormSlug', 'slug'])),
+            'Request Alert Form Slug': asArray(
+              values.getIn(['requestAlertFormSlug', 'slug']),
+            ),
+            'Suggest a Service Form Slug': asArray(
+              values.getIn(['suggestAServiceFormSlug', 'slug']),
+            ),
+          }),
+        },
+        // TODO
+        // defaultTimezone: {
+        //   initialValue: { value: space.get('defaultTimezone') },
+        //   renderAttributes: { typeahead: true },
+        // },
+        // defaultLocale: {
+        //   initialValue: { value: space.get('defaultLocale') },
+        //   renderAttributes: { typeahead: true },
+        // },
+      }}
     components={{
       FormLayout: Layout,
     }}

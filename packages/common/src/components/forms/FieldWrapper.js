@@ -30,12 +30,15 @@ export const FieldWrapper = props => {
           <I18n>{props.helpText}</I18n>
         </small>
       )}
-      {hasErrors(props) &&
-        props.errors.map(error => (
-          <span className="help-block text-danger" key={error}>
-            {error}
-          </span>
-        ))}
+      {hasErrors(props) && (
+        <div>
+          {props.errors.map(error => (
+            <span className="help-block text-danger" key={error}>
+              {error}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   ) : null;
 };

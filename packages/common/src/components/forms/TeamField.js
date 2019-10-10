@@ -15,7 +15,7 @@ const splitTeamName = team => {
 const Input = props => <input {...props.inputProps} className="form-control" />;
 
 const SelectionsContainer = ({ selections, input, multiple }) => (
-  <div className="kinetic-typeahead multi">
+  <div className={classNames('kinetic-typeahead', { multi: multiple })}>
     {selections}
     {input}
   </div>

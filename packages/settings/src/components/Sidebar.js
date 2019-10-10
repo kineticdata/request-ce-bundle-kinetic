@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, withProps } from 'recompose';
 import { bundle } from '@kineticdata/react';
 import { selectHasSharedTaskEngine } from '../redux/modules/spaceApp';
 import {
+  selectVisibleKapps,
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
 } from 'common';
@@ -23,62 +24,83 @@ export const SidebarComponent = ({
   showNotifications,
   showRobots,
   showSchedulers,
+  visibleKapps,
 }) => (
   <div className="sidebar">
     <div className="sidebar-group--content-wrapper">
       {!loading && (
-        <ul className="nav flex-column sidebar-group">
-          <li className="nav-item">
-            {spaceAdmin && (
-              <Link to="system" getProps={isActiveClass('nav-link')}>
-                <I18n>System</I18n>
-                <span className="fa fa-fw fa-angle-right" />
-              </Link>
+        <Fragment>
+          <ul className="nav flex-column sidebar-group">
+            <li className="nav-item">
+              {spaceAdmin && (
+                <Link to="system" getProps={isActiveClass('nav-link')}>
+                  <I18n>System</I18n>
+                  <span className="fa fa-fw fa-angle-right" />
+                </Link>
+              )}
+              {showDatastore && (
+                <Link to="datastore" getProps={isActiveClass('nav-link')}>
+                  <I18n>Datastore</I18n>
+                  <span className="fa fa-fw fa-angle-right" />
+                </Link>
+              )}
+              {showNotifications && (
+                <Link to="notifications" getProps={isActiveClass('nav-link')}>
+                  <I18n>Notifications</I18n>
+                  <span className="fa fa-fw fa-angle-right" />
+                </Link>
+              )}
+              {showRobots && (
+                <Link to="robots" getProps={isActiveClass('nav-link')}>
+                  <I18n>Robots</I18n>
+                  <span className="fa fa-fw fa-angle-right" />
+                </Link>
+              )}
+              {spaceAdmin && (
+                <Link to="users" getProps={isActiveClass('nav-link')}>
+                  <I18n>Users</I18n>
+                  <span className="fa fa-fw fa-angle-right" />
+                </Link>
+              )}
+              {spaceAdmin && (
+                <Link to="teams" getProps={isActiveClass('nav-link')}>
+                  <I18n>Teams</I18n>
+                  <span className="fa fa-fw fa-angle-right" />
+                </Link>
+              )}
+              {showSchedulers && (
+                <Link to="schedulers" getProps={isActiveClass('nav-link')}>
+                  <I18n>Schedulers</I18n>
+                  <span className="fa fa-fw fa-angle-right" />
+                </Link>
+              )}
+              {spaceAdmin && (
+                <Link to="translations" getProps={isActiveClass('nav-link')}>
+                  <I18n>Translations</I18n>
+                  <span className="fa fa-fw fa-angle-right" />
+                </Link>
+              )}
+            </li>
+          </ul>
+          {visibleKapps &&
+            visibleKapps.length > 0 && (
+              <div className="sidebar-group">
+                <h1>Kapp Settings</h1>
+                <ul className="nav flex-column">
+                  {visibleKapps.map(kapp => (
+                    <Link
+                      key={kapp.slug}
+                      to={`/kapps/${kapp.slug}/settings`}
+                      getProps={isActiveClass('nav-link')}
+                    >
+                      <I18n>{kapp.name}</I18n>
+                      <span className="fa fa-fw fa-angle-right" />
+                    </Link>
+                  ))}
+                </ul>
+              </div>
             )}
-            {showDatastore && (
-              <Link to="datastore" getProps={isActiveClass('nav-link')}>
-                <I18n>Datastore</I18n>
-                <span className="fa fa-fw fa-angle-right" />
-              </Link>
-            )}
-            {showNotifications && (
-              <Link to="notifications" getProps={isActiveClass('nav-link')}>
-                <I18n>Notifications</I18n>
-                <span className="fa fa-fw fa-angle-right" />
-              </Link>
-            )}
-            {showRobots && (
-              <Link to="robots" getProps={isActiveClass('nav-link')}>
-                <I18n>Robots</I18n>
-                <span className="fa fa-fw fa-angle-right" />
-              </Link>
-            )}
-            {spaceAdmin && (
-              <Link to="users" getProps={isActiveClass('nav-link')}>
-                <I18n>Users</I18n>
-                <span className="fa fa-fw fa-angle-right" />
-              </Link>
-            )}
-            {spaceAdmin && (
-              <Link to="teams" getProps={isActiveClass('nav-link')}>
-                <I18n>Teams</I18n>
-                <span className="fa fa-fw fa-angle-right" />
-              </Link>
-            )}
-            {showSchedulers && (
-              <Link to="schedulers" getProps={isActiveClass('nav-link')}>
-                <I18n>Schedulers</I18n>
-                <span className="fa fa-fw fa-angle-right" />
-              </Link>
-            )}
-            {spaceAdmin && (
-              <Link to="translations" getProps={isActiveClass('nav-link')}>
-                <I18n>Translations</I18n>
-                <span className="fa fa-fw fa-angle-right" />
-              </Link>
-            )}
-          </li>
-        </ul>
+        </Fragment>
       )}
     </div>
     {spaceAdmin && (
@@ -117,6 +139,7 @@ export const mapStateToProps = state => ({
   forms: state.settingsDatastore.forms,
   spaceAdmin: state.app.profile.spaceAdmin,
   pathname: state.router.location.pathname,
+  visibleKapps: selectVisibleKapps(state),
   hasSharedTaskEngine: selectHasSharedTaskEngine(state),
   isSchedulerAdmin: selectHasRoleSchedulerAdmin(state.app.profile),
   isSchedulerManager: selectHasRoleSchedulerManager(state.app.profile),
