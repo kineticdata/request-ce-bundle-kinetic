@@ -9,7 +9,7 @@ import { FormList } from './forms/FormList';
 import { FormSettings } from './forms/FormSettings';
 import { FormActivity } from './forms/FormActivity';
 import { CreateForm } from './forms/CreateForm';
-import { CategoriesSettings } from './categories/Categories';
+import { CategorySettings } from './categories/CategorySettings';
 import { FormSubmissions } from './forms/FormSubmissions';
 import { I18n } from '@kineticdata/react';
 import { connect } from '../../redux/store';
@@ -23,7 +23,7 @@ export const SettingsComponent = ({ kappSlug }) => (
     <FormSettings path="forms/:id/settings" />
     <FormActivity path="forms/:id/activity" />
     <FormSubmissions path="forms/:id" />
-    <CategoriesSettings path="categories" />
+    <CategorySettings path="categories/*" />
     <SettingsNavigation default />
   </Router>
 );

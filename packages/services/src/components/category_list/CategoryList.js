@@ -31,7 +31,7 @@ export const CategoryList = ({ categories }) => (
                 key={category.slug}
                 category={category}
                 path={category.slug}
-                countOfMatchingForms={category.forms.length}
+                countOfMatchingForms={category.getTotalFormCount()}
               />
             ))}
         </div>

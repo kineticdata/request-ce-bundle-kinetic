@@ -1,22 +1,46 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
-import { fetchCategories } from '@kineticdata/react';
-import { addError } from 'common';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { fetchCategories, updateKapp } from '@kineticdata/react';
+import { addToast, addToastAlert } from 'common';
 import { actions, types } from '../modules/settingsCategories';
 
-export function* fetchCategoriesSaga(action) {
-  const { serverError, categories } = yield call(fetchCategories, {
-    kappSlug: action.payload,
-    include: 'attributes',
+export function* fetchCategoriesSaga() {
+  const kappSlug = yield select(state => state.app.kappSlug);
+
+  const { error, categories } = yield call(fetchCategories, {
+    kappSlug,
+    include: 'attributesMap',
   });
 
-  if (serverError) {
-    yield put(addError('Failed to fetch categories.', 'Fetch Categories'));
-    yield put(actions.setCategoriesErrors(serverError));
+  if (error) {
+    addToastAlert('Failed to fetch categories.');
+    yield put(actions.fetchCategoriesFailure(error));
   } else {
-    yield put(actions.setCategories(categories));
+    yield put(actions.fetchCategoriesSuccess(categories));
+  }
+}
+
+export function* updateCategoriesSaga(action) {
+  const kappSlug = yield select(state => state.app.kappSlug);
+
+  const { error, kapp } = yield call(updateKapp, {
+    kappSlug,
+    kapp: {
+      categories: action.payload,
+    },
+    include: 'categories,categories.attributesMap',
+  });
+
+  if (error) {
+    addToastAlert('Error saving categories.');
+    yield put(actions.fetchCategoriesFailure(error));
+  } else {
+    addToast('Categories updated successfully.');
+    yield put(actions.fetchCategoriesSuccess(kapp.categories));
+    // yield* fetchCategoriesSaga();
   }
 }
 
 export function* watchSettingsCategories() {
-  yield takeEvery(types.FETCH_CATEGORIES, fetchCategoriesSaga);
+  yield takeEvery(types.FETCH_CATEGORIES_REQUEST, fetchCategoriesSaga);
+  yield takeEvery(types.UPDATE_CATEGORIES_REQUEST, updateCategoriesSaga);
 }

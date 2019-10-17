@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 
 export const generateFormButtons = ({
   submitLabel,
@@ -10,7 +10,7 @@ export const generateFormButtons = ({
     {handleDelete && (
       <div className="form-buttons">
         <button
-          className="btn btn-link btn-delete"
+          className="btn btn-link text-danger"
           type="button"
           onClick={handleDelete}
         >

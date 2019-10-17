@@ -29,13 +29,12 @@ export const handleCompleted = props => response => {
 };
 
 export const handleCreated = props => response => {
-  props.push(
-    response.submission.coreState === 'Submitted'
-      ? `${props.appLocation}/requests/request/${
-          response.submission.id
-        }/confirmation`
-      : `${props.match.url}/${response.submission.id}`,
-  );
+  if (
+    response.submission.coreState !== 'Submitted' ||
+    response.submission.currentPage
+  ) {
+    props.push(`${props.location.pathname}/${response.submission.id}`);
+  }
 };
 
 export const handleLoaded = props => form => {
@@ -55,11 +54,7 @@ export const handleDelete = props => () => {
 };
 
 export const mapStateToProps = (state, { categorySlug }) => ({
-  category: categorySlug
-    ? state.servicesApp.categories.find(
-        category => category.slug === categorySlug,
-      )
-    : null,
+  category: state.servicesApp.categoryGetter(categorySlug),
   forms: state.forms.data,
   values: valuesFromQueryParams(state.router.location.search),
   kappSlug: state.app.kappSlug,
@@ -69,7 +64,7 @@ export const mapStateToProps = (state, { categorySlug }) => ({
 export const mapDispatchToProps = {
   push,
   deleteSubmission: actions.deleteSubmissionRequest,
-  fetchCurrentPage: submissionsActions.fetchCurrentPage,
+  fetchCurrentPage: submissionsActions.fetchSubmissionsCurrent,
 };
 
 const enhance = compose(

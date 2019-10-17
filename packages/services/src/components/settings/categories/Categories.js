@@ -1,664 +1,253 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
-import { compose, lifecycle, withState, withHandlers } from 'recompose';
-import { Modal } from 'reactstrap';
-import SortableTree, {
-  removeNodeAtPath,
-  getNodeAtPath,
-  addNodeUnderParent,
-  getFlatDataFromTree,
-  changeNodeAtPath,
-} from 'react-sortable-tree';
-import axios from 'axios';
+import {
+  compose,
+  lifecycle,
+  withState,
+  withHandlers,
+  withProps,
+} from 'recompose';
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
+import { I18n } from '@kineticdata/react';
+import SortableTree from 'react-sortable-tree';
 import 'react-sortable-tree/style.css';
+import { is, fromJS, List, Map } from 'immutable';
 import { PageTitle } from '../../shared/PageTitle';
-
 import { actions } from '../../../redux/modules/settingsCategories';
 import { connect } from '../../../redux/store';
+import * as constants from '../../../constants';
 
-import { I18n } from '@kineticdata/react';
-
-/**
- * AXIOS Calls
- * */
-const addCategory = ({ name, slug, sort, parent }) => {
-  const data = {
-    name,
-    slug,
-    attributes: [
-      {
-        name: 'Sort Order',
-        values: sort || sort === 0 ? [sort.toString()] : [],
-      },
-    ],
-  };
-
-  if (parent != null) {
-    data.attributes.push({
-      name: 'Parent',
-      values: [parent],
-    });
-  }
-
-  return axios.request({
-    method: 'post',
-    url: `${bundle.apiLocation()}/kapps/services/categories/`,
-    data,
-    contentType: 'application/json; charset=utf-8',
-  });
-};
-
-// Delete Category
-export const deleteCategory = ({ slug }) => {
-  return axios.request({
-    method: 'delete',
-    url: `${bundle.apiLocation()}/kapps/services/categories/${slug}`,
-    contentType: 'application/json; charset=utf-8',
-  });
-};
-
-// Update Category
-export const updateCategory = ({ name, slug, sort, parent, originalSlug }) => {
-  const data = {
-    name: name,
-    slug: slug,
-    attributesMap: {
-      'Sort Order': sort || sort === 0 ? [sort.toString()] : [],
-      Parent: parent ? [parent] : [],
-    },
-  };
-  return axios.request({
-    method: 'put',
-    url: `${bundle.apiLocation()}/kapps/services/categories/${
-      originalSlug ? originalSlug : slug
-    }`,
-    data: JSON.stringify(data),
-  });
-};
-
-/**
- * Functions for tree
- * */
-
-// Map categories
-export const mapCatgories = ({ rawCategories, setCategories }) => () => {
-  rawCategories.sort(function(a, b) {
-    a.attributes = a.attributes || {};
-    a.attributes['Sort Order'] = a.attributes['Sort Order'] || [0];
-    b.attributes = b.attributes || {};
-    b.attributes['Sort Order'] = b.attributes['Sort Order'] || [0];
-    return a.attributes['Sort Order'][0] > b.attributes['Sort Order'][0]
-      ? 1
-      : parseInt(b.attributes['Sort Order'][0], 10) >
-        parseInt(a.attributes['Sort Order'][0], 10)
-        ? -1
-        : 0;
-  });
-  const mapped = {};
-  for (let i = 0; i < rawCategories.length; i++) {
-    const slug = rawCategories[i].slug;
-    const cat = mapped[slug] || {};
-    cat.children = cat.children || [];
-    cat.slug = rawCategories[i].slug;
-    cat.name = rawCategories[i].name;
-    cat.title = rawCategories[i].name;
-    cat.sort = rawCategories[i].attributes['Sort Order'][0];
-    const parent = rawCategories[i].attributes.Parent;
-    if (parent && parent[0] !== '') {
-      mapped[parent] = mapped[parent] || {};
-      mapped[parent].children = mapped[parent].children || [];
-      mapped[parent].children.push(cat);
-      mapped[parent].children.sort(function(a, b) {
-        a.attributes = a.attributes || {};
-        a.attributes['Sort Order'] = a.attributes['Sort Order'] || [0];
-        b.attributes = b.attributes || {};
-        b.attributes['Sort Order'] = b.attributes['Sort Order'] || [0];
-        return parseInt(a.sort[0], 10) > parseInt(b.sort[0], 10)
-          ? 1
-          : parseInt(b.sort[0], 10) > parseInt(a.sort[0], 10)
-            ? -1
-            : 0;
-      });
-    } else {
-      mapped[slug] = cat;
-    }
-  }
-  const treeData = Object.values(mapped);
-  setCategories(treeData);
-};
-
-// Remove category
-export const removeCategory = ({ categories, setCategories }) => rowInfo => {
-  if (
-    confirm(
-      'Are you sure you want to remove this category and all subcategories?',
-    )
-  ) {
-    let { node, treeIndex, path } = rowInfo;
-    const newTree = removeNodeAtPath({
-      treeData: categories,
-      path: path, // You can use path from here
-      getNodeKey: ({ node: TreeNode, treeIndex: number }) => {
-        return number;
-      },
-      ignoreCollapsed: true,
-    });
-    deleteCategory({ slug: rowInfo.node.slug })
-      .then(response => {
-        const flatTree = getFlatDataFromTree({
-          treeData: categories,
-          getNodeKey: ({ node: TreeNode, treeIndex: number }) => {
-            return number;
-          },
-          ignoreCollapsed: false,
-        });
-
-        // Remove node and all nested children
-        const parents = [];
-        parents.push(node.slug);
-        for (let i = 0; i < flatTree.length; i++) {
-          const currentNode = flatTree[i];
-          if (
-            currentNode.parentNode &&
-            parents.includes(currentNode.parentNode.slug)
-          ) {
-            parents.push(currentNode.node.slug);
-            deleteCategory({ slug: currentNode.node.slug }).catch(response =>
-              console.log(response),
-            );
-          }
-        }
-        setCategories(newTree);
-      })
-      .catch(response => console.log(response));
-  }
-};
-
-// Add subcategory
-export const addSubCategory = ({
-  categories,
-  setCategories,
-  subcategory,
-  setSubcategory,
-  setInputs,
-}) => rowInfo => {
-  // Check for inputs
-  if (!subcategory.name || !subcategory.slug) {
-    setInputs({ ...subcategory, error: 'All fields are required.' });
-    return false;
-  }
-  // Check for preexisting slug
-  const flatTree = getFlatDataFromTree({
-    treeData: categories,
-    getNodeKey: ({ node: TreeNode, treeIndex: number }) => {
-      return number;
-    },
-    ignoreCollapsed: false,
-  });
-
-  const matches = flatTree.filter(cat => {
-    return cat.node.slug === subcategory.slug;
-  });
-
-  if (matches.length > 0) {
-    setSubcategory({ ...subcategory, error: 'Category slug already exists.' });
-    return false;
-  }
-
-  // Get new node with tree info
-  let NEW_NODE = { title: subcategory.name, slug: subcategory.slug };
-  let { node, treeIndex, path } = rowInfo;
-  let parentNode = getNodeAtPath({
-    treeData: categories,
-    path: path,
-    getNodeKey: ({ treeIndex }) => treeIndex,
-    ignoreCollapsed: true,
-  });
-
-  let getNodeKey = ({ node: object, treeIndex: number }) => {
-    return number;
-  };
-  let parentKey = getNodeKey(parentNode);
-  if (parentKey === -1) {
-    parentKey = null;
-  }
-  let newTree = addNodeUnderParent({
-    treeData: categories,
-    newNode: NEW_NODE,
-    expandParent: true,
-    parentKey: parentKey,
-    getNodeKey: ({ treeIndex }) => treeIndex,
-  });
-
-  // Add subcategory
-  addCategory({
-    name: subcategory.name,
-    slug: subcategory.slug,
-    sort: rowInfo.treeIndex,
-    parent: parentNode.node.slug,
-  })
-    .then(response => {
-      setCategories(newTree.treeData);
-      setSubcategory({});
-    })
-    .catch(response => {
-      setSubcategory({ ...subcategory, error: 'There was an error ' });
-    });
-};
-
-// Add New Category
-export const addNewCategory = ({
-  categories,
-  setCategories,
-  inputs,
-  setSlugEntered,
-  setInputs,
-}) => () => {
-  // Set loading
-  setInputs({ ...inputs, loading: true });
-  // Check for inputs
-  if (!inputs.category || !inputs.slug) {
-    setInputs({ ...inputs, error: 'All fields are required.', loading: false });
-    return false;
-  }
-  // Check for preexisting slug
-  const flatTree = getFlatDataFromTree({
-    treeData: categories,
-    getNodeKey: ({ node: TreeNode, treeIndex: number }) => {
-      return number;
-    },
-    ignoreCollapsed: false,
-  });
-
-  const matches = flatTree.filter(cat => {
-    return cat.node.slug === inputs.slug;
-  });
-
-  if (matches.length > 0) {
-    setInputs({
-      ...inputs,
-      error: 'Category slug already exists.',
-      loading: false,
-    });
-    return false;
-  }
-
-  // Get new node info
-  let NEW_NODE = { title: inputs.category, slug: inputs.slug };
-  let parentKey = null;
-
-  let newTree = addNodeUnderParent({
-    treeData: categories,
-    newNode: NEW_NODE,
-    expandParent: true,
-    parentKey: parentKey,
-    getNodeKey: ({ treeIndex }) => treeIndex,
-    ignoreCollapsed: false,
-  });
-
-  addCategory({
-    name: inputs.category,
-    slug: inputs.slug,
-    sort: categories.length + 1,
-  })
-    .then(response => {
-      setCategories(newTree.treeData);
-      setSlugEntered(false);
-      setInputs({ category: '', slug: '', loading: false });
-    })
-    .catch(response => {
-      setInputs({ ...inputs, error: 'There was an error: ' + response });
-    });
-};
-
-// Edit name / slug of category
-export const editCategory = ({
-  categories,
-  subcategory,
-  setSubcategory,
-  setCategories,
-}) => rowInfo => {
-  let { node, treeIndex, path } = rowInfo;
-
-  const name = subcategory.name;
-  const title = subcategory.name;
-  const slug = subcategory.slug;
-
-  updateCategory({
-    name: name,
-    slug: slug,
-    sort: treeIndex,
-    parent: null,
-    originalSlug: node.slug,
-  })
-    .then(response => {
-      const newTree = changeNodeAtPath({
-        treeData: categories,
-        path,
-        getNodeKey: ({ treeIndex }) => treeIndex,
-        newNode: { ...node, title, name, slug },
-      });
-      setCategories(newTree);
-      setSubcategory({});
-    })
-    .catch(response =>
-      setSubcategory({ ...subcategory, error: 'There was an error ' }),
-    );
-};
-
-// Update the order of categories
-export const updateCategoryOrder = ({ setCategories }) => args => {
-  // get flat tree
-  const flatTree = getFlatDataFromTree({
-    treeData: args.treeData,
-    getNodeKey: ({ node: TreeNode, treeIndex: number }) => {
-      return number;
-    },
-    ignoreCollapsed: false,
-  });
-
-  // reorder categories
-  for (let i = 0; i < flatTree.length; i++) {
-    const currentNode = flatTree[i];
-
-    updateCategory({
-      name: currentNode.node.name,
-      slug: currentNode.node.slug,
-      sort: i,
-      parent: currentNode.parentNode ? currentNode.parentNode.slug : null,
-    })
-      .then(response => setCategories(args.treeData))
-      .catch(response => console.log(response));
-  }
-};
-
-export const isBlank = string => !string || string.trim().length === 0;
-
-/**
- * Render
- * */
-
-export const CategoriesContainer = ({
-  updateCategoryOrder,
-  categories,
-  catLoading,
-  setCategories,
-  removeCategory,
-  addNewCategory,
-  addSubCategory,
-  inputs,
-  setInputs,
-  slugEntered,
-  setSlugEntered,
-  subcategory,
-  setSubcategory,
-  editCategory,
+export const CategoriesComponent = ({
+  categoryHelper,
+  categoryTree,
+  onChange,
+  onSave,
+  dirty,
+  reset,
+  openDropdown,
+  toggleDropdown,
+  handleDelete,
 }) => (
   <Fragment>
     <PageTitle parts={['Space Settings']} />
     <div className="page-container">
-      <div className="page-panel page-panel--white">
-        <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
-              <Link to="../..">
-                <I18n>services</I18n>
-              </Link>{' '}
-              /{` `}
-              <Link to="..">
-                <I18n>settings</I18n>
-              </Link>{' '}
-              /{` `}
-            </h3>
-            <h1>
-              <I18n>Categories</I18n>
-            </h1>
+      <div className="page-panel page-panel--white page-panel--flex page-panel--no-padding">
+        <div className="page-panel__header px-4">
+          <div className="page-title">
+            <div className="page-title__wrapper">
+              <h3>
+                <Link to="../..">
+                  <I18n>services</I18n>
+                </Link>{' '}
+                /{` `}
+                <Link to="..">
+                  <I18n>settings</I18n>
+                </Link>{' '}
+                /{` `}
+              </h3>
+              <h1>
+                <I18n>Categories</I18n>
+              </h1>
+            </div>
+            <div className="page-title__actions">
+              <Link to={'new'} className="btn btn-primary">
+                <span className="fa fa-fw fa-plus" />Add Category
+              </Link>
+            </div>
           </div>
         </div>
-        <section className="row">
-          <div className="col-sm-6 sortable-categories">
-            <I18n
-              render={translate => (
-                <SortableTree
-                  treeData={categories}
-                  onChange={treeData => setCategories(treeData)}
-                  getNodeKey={categories.slug}
-                  onMoveNode={args => updateCategoryOrder(args)}
-                  generateNodeProps={rowInfo => ({
-                    buttons: [
-                      <div>
-                        <span
-                          className="fa fa-pencil fa-lg"
-                          label={translate('Edit')}
-                          onClick={event =>
-                            setSubcategory({
-                              ...subcategory,
-                              rowInfo: rowInfo,
-                              name: rowInfo.node.name,
-                              slug: rowInfo.node.slug,
-                              action: 'edit',
-                            })
-                          }
-                        />
-
-                        <span
-                          className="fa fa-plus-circle fa-lg"
-                          label={translate('Add Subcategory')}
-                          onClick={event =>
-                            setSubcategory({ ...subcategory, rowInfo: rowInfo })
-                          }
-                        />
-
-                        <span
-                          className="fa fa-times-circle fa-lg"
-                          label={translate('Delete')}
-                          onClick={event => removeCategory(rowInfo)}
-                        />
-                      </div>,
-                    ],
-                  })}
-                />
-              )}
+        <div className="page-panel__body">
+          {categoryTree && (
+            <SortableTree
+              treeData={categoryTree}
+              onChange={onChange}
+              getNodeKey={({ node }) => node.slug}
+              generateNodeProps={category => ({
+                title: (
+                  <Fragment>
+                    <Link to={category.node.slug}>
+                      <span className={`fa fa-fw fa-${category.node.icon}`} />{' '}
+                      {category.node.name}
+                    </Link>{' '}
+                    {category.node.hidden && (
+                      <span
+                        className="fa fa-fw fa-eye-slash text-muted"
+                        title="Hidden"
+                      />
+                    )}
+                  </Fragment>
+                ),
+                buttons: [
+                  <Dropdown
+                    toggle={toggleDropdown(category.node.slug)}
+                    isOpen={openDropdown === category.node.slug}
+                  >
+                    <DropdownToggle color="link" className="btn-sm">
+                      <span className="fa fa-ellipsis-h fa-2x" />
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      <DropdownItem tag={Link} to={`new/${category.node.slug}`}>
+                        <I18n>Add Subcategory</I18n>
+                      </DropdownItem>
+                      <DropdownItem
+                        onClick={handleDelete(category.node.slug)}
+                        className="text-danger"
+                      >
+                        <I18n>Delete</I18n> <I18n>{category.node.name}</I18n>
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>,
+                ],
+              })}
             />
+          )}
+        </div>
+        <div className="page-panel__footer p-4 d-flex justify-content-between">
+          <div className="ml-auto">
+            <button
+              type="button"
+              className="btn btn-success"
+              disabled={!dirty}
+              onClick={onSave}
+            >
+              <span className="fa fa-check fa-fw" />Save
+            </button>
+            <button
+              type="button"
+              className="btn btn-link"
+              disabled={!dirty}
+              onClick={reset}
+            >
+              Reset
+            </button>
           </div>
-          <div className="col-sm-6">
-            <h3>
-              <I18n>New Category</I18n>
-            </h3>
-            <form>
-              <div className="form-group">
-                <label>
-                  <I18n>Category Name</I18n>
-                </label>
-                <input
-                  name="category"
-                  value={inputs.category}
-                  id="category-name"
-                  type="text"
-                  onChange={event => {
-                    if (slugEntered) {
-                      setInputs({
-                        ...inputs,
-                        category: event.target.value
-                          .toLowerCase()
-                          .replace(/'/g, '')
-                          .replace(/ /g, '-'),
-                      });
-                    } else {
-                      setInputs({
-                        ...inputs,
-                        category: event.target.value,
-                        slug: event.target.value
-                          .toLowerCase()
-                          .replace(/'/g, '')
-                          .replace(/ /g, '-'),
-                      });
-                    }
-                  }}
-                />
-              </div>
-              <div className="form-group">
-                <label>
-                  <I18n>Category Slug</I18n>
-                </label>
-                <input
-                  name="category-slug"
-                  value={inputs.slug}
-                  id="category-slug"
-                  type="text"
-                  onChange={event =>
-                    setInputs({ ...inputs, slug: event.target.value })
-                  }
-                  onKeyUp={() => setSlugEntered(true)}
-                />
-              </div>
-              {inputs.error && (
-                <div className="alert alert-danger">
-                  <I18n>{inputs.error}</I18n>
-                </div>
-              )}
-              <div
-                className="btn btn-primary"
-                onClick={addNewCategory}
-                disabled={inputs.loading}
-              >
-                <I18n>Create Category</I18n>
-              </div>
-            </form>
-          </div>
-        </section>
-
-        {!!subcategory.rowInfo && (
-          <Modal
-            size="md"
-            isOpen={!!subcategory.rowInfo}
-            toggle={() => setSubcategory({})}
-          >
-            <div className="modal-header">
-              <h4 className="modal-title">
-                <button
-                  onClick={() => setSubcategory({})}
-                  type="button"
-                  className="btn btn-link"
-                >
-                  <I18n>Cancel</I18n>
-                </button>
-                <span>
-                  <I18n>Subcategory</I18n>
-                </span>
-              </h4>
-            </div>
-            <div className="modal-body">
-              <div className="modal-form">
-                <div className="form-group required">
-                  <label htmlFor="name">
-                    <I18n>Name</I18n>
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    onChange={event => {
-                      if (slugEntered) {
-                        setSubcategory({
-                          ...subcategory,
-                          name: event.target.value
-                            .toLowerCase()
-                            .replace(/'/g, '')
-                            .replace(/ /g, '-'),
-                        });
-                      } else {
-                        setSubcategory({
-                          ...subcategory,
-                          name: event.target.value,
-                          slug: event.target.value
-                            .toLowerCase()
-                            .replace(/'/g, '')
-                            .replace(/ /g, '-'),
-                        });
-                      }
-                    }}
-                    value={subcategory.name}
-                    className="form-control"
-                  />
-                </div>
-                <div className="form-group required">
-                  <label htmlFor="name">
-                    <I18n>Slug</I18n>
-                  </label>
-                  <input
-                    id="slug"
-                    name="slug"
-                    onChange={e =>
-                      setSubcategory({ ...subcategory, slug: e.target.value })
-                    }
-                    onKeyUp={() => setSlugEntered(true)}
-                    value={subcategory.slug}
-                    className="form-control"
-                  />
-                </div>
-                {subcategory.error && (
-                  <div className="alert alert-danger">
-                    <I18n>{subcategory.error}</I18n>
-                  </div>
-                )}
-              </div>
-              <div className="modal-footer">
-                <button
-                  disabled={isBlank(subcategory.name)}
-                  onClick={
-                    subcategory.action === 'edit'
-                      ? () => editCategory(subcategory.rowInfo)
-                      : () => addSubCategory(subcategory.rowInfo)
-                  }
-                  type="button"
-                  className="btn btn-primary"
-                >
-                  <I18n>Save</I18n>
-                </button>
-              </div>
-            </div>
-          </Modal>
-        )}
+        </div>
       </div>
     </div>
   </Fragment>
 );
 
+const buildCategoryTree = categories => {
+  return categories.map(category =>
+    Map({
+      name: category.name,
+      slug: category.slug,
+      expanded: true,
+      sortOrder: category.sortOrder,
+      parentSlug: category.parentSlug,
+      icon: category.icon,
+      hidden: category.hidden,
+      children: buildCategoryTree(category.getChildren()),
+    }),
+  );
+};
+
 const mapStateToProps = state => ({
-  rawCategories: state.settingsCategories.rawCategories,
-  loading: state.settingsCategories.loading,
-  kappSlug: state.app.kappSlug,
+  categoryHelper: state.settingsCategories.categoryHelper,
 });
 
 const mapDispatchToProps = {
-  fetchCategories: actions.fetchCategories,
+  fetchCategoriesRequest: actions.fetchCategoriesRequest,
+  updateCategoriesRequest: actions.updateCategoriesRequest,
 };
 
-export const CategoriesSettings = compose(
+const updateTreeHierarchy = (tree, parentSlug) =>
+  tree.map((category, index) => ({
+    ...category,
+    parentSlug,
+    sortOrder: index,
+    children: updateTreeHierarchy(category.children, category.slug),
+  }));
+
+const removeFromTree = (tree, slugToRemove) =>
+  tree
+    .map((category, index) => ({
+      ...category,
+      children: removeFromTree(category.children, slugToRemove),
+    }))
+    .filter(category => category.slug !== slugToRemove);
+
+const serializeTreeHierarchy = tree =>
+  List(tree)
+    .flatMap(category => [
+      {
+        name: category.name,
+        slug: category.slug,
+        attributesMap: {
+          [constants.ATTRIBUTE_PARENT]: category.parentSlug
+            ? [category.parentSlug]
+            : [],
+          [constants.ATTRIBUTE_ORDER]: [`${category.sortOrder}`],
+        },
+      },
+      ...serializeTreeHierarchy(category.children),
+    ])
+    .toJS();
+
+export const Categories = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withState('categories', 'setCategories', []),
-  withState('inputs', 'setInputs', {}),
-  withState('subcategory', 'setSubcategory', {}),
-  withState('subcategory', 'setSubcategory', {}),
-  withState('slugEntered', 'setSlugEntered', false),
+  withState('openDropdown', 'setOpenDropdown', ''),
+  withState('categoryTree', 'setCategoryTree', null),
+  withState('dirty', 'setDirty', false),
+  withProps(props => ({
+    originalCategoryTree: props.categoryHelper
+      ? buildCategoryTree(props.categoryHelper.getRootCategories())
+      : null,
+  })),
   withHandlers({
-    mapCatgories,
-    removeCategory,
-    addNewCategory,
-    addSubCategory,
-    updateCategoryOrder,
-    editCategory,
+    toggleDropdown: ({ openDropdown, setOpenDropdown }) => dropdownSlug => () =>
+      setOpenDropdown(dropdownSlug === openDropdown ? '' : dropdownSlug),
+    onChange: ({ setCategoryTree }) => newTree =>
+      setCategoryTree(updateTreeHierarchy(newTree)),
+    onSave: ({ categoryTree, updateCategoriesRequest }) => () =>
+      updateCategoriesRequest(serializeTreeHierarchy(categoryTree)),
+    reset: ({ setCategoryTree, originalCategoryTree }) => () =>
+      originalCategoryTree && setCategoryTree(originalCategoryTree.toJS()),
+    handleDelete: ({ categoryTree, setCategoryTree }) => slug => () =>
+      setCategoryTree(removeFromTree(categoryTree, slug)),
   }),
   lifecycle({
-    componentWillMount() {
-      this.props.fetchCategories(this.props.kappSlug);
+    componentDidMount() {
+      if (this.props.originalCategoryTree && !this.props.categoryTree) {
+        // Set categoryTree into state if it's not there and is ready
+        this.props.setCategoryTree(this.props.originalCategoryTree.toJS());
+      }
     },
-    componentWillReceiveProps(nextProps) {
-      nextProps.rawCategories !== this.props.rawCategories &&
-        this.props.mapCatgories(nextProps.rawCategories);
+    componentDidUpdate(prevProps) {
+      if (this.props.originalCategoryTree && !this.props.categoryTree) {
+        // Set categoryTree into state if it's not there and is ready
+        this.props.setCategoryTree(this.props.originalCategoryTree.toJS());
+      } else if (
+        this.props.originalCategoryTree &&
+        prevProps.originalCategoryTree &&
+        !is(this.props.originalCategoryTree, prevProps.originalCategoryTree)
+      ) {
+        // If originalCategoryTree changed, update the state version
+        this.props.setCategoryTree(this.props.originalCategoryTree.toJS());
+      }
+
+      if (this.props.categoryTree) {
+        if (
+          !this.props.dirty &&
+          !is(fromJS(this.props.categoryTree), this.props.originalCategoryTree)
+        ) {
+          this.props.setDirty(true);
+        }
+        if (
+          this.props.dirty &&
+          is(fromJS(this.props.categoryTree), this.props.originalCategoryTree)
+        ) {
+          this.props.setDirty(false);
+        }
+      }
     },
   }),
-)(CategoriesContainer);
+)(CategoriesComponent);

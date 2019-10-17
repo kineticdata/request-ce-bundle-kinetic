@@ -12,7 +12,7 @@ export const CategoryCard = props => (
     <p>
       <I18n>{props.category.description}</I18n>
     </p>
-    {props.countOfMatchingForms && (
+    {props.countOfMatchingForms > 0 && (
       <p>
         {props.countOfMatchingForms} <I18n>Services</I18n>
       </p>

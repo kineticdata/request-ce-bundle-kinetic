@@ -3,6 +3,7 @@ import { StaticSelect } from '@kineticdata/react';
 import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { hasErrors } from './utils';
 import { FieldWrapper } from './FieldWrapper';
+import { Map } from 'immutable';
 
 const Input = props => <input {...props.inputProps} className="form-control" />;
 
@@ -34,7 +35,6 @@ export const SelectField = props => {
   const {
     typeahead,
     allowNew,
-    validateNew,
     alwaysRenderSuggestions,
     minSearchLength,
   } = props.renderAttributes.toJS();
@@ -46,14 +46,19 @@ export const SelectField = props => {
           components={components}
           textMode
           id={props.id}
-          value={props.value}
+          value={props.options.find(
+            option =>
+              option.get('value') === props.value ||
+              option.get('label') === props.value,
+          )}
           options={props.options}
           search={props.search}
           allowNew={allowNew}
-          validateNew={validateNew}
           alwaysRenderSuggestions={alwaysRenderSuggestions}
           minSearchLength={minSearchLength}
-          onChange={props.onChange}
+          onChange={value =>
+            props.onChange(Map.isMap(value) ? value.get('value') : value)
+          }
           onBlur={props.onBlur}
           onFocus={props.onFocus}
           placeholder={props.placeholder}

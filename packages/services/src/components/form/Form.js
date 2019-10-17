@@ -39,30 +39,41 @@ export const Form = ({
               </Link>{' '}
               /{' '}
               {path.startsWith('request') && (
-                <Link to={`${appLocation}/requests`}>
-                  <I18n>requests</I18n>
-                </Link>
+                <Fragment>
+                  <Link to={`${appLocation}/requests`}>
+                    <I18n>requests</I18n>
+                  </Link>{' '}
+                  /{' '}
+                  {type && (
+                    <Fragment>
+                      <Link to={`${appLocation}/requests/${type || ''}`}>
+                        <I18n>{type}</I18n>
+                      </Link>{' '}
+                      /{' '}
+                    </Fragment>
+                  )}
+                </Fragment>
               )}
-              {path.startsWith('/request') && ' / '}
-              {path.startsWith('/request') &&
-                type && (
-                  <Link to={`${appLocation}/requests/${type || ''}`}>
-                    <I18n>{type}</I18n>
-                  </Link>
-                )}
-              {path.startsWith('/request') && type && ' / '}
               {category && (
-                <Link to={`${appLocation}/categories`}>
-                  <I18n>categories</I18n>
-                </Link>
+                <Fragment>
+                  <Link to={`${appLocation}/categories`}>
+                    <I18n>categories</I18n>
+                  </Link>{' '}
+                  /{' '}
+                  {category.getTrail().map(ancestorCategory => (
+                    <Fragment key={ancestorCategory.slug}>
+                      <Link
+                        to={`${appLocation}/categories/${
+                          ancestorCategory.slug
+                        }`}
+                      >
+                        <I18n>{ancestorCategory.name}</I18n>
+                      </Link>{' '}
+                      /{' '}
+                    </Fragment>
+                  ))}
+                </Fragment>
               )}
-              {category && ' / '}
-              {category && (
-                <Link to={`${appLocation}/categories/${category.slug}`}>
-                  <I18n>{category.name}</I18n>
-                </Link>
-              )}
-              {category && ' / '}
             </h3>
             {form && (
               <h1>

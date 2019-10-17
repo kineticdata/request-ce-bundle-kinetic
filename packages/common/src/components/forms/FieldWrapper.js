@@ -1,6 +1,7 @@
 import React from 'react';
 import { I18n } from '@kineticdata/react';
 import { hasErrors } from './utils';
+import classNames from 'classnames';
 
 export const FieldWrapper = props => {
   const { EmptyOptionsPlaceholder } = props.renderAttributes
@@ -8,7 +9,7 @@ export const FieldWrapper = props => {
     : {};
 
   return props.visible ? (
-    <div className="form-group">
+    <div className={classNames('form-group', props.className)}>
       {!props.omitLabel && (
         <label htmlFor={props.id} id={props.name}>
           {props.label}

@@ -10,6 +10,17 @@
     margin-bottom: 0.25rem;
   }
 
+  &.input-group > div[role='combobox'] {
+    flex: 1 1 auto;
+    width: 1%;
+    &:not(:first-child) > input {
+      @include border-left-radius(0);
+    }
+    &:not(:last-child) > input {
+      @include border-right-radius(0);
+    }
+  }
+
   .suggestions {
     position: absolute;
     z-index: 1;

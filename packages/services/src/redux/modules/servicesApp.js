@@ -1,5 +1,5 @@
 import { List, Record } from 'immutable';
-import { Category, Form } from '../../models';
+import { CategoryHelper, Form } from '../../models';
 import { Utils } from 'common';
 const { noPayload, withPayload } = Utils;
 const ns = Utils.namespaceBuilder('services/servicesApp');
@@ -19,6 +19,7 @@ export const actions = {
 export const State = Record({
   loading: true,
   error: null,
+  categoryGetter: () => null,
   categories: null,
   homeForms: null,
 });
@@ -28,13 +29,15 @@ const reducer = (state = State(), { type, payload }) => {
     case types.FETCH_APP_DATA_REQUEST:
       return state.set('error', null);
     case types.FETCH_APP_DATA_SUCCESS:
+      const categoryHelper = CategoryHelper(payload.categories);
       return state
         .set('loading', false)
+        .set('categoryGetter', slug => categoryHelper.getCategory(slug))
         .set(
           'categories',
-          List(payload.categories)
-            .map(Category)
-            .filter(category => !category.hidden && category.forms.length > 0),
+          categoryHelper
+            .getRootCategories()
+            .filterNot(category => category.isEmpty()),
         )
         .set('homeForms', List(payload.forms).map(Form));
     case types.FETCH_APP_DATA_FAILURE:

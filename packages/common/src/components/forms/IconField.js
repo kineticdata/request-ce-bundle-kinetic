@@ -4,20 +4,32 @@ import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { FieldWrapper } from './FieldWrapper';
 import { fromJS } from 'immutable';
 import icons from '../../assets/fa-icons';
+import { Map } from 'immutable';
 
-const Input = props => (
-  <div className="input-group">
-    <div className="input-group-prepend">
-      <div className="input-group-text">
-        <span className={`fa fa-fw fa-lg ${props.inputProps.value}`} />
-      </div>
-    </div>
-    <input {...props.inputProps} className="form-control" />
-  </div>
+const options = fromJS(
+  icons.map(({ name, id, filter, aliases }) => ({
+    label: name,
+    value: `fa-${id}`,
+    filter: [
+      id,
+      name.toLowerCase(),
+      ...(filter || []).map(f => f.toLowerCase()),
+      ...(aliases || []).map(a => a.toLowerCase()),
+    ],
+  })),
 );
 
-const SelectionsContainer = ({ input }) => (
-  <div className="kinetic-typeahead">{input}</div>
+const Input = props => <input {...props.inputProps} className="form-control" />;
+
+const SelectionsContainer = ({ input, value }) => (
+  <div className="kinetic-typeahead input-group">
+    <div className="input-group-prepend">
+      <div className="input-group-text">
+        <span className={`fa fa-fw fa-lg ${value && value.get('value')}`} />
+      </div>
+    </div>
+    {input}
+  </div>
 );
 
 const Suggestion = ({ suggestion, active }) => (
@@ -50,19 +62,12 @@ export const IconField = props => {
         components={components}
         textMode
         id={props.id}
-        value={props.value}
-        options={fromJS(
-          icons.map(({ name, id, filter, aliases }) => ({
-            label: name,
-            value: `fa-${id}`,
-            filter: [
-              id,
-              name.toLowerCase(),
-              ...(filter || []).map(f => f.toLowerCase()),
-              ...(aliases || []).map(a => a.toLowerCase()),
-            ],
-          })),
+        value={options.find(
+          option =>
+            option.get('value') === props.value ||
+            option.get('label') === props.value,
         )}
+        options={options}
         search={(icons, searchValue) =>
           icons.filter(icon =>
             icon.filter.some(filter =>
@@ -70,7 +75,9 @@ export const IconField = props => {
             ),
           )
         }
-        onChange={props.onChange}
+        onChange={value =>
+          props.onChange(Map.isMap(value) ? value.get('value') : value)
+        }
         onBlur={props.onBlur}
         onFocus={props.onFocus}
         placeholder={props.placeholder}

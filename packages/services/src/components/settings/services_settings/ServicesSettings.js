@@ -18,6 +18,7 @@ const fieldSet = [
   'sharedBridgedResourceForm',
   'submittedNotificationTemplate',
   'createdNotificationTemplate',
+  'attributesMap',
 ];
 
 const FormLayout = ({ fields, error, buttons }) => (
@@ -70,9 +71,7 @@ export const ServicesSettingsComponent = ({
           label: 'Display Icon',
           type: 'text',
           helpText: 'Font Awesome icon to display in Kapp links.',
-          initialValue: kapp.hasIn(['attributesMap', 'Icon', 0])
-            ? { value: kapp.getIn(['attributesMap', 'Icon', 0]) }
-            : null,
+          initialValue: kapp.getIn(['attributesMap', 'Icon', 0]),
           component: FormComponents.IconField,
         },
         {
@@ -188,7 +187,9 @@ export const ServicesSettingsComponent = ({
           'Record Search History': asArray(values.get('recordSearchHistory')),
           'Service Days Due': asArray(values.get('defaultServiceDaysDue')),
           'Default Kapp Approver': asArray(values.get('defaultKappApprover')),
-          'Task Assignee Team': asArray(values.get('defaultTaskAssigneeTeam')),
+          'Task Assignee Team': asArray(
+            values.getIn(['defaultTaskAssigneeTeam', 'name']),
+          ),
           'Approval Form Slug': asArray(
             values.getIn(['defaultApprovalForm', 'slug']),
           ),
@@ -197,10 +198,10 @@ export const ServicesSettingsComponent = ({
             values.getIn(['sharedBridgedResourceForm', 'slug']),
           ),
           'Notification Template Name - Complete': asArray(
-            values.getIn(['submittedNotificationTemplate', 'slug']),
+            values.getIn(['submittedNotificationTemplate']),
           ),
           'Notification Template Name - Create': asArray(
-            values.getIn(['createdNotificationTemplate', 'slug']),
+            values.getIn(['createdNotificationTemplate']),
           ),
         }),
       },
@@ -245,7 +246,7 @@ export const ServicesSettings = compose(
   connect(mapStateToProps),
   withHandlers({
     onSave: props => () => () => {
-      addToast(`${this.props.currentKapp.name} settings saved successfully.`);
+      addToast(`${props.currentKapp.name} settings saved successfully.`);
       props.reloadApp();
     },
   }),
