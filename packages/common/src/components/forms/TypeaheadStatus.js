@@ -1,10 +1,11 @@
 import React from 'react';
+import { I18n } from '@kineticdata/react';
 
 export const TypeaheadStatus = props => (
   <div>
     {props.info && (
       <div className="status info">
-        {props.info}
+        <I18n>{props.info}</I18n>
         {props.clearFilterField && (
           <button className="btn btn-sm" onClick={props.clearFilterField}>
             <i className="fa fa-fw fa-remove" />
@@ -15,7 +16,7 @@ export const TypeaheadStatus = props => (
     {props.warning && (
       <div className="status warning">
         <i className="fa fa-fw fa-exclamation-triangle" />
-        {props.warning}
+        <I18n>{props.warning}</I18n>
       </div>
     )}
     {props.filterFieldOptions && (
@@ -30,7 +31,11 @@ export const TypeaheadStatus = props => (
           >
             <i className="fa fa-fw fa-search" />
             <span>
-              See <strong>{label}</strong> results for "{value}"
+              <I18n>See</I18n>{' '}
+              <strong>
+                <I18n>{label}</I18n>
+              </strong>{' '}
+              <I18n>results for</I18n> "{value}"
             </span>
             <span className="count">{count}</span>
           </li>

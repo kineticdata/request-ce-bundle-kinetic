@@ -1,6 +1,7 @@
 import React from 'react';
 import { List } from 'immutable';
 import classNames from 'classnames';
+import { I18n } from '@kineticdata/react';
 import { hasErrors } from './utils';
 import { FieldWrapper } from './FieldWrapper';
 
@@ -26,7 +27,7 @@ export const CheckboxField = props => (
         htmlFor={props.id}
         id={`${props.name}-helpTarget`}
       >
-        {props.label}
+        <I18n>{props.label}</I18n>
         {props.required && <abbr title="required">*</abbr>}
       </label>
     </div>

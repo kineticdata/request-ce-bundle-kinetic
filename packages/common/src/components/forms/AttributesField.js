@@ -3,6 +3,8 @@ import { List, Map, Repeat } from 'immutable';
 import { FieldWrapper } from './FieldWrapper';
 import classNames from 'classnames';
 
+// TODO Refactor for bundle
+
 export class AttributesField extends Component {
   constructor(props) {
     super(props);

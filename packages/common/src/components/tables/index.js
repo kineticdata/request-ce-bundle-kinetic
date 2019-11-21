@@ -1,15 +1,15 @@
-import { PaginationControl } from './PaginationControl';
-import { TableLayout } from './TableLayout';
+import { BooleanFilter } from './BooleanFilter';
 import { Header } from './Header';
 import { HeaderCell } from './HeaderCell';
+import { PaginationControl } from './PaginationControl';
+import { TableLayout } from './TableLayout';
 import { TextFilter } from './TextFilter';
-import { BooleanFilter } from './BooleanFilter';
 
 export default {
-  PaginationControl,
-  TableLayout,
+  BooleanFilter,
   Header,
   HeaderCell,
+  PaginationControl,
+  TableLayout,
   TextFilter,
-  BooleanFilter,
 };

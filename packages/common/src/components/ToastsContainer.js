@@ -2,12 +2,14 @@ import React, { Fragment } from 'react';
 import { connect } from '../redux/store';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { actions } from '../redux/modules/toasts';
+import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { I18n } from '@kineticdata/react';
 const {
   removeToast,
   clearToasts,
   removeToastAlert,
   setToastDuration,
+  resolveConfirm,
 } = actions;
 
 const icon = {
@@ -137,9 +139,100 @@ const ToastAlert = compose(
   }),
 )(ToastAlertComponent);
 
+const ConfirmationModalComponent = props => {
+  if (props.confirm === null) {
+    return null;
+  }
+
+  const {
+    size = 'md',
+    title = 'Confirm Action',
+    body = 'Are you sure you want to proceed?',
+    actionName = 'OK',
+    actionType = 'success',
+    confirmationText,
+    confirmationTextLabel = 'text',
+  } = props.confirm;
+
+  const ok = () => props.resolveConfirm(true);
+  const cancel = () => props.resolveConfirm(false);
+
+  const renderBody = body =>
+    typeof body === 'function' ? (
+      <I18n render={translate => body(translate)} />
+    ) : (
+      <I18n>{body}</I18n>
+    );
+
+  return (
+    <Modal isOpen={true} toggle={cancel} size={size}>
+      <div className="modal-header">
+        <h4 className="modal-title">
+          <button className="btn btn-link btn-delete" onClick={cancel}>
+            <I18n>Cancel</I18n>
+          </button>
+          <span>
+            <I18n>{title}</I18n>
+          </span>
+        </h4>
+      </div>
+      <ModalBody className="p-3">
+        {renderBody(body)}
+        {confirmationText && (
+          <Fragment>
+            <p>
+              <I18n
+                render={translate => (
+                  <Fragment>
+                    {translate('Please enter the %s below to confirm.').replace(
+                      '%s',
+                      `${translate(
+                        confirmationTextLabel,
+                      )} (${confirmationText})`,
+                    )}
+                  </Fragment>
+                )}
+              />
+            </p>
+            <input
+              className="form-control"
+              type="text"
+              value={props.confirmationValue}
+              onChange={e => props.setConfirmationValue(e.target.value)}
+            />
+          </Fragment>
+        )}
+      </ModalBody>
+      <ModalFooter className="modal-footer--full-width">
+        <button
+          className={`btn btn-${actionType}`}
+          onClick={ok}
+          disabled={
+            confirmationText && props.confirmationValue !== confirmationText
+          }
+        >
+          <I18n>{actionName}</I18n>
+        </button>
+      </ModalFooter>
+    </Modal>
+  );
+};
+
+const ConfirmationModal = compose(
+  connect(
+    null,
+    { resolveConfirm },
+  ),
+  withState('confirmationValue', 'setConfirmationValue', ''),
+)(ConfirmationModalComponent);
+
 export const ToastsContainer = compose(
   connect(
-    ({ toasts }) => ({ toasts: toasts.list, toastAlerts: toasts.alerts }),
+    ({ toasts }) => ({
+      toasts: toasts.list,
+      toastAlerts: toasts.alerts,
+      confirm: toasts.confirm,
+    }),
     { setToastDuration, clearToasts },
   ),
   lifecycle({
@@ -156,7 +249,7 @@ export const ToastsContainer = compose(
       this.props.clearToasts();
     },
   }),
-)(({ toasts, toastAlerts }) => (
+)(({ toasts, toastAlerts, confirm }) => (
   <Fragment>
     <div className="toasts">
       {toasts.map(toast => <Toast key={toast.id} toast={toast} />)}
@@ -171,6 +264,7 @@ export const ToastsContainer = compose(
         />
       ))}
     </div>
+    {confirm && <ConfirmationModal confirm={confirm} />}
   </Fragment>
 ));
 

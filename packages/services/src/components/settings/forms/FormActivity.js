@@ -1,157 +1,136 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import moment from 'moment';
 import { Link } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
-
+import { ErrorMessage, LoadingMessage, TimeAgo } from 'common';
 import { actions } from '../../../redux/modules/settingsForms';
 import { connect } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 import { PageTitle } from '../../shared/PageTitle';
 
 export const FormActivityContainer = ({
-  loading,
+  kapp,
+  form,
   submission,
-  space,
-  kappSlug,
-  appLocation,
-}) =>
-  !loading && (
-    <div>
-      <PageTitle parts={['Services Settings']} />
-      <div className="page-container">
-        <div className="page-panel page-panel--white">
-          <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
-                <Link to={appLocation}>
-                  <I18n>services</I18n>
-                </Link>{' '}
-                /{` `}
-                <Link to={`${appLocation}/settings`}>
-                  <I18n>settings</I18n>
-                </Link>{' '}
-                /{` `}
-                <Link to={`${appLocation}/settings/forms`}>
-                  <I18n>forms</I18n>
-                </Link>{' '}
-                /{` `}
-                <Link
-                  to={`${appLocation}/settings/forms/${submission.form.slug}`}
-                >
-                  <I18n
-                    context={`kapps.${kappSlug}.forms.${submission.form.slug}`}
-                  >
-                    {submission.form.name}
-                  </I18n>
-                </Link>{' '}
-                /{` `}
-              </h3>
-              <h1>
-                <I18n
-                  context={`kapps.${kappSlug}.forms.${submission.form.slug}`}
-                >
-                  {submission.form.name}
-                </I18n>{' '}
-                ({submission.handle})
-              </h1>
-            </div>
-            {space.attributes
-              .filter(attribute => attribute.name === 'Task Server Url')
-              .map(attribute => (
-                <a
-                  key={attribute.name}
-                  href={`${attribute.values[0]}/app/runs?sourceId=${
-                    submission.id
-                  }`}
-                  target="_blank"
-                >
-                  <button className="btn btn-primary pull-right">
-                    <i className="fa fa-sitemap" /> <I18n>View Runs</I18n>
-                  </button>
-                </a>
-              ))}
+  submissionError,
+}) => (
+  <div className="page-container">
+    <PageTitle parts={['Services Settings']} />
+    <div className="page-panel page-panel--white">
+      <div className="page-title">
+        <div className="page-title__wrapper">
+          <h3>
+            <Link to="../../../../../">
+              <I18n>services</I18n>
+            </Link>{' '}
+            /{` `}
+            <Link to="../../../../">
+              <I18n>settings</I18n>
+            </Link>{' '}
+            /{` `}
+            <Link to="../../../">
+              <I18n>forms</I18n>
+            </Link>{' '}
+            /{` `}
+            <Link to="../../">
+              <I18n>{form.name}</I18n>
+            </Link>{' '}
+            /{` `}
+          </h3>
+          {submission && <h1>{submission.handle}</h1>}
+        </div>
+      </div>
+      {submissionError ? (
+        <ErrorMessage message={submissionError.message} />
+      ) : !submission ? (
+        <LoadingMessage />
+      ) : (
+        <div>
+          <div className="data-list data-list--fourths">
+            <dl>
+              <dt>Submission Label</dt>
+              <dd>{submission.label}</dd>
+            </dl>
+            <dl>
+              <dt>Submission Id</dt>
+              <dd>{submission.id}</dd>
+            </dl>
+            <dl>
+              <dt>Core State</dt>
+              <dd>{submission.coreState}</dd>
+            </dl>
+            <dl>
+              <dt>Time to Close</dt>
+              <dd>
+                {submission.closedAt ? (
+                  moment
+                    .duration(
+                      moment(submission.submittedAt).valueOf() -
+                        moment(submission.closedAt).valueOf(),
+                    )
+                    .humanize()
+                ) : (
+                  <I18n>Not closed yet</I18n>
+                )}
+              </dd>
+            </dl>
+            <dl>
+              <dt>Created</dt>
+              <dd>
+                <TimeAgo timestamp={submission.createdAt} />
+                <br />
+                <small>
+                  <I18n>by</I18n> {submission.createdBy}
+                </small>
+              </dd>
+            </dl>
+            <dl>
+              <dt>Submitted</dt>
+              <dd>
+                {submission.submittedAt ? (
+                  <Fragment>
+                    <TimeAgo timestamp={submission.submittedAt} />
+                    <br />
+                    <small>
+                      <I18n>by</I18n> {submission.submittedBy}
+                    </small>
+                  </Fragment>
+                ) : (
+                  <I18n>N/A</I18n>
+                )}
+              </dd>
+            </dl>
+            <dl>
+              <dt>Updated</dt>
+              <dd>
+                <TimeAgo timestamp={submission.updatedAt} />
+                <br />
+                <small>
+                  <I18n>by</I18n> {submission.updatedBy}
+                </small>
+              </dd>
+            </dl>
+            <dl>
+              <dt>Closed</dt>
+              <dd>
+                {submission.closedAt ? (
+                  <Fragment>
+                    <TimeAgo timestamp={submission.closedAt} />
+                    <br />
+                    <small>
+                      <I18n>by</I18n> {submission.closedBy}
+                    </small>
+                  </Fragment>
+                ) : (
+                  <I18n>N/A</I18n>
+                )}
+              </dd>
+            </dl>
           </div>
-          <section>
-            <div className="settings-flex row">
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Submission Label</I18n>
-                </label>
-                <p>{submission.label}</p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Submission Id</I18n>
-                </label>
-                <p>{submission.id}</p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Status</I18n>
-                </label>
-                <p>{submission.coreState}</p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Time to Close</I18n>
-                </label>
-                <p>
-                  {submission.closedAt ? (
-                    moment
-                      .duration(
-                        moment(submission.submittedAt).valueOf() -
-                          moment(submission.closedAt).valueOf(),
-                      )
-                      .humanize()
-                  ) : (
-                    <I18n>Not closed yet</I18n>
-                  )}
-                </p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Created</I18n>
-                </label>
-                <p>
-                  {moment(submission.createdAt).fromNow()} <I18n>by</I18n>{' '}
-                  {submission.createdBy}
-                </p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Submitted</I18n>
-                </label>
-                <p>
-                  {moment(submission.submittedAt).fromNow()} <I18n>by</I18n>{' '}
-                  {submission.submittedBy}
-                </p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Created</I18n>
-                </label>
-                <p>
-                  {moment(submission.updatedAt).fromNow()} <I18n>by</I18n>{' '}
-                  {submission.updatedBy}
-                </p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Closed</I18n>
-                </label>
-                <p>
-                  {submission.closedAt ? (
-                    moment(submission.closedAt).fromNow()
-                  ) : (
-                    <I18n>N/A</I18n>
-                  )}
-                </p>
-              </div>
-            </div>
-            <br />
-            <h3 className="section__title">
-              <I18n>Fulfillment Process</I18n>
-            </h3>
+          <h3 className="section__title">
+            <I18n>Fulfillment Process</I18n>
+          </h3>
+          <div className="section__content scroll-wrapper-h">
             {submission.activities.filter(activity => activity.type === 'Task')
               .length > 0 ? (
               <table className="table table-sm table-striped table--settings">
@@ -196,10 +175,11 @@ export const FormActivityContainer = ({
             ) : (
               <I18n>There are no fulfillment steps</I18n>
             )}
-            <br />
-            <h3 className="section__title">
-              <I18n>Submission Activity</I18n>
-            </h3>
+          </div>
+          <h3 className="section__title">
+            <I18n>Submission Activity</I18n>
+          </h3>
+          <div className="section__content scroll-wrapper-h">
             {submission.activities.filter(activity => activity.type !== 'Task')
               .length > 0 ? (
               <table className="table table-sm table-striped table--settings">
@@ -244,10 +224,11 @@ export const FormActivityContainer = ({
             ) : (
               <I18n>There is no submission activity</I18n>
             )}
-            <br />
-            <h3 className="section__title">
-              <I18n>Values</I18n>
-            </h3>
+          </div>
+          <h3 className="section__title">
+            <I18n>Values</I18n>
+          </h3>
+          <div className="section__content scroll-wrapper-h">
             <table className="table table-sm table-striped table--settings">
               <thead className="header">
                 <tr>
@@ -270,23 +251,21 @@ export const FormActivityContainer = ({
                 ))}
               </tbody>
             </table>
-          </section>
+          </div>
         </div>
-      </div>
+      )}
     </div>
-  );
+  </div>
+);
 
 const mapStateToProps = state => ({
-  loading: state.settingsForms.submissionLoading,
-  submission: state.settingsForms.formSubmission,
-  space: state.app.space,
-  activityLoading: state.settingsForms.submissionActivityLoading,
-  kappSlug: state.app.kappSlug,
-  appLocation: state.app.location,
+  kapp: state.app.kapp,
+  submission: state.settingsForms.submission,
+  submissionError: state.settingsForms.submissionError,
 });
 
 const mapDispatchToProps = {
-  fetchFormSubmission: actions.fetchFormSubmission,
+  fetchSubmissionRequest: actions.fetchSubmissionRequest,
 };
 
 export const FormActivity = compose(
@@ -296,7 +275,7 @@ export const FormActivity = compose(
   ),
   lifecycle({
     componentWillMount() {
-      this.props.fetchFormSubmission({
+      this.props.fetchSubmissionRequest({
         id: this.props.id,
       });
     },

@@ -9,7 +9,7 @@ import { StartNode } from './activity_nodes/StartNode';
 // returns that otherwise it returns the string value wrapped in an object.
 export const activityData = activity => {
   try {
-    return JSON.parse(activity.data);
+    return activity.data ? JSON.parse(activity.data) : {};
   } catch (e) {
     return { STRING: activity.data };
   }

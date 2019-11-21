@@ -13,8 +13,12 @@ export const BooleanFilter = props => (
       onChange={e => props.onChange(e.target.value)}
     >
       <option />
-      <option value="true">Yes</option>
-      <option value="false">No</option>
+      <option value="true">
+        <I18n>Yes</I18n>
+      </option>
+      <option value="false">
+        <I18n>No</I18n>
+      </option>
     </select>
   </div>
 );

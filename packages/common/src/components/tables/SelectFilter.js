@@ -7,17 +7,21 @@ export const SelectFilter = props => (
       <I18n>{props.title}</I18n>
     </label>
 
-    <select
-      className="form-control form-control-sm"
-      value={props.value}
-      onChange={e => props.onChange(e.target.value)}
-    >
-      <option value="">Any</option>
-      {props.options.map(option => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
+    <I18n
+      render={translate => (
+        <select
+          className="form-control form-control-sm"
+          value={props.value}
+          onChange={e => props.onChange(e.target.value)}
+        >
+          <option value="">{translate('Any')}</option>
+          {props.options.map(option => (
+            <option key={option.value} value={option.value}>
+              {translate(option.label)}
+            </option>
+          ))}
+        </select>
+      )}
+    />
   </div>
 );

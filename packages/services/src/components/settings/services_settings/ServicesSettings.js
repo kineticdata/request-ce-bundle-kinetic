@@ -1,6 +1,11 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
-import { I18n, KappForm } from '@kineticdata/react';
+import {
+  I18n,
+  KappForm,
+  SubmissionSearch,
+  searchSubmissions,
+} from '@kineticdata/react';
 import { compose, withHandlers } from 'recompose';
 import { connect } from '../../../redux/store';
 import { FormComponents, addToast, selectQueueKappSlug } from 'common';
@@ -16,8 +21,8 @@ const fieldSet = [
   'defaultApprovalForm',
   'defaultTaskForm',
   'sharedBridgedResourceForm',
-  'submittedNotificationTemplate',
-  'createdNotificationTemplate',
+  'notificationCreate',
+  'notificationComplete',
   'attributesMap',
 ];
 
@@ -41,8 +46,8 @@ const FormLayout = ({ fields, error, buttons }) => (
     {fields.get('defaultApprovalForm')}
     {fields.get('defaultTaskForm')}
     {fields.get('sharedBridgedResourceForm')}
-    {fields.get('submittedNotificationTemplate')}
-    {fields.get('createdNotificationTemplate')}
+    {fields.get('notificationCreate')}
+    {fields.get('notificationComplete')}
     {error}
     {buttons}
   </Fragment>
@@ -54,6 +59,12 @@ const initialFormValue = (object, attributeName) =>
     : null;
 const asArray = value => (value ? [value] : []);
 
+const notificationSearch = new SubmissionSearch(true)
+  .index('values[Name]')
+  .includes(['values'])
+  .limit(1000)
+  .build();
+
 export const ServicesSettingsComponent = ({
   currentKapp,
   onSave,
@@ -64,7 +75,20 @@ export const ServicesSettingsComponent = ({
     fieldSet={fieldSet}
     onSave={onSave}
     components={{ FormLayout }}
-    addFields={() => ({ kapp }) =>
+    addDataSources={{
+      notifications: {
+        fn: searchSubmissions,
+        params: [
+          {
+            datastore: true,
+            form: 'notification-data',
+            search: notificationSearch,
+          },
+        ],
+        transform: result => result.submissions,
+      },
+    }}
+    addFields={() => ({ kapp, notifications }) =>
       kapp && [
         {
           name: 'icon',
@@ -104,14 +128,10 @@ export const ServicesSettingsComponent = ({
         {
           name: 'defaultKappApprover',
           label: 'Default Kapp Approver',
-          type: 'text', // TODO needs custom field for selecting users, teams, or manager
+          type: 'text',
           helpText:
             "Options are: Team Name, Individual Name or 'Manager'. If this is set, all forms in this kapp will get approvals sent to the value set here unless specified in a form.",
-          initialValue: kapp.getIn([
-            'attributesMap',
-            'Default Kapp Approver',
-            0,
-          ]),
+          initialValue: kapp.getIn(['attributesMap', 'Approver', 0]),
         },
         {
           name: 'defaultTaskAssigneeTeam',
@@ -153,28 +173,46 @@ export const ServicesSettingsComponent = ({
           search: { kappSlug: currentKapp.slug },
         },
         {
-          name: 'submittedNotificationTemplate',
-          label: 'Default Request Submitted Notification Template',
-          type: 'text', // TODO needs Form to support new datasources and then convert to static select field
+          name: 'notificationCreate',
+          label: 'Default Notification Template Name - Create',
+          type: 'select',
+          renderAttributes: { typeahead: true },
           helpText:
-            'Name of the Notification Template to use when submissions in this Kapp are Completed.',
-          initialValue: kapp.getIn([
-            'attributesMap',
-            'Notification Template Name - Complete',
-            0,
-          ]),
-        },
-        {
-          name: 'createdNotificationTemplate',
-          label: 'Default Request Created Notification Template',
-          type: 'text', // TODO needs Form to support new datasources and then convert to static select field
-          helpText:
-            'Name of the Notification Template to use when submissions in this Kapp are Submitted.',
+            "Name of the Notification Template to use when this kapp's submissions are submitted.",
           initialValue: kapp.getIn([
             'attributesMap',
             'Notification Template Name - Create',
             0,
           ]),
+          options: notifications
+            ? notifications
+                .map(notification => ({
+                  label: notification.getIn(['values', 'Name']),
+                  value: notification.getIn(['values', 'Name']),
+                }))
+                .toJS()
+            : [],
+        },
+        {
+          name: 'notificationComplete',
+          label: 'Default Notification Template Name - Complete',
+          type: 'select',
+          renderAttributes: { typeahead: true },
+          helpText:
+            "Name of the Notification Template to use when this kapp's submissions are completed.",
+          initialValue: kapp.getIn([
+            'attributesMap',
+            'Notification Template Name - Complete',
+            0,
+          ]),
+          options: notifications
+            ? notifications
+                .map(notification => ({
+                  label: notification.getIn(['values', 'Name']),
+                  value: notification.getIn(['values', 'Name']),
+                }))
+                .toJS()
+            : [],
         },
       ]}
     alterFields={{
@@ -186,7 +224,7 @@ export const ServicesSettingsComponent = ({
           Icon: asArray(values.get('icon')),
           'Record Search History': asArray(values.get('recordSearchHistory')),
           'Service Days Due': asArray(values.get('defaultServiceDaysDue')),
-          'Default Kapp Approver': asArray(values.get('defaultKappApprover')),
+          Approver: asArray(values.get('defaultKappApprover')),
           'Task Assignee Team': asArray(
             values.getIn(['defaultTaskAssigneeTeam', 'name']),
           ),
@@ -198,10 +236,10 @@ export const ServicesSettingsComponent = ({
             values.getIn(['sharedBridgedResourceForm', 'slug']),
           ),
           'Notification Template Name - Complete': asArray(
-            values.getIn(['submittedNotificationTemplate']),
+            values.getIn(['notificationComplete']),
           ),
           'Notification Template Name - Create': asArray(
-            values.getIn(['createdNotificationTemplate']),
+            values.getIn(['notificationCreate']),
           ),
         }),
       },

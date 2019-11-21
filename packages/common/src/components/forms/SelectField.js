@@ -1,5 +1,5 @@
 import React from 'react';
-import { StaticSelect } from '@kineticdata/react';
+import { I18n, StaticSelect } from '@kineticdata/react';
 import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { hasErrors } from './utils';
 import { FieldWrapper } from './FieldWrapper';
@@ -13,7 +13,9 @@ const SelectionsContainer = ({ input }) => (
 
 const Suggestion = ({ suggestion, active }) => (
   <div className={`suggestion ${active ? 'active' : ''}`}>
-    <div className="large">{suggestion.get('label')}</div>
+    <div className="large">
+      <I18n>{suggestion.get('label')}</I18n>
+    </div>
   </div>
 );
 
@@ -64,22 +66,28 @@ export const SelectField = props => {
           placeholder={props.placeholder}
         />
       ) : (
-        <select
-          className={`form-control${hasErrors(props) ? ' is-invalid' : ''}`}
-          id={props.id}
-          name={props.name}
-          value={props.value}
-          onBlur={props.onBlur}
-          onChange={props.onChange}
-          onFocus={props.onFocus}
-        >
-          <option value="">{props.placeholder || ''}</option>
-          {props.options.map((option, i) => (
-            <option value={option.get('value')} key={i}>
-              {option.get('label') ? option.get('label') : option.get('value')}
-            </option>
-          ))}
-        </select>
+        <I18n
+          render={translate => (
+            <select
+              className={`form-control${hasErrors(props) ? ' is-invalid' : ''}`}
+              id={props.id}
+              name={props.name}
+              value={props.value}
+              onBlur={props.onBlur}
+              onChange={props.onChange}
+              onFocus={props.onFocus}
+            >
+              <option value="">{translate(props.placeholder) || ''}</option>
+              {props.options.map((option, i) => (
+                <option value={option.get('value')} key={i}>
+                  {option.get('label')
+                    ? translate(option.get('label'))
+                    : option.get('value')}
+                </option>
+              ))}
+            </select>
+          )}
+        />
       )}
     </FieldWrapper>
   );

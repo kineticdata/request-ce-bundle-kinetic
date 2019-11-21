@@ -36,7 +36,6 @@ export function* updateCategoriesSaga(action) {
   } else {
     addToast('Categories updated successfully.');
     yield put(actions.fetchCategoriesSuccess(kapp.categories));
-    // yield* fetchCategoriesSaga();
   }
 }
 

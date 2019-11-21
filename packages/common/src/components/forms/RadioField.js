@@ -1,4 +1,5 @@
 import React from 'react';
+import { I18n } from '@kineticdata/react';
 import { FieldWrapper } from './FieldWrapper';
 import classNames from 'classnames';
 
@@ -10,7 +11,7 @@ export const RadioField = props => (
       })}
       id={`${props.name}-helpTarget`}
     >
-      {props.label}
+      <I18n>{props.label}</I18n>
       {props.required && <abbr title="required">*</abbr>}
     </legend>
     {props.options.map(option => (
@@ -30,7 +31,7 @@ export const RadioField = props => (
           htmlFor={`${props.name}-${option.get('value')}`}
           className="form-check-label"
         >
-          {option.get('label')}
+          <I18n>{option.get('label')}</I18n>
         </label>
       </div>
     ))}

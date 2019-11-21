@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
+import { I18n } from '@kineticdata/react';
 import { hasErrors } from './utils';
 import { FieldWrapper } from './FieldWrapper';
 
 export const TextField = props => (
   <FieldWrapper {...props}>
-    <input
-      className={`form-control${hasErrors(props) ? ' is-invalid' : ''}`}
-      type="text"
-      id={props.id}
-      name={props.name}
-      value={props.value}
-      onBlur={props.onBlur}
-      onChange={props.onChange}
-      onFocus={props.onFocus}
-      placeholder={props.placeholder}
-      disabled={!props.enabled}
+    <I18n
+      render={translate => (
+        <input
+          className={`form-control${hasErrors(props) ? ' is-invalid' : ''}`}
+          type="text"
+          id={props.id}
+          name={props.name}
+          value={props.value}
+          onBlur={props.onBlur}
+          onChange={props.onChange}
+          onFocus={props.onFocus}
+          placeholder={translate(props.placeholder)}
+          disabled={!props.enabled}
+        />
+      )}
     />
   </FieldWrapper>
 );
@@ -44,14 +49,18 @@ export class TextMultiField extends Component {
       <FieldWrapper {...this.props}>
         {this.props.value.push('').map((selection, i) => (
           <div key={i} className="input-group selection mb-1">
-            <input
-              type="text"
-              className="form-control"
-              onBlur={this.props.onBlur}
-              onChange={selection ? this.onEdit(i) : this.onAdd}
-              onFocus={this.props.onFocus}
-              placeholder={this.props.placeholder}
-              value={selection}
+            <I18n
+              render={translate => (
+                <input
+                  type="text"
+                  className="form-control"
+                  onBlur={this.props.onBlur}
+                  onChange={selection ? this.onEdit(i) : this.onAdd}
+                  onFocus={this.props.onFocus}
+                  placeholder={translate(this.props.placeholder)}
+                  value={selection}
+                />
+              )}
             />
             {selection && (
               <div className="input-group-append">

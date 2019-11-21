@@ -16,6 +16,7 @@ import { RadioField } from './RadioField';
 // Custom Bundle Field Types
 import { IntegerField } from './IntegerField';
 import { IconField } from './IconField';
+import { WorkflowField } from './WorkflowField';
 
 export default {
   AttributesField,
@@ -40,4 +41,5 @@ export default {
   TextMultiField,
   UserField,
   UserMultiField,
+  WorkflowField,
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StaticSelect } from '@kineticdata/react';
+import { I18n, StaticSelect } from '@kineticdata/react';
 import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { FieldWrapper } from './FieldWrapper';
 import { fromJS } from 'immutable';
@@ -36,7 +36,7 @@ const Suggestion = ({ suggestion, active }) => (
   <div className={`suggestion ${active ? 'active' : ''}`}>
     <div className="large">
       <span className={`fa fa-fw fa-lg ${suggestion.get('value')}`} />{' '}
-      {suggestion.get('label')}
+      <I18n>{suggestion.get('label')}</I18n>
     </div>
   </div>
 );

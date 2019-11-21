@@ -222,6 +222,14 @@
           padding: 1rem;
         }
       }
+      &--full-width {
+        .btn {
+          flex-grow: 1;
+          border-radius: 0;
+          padding: 1rem;
+          margin: 0;
+        }
+      }
     }
   }
 }

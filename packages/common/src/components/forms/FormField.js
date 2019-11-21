@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormSelect } from '@kineticdata/react';
+import { FormSelect, I18n } from '@kineticdata/react';
 import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { FieldWrapper } from './FieldWrapper';
 import classNames from 'classnames';
@@ -55,8 +55,13 @@ const Selection = ({ selection, edit, remove }) => {
 
 const Suggestion = ({ suggestion, active }) => (
   <div className={`suggestion ${active ? 'active' : ''}`}>
-    <div className="large">{suggestion.get('name')}</div>
-    <div className="small">{suggestion.get('description')}</div>
+    <div className="large">
+      <I18n>{suggestion.get('name')}</I18n>{' '}
+      <small>{`<${suggestion.get('slug')}>`}</small>
+    </div>
+    <div className="small">
+      <I18n>{suggestion.get('description')}</I18n>
+    </div>
   </div>
 );
 

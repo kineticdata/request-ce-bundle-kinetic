@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from '@reach/router';
+import { I18n } from '@kineticdata/react';
 
 export const generateFormButtons = ({
   submitLabel,
@@ -14,7 +15,7 @@ export const generateFormButtons = ({
           type="button"
           onClick={handleDelete}
         >
-          Delete
+          <I18n>Delete</I18n>
         </button>
       </div>
     )}
@@ -30,16 +31,16 @@ export const generateFormButtons = ({
         ) : (
           <span className="fa fa-check fa-fw" />
         )}
-        {submitLabel}
+        <I18n>{submitLabel}</I18n>
       </button>
       {cancelPath ? (
         typeof cancelPath === 'function' ? (
           <button type="button" className="btn btn-link" onClick={cancelPath}>
-            Cancel
+            <I18n>Cancel</I18n>
           </button>
         ) : (
           <Link className="btn btn-sm btn-link" to={cancelPath}>
-            Cancel
+            <I18n>Cancel</I18n>
           </Link>
         )
       ) : (
@@ -49,7 +50,7 @@ export const generateFormButtons = ({
           onClick={props.reset}
           disabled={!props.dirty || props.submitting}
         >
-          Reset
+          <I18n>Reset</I18n>
         </button>
       )}
     </div>

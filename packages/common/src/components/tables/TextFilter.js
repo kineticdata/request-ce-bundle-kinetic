@@ -9,7 +9,7 @@ export const TextFilter = ({ value, name, title, onChange }) => (
     <input
       className="form-control form-control-sm"
       type="text"
-      name="name"
+      name={name}
       value={value}
       onChange={e => onChange(e.target.value)}
     />

@@ -60,6 +60,7 @@
     }
     @media all and (min-width: 768px) {
       align-self: flex-end;
+      margin-top: 1.5rem;
       .btn {
         margin-left: 0.5rem;
       }
@@ -99,12 +100,16 @@
     margin-left: -0.75rem;
     margin-right: -0.75rem;
   }
-  a,
-  .fa {
+  > a,
+  > .fa {
     color: $gray50;
     font-size: 0.75rem;
     &:hover {
       color: $blue-lake;
     }
+  }
+
+  + .section__content {
+    margin-bottom: 3rem;
   }
 }

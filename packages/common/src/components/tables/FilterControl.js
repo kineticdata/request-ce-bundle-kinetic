@@ -26,8 +26,12 @@ const FilterBooleanField = ({ filter }) => (
       onChange={e => filter.get('onChange')(e.target.value)}
     >
       <option />
-      <option value="true">Yes</option>
-      <option value="false">No</option>
+      <option value="true">
+        <I18n>Yes</I18n>
+      </option>
+      <option value="false">
+        <I18n>No</I18n>
+      </option>
     </select>
   </div>
 );
@@ -53,7 +57,7 @@ export const generateFilterControl = ({
       )
       .filter(filter => filter !== null)}
     <button className="btn btn-sm btn-secondary pull-right" type="submit">
-      Search
+      <I18n>Search</I18n>
     </button>
   </form>
 );

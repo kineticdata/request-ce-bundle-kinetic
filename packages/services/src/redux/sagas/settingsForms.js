@@ -8,8 +8,9 @@ import {
   fetchKapp,
   updateForm,
   createForm,
+  deleteForm,
 } from '@kineticdata/react';
-import { addSuccess, addError } from 'common';
+import { addSuccess, addError, addToast, addToastAlert } from 'common';
 import axios from 'axios';
 import {
   actions,
@@ -19,183 +20,29 @@ import {
   SUBMISSION_INCLUDES,
 } from '../modules/settingsForms';
 
-export function* fetchFormSaga(action) {
-  const { serverError, form } = yield call(fetchForm, {
-    kappSlug: action.payload.kappSlug,
-    formSlug: action.payload.formSlug,
+export function* fetchFormSaga({ payload }) {
+  const { error, form } = yield call(fetchForm, {
+    kappSlug: payload.kappSlug,
+    formSlug: payload.formSlug,
     include: FORM_INCLUDES,
   });
 
-  if (serverError) {
-    yield put(actions.setFormsError(serverError));
+  if (error) {
+    yield put(actions.fetchFormFailure(error));
   } else {
-    yield put(actions.setForm(form));
+    yield put(actions.fetchFormSuccess(form));
   }
 }
 
-export function* fetchFormSubmissionsSaga(action) {
-  const kappSlug = action.payload.kappSlug;
-  const pageToken = action.payload.pageToken;
-  const formSlug = action.payload.formSlug;
-  const q = action.payload.q;
-  const searchBuilder = new SubmissionSearch().includes(['details', 'values']);
-  // Add some of the optional parameters to the search
-  if (pageToken) searchBuilder.pageToken(pageToken);
-  // Loop over items in q and append them as "eq"
-  // to search build
-  if (q) {
-    for (const key in q) {
-      searchBuilder.eq(key, q[key]);
-    }
-  }
-  searchBuilder.end();
-  const search = searchBuilder.build();
-
-  const { submissions, nextPageToken, serverError } = yield call(
-    searchSubmissions,
-    { search, kapp: kappSlug, form: formSlug },
-  );
-
-  if (serverError) {
-    yield put(actions.setFormsError(serverError));
-  } else {
-    yield put(actions.setFormSubmissions({ submissions, nextPageToken }));
-  }
-}
-
-export function* fetchFormSubmissionSaga(action) {
-  const id = action.payload.id;
-  const { submission, serverError } = yield call(fetchSubmission, {
-    id,
+export function* fetchSubmissionSaga({ payload }) {
+  const { submission, error } = yield call(fetchSubmission, {
+    id: payload.id,
     include: SUBMISSION_INCLUDES,
   });
-  if (serverError) {
-    yield put(actions.setFormsError(serverError));
+  if (error) {
+    yield put(actions.fetchSubmissionFailure(error));
   } else {
-    yield put(actions.setFormSubmission(submission));
-  }
-}
-
-export function* fetchKappSaga(action) {
-  const { serverError, kapp } = yield call(fetchKapp, {
-    kappSlug: action.payload,
-    include: 'formTypes, categories, formAttributeDefinitions',
-  });
-
-  if (serverError) {
-    yield put(actions.setFormsError(serverError));
-  } else {
-    const me = yield select(state => state.app.profile);
-    if (
-      me.spaceAdmin &&
-      !kapp.formAttributeDefinitions.find(d => d.name === 'Form Configuration')
-    ) {
-      // Create Form Configuration Definition if it doesn't exist
-      yield call(axios.request, {
-        method: 'post',
-        url: `${bundle.apiLocation()}/kapps/${
-          kapp.slug
-        }/formAttributeDefinitions`,
-        data: {
-          name: 'Form Configuration',
-          allowsMultiple: false,
-        },
-      });
-    }
-
-    yield put(actions.setKapp(kapp));
-  }
-}
-
-export function* updateFormSaga(action) {
-  const currentForm = action.payload.form;
-  const currentFormChanges = action.payload.inputs;
-  const formContent = {
-    attributesMap: {
-      Icon: [currentFormChanges.icon],
-      'Task Form Slug': currentFormChanges['Task Form Slug']
-        ? [currentFormChanges['Task Form Slug']]
-        : [],
-      'Service Days Due': currentFormChanges['Service Days Due']
-        ? [currentFormChanges['Service Days Due']]
-        : [],
-      'Approval Form Slug': currentFormChanges['Approval Form Slug']
-        ? [currentFormChanges['Approval Form Slug']]
-        : [],
-      Approver: currentFormChanges.Approver
-        ? [currentFormChanges.Approver]
-        : [],
-      'Task Assignee Team': currentFormChanges['Task Assignee Team']
-        ? [currentFormChanges['Task Assignee Team']]
-        : [],
-      'Notification Template Name - Create': currentFormChanges[
-        'Notification Template Name - Create'
-      ]
-        ? [currentFormChanges['Notification Template Name - Create']]
-        : [],
-      'Notification Template Name - Complete': currentFormChanges[
-        'Notification Template Name - Complete'
-      ]
-        ? [currentFormChanges['Notification Template Name - Complete']]
-        : [],
-      'Owning Team': currentFormChanges['Owning Team']
-        ? currentFormChanges['Owning Team']
-        : [],
-      'Form Configuration': [
-        JSON.stringify({
-          columns: currentFormChanges.columns.toJS(),
-        }),
-      ],
-      'Custom Submission Workflow': [
-        currentFormChanges.createdWorkflow === 'custom' && 'Created',
-        currentFormChanges.submittedWorkflow === 'custom' && 'Submitted',
-        currentFormChanges.updatedWorkflow === 'custom' && 'Updated',
-      ].filter(value => !!value),
-    },
-    status: currentFormChanges.status,
-    type: currentFormChanges.type,
-    description: currentFormChanges.description,
-    categorizations: currentFormChanges.categories,
-  };
-  const { serverError } = yield call(updateForm, {
-    kappSlug: action.payload.kappSlug,
-    formSlug: currentForm.slug,
-    form: formContent,
-    include: FORM_INCLUDES,
-  });
-  if (!serverError) {
-    yield put(addSuccess('Updated the form successfully.', 'Updated Form'));
-    yield put(
-      actions.fetchForm({
-        kappSlug: action.payload.kappSlug,
-        formSlug: currentForm.slug,
-      }),
-    );
-  }
-}
-
-export function* fetchNotificationsSaga() {
-  const search = new SubmissionSearch(true)
-    .index('values[Name]')
-    .includes(['details', 'values'])
-    .build();
-
-  const { serverError, submissions } = yield call(searchSubmissions, {
-    search,
-    form: 'notification-data',
-    datastore: true,
-  });
-
-  if (serverError) {
-    yield put(
-      addError(
-        'There was a problem retrieving notifications.',
-        'Retrieving Notifications',
-      ),
-    );
-    yield put(actions.setFormsError(serverError));
-  } else {
-    yield put(actions.setNotifications(submissions));
+    yield put(actions.fetchSubmissionSuccess(submission));
   }
 }
 
@@ -292,13 +139,27 @@ export function* fetchAllSubmissionsSaga(action) {
   }
 }
 
+export function* deleteFormSaga({ payload }) {
+  const { form, error } = yield call(deleteForm, {
+    kappSlug: payload.kappSlug,
+    formSlug: payload.formSlug,
+  });
+  if (form) {
+    if (typeof payload.onSuccess === 'function') {
+      yield call(payload.onSuccess, form);
+    }
+    yield put(actions.deleteFormComplete(payload));
+    addToast('Form deleted successfully.');
+  } else {
+    addToastAlert({ title: 'Error Deleting Form', message: error.message });
+  }
+}
+
 export function* watchSettingsForms() {
-  yield takeEvery(types.FETCH_FORM, fetchFormSaga);
-  yield takeEvery(types.FETCH_KAPP, fetchKappSaga);
-  yield takeEvery(types.UPDATE_FORM, updateFormSaga);
+  yield takeEvery(types.FETCH_FORM_REQUEST, fetchFormSaga);
+  yield takeEvery(types.DELETE_FORM_REQUEST, deleteFormSaga);
+  yield takeEvery(types.FETCH_SUBMISSION_REQUEST, fetchSubmissionSaga);
+
   yield takeEvery(types.CREATE_FORM, createFormSaga);
-  yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
-  yield takeEvery(types.FETCH_FORM_SUBMISSIONS, fetchFormSubmissionsSaga);
-  yield takeEvery(types.FETCH_FORM_SUBMISSION, fetchFormSubmissionSaga);
   yield takeEvery(types.FETCH_ALL_SUBMISSIONS, fetchAllSubmissionsSaga);
 }
