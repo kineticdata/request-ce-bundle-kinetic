@@ -10,7 +10,7 @@ import {
   NavLink,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { KappLink, Utils } from 'common';
+import { Utils } from 'common';
 import { AlertsContainer } from './AlertsContainer';
 import { ProfileContainer } from './ProfileContainer';
 import { I18n } from '../I18nProvider';

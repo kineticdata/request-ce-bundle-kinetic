@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose, lifecycle, withState, withHandlers } from 'recompose';
+import { compose, withState, withHandlers } from 'recompose';
 import { parse, stringify } from 'qs';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
