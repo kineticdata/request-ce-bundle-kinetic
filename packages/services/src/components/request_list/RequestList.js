@@ -66,7 +66,9 @@ export const RequestList = ({
           <StateListWrapper
             data={submissions}
             error={error}
-            emptyTitle={`No ${type !== 'All' ? `${type} ` : ''}Requests Found`}
+            emptyTitle={`No ${
+              type && type !== 'All' ? `${type} ` : ''
+            }Requests Found`}
             emptyMessage={emptyStateMessage(type)}
           >
             {data => (

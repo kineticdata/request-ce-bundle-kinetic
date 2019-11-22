@@ -26,6 +26,7 @@ const fieldSet = [
   'requestAlertFormSlug',
   'suggestAServiceFormSlug',
   'defaultTaskFormSlug',
+  'attributesMap',
 ];
 
 const Layout = ({ fields, error, buttons }) => (
@@ -39,11 +40,13 @@ const Layout = ({ fields, error, buttons }) => (
       {fields.get('defaultTimezone')}
     </div>
     {fields.get('defaultKappDisplay')}
+    <br />
     <h2 className="section__title">
       <I18n>Workflow Options</I18n>
     </h2>
     {fields.get('defaultServiceDaysDue')}
     {fields.get('defaultTaskAssigneeTeam')}
+    <br />
     <h2 className="section__title">
       <I18n>Form Mapping</I18n>
     </h2>
@@ -197,15 +200,12 @@ export const SpaceSettingsComponent = ({
             ),
           }),
         },
-        // TODO
-        // defaultTimezone: {
-        //   initialValue: { value: space.get('defaultTimezone') },
-        //   renderAttributes: { typeahead: true },
-        // },
-        // defaultLocale: {
-        //   initialValue: { value: space.get('defaultLocale') },
-        //   renderAttributes: { typeahead: true },
-        // },
+        defaultTimezone: {
+          renderAttributes: { typeahead: true },
+        },
+        defaultLocale: {
+          renderAttributes: { typeahead: true },
+        },
       }}
     components={{
       FormLayout: Layout,

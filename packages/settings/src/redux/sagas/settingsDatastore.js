@@ -9,7 +9,7 @@ import {
 import {
   fetchForms,
   fetchForm,
-  fetchSpace,
+  fetchBridges,
   fetchBridgeModels,
   createForm,
   updateForm,
@@ -36,7 +36,6 @@ import {
   SUBMISSION_INCLUDES,
   FORMS_INCLUDES,
   FORM_INCLUDES,
-  SPACE_INCLUDES,
   BRIDGE_MODEL_INCLUDES,
 } from '../modules/settingsDatastore';
 import { DatastoreFormSave } from '../../records';
@@ -44,7 +43,7 @@ import { DatastoreFormSave } from '../../records';
 import { chunkList } from '../../utils';
 
 export function* fetchFormsSaga() {
-  const [displayableForms, manageableForms, space] = yield all([
+  const [displayableForms, manageableForms, bridges] = yield all([
     call(fetchForms, {
       datastore: true,
       include: FORMS_INCLUDES,
@@ -53,9 +52,7 @@ export function* fetchFormsSaga() {
       datastore: true,
       manage: 'true',
     }),
-    call(fetchSpace, {
-      include: SPACE_INCLUDES,
-    }),
+    call(fetchBridges),
   ]);
 
   const manageableFormsSlugs = manageableForms.forms
@@ -66,7 +63,7 @@ export function* fetchFormsSaga() {
     actions.setForms({
       manageableForms: manageableFormsSlugs,
       displayableForms: displayableForms.forms || [],
-      bridges: space.space ? space.space.bridges : [],
+      bridges: bridges.bridges || [],
     }),
   );
 }

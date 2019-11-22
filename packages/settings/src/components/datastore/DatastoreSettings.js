@@ -28,7 +28,7 @@ const SettingsComponent = ({
   origForm,
   bridges,
   bridgeModel,
-  bridgeName,
+  bridgeSlug,
   handleBridgeChange,
   newQualification,
   setNewQualification,
@@ -303,18 +303,18 @@ const SettingsComponent = ({
                 <div className="form settings">
                   <div className="form-group">
                     <label htmlFor="name">
-                      <I18n>Bridge Name</I18n>
+                      <I18n>Bridge</I18n>
                     </label>
                     <select
-                      id="bridgeName"
-                      name="bridgeName"
+                      id="bridgeSlug"
+                      name="bridgeSlug"
                       onChange={e =>
-                        handleBridgeChange('bridgeName', e.target.value)
+                        handleBridgeChange('bridgeSlug', e.target.value)
                       }
-                      value={updatedForm.bridgeName}
+                      value={updatedForm.bridgeSlug}
                       className="form-control"
                     >
-                      {!origForm.bridgeName && <option />}
+                      {!origForm.bridgeSlug && <option />}
                       {bridges.map(b => (
                         <option key={b} value={b}>
                           {b}
@@ -322,7 +322,7 @@ const SettingsComponent = ({
                       ))}
                     </select>
                   </div>
-                  {updatedForm.bridgeName && (
+                  {updatedForm.bridgeSlug && (
                     <div>
                       <div className="form-group">
                         <span>
@@ -1075,11 +1075,11 @@ const handleBridgeChange = ({
   setFormChanges,
   updatedForm: { bridgeModel, bridgeModelMapping },
 }) => (type, value) => {
-  if (type === 'bridgeName') {
-    setFormChanges({ type: 'bridgeName', value });
+  if (type === 'bridgeSlug') {
+    setFormChanges({ type: 'bridgeSlug', value });
     setFormChanges({
       type: 'bridgeModelMapping',
-      value: bridgeModelMapping.set('bridgeName', value),
+      value: bridgeModelMapping.set('bridgeSlug', value),
     });
   } else if (type === 'formName') {
     if (bridgeModel.name) {
@@ -1313,7 +1313,7 @@ export const mapStateToProps = (state, { slug }) => ({
     state.settingsDatastore.currentFormChanges,
   ),
   bridges: state.settingsDatastore.bridges,
-  bridgeName: '',
+  bridgeSlug: '',
 });
 
 export const mapDispatchToProps = {

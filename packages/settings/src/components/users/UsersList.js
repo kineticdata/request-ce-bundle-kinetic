@@ -145,7 +145,7 @@ const createCSV = users => {
       return acc;
     }, []),
   );
-  return encodeURI(csv);
+  return csv;
 };
 
 const handleChange = props => () => {

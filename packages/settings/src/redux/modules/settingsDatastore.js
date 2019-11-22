@@ -18,7 +18,6 @@ export const DATASTORE_LIMIT = 500;
 export const SUBMISSION_INCLUDES = 'values,details';
 export const FORMS_INCLUDES = 'details,attributes';
 export const FORM_INCLUDES = 'details,fields,indexDefinitions,attributesMap';
-export const SPACE_INCLUDES = 'bridges';
 export const BRIDGE_MODEL_INCLUDES =
   'attributes, ' +
   'qualifications,qualifications.parameters,' +
@@ -290,19 +289,19 @@ export const selectPrevAndNext = state => {
   }
 };
 
-export const selectBridgeNameByModel = model => {
+export const selectBridgeSlugByModel = model => {
   if (model && model.activeMappingName) {
     const activeMappingName = model.activeMappingName || '';
     const activeMapping = model.mappings
       ? model.mappings.find(m => m.name === activeMappingName)
       : '';
-    return activeMapping ? activeMapping.bridgeName : '';
+    return activeMapping ? activeMapping.bridgeSlug : '';
   } else {
     return '';
   }
 };
 export const selectUpdatedFormActiveBridge = state =>
-  state.settingsDatastore.currentFormChanges.bridgeModelMapping.bridgeName;
+  state.settingsDatastore.currentFormChanges.bridgeModelMapping.bridgeSlug;
 export const selectCurrentForm = state => state.settingsDatastore.currentForm;
 export const selectCurrentFormChanges = state =>
   state.settingsDatastore.currentFormChanges;
@@ -368,7 +367,7 @@ export const reducer = (state = State(), { type, payload }) => {
           return DatastoreForm({ ...form, canManage, isHidden });
         }),
       );
-      const bridges = payload.bridges.map(b => b.name);
+      const bridges = payload.bridges.map(b => b.slug);
       return state
         .set('loading', false)
         .set('errors', [])
@@ -399,7 +398,7 @@ export const reducer = (state = State(), { type, payload }) => {
         canManage,
         columns,
         defaultSearchIndex,
-        bridgeName: bridgeModelMapping.bridgeName,
+        bridgeSlug: bridgeModelMapping.bridgeSlug,
         bridgeModel,
         bridgeModelMapping,
       });
