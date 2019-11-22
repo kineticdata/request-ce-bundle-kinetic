@@ -1082,7 +1082,9 @@ const handleBridgeChange = ({
     setFormChanges({ type: 'bridgeName', value });
     setFormChanges({
       type: 'bridgeModelMapping',
-      value: bridgeModelMapping.set('bridgeName', value),
+      value: bridgeModelMapping
+        .set('bridgeName', value)
+        .set('bridgeSlug', value),
     });
   } else if (type === 'formName') {
     if (bridgeModel.name) {

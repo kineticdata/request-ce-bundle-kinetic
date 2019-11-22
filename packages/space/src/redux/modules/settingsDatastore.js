@@ -296,14 +296,18 @@ export const selectBridgeNameByModel = model => {
     const activeMapping = model.mappings
       ? model.mappings.find(m => m.name === activeMappingName)
       : '';
-    return activeMapping ? activeMapping.bridgeName : '';
+    return activeMapping
+      ? activeMapping.bridgeName || activeMapping.bridgeSlug
+      : '';
   } else {
     return '';
   }
 };
 export const selectUpdatedFormActiveBridge = state =>
   state.space.settingsDatastore.currentFormChanges.bridgeModelMapping
-    .bridgeName;
+    .bridgeName ||
+  state.space.settingsDatastore.currentFormChanges.bridgeModelMapping
+    .bridgeSlug;
 export const selectCurrentForm = state =>
   state.space.settingsDatastore.currentForm;
 export const selectCurrentFormChanges = state =>
@@ -370,7 +374,7 @@ export const reducer = (state = State(), { type, payload }) => {
           return DatastoreForm({ ...form, canManage, isHidden });
         }),
       );
-      const bridges = payload.bridges.map(b => b.name);
+      const bridges = payload.bridges.map(b => b.name || b.slug);
       return state
         .set('loading', false)
         .set('errors', [])
@@ -401,7 +405,8 @@ export const reducer = (state = State(), { type, payload }) => {
         canManage,
         columns,
         defaultSearchIndex,
-        bridgeName: bridgeModelMapping.bridgeName,
+        bridgeName:
+          bridgeModelMapping.bridgeName || bridgeModelMapping.bridgeSlug,
         bridgeModel,
         bridgeModelMapping,
       });

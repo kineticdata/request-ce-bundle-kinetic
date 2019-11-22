@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   call,
   put,
@@ -6,7 +7,7 @@ import {
   all,
   throttle,
 } from 'redux-saga/effects';
-import { CoreAPI } from 'react-kinetic-core';
+import { CoreAPI, bundle } from 'react-kinetic-core';
 import { fromJS, Seq, Map, List } from 'immutable';
 import { push } from 'connected-react-router';
 import { selectToken } from 'discussions/src/redux/modules/socket';
@@ -26,11 +27,35 @@ import {
   BRIDGE_MODEL_INCLUDES,
 } from '../modules/settingsDatastore';
 import { DatastoreFormSave } from '../../records';
-
 import { chunkList } from '../../utils';
 
+import semver from 'semver';
+const AGENT_MINIMUM_VERSION = '5.0.0';
+
+// Implement fetchBridges api call for CE v3
+const fetchBridges = (options = {}) => {
+  return axios
+    .get(`${bundle.spaceLocation()}/app/components/agent/app/api/v1/bridges`)
+    .then(response => ({ bridges: response.data.bridges }))
+    .catch(e => {
+      if (e instanceof Error && !e.response) throw e;
+      const { data = {}, status: statusCode, statusText: msg } = e.response;
+      const { errorKey: key = null, message = data.error, ...rest } = data;
+      const type = types[statusCode];
+      const result = { ...rest, message: message || msg, key, statusCode };
+      if (type) result[type] = true;
+      return { error: result };
+    });
+};
+
 export function* fetchFormsSaga() {
-  const [displayableForms, manageableForms, space] = yield all([
+  const appVersion = yield select(state => state.app.config.version);
+  const isV5 = semver.satisfies(
+    semver.coerce(appVersion),
+    `>=${AGENT_MINIMUM_VERSION}`,
+  );
+
+  const [displayableForms, manageableForms, space, bridges] = yield all([
     call(CoreAPI.fetchForms, {
       datastore: true,
       include: FORMS_INCLUDES,
@@ -39,9 +64,12 @@ export function* fetchFormsSaga() {
       datastore: true,
       manage: 'true',
     }),
-    call(CoreAPI.fetchSpace, {
-      include: SPACE_INCLUDES,
-    }),
+    !isV5
+      ? call(CoreAPI.fetchSpace, {
+          include: SPACE_INCLUDES,
+        })
+      : null,
+    isV5 ? call(fetchBridges) : null,
   ]);
 
   const manageableFormsSlugs = manageableForms.forms
@@ -52,7 +80,10 @@ export function* fetchFormsSaga() {
     actions.setForms({
       manageableForms: manageableFormsSlugs,
       displayableForms: displayableForms.forms || [],
-      bridges: space.space ? space.space.bridges : [],
+      bridges:
+        (space && space.space && space.space.bridges) ||
+        (bridges && bridges.bridges) ||
+        [],
     }),
   );
 }

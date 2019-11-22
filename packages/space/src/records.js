@@ -33,6 +33,7 @@ export const BridgeModelMappingQualification = Record({
 export const BridgeModelMapping = Record({
   attributes: List(),
   bridgeName: '',
+  bridgeSlug: '',
   name: '',
   qualifications: List(),
   status: 'Active',
