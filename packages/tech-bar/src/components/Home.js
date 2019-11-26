@@ -41,6 +41,10 @@ export const HomeComponent = ({
   waitingUsers,
 }) => {
   const selectedTechBar = currentTechBar || techBars.get(0);
+  const unselectedTechBar =
+    techBars.get(0).values['Id'] === selectedTechBar.values['Id']
+      ? techBars.get(1)
+      : techBars.get(0);
   return (
     <Fragment>
       <PageTitle parts={[]} />
@@ -106,6 +110,51 @@ export const HomeComponent = ({
                     </div>
                     <Link
                       to={`appointment/${selectedTechBar.values['Id']}`}
+                      className="btn btn-primary card-button"
+                    >
+                      <I18n>Schedule Now</I18n> →
+                    </Link>
+                    <div
+                      className={`waiting-users-message ${
+                        waitingUsers === 0 ? '' : ''
+                      }`}
+                    >
+                      <I18n>Currently awaiting assistance</I18n>: {waitingUsers}{' '}
+                      <I18n
+                        render={translate =>
+                          waitingUsers === 1
+                            ? translate('person')
+                            : translate('people')
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+                {/* second hero card for unselected techbar */}
+                <div className="hero-card-2">
+                  <div className="card card--tech-bar-loc">
+                    <div className="card-body">
+                      <span className="icon fa fa-map-marker" />
+                      <div className="content">
+                        <span className="title">
+                          <I18n>{unselectedTechBar.values['Name']}</I18n>
+                        </span>
+                        {unselectedTechBar.values['Location'] && (
+                          <div className="subtitle">
+                            <I18n>{unselectedTechBar.values['Location']}</I18n>
+                          </div>
+                        )}
+                        <div className="details">
+                          {unselectedTechBar.values['Details'] && (
+                            <p>
+                              <I18n>{unselectedTechBar.values['Details']}</I18n>
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <Link
+                      to={`appointment/${unselectedTechBar.values['Id']}`}
                       className="btn btn-primary card-button"
                     >
                       <I18n>Schedule Now</I18n> →

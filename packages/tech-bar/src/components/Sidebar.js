@@ -123,6 +123,15 @@ export const SidebarComponent = ({
               )}
             </NavItem>
           ))}
+          <NavItem>
+            <Link to={`displayMultiple/checkin`} className="nav-link">
+              <div>
+                <div>
+                  <I18n>Multiple Check In</I18n>
+                </div>
+              </div>
+            </Link>
+          </NavItem>
         </Nav>
       </div>
     </div>

@@ -19,6 +19,7 @@ import { Home } from './components/Home';
 import { Past } from './components/Past';
 import { TechBars } from './components/TechBars';
 import { Display } from './components/Display';
+import { DisplayMultiple } from './components/DisplayMultiple';
 import { Form } from './components/Form';
 import { AppointmentForm } from './components/AppointmentForm';
 import { Settings } from './components/settings/Settings';
@@ -65,6 +66,8 @@ const AppComponent = props => {
               <Form path="/forms/:formSlug" />
               <Display path="/display/:techBarId/:mode" />
               <Display path="/display/:techBarId" />
+              <DisplayMultiple path="/displayMultiple/:mode" />
+              <DisplayMultiple path="/displayMultiple" />
             </Router>
           </main>
         </I18n>

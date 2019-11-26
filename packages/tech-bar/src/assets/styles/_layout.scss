@@ -33,7 +33,7 @@
     display: flex;
 
     .hero-welcome {
-      flex: 0 0 50%;
+      flex: 0 0 40%;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -54,7 +54,33 @@
     }
 
     .hero-card {
-      flex: 0 0 50%;
+      flex: 0 0 30%;
+      display: flex;
+      flex-direction: column;
+      justify-content: left;
+      .card {
+        flex: 1;
+        min-height: 0px;
+        width: 330px;
+        margin: 0 0 0 auto;
+        border-top-color: $sunflower;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+
+        .card-body {
+          flex-basis: 0;
+        }
+
+        .waiting-users-message {
+          font-size: 0.75rem;
+          color: rgba($gray80, 0.75);
+          font-style: italic;
+          margin-top: 0.25rem;
+        }
+      }
+    }
+
+    .hero-card-2 {
+      flex: 0 0 35%;
       display: flex;
       flex-direction: column;
       .card {
@@ -430,4 +456,112 @@
       height: 350px !important;
     }
   }
+}
+
+// Tech Bar Multiple Check In
+.multiple-page-panel {
+  &--display {
+    display: flex;
+    padding: 2.5%;
+    justify-content: flex-start;
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .location-title {
+    color: $gray80;
+    background-color: rgba($gray80, 0.05);
+    @include border-radius(1rem);
+    font-size: 1.5rem;
+    font-weight: 500;
+    padding: 0.5rem 1.25rem;
+    .fa {
+      color: $gray50;
+    }
+  }
+
+  .tech-bar-display {
+    .btn--checkin {
+      @include border-radius(1rem);
+      width: 100%;
+      font-size: 1.6rem;
+      line-height: 10rem;
+      &:first-child {
+        margin-bottom: 2rem;
+      }
+    }
+
+    .experience-options {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      margin: 3rem 0;
+      button {
+        @include border-radius(50%);
+        flex-basis: 35%;
+        padding: 0;
+        font-size: 22.4vw;
+        @media all and (min-width: 849px) {
+          font-size: 190px;
+        }
+
+        &:before {
+          content: '';
+          display: inline-block;
+          vertical-align: middle;
+          padding-top: 100%;
+        }
+
+        span {
+          vertical-align: middle;
+        }
+      }
+    }
+
+    .full-screen-container {
+      width: 95%;
+      margin: 0;
+
+      .header {
+        @include border-top-radius(1rem);
+        height: 1rem;
+      }
+
+      .body {
+        @include border-bottom-radius(1rem);
+        border: 1px solid $gray10;
+        border-top: none;
+        background-color: $white;
+        padding: 2rem;
+        h1 {
+          font-size: 1.75rem;
+          font-weight: bold;
+          margin: 0;
+          padding: 0 0 1rem;
+          display: flex;
+          justify-content: space-between;
+        }
+        form,
+        .form {
+          @include border-bottom-radius(1rem);
+          overflow: visible;
+          padding: 0;
+        }
+      }
+    }
+
+    &--checkin {
+      margin-top: 2rem;
+      margin-bottom: 5rem;
+    }
+  }
+}
+
+.logo-container {
+  width: 640px;
+  margin: 10px auto;
+  background-color: white;
+  background-position: center;
+  background-size: cover;
+  height: 340px;
 }
