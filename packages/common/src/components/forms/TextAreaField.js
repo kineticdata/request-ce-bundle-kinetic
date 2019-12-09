@@ -8,7 +8,7 @@ export const TextAreaField = props => (
     <I18n
       render={translate => (
         <textarea
-          rows="5"
+          rows="3"
           className={`form-control${hasErrors(props) ? ' is-invalid' : ''}`}
           id={props.id || props.name}
           name={props.name}

@@ -68,6 +68,7 @@ export {
 } from './redux/modules/toasts';
 
 // Common Components
+export { AutoFocusInput } from './components/AutoFocusInput';
 export {
   EmptyMessage,
   ErrorMessage,

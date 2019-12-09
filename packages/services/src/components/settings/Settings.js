@@ -4,14 +4,12 @@ import { Link, Router } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
 import { ErrorMessage, LoadingMessage } from 'common';
 import { PageTitle } from '../shared/PageTitle';
-import { ServicesSettings } from './services_settings/ServicesSettings';
-import { actions } from '../../redux/modules/settingsServices';
 import { actions as formActions } from '../../redux/modules/settingsForms';
+import { ServicesSettings } from './services_settings/ServicesSettings';
 import { FormsList } from './forms/FormsList';
 import { FormSettings } from './forms/FormSettings';
 import { FormDetails } from './forms/FormDetails';
 import { FormActivity } from './forms/FormActivity';
-import { CreateForm } from './forms/CreateForm';
 import { CategorySettings } from './categories/CategorySettings';
 import { I18n } from '@kineticdata/react';
 import { connect } from '../../redux/store';
@@ -74,38 +72,16 @@ export const FormSettingsWrapper = compose(
     ),
 );
 
-export const SettingsComponent = ({ kappSlug }) => (
+export const Settings = () => (
   <Router>
     <ServicesSettings path="general" />
     <FormsList path="forms" />
-    <CreateForm path="forms/new" />
-    <CreateForm path="forms/clone/:id" />
     <FormSettingsWrapper path="forms/:formSlug/*" />
     <FormActivity path="forms/:id/activity" />
     <CategorySettings path="categories/*" />
     <SettingsNavigation default />
   </Router>
 );
-
-const mapStateToProps = (state, props) => ({
-  kappSlug: state.app.kappSlug,
-});
-
-const mapDispatchToProps = {
-  fetchServicesSettings: actions.fetchServicesSettings,
-};
-
-export const Settings = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
-  lifecycle({
-    componentWillMount(prev, next) {
-      this.props.fetchServicesSettings();
-    },
-  }),
-)(SettingsComponent);
 
 const SettingsCard = ({ path, icon, name, description }) => (
   <Link to={path} className="card card--service">

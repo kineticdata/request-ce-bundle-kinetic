@@ -25,8 +25,8 @@ export class ModalButton extends Component {
       typeof this.props.onClose === 'function' ? this.props.onClose : undefined;
   }
 
-  open = () => {
-    this.onOpen && this.onOpen();
+  open = e => {
+    this.onOpen && this.onOpen(e);
     this.setState({ open: true });
   };
 
@@ -34,8 +34,8 @@ export class ModalButton extends Component {
     this.setState({ open: true });
   };
 
-  close = () => {
-    this.onClose && this.onClose();
+  close = e => {
+    this.onClose && this.onClose(e);
     this.setState({ open: false });
   };
 
@@ -43,8 +43,8 @@ export class ModalButton extends Component {
     this.setState({ open: false });
   };
 
-  toggle = () => {
-    this.state.open ? this.close() : this.open();
+  toggle = e => {
+    this.state.open ? this.close(e) : this.open(e);
   };
 
   forceToggle = () => {

@@ -79,6 +79,10 @@ table.table--settings {
     }
   }
 
+  tfoot {
+    background: none;
+  }
+
   &.table-draggable {
     border-collapse: separate;
     border-spacing: 0px;

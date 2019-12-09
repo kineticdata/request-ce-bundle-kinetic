@@ -108,19 +108,29 @@ ActivityFeed.propTypes = {
   joinByDirection: t.oneOf(['ASC', 'DESC']),
   // Sources from which data should be fetched
   dataSources: t.objectOf(
-    t.shape({
-      // @kineticdata/react api function for fetching data
-      fn: t.func.isRequired,
-      // Function which build the params object to the api call based on the
-      // previous params and results
-      params: t.func.isRequired,
-      // Function that transforms the results of the api call into an object
-      // containing a data property
-      transform: t.func.isRequired,
-      // Component for rendering the element of each record in this source
-      component: t.func.isRequired,
-      // Overwrite of the joinBy provided to the ActivityFeed
-      joinBy: t.oneOfType([t.string, t.func]),
-    }),
+    t.oneOf([
+      t.shape({
+        // Static list of data
+        data: t.array.isRequired,
+        // Component for rendering the element of each record in this source
+        component: t.func.isRequired,
+        // Overwrite of the joinBy provided to the ActivityFeed
+        joinBy: t.oneOfType([t.string, t.func]),
+      }),
+      t.shape({
+        // @kineticdata/react api function for fetching data
+        fn: t.func.isRequired,
+        // Function which build the params object to the api call based on the
+        // previous params and results
+        params: t.func.isRequired,
+        // Function that transforms the results of the api call into an object
+        // containing a data property
+        transform: t.func.isRequired,
+        // Component for rendering the element of each record in this source
+        component: t.func.isRequired,
+        // Overwrite of the joinBy provided to the ActivityFeed
+        joinBy: t.oneOfType([t.string, t.func]),
+      }),
+    ]),
   ),
 };

@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from '../redux/store';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { actions } from '../redux/modules/toasts';
+import { AutoFocusInput } from './AutoFocusInput';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { I18n } from '@kineticdata/react';
 const {
@@ -154,7 +155,10 @@ const ConfirmationModalComponent = props => {
     confirmationTextLabel = 'text',
   } = props.confirm;
 
-  const ok = () => props.resolveConfirm(true);
+  const ok = () =>
+    !confirmationText || props.confirmationValue === confirmationText
+      ? props.resolveConfirm(true)
+      : null;
   const cancel = () => props.resolveConfirm(false);
 
   const renderBody = body =>
@@ -165,7 +169,12 @@ const ConfirmationModalComponent = props => {
     );
 
   return (
-    <Modal isOpen={true} toggle={cancel} size={size}>
+    <Modal
+      isOpen={true}
+      toggle={cancel}
+      size={size}
+      autoFocus={!confirmationText}
+    >
       <div className="modal-header">
         <h4 className="modal-title">
           <button className="btn btn-link btn-delete" onClick={cancel}>
@@ -194,17 +203,23 @@ const ConfirmationModalComponent = props => {
                 )}
               />
             </p>
-            <input
+            <AutoFocusInput
               className="form-control"
               type="text"
               value={props.confirmationValue}
               onChange={e => props.setConfirmationValue(e.target.value)}
+              onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  ok();
+                }
+              }}
             />
           </Fragment>
         )}
       </ModalBody>
       <ModalFooter className="modal-footer--full-width">
         <button
+          type="button"
           className={`btn btn-${actionType}`}
           onClick={ok}
           disabled={

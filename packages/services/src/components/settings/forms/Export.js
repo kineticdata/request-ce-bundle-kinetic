@@ -109,7 +109,6 @@ const handleDownload = props => () => {
 };
 
 const mapStateToProps = state => ({
-  form: state.settingsForms.currentForm,
   kappSlug: state.app.kappSlug,
   submissions: state.settingsForms.exportSubmissions,
   submissionsCount: state.settingsForms.exportCount,
@@ -132,18 +131,19 @@ export const Export = compose(
     handleDownload,
   }),
   lifecycle({
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps) {
       if (
-        nextProps.exportStatus === 'FETCHING_RECORDS' &&
-        nextProps.submissions.length > 0
+        this.props.exportStatus === 'FETCHING_RECORDS' &&
+        this.props.submissions.length > 0 &&
+        prevProps.submissions.length === 0
       ) {
-        nextProps.setExportStatus('CONVERT');
-        const csv = createCSV(nextProps.submissions, nextProps.form);
+        this.props.setExportStatus('CONVERT');
+        const csv = createCSV(this.props.submissions, this.props.form);
         // TODO: If CSV fails setExportStatus to FAILED
-        nextProps.setExportStatus('DOWNLOAD');
-        downloadjs(csv, nextProps.form.name + '.csv', 'text/csv');
-        nextProps.setExportStatus('COMPLETE');
-        nextProps.setDownloaded(true);
+        this.props.setExportStatus('DOWNLOAD');
+        downloadjs(csv, this.props.form.name + '.csv', 'text/csv');
+        this.props.setExportStatus('COMPLETE');
+        // this.props.setDownloaded(true);
       }
     },
   }),

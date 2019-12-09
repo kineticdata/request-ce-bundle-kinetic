@@ -1,17 +1,13 @@
-import { call, put, takeEvery, select } from 'redux-saga/effects';
+import { call, put, takeEvery } from 'redux-saga/effects';
 import {
-  bundle,
   fetchForm,
   SubmissionSearch,
   searchSubmissions,
   fetchSubmission,
-  fetchKapp,
   updateForm,
-  createForm,
   deleteForm,
 } from '@kineticdata/react';
-import { addSuccess, addError, addToast, addToastAlert } from 'common';
-import axios from 'axios';
+import { addToast, addToastAlert } from 'common';
 import {
   actions,
   types,
@@ -34,6 +30,49 @@ export function* fetchFormSaga({ payload }) {
   }
 }
 
+export function* cloneFormSaga({ payload }) {
+  const { error: cloneError, form: cloneForm } = yield call(fetchForm, {
+    kappSlug: payload.kappSlug,
+    formSlug: payload.cloneFormSlug,
+    include: FORM_FULL_INCLUDES,
+  });
+
+  if (cloneError) {
+    addToastAlert({
+      title: 'Error Cloning Form',
+      message: 'Could not find form to clone.',
+    });
+    yield put(actions.cloneFormComplete(payload));
+  } else {
+    const { error, form } = yield call(updateForm, {
+      kappSlug: payload.kappSlug,
+      formSlug: payload.formSlug,
+      form: {
+        bridgedResources: cloneForm.bridgedResources,
+        customHeadContent: cloneForm.customHeadContent,
+        pages: cloneForm.pages,
+        securityPolicies: cloneForm.securityPolicies,
+        attributesMap: cloneForm.attributesMap,
+        categorizations: cloneForm.categorizations,
+      },
+    });
+
+    if (error) {
+      addToastAlert({
+        title: 'Error Cloning Form',
+        message: error.message,
+      });
+      yield put(actions.cloneFormComplete(payload));
+    }
+
+    addToast(`${form.name} cloned successfully from ${cloneForm.name}`);
+    if (typeof payload.callback === 'function') {
+      payload.callback(form);
+    }
+    yield put(actions.cloneFormComplete(payload));
+  }
+}
+
 export function* fetchSubmissionSaga({ payload }) {
   const { submission, error } = yield call(fetchSubmission, {
     id: payload.id,
@@ -46,49 +85,33 @@ export function* fetchSubmissionSaga({ payload }) {
   }
 }
 
-export function* createFormSaga(action) {
-  const { serverError, form } = yield call(fetchForm, {
-    kappSlug: action.payload.kappSlug,
-    formSlug: action.payload.inputs['Template to Clone'],
-    include: FORM_FULL_INCLUDES,
-  });
+export function* fetchFormSubmissionsSaga(action) {
+  const kappSlug = action.payload.kappSlug;
+  const pageToken = action.payload.pageToken;
+  const formSlug = action.payload.formSlug;
+  const q = action.payload.q;
+  const searchBuilder = new SubmissionSearch().includes(['details', 'values']);
+  // Add some of the optional parameters to the search
+  if (pageToken) searchBuilder.pageToken(pageToken);
+  // Loop over items in q and append them as "eq"
+  // to search build
+  if (q) {
+    for (const key in q) {
+      searchBuilder.eq(key, q[key]);
+    }
+  }
+  searchBuilder.end();
+  const search = searchBuilder.build();
+
+  const { submissions, nextPageToken, serverError } = yield call(
+    searchSubmissions,
+    { search, kapp: kappSlug, form: formSlug },
+  );
 
   if (serverError) {
     yield put(actions.setFormsError(serverError));
-  }
-
-  const formContent = {
-    ...form,
-    slug: action.payload.inputs.Slug,
-    name: action.payload.inputs.Name,
-    description: action.payload.inputs.Description,
-    status: action.payload.inputs.Status,
-    type: action.payload.inputs.Type,
-    attributesMap: {
-      ...form.attributesMap,
-      'Owning Team': action.payload.inputs['Owning Team'],
-    },
-  };
-
-  const createdForm = yield call(createForm, {
-    kappSlug: action.payload.kappSlug,
-    form: formContent,
-    include: FORM_FULL_INCLUDES,
-  });
-  if (createdForm.serverError || createdForm.error) {
-    yield put(
-      addError(createdForm.error || createdForm.serverError.statusText),
-    );
   } else {
-    yield put(
-      addSuccess(
-        `Form "${action.payload.inputs.Name}" was successfully created.`,
-        'Created Form',
-      ),
-    );
-    if (typeof action.payload.callback === 'function') {
-      action.payload.callback(createdForm.form.slug);
-    }
+    yield put(actions.setFormSubmissions({ submissions, nextPageToken }));
   }
 }
 
@@ -158,8 +181,9 @@ export function* deleteFormSaga({ payload }) {
 export function* watchSettingsForms() {
   yield takeEvery(types.FETCH_FORM_REQUEST, fetchFormSaga);
   yield takeEvery(types.DELETE_FORM_REQUEST, deleteFormSaga);
+  yield takeEvery(types.CLONE_FORM_REQUEST, cloneFormSaga);
   yield takeEvery(types.FETCH_SUBMISSION_REQUEST, fetchSubmissionSaga);
 
-  yield takeEvery(types.CREATE_FORM, createFormSaga);
+  yield takeEvery(types.FETCH_FORM_SUBMISSIONS, fetchFormSubmissionsSaga);
   yield takeEvery(types.FETCH_ALL_SUBMISSIONS, fetchAllSubmissionsSaga);
 }

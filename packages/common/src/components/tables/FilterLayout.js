@@ -39,6 +39,8 @@ export const generateFilterModalLayout = (filterSet, title = 'Filter') => ({
   filters,
   onSearch,
   onReset,
+  onClear,
+  onChangeFilter,
   columnSet,
   loading,
   initializing,
@@ -51,17 +53,18 @@ export const generateFilterModalLayout = (filterSet, title = 'Filter') => ({
     <span className="btn-group">
       <ModalButton
         components={{ ToggleButton: generateToggleButton(hasAppliedFilters) }}
+        onClose={onClear}
       >
-        {({ isOpen, toggle }) => (
+        {({ isOpen, toggle, forceToggle }) => (
           <Modal isOpen={isOpen} toggle={toggle} size="md">
             <form
               onSubmit={e => {
                 onSearch(e);
-                toggle();
+                forceToggle();
               }}
               onReset={e => {
                 onReset(e);
-                toggle();
+                forceToggle();
               }}
               className="p-0"
             >

@@ -87,7 +87,8 @@
       }
     }
     .modal-body {
-      &--padding {
+      &--padding,
+      &.form {
         padding: 0.875rem 1rem;
       }
       display: flex;
@@ -230,6 +231,10 @@
           margin: 0;
         }
       }
+    }
+
+    > form {
+      padding: 0;
     }
   }
 }
