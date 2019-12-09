@@ -30,6 +30,7 @@ export const actions = {
 
 export const FeedState = Record({
   dataSources: null,
+  options: {},
   loading: true,
   errors: null,
   data: List(),
@@ -58,19 +59,21 @@ export const DataSource = Record({
 
 const initializeFeed = ({
   dataSources = {},
+  options = {},
   pageSize = 25,
   joinByDirection = 'DESC',
   joinBy = o => o[Object.keys(o)[0]],
   joinByComparator,
 }) =>
   FeedState({
-    dataSources: Map(dataSources).map(initializeDataSource(joinBy)),
+    dataSources: Map(dataSources).map(initializeDataSource(joinBy, options)),
+    options,
     pageSize,
     joinByDirection,
     joinByComparator,
   });
 
-const initializeDataSource = joinByDefault => ({
+const initializeDataSource = (joinByDefault, options) => ({
   data,
   fn,
   params: paramsFn,
@@ -89,7 +92,7 @@ const initializeDataSource = joinByDefault => ({
           fn,
           paramsFn,
           transform,
-          params: paramsFn(),
+          params: paramsFn(undefined, undefined, options),
         }),
     component,
     joinValueFn:
@@ -123,7 +126,11 @@ export const reducer = (state = Map(), { type, payload }) => {
         .updateIn(
           [payload.feedKey, 'dataSources', payload.sourceName],
           source => {
-            const nextParams = source.paramsFn(source.params, payload.result);
+            const nextParams = source.paramsFn(
+              source.params,
+              payload.result,
+              state.getIn([payload.feedKey, 'options']),
+            );
             const completed =
               payload.result.data.length === 0 ||
               !nextParams ||

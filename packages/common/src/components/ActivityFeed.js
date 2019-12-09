@@ -3,11 +3,12 @@ import t from 'prop-types';
 import { generateKey } from '@kineticdata/react';
 import { connect } from '../redux/store';
 import { actions } from '../redux/modules/activityFeed';
+import { is, Map } from 'immutable';
 
 export class ActivityFeed extends Component {
   constructor(props) {
     super(props);
-    this.feedKey = this.props.feedKey || generateKey();
+    this.feedKey = generateKey();
   }
 
   render() {
@@ -26,6 +27,12 @@ export class ActivityFeedImplComponent extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (!is(Map(this.props.options), Map(prevProps.options))) {
+      this.init();
+    }
+  }
+
   componentWillUnmount() {
     this.props.deleteActivityFeed({ feedKey: this.props.feedKey });
   }
@@ -40,6 +47,7 @@ export class ActivityFeedImplComponent extends Component {
             errors: feed.errors,
             data: feed.pageData,
             dataElements: feed.pageDataElements,
+            options: feed.options,
             startIndex:
               feed.index +
               ((feed.pageData && feed.pageData.length) || feed.index ? 1 : 0),
@@ -90,12 +98,13 @@ const ActivityFeedImpl = connect(
 )(ActivityFeedImplComponent);
 
 ActivityFeed.propTypes = {
-  // Optional string key for initializing the activity feed
-  feedKey: t.string,
   // Function that will render the content of the feed
   children: t.func.isRequired,
   // Boolean value specifying if data should be fetched immediately on mount
   init: t.bool,
+  // Options that will be passed to the params function.
+  // If the options change, the feed will be reset.
+  options: t.object,
   // Number of results to show per page
   pageSize: t.number,
   // Property or function that determines what value the sources should be
