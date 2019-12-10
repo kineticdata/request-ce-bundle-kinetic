@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "./src/index.js",
   "dependencies": {
-    "@kineticdata/react": "^0.1.0-alpha.9",
+    "@kineticdata/react": "^0.1.0-alpha.9-hotfix",
     "@reach/router": "git://github.com/kineticdata/router.git",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.5",
