@@ -2,6 +2,7 @@ import { Record, List } from 'immutable';
 import { LOCATION_CHANGE } from 'connected-react-router';
 import { matchPath } from 'react-router';
 import moment from 'moment';
+import semver from 'semver';
 import * as Utils from 'common/src/utils';
 const { namespace, withPayload } = Utils;
 
@@ -22,6 +23,7 @@ export const actions = {
 export const State = Record({
   kappSlug: null,
   version: null,
+  isPlatform: false,
   locales: List(),
   timezones: List(),
   locale: moment.locale(),
@@ -30,7 +32,12 @@ export const State = Record({
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.SET_VERSION:
-      return state.set('version', payload.version);
+      return state
+        .set('version', payload.version)
+        .set(
+          'isPlatform',
+          semver.satisfies(semver.coerce(payload.version), `>=5.0.0`),
+        );
     case LOCATION_CHANGE:
       const path = '/kapps/:kappSlug';
       const match = matchPath(payload.location.pathname, { path });

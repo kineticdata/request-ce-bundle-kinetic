@@ -29,9 +29,6 @@ import {
 import { DatastoreFormSave } from '../../records';
 import { chunkList } from '../../utils';
 
-import semver from 'semver';
-const AGENT_MINIMUM_VERSION = '5.0.0';
-
 // Implement fetchBridges api call for CE v3
 const fetchBridges = (options = {}) => {
   return axios
@@ -49,11 +46,7 @@ const fetchBridges = (options = {}) => {
 };
 
 export function* fetchFormsSaga() {
-  const appVersion = yield select(state => state.app.config.version);
-  const isV5 = semver.satisfies(
-    semver.coerce(appVersion),
-    `>=${AGENT_MINIMUM_VERSION}`,
-  );
+  const isPlatform = yield select(state => state.app.config.isPlatform);
 
   const [displayableForms, manageableForms, space, bridges] = yield all([
     call(CoreAPI.fetchForms, {
@@ -64,12 +57,12 @@ export function* fetchFormsSaga() {
       datastore: true,
       manage: 'true',
     }),
-    !isV5
+    !isPlatform
       ? call(CoreAPI.fetchSpace, {
           include: SPACE_INCLUDES,
         })
       : null,
-    isV5 ? call(fetchBridges) : null,
+    isPlatform ? call(fetchBridges) : null,
   ]);
 
   const manageableFormsSlugs = manageableForms.forms

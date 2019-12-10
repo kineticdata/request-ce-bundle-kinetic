@@ -48,6 +48,7 @@ const SettingsComponent = ({
   staleFields,
   setStaleFields,
   fetchForm,
+  isPlatform,
 }) =>
   !loading && (
     <I18n context={`datastore.forms.${origForm.slug}`}>
@@ -79,9 +80,15 @@ const SettingsComponent = ({
             </div>
 
             <a
-              href={`${bundle.spaceLocation()}/app/#/admin/datastore/form/${
-                origForm.slug
-              }/builder`}
+              href={
+                isPlatform
+                  ? `${bundle.spaceLocation()}/app/builder/#/forms/${
+                      origForm.slug
+                    }/builder`
+                  : `${bundle.spaceLocation()}/app/#/admin/datastore/form/${
+                      origForm.slug
+                    }/builder`
+              }
               className="btn btn-primary"
               target="_blank"
             >
@@ -1319,6 +1326,7 @@ export const mapStateToProps = (state, { match: { params } }) => ({
   ),
   bridges: state.space.settingsDatastore.bridges,
   bridgeName: '',
+  isPlatform: state.app.config.isPlatform,
 });
 
 export const mapDispatchToProps = {

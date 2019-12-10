@@ -150,6 +150,7 @@ export const FormContainer = ({
   handleColumnChange,
   handleWorkflowToggle,
   taskServerUrl,
+  isPlatform,
 }) =>
   !loading &&
   !kappLoading &&
@@ -186,9 +187,15 @@ export const FormContainer = ({
             </h1>
           </div>
           <a
-            href={`${bundle.spaceLocation()}/app/#/${kappSlug}/author/form/${
-              form.slug
-            }/builder`}
+            href={
+              isPlatform
+                ? `${bundle.spaceLocation()}/app/builder/#/${kappSlug}/forms/${
+                    form.slug
+                  }/builder`
+                : `${bundle.spaceLocation()}/app/#/${kappSlug}/author/form/${
+                    form.slug
+                  }/builder`
+            }
             className="btn btn-primary"
             target="_blank"
           >
@@ -929,6 +936,7 @@ const mapStateToProps = (state, { match: { params } }) => {
     kappSlug: state.app.config.kappSlug,
     categoryDefinitions,
     taskServerUrl: state.app.space.attributesMap['Task Server Url'][0],
+    isPlatform: state.app.config.isPlatform,
   };
 };
 const mapDispatchToProps = {
