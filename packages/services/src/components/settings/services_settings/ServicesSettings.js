@@ -34,12 +34,14 @@ const FormLayout = ({ fields, error, buttons }) => (
     {fields.get('name')}
     {fields.get('icon')}
     {fields.get('recordSearchHistory')}
+    <br />
     <h2 className="section__title">
       <I18n>Workflow Options</I18n>
     </h2>
     {fields.get('defaultServiceDaysDue')}
     {fields.get('defaultKappApprover')}
     {fields.get('defaultTaskAssigneeTeam')}
+    <br />
     <h2 className="section__title">
       <I18n>Form Mapping</I18n>
     </h2>

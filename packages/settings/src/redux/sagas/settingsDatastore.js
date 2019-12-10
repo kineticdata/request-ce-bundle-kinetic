@@ -42,7 +42,17 @@ import { DatastoreFormSave } from '../../records';
 
 import { chunkList } from '../../utils';
 
+import semver from 'semver';
+const AGENT_MINIMUM_VERSION = '5.0.0';
+
 export function* fetchFormsSaga() {
+  // TODO remove v5 check once v5 is released
+  const appVersion = yield select(state => state.app.coreVersion);
+  const isV5 = semver.satisfies(
+    semver.coerce(appVersion),
+    `>=${AGENT_MINIMUM_VERSION}`,
+  );
+
   const [displayableForms, manageableForms, bridges] = yield all([
     call(fetchForms, {
       datastore: true,
@@ -52,7 +62,7 @@ export function* fetchFormsSaga() {
       datastore: true,
       manage: 'true',
     }),
-    call(fetchBridges),
+    isV5 && call(fetchBridges),
   ]);
 
   const manageableFormsSlugs = manageableForms.forms
@@ -63,7 +73,7 @@ export function* fetchFormsSaga() {
     actions.setForms({
       manageableForms: manageableFormsSlugs,
       displayableForms: displayableForms.forms || [],
-      bridges: bridges.bridges || [],
+      bridges: (bridges && bridges.bridges) || [],
     }),
   );
 }
