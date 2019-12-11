@@ -12,6 +12,7 @@ export const FormActivityContainer = ({
   submission,
   space,
   kappSlug,
+  isPlatform,
 }) =>
   !loading && (
     <div>
@@ -53,21 +54,22 @@ export const FormActivityContainer = ({
                 ({submission.handle})
               </h1>
             </div>
-            {space.attributes
-              .filter(attribute => attribute.name === 'Task Server Url')
-              .map(attribute => (
-                <a
-                  key={attribute.name}
-                  href={`${attribute.values[0]}/app/runs?sourceId=${
-                    submission.id
-                  }`}
-                  target="_blank"
-                >
-                  <button className="btn btn-primary pull-right">
-                    <i className="fa fa-sitemap" /> <I18n>View Runs</I18n>
-                  </button>
-                </a>
-              ))}
+            {!isPlatform &&
+              space.attributes
+                .filter(attribute => attribute.name === 'Task Server Url')
+                .map(attribute => (
+                  <a
+                    key={attribute.name}
+                    href={`${attribute.values[0]}/app/runs?sourceId=${
+                      submission.id
+                    }`}
+                    target="_blank"
+                  >
+                    <button className="btn btn-primary pull-right">
+                      <i className="fa fa-sitemap" /> <I18n>View Runs</I18n>
+                    </button>
+                  </a>
+                ))}
           </div>
           <section>
             <div className="settings-flex row">
@@ -280,6 +282,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   space: state.app.space,
   activityLoading: state.services.settingsForms.submissionActivityLoading,
   kappSlug: state.app.config.kappSlug,
+  isPlatform: state.app.config.isPlatform,
 });
 
 const mapDispatchToProps = {

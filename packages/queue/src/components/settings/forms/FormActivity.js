@@ -7,7 +7,12 @@ import { PageTitle } from 'common';
 import { actions } from '../../../redux/modules/settingsForms';
 import { I18n } from '../../../../../app/src/I18nProvider';
 
-export const FormActivityContainer = ({ loading, submission, space }) =>
+export const FormActivityContainer = ({
+  loading,
+  submission,
+  space,
+  isPlatform,
+}) =>
   !loading && (
     <div>
       <PageTitle parts={['Queue Settings']} />
@@ -52,21 +57,22 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                 ({submission.handle})
               </h1>
             </div>
-            {space.attributes
-              .filter(attribute => attribute.name === 'Task Server Url')
-              .map(attribute => (
-                <a
-                  key={attribute.name}
-                  href={`${attribute.values[0]}/app/runs?sourceId=${
-                    submission.id
-                  }`}
-                  target="_blank"
-                >
-                  <button className="btn btn-primary pull-right">
-                    <i className="fa fa-sitemap" /> <I18n>View Runs</I18n>
-                  </button>
-                </a>
-              ))}
+            {!isPlatform &&
+              space.attributes
+                .filter(attribute => attribute.name === 'Task Server Url')
+                .map(attribute => (
+                  <a
+                    key={attribute.name}
+                    href={`${attribute.values[0]}/app/runs?sourceId=${
+                      submission.id
+                    }`}
+                    target="_blank"
+                  >
+                    <button className="btn btn-primary pull-right">
+                      <i className="fa fa-sitemap" /> <I18n>View Runs</I18n>
+                    </button>
+                  </a>
+                ))}
           </div>
           <section>
             <div className="settings-flex row">
@@ -282,6 +288,7 @@ const mapStateToProps = (state, { match: { params } }) => ({
   submission: state.queue.settingsForms.formSubmission,
   space: state.app.space,
   activityLoading: state.queue.settingsForms.submissionActivityLoading,
+  isPlatform: state.app.config.isPlatform,
 });
 
 const mapDispatchToProps = {
