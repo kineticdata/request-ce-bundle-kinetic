@@ -68,10 +68,10 @@ const AboutComponent = ({ space, about, loading }) => (
                 <tr>
                   <th />
                   <th scope="col">
-                    <I18n>Email</I18n>
+                    <I18n>Display Name</I18n>
                   </th>
                   <th scope="col">
-                    <I18n>Display Name</I18n>
+                    <I18n>Email</I18n>
                   </th>
                 </tr>
               </thead>
@@ -82,11 +82,11 @@ const AboutComponent = ({ space, about, loading }) => (
                       <Avatar username={user.username} />
                     </td>
                     <td>
-                      <Link to={`/profile/${user.username || user.email}`}>
-                        {user.email}
+                      <Link to={`/profile/${user.username}`}>
+                        {user.displayName || user.username}
                       </Link>
                     </td>
-                    <td>{user.displayName}</td>
+                    <td>{user.email}</td>
                   </tr>
                 ))}
               </tbody>
