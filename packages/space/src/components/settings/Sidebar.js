@@ -21,6 +21,7 @@ export const SidebarComponent = ({
   showNotifications,
   showRobots,
   showSchedulers,
+  isPlatform,
 }) => (
   <div className="sidebar space-sidebar">
     <Link to={settingsBackPath} className="nav-return">
@@ -132,22 +133,27 @@ export const SidebarComponent = ({
               target="_blank"
               className="nav-link nav-link--admin"
             >
-              <I18n>Kinetic Request Admin</I18n>
+              <I18n>
+                {isPlatform
+                  ? 'Kinetic Platform Admin'
+                  : 'Kinetic Request Admin'}
+              </I18n>
               <span className="fa fa-fw fa-external-link" />
             </a>
           </li>
-          {!hasSharedTaskEngine && (
-            <li>
-              <a
-                href={`${bundle.spaceLocation()}/kinetic-task`}
-                target="_blank"
-                className="nav-link nav-link--admin"
-              >
-                <I18n>Kinetic Task Admin</I18n>
-                <span className="fa fa-fw fa-external-link" />
-              </a>
-            </li>
-          )}
+          {!isPlatform &&
+            !hasSharedTaskEngine && (
+              <li>
+                <a
+                  href={`${bundle.spaceLocation()}/kinetic-task`}
+                  target="_blank"
+                  className="nav-link nav-link--admin"
+                >
+                  <I18n>Kinetic Task Admin</I18n>
+                  <span className="fa fa-fw fa-external-link" />
+                </a>
+              </li>
+            )}
         </ul>
       </div>
     )}
@@ -162,6 +168,7 @@ export const mapStateToProps = state => ({
   hasSharedTaskEngine: selectHasSharedTaskEngine(state),
   isSchedulerAdmin: selectHasRoleSchedulerAdmin(state),
   isSchedulerManager: selectHasRoleSchedulerManager(state),
+  isPlatform: state.app.config.isPlatform,
 });
 
 export const Sidebar = compose(
