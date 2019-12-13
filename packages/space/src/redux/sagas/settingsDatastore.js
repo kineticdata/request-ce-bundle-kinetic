@@ -29,10 +29,12 @@ import {
 import { DatastoreFormSave } from '../../records';
 import { chunkList } from '../../utils';
 
-// Implement fetchBridges api call for CE v3
+// Implement fetchBridges api call for CE v5
 const fetchBridges = (options = {}) => {
   return axios
-    .get(`${bundle.spaceLocation()}/app/components/agent/app/api/v1/bridges`)
+    .get(
+      `${bundle.spaceLocation()}/app/components/agents/system/app/api/v1/bridges`,
+    )
     .then(response => ({ bridges: response.data.bridges }))
     .catch(e => {
       if (e instanceof Error && !e.response) throw e;
