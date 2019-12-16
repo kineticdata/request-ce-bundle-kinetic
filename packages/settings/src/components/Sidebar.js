@@ -3,7 +3,6 @@ import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { compose, withProps } from 'recompose';
 import { bundle } from '@kineticdata/react';
-import { selectHasSharedTaskEngine } from '../redux/modules/spaceApp';
 import {
   selectVisibleKapps,
   selectHasRoleSchedulerAdmin,
@@ -17,7 +16,6 @@ import { context } from '../redux/store';
 import { isActiveClass } from '../utils';
 
 export const SidebarComponent = ({
-  hasSharedTaskEngine,
   loading,
   spaceAdmin,
   showDatastore,
@@ -85,7 +83,7 @@ export const SidebarComponent = ({
               </li>
             </ul>
           </div>
-          {visibleKapps &&
+          {/*visibleKapps &&
             visibleKapps.length > 0 && (
               <div className="sidebar-group">
                 <h1>Kapp Settings</h1>
@@ -102,7 +100,7 @@ export const SidebarComponent = ({
                   ))}
                 </ul>
               </div>
-            )}
+            )*/}
         </Fragment>
       )}
     </div>
@@ -115,22 +113,10 @@ export const SidebarComponent = ({
               target="_blank"
               className="nav-link nav-link--admin"
             >
-              <I18n>Kinetic Request Admin</I18n>
+              <I18n>Kinetic Platform Admin</I18n>
               <span className="fa fa-fw fa-external-link" />
             </a>
           </li>
-          {!hasSharedTaskEngine && (
-            <li>
-              <a
-                href={`${bundle.spaceLocation()}/kinetic-task`}
-                target="_blank"
-                className="nav-link nav-link--admin"
-              >
-                <I18n>Kinetic Task Admin</I18n>
-                <span className="fa fa-fw fa-external-link" />
-              </a>
-            </li>
-          )}
         </ul>
       </div>
     )}
@@ -143,7 +129,6 @@ export const mapStateToProps = state => ({
   spaceAdmin: state.app.profile.spaceAdmin,
   pathname: state.router.location.pathname,
   visibleKapps: selectVisibleKapps(state),
-  hasSharedTaskEngine: selectHasSharedTaskEngine(state),
   isSchedulerAdmin: selectHasRoleSchedulerAdmin(state.app.profile),
   isSchedulerManager: selectHasRoleSchedulerManager(state.app.profile),
 });

@@ -157,7 +157,7 @@ export const FormContainer = ({
             </h1>
           </div>
           <a
-            href={`${bundle.spaceLocation()}/app/#/${kappSlug}/author/form/${
+            href={`${bundle.spaceLocation()}/app/builder/#/${kappSlug}/forms/${
               form.slug
             }/builder`}
             className="btn btn-primary"

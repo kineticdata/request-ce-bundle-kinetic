@@ -76,7 +76,7 @@ const SettingsComponent = ({
             </div>
 
             <a
-              href={`${bundle.spaceLocation()}/app/#/admin/datastore/form/${
+              href={`${bundle.spaceLocation()}/app/builder/#/forms/${
                 origForm.slug
               }/builder`}
               className="btn btn-primary"

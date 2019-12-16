@@ -50,21 +50,6 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                 ({submission.handle})
               </h1>
             </div>
-            {space.attributes
-              .filter(attribute => attribute.name === 'Task Server Url')
-              .map(attribute => (
-                <a
-                  key={attribute.name}
-                  href={`${attribute.values[0]}/app/runs?sourceId=${
-                    submission.id
-                  }`}
-                  target="_blank"
-                >
-                  <button className="btn btn-primary pull-right">
-                    <i className="fa fa-sitemap" /> <I18n>View Runs</I18n>
-                  </button>
-                </a>
-              ))}
           </div>
           <section>
             <div className="settings-flex row">
@@ -168,7 +153,9 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                   {submission.activities
                     .filter(activity => activity.type === 'Task')
                     .map((activity, index) => {
-                      const data = JSON.parse(activity.data);
+                      const data = activity.data
+                        ? JSON.parse(activity.data)
+                        : {};
                       return (
                         <tr key={`task-activity-${index}`}>
                           <td>{activity.type}</td>
@@ -216,7 +203,9 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                   {submission.activities
                     .filter(activity => activity.type !== 'Task')
                     .map((activity, index) => {
-                      const data = JSON.parse(activity.data);
+                      const data = activity.data
+                        ? JSON.parse(activity.data)
+                        : {};
                       return (
                         <tr key={`activity-${index}`}>
                           <td>{activity.type}</td>

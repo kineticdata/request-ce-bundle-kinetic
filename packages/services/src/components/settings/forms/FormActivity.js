@@ -154,7 +154,9 @@ export const FormActivityContainer = ({
                   {submission.activities
                     .filter(activity => activity.type === 'Task')
                     .map((activity, index) => {
-                      const data = JSON.parse(activity.data);
+                      const data = activity.data
+                        ? JSON.parse(activity.data)
+                        : {};
                       return (
                         <tr key={`task-activity-${index}`}>
                           <td>{activity.type}</td>
@@ -203,7 +205,9 @@ export const FormActivityContainer = ({
                   {submission.activities
                     .filter(activity => activity.type !== 'Task')
                     .map((activity, index) => {
-                      const data = JSON.parse(activity.data);
+                      const data = activity.data
+                        ? JSON.parse(activity.data)
+                        : {};
                       return (
                         <tr key={`activity-${index}`}>
                           <td>{activity.type}</td>

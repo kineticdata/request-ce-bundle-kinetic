@@ -32,6 +32,7 @@ export const BridgeModelMappingQualification = Record({
 
 export const BridgeModelMapping = Record({
   attributes: List(),
+  agentSlug: 'system',
   bridgeSlug: '',
   name: '',
   qualifications: List(),

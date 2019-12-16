@@ -439,7 +439,9 @@ export const FormSettingsComponent = ({
               </div>
               <div className="page-title__actions">
                 <a
-                  href={`/app/#/${kapp.slug}/author/form/${form.slug}/builder`}
+                  href={`/app/builder/#/${kapp.slug}/forms/${
+                    form.slug
+                  }/builder`}
                   className="btn btn-primary"
                   target="_blank"
                 >

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   call,
   put,
@@ -9,7 +10,7 @@ import {
 import {
   fetchForms,
   fetchForm,
-  fetchBridges,
+  // fetchBridges,
   fetchBridgeModels,
   createForm,
   updateForm,
@@ -42,17 +43,23 @@ import { DatastoreFormSave } from '../../records';
 
 import { chunkList } from '../../utils';
 
-import semver from 'semver';
-const AGENT_MINIMUM_VERSION = '5.0.0';
+// TODO Remove when RKL is updated to version with fetchBridges function tat supports multiple agents
+const fetchBridges = (options = {}) => {
+  return axios
+    .get(`/app/components/agents/system/app/api/v1/bridges`)
+    .then(response => ({ bridges: response.data.bridges }))
+    .catch(e => {
+      if (e instanceof Error && !e.response) throw e;
+      const { data = {}, status: statusCode, statusText: msg } = e.response;
+      const { errorKey: key = null, message = data.error, ...rest } = data;
+      const type = types[statusCode];
+      const result = { ...rest, message: message || msg, key, statusCode };
+      if (type) result[type] = true;
+      return { error: result };
+    });
+};
 
 export function* fetchFormsSaga() {
-  // TODO remove v5 check once v5 is released
-  const appVersion = yield select(state => state.app.coreVersion);
-  const isV5 = semver.satisfies(
-    semver.coerce(appVersion),
-    `>=${AGENT_MINIMUM_VERSION}`,
-  );
-
   const [displayableForms, manageableForms, bridges] = yield all([
     call(fetchForms, {
       datastore: true,
@@ -62,7 +69,7 @@ export function* fetchFormsSaga() {
       datastore: true,
       manage: 'true',
     }),
-    isV5 && call(fetchBridges),
+    call(fetchBridges),
   ]);
 
   const manageableFormsSlugs = manageableForms.forms
