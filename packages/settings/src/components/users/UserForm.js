@@ -7,7 +7,7 @@ import { fromJS, List } from 'immutable';
 
 import { actions as usersActions } from '../../redux/modules/settingsUsers';
 import { actions as teamsActions } from '../../redux/modules/teamList';
-import { ProfileCard } from 'common';
+import { ProfileCard, Utils } from 'common';
 import { UsersDropdown } from './DropDown';
 import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
@@ -357,16 +357,6 @@ const managerLookup = (users, managerUsername) => {
 const fieldValuesValid = fieldValues =>
   fieldValues.displayName && fieldValues.email && fieldValues.username;
 
-const getProfileAttribute = (user, attr) =>
-  user.profileAttributes && user.profileAttributes[attr]
-    ? user.profileAttributes[attr].join(', ')
-    : '';
-
-const getAttribute = (user, attr) =>
-  user.attributes && user.attributes[attr]
-    ? user.attributes[attr].join(', ')
-    : '';
-
 const buildProfile = (fieldValues, profile) => {
   const profileAttributes =
     profile && profile.profileAttributes
@@ -391,13 +381,13 @@ const translateProfileToFieldValues = user => ({
   email: user.email || '',
   preferredLocale: user.preferredLocale || '',
   timezone: user.timezone || '',
-  phoneNumber: getProfileAttribute(user, 'Phone Number'),
-  firstName: getProfileAttribute(user, 'First Name'),
-  lastName: getProfileAttribute(user, 'Last Name'),
-  department: getAttribute(user, 'Department'),
-  organization: getAttribute(user, 'Organization'),
-  manager: getAttribute(user, 'Manager'),
-  site: getAttribute(user, 'Site'),
+  phoneNumber: Utils.getProfileAttributeValue(user, 'Phone Number', ''),
+  firstName: Utils.getProfileAttributeValue(user, 'First Name', ''),
+  lastName: Utils.getProfileAttributeValue(user, 'Last Name', ''),
+  department: Utils.getAttributeValue(user, 'Department', ''),
+  organization: Utils.getAttributeValue(user, 'Organization', ''),
+  manager: Utils.getAttributeValue(user, 'Manager', ''),
+  site: Utils.getAttributeValue(user, 'Site', ''),
   spaceAdmin: user.spaceAdmin,
   enabled: user.enabled,
   userRoles: user.memberships
@@ -423,15 +413,15 @@ const translateFieldValuesToProfile = (fieldValues, user) => {
     spaceAdmin: fieldValues.spaceAdmin,
     enabled: fieldValues.enabled,
     profileAttributesMap: {
-      'First Name': [fieldValues.firstName],
-      'Last Name': [fieldValues.lastName],
-      'Phone Number': [fieldValues.phoneNumber],
+      'First Name': [fieldValues.firstName].filter(v => v),
+      'Last Name': [fieldValues.lastName].filter(v => v),
+      'Phone Number': [fieldValues.phoneNumber].filter(v => v),
     },
     attributesMap: {
-      Department: [fieldValues.department],
-      Organization: [fieldValues.organization],
-      Manager: [fieldValues.manager],
-      Site: [fieldValues.site],
+      Department: [fieldValues.department].filter(v => v),
+      Organization: [fieldValues.organization].filter(v => v),
+      Manager: [fieldValues.manager].filter(v => v),
+      Site: [fieldValues.site].filter(v => v),
     },
     memberships: [
       ...fieldValues.userRoles.map(role => ({
