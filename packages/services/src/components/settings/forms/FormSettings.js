@@ -104,7 +104,10 @@ const WorkflowLink = ({ taskServerUrl, kappSlug, form, event, mode }) => {
     // Note that we are deliberately checking the persisted form state to see
     // if it was already custom. If not we do not know if there will be a tree
     // to link to, which case sourceGroup should remain null.
-    if (form.attributesMap['Custom Submission Workflow'].includes(event)) {
+    if (
+      form.attributesMap['Custom Submission Workflow'] &&
+      form.attributesMap['Custom Submission Workflow'].includes(event)
+    ) {
       sourceGroup = `Submissions > ${kappSlug} > ${form.slug}`;
     }
   }
@@ -120,6 +123,33 @@ const WorkflowLink = ({ taskServerUrl, kappSlug, form, event, mode }) => {
   ) : (
     <span>Workflow will be created when settings are updated</span>
   );
+};
+
+const WorkflowLinkV5 = ({ taskSourceName, kappSlug, form, event, mode }) => {
+  return taskSourceName ? (
+    mode === 'default' ||
+    (form.attributesMap['Custom Submission Workflow'] &&
+      form.attributesMap['Custom Submission Workflow'].includes(event)) ? (
+      <a
+        target="_blank"
+        href={encodeURI(
+          [
+            '/app/#/space/workflow/trees/details/',
+            taskSourceName,
+            ' :: Submissions > ',
+            kappSlug,
+            ...(mode !== 'default' ? [' > ', form.slug] : []),
+            ' :: ',
+            event,
+          ].join(''),
+        )}
+      >
+        View Workflow
+      </a>
+    ) : (
+      <span>Workflow will be created when settings are updated</span>
+    )
+  ) : null;
 };
 
 export const FormContainer = ({
@@ -150,6 +180,7 @@ export const FormContainer = ({
   handleColumnChange,
   handleWorkflowToggle,
   taskServerUrl,
+  taskSourceName,
   isPlatform,
 }) =>
   !loading &&
@@ -647,13 +678,23 @@ export const FormContainer = ({
                 </label>
               </div>
               <p>
-                <WorkflowLink
-                  taskServerUrl={taskServerUrl}
-                  kappSlug={kappSlug}
-                  form={form}
-                  event="Created"
-                  mode={inputs.createdWorkflow}
-                />
+                {isPlatform ? (
+                  <WorkflowLinkV5
+                    taskSourceName={taskSourceName}
+                    kappSlug={kappSlug}
+                    form={form}
+                    event="Created"
+                    mode={inputs.createdWorkflow}
+                  />
+                ) : (
+                  <WorkflowLink
+                    taskServerUrl={taskServerUrl}
+                    kappSlug={kappSlug}
+                    form={form}
+                    event="Created"
+                    mode={inputs.createdWorkflow}
+                  />
+                )}
               </p>
             </div>
             <div className="form-group">
@@ -695,13 +736,23 @@ export const FormContainer = ({
                 </label>
               </div>
               <p>
-                <WorkflowLink
-                  taskServerUrl={taskServerUrl}
-                  kappSlug={kappSlug}
-                  form={form}
-                  event="Submitted"
-                  mode={inputs.submittedWorkflow}
-                />
+                {isPlatform ? (
+                  <WorkflowLinkV5
+                    taskSourceName={taskSourceName}
+                    kappSlug={kappSlug}
+                    form={form}
+                    event="Submitted"
+                    mode={inputs.submittedWorkflow}
+                  />
+                ) : (
+                  <WorkflowLink
+                    taskServerUrl={taskServerUrl}
+                    kappSlug={kappSlug}
+                    form={form}
+                    event="Submitted"
+                    mode={inputs.submittedWorkflow}
+                  />
+                )}
               </p>
             </div>
             <div className="form-group">
@@ -743,13 +794,23 @@ export const FormContainer = ({
                 </label>
               </div>
               <p>
-                <WorkflowLink
-                  taskServerUrl={taskServerUrl}
-                  kappSlug={kappSlug}
-                  form={form}
-                  event="Updated"
-                  mode={inputs.updatedWorkflow}
-                />
+                {isPlatform ? (
+                  <WorkflowLinkV5
+                    taskSourceName={taskSourceName}
+                    kappSlug={kappSlug}
+                    form={form}
+                    event="Updated"
+                    mode={inputs.updatedWorkflow}
+                  />
+                ) : (
+                  <WorkflowLink
+                    taskServerUrl={taskServerUrl}
+                    kappSlug={kappSlug}
+                    form={form}
+                    event="Updated"
+                    mode={inputs.updatedWorkflow}
+                  />
+                )}
               </p>
             </div>
           </div>
@@ -935,7 +996,12 @@ const mapStateToProps = (state, { match: { params } }) => {
     servicesSettings: state.services.servicesSettings,
     kappSlug: state.app.config.kappSlug,
     categoryDefinitions,
-    taskServerUrl: state.app.space.attributesMap['Task Server Url'][0],
+    taskServerUrl: state.app.space.attributesMap['Task Server Url']
+      ? state.app.space.attributesMap['Task Server Url'][0]
+      : null,
+    taskSourceName: state.app.space.attributesMap['Task Source Name']
+      ? state.app.space.attributesMap['Task Source Name'][0]
+      : null,
     isPlatform: state.app.config.isPlatform,
   };
 };
