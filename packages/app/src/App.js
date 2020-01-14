@@ -19,6 +19,7 @@ import DiscussionsApp from 'discussions';
 import SettingsApp from 'settings';
 // TODO Remove ScaffoldApp
 import ScaffoldApp from 'scaffold';
+import SurveyApp from 'survey';
 import { AppProvider } from './AppProvider';
 
 // Mapping of Bundle Package kapp attribute values to App Components
@@ -27,6 +28,7 @@ const BUNDLE_PACKAGE_PROVIDERS = {
   queue: QueueApp,
   'tech-bar': TechBarApp,
   scaffold: ScaffoldApp,
+  survey: SurveyApp,
 };
 
 const getAppProvider = (kapp, pathname) => {
@@ -40,6 +42,8 @@ const getAppProvider = (kapp, pathname) => {
     return SettingsApp;
   } else if (matchPath(pathname, { path: DiscussionsApp.location })) {
     return DiscussionsApp;
+  } else if (matchPath(pathname, { path: SurveyApp.location })) {
+    return SurveyApp;
   } else if (matchPath(pathname, { path: ScaffoldApp.location })) {
     return ScaffoldApp;
   } else {

@@ -1,0 +1,28 @@
+{
+  "name": "survey",
+  "version": "0.1.0",
+  "main": "./src/index.js",
+  "dependencies": {
+    "@kineticdata/react": "^0.1.0-alpha.9-hotfix",
+    "@reach/router": "git://github.com/kineticdata/router.git",
+    "bootstrap": "^4.3.1",
+    "font-awesome": "^4.7.0",
+    "immutable": "4.0.0-rc.9",
+    "isarray": "^2.0.2",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.23",
+    "query-string": "^5.0.0",
+    "react": "^16.2.0",
+    "react-document-title": "^2.0.3",
+    "react-dom": "^16.2.0",
+    "react-popper": "^0.8.2",
+    "react-redux": "^6.0.1",
+    "react-router": "^4.2.0",
+    "reactstrap": "^7.1.0",
+    "recompose": "^0.30.0",
+    "redux": "^3.7.2",
+    "redux-first-history": "^4.0.0-alpha.7",
+    "redux-saga": "^0.15.6",
+    "uuid": "^3.2.1"
+  }
+}
