@@ -321,7 +321,11 @@ export const NotificationMenuComponent = ({
               {forms.map(form => (
                 <I18n
                   key={form.slug}
-                  context={`kapps.${selectedKapp.slug}.forms.${form.slug}`}
+                  context={
+                    selectedKapp
+                      ? `kapps.${selectedKapp.slug}.forms.${form.slug}`
+                      : `datastore.forms.${form.slug}`
+                  }
                   render={translate => (
                     <option value={form.slug}>{translate(form.name)}</option>
                   )}
@@ -430,6 +434,7 @@ export const NotificationMenu = compose(
       props.setSelectedKapp(
         props.kapps.find(kapp => kapp.slug === event.target.value),
       );
+      props.setSelectedForm(null);
     },
     handleFormSelect: props => event => {
       props.setSelectedForm(
@@ -438,8 +443,11 @@ export const NotificationMenu = compose(
     },
     toggleIsDatastore: props => () => {
       props.setIsDatastore(!props.isDatastore);
+      props.setSelectedForm(null);
       if (!props.isDatastore) {
         props.fetchVariables('app/datastore');
+      } else {
+        props.fetchVariables(props.selectedKapp ? props.selectedKapp.slug : '');
       }
     },
   }),
