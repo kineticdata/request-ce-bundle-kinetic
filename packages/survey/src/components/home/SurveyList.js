@@ -1,9 +1,6 @@
 import React, { Fragment } from 'react';
-import { Link } from '@reach/router';
-import { SurveyCard } from '../shared/SurveyCard';
+import { SurveyCard } from './SurveyCard';
 import { PageTitle } from '../shared/PageTitle';
-// import { StateListWrapper } from 'common';
-// import { getSubmissionPath } from '../../utils';
 import { I18n } from '@kineticdata/react';
 import { compose, lifecycle } from 'recompose';
 import { actions } from '../../redux/modules/submissions';
@@ -11,12 +8,11 @@ import { connect } from '../../redux/store';
 
 const handleNewSurvey = () => console.log('new survey button clicked');
 
-const SurveyHomeComponent = ({
+const SurveyListComponent = ({
   kapp,
   forms,
   submissions,
   submissionsError,
-  homePageMode,
   homePageItems,
   fetchSubmissions,
   appLocation,
@@ -35,7 +31,7 @@ const SurveyHomeComponent = ({
                       <I18n>{kapp.name}</I18n> /
                     </h3>
                     <h1>
-                      <I18n>Current Surveys</I18n> {/*homePageMode */}
+                      <I18n>Survey List</I18n>
                     </h1>
                   </div>
                   <button
@@ -47,6 +43,7 @@ const SurveyHomeComponent = ({
                   </button>
                 </div>
                 <div className="cards__wrapper cards__wrapper--seconds">
+                  {/*homePageItems */}
                   {forms &&
                     forms.map((survey, x) => {
                       console.log('item:', survey);
@@ -74,7 +71,7 @@ const mapDispatchToProps = {
   fetchSubmissions: actions.fetchSubmissionsRequest,
 };
 
-export const SurveyHome = compose(
+export const SurveyList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
@@ -84,4 +81,4 @@ export const SurveyHome = compose(
       this.props.fetchSubmissions();
     },
   }),
-)(SurveyHomeComponent);
+)(SurveyListComponent);

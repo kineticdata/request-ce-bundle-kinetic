@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { LocationProvider, Router } from '@reach/router';
+import { LocationProvider, Router, Redirect } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
 import {
   CommonProvider,
@@ -13,12 +13,9 @@ import { is } from 'immutable';
 import { I18n } from '@kineticdata/react';
 import { connectedHistory, connect, context, store } from './redux/store';
 import { syncAppState } from './redux/modules/app';
-
-import { Sidebar } from './components/Sidebar';
-import { SurveyHome } from './components/home/SurveyHome';
-import { Form } from './components/Form';
-import { Settings } from './components/settings/Settings';
-import { Sidebar as SettingsSidebar } from './components/settings/Sidebar';
+import { SurveyList } from './components/home/SurveyList';
+import { SurveyContainer } from './components/survey/SurveyContainer';
+import { Survey } from './components/survey/Survey';
 import { actions } from './redux/modules/surveyApp';
 
 const AppComponent = props => {
@@ -28,27 +25,13 @@ const AppComponent = props => {
     return <Loading text="App is loading ..." />;
   } else {
     return props.render({
-      sidebar: (
-        <Router>
-          <SettingsSidebar path="settings/*" />
-          <Sidebar path="*" />
-        </Router>
-      ),
       main: (
         <I18n>
           <main className={`package-layout package-layout--survey`}>
             <Router>
-              <Settings path="/settings/*" homePath="../" />
-              <SurveyHome
-                path="/"
-                homePageMode={props.homePageMode}
-                homePageItems={props.homePageItems}
-              />
-              <Form
-                path="/forms/:formSlug/submissions/:id"
-                homePath="../../../../"
-              />
-              <Form path="/forms/:formSlug" homePath="../../../../" />
+              <SurveyList path="/" homePageItems={props.homePageItems} />
+              <SurveyContainer path="/:formSlug/*" />
+              <Survey path=":formSlug/preview" homePath="../../../../" />
             </Router>
           </main>
         </I18n>

@@ -4,7 +4,7 @@ import { Link } from '@reach/router';
 import { I18n } from '@kineticdata/react';
 
 export const SurveyCard = ({ survey }) => (
-  <Link to={`forms/${survey.slug}`} className="card card--service">
+  <div className="card card--service">
     <h1>
       <Icon image="" background="blueSlate" />
       <I18n>{survey.name}</I18n>
@@ -24,5 +24,9 @@ export const SurveyCard = ({ survey }) => (
       <br />
       n/a
     </p>
-  </Link>
+    <Link to={`${survey.slug}/results`}>Results</Link>
+    <Link to={`${survey.slug}/settings`}>Settings</Link>
+    <Link to={`${survey.slug}/test`}>Test</Link>
+    <Link to={`${survey.slug}/preview`}>Preview</Link>
+  </div>
 );

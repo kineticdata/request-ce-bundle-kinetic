@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
-import { connect } from '../redux/store';
+import { connect } from '../../redux/store';
 import { compose, withHandlers, withProps } from 'recompose';
 import { CoreForm } from '@kineticdata/react';
 import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
-import { PageTitle } from './shared/PageTitle';
+import { PageTitle } from '../shared/PageTitle';
 import { Link } from '@reach/router';
 import { parse } from 'query-string';
 
@@ -15,7 +15,7 @@ import { I18n } from '@kineticdata/react';
 // before users nagivate to the actual forms.
 const globals = import('common/globals');
 
-export const FormComponent = ({
+export const SurveyComponent = ({
   formSlug,
   id,
   form,
@@ -126,4 +126,4 @@ const enhance = compose(
   withHandlers({ handleCompleted, handleCreated }),
 );
 
-export const Form = enhance(FormComponent);
+export const Survey = enhance(SurveyComponent);

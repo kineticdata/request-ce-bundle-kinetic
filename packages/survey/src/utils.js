@@ -6,22 +6,6 @@ export const isActiveClass = defaultClass => props => ({
   className: props.isCurrent ? `${defaultClass} active` : defaultClass,
 });
 
-export const getDueDate = (submission, attrName) => {
-  const daysDue = Utils.getConfig({ submission, name: attrName });
-  if (!daysDue) {
-    throw new Error(`getDueDate failed because "${attrName}" was not set.`);
-  }
-  const daysDueNumber = parseInt(daysDue, 10);
-  if (!daysDueNumber) {
-    throw new Error(
-      `getDueDate failed because value of "${attrName}" (${daysDue}) is not a number`,
-    );
-  }
-  return submission.submittedAt
-    ? moment(submission.submittedAt).add(daysDueNumber, 'days')
-    : null;
-};
-
 export const getDurationInDays = (start, end) =>
   Math.round(moment(end).diff(start, 'days', true) * 10) / 10;
 
@@ -111,32 +95,3 @@ export const getSubmissionPath = (appLocation, submission, mode, listType) => {
     .filter(s => !!s)
     .join('/');
 };
-
-export const getCommentFormConfig = (kappSlug, submissionId, comment) => ({
-  ...constants.COMMENT_FORM_CONFIG,
-  kappSlug,
-  values: {
-    [constants.RELATED_SUBMISSION_ID_FIELD]: submissionId,
-    Comment: comment,
-  },
-  completed: true,
-});
-
-export const getCancelFormConfig = (kappSlug, submissionId, comment) => ({
-  ...constants.CANCEL_FORM_CONFIG,
-  kappSlug,
-  values: {
-    [constants.RELATED_SUBMISSION_ID_FIELD]: submissionId,
-    'Cancellation Reason': comment,
-  },
-  completed: true,
-});
-
-export const getFeedbackFormConfig = (kappSlug, submissionId) => ({
-  ...constants.FEEDBACK_FORM_CONFIG,
-  kappSlug,
-  values: { [constants.REFERRING_ID_FIELD]: submissionId },
-});
-
-export const displayableFormPredicate = form =>
-  form.type === 'Service' && form.status === 'Active';
