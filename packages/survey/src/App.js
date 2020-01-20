@@ -15,6 +15,7 @@ import { connectedHistory, connect, context, store } from './redux/store';
 import { syncAppState } from './redux/modules/app';
 import { SurveyList } from './components/home/SurveyList';
 import { SurveyContainer } from './components/survey/SurveyContainer';
+import { SurveyRouter } from './components/survey/SurveyRouter';
 import { Survey } from './components/survey/Survey';
 import { actions } from './redux/modules/surveyApp';
 
@@ -30,7 +31,8 @@ const AppComponent = props => {
           <main className={`package-layout package-layout--survey`}>
             <Router>
               <SurveyList path="/" homePageItems={props.homePageItems} />
-              <SurveyContainer path="/:formSlug/*" />
+              {/* <SurveyContainer path="/:formSlug/*" /> */}
+              <SurveyRouter path="/:formSlug/*" />
               <Survey path=":formSlug/preview" homePath="../../../../" />
             </Router>
           </main>

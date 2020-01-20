@@ -14,7 +14,7 @@ export const SurveyTest = ({ form }) => (
               <I18n>survey</I18n>
             </Link>{' '}
             /{` `}
-            <I18n>{form.name}</I18n> /{` `}
+            <I18n>{form && form.name}</I18n> /{` `}
           </h3>
           <h1>
             <I18n>Test Page</I18n>
@@ -23,7 +23,7 @@ export const SurveyTest = ({ form }) => (
       </div>
       <div>
         <div className="data-list data-list--fourths">
-          {JSON.stringify(form)}
+          {form ? JSON.stringify(form) : 'No form found'}
         </div>
       </div>
     </div>
