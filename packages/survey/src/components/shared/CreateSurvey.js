@@ -29,17 +29,13 @@ const CreateSurveyComponent = ({
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/settings">
-              <I18n>settings</I18n>
-            </Link>{' '}
-            /{` `}
-            <Link to={`/settings/datastore/`}>
-              <I18n>datastore</I18n>
+            <Link to="../">
+              <I18n>survey</I18n>
             </Link>{' '}
             /{` `}
           </h3>
           <h1>
-            <I18n>New Datastore Form</I18n>
+            <I18n>New Survey</I18n>
           </h1>
         </div>
       </div>
@@ -52,7 +48,7 @@ const CreateSurveyComponent = ({
             <div className="col">
               <div className="form-group required">
                 <label htmlFor="name">
-                  <I18n>Datastore Name</I18n>
+                  <I18n>Survey Name</I18n>
                 </label>
                 <input
                   id="name"
@@ -66,7 +62,7 @@ const CreateSurveyComponent = ({
             <div className="col">
               <div className="form-group required">
                 <label htmlFor="slug">
-                  <I18n>Datastore Slug</I18n>
+                  <I18n>Survey Slug</I18n>
                 </label>
                 <input
                   id="slug"
@@ -82,7 +78,7 @@ const CreateSurveyComponent = ({
           </div>
           <div className="form-group">
             <label htmlFor="name">
-              <I18n>Datastore Description</I18n>{' '}
+              <I18n>Survey Description</I18n>{' '}
               <small>
                 <I18n>(optional)</I18n>
               </small>
@@ -111,7 +107,7 @@ const CreateSurveyComponent = ({
                 onClick={handleSave()}
                 className="btn btn-secondary"
               >
-                <I18n>Create Datastore Form</I18n>
+                <I18n>Create Survey</I18n>
               </button>
             </div>
           </div>
@@ -120,12 +116,12 @@ const CreateSurveyComponent = ({
     </div>
     <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
       <h3>
-        <I18n>New Datastore Form</I18n>
+        <I18n>New Survey</I18n>
       </h3>
       <p>
         <I18n>
-          Creating a new Datastore will create a new Kinetic Request datastore
-          form to be used for storing data.
+          Creating a new Survey will create a new Kinetic Request datastore form
+          to be used for storing data.
         </I18n>
       </p>
       {/*<p>

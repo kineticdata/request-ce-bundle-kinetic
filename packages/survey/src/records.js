@@ -61,6 +61,7 @@ export const DatastoreForm = Record({
   fields: [],
   canManage: false,
   isHidden: false,
+  isSurvey: false,
   bridgeModel: BridgeModel(),
   bridgeModelMapping: BridgeModelMapping(),
   bridgeSlug: '',

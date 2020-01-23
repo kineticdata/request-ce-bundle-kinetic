@@ -1,5 +1,37 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *   Temp ~ Scaffold
+ *   Temp ~ Survey
  *     -Used for development
  *     -Move css into appropriate sass files when ready
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.status {
+  color: $white;
+  text-align: center;
+  padding: 0.125rem 0.625rem;
+  font-size: 50%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  align-self: center;
+  border-radius: 0.75rem;
+  margin-left: auto;
+  flex: 0 0 auto;
+
+  &--gray {
+    background-color: $gray50;
+  }
+
+  &--yellow {
+    background-color: $sunflower;
+    color: $gray80;
+  }
+
+  &--green {
+    background-color: $green-grass;
+  }
+
+  &--red {
+    background-color: $red;
+  }
+}

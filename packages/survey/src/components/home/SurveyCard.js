@@ -2,31 +2,41 @@ import React from 'react';
 import { Icon, TimeAgo } from 'common';
 import { Link } from '@reach/router';
 import { I18n } from '@kineticdata/react';
+import { StatusPill } from '../shared/StatusPill';
 
 export const SurveyCard = ({ survey }) => (
-  <div className="card card--service">
+  <div className="card card--survey">
     <h1>
-      <Icon image="" background="blueSlate" />
+      <Icon image="pencil-square" background="blueSlate" />
       <I18n>{survey.name}</I18n>
+      <StatusPill status={survey.bridgeModel.status} />
     </h1>
     <p>
-      <I18n>survey status pill</I18n>
-      <br />
-      {survey.status}
+      <I18n>{survey.description ? survey.description : 'No Description'}</I18n>
     </p>
-    <p>
-      <I18n>survey start date</I18n>
-      <br />
-      <TimeAgo timestamp={survey.createdAt} />
-    </p>
-    <p>
-      <I18n>survey end date</I18n>
-      <br />
-      n/a
-    </p>
-    <Link to={`${survey.slug}/results`}>Results</Link>
+    <br />
+    <span className="meta">
+      <dl className="row">
+        <div className="col">
+          <dt>
+            <I18n context="foo">Created</I18n>
+          </dt>
+          <dd>
+            <TimeAgo timestamp={survey.createdAt} />
+          </dd>
+        </div>
+        <div className="col">
+          <dt>
+            <I18n context="foo">Closed</I18n>
+          </dt>
+          <dd>
+            <I18n>N/A</I18n>
+            {/* <TimeAgo timestamp={''} /> */}
+          </dd>
+        </div>
+      </dl>
+    </span>
+    <Link to={`${survey.slug}/submissions`}>Submissions</Link>
     <Link to={`${survey.slug}/settings`}>Settings</Link>
-    <Link to={`${survey.slug}/test`}>Test</Link>
-    <Link to={`${survey.slug}/preview`}>Preview</Link>
   </div>
 );

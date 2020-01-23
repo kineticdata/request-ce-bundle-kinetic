@@ -31,26 +31,26 @@ const SubmissionSearchComponent = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to="/settings">
-                  <I18n>settings</I18n>
+                <Link to="../../">
+                  <I18n>survey</I18n>
                 </Link>{' '}
                 /{` `}
-                <Link to={`/settings/datastore/`}>
-                  <I18n>datastore</I18n>
-                </Link>{' '}
+                <I18n>{form.name}</I18n>
                 /{` `}
               </h3>
               <h1>
-                <I18n>{form.name}</I18n>
+                <I18n>Submissions</I18n>
               </h1>
             </div>
             <div className="page-title__actions">
-              <Link
-                to={`/settings/datastore/${form.slug}/new`}
+              <button
+                onClick={() => openModal('export')}
+                value="export"
                 className="btn btn-primary"
               >
-                <I18n>New Record</I18n>
-              </Link>
+                <I18n>Export</I18n>
+              </button>
+
               <ButtonDropdown
                 isOpen={optionsOpen}
                 toggle={() => setOptionsOpen(!optionsOpen)}
@@ -62,13 +62,9 @@ const SubmissionSearchComponent = ({
                   <span className="fa fa-ellipsis-v fa-lg" />
                 </DropdownToggle>
                 <DropdownMenu>
-                  <button
-                    onClick={() => openModal('export')}
-                    value="export"
-                    className="dropdown-item"
-                  >
-                    <I18n>Export Records</I18n>
-                  </button>
+                  <Link to="new" className="dropdown-item">
+                    <I18n>New Record</I18n>
+                  </Link>
                   <button
                     onClick={() => openModal('import')}
                     value="import"
@@ -77,10 +73,7 @@ const SubmissionSearchComponent = ({
                     <I18n>Import Records</I18n>
                   </button>
                   {form.canManage && (
-                    <Link
-                      to={`/settings/datastore/${form.slug}/settings`}
-                      className="dropdown-item"
-                    >
+                    <Link to={`../settings`} className="dropdown-item">
                       <I18n>Configure Form</I18n>
                     </Link>
                   )}

@@ -13,11 +13,10 @@ import { is } from 'immutable';
 import { I18n } from '@kineticdata/react';
 import { connectedHistory, connect, context, store } from './redux/store';
 import { syncAppState } from './redux/modules/app';
-import { SurveyList } from './components/home/SurveyList';
-import { SurveyContainer } from './components/survey/SurveyContainer';
+import { SurveyList } from './components/survey/SurveyList';
 import { SurveyRouter } from './components/survey/SurveyRouter';
-import { Survey } from './components/survey/Survey';
 import { actions } from './redux/modules/surveyApp';
+import { actions as datastoreActions } from './redux/modules/settingsDatastore';
 
 const AppComponent = props => {
   if (props.error) {
@@ -30,10 +29,9 @@ const AppComponent = props => {
         <I18n>
           <main className={`package-layout package-layout--survey`}>
             <Router>
-              <SurveyList path="/" homePageItems={props.homePageItems} />
-              {/* <SurveyContainer path="/:formSlug/*" /> */}
-              <SurveyRouter path="/:formSlug/*" />
-              <Survey path=":formSlug/preview" homePath="../../../../" />
+              {/* <SurveyList path="/" homePageItems={props.homePageItems} /> */}
+              <SurveyList path="/" />
+              <SurveyRouter path="/*" />
             </Router>
           </main>
         </I18n>
@@ -49,6 +47,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = {
   fetchAppDataRequest: actions.fetchAppDataRequest,
+  fetchForms: datastoreActions.fetchForms,
 };
 
 const enhance = compose(
@@ -59,6 +58,7 @@ const enhance = compose(
   lifecycle({
     componentDidMount() {
       this.props.fetchAppDataRequest();
+      this.props.fetchForms();
     },
   }),
 );

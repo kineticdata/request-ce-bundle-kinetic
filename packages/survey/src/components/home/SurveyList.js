@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Link } from '@reach/router';
 import { SurveyCard } from './SurveyCard';
 import { PageTitle } from '../shared/PageTitle';
 import { I18n } from '@kineticdata/react';
@@ -31,7 +32,7 @@ const SurveyListComponent = ({
                       <I18n>{kapp.name}</I18n> /
                     </h3>
                     <h1>
-                      <I18n>Survey List</I18n>
+                      <I18n>Surveys</I18n>
                     </h1>
                   </div>
                   <button
@@ -41,6 +42,9 @@ const SurveyListComponent = ({
                   >
                     <I18n>New Survey</I18n>
                   </button>
+                </div>
+                <div>
+                  <Link to="datastore">Datastore View</Link>
                 </div>
                 <div className="cards__wrapper cards__wrapper--seconds">
                   {/*homePageItems */}

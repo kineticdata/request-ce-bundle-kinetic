@@ -79,16 +79,14 @@ const SurveySubmissionComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="/settings">
-                <I18n>settings</I18n>
+              <Link to="../../../">
+                <I18n>survey</I18n>
               </Link>{' '}
               /{` `}
-              <Link to={`/settings/datastore/`}>
-                <I18n>datastore</I18n>
-              </Link>{' '}
+              <I18n>{form.name}</I18n>
               /{` `}
-              <Link to={`/settings/datastore/${form.slug}/`}>
-                <I18n>{form.name}</I18n>
+              <Link to="../">
+                <I18n>submissions</I18n>
               </Link>{' '}
               /
             </h3>

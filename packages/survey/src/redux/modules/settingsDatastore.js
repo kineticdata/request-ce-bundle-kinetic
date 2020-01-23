@@ -363,8 +363,14 @@ export const reducer = (state = State(), { type, payload }) => {
             'false',
           ).toLowerCase();
           const isHidden = hiddenAttr === 'true' || hiddenAttr === 'yes';
+          const surveyAttr = Utils.getAttributeValue(
+            form,
+            'Survey',
+            'false',
+          ).toLowerCase();
+          const isSurvey = surveyAttr === 'true' || surveyAttr === 'yes';
           const canManage = payload.manageableForms.includes(form.slug);
-          return DatastoreForm({ ...form, canManage, isHidden });
+          return DatastoreForm({ ...form, canManage, isHidden, isSurvey });
         }),
       );
       const bridges = payload.bridges.map(b => b.slug);

@@ -2,6 +2,8 @@ import moment from 'moment';
 import { Utils } from 'common';
 import * as constants from './constants';
 
+export const isBlank = string => !string || string.trim().length === 0;
+
 export const isActiveClass = defaultClass => props => ({
   className: props.isCurrent ? `${defaultClass} active` : defaultClass,
 });
@@ -95,3 +97,16 @@ export const getSubmissionPath = (appLocation, submission, mode, listType) => {
     .filter(s => !!s)
     .join('/');
 };
+
+/**
+ *  Take a large List and return a Sequence of List.  Will spilt List into equal chuncks.
+ * Last chunk may be smaller if split can't be done evenly.
+ *
+ * @param {List} list - List of elements
+ * @param {number} [chunkSize=1] - Desired size of chunks
+ * @returns {List} - List of List elements
+ */
+export const chunkList = (list, chunkSize = 1) =>
+  Range(0, list.count(), chunkSize)
+    .map(chunkStart => list.slice(chunkStart, chunkStart + chunkSize))
+    .toList();
