@@ -92,6 +92,7 @@ export const AppComponent = props => {
               <FormContainer path="categories/:categorySlug/:formSlug/:submissionId" />
               <FormListContainer path="forms" />
               <FormContainer path="forms/:formSlug" />
+              <FormContainer path="forms/:formSlug/:submissionId" />
               <CatalogSearchResultsContainer path="search" />
               <CatalogSearchResultsContainer path="search/:query" />
               <RequestListContainer path="requests" />
