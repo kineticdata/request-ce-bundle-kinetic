@@ -5,7 +5,7 @@ import { I18n } from '@kineticdata/react';
 import { StatusPill } from '../shared/StatusPill';
 
 export const SurveyCard = ({ survey }) => (
-  <div className="card card--survey">
+  <Link to={`${survey.slug}/submissions`} className="card card--survey">
     <h1>
       <Icon image="pencil-square" background="blueSlate" />
       <I18n>{survey.name}</I18n>
@@ -36,7 +36,5 @@ export const SurveyCard = ({ survey }) => (
         </div>
       </dl>
     </span>
-    <Link to={`${survey.slug}/submissions`}>Submissions</Link>
-    <Link to={`${survey.slug}/settings`}>Settings</Link>
-  </div>
+  </Link>
 );

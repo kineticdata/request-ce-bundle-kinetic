@@ -51,34 +51,24 @@ const SubmissionSearchComponent = ({
                 <I18n>Export</I18n>
               </button>
 
-              <ButtonDropdown
-                isOpen={optionsOpen}
-                toggle={() => setOptionsOpen(!optionsOpen)}
-              >
-                <DropdownToggle
-                  className="dropdown-toggle hide-caret"
-                  color="link"
+              {form.canManage && (
+                <ButtonDropdown
+                  isOpen={optionsOpen}
+                  toggle={() => setOptionsOpen(!optionsOpen)}
                 >
-                  <span className="fa fa-ellipsis-v fa-lg" />
-                </DropdownToggle>
-                <DropdownMenu>
-                  <Link to="new" className="dropdown-item">
-                    <I18n>New Record</I18n>
-                  </Link>
-                  <button
-                    onClick={() => openModal('import')}
-                    value="import"
-                    className="dropdown-item"
+                  <DropdownToggle
+                    className="dropdown-toggle hide-caret"
+                    color="link"
                   >
-                    <I18n>Import Records</I18n>
-                  </button>
-                  {form.canManage && (
+                    <span className="fa fa-ellipsis-v fa-lg" />
+                  </DropdownToggle>
+                  <DropdownMenu>
                     <Link to={`../settings`} className="dropdown-item">
                       <I18n>Configure Form</I18n>
                     </Link>
-                  )}
-                </DropdownMenu>
-              </ButtonDropdown>
+                  </DropdownMenu>
+                </ButtonDropdown>
+              )}
             </div>
           </div>
           <Searchbar formSlug={slug} />

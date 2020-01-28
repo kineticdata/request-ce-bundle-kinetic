@@ -4,10 +4,13 @@ import { connect } from 'react-redux';
 import { push } from 'redux-first-history';
 import { lifecycle, compose, withHandlers } from 'recompose';
 import { bundle } from '@kineticdata/react';
+import { FormComponents, LoadingMessage } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { I18n, FormForm } from '@kineticdata/react';
 import { actions } from '../../redux/modules/settingsDatastore';
 import { context } from '../../redux/store';
+
+const asArray = value => (value ? [value] : []);
 
 const fieldSet = [
   'name',
@@ -15,6 +18,10 @@ const fieldSet = [
   'description',
   'status',
   'submissionLabelExpression',
+  'attributesMap',
+  'source',
+  'type',
+  'triggerCondition',
   'useCustomWorkflow',
   'scoring',
   'multiLanguageNotifications',
@@ -43,6 +50,11 @@ const FormLayout = ({ fields, error, buttons }) => (
     {fields.get('description')}
     {fields.get('submissionLabelExpression')}
     {fields.get('useCustomWorkflow')}
+    <div className="form-group__columns">
+      {fields.get('source')}
+      {fields.get('type')}
+    </div>
+    {fields.get('triggerCondition')}
     <br />
     <h2 className="section__title">
       <I18n>Scoring &amp; Delivery</I18n>
@@ -82,7 +94,7 @@ const FormLayout = ({ fields, error, buttons }) => (
   </Fragment>
 );
 
-const SettingsComponent = ({ kappSlug, canManage, origForm, loading }) =>
+const SurveySettingsComponent = ({ kappSlug, canManage, origForm, loading }) =>
   !loading && (
     <I18n context={`datastore.forms.${origForm.slug}`}>
       <div className="page-container page-container--panels">
@@ -95,7 +107,10 @@ const SettingsComponent = ({ kappSlug, canManage, origForm, loading }) =>
                   <I18n>survey</I18n>
                 </Link>{' '}
                 /{` `}
-                <I18n>{origForm.name}</I18n> /{` `}
+                <Link to="../submissions">
+                  <I18n>{origForm.name}</I18n>
+                </Link>{' '}
+                /{` `}
               </h3>
               <h1>
                 <I18n>Settings</I18n>
@@ -112,7 +127,7 @@ const SettingsComponent = ({ kappSlug, canManage, origForm, loading }) =>
               <i className="fa fa-fw fa-external-link" />
             </a>
           </div>
-          {true ? (
+          {canManage ? (
             <div className="datastore-settings">
               <div className="form settings">
                 <FormForm
@@ -124,101 +139,147 @@ const SettingsComponent = ({ kappSlug, canManage, origForm, loading }) =>
                   addFields={() => ({ form }) =>
                     form && [
                       {
+                        name: 'source',
+                        label: 'Source',
+                        type: 'text',
+                        helpText: 'System initiating the survey',
+                        initialValue: form.getIn([
+                          'attributesMap',
+                          'Survey Source',
+                          0,
+                        ]),
+                      },
+                      {
+                        name: 'type',
+                        label: 'Type',
+                        type: 'text',
+                        helpText: 'Type of source used to initiate survey',
+                        initialValue: form.getIn([
+                          'attributesMap',
+                          'Survey Type',
+                          0,
+                        ]),
+                      },
+                      {
+                        name: 'triggerCondition',
+                        label: 'Trigger Condition',
+                        type: 'text',
+                        helpText:
+                          'Qualification or event required to initiate survey',
+                        initialValue: form.getIn([
+                          'attributesMap',
+                          'Survey Trigger Condition',
+                          0,
+                        ]),
+                      },
+                      {
                         name: 'useCustomWorkflow',
                         label: 'Use Custom Workflow',
                         type: 'checkbox',
-                        helpText: 'TBD',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Use Custom Workflow',
-                          0,
-                        ]),
+                        helpText:
+                          'If selected, each survey response will trigger the selected custom workflow',
+                        initialValue: form
+                          .getIn([
+                            'attributesMap',
+                            'Survey Use Custom Workflow',
+                            0,
+                          ])
+                          .includes('true' || 'yes'),
                       },
                       {
                         name: 'scoring',
                         label: 'Scoring',
                         type: 'checkbox',
-                        helpText: 'TBD',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Scoring',
-                          0,
-                        ]),
+                        helpText:
+                          'Determines whether or not the survey responses will be scored',
+                        initialValue: form
+                          .getIn(['attributesMap', 'Survey Scoring', 0])
+                          .includes('true' || 'yes'),
                       },
                       {
                         name: 'multiLanguageNotifications',
                         label: 'Multi-language Notifications',
                         type: 'checkbox',
                         helpText: 'TBD',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Multi-language Notifications',
-                          0,
-                        ]),
+                        initialValue: form
+                          .getIn([
+                            'attributesMap',
+                            'Survey Multi-language Notifications',
+                            0,
+                          ])
+                          .includes('true' || 'yes'),
                       },
                       {
                         name: 'lowScoreNotification',
                         label: 'Low Score Notification',
                         type: 'checkbox',
-                        helpText: 'TBD',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Low Score Notification',
-                          0,
-                        ]),
+                        helpText:
+                          'If the survey receives a low enough score, the survey owner will be notifified',
+                        initialValue: form
+                          .getIn([
+                            'attributesMap',
+                            'Survey Low Score Notification',
+                            0,
+                          ])
+                          .includes('true' || 'yes'),
                       },
                       {
                         name: 'sendReminders',
                         label: 'Send Reminders',
                         type: 'checkbox',
-                        helpText: 'TBD',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Send Reminders',
-                          0,
-                        ]),
+                        helpText:
+                          'Additional invitations will be sent reminding those invited to complete the survey',
+                        initialValue: form
+                          .getIn(['attributesMap', 'Survey Send Reminders', 0])
+                          .includes('true' || 'yes'),
                       },
                       {
                         name: 'invitationNotifications',
                         label: 'Invitation Notifications',
                         type: 'checkbox',
-                        helpText: 'TBD',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Invitation Notifications',
-                          0,
-                        ]),
+                        helpText:
+                          'If an invited user exists in the system, they will receive invitations via sytem notifications',
+                        initialValue: form
+                          .getIn([
+                            'attributesMap',
+                            'Survey Invitation Notifications',
+                            0,
+                          ])
+                          .includes('true' || 'yes'),
                       },
                       {
                         name: 'reminderNotifications',
                         label: 'Reminder Notifications',
                         type: 'checkbox',
-                        helpText: 'TBD',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Reminder Notifications',
-                          0,
-                        ]),
+                        helpText:
+                          'If an invited user exists in the system, they will be sent reminders to complete the survey',
+                        initialValue: form
+                          .getIn([
+                            'attributesMap',
+                            'Survey Reminder Notifications',
+                            0,
+                          ])
+                          .includes('true' || 'yes'),
                       },
                       {
                         name: 'allowOptOut',
                         label: 'Allow Opt Out',
                         type: 'checkbox',
-                        helpText: 'TBD',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Allow Opt Out',
-                          0,
-                        ]),
+                        helpText:
+                          'Invited users can opt out of receiving future invitations for this survey',
+                        initialValue: form
+                          .getIn(['attributesMap', 'Survey Allow Opt Out', 0])
+                          .includes('true' || 'yes'),
                       },
                       {
                         name: 'maxInvitations',
                         label: 'Max Invitations Per User Per Day',
                         type: 'text',
-                        helpText: 'TBD',
+                        helpText:
+                          'Maximum number of invitations a user can receive per day',
                         initialValue: form.getIn([
                           'attributesMap',
-                          'Max Invitations Per User Per Day',
+                          'Survey Max Invitations Per User Per Day',
                           0,
                         ]),
                       },
@@ -226,10 +287,11 @@ const SettingsComponent = ({ kappSlug, canManage, origForm, loading }) =>
                         name: 'eventsRequired',
                         label: 'Events Required to Trigger Survey',
                         type: 'text',
-                        helpText: 'TBD',
+                        helpText:
+                          'Number of trigger events needed to initiate one invitation',
                         initialValue: form.getIn([
                           'attributesMap',
-                          'Events Required to Trigger Survey',
+                          'Survey Events Required to Trigger',
                           0,
                         ]),
                       },
@@ -237,10 +299,11 @@ const SettingsComponent = ({ kappSlug, canManage, origForm, loading }) =>
                         name: 'owningTeam',
                         label: 'Owning Team',
                         type: 'text',
-                        helpText: 'TBD',
+                        helpText:
+                          'Team will receive notifications regarding this survey',
                         initialValue: form.getIn([
                           'attributesMap',
-                          'Owning Team',
+                          'Survey Owning Team',
                           0,
                         ]),
                       },
@@ -251,7 +314,7 @@ const SettingsComponent = ({ kappSlug, canManage, origForm, loading }) =>
                         helpText: 'TBD',
                         initialValue: form.getIn([
                           'attributesMap',
-                          'Authentication',
+                          'Survey Authentication',
                           0,
                         ]),
                       },
@@ -259,10 +322,11 @@ const SettingsComponent = ({ kappSlug, canManage, origForm, loading }) =>
                         name: 'assignedIndividual',
                         label: 'Assigned Individual',
                         type: 'text',
-                        helpText: 'TBD',
+                        helpText:
+                          'User will receive notifications regarding this survey',
                         initialValue: form.getIn([
                           'attributesMap',
-                          'Assigned Individual',
+                          'Survey Assigned Individual',
                           0,
                         ]),
                       },
@@ -273,12 +337,74 @@ const SettingsComponent = ({ kappSlug, canManage, origForm, loading }) =>
                         helpText: 'TBD',
                         initialValue: form.getIn([
                           'attributesMap',
-                          'Submitter',
+                          'Survey Submitter',
                           0,
                         ]),
                       },
                     ]}
-                />
+                  alterFields={{
+                    description: { component: FormComponents.TextAreaField },
+                    attributesMap: {
+                      serialize: ({ values }) => ({
+                        'Survey Use Custom Workflow': asArray(
+                          values.get('useCustomWorkflow').toString(),
+                        ),
+                        'Survey Source': asArray(values.get('source')),
+                        'Survey Type': asArray(values.get('type')),
+                        'Survey Trigger Condition': asArray(
+                          values.get('triggerCondition'),
+                        ),
+                        'Survey Scoring': asArray(
+                          values.get('scoring').toString(),
+                        ),
+                        'Survey Multi-language Notifications': asArray(
+                          values.get('multiLanguageNotifications').toString(),
+                        ),
+                        'Survey Low Score Notification': asArray(
+                          values.get('lowScoreNotification').toString(),
+                        ),
+                        'Survey Send Reminders': asArray(
+                          values
+                            .get('sendReminders')
+                            .toString()
+                            .toString(),
+                        ),
+                        'Survey Invitation Notifications': asArray(
+                          values.get('invitationNotifications').toString(),
+                        ),
+                        'Survey Reminder Notifications': asArray(
+                          values.get('reminderNotifications').toString(),
+                        ),
+                        'Survey Allow Opt Out': asArray(
+                          values.get('allowOptOut').toString(),
+                        ),
+                        'Survey Max Invitations Per User Per Day': asArray(
+                          values.get('maxInvitations'),
+                        ),
+                        'Survey Events Required to Trigger': asArray(
+                          values.get('eventsRequired'),
+                        ),
+                        'Survey Owning Team': asArray(values.get('owningTeam')),
+                        // .map(team => team.get('name')),
+                        'Survey Authentication': asArray(
+                          values.get('authentication'),
+                        ),
+                        'Survey Assigned Individual': asArray(
+                          values.get('assignedIndividual'),
+                        ),
+                        'Survey Submitter': asArray(values.get('submitter')),
+                      }),
+                    },
+                  }}
+                >
+                  {({ form, initialized }) =>
+                    initialized ? (
+                      <section className="form">{form}</section>
+                    ) : (
+                      <LoadingMessage />
+                    )
+                  }
+                </FormForm>
               </div>
             </div>
           ) : (
@@ -353,4 +479,4 @@ export const SurveySettings = compose(
       window.removeEventListener('focus', this.props.windowFocusListener);
     },
   }),
-)(SettingsComponent);
+)(SurveySettingsComponent);
