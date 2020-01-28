@@ -63,6 +63,7 @@ export const AppComponent = props =>
             refreshApp: props.refreshApp,
           },
           layoutSize: props.layoutSize,
+          bundleName: 'request-ce-bundle-kinetic',
         }}
         render={({ main, sidebar, header }) => (
           <div className="app-wrapper">
