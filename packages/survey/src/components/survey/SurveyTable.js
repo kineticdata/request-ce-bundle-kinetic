@@ -67,7 +67,7 @@ export const SurveyTable = ({ surveyData }) => {
   const mappedData = surveyData.map(survey => {
     return Map({
       name: survey.name,
-      status: survey.bridgeModel.status,
+      status: survey.status,
       createdAt: survey.createdAt,
       closedAt: 'N/A',
       slug: survey.slug,

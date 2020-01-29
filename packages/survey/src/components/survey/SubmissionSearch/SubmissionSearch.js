@@ -1,28 +1,17 @@
 import React from 'react';
-
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
-import { lifecycle, compose, withState } from 'recompose';
-import { ButtonDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
-
+import { lifecycle, compose } from 'recompose';
 import { actions } from '../../../redux/modules/settingsDatastore';
 import { context } from '../../../redux/store';
 import { PageTitle } from '../../shared/PageTitle';
-
 import { Searchbar } from './Searchbar';
 import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
 import { SurveyModal } from '../SurveyModal';
 import { I18n } from '@kineticdata/react';
 
-const SubmissionSearchComponent = ({
-  form,
-  loading,
-  slug,
-  openModal,
-  optionsOpen,
-  setOptionsOpen,
-}) => (
+const SubmissionSearchComponent = ({ form, loading, slug, openModal }) => (
   <I18n context={`datastore.forms.${form.slug}`}>
     {!loading ? (
       <div className="page-container">
@@ -48,13 +37,14 @@ const SubmissionSearchComponent = ({
                 value="export"
                 className="btn btn-primary"
               >
-                <I18n>Export</I18n>
+                <I18n>Export</I18n> <i className="fa fa-fw fa-download" />
               </button>
 
               {form.canManage && (
                 <Link to={`../settings`}>
                   <button className="btn btn-subtle">
-                    <I18n>Survey Settings</I18n>
+                    <I18n>Survey Settings</I18n>{' '}
+                    <i className="fa fa-fw fa-gear" />
                   </button>
                 </Link>
               )}
@@ -91,7 +81,6 @@ export const SubmissionSearch = compose(
     null,
     { context },
   ),
-  withState('optionsOpen', 'setOptionsOpen', false),
   lifecycle({
     componentWillMount() {
       this.props.fetchForm(this.props.slug);

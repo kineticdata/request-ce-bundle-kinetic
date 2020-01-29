@@ -56,6 +56,7 @@ export const DatastoreForm = Record({
   slug: '',
   description: '',
   indexDefinitions: List(),
+  status: '',
   columns: List(),
   defaultSearchIndex: null,
   fields: [],
@@ -67,6 +68,8 @@ export const DatastoreForm = Record({
   bridgeSlug: '',
   createdAt: '',
   updatedAt: '',
+  closedAt: '',
+  closedBy: '',
   createdBy: '',
   updatedBy: '',
 });
@@ -84,7 +87,7 @@ export const DatastoreConfig = Record({
   // columns config
   columns: List(),
   // index for use in initial search
-  defaultSearchIndex: null,
+  defaultSearchIndex: { index: 'createdAt', direction: 'DESC' },
 });
 
 // Used in datastore to define a single table column

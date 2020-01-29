@@ -24,8 +24,6 @@ import {
   SubmissionSearch,
 } from '@kineticdata/react';
 import { fromJS, Seq, Map, List } from 'immutable';
-import { push } from 'redux-first-history';
-
 import { actions as systemErrorActions } from '../modules/errors';
 import { addSuccess, addError } from 'common';
 import {
@@ -443,69 +441,6 @@ export function* fetchSubmissionSaga(action) {
   }
 }
 
-export function* cloneSubmissionSaga(action) {
-  const include = 'details,values,form,form.fields.details';
-  const { submission, errors, serverError } = yield call(fetchSubmission, {
-    id: action.payload.id,
-    include,
-    datastore: true,
-  });
-
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
-  } else if (errors) {
-    yield put(actions.cloneSubmissionErrors(errors));
-  } else {
-    // The values of attachment fields cannot be cloned so we will filter them out
-    // of the values POSTed to the new submission.
-    const attachmentFields = Seq(submission.form.fields)
-      .filter(field => field.dataType === 'file')
-      .map(field => field.name)
-      .toSet();
-
-    const form = yield select(selectCurrentForm);
-
-    // Some values on the original submission should be reset.
-    const overrideFields = Map({
-      Status: 'Draft',
-      'Discussion Id': null,
-      Observers: [],
-    });
-
-    // Copy the values from the original submission with the transformations
-    // described above.
-    const values = Seq(submission.values)
-      .filter((value, fieldName) => !attachmentFields.contains(fieldName))
-      .map((value, fieldName) => overrideFields.get(fieldName) || value)
-      .toJS();
-
-    // Make the call to create the clone.
-    const {
-      submission: cloneSubmission,
-      postErrors,
-      postServerError,
-    } = yield call(createSubmission, {
-      datastore: true,
-      formSlug: form.slug,
-      values,
-      completed: false,
-    });
-
-    if (postServerError) {
-      yield put(systemErrorActions.setSystemError(serverError));
-    } else if (postErrors) {
-      yield put(actions.cloneSubmissionErrors(postErrors));
-    } else {
-      yield put(actions.cloneSubmissionSuccess());
-      yield put(addSuccess('Submission Cloned'));
-      if (typeof action.payload.callback === 'function') {
-        action.payload.callback();
-      }
-      yield put(push(`/settings/datastore/${form.slug}/${cloneSubmission.id}`));
-    }
-  }
-}
-
 export function* deleteSubmissionSaga(action) {
   const { errors, serverError } = yield call(deleteSubmission, {
     id: action.payload.id,
@@ -701,7 +636,6 @@ export function* watchSettingsDatastore() {
     fetchSubmissionsAdvancedSaga,
   );
   yield takeEvery(types.FETCH_SUBMISSIONS_SIMPLE, fetchSubmissionsSimpleSaga);
-  yield takeEvery(types.CLONE_SUBMISSION, cloneSubmissionSaga);
   yield takeEvery(types.DELETE_SUBMISSION, deleteSubmissionSaga);
   yield takeEvery(types.UPDATE_FORM, updateFormSaga);
   yield takeEvery(types.CREATE_FORM, createFormSaga);

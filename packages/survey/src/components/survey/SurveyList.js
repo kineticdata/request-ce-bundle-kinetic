@@ -8,7 +8,7 @@ import { actions } from '../../redux/modules/settingsDatastore';
 import { context } from '../../redux/store';
 import { PageTitle } from '../shared/PageTitle';
 import { I18n } from '@kineticdata/react';
-import { SurveyCard } from '../home/SurveyCard';
+import { SurveyCard } from './SurveyCard';
 import { SurveyTable } from './SurveyTable';
 import { Icon } from 'common';
 
@@ -43,9 +43,7 @@ const SurveyListComponent = ({
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="../">
-                <I18n>survey</I18n>
-              </Link>{' '}
+              <I18n>survey </I18n>
               /{` `}
             </h3>
             <h1>

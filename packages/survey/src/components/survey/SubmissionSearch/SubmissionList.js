@@ -108,8 +108,6 @@ const SubmissionListComponent = ({
   searching,
   path,
   isMobile,
-  cloneSubmission,
-  deleteSubmission,
   fetchSubmissions,
   clientSortInfo,
   sortTable,
@@ -262,9 +260,7 @@ const SubmissionListComponent = ({
                       columns={visibleColumns}
                       path={path}
                       isMobile={isMobile}
-                      cloneSubmission={cloneSubmission}
                       fetchSubmissions={fetchSubmissions}
-                      deleteSubmission={deleteSubmission}
                     />
                   ))}
                 </tbody>
@@ -302,8 +298,6 @@ export const mapStateToProps = state => ({
 });
 
 export const mapDispatchToProps = {
-  cloneSubmission: actions.cloneSubmission,
-  deleteSubmission: actions.deleteSubmission,
   setClientSortInfo: actions.setClientSortInfo,
   fetchSubmissionsSimple: actions.fetchSubmissionsSimple,
   fetchSubmissionsAdvanced: actions.fetchSubmissionsAdvanced,

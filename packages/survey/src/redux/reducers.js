@@ -1,15 +1,11 @@
-import { reducer as app } from './modules/app';
+import appReducer from './modules/app';
+import errorsReducer from './modules/errors';
 import surveyAppReducer from './modules/surveyApp';
-import formsReducer from './modules/forms';
-// import settingsFormsReducer from './modules/settingsForms';
-import { reducer as settingsDatastoreReducer } from './modules/settingsDatastore';
-import submissionsReducer from './modules/submissions';
+import settingsDatastoreReducer from './modules/settingsDatastore';
 
 export default {
-  app,
-  forms: formsReducer,
-  // settingsForms: settingsFormsReducer,
+  app: appReducer,
+  errors: errorsReducer,
   settingsDatastore: settingsDatastoreReducer,
   surveyApp: surveyAppReducer,
-  submissions: submissionsReducer,
 };

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { LocationProvider, Router, Redirect } from '@reach/router';
+import { LocationProvider, Router } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
 import {
   CommonProvider,

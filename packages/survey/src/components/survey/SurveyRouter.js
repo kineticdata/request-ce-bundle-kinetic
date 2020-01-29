@@ -5,7 +5,7 @@ import { LoadingMessage } from 'common';
 import { SurveySubmission } from './Submission';
 import { SubmissionSearch } from './SubmissionSearch/SubmissionSearch';
 import { SurveySettings } from './SurveySettings';
-import { CreateSurvey } from '../shared/CreateSurvey';
+import { CreateSurvey } from './CreateSurvey';
 import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
 import semver from 'semver';

@@ -6,7 +6,6 @@ import { actions } from '../../redux/modules/settingsDatastore';
 import { context } from '../../redux/store';
 
 import { Export } from './Export';
-import { Import } from './Import';
 import { I18n } from '@kineticdata/react';
 
 const SurveyModalComponent = ({ modalIsOpen, closeModal, modalName }) => (
@@ -17,13 +16,13 @@ const SurveyModalComponent = ({ modalIsOpen, closeModal, modalName }) => (
           <I18n>Cancel</I18n>
         </button>
         <span>
-          <I18n>{modalName === 'import' ? 'Import' : 'Export'} Records</I18n>
+          <I18n>Export Records</I18n>
         </span>
       </h4>
     </div>
     <ModalBody className="modal-body--import-export">
       <div style={{ padding: '1.5rem' }}>
-        {modalName === 'import' ? <Import /> : <Export />}
+        <Export />
       </div>
     </ModalBody>
   </Modal>

@@ -25,15 +25,15 @@ export const BRIDGE_MODEL_INCLUDES =
 
 export const SUBMISSION_SYSTEM_PROPS = [
   ColumnConfig({
-    label: 'Handle',
-    name: 'handle',
+    label: 'Label',
+    name: 'label',
     type: 'system',
     visible: true,
     filterable: true,
   }),
   ColumnConfig({
-    label: 'Label',
-    name: 'label',
+    label: 'Status',
+    name: 'status',
     type: 'system',
     visible: true,
     filterable: true,
@@ -46,7 +46,13 @@ export const SUBMISSION_SYSTEM_PROPS = [
     filterable: true,
   }),
   ColumnConfig({ label: 'Created By', name: 'createdBy', type: 'system' }),
-  ColumnConfig({ label: 'Updated At', name: 'updatedAt', type: 'system' }),
+  ColumnConfig({
+    label: 'Updated At',
+    name: 'updatedAt',
+    type: 'system',
+    visible: true,
+    filterable: true,
+  }),
   ColumnConfig({ label: 'Updated By', name: 'updatedBy', type: 'system' }),
   ColumnConfig({ label: 'Id', name: 'id', type: 'system' }),
 ];
@@ -92,9 +98,6 @@ export const types = {
     'SET_SIMPLE_SEARCH_NEXT_PAGE_INDEX',
   ),
   SET_SORT_DIRECTION: namespace('datastore', 'SET_SORT_DIRECTION'),
-  CLONE_SUBMISSION: namespace('datastore', 'CLONE_SUBMISSION'),
-  CLONE_SUBMISSION_SUCCESS: namespace('datastore', 'CLONE_SUBMISSION_SUCCESS'),
-  CLONE_SUBMISSION_ERROR: namespace('datastore', 'CLONE_SUBMISSION_ERROR'),
   DELETE_SUBMISSION: namespace('datastore', 'DELETE_SUBMISSION'),
   DELETE_SUBMISSION_SUCCESS: namespace(
     'datastore',
@@ -168,9 +171,6 @@ export const actions = {
     types.SET_SIMPLE_SEARCH_NEXT_PAGE_INDEX,
   ),
   setSortDirection: withPayload(types.SET_SORT_DIRECTION),
-  cloneSubmission: withPayload(types.CLONE_SUBMISSION),
-  cloneSubmissionSuccess: noPayload(types.CLONE_SUBMISSION_SUCCESS),
-  cloneSubmissionErrors: withPayload(types.CLONE_SUBMISSION_ERROR),
   deleteSubmission: withPayload(types.DELETE_SUBMISSION),
   deleteSubmissionSuccess: noPayload(types.DELETE_SUBMISSION_SUCCESS),
   deleteSubmissionErrors: withPayload(types.DELETE_SUBMISSION_ERROR),
@@ -339,7 +339,6 @@ export const State = Record({
   sortDirection: 'ASC',
   // Submission List Actions
   submissionActionErrors: [],
-  cloning: false,
   deleting: false,
   // Single Submission
   submission: null,
@@ -357,7 +356,10 @@ export const State = Record({
   importComplete: false,
 });
 
-export const reducer = (state = State(), { type, payload }) => {
+export const settingsDatastoreReducer = (
+  state = State(),
+  { type, payload },
+) => {
   switch (type) {
     case types.FETCH_FORMS:
       return state.set('loading', true).set('errors', []);
@@ -546,12 +548,6 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('simpleSearchParam', payload);
     case types.SET_SORT_DIRECTION:
       return state.set('sortDirection', payload === 'DESC' ? payload : 'ASC');
-    case types.CLONE_SUBMISSION:
-      return state.set('cloning', true);
-    case types.CLONE_SUBMISSION_SUCCESS:
-      return state.set('cloning', false);
-    case types.CLONE_SUBMISSION_ERROR:
-      return state.set('cloning', false).set('submissionActionErrors', payload);
     case types.DELETE_SUBMISSION:
       return state.set('deleting', true);
     case types.DELETE_SUBMISSION_SUCCESS:
@@ -608,3 +604,5 @@ export const reducer = (state = State(), { type, payload }) => {
       return state;
   }
 };
+
+export default settingsDatastoreReducer;

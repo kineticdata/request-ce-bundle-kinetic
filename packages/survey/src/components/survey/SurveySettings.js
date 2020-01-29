@@ -49,6 +49,7 @@ const FormLayout = ({ fields, error, buttons }) => (
       {fields.get('slug')}
     </div>
     {fields.get('description')}
+    {fields.get('status')}
     {fields.get('submissionLabelExpression')}
     {fields.get('useCustomWorkflow')}
     <div className="form-group__columns">

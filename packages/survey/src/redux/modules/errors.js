@@ -17,7 +17,7 @@ export const State = Record({
   notifications: List(),
 });
 
-export const reducer = (state = State(), { type, payload }) => {
+export const errorsReducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.SET_SYSTEM_ERROR:
       return state.set('system', payload);
@@ -27,3 +27,5 @@ export const reducer = (state = State(), { type, payload }) => {
       return state;
   }
 };
+
+export default errorsReducer;

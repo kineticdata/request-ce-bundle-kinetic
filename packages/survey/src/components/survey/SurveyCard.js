@@ -7,9 +7,10 @@ import { StatusPill } from '../shared/StatusPill';
 export const SurveyCard = ({ survey }) => (
   <Link to={`${survey.slug}/submissions`} className="card card--survey">
     <h1>
+      {console.log('survey:', survey)}
       <Icon image="pencil-square" background="blueSlate" />
       <I18n>{survey.name}</I18n>
-      <StatusPill status={survey.bridgeModel.status} />
+      {survey.status && <StatusPill status={survey.status} />}
     </h1>
     <p>
       <I18n>{survey.description ? survey.description : 'No Description'}</I18n>
