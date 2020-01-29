@@ -3,11 +3,9 @@ import { Link, Router } from '@reach/router';
 import { connect } from 'react-redux';
 import { LoadingMessage } from 'common';
 import { SurveySubmission } from './Submission';
-import { SurveyList } from './SurveyList';
 import { SubmissionSearch } from './SubmissionSearch/SubmissionSearch';
 import { SurveySettings } from './SurveySettings';
 import { CreateSurvey } from '../shared/CreateSurvey';
-import { SurveyTest } from './SurveyTest';
 import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
 import semver from 'semver';
@@ -59,7 +57,6 @@ export const SurveyRouterComponent = ({
       <SurveySubmission path=":slug/submissions/new" />
       <SurveySubmission path=":slug/submissions/:id/:mode" />
       <SurveySubmission path=":slug/submissions/:id" />
-      <SurveyTest path="test" />
     </Router>
   ) : (
     <LoadingMessage />

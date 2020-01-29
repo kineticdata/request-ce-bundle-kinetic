@@ -52,7 +52,7 @@ const SurveyListComponent = ({
               <I18n>Survey List</I18n>
             </h1>
           </div>
-          <div className="button-group button-sidebar-action">
+          <div className="page-title__actions button-group">
             <button
               className="btn btn-primary"
               onClick={() =>
@@ -61,9 +61,9 @@ const SurveyListComponent = ({
             >
               <I18n>
                 {homepageMode === 'cards' ? (
-                  <i className="fa fa-th-list" />
-                ) : (
                   <i className="fa fa-th-large" />
+                ) : (
+                  <i className="fa fa-th-list" />
                 )}
               </I18n>
             </button>

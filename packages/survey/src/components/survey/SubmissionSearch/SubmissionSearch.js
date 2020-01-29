@@ -42,7 +42,7 @@ const SubmissionSearchComponent = ({
                 <I18n>Submissions</I18n>
               </h1>
             </div>
-            <div className="page-title__actions">
+            <div className="page-title__actions button-group">
               <button
                 onClick={() => openModal('export')}
                 value="export"
@@ -52,22 +52,11 @@ const SubmissionSearchComponent = ({
               </button>
 
               {form.canManage && (
-                <ButtonDropdown
-                  isOpen={optionsOpen}
-                  toggle={() => setOptionsOpen(!optionsOpen)}
-                >
-                  <DropdownToggle
-                    className="dropdown-toggle hide-caret"
-                    color="link"
-                  >
-                    <span className="fa fa-ellipsis-v fa-lg" />
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    <Link to={`../settings`} className="dropdown-item">
-                      <I18n>Configure Form</I18n>
-                    </Link>
-                  </DropdownMenu>
-                </ButtonDropdown>
+                <Link to={`../settings`}>
+                  <button className="btn btn-subtle">
+                    <I18n>Survey Settings</I18n>
+                  </button>
+                </Link>
               )}
             </div>
           </div>

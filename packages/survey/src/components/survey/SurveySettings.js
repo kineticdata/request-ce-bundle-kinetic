@@ -9,8 +9,9 @@ import { PageTitle } from '../shared/PageTitle';
 import { I18n, FormForm } from '@kineticdata/react';
 import { actions } from '../../redux/modules/settingsDatastore';
 import { context } from '../../redux/store';
+import { getIn } from 'immutable';
 
-const asArray = value => (value ? [value] : []);
+const asArray = value => (value ? [JSON.stringify(value)] : []);
 
 const fieldSet = [
   'name',
@@ -21,7 +22,7 @@ const fieldSet = [
   'attributesMap',
   'source',
   'type',
-  'triggerCondition',
+  'triggerConditionCode',
   'useCustomWorkflow',
   'scoring',
   'multiLanguageNotifications',
@@ -54,7 +55,7 @@ const FormLayout = ({ fields, error, buttons }) => (
       {fields.get('source')}
       {fields.get('type')}
     </div>
-    {fields.get('triggerCondition')}
+    {fields.get('triggerConditionCode')}
     <br />
     <h2 className="section__title">
       <I18n>Scoring &amp; Delivery</I18n>
@@ -136,263 +137,218 @@ const SurveySettingsComponent = ({ kappSlug, canManage, origForm, loading }) =>
                   formSlug={origForm.slug}
                   fieldSet={fieldSet}
                   components={{ FormLayout }}
-                  addFields={() => ({ form }) =>
-                    form && [
-                      {
-                        name: 'source',
-                        label: 'Source',
-                        type: 'text',
-                        helpText: 'System initiating the survey',
-                        initialValue: form.getIn([
+                  addFields={() => ({ form }) => {
+                    const surveyConfig =
+                      form &&
+                      form.getIn([
+                        'attributesMap',
+                        'Survey Configuration',
+                        0,
+                      ]) &&
+                      JSON.parse(
+                        form.getIn([
                           'attributesMap',
-                          'Survey Source',
+                          'Survey Configuration',
                           0,
                         ]),
-                      },
-                      {
-                        name: 'type',
-                        label: 'Type',
-                        type: 'text',
-                        helpText: 'Type of source used to initiate survey',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Survey Type',
-                          0,
-                        ]),
-                      },
-                      {
-                        name: 'triggerCondition',
-                        label: 'Trigger Condition',
-                        type: 'text',
-                        helpText:
-                          'Qualification or event required to initiate survey',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Survey Trigger Condition',
-                          0,
-                        ]),
-                      },
-                      {
-                        name: 'useCustomWorkflow',
-                        label: 'Use Custom Workflow',
-                        type: 'checkbox',
-                        helpText:
-                          'If selected, each survey response will trigger the selected custom workflow',
-                        initialValue: form
-                          .getIn([
-                            'attributesMap',
-                            'Survey Use Custom Workflow',
-                            0,
-                          ])
-                          .includes('true' || 'yes'),
-                      },
-                      {
-                        name: 'scoring',
-                        label: 'Scoring',
-                        type: 'checkbox',
-                        helpText:
-                          'Determines whether or not the survey responses will be scored',
-                        initialValue: form
-                          .getIn(['attributesMap', 'Survey Scoring', 0])
-                          .includes('true' || 'yes'),
-                      },
-                      {
-                        name: 'multiLanguageNotifications',
-                        label: 'Multi-language Notifications',
-                        type: 'checkbox',
-                        helpText: 'TBD',
-                        initialValue: form
-                          .getIn([
-                            'attributesMap',
-                            'Survey Multi-language Notifications',
-                            0,
-                          ])
-                          .includes('true' || 'yes'),
-                      },
-                      {
-                        name: 'lowScoreNotification',
-                        label: 'Low Score Notification',
-                        type: 'checkbox',
-                        helpText:
-                          'If the survey receives a low enough score, the survey owner will be notifified',
-                        initialValue: form
-                          .getIn([
-                            'attributesMap',
-                            'Survey Low Score Notification',
-                            0,
-                          ])
-                          .includes('true' || 'yes'),
-                      },
-                      {
-                        name: 'sendReminders',
-                        label: 'Send Reminders',
-                        type: 'checkbox',
-                        helpText:
-                          'Additional invitations will be sent reminding those invited to complete the survey',
-                        initialValue: form
-                          .getIn(['attributesMap', 'Survey Send Reminders', 0])
-                          .includes('true' || 'yes'),
-                      },
-                      {
-                        name: 'invitationNotifications',
-                        label: 'Invitation Notifications',
-                        type: 'checkbox',
-                        helpText:
-                          'If an invited user exists in the system, they will receive invitations via sytem notifications',
-                        initialValue: form
-                          .getIn([
-                            'attributesMap',
-                            'Survey Invitation Notifications',
-                            0,
-                          ])
-                          .includes('true' || 'yes'),
-                      },
-                      {
-                        name: 'reminderNotifications',
-                        label: 'Reminder Notifications',
-                        type: 'checkbox',
-                        helpText:
-                          'If an invited user exists in the system, they will be sent reminders to complete the survey',
-                        initialValue: form
-                          .getIn([
-                            'attributesMap',
-                            'Survey Reminder Notifications',
-                            0,
-                          ])
-                          .includes('true' || 'yes'),
-                      },
-                      {
-                        name: 'allowOptOut',
-                        label: 'Allow Opt Out',
-                        type: 'checkbox',
-                        helpText:
-                          'Invited users can opt out of receiving future invitations for this survey',
-                        initialValue: form
-                          .getIn(['attributesMap', 'Survey Allow Opt Out', 0])
-                          .includes('true' || 'yes'),
-                      },
-                      {
-                        name: 'maxInvitations',
-                        label: 'Max Invitations Per User Per Day',
-                        type: 'text',
-                        helpText:
-                          'Maximum number of invitations a user can receive per day',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Survey Max Invitations Per User Per Day',
-                          0,
-                        ]),
-                      },
-                      {
-                        name: 'eventsRequired',
-                        label: 'Events Required to Trigger Survey',
-                        type: 'text',
-                        helpText:
-                          'Number of trigger events needed to initiate one invitation',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Survey Events Required to Trigger',
-                          0,
-                        ]),
-                      },
-                      {
-                        name: 'owningTeam',
-                        label: 'Owning Team',
-                        type: 'text',
-                        helpText:
-                          'Team will receive notifications regarding this survey',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Survey Owning Team',
-                          0,
-                        ]),
-                      },
-                      {
-                        name: 'authentication',
-                        label: 'Authentication',
-                        type: 'text',
-                        helpText: 'TBD',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Survey Authentication',
-                          0,
-                        ]),
-                      },
-                      {
-                        name: 'assignedIndividual',
-                        label: 'Assigned Individual',
-                        type: 'text',
-                        helpText:
-                          'User will receive notifications regarding this survey',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Survey Assigned Individual',
-                          0,
-                        ]),
-                      },
-                      {
-                        name: 'submitter',
-                        label: 'Submitter',
-                        type: 'text',
-                        helpText: 'TBD',
-                        initialValue: form.getIn([
-                          'attributesMap',
-                          'Survey Submitter',
-                          0,
-                        ]),
-                      },
-                    ]}
+                      );
+                    return (
+                      form && [
+                        {
+                          name: 'source',
+                          label: 'Source',
+                          type: 'text',
+                          helpText: 'System initiating the survey',
+                          initialValue: surveyConfig && surveyConfig['Source'],
+                        },
+                        {
+                          name: 'type',
+                          label: 'Type',
+                          type: 'text',
+                          helpText: 'Type of source used to initiate survey',
+                          initialValue: surveyConfig && surveyConfig['Type'],
+                        },
+                        {
+                          name: 'triggerConditionCode',
+                          label: 'Trigger Condition',
+                          type: 'text',
+                          helpText:
+                            'Qualification or event required to initiate survey',
+                          initialValue:
+                            surveyConfig && surveyConfig['Trigger Condition'],
+                        },
+                        {
+                          name: 'useCustomWorkflow',
+                          label: 'Use Custom Workflow',
+                          type: 'checkbox',
+                          helpText:
+                            'If selected, each survey response will trigger the selected custom workflow',
+                          initialValue:
+                            surveyConfig && surveyConfig['Use Custom Workflow'],
+                        },
+                        {
+                          name: 'scoring',
+                          label: 'Scoring',
+                          type: 'checkbox',
+                          helpText:
+                            'Determines whether or not the survey responses will be scored',
+                          initialValue: surveyConfig && surveyConfig['Scoring'],
+                        },
+                        {
+                          name: 'multiLanguageNotifications',
+                          label: 'Multi-language Notifications',
+                          type: 'checkbox',
+                          helpText: 'TBD',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Multi-language Notifications'],
+                        },
+                        {
+                          name: 'lowScoreNotification',
+                          label: 'Low Score Notification',
+                          type: 'checkbox',
+                          helpText:
+                            'If the survey receives a low enough score, the survey owner will be notifified',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Low Score Notification'],
+                        },
+                        {
+                          name: 'sendReminders',
+                          label: 'Send Reminders',
+                          type: 'checkbox',
+                          helpText:
+                            'Additional invitations will be sent reminding those invited to complete the survey',
+                          initialValue:
+                            surveyConfig && surveyConfig['Send Reminders'],
+                        },
+                        {
+                          name: 'invitationNotifications',
+                          label: 'Invitation Notifications',
+                          type: 'checkbox',
+                          helpText:
+                            'If an invited user exists in the system, they will receive invitations via sytem notifications',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Invitation Notifications'],
+                        },
+                        {
+                          name: 'reminderNotifications',
+                          label: 'Reminder Notifications',
+                          type: 'checkbox',
+                          helpText:
+                            'If an invited user exists in the system, they will be sent reminders to complete the survey',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Reminder Notifications'],
+                        },
+                        {
+                          name: 'allowOptOut',
+                          label: 'Allow Opt-out',
+                          type: 'checkbox',
+                          helpText:
+                            'Invited users can opt out of receiving future invitations for this survey',
+                          initialValue:
+                            surveyConfig && surveyConfig['Allow Opt-out'],
+                        },
+                        {
+                          name: 'maxInvitations',
+                          label: 'Max Invitations Per User Per Day',
+                          type: 'text',
+                          helpText:
+                            'Maximum number of invitations a user can receive per day',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Max Invitations Per User Per Day'],
+                        },
+                        {
+                          name: 'eventsRequired',
+                          label: 'Events Required to Trigger Survey',
+                          type: 'text',
+                          helpText:
+                            'Number of trigger events needed to initiate one invitation',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Events Required to Trigger'],
+                        },
+                        {
+                          name: 'owningTeam',
+                          label: 'Owning Team',
+                          type: 'text',
+                          helpText:
+                            'Team will receive notifications regarding this survey',
+                          initialValue:
+                            surveyConfig && surveyConfig['Owning Team'],
+                        },
+                        {
+                          name: 'authentication',
+                          label: 'Authentication',
+                          type: 'text',
+                          helpText: 'TBD',
+                          initialValue:
+                            surveyConfig && surveyConfig['Authentication'],
+                        },
+                        {
+                          name: 'assignedIndividual',
+                          label: 'Assigned Individual',
+                          type: 'text',
+                          helpText:
+                            'User will receive notifications regarding this survey',
+                          initialValue:
+                            surveyConfig && surveyConfig['Assigned Individual'],
+                        },
+                        {
+                          name: 'submitter',
+                          label: 'Submitter',
+                          type: 'text',
+                          helpText: 'TBD',
+                          initialValue:
+                            surveyConfig && surveyConfig['Submitter'],
+                        },
+                      ]
+                    );
+                  }}
                   alterFields={{
                     description: { component: FormComponents.TextAreaField },
                     attributesMap: {
                       serialize: ({ values }) => ({
-                        'Survey Use Custom Workflow': asArray(
-                          values.get('useCustomWorkflow').toString(),
-                        ),
-                        'Survey Source': asArray(values.get('source')),
-                        'Survey Type': asArray(values.get('type')),
-                        'Survey Trigger Condition': asArray(
-                          values.get('triggerCondition'),
-                        ),
-                        'Survey Scoring': asArray(
-                          values.get('scoring').toString(),
-                        ),
-                        'Survey Multi-language Notifications': asArray(
-                          values.get('multiLanguageNotifications').toString(),
-                        ),
-                        'Survey Low Score Notification': asArray(
-                          values.get('lowScoreNotification').toString(),
-                        ),
-                        'Survey Send Reminders': asArray(
-                          values
-                            .get('sendReminders')
-                            .toString()
-                            .toString(),
-                        ),
-                        'Survey Invitation Notifications': asArray(
-                          values.get('invitationNotifications').toString(),
-                        ),
-                        'Survey Reminder Notifications': asArray(
-                          values.get('reminderNotifications').toString(),
-                        ),
-                        'Survey Allow Opt Out': asArray(
-                          values.get('allowOptOut').toString(),
-                        ),
-                        'Survey Max Invitations Per User Per Day': asArray(
-                          values.get('maxInvitations'),
-                        ),
-                        'Survey Events Required to Trigger': asArray(
-                          values.get('eventsRequired'),
-                        ),
-                        'Survey Owning Team': asArray(values.get('owningTeam')),
-                        // .map(team => team.get('name')),
-                        'Survey Authentication': asArray(
-                          values.get('authentication'),
-                        ),
-                        'Survey Assigned Individual': asArray(
-                          values.get('assignedIndividual'),
-                        ),
-                        'Survey Submitter': asArray(values.get('submitter')),
+                        'Survey Configuration': asArray({
+                          'Use Custom Workflow': values.get(
+                            'useCustomWorkflow',
+                          ),
+                          Source: values.get('source'),
+                          Type: values.get('type'),
+                          'Trigger Condition': values.get(
+                            'triggerConditionCode',
+                          ),
+                          Scoring: values.get('scoring'),
+                          'Multi-language Notifications': values.get(
+                            'multiLanguageNotifications',
+                          ),
+                          'Low Score Notification': values.get(
+                            'lowScoreNotification',
+                          ),
+                          'Send Reminders': values.get('sendReminders'),
+                          'Invitation Notifications': values.get(
+                            'invitationNotifications',
+                          ),
+                          'Reminder Notifications': values.get(
+                            'reminderNotifications',
+                          ),
+                          'Allow Opt-out': values.get('allowOptOut'),
+                          'Max Invitations Per User Per Day': values.get(
+                            'maxInvitations',
+                          ),
+                          'Events Required to Trigger': values.get(
+                            'eventsRequired',
+                          ),
+                          'Owning Team': values.get('owningTeam'),
+                          Authentication: values.get('authentication'),
+                          'Assigned Individual': values.get(
+                            'assignedIndividual',
+                          ),
+                          Submitter: values.get('submitter'),
+                        }),
                       }),
                     },
                   }}

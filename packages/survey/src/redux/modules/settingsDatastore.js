@@ -38,7 +38,13 @@ export const SUBMISSION_SYSTEM_PROPS = [
     visible: true,
     filterable: true,
   }),
-  ColumnConfig({ label: 'Created At', name: 'createdAt', type: 'system' }),
+  ColumnConfig({
+    label: 'Created At',
+    name: 'createdAt',
+    type: 'system',
+    visible: true,
+    filterable: true,
+  }),
   ColumnConfig({ label: 'Created By', name: 'createdBy', type: 'system' }),
   ColumnConfig({ label: 'Updated At', name: 'updatedAt', type: 'system' }),
   ColumnConfig({ label: 'Updated By', name: 'updatedBy', type: 'system' }),
@@ -205,6 +211,7 @@ export const buildConfig = form => {
     form.attributesMap['Datastore Configuration'] &&
       form.attributesMap['Datastore Configuration'][0],
   );
+
   // Build a list of all current column properties
   let defaultColumnConfig = List(
     form.fields
