@@ -242,8 +242,12 @@ export function* fetchSubmissionsSimpleSaga() {
     query.include(SUBMISSION_INCLUDES);
     query.limit(DATASTORE_LIMIT);
     query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
-    query.index(index.name);
-    query.sw(index.parts[0], simpleSearchParam);
+    if (index) {
+      query.index(index.name);
+    }
+    if (simpleSearchParam) {
+      query.sw(index.parts[0], simpleSearchParam);
+    }
     query.pageToken(pageToken);
 
     const { submissions, nextPageToken = null, serverError } = yield call(
@@ -258,6 +262,24 @@ export function* fetchSubmissionsSimpleSaga() {
       if (pageToken) {
         yield put(actions.pushPageToken(pageToken));
       }
+      // Set the next available page token to the one returned.
+      yield put(actions.setNextPageToken(nextPageToken));
+    }
+    yield put(actions.setSubmissions(submissions));
+  } else if (!simpleSearchParam) {
+    const query = new CoreAPI.SubmissionSearch(true);
+    query.include(SUBMISSION_INCLUDES);
+    query.limit(DATASTORE_LIMIT);
+    query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
+
+    const { submissions, nextPageToken = null, serverError } = yield call(
+      CoreAPI.searchSubmissions,
+      { search: query.build(), datastore: true, form: form.slug },
+    );
+
+    if (serverError) {
+      // What should we do?
+    } else {
       // Set the next available page token to the one returned.
       yield put(actions.setNextPageToken(nextPageToken));
     }
