@@ -243,8 +243,12 @@ export function* fetchSubmissionsSimpleSaga() {
     query.include(SUBMISSION_INCLUDES);
     query.limit(DATASTORE_LIMIT);
     query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
-    query.index(index.name);
-    query.sw(index.parts[0], simpleSearchParam);
+    if (index) {
+      query.index(index.name);
+    }
+    if (simpleSearchParam) {
+      query.sw(index.parts[0], simpleSearchParam);
+    }
     query.pageToken(pageToken);
 
     const { submissions, nextPageToken = null, serverError } = yield call(
@@ -263,27 +267,41 @@ export function* fetchSubmissionsSimpleSaga() {
       yield put(actions.setNextPageToken(nextPageToken));
     }
     yield put(actions.setSubmissions(submissions));
+  } else if (!simpleSearchParam) {
+    const query = new SubmissionSearch(true);
+    query.include(SUBMISSION_INCLUDES);
+    query.limit(DATASTORE_LIMIT);
+    query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
+
+    const { submissions, nextPageToken = null, serverError } = yield call(
+      searchSubmissions,
+      { search: query.build(), datastore: true, form: form.slug },
+    );
+
+    if (serverError) {
+      // What should we do?
+    } else {
+      // Set the next available page token to the one returned.
+      yield put(actions.setNextPageToken(nextPageToken));
+    }
+    yield put(actions.setSubmissions(submissions));
   } else {
-    const indexes = !simpleSearchParam
-      ? form.indexDefinitions.filter(
-          definition =>
-            definition.status === 'Built' && definition.name === 'createdAt',
-        )
-      : form.indexDefinitions.filter(
-          definition =>
-            definition.status === 'Built' &&
-            definition.parts.length === 1 &&
-            definition.name.startsWith('values['),
-        );
-    const searchQueries = indexes.map(index => {
-      const query = new SubmissionSearch(true);
-      query.include(SUBMISSION_INCLUDES);
-      query.limit(DATASTORE_LIMIT);
-      query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
-      query.index(index.name);
-      query.sw(index.parts[0], simpleSearchParam);
-      return query;
-    });
+    const searchQueries = form.indexDefinitions
+      .filter(
+        definition =>
+          definition.status === 'Built' &&
+          definition.parts.length === 1 &&
+          definition.name.startsWith('values['),
+      )
+      .map(index => {
+        const query = new SubmissionSearch(true);
+        query.include(SUBMISSION_INCLUDES);
+        query.limit(DATASTORE_LIMIT);
+        query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
+        query.index(index.name);
+        query.sw(index.parts[0], simpleSearchParam);
+        return query;
+      });
 
     const searchCalls = searchQueries.map(searchQuery =>
       call(searchSubmissions, {
