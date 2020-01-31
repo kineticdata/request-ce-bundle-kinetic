@@ -96,7 +96,7 @@ const CreateSurveyComponent = ({
           </div>
           <div className="form__footer">
             <div className="form__footer__right">
-              <Link to="/settings/datastore" className="btn btn-link mb-0">
+              <Link to="../" className="btn btn-link mb-0">
                 <I18n>Cancel</I18n>
               </Link>
               <button
@@ -138,7 +138,7 @@ const handleSave = ({ createForm, newForm, push, setCreating }) => () => () => {
   setCreating(true);
   createForm({
     form: newForm,
-    callback: () => push(`/settings/datastore/${newForm.slug}/settings`),
+    callback: () => push(`${newForm.slug}/settings`),
   });
 };
 

@@ -133,7 +133,6 @@ export const actions = {
   fetchForm: withPayload(types.FETCH_FORM),
   setForm: withPayload(types.SET_FORM),
   clearForm: withPayload(types.CLEAR_FORM),
-  updateForm: withPayload(types.UPDATE_FORM),
   resetForm: noPayload(types.RESET_FORM),
   createForm: withPayload(types.CREATE_FORM),
   fetchSubmissionsAdvanced: noPayload(types.FETCH_SUBMISSIONS_ADVANCED),
@@ -289,9 +288,9 @@ export const selectPrevAndNext = state => {
         : null;
     return {
       prev:
-        prevItem && `/settings/datastore/${submission.form.slug}/${prevItem}`,
+        prevItem && `../../../${submission.form.slug}/submissions/${prevItem}`,
       next:
-        nextItem && `/settings/datastore/${submission.form.slug}/${nextItem}`,
+        nextItem && `../../../${submission.form.slug}/submissions/${nextItem}`,
     };
   }
 };

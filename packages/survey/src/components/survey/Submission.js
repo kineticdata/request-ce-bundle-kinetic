@@ -126,15 +126,6 @@ const SurveySubmissionComponent = ({
                   </Link>
                 </ButtonGroup>
               )}
-            {submissionId &&
-              !isEditing && (
-                <Link
-                  to={`/settings/datastore/${form.slug}/${submissionId}/edit`}
-                  className="btn btn-primary ml-3 datastore-edit"
-                >
-                  <I18n>Edit Record</I18n>
-                </Link>
-              )}
             {discussionsEnabled && (
               <button
                 onClick={openDiscussions}
