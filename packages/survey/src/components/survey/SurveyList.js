@@ -50,21 +50,7 @@ const SurveyListComponent = ({
               <I18n>Survey List</I18n>
             </h1>
           </div>
-          <div className="page-title__actions button-group">
-            <button
-              className="btn btn-primary"
-              onClick={() =>
-                setHomepageMode(homepageMode === 'cards' ? 'list' : 'cards')
-              }
-            >
-              <I18n>
-                {homepageMode === 'cards' ? (
-                  <i className="fa fa-th-large" />
-                ) : (
-                  <i className="fa fa-th-list" />
-                )}
-              </I18n>
-            </button>
+          <div className="page-title__actions">
             <Link to="new" className="btn btn-secondary">
               <I18n>New Survey</I18n>
             </Link>
@@ -77,17 +63,46 @@ const SurveyListComponent = ({
               <I18n>Loading</I18n>
             </h3>
           ) : datastoreForms && datastoreForms.size > 0 ? (
-            homepageMode === 'list' ? (
-              <SurveyTable surveyData={datastoreForms} />
-            ) : (
-              <div className="cards__wrapper cards__wrapper--seconds">
-                {datastoreForms.map((form, x) => {
-                  return form.canManage ? (
-                    <SurveyCard key={x} survey={form} />
-                  ) : null;
-                })}
+            <Fragment>
+              <div className="survey-view-toggle button-group">
+                <button
+                  className={`btn ${
+                    homepageMode === 'cards' ? 'btn-primary' : 'btn-subtle'
+                  }`}
+                  onClick={() =>
+                    setHomepageMode(homepageMode === 'cards' ? 'list' : 'cards')
+                  }
+                >
+                  <I18n>
+                    <i className="fa fa-th-large" />
+                  </I18n>
+                </button>
+                <button
+                  className={`btn ${
+                    homepageMode === 'list' ? 'btn-primary' : 'btn-subtle'
+                  }`}
+                  onClick={() =>
+                    setHomepageMode(homepageMode === 'cards' ? 'list' : 'cards')
+                  }
+                >
+                  <I18n>
+                    <i className="fa fa-th-list" />
+                  </I18n>
+                </button>
               </div>
-            )
+
+              {homepageMode === 'list' ? (
+                <SurveyTable surveyData={datastoreForms} />
+              ) : (
+                <div className="cards__wrapper cards__wrapper--seconds">
+                  {datastoreForms.map((form, x) => {
+                    return form.canManage ? (
+                      <SurveyCard key={x} survey={form} />
+                    ) : null;
+                  })}
+                </div>
+              )}
+            </Fragment>
           ) : (
             <WallyEmptyMessage />
           )}

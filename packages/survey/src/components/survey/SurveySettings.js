@@ -7,6 +7,7 @@ import { FormComponents, LoadingMessage, Utils } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { I18n, FormForm } from '@kineticdata/react';
 import { actions } from '../../redux/modules/settingsDatastore';
+import { actions as notificationsActions } from '../../redux/modules/settingsNotifications';
 import { context } from '../../redux/store';
 
 const asArray = value => (value ? [JSON.stringify(value)] : []);
@@ -22,18 +23,19 @@ const fieldSet = [
   'type',
   'triggerConditionCode',
   'useCustomWorkflow',
-  'scoring',
-  'multiLanguageNotifications',
-  'lowScoreNotification',
-  'sendReminders',
-  'invitationNotifications',
+  // 'scoring',
+  // 'lowScoreNotification',
+  // 'lowScoreNotificationConfig',
+  'eventsRequired',
+  'invitationNotification',
+  'invitationNotificationSelect',
   'reminderNotifications',
   'reminderNotificationsNumber',
   'reminderNotificationsInterval',
-  'allowOptOut',
+  'multiLanguageNotifications',
   'maxInvitationsNumber',
   'maxInvitationsInterval',
-  'eventsRequired',
+  'allowOptOut',
   'owningTeam',
   'authentication',
   'assignedIndividual',
@@ -59,19 +61,25 @@ const FormLayout = ({ fields, error, buttons }) => (
     </div>
     {fields.get('triggerConditionCode')}
     <br />
+    {/* <h2 className="section__title">
+      <I18n>Scoring</I18n>
+    </h2> */}
+    {/* {fields.get('scoring')} */}
+    {/* {fields.get('lowScoreNotification')} */}
+    {/* {fields.get('lowScoreNotificationSelect')} */}
+    {/* <br /> */}
     <h2 className="section__title">
-      <I18n>Scoring &amp; Delivery</I18n>
+      <I18n>Delivery</I18n>
     </h2>
-    {fields.get('scoring')}
-    {fields.get('lowScoreNotification')}
-    {fields.get('multiLanguageNotifications')}
-    {fields.get('sendReminders')}
-    {fields.get('invitationNotifications')}
+    {fields.get('eventsRequired')}
+    {fields.get('invitationNotification')}
+    {fields.get('invitationNotificationSelect')}
     {fields.get('reminderNotifications')}
     <div className="form-group__columns">
       {fields.get('reminderNotificationsNumber')}
       {fields.get('reminderNotificationsInterval')}
     </div>
+    {fields.get('multiLanguageNotifications')}
     <div className="survey-settings-label">
       <I18n>Maximum Invitations Per User</I18n>
     </div>
@@ -80,7 +88,6 @@ const FormLayout = ({ fields, error, buttons }) => (
       {fields.get('maxInvitationsInterval')}
     </div>
     {fields.get('allowOptOut')}
-    {fields.get('eventsRequired')}
     <br />
     <h2 className="section__title">
       <I18n>Security</I18n>
@@ -105,12 +112,29 @@ const SurveySettingsComponent = ({
   origForm,
   loading,
   taskSourceName,
+  templates,
+  snippets,
 }) => {
   const WorkflowField = FormComponents.WorkflowField({
     taskSourceName,
     kappSlug: kappSlug,
     formSlug: origForm.slug,
   });
+
+  const notificationOptions =
+    !!templates &&
+    !!snippets &&
+    templates
+      .map(t => ({
+        value: t.values['Name'],
+        label: `Template: ${t.values['Name']}`,
+      }))
+      .concat(
+        snippets.map(s => ({
+          value: s.values['Name'],
+          label: `Snippet: ${s.values['Name']}`,
+        })),
+      );
 
   return (
     !loading && (
@@ -150,8 +174,8 @@ const SurveySettingsComponent = ({
                 <div className="form settings">
                   <FormForm
                     datastore={true}
-                    //   kappSlug={kappSlug}
                     formSlug={origForm.slug}
+                    // kappSlug={kappSlug}
                     fieldSet={fieldSet}
                     components={{ FormLayout }}
                     addFields={() => ({ form }) => {
@@ -200,9 +224,7 @@ const SurveySettingsComponent = ({
                                 space,
                                 kapp,
                                 form,
-                                scope: kappSlug
-                                  ? 'Submission'
-                                  : 'Datastore Submission',
+                                scope: 'Datastore Submission',
                               }),
                           },
                           {
@@ -215,52 +237,77 @@ const SurveySettingsComponent = ({
                               surveyConfig['Use Custom Workflow'],
                             component: WorkflowField,
                           },
+                          // {
+                          //   name: 'scoring',
+                          //   label: 'Scoring',
+                          //   type: 'checkbox',
+                          //   helpText:
+                          //     'Determines whether or not the survey responses will be scored',
+                          //   initialValue:
+                          //     surveyConfig && surveyConfig['Scoring'],
+                          // },
+                          // {
+                          //   name: 'lowScoreNotification',
+                          //   label: 'Low Score Notification',
+                          //   type: 'checkbox',
+                          //   visible: ({ values }) => values.get('scoring'),
+                          //   transient: ({ values }) => !values.get('scoring'),
+                          //   helpText:
+                          //     'If the survey receives a low enough score, the survey owner will be notifified',
+                          //   initialValue:
+                          //     surveyConfig &&
+                          //     surveyConfig['Low Score Notification']['active'],
+                          // },
+                          // {
+                          //   name: 'lowScoreNotificationConfig',
+                          //   label: 'TBD',
+                          //   type: 'text',
+                          //   visible: ({ values }) => values.get('lowScoreNotification'),
+                          //   transient: ({ values }) => !values.get('lowScoreNotification'),
+                          //   helpText: '',
+                          //   initialValue:
+                          //     surveyConfig &&
+                          //     surveyConfig['Low Score Notification']['config'],
+                          // },
                           {
-                            name: 'scoring',
-                            label: 'Scoring',
-                            type: 'checkbox',
+                            name: 'eventsRequired',
+                            label:
+                              'Events Required to Trigger Survey Invitation',
+                            type: 'text',
                             helpText:
-                              'Determines whether or not the survey responses will be scored',
-                            initialValue:
-                              surveyConfig && surveyConfig['Scoring'],
-                          },
-                          {
-                            name: 'multiLanguageNotifications',
-                            label: 'Multi-language Notifications',
-                            type: 'checkbox',
-                            helpText: 'TBD',
+                              'Number of trigger events needed to initiate one invitation',
                             initialValue:
                               surveyConfig &&
-                              surveyConfig['Multi-language Notifications'],
+                              surveyConfig['Events Required to Trigger'],
                           },
                           {
-                            name: 'lowScoreNotification',
-                            label: 'Low Score Notification',
+                            name: 'invitationNotification',
+                            label: 'Invitation Notification',
                             type: 'checkbox',
                             helpText:
-                              'If the survey receives a low enough score, the survey owner will be notifified',
+                              'If an invited user exists in the system, they will receive the invitation via sytem notifications',
                             initialValue:
                               surveyConfig &&
-                              surveyConfig['Low Score Notification'],
+                              surveyConfig['Invitation Notification']['active'],
                           },
                           {
-                            name: 'sendReminders',
-                            label: 'Send Reminders',
-                            type: 'checkbox',
+                            name: 'invitationNotificationSelect',
+                            label: 'Notification',
+                            type: 'select',
+                            visible: ({ values }) =>
+                              values.get('invitationNotification'),
+                            required: ({ values }) =>
+                              values.get('invitationNotification'),
+                            transient: ({ values }) =>
+                              !values.get('invitationNotification'),
                             helpText:
-                              'Additional invitations will be sent reminding those invited to complete the survey',
-                            initialValue:
-                              surveyConfig && surveyConfig['Send Reminders'],
-                          },
-                          {
-                            name: 'invitationNotifications',
-                            label: 'Invitation Notifications',
-                            type: 'checkbox',
-                            helpText:
-                              'If an invited user exists in the system, they will receive invitations via sytem notifications',
+                              'Notification template to use for invitations',
                             initialValue:
                               surveyConfig &&
-                              surveyConfig['Invitation Notifications'],
+                              surveyConfig['Invitation Notification'][
+                                'notification'
+                              ],
+                            options: notificationOptions,
                           },
                           {
                             name: 'reminderNotifications',
@@ -307,13 +354,13 @@ const SurveySettingsComponent = ({
                             })),
                           },
                           {
-                            name: 'allowOptOut',
-                            label: 'Allow Opt-out',
+                            name: 'multiLanguageNotifications',
+                            label: 'Multi-language Notifications',
                             type: 'checkbox',
-                            helpText:
-                              'Invited users can opt out of receiving future invitations for this survey',
+                            helpText: 'TBD',
                             initialValue:
-                              surveyConfig && surveyConfig['Allow Opt-out'],
+                              surveyConfig &&
+                              surveyConfig['Multi-language Notifications'],
                           },
                           {
                             name: 'maxInvitationsNumber',
@@ -331,7 +378,7 @@ const SurveySettingsComponent = ({
                             name: 'maxInvitationsInterval',
                             label: 'Interval',
                             type: 'select',
-                            helpText: '...per the selected interval',
+                            helpText: 'Per the selected interval',
                             initialValue:
                               surveyConfig &&
                               surveyConfig['Max Invitations Per User'][
@@ -343,15 +390,13 @@ const SurveySettingsComponent = ({
                             })),
                           },
                           {
-                            name: 'eventsRequired',
-                            label:
-                              'Events Required to Trigger Survey Invitation',
-                            type: 'text',
+                            name: 'allowOptOut',
+                            label: 'Allow Opt-out',
+                            type: 'checkbox',
                             helpText:
-                              'Number of trigger events needed to initiate one invitation',
+                              'Invited users can opt out of receiving future invitations for this survey',
                             initialValue:
-                              surveyConfig &&
-                              surveyConfig['Events Required to Trigger'],
+                              surveyConfig && surveyConfig['Allow Opt-out'],
                           },
                           {
                             name: 'owningTeam',
@@ -404,17 +449,20 @@ const SurveySettingsComponent = ({
                             'Trigger Condition': values.get(
                               'triggerConditionCode',
                             ),
-                            Scoring: values.get('scoring'),
-                            'Multi-language Notifications': values.get(
-                              'multiLanguageNotifications',
+                            // Scoring: values.get('scoring'),
+                            // 'Low Score Notification': {
+                            //   active: values.get('lowScoreNotification'),
+                            //   // config: values.get('lowScoreNotificationConfig'),
+                            // },
+                            'Events Required to Trigger': values.get(
+                              'eventsRequired',
                             ),
-                            'Low Score Notification': values.get(
-                              'lowScoreNotification',
-                            ),
-                            'Send Reminders': values.get('sendReminders'),
-                            'Invitation Notifications': values.get(
-                              'invitationNotifications',
-                            ),
+                            'Invitation Notification': {
+                              active: values.get('invitationNotification'),
+                              notification: values.get(
+                                'invitationNotificationSelect',
+                              ),
+                            },
                             'Reminder Notifications': {
                               active: values.get('reminderNotifications'),
                               number: values.get('reminderNotificationsNumber'),
@@ -422,14 +470,14 @@ const SurveySettingsComponent = ({
                                 'reminderNotificationsInterval',
                               ),
                             },
-                            'Allow Opt-out': values.get('allowOptOut'),
+                            'Multi-language Notifications': values.get(
+                              'multiLanguageNotifications',
+                            ),
                             'Max Invitations Per User': {
                               number: values.get('maxInvitationsNumber'),
                               interval: values.get('maxInvitationsInterval'),
                             },
-                            'Events Required to Trigger': values.get(
-                              'eventsRequired',
-                            ),
+                            'Allow Opt-out': values.get('allowOptOut'),
                             'Owning Team': values.get('owningTeam'),
                             Authentication: values.get('authentication'),
                             'Assigned Individual': values.get(
@@ -476,16 +524,21 @@ const SurveySettingsComponent = ({
 };
 
 export const mapStateToProps = (state, { slug }) => ({
-  loading: state.settingsDatastore.currentFormLoading,
+  loading:
+    state.settingsDatastore.currentFormLoading ||
+    state.settingsNotifications.loading,
   canManage: state.settingsDatastore.currentForm.canManage,
   origForm: state.settingsDatastore.currentForm,
   kappSlug: state.app.kappSlug,
   formSlug: slug,
   taskSourceName: Utils.getAttributeValue(state.app.space, 'Task Source Name'),
+  templates: state.settingsNotifications.notificationTemplates,
+  snippets: state.settingsNotifications.notificationSnippets,
 });
 
 export const mapDispatchToProps = {
   fetchForm: actions.fetchForm,
+  fetchNotifications: notificationsActions.fetchNotifications,
 };
 
 export const SurveySettings = compose(
@@ -498,6 +551,7 @@ export const SurveySettings = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchForm(this.props.formSlug);
+      this.props.fetchNotifications();
     },
   }),
 )(SurveySettingsComponent);
