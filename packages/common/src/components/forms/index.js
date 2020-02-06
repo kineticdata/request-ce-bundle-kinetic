@@ -2,6 +2,7 @@
 import { AttributesField } from './AttributesField';
 import { CheckboxField } from './CheckboxField';
 import { CodeField, CodeTemplateField } from './CodeField';
+import { DateField, DateTimeField } from './DateTimeField';
 import { FormButtons, generateFormButtons } from './FormButtons';
 import { FormError } from './FormError';
 import { FormField, FormMultiField } from './FormField';
@@ -23,6 +24,8 @@ export default {
   CheckboxField,
   CodeField,
   CodeTemplateField,
+  DateField,
+  DateTimeField,
   FormButtons,
   generateFormButtons,
   FormError,

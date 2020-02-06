@@ -1,8 +1,15 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
+import { compose, withHandlers, withState } from 'recompose';
 import moment from 'moment';
 import { Constants } from 'common';
 import { I18n } from '@kineticdata/react';
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
 
 const DiscussionIcon = () => (
   <span className="icon">
@@ -52,6 +59,19 @@ const MobileSubmissionCard = ({ submission, columns, path }) => (
               );
             })}
           </p>
+          <div className="btn-group" role="group" aria-label="Actions">
+            <Link to={`${path}/${submission.id}`} className="btn btn-primary">
+              <I18n>View</I18n>
+            </Link>
+            {submission.coreState === 'Draft' && (
+              <button
+                onClick={console.log('resend invitation')}
+                className="btn btn-success"
+              >
+                <I18n>Resend Invitation</I18n>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </td>
@@ -70,7 +90,13 @@ const TableSubmissionColumn = ({ shouldLink, to, label, discussionIcon }) => (
   </td>
 );
 
-const TableSubmissionRow = ({ columns, submission, path }) => (
+const TableSubmissionRow = ({
+  columns,
+  submission,
+  path,
+  openDropdown,
+  toggleDropdown,
+}) => (
   <tr>
     {columns.map((column, index) => (
       <TableSubmissionColumn
@@ -81,6 +107,29 @@ const TableSubmissionRow = ({ columns, submission, path }) => (
         discussionIcon={showDiscussionIcon(submission, column)}
       />
     ))}
+    <td>
+      <Dropdown
+        toggle={toggleDropdown(submission.id)}
+        isOpen={openDropdown === submission.id}
+      >
+        <DropdownToggle color="link" className="btn-sm">
+          <span className="fa fa-ellipsis-h fa-2x" />
+        </DropdownToggle>
+        <DropdownMenu right>
+          <DropdownItem tag={Link} to={`${path}/${submission.id}`}>
+            <I18n>View</I18n>
+          </DropdownItem>
+          {submission.coreState === 'Draft' && (
+            <button
+              onClick={() => console.log('resend invitation')}
+              className="dropdown-item"
+            >
+              <I18n>Resend Invitation</I18n>
+            </button>
+          )}
+        </DropdownMenu>
+      </Dropdown>
+    </td>
   </tr>
 );
 
@@ -98,12 +147,14 @@ const getSubmissionData = (submission, column) =>
       ? moment(submission[column.name]).format(Constants.TIME_FORMAT)
       : submission[column.name];
 
-export const SubmissionListItem = ({
+const SubmissionListItemComponent = ({
   submission,
   columns,
   form,
   path,
   isMobile,
+  openDropdown,
+  toggleDropdown,
 }) =>
   isMobile ? (
     <MobileSubmissionCard
@@ -112,5 +163,24 @@ export const SubmissionListItem = ({
       path={path}
     />
   ) : (
-    <TableSubmissionRow columns={columns} submission={submission} path={path} />
+    <TableSubmissionRow
+      columns={columns}
+      submission={submission}
+      path={path}
+      openDropdown={openDropdown}
+      toggleDropdown={toggleDropdown}
+    />
   );
+
+const toggleDropdown = ({
+  setOpenDropdown,
+  openDropdown,
+}) => dropdownSlug => () =>
+  setOpenDropdown(dropdownSlug === openDropdown ? '' : dropdownSlug);
+
+export const SubmissionListItem = compose(
+  withState('openDropdown', 'setOpenDropdown', ''),
+  withHandlers({
+    toggleDropdown,
+  }),
+)(SubmissionListItemComponent);

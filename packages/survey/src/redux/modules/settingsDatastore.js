@@ -33,7 +33,7 @@ export const SUBMISSION_SYSTEM_PROPS = [
   }),
   ColumnConfig({
     label: 'Status',
-    name: 'status',
+    name: 'coreState',
     type: 'system',
     visible: true,
     filterable: true,

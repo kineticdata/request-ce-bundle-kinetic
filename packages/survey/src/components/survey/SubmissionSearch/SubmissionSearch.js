@@ -15,7 +15,7 @@ const SubmissionSearchComponent = ({ form, loading, slug, openModal }) => (
   <I18n context={`datastore.forms.${form.slug}`}>
     {!loading ? (
       <div className="page-container">
-        <PageTitle parts={['Search', form.name, 'Datastore']} />
+        <PageTitle parts={['Search', form.name]} />
         <div className="page-panel page-panel--white">
           <div className="page-title">
             <div className="page-title__wrapper">

@@ -64,7 +64,7 @@ const SurveyListComponent = ({
             </h3>
           ) : datastoreForms && datastoreForms.size > 0 ? (
             <Fragment>
-              <div className="survey-view-toggle button-group">
+              <div className="survey-view-toggle btn-group">
                 <button
                   className={`btn ${
                     homepageMode === 'cards' ? 'btn-primary' : 'btn-subtle'
