@@ -89,10 +89,7 @@ export const State = Record({
   dateFormatsLoading: true,
 });
 
-export const settingsNotificationsReducer = (
-  state = State(),
-  { type, payload },
-) => {
+export const notificationsReducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.FETCH_NOTIFICATIONS:
       return state.set('loading', true).set('errors', []);
@@ -151,4 +148,4 @@ export const settingsNotificationsReducer = (
   }
 };
 
-export default settingsNotificationsReducer;
+export default notificationsReducer;

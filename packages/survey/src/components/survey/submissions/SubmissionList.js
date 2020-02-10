@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers } from 'recompose';
-import { actions } from '../../../redux/modules/settingsDatastore';
+import { actions } from '../../../redux/modules/surveys';
 import { context } from '../../../redux/store';
 import { SubmissionListItem } from './SubmissionListItem';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
@@ -283,18 +283,18 @@ const SubmissionListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.settingsDatastore.currentFormLoading,
-  form: state.settingsDatastore.currentForm,
-  submissions: state.settingsDatastore.submissions,
-  clientSortInfo: state.settingsDatastore.clientSortInfo,
-  searching: state.settingsDatastore.searching,
-  nextPageToken: state.settingsDatastore.nextPageToken,
-  pageTokens: state.settingsDatastore.pageTokens,
-  columns: state.settingsDatastore.currentForm.columns,
-  hasStartedSearching: state.settingsDatastore.hasStartedSearching,
+  loading: state.surveys.currentFormLoading,
+  form: state.surveys.currentForm,
+  submissions: state.surveys.submissions,
+  clientSortInfo: state.surveys.clientSortInfo,
+  searching: state.surveys.searching,
+  nextPageToken: state.surveys.nextPageToken,
+  pageTokens: state.surveys.pageTokens,
+  columns: state.surveys.currentForm.columns,
+  hasStartedSearching: state.surveys.hasStartedSearching,
   path: state.router.location.pathname.replace(/\/$/, ''),
   isMobile: state.app.layoutSize === 'small',
-  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
+  simpleSearchActive: state.surveys.simpleSearchActive,
 });
 
 export const mapDispatchToProps = {

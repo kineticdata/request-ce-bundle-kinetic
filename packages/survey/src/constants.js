@@ -46,21 +46,3 @@ export const TIME_AGO_INTERVAL = 10000;
 export const TIME_FORMAT = 'MMMM D, YYYY h:mm A';
 export const DEFAULT_FORM_ICON = 'fa-sticky-note-o';
 export const DEFAULT_CATEGORY_ICON = 'fa-cube';
-
-// Utility forms
-export const FEEDBACK_FORM_CONFIG = {
-  formSlug: FEEDBACK_FORM,
-  title: 'Provide Feedback',
-  confirmationMessage:
-    "Thanks for your feedback. We'll get that routed to the right team.",
-};
-export const COMMENT_FORM_CONFIG = {
-  formSlug: COMMENT_FORM,
-  title: 'Add Comment',
-  confirmationMessage: 'Your comment has been submitted.',
-};
-export const CANCEL_FORM_CONFIG = {
-  formSlug: CANCEL_FORM,
-  title: 'Cancel Request',
-  confirmationMessage: 'Your cancellation request has been received.',
-};

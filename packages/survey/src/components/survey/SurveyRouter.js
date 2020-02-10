@@ -2,8 +2,8 @@ import React from 'react';
 import { Link, Router } from '@reach/router';
 import { connect } from 'react-redux';
 import { LoadingMessage } from 'common';
-import { SurveySubmission } from './Submission';
-import { SubmissionSearch } from './SubmissionSearch/SubmissionSearch';
+import { SurveySubmission } from './submissions/Submission';
+import { SubmissionSearch } from './submissions/SubmissionSearch';
 import { SurveySettings } from './SurveySettings';
 import { CreateSurvey } from './CreateSurvey';
 import { I18n } from '@kineticdata/react';
@@ -63,7 +63,7 @@ export const SurveyRouterComponent = ({
   );
 
 export const mapStateToProps = state => ({
-  loading: state.settingsDatastore.loading,
+  loading: state.surveys.loading,
   version: state.app.coreVersion,
   validVersion: semver.satisfies(
     semver.coerce(state.app.coreVersion),

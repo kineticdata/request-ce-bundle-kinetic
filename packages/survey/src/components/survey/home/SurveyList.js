@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { push } from 'redux-first-history';
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
-import { actions } from '../../redux/modules/settingsDatastore';
-import { context } from '../../redux/store';
-import { PageTitle } from '../shared/PageTitle';
+import { actions } from '../../../redux/modules/surveys';
+import { context } from '../../../redux/store';
+import { PageTitle } from '../../shared/PageTitle';
 import { I18n } from '@kineticdata/react';
 import { SurveyCard } from './SurveyCard';
 import { SurveyTable } from './SurveyTable';
@@ -113,8 +113,8 @@ const SurveyListComponent = ({
 };
 
 export const mapStateToProps = state => ({
-  loading: state.settingsDatastore.loading,
-  datastoreForms: state.settingsDatastore.forms.filter(
+  loading: state.surveys.loading,
+  datastoreForms: state.surveys.forms.filter(
     f => f.isHidden && f.isSurvey, // should be done in redux ?
   ),
   kapp: state.app.kapp,

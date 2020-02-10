@@ -19,13 +19,13 @@ import {
   ViewDiscussionsModal,
 } from 'common';
 import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
-import { PageTitle } from '../shared/PageTitle';
+import { PageTitle } from '../../shared/PageTitle';
 import {
   selectPrevAndNext,
   selectFormBySlug,
   actions,
-} from '../../redux/modules/settingsDatastore';
-import { context } from '../../redux/store';
+} from '../../../redux/modules/surveys';
+import { context } from '../../../redux/store';
 
 import { I18n } from '@kineticdata/react';
 
@@ -203,8 +203,7 @@ export const getRandomKey = () =>
   Math.floor(Math.random() * (100000 - 100 + 1)) + 100;
 
 export const shouldPrevNextShow = state =>
-  state.settingsDatastore.submission !== null &&
-  state.settingsDatastore.submissions.size > 0;
+  state.surveys.submission !== null && state.surveys.submissions.size > 0;
 
 export const handleUpdated = props => response => {
   if (props.submissionId) {
@@ -235,7 +234,7 @@ export const closeDiscussions = props => () =>
 
 export const mapStateToProps = (state, { id, mode, slug }) => ({
   submissionId: id,
-  submission: state.settingsDatastore.submission,
+  submission: state.surveys.submission,
   showPrevAndNext: shouldPrevNextShow(state),
   prevAndNext: selectPrevAndNext(state),
   form: selectFormBySlug(state, slug),

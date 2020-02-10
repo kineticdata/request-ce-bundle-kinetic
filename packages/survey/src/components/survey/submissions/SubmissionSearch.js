@@ -2,13 +2,13 @@ import React from 'react';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { lifecycle, compose } from 'recompose';
-import { actions } from '../../../redux/modules/settingsDatastore';
+import { actions } from '../../../redux/modules/surveys';
 import { context } from '../../../redux/store';
 import { PageTitle } from '../../shared/PageTitle';
 import { Searchbar } from './Searchbar';
 import { SubmissionList } from './SubmissionList';
 import { Paging } from './Paging';
-import { SurveyModal } from '../SurveyModal';
+import { ExportModal } from '../export/ExportModal';
 import { I18n } from '@kineticdata/react';
 
 const SubmissionSearchComponent = ({ form, loading, slug, openModal }) => (
@@ -56,15 +56,15 @@ const SubmissionSearchComponent = ({ form, loading, slug, openModal }) => (
         </div>
       </div>
     ) : null}
-    <SurveyModal />
+    <ExportModal />
   </I18n>
 );
 
 export const mapStateToProps = state => ({
-  loading: state.settingsDatastore.currentFormLoading,
-  form: state.settingsDatastore.currentForm,
-  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
-  submissions: state.settingsDatastore.submissions,
+  loading: state.surveys.currentFormLoading,
+  form: state.surveys.currentForm,
+  simpleSearchActive: state.surveys.simpleSearchActive,
+  submissions: state.surveys.submissions,
 });
 
 export const mapDispatchToProps = {

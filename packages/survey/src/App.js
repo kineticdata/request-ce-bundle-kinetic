@@ -13,10 +13,10 @@ import { is } from 'immutable';
 import { I18n } from '@kineticdata/react';
 import { connectedHistory, connect, context, store } from './redux/store';
 import { syncAppState } from './redux/modules/app';
-import { SurveyList } from './components/survey/SurveyList';
+import { SurveyList } from './components/survey/home/SurveyList';
 import { SurveyRouter } from './components/survey/SurveyRouter';
-import { actions } from './redux/modules/surveyApp';
-import { actions as datastoreActions } from './redux/modules/settingsDatastore';
+import { actions as appActions } from './redux/modules/surveyApp';
+import { actions as surveysActions } from './redux/modules/surveys';
 
 const AppComponent = props => {
   if (props.error) {
@@ -46,8 +46,8 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = {
-  fetchAppDataRequest: actions.fetchAppDataRequest,
-  fetchForms: datastoreActions.fetchForms,
+  fetchAppDataRequest: appActions.fetchAppDataRequest,
+  fetchForms: surveysActions.fetchForms,
 };
 
 const enhance = compose(

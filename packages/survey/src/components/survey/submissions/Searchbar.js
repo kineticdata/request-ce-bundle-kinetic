@@ -2,13 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { Button, Input, InputGroup, InputGroupAddon, Col } from 'reactstrap';
-
 import { List } from 'immutable';
-
 import { IndexPart } from '../../../records';
-import { actions } from '../../../redux/modules/settingsDatastore';
+import { actions } from '../../../redux/modules/surveys';
 import { context } from '../../../redux/store';
-
 import { AutoFocusInput } from './AutoFocusInput';
 import { I18n } from '@kineticdata/react';
 
@@ -401,23 +398,23 @@ const SearchbarComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
-  advancedSearchOpen: state.settingsDatastore.advancedSearchOpen,
-  form: state.settingsDatastore.currentForm,
-  indexDefinitions: state.settingsDatastore.currentForm
-    ? List(state.settingsDatastore.currentForm.indexDefinitions)
+  simpleSearchActive: state.surveys.simpleSearchActive,
+  advancedSearchOpen: state.surveys.advancedSearchOpen,
+  form: state.surveys.currentForm,
+  indexDefinitions: state.surveys.currentForm
+    ? List(state.surveys.currentForm.indexDefinitions)
         .filter(d => d.status === 'Built')
         .map(d => {
           d.name = d.name.replace(':UNIQUE', '');
           return d;
         })
     : [],
-  searchParams: state.settingsDatastore.searchParams,
-  indexParts: state.settingsDatastore.searchParams.indexParts,
-  simpleSearchParam: state.settingsDatastore.simpleSearchParam,
-  searching: state.settingsDatastore.searching,
-  hasStartedSearching: state.settingsDatastore.hasStartedSearching,
-  sortDirection: state.settingsDatastore.sortDirection,
+  searchParams: state.surveys.searchParams,
+  indexParts: state.surveys.searchParams.indexParts,
+  simpleSearchParam: state.surveys.simpleSearchParam,
+  searching: state.surveys.searching,
+  hasStartedSearching: state.surveys.hasStartedSearching,
+  sortDirection: state.surveys.sortDirection,
 });
 
 export const mapDispatchToProps = {

@@ -36,7 +36,9 @@ import {
   FORMS_INCLUDES,
   FORM_INCLUDES,
   BRIDGE_MODEL_INCLUDES,
-} from '../modules/settingsDatastore';
+  SURVEY_TEMPLATE_INCLUDES,
+  SURVEY_TEMPLATE_SLUG,
+} from '../modules/surveys';
 import { DatastoreFormSave } from '../../records';
 
 import { chunkList } from '../../utils';
@@ -189,20 +191,30 @@ export function* updateFormSaga() {
 }
 
 export function* createFormSaga(action) {
-  const form = action.payload.form;
-  const formContent = {
+  const { form: template } = yield call(fetchForm, {
+    datastore: true,
+    formSlug: SURVEY_TEMPLATE_SLUG,
+    include: SURVEY_TEMPLATE_INCLUDES,
+  });
+
+  const survey = action.payload.form;
+
+  const surveyContent = {
     attributesMap: {
-      'Datastore Configuration': [JSON.stringify(form.columns.toJS())],
-      'Datastore Hidden': ['true'],
+      ...template.attributesMap,
       Survey: ['true'],
     },
-    slug: form.slug,
-    name: form.name,
-    description: form.description,
+    slug: survey.slug,
+    name: survey.name,
+    description: survey.description,
+    status: template.status,
+    fields: template.fields,
+    pages: template.pages,
   };
+
   const { error, serverError } = yield call(createForm, {
     datastore: true,
-    form: formContent,
+    form: surveyContent,
     include: FORM_INCLUDES,
   });
   if (serverError || error) {
@@ -216,14 +228,14 @@ export function* createFormSaga(action) {
 }
 
 export const selectSearchParams = state => ({
-  searchParams: state.settingsDatastore.searchParams,
-  form: state.settingsDatastore.currentForm,
-  pageToken: state.settingsDatastore.nextPageToken,
-  pageTokens: state.settingsDatastore.pageTokens,
-  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
-  simpleSearchParam: state.settingsDatastore.simpleSearchParam,
-  simpleSearchNextPageIndex: state.settingsDatastore.simpleSearchNextPageIndex,
-  sortDirection: state.settingsDatastore.sortDirection,
+  searchParams: state.surveys.searchParams,
+  form: state.surveys.currentForm,
+  pageToken: state.surveys.nextPageToken,
+  pageTokens: state.surveys.pageTokens,
+  simpleSearchActive: state.surveys.simpleSearchActive,
+  simpleSearchParam: state.surveys.simpleSearchParam,
+  simpleSearchNextPageIndex: state.surveys.simpleSearchNextPageIndex,
+  sortDirection: state.surveys.sortDirection,
 });
 
 export function* fetchSubmissionsSimpleSaga() {
@@ -627,7 +639,7 @@ export function* debouncePrecentCompleteSaga(action) {
   );
 }
 
-export function* watchSettingsDatastore() {
+export function* watchSurveys() {
   yield takeEvery(types.FETCH_FORMS, fetchFormsSaga);
   yield takeEvery(types.FETCH_FORM, fetchFormSaga);
   yield takeEvery(types.FETCH_SUBMISSION, fetchSubmissionSaga);

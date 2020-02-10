@@ -1,12 +1,10 @@
 import React, { Fragment } from 'react';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import downloadjs from 'downloadjs';
-
 import { connect } from 'react-redux';
 import papaparse from 'papaparse';
-
-import { actions } from '../../redux/modules/settingsDatastore';
-import { context } from '../../redux/store';
+import { actions } from '../../../redux/modules/surveys';
+import { context } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 
 const ExportComponent = ({
@@ -122,9 +120,9 @@ const handleDownload = props => () => {
 };
 
 const mapStateToProps = state => ({
-  form: state.settingsDatastore.currentForm,
-  submissions: state.settingsDatastore.exportSubmissions,
-  submissionsCount: state.settingsDatastore.exportCount,
+  form: state.surveys.currentForm,
+  submissions: state.surveys.exportSubmissions,
+  submissionsCount: state.surveys.exportCount,
 });
 
 const mapDispatchToProps = {

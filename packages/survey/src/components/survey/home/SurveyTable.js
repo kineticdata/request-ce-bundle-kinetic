@@ -3,7 +3,7 @@ import { Link } from '@reach/router';
 import { Table } from '@kineticdata/react';
 import { TimeAgo } from 'common';
 import { Map, List } from 'immutable';
-import { StatusPill } from '../shared/StatusPill';
+import { StatusPill } from '../../shared/StatusPill';
 
 const columns = [
   {

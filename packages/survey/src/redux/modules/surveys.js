@@ -18,6 +18,8 @@ export const DATASTORE_LIMIT = 500;
 export const SUBMISSION_INCLUDES = 'values,details';
 export const FORMS_INCLUDES = 'details,attributes';
 export const FORM_INCLUDES = 'details,fields,indexDefinitions,attributesMap';
+export const SURVEY_TEMPLATE_INCLUDES = 'details,attributesMap,fields,pages';
+export const SURVEY_TEMPLATE_SLUG = 'sample-datastore-survey-1';
 export const BRIDGE_MODEL_INCLUDES =
   'attributes, ' +
   'qualifications,qualifications.parameters,' +
@@ -274,8 +276,8 @@ const sortSubmissions = (submissions, sortInfo) => {
 };
 
 export const selectPrevAndNext = state => {
-  const submissions = state.settingsDatastore.submissions || List();
-  const submission = state.settingsDatastore.submission;
+  const submissions = state.surveys.submissions || List();
+  const submission = state.surveys.submission;
   if (submission !== null) {
     const currentItemIndex = submissions.findIndex(
       item => item.id === submission.id,
@@ -307,12 +309,12 @@ export const selectBridgeSlugByModel = model => {
   }
 };
 export const selectUpdatedFormActiveBridge = state =>
-  state.settingsDatastore.currentFormChanges.bridgeModelMapping.bridgeSlug;
-export const selectCurrentForm = state => state.settingsDatastore.currentForm;
+  state.surveys.currentFormChanges.bridgeModelMapping.bridgeSlug;
+export const selectCurrentForm = state => state.surveys.currentForm;
 export const selectCurrentFormChanges = state =>
-  state.settingsDatastore.currentFormChanges;
+  state.surveys.currentFormChanges;
 export const selectFormBySlug = (state, formSlug) =>
-  state.settingsDatastore.forms.find(form => form.slug === formSlug);
+  state.surveys.forms.find(form => form.slug === formSlug);
 
 export const State = Record({
   loading: true,
@@ -355,10 +357,7 @@ export const State = Record({
   importComplete: false,
 });
 
-export const settingsDatastoreReducer = (
-  state = State(),
-  { type, payload },
-) => {
+export const surveysReducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.FETCH_FORMS:
       return state.set('loading', true).set('errors', []);
@@ -604,4 +603,4 @@ export const settingsDatastoreReducer = (
   }
 };
 
-export default settingsDatastoreReducer;
+export default surveysReducer;

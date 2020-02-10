@@ -17,7 +17,7 @@ import {
   types,
   NOTIFICATIONS_FORM_SLUG,
   NOTIFICATIONS_DATE_FORMAT_FORM_SLUG,
-} from '../modules/settingsNotifications';
+} from '../modules/notifications';
 
 export function* fetchNotificationsSaga() {
   const query = new SubmissionSearch(true);
@@ -213,7 +213,7 @@ export function* fetchDateFormatsSaga() {
   );
 }
 
-export function* watchSettingsNotifications() {
+export function* watchNotifications() {
   yield takeEvery(types.FETCH_VARIABLES, fetchVariablesSaga);
   yield takeEvery(types.FETCH_DATE_FORMATS, fetchDateFormatsSaga);
   yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);

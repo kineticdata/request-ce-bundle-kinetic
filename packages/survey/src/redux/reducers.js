@@ -1,13 +1,13 @@
 import appReducer from './modules/app';
 import errorsReducer from './modules/errors';
 import surveyAppReducer from './modules/surveyApp';
-import settingsDatastoreReducer from './modules/settingsDatastore';
-import settingsNotificationsReducer from './modules/settingsNotifications';
+import surveysReducer from './modules/surveys';
+import notificationsReducer from './modules/notifications';
 
 export default {
   app: appReducer,
   errors: errorsReducer,
-  settingsDatastore: settingsDatastoreReducer,
-  settingsNotifications: settingsNotificationsReducer,
+  surveys: surveysReducer,
+  notifications: notificationsReducer,
   surveyApp: surveyAppReducer,
 };

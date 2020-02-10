@@ -1,13 +1,8 @@
 import React, { Fragment } from 'react';
-
 import { connect } from 'react-redux';
 import { push } from 'redux-first-history';
 import { compose, withHandlers } from 'recompose';
-
-import {
-  actions,
-  DATASTORE_LIMIT,
-} from '../../../redux/modules/settingsDatastore';
+import { actions, DATASTORE_LIMIT } from '../../../redux/modules/surveys';
 import { context } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 
@@ -57,11 +52,11 @@ const PagingComponent = ({
   );
 
 export const mapStateToProps = state => ({
-  submissions: state.settingsDatastore.submissions,
-  pageTokens: state.settingsDatastore.pageTokens,
-  nextPageToken: state.settingsDatastore.nextPageToken,
-  simpleSearchActive: state.settingsDatastore.simpleSearchActive,
-  searching: state.settingsDatastore.searching,
+  submissions: state.surveys.submissions,
+  pageTokens: state.surveys.pageTokens,
+  nextPageToken: state.surveys.nextPageToken,
+  simpleSearchActive: state.surveys.simpleSearchActive,
+  searching: state.surveys.searching,
 });
 
 export const mapDispatchToProps = {

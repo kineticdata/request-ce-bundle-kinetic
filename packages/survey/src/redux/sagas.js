@@ -1,14 +1,14 @@
 import { all } from 'redux-saga/effects';
 import { watchApp } from './sagas/app';
 import { watchSurveyApp } from './sagas/surveyApp';
-import { watchSettingsDatastore } from './sagas/settingsDatastore';
-import { watchSettingsNotifications } from './sagas/settingsNotifications';
+import { watchSurveys } from './sagas/surveys';
+import { watchNotifications } from './sagas/notifications';
 
 export default function*() {
   yield all([
     watchApp(),
     watchSurveyApp(),
-    watchSettingsDatastore(),
-    watchSettingsNotifications(),
+    watchSurveys(),
+    watchNotifications(),
   ]);
 }

@@ -1,14 +1,12 @@
 import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import { connect } from 'react-redux';
-
-import { actions } from '../../redux/modules/settingsDatastore';
-import { context } from '../../redux/store';
-
+import { actions } from '../../../redux/modules/surveys';
+import { context } from '../../../redux/store';
 import { Export } from './Export';
 import { I18n } from '@kineticdata/react';
 
-const SurveyModalComponent = ({ modalIsOpen, closeModal, modalName }) => (
+const ExportModalComponent = ({ modalIsOpen, closeModal, modalName }) => (
   <Modal isOpen={modalIsOpen} toggle={closeModal} size="lg">
     <div className="modal-header">
       <h4 className="modal-title">
@@ -29,17 +27,17 @@ const SurveyModalComponent = ({ modalIsOpen, closeModal, modalName }) => (
 );
 
 const mapStateToProps = state => ({
-  modalIsOpen: state.settingsDatastore.modalIsOpen,
-  modalName: state.settingsDatastore.modalName,
+  modalIsOpen: state.surveys.modalIsOpen,
+  modalName: state.surveys.modalName,
 });
 
 const mapDispatchToProps = {
   closeModal: actions.closeModal,
 };
 
-export const SurveyModal = connect(
+export const ExportModal = connect(
   mapStateToProps,
   mapDispatchToProps,
   null,
   { context },
-)(SurveyModalComponent);
+)(ExportModalComponent);

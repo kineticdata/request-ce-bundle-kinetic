@@ -6,8 +6,8 @@ import { bundle } from '@kineticdata/react';
 import { FormComponents, LoadingMessage, Utils } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { I18n, FormForm } from '@kineticdata/react';
-import { actions } from '../../redux/modules/settingsDatastore';
-import { actions as notificationsActions } from '../../redux/modules/settingsNotifications';
+import { actions } from '../../redux/modules/surveys';
+import { actions as notificationsActions } from '../../redux/modules/notifications';
 import { context } from '../../redux/store';
 
 const asArray = value => (value ? [JSON.stringify(value)] : []);
@@ -467,16 +467,14 @@ const SurveySettingsComponent = ({
 };
 
 export const mapStateToProps = (state, { slug }) => ({
-  loading:
-    state.settingsDatastore.currentFormLoading ||
-    state.settingsNotifications.loading,
-  canManage: state.settingsDatastore.currentForm.canManage,
-  origForm: state.settingsDatastore.currentForm,
+  loading: state.surveys.currentFormLoading || state.notifications.loading,
+  canManage: state.surveys.currentForm.canManage,
+  origForm: state.surveys.currentForm,
   kappSlug: state.app.kappSlug,
   formSlug: slug,
   taskSourceName: Utils.getAttributeValue(state.app.space, 'Task Source Name'),
-  templates: state.settingsNotifications.notificationTemplates,
-  snippets: state.settingsNotifications.notificationSnippets,
+  templates: state.notifications.notificationTemplates,
+  snippets: state.notifications.notificationSnippets,
 });
 
 export const mapDispatchToProps = {
