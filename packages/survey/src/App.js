@@ -16,7 +16,7 @@ import { syncAppState } from './redux/modules/app';
 import { SurveyList } from './components/survey/home/SurveyList';
 import { SurveyRouter } from './components/survey/SurveyRouter';
 import { actions as appActions } from './redux/modules/surveyApp';
-import { actions as surveysActions } from './redux/modules/surveys';
+import { DEFAULT_LIST_MODE_THRESHOLD } from './constants';
 
 const AppComponent = props => {
   if (props.error) {
@@ -29,8 +29,7 @@ const AppComponent = props => {
         <I18n>
           <main className={`package-layout package-layout--survey`}>
             <Router>
-              {/* <SurveyList path="/" homePageItems={props.homePageItems} /> */}
-              <SurveyList path="/" />
+              <SurveyList path="/" surveys={props.surveys} />
               <SurveyRouter path="/*" />
             </Router>
           </main>
@@ -43,11 +42,11 @@ const AppComponent = props => {
 const mapStateToProps = (state, props) => ({
   loading: state.surveyApp.loading,
   error: state.surveyApp.error,
+  surveys: state.surveyApp.forms,
 });
 
 const mapDispatchToProps = {
   fetchAppDataRequest: appActions.fetchAppDataRequest,
-  fetchForms: surveysActions.fetchForms,
 };
 
 const enhance = compose(
@@ -58,7 +57,6 @@ const enhance = compose(
   lifecycle({
     componentDidMount() {
       this.props.fetchAppDataRequest();
-      this.props.fetchForms();
     },
   }),
 );

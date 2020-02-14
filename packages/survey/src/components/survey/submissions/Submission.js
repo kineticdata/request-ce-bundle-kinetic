@@ -1,294 +1,284 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { push } from 'redux-first-history';
-import {
-  compose,
-  withHandlers,
-  withProps,
-  withState,
-  lifecycle,
-} from 'recompose';
+import React, { Fragment } from 'react';
+import moment from 'moment';
 import { Link } from '@reach/router';
-import { parse } from 'query-string';
-import { ButtonGroup } from 'reactstrap';
-import { CoreForm } from '@kineticdata/react';
-import {
-  DiscussionsPanel,
-  addSuccess,
-  addError,
-  ViewDiscussionsModal,
-} from 'common';
-import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
-import { PageTitle } from '../../shared/PageTitle';
-import {
-  selectPrevAndNext,
-  selectFormBySlug,
-  actions,
-} from '../../../redux/modules/surveys';
-import { context } from '../../../redux/store';
-
+import { compose, lifecycle } from 'recompose';
+import { ErrorMessage, LoadingMessage, TimeAgo } from 'common';
+import { actions } from '../../../redux/modules/settingsForms';
+import { connect } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
+import { PageTitle } from '../../shared/PageTitle';
 
-const globals = import('common/globals');
-
-const CreationForm = ({ onChange, values, errors }) => (
-  <div className="form-group">
-    <label htmlFor="title">Title</label>
-    <input
-      id="title"
-      name="title"
-      type="text"
-      value={values.title}
-      onChange={onChange}
-    />
-    {errors.title && (
-      <small className="form-text text-danger">{errors.title}</small>
-    )}
-  </div>
-);
-
-const SurveySubmissionComponent = ({
+export const SubmissionContainer = ({
+  kapp,
   form,
-  showPrevAndNext,
-  prevAndNext,
-  submissionId,
-  handleCreated,
-  handleUpdated,
-  handleError,
-  values,
   submission,
-  isEditing,
-  formKey,
-  discussionsEnabled,
-  viewDiscussionsModal,
-  isSmallLayout,
-  openDiscussions,
-  closeDiscussions,
-  profile,
-  creationFields,
-}) => (
-  <I18n context={`datastore.forms.${form.slug}`}>
-    <div className="page-container page-container--panels">
-      <PageTitle
-        parts={[
-          submissionId ? (submission ? submission.label : '') : ' New Record',
-          'Datastore',
-        ]}
-      />
-      <div className="page-panel page-panel--three-fifths page-panel--white">
+  submissionError,
+}) =>
+  form && (
+    <div className="page-container">
+      <PageTitle parts={['Services Settings']} />
+      <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
               <Link to="../../../">
-                <I18n>survey</I18n>
+                <I18n>{kapp.name}</I18n>
               </Link>{' '}
               /{` `}
-              <I18n>{form.name}</I18n>
-              /{` `}
+              <I18n>{form.name}</I18n> /{` `}
               <Link to="../">
-                <I18n>submissions</I18n>
+                <I18n>Submissions</I18n>
               </Link>{' '}
-              /
+              /{` `}
             </h3>
-            <h1>
-              {submissionId ? (
-                submission ? (
-                  submission.label
-                ) : (
-                  ''
-                )
+            {submission && <h1>{submission.handle}</h1>}
+          </div>
+        </div>
+        {submissionError ? (
+          <ErrorMessage message={submissionError.message} />
+        ) : !submission ? (
+          <LoadingMessage />
+        ) : (
+          <div>
+            <div className="data-list data-list--fourths">
+              <dl>
+                <dt>Submission Label</dt>
+                <dd>{submission.label}</dd>
+              </dl>
+              <dl>
+                <dt>Submission Id</dt>
+                <dd>{submission.id}</dd>
+              </dl>
+              <dl>
+                <dt>Core State</dt>
+                <dd>{submission.coreState}</dd>
+              </dl>
+              <dl>
+                <dt>Time to Close</dt>
+                <dd>
+                  {submission.closedAt ? (
+                    moment
+                      .duration(
+                        moment(submission.submittedAt).valueOf() -
+                          moment(submission.closedAt).valueOf(),
+                      )
+                      .humanize()
+                  ) : (
+                    <I18n>Not closed yet</I18n>
+                  )}
+                </dd>
+              </dl>
+              <dl>
+                <dt>Created</dt>
+                <dd>
+                  <TimeAgo timestamp={submission.createdAt} />
+                  <br />
+                  <small>
+                    <I18n>by</I18n> {submission.createdBy}
+                  </small>
+                </dd>
+              </dl>
+              <dl>
+                <dt>Submitted</dt>
+                <dd>
+                  {submission.submittedAt ? (
+                    <Fragment>
+                      <TimeAgo timestamp={submission.submittedAt} />
+                      <br />
+                      <small>
+                        <I18n>by</I18n> {submission.submittedBy}
+                      </small>
+                    </Fragment>
+                  ) : (
+                    <I18n>N/A</I18n>
+                  )}
+                </dd>
+              </dl>
+              <dl>
+                <dt>Updated</dt>
+                <dd>
+                  <TimeAgo timestamp={submission.updatedAt} />
+                  <br />
+                  <small>
+                    <I18n>by</I18n> {submission.updatedBy}
+                  </small>
+                </dd>
+              </dl>
+              <dl>
+                <dt>Closed</dt>
+                <dd>
+                  {submission.closedAt ? (
+                    <Fragment>
+                      <TimeAgo timestamp={submission.closedAt} />
+                      <br />
+                      <small>
+                        <I18n>by</I18n> {submission.closedBy}
+                      </small>
+                    </Fragment>
+                  ) : (
+                    <I18n>N/A</I18n>
+                  )}
+                </dd>
+              </dl>
+            </div>
+            <h3 className="section__title">
+              <I18n>Fulfillment Process</I18n>
+            </h3>
+            <div className="section__content scroll-wrapper-h">
+              {submission.activities.filter(
+                activity => activity.type === 'Task',
+              ).length > 0 ? (
+                <table className="table table-sm table-striped table--settings">
+                  <thead className="header">
+                    <tr>
+                      <th scope="col">
+                        <I18n>Type</I18n>
+                      </th>
+                      <th scope="col">
+                        <I18n>Label</I18n>
+                      </th>
+                      <th scope="col">
+                        <I18n>Description</I18n>
+                      </th>
+                      <th scope="col">
+                        <I18n>Data</I18n>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {submission.activities
+                      .filter(activity => activity.type === 'Task')
+                      .map((activity, index) => {
+                        const data = activity.data
+                          ? JSON.parse(activity.data)
+                          : {};
+                        return (
+                          <tr key={`task-activity-${index}`}>
+                            <td>{activity.type}</td>
+                            <td>{activity.label}</td>
+                            <td>{activity.description}</td>
+                            <td>
+                              {Object.keys(data).map(key => (
+                                <div key={key}>
+                                  {key}: {data[key]}
+                                </div>
+                              ))}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
               ) : (
-                <I18n>New Record</I18n>
+                <I18n>There are no fulfillment steps</I18n>
               )}
-            </h1>
-          </div>
-          <div className="page-title__actions">
-            {showPrevAndNext &&
-              !isEditing && (
-                <ButtonGroup className="datastore-prev-next">
-                  <Link
-                    to={prevAndNext.prev || ''}
-                    className="btn btn-inverse"
-                    disabled={!prevAndNext.prev}
-                  >
-                    <span className="icon">
-                      <span className="fa fa-fw fa-caret-left" />
-                    </span>
-                  </Link>
-                  <Link
-                    to={prevAndNext.next || ''}
-                    className="btn btn-inverse"
-                    disabled={!prevAndNext.next}
-                  >
-                    <span className="icon">
-                      <span className="fa fa-fw fa-caret-right" />
-                    </span>
-                  </Link>
-                </ButtonGroup>
+            </div>
+            <h3 className="section__title">
+              <I18n>Submission Activity</I18n>
+            </h3>
+            <div className="section__content scroll-wrapper-h">
+              {submission.activities.filter(
+                activity => activity.type !== 'Task',
+              ).length > 0 ? (
+                <table className="table table-sm table-striped table--settings">
+                  <thead className="header">
+                    <tr>
+                      <th scope="col">
+                        <I18n>Type</I18n>
+                      </th>
+                      <th scope="col">
+                        <I18n>Label</I18n>
+                      </th>
+                      <th scope="col">
+                        <I18n>Description</I18n>
+                      </th>
+                      <th scope="col">
+                        <I18n>Data</I18n>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {submission.activities
+                      .filter(activity => activity.type !== 'Task')
+                      .map((activity, index) => {
+                        const data = activity.data
+                          ? JSON.parse(activity.data)
+                          : {};
+                        return (
+                          <tr key={`activity-${index}`}>
+                            <td>{activity.type}</td>
+                            <td>{activity.label}</td>
+                            <td>{activity.description}</td>
+                            <td>
+                              {Object.keys(data).map(key => (
+                                <div key={key}>
+                                  {key}: {data[key]}
+                                </div>
+                              ))}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              ) : (
+                <I18n>There is no submission activity</I18n>
               )}
-            {discussionsEnabled && (
-              <button
-                onClick={openDiscussions}
-                className="btn btn-inverse d-md-none d-lg-none d-xl-none"
-              >
-                <span
-                  className="fa fa-fw fa-comments"
-                  style={{ fontSize: '16px' }}
-                />
-                <I18n>View Discussions</I18n>
-              </button>
-            )}
+            </div>
+            <h3 className="section__title">
+              <I18n>Values</I18n>
+            </h3>
+            <div className="section__content scroll-wrapper-h">
+              <table className="table table-sm table-striped table--settings">
+                <thead className="header">
+                  <tr>
+                    <th scope="col">
+                      <I18n>Field</I18n>
+                    </th>
+                    <th scope="col">
+                      <I18n>Value</I18n>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {submission.form.fields.map(field => (
+                    <tr key={field.name}>
+                      <td>
+                        <I18n>{field.name}</I18n>
+                      </td>
+                      <td>{submission.values[field.name]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-        <div>
-          {submissionId ? (
-            <CoreForm
-              datastore
-              review={!isEditing}
-              submission={submissionId}
-              updated={handleUpdated}
-              error={handleError}
-              globals={globals}
-            />
-          ) : (
-            <CoreForm
-              key={formKey}
-              form={form.slug}
-              datastore
-              onCreated={handleCreated}
-              error={handleError}
-              values={values}
-              globals={globals}
-            />
-          )}
-        </div>
+        )}
       </div>
-      {discussionsEnabled &&
-        submission && (
-          <DiscussionsPanel
-            creationFields={creationFields}
-            CreationForm={CreationForm}
-            itemType="Datastore Submission"
-            itemKey={submissionId}
-            me={profile}
-          />
-        )}
-      {viewDiscussionsModal &&
-        isSmallLayout && (
-          <ViewDiscussionsModal
-            creationFields={creationFields}
-            CreationForm={CreationForm}
-            close={closeDiscussions}
-            itemType="Datastore Submission"
-            itemKey={submissionId}
-            me={profile}
-          />
-        )}
     </div>
-  </I18n>
-);
-
-const valuesFromQueryParams = queryParams => {
-  const params = parse(queryParams);
-  return Object.entries(params).reduce((values, [key, value]) => {
-    if (key.startsWith('values[')) {
-      const vk = key.match(/values\[(.*?)\]/)[1];
-      return { ...values, [vk]: value };
-    }
-    return values;
-  }, {});
-};
-
-export const getRandomKey = () =>
-  Math.floor(Math.random() * (100000 - 100 + 1)) + 100;
-
-export const shouldPrevNextShow = state =>
-  state.surveys.submission !== null && state.surveys.submissions.size > 0;
-
-export const handleUpdated = props => response => {
-  if (props.submissionId) {
-    addSuccess(
-      `Successfully updated submission (${response.submission.handle})`,
-      'Submission Updated!',
-    );
-    props.push(props.match.url.replace('/edit', ''));
-  }
-};
-
-export const handleError = props => response => {
-  addError(response.error, 'Error');
-};
-
-export const handleCreated = props => (response, actions) => {
-  addSuccess(
-    `Successfully created submission (${response.submission.handle})`,
-    'Submission Created!',
   );
-  props.setFormKey(getRandomKey());
-};
 
-export const openDiscussions = props => () =>
-  props.setViewDiscussionsModal(true);
-export const closeDiscussions = props => () =>
-  props.setViewDiscussionsModal(false);
-
-export const mapStateToProps = (state, { id, mode, slug }) => ({
-  submissionId: id,
-  submission: state.surveys.submission,
-  showPrevAndNext: shouldPrevNextShow(state),
-  prevAndNext: selectPrevAndNext(state),
-  form: selectFormBySlug(state, slug),
-  values: valuesFromQueryParams(state.router.location.search),
-  isEditing: mode && mode === 'edit' ? true : false,
-  discussionsEnabled: selectDiscussionsEnabled(state),
-  isSmallLayout: state.app.layoutSize === 'small',
-  profile: state.app.profile,
+const mapStateToProps = state => ({
+  kapp: state.app.kapp,
+  form: state.settingsForms.form,
+  submission: state.settingsForms.submission,
+  submissionError: state.settingsForms.submissionError,
 });
 
-export const mapDispatchToProps = {
-  push,
-  fetchSubmission: actions.fetchSubmission,
-  resetSubmission: actions.resetSubmission,
+const mapDispatchToProps = {
+  fetchSubmissionRequest: actions.fetchSubmissionRequest,
 };
 
-export const SurveySubmission = compose(
+export const Submission = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
-  ),
-  withState('formKey', 'setFormKey', getRandomKey),
-  withState('viewDiscussionsModal', 'setViewDiscussionsModal', false),
-  withHandlers({
-    handleUpdated,
-    handleCreated,
-    handleError,
-    openDiscussions,
-    closeDiscussions,
-  }),
-  withProps(
-    props =>
-      props.submission && {
-        creationFields: {
-          title: props.submission.label || 'Datastore Discussion',
-          description: props.submission.form.name || '',
-        },
-      },
   ),
   lifecycle({
     componentWillMount() {
-      if (this.props.id) {
-        this.props.fetchSubmission(this.props.id);
-      }
-    },
-    componentWillReceiveProps(nextProps) {
-      if (nextProps.id && this.props.id !== nextProps.id) {
-        this.props.fetchSubmission(nextProps.id);
-      }
-    },
-    componentWillUnmount() {
-      this.props.resetSubmission();
+      this.props.fetchSubmissionRequest({
+        id: this.props.id,
+      });
     },
   }),
-)(SurveySubmissionComponent);
+)(SubmissionContainer);

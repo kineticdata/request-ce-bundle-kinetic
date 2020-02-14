@@ -2,32 +2,31 @@ import React from 'react';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { push } from 'redux-first-history';
-import { compose, withHandlers, withState } from 'recompose';
-import { DatastoreForm } from '../../records';
-import { actions } from '../../redux/modules/surveys';
+import { compose, lifecycle, withHandlers, withState } from 'recompose';
+import { Survey } from '../../models';
+import { actions } from '../../redux/modules/settingsForms';
 import { context } from '../../redux/store';
 import { PageTitle } from '../shared/PageTitle';
 import { I18n } from '@kineticdata/react';
 
 const CreateSurveyComponent = ({
-  spaceAdmin,
   setNewForm,
+  kapp,
+  kappSlug,
   newForm,
-  bridges,
-  loading,
   creating,
   handleSave,
   handleNameChange,
-  match,
+  templates,
 }) => (
   <div className="page-container page-container--panels">
-    <PageTitle parts={['New Form', 'Datastore']} />
+    <PageTitle parts={['New Survey']} />
     <div className="page-panel page-panel--two-thirds page-panel--white">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
             <Link to="../">
-              <I18n>survey</I18n>
+              <I18n>{kapp.name}</I18n>
             </Link>{' '}
             /{` `}
           </h3>
@@ -41,6 +40,34 @@ const CreateSurveyComponent = ({
           <I18n>General Settings</I18n>
         </h3>
         <div className="settings form">
+          <div className="form-group">
+            <label htmlFor="template">
+              <I18n>Survey Template</I18n>{' '}
+              <small>
+                <I18n>
+                  (Kapp form of type "Template" to clone for new survey)
+                </I18n>
+              </small>
+            </label>
+            <select
+              id="template"
+              className="form-control"
+              onChange={e => {
+                console.log('///////', JSON.stringify(e.target.value));
+                setNewForm(newForm.set('template', e.target.value));
+              }}
+              value={newForm.template}
+              name="template"
+            >
+              <option value="" />
+              {!!templates &&
+                templates.map(t => (
+                  <option key={t.slug} value={t.slug}>
+                    {t.name}
+                  </option>
+                ))}
+            </select>
+          </div>
           <div className="form-row">
             <div className="col">
               <div className="form-group required">
@@ -98,7 +125,10 @@ const CreateSurveyComponent = ({
               </Link>
               <button
                 disabled={
-                  newForm.name === '' || newForm.slug === '' || creating
+                  newForm.template.slug === '' ||
+                  newForm.name === '' ||
+                  newForm.slug === '' ||
+                  creating
                 }
                 type="button"
                 onClick={handleSave()}
@@ -117,23 +147,24 @@ const CreateSurveyComponent = ({
       </h3>
       <p>
         <I18n>
-          Creating a new Survey will create a new Kinetic Request datastore form
-          to be used for storing data.
+          Creating a new Survey will create a new Kapp form from the Kapp's
+          survey template form.
         </I18n>
       </p>
-      {/*<p>
-        <strong>Bridge Name:</strong> Select the Kinetic Core bridge to allow
-        for automatic bridge creation for this datastore (The Kinetic Core
-        Bridge Adapter must first be installed into Bridgehub to allow this data
-        to be retrieved via bridges).
-      </p>*/}
     </div>
   </div>
 );
 
-const handleSave = ({ createForm, newForm, push, setCreating }) => () => () => {
+const handleSave = ({
+  createForm,
+  newForm,
+  push,
+  setCreating,
+  kapp,
+}) => () => () => {
   setCreating(true);
   createForm({
+    kappSlug: kapp.slug,
     form: newForm,
     callback: () => push(`${newForm.slug}/settings`),
   });
@@ -158,13 +189,16 @@ const handleNameChange = ({ setNewForm, newForm }) => value => {
 };
 
 export const mapStateToProps = state => ({
+  kapp: state.app.kapp,
+  kappSlug: state.app.kappSlug,
   spaceAdmin: state.app.profile.spaceAdmin,
-  bridges: state.surveys.bridges,
+  templates: state.settingsForms.templates,
 });
 
 export const mapDispatchToProps = {
   push,
-  createForm: actions.createForm,
+  createForm: actions.createFormRequest,
+  fetchTemplates: actions.fetchSurveyTemplates,
 };
 
 export const CreateSurvey = compose(
@@ -174,7 +208,12 @@ export const CreateSurvey = compose(
     null,
     { context },
   ),
-  withState('newForm', 'setNewForm', DatastoreForm()),
+  lifecycle({
+    componentWillMount() {
+      this.props.fetchTemplates({ kappSlug: this.props.kappSlug });
+    },
+  }),
+  withState('newForm', 'setNewForm', Survey()),
   withState('creating', 'setCreating', false),
   withHandlers({
     handleSave,

@@ -1,3 +1,7 @@
+// Create from template
+export const DEFAULT_SURVEY_TYPE = '';
+export const DEFAULT_TEMPLATE_INCLUDES = 'details,attributesMap,fields,pages';
+
 // Form slugs
 export const CANCEL_FORM = 'request-to-cancel';
 export const COMMENT_FORM = 'comment';
@@ -36,6 +40,7 @@ export const CORE_STATE_SUBMITTED = 'Submitted';
 export const CORE_STATE_CLOSED = 'Closed';
 
 // Misc config
+export const DEFAULT_LIST_MODE_THRESHOLD = 4;
 export const SUBMISSION_COUNT_LIMIT = 1000;
 export const SUBMISSION_FORM_TYPE = 'Service';
 export const SUBMISSION_FORM_TYPES = ['Service'];

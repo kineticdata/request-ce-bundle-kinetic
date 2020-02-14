@@ -3,7 +3,7 @@ import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import downloadjs from 'downloadjs';
 import { connect } from 'react-redux';
 import papaparse from 'papaparse';
-import { actions } from '../../../redux/modules/surveys';
+import { actions } from '../../../redux/modules/settingsForms';
 import { context } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 
@@ -13,75 +13,76 @@ const ExportComponent = ({
   submissionsCount,
   handleDownload,
   form,
-}) => (
-  <Fragment>
-    <div className="text-center">
-      {exportStatus === 'NOT_STARTED' ? (
-        <Fragment>
-          <h2>
-            <I18n>This process will export as a .csv file</I18n>
-          </h2>
-          <h4>
-            <I18n>Please don't close modal until confirmation</I18n>
-          </h4>
-          <button className="btn btn-primary" onClick={handleDownload}>
-            {1 === 2 ? (
-              <span>
-                <I18n>Export Records for Query</I18n>
-              </span>
-            ) : (
-              <span>
-                <I18n>Export All Records</I18n>
-              </span>
-            )}
-          </button>
-        </Fragment>
-      ) : (
-        <Fragment>
-          <h2>
-            <I18n>Retrieving Records</I18n>
-          </h2>
-          <h4>
-            {submissionsCount} <I18n>records retrieved</I18n>
-          </h4>
-          {/* TODO: Warp user feedback in a conditional if exportStatus === Failed */}
-          {exportStatus === 'CONVERT' && (
+}) =>
+  submissions && (
+    <Fragment>
+      <div className="text-center">
+        {exportStatus === 'NOT_STARTED' ? (
+          <Fragment>
+            <h2>
+              <I18n>This process will export as a .csv file</I18n>
+            </h2>
             <h4>
-              <I18n>Converting Records to CSV format</I18n>
+              <I18n>Please don't close modal until confirmation</I18n>
             </h4>
-          )}
-          {exportStatus === 'DOWNLOAD' && (
-            <I18n
-              render={translate => (
-                <h4>{`${translate(
-                  'Downloading',
-                )} ${submissionsCount} ${translate('Records to')} ${
-                  form.name
-                }.csv`}</h4>
+            <button className="btn btn-primary" onClick={handleDownload}>
+              {1 === 2 ? (
+                <span>
+                  <I18n>Export Records for Query</I18n>
+                </span>
+              ) : (
+                <span>
+                  <I18n>Export All Records</I18n>
+                </span>
               )}
-            />
-          )}
-          {exportStatus === 'COMPLETE' && (
-            <Fragment>
+            </button>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <h2>
+              <I18n>Retrieving Records</I18n>
+            </h2>
+            <h4>
+              {submissionsCount} <I18n>records retrieved</I18n>
+            </h4>
+            {/* TODO: Warp user feedback in a conditional if exportStatus === Failed */}
+            {exportStatus === 'CONVERT' && (
+              <h4>
+                <I18n>Converting Records to CSV format</I18n>
+              </h4>
+            )}
+            {exportStatus === 'DOWNLOAD' && (
               <I18n
                 render={translate => (
-                  <h2>
-                    {`${submissionsCount} ${translate('Records exported to')} ${
-                      form.name
-                    }.csv`}
-                  </h2>
+                  <h4>{`${translate(
+                    'Downloading',
+                  )} ${submissionsCount} ${translate('Records to')} ${
+                    form.name
+                  }.csv`}</h4>
                 )}
               />
-              <h4>
-                <I18n>Click Cancel to close the modal</I18n>
-              </h4>
-            </Fragment>
-          )}
-        </Fragment>
-      )}
-    </div>
-  </Fragment>
-);
+            )}
+            {exportStatus === 'COMPLETE' && (
+              <Fragment>
+                <I18n
+                  render={translate => (
+                    <h2>
+                      {`${submissionsCount} ${translate(
+                        'Records exported to',
+                      )} ${form.name}.csv`}
+                    </h2>
+                  )}
+                />
+                <h4>
+                  <I18n>Click Cancel to close the modal</I18n>
+                </h4>
+              </Fragment>
+            )}
+          </Fragment>
+        )}
+      </div>
+    </Fragment>
+  );
 
 function createCSV(submissions, form) {
   // Create csv string that will be used for download
@@ -91,7 +92,7 @@ function createCSV(submissions, form) {
       /** Because of the parser use the fields currently on the form to build the csv string.
        * This will exclude fields (from the csv) that existed on the form but have been removed.
        */
-      form.get('fields').forEach(field => {
+      form.fields.forEach(field => {
         // If older submissions don't have a new field then add it with a value of null.
         if (submissionValues.hasOwnProperty(field.name)) {
           // Checkbox Array values must be stringifyed to retain their array brackets.
@@ -106,7 +107,7 @@ function createCSV(submissions, form) {
         return null;
       });
       acc.push({
-        'DataStore Record ID': submission.id,
+        'Submission Record ID': submission.id,
         ...submissionValues,
       });
       return acc;
@@ -115,14 +116,19 @@ function createCSV(submissions, form) {
 }
 
 const handleDownload = props => () => {
-  props.fetchAllSubmissions({ formSlug: props.form.slug, accumulator: [] });
+  props.fetchAllSubmissions({
+    formSlug: props.form.slug,
+    kappSlug: props.kappSlug,
+    accumulator: [],
+  });
   props.setExportStatus('FETCHING_RECORDS');
 };
 
 const mapStateToProps = state => ({
-  form: state.surveys.currentForm,
-  submissions: state.surveys.exportSubmissions,
-  submissionsCount: state.surveys.exportCount,
+  kappSlug: state.app.kappSlug,
+  form: state.settingsForms.form,
+  submissions: state.settingsForms.exportSubmissions,
+  submissionsCount: state.settingsForms.exportCount,
 });
 
 const mapDispatchToProps = {

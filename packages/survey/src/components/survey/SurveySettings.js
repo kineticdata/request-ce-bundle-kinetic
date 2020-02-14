@@ -6,8 +6,9 @@ import { bundle } from '@kineticdata/react';
 import { FormComponents, LoadingMessage, Utils } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { I18n, FormForm } from '@kineticdata/react';
-import { actions } from '../../redux/modules/surveys';
+import { actions as formActions } from '../../redux/modules/settingsForms';
 import { actions as notificationsActions } from '../../redux/modules/notifications';
+import { actions as robotsActions } from '../../redux/modules/settingsRobots';
 import { context } from '../../redux/store';
 
 const asArray = value => (value ? [JSON.stringify(value)] : []);
@@ -98,6 +99,7 @@ const FormLayout = ({ fields, error, buttons }) => (
 );
 
 const SurveySettingsComponent = ({
+  kapp,
   kappSlug,
   canManage,
   origForm,
@@ -105,7 +107,10 @@ const SurveySettingsComponent = ({
   taskSourceName,
   templates,
   snippets,
+  robots,
 }) => {
+  console.log('templates:', templates);
+
   const notificationOptions =
     !!templates &&
     !!snippets &&
@@ -122,17 +127,26 @@ const SurveySettingsComponent = ({
       )
       .concat([{ value: 'Survey Invitation', label: 'Survey Invitation' }]); // placeholder
 
+  console.log('robots:', robots);
+
+  const robotOptions =
+    !!robots &&
+    robots.map(r => ({
+      value: r.values['Robot Name'],
+      label: r.values['Task Tree'],
+    }));
+
   return (
     !loading && (
-      <I18n context={`datastore.forms.${origForm.slug}`}>
+      <I18n context={`forms.${origForm.slug}`}>
         <div className="page-container page-container--panels">
-          <PageTitle parts={['Settings', origForm.name, 'Datastore']} />
+          <PageTitle parts={['Settings', origForm.name]} />
           <div className="page-panel page-panel--two-thirds page-panel--white">
             <div className="page-title">
               <div className="page-title__wrapper">
                 <h3>
                   <Link to="../../">
-                    <I18n>survey</I18n>
+                    <I18n>{kapp.name}</I18n>
                   </Link>{' '}
                   /{` `}
                   <Link to="../submissions">
@@ -155,13 +169,12 @@ const SurveySettingsComponent = ({
                 <i className="fa fa-fw fa-external-link" />
               </a>
             </div>
-            {canManage ? (
+            {true ? ( //canManage
               <div className="datastore-settings">
                 <div className="form settings">
                   <FormForm
-                    datastore={true}
                     formSlug={origForm.slug}
-                    // kappSlug={kappSlug}
+                    kappSlug={kappSlug}
                     fieldSet={fieldSet}
                     components={{ FormLayout }}
                     addFields={() => ({ form }) => {
@@ -251,10 +264,7 @@ const SurveySettingsComponent = ({
                             initialValue: surveyConfig
                               ? surveyConfig['Event Polling']['Source']
                               : '',
-                            options: [
-                              { value: 'Source A', label: 'Source A' },
-                              { value: 'Source B', label: 'Source B' },
-                            ],
+                            options: robotOptions && robotOptions,
                           },
                           {
                             name: 'pollingType',
@@ -467,19 +477,22 @@ const SurveySettingsComponent = ({
 };
 
 export const mapStateToProps = (state, { slug }) => ({
-  loading: state.surveys.currentFormLoading || state.notifications.loading,
-  canManage: state.surveys.currentForm.canManage,
-  origForm: state.surveys.currentForm,
+  loading:
+    state.settingsForms.currentFormLoading || state.notifications.loading,
+  origForm: state.settingsForms.form,
+  kapp: state.app.kapp,
   kappSlug: state.app.kappSlug,
   formSlug: slug,
   taskSourceName: Utils.getAttributeValue(state.app.space, 'Task Source Name'),
   templates: state.notifications.notificationTemplates,
   snippets: state.notifications.notificationSnippets,
+  robots: state.settingsRobots.robots.toJS(),
 });
 
 export const mapDispatchToProps = {
-  fetchForm: actions.fetchForm,
+  fetchFormRequest: formActions.fetchFormRequest,
   fetchNotifications: notificationsActions.fetchNotifications,
+  fetchRobots: robotsActions.fetchRobots,
 };
 
 export const SurveySettings = compose(
@@ -491,8 +504,12 @@ export const SurveySettings = compose(
   ),
   lifecycle({
     componentWillMount() {
-      this.props.fetchForm(this.props.formSlug);
+      this.props.fetchFormRequest({
+        kappSlug: this.props.kappSlug,
+        formSlug: this.props.slug,
+      });
       this.props.fetchNotifications();
+      this.props.fetchRobots();
     },
   }),
 )(SurveySettingsComponent);
