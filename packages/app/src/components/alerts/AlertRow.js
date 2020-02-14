@@ -17,7 +17,7 @@ const AlertRowComponent = ({
   <tr>
     {alert.values.URL ? (
       <td>
-        <a href={alert.values.URL} target="_blank">
+        <a href={alert.values.URL} target="_blank" rel="noopener noreferrer">
           <I18n>{alert.values.Title}</I18n>
           <i className="fa fa-fw fa-external-link " />
         </a>

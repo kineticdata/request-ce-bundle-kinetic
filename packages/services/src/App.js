@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import { Provider } from 'react-redux';
-import matchPath from 'rudy-match-path';
-import { LocationProvider, Router } from '@reach/router';
+import React from 'react';
+import { Router } from '@reach/router';
 import {
   compose,
   lifecycle,
@@ -10,16 +8,8 @@ import {
   withState,
 } from 'recompose';
 import { Redirect } from '@reach/router';
-import {
-  CommonProvider,
-  ErrorUnexpected,
-  Loading,
-  ModalFormContainer,
-  ToastsContainer,
-} from 'common';
-import { is } from 'immutable';
-import { connectedHistory, connect, context, store } from './redux/store';
-import { syncAppState } from './redux/modules/app';
+import { ErrorUnexpected, Loading } from 'common';
+import { connect } from './redux/store';
 
 import { actions as categoriesActions } from './redux/modules/servicesApp';
 import { actions as submissionCountActions } from './redux/modules/submissionCounts';
@@ -36,6 +26,10 @@ import { RequestShowContainer } from './components/request/RequestShowContainer'
 import { Settings } from './components/settings/Settings';
 import { I18n } from '@kineticdata/react';
 
+/*****************************************************************************
+ *** PRIVATE APP
+ *****************************************************************************/
+
 const SubmissionRedirect = props => (
   <Redirect
     to={`${props.appLocation}/requests/request/${props.id}/${
@@ -45,7 +39,7 @@ const SubmissionRedirect = props => (
   />
 );
 
-export const AppComponent = props => {
+const AppComponent = props => {
   if (props.error) {
     return <ErrorUnexpected />;
   } else if (props.loading) {
@@ -117,7 +111,6 @@ const mapStateToProps = state => {
     forms: state.servicesApp.homeForms,
     submissionCounts: state.submissionCounts.data,
     pathname: state.router.location.pathname,
-    kappSlug: state.app.kappSlug,
     appLocation: state.app.location,
   };
 };
@@ -128,7 +121,7 @@ const mapDispatchToProps = {
     submissionCountActions.fetchSubmissionCountsRequest,
 };
 
-const enhance = compose(
+export const App = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
@@ -147,7 +140,7 @@ const enhance = compose(
   withState(
     'settingsBackPath',
     'setSettingsBackPath',
-    props => `/kapps/${props.kappSlug}`,
+    props => props.appLocation,
   ),
   withHandlers({
     openSettings: props => () => props.setSettingsBackPath(props.pathname),
@@ -158,60 +151,33 @@ const enhance = compose(
       this.props.fetchSubmissionCountsRequest();
     },
   }),
+)(AppComponent);
+
+/*****************************************************************************
+ *** PUBLIC APP
+ *****************************************************************************/
+
+export const PublicAppComponent = props => {
+  return props.render({
+    main: (
+      <I18n>
+        <main className="package-layout package-layout--services">
+          <Router>
+            <FormContainer path="forms/:formSlug" />
+            <FormContainer path="forms/:formSlug/:submissionId" />
+            <FormContainer path="submissions/:submissionId" />
+            <Redirect from="*" to={props.authRoute} noThrow />
+          </Router>
+        </main>
+      </I18n>
+    ),
+  });
+};
+
+const mapStateToPropsPublic = state => ({
+  authRoute: state.app.authRoute,
+});
+
+export const PublicApp = compose(connect(mapStateToPropsPublic))(
+  PublicAppComponent,
 );
-
-const App = enhance(AppComponent);
-
-export class AppProvider extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { ready: false };
-    // Listen to the local store to see if the embedded app is ready to be
-    // re-rendered. Currently this just means that the required props have been
-    // synced into the local store.
-    this.unsubscribe = store.subscribe(() => {
-      const ready = store.getState().app.ready;
-      if (ready !== this.state.ready) {
-        this.setState({ ready });
-      }
-    });
-  }
-
-  componentDidMount() {
-    Object.entries(this.props.appState).forEach(syncAppState);
-  }
-
-  componentDidUpdate(prevProps) {
-    Object.entries(this.props.appState)
-      .filter(([key, value]) => !is(value, prevProps.appState[key]))
-      .forEach(syncAppState);
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  render() {
-    return (
-      this.state.ready && (
-        <Provider store={store} context={context}>
-          <CommonProvider>
-            <LocationProvider hashRouting history={connectedHistory}>
-              <ToastsContainer duration={5000} />
-              <ModalFormContainer />
-              <Router>
-                <App
-                  render={this.props.render}
-                  path={`${this.props.appState.location}/*`}
-                />
-              </Router>
-            </LocationProvider>
-          </CommonProvider>
-        </Provider>
-      )
-    );
-  }
-
-  static shouldSuppressSidebar = (pathname, kappSlug) =>
-    matchPath(pathname, { path: `/kapps/${kappSlug}`, exact: true });
-}

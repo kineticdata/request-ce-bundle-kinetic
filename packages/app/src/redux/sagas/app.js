@@ -1,22 +1,22 @@
 import { takeEvery, call, put, all, select } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
-import axios from 'axios';
 import {
-  bundle,
   fetchVersion,
   fetchProfile,
   fetchSpace,
   fetchKapps,
   fetchDefaultLocale,
+  fetchLocales,
+  fetchTimezones,
   importLocale,
 } from '@kineticdata/react';
 import semver from 'semver';
 import { enableSearchHistory, Utils } from 'common';
 
 import { actions, types } from '../modules/app';
+import { actions as alertsActions } from '../modules/alerts';
 
-const MINIMUM_CE_VERSION = '2.0.2';
-const MINIMUM_TRANSLATIONS_CE_VERSION = '2.3.0';
+const MINIMUM_CE_VERSION = '5.0.0';
 const SPACE_INCLUDES = ['details', 'attributes', 'attributesMap'];
 const KAPP_INCLUDES = ['details', 'attributes', 'attributesMap'];
 const PROFILE_INCLUDES = [
@@ -34,7 +34,8 @@ const PROFILE_INCLUDES = [
 
 // Fetch Entire App
 export function* fetchAppTask({ payload }) {
-  const { version } = yield call(fetchVersion);
+  const authenticated = yield select(state => state.app.authenticated);
+  const { version } = yield call(fetchVersion, { public: !authenticated });
   const initialLoad = payload;
   // Check to make sure the version is compatible with this bundle.
   if (
@@ -42,29 +43,24 @@ export function* fetchAppTask({ payload }) {
   ) {
     // Set data needed for initialization from server into redux
     yield all([
-      call(fetchSpaceTask),
-      call(fetchKappsTask),
-      call(fetchProfileTask),
-      call(fetchLocaleMetaTask),
+      call(fetchSpaceTask, authenticated),
+      call(fetchKappsTask, authenticated),
+      call(fetchProfileTask, authenticated),
+      call(fetchLocaleMetaTask, authenticated),
       put(actions.setCoreVersion(version.version)),
     ]);
 
     // Fetch data needed for initialization from redux
-    const {
-      currentRoute,
-      space,
-      profile,
-      kapps,
-      errors,
-      coreVersion,
-    } = yield select(state => ({
-      errors: state.app.errors,
-      currentRoute: state.router.location.pathname,
-      space: state.app.space,
-      profile: state.app.profile,
-      kapps: state.app.kapps,
-      coreVersion: state.app.coreVersion,
-    }));
+    const { currentRoute, space, profile, kapps, errors } = yield select(
+      state => ({
+        errors: state.app.errors,
+        currentRoute: state.router.location.pathname,
+        space: state.app.space,
+        profile: state.app.profile,
+        kapps: state.app.kapps,
+      }),
+    );
+
     // Make sure there were no errors fetching metadata
     if (errors.isEmpty()) {
       // Configure Search History for Kapps
@@ -83,13 +79,10 @@ export function* fetchAppTask({ payload }) {
       if (profile.preferredLocale) {
         importLocale(profile.preferredLocale);
         yield put(actions.setUserLocale(profile.preferredLocale));
-      } else if (
-        semver.satisfies(
-          semver.coerce(coreVersion),
-          `>=${MINIMUM_TRANSLATIONS_CE_VERSION}`,
-        )
-      ) {
-        const { defaultLocale } = yield call(fetchDefaultLocale);
+      } else {
+        const { defaultLocale } = yield call(fetchDefaultLocale, {
+          public: !authenticated,
+        });
         importLocale((defaultLocale && defaultLocale.code) || 'en');
         yield put(actions.setUserLocale(defaultLocale && defaultLocale.code));
       }
@@ -119,6 +112,9 @@ export function* fetchAppTask({ payload }) {
         }
       }
       yield put(actions.fetchAppSuccess());
+      if (authenticated) {
+        yield put(alertsActions.fetchAlertsRequest());
+      }
     }
   } else {
     window.alert(
@@ -130,9 +126,10 @@ export function* fetchAppTask({ payload }) {
 }
 
 // Fetch Kapps Task
-export function* fetchKappsTask() {
+export function* fetchKappsTask(authenticated) {
   const { kapps, error } = yield call(fetchKapps, {
     include: KAPP_INCLUDES.join(','),
+    public: !authenticated,
   });
   if (error) {
     yield put(actions.fetchKappsFailure(error));
@@ -142,9 +139,10 @@ export function* fetchKappsTask() {
 }
 
 // Fetch Space Task
-export function* fetchSpaceTask() {
+export function* fetchSpaceTask(authenticated) {
   const { space, error } = yield call(fetchSpace, {
     include: SPACE_INCLUDES.join(','),
+    public: !authenticated,
   });
   if (error) {
     yield put(actions.fetchSpaceFailure(error));
@@ -154,9 +152,10 @@ export function* fetchSpaceTask() {
 }
 
 // Fetch Profile Task
-export function* fetchProfileTask() {
+export function* fetchProfileTask(authenticated) {
   const { profile, error } = yield call(fetchProfile, {
     include: PROFILE_INCLUDES.join(','),
+    public: !authenticated,
   });
   if (error) {
     yield put(actions.fetchProfileFailure(error));
@@ -179,11 +178,14 @@ export function* fetchLocaleMetaTask() {
   );
 }
 
-// TODO: Move to react-kinetic-lib
-const fetchLocales = () => axios.get(`${bundle.apiLocation()}/meta/locales`);
-const fetchTimezones = () =>
-  axios.get(`${bundle.apiLocation()}/meta/timezones`);
+export function* setAuthenticatedTask() {
+  const { authenticated, authRedirect } = yield select(state => state.app);
+  if (authenticated && authRedirect) {
+    yield put(push(authRedirect));
+  }
+}
 
 export function* watchApp() {
   yield takeEvery(types.FETCH_APP_REQUEST, fetchAppTask);
+  yield takeEvery(types.SET_AUTHENTICATED, setAuthenticatedTask);
 }

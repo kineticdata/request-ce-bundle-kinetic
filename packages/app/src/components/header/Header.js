@@ -29,8 +29,9 @@ const BuildKappLink = ({ kapp, onClick, nameOverride = kapp.name }) => (
 );
 
 export const HeaderComponent = ({
-  hasSidebar,
   toggleSidebarOpen,
+  authenticated,
+  authRoute,
   isGuest,
   hasAccessToManagement,
   hasAccessToSupport,
@@ -41,7 +42,7 @@ export const HeaderComponent = ({
 }) => (
   <Navbar color="faded" light>
     <Nav className="nav-header">
-      {hasSidebar &&
+      {typeof toggleSidebarOpen === 'function' &&
         !isGuest && (
           <NavItem id="header-sidebar-toggle">
             <NavLink
@@ -55,7 +56,7 @@ export const HeaderComponent = ({
           </NavItem>
         )}
       <NavItem>
-        {!isGuest && (
+        {!isGuest ? (
           <Dropdown
             id="header-kapp-dropdown"
             isOpen={kappDropdownOpen}
@@ -99,11 +100,23 @@ export const HeaderComponent = ({
               </Link>
             </DropdownMenu>
           </Dropdown>
+        ) : (
+          <div id="header-kapp-dropdown">
+            <span className="nav-link nav-link--static">{menuLabel}</span>
+          </div>
         )}
       </NavItem>
       <div className="nav-item-right">
         {!isGuest && <AlertsDropdown />}
-        <ProfileDropdown />
+        {authenticated ? (
+          <ProfileDropdown />
+        ) : (
+          <NavItem>
+            <Link className="nav-link" to={authRoute} title="Sign In">
+              <i className="fa fa-fw fa-sign-in" />
+            </Link>
+          </NavItem>
+        )}
       </div>
     </Nav>
   </Navbar>
@@ -112,6 +125,8 @@ export const HeaderComponent = ({
 export const mapStateToProps = state => ({
   loading: state.app.loading,
   kapp: state.app.kapp,
+  authenticated: state.app.authenticated,
+  authRoute: state.app.authRoute,
   pathname: state.router.location.pathname,
   // Selectors
   visibleKapps: selectVisibleKapps(state),

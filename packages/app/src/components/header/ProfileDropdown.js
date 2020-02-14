@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, withState } from 'recompose';
 import { Avatar, openModalForm } from 'common';
 import { Link } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
-import { bundle } from '@kineticdata/react';
-import { I18n } from '@kineticdata/react';
+import { logout, I18n } from '@kineticdata/react';
 import * as selectors from '../../redux/selectors';
 
 const HELP_FORM_CONFIG = {
@@ -45,6 +45,7 @@ const ProfileDropdownComponent = ({
   isOpen,
   toggle,
   isGuest,
+  push,
 }) => (
   <Dropdown isOpen={isOpen} toggle={toggle}>
     <DropdownToggle
@@ -69,34 +70,19 @@ const ProfileDropdownComponent = ({
           <I18n>Profile</I18n>
         </Link>
         {profile.spaceAdmin && (
-          <a
-            role="button"
-            tabIndex="0"
-            onClick={openInviteOthersForm}
-            className="dropdown-item"
-          >
+          <button onClick={openInviteOthersForm} className="dropdown-item">
             <I18n>Invite Others</I18n>
-          </a>
+          </button>
         )}
         {!isGuest && (
-          <a
-            role="button"
-            tabIndex="0"
-            onClick={openHelpForm}
-            className="dropdown-item"
-          >
+          <button onClick={openHelpForm} className="dropdown-item">
             <I18n>Get Help</I18n>
-          </a>
+          </button>
         )}
         {!isGuest && (
-          <a
-            role="button"
-            tabIndex="0"
-            onClick={openFeedbackForm}
-            className="dropdown-item"
-          >
+          <button onClick={openFeedbackForm} className="dropdown-item">
             <I18n>Give Feedback</I18n>
-          </a>
+          </button>
         )}
         {!isGuest && (
           <Link to="/about" className="dropdown-item" onClick={toggle}>
@@ -104,13 +90,9 @@ const ProfileDropdownComponent = ({
           </Link>
         )}
         <div className="dropdown-divider" />
-        <a
-          onClick={() => localStorage.removeItem('token')}
-          href={`${bundle.spaceLocation()}/app/logout`}
-          className="dropdown-item"
-        >
+        <button onClick={logout} className="dropdown-item">
           <I18n>Logout</I18n>
-        </a>
+        </button>
       </div>
     </DropdownMenu>
   </Dropdown>
@@ -121,8 +103,13 @@ const mapStateToProps = state => ({
   isGuest: selectors.selectIsGuest(state),
 });
 
+const mapDispatchToProps = { push };
+
 export const ProfileDropdown = compose(
-  connect(mapStateToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withState('isOpen', 'setIsOpen', false),
   withHandlers({
     openHelpForm: props => () => {

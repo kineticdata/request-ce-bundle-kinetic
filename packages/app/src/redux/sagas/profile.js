@@ -19,7 +19,6 @@ const PROFILE_INCLUDES = [
 ].join(',');
 
 export function* fetchProfileRequestSaga({ payload }) {
-  console.log('fetch', payload);
   const { user, profile, error } = payload
     ? yield call(fetchUser, {
         include: PROFILE_INCLUDES,
