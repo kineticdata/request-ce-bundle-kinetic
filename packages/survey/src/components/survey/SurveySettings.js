@@ -31,6 +31,7 @@ const fieldSet = [
   'pollingSource',
   'pollingType',
   'pollingTrigger',
+  'pollingInterval',
   'expiration',
   'allowOptOut',
   'maxFrequencyCount',
@@ -69,6 +70,7 @@ const FormLayout = ({ fields, error, buttons }) => (
     {fields.get('pollingSource')}
     {fields.get('pollingType')}
     {fields.get('pollingTrigger')}
+    {fields.get('pollingInterval')}
     <br />
     <h2 className="section__title">
       <I18n>Delivery Rules</I18n>
@@ -287,6 +289,17 @@ const SurveySettingsComponent = ({
                               : '',
                           },
                           {
+                            name: 'pollingInterval',
+                            label: 'Polling Interval',
+                            type: 'text',
+                            visible: ({ values }) =>
+                              values.get('polling') === 'true',
+                            initialValue: surveyConfig
+                              ? surveyConfig['Event Polling']['Interval']
+                              : 1,
+                            component: FormComponents.IntegerField,
+                          },
+                          {
                             name: 'surveyStart',
                             label: 'Survey Start',
                             type: 'date',
@@ -417,6 +430,7 @@ const SurveySettingsComponent = ({
                               Source: values.get('pollingSource'),
                               Type: values.get('pollingType'),
                               Trigger: values.get('pollingTrigger'),
+                              Interval: values.get('pollingInterval'),
                             },
                             'Survey Period': {
                               Start: values.get('surveyStart'),
