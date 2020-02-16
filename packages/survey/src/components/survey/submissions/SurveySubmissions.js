@@ -1,10 +1,16 @@
 import React from 'react';
 import { Link } from '@reach/router';
-import { compose, lifecycle } from 'recompose';
+import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from '../../../redux/store';
 import { actions as formActions } from '../../../redux/modules/settingsForms';
 import { I18n, SubmissionTable } from '@kineticdata/react';
-import { TimeAgo } from 'common';
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
+import { TimeAgo, addToastAlert } from 'common';
 import { ExportModal } from '../export/ExportModal';
 import { PageTitle } from '../../shared/PageTitle';
 import { generateEmptyBodyRow } from 'common/src/components/tables/EmptyBodyRow';
@@ -25,11 +31,41 @@ const LinkCell = ({ row, value }) => (
   </td>
 );
 
+const ActionsCell = ({ openDropdown, toggleDropdown }) => ({ row }) => (
+  <td>
+    <Dropdown
+      toggle={toggleDropdown(row.get('id'))}
+      isOpen={openDropdown === row.get('id')}
+    >
+      <DropdownToggle color="link" className="btn-sm">
+        <span className="fa fa-ellipsis-h fa-2x" />
+      </DropdownToggle>
+      <DropdownMenu right>
+        <DropdownItem tag={Link} to={row.get('id')}>
+          <I18n>View</I18n>
+        </DropdownItem>
+        <DropdownItem
+          onClick={() =>
+            addToastAlert({
+              title: 'Failed to resend invitation.',
+              message: `Not implemented for ${row.get('id')}`,
+            })
+          }
+        >
+          <I18n>Resend Invitation</I18n>
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
+  </td>
+);
+
 export const FormDetailsComponent = ({
   tableKey,
   kapp,
   form,
   openModal,
+  openDropdown,
+  toggleDropdown,
   processing,
   deleteForm,
 }) => {
@@ -56,8 +92,25 @@ export const FormDetailsComponent = ({
           FilterLayout,
           TableLayout: SettingsTableLayout,
         }}
-        columnSet={['label', 'submittedBy', 'type', 'coreState', 'createdAt']}
-        addColumns={[]}
+        columnSet={[
+          'label',
+          'submittedBy',
+          'coreState',
+          'createdAt',
+          'updatedAt',
+          'actions',
+        ]}
+        addColumns={[
+          {
+            value: 'actions',
+            title: ' ',
+            sortable: false,
+            components: {
+              BodyCell: ActionsCell({ toggleDropdown, openDropdown }),
+            },
+            className: 'text-right',
+          },
+        ]}
         alterColumns={{
           label: {
             components: { BodyCell: LinkCell },
@@ -67,6 +120,15 @@ export const FormDetailsComponent = ({
           },
           createdAt: {
             title: 'Created',
+            filter: 'between',
+            initial: List(['', '']),
+            components: {
+              BodyCell: TimeAgoCell,
+              Filter: BetweenDateFilter,
+            },
+          },
+          updatedAt: {
+            title: 'Updated',
             filter: 'between',
             initial: List(['', '']),
             components: {
@@ -121,11 +183,6 @@ export const FormDetailsComponent = ({
                   >
                     <I18n>Export Records</I18n>
                   </button>
-                  {/* <SubmissionExportModalButton
-                    kappSlug={kapp.slug}
-                    formSlug={form.slug}
-                    title="Export Submissions"
-                  /> */}
                   <Link to="../settings" className="btn btn-primary">
                     <span className="fa fa-fw fa-cog" />
                     <I18n>Survey Settings</I18n>
@@ -204,6 +261,12 @@ const mapDispatchToProps = {
   openModal: formActions.openModal,
 };
 
+const toggleDropdown = ({
+  setOpenDropdown,
+  openDropdown,
+}) => dropdownSlug => () =>
+  setOpenDropdown(dropdownSlug === openDropdown ? '' : dropdownSlug);
+
 export const SurveySubmissions = compose(
   connect(
     mapStateToProps,
@@ -216,5 +279,9 @@ export const SurveySubmissions = compose(
         formSlug: this.props.slug,
       });
     },
+  }),
+  withState('openDropdown', 'setOpenDropdown', ''),
+  withHandlers({
+    toggleDropdown,
   }),
 )(FormDetailsComponent);

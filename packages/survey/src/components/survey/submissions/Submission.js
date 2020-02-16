@@ -16,7 +16,7 @@ export const SubmissionContainer = ({
 }) =>
   form && (
     <div className="page-container">
-      <PageTitle parts={['Services Settings']} />
+      <PageTitle parts={['Survey Submission']} />
       <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
@@ -31,7 +31,7 @@ export const SubmissionContainer = ({
               </Link>{' '}
               /{` `}
             </h3>
-            {submission && <h1>{submission.handle}</h1>}
+            <h1>{submission ? submission.handle : 'New Submission'}</h1>
           </div>
         </div>
         {submissionError ? (

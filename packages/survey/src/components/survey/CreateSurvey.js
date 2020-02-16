@@ -5,6 +5,7 @@ import { push } from 'redux-first-history';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { Survey } from '../../models';
 import { actions } from '../../redux/modules/settingsForms';
+import { actions as appActions } from '../../redux/modules/surveyApp';
 import { context } from '../../redux/store';
 import { PageTitle } from '../shared/PageTitle';
 import { I18n } from '@kineticdata/react';
@@ -52,10 +53,9 @@ const CreateSurveyComponent = ({
             <select
               id="template"
               className="form-control"
-              onChange={e => {
-                console.log('///////', JSON.stringify(e.target.value));
-                setNewForm(newForm.set('template', e.target.value));
-              }}
+              onChange={e =>
+                setNewForm(newForm.set('template', e.target.value))
+              }
               value={newForm.template}
               name="template"
             >
@@ -125,7 +125,7 @@ const CreateSurveyComponent = ({
               </Link>
               <button
                 disabled={
-                  newForm.template.slug === '' ||
+                  newForm.template === '' ||
                   newForm.name === '' ||
                   newForm.slug === '' ||
                   creating
@@ -147,8 +147,8 @@ const CreateSurveyComponent = ({
       </h3>
       <p>
         <I18n>
-          Creating a new Survey will create a new Kapp form from the Kapp's
-          survey template form.
+          Creating a new Survey will create a Kapp form with the same survey
+          configuration as the selected template.
         </I18n>
       </p>
     </div>
@@ -157,6 +157,7 @@ const CreateSurveyComponent = ({
 
 const handleSave = ({
   createForm,
+  fetchAppDataRequest,
   newForm,
   push,
   setCreating,
@@ -166,7 +167,10 @@ const handleSave = ({
   createForm({
     kappSlug: kapp.slug,
     form: newForm,
-    callback: () => push(`${newForm.slug}/settings`),
+    callback: () => {
+      fetchAppDataRequest();
+      push(`${newForm.slug}/settings`);
+    },
   });
 };
 
@@ -199,6 +203,7 @@ export const mapDispatchToProps = {
   push,
   createForm: actions.createFormRequest,
   fetchTemplates: actions.fetchSurveyTemplates,
+  fetchAppDataRequest: appActions.fetchAppDataRequest,
 };
 
 export const CreateSurvey = compose(

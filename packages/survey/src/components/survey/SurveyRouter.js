@@ -3,6 +3,7 @@ import { Router } from '@reach/router';
 import { connect } from 'react-redux';
 import { LoadingMessage } from 'common';
 import { Submission } from './submissions/Submission';
+import { Survey } from './Survey';
 import { SurveySubmissions } from './submissions/SurveySubmissions';
 import { SurveySettings } from './SurveySettings';
 import { CreateSurvey } from './CreateSurvey';
@@ -19,6 +20,7 @@ export const SurveyRouterComponent = ({ match, loading }) =>
   !loading ? (
     <Router>
       <CreateSurvey path="new" />
+      <Survey path="forms/:slug" />
       <SurveyError path="error" />
       <SurveySubmissions path=":slug/submissions" />
       <SurveySettings path=":slug/settings" />

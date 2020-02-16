@@ -16,7 +16,7 @@ import { I18n } from '@kineticdata/react';
 const globals = import('common/globals');
 
 export const SurveyComponent = ({
-  formSlug,
+  slug,
   id,
   form,
   relativeHomePath,
@@ -40,7 +40,7 @@ export const SurveyComponent = ({
           </h3>
           {form && (
             <h1>
-              <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+              <I18n context={`kapps.${kappSlug}.forms.${slug}`}>
                 {form.name}
               </I18n>
             </h1>
@@ -51,13 +51,13 @@ export const SurveyComponent = ({
         {form &&
           form.description && (
             <p>
-              <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+              <I18n context={`kapps.${kappSlug}.forms.${slug}`}>
                 {form.description}
               </I18n>
             </p>
           )}
       </div>
-      <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+      <I18n context={`kapps.${kappSlug}.forms.${slug}`}>
         <div className="embedded-core-form--wrapper">
           {id ? (
             <CoreForm
@@ -69,7 +69,7 @@ export const SurveyComponent = ({
           ) : (
             <CoreForm
               kapp={kappSlug}
-              form={formSlug}
+              form={slug}
               globals={globals}
               loaded={handleLoaded}
               created={handleCreated}
@@ -120,7 +120,7 @@ export const mapStateToProps = state => ({
 const enhance = compose(
   connect(mapStateToProps),
   withProps(props => ({
-    form: props.forms.find(form => form.slug === props.formSlug),
+    form: props.forms.find(form => form.slug === props.slug),
     relativeHomePath: `../../${props.id ? '../../' : ''}`,
   })),
   withHandlers({ handleCompleted, handleCreated }),
