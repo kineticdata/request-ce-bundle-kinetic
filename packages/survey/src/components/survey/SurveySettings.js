@@ -161,7 +161,7 @@ const SurveySettingsComponent = ({
                 </h1>
               </div>
               <a
-                href={`${bundle.spaceLocation()}/app/builder/#/forms/${
+                href={`${bundle.spaceLocation()}/app/builder/#/${kappSlug}/forms/${
                   origForm.slug
                 }/builder`}
                 className="btn btn-primary"

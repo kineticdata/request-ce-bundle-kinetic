@@ -25,13 +25,12 @@ export const SubmissionContainer = ({
                 <I18n>{kapp.name}</I18n>
               </Link>{' '}
               /{` `}
-              <I18n>{form.name}</I18n> /{` `}
               <Link to="../">
-                <I18n>Submissions</I18n>
+                <I18n>{form.name}</I18n>
               </Link>{' '}
               /{` `}
             </h3>
-            <h1>{submission ? submission.handle : 'New Submission'}</h1>
+            <h1>{submission ? submission.id : 'New Submission'}</h1>
           </div>
         </div>
         {submissionError ? (

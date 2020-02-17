@@ -168,11 +168,10 @@ export const FormDetailsComponent = ({
                     <Link to="../../">
                       <I18n>{kapp.name}</I18n>
                     </Link>{' '}
-                    /{` `}
-                    <I18n>{form.name}</I18n> /{` `}
+                    /
                   </h3>
                   <h1>
-                    <I18n>Submissions</I18n>
+                    <I18n>{form.name}</I18n>
                   </h1>
                 </div>
                 <div className="page-title__actions">
