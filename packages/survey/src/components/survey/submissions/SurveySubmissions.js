@@ -180,11 +180,12 @@ export const FormDetailsComponent = ({
                     value="export"
                     className="btn btn-secondary pull-left"
                   >
-                    <I18n>Export Records</I18n>
+                    <span className="fa fa-fw fa-download" />
+                    <I18n> Export Records</I18n>
                   </button>
                   <Link to="../settings" className="btn btn-primary">
                     <span className="fa fa-fw fa-cog" />
-                    <I18n>Survey Settings</I18n>
+                    <I18n> Survey Settings</I18n>
                   </Link>
                 </div>
               </div>

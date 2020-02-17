@@ -111,8 +111,6 @@ const SurveySettingsComponent = ({
   snippets,
   robots,
 }) => {
-  console.log('templates:', templates);
-
   const notificationOptions =
     !!templates &&
     !!snippets &&
@@ -128,8 +126,6 @@ const SurveySettingsComponent = ({
         })),
       )
       .concat([{ value: 'Survey Invitation', label: 'Survey Invitation' }]); // placeholder
-
-  console.log('robots:', robots);
 
   const robotOptions =
     !!robots &&

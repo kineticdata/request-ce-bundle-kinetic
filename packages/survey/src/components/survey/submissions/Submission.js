@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
-import moment from 'moment';
 import { Link } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
-import { ErrorMessage, LoadingMessage, TimeAgo } from 'common';
+import { ErrorMessage, LoadingMessage, TimeAgo, addToastAlert } from 'common';
 import { actions } from '../../../redux/modules/surveys';
 import { connect } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
@@ -30,7 +29,22 @@ export const SubmissionContainer = ({
               </Link>{' '}
               /{` `}
             </h3>
-            <h1>{submission ? submission.id : 'New Submission'}</h1>
+            <h1>{submission ? submission.label : 'New Submission'}</h1>
+          </div>
+          <div className="page-title__actions">
+            <button
+              onClick={() =>
+                addToastAlert({
+                  title: 'Failed to resend invitation.',
+                  message: `Not implemented for ${submission.id}`,
+                })
+              }
+              value="export"
+              className="btn btn-primary pull-right"
+            >
+              <span className="fa fa-fw fa-envelope" />
+              <I18n> Resend Invitation</I18n>
+            </button>
           </div>
         </div>
         {submissionError ? (
@@ -41,31 +55,12 @@ export const SubmissionContainer = ({
           <div>
             <div className="data-list data-list--fourths">
               <dl>
-                <dt>Submission Label</dt>
-                <dd>{submission.label}</dd>
-              </dl>
-              <dl>
                 <dt>Submission Id</dt>
                 <dd>{submission.id}</dd>
               </dl>
               <dl>
-                <dt>Core State</dt>
+                <dt>Status</dt>
                 <dd>{submission.coreState}</dd>
-              </dl>
-              <dl>
-                <dt>Time to Close</dt>
-                <dd>
-                  {submission.closedAt ? (
-                    moment
-                      .duration(
-                        moment(submission.submittedAt).valueOf() -
-                          moment(submission.closedAt).valueOf(),
-                      )
-                      .humanize()
-                  ) : (
-                    <I18n>Not closed yet</I18n>
-                  )}
-                </dd>
               </dl>
               <dl>
                 <dt>Created</dt>
@@ -93,85 +88,8 @@ export const SubmissionContainer = ({
                   )}
                 </dd>
               </dl>
-              <dl>
-                <dt>Updated</dt>
-                <dd>
-                  <TimeAgo timestamp={submission.updatedAt} />
-                  <br />
-                  <small>
-                    <I18n>by</I18n> {submission.updatedBy}
-                  </small>
-                </dd>
-              </dl>
-              <dl>
-                <dt>Closed</dt>
-                <dd>
-                  {submission.closedAt ? (
-                    <Fragment>
-                      <TimeAgo timestamp={submission.closedAt} />
-                      <br />
-                      <small>
-                        <I18n>by</I18n> {submission.closedBy}
-                      </small>
-                    </Fragment>
-                  ) : (
-                    <I18n>N/A</I18n>
-                  )}
-                </dd>
-              </dl>
             </div>
-            <h3 className="section__title">
-              <I18n>Fulfillment Process</I18n>
-            </h3>
-            <div className="section__content scroll-wrapper-h">
-              {submission.activities.filter(
-                activity => activity.type === 'Task',
-              ).length > 0 ? (
-                <table className="table table-sm table-striped table--settings">
-                  <thead className="header">
-                    <tr>
-                      <th scope="col">
-                        <I18n>Type</I18n>
-                      </th>
-                      <th scope="col">
-                        <I18n>Label</I18n>
-                      </th>
-                      <th scope="col">
-                        <I18n>Description</I18n>
-                      </th>
-                      <th scope="col">
-                        <I18n>Data</I18n>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {submission.activities
-                      .filter(activity => activity.type === 'Task')
-                      .map((activity, index) => {
-                        const data = activity.data
-                          ? JSON.parse(activity.data)
-                          : {};
-                        return (
-                          <tr key={`task-activity-${index}`}>
-                            <td>{activity.type}</td>
-                            <td>{activity.label}</td>
-                            <td>{activity.description}</td>
-                            <td>
-                              {Object.keys(data).map(key => (
-                                <div key={key}>
-                                  {key}: {data[key]}
-                                </div>
-                              ))}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
-              ) : (
-                <I18n>There are no fulfillment steps</I18n>
-              )}
-            </div>
+
             <h3 className="section__title">
               <I18n>Submission Activity</I18n>
             </h3>

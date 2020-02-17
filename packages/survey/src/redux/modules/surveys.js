@@ -206,7 +206,6 @@ export const State = Record({
   exportCount: 0,
   downloaded: false,
   fetchingAll: false,
-
   processing: Map(),
   form: null,
   error: null,
