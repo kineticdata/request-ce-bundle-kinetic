@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { searchSubmissions, SubmissionSearch } from '@kineticdata/react';
 import { actions as systemErrorActions } from '../modules/errors';
-import { actions, types, ROBOT_FORM_SLUG } from '../modules/settingsRobots';
+import { actions, types, ROBOT_FORM_SLUG } from '../modules/robots';
 
 export function* fetchRobotsSaga(action) {
   const query = new SubmissionSearch(true);

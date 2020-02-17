@@ -8,7 +8,7 @@ import { PageTitle } from '../shared/PageTitle';
 import { I18n, FormForm } from '@kineticdata/react';
 import { actions as formActions } from '../../redux/modules/settingsForms';
 import { actions as notificationsActions } from '../../redux/modules/notifications';
-import { actions as robotsActions } from '../../redux/modules/settingsRobots';
+import { actions as robotsActions } from '../../redux/modules/robots';
 import { context } from '../../redux/store';
 
 const asArray = value => (value ? [JSON.stringify(value)] : []);
@@ -500,7 +500,7 @@ export const mapStateToProps = (state, { slug }) => ({
   taskSourceName: Utils.getAttributeValue(state.app.space, 'Task Source Name'),
   templates: state.notifications.notificationTemplates,
   snippets: state.notifications.notificationSnippets,
-  robots: state.settingsRobots.robots.toJS(),
+  robots: state.robots.robots.toJS(),
 });
 
 export const mapDispatchToProps = {
