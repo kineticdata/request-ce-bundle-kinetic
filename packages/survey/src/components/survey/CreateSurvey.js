@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { push } from 'redux-first-history';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { Survey } from '../../models';
-import { actions } from '../../redux/modules/settingsForms';
+import { actions } from '../../redux/modules/surveys';
 import { actions as appActions } from '../../redux/modules/surveyApp';
 import { context } from '../../redux/store';
 import { PageTitle } from '../shared/PageTitle';
@@ -196,7 +196,7 @@ export const mapStateToProps = state => ({
   kapp: state.app.kapp,
   kappSlug: state.app.kappSlug,
   spaceAdmin: state.app.profile.spaceAdmin,
-  templates: state.settingsForms.templates,
+  templates: state.surveys.templates,
 });
 
 export const mapDispatchToProps = {

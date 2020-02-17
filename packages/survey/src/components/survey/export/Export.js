@@ -3,7 +3,7 @@ import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import downloadjs from 'downloadjs';
 import { connect } from 'react-redux';
 import papaparse from 'papaparse';
-import { actions } from '../../../redux/modules/settingsForms';
+import { actions } from '../../../redux/modules/surveys';
 import { context } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 
@@ -126,9 +126,9 @@ const handleDownload = props => () => {
 
 const mapStateToProps = state => ({
   kappSlug: state.app.kappSlug,
-  form: state.settingsForms.form,
-  submissions: state.settingsForms.exportSubmissions,
-  submissionsCount: state.settingsForms.exportCount,
+  form: state.surveys.form,
+  submissions: state.surveys.exportSubmissions,
+  submissionsCount: state.surveys.exportCount,
 });
 
 const mapDispatchToProps = {

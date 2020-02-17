@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from '@reach/router';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from '../../../redux/store';
-import { actions as formActions } from '../../../redux/modules/settingsForms';
+import { actions as formActions } from '../../../redux/modules/surveys';
 import { I18n, SubmissionTable } from '@kineticdata/react';
 import {
   Dropdown,
@@ -251,8 +251,8 @@ export const FormDetailsComponent = ({
 
 const mapStateToProps = state => ({
   kapp: state.app.kapp,
-  form: state.settingsForms.form,
-  error: state.settingsForms.error,
+  form: state.surveys.form,
+  error: state.surveys.error,
 });
 
 const mapDispatchToProps = {

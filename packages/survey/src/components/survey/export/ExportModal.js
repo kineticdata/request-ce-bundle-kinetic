@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import { connect } from 'react-redux';
-import { actions } from '../../../redux/modules/settingsForms';
+import { actions } from '../../../redux/modules/surveys';
 import { context } from '../../../redux/store';
 import { Export } from './Export';
 import { I18n } from '@kineticdata/react';
@@ -27,8 +27,8 @@ const ExportModalComponent = ({ modalIsOpen, closeModal, modalName }) => (
 );
 
 const mapStateToProps = state => ({
-  modalIsOpen: state.settingsForms.modalIsOpen,
-  modalName: state.settingsForms.modalName,
+  modalIsOpen: state.surveys.modalIsOpen,
+  modalName: state.surveys.modalName,
 });
 
 const mapDispatchToProps = {

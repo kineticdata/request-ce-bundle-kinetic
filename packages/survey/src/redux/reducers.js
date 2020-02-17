@@ -2,7 +2,7 @@ import appReducer from './modules/app';
 import errorsReducer from './modules/errors';
 import notificationsReducer from './modules/notifications';
 import robotsReducer from './modules/robots';
-import settingsFormsReducer from './modules/settingsForms';
+import surveysReducer from './modules/surveys';
 import surveyAppReducer from './modules/surveyApp';
 
 export default {
@@ -10,6 +10,6 @@ export default {
   errors: errorsReducer,
   notifications: notificationsReducer,
   robots: robotsReducer,
-  settingsForms: settingsFormsReducer,
+  surveys: surveysReducer,
   surveyApp: surveyAppReducer,
 };

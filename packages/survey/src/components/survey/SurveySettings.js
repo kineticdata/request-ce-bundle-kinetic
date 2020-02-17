@@ -6,7 +6,7 @@ import { bundle } from '@kineticdata/react';
 import { FormComponents, LoadingMessage, Utils } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { I18n, FormForm } from '@kineticdata/react';
-import { actions as formActions } from '../../redux/modules/settingsForms';
+import { actions as formActions } from '../../redux/modules/surveys';
 import { actions as notificationsActions } from '../../redux/modules/notifications';
 import { actions as robotsActions } from '../../redux/modules/robots';
 import { context } from '../../redux/store';
@@ -491,9 +491,8 @@ const SurveySettingsComponent = ({
 };
 
 export const mapStateToProps = (state, { slug }) => ({
-  loading:
-    state.settingsForms.currentFormLoading || state.notifications.loading,
-  origForm: state.settingsForms.form,
+  loading: state.surveys.currentFormLoading || state.notifications.loading,
+  origForm: state.surveys.form,
   kapp: state.app.kapp,
   kappSlug: state.app.kappSlug,
   formSlug: slug,

@@ -2,12 +2,12 @@ import { List, Map, Record } from 'immutable';
 import { Utils } from 'common';
 import isobject from 'isobject';
 const { namespace, noPayload, withPayload } = Utils;
-const ns = Utils.namespaceBuilder('survey/settingsForms');
+const ns = Utils.namespaceBuilder('survey/surveys');
 
 export const FORMS_INCLUDES = 'details,attributes';
 export const FORM_INCLUDES = 'details,fields,attributesMap,categorizations';
 export const FORM_FULL_INCLUDES =
-  'details,fields,bridgedResources,customHeadContent,pages,securityPolicies,attributesMap,categorizations';
+  'details,fields,customHeadContent,pages,securityPolicies,attributesMap,categorizations';
 export const SUBMISSION_INCLUDES =
   'details,values,form,form.kapp,form.fields,activities,activities.details';
 
@@ -119,15 +119,15 @@ export const buildFormConfigurationObject = form => {
 };
 
 export const types = {
-  FETCH_FORM_SUBMISSIONS: namespace('settingsForms', 'FETCH_FORM_SUBMISSIONS'),
-  SET_FORM_SUBMISSIONS: namespace('settingsForms', 'SET_FORM_SUBMISSIONS'),
-  FETCH_ALL_SUBMISSIONS: namespace('settingsForms', 'FETCH_ALL_SUBMISSIONS'),
-  SET_EXPORT_SUBMISSIONS: namespace('settingsForms', 'SET_EXPORT_SUBMISSIONS'),
-  SET_EXPORT_COUNT: namespace('settingsForms', 'SET_EXPORT_COUNT'),
-  OPEN_MODAL: namespace('settingsForms', 'OPEN_MODAL'),
-  CLOSE_MODAL: namespace('settingsForms', 'CLOSE_MODAL'),
-  SET_DOWNLOADED: namespace('settingsForms', 'SET_DOWNLOADED'),
-  SET_CLIENT_SORT_INFO: namespace('settingsForms', 'SET_CLIENT_SORT_INFO'),
+  FETCH_FORM_SUBMISSIONS: namespace('surveys', 'FETCH_FORM_SUBMISSIONS'),
+  SET_FORM_SUBMISSIONS: namespace('surveys', 'SET_FORM_SUBMISSIONS'),
+  FETCH_ALL_SUBMISSIONS: namespace('surveys', 'FETCH_ALL_SUBMISSIONS'),
+  SET_EXPORT_SUBMISSIONS: namespace('surveys', 'SET_EXPORT_SUBMISSIONS'),
+  SET_EXPORT_COUNT: namespace('surveys', 'SET_EXPORT_COUNT'),
+  OPEN_MODAL: namespace('surveys', 'OPEN_MODAL'),
+  CLOSE_MODAL: namespace('surveys', 'CLOSE_MODAL'),
+  SET_DOWNLOADED: namespace('surveys', 'SET_DOWNLOADED'),
+  SET_CLIENT_SORT_INFO: namespace('surveys', 'SET_CLIENT_SORT_INFO'),
 
   FETCH_FORM_REQUEST: ns('FETCH_FORM_REQUEST'),
   FETCH_FORM_SUCCESS: ns('FETCH_FORM_SUCCESS'),

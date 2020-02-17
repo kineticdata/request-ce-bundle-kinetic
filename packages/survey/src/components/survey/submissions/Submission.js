@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Link } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
 import { ErrorMessage, LoadingMessage, TimeAgo } from 'common';
-import { actions } from '../../../redux/modules/settingsForms';
+import { actions } from '../../../redux/modules/surveys';
 import { connect } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 import { PageTitle } from '../../shared/PageTitle';
@@ -259,9 +259,9 @@ export const SubmissionContainer = ({
 
 const mapStateToProps = state => ({
   kapp: state.app.kapp,
-  form: state.settingsForms.form,
-  submission: state.settingsForms.submission,
-  submissionError: state.settingsForms.submissionError,
+  form: state.surveys.form,
+  submission: state.surveys.submission,
+  submissionError: state.surveys.submissionError,
 });
 
 const mapDispatchToProps = {

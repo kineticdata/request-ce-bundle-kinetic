@@ -16,7 +16,7 @@ import {
   FORM_INCLUDES,
   FORM_FULL_INCLUDES,
   SUBMISSION_INCLUDES,
-} from '../modules/settingsForms';
+} from '../modules/surveys';
 import {
   DEFAULT_SURVEY_TYPE,
   DEFAULT_TEMPLATE_INCLUDES,
@@ -244,7 +244,7 @@ export function* deleteFormSaga({ payload }) {
   }
 }
 
-export function* watchSettingsForms() {
+export function* watchSurveys() {
   yield takeEvery(types.FETCH_FORM_REQUEST, fetchFormSaga);
   yield takeEvery(types.DELETE_FORM_REQUEST, deleteFormSaga);
   yield takeEvery(types.CLONE_FORM_REQUEST, cloneFormSaga);
