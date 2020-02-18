@@ -10,6 +10,7 @@ import { actions as formActions } from '../../redux/modules/surveys';
 import { actions as notificationsActions } from '../../redux/modules/notifications';
 import { actions as robotsActions } from '../../redux/modules/robots';
 import { context } from '../../redux/store';
+import { SurveySettingsWebApiView } from './SurveySettingsWebApiView';
 
 const asArray = value => (value ? [JSON.stringify(value)] : []);
 
@@ -43,7 +44,7 @@ const fieldSet = [
   'submitter',
 ];
 
-const FormLayout = ({ fields, error, buttons }) => (
+const FormLayout = ({ fields, error, buttons, kappSlug }) => (
   <Fragment>
     <h2 className="section__title">
       <I18n>General Settings</I18n>
@@ -71,6 +72,7 @@ const FormLayout = ({ fields, error, buttons }) => (
     {fields.get('pollingType')}
     {fields.get('pollingTrigger')}
     {fields.get('pollingInterval')}
+    {/* <SurveySettingsWebApiView fields={fields} kappSlug={kappSlug} /> */}
     <br />
     <h2 className="section__title">
       <I18n>Delivery Rules</I18n>

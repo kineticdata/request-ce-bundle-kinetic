@@ -23,8 +23,6 @@ import { CoreStateBadgeCell } from 'common/src/components/tables/CoreStateBadgeC
 import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
 import { List } from 'immutable';
 
-// TODO Replace old details page with this one when SubmissionsTable from RKL is ready to be used
-
 const LinkCell = ({ row, value }) => (
   <td>
     <Link to={`${row.get('id')}`}>{value}</Link>
@@ -97,7 +95,7 @@ export const FormDetailsComponent = ({
           'submittedBy',
           'coreState',
           'createdAt',
-          'updatedAt',
+          'submittedAt',
           'actions',
         ]}
         addColumns={[
@@ -127,8 +125,8 @@ export const FormDetailsComponent = ({
               Filter: BetweenDateFilter,
             },
           },
-          updatedAt: {
-            title: 'Updated',
+          submittedAt: {
+            title: 'Submitted',
             filter: 'between',
             initial: List(['', '']),
             components: {
