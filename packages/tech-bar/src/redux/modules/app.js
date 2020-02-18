@@ -11,8 +11,8 @@ export const reducer = (state = {}, action) => {
   }
   if (
     newState.space &&
-    newState.profile &&
-    newState.kappSlug &&
+    newState.kapp &&
+    (newState.profile || newState.authenticated === false) &&
     newState.layoutSize
   ) {
     newState.ready = true;

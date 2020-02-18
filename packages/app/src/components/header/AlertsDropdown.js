@@ -29,9 +29,9 @@ const AlertsDropdownComponent = ({
           <I18n>Alerts</I18n>
         </span>
         <div className="actions">
-          <a role="button" tabIndex="0" onClick={fetchAlertsRequest}>
+          <button className="btn btn-link" onClick={fetchAlertsRequest}>
             <I18n>Refresh</I18n>
-          </a>
+          </button>
           <span className="divider">&bull;</span>
           <Link to="/alerts" onClick={toggle}>
             <I18n>View All</I18n>

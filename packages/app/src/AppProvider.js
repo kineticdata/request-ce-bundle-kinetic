@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import {
   CommonProvider,
-  ErrorNotFound,
   ErrorUnexpected,
   Loading,
   ModalFormContainer,
   ToastsContainer,
 } from 'common';
+import { parse } from 'query-string';
 import { I18n } from '@kineticdata/react';
 
 import { Home } from './components/Home';
@@ -19,6 +19,7 @@ import { TeamsNavigation } from './components/Teams';
 import { About } from './components/About';
 import { Alerts } from './components/alerts/Alerts';
 import { Alert } from './components/alerts/Alert';
+import SettingsApp from 'settings';
 
 const AppComponent = props => {
   if (props.errors.size > 0) {
@@ -31,7 +32,6 @@ const AppComponent = props => {
         <I18n>
           <main className={`package-layout package-layout--app`}>
             <Switch>
-              <Route exact path="/" component={Home} />
               <Route exact path="/kapps/:kappSlug" component={Home} />
               <Route
                 exact
@@ -49,7 +49,11 @@ const AppComponent = props => {
               <Route exact path="/about" component={About} />
               <Route exact path="/alerts/:id" component={Alert} />
               <Route exact path="/alerts" component={Alerts} />
-              <Route component={ErrorNotFound} />
+              <Redirect
+                path="/datastore/forms/:formSlug"
+                to={`${SettingsApp.location}/datastore/:formSlug/new`}
+              />
+              <Route default component={Home} />
             </Switch>
           </main>
         </I18n>
@@ -58,14 +62,43 @@ const AppComponent = props => {
   }
 };
 
+const PublicAppComponent = props => {
+  return props.render({
+    main: (
+      <I18n>
+        <main className={`package-layout package-layout--app`}>
+          <Switch>
+            {props.kapp && (
+              <Route
+                exact
+                path="/kapps/:kappSlug/forms/:formSlug"
+                component={Form}
+              />
+            )}
+            {props.kapp && (
+              <Route
+                exact
+                path="/kapps/:kappSlug/forms/:formSlug/submissions/:id"
+                component={Form}
+              />
+            )}
+            <Redirect path="/" to={props.authRoute} />
+          </Switch>
+        </main>
+      </I18n>
+    ),
+  });
+};
+
 const mapStateToProps = (state, props) => ({
   loading: state.app.loading,
   errors: state.app.errors,
-  kapp: state.app.kapp,
-  pathname: state.router.location.pathname,
+  authRoute: state.app.authRoute,
+  location: state.router.location,
 });
 
 export const App = connect(mapStateToProps)(AppComponent);
+export const PublicApp = connect(mapStateToProps)(PublicAppComponent);
 
 export class AppProvider extends Component {
   render() {
@@ -73,10 +106,17 @@ export class AppProvider extends Component {
       <CommonProvider>
         <ToastsContainer duration={5000} />
         <ModalFormContainer />
-        <App
-          render={this.props.render}
-          path={`${this.props.appState.location}/*`}
-        />
+        {this.props.appState.authenticated ? (
+          <App
+            render={this.props.render}
+            path={`${this.props.appState.location}/*`}
+          />
+        ) : (
+          <PublicApp
+            render={this.props.render}
+            path={`${this.props.appState.location}/*`}
+          />
+        )}
       </CommonProvider>
     );
   }
@@ -84,4 +124,9 @@ export class AppProvider extends Component {
   // Used for matching pathname to display this App
   // Not used if package is set as Bundle Package of a Kapp
   static location = '/';
+
+  static hasPublicRoutes = true;
+
+  static shouldHideHeader = ({ location }) =>
+    parse(location.search).public !== undefined;
 }

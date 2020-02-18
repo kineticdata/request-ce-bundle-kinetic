@@ -4,7 +4,6 @@ import { Avatar } from './components/Avatar';
 import { ProfileCard } from './components/ProfileCard';
 import { ModalFormContainer } from './components/ModalFormContainer';
 import { TimeAgo } from './components/TimeAgo';
-import { importLocale } from './components/Moment';
 import { Icon } from './components/Icon';
 import { Loading } from './components/Loading';
 import { PageTitle } from './components/PageTitle';
@@ -64,7 +63,6 @@ export {
   addToastAlert,
   removeToastAlert,
   openConfirm,
-  closeConfirm,
 } from './redux/modules/toasts';
 
 // Common Components
@@ -103,7 +101,6 @@ export {
   ProfileCard,
   ModalFormContainer,
   TimeAgo,
-  importLocale,
   Icon,
   Loading,
   PageTitle,

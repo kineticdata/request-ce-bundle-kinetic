@@ -21,11 +21,13 @@ export const Form = ({
   handleCompleted,
   handleLoaded,
   handleDelete,
+  handleUnauthorized,
   values,
   kappSlug,
   formSlug,
   path,
   appLocation,
+  authenticated,
 }) => (
   <Fragment>
     <PageTitle parts={[form ? form.name : '']} />
@@ -83,7 +85,8 @@ export const Form = ({
               </h1>
             )}
           </div>
-          {submissionId &&
+          {authenticated &&
+            submissionId &&
             form && (
               <button
                 type="button"
@@ -105,16 +108,21 @@ export const Form = ({
         </div>
         <div className="embedded-core-form--wrapper">
           {submissionId ? (
-            <I18n submissionId={submissionId}>
+            <I18n submissionId={submissionId} public={!authenticated}>
               <CoreForm
                 submission={submissionId}
                 globals={globals}
                 loaded={handleLoaded}
                 completed={handleCompleted}
+                unauthorized={handleUnauthorized}
+                public={!authenticated}
               />
             </I18n>
           ) : (
-            <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+            <I18n
+              context={`kapps.${kappSlug}.forms.${formSlug}`}
+              public={!authenticated}
+            >
               <CoreForm
                 kapp={kappSlug}
                 form={formSlug}
@@ -122,10 +130,12 @@ export const Form = ({
                 loaded={handleLoaded}
                 created={handleCreated}
                 completed={handleCompleted}
+                unauthorized={handleUnauthorized}
                 values={values}
                 notFoundComponent={ErrorNotFound}
                 unauthorizedComponent={ErrorUnauthorized}
                 unexpectedErrorComponent={ErrorUnexpected}
+                public={!authenticated}
               />
             </I18n>
           )}

@@ -67,9 +67,6 @@ const UsersListComponent = ({
               id="file-input"
               style={{ display: 'none' }}
               onChange={handleChange}
-              ref={element => {
-                this.fileEl = element;
-              }}
             />
             <label
               htmlFor="file-input"
@@ -148,14 +145,15 @@ const createCSV = users => {
   return csv;
 };
 
-const handleChange = props => () => {
-  const file = this.fileEl.files[0];
+const handleChange = props => e => {
+  const file = e.target.files[0];
   const extention = file.name.split('.')[file.name.split('.').length - 1];
-
+  console.log(file, extention);
   if (file && extention === 'csv') {
     const reader = new FileReader();
-    reader.readAsText(this.fileEl.files[0]);
+    reader.readAsText(file);
     reader.onload = event => {
+      console.log(event.target.result);
       papaparse.parse(event.target.result, {
         header: true,
         dynamicTyping: true,

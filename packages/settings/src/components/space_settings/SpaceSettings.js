@@ -2,6 +2,8 @@ import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 import { I18n, SpaceForm } from '@kineticdata/react';
 import { compose, withHandlers } from 'recompose';
+import axios from 'axios';
+import semver from 'semver';
 import { connect } from '../../redux/store';
 import {
   FormComponents,
@@ -12,8 +14,9 @@ import {
   selectServicesKappSlug,
 } from 'common';
 import { PageTitle } from '../shared/PageTitle';
-
-const fieldSet = [
+import { List } from 'immutable';
+window.semver = semver;
+const buildFieldSet = bundleName => [
   'name',
   'defaultLocale',
   'defaultTimezone',
@@ -27,9 +30,10 @@ const fieldSet = [
   'suggestAServiceFormSlug',
   'defaultTaskFormSlug',
   'attributesMap',
+  ...(bundleName ? ['displayValue', 'displayValueSPA'] : []),
 ];
 
-const Layout = ({ fields, error, buttons }) => (
+const buildLayout = bundleName => ({ fields, error, buttons }) => (
   <Fragment>
     <h2 className="section__title">
       <I18n>Display Options</I18n>
@@ -40,6 +44,7 @@ const Layout = ({ fields, error, buttons }) => (
       {fields.get('defaultTimezone')}
     </div>
     {fields.get('defaultKappDisplay')}
+    {bundleName && fields.get('displayValueSPA')}
     <br />
     <h2 className="section__title">
       <I18n>Workflow Options</I18n>
@@ -61,6 +66,72 @@ const Layout = ({ fields, error, buttons }) => (
   </Fragment>
 );
 
+// Add data sources for fetching available bundle versions from S3
+const buildAdditionalDataSources = bundleName =>
+  bundleName
+    ? {
+        releases: {
+          fn: fetchBundleVersions,
+          params: [
+            {
+              name: bundleName,
+            },
+          ],
+          // Filter out any v2 or lower version bundles as they don't support this feature
+          transform: response => response.filter(r => r.major > 2),
+        },
+        branches: {
+          fn: fetchBundleVersions,
+          params: [
+            {
+              name: bundleName,
+              branches: true,
+            },
+          ],
+        },
+      }
+    : {};
+
+const fetchBundleVersions = (options = {}) => {
+  return axios
+    .get(
+      `https://kinops.io.s3.amazonaws.com/?list-type=2&prefix=bundles/${options.name ||
+        'kinetic'}/${options.branches ? 'branches' : 'releases'}/&delimiter=/`,
+    )
+    .then(response => {
+      const doc = new DOMParser().parseFromString(
+        response.data,
+        'application/xml',
+      );
+      return Array.from(
+        doc.getElementsByTagName('CommonPrefixes'),
+        prefix => prefix.textContent,
+      )
+        .map(path => {
+          const match = path.match(/bundles\/[^/]*\/[^/]*\/([^/]*)\/?/);
+          if (match && (!options.branches || match[1] === 'develop')) {
+            const version =
+              match[1] !== 'develop' ? semver.coerce(match[1]) : null;
+            return {
+              label: options.branches
+                ? 'Development Branch'
+                : `Release - v${match[1]}`,
+              value: `https://s3.amazonaws.com/kinops.io/bundles/${options.name ||
+                'kinetic'}/${options.branches ? 'branches' : 'releases'}/${
+                match[1]
+              }`,
+              major: version && version.major,
+            };
+          }
+          return null;
+        })
+        .filter(o => o);
+    })
+    .catch(e => {
+      return [];
+    });
+};
+
 const initialFormValue = (object, attributeName) =>
   object.hasIn(['attributesMap', attributeName, 0])
     ? { slug: object.getIn(['attributesMap', attributeName, 0]) }
@@ -74,10 +145,12 @@ export const SpaceSettingsComponent = ({
   adminKappSlug,
   queueKappSlug,
   servicesKappSlug,
+  bundleName,
 }) => (
   <SpaceForm
-    fieldSet={fieldSet}
+    fieldSet={buildFieldSet(bundleName)}
     onSave={onSave}
+    addDataSources={buildAdditionalDataSources(bundleName)}
     addFields={() => ({ space }) =>
       space && [
         {
@@ -170,8 +243,10 @@ export const SpaceSettingsComponent = ({
           search: { kappSlug: servicesKappSlug },
         },
       ]}
-    alterFields={() => ({ space }) =>
-      space && {
+    alterFields={() => ({ space, releases, branches }) =>
+      space &&
+      releases &&
+      branches && {
         name: {
           helpText: 'The Name of the Space referenced throughout the system.',
         },
@@ -201,14 +276,45 @@ export const SpaceSettingsComponent = ({
           }),
         },
         defaultTimezone: {
+          component: FormComponents.SelectField,
           renderAttributes: { typeahead: true },
         },
         defaultLocale: {
+          component: FormComponents.SelectField,
           renderAttributes: { typeahead: true },
         },
+        displayValueSPA: bundleName
+          ? {
+              label: 'Bundle Version',
+              helpText:
+                'Version of the bundle that should be loaded. Use the Kinetic Platform consoles to set a custom bundle location.',
+              component: FormComponents.SelectField,
+              options: ({ values, branches, releases }) => {
+                const versions = releases
+                  .sortBy(option => option.label)
+                  .reverse()
+                  .concat(branches);
+                return List(
+                  versions.find(
+                    v => v.get('value') === values.get('displayValueSPA'),
+                  )
+                    ? []
+                    : [
+                        {
+                          label: values.get('displayValueSPA'),
+                          value: values.get('displayValueSPA'),
+                        },
+                      ],
+                )
+                  .concat(versions)
+                  .toJS();
+              },
+              renderAttributes: { typeahead: true },
+            }
+          : undefined,
       }}
     components={{
-      FormLayout: Layout,
+      FormLayout: buildLayout(bundleName),
     }}
   >
     {({ form, initialized }) =>
@@ -244,6 +350,9 @@ const mapStateToProps = state => ({
   adminKappSlug: selectAdminKappSlug(state),
   queueKappSlug: selectQueueKappSlug(state),
   servicesKappSlug: selectServicesKappSlug(state),
+  bundleName: state.app.bundleName
+    ? state.app.bundleName.replace('request-ce-bundle-', '')
+    : null,
 });
 
 // Settings Container

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "src/index.js",
   "dependencies": {
-    "@kineticdata/react": "^0.1.0-alpha.9-hotfix",
+    "@kineticdata/react": "^1.2.0",
     "@reach/router": "git://github.com/kineticdata/router.git",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.5",
@@ -12,7 +12,7 @@
     "immutable": "4.0.0-rc.9",
     "moment": "^2.22.2",
     "papaparse": "^4.4.0",
-    "query-string": "^5.1.0",
+    "query-string": "^5.1.1",
     "rc-progress": "^2.2.5",
     "react": "^16.2.0",
     "react-addons-shallow-compare": "^15.6.2",

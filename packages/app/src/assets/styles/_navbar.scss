@@ -34,10 +34,12 @@
       max-width: 204px;
       display: flex;
       justify-content: space-between;
-      &:hover {
-        color: $primary;
-        box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3),
-          0 2px 12px 3px rgba(60, 64, 67, 0.15);
+      &:not(.nav-link--static) {
+        &:hover {
+          color: $primary;
+          box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3),
+            0 2px 12px 3px rgba(60, 64, 67, 0.15);
+        }
       }
 
       > span {

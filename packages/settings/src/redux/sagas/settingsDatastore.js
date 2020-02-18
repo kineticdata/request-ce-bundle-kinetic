@@ -10,7 +10,7 @@ import {
 import {
   fetchForms,
   fetchForm,
-  // fetchBridges,
+  fetchBridges,
   fetchBridgeModels,
   createForm,
   updateForm,
@@ -42,22 +42,6 @@ import {
 import { DatastoreFormSave } from '../../records';
 
 import { chunkList } from '../../utils';
-
-// TODO Remove when RKL is updated to version with fetchBridges function tat supports multiple agents
-const fetchBridges = (options = {}) => {
-  return axios
-    .get(`/app/components/agents/system/app/api/v1/bridges`)
-    .then(response => ({ bridges: response.data.bridges }))
-    .catch(e => {
-      if (e instanceof Error && !e.response) throw e;
-      const { data = {}, status: statusCode, statusText: msg } = e.response;
-      const { errorKey: key = null, message = data.error, ...rest } = data;
-      const type = types[statusCode];
-      const result = { ...rest, message: message || msg, key, statusCode };
-      if (type) result[type] = true;
-      return { error: result };
-    });
-};
 
 export function* fetchFormsSaga() {
   const [displayableForms, manageableForms, bridges] = yield all([
@@ -243,8 +227,12 @@ export function* fetchSubmissionsSimpleSaga() {
     query.include(SUBMISSION_INCLUDES);
     query.limit(DATASTORE_LIMIT);
     query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
-    query.index(index.name);
-    query.sw(index.parts[0], simpleSearchParam);
+    if (index) {
+      query.index(index.name);
+    }
+    if (simpleSearchParam) {
+      query.sw(index.parts[0], simpleSearchParam);
+    }
     query.pageToken(pageToken);
 
     const { submissions, nextPageToken = null, serverError } = yield call(
@@ -259,6 +247,24 @@ export function* fetchSubmissionsSimpleSaga() {
       if (pageToken) {
         yield put(actions.pushPageToken(pageToken));
       }
+      // Set the next available page token to the one returned.
+      yield put(actions.setNextPageToken(nextPageToken));
+    }
+    yield put(actions.setSubmissions(submissions));
+  } else if (!simpleSearchParam) {
+    const query = new SubmissionSearch(true);
+    query.include(SUBMISSION_INCLUDES);
+    query.limit(DATASTORE_LIMIT);
+    query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
+
+    const { submissions, nextPageToken = null, serverError } = yield call(
+      searchSubmissions,
+      { search: query.build(), datastore: true, form: form.slug },
+    );
+
+    if (serverError) {
+      // What should we do?
+    } else {
       // Set the next available page token to the one returned.
       yield put(actions.setNextPageToken(nextPageToken));
     }
