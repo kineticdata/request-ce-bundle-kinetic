@@ -111,8 +111,9 @@ const FormLayout = ({ fields, error, buttons }) => (
         {fields.get('pollingTrigger')}
         {fields.get('pollingInterval')}
       </div>
+
+      {/* Delivery Rules */}
       <div className="survey-settings survey-settings--delivery">
-        {/* Delivery Rules */}
         {fields.get('expiration')}
         {fields.get('allowOptOut')}
         <div className="form-group__columns">
@@ -121,6 +122,7 @@ const FormLayout = ({ fields, error, buttons }) => (
         </div>
         {fields.get('eventInterval')}
       </div>
+
       {/* Security Rules */}
       <div className="survey-settings survey-settings--security">
         <div className="form-group__columns">
