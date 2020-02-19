@@ -1,13 +1,11 @@
 import React, { Fragment } from 'react';
 import { connect } from '../../redux/store';
 import { compose, withHandlers, withProps } from 'recompose';
-import { CoreForm } from '@kineticdata/react';
+import { I18n, CoreForm } from '@kineticdata/react';
 import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { Link } from '@reach/router';
 import { parse } from 'query-string';
-
-import { I18n } from '@kineticdata/react';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -16,6 +14,8 @@ import { I18n } from '@kineticdata/react';
 const globals = import('common/globals');
 
 export const SurveyComponent = ({
+  authenticated,
+  loading,
   slug,
   id,
   form,
@@ -25,64 +25,81 @@ export const SurveyComponent = ({
   handleLoaded,
   handleDelete,
   values,
+  kapp,
   kappSlug,
 }) => (
   <Fragment>
+    {console.log('survey page')}
     <PageTitle parts={[form ? form.name : '']} />
-    <div className="page-container container">
-      <div className="page-title">
-        <div className="page-title__wrapper">
-          <h3>
-            <Link to={relativeHomePath}>
-              <I18n>survey</I18n>
-            </Link>{' '}
-            /{' '}
-          </h3>
-          {form && (
-            <h1>
-              <I18n context={`kapps.${kappSlug}.forms.${slug}`}>
-                {form.name}
-              </I18n>
-            </h1>
-          )}
+    {!loading && form ? (
+      <div className="page-container container">
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h3>
+              <Link to={relativeHomePath}>
+                <I18n>{kapp.name}</I18n>
+              </Link>{' '}
+              /{' '}
+            </h3>
+            {form && (
+              <h1>
+                <I18n
+                  context={`kapps.${kappSlug}.forms.${slug}`}
+                  public={!authenticated}
+                >
+                  {form.name}
+                </I18n>
+              </h1>
+            )}
+          </div>
         </div>
-      </div>
-      <div className="form-description">
-        {form &&
-          form.description && (
-            <p>
-              <I18n context={`kapps.${kappSlug}.forms.${slug}`}>
-                {form.description}
-              </I18n>
-            </p>
-          )}
-      </div>
-      <I18n context={`kapps.${kappSlug}.forms.${slug}`}>
-        <div className="embedded-core-form--wrapper">
-          {id ? (
-            <CoreForm
-              submission={id}
-              globals={globals}
-              loaded={handleLoaded}
-              completed={handleCompleted}
-            />
-          ) : (
-            <CoreForm
-              kapp={kappSlug}
-              form={slug}
-              globals={globals}
-              loaded={handleLoaded}
-              created={handleCreated}
-              completed={handleCompleted}
-              values={values}
-              notFoundComponent={ErrorNotFound}
-              unauthorizedComponent={ErrorUnauthorized}
-              unexpectedErrorComponent={ErrorUnexpected}
-            />
-          )}
+        <div className="form-description">
+          {form &&
+            form.description && (
+              <p>
+                <I18n
+                  context={`kapps.${kappSlug}.forms.${slug}`}
+                  public={!authenticated}
+                >
+                  {form.description}
+                </I18n>
+              </p>
+            )}
         </div>
-      </I18n>
-    </div>
+        <I18n
+          context={`kapps.${kappSlug}.forms.${slug}`}
+          public={!authenticated}
+        >
+          <div className="embedded-core-form--wrapper">
+            {id ? (
+              <CoreForm
+                submission={id}
+                globals={globals}
+                loaded={handleLoaded}
+                completed={handleCompleted}
+                public={!authenticated}
+              />
+            ) : (
+              <CoreForm
+                kapp={kappSlug}
+                form={slug}
+                globals={globals}
+                loaded={handleLoaded}
+                created={handleCreated}
+                completed={handleCompleted}
+                values={values}
+                notFoundComponent={ErrorNotFound}
+                unauthorizedComponent={ErrorUnauthorized}
+                unexpectedErrorComponent={ErrorUnexpected}
+                public={!authenticated}
+              />
+            )}
+          </div>
+        </I18n>
+      </div>
+    ) : (
+      <div>Loading</div>
+    )}
   </Fragment>
 );
 
@@ -112,7 +129,11 @@ export const handleCreated = props => response => {
 };
 
 export const mapStateToProps = state => ({
+  authenticated: state.app.authenticated,
+  kapp: state.app.kapp,
   kappSlug: state.app.kappSlug,
+  loading: state.surveyApp.loading,
+  // form: state.surveys.form,
   forms: state.surveyApp.forms,
   values: valuesFromQueryParams(state.router.location.search),
 });
@@ -120,7 +141,7 @@ export const mapStateToProps = state => ({
 const enhance = compose(
   connect(mapStateToProps),
   withProps(props => ({
-    form: props.forms.find(form => form.slug === props.slug),
+    form: props.forms && props.forms.find(form => form.slug === props.slug),
     relativeHomePath: `../../${props.id ? '../../' : ''}`,
   })),
   withHandlers({ handleCompleted, handleCreated }),

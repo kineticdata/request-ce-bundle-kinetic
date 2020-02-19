@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 import { Table } from '@kineticdata/react';
 import { TimeAgo } from 'common';
-import { Map, List } from 'immutable';
 import { StatusPill } from '../../shared/StatusPill';
 
 const columns = [
@@ -54,31 +53,12 @@ const StatusCell = surveyItem => (
   </td>
 );
 
-// const EmptyBodyRow = generateEmptyBodyRow({
-//   loadingMessage: 'Loading surveys...',
-//   noSearchResultsMessage:
-//     'No surveys found - please modify your search criteria',
-//   noItemsMessage: 'There are no surveys to display.',
-// });
-
-// const FilterLayout = generateFilterLayout(['name']);
-
 export const SurveyTable = ({ surveyData }) => {
-  const mappedData = surveyData.map(survey => {
-    return Map({
-      name: survey.name,
-      status: survey.status,
-      createdAt: survey.createdAt,
-      closedAt: 'N/A',
-      slug: survey.slug,
-    });
-  });
   return (
     <Table
-      data={mappedData}
+      data={surveyData}
       columns={columns}
       columnSet={columnSet}
-      // components={{ EmptyBodyRow, FilterLayout }}
       alterColumns={{
         name: {
           components: {

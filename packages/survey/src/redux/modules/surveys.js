@@ -145,6 +145,8 @@ export const types = {
   CREATE_FORM_REQUEST: ns('CREATE_FORM_REQUEST'),
   CREATE_FORM_SUCCESS: ns('CREATE_FORM_SUCCESS'),
   CREATE_FORM_FAILURE: ns('CREATE_FORM_FAILURE'),
+
+  SUBMIT_OPT_OUT: ns('SUBMIT_OPT_OUT'),
 };
 
 export const actions = {
@@ -176,6 +178,8 @@ export const actions = {
   createFormRequest: withPayload(types.CREATE_FORM_REQUEST),
   createFormSuccess: withPayload(types.CREATE_FORM_SUCCESS),
   createFormFailure: withPayload(types.CREATE_FORM_FAILURE),
+
+  submitOptOut: withPayload(types.SUBMIT_OPT_OUT),
 };
 
 const sortSubmissions = (submissions, sortInfo) => {

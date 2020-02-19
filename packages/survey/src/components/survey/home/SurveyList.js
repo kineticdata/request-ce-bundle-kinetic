@@ -1,9 +1,8 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
+import { connect } from '../../../redux/store';
 import { compose, withState } from 'recompose';
 import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
-import { context } from '../../../redux/store';
 import { PageTitle } from '../../shared/PageTitle';
 import { I18n } from '@kineticdata/react';
 import { SurveyCard } from './SurveyCard';
@@ -110,6 +109,7 @@ export const mapStateToProps = state => ({
   loading: state.surveyApp.loading,
   kapp: state.app.kapp,
   appLocation: state.app.location,
+  surveys: state.surveyApp.forms,
 });
 
 export const mapDispatchToProps = {};
@@ -118,8 +118,6 @@ export const SurveyList = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('homepageMode', 'setHomepageMode', 'cards'),
 )(SurveyListComponent);

@@ -22,7 +22,7 @@ import DiscussionsApp from 'discussions';
 import SettingsApp from 'settings';
 import ScaffoldApp from 'scaffold';
 import SurveyApp from 'survey';
-import { AppProvider } from './AppProvider';
+// import { AppProvider } from './AppProvider';
 
 // Mapping of Bundle Package kapp attribute values to App Components
 const BUNDLE_PACKAGE_PROVIDERS = {

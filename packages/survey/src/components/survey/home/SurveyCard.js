@@ -19,7 +19,7 @@ export const SurveyCard = ({ survey }) => (
       <dl className="row">
         <div className="col">
           <dt>
-            <I18n context="foo">Created</I18n>
+            <I18n>Created</I18n>
           </dt>
           <dd>
             <TimeAgo timestamp={survey.createdAt} />
@@ -27,7 +27,7 @@ export const SurveyCard = ({ survey }) => (
         </div>
         <div className="col">
           <dt>
-            <I18n context="foo">Closed</I18n>
+            <I18n>Closed</I18n>
           </dt>
           <dd>
             <I18n>N/A</I18n>

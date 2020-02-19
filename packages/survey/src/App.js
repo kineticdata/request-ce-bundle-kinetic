@@ -1,21 +1,27 @@
-import React, { Component } from 'react';
-import { Provider } from 'react-redux';
-import { LocationProvider, Router } from '@reach/router';
+import React from 'react';
+import { Router, Redirect } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
-import {
-  CommonProvider,
-  ErrorUnexpected,
-  Loading,
-  ModalFormContainer,
-  ToastsContainer,
-} from 'common';
-import { is } from 'immutable';
+import { ErrorUnexpected, Loading } from 'common';
 import { I18n } from '@kineticdata/react';
-import { connectedHistory, connect, context, store } from './redux/store';
-import { syncAppState } from './redux/modules/app';
+import { connect } from './redux/store';
+import { Survey } from './components/survey/Survey';
+import { OptOut } from './components/survey/OptOut';
 import { SurveyList } from './components/survey/home/SurveyList';
-import { SurveyRouter } from './components/survey/SurveyRouter';
+import { SurveySubmissions } from './components/survey/submissions/SurveySubmissions';
+import { Submission } from './components/survey/submissions/Submission';
+import { SurveySettings } from './components/survey/SurveySettings';
+import { CreateSurvey } from './components/survey/CreateSurvey';
 import { actions as appActions } from './redux/modules/surveyApp';
+
+const SurveyError = () => (
+  <h1>
+    <I18n>Error loading Survey</I18n>
+  </h1>
+);
+
+/*****************************************************************************
+ *** PRIVATE APP
+ *****************************************************************************/
 
 const AppComponent = props => {
   if (props.error) {
@@ -26,10 +32,19 @@ const AppComponent = props => {
     return props.render({
       main: (
         <I18n>
+          {console.log('private app')}
           <main className={`package-layout package-layout--survey`}>
             <Router>
-              <SurveyList path="/" surveys={props.surveys} />
-              <SurveyRouter path="/*" />
+              <SurveyList path="/" />
+              <CreateSurvey path="new" />
+              <Survey path="forms/:slug" />
+              <SurveyError path="error" />
+              <OptOut path="forms/:slug/opt-out" />
+              <SurveySubmissions path=":slug/submissions" />
+              <SurveySettings path=":slug/settings" />
+              <Submission path=":slug/submissions/new" />
+              <Submission path=":slug/submissions/:id" />
+              {/* <SurveyRouter path="/*" /> */}
             </Router>
           </main>
         </I18n>
@@ -60,59 +75,52 @@ const enhance = compose(
   }),
 );
 
-const App = enhance(AppComponent);
+export const App = enhance(AppComponent);
 
-export class AppProvider extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { ready: false };
-    // Listen to the local store to see if the embedded app is ready to be
-    // re-rendered. Currently this just means that the required props have been
-    // synced into the local store.
-    this.unsubscribe = store.subscribe(() => {
-      const ready = store.getState().app.ready;
-      if (ready !== this.state.ready) {
-        this.setState({ ready });
-      }
+/*****************************************************************************
+ *** PUBLIC APP
+ *****************************************************************************/
+
+export const PublicAppComponent = props => {
+  if (props.error) {
+    return <ErrorUnexpected />;
+  } else if (props.loading) {
+    return <Loading text="App is loading ..." />;
+  } else {
+    return props.render({
+      main: (
+        <I18n>
+          {console.log('public app')}
+          <main className="package-layout package-layout--services">
+            <Router>
+              <Survey path="forms/:slug" />
+              <SurveyError path="error" />
+              <OptOut path="forms/:slug/opt-out" />
+              <Redirect from="*" to={props.authRoute} noThrow />
+            </Router>
+          </main>
+        </I18n>
+      ),
     });
   }
+};
 
-  componentDidMount() {
-    Object.entries(this.props.appState).forEach(syncAppState);
-  }
+const mapStateToPropsPublic = state => ({
+  authRoute: state.app.authRoute,
+  loading: state.surveyApp.loading,
+  error: state.surveyApp.error,
+});
 
-  componentDidUpdate(prevProps) {
-    Object.entries(this.props.appState)
-      .filter(([key, value]) => !is(value, prevProps.appState[key]))
-      .forEach(syncAppState);
-  }
+const enhancePublic = compose(
+  connect(
+    mapStateToPropsPublic,
+    mapDispatchToProps,
+  ),
+  lifecycle({
+    componentDidMount() {
+      this.props.fetchAppDataRequest();
+    },
+  }),
+);
 
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  render() {
-    return (
-      this.state.ready && (
-        <Provider store={store} context={context}>
-          <CommonProvider>
-            <LocationProvider hashRouting history={connectedHistory}>
-              <ToastsContainer duration={5000} />
-              <ModalFormContainer />
-              <Router>
-                <App
-                  render={this.props.render}
-                  path={`${this.props.appState.location}/*`}
-                />
-              </Router>
-            </LocationProvider>
-          </CommonProvider>
-        </Provider>
-      )
-    );
-  }
-
-  // Used for matching pathname to display this App
-  // Not used if package is set as Bundle Package of a Kapp
-  static location = '/survey';
-}
+export const PublicApp = enhancePublic(PublicAppComponent);

@@ -1,6 +1,6 @@
 import React from 'react';
 import HTTPSnippet from 'httpsnippet';
-import { CodeViewer } from './CodeViewer';
+import { CodeViewer } from '../shared/CodeViewer';
 
 const origin = () =>
   !process.env.NODE_ENV || process.env.NODE_ENV === 'development'

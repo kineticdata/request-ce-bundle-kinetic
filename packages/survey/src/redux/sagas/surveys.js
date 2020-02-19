@@ -244,6 +244,17 @@ export function* deleteFormSaga({ payload }) {
   }
 }
 
+export function* submitOptOutSaga({ payload }) {
+  yield console.log('payload:', payload);
+  yield addToastAlert({
+    title: 'Test Opt Out',
+    message: `${payload.emailAddress}, ${
+      payload.confirm === 'true' ? 'confirmed' : 'not confirmed'
+    }`,
+  });
+  //TODO: add opt-out trigger
+}
+
 export function* watchSurveys() {
   yield takeEvery(types.FETCH_FORM_REQUEST, fetchFormSaga);
   yield takeEvery(types.DELETE_FORM_REQUEST, deleteFormSaga);
@@ -254,4 +265,5 @@ export function* watchSurveys() {
 
   yield takeEvery(types.CREATE_FORM_REQUEST, createFormSaga);
   yield takeEvery(types.FETCH_SURVEY_TEMPLATES, fetchTemplatesSaga);
+  yield takeEvery(types.SUBMIT_OPT_OUT, submitOptOutSaga);
 }
