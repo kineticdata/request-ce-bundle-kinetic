@@ -10,6 +10,7 @@ import { actions as formActions } from '../../redux/modules/surveys';
 import { actions as notificationsActions } from '../../redux/modules/notifications';
 import { actions as robotsActions } from '../../redux/modules/robots';
 import { context } from '../../redux/store';
+import { isActiveClass } from '../../utils';
 
 const asArray = value => (value ? [JSON.stringify(value)] : []);
 
@@ -45,56 +46,94 @@ const fieldSet = [
 
 const FormLayout = ({ fields, error, buttons }) => (
   <Fragment>
-    <h2 className="section__title">
-      <I18n>General Settings</I18n>
-    </h2>
-    <div className="form-group__columns">
-      {fields.get('name')}
-      {fields.get('slug')}
+    <div className="survey-tabs">
+      <ul className="nav nav-tabs">
+        <li role="presentation">
+          <Link to="somewhere" className="active">
+            <I18n>General Settings</I18n>
+          </Link>
+        </li>
+
+        <li role="presentation">
+          <Link to="somewhere">
+            <I18n>Workflow Process</I18n>
+          </Link>
+        </li>
+        <li role="presentation">
+          <Link to="somewhere">
+            <I18n>Polling</I18n>
+          </Link>
+        </li>
+        <li role="presentation">
+          <Link to="somewhere">
+            <I18n>Delivery Rules</I18n>
+          </Link>
+        </li>
+        <li role="presentation">
+          <Link to="somewhere">
+            <I18n>Security</I18n>
+          </Link>
+        </li>
+      </ul>
     </div>
-    {fields.get('description')}
-    {fields.get('status')}
-    {fields.get('submissionLabelExpression')}
-    {fields.get('workflowProcess')}
-    {fields.get('reminderTemplate')}
-    <div className="form-group__columns">
-      {fields.get('reminderInterval')}
-      {fields.get('reminderMax')}
+    <div className="survey-tabs__content">
+      {/* General Settings */}
+      <div className="survey-settings survey-settings--general active">
+        <div className="form-group__columns">
+          {fields.get('name')}
+          {fields.get('slug')}
+        </div>
+        {fields.get('description')}
+        {fields.get('status')}
+        {fields.get('submissionLabelExpression')}
+      </div>
+
+      {/* Workflow Process */}
+      <div className="survey-settings survey-settings--workflow">
+        {fields.get('workflowProcess')}
+        {fields.get('reminderTemplate')}
+        <div className="form-group__columns">
+          {fields.get('reminderInterval')}
+          {fields.get('reminderMax')}
+        </div>
+        {fields.get('invitationTemplate')}
+        <div className="form-group__columns">
+          {fields.get('surveyStart')}
+          {fields.get('surveyStop')}
+        </div>
+      </div>
+
+      {/* Polling */}
+      <div className="survey-settings survey-settings--polling">
+        {fields.get('polling')}
+        {fields.get('pollingSource')}
+        {fields.get('pollingType')}
+        {fields.get('pollingTrigger')}
+        {fields.get('pollingInterval')}
+      </div>
+      <div className="survey-settings survey-settings--delivery">
+        {/* Delivery Rules */}
+        {fields.get('expiration')}
+        {fields.get('allowOptOut')}
+        <div className="form-group__columns">
+          {fields.get('maxFrequencyCount')}
+          {fields.get('maxFrequencyDays')}
+        </div>
+        {fields.get('eventInterval')}
+      </div>
+      {/* Security Rules */}
+      <div className="survey-settings survey-settings--security">
+        <div className="form-group__columns">
+          {fields.get('owningTeam')}
+          {fields.get('assignedIndividual')}
+        </div>
+        <div className="form-group__columns">
+          {fields.get('authenticated')}
+          {fields.get('submitter')}
+        </div>
+      </div>
     </div>
-    {fields.get('invitationTemplate')}
-    <div className="form-group__columns">
-      {fields.get('surveyStart')}
-      {fields.get('surveyStop')}
-    </div>
-    {fields.get('polling')}
-    {fields.get('pollingSource')}
-    {fields.get('pollingType')}
-    {fields.get('pollingTrigger')}
-    {fields.get('pollingInterval')}
-    <br />
-    <h2 className="section__title">
-      <I18n>Delivery Rules</I18n>
-    </h2>
-    {fields.get('expiration')}
-    {fields.get('allowOptOut')}
-    <div className="form-group__columns">
-      {fields.get('maxFrequencyCount')}
-      {fields.get('maxFrequencyDays')}
-    </div>
-    {fields.get('eventInterval')}
-    <br />
-    <h2 className="section__title">
-      <I18n>Security Rules</I18n>
-    </h2>
-    <div className="form-group__columns">
-      {fields.get('owningTeam')}
-      {fields.get('assignedIndividual')}
-    </div>
-    <div className="form-group__columns">
-      {fields.get('authenticated')}
-      {fields.get('submitter')}
-    </div>
-    <br />
+
     {error}
     {buttons}
   </Fragment>

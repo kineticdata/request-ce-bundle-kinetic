@@ -52,3 +52,17 @@
   text-align: right;
   margin: 0 0 0.75rem 0;
 }
+
+.survey-tabs {
+  .nav-tabs {
+    margin-bottom: 1.5rem;
+  }
+  &__content {
+    .survey-settings {
+      display: none;
+      &.active {
+        display: block;
+      }
+    }
+  }
+}
