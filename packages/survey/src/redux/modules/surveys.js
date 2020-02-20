@@ -145,6 +145,7 @@ export const types = {
   CREATE_FORM_REQUEST: ns('CREATE_FORM_REQUEST'),
   CREATE_FORM_SUCCESS: ns('CREATE_FORM_SUCCESS'),
   CREATE_FORM_FAILURE: ns('CREATE_FORM_FAILURE'),
+  CREATE_SURVEY_CUSTOM_WORKFLOW_TREE: ns('CREATE_SURVEY_CUSTOM_WORKFLOW_TREE'),
 
   SUBMIT_OPT_OUT: ns('SUBMIT_OPT_OUT'),
 };
@@ -178,7 +179,9 @@ export const actions = {
   createFormRequest: withPayload(types.CREATE_FORM_REQUEST),
   createFormSuccess: withPayload(types.CREATE_FORM_SUCCESS),
   createFormFailure: withPayload(types.CREATE_FORM_FAILURE),
-
+  createSurveyCustomWorkflowTree: withPayload(
+    types.CREATE_SURVEY_CUSTOM_WORKFLOW_TREE,
+  ),
   submitOptOut: withPayload(types.SUBMIT_OPT_OUT),
 };
 

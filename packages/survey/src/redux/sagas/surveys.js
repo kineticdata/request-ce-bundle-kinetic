@@ -244,8 +244,11 @@ export function* deleteFormSaga({ payload }) {
   }
 }
 
+export function* createSurveyCustomWorkflowTreeSaga({ payload }) {
+  yield console.log('create survey custom workflow tree');
+}
+
 export function* submitOptOutSaga({ payload }) {
-  yield console.log('payload:', payload);
   yield addToastAlert({
     title: 'Test Opt Out',
     message: `${payload.emailAddress}, ${
@@ -265,5 +268,9 @@ export function* watchSurveys() {
 
   yield takeEvery(types.CREATE_FORM_REQUEST, createFormSaga);
   yield takeEvery(types.FETCH_SURVEY_TEMPLATES, fetchTemplatesSaga);
+  yield takeEvery(
+    types.CREATE_SURVEY_CUSTOM_WORKFLOW_TREE,
+    createSurveyCustomWorkflowTreeSaga,
+  );
   yield takeEvery(types.SUBMIT_OPT_OUT, submitOptOutSaga);
 }

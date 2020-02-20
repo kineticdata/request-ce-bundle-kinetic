@@ -2,17 +2,12 @@ import React from 'react';
 import HTTPSnippet from 'httpsnippet';
 import { CodeViewer } from '../shared/CodeViewer';
 
-const origin = () =>
-  !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
-    ? // ? bundle.spaceLocation()
-      window.location.origin
-    : window.location.origin;
-
 export const SurveySettingsWebApiView = ({ kappSlug }) => {
   const method = 'POST';
   const slug = 'survey-test';
   const publicRoute =
-    kappSlug && `${origin()}/app/kapps/${kappSlug}/webApis/${slug}`;
+    kappSlug &&
+    `${window.location.origin}/app/kapps/${kappSlug}/webApis/${slug}`;
   const snippet = new HTTPSnippet({
     method: method,
     url: `${publicRoute}?timeout=10`,
