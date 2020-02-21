@@ -119,7 +119,7 @@ const fetchBundleVersions = (options = {}) => {
               value: `https://s3.amazonaws.com/kinops.io/bundles/${options.name ||
                 'kinetic'}/${options.branches ? 'branches' : 'releases'}/${
                 match[1]
-              }`,
+              }/index.html`,
               major: version && version.major,
             };
           }
