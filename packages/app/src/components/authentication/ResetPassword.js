@@ -120,8 +120,8 @@ const ResetPasswordRequestForm = ({ children }) => {
 
   const fields = {
     username: (
-      <div className="form-group required">
-        <label htmlFor="username">
+      <div className="form-group">
+        <label htmlFor="username" className="required">
           <I18n>Email Address</I18n>
         </label>
         <input
@@ -243,8 +243,8 @@ const ResetPasswordForm = connect(
       </div>
     ),
     password: (
-      <div className="form-group required">
-        <label htmlFor="password">
+      <div className="form-group">
+        <label htmlFor="password" className="required">
           <I18n>New Password</I18n>
         </label>
         <input
@@ -260,8 +260,8 @@ const ResetPasswordForm = connect(
       </div>
     ),
     confirmPassword: (
-      <div className="form-group required">
-        <label htmlFor="password">
+      <div className="form-group">
+        <label htmlFor="password" className="required">
           <I18n>Confirm Password</I18n>
         </label>
         <input

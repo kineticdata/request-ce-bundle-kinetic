@@ -153,8 +153,8 @@ const RequestAccountForm = ({ children, email: defaultEmail }) => {
 
   const fields = {
     firstName: (
-      <div className="form-group required">
-        <label htmlFor="firstName">
+      <div className="form-group">
+        <label htmlFor="firstName" className="required">
           <I18n>First Name</I18n>
         </label>
         <input
@@ -169,8 +169,8 @@ const RequestAccountForm = ({ children, email: defaultEmail }) => {
       </div>
     ),
     lastName: (
-      <div className="form-group required">
-        <label htmlFor="lastName">
+      <div className="form-group">
+        <label htmlFor="lastName" className="required">
           <I18n>Last Name</I18n>
         </label>
         <input
@@ -184,8 +184,8 @@ const RequestAccountForm = ({ children, email: defaultEmail }) => {
       </div>
     ),
     email: (
-      <div className="form-group required">
-        <label htmlFor="email">
+      <div className="form-group">
+        <label htmlFor="email" className="required">
           <I18n>Email Address</I18n>
         </label>
         <input
@@ -199,7 +199,7 @@ const RequestAccountForm = ({ children, email: defaultEmail }) => {
       </div>
     ),
     phoneNumber: (
-      <div className="form-group required">
+      <div className="form-group">
         <label htmlFor="phoneNumber">
           <I18n>Phone Number</I18n>
         </label>
@@ -213,7 +213,7 @@ const RequestAccountForm = ({ children, email: defaultEmail }) => {
       </div>
     ),
     comments: (
-      <div className="form-group required">
+      <div className="form-group">
         <label htmlFor="comments">
           <I18n>Comments</I18n>
         </label>
@@ -356,8 +356,8 @@ const CreateAccountForm = connect(
 
   const fields = {
     firstName: (
-      <div className="form-group required">
-        <label htmlFor="firstName">
+      <div className="form-group">
+        <label htmlFor="firstName" className="required">
           <I18n>First Name</I18n>
         </label>
         <input
@@ -372,8 +372,8 @@ const CreateAccountForm = connect(
       </div>
     ),
     lastName: (
-      <div className="form-group required">
-        <label htmlFor="lastName">
+      <div className="form-group">
+        <label htmlFor="lastName" className="required">
           <I18n>Last Name</I18n>
         </label>
         <input
@@ -387,8 +387,8 @@ const CreateAccountForm = connect(
       </div>
     ),
     email: (
-      <div className="form-group required">
-        <label htmlFor="email">
+      <div className="form-group">
+        <label htmlFor="email" className="required">
           <I18n>Email Address</I18n>
         </label>
         <input
@@ -402,8 +402,8 @@ const CreateAccountForm = connect(
       </div>
     ),
     password: (
-      <div className="form-group required">
-        <label htmlFor="password">
+      <div className="form-group">
+        <label htmlFor="password" className="required">
           <I18n>New Password</I18n>
         </label>
         <input
@@ -418,14 +418,14 @@ const CreateAccountForm = connect(
       </div>
     ),
     confirmPassword: (
-      <div className="form-group required">
-        <label htmlFor="password">
+      <div className="form-group">
+        <label htmlFor="confirm-password" className="required">
           <I18n>Confirm Password</I18n>
         </label>
         <input
           type="password"
           className="form-control"
-          id="password"
+          id="confirm-password"
           placeholder="password"
           value={confirmPassword}
           onChange={e => setConfirmPassword(e.target.value)}
