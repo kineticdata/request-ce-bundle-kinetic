@@ -32,7 +32,6 @@ const AppComponent = props => {
     return props.render({
       main: (
         <I18n>
-          {console.log('private app')}
           <main className={`package-layout package-layout--survey`}>
             <Router>
               <SurveyList path="/" />
@@ -90,7 +89,6 @@ export const PublicAppComponent = props => {
     return props.render({
       main: (
         <I18n>
-          {console.log('public app')}
           <main className="package-layout package-layout--services">
             <Router>
               <Survey path="forms/:slug" />

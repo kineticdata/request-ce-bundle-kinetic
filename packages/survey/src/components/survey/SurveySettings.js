@@ -1,11 +1,16 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from '@reach/router';
 import { connect } from '../../redux/store';
-import { lifecycle, compose } from 'recompose';
-import { bundle } from '@kineticdata/react';
+import {
+  lifecycle,
+  compose,
+  withHandlers,
+  withProps,
+  withState,
+} from 'recompose';
 import { FormComponents, LoadingMessage, Utils } from 'common';
 import { PageTitle } from '../shared/PageTitle';
-import { I18n, FormForm } from '@kineticdata/react';
+import { bundle, I18n, FormForm } from '@kineticdata/react';
 import { actions as surveyActions } from '../../redux/modules/surveys';
 import { actions as notificationsActions } from '../../redux/modules/notifications';
 import { actions as robotsActions } from '../../redux/modules/robots';
@@ -15,6 +20,20 @@ import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import classnames from 'classnames';
 
 const asArray = value => (value ? [JSON.stringify(value)] : []);
+
+const BuilderLink = ({ tree }) => (
+  <span className="workflow-builder-link">
+    <a
+      className="btn btn-sm btn-primary"
+      href={`${bundle.spaceLocation()}/app/#/space/workflow/trees/builder/${
+        tree.sourceName
+      }/${tree.sourceGroup}/${tree.name}`}
+    >
+      <span className="fa fa-mouse-pointer fa-fw" />
+      Builder
+    </a>
+  </span>
+);
 
 const fieldSet = [
   'name',
@@ -46,13 +65,18 @@ const fieldSet = [
   'submitter',
 ];
 
-const FormLayout = ({ fields, error, buttons, ...props }) => {
+const FormLayoutComponent = ({
+  fields,
+  error,
+  buttons,
+  dirty,
+  formOptions,
+  associatedTree,
+}) => {
   const [activeTab, setActiveTab] = useState('1');
   const toggle = tab => {
     if (activeTab !== tab) setActiveTab(tab);
   };
-
-  console.log('propz:', props);
 
   return (
     <Fragment>
@@ -65,7 +89,7 @@ const FormLayout = ({ fields, error, buttons, ...props }) => {
               onClick={() => {
                 toggle('1');
               }}
-              disabled={props.dirty}
+              disabled={dirty}
             >
               <I18n>General Settings</I18n>
             </NavLink>
@@ -76,7 +100,7 @@ const FormLayout = ({ fields, error, buttons, ...props }) => {
               onClick={() => {
                 toggle('2');
               }}
-              disabled={props.dirty}
+              disabled={dirty}
             >
               <I18n>Workflow Process</I18n>
             </NavLink>
@@ -87,7 +111,7 @@ const FormLayout = ({ fields, error, buttons, ...props }) => {
               onClick={() => {
                 toggle('3');
               }}
-              disabled={props.dirty}
+              disabled={dirty}
             >
               <I18n>Polling</I18n>
             </NavLink>
@@ -98,7 +122,7 @@ const FormLayout = ({ fields, error, buttons, ...props }) => {
               onClick={() => {
                 toggle('4');
               }}
-              disabled={props.dirty}
+              disabled={dirty}
             >
               <I18n>Delivery Rules</I18n>
             </NavLink>
@@ -109,7 +133,7 @@ const FormLayout = ({ fields, error, buttons, ...props }) => {
               onClick={() => {
                 toggle('5');
               }}
-              disabled={props.dirty}
+              disabled={dirty}
             >
               <I18n>Security</I18n>
             </NavLink>
@@ -137,7 +161,12 @@ const FormLayout = ({ fields, error, buttons, ...props }) => {
           {/* Workflow Process */}
           <TabPane tabId="2">
             <div className="survey-settings survey-settings--workflow">
-              {fields.get('workflowProcess')}
+              <div className="workflow-group">
+                {fields.get('workflowProcess')}
+                {associatedTree.tree && (
+                  <BuilderLink tree={associatedTree.tree} />
+                )}
+              </div>
               {fields.get('reminderTemplate')}
               <div className="form-group__columns">
                 {fields.get('reminderInterval')}
@@ -156,9 +185,7 @@ const FormLayout = ({ fields, error, buttons, ...props }) => {
               {fields.get('pollingTrigger')}
               {/* {fields.get('pollingInterval')} */}
               {fields.getIn(['polling', 'props', 'value']) === 'false' && (
-                <SurveySettingsWebApiView
-                  kappSlug={props.formOptions.kappSlug}
-                />
+                <SurveySettingsWebApiView kappSlug={formOptions.kappSlug} />
               )}
             </div>
           </TabPane>
@@ -299,6 +326,9 @@ const SurveySettingsComponent = ({
   templates,
   snippets,
   robots,
+  customWorkflow,
+  setCustomWorkflow,
+  onSave,
 }) => {
   const notificationOptions =
     !!templates &&
@@ -324,7 +354,8 @@ const SurveySettingsComponent = ({
     }));
 
   return (
-    !loading && (
+    !loading &&
+    origForm && (
       <I18n context={`forms.${origForm.slug}`}>
         <div className="page-container page-container--panels">
           <PageTitle parts={['Settings', origForm.name]} />
@@ -363,7 +394,7 @@ const SurveySettingsComponent = ({
                     formSlug={origForm.slug}
                     kappSlug={kappSlug}
                     fieldSet={fieldSet}
-                    onSave={onSave}
+                    onSave={() => onSave}
                     components={{ FormLayout }}
                     addFields={() => ({ form }) => {
                       const surveyConfig =
@@ -393,6 +424,8 @@ const SurveySettingsComponent = ({
                             initialValue: surveyConfig
                               ? surveyConfig['Use Custom Workflow']
                               : 'false',
+                            onChange: ({ values }) =>
+                              setCustomWorkflow(values.get('workflowProcess')),
                           },
                           {
                             name: 'reminderTemplate',
@@ -644,10 +677,7 @@ const SurveySettingsComponent = ({
                   >
                     {({ form, initialized }) =>
                       initialized ? (
-                        <section className="form">
-                          {console.log('form:', form)}
-                          {form}
-                        </section>
+                        <section className="form">{form}</section>
                       ) : (
                         <LoadingMessage />
                       )
@@ -685,14 +715,6 @@ const SurveySettingsComponent = ({
   );
 };
 
-const onSave = () => props => {
-  console.log('onSave props:', props);
-  // dispatch('CREATE_WEB_API_TREE', {
-  //   kappSlug,
-  //   slug: form.slug,
-  // });
-};
-
 export const mapStateToProps = (state, { slug }) => ({
   loading: state.surveys.currentFormLoading || state.notifications.loading,
   origForm: state.surveys.form,
@@ -703,6 +725,7 @@ export const mapStateToProps = (state, { slug }) => ({
   templates: state.notifications.notificationTemplates,
   snippets: state.notifications.notificationSnippets,
   robots: state.robots.robots.toJS(),
+  associatedTree: state.surveys.associatedTree,
 });
 
 export const mapDispatchToProps = {
@@ -710,19 +733,49 @@ export const mapDispatchToProps = {
   fetchNotifications: notificationsActions.fetchNotifications,
   fetchRobots: robotsActions.fetchRobots,
   createSurveyCustomWorkflowTree: surveyActions.createSurveyCustomWorkflowTree,
+  deleteSurveyCustomWorkflowTree: surveyActions.deleteSurveyCustomWorkflowTree,
+  fetchAssociatedTree: surveyActions.fetchAssociatedTree,
 };
+
+const FormLayout = compose(connect(mapStateToProps))(FormLayoutComponent);
 
 export const SurveySettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  // withState('customWorkflow', 'setCustomWorkflow', props => props.origForm.fields),
+  withState('customWorkflow', 'setCustomWorkflow', ''),
+  withProps(props => ({
+    form: props.forms && props.forms.find(form => form.slug === props.slug),
+  })),
+  withHandlers({
+    onSave: props => () => {
+      props.customWorkflow === 'true'
+        ? props.createSurveyCustomWorkflowTree({
+            sourceName: props.taskSourceName,
+            kappSlug: props.kappSlug,
+            formSlug: props.origForm.slug,
+          })
+        : props.customWorkflow === 'false' &&
+          props.deleteSurveyCustomWorkflowTree({
+            sourceName: props.taskSourceName,
+            kappSlug: props.kappSlug,
+            formSlug: props.origForm.slug,
+          });
+    },
+  }),
   lifecycle({
     componentWillMount() {
       this.props.fetchFormRequest({
         kappSlug: this.props.kappSlug,
         formSlug: this.props.slug,
+      });
+      this.props.fetchAssociatedTree({
+        name: 'Submitted',
+        sourceGroup: `Submissions > ${this.props.kappSlug} > ${
+          this.props.slug
+        }`,
+        sourceName: this.props.taskSourceName,
       });
       this.props.fetchNotifications();
       this.props.fetchRobots();

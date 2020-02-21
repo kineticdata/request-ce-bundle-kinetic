@@ -44,7 +44,6 @@ export default class extends Component {
             <LocationProvider hashRouting history={connectedHistory}>
               <ToastsContainer duration={5000} />
               <ModalFormContainer />
-              {console.log('waaasadsdhashdahs', this.props.appState)}
               <Router>
                 {this.props.appState.authenticated ? (
                   <App

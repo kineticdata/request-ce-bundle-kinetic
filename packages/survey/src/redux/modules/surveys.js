@@ -146,8 +146,11 @@ export const types = {
   CREATE_FORM_SUCCESS: ns('CREATE_FORM_SUCCESS'),
   CREATE_FORM_FAILURE: ns('CREATE_FORM_FAILURE'),
   CREATE_SURVEY_CUSTOM_WORKFLOW_TREE: ns('CREATE_SURVEY_CUSTOM_WORKFLOW_TREE'),
+  DELETE_SURVEY_CUSTOM_WORKFLOW_TREE: ns('DELETE_SURVEY_CUSTOM_WORKFLOW_TREE'),
 
   SUBMIT_OPT_OUT: ns('SUBMIT_OPT_OUT'),
+  FETCH_ASSOCIATED_TREE: ns('FETCH_ASSOCIATED_TREE'),
+  FETCH_ASSOCIATED_TREE_COMPLETE: ns('FETCH_ASSOCIATED_TREE_COMPLETE'),
 };
 
 export const actions = {
@@ -182,7 +185,14 @@ export const actions = {
   createSurveyCustomWorkflowTree: withPayload(
     types.CREATE_SURVEY_CUSTOM_WORKFLOW_TREE,
   ),
+  deleteSurveyCustomWorkflowTree: withPayload(
+    types.DELETE_SURVEY_CUSTOM_WORKFLOW_TREE,
+  ),
   submitOptOut: withPayload(types.SUBMIT_OPT_OUT),
+  fetchAssociatedTree: withPayload(types.FETCH_ASSOCIATED_TREE),
+  fetchAssociatedTreeComplete: withPayload(
+    types.FETCH_ASSOCIATED_TREE_COMPLETE,
+  ),
 };
 
 const sortSubmissions = (submissions, sortInfo) => {
@@ -219,6 +229,7 @@ export const State = Record({
   submission: null,
   submissionError: null,
   templates: [],
+  associatedTree: [],
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -298,6 +309,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('error', payload);
     case types.FETCH_SURVEY_TEMPLATES_COMPLETE:
       return state.set('templates', payload.templates);
+    case types.FETCH_ASSOCIATED_TREE_COMPLETE:
+      return state.set('associatedTree', payload);
 
     default:
       return state;

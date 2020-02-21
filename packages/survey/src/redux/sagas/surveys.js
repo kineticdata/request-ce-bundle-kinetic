@@ -8,6 +8,9 @@ import {
   createForm,
   updateForm,
   deleteForm,
+  createTree,
+  deleteTree,
+  fetchTree,
 } from '@kineticdata/react';
 import { addToast, addToastAlert } from 'common';
 import {
@@ -53,6 +56,21 @@ export function* fetchTemplatesSaga({ payload }) {
     yield put(
       actions.fetchSurveyTemplatesComplete({
         templates,
+      }),
+    );
+  }
+}
+
+export function* fetchAssociatedTreeSaga({ payload }) {
+  const { tree, error } = yield call(fetchTree, {
+    name: payload.name,
+    sourceGroup: payload.sourceGroup,
+    sourceName: payload.sourceName,
+  });
+  if (tree) {
+    yield put(
+      actions.fetchAssociatedTreeComplete({
+        tree,
       }),
     );
   }
@@ -245,7 +263,35 @@ export function* deleteFormSaga({ payload }) {
 }
 
 export function* createSurveyCustomWorkflowTreeSaga({ payload }) {
-  yield console.log('create survey custom workflow tree');
+  const { tree, error } = yield call(createTree, {
+    tree: {
+      sourceName: payload.sourceName,
+      sourceGroup: `Submissions > ${payload.kappSlug} > ${payload.formSlug}`,
+      name: 'Submitted',
+    },
+  });
+
+  if (error) {
+    throw (error.statusCode === 400 && error.message) ||
+      'There was an error saving the workflow';
+  } else {
+    return tree;
+  }
+}
+
+export function* deleteSurveyCustomWorkflowTreeSaga({ payload }) {
+  const { tree } = yield call(deleteTree, {
+    type: 'tree',
+    sourceName: payload.sourceName,
+    sourceGroup: `Submissions > ${payload.kappSlug} > ${payload.formSlug}`,
+    name: 'Submitted',
+  });
+  if (tree) {
+    yield addToastAlert({
+      title: 'Workflow Deleted',
+      message: `${payload.sourceGroup} workflow deleted.`,
+    });
+  }
 }
 
 export function* submitOptOutSaga({ payload }) {
@@ -272,5 +318,10 @@ export function* watchSurveys() {
     types.CREATE_SURVEY_CUSTOM_WORKFLOW_TREE,
     createSurveyCustomWorkflowTreeSaga,
   );
+  yield takeEvery(
+    types.DELETE_SURVEY_CUSTOM_WORKFLOW_TREE,
+    deleteSurveyCustomWorkflowTreeSaga,
+  );
   yield takeEvery(types.SUBMIT_OPT_OUT, submitOptOutSaga);
+  yield takeEvery(types.FETCH_ASSOCIATED_TREE, fetchAssociatedTreeSaga);
 }

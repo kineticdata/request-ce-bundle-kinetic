@@ -29,7 +29,6 @@ export const SurveyComponent = ({
   kappSlug,
 }) => (
   <Fragment>
-    {console.log('survey page')}
     <PageTitle parts={[form ? form.name : '']} />
     {!loading && form ? (
       <div className="page-container container">
