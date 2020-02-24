@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { compose, withHandlers } from 'recompose';
-import { openModalForm } from 'common';
-import { selectAdminKapp } from 'app/src/redux/selectors';
+import { openModalForm, selectAdminKappSlug } from 'common';
 import { connect } from '../../redux/store';
 
 import { getFeedbackFormConfig } from '../../utils';
@@ -15,16 +14,16 @@ export const RequestShowConfirmation = ({ handleOpenFeedback }) => (
 
     <p>
       <I18n>With</I18n>{' '}
-      <a onClick={handleOpenFeedback} role="button" tabIndex={0}>
+      <button className="btn btn-text" onClick={handleOpenFeedback}>
         <I18n>Feedback</I18n>
-      </a>{' '}
+      </button>{' '}
       <I18n>we are able to continuously improve.</I18n>
     </p>
   </Fragment>
 );
 
 export const mapStateToProps = state => ({
-  adminKappSlug: selectAdminKapp(state).slug,
+  adminKappSlug: selectAdminKappSlug(state),
 });
 
 const enhance = compose(

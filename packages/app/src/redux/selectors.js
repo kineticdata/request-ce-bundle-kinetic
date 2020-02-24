@@ -1,26 +1,5 @@
 import { Utils } from 'common';
 
-// Find a Kapp by Space Attribute Value
-const kappBySpaceAttribute = (state, slugAttributeName) =>
-  state.app.loading
-    ? null
-    : state.app.kapps.find(
-        kapp =>
-          kapp.slug ===
-          Utils.getAttributeValue(state.app.space, slugAttributeName),
-      );
-
-export const selectAdminKapp = state =>
-  kappBySpaceAttribute(state, 'Admin Kapp Slug');
-export const selectQueueKapp = state =>
-  kappBySpaceAttribute(state, 'Queue Kapp Slug');
-export const selectServicesKapp = state =>
-  kappBySpaceAttribute(state, 'Catalog Kapp Slug');
-export const selectTeamsKapp = state =>
-  kappBySpaceAttribute(state, 'Teams Kapp Slug');
-export const selectTechBarKapp = state =>
-  kappBySpaceAttribute(state, 'Tech Bar Kapp Slug');
-
 // Role Selectors
 export const selectHasRoleDataAdmin = state =>
   !state.app.loading
