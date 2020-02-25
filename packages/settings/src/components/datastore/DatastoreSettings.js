@@ -181,7 +181,10 @@ const SettingsComponent = ({
                             {List(origForm.indexDefinitions)
                               .filter(d => d.status === 'Built')
                               .map(({ name }) => (
-                                <option value={name} key={name}>
+                                <option
+                                  value={name.replace(':UNIQUE', '')}
+                                  key={name}
+                                >
                                   {name.replace(':UNIQUE', '')}
                                 </option>
                               ))}
