@@ -7,7 +7,7 @@ import { connect } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 import { PageTitle } from '../../shared/PageTitle';
 
-export const SubmissionContainer = ({
+export const SubmissionDetailsContainer = ({
   kapp,
   form,
   submission,
@@ -186,7 +186,7 @@ const mapDispatchToProps = {
   fetchSubmissionRequest: actions.fetchSubmissionRequest,
 };
 
-export const Submission = compose(
+export const SubmissionDetails = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
@@ -198,4 +198,4 @@ export const Submission = compose(
       });
     },
   }),
-)(SubmissionContainer);
+)(SubmissionDetailsContainer);
