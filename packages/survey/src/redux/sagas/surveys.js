@@ -62,7 +62,7 @@ export function* fetchTemplatesSaga({ payload }) {
 }
 
 export function* fetchAssociatedTreeSaga({ payload }) {
-  const { tree, error } = yield call(fetchTree, {
+  const { tree } = yield call(fetchTree, {
     name: payload.name,
     sourceGroup: payload.sourceGroup,
     sourceName: payload.sourceName,
@@ -158,6 +158,7 @@ export function* cloneFormSaga({ payload }) {
 }
 
 export function* fetchSubmissionSaga({ payload }) {
+  console.log('payload.id:', payload.id);
   const { submission, error } = yield call(fetchSubmission, {
     id: payload.id,
     include: SUBMISSION_INCLUDES,
