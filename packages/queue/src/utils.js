@@ -7,9 +7,11 @@ export const refreshFilter = ({
   fetchList,
   setOffsetWithScroll,
 }) => () => {
-  fetchList(filter);
+  if (filter) {
+    fetchList(filter);
 
-  if (setOffsetWithScroll) {
-    setOffsetWithScroll(0);
+    if (setOffsetWithScroll) {
+      setOffsetWithScroll(0);
+    }
   }
 };

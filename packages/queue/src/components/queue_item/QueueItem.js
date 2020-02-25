@@ -144,12 +144,12 @@ export const QueueItemContainer = compose(
       },
   ),
   lifecycle({
-    componentWillMount() {
+    componentDidMount() {
       this.props.fetchCurrentItem(this.props.id);
     },
-    componentWillReceiveProps(nextProps) {
-      if (this.props.id !== nextProps.id) {
-        this.props.fetchCurrentItem(nextProps.id);
+    componentDidUpdate(prevProps) {
+      if (this.props.id !== prevProps.id) {
+        this.props.fetchCurrentItem(this.props.id);
       }
     },
     componentWillUnmount() {
