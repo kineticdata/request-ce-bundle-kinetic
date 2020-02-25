@@ -13,7 +13,7 @@ export function* fetchAppDataRequestSaga() {
     call(fetchCategories, {
       kappSlug,
       include:
-        'attributes,categorizations.form,categorizations.form.attributes',
+        'attributes,categorizations.form,categorizations.form.attributes,categorizations.form.kapp',
     }),
     call(fetchForms, {
       kappSlug,
