@@ -5,6 +5,7 @@ import { connect } from '../../redux/store';
 import { LoadingMessage } from 'common';
 import { I18n } from '@kineticdata/react';
 import { PageTitle } from '../shared/PageTitle';
+import { parse } from 'query-string';
 
 export const OptOutComponent = ({
   kapp,
@@ -13,9 +14,11 @@ export const OptOutComponent = ({
   form,
   handleFieldChange,
   handleSubmit,
+  values,
 }) => (
   <div className="page-container">
     {console.log('fv:', fieldValues)}
+    {console.log('qv:', values)}
     <PageTitle parts={['Opt Out']} />
     {!form ? (
       <LoadingMessage />
@@ -87,8 +90,18 @@ export const OptOutComponent = ({
 );
 
 const fieldValuesValid = fieldValues => {
-  console.log(fieldValues);
   return fieldValues.emailAddress && fieldValues.confirm === 'true';
+};
+
+const valuesFromQueryParams = queryParams => {
+  const params = parse(queryParams);
+  return Object.entries(params).reduce((values, [key, value]) => {
+    if (key.startsWith('values[')) {
+      const vk = key.match(/values\[(.*?)\]/)[1];
+      return { ...values, [vk]: value };
+    }
+    return values;
+  }, {});
 };
 
 export const mapStateToProps = state => ({
@@ -98,6 +111,7 @@ export const mapStateToProps = state => ({
   appLocation: state.app.location,
   authenticated: state.app.authenticated,
   authRoute: state.app.authRoute,
+  values: valuesFromQueryParams(state.router.location.search),
 });
 
 export const mapDispatchToProps = {

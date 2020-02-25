@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
 import { connect } from '../../redux/store';
-import { compose, withHandlers, withProps } from 'recompose';
+import { actions } from '../../redux/modules/surveys';
+import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { I18n, CoreForm } from '@kineticdata/react';
-import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
+// import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { Link } from '@reach/router';
 import { parse } from 'query-string';
@@ -11,11 +12,14 @@ import { parse } from 'query-string';
 // forms. Note that we deliberately do this as a const so that it should start
 // immediately without making the application wait but it will likely be ready
 // before users nagivate to the actual forms.
-const globals = import('common/globals');
+
+// const globals = import('common/globals');
 
 export const SurveyComponent = ({
   authenticated,
   loading,
+  submission,
+  submissionId,
   slug,
   id,
   form,
@@ -28,10 +32,12 @@ export const SurveyComponent = ({
   kapp,
   kappSlug,
 }) => (
+  // submission &&
   <Fragment>
     <PageTitle parts={[form ? form.name : '']} />
-    {!loading && form ? (
+    {!loading && form && submission ? (
       <div className="page-container container">
+        {console.log('submission:', submission)}
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -66,33 +72,42 @@ export const SurveyComponent = ({
             )}
         </div>
         <I18n
-          context={`kapps.${kappSlug}.forms.${slug}`}
+          // context={`kapps.${kappSlug}.forms.${slug}`}
           public={!authenticated}
         >
           <div className="embedded-core-form--wrapper">
-            {id ? (
+            {submission && (
               <CoreForm
-                submission={id}
-                globals={globals}
-                loaded={handleLoaded}
-                completed={handleCompleted}
+                submission={submission.id}
+                // form={submission.form.slug}
+                // globals={globals}
+                // loaded={handleLoaded}
+                // completed={handleCompleted}
                 public={!authenticated}
+                review={submission.coreState !== 'Draft'}
+                // created={handleCreated}
+                // values={submission.values}
+                // notFoundComponent={ErrorNotFound}
+                // unauthorizedComponent={ErrorUnauthorized}
+                // unexpectedErrorComponent={ErrorUnexpected}
               />
-            ) : (
-              <CoreForm
-                kapp={kappSlug}
-                form={slug}
-                globals={globals}
-                loaded={handleLoaded}
-                created={handleCreated}
-                completed={handleCompleted}
-                values={values}
-                notFoundComponent={ErrorNotFound}
-                unauthorizedComponent={ErrorUnauthorized}
-                unexpectedErrorComponent={ErrorUnexpected}
-                public={!authenticated}
-              />
-            )}
+            )
+            // : (
+            //   <CoreForm
+            //     kapp={kappSlug}
+            //     form={slug}
+            //     globals={globals}
+            //     loaded={handleLoaded}
+            //     created={handleCreated}
+            //     completed={handleCompleted}
+            //     values={values}
+            //     notFoundComponent={ErrorNotFound}
+            //     unauthorizedComponent={ErrorUnauthorized}
+            //     unexpectedErrorComponent={ErrorUnexpected}
+            //     public={!authenticated}
+            //   />
+            // )
+            }
           </div>
         </I18n>
       </div>
@@ -132,18 +147,37 @@ export const mapStateToProps = state => ({
   kapp: state.app.kapp,
   kappSlug: state.app.kappSlug,
   loading: state.surveyApp.loading,
-  // form: state.surveys.form,
+  submission: state.surveys.submission,
   forms: state.surveyApp.forms,
   values: valuesFromQueryParams(state.router.location.search),
 });
 
+export const mapDispatchToProps = {
+  fetchSubmission: actions.fetchSubmissionRequest,
+};
+
 const enhance = compose(
-  connect(mapStateToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withProps(props => ({
-    form: props.forms && props.forms.find(form => form.slug === props.slug),
-    relativeHomePath: `../../${props.id ? '../../' : ''}`,
+    slug: props.submission && props.submission.form.slug,
+    form:
+      props.forms &&
+      props.submission &&
+      props.forms.find(form => form.slug === props.submission.form.slug),
+    relativeHomePath: `../../${props.submissionId ? '../../' : ''}`,
   })),
   withHandlers({ handleCompleted, handleCreated }),
+  lifecycle({
+    componentWillMount() {
+      this.props.submissionId &&
+        this.props.fetchSubmission({
+          id: this.props.submissionId,
+        });
+    },
+  }),
 );
 
 export const Survey = enhance(SurveyComponent);

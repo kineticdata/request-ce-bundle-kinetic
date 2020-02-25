@@ -8,7 +8,7 @@ import { Survey } from './components/survey/Survey';
 import { OptOut } from './components/survey/OptOut';
 import { SurveyList } from './components/survey/home/SurveyList';
 import { SurveySubmissions } from './components/survey/submissions/SurveySubmissions';
-import { Submission } from './components/survey/submissions/Submission';
+import { SubmissionDetails } from './components/survey/submissions/SubmissionDetails';
 import { SurveySettings } from './components/survey/SurveySettings';
 import { CreateSurvey } from './components/survey/CreateSurvey';
 import { actions as appActions } from './redux/modules/surveyApp';
@@ -36,14 +36,12 @@ const AppComponent = props => {
             <Router>
               <SurveyList path="/" />
               <CreateSurvey path="new" />
-              <Survey path="forms/:slug" />
+              <Survey path=":submissionId" />
               <SurveyError path="error" />
-              <OptOut path="forms/:slug/opt-out" />
+              <OptOut path=":slug/opt-out" />
               <SurveySubmissions path=":slug/submissions" />
               <SurveySettings path=":slug/settings" />
-              <Submission path=":slug/submissions/new" />
-              <Submission path=":slug/submissions/:id" />
-              {/* <SurveyRouter path="/*" /> */}
+              <SubmissionDetails path=":slug/submissions/:id" />
             </Router>
           </main>
         </I18n>
@@ -91,9 +89,10 @@ export const PublicAppComponent = props => {
         <I18n>
           <main className="package-layout package-layout--services">
             <Router>
-              <Survey path="forms/:slug" />
-              <SurveyError path="error" />
-              <OptOut path="forms/:slug/opt-out" />
+              {/* <Survey path="forms/:slug" exact={true} /> */}
+              {/* <Survey path="forms/:slug/:submissionId" /> */}
+              {/* <SurveyError path="error" /> */}
+              {/* <OptOut path="forms/:slug/opt-out" /> */}
               <Redirect from="*" to={props.authRoute} noThrow />
             </Router>
           </main>
