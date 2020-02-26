@@ -24,7 +24,6 @@ import {
 import {
   DEFAULT_SURVEY_TYPE,
   DEFAULT_TEMPLATE_INCLUDES,
-  SURVEY_OPT_OUT_DATASTORE_SLUG,
 } from '../../constants';
 
 export function* fetchFormSaga({ payload }) {
@@ -301,7 +300,7 @@ export function* deleteSurveyCustomWorkflowTreeSaga({ payload }) {
 export function* submitOptOutSaga({ payload }) {
   const { submission, error } = yield call(createSubmission, {
     datastore: true,
-    formSlug: SURVEY_OPT_OUT_DATASTORE_SLUG,
+    formSlug: '',
     include: 'details,values',
     completed: true,
     values: {
