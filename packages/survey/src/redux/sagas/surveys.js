@@ -1,8 +1,9 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 import {
   fetchForm,
   fetchForms,
   SubmissionSearch,
+  createSubmission,
   searchSubmissions,
   fetchSubmission,
   createForm,
@@ -23,6 +24,7 @@ import {
 import {
   DEFAULT_SURVEY_TYPE,
   DEFAULT_TEMPLATE_INCLUDES,
+  SURVEY_OPT_OUT_DATASTORE_SLUG,
 } from '../../constants';
 
 export function* fetchFormSaga({ payload }) {
@@ -158,10 +160,11 @@ export function* cloneFormSaga({ payload }) {
 }
 
 export function* fetchSubmissionSaga({ payload }) {
-  console.log('payload.id:', payload.id);
+  const authenticated = yield select(state => state.app.authenticated);
   const { submission, error } = yield call(fetchSubmission, {
     id: payload.id,
     include: SUBMISSION_INCLUDES,
+    public: !authenticated,
   });
   if (error) {
     yield put(actions.fetchSubmissionFailure(error));
@@ -296,13 +299,25 @@ export function* deleteSurveyCustomWorkflowTreeSaga({ payload }) {
 }
 
 export function* submitOptOutSaga({ payload }) {
-  yield addToastAlert({
-    title: 'Test Opt Out',
-    message: `${payload.emailAddress}, ${
-      payload.confirm === 'true' ? 'confirmed' : 'not confirmed'
-    }`,
+  const { submission, error } = yield call(createSubmission, {
+    datastore: true,
+    formSlug: SURVEY_OPT_OUT_DATASTORE_SLUG,
+    include: 'details,values',
+    completed: true,
+    values: {
+      'User Id': payload['User Id'],
+      'Survey Slug': payload['Survey Slug'],
+    },
   });
-  //TODO: add opt-out trigger
+  if (error) {
+    yield addToastAlert({
+      title: 'Opt Out Failed',
+      message: error.message,
+    });
+  } else {
+    console.log('sub:', submission);
+    return submission;
+  }
 }
 
 export function* watchSurveys() {

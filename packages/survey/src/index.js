@@ -6,6 +6,7 @@ import { is } from 'immutable';
 import { connectedHistory, context, store } from './redux/store';
 import { syncAppState } from './redux/modules/app';
 import { App, PublicApp } from './App';
+import matchPath from 'rudy-match-path';
 
 export default class extends Component {
   constructor(props) {
@@ -66,8 +67,10 @@ export default class extends Component {
 
   // Used for matching pathname to display this App
   // Not used if package is set as Bundle Package of a Kapp
-
   // static location = '/survey';
+
+  static shouldHideHeader = ({ authenticated, appLocation, location }) =>
+    !authenticated && matchPath(location.pathname, { path: `${appLocation}` });
 
   static hasPublicRoutes = true;
 }

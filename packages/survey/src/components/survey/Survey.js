@@ -32,12 +32,10 @@ export const SurveyComponent = ({
   kapp,
   kappSlug,
 }) => (
-  // submission &&
   <Fragment>
     <PageTitle parts={[form ? form.name : '']} />
     {!loading && form && submission ? (
       <div className="page-container container">
-        {console.log('submission:', submission)}
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -72,7 +70,7 @@ export const SurveyComponent = ({
             )}
         </div>
         <I18n
-          // context={`kapps.${kappSlug}.forms.${slug}`}
+          context={`kapps.${kappSlug}.forms.${slug}`}
           public={!authenticated}
         >
           <div className="embedded-core-form--wrapper">

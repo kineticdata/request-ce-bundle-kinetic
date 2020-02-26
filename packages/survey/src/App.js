@@ -89,10 +89,9 @@ export const PublicAppComponent = props => {
         <I18n>
           <main className="package-layout package-layout--services">
             <Router>
-              {/* <Survey path="forms/:slug" exact={true} /> */}
-              {/* <Survey path="forms/:slug/:submissionId" /> */}
-              {/* <SurveyError path="error" /> */}
-              {/* <OptOut path="forms/:slug/opt-out" /> */}
+              <Survey path=":submissionId" />
+              <SurveyError path="error" />
+              <OptOut path=":slug/opt-out" />
               <Redirect from="*" to={props.authRoute} noThrow />
             </Router>
           </main>
