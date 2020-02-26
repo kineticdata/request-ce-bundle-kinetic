@@ -1,134 +1,114 @@
 import React, { Fragment } from 'react';
-import {
-  compose,
-  lifecycle,
-  withHandlers,
-  withProps,
-  withState,
-} from 'recompose';
-import { actions } from '../../redux/modules/surveys';
-import { connect } from '../../redux/store';
-import { LoadingMessage } from 'common';
-import { I18n } from '@kineticdata/react';
-import { PageTitle } from '../shared/PageTitle';
+import { compose, withHandlers, withProps } from 'recompose';
 import { parse } from 'query-string';
+import { connect } from '../../redux/store';
+import { CoreForm, I18n } from '@kineticdata/react';
+import { Link } from '@reach/router';
+import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
+import { PageTitle } from '../shared/PageTitle';
 
-const Confirmation = () => (
+// Asynchronously import the global dependencies that are used in the embedded
+// forms. Note that we deliberately do this as a const so that it should start
+// immediately without making the application wait but it will likely be ready
+// before users nagivate to the actual forms.
+const globals = import('common/globals');
+
+export const OptOutComponent = ({
+  form,
+  type,
+  submissionId,
+  handleCreated,
+  handleCompleted,
+  handleLoaded,
+  handleDelete,
+  handleUnauthorized,
+  values,
+  kapp,
+  kappSlug,
+  formSlug,
+  path,
+  appLocation,
+  authenticated,
+}) => (
   <Fragment>
-    <div className="page-container container">
-      <div className="page-title">
-        <div className="page-title__wrapper">Opt out request submitted.</div>
+    <PageTitle parts={[form ? form.name : '']} />
+    <div className="page-container page-container--color-bar">
+      <div className="page-panel">
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h3>
+              <Link to={appLocation}>
+                <I18n>{kapp.name}</I18n>
+              </Link>{' '}
+              /{' '}
+            </h3>
+            {form && (
+              <h1>
+                <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
+                  {form.name}
+                </I18n>
+              </h1>
+            )}
+          </div>
+          {/* {authenticated &&
+            submissionId &&
+            form && (
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="btn btn-outline-danger"
+              >
+                <I18n>Cancel Request</I18n>
+              </button>
+            )} */}
+        </div>
+        <div className="form-description">
+          {form && (
+            <p>
+              <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
+                {form.description}
+              </I18n>
+            </p>
+          )}
+        </div>
+        <div className="embedded-core-form--wrapper">
+          {submissionId ? (
+            <I18n submissionId={submissionId} public={!authenticated}>
+              <CoreForm
+                submission={submissionId}
+                globals={globals}
+                loaded={handleLoaded}
+                completed={handleCompleted}
+                unauthorized={handleUnauthorized}
+                public={!authenticated}
+              />
+            </I18n>
+          ) : (
+            <I18n
+              context={`kapps.${kappSlug}.forms.${form.slug}`}
+              public={!authenticated}
+            >
+              <CoreForm
+                kapp={kappSlug}
+                form={form.slug}
+                globals={globals}
+                loaded={handleLoaded}
+                created={handleCreated}
+                completed={handleCompleted}
+                unauthorized={handleUnauthorized}
+                values={values}
+                notFoundComponent={ErrorNotFound}
+                unauthorizedComponent={ErrorUnauthorized}
+                unexpectedErrorComponent={ErrorUnexpected}
+                public={!authenticated}
+              />
+            </I18n>
+          )}
+        </div>
       </div>
     </div>
   </Fragment>
 );
-
-export const OptOutComponent = ({
-  kapp,
-  fieldValues,
-  form,
-  handleFieldChange,
-  handleSubmit,
-  values,
-  confirmation,
-}) => (
-  <div className="page-container">
-    <PageTitle parts={['Opt Out']} />
-    {!form ? (
-      <LoadingMessage />
-    ) : (
-      <div className="page-container container">
-        <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
-              <I18n>{kapp.name}</I18n> /{' '}
-            </h3>
-            <h1>
-              <I18n>{form.name}</I18n>
-            </h1>
-          </div>
-        </div>
-        {confirmation === 'true' ? (
-          <Confirmation />
-        ) : (
-          <Fragment>
-            <div className="form-description">
-              <h4>
-                <I18n>Opt Out</I18n>
-              </h4>
-              <p>
-                <I18n>
-                  Please fill out the form below to opt out of future
-                  invitations to this survey.
-                </I18n>
-              </p>
-            </div>
-            <form onSubmit={handleSubmit} className="form">
-              <div className="form-group col-6 required">
-                <label htmlFor="emailAddress">
-                  <I18n>Email Address</I18n>
-                </label>
-                <input
-                  type="text"
-                  id="emailAddress"
-                  name="emailAddress"
-                  onChange={handleFieldChange}
-                  value={fieldValues.emailAddress}
-                  placeholder={values['Email']}
-                />
-              </div>
-              <div className="form-group col-6 required">
-                <label htmlFor="confirm">
-                  <I18n>Confirm Opt Out</I18n>
-                </label>
-                <input
-                  type="checkbox"
-                  id="confirm"
-                  name="confirm"
-                  onChange={handleFieldChange}
-                  value={fieldValues.confirm}
-                />
-              </div>
-              <div className="form__footer">
-                <div className="form__footer__left col-6">
-                  <button
-                    type="submit"
-                    disabled={!fieldValuesValid(fieldValues)}
-                    className="btn btn-primary"
-                  >
-                    <I18n>Submit</I18n>
-                  </button>
-                </div>
-              </div>
-            </form>
-          </Fragment>
-        )}
-      </div>
-    )}
-  </div>
-);
-
-const fieldValuesValid = fieldValues => {
-  return fieldValues.emailAddress && fieldValues.confirm;
-};
-
-const handleFieldChange = props => ({ target: { name, value } }) => {
-  name === 'confirm'
-    ? props.setFieldValues({
-        ...props.fieldValues,
-        confirm: value === 'true' ? false : true,
-      })
-    : props.setFieldValues({ ...props.fieldValues, [name]: value });
-};
-
-const handleSubmit = props => event => {
-  event.preventDefault();
-  props.submitOptOut({
-    'User Id': props.fieldValues.emailAddress,
-    'Survey Slug': props.slug,
-  });
-  props.setConfirmation('true');
-};
 
 const valuesFromQueryParams = queryParams => {
   const params = parse(queryParams);
@@ -141,45 +121,72 @@ const valuesFromQueryParams = queryParams => {
   }, {});
 };
 
+export const handleCompleted = props => response => {
+  if (props.authenticated) {
+    if (!response.submission.currentPage) {
+      props.navigate(
+        `${props.appLocation}/requests/request/${
+          response.submission.id
+        }/confirmation`,
+      );
+    }
+    props.fetchCurrentPage();
+  }
+};
+
+export const handleCreated = props => response => {
+  if (
+    response.submission.coreState !== 'Submitted' ||
+    response.submission.currentPage
+  ) {
+    props.navigate(response.submission.id);
+  }
+};
+
+export const handleUnauthorized = props => response => {
+  if (!props.authenticated) {
+    props.navigate(props.authRoute);
+  }
+};
+
+export const handleLoaded = props => form => {
+  props.setForm({
+    slug: form.slug(),
+    name: form.name(),
+    description: form.description(),
+  });
+};
+
+export const handleDelete = props => () => {
+  const deleteCallback = () => {
+    props.fetchCurrentPage();
+    props.navigate(props.appLocation);
+  };
+  props.deleteSubmission({ id: props.submissionId, callback: deleteCallback });
+};
+
 export const mapStateToProps = state => ({
+  forms: state.surveyApp.forms,
+  values: valuesFromQueryParams(state.router.location.search),
   kapp: state.app.kapp,
   kappSlug: state.app.kappSlug,
-  forms: state.surveyApp.forms,
   appLocation: state.app.location,
   authenticated: state.app.authenticated,
   authRoute: state.app.authRoute,
-  values: valuesFromQueryParams(state.router.location.search),
 });
 
-export const mapDispatchToProps = {
-  submitOptOut: actions.submitOptOut,
-};
-
 const enhance = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps),
   withProps(props => ({
-    form: props.forms && props.forms.find(form => form.slug === props.slug),
+    form:
+      props.forms && props.forms.find(form => form.slug === 'survey-opt-out'),
   })),
-  withState('fieldValues', 'setFieldValues', {
-    emailAddress: '',
-    confirm: false,
-  }),
-  withState('confirmation', 'setConfirmation', 'false'),
   withHandlers({
-    handleFieldChange,
-    handleSubmit,
-  }),
-  lifecycle({
-    componentWillMount() {
-      this.props.values &&
-        this.props.setFieldValues({
-          ...this.props.fieldValues,
-          emailAddress: this.props.values['email'],
-        });
-    },
+    handleCompleted,
+    handleCreated,
+    handleLoaded,
+    handleDelete,
+    handleUnauthorized,
   }),
 );
 

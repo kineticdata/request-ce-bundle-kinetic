@@ -25,10 +25,15 @@ export function* fetchNotificationsSaga() {
     yield put(actions.setFetchNotificationsError(errors));
   } else {
     yield put(
-      actions.setNotifications({
-        templates: submissions.filter(sub => sub.values.Type === 'Template'),
-        snippets: submissions.filter(sub => sub.values.Type === 'Snippet'),
-      }),
+      actions.setNotifications(
+        submissions.filter(
+          sub =>
+            sub.values['Type'] === 'Template' &&
+            sub.values['Status'] === 'Active',
+        ),
+        // templates: submissions.filter(sub => sub.values.Type === 'Template'),
+        // snippets: submissions.filter(sub => sub.values.Type === 'Snippet'),
+      ),
     );
   }
 }

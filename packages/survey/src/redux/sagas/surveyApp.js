@@ -8,6 +8,12 @@ export function* fetchAppDataRequestSaga() {
   const authenticated = yield select(state => state.app.authenticated);
   const kappSlug = yield select(state => state.app.kappSlug);
 
+  // check for prerequisites
+  // 1. Form Attribute (Survey Configuration)
+  // 2. Forms (Survey Template / OptOut)
+  // 3. Ensure that "robots" exist (check for the robots datastore form)
+  // 4. Probably some trees that need to exist.
+
   const { forms, error } = yield call(fetchForms, {
     kappSlug,
     include: 'details,attributes',
@@ -21,6 +27,12 @@ export function* fetchAppDataRequestSaga() {
       message: error.message,
     });
   } else {
+    // check  for template requirement
+    const hasTemplate = !!forms.find(form => form.type === 'Template');
+    if (!hasTemplate) {
+      yield put(actions.fetchAppDataRequired('template'));
+    }
+
     const filteredForms = forms.filter(form => form.type !== 'Template');
     yield put(
       actions.fetchAppDataSuccess({

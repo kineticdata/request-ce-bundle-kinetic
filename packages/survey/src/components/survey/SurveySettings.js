@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 import { connect } from '../../redux/store';
 import {
@@ -35,6 +35,40 @@ const BuilderLink = ({ tree }) => (
   </span>
 );
 
+const SidebarContent = ({ tab }) =>
+  tab === '1' ? (
+    <Fragment>
+      <h3>General Settings</h3>
+      {/* TODO: add details */}
+    </Fragment>
+  ) : tab === '2' ? (
+    <Fragment>
+      <h3>Workflow Process</h3>
+      {/* TODO: add details */}
+      <br />
+      <Link to={'/settings/notifications/templates/new'}>
+        New Notification Template
+      </Link>
+    </Fragment>
+  ) : tab === '3' ? (
+    <Fragment>
+      <h3>Polling</h3>
+      {/* TODO: add details */}
+    </Fragment>
+  ) : tab === '4' ? (
+    <Fragment>
+      <h3>Delivery Rules</h3>
+      {/* TODO: add details */}
+    </Fragment>
+  ) : (
+    tab === '5' && (
+      <Fragment>
+        <h3>Security</h3>
+        {/* TODO: add details */}
+      </Fragment>
+    )
+  );
+
 const fieldSet = [
   'name',
   'slug',
@@ -65,20 +99,22 @@ const fieldSet = [
   'submitter',
 ];
 
-const FormLayoutComponent = ({
-  fields,
-  error,
-  buttons,
-  dirty,
-  formOptions,
+const SurveySettingsComponent = ({
+  kapp,
+  kappSlug,
+  origForm,
+  loading,
+  templates,
+  robots,
+  customWorkflow,
+  setCustomWorkflow,
+  onSave,
+  spaceAdmin,
   associatedTree,
+  activeTab,
+  toggleTab,
 }) => {
-  const [activeTab, setActiveTab] = useState('1');
-  const toggle = tab => {
-    if (activeTab !== tab) setActiveTab(tab);
-  };
-
-  return (
+  const FormLayout = ({ fields, error, buttons, dirty, formOptions }) => (
     <Fragment>
       {/* reactStrap navigation */}
       <div className="survey-tabs">
@@ -87,7 +123,7 @@ const FormLayoutComponent = ({
             <NavLink
               className={classnames({ active: activeTab === '1' })}
               onClick={() => {
-                toggle('1');
+                toggleTab('1');
               }}
               disabled={dirty}
             >
@@ -98,7 +134,7 @@ const FormLayoutComponent = ({
             <NavLink
               className={classnames({ active: activeTab === '2' })}
               onClick={() => {
-                toggle('2');
+                toggleTab('2');
               }}
               disabled={dirty}
             >
@@ -109,7 +145,7 @@ const FormLayoutComponent = ({
             <NavLink
               className={classnames({ active: activeTab === '3' })}
               onClick={() => {
-                toggle('3');
+                toggleTab('3');
               }}
               disabled={dirty}
             >
@@ -120,7 +156,7 @@ const FormLayoutComponent = ({
             <NavLink
               className={classnames({ active: activeTab === '4' })}
               onClick={() => {
-                toggle('4');
+                toggleTab('4');
               }}
               disabled={dirty}
             >
@@ -131,7 +167,7 @@ const FormLayoutComponent = ({
             <NavLink
               className={classnames({ active: activeTab === '5' })}
               onClick={() => {
-                toggle('5');
+                toggleTab('5');
               }}
               disabled={dirty}
             >
@@ -163,16 +199,17 @@ const FormLayoutComponent = ({
             <div className="survey-settings survey-settings--workflow">
               <div className="workflow-group">
                 {fields.get('workflowProcess')}
-                {associatedTree.tree && (
-                  <BuilderLink tree={associatedTree.tree} />
-                )}
+                {spaceAdmin &&
+                  associatedTree.tree && (
+                    <BuilderLink tree={associatedTree.tree} />
+                  )}
               </div>
+              {fields.get('invitationTemplate')}
               {fields.get('reminderTemplate')}
               <div className="form-group__columns">
                 {fields.get('reminderInterval')}
                 {fields.get('reminderMax')}
               </div>
-              {fields.get('invitationTemplate')}
             </div>
           </TabPane>
 
@@ -218,133 +255,17 @@ const FormLayoutComponent = ({
           </TabPane>
         </TabContent>
       </div>
-
-      {/* previous style */}
-      {/* <div className="survey-tabs">
-      <ul className="nav nav-tabs">
-        <li role="presentation">
-          <Link to="somewhere" className="active">
-            <I18n>General Settings</I18n>
-          </Link>
-        </li>
-
-        <li role="presentation">
-          <Link to="somewhere">
-            <I18n>Workflow Process</I18n>
-          </Link>
-        </li>
-        <li role="presentation">
-          <Link to="somewhere">
-            <I18n>Polling</I18n>
-          </Link>
-        </li>
-        <li role="presentation">
-          <Link to="somewhere">
-            <I18n>Delivery Rules</I18n>
-          </Link>
-        </li>
-        <li role="presentation">
-          <Link to="somewhere">
-            <I18n>Security</I18n>
-          </Link>
-        </li>
-      </ul>
-    </div> */}
-      {/* <div className="survey-tabs__content"> */}
-      {/* General Settings */}
-      {/* <div className="survey-settings survey-settings--general active">
-        <div className="form-group__columns">
-          {fields.get('name')}
-          {fields.get('slug')}
-        </div>
-        {fields.get('description')}
-        {fields.get('status')}
-        {fields.get('submissionLabelExpression')}
-      </div> */}
-
-      {/* Workflow Process */}
-      {/* <div className="survey-settings survey-settings--workflow">
-        {fields.get('workflowProcess')}
-        {fields.get('reminderTemplate')}
-        <div className="form-group__columns">
-          {fields.get('reminderInterval')}
-          {fields.get('reminderMax')}
-        </div>
-        {fields.get('invitationTemplate')}
-        <div className="form-group__columns">
-          {fields.get('surveyStart')}
-          {fields.get('surveyStop')}
-        </div>
-      </div> */}
-
-      {/* Polling */}
-      {/* <div className="survey-settings survey-settings--polling">
-        {fields.get('polling')}
-        {fields.get('pollingSource')}
-        {fields.get('pollingType')}
-        {fields.get('pollingTrigger')}
-        {fields.get('pollingInterval')}
-      </div> */}
-
-      {/* Delivery Rules */}
-      {/* <div className="survey-settings survey-settings--delivery">
-        {fields.get('expiration')}
-        {fields.get('allowOptOut')}
-        <div className="form-group__columns">
-          {fields.get('maxFrequencyCount')}
-          {fields.get('maxFrequencyDays')}
-        </div>
-        {fields.get('eventInterval')}
-      </div> */}
-
-      {/* Security Rules */}
-      {/* <div className="survey-settings survey-settings--security">
-        <div className="form-group__columns">
-          {fields.get('owningTeam')}
-          {fields.get('assignedIndividual')}
-        </div>
-        <div className="form-group__columns">
-          {fields.get('authenticated')}
-          {fields.get('submitter')}
-        </div>
-      </div> */}
-      {/* </div> */}
-
       {error}
       {buttons}
     </Fragment>
   );
-};
 
-const SurveySettingsComponent = ({
-  kapp,
-  kappSlug,
-  canManage,
-  origForm,
-  loading,
-  taskSourceName,
-  templates,
-  snippets,
-  robots,
-  customWorkflow,
-  setCustomWorkflow,
-  onSave,
-}) => {
   const notificationOptions =
     !!templates &&
-    !!snippets &&
-    templates
-      .map(t => ({
-        value: t.values['Name'],
-        label: `Template: ${t.values['Name']}`,
-      }))
-      .concat(
-        snippets.map(s => ({
-          value: s.values['Name'],
-          label: `Snippet: ${s.values['Name']}`,
-        })),
-      )
-      .concat([{ value: 'Survey Invitation', label: 'Survey Invitation' }]); // placeholder
+    templates.map(t => ({
+      value: t.values['Name'],
+      label: t.values['Name'],
+    }));
 
   const robotOptions =
     !!robots &&
@@ -414,17 +335,19 @@ const SurveySettingsComponent = ({
                       form && [
                         {
                           name: 'workflowProcess',
-                          label: 'Workflow Process',
+                          label: 'Run Workflow Process on Submit',
                           type: 'radio',
                           options: [
-                            { label: 'Standard', value: 'false' },
-                            { label: 'Custom', value: 'true' },
+                            { label: 'No', value: 'false' },
+                            { label: 'Yes', value: 'true' },
                           ],
                           initialValue: surveyConfig
                             ? surveyConfig['Use Custom Workflow']
                             : 'false',
                           onChange: ({ values }) =>
                             setCustomWorkflow(values.get('workflowProcess')),
+                          helpText:
+                            'A workflow can be created upon submission of a survey to trigger additional actions',
                         },
                         {
                           name: 'reminderTemplate',
@@ -432,18 +355,22 @@ const SurveySettingsComponent = ({
                           type: 'select',
                           initialValue: surveyConfig
                             ? surveyConfig['Reminders']['Reminder Template']
-                            : '',
+                            : 'Survey Invitation',
                           options: notificationOptions,
+                          helpText:
+                            'This email notification template will be used when sending out a survey reminder',
                         },
 
                         {
                           name: 'reminderInterval',
-                          label: 'Reminder Notifications Interval',
+                          label: 'Reminder Notifications Interval (in days)',
                           type: 'text',
                           initialValue: surveyConfig
                             ? surveyConfig['Reminders']['Reminder Interval']
                             : 0,
                           component: FormComponents.IntegerField,
+                          helpText:
+                            'Number of days in between reminder notifications',
                         },
                         {
                           name: 'reminderMax',
@@ -453,15 +380,17 @@ const SurveySettingsComponent = ({
                             ? surveyConfig['Reminders']['Reminder Max']
                             : 0,
                           component: FormComponents.IntegerField,
+                          helpText: 'Maximum number of reminders to send',
                         },
                         {
                           name: 'invitationTemplate',
-                          label: 'Invitation Template',
+                          label: 'Invitation Notification Template',
                           type: 'select',
                           initialValue: surveyConfig
                             ? surveyConfig['Invitation Notification Name']
                             : 'Survey Invitation',
                           options: notificationOptions,
+                          helpText: `This email notification template will be used when sending out the survey`,
                         },
                         {
                           name: 'polling',
@@ -477,7 +406,7 @@ const SurveySettingsComponent = ({
                         },
                         {
                           name: 'pollingSource',
-                          label: 'Polling Source',
+                          label: 'Source',
                           type: 'select',
                           visible: ({ values }) =>
                             values.get('polling') === 'true',
@@ -488,23 +417,29 @@ const SurveySettingsComponent = ({
                         },
                         {
                           name: 'pollingType',
-                          label: 'Polling Type',
+                          label: 'Type',
                           type: 'text',
                           visible: ({ values }) =>
                             values.get('polling') === 'true',
                           initialValue: surveyConfig
                             ? surveyConfig['Event Polling']['Type']
                             : '',
+                          helpText:
+                            'Name of the form or object that will be polled',
+                          placeholder: 'PD:HelpDesk',
                         },
                         {
                           name: 'pollingTrigger',
-                          label: 'Polling Trigger',
+                          label: 'Trigger',
                           type: 'text',
                           visible: ({ values }) =>
                             values.get('polling') === 'true',
                           initialValue: surveyConfig
                             ? surveyConfig['Event Polling']['Trigger']
                             : '',
+                          helpText:
+                            'Query that will be executed to retrieve surveys',
+                          placeholder: `‘Status’=”Completed”`,
                         },
                         // {
                         //   name: 'pollingInterval',
@@ -525,6 +460,7 @@ const SurveySettingsComponent = ({
                             ? surveyConfig['Survey Period']['Start']
                             : '',
                           component: FormComponents.DateField,
+                          helpText: 'Date when surveys will begin being sent',
                         },
                         {
                           name: 'surveyStop',
@@ -534,6 +470,7 @@ const SurveySettingsComponent = ({
                             ? surveyConfig['Survey Period']['Stop']
                             : '',
                           component: FormComponents.DateField,
+                          helpText: 'Date when surveys will stop being sent',
                         },
                         {
                           name: 'expiration',
@@ -543,6 +480,8 @@ const SurveySettingsComponent = ({
                             ? surveyConfig['Expiration']
                             : 365,
                           component: FormComponents.IntegerField,
+                          helpText:
+                            'Number of days the user being surveyed has to fill it out',
                         },
                         {
                           name: 'allowOptOut',
@@ -555,6 +494,8 @@ const SurveySettingsComponent = ({
                             { value: 'true', label: 'Yes' },
                             { value: 'false', label: 'No' },
                           ],
+                          helpText:
+                            'Allows a user to opt-out of retrieving this survey',
                         },
                         {
                           name: 'maxFrequencyCount',
@@ -621,7 +562,25 @@ const SurveySettingsComponent = ({
                     );
                   }}
                   alterFields={{
+                    name: {
+                      helpText: 'Name of the survey',
+                    },
+                    slug: {
+                      helpText: 'Unique identifier of the survey',
+                    },
                     description: { component: FormComponents.TextAreaField },
+                    status: {
+                      options: [
+                        { value: 'Active', label: 'Active' },
+                        { value: 'Inactive', label: 'Inactive' },
+                      ],
+                      helpText: 'Only Active surveys will be sent out',
+                    },
+                    submissionLabelExpression: {
+                      label: 'Survey Label',
+                      helpText:
+                        'Custom label for survey submissions. Click the </> button to see available values derived from each submission.',
+                    },
                     attributesMap: {
                       serialize: ({ values }) => ({
                         'Survey Configuration': asArray({
@@ -695,6 +654,7 @@ const SurveySettingsComponent = ({
                 navigating between tabs. Reset or save your changes to continue.
               </I18n>
             </p>
+            <SidebarContent tab={activeTab} />
           </div>
         </div>
       </I18n>
@@ -704,13 +664,13 @@ const SurveySettingsComponent = ({
 
 export const mapStateToProps = (state, { slug }) => ({
   loading: state.surveys.currentFormLoading || state.notifications.loading,
+  spaceAdmin: state.app.profile.spaceAdmin ? true : false,
   origForm: state.surveys.form,
   kapp: state.app.kapp,
   kappSlug: state.app.kappSlug,
   formSlug: slug,
   taskSourceName: Utils.getAttributeValue(state.app.space, 'Task Source Name'),
   templates: state.notifications.notificationTemplates,
-  snippets: state.notifications.notificationSnippets,
   robots: state.robots.robots.toJS(),
   associatedTree: state.surveys.associatedTree,
 });
@@ -724,18 +684,20 @@ export const mapDispatchToProps = {
   fetchAssociatedTree: surveyActions.fetchAssociatedTree,
 };
 
-const FormLayout = compose(connect(mapStateToProps))(FormLayoutComponent);
-
 export const SurveySettings = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
   withState('customWorkflow', 'setCustomWorkflow', ''),
+  withState('activeTab', 'setActiveTab', '1'),
   withProps(props => ({
     form: props.forms && props.forms.find(form => form.slug === props.slug),
   })),
   withHandlers({
+    toggleTab: props => tab => {
+      if (props.activeTab !== tab) props.setActiveTab(tab);
+    },
     onSave: props => () => {
       props.customWorkflow === 'true'
         ? props.createSurveyCustomWorkflowTree({

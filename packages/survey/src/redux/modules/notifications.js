@@ -75,7 +75,6 @@ export const State = Record({
   loading: true,
   errors: [],
   notificationTemplates: [],
-  notificationSnippets: [],
   // Notification List Actions
   cloning: false,
   deleting: false,
@@ -97,8 +96,7 @@ export const notificationsReducer = (state = State(), { type, payload }) => {
       return state
         .set('loading', false)
         .set('errors', [])
-        .set('notificationTemplates', payload.templates)
-        .set('notificationSnippets', payload.snippets);
+        .set('notificationTemplates', payload);
     case types.SET_FETCH_NOTIFICATIONS_ERROR:
       return state.set('loading', false).set('errors', payload);
     case types.FETCH_NOTIFICATION:

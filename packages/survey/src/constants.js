@@ -1,5 +1,3 @@
-export const SURVEY_OPT_OUT_DATASTORE_SLUG = 'survey-opt-out';
-
 // Create from template
 export const DEFAULT_SURVEY_TYPE = '';
 export const DEFAULT_TEMPLATE_INCLUDES = 'details,attributesMap,fields,pages';

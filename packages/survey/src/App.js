@@ -4,6 +4,7 @@ import { compose, lifecycle } from 'recompose';
 import { ErrorUnexpected, Loading } from 'common';
 import { I18n } from '@kineticdata/react';
 import { connect } from './redux/store';
+import { SurveyAppSetup } from './components/survey/SurveyAppSetup';
 import { Survey } from './components/survey/Survey';
 import { OptOut } from './components/survey/OptOut';
 import { SurveyList } from './components/survey/home/SurveyList';
@@ -24,7 +25,9 @@ const SurveyError = () => (
  *****************************************************************************/
 
 const AppComponent = props => {
-  if (props.error) {
+  if (props.required && props.required[0]) {
+    return <SurveyAppSetup required={props.required} />;
+  } else if (props.error) {
     return <ErrorUnexpected />;
   } else if (props.loading) {
     return <Loading text="App is loading ..." />;
@@ -38,7 +41,7 @@ const AppComponent = props => {
               <CreateSurvey path="new" />
               <Survey path=":submissionId" />
               <SurveyError path="error" />
-              <OptOut path=":slug/opt-out" />
+              <OptOut path="survey-opt-out" />
               <SurveySubmissions path=":slug/submissions" />
               <SurveySettings path=":slug/settings" />
               <SubmissionDetails path=":slug/submissions/:id" />
@@ -54,6 +57,7 @@ const mapStateToProps = (state, props) => ({
   loading: state.surveyApp.loading,
   error: state.surveyApp.error,
   surveys: state.surveyApp.forms,
+  required: state.surveyApp.required,
 });
 
 const mapDispatchToProps = {

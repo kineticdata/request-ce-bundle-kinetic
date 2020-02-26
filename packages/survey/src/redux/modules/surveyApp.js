@@ -7,18 +7,21 @@ export const types = {
   FETCH_APP_DATA_REQUEST: ns('FETCH_APP_DATA_REQUEST'),
   FETCH_APP_DATA_SUCCESS: ns('FETCH_APP_DATA_SUCCESS'),
   FETCH_APP_DATA_FAILURE: ns('FETCH_APP_DATA_FAILURE'),
+  FETCH_APP_DATA_REQUIRED: ns('FETCH_APP_DATA_REQUIRED'),
 };
 
 export const actions = {
   fetchAppDataRequest: withPayload(types.FETCH_APP_DATA_REQUEST),
   fetchAppDataSuccess: withPayload(types.FETCH_APP_DATA_SUCCESS),
   fetchAppDataFailure: withPayload(types.FETCH_APP_DATA_FAILURE),
+  fetchAppDataRequired: withPayload(types.FETCH_APP_DATA_REQUIRED),
 };
 
 export const State = Record({
   loading: true,
   error: null,
   forms: null,
+  required: null,
 });
 
 const surveyAppReducer = (state = State(), { type, payload }) => {
@@ -29,6 +32,8 @@ const surveyAppReducer = (state = State(), { type, payload }) => {
       return state.set('forms', List(payload.forms)).set('loading', false);
     case types.FETCH_APP_DATA_FAILURE:
       return state.set('error', payload);
+    case types.FETCH_APP_DATA_REQUIRED:
+      return state.set('required', payload);
     default:
       return state;
   }
