@@ -56,12 +56,15 @@
 .survey-tabs {
   .nav-tabs {
     margin-bottom: 1.5rem;
-  }
-  &__content {
-    .survey-settings {
-      display: none;
-      &.active {
-        display: block;
+    .nav-link.active {
+      border-color: transparent;
+      border-bottom: 2px solid #ff991c;
+    }
+    .nav-link {
+      padding-top: 0;
+      &:hover {
+        border-color: transparent;
+        border-bottom: 2px solid $orange-kinetic;
       }
     }
   }
