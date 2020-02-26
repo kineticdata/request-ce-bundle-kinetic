@@ -13,6 +13,16 @@ import { I18n } from '@kineticdata/react';
 import { PageTitle } from '../shared/PageTitle';
 import { parse } from 'query-string';
 
+const Confirmation = () => (
+  <Fragment>
+    <div className="page-container container">
+      <div className="page-title">
+        <div className="page-title__wrapper">Opt out request submitted.</div>
+      </div>
+    </div>
+  </Fragment>
+);
+
 export const OptOutComponent = ({
   kapp,
   fieldValues,
@@ -21,36 +31,27 @@ export const OptOutComponent = ({
   handleSubmit,
   values,
   confirmation,
-}) => {
-  console.log('confirmation:', confirmation);
-  return (
-    <div className="page-container">
-      <PageTitle parts={['Opt Out']} />
-      {confirmation === 'true' ? (
-        <Fragment>
-          <div className="page-container container">
-            <div className="page-title">
-              <div className="page-title__wrapper">
-                Opt out request submitted.
-              </div>
-            </div>
+}) => (
+  <div className="page-container">
+    <PageTitle parts={['Opt Out']} />
+    {!form ? (
+      <LoadingMessage />
+    ) : (
+      <div className="page-container container">
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h3>
+              <I18n>{kapp.name}</I18n> /{' '}
+            </h3>
+            <h1>
+              <I18n>{form.name}</I18n>
+            </h1>
           </div>
-        </Fragment>
-      ) : !form ? (
-        <LoadingMessage />
-      ) : (
-        <Fragment>
-          <div className="page-container container">
-            <div className="page-title">
-              <div className="page-title__wrapper">
-                <h3>
-                  <I18n>{kapp.name}</I18n> /{' '}
-                </h3>
-                <h1>
-                  <I18n>{form.name}</I18n>
-                </h1>
-              </div>
-            </div>
+        </div>
+        {confirmation === 'true' ? (
+          <Confirmation />
+        ) : (
+          <Fragment>
             <div className="form-description">
               <h4>
                 <I18n>Opt Out</I18n>
@@ -100,12 +101,12 @@ export const OptOutComponent = ({
                 </div>
               </div>
             </form>
-          </div>
-        </Fragment>
-      )}
-    </div>
-  );
-};
+          </Fragment>
+        )}
+      </div>
+    )}
+  </div>
+);
 
 const fieldValuesValid = fieldValues => {
   return fieldValues.emailAddress && fieldValues.confirm;
@@ -121,7 +122,6 @@ const handleFieldChange = props => ({ target: { name, value } }) => {
 };
 
 const handleSubmit = props => event => {
-  console.log('props:', props);
   event.preventDefault();
   props.submitOptOut({
     'User Id': props.fieldValues.emailAddress,

@@ -315,7 +315,6 @@ export function* submitOptOutSaga({ payload }) {
       message: error.message,
     });
   } else {
-    console.log('sub:', submission);
     return submission;
   }
 }
