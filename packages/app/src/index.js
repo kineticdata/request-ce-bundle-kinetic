@@ -1,3 +1,5 @@
+import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { matchPath } from 'react-router';
@@ -10,8 +12,6 @@ import { actions as layoutActions } from './redux/modules/layout';
 import { actions } from './redux/modules/app';
 import { Authentication } from './components/authentication/Authentication';
 import { App } from './App';
-import 'react-app-polyfill/ie11';
-import 'react-app-polyfill/stable';
 
 // Shared Components
 import { FormComponents, TableComponents } from 'common';
