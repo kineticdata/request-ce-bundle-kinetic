@@ -276,7 +276,7 @@ export const Discussions = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withState('query', 'setQuery', ''),
+  withState('query', 'setQuery', props => props.title),
   withState('createModal', 'setCreateModal', false),
   withHandlers({
     loadNextHandler,
