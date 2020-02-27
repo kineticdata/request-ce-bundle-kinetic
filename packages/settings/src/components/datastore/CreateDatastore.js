@@ -16,7 +16,6 @@ const CreateDatastoreComponent = ({
   spaceAdmin,
   setNewForm,
   newForm,
-  bridges,
   loading,
   creating,
   handleSave,
@@ -128,12 +127,6 @@ const CreateDatastoreComponent = ({
           form to be used for storing data.
         </I18n>
       </p>
-      {/*<p>
-        <strong>Bridge Name:</strong> Select the Kinetic Core bridge to allow
-        for automatic bridge creation for this datastore (The Kinetic Core
-        Bridge Adapter must first be installed into Bridgehub to allow this data
-        to be retrieved via bridges).
-      </p>*/}
     </div>
   </div>
 );
@@ -166,7 +159,6 @@ const handleNameChange = ({ setNewForm, newForm }) => value => {
 
 export const mapStateToProps = state => ({
   spaceAdmin: state.app.profile.spaceAdmin,
-  bridges: state.settingsDatastore.bridges,
 });
 
 export const mapDispatchToProps = {

@@ -60,6 +60,7 @@ const fetchBridges = (options = {}) => {
 };
 
 export function* fetchFormsSaga() {
+  const isSpaceAdmin = yield select(state => state.app.profile.spaceAdmin);
   const [displayableForms, manageableForms, bridges] = yield all([
     call(fetchForms, {
       datastore: true,
@@ -69,7 +70,7 @@ export function* fetchFormsSaga() {
       datastore: true,
       manage: 'true',
     }),
-    call(fetchBridges),
+    isSpaceAdmin ? call(fetchBridges) : '',
   ]);
 
   const manageableFormsSlugs = manageableForms.forms
@@ -109,6 +110,7 @@ export function* fetchFormSaga(action) {
 }
 
 export function* updateFormSaga() {
+  const isSpaceAdmin = yield select(state => state.app.profile.spaceAdmin);
   const currentForm = yield select(selectCurrentForm);
   const currentFormChanges = yield select(selectCurrentFormChanges);
   let updateError = null;
@@ -149,8 +151,9 @@ export function* updateFormSaga() {
     }
   }
 
-  // Update bridge model if bridge info has changed
+  // Update bridge model if bridge info has changed, and user is space admin
   if (
+    isSpaceAdmin &&
     !updateError &&
     (!currentForm.bridgeModel.equals(currentFormChanges.bridgeModel) ||
       !currentForm.bridgeModelMapping.equals(
