@@ -7,6 +7,7 @@ export const Form = object => ({
   slug: object.slug,
   description: object.description,
   icon: Utils.getIcon(object, constants.DEFAULT_FORM_ICON),
+  keywords: Utils.getAttributeValues(object, constants.ATTRIBUTE_KEYWORD),
   categories:
     object.categorizations && object.categorizations.map(c => c.category.slug),
   type: object.type,

@@ -22,6 +22,7 @@ export const State = Record({
   categoryGetter: () => null,
   categories: null,
   homeForms: null,
+  searchableForms: null,
 });
 
 const reducer = (state = State(), { type, payload }) => {
@@ -39,7 +40,13 @@ const reducer = (state = State(), { type, payload }) => {
             .getRootCategories()
             .filterNot(category => category.isEmpty()),
         )
-        .set('homeForms', List(payload.forms).map(Form));
+        .set('homeForms', List(payload.forms).map(Form))
+        .set(
+          'searchableForms',
+          payload.searchableLimitReached
+            ? null
+            : List(payload.searchableForms).map(Form),
+        );
     case types.FETCH_APP_DATA_FAILURE:
       return state.set('loading', false).set('error', payload);
     default:

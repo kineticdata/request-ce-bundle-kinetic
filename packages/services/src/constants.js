@@ -14,6 +14,7 @@ export const ATTRIBUTE_PARENT = 'Parent';
 export const ATTRIBUTE_HIDDEN = 'Hidden';
 export const ATTRIBUTE_SERVICE_DAYS_DUE = 'Service Days Due';
 export const ATTRIBUTE_SERVICE_OWNING_TEAM = 'Service Owning Team';
+export const ATTRIBUTE_KEYWORD = 'Keyword';
 
 // Field names
 export const STATUS_FIELD = 'Status';
