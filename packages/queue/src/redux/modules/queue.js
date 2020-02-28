@@ -93,6 +93,7 @@ export const State = Record({
   }),
   lists: Map(),
   statuses: Map(),
+  loading: Map(),
   newItemMenuOpen: false,
   newItemMenuOptions: Map(),
 
@@ -115,12 +116,17 @@ export const reducer = (state = State(), { type, payload }) => {
           )
           .set('type', 'adhoc'),
       );
+    case types.FETCH_LIST:
+      return state.setIn(['loading', payload], true);
     case types.SET_LIST_ITEMS:
       return state
         .setIn(['lists', payload.filter], List(payload.list))
-        .setIn(['statuses', payload.filter], null);
+        .setIn(['statuses', payload.filter], null)
+        .setIn(['loading', payload.filter], false);
     case types.SET_LIST_STATUS:
-      return state.setIn(['statuses', payload.filter], payload.status);
+      return state
+        .setIn(['statuses', payload.filter], payload.status)
+        .setIn(['loading', payload.filter], false);
     case types.FETCH_CURRENT_ITEM:
       return state.set('currentItemLoading', true);
     case types.SET_CURRENT_ITEM:

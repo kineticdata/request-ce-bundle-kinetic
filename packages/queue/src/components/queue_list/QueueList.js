@@ -3,7 +3,7 @@ import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
 import wallyMissingImage from 'common/src/assets/images/wally-missing.svg';
 import { QueueListItemSmall } from './QueueListItem';
 import { TOO_MANY_STATUS_STRING } from '../../redux/sagas/queue';
-import { Constants, GroupDivider } from 'common';
+import { Constants, GroupDivider, LoadingMessage } from 'common';
 import { FilterMenuToolbar } from './FilterMenuToolbar';
 import { FilterMenuMobile } from './FilterMenuMobile';
 import { QueueListPagination } from './QueueListPagination';
@@ -110,6 +110,7 @@ export const QueueList = ({
   filter,
   queueItems,
   statusMessage,
+  isLoading,
   openFilterMenu,
   sortDirection,
   sortBy,
@@ -175,6 +176,8 @@ export const QueueList = ({
               >
                 {statusMessage ? (
                   <WallyErrorMessage message={statusMessage} />
+                ) : isLoading ? (
+                  <LoadingMessage />
                 ) : queueItems && queueItems.size > 0 ? (
                   isGrouped ? (
                     queueItems

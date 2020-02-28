@@ -164,38 +164,40 @@ export const sortSubmissions = (submissions, filter) =>
 
 export function* fetchListTask(action) {
   const filter = action.payload;
-  const appSettings = yield select(getAppSettings);
-  const kappSlug = yield select(getKappSlug);
-  const { search, invalidAssignment } = yield call(
-    buildSearch,
-    filter,
-    appSettings,
-  );
-
-  // If invalidAssignment is true, then there is a problem with the query
-  // and we should immediately yield an empty list.
-  if (invalidAssignment) {
-    yield put(actions.setListItems(filter, []));
-  } else {
-    const { submissions, messages, nextPageToken, error } = yield call(
-      searchSubmissions,
-      { kapp: kappSlug, search, limit: 1000 },
+  if (filter) {
+    const appSettings = yield select(getAppSettings);
+    const kappSlug = yield select(getKappSlug);
+    const { search, invalidAssignment } = yield call(
+      buildSearch,
+      filter,
+      appSettings,
     );
 
-    if (error || (messages && messages.length > 0)) {
-      yield put(actions.setListStatus(filter, ERROR_STATUS_STRING));
-      yield put(addToastAlert('Failed to retrieve items!'));
-    } else if (nextPageToken) {
-      yield put(actions.setListStatus(filter, TOO_MANY_STATUS_STRING));
+    // If invalidAssignment is true, then there is a problem with the query
+    // and we should immediately yield an empty list.
+    if (invalidAssignment) {
+      yield put(actions.setListItems(filter, []));
     } else {
-      // Post-process results:
-      const sortedSubmissions = yield call(
-        sortSubmissions,
-        submissions,
-        filter,
+      const { submissions, messages, nextPageToken, error } = yield call(
+        searchSubmissions,
+        { kapp: kappSlug, search, limit: 1000 },
       );
 
-      yield put(actions.setListItems(filter, sortedSubmissions));
+      if (error || (messages && messages.length > 0)) {
+        yield put(actions.setListStatus(filter, ERROR_STATUS_STRING));
+        yield put(addToastAlert('Failed to retrieve items!'));
+      } else if (nextPageToken) {
+        yield put(actions.setListStatus(filter, TOO_MANY_STATUS_STRING));
+      } else {
+        // Post-process results:
+        const sortedSubmissions = yield call(
+          sortSubmissions,
+          submissions,
+          filter,
+        );
+
+        yield put(actions.setListItems(filter, sortedSubmissions));
+      }
     }
   }
 }
