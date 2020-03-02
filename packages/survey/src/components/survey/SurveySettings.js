@@ -205,7 +205,8 @@ const SurveySettingsComponent = ({
                   trigger additional actions
                 </p>
                 {spaceAdmin &&
-                  associatedTree.tree && (
+                  associatedTree.tree &&
+                  fields.get('workflowProcess').props['value'] === 'true' && (
                     <BuilderLink tree={associatedTree.tree} />
                   )}
               </div>
@@ -757,18 +758,18 @@ export const SurveySettings = compose(
       if (props.activeTab !== tab) props.setActiveTab(tab);
     },
     onSave: props => () => {
-      props.customWorkflow === 'true'
-        ? props.createSurveyCustomWorkflowTree({
-            sourceName: props.taskSourceName,
-            kappSlug: props.kappSlug,
-            formSlug: props.origForm.slug,
-          })
-        : props.customWorkflow === 'false' &&
-          props.deleteSurveyCustomWorkflowTree({
-            sourceName: props.taskSourceName,
-            kappSlug: props.kappSlug,
-            formSlug: props.origForm.slug,
-          });
+      props.customWorkflow === 'true' &&
+        props.createSurveyCustomWorkflowTree({
+          sourceName: props.taskSourceName,
+          kappSlug: props.kappSlug,
+          formSlug: props.origForm.slug,
+        });
+      // : props.customWorkflow === 'false' &&
+      //   props.deleteSurveyCustomWorkflowTree({
+      //     sourceName: props.taskSourceName,
+      //     kappSlug: props.kappSlug,
+      //     formSlug: props.origForm.slug,
+      //   });
     },
   }),
   lifecycle({

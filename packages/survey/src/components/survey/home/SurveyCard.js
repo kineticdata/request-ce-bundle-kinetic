@@ -15,7 +15,7 @@ export const SurveyCard = ({ survey }) => (
       <I18n>{survey.description ? survey.description : 'No Description'}</I18n>
     </p>
     <br />
-    <span className="meta">
+    <span className="meta card-black-text">
       <dl className="row">
         <div className="col">
           <dt>
@@ -27,11 +27,10 @@ export const SurveyCard = ({ survey }) => (
         </div>
         <div className="col">
           <dt>
-            <I18n>Closed</I18n>
+            <I18n>Updated</I18n>
           </dt>
           <dd>
-            <I18n>N/A</I18n>
-            {/* <TimeAgo timestamp={''} /> */}
+            <TimeAgo timestamp={survey.updatedAt} />
           </dd>
         </div>
       </dl>

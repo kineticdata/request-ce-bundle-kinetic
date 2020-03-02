@@ -182,6 +182,7 @@ const enhance = compose(
       this.props.fetchFormRequest({
         kappSlug: this.props.kappSlug,
         formSlug: 'survey-opt-out',
+        public: !this.props.authenticated,
       });
     },
   }),

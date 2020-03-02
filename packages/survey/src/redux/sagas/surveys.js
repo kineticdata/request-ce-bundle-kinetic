@@ -30,6 +30,7 @@ export function* fetchFormSaga({ payload }) {
   const { error, form } = yield call(fetchForm, {
     kappSlug: payload.kappSlug,
     formSlug: payload.formSlug,
+    public: payload.public,
     include: FORM_INCLUDES,
   });
 
@@ -275,6 +276,10 @@ export function* createSurveyCustomWorkflowTreeSaga({ payload }) {
   });
 
   if (error) {
+    yield addToastAlert({
+      title: 'Error Saving Tree',
+      message: error.message,
+    });
     throw (error.statusCode === 400 && error.message) ||
       'There was an error saving the workflow';
   } else {

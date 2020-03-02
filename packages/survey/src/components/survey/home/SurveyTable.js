@@ -21,13 +21,13 @@ const columns = [
     type: 'text',
   },
   {
-    value: 'closedAt',
-    title: 'Closed',
+    value: 'updatedAt',
+    title: 'Updated',
     type: 'text',
   },
 ];
 
-const columnSet = ['name', 'status', 'createdAt', 'closedAt'];
+const columnSet = ['name', 'status', 'createdAt', 'updatedAt'];
 
 const NameCell = surveyItem => (
   <td>
@@ -56,7 +56,7 @@ const StatusCell = surveyItem => (
 export const SurveyTable = ({ surveyData }) => {
   return (
     <Table
-      data={surveyData}
+      data={surveyData.toJS()}
       columns={columns}
       columnSet={columnSet}
       alterColumns={{
@@ -75,7 +75,7 @@ export const SurveyTable = ({ surveyData }) => {
             BodyCell: TimeAgoCell,
           },
         },
-        closedAt: {
+        updatedAt: {
           components: {
             BodyCell: TimeAgoCell,
           },
