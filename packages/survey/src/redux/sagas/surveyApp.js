@@ -28,12 +28,14 @@ export function* fetchAppDataRequestSaga() {
     });
   } else {
     // check  for template requirement
-    const hasTemplate = !!forms.find(form => form.type === 'Template');
-    if (!hasTemplate) {
-      yield put(actions.fetchAppDataRequired('template'));
-    }
-
-    const filteredForms = forms.filter(form => form.type !== 'Template');
+    // const hasTemplate = !!forms.find(form => form.type === 'Template');
+    // if (!hasTemplate) {
+    //   yield put(actions.fetchAppDataRequired('template'));
+    // }
+    yield console.log('formZ:', forms);
+    const filteredForms = forms.filter(
+      form => form.type !== 'Template' && form.slug !== 'survey-opt-out',
+    );
     yield put(
       actions.fetchAppDataSuccess({
         forms: filteredForms,
