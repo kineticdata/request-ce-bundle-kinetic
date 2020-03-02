@@ -32,7 +32,6 @@ export function* fetchAppDataRequestSaga() {
     // if (!hasTemplate) {
     //   yield put(actions.fetchAppDataRequired('template'));
     // }
-    yield console.log('formZ:', forms);
     const filteredForms = forms.filter(
       form => form.type !== 'Template' && form.slug !== 'survey-opt-out',
     );
