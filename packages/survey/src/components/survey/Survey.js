@@ -35,79 +35,78 @@ export const SurveyComponent = ({
   <Fragment>
     <PageTitle parts={[form ? form.name : '']} />
     {!loading && form && submission ? (
-      <div className="page-container container">
-        <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
-              <Link to={relativeHomePath}>
-                <I18n>{kapp.name}</I18n>
-              </Link>{' '}
-              /{' '}
-            </h3>
-            {form && (
-              <h1>
-                <I18n
-                  context={`kapps.${kappSlug}.forms.${slug}`}
-                  public={!authenticated}
-                >
-                  {form.name}
-                </I18n>
-              </h1>
-            )}
+      <div className="page-container page-container--color-bar">
+        <div className="page-panel">
+          <div className="page-title">
+            <div className="page-title__wrapper">
+              <h3>
+                <I18n>{kapp.name}</I18n> /{' '}
+              </h3>
+              {form && (
+                <h1>
+                  <I18n
+                    context={`kapps.${kappSlug}.forms.${slug}`}
+                    public={!authenticated}
+                  >
+                    {form.name}
+                  </I18n>
+                </h1>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="form-description">
-          {form &&
-            form.description && (
-              <p>
-                <I18n
-                  context={`kapps.${kappSlug}.forms.${slug}`}
-                  public={!authenticated}
-                >
-                  {form.description}
-                </I18n>
-              </p>
-            )}
-        </div>
-        <I18n
-          context={`kapps.${kappSlug}.forms.${slug}`}
-          public={!authenticated}
-        >
-          <div className="embedded-core-form--wrapper">
-            {submission && (
-              <CoreForm
-                submission={submission.id}
-                // form={submission.form.slug}
-                // globals={globals}
-                // loaded={handleLoaded}
-                // completed={handleCompleted}
-                public={!authenticated}
-                review={submission.coreState !== 'Draft'}
-                // created={handleCreated}
-                // values={submission.values}
-                // notFoundComponent={ErrorNotFound}
-                // unauthorizedComponent={ErrorUnauthorized}
-                // unexpectedErrorComponent={ErrorUnexpected}
-              />
-            )
-            // : (
-            //   <CoreForm
-            //     kapp={kappSlug}
-            //     form={slug}
-            //     globals={globals}
-            //     loaded={handleLoaded}
-            //     created={handleCreated}
-            //     completed={handleCompleted}
-            //     values={values}
-            //     notFoundComponent={ErrorNotFound}
-            //     unauthorizedComponent={ErrorUnauthorized}
-            //     unexpectedErrorComponent={ErrorUnexpected}
-            //     public={!authenticated}
-            //   />
-            // )
-            }
+          <div className="form-description">
+            {form &&
+              form.description && (
+                <p>
+                  <I18n
+                    context={`kapps.${kappSlug}.forms.${slug}`}
+                    public={!authenticated}
+                  >
+                    {form.description}
+                  </I18n>
+                </p>
+              )}
           </div>
-        </I18n>
+          <I18n
+            context={`kapps.${kappSlug}.forms.${slug}`}
+            public={!authenticated}
+          >
+            <div className="embedded-core-form--wrapper">
+              {submission && (
+                <CoreForm
+                  submission={submission.id}
+                  // form={submission.form.slug}
+                  // globals={globals}
+                  // loaded={handleLoaded}
+                  // completed={handleCompleted}
+                  public={!authenticated}
+                  review={submission.coreState !== 'Draft'}
+                  // created={handleCreated}
+                  // values={submission.values}
+                  // notFoundComponent={ErrorNotFound}
+                  // unauthorizedComponent={ErrorUnauthorized}
+                  // unexpectedErrorComponent={ErrorUnexpected}
+                />
+              )
+              // : (
+              //   <CoreForm
+              //     kapp={kappSlug}
+              //     form={slug}
+              //     globals={globals}
+              //     loaded={handleLoaded}
+              //     created={handleCreated}
+              //     completed={handleCompleted}
+              //     values={values}
+              //     notFoundComponent={ErrorNotFound}
+              //     unauthorizedComponent={ErrorUnauthorized}
+              //     unexpectedErrorComponent={ErrorUnexpected}
+              //     public={!authenticated}
+              //   />
+              // )
+              }
+            </div>
+          </I18n>
+        </div>
       </div>
     ) : (
       <div>Loading</div>

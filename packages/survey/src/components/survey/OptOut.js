@@ -38,10 +38,7 @@ export const OptOutComponent = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <Link to={appLocation}>
-                  <I18n>{kapp.name}</I18n>
-                </Link>{' '}
-                /{' '}
+                <I18n>{kapp.name}</I18n> /{' '}
               </h3>
               {form && (
                 <h1>
