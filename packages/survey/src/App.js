@@ -95,7 +95,7 @@ export const PublicAppComponent = props => {
             <Router>
               <Survey path=":submissionId" />
               <SurveyError path="error" />
-              <OptOut path=":slug/opt-out" />
+              <OptOut path="survey-opt-out" />
               <Redirect from="*" to={props.authRoute} noThrow />
             </Router>
           </main>

@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
-import { compose, withHandlers, withProps } from 'recompose';
+import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { parse } from 'query-string';
 import { connect } from '../../redux/store';
+import { actions } from '../../redux/modules/surveys';
 import { CoreForm, I18n } from '@kineticdata/react';
 import { Link } from '@reach/router';
 import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
@@ -20,7 +21,6 @@ export const OptOutComponent = ({
   handleCreated,
   handleCompleted,
   handleLoaded,
-  handleDelete,
   handleUnauthorized,
   values,
   kapp,
@@ -29,86 +29,76 @@ export const OptOutComponent = ({
   path,
   appLocation,
   authenticated,
-}) => (
-  <Fragment>
-    <PageTitle parts={[form ? form.name : '']} />
-    <div className="page-container page-container--color-bar">
-      <div className="page-panel">
-        <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
-              <Link to={appLocation}>
-                <I18n>{kapp.name}</I18n>
-              </Link>{' '}
-              /{' '}
-            </h3>
+}) =>
+  form && (
+    <Fragment>
+      <PageTitle parts={[form ? form.name : '']} />
+      <div className="page-container page-container--color-bar">
+        <div className="page-panel">
+          <div className="page-title">
+            <div className="page-title__wrapper">
+              <h3>
+                <Link to={appLocation}>
+                  <I18n>{kapp.name}</I18n>
+                </Link>{' '}
+                /{' '}
+              </h3>
+              {form && (
+                <h1>
+                  <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
+                    {form.name}
+                  </I18n>
+                </h1>
+              )}
+            </div>
+          </div>
+          <div className="form-description">
             {form && (
-              <h1>
+              <p>
                 <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
-                  {form.name}
+                  {form.description}
                 </I18n>
-              </h1>
+              </p>
             )}
           </div>
-          {/* {authenticated &&
-            submissionId &&
-            form && (
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="btn btn-outline-danger"
-              >
-                <I18n>Cancel Request</I18n>
-              </button>
-            )} */}
-        </div>
-        <div className="form-description">
-          {form && (
-            <p>
-              <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
-                {form.description}
+          <div className="embedded-core-form--wrapper">
+            {submissionId ? (
+              <I18n submissionId={submissionId} public={!authenticated}>
+                <CoreForm
+                  submission={submissionId}
+                  globals={globals}
+                  loaded={handleLoaded}
+                  completed={handleCompleted}
+                  unauthorized={handleUnauthorized}
+                  public={!authenticated}
+                />
               </I18n>
-            </p>
-          )}
-        </div>
-        <div className="embedded-core-form--wrapper">
-          {submissionId ? (
-            <I18n submissionId={submissionId} public={!authenticated}>
-              <CoreForm
-                submission={submissionId}
-                globals={globals}
-                loaded={handleLoaded}
-                completed={handleCompleted}
-                unauthorized={handleUnauthorized}
+            ) : (
+              <I18n
+                context={`kapps.${kappSlug}.forms.${form.slug}`}
                 public={!authenticated}
-              />
-            </I18n>
-          ) : (
-            <I18n
-              context={`kapps.${kappSlug}.forms.${form.slug}`}
-              public={!authenticated}
-            >
-              <CoreForm
-                kapp={kappSlug}
-                form={form.slug}
-                globals={globals}
-                loaded={handleLoaded}
-                created={handleCreated}
-                completed={handleCompleted}
-                unauthorized={handleUnauthorized}
-                values={values}
-                notFoundComponent={ErrorNotFound}
-                unauthorizedComponent={ErrorUnauthorized}
-                unexpectedErrorComponent={ErrorUnexpected}
-                public={!authenticated}
-              />
-            </I18n>
-          )}
+              >
+                <CoreForm
+                  kapp={kappSlug}
+                  form={form.slug}
+                  globals={globals}
+                  // loaded={handleLoaded}
+                  // created={handleCreated}
+                  completed={handleCompleted}
+                  unauthorized={handleUnauthorized}
+                  values={values}
+                  notFoundComponent={ErrorNotFound}
+                  unauthorizedComponent={ErrorUnauthorized}
+                  unexpectedErrorComponent={ErrorUnexpected}
+                  public={!authenticated}
+                />
+              </I18n>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  </Fragment>
-);
+    </Fragment>
+  );
 
 const valuesFromQueryParams = queryParams => {
   const params = parse(queryParams);
@@ -125,12 +115,12 @@ export const handleCompleted = props => response => {
   if (props.authenticated) {
     if (!response.submission.currentPage) {
       props.navigate(
-        `${props.appLocation}/requests/request/${
+        `${props.appLocation}/survey-opt-out/confirmation?id=${
           response.submission.id
-        }/confirmation`,
+        }`,
       );
     }
-    props.fetchCurrentPage();
+    // props.fetchCurrentPage();
   }
 };
 
@@ -157,15 +147,8 @@ export const handleLoaded = props => form => {
   });
 };
 
-export const handleDelete = props => () => {
-  const deleteCallback = () => {
-    props.fetchCurrentPage();
-    props.navigate(props.appLocation);
-  };
-  props.deleteSubmission({ id: props.submissionId, callback: deleteCallback });
-};
-
-export const mapStateToProps = state => ({
+const mapStateToProps = state => ({
+  form: state.surveys.form,
   forms: state.surveyApp.forms,
   values: valuesFromQueryParams(state.router.location.search),
   kapp: state.app.kapp,
@@ -175,18 +158,32 @@ export const mapStateToProps = state => ({
   authRoute: state.app.authRoute,
 });
 
+export const mapDispatchToProps = {
+  fetchFormRequest: actions.fetchFormRequest,
+};
+
 const enhance = compose(
-  connect(mapStateToProps),
-  withProps(props => ({
-    form:
-      props.forms && props.forms.find(form => form.slug === 'survey-opt-out'),
-  })),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+  // withProps(props => ({
+  //   form:
+  //     props.forms && props.forms.find(form => form.slug === 'survey-opt-out'),
+  // })),
   withHandlers({
     handleCompleted,
     handleCreated,
     handleLoaded,
-    handleDelete,
     handleUnauthorized,
+  }),
+  lifecycle({
+    componentWillMount() {
+      this.props.fetchFormRequest({
+        kappSlug: this.props.kappSlug,
+        formSlug: 'survey-opt-out',
+      });
+    },
   }),
 );
 

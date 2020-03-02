@@ -18,6 +18,7 @@ import { SurveySettingsWebApiView } from './SurveySettingsWebApiView';
 // import { isActiveClass } from '../../utils';
 import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import classnames from 'classnames';
+import moment from 'moment';
 
 const asArray = value => (value ? [JSON.stringify(value)] : []);
 
@@ -199,6 +200,10 @@ const SurveySettingsComponent = ({
             <div className="survey-settings survey-settings--workflow">
               <div className="workflow-group">
                 {fields.get('workflowProcess')}
+                <p className="small">
+                  A workflow can be created upon submission of a survey to
+                  trigger additional actions
+                </p>
                 {spaceAdmin &&
                   associatedTree.tree && (
                     <BuilderLink tree={associatedTree.tree} />
@@ -222,7 +227,10 @@ const SurveySettingsComponent = ({
               {fields.get('pollingTrigger')}
               {/* {fields.get('pollingInterval')} */}
               {fields.getIn(['polling', 'props', 'value']) === 'false' && (
-                <SurveySettingsWebApiView kappSlug={formOptions.kappSlug} />
+                <SurveySettingsWebApiView
+                  kappSlug={formOptions.kappSlug}
+                  formSlug={formOptions.formSlug}
+                />
               )}
             </div>
           </TabPane>
@@ -232,10 +240,21 @@ const SurveySettingsComponent = ({
             <div className="survey-settings survey-settings--delivery">
               {fields.get('expiration')}
               {fields.get('allowOptOut')}
+              <p className="small">
+                Allows a user to opt-out of retrieving this survey
+              </p>
               <div className="form-group__columns">
                 {fields.get('maxFrequencyCount')}
                 {fields.get('maxFrequencyDays')}
               </div>
+              <p className="small">
+                Max Frequency Count and Days allows you to control the maximum
+                number of surveys that will be sent to a given individual in at
+                those number of days. For example, if this is an incident
+                survey, you may not want to send more than one satisfaction
+                survey a week (Max count: 1, Days: 7). The default is
+                essentially having no limit.
+              </p>
               {fields.get('eventInterval')}
             </div>
           </TabPane>
@@ -341,21 +360,22 @@ const SurveySettingsComponent = ({
                             { label: 'No', value: 'false' },
                             { label: 'Yes', value: 'true' },
                           ],
-                          initialValue: surveyConfig
-                            ? surveyConfig['Use Custom Workflow']
-                            : 'false',
+                          initialValue:
+                            surveyConfig && surveyConfig['Use Custom Workflow']
+                              ? surveyConfig['Use Custom Workflow']
+                              : 'false',
                           onChange: ({ values }) =>
                             setCustomWorkflow(values.get('workflowProcess')),
-                          helpText:
-                            'A workflow can be created upon submission of a survey to trigger additional actions',
                         },
                         {
                           name: 'reminderTemplate',
                           label: 'Reminder Notifications Template',
                           type: 'select',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Reminders']['Reminder Template']
-                            : 'Survey Invitation',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Reminders']['Reminder Template']
+                              ? surveyConfig['Reminders']['Reminder Template']
+                              : 'Survey Invitation',
                           options: notificationOptions,
                           helpText:
                             'This email notification template will be used when sending out a survey reminder',
@@ -365,9 +385,11 @@ const SurveySettingsComponent = ({
                           name: 'reminderInterval',
                           label: 'Reminder Notifications Interval (in days)',
                           type: 'text',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Reminders']['Reminder Interval']
-                            : 0,
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Reminders']['Reminder Interval']
+                              ? surveyConfig['Reminders']['Reminder Interval']
+                              : 0,
                           component: FormComponents.IntegerField,
                           helpText:
                             'Number of days in between reminder notifications',
@@ -376,9 +398,11 @@ const SurveySettingsComponent = ({
                           name: 'reminderMax',
                           label: 'Reminder Notifications Max',
                           type: 'text',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Reminders']['Reminder Max']
-                            : 0,
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Reminders']['Reminder Max']
+                              ? surveyConfig['Reminders']['Reminder Max']
+                              : 0,
                           component: FormComponents.IntegerField,
                           helpText: 'Maximum number of reminders to send',
                         },
@@ -386,9 +410,11 @@ const SurveySettingsComponent = ({
                           name: 'invitationTemplate',
                           label: 'Invitation Notification Template',
                           type: 'select',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Invitation Notification Name']
-                            : 'Survey Invitation',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Invitation Notification Name']
+                              ? surveyConfig['Invitation Notification Name']
+                              : 'Survey Invitation',
                           options: notificationOptions,
                           helpText: `This email notification template will be used when sending out the survey`,
                         },
@@ -396,9 +422,11 @@ const SurveySettingsComponent = ({
                           name: 'polling',
                           label: 'Poll For Survey Events',
                           type: 'radio',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Event Polling']['Poll']
-                            : 'false',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Event Polling']['Poll']
+                              ? surveyConfig['Event Polling']['Poll']
+                              : 'false',
                           options: [
                             { value: 'true', label: 'Yes' },
                             { value: 'false', label: 'No' },
@@ -410,9 +438,11 @@ const SurveySettingsComponent = ({
                           type: 'select',
                           visible: ({ values }) =>
                             values.get('polling') === 'true',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Event Polling']['Source']
-                            : '',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Event Polling']['Source']
+                              ? surveyConfig['Event Polling']['Source']
+                              : '',
                           options: robotOptions && robotOptions,
                         },
                         {
@@ -421,9 +451,11 @@ const SurveySettingsComponent = ({
                           type: 'text',
                           visible: ({ values }) =>
                             values.get('polling') === 'true',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Event Polling']['Type']
-                            : '',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Event Polling']['Type']
+                              ? surveyConfig['Event Polling']['Type']
+                              : '',
                           helpText:
                             'Name of the form or object that will be polled',
                           placeholder: 'PD:HelpDesk',
@@ -434,9 +466,11 @@ const SurveySettingsComponent = ({
                           type: 'text',
                           visible: ({ values }) =>
                             values.get('polling') === 'true',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Event Polling']['Trigger']
-                            : '',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Event Polling']['Trigger']
+                              ? surveyConfig['Event Polling']['Trigger']
+                              : '',
                           helpText:
                             'Query that will be executed to retrieve surveys',
                           placeholder: `‘Status’=”Completed”`,
@@ -456,9 +490,11 @@ const SurveySettingsComponent = ({
                           name: 'surveyStart',
                           label: 'Survey Start',
                           type: 'date',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Survey Period']['Start']
-                            : '',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Survey Period']['Start']
+                              ? surveyConfig['Survey Period']['Start']
+                              : new moment().format('YYYY-MM-DD'),
                           component: FormComponents.DateField,
                           helpText: 'Date when surveys will begin being sent',
                         },
@@ -466,9 +502,11 @@ const SurveySettingsComponent = ({
                           name: 'surveyStop',
                           label: 'Survey Stop',
                           type: 'date',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Survey Period']['Stop']
-                            : '',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Survey Period']['Stop']
+                              ? surveyConfig['Survey Period']['Stop']
+                              : new moment().add(1, 'y').format('YYYY-MM-DD'),
                           component: FormComponents.DateField,
                           helpText: 'Date when surveys will stop being sent',
                         },
@@ -476,9 +514,10 @@ const SurveySettingsComponent = ({
                           name: 'expiration',
                           label: 'Expiration in Days',
                           type: 'text',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Expiration']
-                            : 365,
+                          initialValue:
+                            surveyConfig && surveyConfig['Expiration']
+                              ? surveyConfig['Expiration']
+                              : 365,
                           component: FormComponents.IntegerField,
                           helpText:
                             'Number of days the user being surveyed has to fill it out',
@@ -487,42 +526,53 @@ const SurveySettingsComponent = ({
                           name: 'allowOptOut',
                           label: 'Allow Opt-out',
                           type: 'radio',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Allow Opt-out']
-                            : 'false',
+                          initialValue:
+                            surveyConfig && surveyConfig['Allow Opt-out']
+                              ? surveyConfig['Allow Opt-out']
+                              : 'false',
                           options: [
                             { value: 'true', label: 'Yes' },
                             { value: 'false', label: 'No' },
                           ],
-                          helpText:
-                            'Allows a user to opt-out of retrieving this survey',
                         },
                         {
                           name: 'maxFrequencyCount',
                           label: 'Max Frequency Count',
                           type: 'text',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Maximum Survey Frequency']['Count']
-                            : 1000,
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Maximum Survey Frequency']['Count']
+                              ? surveyConfig['Maximum Survey Frequency'][
+                                  'Count'
+                                ]
+                              : 1000,
                           component: FormComponents.IntegerField,
                         },
                         {
                           name: 'maxFrequencyDays',
                           label: 'Max Frequency Days',
                           type: 'text',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Maximum Survey Frequency']['Days']
-                            : 1,
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Maximum Survey Frequency']['Days']
+                              ? surveyConfig['Maximum Survey Frequency']['Days']
+                              : 1,
                           component: FormComponents.IntegerField,
                         },
                         {
                           name: 'eventInterval',
                           label: 'Survey Event Interval',
                           type: 'text',
-                          initialValue: surveyConfig
-                            ? surveyConfig['Survey Event Interval']
-                            : 1,
+                          visible: ({ values }) =>
+                            values.get('polling') === 'true',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Survey Event Interval']
+                              ? surveyConfig['Survey Event Interval']
+                              : 1,
                           component: FormComponents.IntegerField,
+                          helpText:
+                            'How many qualified events happen for each survey sent. For example, you may only want to send one survey for every 10 incidents (Interval: 10). The default is no limitation.',
                         },
                         {
                           name: 'owningTeam',
@@ -531,7 +581,9 @@ const SurveySettingsComponent = ({
                           helpText:
                             'Team will receive notifications regarding this survey',
                           initialValue:
-                            surveyConfig && surveyConfig['Owning Team'],
+                            surveyConfig && surveyConfig['Owning Team']
+                              ? surveyConfig['Owning Team']
+                              : '',
                         },
                         {
                           name: 'authenticated',
@@ -539,7 +591,9 @@ const SurveySettingsComponent = ({
                           type: 'text',
                           helpText: 'TBD',
                           initialValue:
-                            surveyConfig && surveyConfig['Authenticated'],
+                            surveyConfig && surveyConfig['Authenticated']
+                              ? surveyConfig['Authenticated']
+                              : '',
                         },
                         {
                           name: 'assignedIndividual',
@@ -548,7 +602,9 @@ const SurveySettingsComponent = ({
                           helpText:
                             'User will receive notifications regarding this survey',
                           initialValue:
-                            surveyConfig && surveyConfig['Assigned Individual'],
+                            surveyConfig && surveyConfig['Assigned Individual']
+                              ? surveyConfig['Assigned Individual']
+                              : '',
                         },
                         {
                           name: 'submitter',
@@ -556,7 +612,9 @@ const SurveySettingsComponent = ({
                           type: 'text',
                           helpText: 'TBD',
                           initialValue:
-                            surveyConfig && surveyConfig['Submitter'],
+                            surveyConfig && surveyConfig['Submitter']
+                              ? surveyConfig['Submitter']
+                              : '',
                         },
                       ]
                     );
@@ -579,7 +637,7 @@ const SurveySettingsComponent = ({
                     submissionLabelExpression: {
                       label: 'Survey Label',
                       helpText:
-                        'Custom label for survey submissions. Click the </> button to see available values derived from each submission.',
+                        'A combination of fields from the survey and text to help you identify at a glance which survey submission is which.',
                     },
                     attributesMap: {
                       serialize: ({ values }) => ({

@@ -2,15 +2,31 @@ import React from 'react';
 import HTTPSnippet from 'httpsnippet';
 import { CodeViewer } from '../shared/CodeViewer';
 
-export const SurveySettingsWebApiView = ({ kappSlug }) => {
+export const SurveySettingsWebApiView = ({ kappSlug, formSlug }) => {
   const method = 'POST';
-  const slug = 'survey-test';
   const publicRoute =
     kappSlug &&
-    `${window.location.origin}/app/kapps/${kappSlug}/webApis/${slug}`;
+    `${window.location.origin}/app/kapps/${kappSlug}/webApis/${formSlug}`;
   const snippet = new HTTPSnippet({
     method: method,
     url: `${publicRoute}?timeout=10`,
+    postData: {
+      mimeType: 'application/x-www-form-urlencoded',
+      params: [
+        {
+          name: 'surveySlug',
+          value: formSlug,
+        },
+        {
+          name: 'userId',
+          value: 'name@example.com',
+        },
+        {
+          name: 'data',
+          value: 'varies by initiating system',
+        },
+      ],
+    },
   });
 
   return (
