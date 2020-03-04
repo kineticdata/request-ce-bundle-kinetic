@@ -40,6 +40,7 @@ const AppComponent = props => {
             <Router>
               <SurveyList path="/" />
               <CreateSurvey path="new" />
+              <Survey path="forms/:formSlug/submissions/:submissionId" />
               <Survey path=":submissionId" />
               <SurveyPreview path="forms/:slug" />
               <SurveyError path="error" />
@@ -95,6 +96,7 @@ export const PublicAppComponent = props => {
         <I18n>
           <main className="package-layout package-layout--services">
             <Router>
+              <Survey path="forms/:formSlug/submissions/:submissionId" />
               <Survey path=":submissionId" />
               <SurveyError path="error" />
               <OptOut path="survey-opt-out" />
