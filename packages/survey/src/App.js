@@ -6,6 +6,7 @@ import { I18n } from '@kineticdata/react';
 import { connect } from './redux/store';
 import { SurveyAppSetup } from './components/survey/SurveyAppSetup';
 import { Survey } from './components/survey/Survey';
+import { SurveyPreview } from './components/survey/SurveyPreview';
 import { OptOut } from './components/survey/OptOut';
 import { SurveyList } from './components/survey/home/SurveyList';
 import { SurveySubmissions } from './components/survey/submissions/SurveySubmissions';
@@ -40,6 +41,7 @@ const AppComponent = props => {
               <SurveyList path="/" />
               <CreateSurvey path="new" />
               <Survey path=":submissionId" />
+              <SurveyPreview path="forms/:slug" />
               <SurveyError path="error" />
               <OptOut path="survey-opt-out" />
               <SurveySubmissions path=":slug/submissions" />

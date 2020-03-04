@@ -151,6 +151,7 @@ export const types = {
   SUBMIT_OPT_OUT: ns('SUBMIT_OPT_OUT'),
   FETCH_ASSOCIATED_TREE: ns('FETCH_ASSOCIATED_TREE'),
   FETCH_ASSOCIATED_TREE_COMPLETE: ns('FETCH_ASSOCIATED_TREE_COMPLETE'),
+  CALL_FORM_ACTION: ns('CALL_FORM_ACTION'),
 };
 
 export const actions = {
@@ -193,6 +194,7 @@ export const actions = {
   fetchAssociatedTreeComplete: withPayload(
     types.FETCH_ASSOCIATED_TREE_COMPLETE,
   ),
+  callFormAction: withPayload(types.CALL_FORM_ACTION),
 };
 
 const sortSubmissions = (submissions, sortInfo) => {

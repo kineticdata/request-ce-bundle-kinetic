@@ -29,7 +29,12 @@ const LinkCell = ({ row, value }) => (
   </td>
 );
 
-const ActionsCell = ({ openDropdown, toggleDropdown }) => ({ row }) => (
+const ActionsCell = ({
+  openDropdown,
+  toggleDropdown,
+  formActions,
+  callFormAction,
+}) => ({ row }) => (
   <td>
     <Dropdown
       toggle={toggleDropdown(row.get('id'))}
@@ -42,16 +47,19 @@ const ActionsCell = ({ openDropdown, toggleDropdown }) => ({ row }) => (
         <DropdownItem tag={Link} to={row.get('id')}>
           <I18n>View</I18n>
         </DropdownItem>
-        <DropdownItem
-          onClick={() =>
-            addToastAlert({
-              title: 'Failed to resend invitation.',
-              message: `Not implemented for ${row.get('id')}`,
-            })
-          }
-        >
-          <I18n>Resend Invitation</I18n>
-        </DropdownItem>
+        {formActions.map(el => (
+          <DropdownItem
+            key={el.slug}
+            onClick={() =>
+              callFormAction({
+                formSlug: el.slug,
+                surveySubmissionId: row.get('id'),
+              })
+            }
+          >
+            <I18n>{el.name}</I18n>
+          </DropdownItem>
+        ))}
       </DropdownMenu>
     </Dropdown>
   </td>
@@ -61,6 +69,8 @@ export const FormDetailsComponent = ({
   tableKey,
   kapp,
   form,
+  formActions,
+  callFormAction,
   openModal,
   openDropdown,
   toggleDropdown,
@@ -104,7 +114,12 @@ export const FormDetailsComponent = ({
             title: ' ',
             sortable: false,
             components: {
-              BodyCell: ActionsCell({ toggleDropdown, openDropdown }),
+              BodyCell: ActionsCell({
+                toggleDropdown,
+                openDropdown,
+                formActions,
+                callFormAction,
+              }),
             },
             className: 'text-right',
           },
@@ -252,10 +267,12 @@ const mapStateToProps = state => ({
   kapp: state.app.kapp,
   form: state.surveys.form,
   error: state.surveys.error,
+  formActions: state.surveyApp.formActions,
 });
 
 const mapDispatchToProps = {
   fetchFormRequest: formActions.fetchFormRequest,
+  callFormAction: formActions.callFormAction,
   openModal: formActions.openModal,
 };
 

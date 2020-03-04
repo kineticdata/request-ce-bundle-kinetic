@@ -323,6 +323,25 @@ export function* submitOptOutSaga({ payload }) {
   }
 }
 
+export function* callFormActionSaga({
+  payload: { formSlug, surveySubmissionId },
+}) {
+  const { submission, error } = yield call(createSubmission, {
+    formSlug,
+    values: {
+      surveySubmissionId,
+    },
+  });
+  if (error) {
+    yield addToastAlert({
+      title: 'Survey Action Failed',
+      message: error.message,
+    });
+  } else {
+    return submission;
+  }
+}
+
 export function* watchSurveys() {
   yield takeEvery(types.FETCH_FORM_REQUEST, fetchFormSaga);
   yield takeEvery(types.DELETE_FORM_REQUEST, deleteFormSaga);
@@ -343,4 +362,5 @@ export function* watchSurveys() {
   );
   yield takeEvery(types.SUBMIT_OPT_OUT, submitOptOutSaga);
   yield takeEvery(types.FETCH_ASSOCIATED_TREE, fetchAssociatedTreeSaga);
+  yield takeEvery(types.CALL_FORM_ACTION, callFormActionSaga);
 }

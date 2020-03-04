@@ -32,12 +32,10 @@ export function* fetchAppDataRequestSaga() {
     // if (!hasTemplate) {
     //   yield put(actions.fetchAppDataRequired('template'));
     // }
-    const filteredForms = forms.filter(
-      form => form.type !== 'Template' && form.slug !== 'survey-opt-out',
-    );
     yield put(
       actions.fetchAppDataSuccess({
-        forms: filteredForms,
+        forms: forms.filter(form => form.type === 'Survey'),
+        formActions: forms.filter(form => form.type === 'Survey Action'),
       }),
     );
   }

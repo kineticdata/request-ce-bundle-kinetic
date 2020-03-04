@@ -1,6 +1,12 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
+import {
+  UncontrolledButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
 import { ErrorMessage, LoadingMessage, TimeAgo, addToastAlert } from 'common';
 import { actions } from '../../../redux/modules/surveys';
 import { connect } from '../../../redux/store';
@@ -10,6 +16,8 @@ import { PageTitle } from '../../shared/PageTitle';
 export const SubmissionDetailsContainer = ({
   kapp,
   form,
+  formActions,
+  callFormAction,
   submission,
   submissionError,
 }) =>
@@ -32,7 +40,27 @@ export const SubmissionDetailsContainer = ({
             <h1>{submission ? submission.label : 'New Submission'}</h1>
           </div>
           <div className="page-title__actions">
-            <button
+            <UncontrolledButtonDropdown>
+              <DropdownToggle caret className="btn btn-primary">
+                Actions
+              </DropdownToggle>
+              <DropdownMenu>
+                {formActions.map(el => (
+                  <DropdownItem
+                    key={el.slug}
+                    onClick={() =>
+                      callFormAction({
+                        formSlug: el.slug,
+                        surveySubmissionId: submission.id,
+                      })
+                    }
+                  >
+                    <I18n>{el.name}</I18n>
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            </UncontrolledButtonDropdown>
+            {/* <button
               onClick={() =>
                 addToastAlert({
                   title: 'Failed to resend invitation.',
@@ -44,7 +72,7 @@ export const SubmissionDetailsContainer = ({
             >
               <span className="fa fa-fw fa-envelope" />
               <I18n> Resend Invitation</I18n>
-            </button>
+            </button> */}
           </div>
         </div>
         {submissionError ? (
@@ -178,12 +206,14 @@ export const SubmissionDetailsContainer = ({
 const mapStateToProps = state => ({
   kapp: state.app.kapp,
   form: state.surveys.form,
+  formActions: state.surveyApp.formActions,
   submission: state.surveys.submission,
   submissionError: state.surveys.submissionError,
 });
 
 const mapDispatchToProps = {
   fetchSubmissionRequest: actions.fetchSubmissionRequest,
+  callFormAction: actions.callFormAction,
 };
 
 export const SubmissionDetails = compose(
