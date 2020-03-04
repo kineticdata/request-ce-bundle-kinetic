@@ -39,41 +39,30 @@ export const SubmissionDetailsContainer = ({
             </h3>
             <h1>{submission ? submission.label : 'New Submission'}</h1>
           </div>
-          <div className="page-title__actions">
-            <UncontrolledButtonDropdown>
-              <DropdownToggle caret className="btn btn-primary">
-                Actions
-              </DropdownToggle>
-              <DropdownMenu>
-                {formActions.map(el => (
-                  <DropdownItem
-                    key={el.slug}
-                    onClick={() =>
-                      callFormAction({
-                        formSlug: el.slug,
-                        surveySubmissionId: submission.id,
-                      })
-                    }
-                  >
-                    <I18n>{el.name}</I18n>
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </UncontrolledButtonDropdown>
-            {/* <button
-              onClick={() =>
-                addToastAlert({
-                  title: 'Failed to resend invitation.',
-                  message: `Not implemented for ${submission.id}`,
-                })
-              }
-              value="export"
-              className="btn btn-primary pull-right"
-            >
-              <span className="fa fa-fw fa-envelope" />
-              <I18n> Resend Invitation</I18n>
-            </button> */}
-          </div>
+          {form.status === 'Active' && (
+            <div className="page-title__actions">
+              <UncontrolledButtonDropdown>
+                <DropdownToggle caret className="btn btn-primary">
+                  Actions
+                </DropdownToggle>
+                <DropdownMenu>
+                  {formActions.map(el => (
+                    <DropdownItem
+                      key={el.slug}
+                      onClick={() =>
+                        callFormAction({
+                          formSlug: el.slug,
+                          surveySubmissionId: submission.id,
+                        })
+                      }
+                    >
+                      <I18n>{el.name}</I18n>
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </UncontrolledButtonDropdown>
+            </div>
+          )}
         </div>
         {submissionError ? (
           <ErrorMessage message={submissionError.message} />

@@ -109,7 +109,7 @@ export const FormDetailsComponent = ({
           'actions',
         ]}
         addColumns={[
-          {
+          form.status === 'Active' && {
             value: 'actions',
             title: ' ',
             sortable: false,
