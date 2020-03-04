@@ -1,5 +1,5 @@
 // Create from template
-export const DEFAULT_SURVEY_TYPE = '';
+export const DEFAULT_SURVEY_TYPE = 'Survey';
 export const DEFAULT_TEMPLATE_INCLUDES = 'details,attributesMap,fields,pages';
 
 // Form slugs
