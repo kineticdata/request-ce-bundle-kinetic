@@ -326,10 +326,12 @@ export function* submitOptOutSaga({ payload }) {
 export function* callFormActionSaga({
   payload: { formSlug, surveySubmissionId },
 }) {
+  const kappSlug = yield select(state => state.app.kappSlug);
   const { submission, error } = yield call(createSubmission, {
+    kappSlug,
     formSlug,
     values: {
-      surveySubmissionId,
+      'Survey Submission Id': surveySubmissionId,
     },
   });
   if (error) {
@@ -338,7 +340,9 @@ export function* callFormActionSaga({
       message: error.message,
     });
   } else {
-    return submission;
+    addToast({
+      message: 'Resending Invitation',
+    });
   }
 }
 
