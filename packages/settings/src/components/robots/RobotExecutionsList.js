@@ -35,6 +35,7 @@ const WallyEmptyMessage = () => {
 };
 
 const RobotExecutionsListComponent = ({
+  robot,
   robotExecutions,
   robotExecutionsLoading,
   robotExecutionsErrors,
@@ -69,7 +70,7 @@ const RobotExecutionsListComponent = ({
               /{` `}
             </h3>
             <h1>
-              <I18n>Executions</I18n>
+              {(robot && robot.values['Robot Name']) || <I18n>Executions</I18n>}
             </h1>
           </div>
         </div>
@@ -147,6 +148,7 @@ const RobotExecutionsListComponent = ({
                     </td>
                     <td>
                       {execution.values['Status'].toLowerCase() !== 'running' &&
+                        execution.values['End'] &&
                         moment(execution.values['End']).format(
                           Constants.TIME_FORMAT,
                         )}
