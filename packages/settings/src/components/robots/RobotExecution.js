@@ -15,7 +15,12 @@ import { I18n } from '@kineticdata/react';
 
 const globals = import('common/globals');
 
-const RobotExecutionComponent = ({ robotExecution, match, handleError }) => {
+const RobotExecutionComponent = ({
+  robotExecution,
+  robotId,
+  executionId,
+  handleError,
+}) => {
   return (
     <div className="page-container">
       <div className="page-panel page-panel--white">
@@ -31,7 +36,7 @@ const RobotExecutionComponent = ({ robotExecution, match, handleError }) => {
               </Link>{' '}
               /{` `}
               {robotExecution && (
-                <Link to={`/settings/robots/${match.params.robotId}`}>
+                <Link to={`/settings/robots/${robotId}`}>
                   <span>{robotExecution.values['Robot Name']}</span>
                 </Link>
               )}
@@ -45,7 +50,7 @@ const RobotExecutionComponent = ({ robotExecution, match, handleError }) => {
           <CoreForm
             datastore
             review
-            submission={match.params.executionId}
+            submission={executionId}
             error={handleError}
             globals={globals}
           />
