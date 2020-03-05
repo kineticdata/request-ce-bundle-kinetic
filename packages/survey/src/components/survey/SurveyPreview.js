@@ -12,7 +12,7 @@ import { parse } from 'query-string';
 // immediately without making the application wait but it will likely be ready
 // before users nagivate to the actual forms.
 
-// const globals = import('common/globals');
+const globals = import('common/globals');
 
 export const SurveyPreviewComponent = ({
   authenticated,
@@ -65,6 +65,7 @@ export const SurveyPreviewComponent = ({
               <CoreForm
                 kapp={kappSlug}
                 form={slug}
+                globals={globals}
                 created={handleCreated}
                 completed={handleCompleted}
                 notFoundComponent={ErrorNotFound}

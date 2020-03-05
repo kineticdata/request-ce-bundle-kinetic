@@ -139,7 +139,6 @@ export const types = {
   DELETE_FORM_COMPLETE: ns('DELETE_FORM_COMPLETE'),
   CLONE_FORM_REQUEST: ns('CLONE_FORM_REQUEST'),
   CLONE_FORM_COMPLETE: ns('CLONE_FORM_COMPLETE'),
-
   FETCH_SURVEY_TEMPLATES: ns('FETCH_SURVEY_TEMPLATES'),
   FETCH_SURVEY_TEMPLATES_COMPLETE: ns('FETCH_SURVEY_TEMPLATES_COMPLETE'),
   CREATE_FORM_REQUEST: ns('CREATE_FORM_REQUEST'),
@@ -147,8 +146,6 @@ export const types = {
   CREATE_FORM_FAILURE: ns('CREATE_FORM_FAILURE'),
   CREATE_SURVEY_CUSTOM_WORKFLOW_TREE: ns('CREATE_SURVEY_CUSTOM_WORKFLOW_TREE'),
   DELETE_SURVEY_CUSTOM_WORKFLOW_TREE: ns('DELETE_SURVEY_CUSTOM_WORKFLOW_TREE'),
-
-  SUBMIT_OPT_OUT: ns('SUBMIT_OPT_OUT'),
   FETCH_ASSOCIATED_TREE: ns('FETCH_ASSOCIATED_TREE'),
   FETCH_ASSOCIATED_TREE_COMPLETE: ns('FETCH_ASSOCIATED_TREE_COMPLETE'),
   CALL_FORM_ACTION: ns('CALL_FORM_ACTION'),
@@ -164,7 +161,6 @@ export const actions = {
   closeModal: noPayload(types.CLOSE_MODAL),
   setExportSubmissions: withPayload(types.SET_EXPORT_SUBMISSIONS),
   setExportCount: withPayload(types.SET_EXPORT_COUNT),
-
   fetchFormRequest: withPayload(types.FETCH_FORM_REQUEST),
   fetchFormSuccess: withPayload(types.FETCH_FORM_SUCCESS),
   fetchFormFailure: withPayload(types.FETCH_FORM_FAILURE),
@@ -175,7 +171,6 @@ export const actions = {
   deleteFormComplete: withPayload(types.DELETE_FORM_COMPLETE),
   cloneFormRequest: withPayload(types.CLONE_FORM_REQUEST),
   cloneFormComplete: withPayload(types.CLONE_FORM_COMPLETE),
-
   fetchSurveyTemplates: withPayload(types.FETCH_SURVEY_TEMPLATES),
   fetchSurveyTemplatesComplete: withPayload(
     types.FETCH_SURVEY_TEMPLATES_COMPLETE,
@@ -189,7 +184,6 @@ export const actions = {
   deleteSurveyCustomWorkflowTree: withPayload(
     types.DELETE_SURVEY_CUSTOM_WORKFLOW_TREE,
   ),
-  submitOptOut: withPayload(types.SUBMIT_OPT_OUT),
   fetchAssociatedTree: withPayload(types.FETCH_ASSOCIATED_TREE),
   fetchAssociatedTreeComplete: withPayload(
     types.FETCH_ASSOCIATED_TREE_COMPLETE,

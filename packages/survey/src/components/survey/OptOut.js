@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react';
-import { compose, lifecycle, withHandlers, withProps } from 'recompose';
+import { compose, lifecycle, withHandlers } from 'recompose';
 import { parse } from 'query-string';
 import { connect } from '../../redux/store';
 import { actions } from '../../redux/modules/surveys';
 import { CoreForm, I18n } from '@kineticdata/react';
-import { Link } from '@reach/router';
 import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 

@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
-import { compose, lifecycle } from 'recompose';
+import { compose, lifecycle, withProps } from 'recompose';
 import {
   UncontrolledButtonDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { ErrorMessage, LoadingMessage, TimeAgo, addToastAlert } from 'common';
+import { ErrorMessage, LoadingMessage, TimeAgo } from 'common';
 import { actions } from '../../../redux/modules/surveys';
 import { connect } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
@@ -21,9 +21,7 @@ export const SubmissionDetailsContainer = ({
   submission,
   submissionError,
 }) =>
-  !form ? (
-    <div>No Form Loaded</div>
-  ) : (
+  form && (
     <div className="page-container">
       <PageTitle parts={['Survey Submission']} />
       <div className="page-panel page-panel--white">
@@ -196,7 +194,7 @@ export const SubmissionDetailsContainer = ({
 
 const mapStateToProps = state => ({
   kapp: state.app.kapp,
-  form: state.surveys.form,
+  forms: state.surveyApp.forms,
   formActions: state.surveyApp.formActions,
   submission: state.surveys.submission,
   submissionError: state.surveys.submissionError,
@@ -212,6 +210,9 @@ export const SubmissionDetails = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withProps(props => ({
+    form: props.forms && props.forms.find(form => form.slug === props.slug),
+  })),
   lifecycle({
     componentWillMount() {
       this.props.fetchSubmissionRequest({

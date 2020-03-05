@@ -5,7 +5,6 @@ import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { I18n, CoreForm } from '@kineticdata/react';
 import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
 import { PageTitle } from '../shared/PageTitle';
-import { Link } from '@reach/router';
 import { parse } from 'query-string';
 
 // Asynchronously import the global dependencies that are used in the embedded
@@ -13,22 +12,14 @@ import { parse } from 'query-string';
 // immediately without making the application wait but it will likely be ready
 // before users nagivate to the actual forms.
 
-// const globals = import('common/globals');
+const globals = import('common/globals');
 
 export const SurveyComponent = ({
   authenticated,
   loading,
   submission,
-  submissionId,
   slug,
-  id,
   form,
-  relativeHomePath,
-  handleCreated,
-  handleCompleted,
-  handleLoaded,
-  handleDelete,
-  values,
   kapp,
   kappSlug,
 }) => (
@@ -64,12 +55,8 @@ export const SurveyComponent = ({
                   submission={submission.id}
                   public={!authenticated}
                   review={submission.coreState !== 'Draft'}
-                  // form={submission.form.slug}
-                  // globals={globals}
-                  // loaded={handleLoaded}
-                  // completed={handleCompleted}
-                  // created={handleCreated}
-                  // values={submission.values}
+                  form={submission.form.slug}
+                  globals={globals}
                   notFoundComponent={ErrorNotFound}
                   unauthorizedComponent={ErrorUnauthorized}
                   unexpectedErrorComponent={ErrorUnexpected}
@@ -135,7 +122,7 @@ const enhance = compose(
       props.forms &&
       props.submission &&
       props.forms.find(form => form.slug === props.submission.form.slug),
-    relativeHomePath: `../../${props.submissionId ? '../../' : ''}`,
+    // relativeHomePath: `../../${props.submissionId ? '../../' : ''}`,
   })),
   withHandlers({ handleCompleted, handleCreated }),
   lifecycle({

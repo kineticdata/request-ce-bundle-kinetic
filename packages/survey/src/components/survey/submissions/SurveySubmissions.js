@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from '@reach/router';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { connect } from '../../../redux/store';
-import { actions as formActions } from '../../../redux/modules/surveys';
+import { actions } from '../../../redux/modules/surveys';
 import { I18n, SubmissionTable } from '@kineticdata/react';
 import {
   Dropdown,
@@ -10,7 +10,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { TimeAgo, addToastAlert } from 'common';
+import { TimeAgo } from 'common';
 import { ExportModal } from '../export/ExportModal';
 import { PageTitle } from '../../shared/PageTitle';
 import { generateEmptyBodyRow } from 'common/src/components/tables/EmptyBodyRow';
@@ -74,8 +74,6 @@ export const FormDetailsComponent = ({
   openModal,
   openDropdown,
   toggleDropdown,
-  processing,
-  deleteForm,
 }) => {
   const EmptyBodyRow = generateEmptyBodyRow({
     loadingMessage: 'Loading Submissions...',
@@ -271,9 +269,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  fetchFormRequest: formActions.fetchFormRequest,
-  callFormAction: formActions.callFormAction,
-  openModal: formActions.openModal,
+  fetchFormRequest: actions.fetchFormRequest,
+  callFormAction: actions.callFormAction,
+  openModal: actions.openModal,
 };
 
 const toggleDropdown = ({
@@ -288,7 +286,7 @@ export const SurveySubmissions = compose(
     mapDispatchToProps,
   ),
   lifecycle({
-    componentWillMount(prev, next) {
+    componentWillMount() {
       this.props.fetchFormRequest({
         kappSlug: this.props.kapp.slug,
         formSlug: this.props.slug,

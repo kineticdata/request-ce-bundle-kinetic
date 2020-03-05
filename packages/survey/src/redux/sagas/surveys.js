@@ -302,27 +302,6 @@ export function* deleteSurveyCustomWorkflowTreeSaga({ payload }) {
   }
 }
 
-export function* submitOptOutSaga({ payload }) {
-  const { submission, error } = yield call(createSubmission, {
-    datastore: true,
-    formSlug: '',
-    include: 'details,values',
-    completed: true,
-    values: {
-      'User Id': payload['User Id'],
-      'Survey Slug': payload['Survey Slug'],
-    },
-  });
-  if (error) {
-    yield addToastAlert({
-      title: 'Opt Out Failed',
-      message: error.message,
-    });
-  } else {
-    return submission;
-  }
-}
-
 export function* callFormActionSaga({
   payload: { formSlug, surveySubmissionId },
 }) {
@@ -343,6 +322,7 @@ export function* callFormActionSaga({
     addToast({
       message: 'Resending Invitation',
     });
+    return submission;
   }
 }
 
@@ -364,7 +344,6 @@ export function* watchSurveys() {
     types.DELETE_SURVEY_CUSTOM_WORKFLOW_TREE,
     deleteSurveyCustomWorkflowTreeSaga,
   );
-  yield takeEvery(types.SUBMIT_OPT_OUT, submitOptOutSaga);
   yield takeEvery(types.FETCH_ASSOCIATED_TREE, fetchAssociatedTreeSaga);
   yield takeEvery(types.CALL_FORM_ACTION, callFormActionSaga);
 }
