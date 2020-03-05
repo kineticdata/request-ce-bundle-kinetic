@@ -3,7 +3,7 @@ import { connect } from '../../redux/store';
 import { actions } from '../../redux/modules/surveys';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { I18n, CoreForm } from '@kineticdata/react';
-// import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
+import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { Link } from '@reach/router';
 import { parse } from 'query-string';
@@ -54,19 +54,6 @@ export const SurveyComponent = ({
               )}
             </div>
           </div>
-          <div className="form-description">
-            {form &&
-              form.description && (
-                <p>
-                  <I18n
-                    context={`kapps.${kappSlug}.forms.${slug}`}
-                    public={!authenticated}
-                  >
-                    {form.description}
-                  </I18n>
-                </p>
-              )}
-          </div>
           <I18n
             context={`kapps.${kappSlug}.forms.${slug}`}
             public={!authenticated}
@@ -75,35 +62,19 @@ export const SurveyComponent = ({
               {submission && (
                 <CoreForm
                   submission={submission.id}
+                  public={!authenticated}
+                  review={submission.coreState !== 'Draft'}
                   // form={submission.form.slug}
                   // globals={globals}
                   // loaded={handleLoaded}
                   // completed={handleCompleted}
-                  public={!authenticated}
-                  review={submission.coreState !== 'Draft'}
                   // created={handleCreated}
                   // values={submission.values}
-                  // notFoundComponent={ErrorNotFound}
-                  // unauthorizedComponent={ErrorUnauthorized}
-                  // unexpectedErrorComponent={ErrorUnexpected}
+                  notFoundComponent={ErrorNotFound}
+                  unauthorizedComponent={ErrorUnauthorized}
+                  unexpectedErrorComponent={ErrorUnexpected}
                 />
-              )
-              // : (
-              //   <CoreForm
-              //     kapp={kappSlug}
-              //     form={slug}
-              //     globals={globals}
-              //     loaded={handleLoaded}
-              //     created={handleCreated}
-              //     completed={handleCompleted}
-              //     values={values}
-              //     notFoundComponent={ErrorNotFound}
-              //     unauthorizedComponent={ErrorUnauthorized}
-              //     unexpectedErrorComponent={ErrorUnexpected}
-              //     public={!authenticated}
-              //   />
-              // )
-              }
+              )}
             </div>
           </I18n>
         </div>

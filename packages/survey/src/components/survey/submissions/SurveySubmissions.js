@@ -25,7 +25,7 @@ import { List } from 'immutable';
 
 const LinkCell = ({ row, value }) => (
   <td>
-    <Link to={`${row.get('id')}`}>{value}</Link>
+    <Link to={`${row.get('id')}/details`}>{value}</Link>
   </td>
 );
 
@@ -44,7 +44,7 @@ const ActionsCell = ({
         <span className="fa fa-ellipsis-h fa-2x" />
       </DropdownToggle>
       <DropdownMenu right>
-        <DropdownItem tag={Link} to={row.get('id')}>
+        <DropdownItem tag={Link} to={`${row.get('id')}/details`}>
           <I18n>View</I18n>
         </DropdownItem>
         {formActions.map(el => (

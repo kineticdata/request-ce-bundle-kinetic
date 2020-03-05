@@ -21,18 +21,20 @@ export const SubmissionDetailsContainer = ({
   submission,
   submissionError,
 }) =>
-  form && (
+  !form ? (
+    <div>No Form Loaded</div>
+  ) : (
     <div className="page-container">
       <PageTitle parts={['Survey Submission']} />
       <div className="page-panel page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
-              <Link to="../../../">
+              <Link to="../../../../">
                 <I18n>{kapp.name}</I18n>
               </Link>{' '}
               /{` `}
-              <Link to="../">
+              <Link to="../../">
                 <I18n>{form.name}</I18n>
               </Link>{' '}
               /{` `}
@@ -213,7 +215,7 @@ export const SubmissionDetails = compose(
   lifecycle({
     componentWillMount() {
       this.props.fetchSubmissionRequest({
-        id: this.props.id,
+        id: this.props.submissionId,
       });
     },
   }),

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Router, Redirect } from '@reach/router';
+// import { Route, Redirect } from 'react-router-dom';
 import { compose, lifecycle } from 'recompose';
 import { ErrorUnexpected, Loading } from 'common';
 import { I18n } from '@kineticdata/react';
@@ -40,14 +41,19 @@ const AppComponent = props => {
             <Router>
               <SurveyList path="/" />
               <CreateSurvey path="new" />
-              <Survey path="forms/:formSlug/submissions/:submissionId" />
-              <Survey path=":submissionId" />
+              <Survey path=":slug/submissions/:submissionId" />
+              <Redirect
+                from="forms/:slug/submissions/:submissionId"
+                to="../../../../:slug/submissions/:submissionId"
+                noThrow
+              />
               <SurveyPreview path="forms/:slug" />
+              <Redirect from=":slug" to="../forms/:slug" noThrow />
               <SurveyError path="error" />
               <OptOut path="survey-opt-out" />
               <SurveySubmissions path=":slug/submissions" />
               <SurveySettings path=":slug/settings" />
-              <SubmissionDetails path=":slug/submissions/:id" />
+              <SubmissionDetails path=":slug/submissions/:submissionId/details" />
             </Router>
           </main>
         </I18n>
@@ -96,8 +102,12 @@ export const PublicAppComponent = props => {
         <I18n>
           <main className="package-layout package-layout--services">
             <Router>
-              <Survey path="forms/:formSlug/submissions/:submissionId" />
-              <Survey path=":submissionId" />
+              <Survey path=":slug/submissions/:submissionId" />
+              <Redirect
+                from="forms/:slug/submissions/:submissionId"
+                to="../../../../:slug/submissions/:submissionId"
+                noThrow
+              />
               <SurveyError path="error" />
               <OptOut path="survey-opt-out" />
               <Redirect from="*" to={props.authRoute} noThrow />
