@@ -109,7 +109,7 @@ export const mapStateToProps = state => ({
   loading: state.surveyApp.loading,
   kapp: state.app.kapp,
   appLocation: state.app.location,
-  surveys: state.surveyApp.forms,
+  surveys: state.surveyApp.surveys,
 });
 
 export const mapDispatchToProps = {};

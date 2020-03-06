@@ -1,13 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 import { connect } from '../../redux/store';
-import {
-  lifecycle,
-  compose,
-  withHandlers,
-  withProps,
-  withState,
-} from 'recompose';
+import { lifecycle, compose, withHandlers, withState } from 'recompose';
 import { FormComponents, LoadingMessage, Utils } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { bundle, I18n, FormForm } from '@kineticdata/react';
@@ -726,9 +720,6 @@ export const SurveySettings = compose(
   ),
   withState('customWorkflow', 'setCustomWorkflow', ''),
   withState('activeTab', 'setActiveTab', '1'),
-  withProps(props => ({
-    form: props.forms && props.forms.find(form => form.slug === props.slug),
-  })),
   withHandlers({
     toggleTab: props => tab => {
       if (props.activeTab !== tab) props.setActiveTab(tab);

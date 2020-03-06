@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react';
 import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import downloadjs from 'downloadjs';
-import { connect } from 'react-redux';
 import papaparse from 'papaparse';
 import { actions } from '../../../redux/modules/surveys';
-import { context } from '../../../redux/store';
+import { connect } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 
 const ExportComponent = ({
@@ -140,8 +139,6 @@ export const Export = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
   withState('exportStatus', 'setExportStatus', 'NOT_STARTED'),
   withHandlers({
@@ -152,7 +149,7 @@ export const Export = compose(
       if (this.props.submissions.length !== nextProps.submissions.length) {
         nextProps.setExportStatus('CONVERT');
         const csv = createCSV(nextProps.submissions, nextProps.form);
-        // TODO: If CSV fails setExportStatus to FAILD
+        // TODO: If CSV fails setExportStatus to FAILED
         nextProps.setExportStatus('DOWNLOAD');
         downloadjs(csv, nextProps.form.name + '.csv', 'text/csv');
         nextProps.setExportStatus('COMPLETE');

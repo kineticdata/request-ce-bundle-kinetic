@@ -9,6 +9,7 @@ import {
   ErrorUnexpected,
   LoadingMessage,
 } from 'common';
+import { handleCompleted } from './Survey';
 import { Link } from '@reach/router';
 import { PageTitle } from '../shared/PageTitle';
 import { parse } from 'query-string';
@@ -28,6 +29,7 @@ export const SurveyPreviewComponent = ({
   kapp,
   kappSlug,
   values,
+  handleCompleted,
 }) => (
   <Fragment>
     <PageTitle parts={[form ? form.name : '', 'Preview']} />
@@ -99,12 +101,6 @@ const valuesFromQueryParams = queryParams => {
   }, {});
 };
 
-export const handleCompleted = props => response => {
-  if (!response.submission.currentPage) {
-    props.navigate(props.relativeHomePath);
-  }
-};
-
 export const mapStateToProps = state => ({
   authenticated: state.app.authenticated,
   kapp: state.app.kapp,
@@ -112,8 +108,6 @@ export const mapStateToProps = state => ({
   loading: state.surveyApp.loading,
   submission: state.surveys.submission,
   forms: state.surveyApp.forms,
-  templates: state.surveyApp.templates,
-  utilities: state.surveyApp.utilities,
   values: valuesFromQueryParams(state.router.location.search),
 });
 
@@ -127,14 +121,7 @@ const enhance = compose(
     mapDispatchToProps,
   ),
   withProps(props => ({
-    form:
-      props.forms && props.forms.find(form => form.slug === props.slug)
-        ? props.forms.find(form => form.slug === props.slug)
-        : props.templates &&
-          props.templates.find(template => template.slug === props.slug)
-          ? props.templates.find(template => template.slug === props.slug)
-          : props.utilities &&
-            props.utilities.find(utility => utility.slug === props.slug),
+    form: props.forms && props.forms.find(form => form.slug === props.slug),
     relativeHomePath: `../../${props.submissionId ? '../../' : ''}`,
   })),
   withHandlers({ handleCompleted }),

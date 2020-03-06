@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from '../../redux/store';
 import { actions } from '../../redux/modules/surveys';
-import { compose, lifecycle, withProps } from 'recompose';
+import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { I18n, CoreForm } from '@kineticdata/react';
 import {
   ErrorNotFound,
@@ -27,6 +27,7 @@ export const SurveyComponent = ({
   kappSlug,
   values,
   optOutFormSlug,
+  handleCompleted,
 }) => (
   <Fragment>
     <PageTitle parts={[submission ? submission.form.name : '']} />
@@ -48,6 +49,7 @@ export const SurveyComponent = ({
                   form={submission.form.slug}
                   globals={globals}
                   values={values}
+                  completed={handleCompleted}
                   notFoundComponent={ErrorNotFound}
                   unauthorizedComponent={ErrorUnauthorized}
                   unexpectedErrorComponent={ErrorUnexpected}
@@ -59,6 +61,7 @@ export const SurveyComponent = ({
                   form={optOutFormSlug}
                   globals={globals}
                   values={values}
+                  completed={handleCompleted}
                   notFoundComponent={ErrorNotFound}
                   unauthorizedComponent={ErrorUnauthorized}
                   unexpectedErrorComponent={ErrorUnexpected}
@@ -70,6 +73,19 @@ export const SurveyComponent = ({
       </div>
     )}
   </Fragment>
+);
+
+export const SurveyConfirmation = props => (
+  <div className="page-container page-container--color-bar">
+    <div className="page-panel">
+      <I18n
+        context={`kapps.${props.kappSlug}.forms.${props.slug}`}
+        public={!props.authenticated}
+      >
+        <h4>Thank you for taking the time to complete this survey.</h4>
+      </I18n>
+    </div>
+  </div>
 );
 
 const valuesFromQueryParams = queryParams => {
@@ -85,11 +101,7 @@ const valuesFromQueryParams = queryParams => {
 
 export const handleCompleted = props => response => {
   if (!response.submission.currentPage) {
-    props.navigate(
-      `${props.appLocation}/requests/request/${
-        response.submission.id
-      }/confirmation`,
-    );
+    props.navigate(`confirmation`);
   }
 };
 
@@ -97,7 +109,6 @@ export const mapStateToProps = state => ({
   authenticated: state.app.authenticated,
   kappSlug: state.app.kappSlug,
   loading: state.surveyApp.loading,
-  utilities: state.surveyApp.utilities,
   submission: state.surveys.submission,
   optOutFormSlug: 'survey-opt-out',
   values: valuesFromQueryParams(state.router.location.search),
@@ -115,6 +126,7 @@ const enhance = compose(
   withProps(props => ({
     slug: props.submission ? props.submission.form.slug : props.optOutFormSlug,
   })),
+  withHandlers({ handleCompleted }),
   lifecycle({
     componentWillMount() {
       this.props.submissionId &&

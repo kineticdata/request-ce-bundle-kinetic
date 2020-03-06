@@ -5,7 +5,7 @@ import { ErrorUnexpected, Loading } from 'common';
 import { I18n } from '@kineticdata/react';
 import { connect } from './redux/store';
 import { SurveyAppSetup } from './components/survey/SurveyAppSetup';
-import { Survey } from './components/survey/Survey';
+import { Survey, SurveyConfirmation } from './components/survey/Survey';
 import { SurveyPreview } from './components/survey/SurveyPreview';
 import { SurveyList } from './components/survey/home/SurveyList';
 import { SurveySubmissions } from './components/survey/submissions/SurveySubmissions';
@@ -52,6 +52,9 @@ const AppComponent = props => {
               <SurveySubmissions path=":slug/submissions" />
               <SurveySettings path=":slug/settings" />
               <SubmissionDetails path=":slug/submissions/:submissionId/details" />
+              <SurveyConfirmation path="forms/:slug/confirmation" />
+              <SurveyConfirmation path="survey-opt-out/confirmation" />
+              <SurveyConfirmation path=":slug/submissions/:submissionId/confirmation" />
             </Router>
           </main>
         </I18n>
