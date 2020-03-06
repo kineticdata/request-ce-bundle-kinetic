@@ -21,6 +21,7 @@ export const State = Record({
   loading: true,
   error: null,
   forms: null,
+  templates: null,
   formActions: null,
   required: null,
 });
@@ -32,6 +33,7 @@ const surveyAppReducer = (state = State(), { type, payload }) => {
     case types.FETCH_APP_DATA_SUCCESS:
       return state
         .set('forms', List(payload.forms))
+        .set('templates', List(payload.templates))
         .set('formActions', List(payload.formActions))
         .set('loading', false);
     case types.FETCH_APP_DATA_FAILURE:

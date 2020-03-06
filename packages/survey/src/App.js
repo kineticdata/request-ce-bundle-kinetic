@@ -1,6 +1,5 @@
 import React from 'react';
 import { Router, Redirect } from '@reach/router';
-// import { Route, Redirect } from 'react-router-dom';
 import { compose, lifecycle } from 'recompose';
 import { ErrorUnexpected, Loading } from 'common';
 import { I18n } from '@kineticdata/react';

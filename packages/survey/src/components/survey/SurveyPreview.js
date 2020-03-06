@@ -115,6 +115,7 @@ export const mapStateToProps = state => ({
   loading: state.surveyApp.loading,
   submission: state.surveys.submission,
   forms: state.surveyApp.forms,
+  templates: state.surveyApp.templates,
   values: valuesFromQueryParams(state.router.location.search),
 });
 
@@ -128,8 +129,11 @@ const enhance = compose(
     mapDispatchToProps,
   ),
   withProps(props => ({
-    slug: props.slug,
-    form: props.forms && props.forms.find(form => form.slug === props.slug),
+    form:
+      props.forms && props.forms.find(form => form.slug === props.slug)
+        ? props.forms.find(form => form.slug === props.slug)
+        : props.templates &&
+          props.templates.find(template => template.slug === props.slug),
     relativeHomePath: `../../${props.submissionId ? '../../' : ''}`,
   })),
   withHandlers({ handleCompleted, handleCreated }),

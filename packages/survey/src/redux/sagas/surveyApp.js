@@ -35,6 +35,7 @@ export function* fetchAppDataRequestSaga() {
     yield put(
       actions.fetchAppDataSuccess({
         forms: forms.filter(form => form.type === 'Survey'),
+        templates: forms.filter(form => form.type === 'Template'),
         formActions: forms.filter(form => form.type === 'Survey Action'),
       }),
     );
