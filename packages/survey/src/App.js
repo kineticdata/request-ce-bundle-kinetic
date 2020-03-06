@@ -7,7 +7,6 @@ import { connect } from './redux/store';
 import { SurveyAppSetup } from './components/survey/SurveyAppSetup';
 import { Survey } from './components/survey/Survey';
 import { SurveyPreview } from './components/survey/SurveyPreview';
-import { OptOut } from './components/survey/OptOut';
 import { SurveyList } from './components/survey/home/SurveyList';
 import { SurveySubmissions } from './components/survey/submissions/SurveySubmissions';
 import { SubmissionDetails } from './components/survey/submissions/SubmissionDetails';
@@ -46,10 +45,10 @@ const AppComponent = props => {
                 to="../../../../:slug/submissions/:submissionId"
                 noThrow
               />
+              <Survey path="survey-opt-out" />
               <SurveyPreview path="forms/:slug" />
               <Redirect from=":slug" to="../forms/:slug" noThrow />
               <SurveyError path="error" />
-              <OptOut path="survey-opt-out" />
               <SurveySubmissions path=":slug/submissions" />
               <SurveySettings path=":slug/settings" />
               <SubmissionDetails path=":slug/submissions/:submissionId/details" />
@@ -107,8 +106,8 @@ export const PublicAppComponent = props => {
                 to="../../../../:slug/submissions/:submissionId"
                 noThrow
               />
+              <Survey path="survey-opt-out" />
               <SurveyError path="error" />
-              <OptOut path="survey-opt-out" />
               <Redirect from="*" to={props.authRoute} noThrow />
             </Router>
           </main>

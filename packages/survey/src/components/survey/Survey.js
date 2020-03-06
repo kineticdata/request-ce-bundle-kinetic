@@ -26,10 +26,13 @@ export const SurveyComponent = ({
   slug,
   kappSlug,
   values,
+  optOutFormSlug,
 }) => (
   <Fragment>
     <PageTitle parts={[submission ? submission.form.name : '']} />
-    {!loading && submission ? (
+    {loading ? (
+      <LoadingMessage />
+    ) : (
       <div className="page-container page-container--color-bar">
         <div className="page-panel">
           <I18n
@@ -37,23 +40,34 @@ export const SurveyComponent = ({
             public={!authenticated}
           >
             <div className="embedded-core-form--wrapper">
-              <CoreForm
-                submission={submission.id}
-                public={!authenticated}
-                review={submission.coreState !== 'Draft'}
-                form={submission.form.slug}
-                globals={globals}
-                values={values}
-                notFoundComponent={ErrorNotFound}
-                unauthorizedComponent={ErrorUnauthorized}
-                unexpectedErrorComponent={ErrorUnexpected}
-              />
+              {submission ? (
+                <CoreForm
+                  submission={submission.id}
+                  public={!authenticated}
+                  review={submission.coreState !== 'Draft'}
+                  form={submission.form.slug}
+                  globals={globals}
+                  values={values}
+                  notFoundComponent={ErrorNotFound}
+                  unauthorizedComponent={ErrorUnauthorized}
+                  unexpectedErrorComponent={ErrorUnexpected}
+                />
+              ) : (
+                <CoreForm
+                  public={!authenticated}
+                  kapp={kappSlug}
+                  form={optOutFormSlug}
+                  globals={globals}
+                  values={values}
+                  notFoundComponent={ErrorNotFound}
+                  unauthorizedComponent={ErrorUnauthorized}
+                  unexpectedErrorComponent={ErrorUnexpected}
+                />
+              )}
             </div>
           </I18n>
         </div>
       </div>
-    ) : (
-      <LoadingMessage />
     )}
   </Fragment>
 );
@@ -83,7 +97,9 @@ export const mapStateToProps = state => ({
   authenticated: state.app.authenticated,
   kappSlug: state.app.kappSlug,
   loading: state.surveyApp.loading,
+  utilities: state.surveyApp.utilities,
   submission: state.surveys.submission,
+  optOutFormSlug: 'survey-opt-out',
   values: valuesFromQueryParams(state.router.location.search),
 });
 
@@ -97,7 +113,7 @@ const enhance = compose(
     mapDispatchToProps,
   ),
   withProps(props => ({
-    slug: props.submission && props.submission.form.slug,
+    slug: props.submission ? props.submission.form.slug : props.optOutFormSlug,
   })),
   lifecycle({
     componentWillMount() {

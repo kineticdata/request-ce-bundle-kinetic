@@ -60,6 +60,7 @@ export function* createFormSaga({ payload }) {
     kappSlug: payload.kappSlug,
     formSlug: payload.form.template,
     include: DEFAULT_TEMPLATE_INCLUDES,
+    export: true,
   });
 
   if (templateError) {
