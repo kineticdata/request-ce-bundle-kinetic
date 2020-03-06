@@ -22,6 +22,10 @@ export const SurveySettingsWebApiView = ({ kappSlug, formSlug }) => {
           value: 'name@example.com',
         },
         {
+          name: 'referenceId',
+          value: '12345',
+        },
+        {
           name: 'data',
           value: 'varies by initiating system',
         },

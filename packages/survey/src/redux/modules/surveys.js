@@ -139,8 +139,6 @@ export const types = {
   DELETE_FORM_COMPLETE: ns('DELETE_FORM_COMPLETE'),
   CLONE_FORM_REQUEST: ns('CLONE_FORM_REQUEST'),
   CLONE_FORM_COMPLETE: ns('CLONE_FORM_COMPLETE'),
-  FETCH_SURVEY_TEMPLATES: ns('FETCH_SURVEY_TEMPLATES'),
-  FETCH_SURVEY_TEMPLATES_COMPLETE: ns('FETCH_SURVEY_TEMPLATES_COMPLETE'),
   CREATE_FORM_REQUEST: ns('CREATE_FORM_REQUEST'),
   CREATE_FORM_SUCCESS: ns('CREATE_FORM_SUCCESS'),
   CREATE_FORM_FAILURE: ns('CREATE_FORM_FAILURE'),
@@ -171,10 +169,6 @@ export const actions = {
   deleteFormComplete: withPayload(types.DELETE_FORM_COMPLETE),
   cloneFormRequest: withPayload(types.CLONE_FORM_REQUEST),
   cloneFormComplete: withPayload(types.CLONE_FORM_COMPLETE),
-  fetchSurveyTemplates: withPayload(types.FETCH_SURVEY_TEMPLATES),
-  fetchSurveyTemplatesComplete: withPayload(
-    types.FETCH_SURVEY_TEMPLATES_COMPLETE,
-  ),
   createFormRequest: withPayload(types.CREATE_FORM_REQUEST),
   createFormSuccess: withPayload(types.CREATE_FORM_SUCCESS),
   createFormFailure: withPayload(types.CREATE_FORM_FAILURE),
@@ -224,7 +218,6 @@ export const State = Record({
   error: null,
   submission: null,
   submissionError: null,
-  templates: [],
   associatedTree: [],
 });
 
@@ -303,8 +296,6 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('form', payload);
     case types.CREATE_FORM_FAILURE:
       return state.set('error', payload);
-    case types.FETCH_SURVEY_TEMPLATES_COMPLETE:
-      return state.set('templates', payload.templates);
     case types.FETCH_ASSOCIATED_TREE_COMPLETE:
       return state.set('associatedTree', payload);
 

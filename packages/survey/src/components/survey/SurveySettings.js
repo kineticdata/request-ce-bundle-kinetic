@@ -95,9 +95,7 @@ const fieldSet = [
   'maxFrequencyDays',
   'eventInterval',
   'owningTeam',
-  'authenticated',
-  'assignedIndividual',
-  'submitter',
+  'owningIndividual',
 ];
 
 const SurveySettingsComponent = ({
@@ -228,10 +226,16 @@ const SurveySettingsComponent = ({
               {fields.get('pollingTrigger')}
               {/* {fields.get('pollingInterval')} */}
               {fields.getIn(['polling', 'props', 'value']) === 'false' && (
-                <SurveySettingsWebApiView
-                  kappSlug={formOptions.kappSlug}
-                  formSlug={formOptions.formSlug}
-                />
+                <Fragment>
+                  <p className="small">
+                    Non-polling surveys will be triggered via an API call. Below
+                    are several examples of how to make this call.
+                  </p>
+                  <SurveySettingsWebApiView
+                    kappSlug={formOptions.kappSlug}
+                    formSlug={formOptions.formSlug}
+                  />
+                </Fragment>
               )}
             </div>
           </TabPane>
@@ -265,11 +269,7 @@ const SurveySettingsComponent = ({
             <div className="survey-settings survey-settings--security">
               <div className="form-group__columns">
                 {fields.get('owningTeam')}
-                {fields.get('assignedIndividual')}
-              </div>
-              <div className="form-group__columns">
-                {fields.get('authenticated')}
-                {fields.get('submitter')}
+                {fields.get('owningIndividual')}
               </div>
             </div>
           </TabPane>
@@ -587,34 +587,14 @@ const SurveySettingsComponent = ({
                               : '',
                         },
                         {
-                          name: 'authenticated',
-                          label: 'Authenticated',
-                          type: 'text',
-                          helpText: 'TBD',
-                          initialValue:
-                            surveyConfig && surveyConfig['Authenticated']
-                              ? surveyConfig['Authenticated']
-                              : '',
-                        },
-                        {
-                          name: 'assignedIndividual',
-                          label: 'Assigned Individual',
+                          name: 'owningIndividual',
+                          label: 'Owning Individual',
                           type: 'user',
                           helpText:
                             'User will receive notifications regarding this survey',
                           initialValue:
-                            surveyConfig && surveyConfig['Assigned Individual']
-                              ? surveyConfig['Assigned Individual']
-                              : '',
-                        },
-                        {
-                          name: 'submitter',
-                          label: 'Submitter',
-                          type: 'text',
-                          helpText: 'TBD',
-                          initialValue:
-                            surveyConfig && surveyConfig['Submitter']
-                              ? surveyConfig['Submitter']
+                            surveyConfig && surveyConfig['Owning Individual']
+                              ? surveyConfig['Owning Individual']
                               : '',
                         },
                       ]
@@ -671,11 +651,7 @@ const SurveySettingsComponent = ({
                           },
                           'Survey Event Interval': values.get('eventInterval'),
                           'Owning Team': values.get('owningTeam'),
-                          Authenticated: values.get('authenticated'),
-                          'Assigned Individual': values.get(
-                            'assignedIndividual',
-                          ),
-                          Submitter: values.get('submitter'),
+                          'Owning Individual': values.get('owningIndividual'),
                         }),
                       }),
                     },

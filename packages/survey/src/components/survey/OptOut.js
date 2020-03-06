@@ -36,26 +36,12 @@ export const OptOutComponent = ({
         <div className="page-panel">
           <div className="page-title">
             <div className="page-title__wrapper">
-              <h3>
-                <I18n>{kapp.name}</I18n> /{' '}
-              </h3>
-              {form && (
-                <h1>
-                  <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
-                    {form.name}
-                  </I18n>
-                </h1>
-              )}
-            </div>
-          </div>
-          <div className="form-description">
-            {form && (
-              <p>
+              <h1>
                 <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
-                  {form.description}
+                  {form.name}
                 </I18n>
-              </p>
-            )}
+              </h1>
+            </div>
           </div>
           <div className="embedded-core-form--wrapper">
             {submissionId ? (

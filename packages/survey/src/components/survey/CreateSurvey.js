@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
+import { connect } from '../../redux/store';
 import { push } from 'redux-first-history';
-import { compose, lifecycle, withHandlers, withState } from 'recompose';
+import { compose, withHandlers, withState } from 'recompose';
 import { Survey } from '../../models';
 import { actions } from '../../redux/modules/surveys';
 import { actions as appActions } from '../../redux/modules/surveyApp';
-import { context } from '../../redux/store';
 import { PageTitle } from '../shared/PageTitle';
 import { I18n } from '@kineticdata/react';
 
@@ -196,13 +195,12 @@ export const mapStateToProps = state => ({
   kapp: state.app.kapp,
   kappSlug: state.app.kappSlug,
   spaceAdmin: state.app.profile.spaceAdmin,
-  templates: state.surveys.templates,
+  templates: state.surveyApp.templates,
 });
 
 export const mapDispatchToProps = {
   push,
   createForm: actions.createFormRequest,
-  fetchTemplates: actions.fetchSurveyTemplates,
   fetchAppDataRequest: appActions.fetchAppDataRequest,
 };
 
@@ -210,14 +208,7 @@ export const CreateSurvey = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
-  lifecycle({
-    componentWillMount() {
-      this.props.fetchTemplates({ kappSlug: this.props.kappSlug });
-    },
-  }),
   withState('newForm', 'setNewForm', Survey()),
   withState('creating', 'setCreating', false),
   withHandlers({

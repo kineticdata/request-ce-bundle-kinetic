@@ -1,7 +1,6 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 import {
   fetchForm,
-  fetchForms,
   SubmissionSearch,
   createSubmission,
   searchSubmissions,
@@ -38,28 +37,6 @@ export function* fetchFormSaga({ payload }) {
     yield put(actions.fetchFormFailure(error));
   } else {
     yield put(actions.fetchFormSuccess(form));
-  }
-}
-
-export function* fetchTemplatesSaga({ payload }) {
-  const { forms, error } = yield call(fetchForms, {
-    kappSlug: payload.kappSlug,
-    include: 'details,attributes',
-    q: 'type = "Template"',
-  });
-
-  if (error) {
-    addToastAlert({
-      title: 'Failed to load Survey Templates.',
-      message: error.message,
-    });
-  } else {
-    const templates = forms.map(form => ({ name: form.name, slug: form.slug }));
-    yield put(
-      actions.fetchSurveyTemplatesComplete({
-        templates,
-      }),
-    );
   }
 }
 
@@ -335,7 +312,6 @@ export function* watchSurveys() {
   yield takeEvery(types.FETCH_ALL_SUBMISSIONS, fetchAllSubmissionsSaga);
 
   yield takeEvery(types.CREATE_FORM_REQUEST, createFormSaga);
-  yield takeEvery(types.FETCH_SURVEY_TEMPLATES, fetchTemplatesSaga);
   yield takeEvery(
     types.CREATE_SURVEY_CUSTOM_WORKFLOW_TREE,
     createSurveyCustomWorkflowTreeSaga,

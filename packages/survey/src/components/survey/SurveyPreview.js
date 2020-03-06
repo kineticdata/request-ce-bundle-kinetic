@@ -3,7 +3,13 @@ import { connect } from '../../redux/store';
 import { actions } from '../../redux/modules/surveys';
 import { compose, withHandlers, withProps } from 'recompose';
 import { I18n, CoreForm } from '@kineticdata/react';
-import { ErrorNotFound, ErrorUnauthorized, ErrorUnexpected } from 'common';
+import {
+  ErrorNotFound,
+  ErrorUnauthorized,
+  ErrorUnexpected,
+  LoadingMessage,
+} from 'common';
+import { Link } from '@reach/router';
 import { PageTitle } from '../shared/PageTitle';
 import { parse } from 'query-string';
 
@@ -21,6 +27,7 @@ export const SurveyPreviewComponent = ({
   form,
   kapp,
   kappSlug,
+  values,
 }) => (
   <Fragment>
     <PageTitle parts={[form ? form.name : '', 'Preview']} />
@@ -30,32 +37,30 @@ export const SurveyPreviewComponent = ({
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
-                <I18n>{kapp.name}</I18n> /{' '}
+                <Link to="../../">
+                  <I18n>{kapp.name}</I18n> /{' '}
+                </Link>
+                <I18n>Preview</I18n> /{' '}
               </h3>
-              {form && (
-                <h1>
-                  <I18n
-                    context={`kapps.${kappSlug}.forms.${slug}`}
-                    public={!authenticated}
-                  >
-                    {form.name}
-                  </I18n>
-                </h1>
-              )}
+              <h1>
+                <I18n
+                  context={`kapps.${kappSlug}.forms.${slug}`}
+                  public={!authenticated}
+                >
+                  {form.name}
+                </I18n>
+              </h1>
             </div>
           </div>
           <div className="form-description">
-            {form &&
-              form.description && (
-                <p>
-                  <I18n
-                    context={`kapps.${kappSlug}.forms.${slug}`}
-                    public={!authenticated}
-                  >
-                    {form.description}
-                  </I18n>
-                </p>
-              )}
+            <p>
+              <I18n
+                context={`kapps.${kappSlug}.forms.${slug}`}
+                public={!authenticated}
+              >
+                {form.description}
+              </I18n>
+            </p>
           </div>
           <I18n
             context={`kapps.${kappSlug}.forms.${slug}`}
@@ -66,7 +71,7 @@ export const SurveyPreviewComponent = ({
                 kapp={kappSlug}
                 form={slug}
                 globals={globals}
-                created={handleCreated}
+                values={values}
                 completed={handleCompleted}
                 notFoundComponent={ErrorNotFound}
                 unauthorizedComponent={ErrorUnauthorized}
@@ -78,7 +83,7 @@ export const SurveyPreviewComponent = ({
         </div>
       </div>
     ) : (
-      <div>Loading</div>
+      <LoadingMessage />
     )}
   </Fragment>
 );
@@ -100,14 +105,6 @@ export const handleCompleted = props => response => {
   }
 };
 
-export const handleCreated = props => response => {
-  props.navigate(
-    response.submission.coreState === 'Submitted'
-      ? props.relativeHomePath
-      : `submissions/${response.submission.id}`,
-  );
-};
-
 export const mapStateToProps = state => ({
   authenticated: state.app.authenticated,
   kapp: state.app.kapp,
@@ -116,6 +113,7 @@ export const mapStateToProps = state => ({
   submission: state.surveys.submission,
   forms: state.surveyApp.forms,
   templates: state.surveyApp.templates,
+  utilities: state.surveyApp.utilities,
   values: valuesFromQueryParams(state.router.location.search),
 });
 
@@ -133,10 +131,13 @@ const enhance = compose(
       props.forms && props.forms.find(form => form.slug === props.slug)
         ? props.forms.find(form => form.slug === props.slug)
         : props.templates &&
-          props.templates.find(template => template.slug === props.slug),
+          props.templates.find(template => template.slug === props.slug)
+          ? props.templates.find(template => template.slug === props.slug)
+          : props.utilities &&
+            props.utilities.find(utility => utility.slug === props.slug),
     relativeHomePath: `../../${props.submissionId ? '../../' : ''}`,
   })),
-  withHandlers({ handleCompleted, handleCreated }),
+  withHandlers({ handleCompleted }),
 );
 
 export const SurveyPreview = enhance(SurveyPreviewComponent);
