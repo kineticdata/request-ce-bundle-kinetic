@@ -1,18 +1,25 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
-import { connect } from '../../redux/store';
-import { lifecycle, compose, withHandlers, withState } from 'recompose';
-import { FormComponents, LoadingMessage, Utils } from 'common';
-import { PageTitle } from '../shared/PageTitle';
-import { bundle, I18n, FormForm } from '@kineticdata/react';
-import { actions as surveyActions } from '../../redux/modules/surveys';
-import { actions as notificationsActions } from '../../redux/modules/notifications';
-import { actions as robotsActions } from '../../redux/modules/robots';
-import { SurveySettingsWebApiView } from './SurveySettingsWebApiView';
-// import { isActiveClass } from '../../utils';
+import { connect } from '../../../redux/store';
+import {
+  lifecycle,
+  compose,
+  withHandlers,
+  withProps,
+  withState,
+} from 'recompose';
 import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import classnames from 'classnames';
 import moment from 'moment';
+import { FormComponents, LoadingMessage, Utils } from 'common';
+import { PageTitle } from '../../shared/PageTitle';
+import { bundle, I18n, FormForm } from '@kineticdata/react';
+import { actions as appActions } from '../../../redux/modules/surveyApp';
+import { actions as surveyActions } from '../../../redux/modules/surveys';
+import { actions as notificationsActions } from '../../../redux/modules/notifications';
+import { actions as robotsActions } from '../../../redux/modules/robots';
+import { SettingsWebApiView } from './SettingsWebApiView';
+import { SettingsSidebar } from './SettingsSidebar';
 
 const asArray = value => (value ? [JSON.stringify(value)] : []);
 
@@ -30,45 +37,11 @@ const BuilderLink = ({ tree }) => (
   </span>
 );
 
-const SidebarContent = ({ tab }) =>
-  tab === '1' ? (
-    <Fragment>
-      <h3>General Settings</h3>
-      {/* TODO: add details */}
-    </Fragment>
-  ) : tab === '2' ? (
-    <Fragment>
-      <h3>Workflow Process</h3>
-      {/* TODO: add details */}
-      <br />
-      <Link to={'/settings/notifications/templates/new'}>
-        New Notification Template
-      </Link>
-    </Fragment>
-  ) : tab === '3' ? (
-    <Fragment>
-      <h3>Polling</h3>
-      {/* TODO: add details */}
-    </Fragment>
-  ) : tab === '4' ? (
-    <Fragment>
-      <h3>Delivery Rules</h3>
-      {/* TODO: add details */}
-    </Fragment>
-  ) : (
-    tab === '5' && (
-      <Fragment>
-        <h3>Security</h3>
-        {/* TODO: add details */}
-      </Fragment>
-    )
-  );
-
 const fieldSet = [
   'name',
   'slug',
   'description',
-  'status',
+  // 'status',
   'submissionLabelExpression',
   'attributesMap',
   'workflowProcess',
@@ -96,6 +69,7 @@ const SurveySettingsComponent = ({
   kapp,
   kappSlug,
   origForm,
+  surveyConfig,
   loading,
   templates,
   robots,
@@ -109,7 +83,6 @@ const SurveySettingsComponent = ({
 }) => {
   const FormLayout = ({ fields, error, buttons, dirty, formOptions }) => (
     <Fragment>
-      {/* reactStrap navigation */}
       <div className="survey-tabs">
         <Nav tabs>
           <NavItem>
@@ -178,7 +151,7 @@ const SurveySettingsComponent = ({
                 {fields.get('slug')}
               </div>
               {fields.get('description')}
-              {fields.get('status')}
+              {/* {fields.get('status')} */}
               {fields.get('submissionLabelExpression')}
               <div className="form-group__columns">
                 {fields.get('surveyStart')}
@@ -225,7 +198,7 @@ const SurveySettingsComponent = ({
                     Non-polling surveys will be triggered via an API call. Below
                     are several examples of how to make this call.
                   </p>
-                  <SurveySettingsWebApiView
+                  <SettingsWebApiView
                     kappSlug={formOptions.kappSlug}
                     formSlug={formOptions.formSlug}
                   />
@@ -331,20 +304,6 @@ const SurveySettingsComponent = ({
                   onSave={() => onSave}
                   components={{ FormLayout }}
                   addFields={() => ({ form }) => {
-                    const surveyConfig =
-                      form &&
-                      form.getIn([
-                        'attributesMap',
-                        'Survey Configuration',
-                        0,
-                      ]) &&
-                      JSON.parse(
-                        form.getIn([
-                          'attributesMap',
-                          'Survey Configuration',
-                          0,
-                        ]),
-                      );
                     return (
                       form && [
                         {
@@ -386,8 +345,7 @@ const SurveySettingsComponent = ({
                               ? surveyConfig['Reminders']['Reminder Interval']
                               : 0,
                           component: FormComponents.IntegerField,
-                          helpText:
-                            'Number of days in between reminder notifications',
+                          helpText: 'Number of days between survey reminders',
                         },
                         {
                           name: 'reminderMax',
@@ -399,7 +357,8 @@ const SurveySettingsComponent = ({
                               ? surveyConfig['Reminders']['Reminder Max']
                               : 0,
                           component: FormComponents.IntegerField,
-                          helpText: 'Maximum number of reminders to send',
+                          helpText:
+                            'Maximum number of survey reminders that will be sent out (if survey is completed, reminders stop)',
                         },
                         {
                           name: 'invitationTemplate',
@@ -574,7 +533,7 @@ const SurveySettingsComponent = ({
                           label: 'Owning Team',
                           type: 'team',
                           helpText:
-                            'Team will receive notifications regarding this survey',
+                            'Team allowed to review survey submissions and edit survey',
                           initialValue:
                             surveyConfig && surveyConfig['Owning Team']
                               ? surveyConfig['Owning Team']
@@ -585,7 +544,7 @@ const SurveySettingsComponent = ({
                           label: 'Owning Individual',
                           type: 'user',
                           helpText:
-                            'User will receive notifications regarding this survey',
+                            'Individual allowed to review survey submissions and edit survey (in addition to owning team). Set to creator of the survey by default.',
                           initialValue:
                             surveyConfig && surveyConfig['Owning Individual']
                               ? surveyConfig['Owning Individual']
@@ -602,13 +561,13 @@ const SurveySettingsComponent = ({
                       helpText: 'Unique identifier of the survey',
                     },
                     description: { component: FormComponents.TextAreaField },
-                    status: {
-                      options: [
-                        { value: 'Active', label: 'Active' },
-                        { value: 'Inactive', label: 'Inactive' },
-                      ],
-                      helpText: 'Only Active surveys will be sent out',
-                    },
+                    // status: {
+                    //   options: [
+                    //     { value: 'Active', label: 'Active' },
+                    //     { value: 'Inactive', label: 'Inactive' },
+                    //   ],
+                    //   helpText: 'Only Active surveys will be sent out',
+                    // },
                     submissionLabelExpression: {
                       label: 'Survey Label',
                       helpText:
@@ -683,7 +642,7 @@ const SurveySettingsComponent = ({
                 navigating between tabs. Reset or save your changes to continue.
               </I18n>
             </p>
-            <SidebarContent tab={activeTab} />
+            <SettingsSidebar tab={activeTab} />
           </div>
         </div>
       </I18n>
@@ -691,13 +650,32 @@ const SurveySettingsComponent = ({
   );
 };
 
+export const onSave = props => response => {
+  !props.associatedTree.tree &&
+    props.customWorkflow === 'true' &&
+    props.createSurveyCustomWorkflowTree({
+      sourceName: props.taskSourceName,
+      kappSlug: props.kappSlug,
+      formSlug: props.origForm.slug,
+    });
+  // props.associatedTree.tree &&
+  //   props.customWorkflow === 'false' &&
+  //   props.deleteSurveyCustomWorkflowTree({
+  //     sourceName: props.taskSourceName,
+  //     kappSlug: props.kappSlug,
+  //     formSlug: props.origForm.slug,
+  //   });
+  // },
+  props.setFormReset(true);
+};
+
 export const mapStateToProps = (state, { slug }) => ({
   loading: state.surveys.currentFormLoading || state.notifications.loading,
   spaceAdmin: state.app.profile.spaceAdmin ? true : false,
-  origForm: state.surveys.form,
   kapp: state.app.kapp,
   kappSlug: state.app.kappSlug,
   formSlug: slug,
+  origForm: state.surveys.form,
   taskSourceName: Utils.getAttributeValue(state.app.space, 'Task Source Name'),
   templates: state.notifications.notificationTemplates,
   robots: state.robots.robots.toJS(),
@@ -705,12 +683,13 @@ export const mapStateToProps = (state, { slug }) => ({
 });
 
 export const mapDispatchToProps = {
-  fetchFormRequest: surveyActions.fetchFormRequest,
   fetchNotifications: notificationsActions.fetchNotifications,
   fetchRobots: robotsActions.fetchRobots,
   createSurveyCustomWorkflowTree: surveyActions.createSurveyCustomWorkflowTree,
   deleteSurveyCustomWorkflowTree: surveyActions.deleteSurveyCustomWorkflowTree,
+  fetchFormRequest: surveyActions.fetchFormRequest,
   fetchAssociatedTree: surveyActions.fetchAssociatedTree,
+  fetchAppDataRequest: appActions.fetchAppDataRequest,
 };
 
 export const SurveySettings = compose(
@@ -720,29 +699,23 @@ export const SurveySettings = compose(
   ),
   withState('customWorkflow', 'setCustomWorkflow', ''),
   withState('activeTab', 'setActiveTab', '1'),
+  withState('formReset', 'setFormReset', false),
+  withProps(props => ({
+    surveyConfig:
+      props.origForm &&
+      props.origForm['attributesMap']['Survey Configuration'][0] &&
+      JSON.parse(props.origForm['attributesMap']['Survey Configuration'][0]),
+  })),
   withHandlers({
     toggleTab: props => tab => {
       if (props.activeTab !== tab) props.setActiveTab(tab);
     },
-    onSave: props => () => {
-      props.customWorkflow === 'true' &&
-        props.createSurveyCustomWorkflowTree({
-          sourceName: props.taskSourceName,
-          kappSlug: props.kappSlug,
-          formSlug: props.origForm.slug,
-        });
-      // : props.customWorkflow === 'false' &&
-      //   props.deleteSurveyCustomWorkflowTree({
-      //     sourceName: props.taskSourceName,
-      //     kappSlug: props.kappSlug,
-      //     formSlug: props.origForm.slug,
-      //   });
-    },
+    onSave,
   }),
   lifecycle({
     componentWillMount() {
       this.props.fetchFormRequest({
-        kappSlug: this.props.kappSlug,
+        kappSlug: this.props.kapp.slug,
         formSlug: this.props.slug,
       });
       this.props.fetchAssociatedTree({
@@ -754,6 +727,22 @@ export const SurveySettings = compose(
       });
       this.props.fetchNotifications();
       this.props.fetchRobots();
+    },
+    componentDidUpdate(prevProps) {
+      if (this.props.formReset !== prevProps.formReset) {
+        this.props.setFormReset(false);
+        this.props.fetchFormRequest({
+          kappSlug: this.props.kapp.slug,
+          formSlug: this.props.slug,
+        });
+        this.props.fetchAssociatedTree({
+          name: 'Submitted',
+          sourceGroup: `Submissions > ${this.props.kappSlug} > ${
+            this.props.slug
+          }`,
+          sourceName: this.props.taskSourceName,
+        });
+      }
     },
   }),
 )(SurveySettingsComponent);

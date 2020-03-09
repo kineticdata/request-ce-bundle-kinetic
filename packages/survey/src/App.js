@@ -4,13 +4,12 @@ import { compose, lifecycle } from 'recompose';
 import { ErrorUnexpected, Loading } from 'common';
 import { I18n } from '@kineticdata/react';
 import { connect } from './redux/store';
-import { SurveyAppSetup } from './components/survey/SurveyAppSetup';
 import { Survey, SurveyConfirmation } from './components/survey/Survey';
 import { SurveyPreview } from './components/survey/SurveyPreview';
 import { SurveyList } from './components/survey/home/SurveyList';
 import { SurveySubmissions } from './components/survey/submissions/SurveySubmissions';
 import { SubmissionDetails } from './components/survey/submissions/SubmissionDetails';
-import { SurveySettings } from './components/survey/SurveySettings';
+import { SurveySettings } from './components/survey/settings/SurveySettings';
 import { CreateSurvey } from './components/survey/CreateSurvey';
 import { actions as appActions } from './redux/modules/surveyApp';
 
@@ -25,9 +24,7 @@ const SurveyError = () => (
  *****************************************************************************/
 
 const AppComponent = props => {
-  if (props.required && props.required[0]) {
-    return <SurveyAppSetup required={props.required} />;
-  } else if (props.error) {
+  if (props.error) {
     return <ErrorUnexpected />;
   } else if (props.loading) {
     return <Loading text="App is loading ..." />;

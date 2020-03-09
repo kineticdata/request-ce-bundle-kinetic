@@ -1,8 +1,8 @@
 import React from 'react';
 import HTTPSnippet from 'httpsnippet';
-import { CodeViewer } from '../shared/CodeViewer';
+import { CodeViewer } from '../../shared/CodeViewer';
 
-export const SurveySettingsWebApiView = ({ kappSlug, formSlug }) => {
+export const SettingsWebApiView = ({ kappSlug, formSlug }) => {
   const method = 'POST';
   const publicRoute =
     kappSlug &&

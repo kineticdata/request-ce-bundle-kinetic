@@ -40,9 +40,9 @@ export const SurveyPreviewComponent = ({
             <div className="page-title__wrapper">
               <h3>
                 <Link to="../../">
-                  <I18n>{kapp.name}</I18n> /{' '}
-                </Link>
-                <I18n>Preview</I18n> /{' '}
+                  <I18n>{kapp.name}</I18n>
+                </Link>{' '}
+                / <I18n>Preview</I18n> /{' '}
               </h3>
               <h1>
                 <I18n
