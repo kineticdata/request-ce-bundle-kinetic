@@ -76,6 +76,7 @@ const SurveySettingsComponent = ({
   customWorkflow,
   setCustomWorkflow,
   onSave,
+  // onReset,
   spaceAdmin,
   associatedTree,
   activeTab,
@@ -301,7 +302,8 @@ const SurveySettingsComponent = ({
                   formSlug={origForm.slug}
                   kappSlug={kappSlug}
                   fieldSet={fieldSet}
-                  onSave={() => onSave}
+                  onSave={onSave}
+                  // onReset={onReset}
                   components={{ FormLayout }}
                   addFields={() => ({ form }) => {
                     return (
@@ -650,6 +652,11 @@ const SurveySettingsComponent = ({
   );
 };
 
+// export const onReset = props => response => {
+//   console.log('onReset')
+//   props.setFormReset(true)
+// }
+
 export const onSave = props => response => {
   !props.associatedTree.tree &&
     props.customWorkflow === 'true' &&
@@ -711,6 +718,7 @@ export const SurveySettings = compose(
       if (props.activeTab !== tab) props.setActiveTab(tab);
     },
     onSave,
+    // onReset,
   }),
   lifecycle({
     componentWillMount() {

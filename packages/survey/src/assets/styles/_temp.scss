@@ -47,6 +47,16 @@
   line-height: 0.75rem;
 }
 
+.survey-settings-sidebar-link {
+  line-height: normal;
+  text-transform: none;
+  color: $blue-lake;
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
 .survey-view-toggle {
   display: block;
   text-align: right;

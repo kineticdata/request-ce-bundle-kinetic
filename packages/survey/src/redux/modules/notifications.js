@@ -1,5 +1,6 @@
 import { Record } from 'immutable';
 import { Utils } from 'common';
+const ns = Utils.namespaceBuilder('survey/notifications');
 
 const { namespace, noPayload, withPayload } = Utils;
 
@@ -8,38 +9,32 @@ export const NOTIFICATIONS_DATE_FORMAT_FORM_SLUG =
   'notification-template-dates';
 
 export const types = {
-  FETCH_NOTIFICATIONS: namespace(
-    'settingsNotifications',
-    'FETCH_NOTIFICATIONS',
-  ),
-  SET_NOTIFICATIONS: namespace('settingsNotifications', 'SET_NOTIFICATIONS'),
-  SET_FETCH_NOTIFICATIONS_ERROR: namespace(
-    'settingsNotifications',
-    'SET_FETCH_NOTIFICATIONS_ERROR',
-  ),
-  FETCH_NOTIFICATION: namespace('settingsNotifications', 'FETCH_NOTIFICATION'),
-  SET_NOTIFICATION: namespace('settingsNotifications', 'SET_NOTIFICATION'),
-  RESET_NOTIFICATION: namespace('settingsNotifications', 'RESET_NOTIFICATION'),
-  CLONE_NOTIFICATION: namespace('settingsNotifications', 'CLONE_NOTIFICATION'),
-  SET_CLONE_SUCCESS: namespace('settingsNotifications', 'SET_CLONE_SUCCESS'),
-  SET_CLONE_ERROR: namespace('settingsNotifications', 'SET_CLONE_ERROR'),
-  DELETE_NOTIFICATION: namespace(
-    'settingsNotifications',
-    'DELETE_NOTIFICATION',
-  ),
-  SET_DELETE_SUCCESS: namespace('settingsNotifications', 'SET_DELETE_SUCCESS'),
-  SET_DELETE_ERROR: namespace('settingsNotifications', 'SET_DELETE_ERROR'),
-  FETCH_VARIABLES: namespace('settingsNotifications', 'FETCH_VARIABLES'),
-  SET_VARIABLES: namespace('settingsNotifications', 'SET_VARIABLES'),
-  SET_VARIABLES_ERROR: namespace(
-    'settingsNotifications',
-    'SET_VARIABLES_ERROR',
-  ),
-  FETCH_DATE_FORMATS: namespace('settingsNotifications', 'FETCH_DATE_FORMATS'),
-  SET_DATE_FORMATS: namespace('settingsNotifications', 'SET_DATE_FORMATS'),
-  SAVE_NOTIFICATION: namespace('settingsNotifications', 'SAVE_NOTIFICATION'),
-  SET_SAVE_SUCCESS: namespace('settingsNotifications', 'SET_SAVE_SUCCESS'),
-  SET_SAVE_ERROR: namespace('settingsNotifications', 'SET_SAVE_ERROR'),
+  FETCH_NOTIFICATIONS: ns('FETCH_NOTIFICATIONS'),
+  SET_NOTIFICATIONS: ns('SET_NOTIFICATIONS'),
+  SET_FETCH_NOTIFICATIONS_ERROR: ns('SET_FETCH_NOTIFICATIONS_ERROR'),
+  FETCH_NOTIFICATION: ns('FETCH_NOTIFICATION'),
+  SET_NOTIFICATION: ns('SET_NOTIFICATION'),
+  RESET_NOTIFICATION: ns('RESET_NOTIFICATION'),
+  CLONE_NOTIFICATION: ns('CLONE_NOTIFICATION'),
+  SET_CLONE_SUCCESS: ns('SET_CLONE_SUCCESS'),
+  SET_CLONE_ERROR: ns('SET_CLONE_ERROR'),
+  // DELETE_NOTIFICATION: namespace(
+  //   'settingsNotifications',
+  //   'DELETE_NOTIFICATION',
+  // ),
+  // SET_DELETE_SUCCESS: namespace('settingsNotifications', 'SET_DELETE_SUCCESS'),
+  // SET_DELETE_ERROR: namespace('settingsNotifications', 'SET_DELETE_ERROR'),
+  // FETCH_VARIABLES: namespace('settingsNotifications', 'FETCH_VARIABLES'),
+  // SET_VARIABLES: namespace('settingsNotifications', 'SET_VARIABLES'),
+  // SET_VARIABLES_ERROR: namespace(
+  //   'settingsNotifications',
+  //   'SET_VARIABLES_ERROR',
+  // ),
+  // FETCH_DATE_FORMATS: namespace('settingsNotifications', 'FETCH_DATE_FORMATS'),
+  // SET_DATE_FORMATS: namespace('settingsNotifications', 'SET_DATE_FORMATS'),
+  // SAVE_NOTIFICATION: namespace('settingsNotifications', 'SAVE_NOTIFICATION'),
+  // SET_SAVE_SUCCESS: namespace('settingsNotifications', 'SET_SAVE_SUCCESS'),
+  // SET_SAVE_ERROR: namespace('settingsNotifications', 'SET_SAVE_ERROR'),
 };
 
 export const actions = {

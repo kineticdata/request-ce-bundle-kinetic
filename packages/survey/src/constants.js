@@ -1,6 +1,9 @@
 // Create from template
 export const DEFAULT_SURVEY_TYPE = 'Survey';
 export const DEFAULT_TEMPLATE_INCLUDES = 'details,attributesMap,fields,pages';
+export const DEFAULT_NOTIFICATION_TEMPLATE_NAME = 'Survey Invitation';
+export const DEFAULT_NOTIFICATION_OPT_OUT_TEMPLATE_NAME =
+  'Survey Invitation - Allows Opt Out';
 
 // Attribute names
 export const STATUSES_ACTIVE = 'Statuses - Active';

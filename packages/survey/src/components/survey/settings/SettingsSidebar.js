@@ -1,7 +1,18 @@
 import React, { Fragment } from 'react';
-import { Link } from '@reach/router';
+import { connect } from '../../../redux/store';
+import { compose, withProps } from 'recompose';
+import { actions as notificationsActions } from '../../../redux/modules/notifications';
+import {
+  DEFAULT_NOTIFICATION_TEMPLATE_NAME,
+  DEFAULT_NOTIFICATION_OPT_OUT_TEMPLATE_NAME,
+} from '../../../constants';
 
-export const SettingsSidebar = ({ tab }) =>
+export const SettingsSidebarComponent = ({
+  tab,
+  cloneNotification,
+  defaultTemplate,
+  defaultOptOutTemplate,
+}) =>
   tab === '1' ? (
     <Fragment>
       <h3>General Settings</h3>
@@ -54,12 +65,26 @@ export const SettingsSidebar = ({ tab }) =>
         to the survey recipient when their survey is created. This text is
         rather general by default. If desired please clone this notification
         template and create your custom notification by{' '}
-        <a href="/settings/notifications/templates/new">clicking here</a>.{' '}
+        <span
+          className="survey-settings-sidebar-link"
+          onClick={() => cloneNotification(defaultTemplate.id)}
+          role="button"
+          tabIndex={0}
+        >
+          clicking here
+        </span>.{' '}
         <u>
           If your survey allows users to Opt Out, please update this
           notification to be Survey Invitation with Opt Out
         </u>. To start your custom notification using the Opt Out template,{' '}
-        <a href="/settings/notifications/templates/new">click here</a>.
+        <span
+          className="survey-settings-sidebar-link"
+          onClick={() => cloneNotification(defaultOptOutTemplate.id)}
+          role="button"
+          tabIndex={0}
+        >
+          click here
+        </span>.
       </p>
       <p>
         <b>Reminder Notifications Template</b> is the notification that is sent
@@ -70,12 +95,26 @@ export const SettingsSidebar = ({ tab }) =>
         <u>There are no reminders configured by default</u>. Note that this uses
         the generic invitation text by default. If desired please clone this
         notification template and create your custom notification by{' '}
-        <a href="/settings/notifications/templates/new">clicking here</a>.{' '}
+        <span
+          className="survey-settings-sidebar-link"
+          onClick={() => cloneNotification(defaultTemplate.id)}
+          role="button"
+          tabIndex={0}
+        >
+          clicking here
+        </span>.{' '}
         <u>
           If your survey allows users to Opt Out, please update this
           notification to be Survey Invitation with Opt Out
         </u>. To start your custom notification using the Opt Out template,{' '}
-        <a href="/settings/notifications/templates/new">click here</a>.
+        <span
+          className="survey-settings-sidebar-link"
+          onClick={() => cloneNotification(defaultOptOutTemplate.id)}
+          role="button"
+          tabIndex={0}
+        >
+          click here
+        </span>..
       </p>
     </Fragment>
   ) : tab === '3' ? (
@@ -149,3 +188,36 @@ export const SettingsSidebar = ({ tab }) =>
       </Fragment>
     )
   );
+
+export const mapStateToProps = (state, { slug }) => ({
+  kappSlug: state.app.kappSlug,
+  formSlug: slug,
+  templates: state.notifications.notificationTemplates,
+});
+
+export const mapDispatchToProps = {
+  fetchNotifications: notificationsActions.fetchNotifications,
+  cloneNotification: notificationsActions.cloneNotification,
+};
+
+export const SettingsSidebar = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+  withProps(props => ({
+    defaultTemplate:
+      props.templates &&
+      props.templates.find(
+        template =>
+          template.values['Name'] === DEFAULT_NOTIFICATION_TEMPLATE_NAME,
+      ),
+    defaultOptOutTemplate:
+      props.templates &&
+      props.templates.find(
+        template =>
+          template.values['Name'] ===
+          DEFAULT_NOTIFICATION_OPT_OUT_TEMPLATE_NAME,
+      ),
+  })),
+)(SettingsSidebarComponent);
