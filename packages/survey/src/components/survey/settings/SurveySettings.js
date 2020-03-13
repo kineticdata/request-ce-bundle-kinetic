@@ -55,7 +55,7 @@ const fieldSet = [
   'pollingSource',
   'pollingType',
   'pollingTrigger',
-  // 'pollingInterval',
+  'pollingInterval',
   'expiration',
   'allowOptOut',
   'maxFrequencyCount',
@@ -192,7 +192,7 @@ const SurveySettingsComponent = ({
               {fields.get('pollingSource')}
               {fields.get('pollingType')}
               {fields.get('pollingTrigger')}
-              {/* {fields.get('pollingInterval')} */}
+              {fields.get('pollingInterval')}
               {fields.getIn(['polling', 'props', 'value']) === 'false' && (
                 <Fragment>
                   <p className="small">
@@ -431,17 +431,19 @@ const SurveySettingsComponent = ({
                             'Query that will be executed to retrieve surveys',
                           placeholder: `‘Status’=”Completed”`,
                         },
-                        // {
-                        //   name: 'pollingInterval',
-                        //   label: 'Polling Interval',
-                        //   type: 'text',
-                        //   visible: ({ values }) =>
-                        //     values.get('polling') === 'true',
-                        //   initialValue: surveyConfig
-                        //     ? surveyConfig['Event Polling']['Interval']
-                        //     : 1,
-                        //   component: FormComponents.IntegerField,
-                        // },
+                        {
+                          name: 'pollingInterval',
+                          label: 'Interval (in minutes)',
+                          type: 'text',
+                          visible: ({ values }) =>
+                            values.get('polling') === 'true',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Event Polling']['Interval']
+                              ? surveyConfig['Event Polling']['Interval']
+                              : 1440,
+                          component: FormComponents.IntegerField,
+                        },
                         {
                           name: 'surveyStart',
                           label: 'Survey Start',
