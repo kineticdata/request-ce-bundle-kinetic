@@ -12,6 +12,7 @@ import { actions } from '../../../redux/modules/surveys';
 import { connect } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 import { PageTitle } from '../../shared/PageTitle';
+import { CoreStateBadge } from 'common/src/components/tables/CoreStateBadgeCell';
 
 export const SubmissionDetailsContainer = ({
   kapp,
@@ -77,7 +78,9 @@ export const SubmissionDetailsContainer = ({
               </dl>
               <dl>
                 <dt>Status</dt>
-                <dd>{submission.coreState}</dd>
+                <dd>
+                  <CoreStateBadge coreState={submission.coreState} />
+                </dd>
               </dl>
               <dl>
                 <dt>Created</dt>
@@ -118,6 +121,9 @@ export const SubmissionDetailsContainer = ({
                   <thead className="header">
                     <tr>
                       <th scope="col">
+                        <I18n>Timestamp</I18n>
+                      </th>
+                      <th scope="col">
                         <I18n>Type</I18n>
                       </th>
                       <th scope="col">
@@ -140,6 +146,9 @@ export const SubmissionDetailsContainer = ({
                           : {};
                         return (
                           <tr key={`activity-${index}`}>
+                            <td>
+                              <TimeAgo timestamp={activity.createdAt} />
+                            </td>
                             <td>{activity.type}</td>
                             <td>{activity.label}</td>
                             <td>{activity.description}</td>

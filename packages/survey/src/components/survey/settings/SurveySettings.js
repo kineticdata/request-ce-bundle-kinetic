@@ -110,13 +110,24 @@ const SurveySettingsComponent = ({
           </NavItem>
           <NavItem>
             <NavLink
+              className={classnames({ active: activeTab === '6' })}
+              onClick={() => {
+                toggleTab('6');
+              }}
+              disabled={dirty}
+            >
+              <I18n>Notifications</I18n>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
               className={classnames({ active: activeTab === '3' })}
               onClick={() => {
                 toggleTab('3');
               }}
               disabled={dirty}
             >
-              <I18n>Polling</I18n>
+              <I18n>Triggers</I18n>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -176,6 +187,12 @@ const SurveySettingsComponent = ({
                     <BuilderLink tree={associatedTree.tree} />
                   )}
               </div>
+            </div>
+          </TabPane>
+
+          {/* Notifications */}
+          <TabPane tabId="6">
+            <div className="survey-settings survey-settings--workflow">
               {fields.get('invitationTemplate')}
               {fields.get('reminderTemplate')}
               <div className="form-group__columns">
@@ -185,7 +202,7 @@ const SurveySettingsComponent = ({
             </div>
           </TabPane>
 
-          {/* Polling */}
+          {/* Triggers */}
           <TabPane tabId="3">
             <div className="survey-settings survey-settings--polling">
               {fields.get('polling')}
@@ -202,6 +219,7 @@ const SurveySettingsComponent = ({
                   <SettingsWebApiView
                     kappSlug={formOptions.kappSlug}
                     formSlug={formOptions.formSlug}
+                    formFields={origForm.fields}
                   />
                 </Fragment>
               )}
@@ -345,7 +363,7 @@ const SurveySettingsComponent = ({
                             surveyConfig &&
                             surveyConfig['Reminders']['Reminder Interval']
                               ? surveyConfig['Reminders']['Reminder Interval']
-                              : 0,
+                              : 2,
                           component: FormComponents.IntegerField,
                           helpText: 'Number of days between survey reminders',
                         },
@@ -357,7 +375,7 @@ const SurveySettingsComponent = ({
                             surveyConfig &&
                             surveyConfig['Reminders']['Reminder Max']
                               ? surveyConfig['Reminders']['Reminder Max']
-                              : 0,
+                              : 3,
                           component: FormComponents.IntegerField,
                           helpText:
                             'Maximum number of survey reminders that will be sent out (if survey is completed, reminders stop)',

@@ -15,7 +15,6 @@ import { ExportModal } from '../export/ExportModal';
 import { PageTitle } from '../../shared/PageTitle';
 import { generateEmptyBodyRow } from 'common/src/components/tables/EmptyBodyRow';
 import { generateFilterModalLayout } from 'common/src/components/tables/FilterLayout';
-import { TimeAgoCell } from 'common/src/components/tables/TimeAgoCell';
 import { BetweenDateFilter } from 'common/src/components/tables/BetweenDateFilter';
 import { ValuesFilter } from 'common/src/components/tables/ValuesFilter';
 import { SelectFilter } from 'common/src/components/tables/SelectFilter';
@@ -27,6 +26,10 @@ const LinkCell = ({ row, value }) => (
   <td>
     <Link to={`${row.get('id')}/details`}>{value}</Link>
   </td>
+);
+
+const TimeAgoCell = ({ value }) => (
+  <td>{value ? <TimeAgo timestamp={value} /> : 'N/A'}</td>
 );
 
 const ActionsCell = ({

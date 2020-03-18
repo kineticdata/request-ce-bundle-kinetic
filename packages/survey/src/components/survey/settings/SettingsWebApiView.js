@@ -2,11 +2,16 @@ import React from 'react';
 import HTTPSnippet from 'httpsnippet';
 import { CodeViewer } from '../../shared/CodeViewer';
 
-export const SettingsWebApiView = ({ kappSlug, formSlug }) => {
+export const SettingsWebApiView = ({ kappSlug, formSlug, formFields }) => {
   const method = 'POST';
+  const dataFields = formFields
+    .filter(f => f.name.startsWith('d-'))
+    .map(f => f.name);
+  const dataObject = dataFields.reduce((a, b) => ((a[b] = ''), a), {});
   const publicRoute =
     kappSlug &&
-    `${window.location.origin}/app/kapps/${kappSlug}/webApis/${formSlug}`;
+    `${window.location.origin}/app/kapps/${kappSlug}/webApis/create-survey`;
+
   const snippet = new HTTPSnippet({
     method: method,
     url: `${publicRoute}?timeout=10`,
@@ -23,11 +28,11 @@ export const SettingsWebApiView = ({ kappSlug, formSlug }) => {
         },
         {
           name: 'referenceId',
-          value: '12345',
+          value: '',
         },
         {
           name: 'data',
-          value: 'varies by initiating system',
+          value: dataObject,
         },
       ],
     },

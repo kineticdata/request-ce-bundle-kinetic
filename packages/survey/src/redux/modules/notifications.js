@@ -2,7 +2,7 @@ import { Record } from 'immutable';
 import { Utils } from 'common';
 const ns = Utils.namespaceBuilder('survey/notifications');
 
-const { namespace, noPayload, withPayload } = Utils;
+const { noPayload, withPayload } = Utils;
 
 export const NOTIFICATIONS_FORM_SLUG = 'notification-data';
 export const NOTIFICATIONS_DATE_FORMAT_FORM_SLUG =

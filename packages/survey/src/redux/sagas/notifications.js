@@ -33,11 +33,19 @@ export function* fetchNotificationsSaga() {
   } else {
     yield put(
       actions.setNotifications(
-        submissions.filter(
-          sub =>
-            sub.values['Type'] === 'Template' &&
-            sub.values['Status'] === 'Active',
-        ),
+        submissions
+          .filter(
+            sub =>
+              sub.values['Name'].includes('Survey') &&
+              sub.values['Type'] === 'Template' &&
+              sub.values['Status'] === 'Active',
+          )
+          .sort(
+            (a, b) =>
+              a.values['Name'].toUpperCase() > b.values['Name'].toUpperCase()
+                ? 1
+                : -1,
+          ),
       ),
     );
   }
