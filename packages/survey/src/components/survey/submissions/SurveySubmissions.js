@@ -103,10 +103,10 @@ export const FormDetailsComponent = ({
         }}
         columnSet={[
           'label',
-          'submittedBy',
-          'coreState',
           'createdAt',
           'submittedAt',
+          'submittedBy',
+          'coreState',
           'actions',
         ]}
         addColumns={[
@@ -152,6 +152,7 @@ export const FormDetailsComponent = ({
           },
           coreState: {
             title: 'Status',
+            sortable: true,
             components: {
               BodyCell: CoreStateBadgeCell,
               Filter: SelectFilter,
