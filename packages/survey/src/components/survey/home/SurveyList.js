@@ -39,21 +39,31 @@ const columns = [
     value: 'name',
     title: 'Name',
     type: 'text',
+    sortable: true,
+    filter: 'includes',
   },
   {
     value: 'createdAt',
     title: 'Created',
     type: 'text',
+    sortable: true,
   },
   {
     value: 'updatedAt',
     title: 'Updated',
     type: 'text',
+    sortable: true,
   },
   {
     value: 'status',
     title: 'Status',
     type: 'text',
+    sortable: true,
+    filter: 'equals',
+    options: () => [
+      { value: 'Active', label: 'Active' },
+      { value: 'Inactive', label: 'Inactive' },
+    ],
   },
 ];
 
@@ -200,6 +210,7 @@ const SurveyListComponent = ({
       }}
       columns={columns}
       columnSet={['name', 'createdAt', 'updatedAt', 'status', 'actions']}
+      defaultSortColumn="status"
       addColumns={[
         {
           value: 'actions',
@@ -266,7 +277,7 @@ const SurveyListComponent = ({
               </div>
             </div>
             <div>
-              {/* <div className="mb-2 text-right">{filter}</div> */}
+              <div className="mb-2 text-right">{filter}</div>
               {table}
               {pagination}
             </div>
