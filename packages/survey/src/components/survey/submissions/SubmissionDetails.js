@@ -1,18 +1,47 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
-import { compose, lifecycle, withProps } from 'recompose';
+import {
+  compose,
+  lifecycle,
+  withProps,
+  withState,
+  withHandlers,
+} from 'recompose';
 import {
   UncontrolledButtonDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { ErrorMessage, LoadingMessage, TimeAgo } from 'common';
+import {
+  ErrorMessage,
+  LoadingMessage,
+  TimeAgo,
+  DiscussionsPanel,
+  ViewDiscussionsModal,
+} from 'common';
+import { selectDiscussionsEnabled } from 'common/src/redux/modules/common';
 import { actions } from '../../../redux/modules/surveys';
 import { connect } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 import { PageTitle } from '../../shared/PageTitle';
 import { CoreStateBadge } from 'common/src/components/tables/CoreStateBadgeCell';
+
+const CreationForm = ({ onChange, values, errors }) => (
+  <div className="form-group">
+    <label htmlFor="title">Title</label>
+    <input
+      id="title"
+      name="title"
+      type="text"
+      value={values.title}
+      onChange={onChange}
+    />
+    {errors.title && (
+      <small className="form-text text-danger">{errors.title}</small>
+    )}
+  </div>
+);
 
 export const SubmissionDetailsContainer = ({
   kapp,
@@ -21,11 +50,18 @@ export const SubmissionDetailsContainer = ({
   callFormAction,
   submission,
   submissionError,
+  discussionsEnabled,
+  viewDiscussionsModal,
+  isSmallLayout,
+  openDiscussions,
+  closeDiscussions,
+  profile,
+  creationFields,
 }) =>
   form && (
-    <div className="page-container">
+    <div className="page-container page-container--panels">
       <PageTitle parts={['Survey Submission']} />
-      <div className="page-panel page-panel--white">
+      <div className="page-panel page-panel--three-fifths page-panel--white">
         <div className="page-title">
           <div className="page-title__wrapper">
             <h3>
@@ -40,8 +76,8 @@ export const SubmissionDetailsContainer = ({
             </h3>
             <h1>{submission ? submission.label : 'New Submission'}</h1>
           </div>
-          {form.status === 'Active' && (
-            <div className="page-title__actions">
+          <div className="page-title__actions">
+            {form.status === 'Active' && (
               <UncontrolledButtonDropdown>
                 <DropdownToggle caret className="btn btn-primary">
                   Actions
@@ -62,8 +98,20 @@ export const SubmissionDetailsContainer = ({
                   ))}
                 </DropdownMenu>
               </UncontrolledButtonDropdown>
-            </div>
-          )}
+            )}
+            {/* {discussionsEnabled && (
+              <button
+                onClick={openDiscussions}
+                className="btn btn-primary "
+              >
+                <span
+                  className="fa fa-fw fa-comments"
+                  style={{ fontSize: '16px' }}
+                />
+                <I18n>View Discussions</I18n>
+              </button>
+            )} */}
+          </div>
         </div>
         {submissionError ? (
           <ErrorMessage message={submissionError.message} />
@@ -109,7 +157,6 @@ export const SubmissionDetailsContainer = ({
                 </dd>
               </dl>
             </div>
-
             <h3 className="section__title">
               <I18n>Submission Activity</I18n>
             </h3>
@@ -198,8 +245,34 @@ export const SubmissionDetailsContainer = ({
           </div>
         )}
       </div>
+      {discussionsEnabled &&
+        submission && (
+          <DiscussionsPanel
+            creationFields={creationFields}
+            CreationForm={CreationForm}
+            itemType="Submission"
+            itemKey={submission.id}
+            me={profile}
+          />
+        )}
+      {viewDiscussionsModal &&
+        isSmallLayout && (
+          <ViewDiscussionsModal
+            creationFields={creationFields}
+            CreationForm={CreationForm}
+            close={closeDiscussions}
+            itemType="Submission"
+            itemKey={submission.id}
+            me={profile}
+          />
+        )}
     </div>
   );
+
+export const openDiscussions = props => () =>
+  props.setViewDiscussionsModal(true);
+export const closeDiscussions = props => () =>
+  props.setViewDiscussionsModal(false);
 
 const mapStateToProps = state => ({
   kapp: state.app.kapp,
@@ -207,6 +280,9 @@ const mapStateToProps = state => ({
   formActions: state.surveyApp.formActions,
   submission: state.surveys.submission,
   submissionError: state.surveys.submissionError,
+  discussionsEnabled: selectDiscussionsEnabled(state),
+  isSmallLayout: state.app.layoutSize === 'small',
+  profile: state.app.profile,
 });
 
 const mapDispatchToProps = {
@@ -221,7 +297,16 @@ export const SubmissionDetails = compose(
   ),
   withProps(props => ({
     form: props.forms && props.forms.find(form => form.slug === props.slug),
+    creationFields: props.submission && {
+      title: props.submission.label || 'Survey Submission Discussion',
+      description: props.submission.form.name || '',
+    },
   })),
+  withState('viewDiscussionsModal', 'setViewDiscussionsModal', false),
+  withHandlers({
+    openDiscussions,
+    closeDiscussions,
+  }),
   lifecycle({
     componentWillMount() {
       this.props.fetchSubmissionRequest({

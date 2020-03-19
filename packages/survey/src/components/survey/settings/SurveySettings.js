@@ -730,6 +730,7 @@ export const SurveySettings = compose(
   withProps(props => ({
     surveyConfig:
       props.origForm &&
+      props.origForm['attributesMap'] &&
       props.origForm['attributesMap']['Survey Configuration'][0] &&
       JSON.parse(props.origForm['attributesMap']['Survey Configuration'][0]),
   })),

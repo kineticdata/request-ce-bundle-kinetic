@@ -60,6 +60,11 @@ export const SettingsSidebarComponent = ({
         please set <b>Run Workflow Process on Submit</b> to Yes. You will then
         be able to access the workflow builder for this survey.
       </p>
+    </Fragment>
+  ) : tab === '6' ? (
+    <Fragment>
+      <h3>Notifications</h3>
+      <br />
       <p>
         <b>Invitation Notification Template</b> is the notification that is sent
         to the survey recipient when their survey is created. This text is
@@ -114,7 +119,7 @@ export const SettingsSidebarComponent = ({
           tabIndex={0}
         >
           click here
-        </span>..
+        </span>.
       </p>
     </Fragment>
   ) : tab === '3' ? (
