@@ -6,7 +6,7 @@ export const SettingsWebApiView = ({ kappSlug, formSlug, formFields }) => {
   const method = 'POST';
   const dataFields = formFields
     .filter(f => f.name.startsWith('d-'))
-    .map(f => f.name);
+    .map(f => f.name.substr(2));
   const dataObject = dataFields.reduce((a, b) => ((a[b] = ''), a), {});
   const publicRoute =
     kappSlug &&
