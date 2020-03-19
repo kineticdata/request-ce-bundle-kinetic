@@ -118,12 +118,14 @@ export function* cloneFormSaga({ payload }) {
         securityPolicies: cloneForm.securityPolicies,
         attributesMap: cloneForm.attributesMap,
         categorizations: cloneForm.categorizations,
+        status: cloneForm.status,
+        type: cloneForm.type,
       },
     });
 
     if (error) {
       addToastAlert({
-        title: 'Error Cloning Form',
+        title: 'Error Cloning Survey',
         message: error.message,
       });
       yield put(actions.cloneFormComplete(payload));
@@ -304,6 +306,29 @@ export function* callFormActionSaga({
   }
 }
 
+export function* fetchSurveyPollersSaga() {
+  const kappSlug = yield select(state => state.app.kappSlug);
+  const formSlug = 'survey-pollers';
+  const searchBuilder = new SubmissionSearch().includes(['values']);
+  searchBuilder.end();
+  const search = searchBuilder.build();
+
+  const { submissions, serverError } = yield call(searchSubmissions, {
+    search,
+    kapp: kappSlug,
+    form: formSlug,
+  });
+
+  if (serverError) {
+    return serverError;
+  } else {
+    const pollers = submissions
+      .map(s => s.values)
+      .filter(s => s['Status'] === 'Active');
+    yield put(actions.fetchSurveyPollersComplete(pollers));
+  }
+}
+
 export function* watchSurveys() {
   yield takeEvery(types.FETCH_FORM_REQUEST, fetchFormSaga);
   yield takeEvery(types.DELETE_FORM_REQUEST, deleteFormSaga);
@@ -322,5 +347,6 @@ export function* watchSurveys() {
     deleteSurveyCustomWorkflowTreeSaga,
   );
   yield takeEvery(types.FETCH_ASSOCIATED_TREE, fetchAssociatedTreeSaga);
+  yield takeEvery(types.FETCH_SURVEY_POLLERS, fetchSurveyPollersSaga);
   yield takeEvery(types.CALL_FORM_ACTION, callFormActionSaga);
 }

@@ -70,9 +70,10 @@ const SurveySettingsComponent = ({
   kappSlug,
   origForm,
   surveyConfig,
+  surveyPollers,
   loading,
   templates,
-  robots,
+  // robots,
   customWorkflow,
   setCustomWorkflow,
   onSave,
@@ -273,11 +274,18 @@ const SurveySettingsComponent = ({
       label: t.values['Name'],
     }));
 
-  const robotOptions =
-    !!robots &&
-    robots.map(r => ({
-      value: r.values['Robot Name'],
-      label: r.values['Task Tree'],
+  // const robotOptions =
+  //   !!robots &&
+  //   robots.map(r => ({
+  //     value: r.values['Robot Name'],
+  //     label: r.values['Task Tree'],
+  //   }));
+
+  const surveyPollerOptions =
+    !!surveyPollers &&
+    surveyPollers.map(s => ({
+      value: s['Poller Tree'],
+      label: s['Poller Tree'],
     }));
 
   return (
@@ -417,7 +425,7 @@ const SurveySettingsComponent = ({
                             surveyConfig['Event Polling']['Source']
                               ? surveyConfig['Event Polling']['Source']
                               : '',
-                          options: robotOptions && robotOptions,
+                          options: surveyPollerOptions && surveyPollerOptions,
                         },
                         {
                           name: 'pollingType',
@@ -702,16 +710,18 @@ export const mapStateToProps = (state, { slug }) => ({
   kapp: state.app.kapp,
   kappSlug: state.app.kappSlug,
   formSlug: slug,
+  surveyPollers: state.surveys.surveyPollers,
   origForm: state.surveys.form,
   taskSourceName: Utils.getAttributeValue(state.app.space, 'Task Source Name'),
   templates: state.notifications.notificationTemplates,
-  robots: state.robots.robots.toJS(),
+  // robots: state.robots.robots.toJS(),
   associatedTree: state.surveys.associatedTree,
 });
 
 export const mapDispatchToProps = {
   fetchNotifications: notificationsActions.fetchNotifications,
-  fetchRobots: robotsActions.fetchRobots,
+  // fetchRobots: robotsActions.fetchRobots,
+  fetchSurveyPollers: surveyActions.fetchSurveyPollers,
   createSurveyCustomWorkflowTree: surveyActions.createSurveyCustomWorkflowTree,
   deleteSurveyCustomWorkflowTree: surveyActions.deleteSurveyCustomWorkflowTree,
   fetchFormRequest: surveyActions.fetchFormRequest,
@@ -733,6 +743,8 @@ export const SurveySettings = compose(
       props.origForm['attributesMap'] &&
       props.origForm['attributesMap']['Survey Configuration'][0] &&
       JSON.parse(props.origForm['attributesMap']['Survey Configuration'][0]),
+    pollingSourceList:
+      props.forms && props.forms.find(form => form.slug === 'survey-pollers'),
   })),
   withHandlers({
     toggleTab: props => tab => {
@@ -755,7 +767,8 @@ export const SurveySettings = compose(
         sourceName: this.props.taskSourceName,
       });
       this.props.fetchNotifications();
-      this.props.fetchRobots();
+      this.props.fetchSurveyPollers();
+      // this.props.fetchRobots();
     },
     componentDidUpdate(prevProps) {
       if (this.props.formReset !== prevProps.formReset) {

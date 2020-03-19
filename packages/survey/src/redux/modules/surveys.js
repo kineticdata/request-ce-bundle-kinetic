@@ -146,6 +146,8 @@ export const types = {
   DELETE_SURVEY_CUSTOM_WORKFLOW_TREE: ns('DELETE_SURVEY_CUSTOM_WORKFLOW_TREE'),
   FETCH_ASSOCIATED_TREE: ns('FETCH_ASSOCIATED_TREE'),
   FETCH_ASSOCIATED_TREE_COMPLETE: ns('FETCH_ASSOCIATED_TREE_COMPLETE'),
+  FETCH_SURVEY_POLLERS: ns('FETCH_SURVEY_POLLERS'),
+  FETCH_SURVEY_POLLERS_COMPLETE: ns('FETCH_SURVEY_POLLERS_COMPLETE'),
   CALL_FORM_ACTION: ns('CALL_FORM_ACTION'),
 };
 
@@ -182,6 +184,8 @@ export const actions = {
   fetchAssociatedTreeComplete: withPayload(
     types.FETCH_ASSOCIATED_TREE_COMPLETE,
   ),
+  fetchSurveyPollers: noPayload(types.FETCH_SURVEY_POLLERS),
+  fetchSurveyPollersComplete: withPayload(types.FETCH_SURVEY_POLLERS_COMPLETE),
   callFormAction: withPayload(types.CALL_FORM_ACTION),
 };
 
@@ -219,6 +223,7 @@ export const State = Record({
   submission: null,
   submissionError: null,
   associatedTree: [],
+  surveyPollers: null,
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -298,6 +303,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('error', payload);
     case types.FETCH_ASSOCIATED_TREE_COMPLETE:
       return state.set('associatedTree', payload);
+    case types.FETCH_SURVEY_POLLERS_COMPLETE:
+      return state.set('surveyPollers', payload);
 
     default:
       return state;
