@@ -11,13 +11,11 @@ import {
 import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import classnames from 'classnames';
 import moment from 'moment';
-import { FormComponents, LoadingMessage, Utils } from 'common';
+import { FormComponents, LoadingMessage, addToast } from 'common';
 import { PageTitle } from '../../shared/PageTitle';
 import { bundle, I18n, FormForm } from '@kineticdata/react';
-import { actions as appActions } from '../../../redux/modules/surveyApp';
 import { actions as surveyActions } from '../../../redux/modules/surveys';
 import { actions as notificationsActions } from '../../../redux/modules/notifications';
-import { actions as robotsActions } from '../../../redux/modules/robots';
 import { SettingsWebApiView } from './SettingsWebApiView';
 import { SettingsSidebar } from './SettingsSidebar';
 
@@ -73,11 +71,7 @@ const SurveySettingsComponent = ({
   surveyPollers,
   loading,
   templates,
-  // robots,
-  customWorkflow,
-  setCustomWorkflow,
   onSave,
-  // onReset,
   spaceAdmin,
   associatedTree,
   activeTab,
@@ -274,13 +268,6 @@ const SurveySettingsComponent = ({
       label: t.values['Name'],
     }));
 
-  // const robotOptions =
-  //   !!robots &&
-  //   robots.map(r => ({
-  //     value: r.values['Robot Name'],
-  //     label: r.values['Task Tree'],
-  //   }));
-
   const surveyPollerOptions =
     !!surveyPollers &&
     surveyPollers.map(s => ({
@@ -329,7 +316,6 @@ const SurveySettingsComponent = ({
                   kappSlug={kappSlug}
                   fieldSet={fieldSet}
                   onSave={onSave}
-                  // onReset={onReset}
                   components={{ FormLayout }}
                   addFields={() => ({ form }) => {
                     return (
@@ -343,11 +329,11 @@ const SurveySettingsComponent = ({
                             { label: 'Yes', value: 'true' },
                           ],
                           initialValue:
-                            surveyConfig && surveyConfig['Use Custom Workflow']
+                            associatedTree.tree &&
+                            surveyConfig &&
+                            surveyConfig['Use Custom Workflow']
                               ? surveyConfig['Use Custom Workflow']
                               : 'false',
-                          onChange: ({ values }) =>
-                            setCustomWorkflow(values.get('workflowProcess')),
                         },
                         {
                           name: 'reminderTemplate',
@@ -680,30 +666,6 @@ const SurveySettingsComponent = ({
   );
 };
 
-// export const onReset = props => response => {
-//   console.log('onReset')
-//   props.setFormReset(true)
-// }
-
-export const onSave = props => response => {
-  !props.associatedTree.tree &&
-    props.customWorkflow === 'true' &&
-    props.createSurveyCustomWorkflowTree({
-      sourceName: props.taskSourceName,
-      kappSlug: props.kappSlug,
-      formSlug: props.origForm.slug,
-    });
-  // props.associatedTree.tree &&
-  //   props.customWorkflow === 'false' &&
-  //   props.deleteSurveyCustomWorkflowTree({
-  //     sourceName: props.taskSourceName,
-  //     kappSlug: props.kappSlug,
-  //     formSlug: props.origForm.slug,
-  //   });
-  // },
-  props.setFormReset(true);
-};
-
 export const mapStateToProps = (state, { slug }) => ({
   loading: state.surveys.currentFormLoading || state.notifications.loading,
   spaceAdmin: state.app.profile.spaceAdmin ? true : false,
@@ -712,21 +674,15 @@ export const mapStateToProps = (state, { slug }) => ({
   formSlug: slug,
   surveyPollers: state.surveys.surveyPollers,
   origForm: state.surveys.form,
-  taskSourceName: Utils.getAttributeValue(state.app.space, 'Task Source Name'),
   templates: state.notifications.notificationTemplates,
-  // robots: state.robots.robots.toJS(),
   associatedTree: state.surveys.associatedTree,
 });
 
 export const mapDispatchToProps = {
   fetchNotifications: notificationsActions.fetchNotifications,
-  // fetchRobots: robotsActions.fetchRobots,
   fetchSurveyPollers: surveyActions.fetchSurveyPollers,
-  createSurveyCustomWorkflowTree: surveyActions.createSurveyCustomWorkflowTree,
-  deleteSurveyCustomWorkflowTree: surveyActions.deleteSurveyCustomWorkflowTree,
   fetchFormRequest: surveyActions.fetchFormRequest,
-  fetchAssociatedTree: surveyActions.fetchAssociatedTree,
-  fetchAppDataRequest: appActions.fetchAppDataRequest,
+  clearSurveyState: surveyActions.clearSurveyState,
 };
 
 export const SurveySettings = compose(
@@ -734,9 +690,7 @@ export const SurveySettings = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withState('customWorkflow', 'setCustomWorkflow', ''),
   withState('activeTab', 'setActiveTab', '1'),
-  withState('formReset', 'setFormReset', false),
   withProps(props => ({
     surveyConfig:
       props.origForm &&
@@ -750,8 +704,13 @@ export const SurveySettings = compose(
     toggleTab: props => tab => {
       if (props.activeTab !== tab) props.setActiveTab(tab);
     },
-    onSave,
-    // onReset,
+    onSave: props => () => () => {
+      props.fetchFormRequest({
+        kappSlug: props.kappSlug,
+        formSlug: props.origForm.slug,
+      });
+      addToast(`${props.origForm.name} settings saved successfully.`);
+    },
   }),
   lifecycle({
     componentWillMount() {
@@ -759,32 +718,11 @@ export const SurveySettings = compose(
         kappSlug: this.props.kapp.slug,
         formSlug: this.props.slug,
       });
-      this.props.fetchAssociatedTree({
-        name: 'Submitted',
-        sourceGroup: `Submissions > ${this.props.kappSlug} > ${
-          this.props.slug
-        }`,
-        sourceName: this.props.taskSourceName,
-      });
       this.props.fetchNotifications();
       this.props.fetchSurveyPollers();
-      // this.props.fetchRobots();
     },
-    componentDidUpdate(prevProps) {
-      if (this.props.formReset !== prevProps.formReset) {
-        this.props.setFormReset(false);
-        this.props.fetchFormRequest({
-          kappSlug: this.props.kapp.slug,
-          formSlug: this.props.slug,
-        });
-        this.props.fetchAssociatedTree({
-          name: 'Submitted',
-          sourceGroup: `Submissions > ${this.props.kappSlug} > ${
-            this.props.slug
-          }`,
-          sourceName: this.props.taskSourceName,
-        });
-      }
+    componentWillUnmount() {
+      this.props.clearSurveyState();
     },
   }),
 )(SurveySettingsComponent);

@@ -9,10 +9,9 @@ import {
   updateForm,
   deleteForm,
   createTree,
-  deleteTree,
   fetchTree,
 } from '@kineticdata/react';
-import { addToast, addToastAlert } from 'common';
+import { addToast, addToastAlert, Utils } from 'common';
 import {
   actions,
   types,
@@ -26,6 +25,10 @@ import {
 } from '../../constants';
 
 export function* fetchFormSaga({ payload }) {
+  const space = yield select(state => state.app.space);
+  const taskSourceName = Utils.getAttributeValue(space, 'Task Source Name');
+
+  // fetch form
   const { error, form } = yield call(fetchForm, {
     kappSlug: payload.kappSlug,
     formSlug: payload.formSlug,
@@ -36,22 +39,60 @@ export function* fetchFormSaga({ payload }) {
   if (error) {
     yield put(actions.fetchFormFailure(error));
   } else {
-    yield put(actions.fetchFormSuccess(form));
-  }
-}
+    // check if custom workflow is selected
+    const customWorkflow = JSON.parse(
+      form.attributesMap['Survey Configuration'][0],
+    )['Use Custom Workflow'];
+    if (customWorkflow === 'true') {
+      // try to fetch associated tree
+      const { tree } = yield call(fetchTree, {
+        name: 'Submitted',
+        sourceGroup: `Submissions > ${payload.kappSlug} > ${payload.formSlug}`,
+        sourceName: taskSourceName,
+      });
+      if (tree) {
+        yield put(
+          actions.fetchAssociatedTreeComplete({
+            tree,
+          }),
+        );
+        yield put(actions.fetchFormSuccess(form));
+      } else {
+        // if no associated tree found, create one
+        const { tree: newTree, error: newError } = yield call(createTree, {
+          tree: {
+            sourceName: taskSourceName,
+            sourceGroup: `Submissions > ${payload.kappSlug} > ${
+              payload.formSlug
+            }`,
+            name: 'Submitted',
+          },
+        });
+        if (newTree) {
+          yield put(
+            actions.fetchAssociatedTreeComplete({
+              newTree,
+            }),
+          );
 
-export function* fetchAssociatedTreeSaga({ payload }) {
-  const { tree } = yield call(fetchTree, {
-    name: payload.name,
-    sourceGroup: payload.sourceGroup,
-    sourceName: payload.sourceName,
-  });
-  if (tree) {
-    yield put(
-      actions.fetchAssociatedTreeComplete({
-        tree,
-      }),
-    );
+          // ...and refetch form
+          yield put(
+            actions.fetchFormRequest({
+              kappSlug: payload.kappSlug,
+              formSlug: payload.formSlug,
+              public: payload.public,
+            }),
+          );
+        } else {
+          yield addToastAlert({
+            title: 'Error Saving Tree',
+            message: newError.message,
+          });
+          throw (newError.statusCode === 400 && newError.message) ||
+            'There was an error saving the workflow';
+        }
+      }
+    } else yield put(actions.fetchFormSuccess(form));
   }
 }
 
@@ -115,6 +156,7 @@ export function* cloneFormSaga({ payload }) {
         bridgedResources: cloneForm.bridgedResources,
         customHeadContent: cloneForm.customHeadContent,
         pages: cloneForm.pages,
+        fields: cloneForm.fields,
         securityPolicies: cloneForm.securityPolicies,
         attributesMap: cloneForm.attributesMap,
         categorizations: cloneForm.categorizations,
@@ -246,42 +288,6 @@ export function* deleteFormSaga({ payload }) {
   }
 }
 
-export function* createSurveyCustomWorkflowTreeSaga({ payload }) {
-  const { tree, error } = yield call(createTree, {
-    tree: {
-      sourceName: payload.sourceName,
-      sourceGroup: `Submissions > ${payload.kappSlug} > ${payload.formSlug}`,
-      name: 'Submitted',
-    },
-  });
-
-  if (error) {
-    yield addToastAlert({
-      title: 'Error Saving Tree',
-      message: error.message,
-    });
-    throw (error.statusCode === 400 && error.message) ||
-      'There was an error saving the workflow';
-  } else {
-    return tree;
-  }
-}
-
-export function* deleteSurveyCustomWorkflowTreeSaga({ payload }) {
-  const { tree } = yield call(deleteTree, {
-    type: 'tree',
-    sourceName: payload.sourceName,
-    sourceGroup: `Submissions > ${payload.kappSlug} > ${payload.formSlug}`,
-    name: 'Submitted',
-  });
-  if (tree) {
-    yield addToastAlert({
-      title: 'Workflow Deleted',
-      message: `${payload.sourceGroup} workflow deleted.`,
-    });
-  }
-}
-
 export function* callFormActionSaga({
   payload: { formSlug, surveySubmissionId },
 }) {
@@ -336,17 +342,7 @@ export function* watchSurveys() {
   yield takeEvery(types.FETCH_SUBMISSION_REQUEST, fetchSubmissionSaga);
   yield takeEvery(types.FETCH_FORM_SUBMISSIONS, fetchFormSubmissionsSaga);
   yield takeEvery(types.FETCH_ALL_SUBMISSIONS, fetchAllSubmissionsSaga);
-
   yield takeEvery(types.CREATE_FORM_REQUEST, createFormSaga);
-  yield takeEvery(
-    types.CREATE_SURVEY_CUSTOM_WORKFLOW_TREE,
-    createSurveyCustomWorkflowTreeSaga,
-  );
-  yield takeEvery(
-    types.DELETE_SURVEY_CUSTOM_WORKFLOW_TREE,
-    deleteSurveyCustomWorkflowTreeSaga,
-  );
-  yield takeEvery(types.FETCH_ASSOCIATED_TREE, fetchAssociatedTreeSaga);
   yield takeEvery(types.FETCH_SURVEY_POLLERS, fetchSurveyPollersSaga);
   yield takeEvery(types.CALL_FORM_ACTION, callFormActionSaga);
 }

@@ -142,13 +142,11 @@ export const types = {
   CREATE_FORM_REQUEST: ns('CREATE_FORM_REQUEST'),
   CREATE_FORM_SUCCESS: ns('CREATE_FORM_SUCCESS'),
   CREATE_FORM_FAILURE: ns('CREATE_FORM_FAILURE'),
-  CREATE_SURVEY_CUSTOM_WORKFLOW_TREE: ns('CREATE_SURVEY_CUSTOM_WORKFLOW_TREE'),
-  DELETE_SURVEY_CUSTOM_WORKFLOW_TREE: ns('DELETE_SURVEY_CUSTOM_WORKFLOW_TREE'),
-  FETCH_ASSOCIATED_TREE: ns('FETCH_ASSOCIATED_TREE'),
   FETCH_ASSOCIATED_TREE_COMPLETE: ns('FETCH_ASSOCIATED_TREE_COMPLETE'),
   FETCH_SURVEY_POLLERS: ns('FETCH_SURVEY_POLLERS'),
   FETCH_SURVEY_POLLERS_COMPLETE: ns('FETCH_SURVEY_POLLERS_COMPLETE'),
   CALL_FORM_ACTION: ns('CALL_FORM_ACTION'),
+  CLEAR_SURVEY_STATE: ns('CLEAR_SURVEY_STATE'),
 };
 
 export const actions = {
@@ -174,19 +172,13 @@ export const actions = {
   createFormRequest: withPayload(types.CREATE_FORM_REQUEST),
   createFormSuccess: withPayload(types.CREATE_FORM_SUCCESS),
   createFormFailure: withPayload(types.CREATE_FORM_FAILURE),
-  createSurveyCustomWorkflowTree: withPayload(
-    types.CREATE_SURVEY_CUSTOM_WORKFLOW_TREE,
-  ),
-  deleteSurveyCustomWorkflowTree: withPayload(
-    types.DELETE_SURVEY_CUSTOM_WORKFLOW_TREE,
-  ),
-  fetchAssociatedTree: withPayload(types.FETCH_ASSOCIATED_TREE),
   fetchAssociatedTreeComplete: withPayload(
     types.FETCH_ASSOCIATED_TREE_COMPLETE,
   ),
   fetchSurveyPollers: noPayload(types.FETCH_SURVEY_POLLERS),
   fetchSurveyPollersComplete: withPayload(types.FETCH_SURVEY_POLLERS_COMPLETE),
   callFormAction: withPayload(types.CALL_FORM_ACTION),
+  clearSurveyState: noPayload(types.CLEAR_SURVEY_STATE),
 };
 
 const sortSubmissions = (submissions, sortInfo) => {
@@ -219,6 +211,7 @@ export const State = Record({
   fetchingAll: false,
   processing: Map(),
   form: null,
+  currentFormLoading: true,
   error: null,
   submission: null,
   submissionError: null,
@@ -271,9 +264,9 @@ export const reducer = (state = State(), { type, payload }) => {
         )
         .set('error', null);
     case types.FETCH_FORM_SUCCESS:
-      return state.set('form', payload);
+      return state.set('form', payload).set('currentFormLoading', false);
     case types.FETCH_FORM_FAILURE:
-      return state.set('error', payload);
+      return state.set('error', payload).set('currentFormLoading', false);
     case types.FETCH_SUBMISSION_REQUEST:
       return state
         .update(
@@ -305,7 +298,8 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('associatedTree', payload);
     case types.FETCH_SURVEY_POLLERS_COMPLETE:
       return state.set('surveyPollers', payload);
-
+    case types.CLEAR_SURVEY_STATE:
+      return State();
     default:
       return state;
   }

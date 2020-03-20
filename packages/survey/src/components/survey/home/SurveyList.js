@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 import { connect } from '../../../redux/store';
 import { actions } from '../../../redux/modules/surveys';
+import { actions as appActions } from '../../../redux/modules/surveyApp';
 import { compose, withState, withHandlers } from 'recompose';
 import { PageTitle } from '../../shared/PageTitle';
 import {
@@ -189,7 +190,9 @@ const SurveyListComponent = ({
   modalOpen,
   toggleModal,
   deleteForm,
+  createFormRequest,
   cloneFormRequest,
+  fetchAppDataRequest,
   navigate,
 }) => {
   const EmptyBodyRow = generateEmptyBodyRow({
@@ -301,21 +304,17 @@ const SurveyListComponent = ({
             </div>
             <FormForm
               kappSlug={kapp.slug}
-              fieldSet={[
-                'name',
-                'slug',
-                'status',
-                'type',
-                'submissionLabelExpression',
-                'description',
-              ]}
+              fieldSet={['name', 'slug', 'description']}
               onSave={() => form => {
                 if (typeof modalOpen === 'string') {
                   cloneFormRequest({
                     kappSlug: kapp.slug,
                     formSlug: form.slug,
                     cloneFormSlug: modalOpen,
-                    callback: () => navigate(`${form.slug}/settings`),
+                    callback: () => {
+                      fetchAppDataRequest();
+                      navigate(`${form.slug}/settings`);
+                    },
                   });
                 } else {
                   addToast(`${form.name} created successfully.`);
@@ -371,7 +370,9 @@ export const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   deleteFormRequest: actions.deleteFormRequest,
+  createFormRequest: actions.createFormRequest,
   cloneFormRequest: actions.cloneFormRequest,
+  fetchAppDataRequest: appActions.fetchAppDataRequest,
 };
 
 export const SurveyList = compose(
