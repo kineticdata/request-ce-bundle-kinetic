@@ -19,6 +19,7 @@ import { BetweenDateFilter } from 'common/src/components/tables/BetweenDateFilte
 import { ValuesFilter } from 'common/src/components/tables/ValuesFilter';
 import { SelectFilter } from 'common/src/components/tables/SelectFilter';
 import { CoreStateBadgeCell } from 'common/src/components/tables/CoreStateBadgeCell';
+import { StatusBadge } from 'common/src/components/tables/StatusBadgeCell';
 import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
 import { List } from 'immutable';
 
@@ -175,7 +176,7 @@ export const FormDetailsComponent = ({
       >
         {({ pagination, table, filter, ...more }) => (
           <div className="page-container">
-            <PageTitle parts={[form.name, `Forms`]} />
+            <PageTitle parts={[form.name]} />
             <div className="page-panel page-panel--white">
               <div className="page-title">
                 <div className="page-title__wrapper">
@@ -219,7 +220,7 @@ export const FormDetailsComponent = ({
                   <dl>
                     <dt>Status</dt>
                     <dd>
-                      {form.status || <em className="text-muted">None</em>}
+                      <StatusBadge status={form.status} />
                     </dd>
                   </dl>
                   <dl>
