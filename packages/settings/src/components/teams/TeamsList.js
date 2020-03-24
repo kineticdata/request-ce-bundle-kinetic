@@ -1,73 +1,90 @@
 import React from 'react';
-import { Link } from '@reach/router';
-import { TeamsListItem } from './TeamsListItem';
-import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
-import { I18n } from '@kineticdata/react';
+import { Link } from 'react-router-dom';
+import { TeamTable, I18n } from '@kineticdata/react';
+import { generateEmptyBodyRow } from 'common/src/components/tables/EmptyBodyRow';
+import { generateFilterModalLayout } from 'common/src/components/tables/FilterLayout';
+import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
 import { PageTitle } from '../shared/PageTitle';
 
-const WallyEmptyMessage = ({ me }) => {
-  return (
-    <div className="empty-state empty-state--wally">
-      <h5>
-        <I18n>No Teams Right Now...</I18n>
-      </h5>
-      <img src={wallyHappyImage} alt="Happy Wally" />
-      {me.spaceAdmin && (
-        <h6>
-          <I18n>Add a team by hitting the new button!</I18n>
-        </h6>
-      )}
-    </div>
-  );
-};
+const NameCell = ({ value, row }) => (
+  <td>
+    <Link to={`/settings/teams/${row.get('slug')}/edit`} title="Edit Team">
+      {value}
+    </Link>
+  </td>
+);
 
-export const TeamsList = ({ loading, teams, me }) => (
-  <div className="page-container">
-    <PageTitle parts={['Teams']} />
-    {!loading && (
-      <div className="page-panel page-panel--white">
-        <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
-              <Link to="/settings">
-                <I18n>settings</I18n>
-              </Link>{' '}
-              /{' '}
-            </h3>
-            <h1>
-              <I18n>Teams</I18n>
-            </h1>
+const EmptyBodyRow = generateEmptyBodyRow({
+  loadingMessage: 'Loading Teams...',
+  noSearchResultsMessage:
+    'No Teams were found - please modify your search criteria',
+  noItemsMessage: 'There are no Teams to display.',
+  noItemsLinkTo: '/space/users-teams/teams/new',
+  noItemsLinkToMessage: 'Add new Team',
+});
+
+const FilterLayout = generateFilterModalLayout(['name']);
+
+export const TeamsList = ({ tableType }) => (
+  <TeamTable
+    // tableKey={tableKey}
+    components={{
+      FilterLayout,
+      EmptyBodyRow,
+      TableLayout: SettingsTableLayout,
+    }}
+    alterColumns={{
+      name: {
+        components: {
+          BodyCell: NameCell,
+        },
+      },
+      description: {
+        sortable: false,
+      },
+    }}
+    columnSet={['name', 'description']}
+  >
+    {({ pagination, table, filter }) => (
+      <div className="page-container">
+        <PageTitle parts={['Users']} />
+        <div className="page-panel page-panel--white">
+          <div className="page-title">
+            <div className="page-title__wrapper">
+              <h3>
+                <Link to="../settings">
+                  <I18n>settings</I18n>
+                </Link>{' '}
+                /{` `}
+              </h3>
+              <h1>
+                <I18n>Teams</I18n>
+              </h1>
+            </div>
+            <div className="page-title__actions">
+              <Link to="../settings/teams/new">
+                <I18n
+                  render={translate => (
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      title={translate('New Team')}
+                    >
+                      <span className="fa fa-plus fa-fw" />{' '}
+                      {translate('New Team')}
+                    </button>
+                  )}
+                />
+              </Link>
+            </div>
           </div>
-
-          <Link to="/settings/teams/new" className="btn btn-secondary">
-            <I18n>New Team</I18n>
-          </Link>
+          <div>
+            <div className="mb-2 text-right">{filter}</div>
+            {table}
+            {pagination}
+          </div>
         </div>
-        {teams.size > 0 ? (
-          <div className="space-admin-wrapper">
-            <table className="table table-sm table--settings">
-              <thead className="d-none d-md-table-header-group sortable">
-                <tr className="header">
-                  <th scope="col" width="33%">
-                    <I18n>Team</I18n>
-                  </th>
-                  <th scope="col">
-                    <I18n>Description</I18n>
-                  </th>
-                  <th className="sort-disabled" />
-                </tr>
-              </thead>
-              <tbody>
-                {teams.map(team => {
-                  return <TeamsListItem key={team.slug} team={team} />;
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <WallyEmptyMessage me={me} />
-        )}
       </div>
     )}
-  </div>
+  </TeamTable>
 );
