@@ -1170,10 +1170,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@kineticdata/react@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-1.2.0.tgz#2b86586daf90ca32c369089e3db1ec3b4ebb0d12"
-  integrity sha512-LtnR9+WOnoSTTRSz1MN81XGzTVgibfrWlZkTcwuu8sX02Y0YilXuX7RbF+kBgyl+WAfyCCqHWadEfyLKHwGN3A==
+"@kineticdata/react@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-5.0.1.tgz#54bb213a5cf418dd01c9017b8639d4ba309bd537"
+  integrity sha512-LwzuGKMkGrv778+Ky0kBH+aPakSnxofcwjTW41yrKPA9fGkTvkBS/meIL6NN/sKVj/lSM2WPJSlLTxoDGZAPxg==
   dependencies:
     axios "^0.18.0"
     classnames "^2.2.6"
