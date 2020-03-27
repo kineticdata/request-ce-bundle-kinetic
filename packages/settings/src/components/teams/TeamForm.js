@@ -81,9 +81,11 @@ export const TeamForm = ({ formKey, slug: teamSlug, onSave, onDelete }) => (
               {form}
             </div>
             <div className="page-panel page-panel--one-thirds page-panel--sidebar">
-              <TeamCard
-                team={getIn(form, ['props', 'bindings', 'team'], []).toJS()}
-              />
+              {teamSlug && (
+                <TeamCard
+                  team={getIn(form, ['props', 'bindings', 'team'], []).toJS()}
+                />
+              )}
             </div>
           </Fragment>
         )
