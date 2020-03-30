@@ -7,8 +7,8 @@ import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { PageTitle } from '../shared/PageTitle';
 import { Avatar } from 'common';
-// import papaparse from 'papaparse';
-// import { fromJS } from 'immutable';
+import papaparse from 'papaparse';
+import { fromJS } from 'immutable';
 // import downloadjs from 'downloadjs';
 
 // const IsJsonString = str => {
@@ -90,7 +90,7 @@ import { Avatar } from 'common';
 
 const AvatarCell = ({ row }) => (
   <td>
-    <Avatar username={row.get('username')} />
+    <Avatar username={row.get('username')} size={18} />
   </td>
 );
 
@@ -118,12 +118,12 @@ const ActionsCell = ({ row }) => (
         >
           <I18n>Edit</I18n>
         </Link>
-        <Link
+        {/* <Link
           to={`/settings/users/${row.get('username')}/clone`}
           className="dropdown-item"
         >
           <I18n>Clone</I18n>
-        </Link>
+        </Link> */}
       </DropdownMenu>
     </UncontrolledDropdown>
   </td>
@@ -134,7 +134,7 @@ const EmptyBodyRow = generateEmptyBodyRow({
   noSearchResultsMessage:
     'No Users were found - please modify your search criteria',
   noItemsMessage: 'There are no Users to display.',
-  noItemsLinkTo: '/space/users-teams/users/new',
+  noItemsLinkTo: '/settings/users/new',
   noItemsLinkToMessage: 'Add new User',
 });
 
@@ -212,8 +212,8 @@ export const UsersList = ({ tableType }) => (
                 style={{ marginBottom: '0px' }}
               >
                 <I18n>Import Users</I18n>
-              </label>
-              <button className="btn btn-secondary" onClick={handleExport}>
+              </label> */}
+              {/* <button className="btn btn-secondary" onClick={handleExport}>
                 <I18n>Export Users</I18n>
               </button> */}
               <Link to="../settings/users/new">

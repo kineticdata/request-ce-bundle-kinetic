@@ -1,10 +1,14 @@
 import React, { Fragment } from 'react';
-import { TeamForm as TeamFormLib, I18n } from '@kineticdata/react';
+import { TeamForm as TeamFormLib, I18n, history } from '@kineticdata/react';
 import { FormComponents } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { Link } from '@reach/router';
 import { TeamCard } from '../shared/TeamCard';
 import { getIn } from 'immutable';
+
+const handleSave = () => team => {
+  history.push(`/settings/teams/${team.slug}/edit`);
+};
 
 const layout = ({ fields, error, buttons }) => (
   <form>
@@ -55,7 +59,7 @@ export const TeamForm = ({ formKey, slug: teamSlug, onSave, onDelete }) => (
         }),
         FormLayout: layout,
       }}
-      onSave={onSave}
+      onSave={handleSave}
     >
       {({ form, bindings: { form: formBindings }, initialized }) =>
         initialized && (

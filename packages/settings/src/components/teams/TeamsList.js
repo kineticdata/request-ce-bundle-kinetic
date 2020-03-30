@@ -19,7 +19,7 @@ const EmptyBodyRow = generateEmptyBodyRow({
   noSearchResultsMessage:
     'No Teams were found - please modify your search criteria',
   noItemsMessage: 'There are no Teams to display.',
-  noItemsLinkTo: '/space/users-teams/teams/new',
+  noItemsLinkTo: '/settings/teams/new',
   noItemsLinkToMessage: 'Add new Team',
 });
 
@@ -47,7 +47,7 @@ export const TeamsList = ({ tableType }) => (
   >
     {({ pagination, table, filter }) => (
       <div className="page-container">
-        <PageTitle parts={['Users']} />
+        <PageTitle parts={['Teams']} />
         <div className="page-panel page-panel--white">
           <div className="page-title">
             <div className="page-title__wrapper">

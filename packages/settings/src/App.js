@@ -12,7 +12,6 @@ import {
 } from 'common';
 import { is } from 'immutable';
 import { I18n } from '@kineticdata/react';
-
 import { Sidebar } from './components/Sidebar';
 import { Settings } from './components/Settings';
 import { Notifications } from './components/notifications/Notifications';
@@ -24,9 +23,7 @@ import { Translations } from './components/translations/Translations';
 import { SchedulerSettings } from './components/SchedulerSettings';
 import { SpaceSettings } from './components/space_settings/SpaceSettings';
 import { syncAppState } from './redux/modules/app';
-
 import { actions as datastoreActions } from './redux/modules/settingsDatastore';
-import { actions as teamActions } from './redux/modules/teamList';
 
 const AppComponent = props => {
   if (props.error) {
@@ -65,7 +62,6 @@ const mapStateToProps = (state, props) => ({});
 
 const mapDispatchToProps = {
   fetchForms: datastoreActions.fetchForms,
-  fetchTeams: teamActions.fetchTeams,
 };
 
 const enhance = compose(
@@ -76,7 +72,6 @@ const enhance = compose(
   lifecycle({
     componentDidMount() {
       this.props.fetchForms();
-      this.props.fetchTeams();
     },
   }),
 );

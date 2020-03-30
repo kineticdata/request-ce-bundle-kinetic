@@ -48,22 +48,28 @@ const layout = ({ fields, error, buttons }) => (
   </form>
 );
 
-export const UserForm = ({ formKey, username, onSave, onDelete }) => (
+export const UserForm = ({ formKey, username, onSave, onDelete, mode }) => (
   <div className="page-container page-container--panels">
-    <PageTitle parts={[username ? `Edit Team` : 'New', 'Teams']} />
+    <PageTitle
+      parts={[username && mode === 'edit' ? `Edit User` : 'New', 'Users']}
+    />
     <UserFormLib
-      formKey={formKey}
-      username={username}
+      formkey={`user-${mode}`}
+      username={username ? username : null}
       alterFields={{
-        description: {
-          component: FormComponents.TextAreaField,
+        displayName: mode !== 'edit' && {
+          initialValue: '',
+        },
+        email: mode !== 'edit' && {
+          initialValue: '',
         },
       }}
       components={{
         FormError: FormComponents.FormError,
         FormButtons: FormComponents.generateFormButtons({
           handleDelete: onDelete,
-          submitLabel: username ? 'Update User' : 'Create User',
+          submitLabel:
+            username && mode === 'edit' ? 'Update User' : 'Create User',
           cancelPath: '/settings/users',
         }),
         FormLayout: layout,
@@ -87,20 +93,23 @@ export const UserForm = ({ formKey, username, onSave, onDelete }) => (
                     /
                   </h3>
                   <h1>
-                    <I18n>{username ? 'Edit' : 'New'} User</I18n>
+                    <I18n>
+                      {username && mode === 'edit' ? 'Edit' : 'New'} User
+                    </I18n>
                   </h1>
                 </div>
               </div>
               {form}
             </div>
             <div className="page-panel page-panel--one-thirds page-panel--sidebar">
-              {username && (
-                <ProfileCard
-                  user={buildProfile(
-                    getIn(form, ['props', 'bindings', 'user'], []).toJS(),
-                  )}
-                />
-              )}
+              {username &&
+                mode === 'edit' && (
+                  <ProfileCard
+                    user={buildProfile(
+                      getIn(form, ['props', 'bindings', 'user'], []).toJS(),
+                    )}
+                  />
+                )}
             </div>
           </Fragment>
         )
