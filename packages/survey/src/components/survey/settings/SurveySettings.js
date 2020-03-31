@@ -77,6 +77,7 @@ const SurveySettingsComponent = ({
   activeTab,
   toggleTab,
 }) => {
+  console.log('surveyConfig:', surveyConfig);
   const FormLayout = ({ fields, error, buttons, dirty, formOptions }) => (
     <Fragment>
       <div className="survey-tabs">

@@ -124,7 +124,7 @@ export const SettingsSidebarComponent = ({
     </Fragment>
   ) : tab === '3' ? (
     <Fragment>
-      <h3>Polling</h3>
+      <h3>Triggers</h3>
       <br />
       <p>
         Polling should only be used if the system triggering the survey cannot
