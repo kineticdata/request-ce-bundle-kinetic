@@ -696,9 +696,7 @@ export const SurveySettings = compose(
     surveyConfig:
       props.origForm &&
       props.origForm['attributesMap'] &&
-      props.origForm['attributesMap']['Survey Configuration'][0] &&
-      typeof props.origForm['attributesMap']['Survey Configuration'][0] ===
-        'object' &&
+      props.origForm['attributesMap']['Survey Configuration'][0] !== '' &&
       JSON.parse(props.origForm['attributesMap']['Survey Configuration'][0]),
     pollingSourceList:
       props.forms && props.forms.find(form => form.slug === 'survey-pollers'),
