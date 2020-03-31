@@ -7,8 +7,8 @@ import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { PageTitle } from '../shared/PageTitle';
 import { Avatar } from 'common';
-import papaparse from 'papaparse';
-import { fromJS } from 'immutable';
+// import papaparse from 'papaparse';
+// import { fromJS } from 'immutable';
 // import downloadjs from 'downloadjs';
 
 // const IsJsonString = str => {
