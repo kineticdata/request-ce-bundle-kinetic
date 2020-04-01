@@ -40,9 +40,12 @@ export function* fetchFormSaga({ payload }) {
     yield put(actions.fetchFormFailure(error));
   } else {
     // check if custom workflow is selected
-    const customWorkflow = JSON.parse(
-      form.attributesMap['Survey Configuration'][0],
-    )['Use Custom Workflow'];
+    const customWorkflow =
+      form.attributesMap['Survey Configuration'] &&
+      form.attributesMap['Survey Configuration'][0] &&
+      JSON.parse(form.attributesMap['Survey Configuration'][0])[
+        'Use Custom Workflow'
+      ];
     if (customWorkflow === 'true') {
       // try to fetch associated tree
       const { tree } = yield call(fetchTree, {
