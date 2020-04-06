@@ -84,7 +84,7 @@ export const QueueSettingsComponent = ({ currentKapp, onSave }) => (
         {
           name: 'notificationComplete',
           label: 'Default Request Submitted Notification Template',
-          type: 'select',
+          // type: 'text',
           renderAttributes: { typeahead: true },
           helpText:
             "Name of the Notification Template to use when this kapp's submissions are completed.",
@@ -101,6 +101,7 @@ export const QueueSettingsComponent = ({ currentKapp, onSave }) => (
                 }))
                 .toJS()
             : [],
+          component: FormComponents.NotificationField,
         },
         {
           name: 'notificationCreate',

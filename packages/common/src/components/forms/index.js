@@ -17,6 +17,7 @@ import { RadioField } from './RadioField';
 import { IntegerField } from './IntegerField';
 import { IconField } from './IconField';
 import { WorkflowField } from './WorkflowField';
+import { NotificationField } from './NotificationField';
 
 export default {
   AttributesField,
@@ -29,6 +30,7 @@ export default {
   FormField,
   FormMultiField,
   IconField,
+  NotificationField,
   IntegerField,
   PasswordField,
   RadioField,
