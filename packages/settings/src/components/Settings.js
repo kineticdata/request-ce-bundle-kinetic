@@ -1,12 +1,14 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 import { connect } from '../redux/store';
-import { compose } from 'recompose';
+import { compose, withProps } from 'recompose';
 import {
   Icon,
   selectHasRoleSchedulerAdmin,
   selectHasRoleSchedulerManager,
 } from 'common';
+import { NOTIFICATIONS_FORM_SLUG } from '../redux/modules/settingsNotifications';
+import { ROBOT_DEFINITIONS_FORM_SLUG } from '../redux/modules/settingsRobots';
 import { PageTitle } from './shared/PageTitle';
 import { I18n } from '@kineticdata/react';
 
@@ -24,8 +26,10 @@ const SettingsCard = ({ path, icon, name, description }) => (
 
 const SettingsComponent = ({
   isSpaceAdmin,
-  isSchedulerAdmin,
-  isSchedulerManager,
+  showDatastore,
+  showNotifications,
+  showRobots,
+  showSchedulers,
 }) => (
   <div className="page-container">
     <PageTitle parts={['Settings']} />
@@ -42,59 +46,64 @@ const SettingsComponent = ({
         render={translate => (
           <div className="cards__wrapper cards__wrapper--seconds">
             {isSpaceAdmin && (
-              <Fragment>
-                <SettingsCard
-                  name={translate('User Management')}
-                  path={`/settings/users`}
-                  icon="fa-users"
-                  description={translate('Create, Edit and Import Users')}
-                />
-
-                <SettingsCard
-                  name={translate('Team Management')}
-                  path={`/settings/teams`}
-                  icon="fa-users"
-                  description={translate('Create and Edit Teams')}
-                />
-
-                <SettingsCard
-                  name={translate('System Settings')}
-                  path={`/settings/system`}
-                  icon="fa-gear"
-                  description={translate('View and Modify all System Settings')}
-                />
-
-                <SettingsCard
-                  name={translate('Datastore Forms')}
-                  path={`/settings/datastore`}
-                  icon="fa-hdd-o"
-                  description={translate(
-                    'View, Create and Edit Reference Data',
-                  )}
-                />
-                <SettingsCard
-                  name={translate('Notifications')}
-                  path={`/settings/notifications`}
-                  icon="fa-envelope-o"
-                  description={translate(
-                    'View, Create and Edit Email Notifications',
-                  )}
-                />
-                <SettingsCard
-                  name={translate('Robots')}
-                  path={`/settings/robots`}
-                  icon="fa-tasks"
-                  description={translate('View, Create and Edit Robots')}
-                />
-                <SettingsCard
-                  name={translate('Translations')}
-                  path={`/settings/translations`}
-                  icon="fa-globe"
-                  description={translate('View, Create and Edit Translations')}
-                />
-              </Fragment>
+              <SettingsCard
+                name={translate('User Management')}
+                path={`/settings/users`}
+                icon="fa-users"
+                description={translate('Create, Edit and Import Users')}
+              />
             )}
-            {(isSchedulerAdmin || isSchedulerManager) && (
+            {isSpaceAdmin && (
+              <SettingsCard
+                name={translate('Team Management')}
+                path={`/settings/teams`}
+                icon="fa-users"
+                description={translate('Create and Edit Teams')}
+              />
+            )}
+            {isSpaceAdmin && (
+              <SettingsCard
+                name={translate('System Settings')}
+                path={`/settings/system`}
+                icon="fa-gear"
+                description={translate('View and Modify all System Settings')}
+              />
+            )}
+            {showDatastore && (
+              <SettingsCard
+                name={translate('Datastore Forms')}
+                path={`/settings/datastore`}
+                icon="fa-hdd-o"
+                description={translate('View, Create and Edit Reference Data')}
+              />
+            )}
+            {showNotifications && (
+              <SettingsCard
+                name={translate('Notifications')}
+                path={`/settings/notifications`}
+                icon="fa-envelope-o"
+                description={translate(
+                  'View, Create and Edit Email Notifications',
+                )}
+              />
+            )}
+            {showRobots && (
+              <SettingsCard
+                name={translate('Robots')}
+                path={`/settings/robots`}
+                icon="fa-tasks"
+                description={translate('View, Create and Edit Robots')}
+              />
+            )}
+            {isSpaceAdmin && (
+              <SettingsCard
+                name={translate('Translations')}
+                path={`/settings/translations`}
+                icon="fa-globe"
+                description={translate('View, Create and Edit Translations')}
+              />
+            )}
+            {showSchedulers && (
               <SettingsCard
                 name={translate('Schedulers')}
                 path={`/settings/schedulers`}
@@ -110,9 +119,22 @@ const SettingsComponent = ({
 );
 
 const mapStateToProps = state => ({
+  forms: state.settingsDatastore.forms,
   isSpaceAdmin: state.app.profile.spaceAdmin,
   isSchedulerAdmin: selectHasRoleSchedulerAdmin(state.app.profile),
   isSchedulerManager: selectHasRoleSchedulerManager(state.app.profile),
 });
 
-export const Settings = compose(connect(mapStateToProps))(SettingsComponent);
+export const Settings = compose(
+  connect(mapStateToProps),
+  withProps(props => ({
+    showDatastore: props.spaceAdmin || !props.forms.isEmpty(),
+    showNotifications: !!props.forms.find(
+      form => form.slug === NOTIFICATIONS_FORM_SLUG,
+    ),
+    showRobots: !!props.forms.find(
+      form => form.slug === ROBOT_DEFINITIONS_FORM_SLUG,
+    ),
+    showSchedulers: props.isSchedulerAdmin || props.isSchedulerManager,
+  })),
+)(SettingsComponent);

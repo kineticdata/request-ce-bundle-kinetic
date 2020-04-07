@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { Button, Input, InputGroup, InputGroupAddon, Col } from 'reactstrap';
-
+import { addToast } from 'common';
 import { List } from 'immutable';
 
 import { IndexPart } from '../../../records';
@@ -572,7 +572,7 @@ export const Searchbar = compose(
     handleRemoveIndexPartInput,
   }),
   lifecycle({
-    componentWillMount() {
+    componentDidMount() {
       if (this.props.searchParams.index) {
         this.props.setPlaceholderText(
           `Searching by ${this.props.searchParams.index.name}...`,
@@ -583,24 +583,33 @@ export const Searchbar = compose(
         this.props.formSlug === (this.props.form && this.props.form.slug) &&
         this.props.form.defaultSearchIndex
       ) {
-        this.props.setSimpleSearch(false);
         const index = this.props.form.indexDefinitions.find(
           indexDef =>
             indexDef.name === this.props.form.defaultSearchIndex.index,
         );
-        const parts = List(
-          index.parts.map((part, i) =>
-            IndexPart({ name: part, operation: 'All' }),
-          ),
-        );
-        this.props.setPlaceholderText(`Searching by ${index.name}...`);
-        this.props.setIndex(index);
-        this.props.setIndexLookup(index.name);
-        this.props.setIndexParts(parts);
-        this.props.setSortDirection(
-          this.props.form.defaultSearchIndex.direction,
-        );
-        this.props.fetchSubmissionsAdvanced();
+        if (index) {
+          const parts = List(
+            index.parts.map((part, i) =>
+              IndexPart({ name: part, operation: 'All' }),
+            ),
+          );
+          this.props.setSimpleSearch(false);
+          this.props.setPlaceholderText(`Searching by ${index.name}...`);
+          this.props.setIndex(index);
+          this.props.setIndexLookup(index.name);
+          this.props.setIndexParts(parts);
+          this.props.setSortDirection(
+            this.props.form.defaultSearchIndex.direction,
+          );
+          this.props.fetchSubmissionsAdvanced();
+        } else {
+          addToast({
+            severity: 'warning',
+            message: `Could not find the Default Search Index: ${
+              this.props.form.defaultSearchIndex.index
+            }`,
+          });
+        }
       }
     },
   }),

@@ -49,6 +49,7 @@ const SettingsComponent = ({
   staleFields,
   setStaleFields,
   fetchForm,
+  isSpaceAdmin,
 }) =>
   !loading && (
     <I18n context={`datastore.forms.${origForm.slug}`}>
@@ -181,7 +182,10 @@ const SettingsComponent = ({
                             {List(origForm.indexDefinitions)
                               .filter(d => d.status === 'Built')
                               .map(({ name }) => (
-                                <option value={name} key={name}>
+                                <option
+                                  value={name.replace(':UNIQUE', '')}
+                                  key={name}
+                                >
                                   {name.replace(':UNIQUE', '')}
                                 </option>
                               ))}
@@ -296,68 +300,70 @@ const SettingsComponent = ({
                   </table>
                 </div>
               </div>
-              <div className="table-settings">
-                <h3 className="section__title">
-                  <I18n>Bridge Configuration</I18n>
-                </h3>
-                <div className="form settings">
-                  <div className="form-group">
-                    <label htmlFor="name">
-                      <I18n>Bridge</I18n>
-                    </label>
-                    <select
-                      id="bridgeSlug"
-                      name="bridgeSlug"
-                      onChange={e =>
-                        handleBridgeChange('bridgeSlug', e.target.value)
-                      }
-                      value={updatedForm.bridgeSlug}
-                      className="form-control"
-                    >
-                      {!origForm.bridgeSlug && <option />}
-                      {bridges.map(b => (
-                        <option key={b} value={b}>
-                          {b}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {updatedForm.bridgeSlug && (
-                    <div>
-                      <div className="form-group">
-                        <span>
-                          <I18n>Model & Mapping Name:</I18n>{' '}
-                        </span>
-                        <strong>
-                          {updatedForm.bridgeModel.name ||
-                            `Datastore - ${updatedForm.name}`}
-                        </strong>
-                      </div>
-                      <QualificationTable
-                        updatedForm={updatedForm}
-                        handleBridgeChange={handleBridgeChange}
-                        setNewQualification={setNewQualification}
-                      />
-                      <QualificationModal
-                        updatedForm={updatedForm}
-                        handleBridgeChange={handleBridgeChange}
-                        newQualification={newQualification}
-                        setNewQualification={setNewQualification}
-                      />
-                      <AttributeTable
-                        updatedForm={updatedForm}
-                        editAttribute={editAttribute}
-                        setEditAttribute={setEditAttribute}
-                        newAttribute={newAttribute}
-                        setNewAttribute={setNewAttribute}
-                        handleBridgeChange={handleBridgeChange}
-                        canGenerateAttributes={canGenerateAttributes}
-                        generateAttributes={generateAttributes}
-                      />
+              {isSpaceAdmin && (
+                <div className="table-settings">
+                  <h3 className="section__title">
+                    <I18n>Bridge Configuration</I18n>
+                  </h3>
+                  <div className="form settings">
+                    <div className="form-group">
+                      <label htmlFor="name">
+                        <I18n>Bridge</I18n>
+                      </label>
+                      <select
+                        id="bridgeSlug"
+                        name="bridgeSlug"
+                        onChange={e =>
+                          handleBridgeChange('bridgeSlug', e.target.value)
+                        }
+                        value={updatedForm.bridgeSlug}
+                        className="form-control"
+                      >
+                        {!origForm.bridgeSlug && <option />}
+                        {bridges.map(b => (
+                          <option key={b} value={b}>
+                            {b}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                  )}
+                    {updatedForm.bridgeSlug && (
+                      <div>
+                        <div className="form-group">
+                          <span>
+                            <I18n>Model & Mapping Name:</I18n>{' '}
+                          </span>
+                          <strong>
+                            {updatedForm.bridgeModel.name ||
+                              `Datastore - ${updatedForm.name}`}
+                          </strong>
+                        </div>
+                        <QualificationTable
+                          updatedForm={updatedForm}
+                          handleBridgeChange={handleBridgeChange}
+                          setNewQualification={setNewQualification}
+                        />
+                        <QualificationModal
+                          updatedForm={updatedForm}
+                          handleBridgeChange={handleBridgeChange}
+                          newQualification={newQualification}
+                          setNewQualification={setNewQualification}
+                        />
+                        <AttributeTable
+                          updatedForm={updatedForm}
+                          editAttribute={editAttribute}
+                          setEditAttribute={setEditAttribute}
+                          newAttribute={newAttribute}
+                          setNewAttribute={setNewAttribute}
+                          handleBridgeChange={handleBridgeChange}
+                          canGenerateAttributes={canGenerateAttributes}
+                          generateAttributes={generateAttributes}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="form__footer">
                 <div className="form__footer__right">
                   {hasChanged && (
@@ -1252,7 +1258,7 @@ const generateAttributes = ({
       quals =>
         quals.push({
           name: 'Id',
-          structureField: `\${fields('values[id]')}`,
+          structureField: `\${fields('id')}`,
         }),
     );
   }
@@ -1314,6 +1320,7 @@ export const mapStateToProps = (state, { slug }) => ({
   ),
   bridges: state.settingsDatastore.bridges,
   bridgeSlug: '',
+  isSpaceAdmin: state.app.profile.spaceAdmin,
 });
 
 export const mapDispatchToProps = {

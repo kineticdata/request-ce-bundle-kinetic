@@ -1,7 +1,6 @@
 import React from 'react';
 import { compose, withHandlers } from 'recompose';
-import { openModalForm } from 'common';
-import { selectAdminKapp } from 'app/src/redux/selectors';
+import { openModalForm, selectAdminKappSlug } from 'common';
 import { connect } from '../../redux/store';
 import { getFeedbackFormConfig } from '../../utils';
 import { I18n } from '@kineticdata/react';
@@ -13,7 +12,7 @@ const FeedbackButton = props => (
 );
 
 export const mapStateToProps = state => ({
-  adminKappSlug: selectAdminKapp(state).slug,
+  adminKappSlug: selectAdminKappSlug(state),
 });
 
 const enhance = compose(

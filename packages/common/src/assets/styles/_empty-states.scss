@@ -41,7 +41,8 @@
   }
 }
 
-.empty-state {
+.empty-state,
+.loading-state {
   color: $gray50;
   &__message {
     color: rgba($gray50, 0.8);

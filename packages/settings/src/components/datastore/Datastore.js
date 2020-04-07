@@ -40,14 +40,9 @@ const DatastoreVersionError = ({ coreVersion }) => (
   </div>
 );
 
-export const DatastoreRouter = ({
-  match,
-  loading,
-  validVersion,
-  coreVersion,
-}) =>
+export const DatastoreRouter = ({ match, loading, validVersion, version }) =>
   !validVersion ? (
-    <DatastoreVersionError version={coreVersion} />
+    <DatastoreVersionError version={version} />
   ) : (
     !loading && (
       <Router>

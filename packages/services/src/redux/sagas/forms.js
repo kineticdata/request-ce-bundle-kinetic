@@ -40,7 +40,9 @@ const buildQuery = (options = {}) => {
       q += `name = "${options.name}"`;
     }
   } else if (options.query) {
-    q += ` AND name =* "${options.query}"`;
+    q += ` AND (name =* "${options.query}" OR attributes[Keyword] =* "${
+      options.query
+    }")`;
   }
   return q;
 };

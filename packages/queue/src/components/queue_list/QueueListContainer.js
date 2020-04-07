@@ -20,6 +20,7 @@ const mapStateToProps = (state, props) => {
     queueItems: (filter && state.queue.lists.get(filter)) || List(),
     isGrouped: filter && filter.groupBy !== '',
     statusMessage: filter && state.queue.statuses.get(filter),
+    isLoading: filter && state.queue.loading.get(filter),
     isMobile: state.app.layoutSize === 'small',
     hasTeams: state.queueApp.myTeams.size > 0,
   };

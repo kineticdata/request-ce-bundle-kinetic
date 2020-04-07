@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
+import { connect } from '../redux/store';
 import { compose, withProps } from 'recompose';
 import { bundle } from '@kineticdata/react';
 import {
@@ -11,7 +11,6 @@ import {
 import { NOTIFICATIONS_FORM_SLUG } from '../redux/modules/settingsNotifications';
 import { ROBOT_DEFINITIONS_FORM_SLUG } from '../redux/modules/settingsRobots';
 import { I18n } from '@kineticdata/react';
-import { context } from '../redux/store';
 
 import { isActiveClass } from '../utils';
 
@@ -134,12 +133,7 @@ export const mapStateToProps = state => ({
 });
 
 export const Sidebar = compose(
-  connect(
-    mapStateToProps,
-    null,
-    null,
-    { context },
-  ),
+  connect(mapStateToProps),
   withProps(props => ({
     showDatastore: props.spaceAdmin || !props.forms.isEmpty(),
     showNotifications: !!props.forms.find(
