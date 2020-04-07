@@ -16,6 +16,9 @@ import {
 import { PageTitle } from '../shared/PageTitle';
 import { List } from 'immutable';
 window.semver = semver;
+
+const localAxios = axios.create({ withCredentials: false });
+
 const buildFieldSet = bundleName => [
   'name',
   'defaultLocale',
@@ -93,7 +96,7 @@ const buildAdditionalDataSources = bundleName =>
     : {};
 
 const fetchBundleVersions = (options = {}) => {
-  return axios
+  return localAxios
     .get(
       `https://kinops.io.s3.amazonaws.com/?list-type=2&prefix=bundles/${options.name ||
         'kinetic'}/${options.branches ? 'branches' : 'releases'}/&delimiter=/`,
