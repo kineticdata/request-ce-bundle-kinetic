@@ -11,9 +11,9 @@ import { connect } from '../../../redux/store';
 import {
   FormComponents,
   LoadingMessage,
-  Utils,
+  // Utils,
   addToast,
-  selectQueueKappSlug,
+  // selectQueueKappSlug,
 } from 'common';
 import {
   actions,
@@ -107,70 +107,49 @@ export const FieldsTableField = props => (
 );
 
 const fieldSet = [
-  // 'name',
-  // 'slug',
   'description',
   'type',
   'status',
-  // 'submissionLabelExpression',
-  // 'categorizations',
   'submissionTableFields',
-  'attributesMap',
-  // 'icon',
+  'permittedSubtasks',
+  'prohibitSubtasks',
   'owningTeam',
-  // 'approver',
-  // 'approvalForm',
-  'notificationCreate',
+  'allowReassignment',
+  'assignableTeams',
   'notificationComplete',
-  // 'serviceDaysDue',
-  // 'taskAssigneeTeam',
-  // 'taskForm',
-  // 'createdWorkflow',
-  // 'submittedWorkflow',
-  // 'updatedWorkflow',
+  'notificationCreate',
 ];
 
 const FormLayout = ({ fields, error, buttons }) => (
   <Fragment>
     <h2 className="section__title">
+      <br />
       <I18n>General Settings</I18n>
     </h2>
-    {/* <div className="form-group__columns">
-      {fields.get('name')}
-      {fields.get('slug')}
-    </div> */}
     {fields.get('description')}
     <div className="form-group__columns">
       {fields.get('type')}
       {fields.get('status')}
     </div>
-    {/* {fields.get('submissionLabelExpression')}
-    {fields.get('categorizations')} */}
     <br />
     <h2 className="section__title">
-      <I18n>Attributes</I18n>
-    </h2>
-    {/* {fields.get('icon')} */}
-    {fields.get('owningTeam')}
-    {/* {fields.get('approver')}
-    {fields.get('approvalForm')} */}
-    {fields.get('notificationCreate')}
-    {fields.get('notificationComplete')}
-    {/* {fields.get('serviceDaysDue')} */}
-    {/* {fields.get('taskAssigneeTeam')} */}
-    {/* {fields.get('taskForm')} */}
-    <br />
-    {/* <h2 className="section__title">
-      <I18n>Workflow</I18n>
-    </h2> */}
-    {/* {fields.get('createdWorkflow')}
-    {fields.get('submittedWorkflow')}
-    {fields.get('updatedWorkflow')} */}
-    {/* <br /> */}
-    <h2 className="section__title">
-      <I18n>Submission Table - Default Columns</I18n>
+      <br />
+      <I18n>Table Display Settings</I18n>
     </h2>
     {fields.get('submissionTableFields')}
+    <br />
+    <h2 className="section__title">
+      <br />
+      <I18n>Attributes</I18n>
+    </h2>
+    {/* {fields.get('attributesMap')} */}
+    {fields.get('permittedSubtasks')}
+    {fields.get('prohibitSubtasks')}
+    {fields.get('owningTeam')}
+    {fields.get('allowReassignment')}
+    {fields.get('assignableTeams')}
+    {fields.get('notificationCreate')}
+    {fields.get('notificationComplete')}
     {error}
     {buttons}
   </Fragment>
@@ -218,17 +197,30 @@ export const FormSettingsComponent = ({
       }}
       addFields={() => ({ form, notifications }) =>
         form && [
-          // {
-          //   name: 'icon',
-          //   label: 'Display Icon',
-          //   type: 'text',
-          //   helpText: 'Font Awesome icon to display in Kapp links.',
-          //   initialValue: form.getIn(['attributesMap', 'Icon', 0]),
-          //   component: FormComponents.IconField,
-          // },
+          {
+            name: 'permittedSubtasks',
+            label: 'Permitted Subtasks',
+            type: 'select-multi',
+            helpText: 'TBD',
+            initialValue: form
+              .getIn(['attributesMap', 'Permitted Subtasks'])
+              .map(name => ({ name }))
+              .toJS(),
+            // options: subtask options needed
+          },
+          {
+            name: 'prohibitSubtasks',
+            label: 'Prohibit Subtasks',
+            type: 'select',
+            helpText: 'TBD',
+            initialValue: form
+              .getIn(['attributesMap', 'Prohibit Subtasks'])
+              .toJS(),
+            options: ['Yes', 'No'].map(el => ({ label: el, value: el })),
+          },
           {
             name: 'owningTeam',
-            label: 'Owning Team',
+            label: 'Owning Teams',
             type: 'team-multi',
             helpText: 'Teams responsible for maintaining this form.',
             initialValue: form
@@ -236,26 +228,26 @@ export const FormSettingsComponent = ({
               .map(name => ({ name }))
               .toJS(),
           },
-          // {
-          //   name: 'approver',
-          //   label: 'Approver',
-          //   type: 'text',
-          //   helpText:
-          //     "Options are: Team Name, Individual Name or 'Manager'. If this is set, this form will get approvals sent to the value set here. Defaults to value at Kapp level.",
-          //   initialValue: form.getIn(['attributesMap', 'Approver', 0]),
-          // },
-          // {
-          //   name: 'approvalForm',
-          //   label: 'Approval Form',
-          //   type: 'form',
-          //   helpText:
-          //     'The Queue kapp form which approvals should be created in. Defaults to value at Kapp level.',
-          //   initialValue: form
-          //     .getIn(['attributesMap', 'Approval Form Slug'])
-          //     .map(slug => ({ slug }))
-          //     .toJS()[0],
-          //   search: { kappSlug: queueKappSlug },
-          // },
+          {
+            name: 'allowReassignment',
+            label: 'Allow Reassignment',
+            type: 'select',
+            helpText: 'TBD',
+            initialValue: form
+              .getIn(['attributesMap', 'Allow Reassignment'])
+              .toJS(),
+            options: ['Yes', 'No'].map(el => ({ label: el, value: el })),
+          },
+          {
+            name: 'assignableTeams',
+            label: 'Assignable Teams',
+            type: 'team-multi',
+            helpText: 'TBD',
+            initialValue: form
+              .getIn(['attributesMap', 'Assignable Teams'])
+              .map(name => ({ name }))
+              .toJS(),
+          },
           {
             name: 'notificationCreate',
             label: 'Notification Template Name - Create',
@@ -298,68 +290,6 @@ export const FormSettingsComponent = ({
                   .toJS()
               : [],
           },
-          // {
-          //   name: 'serviceDaysDue',
-          //   label: 'Service Days Due',
-          //   type: 'text',
-          //   helpText:
-          //     'Number of days until service is expected to be fulfilled this form. Defaults to value at Kapp level.',
-          //   initialValue: form.getIn(['attributesMap', 'Service Days Due', 0]),
-          //   component: FormComponents.IntegerField,
-          // },
-          // {
-          //   name: 'taskAssigneeTeam',
-          //   label: 'Task Assignee Team',
-          //   type: 'team',
-          //   helpText:
-          //     'Team to assign tasks to. Defaults to value at Kapp level.',
-          //   initialValue: form
-          //     .getIn(['attributesMap', 'Task Assignee Team'])
-          //     .map(name => ({ name }))
-          //     .toJS()[0],
-          // },
-          // {
-          //   name: 'taskForm',
-          //   label: 'Task Form',
-          //   type: 'form',
-          //   helpText:
-          //     'The Queue kapp form to use when creating a task item. Defaults to value at Kapp level.',
-          //   initialValue: form
-          //     .getIn(['attributesMap', 'Task Form Slug'])
-          //     .map(slug => ({ slug }))
-          //     .toJS()[0],
-          //   search: { kappSlug: queueKappSlug },
-          // },
-          // {
-          //   name: 'createdWorkflow',
-          //   label: 'Created',
-          //   type: 'checkbox',
-          //   helpText: 'If unchecked, default workflow will be used.',
-          //   initialValue: form
-          //     .getIn(['attributesMap', 'Custom Submission Workflow'])
-          //     .includes('Created'),
-          //   component: WorkflowField,
-          // },
-          // {
-          //   name: 'submittedWorkflow',
-          //   label: 'Submitted',
-          //   type: 'checkbox',
-          //   helpText: 'If unchecked, default workflow will be used.',
-          //   initialValue: form
-          //     .getIn(['attributesMap', 'Custom Submission Workflow'])
-          //     .includes('Submitted'),
-          //   component: WorkflowField,
-          // },
-          // {
-          //   name: 'updatedWorkflow',
-          //   label: 'Updated',
-          //   type: 'checkbox',
-          //   helpText: 'If unchecked, default workflow will be used.',
-          //   initialValue: form
-          //     .getIn(['attributesMap', 'Custom Submission Workflow'])
-          //     .includes('Updated'),
-          //   component: WorkflowField,
-          // },
           {
             name: 'submissionTableFields',
             label: 'Submission Table - Fields',
@@ -375,30 +305,19 @@ export const FormSettingsComponent = ({
         // categorizations: { component: FormComponents.SelectMultiField },
         attributesMap: {
           serialize: ({ values }) => ({
-            // Icon: asArray(values.get('icon')),
+            'Permitted Subtasks': asArray(values.get('permittedSubtasks')),
+            'Prohibit Subtasks': asArray(values.get('prohibitSubtasks')),
             'Owning Team': values
               .get('owningTeam')
               .map(team => team.get('name')),
-            // Approver: asArray(values.get('approver')),
-            // 'Approval Form Slug': asArray(
-            //   values.getIn(['approvalForm', 'slug']),
-            // ),
+            'Allow Reassignment': asArray(values.get('allowReassignment')),
+            'Assignable Teams': asArray(values.getIn('assignableTeams')),
             'Notification Template Name - Create': asArray(
               values.get('notificationCreate'),
             ),
             'Notification Template Name - Complete': asArray(
               values.get('notificationComplete'),
             ),
-            // 'Service Days Due': asArray(values.get('serviceDaysDue')),
-            'Task Assignee Team': asArray(
-              values.getIn(['taskAssigneeTeam', 'name']),
-            ),
-            // 'Task Form Slug': asArray(values.getIn(['taskForm', 'slug'])),
-            // 'Custom Submission Workflow': [
-            //   values.get('createdWorkflow') ? 'Created' : '',
-            //   values.get('submittedWorkflow') ? 'Submitted' : '',
-            //   values.get('updatedWorkflow') ? 'Updated' : '',
-            // ].filter(v => v),
             'Form Configuration': [
               // TODO Update to allow for other props in Form Config attribute
               JSON.stringify({
@@ -1080,7 +999,7 @@ export const FormSettings = compose(
 //   lifecycle({
 //     componentWillMount() {
 //       this.props.fetchFormSettings({
-//         formSlug: this.props.id,
+//         formSlug: this.props.form.slug,
 //         kappSlug: this.props.kappSlug,
 //       });
 //       this.props.fetchKapp(this.props.kappSlug);
