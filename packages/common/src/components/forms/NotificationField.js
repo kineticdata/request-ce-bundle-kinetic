@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  I18n,
-  StaticSelect,
-  SubmissionSearch,
-  searchSubmissions,
-} from '@kineticdata/react';
+import { I18n, StaticSelect } from '@kineticdata/react';
 import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { hasErrors } from './utils';
 import { FieldWrapper } from './FieldWrapper';
@@ -15,16 +10,19 @@ const Input = props => <input {...props.inputProps} className="form-control" />;
 
 const SelectionsContainer = ({ input, value }) => (
   <div className="kinetic-typeahead input-group">
-    {/* link to notification */}
+    {/* link to notification template */}
     <span className="input-group-addon input-group-prepend">
-      <Link
-        className="input-group-text"
-        to={`/settings/notifications/templates/`}
-      >
-        <I18n>View Template</I18n>
-      </Link>
+      {value &&
+        value.get('slug') && (
+          <Link
+            className="input-group-text"
+            to={`/settings/notifications/templates/${value.get('slug')}`}
+            target="_blank"
+          >
+            <I18n>View Template</I18n>
+          </Link>
+        )}
     </span>
-    {console.log('value:', value.toJS())}
     {input}
   </div>
 );
