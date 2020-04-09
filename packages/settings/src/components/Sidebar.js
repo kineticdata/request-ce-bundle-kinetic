@@ -28,12 +28,12 @@ export const SidebarComponent = ({
       {!loading && (
         <Fragment>
           <div className="sidebar-group">
-            <h1>System Settings</h1>
+            <h1>Space Settings</h1>
             <ul className="nav flex-column">
               <li className="nav-item">
                 {spaceAdmin && (
-                  <Link to="system" getProps={isActiveClass('nav-link')}>
-                    <I18n>System</I18n>
+                  <Link to="space" getProps={isActiveClass('nav-link')}>
+                    <I18n>Space</I18n>
                     <span className="fa fa-fw fa-angle-right" />
                   </Link>
                 )}

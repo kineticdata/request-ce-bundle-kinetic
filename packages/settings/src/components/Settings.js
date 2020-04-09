@@ -63,10 +63,10 @@ const SettingsComponent = ({
             )}
             {isSpaceAdmin && (
               <SettingsCard
-                name={translate('System Settings')}
-                path={`/settings/system`}
+                name={translate('Space Settings')}
+                path={`/settings/space`}
                 icon="fa-gear"
-                description={translate('View and Modify all System Settings')}
+                description={translate('View and Modify all Space Settings')}
               />
             )}
             {showDatastore && (

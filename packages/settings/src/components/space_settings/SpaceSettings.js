@@ -239,7 +239,7 @@ export const SpaceSettingsComponent = ({
     alterFields={() => ({ space }) =>
       space && {
         name: {
-          helpText: 'The Name of the Space referenced throughout the system.',
+          helpText: 'The Name of the Space referenced throughout the space.',
         },
         attributesMap: {
           serialize: ({ values }) => ({
@@ -309,7 +309,7 @@ export const SpaceSettingsComponent = ({
     {({ form, initialized }) =>
       initialized && (
         <div className="page-container">
-          <PageTitle parts={['System Settings']} />
+          <PageTitle parts={['Space Settings']} />
           <div className="page-panel page-panel--white">
             <div className="page-title">
               <div className="page-title__wrapper">
@@ -320,7 +320,7 @@ export const SpaceSettingsComponent = ({
                   /{` `}
                 </h3>
                 <h1>
-                  <I18n>System Settings</I18n>
+                  <I18n>Space Settings</I18n>
                 </h1>
               </div>
             </div>
@@ -349,7 +349,7 @@ export const SpaceSettings = compose(
   connect(mapStateToProps),
   withHandlers({
     onSave: props => () => () => {
-      addToast('System settings saved successfully.');
+      addToast('Space settings saved successfully.');
       props.reloadApp();
     },
   }),

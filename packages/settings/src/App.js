@@ -41,7 +41,7 @@ const AppComponent = props => {
         <I18n>
           <main className={`package-layout package-layout--settings`}>
             <Router>
-              <SpaceSettings path="system" />
+              <SpaceSettings path="space" />
               <Datastore path="datastore/*" />
               <RobotsWrapper path="robots/*" />
               <Users path="users/*" />
