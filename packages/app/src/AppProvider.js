@@ -93,6 +93,7 @@ const PublicAppComponent = props => {
 const mapStateToProps = (state, props) => ({
   loading: state.app.loading,
   errors: state.app.errors,
+  kapp: state.app.kapp,
   authRoute: state.app.authRoute,
   location: state.router.location,
 });
