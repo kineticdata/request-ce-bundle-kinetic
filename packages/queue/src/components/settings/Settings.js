@@ -3,7 +3,6 @@ import { Link, Router } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
 import { Icon, ErrorMessage, LoadingMessage } from 'common';
 import { QueueSettings } from './QueueSettings';
-// import { actions } from '../../redux/modules/settingsQueue';
 import { actions as formActions } from '../../redux/modules/settingsForms';
 import { PageTitle } from '../shared/PageTitle';
 import { FormList } from './forms/FormList';
@@ -20,6 +19,7 @@ export const FormSettingsWrapper = compose(
     state => ({
       kapp: state.app.kapp,
       form: state.settingsForms.currentForm,
+      loading: state.settingsForms.loading,
       error: state.settingsForms.error,
     }),
     { fetchFormRequest: formActions.fetchForm },
@@ -33,8 +33,8 @@ export const FormSettingsWrapper = compose(
     },
   }),
 )(
-  ({ form, error }) =>
-    error || !form ? (
+  ({ form, error, loading }) =>
+    loading || error || !form ? (
       <div className="page-container">
         <PageTitle parts={[form && form.name, `Forms`]} />
         <div className="page-panel page-panel--white">
@@ -79,28 +79,10 @@ export const Settings = () => (
     {/* <CreateForm path="forms/new" />
     <CreateForm path="forms/clone/:id" /> */}
     <FormSettingsWrapper path="forms/:formSlug/*" />
-    {/* <FormSettings path="forms/:id/settings" />
-    <FormSubmissions path="forms/:id/" /> */}
-    <FormActivity path="forms/:id/activity" />
+    {/* <FormActivity path="forms/:id/activity" /> */}
     <SettingsNavigation default />
   </Router>
 );
-
-// const mapDispatchToProps = {
-//   fetchQueueSettings: actions.fetchQueueSettings,
-// };
-
-// export const Settings = compose(
-//   connect(
-//     null,
-//     mapDispatchToProps,
-//   ),
-//   lifecycle({
-//     componentWillMount(prev, next) {
-//       this.props.fetchQueueSettings();
-//     },
-//   }),
-// )(SettingsComponent);
 
 const SettingsCard = ({ path, icon, name, description }) => (
   <Link to={path} className="card card--settings">

@@ -70,7 +70,8 @@ export const QueueSettingsComponent = ({ currentKapp, onSave }) => (
       },
     }}
     addFields={() => ({ kapp, notifications }) =>
-      kapp && [
+      kapp &&
+      notifications && [
         {
           name: 'icon',
           label: 'Display Icon',

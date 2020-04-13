@@ -8,6 +8,7 @@ import { I18n } from '@kineticdata/react';
 import { connect } from '../../../redux/store';
 
 const ExportModalComponent = ({
+  form,
   modalIsOpen,
   closeModal,
   modalName,
@@ -27,7 +28,11 @@ const ExportModalComponent = ({
     </div>
     <ModalBody>
       <div style={{ padding: '1rem' }}>
-        <Export filter={filter} createSearchQuery={createSearchQuery} />
+        <Export
+          filter={filter}
+          createSearchQuery={createSearchQuery}
+          form={form}
+        />
       </div>
     </ModalBody>
   </Modal>

@@ -14,6 +14,27 @@ import { SelectFilter } from 'common/src/components/tables/SelectFilter';
 import { CoreStateBadgeCell } from 'common/src/components/tables/CoreStateBadgeCell';
 import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
 import { List } from 'immutable';
+import { ExportModal } from './ExportModal';
+import { actions } from '../../../redux/modules/settingsForms';
+
+// Create q for search from filter object
+const createSearchQuery = filter => {
+  const jsfilter = filter.props.appliedFilters.toJS();
+  const q = {};
+  for (const property in jsfilter) {
+    if (
+      property !== 'values' &&
+      property !== 'createdAt' &&
+      jsfilter[property].value
+    ) {
+      q[property] = jsfilter[property].value;
+    }
+  }
+  for (let value of jsfilter.values.value) {
+    q[`values[${value.field}]`] = value.value;
+  }
+  return q;
+};
 
 const LinkCell = ({ row, value }) => (
   <td>
@@ -25,6 +46,7 @@ export const FormSubmissionsComponent = ({
   tableKey,
   kapp,
   form,
+  openModal,
   processing,
   deleteForm,
 }) => {
@@ -115,11 +137,18 @@ export const FormSubmissionsComponent = ({
                 </h1>
               </div>
               <div className="page-title__actions">
-                <SubmissionExportModalButton
+                {/* <SubmissionExportModalButton
                   kappSlug={kapp.slug}
                   formSlug={form.slug}
                   title="Export Submissions"
-                />
+                /> */}
+                <button
+                  onClick={() => openModal('export')}
+                  value="export"
+                  className="btn btn-primary pull-left"
+                >
+                  <I18n>Export Records</I18n>
+                </button>
                 <Link to="settings" className="btn btn-primary">
                   <span className="fa fa-fw fa-cog" />
                   <I18n>Form Settings</I18n>
@@ -175,6 +204,11 @@ export const FormSubmissionsComponent = ({
               </div>
             </div>
           </div>
+          <ExportModal
+            form={form}
+            filter={filter}
+            createSearchQuery={createSearchQuery}
+          />
         </div>
       )}
     </SubmissionTable>
@@ -185,7 +219,9 @@ const mapStateToProps = state => ({
   kapp: state.app.kapp,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  openModal: actions.openModal,
+};
 
 export const FormSubmissions = compose(
   connect(
