@@ -23,6 +23,26 @@ import { StatusBadge } from 'common/src/components/tables/StatusBadgeCell';
 import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
 import { List } from 'immutable';
 
+// Create q for search from filter object
+const createSearchQuery = filter => {
+  const jsfilter = filter.props.appliedFilters.toJS();
+  const q = {};
+  for (const property in jsfilter) {
+    if (
+      property !== 'values' &&
+      property !== 'createdAt' &&
+      property !== 'submittedAt' &&
+      jsfilter[property].value
+    ) {
+      q[property] = jsfilter[property].value;
+    }
+  }
+  for (let value of jsfilter.values.value) {
+    q[`values[${value.field}]`] = value.value;
+  }
+  return q;
+};
+
 const LinkCell = ({ row, value }) => (
   <td>
     <Link to={`${row.get('id')}/details`}>{value}</Link>
@@ -257,7 +277,7 @@ export const FormDetailsComponent = ({
             <ExportModal
               form={form}
               filter={filter}
-              // createSearchQuery={createSearchQuery}
+              createSearchQuery={createSearchQuery}
             />
           </div>
         )}

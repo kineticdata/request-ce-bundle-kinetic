@@ -115,10 +115,12 @@ function createCSV(submissions, form) {
 }
 
 const handleDownload = props => () => {
+  const q = props.createSearchQuery(props.filter);
   props.fetchAllSubmissions({
     formSlug: props.form.slug,
     kappSlug: props.kappSlug,
     accumulator: [],
+    q: q,
   });
   props.setExportStatus('FETCHING_RECORDS');
 };

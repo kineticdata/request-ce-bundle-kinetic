@@ -586,6 +586,7 @@ const SurveySettingsComponent = ({
                     //   helpText: 'Only Active surveys will be sent out',
                     // },
                     submissionLabelExpression: {
+                      language: 'js-template',
                       label: 'Survey Label',
                       helpText:
                         'A combination of fields from the survey and text to help you identify at a glance which survey submission is which.',
