@@ -185,9 +185,11 @@ export const FormSettingsComponent = ({ form, kapp, onSave }) => {
             label: 'Permitted Subtasks',
             type: 'text-multi',
             helpText: 'TBD',
-            initialValue: form
-              .getIn(['attributesMap', 'Permitted Subtasks', 0])
-              .split(','),
+            initialValue: form.getIn(['attributesMap', 'Permitted Subtasks', 0])
+              ? form
+                  .getIn(['attributesMap', 'Permitted Subtasks', 0])
+                  .split(',')
+              : [],
           },
           {
             name: 'prohibitSubtasks',
@@ -347,6 +349,7 @@ export const FormSettingsComponent = ({ form, kapp, onSave }) => {
                   }/builder`}
                   className="btn btn-primary"
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <span className="fa fa-fw fa-mouse-pointer" />
                   <I18n>Form Builder</I18n>

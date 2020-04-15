@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, withHandlers, withState, lifecycle } from 'recompose';
 import { connect } from '../../../redux/store';
 import {
   UncontrolledDropdown,
@@ -27,11 +27,11 @@ import { StatusBadgeCell } from 'common/src/components/tables/StatusBadgeCell';
 import { SelectFilter } from 'common/src/components/tables/SelectFilter';
 import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
 import { actions } from '../../../redux/modules/settingsForms';
+import { actions as queueActions } from '../../../redux/modules/settingsQueue';
 
-const ActionsCell = ({ deleteForm, toggleModal, processing }) => ({
+const ActionsCell = ({ toggleModal, processing }) => ({
   tableOptions: { kappSlug },
   row,
-  tableKey,
 }) => (
   <td className="text-right" style={{ width: '1%' }}>
     {processing.has(row.get('slug')) ? (
@@ -156,6 +156,8 @@ export const FormListComponent = ({
   deleteForm,
   cloneFormRequest,
   navigate,
+  queueSettings,
+  loading,
 }) => {
   const EmptyBodyRow = generateEmptyBodyRow({
     loadingMessage: 'Loading Forms...',
@@ -167,192 +169,211 @@ export const FormListComponent = ({
   });
 
   return (
-    <FormTable
-      kappSlug={kapp.slug}
-      components={{
-        EmptyBodyRow,
-        FilterLayout,
-        TableLayout: SettingsTableLayout,
-      }}
-      columnSet={[
-        'name',
-        'description',
-        'type',
-        'updatedAt',
-        'createdAt',
-        'status',
-        'actions',
-      ]}
-      addColumns={[
-        {
-          value: 'description',
-          title: 'Description',
-          sortable: false,
-        },
-        {
-          value: 'actions',
-          title: ' ',
-          sortable: false,
-          components: {
-            BodyCell: ActionsCell({ deleteForm, toggleModal, processing }),
+    !loading && (
+      <FormTable
+        kappSlug={kapp.slug}
+        components={{
+          EmptyBodyRow,
+          FilterLayout,
+          TableLayout: SettingsTableLayout,
+        }}
+        columnSet={[
+          'name',
+          'description',
+          'type',
+          'updatedAt',
+          'createdAt',
+          'status',
+          'actions',
+        ]}
+        defaultSortColumn="name"
+        defaultSortDirection="asc"
+        addColumns={[
+          {
+            value: 'description',
+            title: 'Description',
+            sortable: false,
           },
-          className: 'text-right',
-        },
-      ]}
-      alterColumns={{
-        updatedAt: {
-          components: {
-            BodyCell: TimeAgoCell,
+          {
+            value: 'actions',
+            title: ' ',
+            sortable: false,
+            components: {
+              BodyCell: ActionsCell({ deleteForm, toggleModal, processing }),
+            },
+            className: 'text-right',
           },
-        },
-        createdAt: {
-          components: {
-            BodyCell: TimeAgoCell,
+        ]}
+        alterColumns={{
+          updatedAt: {
+            components: {
+              BodyCell: TimeAgoCell,
+            },
           },
-        },
-        name: {
-          components: {
-            BodyCell: FormNameCell,
+          createdAt: {
+            components: {
+              BodyCell: TimeAgoCell,
+            },
           },
-        },
-        status: {
-          components: {
-            BodyCell: StatusBadgeCell,
-            Filter: SelectFilter,
+          name: {
+            components: {
+              BodyCell: FormNameCell,
+            },
           },
-        },
-      }}
-    >
-      {({ pagination, table, filter, tableKey }) => (
-        <div className="page-container">
-          <PageTitle parts={[`Forms`]} />
-          <div className="page-panel page-panel--white">
-            <div className="page-title">
-              <div className="page-title__wrapper">
-                <h3>
-                  <Link to="../../">
-                    <I18n>queue</I18n>
-                  </Link>{' '}
-                  /{` `}
-                  <Link to="../">
-                    <I18n>settings</I18n>
-                  </Link>{' '}
-                  /{` `}
-                </h3>
-                <h1>
-                  <I18n>Forms</I18n>
-                </h1>
+          type: {
+            components: {
+              Filter: SelectFilter,
+            },
+            options: () =>
+              queueSettings.queueSettingsKapp.formTypes.map(({ name }) => ({
+                value: name,
+                label: name,
+              })),
+          },
+          status: {
+            components: {
+              BodyCell: StatusBadgeCell,
+              Filter: SelectFilter,
+            },
+          },
+        }}
+      >
+        {({ pagination, table, filter, tableKey }) => (
+          <div className="page-container">
+            <PageTitle parts={[`Forms`]} />
+            <div className="page-panel page-panel--white">
+              <div className="page-title">
+                <div className="page-title__wrapper">
+                  <h3>
+                    <Link to="../../">
+                      <I18n>queue</I18n>
+                    </Link>{' '}
+                    /{` `}
+                    <Link to="../">
+                      <I18n>settings</I18n>
+                    </Link>{' '}
+                    /{` `}
+                  </h3>
+                  <h1>
+                    <I18n>Forms</I18n>
+                  </h1>
+                </div>
+                <div className="page-title__actions">
+                  <I18n
+                    render={translate => (
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        title={translate('New Form')}
+                        onClick={() => toggleModal(true)}
+                      >
+                        <span className="fa fa-plus fa-fw" />{' '}
+                        {translate('New Form')}
+                      </button>
+                    )}
+                  />
+                </div>
               </div>
-              <div className="page-title__actions">
-                <I18n
-                  render={translate => (
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      title={translate('New Form')}
-                      onClick={() => toggleModal(true)}
-                    >
-                      <span className="fa fa-plus fa-fw" />{' '}
-                      {translate('New Form')}
-                    </button>
-                  )}
-                />
+              <div>
+                <div className="mb-2 text-right">{filter}</div>
+                {table}
+                {pagination}
               </div>
             </div>
-            <div>
-              <div className="mb-2 text-right">{filter}</div>
-              {table}
-              {pagination}
-            </div>
-          </div>
 
-          {/* Modal for creating a new form */}
-          <Modal isOpen={!!modalOpen} toggle={() => toggleModal()} size="lg">
-            <div className="modal-header">
-              <h4 className="modal-title">
-                <button
-                  type="button"
-                  className="btn btn-link btn-delete"
-                  onClick={() => toggleModal()}
-                >
-                  <I18n>Close</I18n>
-                </button>
-                <span>
-                  <I18n>New Form</I18n>
-                </span>
-              </h4>
-            </div>
-            <FormForm
-              kappSlug={kapp.slug}
-              fieldSet={[
-                'name',
-                'slug',
-                'status',
-                'type',
-                'submissionLabelExpression',
-                'description',
-              ]}
-              onSave={() => form => {
-                if (typeof modalOpen === 'string') {
-                  cloneFormRequest({
-                    kappSlug: kapp.slug,
-                    formSlug: form.slug,
-                    cloneFormSlug: modalOpen,
-                    callback: () => navigate(`${form.slug}/settings`),
-                  });
-                } else {
-                  addToast(`${form.name} created successfully.`);
-                  navigate(`${form.slug}/settings`);
+            {/* Modal for creating a new form */}
+            <Modal isOpen={!!modalOpen} toggle={() => toggleModal()} size="lg">
+              <div className="modal-header">
+                <h4 className="modal-title">
+                  <button
+                    type="button"
+                    className="btn btn-link btn-delete"
+                    onClick={() => toggleModal()}
+                  >
+                    <I18n>Close</I18n>
+                  </button>
+                  <span>
+                    <I18n>New Form</I18n>
+                  </span>
+                </h4>
+              </div>
+              <FormForm
+                kappSlug={kapp.slug}
+                fieldSet={[
+                  'name',
+                  'slug',
+                  'status',
+                  'type',
+                  'submissionLabelExpression',
+                  'description',
+                ]}
+                onSave={() => form => {
+                  if (typeof modalOpen === 'string') {
+                    cloneFormRequest({
+                      kappSlug: kapp.slug,
+                      formSlug: form.slug,
+                      cloneFormSlug: modalOpen,
+                      callback: () => navigate(`${form.slug}/settings`),
+                    });
+                  } else {
+                    addToast(`${form.name} created successfully.`);
+                    navigate(`${form.slug}/settings`);
+                  }
+                }}
+                components={{ FormLayout, FormButtons }}
+                alterFields={{
+                  description: {
+                    component: FormComponents.TextAreaField,
+                  },
+                }}
+                addDataSources={
+                  typeof modalOpen === 'string'
+                    ? {
+                        cloneForm: {
+                          fn: fetchForm,
+                          params: [
+                            { kappSlug: kapp.slug, formSlug: modalOpen },
+                          ],
+                          // Set to the form, or the result in case of an error
+                          transform: result => result.form || result,
+                        },
+                      }
+                    : undefined
                 }
-              }}
-              components={{ FormLayout, FormButtons }}
-              alterFields={{
-                description: {
-                  component: FormComponents.TextAreaField,
-                },
-              }}
-              addDataSources={
-                typeof modalOpen === 'string'
-                  ? {
-                      cloneForm: {
-                        fn: fetchForm,
-                        params: [{ kappSlug: kapp.slug, formSlug: modalOpen }],
-                        // Set to the form, or the result in case of an error
-                        transform: result => result.form || result,
-                      },
-                    }
-                  : undefined
-              }
-            >
-              {({ form, initialized, bindings: { cloneForm } }) => {
-                const isClone = typeof modalOpen === 'string';
-                const cloneError = cloneForm && cloneForm.get('error');
-                return initialized && (!isClone || cloneForm) ? (
-                  cloneError ? (
-                    <CloneErrorFormLayout />
+              >
+                {({ form, initialized, bindings: { cloneForm } }) => {
+                  const isClone = typeof modalOpen === 'string';
+                  const cloneError = cloneForm && cloneForm.get('error');
+                  return initialized && (!isClone || cloneForm) ? (
+                    cloneError ? (
+                      <CloneErrorFormLayout />
+                    ) : (
+                      form
+                    )
                   ) : (
-                    form
-                  )
-                ) : (
-                  <LoadingFormLayout />
-                );
-              }}
-            </FormForm>
-          </Modal>
-        </div>
-      )}
-    </FormTable>
+                    <LoadingFormLayout />
+                  );
+                }}
+              </FormForm>
+            </Modal>
+          </div>
+        )}
+      </FormTable>
+    )
   );
 };
 
 const mapStateToProps = state => ({
   kapp: state.app.kapp,
   processing: state.settingsForms.processing,
+  queueSettings: state.queueSettings,
+  loading: state.queueSettings.loading,
 });
 
 const mapDispatchToProps = {
   deleteFormRequest: actions.deleteFormRequest,
   cloneFormRequest: actions.cloneFormRequest,
+  fetchQueueSettings: queueActions.fetchQueueSettings,
 };
 
 // Settings Container
@@ -381,5 +402,10 @@ export const FormList = compose(
             onSuccess,
           }),
       }),
+  }),
+  lifecycle({
+    componentWillMount() {
+      this.props.fetchQueueSettings();
+    },
   }),
 )(FormListComponent);

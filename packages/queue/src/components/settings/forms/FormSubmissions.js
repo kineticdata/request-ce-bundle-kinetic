@@ -3,7 +3,7 @@ import { Link } from '@reach/router';
 import { compose } from 'recompose';
 import { connect } from '../../../redux/store';
 import { I18n, SubmissionTable } from '@kineticdata/react';
-import { TimeAgo, SubmissionExportModalButton } from 'common';
+import { TimeAgo } from 'common';
 import { PageTitle } from '../../shared/PageTitle';
 import { generateEmptyBodyRow } from 'common/src/components/tables/EmptyBodyRow';
 import { generateFilterModalLayout } from 'common/src/components/tables/FilterLayout';
@@ -17,25 +17,6 @@ import { List } from 'immutable';
 import { ExportModal } from './ExportModal';
 import { actions } from '../../../redux/modules/settingsForms';
 
-// Create q for search from filter object
-const createSearchQuery = filter => {
-  const jsfilter = filter.props.appliedFilters.toJS();
-  const q = {};
-  for (const property in jsfilter) {
-    if (
-      property !== 'values' &&
-      property !== 'createdAt' &&
-      jsfilter[property].value
-    ) {
-      q[property] = jsfilter[property].value;
-    }
-  }
-  for (let value of jsfilter.values.value) {
-    q[`values[${value.field}]`] = value.value;
-  }
-  return q;
-};
-
 const LinkCell = ({ row, value }) => (
   <td>
     <Link to={`submissions/${row.get('id')}`}>{value}</Link>
@@ -47,8 +28,6 @@ export const FormSubmissionsComponent = ({
   kapp,
   form,
   openModal,
-  processing,
-  deleteForm,
 }) => {
   const EmptyBodyRow = generateEmptyBodyRow({
     loadingMessage: 'Loading Submissions...',
@@ -72,14 +51,12 @@ export const FormSubmissionsComponent = ({
         FilterLayout,
         TableLayout: SettingsTableLayout,
       }}
-      columnSet={['label', 'submittedBy', 'type', 'coreState', 'createdAt']}
-      addColumns={[]}
+      columnSet={['label', 'createdAt', 'submittedBy', 'coreState']}
+      defaultSortColumn={'createdAt'}
       alterColumns={{
         label: {
           components: { BodyCell: LinkCell },
-        },
-        submittedBy: {
-          title: 'Submitter',
+          sortable: true,
         },
         createdAt: {
           title: 'Created',
@@ -90,8 +67,12 @@ export const FormSubmissionsComponent = ({
             Filter: BetweenDateFilter,
           },
         },
+        submittedBy: {
+          sortable: true,
+        },
         coreState: {
           title: 'State',
+          sortable: true,
           components: {
             BodyCell: CoreStateBadgeCell,
             Filter: SelectFilter,
@@ -137,21 +118,17 @@ export const FormSubmissionsComponent = ({
                 </h1>
               </div>
               <div className="page-title__actions">
-                {/* <SubmissionExportModalButton
-                  kappSlug={kapp.slug}
-                  formSlug={form.slug}
-                  title="Export Submissions"
-                /> */}
                 <button
                   onClick={() => openModal('export')}
                   value="export"
-                  className="btn btn-primary pull-left"
+                  className="btn btn-secondary pull-left"
                 >
-                  <I18n>Export Records</I18n>
+                  <span className="fa fa-fw fa-download" />
+                  <I18n> Export Records</I18n>
                 </button>
                 <Link to="settings" className="btn btn-primary">
                   <span className="fa fa-fw fa-cog" />
-                  <I18n>Form Settings</I18n>
+                  <I18n> Form Settings</I18n>
                 </Link>
               </div>
             </div>
@@ -207,7 +184,7 @@ export const FormSubmissionsComponent = ({
           <ExportModal
             form={form}
             filter={filter}
-            createSearchQuery={createSearchQuery}
+            // createSearchQuery={createSearchQuery}
           />
         </div>
       )}
