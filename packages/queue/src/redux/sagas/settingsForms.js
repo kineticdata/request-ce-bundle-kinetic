@@ -9,7 +9,7 @@ import {
   updateForm,
   createForm,
 } from '@kineticdata/react';
-import { addSuccess, addError } from 'common';
+import { addToast, addToastAlert, addSuccess, addError } from 'common';
 import axios from 'axios';
 import {
   actions,
@@ -30,6 +30,49 @@ export function* fetchFormSaga(action) {
     yield put(actions.setFormsError(serverError));
   } else {
     yield put(actions.setForm(form));
+  }
+}
+
+export function* cloneFormSaga({ payload }) {
+  const { error: cloneError, form: cloneForm } = yield call(fetchForm, {
+    kappSlug: payload.kappSlug,
+    formSlug: payload.cloneFormSlug,
+    include: FORM_FULL_INCLUDES,
+  });
+
+  if (cloneError) {
+    addToastAlert({
+      title: 'Error Cloning Form',
+      message: 'Could not find form to clone.',
+    });
+    yield put(actions.cloneFormComplete(payload));
+  } else {
+    const { error, form } = yield call(updateForm, {
+      kappSlug: payload.kappSlug,
+      formSlug: payload.formSlug,
+      form: {
+        bridgedResources: cloneForm.bridgedResources,
+        customHeadContent: cloneForm.customHeadContent,
+        pages: cloneForm.pages,
+        securityPolicies: cloneForm.securityPolicies,
+        attributesMap: cloneForm.attributesMap,
+        categorizations: cloneForm.categorizations,
+      },
+    });
+
+    if (error) {
+      addToastAlert({
+        title: 'Error Cloning Form',
+        message: error.message,
+      });
+      yield put(actions.cloneFormComplete(payload));
+    }
+
+    addToast(`${form.name} cloned successfully from ${cloneForm.name}`);
+    if (typeof payload.callback === 'function') {
+      payload.callback(form);
+    }
+    yield put(actions.cloneFormComplete(payload));
   }
 }
 
@@ -299,6 +342,7 @@ export function* watchSettingsForms() {
   yield takeEvery(types.FETCH_KAPP, fetchKappSaga);
   yield takeEvery(types.UPDATE_QUEUE_FORM, updateFormSaga);
   yield takeEvery(types.CREATE_FORM, createFormSaga);
+  yield takeEvery(types.CLONE_FORM_REQUEST, cloneFormSaga);
   yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
   yield takeEvery(types.FETCH_FORM_SUBMISSIONS, fetchFormSubmissionsSaga);
   yield takeEvery(types.FETCH_FORM_SUBMISSION, fetchFormSubmissionSaga);
