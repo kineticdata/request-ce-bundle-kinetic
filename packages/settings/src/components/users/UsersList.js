@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { compose, withHandlers, withState } from 'recompose';
+import { connect } from '../../redux/store';
+import { actions } from '../../redux/modules/settingsUsers';
 import { Link } from 'react-router-dom';
-import { UserTable, I18n } from '@kineticdata/react';
+import { UserTable, UserForm, fetchUser, I18n } from '@kineticdata/react';
 import { generateEmptyBodyRow } from 'common/src/components/tables/EmptyBodyRow';
 import { generateFilterModalLayout } from 'common/src/components/tables/FilterLayout';
 import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
-import { UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
+import {
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  Modal,
+  ModalBody,
+  ModalFooter,
+} from 'reactstrap';
 import { PageTitle } from '../shared/PageTitle';
-import { Avatar } from 'common';
+import {
+  FormComponents,
+  ErrorMessage,
+  LoadingMessage,
+  addToast,
+  openConfirm,
+} from 'common';
 // import papaparse from 'papaparse';
 // import { fromJS } from 'immutable';
 // import downloadjs from 'downloadjs';
@@ -88,10 +105,79 @@ import { Avatar } from 'common';
 //   downloadjs(props.data, 'user.csv', 'text/csv');
 // };
 
-const AvatarCell = ({ row }) => (
-  <td>
-    <Avatar username={row.get('username')} size={18} />
-  </td>
+const FormLayout = ({ fields, error, buttons, bindings: { cloneUser } }) => (
+  <Fragment>
+    <ModalBody className="form">
+      {cloneUser && (
+        <div className="alert alert-info text-center">
+          <div className="alert-heading">
+            <I18n>Cloning User</I18n>{' '}
+            <strong>
+              <I18n>{cloneUser.get('username')}</I18n>
+            </strong>
+          </div>
+          <hr className="my-2" />
+          <small>
+            <I18n
+              render={translate =>
+                translate(
+                  'Attributes, profile attributes, and team memberships will be copied from %s to this new user.',
+                ).replace('%s', translate(cloneUser.get('username')))
+              }
+            />
+          </small>
+        </div>
+      )}
+      <div className="form-group__columns">
+        {fields.get('spaceAdmin')}
+        {fields.get('enabled')}
+        {fields.get('email')}
+        {fields.get('displayName')}
+      </div>
+      {error}
+    </ModalBody>
+    <ModalFooter className="modal-footer--full-width">{buttons}</ModalFooter>
+  </Fragment>
+);
+
+const FormButtons = props => (
+  <button
+    className="btn btn-success"
+    type="submit"
+    disabled={!props.dirty || props.submitting}
+    onClick={props.submit}
+  >
+    {props.submitting && (
+      <span className="fa fa-circle-o-notch fa-spin fa-fw" />
+    )}{' '}
+    <I18n>Create User</I18n>
+  </button>
+);
+
+const LoadingFormLayout = () => (
+  <Fragment>
+    <ModalBody className="form">
+      <LoadingMessage />
+    </ModalBody>
+    <ModalFooter className="modal-footer--full-width">
+      <button className="btn btn-success" type="button" disabled={true}>
+        <I18n>Create User</I18n>
+      </button>
+    </ModalFooter>
+  </Fragment>
+);
+
+const CloneErrorFormLayout = () => (
+  <Fragment>
+    <ModalBody className="form">
+      <ErrorMessage message="Failed to load user to clone." />
+    </ModalBody>
+    <ModalFooter className="modal-footer--full-width">
+      <button className="btn btn-success" type="button" disabled={true}>
+        <I18n>Create User</I18n>
+      </button>
+    </ModalFooter>
+  </Fragment>
 );
 
 const NameCell = ({ value, row }) => (
@@ -102,7 +188,7 @@ const NameCell = ({ value, row }) => (
   </td>
 );
 
-const ActionsCell = ({ row }) => (
+const ActionsCell = ({ toggleModal }) => ({ row }) => (
   <td className="text-right" style={{ width: '1%' }}>
     <UncontrolledDropdown className="more-actions">
       <DropdownToggle tag="button" className="btn btn-sm btn-link">
@@ -118,12 +204,9 @@ const ActionsCell = ({ row }) => (
         >
           <I18n>Edit</I18n>
         </Link>
-        {/* <Link
-          to={`/settings/users/${row.get('username')}/clone`}
-          className="dropdown-item"
-        >
-          <I18n>Clone</I18n>
-        </Link> */}
+        <DropdownItem onClick={() => toggleModal(row.get('username'))}>
+          Clone
+        </DropdownItem>
       </DropdownMenu>
     </UncontrolledDropdown>
   </td>
@@ -138,15 +221,17 @@ const EmptyBodyRow = generateEmptyBodyRow({
   noItemsLinkToMessage: 'Add new User',
 });
 
-const FilterLayout = generateFilterModalLayout([
-  'username',
-  'displayName',
-  'email',
-]);
+const FilterLayout = generateFilterModalLayout(['username', 'displayName']);
 
-export const UsersList = ({ tableType }) => (
+export const UsersListComponent = ({
+  tableKey,
+  modalOpen,
+  toggleModal,
+  cloneUserRequest,
+  navigate,
+}) => (
   <UserTable
-    // tableKey={tableKey}
+    tableKey={tableKey}
     components={{
       FilterLayout,
       EmptyBodyRow,
@@ -154,6 +239,7 @@ export const UsersList = ({ tableType }) => (
     }}
     alterColumns={{
       username: {
+        title: 'Email',
         components: {
           BodyCell: NameCell,
         },
@@ -161,28 +247,20 @@ export const UsersList = ({ tableType }) => (
     }}
     addColumns={[
       {
-        value: 'avatar',
-        title: ' ',
-        sortable: false,
-        components: {
-          BodyCell: AvatarCell,
-        },
-      },
-      {
         value: 'actions',
         title: ' ',
         sortable: false,
         components: {
-          BodyCell: ActionsCell,
+          BodyCell: ActionsCell({ toggleModal }),
         },
       },
     ]}
-    columnSet={['avatar', 'username', 'displayName', 'email', 'actions']}
+    columnSet={['username', 'displayName', 'actions']}
   >
     {({ pagination, table, filter }) => (
-      <div className="page-container">
+      <div className="page-container page-container--panels">
         <PageTitle parts={['Users']} />
-        <div className="page-panel page-panel--white">
+        <div className="page-panel page-panel--two-thirds page-panel--white">
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
@@ -216,7 +294,7 @@ export const UsersList = ({ tableType }) => (
               {/* <button className="btn btn-secondary" onClick={handleExport}>
                 <I18n>Export Users</I18n>
               </button> */}
-              <Link to="../settings/users/new">
+              {/* <Link to="../settings/users/new">
                 <I18n
                   render={translate => (
                     <button
@@ -229,7 +307,20 @@ export const UsersList = ({ tableType }) => (
                     </button>
                   )}
                 />
-              </Link>
+              </Link> */}
+              <I18n
+                render={translate => (
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    title={translate('New User')}
+                    onClick={() => toggleModal(true)}
+                  >
+                    <span className="fa fa-plus fa-fw" />{' '}
+                    {translate('New User')}
+                  </button>
+                )}
+              />
             </div>
           </div>
           <div>
@@ -238,7 +329,120 @@ export const UsersList = ({ tableType }) => (
             {pagination}
           </div>
         </div>
+        <div className="page-panel page-panel--one-thirds page-panel--sidebar">
+          <h3>
+            <I18n>Users</I18n>
+          </h3>
+          <p>
+            <I18n>
+              Users are the platform representation of individuals. They can
+              have attributes and profile attributes, which can be defined per
+              space, and they can also be members of teams.
+            </I18n>
+          </p>
+        </div>
+
+        {/* Modal for creating a new user */}
+        <Modal isOpen={!!modalOpen} toggle={() => toggleModal()} size="lg">
+          <div className="modal-header">
+            <h4 className="modal-title">
+              <button
+                type="button"
+                className="btn btn-link btn-delete"
+                onClick={() => toggleModal()}
+              >
+                <I18n>Close</I18n>
+              </button>
+              <span>
+                <I18n>New User</I18n>
+              </span>
+            </h4>
+          </div>
+          <UserForm
+            formkey={`user-${modalOpen === 'string' ? 'clone' : 'new'}`}
+            username={null}
+            fieldSet={[
+              'spaceAdmin',
+              'enabled',
+              'displayName',
+              'email',
+              'attributesMap',
+              'profileAttributesMap',
+              'memberships',
+            ]}
+            onSave={() => user => {
+              if (typeof modalOpen === 'string') {
+                // cloneUserRequest({
+                //   username: modalOpen,
+                //   callback: () => navigate(`${user.username}/settings`),
+                // });
+                console.log('user:', user);
+              } else {
+                addToast(`${user.username} created successfully.`);
+                navigate(`${user.username}/settings`);
+              }
+            }}
+            components={{ FormLayout, FormButtons }}
+            alterFields={{
+              displayName: {
+                required: true,
+              },
+              email: {
+                required: true,
+              },
+            }}
+            addDataSources={
+              typeof modalOpen === 'string'
+                ? {
+                    cloneUser: {
+                      fn: fetchUser,
+                      params: [{ username: modalOpen }],
+                      // Set to the user, or the result in case of an error
+                      transform: result => result.user || result,
+                    },
+                  }
+                : undefined
+            }
+          >
+            {({ form, initialized, bindings: { cloneUser } }) => {
+              const isClone = typeof modalOpen === 'string';
+              const cloneError = cloneUser && cloneUser.get('error');
+              return initialized && (!isClone || cloneUser) ? (
+                cloneError ? (
+                  <CloneErrorFormLayout />
+                ) : (
+                  form
+                )
+              ) : (
+                <LoadingFormLayout />
+              );
+            }}
+          </UserForm>
+        </Modal>
       </div>
     )}
   </UserTable>
 );
+
+const mapStateToProps = state => ({
+  kapp: state.app.kapp,
+});
+
+const mapDispatchToProps = {
+  cloneUserRequest: actions.cloneUserRequest,
+};
+
+// Settings Container
+export const UsersList = compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+  withState('modalOpen', 'setModalOpen', false),
+  withHandlers({
+    toggleModal: props => slug =>
+      !slug || slug === props.modalOpen
+        ? props.setModalOpen(false)
+        : props.setModalOpen(slug),
+  }),
+)(UsersListComponent);

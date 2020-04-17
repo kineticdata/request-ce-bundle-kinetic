@@ -85,10 +85,33 @@ export const TeamForm = ({ formKey, slug: teamSlug, onSave, onDelete }) => (
               {form}
             </div>
             <div className="page-panel page-panel--one-thirds page-panel--sidebar">
-              {teamSlug && (
-                <TeamCard
-                  team={getIn(form, ['props', 'bindings', 'team'], []).toJS()}
-                />
+              {teamSlug ? (
+                <Fragment>
+                  <br />
+                  <TeamCard
+                    team={getIn(form, ['props', 'bindings', 'team'], []).toJS()}
+                  />
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <h3>
+                    <I18n>New Team</I18n>
+                  </h3>
+                  <p>
+                    <I18n>
+                      Teams represent groupings of users within the system.
+                      Teams are commonly used to for security to define groups
+                      of users that have permissions to a specific resource.
+                    </I18n>
+                  </p>
+                  <p>
+                    <I18n>
+                      Attributes are only modifiable by space admins and are
+                      typically used to store variables about a team (e.g.
+                      Manager).
+                    </I18n>
+                  </p>
+                </Fragment>
               )}
             </div>
           </Fragment>

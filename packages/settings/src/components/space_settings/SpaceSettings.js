@@ -180,7 +180,9 @@ export const SpaceSettingsComponent = ({
           type: 'team',
           helpText: 'Team to assign tasks to if not defined in a form or kapp.',
           initialValue: space.hasIn(['attributesMap', 'Task Assignee Team', 0])
-            ? { name: space.getIn(['attributesMap', 'Task Assignee Team', 0]) }
+            ? {
+                name: space.getIn(['attributesMap', 'Task Assignee Team', 0]),
+              }
             : null,
         },
         {

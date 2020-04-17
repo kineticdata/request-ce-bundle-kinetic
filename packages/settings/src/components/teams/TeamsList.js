@@ -46,9 +46,9 @@ export const TeamsList = ({ tableType }) => (
     columnSet={['name', 'description']}
   >
     {({ pagination, table, filter }) => (
-      <div className="page-container">
+      <div className="page-container page-container--panels">
         <PageTitle parts={['Teams']} />
-        <div className="page-panel page-panel--white">
+        <div className="page-panel page-panel--two-thirds page-panel--white">
           <div className="page-title">
             <div className="page-title__wrapper">
               <h3>
@@ -83,6 +83,18 @@ export const TeamsList = ({ tableType }) => (
             {table}
             {pagination}
           </div>
+        </div>
+        <div className="page-panel page-panel--one-thirds page-panel--sidebar">
+          <h3>
+            <I18n>Teams</I18n>
+          </h3>
+          <p>
+            <I18n>
+              Teams represent groupings of users within the system. Teams are
+              commonly used to for security to define groups of users that have
+              permissions to a specific resource.
+            </I18n>
+          </p>
         </div>
       </div>
     )}

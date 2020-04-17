@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { UserForm as UserFormLib, I18n } from '@kineticdata/react';
+import { UserForm as UserFormLib, I18n, fetchUser } from '@kineticdata/react';
 import { FormComponents, ProfileCard } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { Link } from '@reach/router';
@@ -55,7 +55,7 @@ export const UserForm = ({ formKey, username, onSave, onDelete, mode }) => (
     />
     <UserFormLib
       formkey={`user-${mode}`}
-      username={username ? username : null}
+      username={username && mode === 'edit' ? username : null}
       alterFields={{
         displayName: mode !== 'edit' && {
           initialValue: '',
@@ -74,11 +74,24 @@ export const UserForm = ({ formKey, username, onSave, onDelete, mode }) => (
         }),
         FormLayout: layout,
       }}
+      addDataSources={
+        username
+          ? {
+              user: {
+                fn: fetchUser,
+                params: [{ username: username }],
+                // Set to the form, or the result in case of an error
+                transform: result => result.user || result,
+              },
+            }
+          : undefined
+      }
       onSave={onSave}
     >
-      {({ form, bindings: { form: formBindings }, initialized }) =>
+      {({ form, bindings: { form: formBindings }, initialized, user }) =>
         initialized && (
           <Fragment>
+            {console.log('user:', user)}
             <div className="page-panel page-panel--two-thirds page-panel--white">
               <div className="page-title">
                 <div className="page-title__wrapper">
@@ -102,14 +115,50 @@ export const UserForm = ({ formKey, username, onSave, onDelete, mode }) => (
               {form}
             </div>
             <div className="page-panel page-panel--one-thirds page-panel--sidebar">
-              {username &&
+              {username ? (
                 mode === 'edit' && (
-                  <ProfileCard
-                    user={buildProfile(
-                      getIn(form, ['props', 'bindings', 'user'], []).toJS(),
-                    )}
-                  />
-                )}
+                  <Fragment>
+                    <br />
+                    <ProfileCard
+                      user={buildProfile(
+                        getIn(form, ['props', 'bindings', 'user'], []).toJS(),
+                      )}
+                    />
+                  </Fragment>
+                )
+              ) : (
+                <Fragment>
+                  <h3>
+                    <I18n>New User</I18n>
+                  </h3>
+                  <p>
+                    <I18n>
+                      Users are the platform representation of individuals. They
+                      can have attributes and profile attributes, which can be
+                      defined per space, and they can also be members of teams.
+                    </I18n>
+                  </p>
+                  <p>
+                    <I18n>
+                      Attributes are only modifiable by space admins and are
+                      typically used to store variables that a user can not
+                      change (e.g. Manager).
+                    </I18n>
+                  </p>
+                  <p>
+                    <I18n>
+                      Profile Attributes are typically used to store variables
+                      that the user has access to change (e.g. Phone Number).
+                    </I18n>
+                  </p>
+                  <p>
+                    <I18n>
+                      Teams are used to group users together. They are typically
+                      used for creating Roles or Assignment Groups.
+                    </I18n>
+                  </p>
+                </Fragment>
+              )}
             </div>
           </Fragment>
         )

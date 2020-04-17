@@ -1,15 +1,12 @@
 import React from 'react';
-
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import { push } from 'redux-first-history';
 import { compose, withHandlers, withState } from 'recompose';
-
 import { DatastoreForm } from '../../records';
 import { actions } from '../../redux/modules/settingsDatastore';
 import { context } from '../../redux/store';
 import { PageTitle } from '../shared/PageTitle';
-
 import { I18n } from '@kineticdata/react';
 
 const CreateDatastoreComponent = ({
