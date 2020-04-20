@@ -17,93 +17,83 @@ import {
   ModalFooter,
 } from 'reactstrap';
 import { PageTitle } from '../shared/PageTitle';
-import {
-  FormComponents,
-  ErrorMessage,
-  LoadingMessage,
-  addToast,
-  openConfirm,
-} from 'common';
-// import papaparse from 'papaparse';
-// import { fromJS } from 'immutable';
-// import downloadjs from 'downloadjs';
+import { ErrorMessage, LoadingMessage, addToast } from 'common';
+import { ExportModal } from './ExportModal';
+import papaparse from 'papaparse';
+import { fromJS } from 'immutable';
 
-// const IsJsonString = str => {
-//   try {
-//     JSON.parse(str);
-//   } catch (e) {
-//     return false;
-//   }
-//   return true;
-// };
+const IsJsonString = str => {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+};
 
-// const handleImport = props => () => {
-//   const file = this.fileEl.files[0];
-//   const extention = file.name.split('.')[file.name.split('.').length - 1];
+const handleImport = props => () => {
+  const file = this.fileEl.files[0];
+  const extention = file.name.split('.')[file.name.split('.').length - 1];
 
-//   if (file && extention === 'csv') {
-//     const reader = new FileReader();
-//     reader.readAsText(this.fileEl.files[0]);
-//     reader.onload = event => {
-//       papaparse.parse(event.target.result, {
-//         header: true,
-//         dynamicTyping: true,
-//         complete: results => {
-//           // When streaming, parse results are not available in this callback.
-//           if (results.errors.length <= 0) {
-//             const { users, updateUser, createUser } = props;
-//             const importedUsers = fromJS(results.data)
-//               .map(user => {
-//                 return user
-//                   .update('allowedIps', val => (val ? val : ''))
-//                   .update(
-//                     'attributesMap',
-//                     val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
-//                   )
-//                   .update(
-//                     'profileAttributesMap',
-//                     val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
-//                   )
-//                   .update(
-//                     'memberships',
-//                     val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
-//                   );
-//               })
-//               .toSet();
-//             const existingUsers = fromJS(
-//               users.map(user => ({
-//                 ...user,
-//                 memberships: user.memberships.reduce((acc, membership) => {
-//                   const team = { team: { name: membership.team.name } };
-//                   acc.push(team);
-//                   return acc;
-//                 }, []),
-//               })),
-//             ).toSet();
-//             const userdiff = importedUsers.subtract(existingUsers);
-//             userdiff.forEach(user => {
-//               const found = existingUsers.find(
-//                 existingUser =>
-//                   user.get('username') === existingUser.get('username'),
-//               );
-//               if (found) {
-//                 updateUser(user.toJS());
-//               } else {
-//                 createUser(user.toJS());
-//               }
-//             });
-//           } else {
-//             console.log(results.errors);
-//           }
-//         },
-//       });
-//     };
-//   }
-// };
-
-// const handleExport = props => {
-//   downloadjs(props.data, 'user.csv', 'text/csv');
-// };
+  if (file && extention === 'csv') {
+    const reader = new FileReader();
+    reader.readAsText(this.fileEl.files[0]);
+    reader.onload = event => {
+      papaparse.parse(event.target.result, {
+        header: true,
+        dynamicTyping: true,
+        complete: results => {
+          // When streaming, parse results are not available in this callback.
+          if (results.errors.length <= 0) {
+            const { users, updateUser, createUser } = props;
+            const importedUsers = fromJS(results.data)
+              .map(user => {
+                return user
+                  .update('allowedIps', val => (val ? val : ''))
+                  .update(
+                    'attributesMap',
+                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                  )
+                  .update(
+                    'profileAttributesMap',
+                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                  )
+                  .update(
+                    'memberships',
+                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                  );
+              })
+              .toSet();
+            const existingUsers = fromJS(
+              users.map(user => ({
+                ...user,
+                memberships: user.memberships.reduce((acc, membership) => {
+                  const team = { team: { name: membership.team.name } };
+                  acc.push(team);
+                  return acc;
+                }, []),
+              })),
+            ).toSet();
+            const userdiff = importedUsers.subtract(existingUsers);
+            userdiff.forEach(user => {
+              const found = existingUsers.find(
+                existingUser =>
+                  user.get('username') === existingUser.get('username'),
+              );
+              if (found) {
+                updateUser(user.toJS());
+              } else {
+                createUser(user.toJS());
+              }
+            });
+          } else {
+            console.log(results.errors);
+          }
+        },
+      });
+    };
+  }
+};
 
 const FormLayout = ({ fields, error, buttons, bindings: { cloneUser } }) => (
   <Fragment>
@@ -228,7 +218,9 @@ export const UsersListComponent = ({
   modalOpen,
   toggleModal,
   cloneUserRequest,
+  createUserRequest,
   navigate,
+  openExportModal,
 }) => (
   <UserTable
     tableKey={tableKey}
@@ -274,7 +266,7 @@ export const UsersListComponent = ({
               </h1>
             </div>
             <div className="page-title__actions">
-              {/* <input
+              <input
                 type="file"
                 accept=".csv"
                 id="file-input"
@@ -290,24 +282,13 @@ export const UsersListComponent = ({
                 style={{ marginBottom: '0px' }}
               >
                 <I18n>Import Users</I18n>
-              </label> */}
-              {/* <button className="btn btn-secondary" onClick={handleExport}>
+              </label>
+              <button
+                className="btn btn-info"
+                onClick={() => openExportModal('export')}
+              >
                 <I18n>Export Users</I18n>
-              </button> */}
-              {/* <Link to="../settings/users/new">
-                <I18n
-                  render={translate => (
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      title={translate('New User')}
-                    >
-                      <span className="fa fa-plus fa-fw" />{' '}
-                      {translate('New User')}
-                    </button>
-                  )}
-                />
-              </Link> */}
+              </button>
               <I18n
                 render={translate => (
                   <button
@@ -341,6 +322,7 @@ export const UsersListComponent = ({
             </I18n>
           </p>
         </div>
+        <ExportModal />
 
         {/* Modal for creating a new user */}
         <Modal isOpen={!!modalOpen} toggle={() => toggleModal()} size="lg">
@@ -359,8 +341,7 @@ export const UsersListComponent = ({
             </h4>
           </div>
           <UserForm
-            formkey={`user-${modalOpen === 'string' ? 'clone' : 'new'}`}
-            username={null}
+            formkey={`user-${typeof modalOpen === 'string' ? 'clone' : 'new'}`}
             fieldSet={[
               'spaceAdmin',
               'enabled',
@@ -372,14 +353,13 @@ export const UsersListComponent = ({
             ]}
             onSave={() => user => {
               if (typeof modalOpen === 'string') {
-                // cloneUserRequest({
-                //   username: modalOpen,
-                //   callback: () => navigate(`${user.username}/settings`),
-                // });
-                console.log('user:', user);
+                cloneUserRequest({
+                  cloneUserUsername: modalOpen,
+                  callback: () => navigate(`${user.username}/settings`),
+                });
               } else {
                 addToast(`${user.username} created successfully.`);
-                navigate(`${user.username}/settings`);
+                user && navigate(`${user.username}/settings`);
               }
             }}
             components={{ FormLayout, FormButtons }}
@@ -430,9 +410,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   cloneUserRequest: actions.cloneUserRequest,
+  openExportModal: actions.openModal,
 };
 
-// Settings Container
+// Users Container
 export const UsersList = compose(
   connect(
     mapStateToProps,
