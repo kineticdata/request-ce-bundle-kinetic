@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { compose, withHandlers, withState } from 'recompose';
 import { Link } from '@reach/router';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
-import { I18n, FormTable } from '@kineticdata/react';
+import { I18n, FormTable, FormForm } from '@kineticdata/react';
 import { PageTitle } from '../shared/PageTitle';
 import { generateEmptyBodyRow } from 'common/src/components/tables/EmptyBodyRow';
 import { generateFilterModalLayout } from 'common/src/components/tables/FilterLayout';
@@ -9,6 +10,36 @@ import { TimeAgoCell } from 'common/src/components/tables/TimeAgoCell';
 import { StatusBadgeCell } from 'common/src/components/tables/StatusBadgeCell';
 import { SelectFilter } from 'common/src/components/tables/SelectFilter';
 import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
+import { Modal, ModalBody, ModalFooter } from 'reactstrap';
+import { FormComponents, addToast } from 'common';
+
+const FormLayout = ({ fields, error, buttons }) => (
+  <Fragment>
+    <ModalBody className="form">
+      <div className="form-group__columns">
+        {fields.get('name')}
+        {fields.get('slug')}
+      </div>
+      {fields.get('description')}
+      {error}
+    </ModalBody>
+    <ModalFooter className="modal-footer--full-width">{buttons}</ModalFooter>
+  </Fragment>
+);
+
+const FormButtons = props => (
+  <button
+    className="btn btn-success"
+    type="submit"
+    disabled={!props.dirty || props.submitting}
+    onClick={props.submit}
+  >
+    {props.submitting && (
+      <span className="fa fa-circle-o-notch fa-spin fa-fw" />
+    )}{' '}
+    <I18n>Create Datastore</I18n>
+  </button>
+);
 
 const ActionsCell = () => ({ row }) => (
   <td className="text-right" style={{ width: '1%' }}>
@@ -53,7 +84,7 @@ const EmptyBodyRow = generateEmptyBodyRow({
   noItemsLinkToMessage: 'Add New Datastore Form',
 });
 
-export const FormList = () => (
+export const FormListComponent = ({ modalOpen, toggleModal, navigate }) => (
   <FormTable
     datastore
     components={{
@@ -109,20 +140,19 @@ export const FormList = () => (
               </h1>
             </div>
             <div className="page-title__actions">
-              <Link to="new">
-                <I18n
-                  render={translate => (
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      title={translate('New Datastore Form')}
-                    >
-                      <span className="fa fa-plus fa-fw" />{' '}
-                      {translate('New Datastore Form')}
-                    </button>
-                  )}
-                />
-              </Link>
+              <I18n
+                render={translate => (
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    title={translate('New Datastore')}
+                    onClick={() => toggleModal(true)}
+                  >
+                    <span className="fa fa-plus fa-fw" />{' '}
+                    {translate('New Datastore')}
+                  </button>
+                )}
+              />
             </div>
           </div>
           <div>
@@ -151,7 +181,58 @@ export const FormList = () => (
             </I18n>
           </p>
         </div>
+
+        {/* Modal for creating a new team */}
+        <Modal isOpen={!!modalOpen} toggle={() => toggleModal()} size="lg">
+          <div className="modal-header">
+            <h4 className="modal-title">
+              <button
+                type="button"
+                className="btn btn-link btn-delete"
+                onClick={() => toggleModal()}
+              >
+                <I18n>Close</I18n>
+              </button>
+              <span>
+                <I18n>New Datastore</I18n>
+              </span>
+            </h4>
+          </div>
+          <FormForm
+            datastore={true}
+            fieldSet={['name', 'slug', 'description']}
+            onSave={() => form => {
+              addToast(`${form.name} created successfully.`);
+              form && navigate(`${form.slug}/settings`);
+            }}
+            components={{
+              FormLayout,
+              FormButtons,
+              FormError: FormComponents.FormError,
+            }}
+            alterFields={{
+              description: {
+                component: FormComponents.TextAreaField,
+              },
+            }}
+          >
+            {({ form, initialized }) => {
+              return initialized && form;
+            }}
+          </FormForm>
+        </Modal>
       </div>
     )}
   </FormTable>
 );
+
+// Datastore Container
+export const FormList = compose(
+  withState('modalOpen', 'setModalOpen', false),
+  withHandlers({
+    toggleModal: props => slug =>
+      !slug || slug === props.modalOpen
+        ? props.setModalOpen(false)
+        : props.setModalOpen(slug),
+  }),
+)(FormListComponent);

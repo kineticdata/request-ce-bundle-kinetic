@@ -5,7 +5,7 @@ import { DatastoreSubmission } from './Submission';
 import { FormList } from './FormList';
 import { SubmissionSearch } from './SubmissionSearch/SubmissionSearch';
 import { DatastoreSettings } from './DatastoreSettings';
-import { CreateDatastore } from './CreateDatastore';
+// import { DatastoreEdit } from './DatastoreEdit';
 
 import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
@@ -46,10 +46,10 @@ export const DatastoreRouter = ({ match, loading, validVersion, version }) =>
   ) : (
     !loading && (
       <Router>
-        <CreateDatastore path="new" />
         <DatastoreError path="error" />
         <SubmissionSearch path=":slug" />
         <DatastoreSettings path=":slug/settings" />
+        {/* <DatastoreEdit path=":slug/settings" /> */}
         <DatastoreSubmission path=":slug/new" />
         <DatastoreSubmission path=":slug/:id/:mode" />
         <DatastoreSubmission path=":slug/:id" />

@@ -1,8 +1,7 @@
 import React from 'react';
-
 import { Router } from '@reach/router';
 import { UsersList } from './UsersList';
-import { UserForm } from './UserForm';
+import { UserEdit } from './UserEdit';
 import { I18n } from '@kineticdata/react';
 
 const UsersError = () => (
@@ -18,10 +17,9 @@ const ImportUsers = () => (
 
 export const Users = ({ match }) => (
   <Router>
-    <UserForm path="new" />
     <ImportUsers path="import" />
     <UsersError path="/error" />
-    <UserForm path=":username/:mode" />
+    <UserEdit path=":username/edit" />
     <UsersList default />
   </Router>
 );

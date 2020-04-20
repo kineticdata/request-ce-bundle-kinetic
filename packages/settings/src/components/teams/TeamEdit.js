@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
 import { TeamForm as TeamFormLib, I18n, history } from '@kineticdata/react';
-import { FormComponents } from 'common';
+import { FormComponents, addToast } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { Link } from '@reach/router';
 import { TeamCard } from '../shared/TeamCard';
 import { getIn } from 'immutable';
 
 const handleSave = () => team => {
+  addToast(`${team.name} updated successfully.`);
   history.push(`/settings/teams/${team.slug}/edit`);
 };
 
@@ -39,9 +40,9 @@ const layout = ({ fields, error, buttons }) => (
   </form>
 );
 
-export const TeamForm = ({ formKey, slug: teamSlug, onSave, onDelete }) => (
+export const TeamEdit = ({ formKey, slug: teamSlug, onSave, onDelete }) => (
   <div className="page-container page-container--panels">
-    <PageTitle parts={[teamSlug ? `Edit Team` : 'New', 'Teams']} />
+    <PageTitle parts={[`Edit Team`, 'Teams']} />
     <TeamFormLib
       formKey={formKey}
       teamSlug={teamSlug}
@@ -54,7 +55,7 @@ export const TeamForm = ({ formKey, slug: teamSlug, onSave, onDelete }) => (
         FormError: FormComponents.FormError,
         FormButtons: FormComponents.generateFormButtons({
           handleDelete: onDelete,
-          submitLabel: teamSlug ? 'Update Team' : 'Create Team',
+          submitLabel: 'Update Team',
           cancelPath: '/settings/teams',
         }),
         FormLayout: layout,
@@ -78,41 +79,17 @@ export const TeamForm = ({ formKey, slug: teamSlug, onSave, onDelete }) => (
                     /
                   </h3>
                   <h1>
-                    <I18n>{teamSlug ? 'Edit' : 'New'} Team</I18n>
+                    <I18n>Edit Team</I18n>
                   </h1>
                 </div>
               </div>
               {form}
             </div>
             <div className="page-panel page-panel--one-thirds page-panel--sidebar">
-              {teamSlug ? (
-                <Fragment>
-                  <br />
-                  <TeamCard
-                    team={getIn(form, ['props', 'bindings', 'team'], []).toJS()}
-                  />
-                </Fragment>
-              ) : (
-                <Fragment>
-                  <h3>
-                    <I18n>New Team</I18n>
-                  </h3>
-                  <p>
-                    <I18n>
-                      Teams represent groupings of users within the system.
-                      Teams are commonly used to for security to define groups
-                      of users that have permissions to a specific resource.
-                    </I18n>
-                  </p>
-                  <p>
-                    <I18n>
-                      Attributes are only modifiable by space admins and are
-                      typically used to store variables about a team (e.g.
-                      Manager).
-                    </I18n>
-                  </p>
-                </Fragment>
-              )}
+              <br />
+              <TeamCard
+                team={getIn(form, ['props', 'bindings', 'team'], []).toJS()}
+              />
             </div>
           </Fragment>
         )

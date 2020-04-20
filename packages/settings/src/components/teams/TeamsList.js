@@ -1,10 +1,38 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { compose, withHandlers, withState } from 'recompose';
 import { Link } from 'react-router-dom';
-import { TeamTable, I18n } from '@kineticdata/react';
+import { TeamTable, TeamForm, I18n } from '@kineticdata/react';
 import { generateEmptyBodyRow } from 'common/src/components/tables/EmptyBodyRow';
 import { generateFilterModalLayout } from 'common/src/components/tables/FilterLayout';
 import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
 import { PageTitle } from '../shared/PageTitle';
+import { Modal, ModalBody, ModalFooter } from 'reactstrap';
+import { FormComponents, addToast } from 'common';
+
+const FormLayout = ({ fields, error, buttons }) => (
+  <Fragment>
+    <ModalBody className="form">
+      {fields.get('localName')}
+      {fields.get('description')}
+      {error}
+    </ModalBody>
+    <ModalFooter className="modal-footer--full-width">{buttons}</ModalFooter>
+  </Fragment>
+);
+
+const FormButtons = props => (
+  <button
+    className="btn btn-success"
+    type="submit"
+    disabled={!props.dirty || props.submitting}
+    onClick={props.submit}
+  >
+    {props.submitting && (
+      <span className="fa fa-circle-o-notch fa-spin fa-fw" />
+    )}{' '}
+    <I18n>Create Team</I18n>
+  </button>
+);
 
 const NameCell = ({ value, row }) => (
   <td>
@@ -25,9 +53,13 @@ const EmptyBodyRow = generateEmptyBodyRow({
 
 const FilterLayout = generateFilterModalLayout(['name']);
 
-export const TeamsList = ({ tableType }) => (
+export const TeamsListComponent = ({
+  tableType,
+  modalOpen,
+  toggleModal,
+  navigate,
+}) => (
   <TeamTable
-    // tableKey={tableKey}
     components={{
       FilterLayout,
       EmptyBodyRow,
@@ -62,20 +94,19 @@ export const TeamsList = ({ tableType }) => (
               </h1>
             </div>
             <div className="page-title__actions">
-              <Link to="../settings/teams/new">
-                <I18n
-                  render={translate => (
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      title={translate('New Team')}
-                    >
-                      <span className="fa fa-plus fa-fw" />{' '}
-                      {translate('New Team')}
-                    </button>
-                  )}
-                />
-              </Link>
+              <I18n
+                render={translate => (
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    title={translate('New Team')}
+                    onClick={() => toggleModal(true)}
+                  >
+                    <span className="fa fa-plus fa-fw" />{' '}
+                    {translate('New Team')}
+                  </button>
+                )}
+              />
             </div>
           </div>
           <div>
@@ -96,7 +127,57 @@ export const TeamsList = ({ tableType }) => (
             </I18n>
           </p>
         </div>
+
+        {/* Modal for creating a new team */}
+        <Modal isOpen={!!modalOpen} toggle={() => toggleModal()} size="lg">
+          <div className="modal-header">
+            <h4 className="modal-title">
+              <button
+                type="button"
+                className="btn btn-link btn-delete"
+                onClick={() => toggleModal()}
+              >
+                <I18n>Close</I18n>
+              </button>
+              <span>
+                <I18n>New Team</I18n>
+              </span>
+            </h4>
+          </div>
+          <TeamForm
+            formkey="team-new"
+            onSave={() => team => {
+              addToast(`${team.name} created successfully.`);
+              team && navigate(`${team.slug}/edit`);
+            }}
+            components={{
+              FormLayout,
+              FormButtons,
+              FormError: FormComponents.FormError,
+            }}
+            alterFields={{
+              description: {
+                component: FormComponents.TextAreaField,
+              },
+            }}
+          >
+            {({ form, initialized }) => {
+              return initialized && form;
+            }}
+          </TeamForm>
+        </Modal>
       </div>
     )}
   </TeamTable>
 );
+
+// Teams Container
+export const TeamsList = compose(
+  withState('modalOpen', 'setModalOpen', false),
+  withHandlers({
+    toggleModal: props => slug =>
+      !slug || slug === props.modalOpen
+        ? props.setModalOpen(false)
+        : props.setModalOpen(slug),
+  }),
+)(TeamsListComponent);

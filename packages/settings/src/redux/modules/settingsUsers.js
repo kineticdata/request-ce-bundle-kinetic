@@ -57,21 +57,6 @@ export const actions = {
 
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
-    case types.FETCH_USERS:
-      return state.set('loading', true);
-    case types.SET_USERS:
-      return state.set('loading', false).set('users', payload);
-    case types.FETCH_USER:
-      return state.set('userLoading', true);
-    case types.SET_USER:
-      return state
-        .set('userLoading', false)
-        .set('user', payload)
-        .set('error', null);
-    case types.UPDATE_USER:
-      return state.set('userLoading', true);
-    case types.CREATE_USER:
-      return state.set('userLoading', true);
     case types.CLONE_USER_REQUEST:
       return state.setIn(['processing', payload.cloneUserUsername], true);
     case types.CLONE_USER_COMPLETE:

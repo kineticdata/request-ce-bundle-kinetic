@@ -17,7 +17,7 @@ import {
   ModalFooter,
 } from 'reactstrap';
 import { PageTitle } from '../shared/PageTitle';
-import { ErrorMessage, LoadingMessage, addToast } from 'common';
+import { ErrorMessage, LoadingMessage, addToast, FormComponents } from 'common';
 import { ExportModal } from './ExportModal';
 import papaparse from 'papaparse';
 import { fromJS } from 'immutable';
@@ -111,7 +111,7 @@ const FormLayout = ({ fields, error, buttons, bindings: { cloneUser } }) => (
             <I18n
               render={translate =>
                 translate(
-                  'Attributes, profile attributes, and team memberships will be copied from %s to this new user.',
+                  'Attributes and team memberships will be copied from %s to this new user.',
                 ).replace('%s', translate(cloneUser.get('username')))
               }
             />
@@ -119,10 +119,10 @@ const FormLayout = ({ fields, error, buttons, bindings: { cloneUser } }) => (
         </div>
       )}
       <div className="form-group__columns">
-        {fields.get('spaceAdmin')}
-        {fields.get('enabled')}
-        {fields.get('email')}
+        {fields.get('username')}
         {fields.get('displayName')}
+        {fields.get('password')}
+        {fields.get('passwordConfirmation')}
       </div>
       {error}
     </ModalBody>
@@ -342,33 +342,26 @@ export const UsersListComponent = ({
           </div>
           <UserForm
             formkey={`user-${typeof modalOpen === 'string' ? 'clone' : 'new'}`}
-            fieldSet={[
-              'spaceAdmin',
-              'enabled',
-              'displayName',
-              'email',
-              'attributesMap',
-              'profileAttributesMap',
-              'memberships',
-            ]}
-            onSave={() => user => {
+            onSave={() => ({ user }) => {
               if (typeof modalOpen === 'string') {
                 cloneUserRequest({
                   cloneUserUsername: modalOpen,
-                  callback: () => navigate(`${user.username}/settings`),
+                  user: user,
+                  callback: () => navigate(`${user.username}/edit`),
                 });
               } else {
                 addToast(`${user.username} created successfully.`);
-                user && navigate(`${user.username}/settings`);
+                user && navigate(`${user.username}/edit`);
               }
             }}
-            components={{ FormLayout, FormButtons }}
+            components={{
+              FormLayout,
+              FormButtons,
+              FormError: FormComponents.FormError,
+            }}
             alterFields={{
-              displayName: {
-                required: true,
-              },
-              email: {
-                required: true,
+              username: {
+                label: 'Email',
               },
             }}
             addDataSources={
