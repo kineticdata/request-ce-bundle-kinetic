@@ -3,11 +3,15 @@ import { useLocation, Link } from 'react-router-dom';
 import { logout, I18n } from '@kineticdata/react';
 import { LoginWrapper } from './LoginWrapper';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
+import { Helmet } from 'react-helmet';
 
 export const Login = ({ loginProps }) => {
   let location = useLocation();
   return (
     <LoginWrapper>
+      <Helmet>
+        <title>kinops Login</title>
+      </Helmet>
       <LoginForm {...loginProps}>
         {({ fields, buttons }) => (
           <>

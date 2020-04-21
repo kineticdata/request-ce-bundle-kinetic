@@ -6,6 +6,7 @@ import { bundle, createSubmission, I18n } from '@kineticdata/react';
 import { parse } from 'query-string';
 import axios from 'axios';
 import { LoginWrapper } from './LoginWrapper';
+import Helmet from 'react-helmet';
 
 export const CreateAccount = () => {
   let location = useLocation();
@@ -13,6 +14,9 @@ export const CreateAccount = () => {
 
   return (
     <LoginWrapper>
+      <Helmet>
+        <title>Create Account</title>
+      </Helmet>
       {invitationToken ? (
         <CreateAccountForm
           invitationToken={invitationToken}

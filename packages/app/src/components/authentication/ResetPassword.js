@@ -6,12 +6,16 @@ import { bundle, createSubmission, I18n } from '@kineticdata/react';
 import { parse, stringify } from 'query-string';
 import axios from 'axios';
 import { LoginWrapper } from './LoginWrapper';
+import { Helmet } from 'react-helmet';
 
 export const ResetPassword = () => {
   let location = useLocation();
   let { token } = useParams();
   return (
     <LoginWrapper>
+      <Helmet>
+        <title>Reset Password</title>
+      </Helmet>
       {token ? (
         <ResetPasswordForm token={token} username={parse(location.search).u}>
           {({ fields, buttons, messages }) => (
@@ -19,12 +23,7 @@ export const ResetPassword = () => {
               <h3>
                 <I18n>Request Password Reset</I18n>
               </h3>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {fields.username}
                 {fields.password}
                 {fields.confirmPassword}
@@ -48,12 +47,7 @@ export const ResetPassword = () => {
               <h3>
                 <I18n>Reset Password</I18n>
               </h3>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {fields.username}
                 {messages.error}
                 {messages.success}
