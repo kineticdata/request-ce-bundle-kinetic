@@ -8,6 +8,7 @@ import {
   fetchKapp,
   updateForm,
   createForm,
+  deleteForm,
 } from '@kineticdata/react';
 import { addToast, addToastAlert, addSuccess, addError } from 'common';
 import axios from 'axios';
@@ -337,6 +338,22 @@ export function* fetchAllSubmissionsSaga(action) {
   }
 }
 
+export function* deleteFormSaga({ payload }) {
+  const { form, error } = yield call(deleteForm, {
+    kappSlug: payload.kappSlug,
+    formSlug: payload.formSlug,
+  });
+  if (form) {
+    if (typeof payload.onSuccess === 'function') {
+      yield call(payload.onSuccess, form);
+    }
+    yield put(actions.deleteFormComplete(payload));
+    addToast('Form deleted successfully.');
+  } else {
+    addToastAlert({ title: 'Error Deleting Form', message: error.message });
+  }
+}
+
 export function* watchSettingsForms() {
   yield takeEvery(types.FETCH_FORM, fetchFormSaga);
   yield takeEvery(types.FETCH_KAPP, fetchKappSaga);
@@ -347,4 +364,5 @@ export function* watchSettingsForms() {
   yield takeEvery(types.FETCH_FORM_SUBMISSIONS, fetchFormSubmissionsSaga);
   yield takeEvery(types.FETCH_FORM_SUBMISSION, fetchFormSubmissionSaga);
   yield takeEvery(types.FETCH_ALL_SUBMISSIONS, fetchAllSubmissionsSaga);
+  yield takeEvery(types.DELETE_FORM_REQUEST, deleteFormSaga);
 }

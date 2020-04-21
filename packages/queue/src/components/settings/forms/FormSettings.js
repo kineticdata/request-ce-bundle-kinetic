@@ -101,12 +101,15 @@ export const FieldsTableField = props => (
 );
 
 const fieldSet = [
-  'description',
-  'type',
+  'name',
+  'slug',
   'status',
+  'type',
+  'submissionLabelExpression',
+  'description',
   'submissionTableFields',
-  'permittedSubtasks',
   'prohibitSubtasks',
+  'permittedSubtasks',
   'owningTeam',
   'allowReassignment',
   'assignableTeams',
@@ -117,33 +120,34 @@ const fieldSet = [
 const FormLayout = ({ fields, error, buttons }) => (
   <Fragment>
     <h2 className="section__title">
-      <br />
-      <I18n>General Settings</I18n>
+      <I18n>General</I18n>
     </h2>
-    {fields.get('description')}
     <div className="form-group__columns">
-      {fields.get('type')}
-      {fields.get('status')}
+      {fields.get('name')}
+      {fields.get('slug')}
     </div>
+    <div className="form-group__columns">
+      {fields.get('status')}
+      {fields.get('type')}
+    </div>
+    {fields.get('submissionLabelExpression')}
+    {fields.get('description')}
     <br />
     <h2 className="section__title">
-      <br />
-      <I18n>Table Display Settings</I18n>
-    </h2>
-    {fields.get('submissionTableFields')}
-    <br />
-    <h2 className="section__title">
-      <br />
       <I18n>Attributes</I18n>
     </h2>
-    {/* {fields.get('attributesMap')} */}
-    {fields.get('permittedSubtasks')}
     {fields.get('prohibitSubtasks')}
+    {fields.get('permittedSubtasks')}
     {fields.get('owningTeam')}
     {fields.get('allowReassignment')}
     {fields.get('assignableTeams')}
     {fields.get('notificationCreate')}
     {fields.get('notificationComplete')}
+    <br />
+    <h2 className="section__title">
+      <I18n>Submission Table - Default Columns</I18n>
+    </h2>
+    {fields.get('submissionTableFields')}
     {error}
     {buttons}
   </Fragment>
@@ -181,10 +185,21 @@ export const FormSettingsComponent = ({ form, kapp, onSave }) => {
       addFields={() => ({ form, notifications }) =>
         form && [
           {
+            name: 'prohibitSubtasks',
+            label: 'Prohibit Subtasks',
+            type: 'select',
+            helpText: "Can users create subtasks for this form's submissions.",
+            initialValue: form
+              .getIn(['attributesMap', 'Prohibit Subtasks'])
+              .toJS(),
+            options: ['Yes', 'No'].map(el => ({ label: el, value: el })),
+          },
+          {
             name: 'permittedSubtasks',
             label: 'Permitted Subtasks',
             type: 'text-multi',
-            helpText: 'TBD',
+            helpText:
+              "Defines which forms may be submitted as subtasks to this form's submissions.",
             initialValue: form.getIn(['attributesMap', 'Permitted Subtasks', 0])
               ? form
                   .getIn(['attributesMap', 'Permitted Subtasks', 0])
@@ -192,18 +207,8 @@ export const FormSettingsComponent = ({ form, kapp, onSave }) => {
               : [],
           },
           {
-            name: 'prohibitSubtasks',
-            label: 'Prohibit Subtasks',
-            type: 'select',
-            helpText: 'TBD',
-            initialValue: form
-              .getIn(['attributesMap', 'Prohibit Subtasks'])
-              .toJS(),
-            options: ['Yes', 'No'].map(el => ({ label: el, value: el })),
-          },
-          {
             name: 'owningTeam',
-            label: 'Owning Teams',
+            label: 'Owning Team',
             type: 'team-multi',
             helpText: 'Teams responsible for maintaining this form.',
             initialValue: form
@@ -215,7 +220,8 @@ export const FormSettingsComponent = ({ form, kapp, onSave }) => {
             name: 'allowReassignment',
             label: 'Allow Reassignment',
             type: 'select',
-            helpText: 'TBD',
+            helpText:
+              'Can submissions of this form be reassigned to other teams.',
             initialValue: form
               .getIn(['attributesMap', 'Allow Reassignment'])
               .toJS(),
@@ -225,7 +231,8 @@ export const FormSettingsComponent = ({ form, kapp, onSave }) => {
             name: 'assignableTeams',
             label: 'Assignable Teams',
             type: 'team-multi',
-            helpText: 'TBD',
+            helpText:
+              'Teams to which submissions of this form can be reassigned to.',
             initialValue: form
               .getIn(['attributesMap', 'Assignable Teams'])
               .map(name => ({ name }))
@@ -291,8 +298,8 @@ export const FormSettingsComponent = ({ form, kapp, onSave }) => {
         description: { component: FormComponents.TextAreaField },
         attributesMap: {
           serialize: ({ values }) => ({
-            'Permitted Subtasks': asArray(values.get('permittedSubtasks')),
             'Prohibit Subtasks': asArray(values.get('prohibitSubtasks')),
+            'Permitted Subtasks': asArray(values.get('permittedSubtasks')),
             'Owning Team': values
               .get('owningTeam')
               .map(team => team.get('name')),

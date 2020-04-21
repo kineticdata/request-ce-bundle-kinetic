@@ -8,7 +8,6 @@ import { PageTitle } from '../shared/PageTitle';
 import { FormList } from './forms/FormList';
 import { FormSettings } from './forms/FormSettings';
 import { FormActivity } from './forms/FormActivity';
-// import { CreateForm } from './forms/CreateForm';
 import { FormSubmissions } from './forms/FormSubmissions';
 import { I18n } from '@kineticdata/react';
 import { connect } from '../../redux/store';
@@ -76,8 +75,6 @@ export const Settings = () => (
   <Router>
     <QueueSettings path="general" />
     <FormList path="forms" />
-    {/* <CreateForm path="forms/new" />
-    <CreateForm path="forms/clone/:id" /> */}
     <FormSettingsWrapper path="forms/:formSlug/*" />
     {/* <FormActivity path="forms/:id/activity" /> */}
     <SettingsNavigation default />

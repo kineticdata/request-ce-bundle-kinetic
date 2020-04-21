@@ -11,7 +11,13 @@ import {
   ModalBody,
   ModalFooter,
 } from 'reactstrap';
-import { I18n, FormTable, FormForm, fetchForm } from '@kineticdata/react';
+import {
+  I18n,
+  FormTable,
+  FormForm,
+  fetchForm,
+  refetchTable,
+} from '@kineticdata/react';
 import {
   FormComponents,
   ErrorMessage,
@@ -29,9 +35,10 @@ import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
 import { actions } from '../../../redux/modules/settingsForms';
 import { actions as queueActions } from '../../../redux/modules/settingsQueue';
 
-const ActionsCell = ({ toggleModal, processing }) => ({
+const ActionsCell = ({ deleteForm, toggleModal, processing }) => ({
   tableOptions: { kappSlug },
   row,
+  tableKey,
 }) => (
   <td className="text-right" style={{ width: '1%' }}>
     {processing.has(row.get('slug')) ? (
@@ -45,10 +52,17 @@ const ActionsCell = ({ toggleModal, processing }) => ({
         </DropdownToggle>
         <DropdownMenu right>
           <Link to={`${row.get('slug')}/settings`} className="dropdown-item">
-            Configure Form
+            Settings
           </Link>
           <DropdownItem onClick={() => toggleModal(row.get('slug'))}>
-            Clone Form
+            Clone
+          </DropdownItem>
+          <DropdownItem
+            onClick={() =>
+              deleteForm(row.get('slug'), () => refetchTable(tableKey))
+            }
+          >
+            Delete
           </DropdownItem>
         </DropdownMenu>
       </UncontrolledDropdown>
