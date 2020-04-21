@@ -108,6 +108,8 @@ export const PublicAppComponent = props => {
               />
               <Survey path="survey-opt-out" />
               <SurveyError path="error" />
+              <SurveyConfirmation path="survey-opt-out/confirmation" />
+              <SurveyConfirmation path=":slug/submissions/:submissionId/confirmation" />
               <Redirect from="*" to={props.authRoute} noThrow />
             </Router>
           </main>
