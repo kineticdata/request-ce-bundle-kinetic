@@ -22,7 +22,7 @@ const SurveyConfirmationComponent = props => {
     <Fragment>
       <PageTitle parts={['Survey Confirmation']} />
       <div className="page-container page-container--color-bar">
-        <div className="page-panel">
+        <div className="page-panel text-center">
           <I18n
             context={`kapps.${props.kappSlug}.forms.${props.slug}`}
             public={!props.authenticated}
