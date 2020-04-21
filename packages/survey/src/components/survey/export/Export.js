@@ -115,11 +115,42 @@ function createCSV(submissions, form) {
 }
 
 const handleDownload = props => () => {
-  const q = props.createSearchQuery(props.filter);
+  const filter = props.filter.props.appliedFilters.toJS();
+  const q = {};
+  const createdAt = {};
+  const submittedAt = {};
+  let coreState = undefined;
+
+  for (const property in filter) {
+    if (property !== 'values' && filter[property].value) {
+      if (property === 'createdAt') {
+        createdAt['startDate'] =
+          filter[property].value[0] && new Date(filter[property].value[0]);
+        createdAt['endDate'] =
+          filter[property].value[1] && new Date(filter[property].value[1]);
+      } else if (property === 'submittedAt') {
+        submittedAt['startDate'] =
+          filter[property].value[0] && new Date(filter[property].value[0]);
+        submittedAt['endDate'] =
+          filter[property].value[1] && new Date(filter[property].value[1]);
+      } else if (property === 'coreState') {
+        coreState = filter[property].value;
+      } else {
+        q[property] = filter[property].value;
+      }
+    }
+  }
+  for (let value of filter.values.value) {
+    q[`values[${value.field}]`] = value.value;
+  }
+
   props.fetchAllSubmissions({
     formSlug: props.form.slug,
     kappSlug: props.kappSlug,
     accumulator: [],
+    createdAt: createdAt,
+    submittedAt: submittedAt,
+    coreState: coreState,
     q: q,
   });
   props.setExportStatus('FETCHING_RECORDS');
@@ -127,7 +158,6 @@ const handleDownload = props => () => {
 
 const mapStateToProps = state => ({
   kappSlug: state.app.kappSlug,
-  form: state.surveys.form,
   submissions: state.surveys.exportSubmissions,
   submissionsCount: state.surveys.exportCount,
 });

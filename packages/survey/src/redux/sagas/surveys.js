@@ -229,13 +229,33 @@ export function* fetchFormSubmissionsSaga(action) {
 }
 
 export function* fetchAllSubmissionsSaga(action) {
-  const { pageToken, accumulator, formSlug, kappSlug, q } = action.payload;
-  const searcher = new SubmissionSearch(true);
+  const {
+    pageToken,
+    accumulator,
+    formSlug,
+    kappSlug,
+    createdAt,
+    submittedAt,
+    coreState,
+    q,
+  } = action.payload;
+  const searcher = new SubmissionSearch(false);
 
   if (q) {
     for (const key in q) {
       searcher.eq(key, q[key]);
     }
+  }
+  if (createdAt) {
+    createdAt['startDate'] && searcher.startDate(createdAt['startDate']);
+    createdAt['endDate'] && searcher.endDate(createdAt['endDate']);
+  }
+  if (submittedAt) {
+    submittedAt['startDate'] && searcher.startDate(submittedAt['startDate']);
+    submittedAt['endDate'] && searcher.endDate(submittedAt['endDate']);
+  }
+  if (coreState) {
+    searcher.coreState(coreState);
   }
   searcher.include('values');
   searcher.limit(1000);
