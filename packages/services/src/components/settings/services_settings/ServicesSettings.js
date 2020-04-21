@@ -191,9 +191,11 @@ export const ServicesSettingsComponent = ({
                 .map(notification => ({
                   label: notification.getIn(['values', 'Name']),
                   value: notification.getIn(['values', 'Name']),
+                  slug: notification.get('id'),
                 }))
                 .toJS()
             : [],
+          component: FormComponents.NotificationField,
         },
         {
           name: 'notificationComplete',
@@ -212,9 +214,11 @@ export const ServicesSettingsComponent = ({
                 .map(notification => ({
                   label: notification.getIn(['values', 'Name']),
                   value: notification.getIn(['values', 'Name']),
+                  slug: notification.get('id'),
                 }))
                 .toJS()
             : [],
+          component: FormComponents.NotificationField,
         },
       ]}
     alterFields={{

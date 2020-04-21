@@ -97,7 +97,7 @@ export const FieldsTableField = props => (
     {props.helpText && (
       <tfoot>
         <tr>
-          <td colspan="2">
+          <td colSpan="2">
             <small>{props.helpText}</small>
           </td>
         </tr>
@@ -273,9 +273,11 @@ export const FormSettingsComponent = ({
                   .map(notification => ({
                     label: notification.getIn(['values', 'Name']),
                     value: notification.getIn(['values', 'Name']),
+                    slug: notification.get('id'),
                   }))
                   .toJS()
               : [],
+            component: FormComponents.NotificationField,
           },
           {
             name: 'notificationComplete',
@@ -294,9 +296,11 @@ export const FormSettingsComponent = ({
                   .map(notification => ({
                     label: notification.getIn(['values', 'Name']),
                     value: notification.getIn(['values', 'Name']),
+                    slug: notification.get('id'),
                   }))
                   .toJS()
               : [],
+            component: FormComponents.NotificationField,
           },
           {
             name: 'serviceDaysDue',
