@@ -4,7 +4,8 @@ import { compose, lifecycle } from 'recompose';
 import { ErrorUnexpected, Loading } from 'common';
 import { I18n } from '@kineticdata/react';
 import { connect } from './redux/store';
-import { Survey, SurveyConfirmation } from './components/survey/Survey';
+import { Survey } from './components/survey/Survey';
+import { SurveyConfirmation } from './components/survey/SurveyConfirmation';
 import { SurveyPreview } from './components/survey/SurveyPreview';
 import { SurveyList } from './components/survey/home/SurveyList';
 import { SurveySubmissions } from './components/survey/submissions/SurveySubmissions';
@@ -108,6 +109,8 @@ export const PublicAppComponent = props => {
               />
               <Survey path="survey-opt-out" />
               <SurveyError path="error" />
+              {/* <SurveyPreview path="forms/:slug" />
+              <SurveyConfirmation path="forms/:slug/confirmation" /> */}
               <SurveyConfirmation path="survey-opt-out/confirmation" />
               <SurveyConfirmation path=":slug/submissions/:submissionId/confirmation" />
               <Redirect from="*" to={props.authRoute} noThrow />

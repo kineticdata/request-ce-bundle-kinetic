@@ -75,19 +75,6 @@ export const SurveyComponent = ({
   </Fragment>
 );
 
-export const SurveyConfirmation = props => (
-  <div className="page-container page-container--color-bar">
-    <div className="page-panel">
-      <I18n
-        context={`kapps.${props.kappSlug}.forms.${props.slug}`}
-        public={!props.authenticated}
-      >
-        <h4>Thank you for taking the time to complete this survey.</h4>
-      </I18n>
-    </div>
-  </div>
-);
-
 const valuesFromQueryParams = queryParams => {
   const params = parse(queryParams);
   return Object.entries(params).reduce((values, [key, value]) => {

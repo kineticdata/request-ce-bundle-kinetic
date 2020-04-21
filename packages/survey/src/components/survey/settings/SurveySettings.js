@@ -61,6 +61,7 @@ const fieldSet = [
   'eventInterval',
   'owningTeam',
   'owningIndividual',
+  'confirmationPageText',
 ];
 
 const SurveySettingsComponent = ({
@@ -161,6 +162,7 @@ const SurveySettingsComponent = ({
               {fields.get('description')}
               {/* {fields.get('status')} */}
               {fields.get('submissionLabelExpression')}
+              {fields.get('confirmationPageText')}
               <div className="form-group__columns">
                 {fields.get('surveyStart')}
                 {fields.get('surveyStop')}
@@ -567,6 +569,23 @@ const SurveySettingsComponent = ({
                               ? surveyConfig['Owning Individual']
                               : '',
                         },
+                        {
+                          name: 'confirmationPageText',
+                          label: 'Confirmation Page Text',
+                          type: 'text',
+                          helpText:
+                            'Message shown to each survey participant after they have completed the survey. If no message is added, it will default to the message set at the kapp level or use the system default.',
+                          initialValue: form.getIn([
+                            'attributesMap',
+                            'Confirmation Page Text',
+                          ])
+                            ? form.getIn([
+                                'attributesMap',
+                                'Confirmation Page Text',
+                                0,
+                              ])
+                            : '',
+                        },
                       ]
                     );
                   }}
@@ -624,6 +643,9 @@ const SurveySettingsComponent = ({
                           'Owning Team': values.get('owningTeam'),
                           'Owning Individual': values.get('owningIndividual'),
                         }),
+                        'Confirmation Page Text': [
+                          values.get('confirmationPageText'),
+                        ],
                       }),
                     },
                   }}
