@@ -10,7 +10,7 @@ import {
 import {
   fetchForms,
   fetchForm,
-  // fetchBridges,
+  fetchBridges,
   fetchBridgeModels,
   createForm,
   updateForm,
@@ -42,22 +42,6 @@ import {
 import { DatastoreFormSave } from '../../records';
 
 import { chunkList } from '../../utils';
-
-// TODO Remove when RKL is updated to version with fetchBridges function tat supports multiple agents
-const fetchBridges = (options = {}) => {
-  return axios
-    .get(`/app/components/agents/system/app/api/v1/bridges`)
-    .then(response => ({ bridges: response.data.bridges }))
-    .catch(e => {
-      if (e instanceof Error && !e.response) throw e;
-      const { data = {}, status: statusCode, statusText: msg } = e.response;
-      const { errorKey: key = null, message = data.error, ...rest } = data;
-      const type = types[statusCode];
-      const result = { ...rest, message: message || msg, key, statusCode };
-      if (type) result[type] = true;
-      return { error: result };
-    });
-};
 
 export function* fetchFormsSaga() {
   const isSpaceAdmin = yield select(state => state.app.profile.spaceAdmin);

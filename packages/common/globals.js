@@ -18,6 +18,12 @@ import 'mdn-polyfills/Element.prototype.matches';
 import 'mdn-polyfills/Element.prototype.closest';
 import 'mdn-polyfills/Node.prototype.remove';
 
+jquery.ajaxSetup({
+  xhrFields: {
+    withCredentials: true,
+  },
+});
+
 window.$ = jquery;
 window.jQuery = jquery;
 window.moment = moment;

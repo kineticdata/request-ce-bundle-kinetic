@@ -1,12 +1,7 @@
 import { Record, List, Set } from 'immutable';
 import matchPath from 'rudy-match-path';
 import { Utils } from 'common';
-import {
-  Profile,
-  Filter,
-  AssignmentCriteria,
-  filterReviver,
-} from '../../records';
+import { Profile, Filter, filterReviver } from '../../records';
 const { withPayload, noPayload, getAttributeValue } = Utils;
 const ns = Utils.namespaceBuilder('queue/app');
 

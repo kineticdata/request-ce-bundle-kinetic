@@ -223,7 +223,7 @@ export const handleUpdated = props => response => {
       `Successfully updated submission (${response.submission.handle})`,
       'Submission Updated!',
     );
-    props.push(props.match.url.replace('/edit', ''));
+    props.navigate('..');
   }
 };
 

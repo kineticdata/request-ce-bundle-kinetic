@@ -3,6 +3,7 @@ import { Link } from '@reach/router';
 import { I18n, SpaceForm } from '@kineticdata/react';
 import { compose, withHandlers } from 'recompose';
 import axios from 'axios';
+import semver from 'semver';
 import { connect } from '../../redux/store';
 import {
   FormComponents,
@@ -14,6 +15,9 @@ import {
 } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { List } from 'immutable';
+window.semver = semver;
+
+const localAxios = axios.create({ withCredentials: false });
 
 const buildFieldSet = bundleName => [
   'name',
@@ -65,6 +69,7 @@ const buildLayout = bundleName => ({ fields, error, buttons }) => (
   </Fragment>
 );
 
+// Add data sources for fetching available bundle versions from S3
 const buildAdditionalDataSources = bundleName =>
   bundleName
     ? {
@@ -75,6 +80,8 @@ const buildAdditionalDataSources = bundleName =>
               name: bundleName,
             },
           ],
+          // Filter out any v2 or lower version bundles as they don't support this feature
+          transform: response => response.filter(r => r.major > 2),
         },
         branches: {
           fn: fetchBundleVersions,
@@ -89,9 +96,9 @@ const buildAdditionalDataSources = bundleName =>
     : {};
 
 const fetchBundleVersions = (options = {}) => {
-  return axios
+  return localAxios
     .get(
-      `http://kinops.io.s3.amazonaws.com/?list-type=2&prefix=bundles/${options.name ||
+      `https://kinops.io.s3.amazonaws.com/?list-type=2&prefix=bundles/${options.name ||
         'kinetic'}/${options.branches ? 'branches' : 'releases'}/&delimiter=/`,
     )
     .then(response => {
@@ -106,6 +113,8 @@ const fetchBundleVersions = (options = {}) => {
         .map(path => {
           const match = path.match(/bundles\/[^/]*\/[^/]*\/([^/]*)\/?/);
           if (match && (!options.branches || match[1] === 'develop')) {
+            const version =
+              match[1] !== 'develop' ? semver.coerce(match[1]) : null;
             return {
               label: options.branches
                 ? 'Development Branch'
@@ -113,7 +122,8 @@ const fetchBundleVersions = (options = {}) => {
               value: `https://s3.amazonaws.com/kinops.io/bundles/${options.name ||
                 'kinetic'}/${options.branches ? 'branches' : 'releases'}/${
                 match[1]
-              }`,
+              }/index.html`,
+              major: version && version.major,
             };
           }
           return null;
@@ -238,8 +248,10 @@ export const SpaceSettingsComponent = ({
           search: { kappSlug: servicesKappSlug },
         },
       ]}
-    alterFields={() => ({ space }) =>
-      space && {
+    alterFields={() => ({ space, releases, branches }) =>
+      space &&
+      releases &&
+      branches && {
         name: {
           helpText: 'The Name of the Space referenced throughout the space.',
         },
@@ -269,9 +281,11 @@ export const SpaceSettingsComponent = ({
           }),
         },
         defaultTimezone: {
+          component: FormComponents.SelectField,
           renderAttributes: { typeahead: true },
         },
         defaultLocale: {
+          component: FormComponents.SelectField,
           renderAttributes: { typeahead: true },
         },
         displayValueSPA: bundleName

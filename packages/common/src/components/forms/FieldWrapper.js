@@ -21,7 +21,9 @@ export const FieldWrapper = props => {
         <p className="no-data">
           <I18n>{props.renderAttributes.get('disabledMessage')}</I18n>
         </p>
-      ) : props.options.isEmpty() && EmptyOptionsPlaceholder ? (
+      ) : props.options &&
+      props.options.isEmpty() &&
+      EmptyOptionsPlaceholder ? (
         <EmptyOptionsPlaceholder />
       ) : (
         props.children

@@ -91,14 +91,12 @@ export const AppointmentFormComponent = ({
 );
 
 export const handleCompleted = props => response => {
-  console.log('handleCompleted', response.submission.id);
   if (!response.submission.currentPage) {
     props.navigate(`/kapps/${props.kappSlug}`);
   }
 };
 
 export const handleCreated = props => response => {
-  console.log('handleCreated', response.submission.id);
   props.navigate(
     response.submission.coreState === 'Submitted'
       ? `/kapps/${props.kappSlug}`
