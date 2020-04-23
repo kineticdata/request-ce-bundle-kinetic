@@ -129,10 +129,12 @@ export const SidebarComponent = ({
     {hasSettingsAccess && (
       <div className="sidebar-group sidebar-group--settings">
         <ul className="nav flex-column settings-group">
-          <Link to="settings/general" className="nav-link">
-            <I18n>Settings</I18n>
-            <span className="fa fa-fw fa-angle-right" />
-          </Link>
+          <li>
+            <Link to="settings/general" className="nav-link">
+              <I18n>Settings</I18n>
+              <span className="fa fa-fw fa-angle-right" />
+            </Link>
+          </li>
         </ul>
       </div>
     )}
