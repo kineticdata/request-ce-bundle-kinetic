@@ -31,12 +31,6 @@ export const SettingsSidebarComponent = ({
         individuals taking the survey do not see this value.
       </p>
       <p>
-        <b>Status</b> controls whether or not the survey will be sent. Inactive
-        surveys will not be sent. Surveys default to inactive. Once stop and
-        start times are set, the survey will automatically be made active for
-        the appropriate dates.
-      </p>
-      <p>
         <b>Survey Label</b> will be used to help differentiate the survey
         submissions (the instances of the survey) from each other. Use text and
         submission values (click on the {'</>'} to add fields) to create a

@@ -58,7 +58,7 @@ const fieldSet = [
   'allowOptOut',
   'maxFrequencyCount',
   'maxFrequencyDays',
-  'eventInterval',
+  // 'eventInterval',
   'owningTeam',
   'owningIndividual',
   'confirmationPageText',
@@ -244,7 +244,7 @@ const SurveySettingsComponent = ({
                 survey a week (Max count: 1, Days: 7). The default is
                 essentially having no limit.
               </p>
-              {fields.get('eventInterval')}
+              {/* {fields.get('eventInterval')} */}
             </div>
           </TabPane>
 
@@ -532,21 +532,21 @@ const SurveySettingsComponent = ({
                               : 1,
                           component: FormComponents.IntegerField,
                         },
-                        {
-                          name: 'eventInterval',
-                          label: 'Survey Event Interval',
-                          type: 'text',
-                          visible: ({ values }) =>
-                            values.get('polling') === 'true',
-                          initialValue:
-                            surveyConfig &&
-                            surveyConfig['Survey Event Interval']
-                              ? surveyConfig['Survey Event Interval']
-                              : 1,
-                          component: FormComponents.IntegerField,
-                          helpText:
-                            'How many qualified events happen for each survey sent. For example, you may only want to send one survey for every 10 incidents (Interval: 10). The default is no limitation.',
-                        },
+                        // {
+                        //   name: 'eventInterval',
+                        //   label: 'Survey Event Interval',
+                        //   type: 'text',
+                        //   visible: ({ values }) =>
+                        //     values.get('polling') === 'true',
+                        //   initialValue:
+                        //     surveyConfig &&
+                        //     surveyConfig['Survey Event Interval']
+                        //       ? surveyConfig['Survey Event Interval']
+                        //       : 1,
+                        //   component: FormComponents.IntegerField,
+                        //   helpText:
+                        //     'How many qualified events happen for each survey sent. For example, you may only want to send one survey for every 10 incidents (Interval: 10). The default is no limitation.',
+                        // },
                         {
                           name: 'owningTeam',
                           label: 'Owning Team',
@@ -639,7 +639,7 @@ const SurveySettingsComponent = ({
                             Count: values.get('maxFrequencyCount'),
                             Days: values.get('maxFrequencyDays'),
                           },
-                          'Survey Event Interval': values.get('eventInterval'),
+                          // 'Survey Event Interval': values.get('eventInterval'),
                           'Owning Team': values.get('owningTeam'),
                           'Owning Individual': values.get('owningIndividual'),
                         }),
