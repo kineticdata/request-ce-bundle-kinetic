@@ -65,7 +65,7 @@ export class FieldSelect extends React.Component {
           .map(field => field.name);
       });
       this.setState({
-        options: Set(fieldLists.flatten())
+        options: Set(fieldLists.flat())
           .sort()
           .map(field => ({
             label: field,
@@ -149,6 +149,7 @@ export class FieldSelect extends React.Component {
           <I18n
             render={translate => (
               <Typeahead
+                id="groupSelectTypeahead"
                 className={this.props.className}
                 options={this.state.options}
                 renderMenu={renderMenu}
