@@ -52,6 +52,7 @@ const ProfileDropdownComponent = ({
       nav
       role="button"
       className="icon-wrapper"
+      aria-label="Profile Menu"
       style={{ padding: '0 0.75rem' }}
     >
       <Avatar size={24} user={profile} previewable={false} />
@@ -65,8 +66,13 @@ const ProfileDropdownComponent = ({
         </h6>
       </div>
       <div className="profile-links">
-        <div className="dropdown-divider" />
-        <Link to="/profile/edit" className="dropdown-item" onClick={toggle}>
+        <div className="dropdown-divider" role="none" />
+        <Link
+          to="/profile/edit"
+          className="dropdown-item"
+          onClick={toggle}
+          role="menuitem"
+        >
           <I18n>Profile</I18n>
         </Link>
         {profile.spaceAdmin && (
@@ -85,11 +91,16 @@ const ProfileDropdownComponent = ({
           </button>
         )}
         {!isGuest && (
-          <Link to="/about" className="dropdown-item" onClick={toggle}>
+          <Link
+            to="/about"
+            className="dropdown-item"
+            onClick={toggle}
+            role="menuitem"
+          >
             <I18n>About My Space</I18n>
           </Link>
         )}
-        <div className="dropdown-divider" />
+        <div className="dropdown-divider" role="none" />
         <button onClick={logout} className="dropdown-item">
           <I18n>Logout</I18n>
         </button>
