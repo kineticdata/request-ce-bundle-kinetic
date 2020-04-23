@@ -17,8 +17,15 @@ import {
   ModalFooter,
 } from 'reactstrap';
 import { PageTitle } from '../shared/PageTitle';
-import { ErrorMessage, LoadingMessage, addToast, FormComponents } from 'common';
+import {
+  ErrorMessage,
+  LoadingMessage,
+  addToast,
+  addToastAlert,
+  FormComponents,
+} from 'common';
 import { ExportModal } from './ExportModal';
+import { ImportModal } from './ImportModal';
 import papaparse from 'papaparse';
 import { fromJS } from 'immutable';
 
@@ -31,64 +38,51 @@ const IsJsonString = str => {
   return true;
 };
 
-const handleImport = props => () => {
-  const file = this.fileEl.files[0];
+const handleImport = props => e => {
+  const file = e.target.files[0];
+  e.target.value = null;
   const extention = file.name.split('.')[file.name.split('.').length - 1];
-  console.log(file, extention);
   if (file && extention === 'csv') {
     const reader = new FileReader();
     reader.readAsText(file);
     reader.onload = event => {
-      console.log(event.target.result);
       papaparse.parse(event.target.result, {
         header: true,
         dynamicTyping: true,
+        skipEmptyLines: true,
         complete: results => {
           // When streaming, parse results are not available in this callback.
           if (results.errors.length <= 0) {
-            const { users, updateUser, createUser } = props;
-            const importedUsers = fromJS(results.data)
-              .map(user => {
-                return user
-                  .update('allowedIps', val => (val ? val : ''))
-                  .update(
-                    'attributesMap',
-                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
-                  )
-                  .update(
-                    'profileAttributesMap',
-                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
-                  )
-                  .update(
-                    'memberships',
-                    val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
-                  );
-              })
-              .toSet();
-            const existingUsers = fromJS(
-              users.map(user => ({
-                ...user,
-                memberships: user.memberships.reduce((acc, membership) => {
-                  const team = { team: { name: membership.team.name } };
-                  acc.push(team);
-                  return acc;
-                }, []),
-              })),
-            ).toSet();
-            const userdiff = importedUsers.subtract(existingUsers);
-            userdiff.forEach(user => {
-              const found = existingUsers.find(
-                existingUser =>
-                  user.get('username') === existingUser.get('username'),
-              );
-              if (found) {
-                updateUser(user.toJS());
-              } else {
-                createUser(user.toJS());
-              }
-            });
+            props.importUsersRequest(
+              fromJS(results.data)
+                .map(user => {
+                  return user
+                    .update('allowedIps', val => (val ? val : ''))
+                    .update(
+                      'attributesMap',
+                      val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                    )
+                    .update(
+                      'profileAttributesMap',
+                      val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                    )
+                    .update(
+                      'memberships',
+                      val => (IsJsonString(val) ? fromJS(JSON.parse(val)) : {}),
+                    );
+                })
+                .toSet()
+                .toJS(),
+            );
           } else {
-            console.log(results.errors);
+            addToastAlert({
+              title: 'Import File Error',
+              message:
+                (results.errors &&
+                  results.errors[0] &&
+                  results.errors[0].message) ||
+                'Invalid file provided',
+            });
           }
         },
       });
@@ -222,8 +216,12 @@ export const UsersListComponent = ({
   createUserRequest,
   navigate,
   openExportModal,
+  handleImport,
+  remountKey,
+  setRemountKey,
 }) => (
   <UserTable
+    key={remountKey}
     tableKey={tableKey}
     components={{
       FilterLayout,
@@ -273,9 +271,6 @@ export const UsersListComponent = ({
                 id="file-input"
                 style={{ display: 'none' }}
                 onChange={handleImport}
-                ref={element => {
-                  this.fileEl = element;
-                }}
               />
               <label
                 htmlFor="file-input"
@@ -324,6 +319,9 @@ export const UsersListComponent = ({
           </p>
         </div>
         <ExportModal />
+        <ImportModal
+          onClose={() => setRemountKey(`remount-key-${new Date().getTime()}`)}
+        />
 
         {/* Modal for creating a new user */}
         <Modal isOpen={!!modalOpen} toggle={() => toggleModal()} size="lg">
@@ -405,6 +403,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   cloneUserRequest: actions.cloneUserRequest,
   openExportModal: actions.openModal,
+  importUsersRequest: actions.importUsersRequest,
 };
 
 // Users Container
@@ -413,11 +412,17 @@ export const UsersList = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  withState(
+    'remountKey',
+    'setRemountKey',
+    `remount-key-${new Date().getTime()}`,
+  ),
   withState('modalOpen', 'setModalOpen', false),
   withHandlers({
     toggleModal: props => slug =>
       !slug || slug === props.modalOpen
         ? props.setModalOpen(false)
         : props.setModalOpen(slug),
+    handleImport,
   }),
 )(UsersListComponent);

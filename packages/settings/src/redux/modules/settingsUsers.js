@@ -14,9 +14,11 @@ export const State = Record({
   fetchingAll: false,
   modalIsOpen: false,
   modalName: '',
-  exportUsers: [],
-  exportCount: 0,
+  exportUsers: List(),
   downloaded: false,
+  importing: false,
+  importCounts: {},
+  importErrors: List(),
 });
 
 export const types = {
@@ -33,8 +35,10 @@ export const types = {
   CLOSE_MODAL: namespace('users', 'CLOSE_MODAL'),
   FETCH_ALL_USERS: namespace('users', 'FETCH_ALL_USERS'),
   SET_EXPORT_USERS: namespace('users', 'SET_EXPORT_USERS'),
-  SET_EXPORT_COUNT: namespace('users', 'SET_EXPORT_COUNT'),
   SET_DOWNLOADED: namespace('users', 'SET_DOWNLOADED'),
+  IMPORT_USERS_REQUEST: namespace('users', 'IMPORT_USERS_REQUEST'),
+  IMPORT_USERS_COMPLETE: namespace('users', 'IMPORT_USERS_COMPLETE'),
+  IMPORT_USERS_RESET: namespace('users', 'IMPORT_USERS_RESET'),
 };
 
 export const actions = {
@@ -51,8 +55,10 @@ export const actions = {
   closeModal: noPayload(types.CLOSE_MODAL),
   fetchAllUsers: withPayload(types.FETCH_ALL_USERS),
   setExportUsers: withPayload(types.SET_EXPORT_USERS),
-  setExportCount: withPayload(types.SET_EXPORT_COUNT),
   setDownloaded: withPayload(types.SET_DOWNLOADED),
+  importUsersRequest: withPayload(types.IMPORT_USERS_REQUEST),
+  importUsersComplete: withPayload(types.IMPORT_USERS_COMPLETE),
+  importUsersReset: withPayload(types.IMPORT_USERS_RESET),
 };
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -62,17 +68,39 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.CLONE_USER_COMPLETE:
       return state.deleteIn(['processing', payload.cloneUserUsername]);
     case types.FETCH_ALL_USERS:
-      return state.set('fetchingAll', true);
+      return state.set('fetchingAll', true).set('exportUsers', List());
     case types.SET_EXPORT_USERS:
-      return state.set('exportUsers', payload).set('fetchingAll', false);
-    case types.SET_EXPORT_COUNT:
-      return state.set('exportCount', payload);
+      return state
+        .update(
+          'exportUsers',
+          users => (payload.error ? List() : users.concat(List(payload.data))),
+        )
+        .set('fetchingAll', !payload.completed && !payload.error);
     case types.OPEN_MODAL:
       return state.set('modalIsOpen', true).set('modalName', payload);
     case types.CLOSE_MODAL:
       return state.set('modalIsOpen', false).set('modalName', '');
     case types.SET_DOWNLOADED:
       return state.set('downloaded', payload);
+    case types.IMPORT_USERS_REQUEST:
+      return state
+        .set('importing', 'STARTED')
+        .set('importErrors', List())
+        .set('importCounts', { total: payload.length });
+    case types.IMPORT_USERS_COMPLETE:
+      return state
+        .set('importing', 'COMPLETED')
+        .set('importErrors', payload.errors ? List(payload.errors) : List())
+        .update(
+          'importCounts',
+          counts =>
+            payload.counts ? { ...counts, ...payload.counts } : counts,
+        );
+    case types.IMPORT_USERS_RESET:
+      return state
+        .set('importErrors', List())
+        .set('importCounts', {})
+        .set('importing', null);
     default:
       return state;
   }
