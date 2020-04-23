@@ -15,7 +15,7 @@ export const CreateAccount = () => {
   return (
     <LoginWrapper>
       <Helmet>
-        <title>Create Account</title>
+        <title>Create Account | kinops</title>
       </Helmet>
       {invitationToken ? (
         <CreateAccountForm

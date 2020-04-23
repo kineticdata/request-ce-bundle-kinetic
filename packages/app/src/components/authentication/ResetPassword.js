@@ -14,7 +14,7 @@ export const ResetPassword = () => {
   return (
     <LoginWrapper>
       <Helmet>
-        <title>Reset Password</title>
+        <title>Reset Password | kinops</title>
       </Helmet>
       {token ? (
         <ResetPasswordForm token={token} username={parse(location.search).u}>

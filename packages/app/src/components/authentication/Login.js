@@ -10,7 +10,7 @@ export const Login = ({ loginProps }) => {
   return (
     <LoginWrapper>
       <Helmet>
-        <title>kinops Login</title>
+        <title>signin | kinops </title>
       </Helmet>
       <LoginForm {...loginProps}>
         {({ fields, buttons }) => (
@@ -23,12 +23,7 @@ export const Login = ({ loginProps }) => {
                 </Link>
               </small>
             </h3>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               {fields.username}
               {fields.password}
 
