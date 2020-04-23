@@ -10,7 +10,7 @@ export const SettingsWebApiView = ({ kappSlug, formSlug, formFields }) => {
   const dataObject = dataFields.reduce((a, b) => ((a[b] = ''), a), {});
   const publicRoute =
     kappSlug &&
-    `${window.location.origin}/app/kapps/${kappSlug}/webApis/create-survey`;
+    `${window.location.origin}/app/kapps/${kappSlug}/webApis/generate-survey`;
 
   const snippet = new HTTPSnippet({
     method: method,
