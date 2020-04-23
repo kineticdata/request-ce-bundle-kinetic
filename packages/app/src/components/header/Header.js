@@ -41,71 +41,74 @@ export const HeaderComponent = ({
   kappDropdownToggle,
 }) => (
   <Navbar color="faded" light>
-    <Nav className="nav-header">
-      {typeof toggleSidebarOpen === 'function' &&
-        !isGuest && (
-          <NavItem id="header-sidebar-toggle">
-            <NavLink
-              className="drawer-button"
-              role="button"
-              tabIndex="0"
-              onClick={toggleSidebarOpen}
+    <div className="nav nav-header">
+      <Nav>
+        {typeof toggleSidebarOpen === 'function' &&
+          !isGuest && (
+            <NavItem id="header-sidebar-toggle">
+              <NavLink
+                className="drawer-button"
+                role="button"
+                tabIndex="0"
+                aria-label="Toggle Sidebar"
+                onClick={toggleSidebarOpen}
+              >
+                <i className="fa fa-fw fa-bars" />
+              </NavLink>
+            </NavItem>
+          )}
+        <NavItem>
+          {!isGuest ? (
+            <Dropdown
+              id="header-kapp-dropdown"
+              isOpen={kappDropdownOpen}
+              toggle={kappDropdownToggle}
             >
-              <i className="fa fa-fw fa-bars" />
-            </NavLink>
-          </NavItem>
-        )}
-      <NavItem>
-        {!isGuest ? (
-          <Dropdown
-            id="header-kapp-dropdown"
-            isOpen={kappDropdownOpen}
-            toggle={kappDropdownToggle}
-          >
-            <DropdownToggle nav role="button">
-              <span>{menuLabel}</span> <i className="fa fa-caret-down" />
-            </DropdownToggle>
-            <DropdownMenu>
-              {visibleKapps.map(thisKapp => (
-                <BuildKappLink
-                  kapp={thisKapp}
-                  key={thisKapp.slug}
+              <DropdownToggle nav role="button">
+                <span>{menuLabel}</span> <i className="fa fa-caret-down" />
+              </DropdownToggle>
+              <DropdownMenu>
+                {visibleKapps.map(thisKapp => (
+                  <BuildKappLink
+                    kapp={thisKapp}
+                    key={thisKapp.slug}
+                    onClick={kappDropdownToggle}
+                  />
+                ))}
+                <DropdownItem divider />
+                <Link
+                  className="dropdown-item"
+                  to="/discussions"
                   onClick={kappDropdownToggle}
-                />
-              ))}
-              <DropdownItem divider />
-              <Link
-                className="dropdown-item"
-                to="/discussions"
-                onClick={kappDropdownToggle}
-              >
-                <span className="fa fa-fw fa-comments" />
-                <I18n>Discussions</I18n>
-              </Link>
-              <Link
-                className="dropdown-item"
-                to="/teams"
-                onClick={kappDropdownToggle}
-              >
-                <span className="fa fa-fw fa-users" />
-                <I18n>Teams</I18n>
-              </Link>
-              <Link
-                className="dropdown-item"
-                to="/settings"
-                onClick={kappDropdownToggle}
-              >
-                <span className="fa fa-fw fa-cog" />
-                <I18n>Settings</I18n>
-              </Link>
-            </DropdownMenu>
-          </Dropdown>
-        ) : (
-          <div id="header-kapp-dropdown">
-            <span className="nav-link nav-link--static">{menuLabel}</span>
-          </div>
-        )}
-      </NavItem>
+                >
+                  <span className="fa fa-fw fa-comments" />
+                  <I18n>Discussions</I18n>
+                </Link>
+                <Link
+                  className="dropdown-item"
+                  to="/teams"
+                  onClick={kappDropdownToggle}
+                >
+                  <span className="fa fa-fw fa-users" />
+                  <I18n>Teams</I18n>
+                </Link>
+                <Link
+                  className="dropdown-item"
+                  to="/settings"
+                  onClick={kappDropdownToggle}
+                >
+                  <span className="fa fa-fw fa-cog" />
+                  <I18n>Settings</I18n>
+                </Link>
+              </DropdownMenu>
+            </Dropdown>
+          ) : (
+            <div id="header-kapp-dropdown">
+              <span className="nav-link nav-link--static">{menuLabel}</span>
+            </div>
+          )}
+        </NavItem>
+      </Nav>
       <div className="nav-item-right">
         {!isGuest && <AlertsDropdown />}
         {authenticated ? (
@@ -118,7 +121,7 @@ export const HeaderComponent = ({
           </NavItem>
         )}
       </div>
-    </Nav>
+    </div>
   </Navbar>
 );
 
