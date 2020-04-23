@@ -10,11 +10,12 @@ export const CatalogSearch = props => (
           placeholder={translate('Search services...')}
           value={props.searchTerm}
           autoFocus
+          aria-label="Search Services"
           onChange={event => props.catalogSearchInput(event.target.value)}
         />
       )}
     />
-    <button type="submit">
+    <button type="submit" aria-label="Search Button">
       <span className="fa fa-fw fa-search" />
     </button>
   </form>
