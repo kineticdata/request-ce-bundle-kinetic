@@ -14,6 +14,7 @@ export const PaginationControl = ({
         <button
           className="btn btn-link icon-wrapper"
           onClick={prevPage}
+          aria-label="Previous Page"
           disabled={loading || !prevPage}
           title={translate('Previous Page')}
         >
@@ -35,6 +36,7 @@ export const PaginationControl = ({
         <button
           className="btn btn-link icon-wrapper"
           onClick={nextPage}
+          aria-label="Next Page"
           disabled={loading || !nextPage}
           title={translate('Next Page')}
         >
