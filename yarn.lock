@@ -1146,40 +1146,6 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@kineticdata/react@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-1.2.0.tgz#2b86586daf90ca32c369089e3db1ec3b4ebb0d12"
-  integrity sha512-LtnR9+WOnoSTTRSz1MN81XGzTVgibfrWlZkTcwuu8sX02Y0YilXuX7RbF+kBgyl+WAfyCCqHWadEfyLKHwGN3A==
-  dependencies:
-    axios "^0.18.0"
-    classnames "^2.2.6"
-    deepequal "^0.0.1"
-    draft-js "^0.11.0"
-    history "^4.9.0"
-    husky "^1.3.1"
-    immutable "4.0.0-rc.9"
-    jest-immutable-matchers "^2.0.1"
-    kld-intersections "^0.6.0"
-    lodash "^4.17.15"
-    lodash-es "^4.17.15"
-    lodash.isplainobject "^4.0.6"
-    lodash.isstring "^4.0.1"
-    modularscale-sass "^3.0.8"
-    moment "^2.21.0"
-    node-sass "^4.12.0"
-    prismjs "^1.17.1"
-    prop-types "^15.7.2"
-    react-autosuggest "^9.4.3"
-    react-avatar "^3.5.0"
-    react-dropzone "^4.2.3"
-    react-markdown "^4.0.6"
-    react-popper "^1.3.4"
-    react-redux "^6.0.0"
-    reactstrap "^7.1.0"
-    recompose "^0.30.0"
-    redux "^4.0.1"
-    redux-saga "^1.0.1"
-
 "@kineticdata/react@^5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-5.0.1.tgz#54bb213a5cf418dd01c9017b8639d4ba309bd537"
@@ -5703,7 +5669,7 @@ hex-color-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
   integrity sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
 
-history@^4.7.2, history@^4.9.0:
+history@^4.9.0:
   version "4.10.1"
   resolved "https://registry.yarnpkg.com/history/-/history-4.10.1.tgz#33371a65e3a83b267434e2b3f3b1b4c58aad4cf3"
   integrity sha512-36nwAD620w12kuzPAsyINPWJqlNbij+hpK1k9XRloDtym8mxzGYl2c17LnV6IAGB2Dmg4tEa7G7DlawS0+qjew==
@@ -5724,7 +5690,7 @@ hmac-drbg@^1.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
-hoist-non-react-statics@^2.3.1, hoist-non-react-statics@^2.5.0:
+hoist-non-react-statics@^2.3.1:
   version "2.5.5"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
   integrity sha512-rqcy4pJo55FTTLWt+bU8ukscqHeE/e9KWvsOW2b/a3afxQZhwkQdT1rPPCJ0rYXdj4vNcasY8zHTH+jF/qStxw==
@@ -9918,7 +9884,7 @@ query-string@^4.1.0:
     object-assign "^4.1.0"
     strict-uri-encode "^1.0.0"
 
-query-string@^5.0.0, query-string@^5.1.1:
+query-string@^5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-5.1.1.tgz#a78c012b71c17e05f2e3fa2319dd330682efb3cb"
   integrity sha512-gjWOsm2SoGlgLEdAGt7a6slVOk9mGiXmPFMqrEhLQ68rhQuBnpfs3+EmlvqKyxnCo9/PPlF+9MtY02S1aFg+Jw==
@@ -10191,7 +10157,7 @@ react-document-title@^2.0.3:
     prop-types "^15.5.6"
     react-side-effect "^1.0.2"
 
-react-dom@^16.12.0, react-dom@^16.2.0, react-dom@^16.3.0:
+react-dom@^16.12.0, react-dom@^16.3.0:
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.12.0.tgz#0da4b714b8d13c2038c9396b54a92baea633fe11"
   integrity sha512-LMxFfAGrcS3kETtQaCkTKjMiifahaMySFDn71fZUNpPHZQEzmk/GiAeIT8JSOrHB23fnuCOMruL2a8NYlw+8Gw==
@@ -10380,19 +10346,6 @@ react-router@5.1.2, react-router@^5.1.2:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-router@^4.2.0:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-4.3.1.tgz#aada4aef14c809cb2e686b05cee4742234506c4e"
-  integrity sha512-yrvL8AogDh2X42Dt9iknk4wF4V8bWREPirFfS9gLU1huk6qK41sg7Z/1S81jjTrGHxa3B8R3J6xIkDAA6CVarg==
-  dependencies:
-    history "^4.7.2"
-    hoist-non-react-statics "^2.5.0"
-    invariant "^2.2.4"
-    loose-envify "^1.3.1"
-    path-to-regexp "^1.7.0"
-    prop-types "^15.6.1"
-    warning "^4.0.1"
-
 react-scripts@3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-3.2.0.tgz#58ccd6b4ffa27f1b4d2986cbdcaa916660e9e33c"
@@ -10570,7 +10523,7 @@ react-with-styles@^3.2.0:
     prop-types "^15.6.2"
     react-with-direction "^1.3.0"
 
-react@^16.12.0, react@^16.2.0, react@^16.3.0:
+react@^16.12.0, react@^16.3.0:
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.12.0.tgz#0c0a9c6a142429e3614834d5a778e18aa78a0b83"
   integrity sha512-fglqy3k5E+81pA8s+7K0/T3DBCF0ZDOher1elBFzF7O6arXJgzyu/FW+COxFvAWXJoJN9KIZbT2LXlukwphYTA==
