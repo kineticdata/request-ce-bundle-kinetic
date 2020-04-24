@@ -194,6 +194,7 @@ const TeamFormComponent = ({
                   className={'fa fa-plus control'}
                   style={{ cursor: 'pointer' }}
                   onClick={handleAddMemberClick}
+                  aria-label="Add Team member"
                 />
               </h3>
 
@@ -228,6 +229,7 @@ const TeamFormComponent = ({
                             onClick={handleRemoveMember(user.username)}
                             className="btn btn-danger btn-sm"
                           >
+                            <span className="sr-only">Remove Member</span>
                             <span className="fa fa-remove" />
                           </button>
                         </td>
@@ -245,6 +247,7 @@ const TeamFormComponent = ({
                 <I18n>Subteams</I18n>
                 <Link to={`/settings/teams/new?parent=${team.name}`}>
                   <i className={'fa fa-plus control'} />
+                  <span className="sr-only">Add a Subteam</span>
                 </Link>
               </h3>
 
