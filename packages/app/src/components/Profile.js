@@ -66,13 +66,13 @@ const ProfileComponent = ({
             siteEnabled ||
             departmentEnabled ||
             organizationEnabled) && (
-            <dl>
+            <dl className="row">
               {managerEnabled && (
-                <span>
-                  <dt>
+                <>
+                  <dt className="col-6">
                     <I18n>Manager</I18n>
                   </dt>
-                  <dd>
+                  <dd className="col-6">
                     {manager ? (
                       <I18n>{manager}</I18n>
                     ) : (
@@ -81,14 +81,14 @@ const ProfileComponent = ({
                       </em>
                     )}
                   </dd>
-                </span>
+                </>
               )}
               {departmentEnabled && (
-                <span>
-                  <dt>
+                <>
+                  <dt className="col-6">
                     <I18n>Department</I18n>
                   </dt>
-                  <dd>
+                  <dd className="col-6">
                     {department ? (
                       <I18n>{department}</I18n>
                     ) : (
@@ -97,14 +97,14 @@ const ProfileComponent = ({
                       </em>
                     )}
                   </dd>
-                </span>
+                </>
               )}
               {organizationEnabled && (
-                <span>
-                  <dt>
+                <>
+                  <dt className="col-6">
                     <I18n>Organization</I18n>
                   </dt>
-                  <dd>
+                  <dd className="col-6">
                     {organization ? (
                       <I18n>{organization}</I18n>
                     ) : (
@@ -113,14 +113,14 @@ const ProfileComponent = ({
                       </em>
                     )}
                   </dd>
-                </span>
+                </>
               )}
               {siteEnabled && (
-                <span>
-                  <dt>
+                <>
+                  <dt className="col-6">
                     <I18n>Site</I18n>
                   </dt>
-                  <dd>
+                  <dd className="col-6">
                     {site ? (
                       <I18n>{site}</I18n>
                     ) : (
@@ -129,7 +129,7 @@ const ProfileComponent = ({
                       </em>
                     )}
                   </dd>
-                </span>
+                </>
               )}
             </dl>
           )}
