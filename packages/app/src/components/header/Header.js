@@ -19,7 +19,12 @@ import { I18n } from '@kineticdata/react';
 import * as selectors from '../../redux/selectors';
 
 const BuildKappLink = ({ kapp, onClick, nameOverride = kapp.name }) => (
-  <Link className="dropdown-item" to={`/kapps/${kapp.slug}`} onClick={onClick}>
+  <Link
+    className="dropdown-item"
+    to={`/kapps/${kapp.slug}`}
+    onClick={onClick}
+    role="menuitem"
+  >
     <span
       className={`fa fa-fw' ${Utils.getAttributeValue(kapp, 'Icon') ||
         'fa-book'}`}
@@ -80,6 +85,7 @@ export const HeaderComponent = ({
                   className="dropdown-item"
                   to="/discussions"
                   onClick={kappDropdownToggle}
+                  role="menuitem"
                 >
                   <span className="fa fa-fw fa-comments" />
                   <I18n>Discussions</I18n>
@@ -88,6 +94,7 @@ export const HeaderComponent = ({
                   className="dropdown-item"
                   to="/teams"
                   onClick={kappDropdownToggle}
+                  role="menuitem"
                 >
                   <span className="fa fa-fw fa-users" />
                   <I18n>Teams</I18n>
@@ -96,6 +103,7 @@ export const HeaderComponent = ({
                   className="dropdown-item"
                   to="/settings"
                   onClick={kappDropdownToggle}
+                  role="menuitem"
                 >
                   <span className="fa fa-fw fa-cog" />
                   <I18n>Settings</I18n>
