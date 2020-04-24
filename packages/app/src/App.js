@@ -21,6 +21,8 @@ import TechBarApp from 'tech-bar';
 import DiscussionsApp from 'discussions';
 import SettingsApp from 'settings';
 import ScaffoldApp from 'scaffold';
+import SurveyApp from 'survey';
+// import { AppProvider } from './AppProvider';
 
 // Mapping of Bundle Package kapp attribute values to App Components
 const BUNDLE_PACKAGE_PROVIDERS = {
@@ -28,10 +30,11 @@ const BUNDLE_PACKAGE_PROVIDERS = {
   queue: QueueApp,
   'tech-bar': TechBarApp,
   scaffold: ScaffoldApp,
+  survey: SurveyApp,
 };
 
 // List of available static packages
-const STATIC_PACKAGE_PROVIDERS = [SettingsApp, DiscussionsApp];
+const STATIC_PACKAGE_PROVIDERS = [SettingsApp, DiscussionsApp, ScaffoldApp];
 
 // Determine the correct AppProvider based on the kapp/route
 const getAppProvider = ({ kapp, pathname }) => {
