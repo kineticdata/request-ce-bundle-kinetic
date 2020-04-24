@@ -73,7 +73,7 @@ const MobileSubmissionCard = ({ submission, columns, path }) => (
             >
               <I18n>Clone</I18n>
             </button>
-            <div className="dropdown-divider" />
+            <div className="dropdown-divider" role="none" />
             <button
               type="button"
               onClick={handleDelete(submission.id)}
