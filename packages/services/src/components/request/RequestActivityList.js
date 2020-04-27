@@ -16,8 +16,8 @@ export const activityData = activity => {
 };
 
 export const RequestActivityList = ({ submission }) => (
-  <div className="submission-timeline">
-    <ul>
+  <div className="submission-timeline" role="tabpanel">
+    <div>
       {submission.submittedAt ? (
         <StartNode timestamp={submission.submittedAt} label="Started" />
       ) : (
@@ -32,6 +32,6 @@ export const RequestActivityList = ({ submission }) => (
       ) : (
         <InProgressNode />
       )}
-    </ul>
+    </div>
   </div>
 );

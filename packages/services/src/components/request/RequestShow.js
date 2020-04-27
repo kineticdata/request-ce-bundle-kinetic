@@ -250,8 +250,8 @@ export const RequestShow = ({
               )}
 
               <div className="submission-tabs">
-                <ul className="nav nav-tabs">
-                  <li role="presentation">
+                <ul className="nav nav-tabs" role="tablist">
+                  <li role="tab">
                     <Link
                       to={getSubmissionPath(
                         appLocation,
@@ -265,7 +265,7 @@ export const RequestShow = ({
                     </Link>
                   </li>
 
-                  <li role="presentation">
+                  <li role="tab">
                     <Link
                       to={`${getSubmissionPath(
                         appLocation,
