@@ -48,7 +48,8 @@
     flex: 1 0 auto;
   }
   // Search Input
-  input[type='text'] {
+  input[type='text'],
+  input[type='search'] {
     height: auto;
     border: none;
     border-radius: $border-radius-base;
