@@ -56,9 +56,7 @@ export const AppComponent = props =>
       appState={{
         ...props.app.toObject(),
         location: props.appLocation,
-        actions: {
-          refreshApp: props.refreshApp,
-        },
+        actions: { refreshApp: props.refreshApp },
         layoutSize: props.layoutSize,
         bundleName: 'request-ce-bundle-kinetic',
       }}
@@ -79,7 +77,16 @@ export const AppComponent = props =>
                 : ''
             }`}
           >
-            {sidebar && <div className="app-sidebar-container">{sidebar}</div>}
+            {sidebar && (
+              <aside
+                className="app-sidebar-container"
+                aria-labelledby="toggle-sidebar"
+                aria-hidden={props.sidebarOpen ? 'false' : 'true'}
+              >
+                {sidebar}
+              </aside>
+            )}
+
             <div
               className="app-main-container"
               onClick={

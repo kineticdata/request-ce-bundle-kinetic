@@ -55,8 +55,8 @@ export const HeaderComponent = ({
                 className="drawer-button"
                 role="button"
                 tabIndex="0"
-                aria-label="Toggle Sidebar"
                 onClick={toggleSidebarOpen}
+                id="toggle-sidebar"
               >
                 <span className="sr-only">Toggle Sidebar</span>
                 <i className="fa fa-fw fa-bars" />
