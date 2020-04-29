@@ -39,7 +39,7 @@
   }
   button {
     position: relative;
-    left: -3rem;
+    // left: -3rem;
     line-height: 1.125rem;
     padding: 0.9375rem;
     cursor: pointer;
@@ -58,9 +58,9 @@
     font-weight: 600;
     line-height: 1.125rem;
     padding: 0.9375rem;
-    &:focus {
-      border: none;
-    }
+    // &:focus {
+    //   border: none;
+    // }
   }
   &::placeholder {
     color: #ffffff;
