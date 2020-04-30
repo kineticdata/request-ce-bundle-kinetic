@@ -8,7 +8,7 @@
     "datatables.net-dt": "^1.10.16",
     "datatables.net-responsive": "^2.2.1",
     "datatables.net-responsive-bs": "^2.2.1",
-    "jquery": "^3.2.1",
+    "jquery": "^3.5.0",
     "lodash.ismatch": "^4.4.0",
     "memoize-one": "^4.0.2",
     "moment": "^2.22.2",
