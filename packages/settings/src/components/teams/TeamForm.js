@@ -195,7 +195,9 @@ const TeamFormComponent = ({
                   style={{ cursor: 'pointer' }}
                   onClick={handleAddMemberClick}
                   aria-label="Add Team member"
-                />
+                >
+                  <span className="sr-only">Add team member</span>
+                </i>
               </h3>
 
               <div className="col-12">

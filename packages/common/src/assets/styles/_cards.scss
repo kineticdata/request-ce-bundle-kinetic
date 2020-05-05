@@ -228,8 +228,17 @@
       font-size: 0.75rem;
       line-height: 1.125rem;
       margin-bottom: 0;
-      &.members-toggle {
-        margin-bottom: 1rem;
+    }
+    .members-toggle { 
+          
+      color: $gray50;
+      font-size: 0.75rem;
+      line-height: 1.125rem;
+  
+      &.btn{
+display: block; 
+        text-align: center;
+        margin: 0 auto;
       }
     }
     .btn {
