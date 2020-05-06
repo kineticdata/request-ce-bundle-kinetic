@@ -41,8 +41,8 @@ const TeamsComponent = ({ error, teams, me, openRequestNewTeam }) => (
           <h1>Teams</h1>
         </div>
         {me.spaceAdmin ? (
-          <Link to="/settings/teams/new" className="btn btn-secondary">
-            <I18n>New Team</I18n>
+          <Link to="/settings/teams" className="btn btn-secondary">
+            <I18n>Manage Teams</I18n>
           </Link>
         ) : (
           <button onClick={openRequestNewTeam} className="btn btn-secondary">
