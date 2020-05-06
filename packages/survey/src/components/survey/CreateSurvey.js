@@ -1,44 +1,37 @@
 import React from 'react';
-
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
+import { connect } from '../../redux/store';
 import { push } from 'redux-first-history';
 import { compose, withHandlers, withState } from 'recompose';
-
-import { DatastoreForm } from '../../records';
-import { actions } from '../../redux/modules/settingsDatastore';
-import { context } from '../../redux/store';
+import { Survey } from '../../models';
+import { actions } from '../../redux/modules/surveys';
+import { actions as appActions } from '../../redux/modules/surveyApp';
 import { PageTitle } from '../shared/PageTitle';
-
 import { I18n } from '@kineticdata/react';
 
-const CreateDatastoreComponent = ({
-  spaceAdmin,
+const CreateSurveyComponent = ({
   setNewForm,
+  kapp,
+  kappSlug,
   newForm,
-  loading,
   creating,
   handleSave,
   handleNameChange,
-  match,
+  templates,
 }) => (
   <div className="page-container page-container--panels">
-    <PageTitle parts={['New Form', 'Datastore']} />
+    <PageTitle parts={['New Survey']} />
     <div className="page-panel page-panel--two-thirds page-panel--white">
       <div className="page-title">
         <div className="page-title__wrapper">
           <h3>
-            <Link to="/settings">
-              <I18n>settings</I18n>
-            </Link>{' '}
-            /{` `}
-            <Link to={`/settings/datastore/`}>
-              <I18n>datastore</I18n>
+            <Link to="../">
+              <I18n>{kapp.name}</I18n>
             </Link>{' '}
             /{` `}
           </h3>
           <h1>
-            <I18n>New Datastore Form</I18n>
+            <I18n>New Survey</I18n>
           </h1>
         </div>
       </div>
@@ -47,11 +40,38 @@ const CreateDatastoreComponent = ({
           <I18n>General Settings</I18n>
         </h3>
         <div className="settings form">
+          <div className="form-group">
+            <label htmlFor="template">
+              <I18n>Survey Template</I18n>{' '}
+              <small>
+                <I18n>
+                  (Kapp form of type "Template" to clone for new survey)
+                </I18n>
+              </small>
+            </label>
+            <select
+              id="template"
+              className="form-control"
+              onChange={e =>
+                setNewForm(newForm.set('template', e.target.value))
+              }
+              value={newForm.template}
+              name="template"
+            >
+              <option value="" />
+              {!!templates &&
+                templates.map(t => (
+                  <option key={t.slug} value={t.slug}>
+                    {t.name}
+                  </option>
+                ))}
+            </select>
+          </div>
           <div className="form-row">
             <div className="col">
               <div className="form-group required">
                 <label htmlFor="name">
-                  <I18n>Datastore Name</I18n>
+                  <I18n>Survey Name</I18n>
                 </label>
                 <input
                   id="name"
@@ -65,7 +85,7 @@ const CreateDatastoreComponent = ({
             <div className="col">
               <div className="form-group required">
                 <label htmlFor="slug">
-                  <I18n>Datastore Slug</I18n>
+                  <I18n>Survey Slug</I18n>
                 </label>
                 <input
                   id="slug"
@@ -81,7 +101,7 @@ const CreateDatastoreComponent = ({
           </div>
           <div className="form-group">
             <label htmlFor="name">
-              <I18n>Datastore Description</I18n>{' '}
+              <I18n>Survey Description</I18n>{' '}
               <small>
                 <I18n>(optional)</I18n>
               </small>
@@ -99,18 +119,21 @@ const CreateDatastoreComponent = ({
           </div>
           <div className="form__footer">
             <div className="form__footer__right">
-              <Link to="/settings/datastore" className="btn btn-link mb-0">
+              <Link to="../" className="btn btn-link mb-0">
                 <I18n>Cancel</I18n>
               </Link>
               <button
                 disabled={
-                  newForm.name === '' || newForm.slug === '' || creating
+                  newForm.template === '' ||
+                  newForm.name === '' ||
+                  newForm.slug === '' ||
+                  creating
                 }
                 type="button"
                 onClick={handleSave()}
                 className="btn btn-secondary"
               >
-                <I18n>Create Datastore Form</I18n>
+                <I18n>Create Survey</I18n>
               </button>
             </div>
           </div>
@@ -119,23 +142,34 @@ const CreateDatastoreComponent = ({
     </div>
     <div className="page-panel page-panel--one-thirds page-panel--transparent page-panel--sidebar page-panel--datastore-sidebar">
       <h3>
-        <I18n>New Datastore Form</I18n>
+        <I18n>New Survey</I18n>
       </h3>
       <p>
         <I18n>
-          Creating a new Datastore will create a new Kinetic Request datastore
-          form to be used for storing data.
+          Creating a new Survey will create a Kapp form with the same survey
+          configuration as the selected template.
         </I18n>
       </p>
     </div>
   </div>
 );
 
-const handleSave = ({ createForm, newForm, push, setCreating }) => () => () => {
+const handleSave = ({
+  createForm,
+  fetchAppDataRequest,
+  newForm,
+  push,
+  setCreating,
+  kapp,
+}) => () => () => {
   setCreating(true);
   createForm({
+    kappSlug: kapp.slug,
     form: newForm,
-    callback: () => push(`/settings/datastore/${newForm.slug}/settings`),
+    callback: () => {
+      fetchAppDataRequest();
+      push(`${newForm.slug}/settings`);
+    },
   });
 };
 
@@ -158,25 +192,27 @@ const handleNameChange = ({ setNewForm, newForm }) => value => {
 };
 
 export const mapStateToProps = state => ({
+  kapp: state.app.kapp,
+  kappSlug: state.app.kappSlug,
   spaceAdmin: state.app.profile.spaceAdmin,
+  templates: state.surveyApp.templates,
 });
 
 export const mapDispatchToProps = {
   push,
-  createForm: actions.createForm,
+  createForm: actions.createFormRequest,
+  fetchAppDataRequest: appActions.fetchAppDataRequest,
 };
 
-export const CreateDatastore = compose(
+export const CreateSurvey = compose(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { context },
   ),
-  withState('newForm', 'setNewForm', DatastoreForm()),
+  withState('newForm', 'setNewForm', Survey()),
   withState('creating', 'setCreating', false),
   withHandlers({
     handleSave,
     handleNameChange,
   }),
-)(CreateDatastoreComponent);
+)(CreateSurveyComponent);

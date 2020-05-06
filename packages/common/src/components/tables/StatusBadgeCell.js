@@ -16,3 +16,9 @@ export const StatusBadgeCell = ({ value }) => (
     </span>
   </td>
 );
+
+export const StatusBadge = ({ status }) => (
+  <span className={`badge ${STATUS_CLASSES[status]}`}>
+    <I18n>{status}</I18n>
+  </span>
+);

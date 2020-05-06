@@ -5,7 +5,6 @@ const { namespace, noPayload, withPayload } = Utils;
 export const State = Record({
   loading: true,
   data: null,
-
   isAddMemberModalOpen: false,
   deleteError: null,
   submitError: null,

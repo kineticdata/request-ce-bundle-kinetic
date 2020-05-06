@@ -1,4 +1,4 @@
-import { List, Record } from 'immutable';
+import { List, Map, Record } from 'immutable';
 import { Utils } from 'common';
 import isobject from 'isobject';
 
@@ -85,6 +85,10 @@ export const types = {
   OPEN_MODAL: namespace('settingsQueueForms', 'OPEN_MODAL'),
   CLOSE_MODAL: namespace('settingsQueueForms', 'CLOSE_MODAL'),
   SET_DOWNLOADED: namespace('settingsQueueForms', 'SET_DOWNLOADED'),
+  DELETE_FORM_REQUEST: namespace('settingsQueueForms', 'DELETE_FORM_REQUEST'),
+  DELETE_FORM_COMPLETE: namespace('settingsQueueForms', 'DELETE_FORM_COMPLETE'),
+  CLONE_FORM_REQUEST: namespace('settingsQueueForms', 'CLONE_FORM_REQUEST'),
+  CLONE_FORM_COMPLETE: namespace('settingsQueueForms', 'CLONE_FORM_COMPLETE'),
 };
 
 export const actions = {
@@ -108,6 +112,10 @@ export const actions = {
   openModal: withPayload(types.OPEN_MODAL),
   closeModal: noPayload(types.CLOSE_MODAL),
   setDownloaded: withPayload(types.SET_DOWNLOADED),
+  deleteFormRequest: withPayload(types.DELETE_FORM_REQUEST), // new
+  deleteFormComplete: withPayload(types.DELETE_FORM_COMPLETE), // new
+  cloneFormRequest: withPayload(types.CLONE_FORM_REQUEST), // new
+  cloneFormComplete: withPayload(types.CLONE_FORM_COMPLETE), // new
 };
 
 export const parseFormConfigurationJson = json => {
@@ -220,6 +228,7 @@ export const State = Record({
   exportSubmissions: [],
   exportCount: 0,
   downloaded: false,
+  processing: Map(),
 });
 
 export const reducer = (state = State(), { type, payload }) => {
@@ -282,6 +291,14 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('modalIsOpen', false).set('modalName', '');
     case types.SET_DOWNLOADED:
       return state.set('downloaded', payload);
+    case types.DELETE_FORM_REQUEST:
+      return state.setIn(['processing', payload.formSlug], true);
+    case types.DELETE_FORM_COMPLETE:
+      return state.deleteIn(['processing', payload.formSlug]);
+    case types.CLONE_FORM_REQUEST:
+      return state.setIn(['processing', payload.cloneFormSlug], true);
+    case types.CLONE_FORM_COMPLETE:
+      return state.deleteIn(['processing', payload.cloneFormSlug]);
     default:
       return state;
   }

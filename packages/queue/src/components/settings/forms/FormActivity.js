@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import moment from 'moment';
 import { Link } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
+import { TimeAgo } from 'common';
 import { actions } from '../../../redux/modules/settingsForms';
 import { I18n } from '@kineticdata/react';
 import { connect } from '../../../redux/store';
@@ -9,127 +10,125 @@ import { PageTitle } from '../../shared/PageTitle';
 
 export const FormActivityContainer = ({ loading, submission, space }) =>
   !loading && (
-    <div>
+    <div className="page-container">
       <PageTitle parts={['Queue Settings']} />
-      <div className="page-container">
-        <div className="page-panel page-panel--white">
-          <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
-                <Link to="../../../..">
-                  <I18n>queue</I18n>
-                </Link>{' '}
-                /{` `}
-                <Link to="../../..">
-                  <I18n>settings</I18n>
-                </Link>{' '}
-                /{` `}
-                <Link to="../..">
-                  <I18n>forms</I18n>
-                </Link>{' '}
-                /{` `}
-                <Link to={`../../${submission.form.slug}`}>
-                  <I18n
-                    context={`kapps.${submission.form.kapp.slug}.forms.${
-                      submission.form.slug
-                    }`}
-                  >
-                    {submission.form.name}
-                  </I18n>
-                </Link>{' '}
-                /{` `}
-              </h3>
-              <h1>
+      <div className="page-panel page-panel--white">
+        <div className="page-title">
+          <div className="page-title__wrapper">
+            <h3>
+              <Link to="../../../../..">
+                <I18n>queue</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="../../../..">
+                <I18n>settings</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to="../../..">
+                <I18n>forms</I18n>
+              </Link>{' '}
+              /{` `}
+              <Link to={`../..`}>
                 <I18n
                   context={`kapps.${submission.form.kapp.slug}.forms.${
                     submission.form.slug
                   }`}
                 >
                   {submission.form.name}
-                </I18n>{' '}
-                ({submission.handle})
-              </h1>
-            </div>
-          </div>
-          <section>
-            <div className="settings-flex row">
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Submission Label</I18n>
-                </label>
-                <p>{submission.label}</p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Submission Id</I18n>
-                </label>
-                <p>{submission.id}</p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Status</I18n>
-                </label>
-                <p>{submission.coreState}</p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Time to Close</I18n>
-                </label>
-                <p>
-                  {submission.closedAt
-                    ? moment
-                        .duration(
-                          moment(submission.submittedAt).valueOf() -
-                            moment(submission.closedAt).valueOf(),
-                        )
-                        .humanize()
-                    : 'Not closed yet'}
-                </p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Created</I18n>
-                </label>
-                <p>
-                  {moment(submission.createdAt).fromNow()} by{' '}
-                  {submission.createdBy}
-                </p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Submitted</I18n>
-                </label>
-                <p>
-                  {moment(submission.submittedAt).fromNow()} by{' '}
-                  {submission.submittedBy}
-                </p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Created</I18n>
-                </label>
-                <p>
-                  {moment(submission.updatedAt).fromNow()} by{' '}
-                  {submission.updatedBy}
-                </p>
-              </div>
-              <div className="col-sm-6">
-                <label>
-                  <I18n>Closed</I18n>
-                </label>
-                <p>
-                  {submission.closedAt ? (
-                    moment(submission.closedAt).fromNow()
-                  ) : (
-                    <I18n>N/A</I18n>
-                  )}
-                </p>
-              </div>
-            </div>
-            <br />
-            <h3 className="section__title">
-              <I18n>Fulfillment Process</I18n>
+                </I18n>
+              </Link>{' '}
+              /{` `}
             </h3>
+            <h1>{submission.handle}</h1>
+          </div>
+        </div>
+        <section>
+          <div className="data-list data-list--fourths">
+            <dl>
+              <dt>Submission Label</dt>
+              <dd>{submission.label}</dd>
+            </dl>
+            <dl>
+              <dt>Submission Id</dt>
+              <dd>{submission.id}</dd>
+            </dl>
+            <dl>
+              <dt>Core State</dt>
+              <dd>{submission.coreState}</dd>
+            </dl>
+            <dl>
+              <dt>Time to Close</dt>
+              <dd>
+                {submission.closedAt ? (
+                  moment
+                    .duration(
+                      moment(submission.submittedAt).valueOf() -
+                        moment(submission.closedAt).valueOf(),
+                    )
+                    .humanize()
+                ) : (
+                  <I18n>Not closed yet</I18n>
+                )}
+              </dd>
+            </dl>
+            <dl>
+              <dt>Created</dt>
+              <dd>
+                <TimeAgo timestamp={submission.createdAt} />
+                <br />
+                <small>
+                  <I18n>by</I18n> {submission.createdBy}
+                </small>
+              </dd>
+            </dl>
+            <dl>
+              <dt>Submitted</dt>
+              <dd>
+                {submission.submittedAt ? (
+                  <Fragment>
+                    <TimeAgo timestamp={submission.submittedAt} />
+                    <br />
+                    <small>
+                      <I18n>by</I18n> {submission.submittedBy}
+                    </small>
+                  </Fragment>
+                ) : (
+                  <I18n>N/A</I18n>
+                )}
+              </dd>
+            </dl>
+            <dl>
+              <dt>Updated</dt>
+              <dd>
+                <TimeAgo timestamp={submission.updatedAt} />
+                <br />
+                <small>
+                  <I18n>by</I18n> {submission.updatedBy}
+                </small>
+              </dd>
+            </dl>
+            <dl>
+              <dt>Closed</dt>
+              <dd>
+                {submission.closedAt ? (
+                  <Fragment>
+                    <TimeAgo timestamp={submission.closedAt} />
+                    <br />
+                    <small>
+                      <I18n>by</I18n> {submission.closedBy}
+                    </small>
+                  </Fragment>
+                ) : (
+                  <I18n>N/A</I18n>
+                )}
+              </dd>
+            </dl>
+          </div>
+
+          <h3 className="section__title">
+            <I18n>Fulfillment Process</I18n>
+          </h3>
+          <div className="section__content scroll-wrapper-h">
             {submission.activities.filter(activity => activity.type === 'Task')
               .length > 0 ? (
               <table className="table table-sm table-striped settings-table">
@@ -176,10 +175,12 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
             ) : (
               <I18n>There are no fulfillment steps</I18n>
             )}
-            <br />
-            <h3 className="section__title">
-              <I18n>Submission Activity</I18n>
-            </h3>
+          </div>
+
+          <h3 className="section__title">
+            <I18n>Submission Activity</I18n>
+          </h3>
+          <div className="section__content scroll-wrapper-h">
             {submission.activities.filter(activity => activity.type !== 'Task')
               .length > 0 ? (
               <table className="table table-sm table-striped settings-table">
@@ -226,10 +227,12 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
             ) : (
               <I18n>There is no submission activity</I18n>
             )}
-            <br />
-            <h3 className="section__title">
-              <I18n>Values</I18n>
-            </h3>
+          </div>
+
+          <h3 className="section__title">
+            <I18n>Values</I18n>
+          </h3>
+          <div className="section__content scroll-wrapper-h">
             <table className="table table-sm table-striped settings-table">
               <thead className="header">
                 <tr>
@@ -258,8 +261,8 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                 ))}
               </tbody>
             </table>
-          </section>
-        </div>
+          </div>
+        </section>
       </div>
     </div>
   );

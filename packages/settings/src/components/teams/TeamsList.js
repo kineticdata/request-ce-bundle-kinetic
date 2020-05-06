@@ -1,73 +1,183 @@
-import React from 'react';
-import { Link } from '@reach/router';
-import { TeamsListItem } from './TeamsListItem';
-import wallyHappyImage from 'common/src/assets/images/wally-happy.svg';
-import { I18n } from '@kineticdata/react';
+import React, { Fragment } from 'react';
+import { compose, withHandlers, withState } from 'recompose';
+import { Link } from 'react-router-dom';
+import { TeamTable, TeamForm, I18n } from '@kineticdata/react';
+import { generateEmptyBodyRow } from 'common/src/components/tables/EmptyBodyRow';
+import { generateFilterModalLayout } from 'common/src/components/tables/FilterLayout';
+import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
 import { PageTitle } from '../shared/PageTitle';
+import { Modal, ModalBody, ModalFooter } from 'reactstrap';
+import { FormComponents, addToast } from 'common';
 
-const WallyEmptyMessage = ({ me }) => {
-  return (
-    <div className="empty-state empty-state--wally">
-      <h5>
-        <I18n>No Teams Right Now...</I18n>
-      </h5>
-      <img src={wallyHappyImage} alt="Happy Wally" />
-      {me.spaceAdmin && (
-        <h6>
-          <I18n>Add a team by hitting the new button!</I18n>
-        </h6>
-      )}
-    </div>
-  );
-};
+const FormLayout = ({ fields, error, buttons }) => (
+  <Fragment>
+    <ModalBody className="form">
+      {fields.get('localName')}
+      {fields.get('description')}
+      {error}
+    </ModalBody>
+    <ModalFooter className="modal-footer--full-width">{buttons}</ModalFooter>
+  </Fragment>
+);
 
-export const TeamsList = ({ loading, teams, me }) => (
-  <div className="page-container">
-    <PageTitle parts={['Teams']} />
-    {!loading && (
-      <div className="page-panel page-panel--white">
-        <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
-              <Link to="/settings">
-                <I18n>settings</I18n>
-              </Link>{' '}
-              /{' '}
-            </h3>
-            <h1>
-              <I18n>Teams</I18n>
-            </h1>
+const FormButtons = props => (
+  <button
+    className="btn btn-success"
+    type="submit"
+    disabled={!props.dirty || props.submitting}
+    onClick={props.submit}
+  >
+    {props.submitting && (
+      <span className="fa fa-circle-o-notch fa-spin fa-fw" />
+    )}{' '}
+    <I18n>Create Team</I18n>
+  </button>
+);
+
+const NameCell = ({ value, row }) => (
+  <td>
+    <Link to={`/settings/teams/${row.get('slug')}/edit`} title="Edit Team">
+      {value}
+    </Link>
+  </td>
+);
+
+const EmptyBodyRow = generateEmptyBodyRow({
+  loadingMessage: 'Loading Teams...',
+  noSearchResultsMessage:
+    'No Teams were found - please modify your search criteria',
+  noItemsMessage: 'There are no Teams to display.',
+  noItemsLinkTo: '/settings/teams/new',
+  noItemsLinkToMessage: 'Add new Team',
+});
+
+const FilterLayout = generateFilterModalLayout(['name']);
+
+export const TeamsListComponent = ({
+  tableType,
+  modalOpen,
+  toggleModal,
+  navigate,
+}) => (
+  <TeamTable
+    components={{
+      FilterLayout,
+      EmptyBodyRow,
+      TableLayout: SettingsTableLayout,
+    }}
+    alterColumns={{
+      name: {
+        components: {
+          BodyCell: NameCell,
+        },
+      },
+      description: {
+        sortable: false,
+      },
+    }}
+    columnSet={['name', 'description']}
+  >
+    {({ pagination, table, filter }) => (
+      <div className="page-container page-container--panels">
+        <PageTitle parts={['Teams']} />
+        <div className="page-panel page-panel--two-thirds page-panel--white">
+          <div className="page-title">
+            <div className="page-title__wrapper">
+              <h3>
+                <Link to="../settings">
+                  <I18n>settings</I18n>
+                </Link>{' '}
+                /{` `}
+              </h3>
+              <h1>
+                <I18n>Teams</I18n>
+              </h1>
+            </div>
+            <div className="page-title__actions">
+              <I18n
+                render={translate => (
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    title={translate('New Team')}
+                    onClick={() => toggleModal(true)}
+                  >
+                    <span className="fa fa-plus fa-fw" />{' '}
+                    {translate('New Team')}
+                  </button>
+                )}
+              />
+            </div>
           </div>
-
-          <Link to="/settings/teams/new" className="btn btn-secondary">
-            <I18n>New Team</I18n>
-          </Link>
+          <div>
+            <div className="mb-2 text-right">{filter}</div>
+            {table}
+            {pagination}
+          </div>
         </div>
-        {teams.size > 0 ? (
-          <div className="space-admin-wrapper">
-            <table className="table table-sm table--settings">
-              <thead className="d-none d-md-table-header-group sortable">
-                <tr className="header">
-                  <th scope="col" width="33%">
-                    <I18n>Team</I18n>
-                  </th>
-                  <th scope="col">
-                    <I18n>Description</I18n>
-                  </th>
-                  <th className="sort-disabled" />
-                </tr>
-              </thead>
-              <tbody>
-                {teams.map(team => {
-                  return <TeamsListItem key={team.slug} team={team} />;
-                })}
-              </tbody>
-            </table>
+        <div className="page-panel page-panel--one-thirds page-panel--sidebar">
+          <h3>
+            <I18n>Teams</I18n>
+          </h3>
+          <p>
+            <I18n>
+              Teams represent groupings of users within the system. Teams are
+              commonly used to for security to define groups of users that have
+              permissions to a specific resource.
+            </I18n>
+          </p>
+        </div>
+
+        {/* Modal for creating a new team */}
+        <Modal isOpen={!!modalOpen} toggle={() => toggleModal()} size="lg">
+          <div className="modal-header">
+            <h4 className="modal-title">
+              <button
+                type="button"
+                className="btn btn-link btn-delete"
+                onClick={() => toggleModal()}
+              >
+                <I18n>Close</I18n>
+              </button>
+              <span>
+                <I18n>New Team</I18n>
+              </span>
+            </h4>
           </div>
-        ) : (
-          <WallyEmptyMessage me={me} />
-        )}
+          <TeamForm
+            formkey="team-new"
+            onSave={() => team => {
+              addToast(`${team.name} created successfully.`);
+              team && navigate(`${team.slug}/edit`);
+            }}
+            components={{
+              FormLayout,
+              FormButtons,
+              FormError: FormComponents.FormError,
+            }}
+            alterFields={{
+              description: {
+                component: FormComponents.TextAreaField,
+              },
+            }}
+          >
+            {({ form, initialized }) => {
+              return initialized && form;
+            }}
+          </TeamForm>
+        </Modal>
       </div>
     )}
-  </div>
+  </TeamTable>
 );
+
+// Teams Container
+export const TeamsList = compose(
+  withState('modalOpen', 'setModalOpen', false),
+  withHandlers({
+    toggleModal: props => slug =>
+      !slug || slug === props.modalOpen
+        ? props.setModalOpen(false)
+        : props.setModalOpen(slug),
+  }),
+)(TeamsListComponent);

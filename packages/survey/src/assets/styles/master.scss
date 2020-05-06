@@ -1,0 +1,12 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * kinops Survey
+ * Copyright (c) 2017 - 2020 Kinetic Data, Inc.
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+#root ~ div,
+.package-layout--survey {
+  @import 'temp';
+  @import 'cards';
+
+  @import 'likert';
+}

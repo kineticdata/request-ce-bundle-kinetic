@@ -1,0 +1,94 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Temp ~ Survey
+ *     -Used for development
+ *     -Move css into appropriate sass files when ready
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.status {
+  color: $white;
+  text-align: center;
+  padding: 0.125rem 0.625rem;
+  font-size: 50%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  align-self: center;
+  border-radius: 0.75rem;
+  margin-left: auto;
+  flex: 0 0 auto;
+
+  &--gray {
+    background-color: $gray50;
+  }
+
+  &--yellow {
+    background-color: $sunflower;
+    color: $gray80;
+  }
+
+  &--green {
+    background-color: $green-grass;
+  }
+
+  &--red {
+    background-color: $red;
+  }
+}
+
+.survey-settings-label {
+  padding: 0.375rem 0.75rem 0.75rem 0;
+  overflow: hidden;
+  background: $white;
+  display: block;
+  color: rgba($gray80, 0.75);
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 0.75rem;
+}
+
+.survey-settings-sidebar-link {
+  line-height: normal;
+  text-transform: none;
+  color: $blue-lake;
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.survey-view-toggle {
+  display: block;
+  text-align: right;
+  margin: 0 0 0.75rem 0;
+}
+
+.survey-tabs {
+  .nav-tabs {
+    margin-bottom: 1.5rem;
+    .nav-link.active {
+      border-color: transparent;
+      border-bottom: 2px solid #ff991c;
+    }
+    .nav-link {
+      padding-top: 0;
+      &:hover {
+        border-color: transparent;
+        border-bottom: 2px solid $orange-kinetic;
+      }
+    }
+  }
+}
+
+.workflow-group {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.workflow-builder-link {
+  display: flex;
+}
+
+.card-black-text {
+  color: $black;
+}

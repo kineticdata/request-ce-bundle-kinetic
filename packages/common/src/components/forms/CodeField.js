@@ -18,6 +18,7 @@ const generateCodeField = templateMode => props => (
           onBlur={props.onBlur}
           onChange={props.onChange}
           onFocus={props.onFocus}
+          language={props.language}
           placeholder={translate(props.placeholder)}
           disabled={!props.enabled}
         >

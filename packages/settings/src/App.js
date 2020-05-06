@@ -4,7 +4,6 @@ import { compose, lifecycle } from 'recompose';
 import { connect } from './redux/store';
 import { ErrorUnexpected, Loading } from 'common';
 import { I18n } from '@kineticdata/react';
-
 import { Sidebar } from './components/Sidebar';
 import { Settings } from './components/Settings';
 import { Notifications } from './components/notifications/Notifications';
@@ -15,9 +14,7 @@ import { Teams } from './components/teams/Teams';
 import { Translations } from './components/translations/Translations';
 import { SchedulerSettings } from './components/SchedulerSettings';
 import { SpaceSettings } from './components/space_settings/SpaceSettings';
-
 import { actions as datastoreActions } from './redux/modules/settingsDatastore';
-import { actions as teamActions } from './redux/modules/teamList';
 
 const AppComponent = props => {
   if (props.error) {
@@ -35,7 +32,7 @@ const AppComponent = props => {
         <I18n>
           <main className={`package-layout package-layout--settings`}>
             <Router>
-              <SpaceSettings path="system" />
+              <SpaceSettings path="space" />
               <Datastore path="datastore/*" />
               <RobotsWrapper path="robots/*" />
               <Users path="users/*" />
@@ -56,7 +53,6 @@ const mapStateToProps = (state, props) => ({});
 
 const mapDispatchToProps = {
   fetchForms: datastoreActions.fetchForms,
-  fetchTeams: teamActions.fetchTeams,
 };
 
 const enhance = compose(
@@ -67,7 +63,6 @@ const enhance = compose(
   lifecycle({
     componentDidMount() {
       this.props.fetchForms();
-      this.props.fetchTeams();
     },
   }),
 );

@@ -1,0 +1,29 @@
+.card--survey {
+  border: 1px solid $gray16;
+  margin-bottom: 0.75rem;
+  padding: 0.6875rem 1rem;
+  transition: background-color 0.3s;
+  @include setBgColorAndHover($white);
+
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+
+  h1 {
+    color: $gray80;
+    display: inline-flex;
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 2.25rem;
+    margin: 0;
+  }
+
+  p {
+    color: $gray50;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin-bottom: 0;
+    @include word-break;
+  }
+}

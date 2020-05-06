@@ -2,6 +2,7 @@
 import { AttributesField } from './AttributesField';
 import { CheckboxField } from './CheckboxField';
 import { CodeField, CodeTemplateField } from './CodeField';
+import { DateField, DateTimeField } from './DateTimeField';
 import { FormButtons, generateFormButtons } from './FormButtons';
 import { FormError } from './FormError';
 import { FormField, FormMultiField } from './FormField';
@@ -17,18 +18,22 @@ import { RadioField } from './RadioField';
 import { IntegerField } from './IntegerField';
 import { IconField } from './IconField';
 import { WorkflowField } from './WorkflowField';
+import { NotificationField } from './NotificationField';
 
 export default {
   AttributesField,
   CheckboxField,
   CodeField,
   CodeTemplateField,
+  DateField,
+  DateTimeField,
   FormButtons,
   generateFormButtons,
   FormError,
   FormField,
   FormMultiField,
   IconField,
+  NotificationField,
   IntegerField,
   PasswordField,
   RadioField,
