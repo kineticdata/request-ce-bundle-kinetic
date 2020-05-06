@@ -98,7 +98,7 @@ const buildAdditionalDataSources = bundleName =>
 const fetchBundleVersions = (options = {}) => {
   return localAxios
     .get(
-      `https://kinops.io.s3.amazonaws.com/?list-type=2&prefix=bundles/${options.name ||
+      `https://s3.amazonaws.com/kinops.io?list-type=2&prefix=bundles/${options.name ||
         'kinetic'}/${options.branches ? 'branches' : 'releases'}/&delimiter=/`,
     )
     .then(response => {
