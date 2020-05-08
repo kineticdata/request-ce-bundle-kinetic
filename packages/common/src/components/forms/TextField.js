@@ -71,6 +71,7 @@ export class TextMultiField extends Component {
                   onBlur={this.props.onBlur}
                   type="button"
                 >
+                  <span className="sr-only">Remove</span>
                   <i className="fa fa-fw fa-times" />
                 </button>
               </div>

@@ -311,6 +311,7 @@ const SearchbarComponent = ({
             className="advanced-dropdown-caret"
             onClick={handleResetSearch}
           >
+            <span className="sr-only">Reset Search</span>
             <i className="fa fa-fw fa-times text-danger" />
           </Button>
         )}
@@ -319,6 +320,7 @@ const SearchbarComponent = ({
           className="advanced-dropdown-caret"
           onClick={toggleAdvancedSearchOpen}
         >
+          <span className="sr-only">Open</span>
           <i className="fa fa-fw fa-caret-down" />
         </Button>
       </InputGroupAddon>
@@ -328,6 +330,7 @@ const SearchbarComponent = ({
           className={advancedSearchOpen ? 'advanced-open' : ''}
           onClick={handleSearchSubmissions}
         >
+          <span className="sr-only">Searc Submissions</span>
           <i className="fa fa-fw fa-search" />
         </Button>
       </InputGroupAddon>

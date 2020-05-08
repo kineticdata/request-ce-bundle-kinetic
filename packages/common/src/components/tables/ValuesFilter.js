@@ -124,6 +124,7 @@ export class ValuesFilter extends Component {
                               type="button"
                               onClick={this.handleRemove(idx)}
                             >
+                              <span className="sr-only">Remove</span>
                               <span className="fa fa-times fa-fw" />
                             </button>
                           </div>

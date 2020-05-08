@@ -540,6 +540,7 @@ const QualificationTable = ({
                     )
                   }
                 >
+                  <span className="sr-only">Edit</span>
                   <span className="fa fa-fw fa-pencil" />
                 </button>
                 <button
@@ -548,6 +549,7 @@ const QualificationTable = ({
                     handleBridgeChange('bridgeQualificationDelete', index)
                   }
                 >
+                  <span className="sr-only">Remove</span>
                   <span className="fa fa-fw fa-close" />
                 </button>
               </div>
@@ -671,6 +673,7 @@ const QualificationModal = ({
                             )
                           }
                         >
+                          <span className="sr-only">Remove</span>
                           <span className="fa fa-fw fa-close" />
                         </button>
                       </div>
@@ -944,6 +947,7 @@ const AttributeTable = ({
                       className="btn btn-danger"
                       onClick={() => setEditAttribute(new BridgeAttribute())}
                     >
+                      <span className="sr-only">Remove</span>
                       <span className="fa fa-fw fa-close" />
                     </button>
                     <button
@@ -968,6 +972,7 @@ const AttributeTable = ({
                         )
                       }
                     >
+                      <span className="sr-only">Edit</span>
                       <span className="fa fa-fw fa-pencil" />
                     </button>
                     <button
@@ -976,6 +981,7 @@ const AttributeTable = ({
                         handleBridgeChange('bridgeAttributeDelete', index)
                       }
                     >
+                      <span className="sr-only">Remove</span>
                       <span className="fa fa-fw fa-close" />
                     </button>
                   </div>

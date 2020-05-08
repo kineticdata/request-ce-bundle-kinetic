@@ -136,6 +136,7 @@ export class AttributesField extends Component {
                       onBlur={this.props.onBlur}
                       onClick={this.onRemove(name, index)}
                     >
+                      <span className="sr-only">Remove Attribute</span>
                       <span className="fa fa-times fa-fw" />
                     </button>
                   )}

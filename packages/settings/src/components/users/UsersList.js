@@ -269,16 +269,15 @@ export const UsersListComponent = ({
                 type="file"
                 accept=".csv"
                 id="file-input"
-                style={{ display: 'none' }}
                 onChange={handleImport}
               />
-              <label
+              {/* <label
                 htmlFor="file-input"
                 className="btn btn-info"
                 style={{ marginBottom: '0px' }}
               >
                 <I18n>Import Users</I18n>
-              </label>
+              </label> */}
               <button
                 className="btn btn-info"
                 onClick={() => openExportModal('export')}

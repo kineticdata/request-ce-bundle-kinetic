@@ -371,9 +371,11 @@ const renderActionsCell = ({
     ) : (
       <div className="btn-group">
         <button className="btn btn-success" onClick={handleUpdateContext}>
+          <span className="sr-only">Check</span>
           <span className="fa fa-check" />
         </button>
         <button className="btn btn-danger" onClick={toggleUpdate('')}>
+          <span className="sr-only">Delete</span>
           <span className="fa fa-times" />
         </button>
       </div>

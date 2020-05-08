@@ -173,6 +173,7 @@ const renderHeaderHandler = props => () => {
                       onClick={() => props.performSearchHandler(true)}
                       title={translate('Clear Search')}
                     >
+                      <span className="sr-only">Clear Search</span>
                       <span className="fa fa-times text-danger" />
                     </button>
                   </div>

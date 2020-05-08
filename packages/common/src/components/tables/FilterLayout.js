@@ -112,6 +112,7 @@ export const generateFilterModalLayout = (filterSet, title = 'Filter') => ({
               title={translate('Reset Filters')}
               onClick={onReset}
             >
+              <span className="sr-only">Reset Filters</span>
               <span className="fa fa-times" />
             </button>
           )}

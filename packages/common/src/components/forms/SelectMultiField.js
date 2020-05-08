@@ -29,6 +29,7 @@ const Selection = ({ selection, remove, ...other }) => {
             onClick={remove}
             type="button"
           >
+            <span className="sr-only">Remove</span>
             <i className="fa fa-fw fa-times" />
           </button>
         </div>
@@ -155,6 +156,7 @@ export class SelectMultiField extends Component {
                       onBlur={this.props.onBlur}
                       type="button"
                     >
+                      <span className="sr-only">Remove</span>
                       <i className="fa fa-fw fa-times" />
                     </button>
                   </div>

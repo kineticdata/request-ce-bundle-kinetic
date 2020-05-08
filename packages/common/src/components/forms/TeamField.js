@@ -40,6 +40,7 @@ const Selection = ({ selection, edit, remove }) => {
             onClick={edit}
             type="button"
           >
+            <span className="sr-only">Edit Team</span>
             <i className="fa fa-fw fa-pencil" />
           </button>
         </div>
@@ -51,6 +52,7 @@ const Selection = ({ selection, edit, remove }) => {
             onClick={remove}
             type="button"
           >
+            <span className="sr-only">Remove Team</span>
             <i className="fa fa-fw fa-times" />
           </button>
         </div>

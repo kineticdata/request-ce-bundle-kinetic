@@ -597,6 +597,7 @@ export const FormDetailsComponent = ({
                                     setProperty({ name: '' });
                                   }}
                                 >
+                                  <span className="sr-only">Remove</span>
                                   <i className="fa fa-times fa-lg" />
                                 </button>
                               </div>
@@ -657,6 +658,7 @@ export const FormDetailsComponent = ({
                               setProperty({ name: '' });
                             }}
                           >
+                            <span className="sr-only">Add</span>
                             <i className="fa fa-plus fa-lg" />
                           </button>
                         </div>
@@ -699,6 +701,7 @@ export const FormDetailsComponent = ({
                                     setFieldValue({ name: '' });
                                   }}
                                 >
+                                  <span className="sr-only">Remove</span>
                                   <i className="fa fa-times fa-lg" />
                                 </button>
                               </div>
@@ -755,6 +758,7 @@ export const FormDetailsComponent = ({
                               setFieldValue({ name: '' });
                             }}
                           >
+                            <span className="sr-only">Add</span>
                             <i className="fa fa-plus fa-lg" />
                           </button>
                         </div>

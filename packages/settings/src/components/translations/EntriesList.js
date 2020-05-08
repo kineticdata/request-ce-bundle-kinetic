@@ -476,12 +476,14 @@ export const EntriesListComponent = ({
                             className="btn btn-sm btn-primary"
                             onClick={toggleEdit(translations.get(0), 'key')}
                           >
+                            <span className="sr-only">Edit</span>
                             <span className="fa fa-fw fa-pencil" />
                           </button>
                           <button
                             className="btn btn-sm btn-danger"
                             onClick={toggleDelete(translations.get(0), 'key')}
                           >
+                            <span className="sr-only">Remove</span>
                             <span className="fa fa-fw fa-times" />
                           </button>
                         </ButtonGroup>
@@ -873,6 +875,7 @@ const renderActionsCell = ({ toggleEdit, toggleDelete }) => ({
   <td className="text-right">
     <ButtonGroup>
       <button className="btn btn-sm btn-primary" onClick={toggleEdit(row)}>
+        <span className="sr-only">Edit</span>
         <span className="fa fa-fw fa-pencil" />
       </button>
       <button
@@ -880,6 +883,7 @@ const renderActionsCell = ({ toggleEdit, toggleDelete }) => ({
         className="btn btn-sm btn-danger"
         onClick={toggleDelete(row)}
       >
+        <span className="sr-only">Remove</span>
         <span className="fa fa-fw fa-times" />
       </button>
     </ButtonGroup>

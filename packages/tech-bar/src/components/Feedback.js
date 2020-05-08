@@ -51,6 +51,7 @@ export const FeedbackComponent = ({
                 disabled={disabled}
                 onClick={() => handleExperienceClick('Positive')}
               >
+                <span className="sr-only">Postive</span>
                 <span className="fa fa-smile-o" />
               </button>
               <button
@@ -59,6 +60,7 @@ export const FeedbackComponent = ({
                 disabled={disabled}
                 onClick={() => handleExperienceClick('Negative')}
               >
+                <span className="sr-only">Negative</span>
                 <span className="fa fa-frown-o" />
               </button>
             </div>

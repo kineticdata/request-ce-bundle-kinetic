@@ -46,8 +46,8 @@ const AlertRowComponent = ({
             <span className="fa fa-fw fa-close" />
           </button>
           <Link className="btn btn-primary" to={`/alerts/${alert.id}`}>
+            <span className="sr-only">Edit Alert</span>{' '}
             <span className="fa fa-fw fa-pencil" />
-            <span className="sr-only">Edit Alert</span>
           </Link>
         </div>
         <PopConfirm
