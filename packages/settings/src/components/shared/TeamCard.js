@@ -25,11 +25,12 @@ const TeamCardComponent = props => {
           <I18n>{description}</I18n>
         </pre>
 
-        {slug && (
-          <Link to={`/teams/${slug}`} className="btn btn-primary btn-sm">
-            <I18n>View Team</I18n>
-          </Link>
-        )}
+        {!name.startsWith('Role') &&
+          slug && (
+            <Link to={`/teams/${slug}`} className="btn btn-primary btn-sm">
+              <I18n>View Team</I18n>
+            </Link>
+          )}
         {memberships && memberships.length > 0 ? (
           <p className="members-toggle" onClick={toggleShowMembers}>
             <I18n>{showMembers ? 'Less' : 'More'}</I18n>
