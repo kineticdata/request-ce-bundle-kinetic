@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { TeamForm as TeamFormLib, I18n, history } from '@kineticdata/react';
+import { TeamForm as TeamFormLib, I18n } from '@kineticdata/react';
 import { FormComponents, addToast } from 'common';
 import { PageTitle } from '../shared/PageTitle';
 import { Link } from '@reach/router';
