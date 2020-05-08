@@ -550,7 +550,7 @@ const QualificationTable = ({
                   }
                 >
                   <span className="sr-only">Remove</span>
-                  <span className="fa fa-fw fa-close" />
+                  <span className="fa fa-fw fa-times" />
                 </button>
               </div>
             </td>
@@ -674,7 +674,7 @@ const QualificationModal = ({
                           }
                         >
                           <span className="sr-only">Remove</span>
-                          <span className="fa fa-fw fa-close" />
+                          <span className="fa fa-fw fa-times" />
                         </button>
                       </div>
                     </td>
@@ -948,7 +948,7 @@ const AttributeTable = ({
                       onClick={() => setEditAttribute(new BridgeAttribute())}
                     >
                       <span className="sr-only">Remove</span>
-                      <span className="fa fa-fw fa-close" />
+                      <span className="fa fa-fw fa-times" />
                     </button>
                     <button
                       className="btn btn-success"
@@ -982,7 +982,7 @@ const AttributeTable = ({
                       }
                     >
                       <span className="sr-only">Remove</span>
-                      <span className="fa fa-fw fa-close" />
+                      <span className="fa fa-fw fa-times" />
                     </button>
                   </div>
                 )}

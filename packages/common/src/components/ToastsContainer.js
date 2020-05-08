@@ -31,6 +31,7 @@ const ToastComponent = ({ toast, dismiss, showing, duration }) => (
       </div>
     )}
     <div className="toast__close">
+      <span className="sr-only">Dismiss</span>
       <span className="fa fa-fw fa-times" role="button" onClick={dismiss} />
     </div>
   </div>
@@ -98,6 +99,7 @@ const ToastAlertComponent = ({ alert, dismiss, showing }) => (
       )}
     </div>
     <div className="toast-alert__close">
+      <span className="sr-only">Dismiss</span>
       <span className="fa fa-fw fa-times" role="button" onClick={dismiss} />
     </div>
   </div>
