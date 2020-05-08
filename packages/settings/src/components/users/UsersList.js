@@ -265,19 +265,21 @@ export const UsersListComponent = ({
               </h1>
             </div>
             <div className="page-title__actions">
-              <input
-                type="file"
-                accept=".csv"
-                id="file-input"
-                onChange={handleImport}
-              />
-              {/* <label
-                htmlFor="file-input"
-                className="btn btn-info"
-                style={{ marginBottom: '0px' }}
-              >
-                <I18n>Import Users</I18n>
-              </label> */}
+              <div className="file-up" data-file-input>
+                <label htmlFor="file_upload" className="file-up__label">
+                  <span className="file-up__label__text btn btn-info">
+                    <I18n>Import Users</I18n>
+                  </span>
+                  <input
+                    type="file"
+                    accept=".csv"
+                    autocomplete="off"
+                    id="file_upload"
+                    onChange={handleImport}
+                  />
+                </label>
+              </div>
+
               <button
                 className="btn btn-info"
                 onClick={() => openExportModal('export')}
