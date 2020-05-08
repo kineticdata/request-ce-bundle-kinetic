@@ -48,6 +48,7 @@ const ActionsCell = ({ deleteForm, toggleModal, processing }) => ({
     ) : (
       <UncontrolledDropdown className="more-actions">
         <DropdownToggle tag="button" className="btn btn-sm btn-link">
+          <span className="sr-only">More Action</span>
           <span className="fa fa-chevron-down fa-fw" />
         </DropdownToggle>
         <DropdownMenu right>

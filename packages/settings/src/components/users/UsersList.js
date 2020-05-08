@@ -177,6 +177,7 @@ const ActionsCell = ({ toggleModal }) => ({ row }) => (
   <td className="text-right" style={{ width: '1%' }}>
     <UncontrolledDropdown className="more-actions">
       <DropdownToggle tag="button" className="btn btn-sm btn-link">
+        <span className="sr-only">More Actions</span>
         <span className="fa fa-chevron-down fa-fw" />
       </DropdownToggle>
       <DropdownMenu right>
