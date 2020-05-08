@@ -307,6 +307,7 @@ const SurveySettingsComponent = ({
                 }/builder`}
                 className="btn btn-primary"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 <I18n>Form Builder</I18n>{' '}
                 <i className="fa fa-fw fa-external-link" />
