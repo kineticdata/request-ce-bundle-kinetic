@@ -229,12 +229,7 @@ export const UsersListComponent = ({
       TableLayout: SettingsTableLayout,
     }}
     alterColumns={{
-      username: {
-        title: 'Email',
-        components: {
-          BodyCell: NameCell,
-        },
-      },
+      username: { title: 'Email', components: { BodyCell: NameCell } },
     }}
     addColumns={[
       {
@@ -253,14 +248,18 @@ export const UsersListComponent = ({
         <PageTitle parts={['Users']} />
         <div className="page-panel page-panel--two-thirds page-panel--white">
           <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
+            <div
+              role="navigation"
+              aria-label="breadcrumbs"
+              className="page-title__breadcrumbs"
+            >
+              <span className="breadcrumb-item">
                 <Link to="../settings">
                   <I18n>settings</I18n>
-                </Link>{' '}
-                /{` `}
-              </h3>
-              <h1>
+                </Link>
+              </span>{' '}
+              <span aria-hidden="true">/ </span>
+              <h1 aria-current="page">
                 <I18n>Users</I18n>
               </h1>
             </div>
@@ -358,22 +357,17 @@ export const UsersListComponent = ({
               FormButtons,
               FormError: FormComponents.FormError,
             }}
-            alterFields={{
-              username: {
-                label: 'Email',
-              },
-            }}
+            alterFields={{ username: { label: 'Email' } }}
             addDataSources={
               typeof modalOpen === 'string'
                 ? {
                     cloneUser: {
                       fn: fetchUser,
                       params: [{ username: modalOpen }],
-                      // Set to the user, or the result in case of an error
                       transform: result => result.user || result,
                     },
                   }
-                : undefined
+                : undefined // Set to the user, or the result in case of an error
             }
           >
             {({ form, initialized, bindings: { cloneUser } }) => {

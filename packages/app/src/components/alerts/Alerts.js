@@ -41,11 +41,10 @@ const AlertsComponent = ({
       {!loading && (
         <div className="page-panel page-panel--space-alerts">
           <div className="page-title">
-            <div className="page-title__wrapper">
-              <h1>
-                <I18n>Alerts</I18n>
-              </h1>
-            </div>
+            <h1>
+              <I18n>Alerts</I18n>
+            </h1>
+
             {canEdit && (
               <Link to="/alerts/new" className="btn btn-secondary">
                 <I18n>New Alert</I18n>

@@ -25,22 +25,33 @@ const RobotExecutionComponent = ({
     <div className="page-container">
       <div className="page-panel page-panel--white">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to="/settings">
                 <I18n>settings</I18n>
-              </Link>{' '}
-              /{` `}
+              </Link>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
+            <span className="breadcrumb-item">
               <Link to="/settings/robots">
                 <I18n>robots</I18n>
-              </Link>{' '}
-              /{` `}
-              {robotExecution && (
-                <Link to={`/settings/robots/${robotId}`}>
-                  <span>{robotExecution.values['Robot Name']}</span>
-                </Link>
-              )}
-            </h3>
+              </Link>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
+            {robotExecution && (
+              <>
+                <span className="breadcrumb-item">
+                  <Link to={`/settings/robots/${robotId}`}>
+                    <span>{robotExecution.values['Robot Name']}</span>
+                  </Link>
+                </span>{' '}
+                <span aria-hidden="true">/ </span>
+              </>
+            )}
             <h1>
               <I18n>Execution Details</I18n>
             </h1>

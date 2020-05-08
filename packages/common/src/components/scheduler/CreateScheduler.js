@@ -37,17 +37,22 @@ const CreateSchedulerComponent = ({
       <PageTitle parts={['Create Scheduler', 'Schedulers', 'Settings']} />
       <div className="page-panel page-panel--white">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
-              {breadcrumbs.map(breadcrumb => (
-                <Fragment key={breadcrumb.label}>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            {breadcrumbs.map(breadcrumb => (
+              <Fragment key={breadcrumb.label}>
+                <span className="breadcrumb-item">
                   <Link to={breadcrumb.path}>
                     <I18n>{breadcrumb.label}</I18n>
-                  </Link>{' '}
-                  /{` `}
-                </Fragment>
-              ))}
-            </h3>
+                  </Link>
+                </span>{' '}
+                <span aria-hidden="true">/ </span>
+              </Fragment>
+            ))}
+
             <h1>
               <I18n>Create Scheduler</I18n>
             </h1>

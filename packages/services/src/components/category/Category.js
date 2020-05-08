@@ -11,8 +11,12 @@ export const Category = ({ category }) => (
     <div className="page-container page-container--color-bar">
       <div className="page-panel">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to="../..">
                 <I18n>services</I18n>
               </Link>{' '}
@@ -32,7 +36,7 @@ export const Category = ({ category }) => (
                     /{' '}
                   </Fragment>
                 ))}
-            </h3>
+            </span>
             <h1>
               <I18n>{category.name}</I18n>
             </h1>

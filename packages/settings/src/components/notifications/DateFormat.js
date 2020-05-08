@@ -17,17 +17,23 @@ export const DateFormatComponent = props => (
     <PageTitle parts={['Date Formats', 'Notifications', 'Settings']} />
     <div className="page-panel page-panel--white">
       <div className="page-title">
-        <div className="page-title__wrapper">
-          <h3>
+        <div
+          role="navigation"
+          aria-label="breadcrumbs"
+          className="page-title__breadcrumbs"
+        >
+          <span className="breadcrumb-item">
             <Link to="/settings">
               <I18n>settings</I18n>
-            </Link>{' '}
-            /{` `}
+            </Link>
+          </span>{' '}
+          <span aria-hidden="true">/ </span>
+          <span className="breadcrumb-item">
             <Link to="/settings/notifications/date-formats">
               <I18n>notification date formats</I18n>
             </Link>
-            {` `}/
-          </h3>
+          </span>{' '}
+          <span aria-hidden="true">/ </span>
           <h1>
             <I18n>{props.submissionId ? 'Edit' : 'New'} Date Format</I18n>
           </h1>

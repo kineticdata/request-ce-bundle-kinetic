@@ -32,8 +32,12 @@ export const AppointmentFormComponent = ({
         {techBar ? (
           <Fragment>
             <div className="page-title">
-              <div className="page-title__wrapper">
-                <h3>
+              <div
+                role="navigation"
+                aria-label="breadcrumbs"
+                className="page-title__breadcrumbs"
+              >
+                <span className="breadcrumb-item">
                   <Link to={relativeHomePath}>
                     <I18n>tech bar</I18n>
                   </Link>{' '}
@@ -46,7 +50,7 @@ export const AppointmentFormComponent = ({
                       /{' '}
                     </Fragment>
                   )}
-                </h3>
+                </span>
                 <h1>
                   <I18n>{techBar.values['Name']}</I18n>{' '}
                   <small>

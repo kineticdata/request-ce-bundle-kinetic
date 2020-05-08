@@ -97,13 +97,17 @@ export const TranslationsListComponent = ({
     <div className="page-container">
       <div className="page-panel page-panel--white">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to="/settings">
                 <I18n>settings</I18n>
-              </Link>{' '}
-              /{` `}
-            </h3>
+              </Link>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
             <h1>
               <I18n>Translations</I18n>
             </h1>
@@ -196,14 +200,8 @@ export const TranslationsListComponent = ({
               formContexts.toJS()
             }
             columns={[
-              !mode && {
-                value: 'kappName',
-                title: 'Kapp Name',
-              },
-              mode !== 'custom' && {
-                value: 'formName',
-                title: 'Form Name',
-              },
+              !mode && { value: 'kappName', title: 'Kapp Name' },
+              mode !== 'custom' && { value: 'formName', title: 'Form Name' },
               {
                 value: 'name',
                 title: 'Context Name',

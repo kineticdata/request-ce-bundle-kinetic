@@ -74,17 +74,23 @@ const NotificationComponent = ({
     />
     <div className="page-panel page-panel--two-thirds page-panel--white">
       <div className="page-title">
-        <div className="page-title__wrapper">
-          <h3>
+        <div
+          role="navigation"
+          aria-label="breadcrumbs"
+          className="page-title__breadcrumbs"
+        >
+          <span className="breadcrumb-item">
             <Link to="/settings">
               <I18n>settings</I18n>
-            </Link>{' '}
-            /{` `}
+            </Link>
+          </span>{' '}
+          <span aria-hidden="true">/ </span>
+          <span className="breadcrumb-item">
             <Link to={`/settings/notifications/${type}`}>
               <I18n>notification {type}</I18n>
             </Link>
-            {` `}/
-          </h3>
+          </span>{' '}
+          <span aria-hidden="true">/ </span>
           {!loading && (
             <h1>
               {submission ? submission.label : <I18n>{`New ${title}`}</I18n>}

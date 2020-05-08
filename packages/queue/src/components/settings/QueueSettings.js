@@ -149,17 +149,24 @@ export const QueueSettingsComponent = ({ currentKapp, onSave }) => (
         <PageTitle parts={[`${currentKapp.name} Settings`]} />
         <div className="page-panel page-panel--white">
           <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
+            <div
+              role="navigation"
+              aria-label="breadcrumbs"
+              className="page-title__breadcrumbs"
+            >
+              <span className="breadcrumb-item">
                 <Link to="../../">
                   <I18n>queue</I18n>
                 </Link>{' '}
-                /{` `}
+              </span>
+              <span aria-hidden="true">/ </span>
+              <span className="breadcrumb-item">
+                {' '}
                 <Link to="../">
                   <I18n>settings</I18n>
                 </Link>{' '}
-                /{` `}
-              </h3>
+                <span aria-hidden="true">/ </span>
+              </span>
               <h1>
                 <I18n>General Settings</I18n>
               </h1>

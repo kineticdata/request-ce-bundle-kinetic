@@ -280,21 +280,29 @@ export const FormDetailsComponent = ({
       <PageTitle parts={[form.name, `Forms`]} />
       <div className="page-panel page-panel--white">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to="../../../">
                 <I18n>services</I18n>
-              </Link>{' '}
-              /{` `}
+              </Link>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
+            <span className="breadcrumb-item">
               <Link to="../../">
                 <I18n>settings</I18n>
-              </Link>{' '}
-              /{` `}
+              </Link>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
+            <span className="">
               <Link to="../">
                 <I18n>forms</I18n>
-              </Link>{' '}
-              /{` `}
-            </h3>
+              </Link>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
             <h1>
               <I18n>{form.name}</I18n>
             </h1>

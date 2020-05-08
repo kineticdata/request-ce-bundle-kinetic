@@ -6,7 +6,8 @@
   justify-content: space-between;
   display: flex;
   flex: 1 1 100%;
-  h1 {
+  h1,
+  .breadcrumb-last {
     margin-top: 0;
     color: $blue-slate;
     font-size: 2rem;
@@ -21,12 +22,14 @@
       font-weight: 300;
     }
   }
-  h3 {
+
+  .breadcrumb-item {
     color: $orange-kinops;
     font-size: 0.9375rem;
     font-weight: 700;
     letter-spacing: 1px;
     line-height: 1.5rem;
+    + span,
     a {
       color: $orange-kinops;
       font-size: 0.9375rem;
@@ -34,6 +37,12 @@
       letter-spacing: 1px;
       line-height: 1.5rem;
     }
+  }
+  ol,
+  &__breadcrumbs {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
   }
   // Any object to the right of the title
   > a,
@@ -50,7 +59,7 @@
       flex-shrink: 0;
     }
   }
-  .page-title__actions {
+  &__actions {
     @media all and (min-width: 0) {
       display: flex;
       justify-content: space-between;

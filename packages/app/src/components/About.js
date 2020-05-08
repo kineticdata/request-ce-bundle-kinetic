@@ -13,11 +13,9 @@ const AboutComponent = ({ space, users, teams, loading }) => (
     {!loading && (
       <div className="page-panel">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h1>
-              <I18n>About My Space</I18n>
-            </h1>
-          </div>
+          <h1>
+            <I18n>About My Space</I18n>
+          </h1>
         </div>
         <div className="page-content">
           <section>

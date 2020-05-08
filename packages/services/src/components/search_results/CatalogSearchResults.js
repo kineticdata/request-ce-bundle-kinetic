@@ -25,13 +25,17 @@ export const CatalogSearchResults = ({
     <div className="page-container page-container--color-bar">
       <div className="page-panel">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to={`../${query ? '../' : ''}`}>
                 <I18n>services</I18n>
               </Link>{' '}
               / <I18n>search results</I18n>
-            </h3>
+            </span>
             <h1>{query}</h1>
           </div>
         </div>

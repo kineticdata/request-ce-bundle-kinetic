@@ -14,20 +14,30 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
       <PageTitle parts={['Queue Settings']} />
       <div className="page-panel page-panel--white">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to="../../../../..">
                 <I18n>queue</I18n>
-              </Link>{' '}
-              /{` `}
+              </Link>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
+            <span className="breadcrumb-item">
               <Link to="../../../..">
                 <I18n>settings</I18n>
-              </Link>{' '}
-              /{` `}
+              </Link>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
+            <span className="breadcrumb-item">
               <Link to="../../..">
                 <I18n>forms</I18n>
-              </Link>{' '}
-              /{` `}
+              </Link>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
+            <span className="breadcrumb-item">
               <Link to={`../..`}>
                 <I18n
                   context={`kapps.${submission.form.kapp.slug}.forms.${
@@ -37,8 +47,8 @@ export const FormActivityContainer = ({ loading, submission, space }) =>
                   {submission.form.name}
                 </I18n>
               </Link>{' '}
-              /{` `}
-            </h3>
+            </span>
+            <span aria-hidden="true">/ </span>
             <h1>{submission.handle}</h1>
           </div>
         </div>

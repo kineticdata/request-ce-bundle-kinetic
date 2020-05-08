@@ -37,13 +37,17 @@ export const SurveyPreviewComponent = ({
       <div className="page-container page-container--color-bar">
         <div className="page-panel">
           <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
+            <div
+              role="navigation"
+              aria-label="breadcrumbs"
+              className="page-title__breadcrumbs"
+            >
+              <span className="breadcrumb-item">
                 <Link to="../../">
                   <I18n>{kapp.name}</I18n>
                 </Link>{' '}
                 / <I18n>Preview</I18n> /{' '}
-              </h3>
+              </span>
               <h1>
                 <I18n
                   context={`kapps.${kappSlug}.forms.${slug}`}

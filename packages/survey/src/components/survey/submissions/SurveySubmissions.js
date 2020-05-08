@@ -179,13 +179,17 @@ export const FormDetailsComponent = ({
             <PageTitle parts={[form.name]} />
             <div className="page-panel page-panel--white">
               <div className="page-title">
-                <div className="page-title__wrapper">
-                  <h3>
+                <div
+                  role="navigation"
+                  aria-label="breadcrumbs"
+                  className="page-title__breadcrumbs"
+                >
+                  <span className="breadcrumb-item">
                     <Link to="../../">
                       <I18n>{kapp.name}</I18n>
                     </Link>{' '}
                     /
-                  </h3>
+                  </span>
                   <h1>
                     <I18n>{form.name}</I18n>
                   </h1>

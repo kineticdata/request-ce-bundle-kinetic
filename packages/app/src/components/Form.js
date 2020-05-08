@@ -25,15 +25,19 @@ const Layout = ({ authenticated, kapp, isPublic }) => ({ form, content }) => (
   <>
     {!isPublic && (
       <div className="page-title">
-        <div className="page-title__wrapper">
+        <div
+          role="navigation"
+          aria-label="breadcrumbs"
+          className="page-title__breadcrumbs"
+        >
           {kapp && (
             <>
-              <h3>
+              <span className="breadcrumb-item">
                 <Link to={`/kapps/${kapp.slug}`}>
                   <I18n>{kapp.name}</I18n>
                 </Link>{' '}
-                /{' '}
-              </h3>
+              </span>
+              <span aria-hidden="true">/ </span>
               {form && (
                 <h1>
                   <I18n>{form.name}</I18n>
