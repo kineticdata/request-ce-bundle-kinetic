@@ -36,7 +36,7 @@ const FormButtons = props => (
 
 const NameCell = ({ value, row }) => (
   <td>
-    <Link to={`/settings/teams/${row.get('slug')}/edit`} title="Edit Team">
+    <Link to={`/settings/teams/${row.get('slug')}`} title="Edit Team">
       {value}
     </Link>
   </td>
@@ -148,7 +148,7 @@ export const TeamsListComponent = ({
             formkey="team-new"
             onSave={() => team => {
               addToast(`${team.name} created successfully.`);
-              team && navigate(`${team.slug}/edit`);
+              team && navigate(`${team.slug}`);
             }}
             components={{
               FormLayout,

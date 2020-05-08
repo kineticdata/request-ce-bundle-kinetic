@@ -5,7 +5,7 @@ import { TeamEdit } from './TeamEdit';
 
 export const Teams = ({ match }) => (
   <Router>
-    <TeamEdit path=":slug/edit" />
-    <TeamsList path="/" />
+    <TeamEdit path=":slug" />
+    <TeamsList default />
   </Router>
 );
