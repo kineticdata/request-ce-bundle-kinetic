@@ -217,7 +217,8 @@ export const FormSettingsComponent = ({
         },
       }}
       addFields={() => ({ form, notifications }) =>
-        form && [
+        form &&
+        notifications && [
           {
             name: 'icon',
             label: 'Display Icon',
@@ -376,7 +377,10 @@ export const FormSettingsComponent = ({
         ]}
       alterFields={{
         description: { component: FormComponents.TextAreaField },
-        categorizations: { component: FormComponents.SelectMultiField },
+        categorizations: {
+          component: FormComponents.SelectMultiField,
+          renderAttributes: { typeahead: true },
+        },
         attributesMap: {
           serialize: ({ values }) => ({
             Icon: asArray(values.get('icon')),

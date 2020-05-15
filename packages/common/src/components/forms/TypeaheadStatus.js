@@ -3,14 +3,19 @@ import { I18n } from '@kineticdata/react';
 
 export const TypeaheadStatus = props => (
   <div>
-    {props.info && (
-      <div className="status info">
-        <I18n>{props.info}</I18n>
+    {props.meta && (
+      <div className="status meta">
+        <I18n>{props.meta}</I18n>
         {props.clearFilterField && (
           <button className="btn btn-sm" onClick={props.clearFilterField}>
             <i className="fa fa-fw fa-remove" />
           </button>
         )}
+      </div>
+    )}
+    {props.info && (
+      <div className="status info">
+        <I18n>{props.info}</I18n>
       </div>
     )}
     {props.warning && (

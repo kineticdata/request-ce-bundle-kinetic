@@ -91,7 +91,8 @@ export const ServicesSettingsComponent = ({
       },
     }}
     addFields={() => ({ kapp, notifications }) =>
-      kapp && [
+      kapp &&
+      notifications && [
         {
           name: 'icon',
           label: 'Display Icon',

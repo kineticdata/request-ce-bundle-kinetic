@@ -183,7 +183,8 @@ export const FormSettingsComponent = ({ form, kapp, onSave }) => {
         },
       }}
       addFields={() => ({ form, notifications }) =>
-        form && [
+        form &&
+        notifications && [
           {
             name: 'prohibitSubtasks',
             label: 'Prohibit Subtasks',

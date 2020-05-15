@@ -7,8 +7,34 @@ import { Map } from 'immutable';
 
 const Input = props => <input {...props.inputProps} className="form-control" />;
 
-const SelectionsContainer = ({ input }) => (
-  <div className="kinetic-typeahead">{input}</div>
+const SelectionsContainer = ({ input, selections }) => (
+  <div className="kinetic-typeahead">
+    {selections}
+    {input}
+  </div>
+);
+
+const Selection = ({ selection, disabled, edit, focusRef, remove }) => (
+  <div
+    className="selection single form-control-plaintext"
+    onClick={edit}
+    onKeyDown={edit}
+    role="button"
+    ref={focusRef}
+    tabIndex={0}
+  >
+    {selection ? selection.get('label') : <em>None</em>}
+    {selection &&
+      !disabled && (
+        <button
+          className="btn btn-subtle btn-xs"
+          onClick={remove}
+          type="button"
+        >
+          <i className="fa fa-fw fa-times" />
+        </button>
+      )}
+  </div>
 );
 
 const Suggestion = ({ suggestion, active }) => (
@@ -28,6 +54,7 @@ const SuggestionsContainer = ({ open, children, containerProps }) => (
 const components = {
   Input,
   SelectionsContainer,
+  Selection,
   Status,
   SuggestionsContainer,
   Suggestion,
@@ -37,7 +64,6 @@ export const SelectField = props => {
   const {
     typeahead,
     allowNew,
-    alwaysRenderSuggestions,
     minSearchLength,
   } = props.renderAttributes.toJS();
 
@@ -46,21 +72,21 @@ export const SelectField = props => {
       {typeahead ? (
         <StaticSelect
           components={components}
-          textMode
           id={props.id}
-          value={props.options.find(
-            option =>
-              option.get('value') === props.value ||
-              option.get('label') === props.value,
-          )}
+          value={
+            props.value
+              ? props.options.find(
+                  option =>
+                    option.get('value') === props.value ||
+                    option.get('label') === props.value,
+                ) || Map({ label: props.value, value: props.value })
+              : null
+          }
           options={props.options}
           search={props.search}
           allowNew={allowNew}
-          alwaysRenderSuggestions={alwaysRenderSuggestions}
           minSearchLength={minSearchLength}
-          onChange={value =>
-            props.onChange(Map.isMap(value) ? value.get('value') : value)
-          }
+          onChange={value => props.onChange(value ? value.get('value') : '')}
           onBlur={props.onBlur}
           onFocus={props.onFocus}
           placeholder={props.placeholder}

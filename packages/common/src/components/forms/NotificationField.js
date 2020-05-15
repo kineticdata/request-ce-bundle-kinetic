@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { I18n, StaticSelect } from '@kineticdata/react';
 import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { hasErrors } from './utils';
@@ -8,23 +8,45 @@ import { Link } from 'react-router-dom';
 
 const Input = props => <input {...props.inputProps} className="form-control" />;
 
-const SelectionsContainer = ({ input, value }) => (
+const SelectionsContainer = ({ input, selections, value }) => (
   <div className="kinetic-typeahead input-group">
-    {/* link to notification template */}
-    <span className="input-group-addon input-group-prepend">
-      {value &&
-        value.get('slug') && (
-          <Link
-            className="input-group-text"
-            to={`/settings/notifications/templates/${value.get('slug')}`}
-            target="_blank"
-          >
-            <I18n>View Template</I18n>
-          </Link>
-        )}
-    </span>
+    {selections}
     {input}
   </div>
+);
+
+const Selection = ({ selection, disabled, edit, focusRef, remove }) => (
+  <Fragment>
+    <div
+      className="selection single form-control-plaintext"
+      onClick={edit}
+      onKeyDown={edit}
+      role="button"
+      ref={focusRef}
+      tabIndex={0}
+    >
+      {selection ? selection.get('label') : <em>None</em>}
+      {selection &&
+        !disabled && (
+          <button
+            className="btn btn-subtle btn-xs"
+            onClick={remove}
+            type="button"
+          >
+            <i className="fa fa-fw fa-times" />
+          </button>
+        )}
+    </div>
+    {selection && (
+      <Link
+        className="input-group-text"
+        to={`/settings/notifications/templates/${selection.get('slug')}`}
+        target="_blank"
+      >
+        <I18n>View Template</I18n>
+      </Link>
+    )}
+  </Fragment>
 );
 
 const Suggestion = ({ suggestion, active }) => (
@@ -44,6 +66,7 @@ const SuggestionsContainer = ({ open, children, containerProps }) => (
 const components = {
   Input,
   SelectionsContainer,
+  Selection,
   Status,
   SuggestionsContainer,
   Suggestion,
@@ -53,7 +76,6 @@ export const NotificationField = props => {
   const {
     typeahead,
     allowNew,
-    alwaysRenderSuggestions,
     minSearchLength,
   } = props.renderAttributes.toJS();
 
@@ -62,7 +84,6 @@ export const NotificationField = props => {
       {typeahead ? (
         <StaticSelect
           components={components}
-          textMode
           id={props.id}
           value={props.options.find(
             option =>
@@ -72,7 +93,6 @@ export const NotificationField = props => {
           options={props.options}
           search={props.search}
           allowNew={allowNew}
-          alwaysRenderSuggestions={alwaysRenderSuggestions}
           minSearchLength={minSearchLength}
           onChange={value =>
             props.onChange(Map.isMap(value) ? value.get('value') : value)

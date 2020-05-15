@@ -81,7 +81,6 @@ export class SelectMultiField extends Component {
     const {
       typeahead,
       allowNew,
-      alwaysRenderSuggestions,
       minSearchLength,
     } = this.props.renderAttributes.toJS();
 
@@ -102,7 +101,6 @@ export class SelectMultiField extends Component {
             options={this.props.options}
             search={this.props.search}
             allowNew={allowNew}
-            alwaysRenderSuggestions={alwaysRenderSuggestions}
             minSearchLength={minSearchLength}
             onChange={value => {
               this.props.onChange(value.map(val => val.get('value')));

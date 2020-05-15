@@ -21,13 +21,9 @@ const options = fromJS(
 
 const Input = props => <input {...props.inputProps} className="form-control" />;
 
-const SelectionsContainer = ({ input, value }) => (
+const SelectionsContainer = ({ input, selections }) => (
   <div className="kinetic-typeahead input-group">
-    <div className="input-group-prepend">
-      <div className="input-group-text">
-        <span className={`fa fa-fw fa-lg ${value && value.get('value')}`} />
-      </div>
-    </div>
+    {selections}
     {input}
   </div>
 );
@@ -41,6 +37,30 @@ const Suggestion = ({ suggestion, active }) => (
   </div>
 );
 
+const Selection = ({ selection, disabled, edit, focusRef, remove }) => (
+  <div
+    className="selection single form-control-plaintext"
+    onClick={edit}
+    onKeyDown={edit}
+    role="button"
+    ref={focusRef}
+    tabIndex={0}
+  >
+    {selection && <i className={`fa fa-fw ${selection.get('value')}`} />}
+    {selection ? selection.get('label') : <em>None</em>}
+    {selection &&
+      !disabled && (
+        <button
+          className="btn btn-subtle btn-xs"
+          onClick={remove}
+          type="button"
+        >
+          <i className="fa fa-fw fa-times" />
+        </button>
+      )}
+  </div>
+);
+
 const SuggestionsContainer = ({ open, children, containerProps }) => (
   <div {...containerProps} className={`suggestions ${open ? 'open' : ''}`}>
     {children}
@@ -50,6 +70,7 @@ const SuggestionsContainer = ({ open, children, containerProps }) => (
 const components = {
   Input,
   SelectionsContainer,
+  Selection,
   Status,
   SuggestionsContainer,
   Suggestion,
@@ -60,7 +81,6 @@ export const IconField = props => {
     <FieldWrapper {...props}>
       <StaticSelect
         components={components}
-        textMode
         id={props.id}
         value={options.find(
           option =>
