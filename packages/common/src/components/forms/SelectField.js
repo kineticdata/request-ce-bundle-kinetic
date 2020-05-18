@@ -39,6 +39,7 @@ const Selection = ({ selection, disabled, edit, focusRef, remove }) => (
             onClick={remove}
             type="button"
           >
+            <span className="sr-only">Remove</span>
             <i className="fa fa-fw fa-times" />
           </button>
         </div>

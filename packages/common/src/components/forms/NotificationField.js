@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { I18n, StaticSelect } from '@kineticdata/react';
 import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { hasErrors } from './utils';
@@ -53,6 +53,7 @@ const Selection = ({ selection, disabled, edit, focusRef, remove }) => (
             onClick={remove}
             type="button"
           >
+            <span className="sr-only">Remove</span>
             <span className="fa fa-fw fa-times" />
           </button>
         </div>
