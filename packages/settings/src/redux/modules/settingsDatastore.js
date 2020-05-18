@@ -409,7 +409,8 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.CLEAR_FORM:
       return state
         .set('currentForm', DatastoreForm())
-        .set('currentFormChanges', DatastoreForm());
+        .set('currentFormChanges', DatastoreForm())
+        .set('submissions', List());
     case types.RESET_FORM:
       return state.set('currentFormChanges', state.get('currentForm'));
     case types.FETCH_SUBMISSIONS_ADVANCED:
