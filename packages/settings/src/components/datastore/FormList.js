@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, lifecycle, withHandlers, withState } from 'recompose';
+import { connect } from '../../redux/store';
 import { Link } from '@reach/router';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { I18n, FormTable, FormForm } from '@kineticdata/react';
@@ -12,6 +13,7 @@ import { SelectFilter } from 'common/src/components/tables/SelectFilter';
 import { SettingsTableLayout } from 'common/src/components/tables/TableLayout';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { FormComponents, addToast } from 'common';
+import { actions } from '../../redux/modules/settingsDatastore';
 
 const FormLayout = ({ fields, error, buttons }) => (
   <Fragment>
@@ -21,6 +23,7 @@ const FormLayout = ({ fields, error, buttons }) => (
         {fields.get('slug')}
       </div>
       {fields.get('description')}
+      {fields.get('status')}
       {error}
     </ModalBody>
     <ModalFooter className="modal-footer--full-width">{buttons}</ModalFooter>
@@ -200,7 +203,7 @@ export const FormListComponent = ({ modalOpen, toggleModal, navigate }) => (
           </div>
           <FormForm
             datastore={true}
-            fieldSet={['name', 'slug', 'description']}
+            fieldSet={['name', 'slug', 'description', 'status']}
             onSave={() => form => {
               addToast(`${form.name} created successfully.`);
               form && navigate(`${form.slug}/settings`);
@@ -228,11 +231,20 @@ export const FormListComponent = ({ modalOpen, toggleModal, navigate }) => (
 
 // Datastore Container
 export const FormList = compose(
+  connect(
+    null,
+    { resetSearch: actions.resetSearchParams },
+  ),
   withState('modalOpen', 'setModalOpen', false),
   withHandlers({
     toggleModal: props => slug =>
       !slug || slug === props.modalOpen
         ? props.setModalOpen(false)
         : props.setModalOpen(slug),
+  }),
+  lifecycle({
+    componentDidMount() {
+      this.props.resetSearch();
+    },
   }),
 )(FormListComponent);

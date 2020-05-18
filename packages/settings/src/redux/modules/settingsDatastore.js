@@ -16,8 +16,9 @@ const { namespace, noPayload, withPayload } = Utils;
 
 export const DATASTORE_LIMIT = 500;
 export const SUBMISSION_INCLUDES = 'values,details';
-export const FORMS_INCLUDES = 'details,attributes';
-export const FORM_INCLUDES = 'details,fields,indexDefinitions,attributesMap';
+export const FORMS_INCLUDES = 'details,attributes,authorization';
+export const FORM_INCLUDES =
+  'details,fields,indexDefinitions,attributesMap,authorization';
 export const BRIDGE_MODEL_INCLUDES =
   'attributes, ' +
   'qualifications,qualifications.parameters,' +
@@ -389,7 +390,7 @@ export const reducer = (state = State(), { type, payload }) => {
       )
         .update('attributes', a => List(a))
         .update('qualifications', a => List(a));
-      const canManage = state.forms.find(f => f.slug === form.slug).canManage;
+      const canManage = form.authorization.Modification;
       const savedConfig = buildConfig(form);
       const columns = savedConfig.columns;
       const defaultSearchIndex = savedConfig.defaultSearchIndex;
@@ -409,8 +410,7 @@ export const reducer = (state = State(), { type, payload }) => {
     case types.CLEAR_FORM:
       return state
         .set('currentForm', DatastoreForm())
-        .set('currentFormChanges', DatastoreForm())
-        .set('submissions', List());
+        .set('currentFormChanges', DatastoreForm());
     case types.RESET_FORM:
       return state.set('currentFormChanges', state.get('currentForm'));
     case types.FETCH_SUBMISSIONS_ADVANCED:
