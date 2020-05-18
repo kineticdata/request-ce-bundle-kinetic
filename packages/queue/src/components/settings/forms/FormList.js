@@ -48,6 +48,7 @@ const ActionsCell = ({ deleteForm, toggleModal, processing }) => ({
     ) : (
       <UncontrolledDropdown className="more-actions">
         <DropdownToggle tag="button" className="btn btn-sm btn-link">
+          <span className="sr-only">More Actions</span>
           <span className="fa fa-chevron-down fa-fw" />
         </DropdownToggle>
         <DropdownMenu right>
@@ -203,11 +204,7 @@ export const FormListComponent = ({
         defaultSortColumn="name"
         defaultSortDirection="asc"
         addColumns={[
-          {
-            value: 'description',
-            title: 'Description',
-            sortable: false,
-          },
+          { value: 'description', title: 'Description', sortable: false },
           {
             value: 'actions',
             title: ' ',
@@ -219,25 +216,11 @@ export const FormListComponent = ({
           },
         ]}
         alterColumns={{
-          updatedAt: {
-            components: {
-              BodyCell: TimeAgoCell,
-            },
-          },
-          createdAt: {
-            components: {
-              BodyCell: TimeAgoCell,
-            },
-          },
-          name: {
-            components: {
-              BodyCell: FormNameCell,
-            },
-          },
+          updatedAt: { components: { BodyCell: TimeAgoCell } },
+          createdAt: { components: { BodyCell: TimeAgoCell } },
+          name: { components: { BodyCell: FormNameCell } },
           type: {
-            components: {
-              Filter: SelectFilter,
-            },
+            components: { Filter: SelectFilter },
             options: () =>
               queueSettings.queueSettingsKapp.formTypes.map(({ name }) => ({
                 value: name,
@@ -245,10 +228,7 @@ export const FormListComponent = ({
               })),
           },
           status: {
-            components: {
-              BodyCell: StatusBadgeCell,
-              Filter: SelectFilter,
-            },
+            components: { BodyCell: StatusBadgeCell, Filter: SelectFilter },
           },
         }}
       >
@@ -257,17 +237,24 @@ export const FormListComponent = ({
             <PageTitle parts={[`Forms`]} />
             <div className="page-panel page-panel--white">
               <div className="page-title">
-                <div className="page-title__wrapper">
-                  <h3>
+                <div
+                  role="navigation"
+                  aria-label="breadcrumbs"
+                  className="page-title__breadcrumbs"
+                >
+                  <span className="breadcrumb-item">
                     <Link to="../../">
                       <I18n>queue</I18n>
                     </Link>{' '}
-                    /{` `}
+                  </span>
+                  <span aria-hidden="true">/ </span>
+                  <span className="breadcrumb-item">
                     <Link to="../">
                       <I18n>settings</I18n>
                     </Link>{' '}
-                    /{` `}
-                  </h3>
+                  </span>
+                  <span aria-hidden="true">/ </span>
+
                   <h1>
                     <I18n>Forms</I18n>
                   </h1>
@@ -336,9 +323,7 @@ export const FormListComponent = ({
                 }}
                 components={{ FormLayout, FormButtons }}
                 alterFields={{
-                  description: {
-                    component: FormComponents.TextAreaField,
-                  },
+                  description: { component: FormComponents.TextAreaField },
                 }}
                 addDataSources={
                   typeof modalOpen === 'string'
@@ -348,11 +333,10 @@ export const FormListComponent = ({
                           params: [
                             { kappSlug: kapp.slug, formSlug: modalOpen },
                           ],
-                          // Set to the form, or the result in case of an error
                           transform: result => result.form || result,
                         },
                       }
-                    : undefined
+                    : undefined // Set to the form, or the result in case of an error
                 }
               >
                 {({ form, initialized, bindings: { cloneForm } }) => {

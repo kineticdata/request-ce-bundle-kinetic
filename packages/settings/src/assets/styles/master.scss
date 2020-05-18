@@ -6,6 +6,7 @@
 #root ~ div,
 .package-layout--settings {
   @import 'datastore';
+  @import 'file-upload';
   @import 'robots';
   @import 'temp';
 }

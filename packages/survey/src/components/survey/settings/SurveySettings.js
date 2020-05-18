@@ -285,17 +285,23 @@ const SurveySettingsComponent = ({
           <PageTitle parts={['Settings', origForm.name]} />
           <div className="page-panel page-panel--two-thirds page-panel--white">
             <div className="page-title">
-              <div className="page-title__wrapper">
-                <h3>
+              <div
+                role="navigation"
+                aria-label="breadcrumbs"
+                className="page-title__breadcrumbs"
+              >
+                <span className="breadcrumb-item">
                   <Link to="../../">
                     <I18n>{kapp.name}</I18n>
-                  </Link>{' '}
-                  /{` `}
+                  </Link>
+                </span>{' '}
+                <span aria-hidden="true">/ </span>
+                <span className="breadcrumb-item">
                   <Link to="../submissions">
                     <I18n>{origForm.name}</I18n>
-                  </Link>{' '}
-                  /{` `}
-                </h3>
+                  </Link>
+                </span>{' '}
+                <span aria-hidden="true">/ </span>
                 <h1>
                   <I18n>Settings</I18n>
                 </h1>

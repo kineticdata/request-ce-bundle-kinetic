@@ -57,20 +57,29 @@ const SettingsComponent = ({
         <PageTitle parts={['Settings', origForm.name, 'Datastore']} />
         <div className="page-panel page-panel--two-thirds page-panel--white">
           <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
+            <div
+              role="navigation"
+              aria-label="breadcrumbs"
+              className="page-title__breadcrumbs"
+            >
+              <span className="breadcrumb-item">
                 <Link to="/settings">
                   <I18n>settings</I18n>
-                </Link>{' '}
-                /{` `}
+                </Link>
+              </span>{' '}
+              <span aria-hidden="true">/ </span>
+              <span className="breadcrumb-item">
                 <Link to={`/settings/datastore/`}>
                   <I18n>datastore</I18n>
-                </Link>{' '}
-                /{` `}
+                </Link>
+              </span>{' '}
+              <span aria-hidden="true">/ </span>
+              <span className="breadcrumb-item">
                 <Link to={`/settings/datastore/${origForm.slug}/`}>
                   <I18n>{origForm.name}</I18n>
                 </Link>
-              </h3>
+              </span>{' '}
+              <span aria-hidden="true">/ </span>
               <h1>
                 <I18n>Configuration</I18n>
               </h1>
@@ -531,6 +540,7 @@ const QualificationTable = ({
                     )
                   }
                 >
+                  <span className="sr-only">Edit</span>
                   <span className="fa fa-fw fa-pencil" />
                 </button>
                 <button
@@ -539,7 +549,8 @@ const QualificationTable = ({
                     handleBridgeChange('bridgeQualificationDelete', index)
                   }
                 >
-                  <span className="fa fa-fw fa-close" />
+                  <span className="sr-only">Remove</span>
+                  <span className="fa fa-fw fa-times" />
                 </button>
               </div>
             </td>
@@ -662,7 +673,8 @@ const QualificationModal = ({
                             )
                           }
                         >
-                          <span className="fa fa-fw fa-close" />
+                          <span className="sr-only">Remove</span>
+                          <span className="fa fa-fw fa-times" />
                         </button>
                       </div>
                     </td>
@@ -935,7 +947,8 @@ const AttributeTable = ({
                       className="btn btn-danger"
                       onClick={() => setEditAttribute(new BridgeAttribute())}
                     >
-                      <span className="fa fa-fw fa-close" />
+                      <span className="sr-only">Remove</span>
+                      <span className="fa fa-fw fa-times" />
                     </button>
                     <button
                       className="btn btn-success"
@@ -959,6 +972,7 @@ const AttributeTable = ({
                         )
                       }
                     >
+                      <span className="sr-only">Edit</span>
                       <span className="fa fa-fw fa-pencil" />
                     </button>
                     <button
@@ -967,7 +981,8 @@ const AttributeTable = ({
                         handleBridgeChange('bridgeAttributeDelete', index)
                       }
                     >
-                      <span className="fa fa-fw fa-close" />
+                      <span className="sr-only">Remove</span>
+                      <span className="fa fa-fw fa-times" />
                     </button>
                   </div>
                 )}

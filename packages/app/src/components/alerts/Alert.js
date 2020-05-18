@@ -31,13 +31,17 @@ const AlertComponent = ({
 
       <div className="page-panel page-panel--space-alerts-form">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to="/alerts">
                 <I18n>alerts</I18n>
-              </Link>{' '}
-              /
-            </h3>
+              </Link>
+            </span>
+            <span aria-hidden="true">/ </span>
             <h1>
               <I18n>{editing ? 'Edit' : 'New'} Alert</I18n>
             </h1>

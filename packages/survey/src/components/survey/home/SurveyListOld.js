@@ -36,11 +36,15 @@ const SurveyListComponent = ({
       <PageTitle parts={[]} />
       <div className="page-panel page-panel--two-thirds">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <I18n>{kapp.name} </I18n>
-              /{` `}
-            </h3>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
             <h1>
               <I18n>Surveys</I18n>
             </h1>

@@ -29,15 +29,16 @@ const ProfileComponent = ({
     {profile && (
       <div className="page-panel page-panel--white">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h1>
-              <I18n>Profile</I18n>
-            </h1>
-          </div>
+          <h1>
+            <I18n>Profile</I18n>
+          </h1>
+
           {profile.username === me.username ? (
-            <Link to="/profile/edit" className="btn btn-secondary">
-              <I18n>Edit Profile</I18n>
-            </Link>
+            <div className="page-title__actions">
+              <Link to="/profile/edit" className="btn btn-secondary">
+                <I18n>Edit Profile</I18n>
+              </Link>
+            </div>
           ) : null}
         </div>
         <div className="card card--profile">

@@ -37,18 +37,19 @@ const TeamsComponent = ({ error, teams, me, openRequestNewTeam }) => (
     <PageTitle parts={['Teams']} />
     <div className="page-panel">
       <div className="page-title">
-        <div className="page-title__wrapper">
-          <h1>Teams</h1>
+        <h1>Teams</h1>
+
+        <div className="page-title__actions">
+          {me.spaceAdmin ? (
+            <Link to="/settings/teams" className="btn btn-secondary">
+              <I18n>Manage Teams</I18n>
+            </Link>
+          ) : (
+            <button onClick={openRequestNewTeam} className="btn btn-secondary">
+              <I18n>Request New Team</I18n>
+            </button>
+          )}
         </div>
-        {me.spaceAdmin ? (
-          <Link to="/settings/teams" className="btn btn-secondary">
-            <I18n>Manage Teams</I18n>
-          </Link>
-        ) : (
-          <button onClick={openRequestNewTeam} className="btn btn-secondary">
-            <I18n>Request New Team</I18n>
-          </button>
-        )}
       </div>
       <StateListWrapper
         data={teams}

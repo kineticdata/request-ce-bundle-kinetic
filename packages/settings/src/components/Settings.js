@@ -35,11 +35,9 @@ const SettingsComponent = ({
     <PageTitle parts={['Settings']} />
     <div className="page-panel page-panel--white">
       <div className="page-title">
-        <div className="page-title__wrapper">
-          <h1>
-            <I18n>Settings</I18n>
-          </h1>
-        </div>
+        <h1>
+          <I18n>Settings</I18n>
+        </h1>
       </div>
 
       <I18n

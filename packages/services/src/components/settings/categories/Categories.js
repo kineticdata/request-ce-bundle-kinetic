@@ -39,17 +39,23 @@ export const CategoriesComponent = ({
       <div className="page-panel page-panel--white page-panel--flex page-panel--no-padding">
         <div className="page-panel__header px-4">
           <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
+            <div
+              role="navigation"
+              aria-label="breadcrumbs"
+              className="page-title__breadcrumbs"
+            >
+              <span className="breadcrumb-item">
                 <Link to="../..">
                   <I18n>services</I18n>
-                </Link>{' '}
-                /{` `}
+                </Link>
+              </span>{' '}
+              <span aria-hidden="true">/ </span>
+              <span className="breadcrumb-item">
                 <Link to="..">
                   <I18n>settings</I18n>
                 </Link>{' '}
-                /{` `}
-              </h3>
+              </span>
+              <span aria-hidden="true">/ </span>
               <h1>
                 <I18n>Categories</I18n>
               </h1>

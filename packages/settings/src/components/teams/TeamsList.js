@@ -66,14 +66,8 @@ export const TeamsListComponent = ({
       TableLayout: SettingsTableLayout,
     }}
     alterColumns={{
-      name: {
-        components: {
-          BodyCell: NameCell,
-        },
-      },
-      description: {
-        sortable: false,
-      },
+      name: { components: { BodyCell: NameCell } },
+      description: { sortable: false },
     }}
     columnSet={['name', 'description']}
   >
@@ -82,13 +76,17 @@ export const TeamsListComponent = ({
         <PageTitle parts={['Teams']} />
         <div className="page-panel page-panel--two-thirds page-panel--white">
           <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
+            <div
+              role="navigation"
+              aria-label="breadcrumbs"
+              className="page-title__breadcrumbs"
+            >
+              <span className="breadcrumb-item">
                 <Link to="../settings">
                   <I18n>settings</I18n>
-                </Link>{' '}
-                /{` `}
-              </h3>
+                </Link>
+              </span>{' '}
+              <span aria-hidden="true">/ </span>
               <h1>
                 <I18n>Teams</I18n>
               </h1>
@@ -156,9 +154,7 @@ export const TeamsListComponent = ({
               FormError: FormComponents.FormError,
             }}
             alterFields={{
-              description: {
-                component: FormComponents.TextAreaField,
-              },
+              description: { component: FormComponents.TextAreaField },
             }}
           >
             {({ form, initialized }) => {

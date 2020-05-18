@@ -47,6 +47,7 @@ const ActionsCell = ({ deleteForm, toggleModal, processing }) => ({
     ) : (
       <UncontrolledDropdown className="more-actions">
         <DropdownToggle tag="button" className="btn btn-sm btn-link">
+          <span className="sr-only">More Actions</span>
           <span className="fa fa-chevron-down fa-fw" />
         </DropdownToggle>
         <DropdownMenu right>
@@ -235,17 +236,23 @@ export const FormsListComponent = ({
           <PageTitle parts={[`Forms`]} />
           <div className="page-panel page-panel--white">
             <div className="page-title">
-              <div className="page-title__wrapper">
-                <h3>
+              <div
+                role="navigation"
+                aria-label="breadcrumbs"
+                className="page-title__breadcrumbs"
+              >
+                <span className="breadcrumb-item">
                   <Link to="../../">
                     <I18n>services</I18n>
-                  </Link>{' '}
-                  /{` `}
+                  </Link>
+                </span>{' '}
+                <span aria-hidden="true">/ </span>
+                <span className="breadcrumb-item">
                   <Link to="../">
                     <I18n>settings</I18n>
-                  </Link>{' '}
-                  /{` `}
-                </h3>
+                  </Link>
+                </span>{' '}
+                <span aria-hidden="true">/ </span>
                 <h1>
                   <I18n>Forms</I18n>
                 </h1>

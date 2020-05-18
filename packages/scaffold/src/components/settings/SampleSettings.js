@@ -11,17 +11,23 @@ export const SampleSettingsComponent = props => (
     <div className="page-container">
       <div className="page-panel page-panel--scrollable">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to="../../">
                 <I18n>scaffold</I18n>
               </Link>{' '}
-              /{` `}
+            </span>
+            <span aria-hidden="true">/ </span>
+            <span className="breadcrumb-item">
               <Link to="../">
                 <I18n>settings</I18n>
               </Link>{' '}
-              /{` `}
-            </h3>
+              <span aria-hidden="true">/ </span>
+            </span>
             <h1>
               <I18n>Sample</I18n>
             </h1>

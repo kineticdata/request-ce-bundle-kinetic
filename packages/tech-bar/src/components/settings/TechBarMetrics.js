@@ -40,17 +40,23 @@ export const TechBarMetricsComponent = ({
     <div className="page-container">
       <div className="page-panel page-panel--white page-panel--tech-bar-metrics">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to={`../../${mode ? '../' : ''}`}>
                 <I18n>tech bar</I18n>
-              </Link>{' '}
-              /{` `}
+              </Link>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
+            <span className="breadcrumb-item">
               <Link to={`../${mode ? '../' : ''}`}>
                 <I18n>settings</I18n>
-              </Link>{' '}
-              /{` `}
-            </h3>
+              </Link>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
             <h1>
               <I18n>Metrics</I18n>
             </h1>

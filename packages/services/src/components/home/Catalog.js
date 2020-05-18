@@ -40,10 +40,14 @@ export const Catalog = ({
             <div className="column-container">
               <div className="column-panel column-panel--thirds">
                 <div className="page-title">
-                  <div className="page-title__wrapper">
-                    <h3 className="text-lowercase">
+                  <div
+                    role="navigation"
+                    aria-label="breadcrumbs"
+                    className="page-title__breadcrumbs"
+                  >
+                    <span className="breadcrumb-item text-lowercase">
                       <I18n>{kapp.name}</I18n> /
-                    </h3>
+                    </span>
                     <h1>
                       <I18n>Recent Requests</I18n>
                     </h1>
@@ -77,10 +81,14 @@ export const Catalog = ({
               </div>
               <div className="column-panel column-panel--thirds">
                 <div className="page-title">
-                  <div className="page-title__wrapper">
-                    <h3 className="text-lowercase">
+                  <div
+                    role="navigation"
+                    aria-label="breadcrumbs"
+                    className="page-title__breadcrumbs"
+                  >
+                    <span className="breadcrumb-item text-lowercase">
                       <I18n>{kapp.name}</I18n> /
-                    </h3>
+                    </span>
                     <h1>
                       <I18n>{homePageMode}</I18n>
                     </h1>

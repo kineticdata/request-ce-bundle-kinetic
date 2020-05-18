@@ -72,6 +72,7 @@ const ActionsCell = ({ deleteForm, toggleModal }) => ({ row, tableKey }) => (
   <td className="text-right" style={{ width: '1%' }}>
     <UncontrolledDropdown className="more-actions">
       <DropdownToggle tag="button" className="btn btn-sm btn-link">
+        <span className="sr-only">More Actions</span>
         <span className="fa fa-chevron-down fa-fw" />
       </DropdownToggle>
       <DropdownMenu right>
@@ -254,10 +255,14 @@ const SurveyListComponent = ({
           <PageTitle parts={[`Surveys`]} />
           <div className="page-panel page-panel--white">
             <div className="page-title">
-              <div className="page-title__wrapper">
-                <h3>
+              <div
+                role="navigation"
+                aria-label="breadcrumbs"
+                className="page-title__breadcrumbs"
+              >
+                <span className="breadcrumb-item">
                   <I18n>{kapp.name} / </I18n>
-                </h3>
+                </span>
                 <h1>
                   <I18n>Surveys</I18n>
                 </h1>

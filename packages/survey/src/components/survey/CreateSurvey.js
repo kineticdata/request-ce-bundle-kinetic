@@ -23,13 +23,17 @@ const CreateSurveyComponent = ({
     <PageTitle parts={['New Survey']} />
     <div className="page-panel page-panel--two-thirds page-panel--white">
       <div className="page-title">
-        <div className="page-title__wrapper">
-          <h3>
+        <div
+          role="navigation"
+          aria-label="breadcrumbs"
+          className="page-title__breadcrumbs"
+        >
+          <span className="breadcrumb-item">
             <Link to="../">
               <I18n>{kapp.name}</I18n>
-            </Link>{' '}
-            /{` `}
-          </h3>
+            </Link>
+          </span>{' '}
+          <span aria-hidden="true">/ </span>
           <h1>
             <I18n>New Survey</I18n>
           </h1>

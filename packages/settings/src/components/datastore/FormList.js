@@ -48,6 +48,7 @@ const ActionsCell = () => ({ row }) => (
   <td className="text-right" style={{ width: '1%' }}>
     <UncontrolledDropdown className="more-actions">
       <DropdownToggle tag="button" className="btn btn-sm btn-link">
+        <span className="sr-only">More Actions</span>
         <span className="fa fa-chevron-down fa-fw" />
       </DropdownToggle>
       <DropdownMenu right>
@@ -101,28 +102,15 @@ export const FormListComponent = ({ modalOpen, toggleModal, navigate }) => (
         value: 'actions',
         title: ' ',
         sortable: false,
-        components: {
-          BodyCell: ActionsCell(),
-        },
+        components: { BodyCell: ActionsCell() },
         className: 'text-right',
       },
     ]}
     alterColumns={{
-      updatedAt: {
-        components: {
-          BodyCell: TimeAgoCell,
-        },
-      },
-      name: {
-        components: {
-          BodyCell: FormNameCell,
-        },
-      },
+      updatedAt: { components: { BodyCell: TimeAgoCell } },
+      name: { components: { BodyCell: FormNameCell } },
       status: {
-        components: {
-          BodyCell: StatusBadgeCell,
-          Filter: SelectFilter,
-        },
+        components: { BodyCell: StatusBadgeCell, Filter: SelectFilter },
       },
     }}
   >
@@ -131,13 +119,17 @@ export const FormListComponent = ({ modalOpen, toggleModal, navigate }) => (
         <PageTitle parts={['Datastore Forms']} />
         <div className="page-panel page-panel--two-thirds page-panel--white">
           <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
+            <div
+              role="navigation"
+              aria-label="breadcrumbs"
+              className="page-title__breadcrumbs"
+            >
+              <span className="breadcrumb-item">
                 <Link to="../">
                   <I18n>settings</I18n>
-                </Link>{' '}
-                /{` `}
-              </h3>
+                </Link>
+              </span>{' '}
+              <span aria-hidden="true">/ </span>
               <h1>
                 <I18n>Datastore Forms</I18n>
               </h1>
@@ -214,9 +206,7 @@ export const FormListComponent = ({ modalOpen, toggleModal, navigate }) => (
               FormError: FormComponents.FormError,
             }}
             alterFields={{
-              description: {
-                component: FormComponents.TextAreaField,
-              },
+              description: { component: FormComponents.TextAreaField },
             }}
           >
             {({ form, initialized }) => {

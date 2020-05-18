@@ -178,6 +178,7 @@ const ActionsCell = ({ toggleModal }) => ({ row }) => (
   <td className="text-right" style={{ width: '1%' }}>
     <UncontrolledDropdown className="more-actions">
       <DropdownToggle tag="button" className="btn btn-sm btn-link">
+        <span className="sr-only">More Actions</span>
         <span className="fa fa-chevron-down fa-fw" />
       </DropdownToggle>
       <DropdownMenu right>
@@ -230,12 +231,7 @@ export const UsersListComponent = ({
       TableLayout: SettingsTableLayout,
     }}
     alterColumns={{
-      username: {
-        title: 'Email',
-        components: {
-          BodyCell: NameCell,
-        },
-      },
+      username: { title: 'Email', components: { BodyCell: NameCell } },
     }}
     addColumns={[
       {
@@ -254,32 +250,37 @@ export const UsersListComponent = ({
         <PageTitle parts={['Users']} />
         <div className="page-panel page-panel--two-thirds page-panel--white">
           <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
+            <div
+              role="navigation"
+              aria-label="breadcrumbs"
+              className="page-title__breadcrumbs"
+            >
+              <span className="breadcrumb-item">
                 <Link to="../settings">
                   <I18n>settings</I18n>
-                </Link>{' '}
-                /{` `}
-              </h3>
-              <h1>
+                </Link>
+              </span>{' '}
+              <span aria-hidden="true">/ </span>
+              <h1 aria-current="page">
                 <I18n>Users</I18n>
               </h1>
             </div>
             <div className="page-title__actions">
-              <input
-                type="file"
-                accept=".csv"
-                id="file-input"
-                style={{ display: 'none' }}
-                onChange={handleImport}
-              />
-              <label
-                htmlFor="file-input"
-                className="btn btn-info"
-                style={{ marginBottom: '0px' }}
-              >
-                <I18n>Import Users</I18n>
-              </label>
+              <div className="file-up" data-file-input>
+                <label htmlFor="file_upload" className="file-up__label">
+                  <span className="file-up__label__text btn btn-info">
+                    <I18n>Import Users</I18n>
+                  </span>
+                  <input
+                    type="file"
+                    accept=".csv"
+                    autocomplete="off"
+                    id="file_upload"
+                    onChange={handleImport}
+                  />
+                </label>
+              </div>
+
               <button
                 className="btn btn-info"
                 onClick={() => openExportModal('export')}
@@ -359,22 +360,17 @@ export const UsersListComponent = ({
               FormButtons,
               FormError: FormComponents.FormError,
             }}
-            alterFields={{
-              username: {
-                label: 'Email',
-              },
-            }}
+            alterFields={{ username: { label: 'Email' } }}
             addDataSources={
               typeof modalOpen === 'string'
                 ? {
                     cloneUser: {
                       fn: fetchUser,
                       params: [{ username: modalOpen }],
-                      // Set to the user, or the result in case of an error
                       transform: result => result.user || result,
                     },
                   }
-                : undefined
+                : undefined // Set to the user, or the result in case of an error
             }
           >
             {({ form, initialized, bindings: { cloneUser } }) => {

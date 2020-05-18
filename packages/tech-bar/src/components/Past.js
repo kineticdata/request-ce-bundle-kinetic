@@ -15,13 +15,17 @@ export const PastComponent = ({ techBars, error, pastAppointments }) => (
     <div className="page-container page-container--tech-bar container">
       <div className="page-panel">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to="../">
                 <I18n>tech bar</I18n>
               </Link>{' '}
               /{' '}
-            </h3>
+            </span>
             <h1>
               <I18n>Past Appointments</I18n>
             </h1>
