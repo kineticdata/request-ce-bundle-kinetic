@@ -65,7 +65,7 @@ export class TextMultiField extends Component {
             {selection && (
               <div className="input-group-append">
                 <button
-                  className="btn btn-sm btn-danger pull-right"
+                  className="btn btn-sm btn-clear"
                   onClick={this.onRemove(i)}
                   onFocus={this.props.onFocus}
                   onBlur={this.props.onBlur}

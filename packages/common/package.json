@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "src/index.js",
   "dependencies": {
-    "@kineticdata/react": "^5.0.1",
+    "@kineticdata/react": "5.0.5",
     "@reach/router": "git://github.com/kineticdata/router.git",
     "bootstrap-select": "1.12.4",
     "datatables.net": "^1.10.16",

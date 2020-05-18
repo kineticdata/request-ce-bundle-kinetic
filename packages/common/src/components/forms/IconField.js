@@ -4,7 +4,7 @@ import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { FieldWrapper } from './FieldWrapper';
 import { fromJS } from 'immutable';
 import icons from '../../assets/fa-icons';
-import { Map } from 'immutable';
+import { getIn, Map } from 'immutable';
 
 const options = fromJS(
   icons.map(({ name, id, filter, aliases }) => ({
@@ -19,10 +19,21 @@ const options = fromJS(
   })),
 );
 
-const Input = props => <input {...props.inputProps} className="form-control" />;
+const Input = props => (
+  <input
+    {...props.inputProps}
+    className="form-control"
+    placeholder={getIn(props, ['inputProps', 'selection', 'label'], '')}
+  />
+);
 
-const SelectionsContainer = ({ input, selections }) => (
+const SelectionsContainer = ({ input, selections, value }) => (
   <div className="kinetic-typeahead input-group">
+    <div className="input-group-prepend">
+      <div className="input-group-text">
+        <span className={`fa fa-fw fa-lg ${value && value.get('value')}`} />
+      </div>
+    </div>
     {selections}
     {input}
   </div>
@@ -38,27 +49,29 @@ const Suggestion = ({ suggestion, active }) => (
 );
 
 const Selection = ({ selection, disabled, edit, focusRef, remove }) => (
-  <div
-    className="selection single form-control-plaintext"
-    onClick={edit}
-    onKeyDown={edit}
-    role="button"
-    ref={focusRef}
-    tabIndex={0}
-  >
-    {selection && <i className={`fa fa-fw ${selection.get('value')}`} />}
-    {selection ? selection.get('label') : <em>None</em>}
+  <>
+    <input
+      className="form-control"
+      type="text"
+      value={selection ? selection.get('label') : ''}
+      onChange={() => {}}
+      onFocus={e => e.target.click()}
+      onClick={edit}
+      disabled={disabled}
+    />
     {selection &&
       !disabled && (
-        <button
-          className="btn btn-subtle btn-xs"
-          onClick={remove}
-          type="button"
-        >
-          <i className="fa fa-fw fa-times" />
-        </button>
+        <div className="input-group-append">
+          <button
+            className="btn btn-sm btn-clear"
+            onClick={remove}
+            type="button"
+          >
+            <i className="fa fa-fw fa-times" />
+          </button>
+        </div>
       )}
-  </div>
+  </>
 );
 
 const SuggestionsContainer = ({ open, children, containerProps }) => (

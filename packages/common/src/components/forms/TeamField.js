@@ -3,6 +3,7 @@ import { TeamSelect } from '@kineticdata/react';
 import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { FieldWrapper } from './FieldWrapper';
 import classNames from 'classnames';
+import { getIn } from 'immutable';
 
 const splitTeamName = team => {
   const [local, ...parents] = team
@@ -12,7 +13,13 @@ const splitTeamName = team => {
   return [parents.reverse().join('::'), local];
 };
 
-const Input = props => <input {...props.inputProps} className="form-control" />;
+const Input = props => (
+  <input
+    {...props.inputProps}
+    className="form-control"
+    placeholder={getIn(props, ['inputProps', 'selection', 'name'], '')}
+  />
+);
 
 const SelectionsContainer = ({ selections, input, multiple }) => (
   <div className={classNames('kinetic-typeahead', { multi: multiple })}>
@@ -21,54 +28,44 @@ const SelectionsContainer = ({ selections, input, multiple }) => (
   </div>
 );
 
-const Selection = ({ selection, remove }) => {
-  const input = (
+const Selection = ({ selection, remove }) => (
+  <div className="input-group selection">
     <input
       className="form-control"
       type="text"
       disabled
       value={selection.get('name')}
     />
-  );
-  return remove ? (
-    <div className="input-group selection">
-      {input}
-      {remove && (
+    <div className="input-group-append">
+      <button className="btn btn-sm btn-clear" onClick={remove} type="button">
+        <i className="fa fa-fw fa-times" />
+      </button>
+    </div>
+  </div>
+);
+
+const SingleSelection = ({ selection, disabled, edit, focusRef, remove }) => (
+  <div className="input-group selection">
+    <input
+      className="form-control"
+      type="text"
+      value={selection ? selection.get('name') : ''}
+      onChange={() => {}}
+      onFocus={e => e.target.click()}
+      onClick={edit}
+      disabled={disabled}
+    />
+    {selection &&
+      !disabled && (
         <div className="input-group-append">
           <button
-            className="btn btn-sm btn-danger pull-right"
+            className="btn btn-sm btn-clear"
             onClick={remove}
             type="button"
           >
             <i className="fa fa-fw fa-times" />
           </button>
         </div>
-      )}
-    </div>
-  ) : (
-    input
-  );
-};
-
-const SingleSelection = ({ selection, disabled, edit, focusRef, remove }) => (
-  <div
-    className="selection single form-control-plaintext"
-    onClick={edit}
-    onKeyDown={edit}
-    role="button"
-    ref={focusRef}
-    tabIndex={0}
-  >
-    {selection ? selection.get('name') : <em>None</em>}
-    {selection &&
-      !disabled && (
-        <button
-          className="btn btn-subtle btn-xs"
-          onClick={remove}
-          type="button"
-        >
-          <i className="fa fa-fw fa-times" />
-        </button>
       )}
   </div>
 );

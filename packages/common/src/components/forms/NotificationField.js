@@ -3,50 +3,61 @@ import { I18n, StaticSelect } from '@kineticdata/react';
 import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { hasErrors } from './utils';
 import { FieldWrapper } from './FieldWrapper';
-import { Map } from 'immutable';
+import { Map, getIn } from 'immutable';
 import { Link } from 'react-router-dom';
 
-const Input = props => <input {...props.inputProps} className="form-control" />;
+const Input = props => (
+  <input
+    {...props.inputProps}
+    className="form-control"
+    placeholder={getIn(props, ['inputProps', 'selection', 'label'], '')}
+  />
+);
 
 const SelectionsContainer = ({ input, selections, value }) => (
   <div className="kinetic-typeahead input-group">
     {selections}
     {input}
+    {value && (
+      <div className="input-group-append">
+        <div className="input-group-text">
+          {console.log('!', value.toJS())}
+          <Link
+            to={`/settings/notifications/templates/${value.get('slug')}`}
+            target="_blank"
+          >
+            <I18n>View Template</I18n>
+          </Link>
+        </div>
+      </div>
+    )}
   </div>
 );
 
 const Selection = ({ selection, disabled, edit, focusRef, remove }) => (
-  <Fragment>
-    <div
-      className="selection single form-control-plaintext"
+  <>
+    <input
+      className="form-control"
+      type="text"
+      value={selection ? selection.get('label') : ''}
+      onChange={() => {}}
+      onFocus={e => e.target.click()}
       onClick={edit}
-      onKeyDown={edit}
-      role="button"
-      ref={focusRef}
-      tabIndex={0}
-    >
-      {selection ? selection.get('label') : <em>None</em>}
-      {selection &&
-        !disabled && (
+      disabled={disabled}
+    />
+    {selection &&
+      !disabled && (
+        <div className="input-group-append">
           <button
-            className="btn btn-subtle btn-xs"
+            className="btn btn-sm btn-clear"
             onClick={remove}
             type="button"
           >
-            <i className="fa fa-fw fa-times" />
+            <span className="fa fa-fw fa-times" />
           </button>
-        )}
-    </div>
-    {selection && (
-      <Link
-        className="input-group-text"
-        to={`/settings/notifications/templates/${selection.get('slug')}`}
-        target="_blank"
-      >
-        <I18n>View Template</I18n>
-      </Link>
-    )}
-  </Fragment>
+        </div>
+      )}
+  </>
 );
 
 const Suggestion = ({ suggestion, active }) => (

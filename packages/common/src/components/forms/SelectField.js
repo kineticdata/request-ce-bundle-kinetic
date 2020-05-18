@@ -3,9 +3,15 @@ import { I18n, StaticSelect } from '@kineticdata/react';
 import { TypeaheadStatus as Status } from './TypeaheadStatus';
 import { hasErrors } from './utils';
 import { FieldWrapper } from './FieldWrapper';
-import { Map } from 'immutable';
+import { Map, getIn } from 'immutable';
 
-const Input = props => <input {...props.inputProps} className="form-control" />;
+const Input = props => (
+  <input
+    {...props.inputProps}
+    className="form-control"
+    placeholder={getIn(props, ['inputProps', 'selection', 'label'], '')}
+  />
+);
 
 const SelectionsContainer = ({ input, selections }) => (
   <div className="kinetic-typeahead">
@@ -15,24 +21,27 @@ const SelectionsContainer = ({ input, selections }) => (
 );
 
 const Selection = ({ selection, disabled, edit, focusRef, remove }) => (
-  <div
-    className="selection single form-control-plaintext"
-    onClick={edit}
-    onKeyDown={edit}
-    role="button"
-    ref={focusRef}
-    tabIndex={0}
-  >
-    {selection ? selection.get('label') : <em>None</em>}
+  <div className="input-group selection">
+    <input
+      className="form-control"
+      type="text"
+      value={selection ? selection.get('label') : ''}
+      onChange={() => {}}
+      onFocus={e => e.target.click()}
+      onClick={edit}
+      disabled={disabled}
+    />
     {selection &&
       !disabled && (
-        <button
-          className="btn btn-subtle btn-xs"
-          onClick={remove}
-          type="button"
-        >
-          <i className="fa fa-fw fa-times" />
-        </button>
+        <div className="input-group-append">
+          <button
+            className="btn btn-sm btn-clear"
+            onClick={remove}
+            type="button"
+          >
+            <i className="fa fa-fw fa-times" />
+          </button>
+        </div>
       )}
   </div>
 );

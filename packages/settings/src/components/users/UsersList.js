@@ -41,7 +41,8 @@ const IsJsonString = str => {
 const handleImport = props => e => {
   const file = e.target.files[0];
   e.target.value = null;
-  const extention = file.name.split('.')[file.name.split('.').length - 1];
+  const extention =
+    file && file.name && file.name.split('.')[file.name.split('.').length - 1];
   if (file && extention === 'csv') {
     const reader = new FileReader();
     reader.readAsText(file);

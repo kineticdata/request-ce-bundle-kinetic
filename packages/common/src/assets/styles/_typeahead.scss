@@ -23,7 +23,8 @@
 
   .suggestions {
     position: absolute;
-    z-index: 1;
+    // Needed to display over bootstrap input-group buttons
+    z-index: 3;
     display: none;
     min-width: 20rem;
     max-height: 360px;
@@ -144,6 +145,30 @@
       background-color: #f0f0f0;
       button {
         opacity: 1;
+      }
+    }
+  }
+}
+
+.input-group {
+  .input-group-append {
+    button.btn-clear {
+      background-color: white;
+      border-color: #ced4da;
+      border-left-color: white;
+      color: $danger;
+      transition: text-shadow 0.3s;
+      &:hover {
+        text-shadow: 0px 0px 1rem red;
+      }
+    }
+  }
+  input[type='text'][disabled],
+  input[type='text'].disabled {
+    ~ .input-group-append {
+      button.btn-clear {
+        background-color: #e9ecef;
+        border-left-color: #e9ecef;
       }
     }
   }

@@ -13,7 +13,7 @@ const SelectionsContainer = ({ selections, input, multiple }) => (
   </div>
 );
 
-const Selection = ({ selection, remove, ...other }) => {
+const Selection = ({ selection, remove }) => {
   return selection ? (
     <div className="input-group selection">
       <input
@@ -22,17 +22,11 @@ const Selection = ({ selection, remove, ...other }) => {
         disabled
         value={selection.get('label')}
       />
-      {remove && (
-        <div className="input-group-append">
-          <button
-            className="btn btn-sm btn-danger pull-right"
-            onClick={remove}
-            type="button"
-          >
-            <i className="fa fa-fw fa-times" />
-          </button>
-        </div>
-      )}
+      <div className="input-group-append">
+        <button className="btn btn-sm btn-clear" onClick={remove} type="button">
+          <i className="fa fa-fw fa-times" />
+        </button>
+      </div>
     </div>
   ) : null;
 };
@@ -147,7 +141,7 @@ export class SelectMultiField extends Component {
                 {selection && (
                   <div className="input-group-append">
                     <button
-                      className="btn btn-sm btn-danger pull-right"
+                      className="btn btn-sm btn-clear"
                       onClick={this.onRemove(i)}
                       onFocus={this.props.onFocus}
                       onBlur={this.props.onBlur}

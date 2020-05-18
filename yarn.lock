@@ -1271,10 +1271,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@kineticdata/react@^5.0.1":
-  version "5.0.4"
-  resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-5.0.4.tgz#09c3151ffe84cbef6db564966e1fb5b3ad46d391"
-  integrity sha512-th7rK5elIBwW357okBIpXGkGeCAL5upGtrMolJVerlKfL8KGWezBEyOQN0Rh5h2JY2el2eM4S/NoHNxxRIoJ1A==
+"@kineticdata/react@5.0.5":
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-5.0.5.tgz#5e0b7526c23da5604be7857195926fff3fd9f8b0"
+  integrity sha512-GD5MFSB1Np9jP/jCyh7Eb+fslcwA4tgmdHW/Z8cRPdolXEmaDF0ayyUOy6FvAdNm/UO5i0zS+hFJ60Hsdtcd6g==
   dependencies:
     axios "^0.18.0"
     classnames "^2.2.6"
