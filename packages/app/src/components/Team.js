@@ -71,7 +71,7 @@ const TeamComponent = ({
             </div>
             {me.spaceAdmin && (
               <Link
-                to={`/settings/teams/${team.slug}/edit`}
+                to={`/settings/teams/${team.slug}`}
                 className="btn btn-secondary"
               >
                 <I18n>Edit Team</I18n>

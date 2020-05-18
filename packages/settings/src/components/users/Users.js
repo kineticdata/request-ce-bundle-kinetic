@@ -18,8 +18,8 @@ const ImportUsers = () => (
 export const Users = ({ match }) => (
   <Router>
     <ImportUsers path="import" />
-    <UsersError path="/error" />
-    <UserEdit path=":username/edit" />
+    <UsersError path="error" />
+    <UserEdit path=":username" />
     <UsersList default />
   </Router>
 );

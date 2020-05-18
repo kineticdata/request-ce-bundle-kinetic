@@ -168,7 +168,7 @@ const CloneErrorFormLayout = () => (
 
 const NameCell = ({ value, row }) => (
   <td>
-    <Link to={`/settings/users/${row.get('username')}/edit`} title="Edit User">
+    <Link to={`/settings/users/${row.get('username')}`} title="Edit User">
       {value}
     </Link>
   </td>
@@ -185,7 +185,7 @@ const ActionsCell = ({ toggleModal }) => ({ row }) => (
           <I18n>View</I18n>
         </Link>
         <Link
-          to={`/settings/users/${row.get('username')}/edit`}
+          to={`/settings/users/${row.get('username')}`}
           className="dropdown-item"
         >
           <I18n>Edit</I18n>
@@ -347,11 +347,11 @@ export const UsersListComponent = ({
                 cloneUserRequest({
                   cloneUserUsername: modalOpen,
                   user: user,
-                  callback: () => navigate(`${user.username}/edit`),
+                  callback: () => navigate(`${user.username}`),
                 });
               } else {
                 addToast(`${user.username} created successfully.`);
-                user && navigate(`${user.username}/edit`);
+                user && navigate(`${user.username}`);
               }
             }}
             components={{
