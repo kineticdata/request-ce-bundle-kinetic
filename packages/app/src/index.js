@@ -16,6 +16,11 @@ import { App } from './App';
 // Shared Components
 import { FormComponents, TableComponents } from 'common';
 
+if (process.env.NODE_ENV === 'development') {
+  const axe = require('react-axe');
+  axe(React, ReactDOM, 1000);
+}
+
 const ConnectedKineticLib = connect(state => ({
   locale: state.app.locale,
 }))(KineticLib);

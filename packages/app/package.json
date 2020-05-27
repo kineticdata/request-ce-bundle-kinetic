@@ -47,7 +47,9 @@
   "devDependencies": {
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
-    "jest-immutable-matchers": "^2.0.1"
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "jest-immutable-matchers": "^2.0.1",
+    "react-axe": "3.3.0"
   },
   "browserslist": {
     "production": [
@@ -61,6 +63,15 @@
       "last 1 firefox version",
       "last 1 safari version",
       "ie 11"
+    ]
+  },
+  "eslintConfig": {
+    "plugins": [
+      "jsx-a11y"
+    ],
+    "extends": [
+      "react-app",
+      "plugin:jsx-a11y/recommended"
     ]
   }
 }
