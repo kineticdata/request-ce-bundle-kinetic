@@ -24,6 +24,7 @@ export const DiscussionDetailsComponent = props => (
         discussion={props.discussion}
         profile={props.profile}
         onLeave={props.onLeave}
+        close={props.close}
       />
     ) : props.view === 'invitations' ? (
       <InvitationDialog discussion={props.discussion} profile={props.profile} />
