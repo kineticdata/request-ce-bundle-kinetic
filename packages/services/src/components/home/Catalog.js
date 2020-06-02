@@ -42,7 +42,7 @@ export const Catalog = ({
                 <div className="page-title">
                   <div
                     role="navigation"
-                    aria-label="breadcrumbs"
+                    aria-label="breadcrumbs recent requests"
                     className="page-title__breadcrumbs"
                   >
                     <span className="breadcrumb-item text-lowercase">
@@ -83,7 +83,7 @@ export const Catalog = ({
                 <div className="page-title">
                   <div
                     role="navigation"
-                    aria-label="breadcrumbs"
+                    aria-label="breadcrumbs categories"
                     className="page-title__breadcrumbs"
                   >
                     <span className="breadcrumb-item text-lowercase">
