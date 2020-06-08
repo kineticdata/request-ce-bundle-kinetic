@@ -42,10 +42,18 @@ form,
 
 form {
   // Headings
-  section h1 {
-    margin-top: 0;
-    & ~ section h1 {
-      margin-top: 1rem;
+  section {
+    h1,
+    .section-title {
+      @include ms-respond(font-size, 6);
+      // Mobile
+      line-height: 1.2;
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      & ~ section h1,
+      & ~ section .section-title {
+        margin-top: 1rem;
+      }
     }
   }
   // Checkboxes & Radios
@@ -314,7 +322,8 @@ section.page {
       margin-bottom: 2rem;
     }
 
-    h1 {
+    h1,
+    .section-title {
       padding: 0 0 1rem;
     }
 

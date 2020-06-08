@@ -6,7 +6,8 @@
   form {
     background-color: transparent;
     padding: 0;
-    h1 {
+    h1,
+    .section-title {
       color: $black;
       font-size: 1.625rem;
       font-weight: 600;
