@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { compose, withHandlers, withState } from 'recompose';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { TeamTable, TeamForm, I18n } from '@kineticdata/react';
 import { generateEmptyBodyRow } from 'common/src/components/tables/EmptyBodyRow';
 import { generateFilterModalLayout } from 'common/src/components/tables/FilterLayout';
@@ -36,7 +36,7 @@ const FormButtons = props => (
 
 const NameCell = ({ value, row }) => (
   <td>
-    <Link to={`/settings/teams/${row.get('slug')}`} title="Edit Team">
+    <Link to={row.get('slug')} title="Edit Team">
       {value}
     </Link>
   </td>
@@ -82,7 +82,7 @@ export const TeamsListComponent = ({
               className="page-title__breadcrumbs"
             >
               <span className="breadcrumb-item">
-                <Link to="../settings">
+                <Link to="..">
                   <I18n>settings</I18n>
                 </Link>
               </span>{' '}
