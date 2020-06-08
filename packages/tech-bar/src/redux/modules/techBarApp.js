@@ -62,6 +62,9 @@ export const Settings = (object = {}) => ({
   submissionId: object.id,
   feedbackIdentitifcation:
     (object.values && object.values['Feedback Identification']) || 'Optional',
+  allowScheduledCheckIns:
+    ((object.values && object.values['Allow Scheduled Check-Ins']) || 'Yes') ===
+    'Yes',
   allowWalkIns:
     ((object.values && object.values['Allow Walk-Ins']) || 'Yes') === 'Yes',
 });

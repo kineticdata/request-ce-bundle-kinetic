@@ -53,13 +53,15 @@ export const CheckInComponent = ({
             <div className="header bg-dark" />
             <div className="body">
               <div className="form">
-                <button
-                  type="button"
-                  className="btn btn--checkin btn-success"
-                  onClick={() => toggleShowDetails('appointment')}
-                >
-                  <I18n>I have an appointment</I18n>
-                </button>
+                {techBar.settings.allowScheduledCheckIns && (
+                  <button
+                    type="button"
+                    className="btn btn--checkin btn-success"
+                    onClick={() => toggleShowDetails('appointment')}
+                  >
+                    <I18n>I have an appointment</I18n>
+                  </button>
+                )}
                 {techBar.settings.allowWalkIns && (
                   <button
                     type="button"

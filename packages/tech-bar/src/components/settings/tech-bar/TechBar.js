@@ -64,6 +64,16 @@ export const TechBarComponent = ({
               </h2>
               <div className="form-group">
                 <label>
+                  <I18n>Allow Scheduled Check-Ins</I18n>
+                </label>
+                <div>
+                  <I18n>
+                    {techBar.settings.allowScheduledCheckIns ? 'Yes' : 'No'}
+                  </I18n>
+                </div>
+              </div>
+              <div className="form-group">
+                <label>
                   <I18n>Allow Walk-Ins</I18n>
                 </label>
                 <div>
