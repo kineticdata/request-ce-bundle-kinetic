@@ -7,81 +7,96 @@ import { connect } from '../../../redux/store';
 import { I18n } from '@kineticdata/react';
 
 const ExportComponent = ({
+  filter,
   submissions,
   exportStatus,
   submissionsCount,
   handleDownload,
   form,
-}) =>
-  submissions && (
-    <Fragment>
-      <div className="text-center">
-        {exportStatus === 'NOT_STARTED' ? (
-          <Fragment>
-            <h2>
-              <I18n>This process will export as a .csv file</I18n>
-            </h2>
-            <h4>
-              <I18n>Please don't close modal until confirmation</I18n>
-            </h4>
-            <button className="btn btn-primary" onClick={handleDownload}>
-              {1 === 2 ? (
-                <span>
-                  <I18n>Export Records for Query</I18n>
-                </span>
-              ) : (
-                <span>
-                  <I18n>Export All Records</I18n>
-                </span>
-              )}
-            </button>
-          </Fragment>
-        ) : (
-          <Fragment>
-            <h2>
-              <I18n>Retrieving Records</I18n>
-            </h2>
-            <h4>
-              {submissionsCount} <I18n>records retrieved</I18n>
-            </h4>
-            {/* TODO: Warp user feedback in a conditional if exportStatus === Failed */}
-            {exportStatus === 'CONVERT' && (
+}) => {
+  let filterLabel = 'All';
+  for (let [key, value] of Object.entries(filter.props.appliedFilters.toJS())) {
+    if (key === 'submittedAt' || key === 'createdAt') {
+      if (value.value[0].length || value.value[1].length) {
+        filterLabel = 'Filtered';
+      }
+    } else if (value.value.length) {
+      filterLabel = 'Filtered';
+    }
+  }
+
+  return (
+    submissions && (
+      <Fragment>
+        <div className="text-center">
+          {exportStatus === 'NOT_STARTED' ? (
+            <Fragment>
+              <h2>
+                <I18n>This process will export as a .csv file</I18n>
+              </h2>
               <h4>
-                <I18n>Converting Records to CSV format</I18n>
+                <I18n>Please don't close modal until confirmation</I18n>
               </h4>
-            )}
-            {exportStatus === 'DOWNLOAD' && (
-              <I18n
-                render={translate => (
-                  <h4>{`${translate(
-                    'Downloading',
-                  )} ${submissionsCount} ${translate('Records to')} ${
-                    form.name
-                  }.csv`}</h4>
+              <button className="btn btn-primary" onClick={handleDownload}>
+                {1 === 2 ? (
+                  <span>
+                    <I18n>Export Records for Query</I18n>
+                  </span>
+                ) : (
+                  <span>
+                    <I18n>Export {filterLabel} Records</I18n>
+                  </span>
                 )}
-              />
-            )}
-            {exportStatus === 'COMPLETE' && (
-              <Fragment>
+              </button>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <h2>
+                <I18n>Retrieving Records</I18n>
+              </h2>
+              <h4>
+                {submissionsCount} <I18n>records retrieved</I18n>
+              </h4>
+              {/* TODO: Warp user feedback in a conditional if exportStatus === Failed */}
+              {exportStatus === 'CONVERT' && (
+                <h4>
+                  <I18n>Converting Records to CSV format</I18n>
+                </h4>
+              )}
+              {exportStatus === 'DOWNLOAD' && (
                 <I18n
                   render={translate => (
-                    <h2>
-                      {`${submissionsCount} ${translate(
-                        'Records exported to',
-                      )} ${form.name}.csv`}
-                    </h2>
+                    <h4>{`${translate(
+                      'Downloading',
+                    )} ${submissionsCount} ${translate('Records to')} ${
+                      form.name
+                    }.csv`}</h4>
                   )}
                 />
-                <h4>
-                  <I18n>Click Cancel to close the modal</I18n>
-                </h4>
-              </Fragment>
-            )}
-          </Fragment>
-        )}
-      </div>
-    </Fragment>
+              )}
+              {exportStatus === 'COMPLETE' && (
+                <Fragment>
+                  <I18n
+                    render={translate => (
+                      <h2>
+                        {`${submissionsCount} ${translate(
+                          'Records exported to',
+                        )} ${form.name}.csv`}
+                      </h2>
+                    )}
+                  />
+                  <h4>
+                    <I18n>Click Cancel to close the modal</I18n>
+                  </h4>
+                </Fragment>
+              )}
+            </Fragment>
+          )}
+        </div>
+      </Fragment>
+    )
   );
+};
 
 function createCSV(submissions, form) {
   // Create csv string that will be used for download

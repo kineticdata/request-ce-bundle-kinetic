@@ -25,9 +25,11 @@ const BuilderLink = ({ tree }) => (
   <span className="workflow-builder-link">
     <a
       className="btn btn-sm btn-primary"
-      href={`${bundle.spaceLocation()}/app/#/space/workflow/trees/builder/${
+      href={`${bundle.spaceLocation()}/app/#/workflow/trees/builder/${
         tree.sourceName
       }/${tree.sourceGroup}/${tree.name}`}
+      target="_blank"
+      rel="noopener noreferrer"
     >
       <span className="fa fa-mouse-pointer fa-fw" />
       Builder
@@ -435,7 +437,7 @@ const SurveySettingsComponent = ({
                               : '',
                           helpText:
                             'Name of the form or object that will be polled',
-                          placeholder: 'PD:HelpDesk',
+                          placeholder: 'HPD:HelpDesk',
                         },
                         {
                           name: 'pollingTrigger',
@@ -463,6 +465,8 @@ const SurveySettingsComponent = ({
                             surveyConfig['Event Polling']['Interval']
                               ? surveyConfig['Event Polling']['Interval']
                               : 1440,
+                          helpText:
+                            'Number of minutes between each polling query. This value is used to calculate begin and end dates (using last modified date/time on the record) that are appended to the query',
                           component: FormComponents.IntegerField,
                         },
                         {
@@ -524,7 +528,7 @@ const SurveySettingsComponent = ({
                               ? surveyConfig['Maximum Survey Frequency'][
                                   'Count'
                                 ]
-                              : 1000,
+                              : 1,
                           component: FormComponents.IntegerField,
                         },
                         {
@@ -535,7 +539,7 @@ const SurveySettingsComponent = ({
                             surveyConfig &&
                             surveyConfig['Maximum Survey Frequency']['Days']
                               ? surveyConfig['Maximum Survey Frequency']['Days']
-                              : 1,
+                              : 7,
                           component: FormComponents.IntegerField,
                         },
                         // {

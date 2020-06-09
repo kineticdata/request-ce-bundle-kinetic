@@ -39,8 +39,8 @@ export const SettingsSidebarComponent = ({
       <p>values('Recipient Id')'s survey for ticket values('Reference Id')</p>
       <p>And the resulting list of surveys might look like this:</p>
       <p>
-        btigges’s survey for ticket 23456
-        <br />jsundberg’s survey for ticket 34956
+        mary_manager’s survey for ticket 23456
+        <br />tommy_user’s survey for ticket 34956
       </p>
     </Fragment>
   ) : tab === '2' ? (
