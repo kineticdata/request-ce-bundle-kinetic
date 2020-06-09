@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "main": "./src/index.js",
   "scripts": {
+    "prestart": "node ./src/setupEnv.js",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",

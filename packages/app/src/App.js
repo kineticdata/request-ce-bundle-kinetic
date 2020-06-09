@@ -68,32 +68,40 @@ export const AppComponent = props =>
         <div className="app-wrapper">
           {!props.headerHidden && (
             <div className="app-header">
-              <Header toggleSidebarOpen={sidebar && props.toggleSidebarOpen} />
+              <Header
+                toggleSidebarOpen={
+                  sidebar && !props.sidebarHidden && props.toggleSidebarOpen
+                }
+              />
             </div>
           )}
           <div
             className={`app-body ${
-              sidebar
+              sidebar && !props.sidebarHidden
                 ? props.sidebarOpen
                   ? 'open-sidebar'
                   : 'closed-sidebar'
                 : ''
             }`}
           >
-            {sidebar && (
-              <aside
-                className="app-sidebar-container"
-                aria-labelledby="toggle-sidebar"
-                aria-hidden={props.sidebarOpen ? 'false' : 'true'}
-              >
-                {sidebar}
-              </aside>
-            )}
+            {sidebar &&
+              !props.sidebarHidden && (
+                <aside
+                  className="app-sidebar-container"
+                  aria-labelledby="toggle-sidebar"
+                  aria-hidden={props.sidebarOpen ? 'false' : 'true'}
+                >
+                  {sidebar}
+                </aside>
+              )}
 
             <div
               className="app-main-container"
               onClick={
-                sidebar && props.sidebarOpen && props.layoutSize === 'small'
+                sidebar &&
+                !props.sidebarHidden &&
+                props.sidebarOpen &&
+                props.layoutSize === 'small'
                   ? props.toggleSidebarOpen
                   : undefined
               }

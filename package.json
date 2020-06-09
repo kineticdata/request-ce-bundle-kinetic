@@ -6,11 +6,14 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "cd packages/app && react-app-rewired start",
-    "build": "cd packages/app && react-app-rewired build",
-    "test": "cd packages/app && react-app-rewired test --env=jsdom",
+    "start": "cd packages/app && yarn start",
+    "build": "cd packages/app && yarn build",
+    "test": "cd packages/app && yarn test",
     "format": "prettier --write \"**\"",
     "precommit": "lint-staged"
+  },
+  "engines": {
+    "node": "10.x"
   },
   "devDependencies": {
     "husky": "^0.14.3",

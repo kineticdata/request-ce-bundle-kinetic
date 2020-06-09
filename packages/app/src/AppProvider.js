@@ -50,6 +50,10 @@ const AppComponent = props => {
               <Route exact path="/alerts/:id" component={Alert} />
               <Route exact path="/alerts" component={Alerts} />
               <Redirect
+                path="/datastore/forms/:formSlug/submissions/:id"
+                to={`${SettingsApp.location}/datastore/:formSlug/:id`}
+              />
+              <Redirect
                 path="/datastore/forms/:formSlug"
                 to={`${SettingsApp.location}/datastore/:formSlug/new`}
               />

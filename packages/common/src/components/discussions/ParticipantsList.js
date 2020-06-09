@@ -8,7 +8,7 @@ import { Popover, PopoverBody } from 'reactstrap';
 
 export const ParticipantsList = props => (
   <div className="participants-list-wrapper">
-    <h1>
+    <div className="participants-heading">
       Participants
       <button
         type="button"
@@ -17,7 +17,7 @@ export const ParticipantsList = props => (
       >
         <i className="fa fa-fw fa-plus" />
       </button>
-    </h1>
+    </div>
     <ul className="participants-list">
       {props.discussion.participants
         .map(p => p.user)

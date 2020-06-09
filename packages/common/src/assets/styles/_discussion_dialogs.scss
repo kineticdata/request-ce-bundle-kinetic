@@ -48,7 +48,7 @@
   }
 
   .participants-list-wrapper {
-    h1 {
+    .participants-heading {
       color: $blue-lake;
       display: flex;
       justify-content: space-between;
@@ -121,6 +121,46 @@
       border-radius: 50%;
       &.is-active {
         border-color: rgba($present, 1);
+      }
+    }
+  }
+
+  .related-items-list-wrapper {
+    border-top: 1px solid $gray6;
+    .related-items-heading {
+      color: $blue-lake;
+      line-height: 1;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0;
+      margin: 1rem 1rem 0.5rem 1rem;
+    }
+    .related-items-empty-state {
+      color: $gray60;
+      font-size: 0.75rem;
+      padding: 0.25rem 1rem;
+    }
+    ul.related-items-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 0.75rem 0;
+      li {
+        padding: 0.25rem 1rem;
+        &:hover {
+          background-color: $gray3;
+        }
+
+        > a,
+        > div {
+          display: flex;
+          flex-direction: column;
+          text-decoration: none;
+          font-size: 0.8375rem;
+          span:first-child {
+            font-size: 90%;
+            color: $gray60;
+          }
+        }
       }
     }
   }
