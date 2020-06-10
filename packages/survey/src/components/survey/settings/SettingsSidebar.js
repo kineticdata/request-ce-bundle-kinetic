@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from '../../../redux/store';
 import { compose, withProps } from 'recompose';
 import { actions as notificationsActions } from '../../../redux/modules/notifications';
@@ -61,7 +62,9 @@ export const SettingsSidebarComponent = ({
       <br />
       <p>
         <b>Invitation Notification Template</b> is the notification that is sent
-        to the survey recipient when their survey is created. This text is
+        to the survey recipient when their survey is created.
+      </p>
+      {/* This text is
         rather general by default. If desired please clone this notification
         template and create your custom notification by{' '}
         <span
@@ -84,17 +87,49 @@ export const SettingsSidebarComponent = ({
         >
           click here
         </span>.
-      </p>
+      </p> */}
       <p>
         <b>Reminder Notifications Template</b> is the notification that is sent
         to the survey recipient if reminders are configured. If the user hasn’t
         responded to the survey, the user will get up to{' '}
         <b>Reminder Notifications Max</b> reminders{' '}
         <b>Reminder Notifications Interval</b> days apart.{' '}
-        <u>There are no reminders configured by default</u>. Note that this uses
-        the generic invitation text by default. If desired please clone this
-        notification template and create your custom notification by{' '}
+        <u>There are no reminders configured by default</u>.
+      </p>
+      <p>
+        Note that the default templates use rather generic invitation language.
+        If desired, you can clone these notification template to create your own
+        custom notification. Be sure to rename your newly created template,
+        update its content, and set it to "Active." If your survey allows users
+        to Opt Out, start from the "Survey Invitation with Opt Out" template.
+      </p>
+      <p>
+        <Link to="/settings/notifications/templates" target="_blank">
+          View all Notification Templates
+        </Link>
+      </p>
+      <p>
         <span
+          className="survey-settings-sidebar-link"
+          onClick={() => cloneNotification(defaultTemplate.id)}
+          role="button"
+          tabIndex={0}
+        >
+          Clone the "Survey Invitation" template
+        </span>
+      </p>
+      <p>
+        <span
+          className="survey-settings-sidebar-link"
+          onClick={() => cloneNotification(defaultOptOutTemplate.id)}
+          role="button"
+          tabIndex={0}
+        >
+          Clone the "Survey Invitation with Opt Out" template
+        </span>
+      </p>
+      {/* notification to be Survey Invitation with Opt Out by{' '}
+         <span
           className="survey-settings-sidebar-link"
           onClick={() => cloneNotification(defaultTemplate.id)}
           role="button"
@@ -114,7 +149,7 @@ export const SettingsSidebarComponent = ({
         >
           click here
         </span>.
-      </p>
+      </p> */}
     </Fragment>
   ) : tab === '3' ? (
     <Fragment>

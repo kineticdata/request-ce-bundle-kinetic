@@ -270,6 +270,7 @@ const SurveySettingsComponent = ({
     templates.map(t => ({
       value: t.values['Name'],
       label: t.values['Name'],
+      slug: t.id,
     }));
 
   const surveyPollerOptions =
@@ -350,6 +351,7 @@ const SurveySettingsComponent = ({
                           name: 'reminderTemplate',
                           label: 'Reminder Notifications Template',
                           type: 'select',
+                          renderAttributes: { typeahead: true },
                           initialValue:
                             surveyConfig &&
                             surveyConfig['Reminders']['Reminder Template']
@@ -358,6 +360,7 @@ const SurveySettingsComponent = ({
                           options: notificationOptions,
                           helpText:
                             'This email notification template will be used when sending out a survey reminder',
+                          component: FormComponents.NotificationField,
                         },
 
                         {
@@ -389,6 +392,7 @@ const SurveySettingsComponent = ({
                           name: 'invitationTemplate',
                           label: 'Invitation Notification Template',
                           type: 'select',
+                          renderAttributes: { typeahead: true },
                           initialValue:
                             surveyConfig &&
                             surveyConfig['Invitation Notification Name']
@@ -396,6 +400,7 @@ const SurveySettingsComponent = ({
                               : 'Survey Invitation',
                           options: notificationOptions,
                           helpText: `This email notification template will be used when sending out the survey`,
+                          component: FormComponents.NotificationField,
                         },
                         {
                           name: 'polling',
@@ -566,7 +571,7 @@ const SurveySettingsComponent = ({
                           initialValue:
                             surveyConfig && surveyConfig['Owning Team']
                               ? surveyConfig['Owning Team']
-                              : '',
+                              : null,
                         },
                         {
                           name: 'owningIndividual',
@@ -577,7 +582,7 @@ const SurveySettingsComponent = ({
                           initialValue:
                             surveyConfig && surveyConfig['Owning Individual']
                               ? surveyConfig['Owning Individual']
-                              : '',
+                              : null,
                         },
                         {
                           name: 'confirmationPageText',
