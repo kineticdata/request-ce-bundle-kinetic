@@ -64,30 +64,6 @@ export const SettingsSidebarComponent = ({
         <b>Invitation Notification Template</b> is the notification that is sent
         to the survey recipient when their survey is created.
       </p>
-      {/* This text is
-        rather general by default. If desired please clone this notification
-        template and create your custom notification by{' '}
-        <span
-          className="survey-settings-sidebar-link"
-          onClick={() => cloneNotification(defaultTemplate.id)}
-          role="button"
-          tabIndex={0}
-        >
-          clicking here
-        </span>.{' '}
-        <u>
-          If your survey allows users to Opt Out, please update this
-          notification to be Survey Invitation with Opt Out
-        </u>. To start your custom notification using the Opt Out template,{' '}
-        <span
-          className="survey-settings-sidebar-link"
-          onClick={() => cloneNotification(defaultOptOutTemplate.id)}
-          role="button"
-          tabIndex={0}
-        >
-          click here
-        </span>.
-      </p> */}
       <p>
         <b>Reminder Notifications Template</b> is the notification that is sent
         to the survey recipient if reminders are configured. If the user hasn’t
@@ -100,8 +76,10 @@ export const SettingsSidebarComponent = ({
         Note that the default templates use rather generic invitation language.
         If desired, you can clone these notification template to create your own
         custom notification. Be sure to rename your newly created template,
-        update its content, and set it to "Active." If your survey allows users
-        to Opt Out, start from the "Survey Invitation with Opt Out" template.
+        update its content, and set its status to "Active." If your survey
+        allows users to Opt Out, start from the "{
+          defaultOptOutTemplate.values['Name']
+        }" template.
       </p>
       <p>
         <Link to="/settings/notifications/templates" target="_blank">
@@ -115,7 +93,7 @@ export const SettingsSidebarComponent = ({
           role="button"
           tabIndex={0}
         >
-          Clone the "Survey Invitation" template
+          Clone the "{defaultTemplate.values['Name']}" template
         </span>
       </p>
       <p>
@@ -125,31 +103,9 @@ export const SettingsSidebarComponent = ({
           role="button"
           tabIndex={0}
         >
-          Clone the "Survey Invitation with Opt Out" template
+          Clone the "{defaultOptOutTemplate.values['Name']}" template
         </span>
       </p>
-      {/* notification to be Survey Invitation with Opt Out by{' '}
-         <span
-          className="survey-settings-sidebar-link"
-          onClick={() => cloneNotification(defaultTemplate.id)}
-          role="button"
-          tabIndex={0}
-        >
-          clicking here
-        </span>.{' '}
-        <u>
-          If your survey allows users to Opt Out, please update this
-          notification to be Survey Invitation with Opt Out
-        </u>. To start your custom notification using the Opt Out template,{' '}
-        <span
-          className="survey-settings-sidebar-link"
-          onClick={() => cloneNotification(defaultOptOutTemplate.id)}
-          role="button"
-          tabIndex={0}
-        >
-          click here
-        </span>.
-      </p> */}
     </Fragment>
   ) : tab === '3' ? (
     <Fragment>
