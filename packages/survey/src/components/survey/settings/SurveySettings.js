@@ -54,6 +54,7 @@ const fieldSet = [
   'polling',
   'pollingSource',
   'pollingType',
+  'pollingReferenceId',
   'pollingTrigger',
   'pollingInterval',
   'expiration',
@@ -207,6 +208,7 @@ const SurveySettingsComponent = ({
               {fields.get('polling')}
               {fields.get('pollingSource')}
               {fields.get('pollingType')}
+              {fields.get('pollingReferenceId')}
               {fields.get('pollingTrigger')}
               {fields.get('pollingInterval')}
               {fields.getIn(['polling', 'props', 'value']) === 'false' && (
@@ -445,6 +447,18 @@ const SurveySettingsComponent = ({
                           placeholder: 'HPD:HelpDesk',
                         },
                         {
+                          name: 'pollingReferenceId',
+                          label: 'Reference Id',
+                          type: 'text',
+                          visible: ({ values }) =>
+                            values.get('polling') === 'true',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Event Polling']['Reference Id']
+                              ? surveyConfig['Event Polling']['Reference Id']
+                              : '',
+                        },
+                        {
                           name: 'pollingTrigger',
                           label: 'Trigger',
                           type: 'text',
@@ -641,6 +655,7 @@ const SurveySettingsComponent = ({
                             Poll: values.get('polling'),
                             Source: values.get('pollingSource'),
                             Type: values.get('pollingType'),
+                            'Reference Id': values.get('pollingReferenceId'),
                             Trigger: values.get('pollingTrigger'),
                             Interval: values.get('pollingInterval'),
                           },
