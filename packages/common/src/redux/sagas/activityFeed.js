@@ -15,7 +15,7 @@ function* fetchDataSaga({ payload: { feedKey } }) {
   yield all(
     dataSources
       .map((source, sourceName) => {
-        if (!source.completed && source.shouldFetch) {
+        if (source.fn && !source.completed && source.shouldFetch) {
           return put(
             actions.fetchDataSourceRequest({
               feedKey,

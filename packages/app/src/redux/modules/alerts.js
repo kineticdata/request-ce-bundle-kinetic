@@ -25,7 +25,7 @@ export const State = Record({
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.FETCH_ALERTS_REQUEST:
-      return state.set('error', null);
+      return state.set('error', null).set('data', null);
     case types.FETCH_ALERTS_SUCCESS:
       return state.set('error', null).set('data', payload);
     case types.FETCH_ALERTS_FAILURE:

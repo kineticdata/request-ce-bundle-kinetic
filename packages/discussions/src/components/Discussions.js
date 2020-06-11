@@ -173,6 +173,7 @@ const renderHeaderHandler = props => () => {
                       onClick={() => props.performSearchHandler(true)}
                       title={translate('Clear Search')}
                     >
+                      <span className="sr-only">Clear Search</span>
                       <span className="fa fa-times text-danger" />
                     </button>
                   </div>
@@ -276,7 +277,7 @@ export const Discussions = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withState('query', 'setQuery', ''),
+  withState('query', 'setQuery', props => props.title),
   withState('createModal', 'setCreateModal', false),
   withHandlers({
     loadNextHandler,

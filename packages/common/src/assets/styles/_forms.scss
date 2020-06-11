@@ -4,7 +4,7 @@
 form,
 .form {
   margin-left: 0;
-  padding: 0.75rem 0.75rem 3rem 0.75rem;
+  padding: 0.75rem 0.75rem 1.5rem 0.75rem;
   font-weight: 400;
   font-size: 0.875rem;
   // overflow: hidden;
@@ -24,6 +24,7 @@ form,
     }
     &.form-check-label {
       margin-bottom: 0;
+      display: inline-block;
     }
   }
 
@@ -39,13 +40,42 @@ form,
   content: '*';
   color: red;
 }
+abbr[title='required'] {
+  color: red;
+}
+
+.form-group__columns {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  > * {
+    flex: 0 0 100%;
+  }
+  @media all and (min-width: 576px) {
+    > .form-group {
+      flex-basis: calc(50% - 0.75rem);
+      @media all and (-ms-high-contrast: none) {
+        width: calc(50% - 0.75rem);
+        flex-basis: auto;
+      }
+    }
+  }
+}
 
 form {
   // Headings
-  section h1 {
-    margin-top: 0;
-    & ~ section h1 {
-      margin-top: 1rem;
+  section {
+    h1,
+    .section-title {
+      font-size: 2rem;
+      // Mobile
+      line-height: 1.2;
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      & ~ section h1,
+      & ~ section .section-title {
+        margin-top: 1rem;
+      }
     }
   }
   // Checkboxes & Radios
@@ -314,7 +344,8 @@ section.page {
       margin-bottom: 2rem;
     }
 
-    h1 {
+    h1,
+    .section-title {
       padding: 0 0 1rem;
     }
 

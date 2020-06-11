@@ -6,19 +6,14 @@ import { I18n } from '@kineticdata/react';
 import { connect } from '../../redux/store';
 import { isActiveClass } from '../../utils';
 
-export const SidebarComponent = ({
-  settingsBackPath,
-  loading,
-  spaceAdmin,
-  kapp,
-}) => (
+export const SidebarComponent = ({ settingsBackPath, spaceAdmin, kapp }) => (
   <div className="sidebar">
     <Link to={settingsBackPath} className="nav-return">
       <span className="fa fa-fw fa-chevron-left" />
       <I18n>Return to</I18n> <I18n>{kapp.name}</I18n>
     </Link>
     <div className="sidebar-group--content-wrapper">
-      {!loading && (
+      {kapp && (
         <ul className="nav flex-column sidebar-group">
           <li className="nav-item">
             {spaceAdmin && (
@@ -45,7 +40,6 @@ export const SidebarComponent = ({
 );
 
 export const mapStateToProps = state => ({
-  loading: state.servicesSettings.loading,
   spaceAdmin: state.app.profile.spaceAdmin,
   kapp: state.app.kapp,
 });

@@ -74,6 +74,7 @@ const initializeFeed = ({
   });
 
 const initializeDataSource = (joinByDefault, options) => ({
+  data,
   fn,
   params: paramsFn,
   transform,
@@ -81,10 +82,18 @@ const initializeDataSource = (joinByDefault, options) => ({
   component = () => null,
 }) =>
   DataSource({
-    fn,
-    paramsFn,
-    params: paramsFn(undefined, undefined, options),
-    transform,
+    ...(data
+      ? {
+          data: List(data),
+          shouldFetch: false,
+          completed: true,
+        }
+      : {
+          fn,
+          paramsFn,
+          transform,
+          params: paramsFn(undefined, undefined, options),
+        }),
     component,
     joinValueFn:
       typeof joinBy === 'function'

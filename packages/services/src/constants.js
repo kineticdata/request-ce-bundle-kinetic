@@ -14,6 +14,7 @@ export const ATTRIBUTE_PARENT = 'Parent';
 export const ATTRIBUTE_HIDDEN = 'Hidden';
 export const ATTRIBUTE_SERVICE_DAYS_DUE = 'Service Days Due';
 export const ATTRIBUTE_SERVICE_OWNING_TEAM = 'Service Owning Team';
+export const ATTRIBUTE_KEYWORD = 'Keyword';
 
 // Field names
 export const STATUS_FIELD = 'Status';
@@ -38,7 +39,9 @@ export const CORE_STATE_CLOSED = 'Closed';
 // Misc config
 export const SUBMISSION_COUNT_LIMIT = 1000;
 export const SUBMISSION_FORM_TYPE = 'Service';
+export const SUBMISSION_FORM_TYPES = ['Service'];
 export const SUBMISSION_FORM_STATUS = 'Active';
+export const SUBMISSION_FORM_STATUSES = ['New', 'Active'];
 export const PAGE_SIZE = 10;
 export const TIME_AGO_INTERVAL = 10000;
 export const TIME_FORMAT = 'MMMM D, YYYY h:mm A';

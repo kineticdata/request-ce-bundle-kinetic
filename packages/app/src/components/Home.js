@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
 import { Link } from 'react-router-dom';
 import { PageTitle } from './shared/PageTitle';
-import { addToast } from 'common';
+import { addToast, selectVisibleKapps } from 'common';
 import { I18n, fetchForms } from '@kineticdata/react';
-import * as selectors from '../redux/selectors';
 
 export const HomeComponent = ({
   space,
@@ -108,7 +107,7 @@ export const mapStateToProps = state => {
     kapp: state.app.kapp,
     profile: state.app.profile,
     pathname: state.router.location.pathname,
-    visibleKapps: selectors.selectVisibleKapps(state),
+    visibleKapps: selectVisibleKapps(state),
   };
 };
 

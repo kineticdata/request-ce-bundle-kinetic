@@ -10,7 +10,7 @@ import { I18n } from '@kineticdata/react';
 // forms. Note that we deliberately do this as a const so that it should start
 // immediately without making the application wait but it will likely be ready
 // before users nagivate to the actual forms.
-//const globals = import('../../globals');
+const globals = import('../../globals');
 
 export const ModalForm = ({
   form,
@@ -47,7 +47,7 @@ export const ModalForm = ({
               kapp={form.kappSlug}
               form={form.formSlug}
               values={form.values}
-              //globals={globals}
+              globals={globals}
               onCompleted={handleCompleted}
               notFoundComponent={ErrorNotFound}
               unauthorizedComponent={ErrorUnauthorized}

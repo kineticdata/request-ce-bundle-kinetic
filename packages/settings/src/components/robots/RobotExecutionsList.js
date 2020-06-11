@@ -35,6 +35,7 @@ const WallyEmptyMessage = () => {
 };
 
 const RobotExecutionsListComponent = ({
+  robot,
   robotExecutions,
   robotExecutionsLoading,
   robotExecutionsErrors,
@@ -57,19 +58,25 @@ const RobotExecutionsListComponent = ({
       <PageTitle parts={['Robots', 'Settings']} />
       <div className="page-panel page-panel--white">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to="/settings">
                 <I18n>settings</I18n>
-              </Link>{' '}
-              /{` `}
+              </Link>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
+            <span className="breadcrumb-item">
               <Link to="/settings/robots">
                 <I18n>robots</I18n>
-              </Link>{' '}
-              /{` `}
-            </h3>
+              </Link>
+            </span>{' '}
+            <span aria-hidden="true">/ </span>
             <h1>
-              <I18n>Executions</I18n>
+              {(robot && robot.values['Robot Name']) || <I18n>Executions</I18n>}
             </h1>
           </div>
         </div>
@@ -147,6 +154,7 @@ const RobotExecutionsListComponent = ({
                     </td>
                     <td>
                       {execution.values['Status'].toLowerCase() !== 'running' &&
+                        execution.values['End'] &&
                         moment(execution.values['End']).format(
                           Constants.TIME_FORMAT,
                         )}

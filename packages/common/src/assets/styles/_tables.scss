@@ -37,8 +37,12 @@
   display: table-row-group;
 }
 
+.scroll-wrapper-h {
+  overflow-x: auto;
+}
+
 table.table--settings {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
 
   tbody {
     tr {
@@ -58,15 +62,25 @@ table.table--settings {
             }
           }
         }
-        > .dropdown .btn {
-          background-color: transparent;
-          padding: 0rem 0.25rem;
+        > .dropdown {
+          .btn {
+            background-color: transparent;
+            font-size: 1rem;
+            padding: 0rem 0.25rem;
+          }
+          .dropdown-menu {
+            font-size: 0.9375rem;
+          }
         }
         & .dropdown-item {
           padding: 0.25rem 1rem;
         }
       }
     }
+  }
+
+  tfoot {
+    background: none;
   }
 
   &.table-draggable {

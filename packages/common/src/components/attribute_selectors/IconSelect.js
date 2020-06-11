@@ -75,14 +75,16 @@ const filterByCallback = (option, props) => {
 };
 
 const iconCache = new Cache(() =>
-  import('./fa-icons').then(icons =>
-    icons.map(icon => ({
-      label: icon.name,
-      icon: {
-        ...icon,
-        id: `fa-${icon.id}`,
-      },
-    })),
+  import('./fa-icons').then(
+    module =>
+      module &&
+      module.default.map(icon => ({
+        label: icon.name,
+        icon: {
+          ...icon,
+          id: `fa-${icon.id}`,
+        },
+      })),
   ),
 );
 

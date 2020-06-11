@@ -29,34 +29,34 @@ const AlertsDropdownComponent = ({
           <I18n>Alerts</I18n>
         </span>
         <div className="actions">
-          <a role="button" tabIndex="0" onClick={fetchAlertsRequest}>
+          <button className="btn btn-link" onClick={fetchAlertsRequest}>
             <I18n>Refresh</I18n>
-          </a>
+          </button>
           <span className="divider">&bull;</span>
-          <Link to="/alerts" onClick={toggle}>
+          <Link to="/alerts" onClick={toggle} role="menuitem">
             <I18n>View All</I18n>
           </Link>
           {isSpaceAdmin && (
             <Fragment>
               <span className="divider">&bull;</span>
-              <Link to="/alerts/new" onClick={toggle}>
+              <Link to="/alerts/new" onClick={toggle} role="menuitem">
                 <I18n>New Alert</I18n>
               </Link>
             </Fragment>
           )}
         </div>
       </div>
-      <ul className="alerts-list">
+      <div className="alerts-list">
         {error && (
-          <h6 className="empty-alerts">
+          <span className="empty-alerts">
             <I18n>There was an error fetching alerts.</I18n>
-          </h6>
+          </span>
         )}
         {alerts &&
           alerts.map(alert => (
-            <li key={alert.id} className="alert-item">
-              <h1>
-                <Link to={`/alerts/${alert.id}`}>
+            <div key={alert.id} className="alert-item" role="none">
+              <h1 className="alert-item__title">
+                <Link to={`/alerts/${alert.id}`} role="menuitem">
                   <small className="source">
                     <I18n>{alert.values.Source}</I18n>
                   </small>
@@ -66,6 +66,7 @@ const AlertsDropdownComponent = ({
               <I18n
                 render={translate => (
                   <p
+                    className="alert-item__content"
                     dangerouslySetInnerHTML={{
                       __html: translate(alert.values.Content),
                     }}
@@ -73,15 +74,15 @@ const AlertsDropdownComponent = ({
                 )}
               />
               <span className="meta">{alert.values.CreatedAt}</span>
-            </li>
+            </div>
           ))}
         {alerts &&
           alerts.size < 1 && (
-            <h6 className="empty-alerts">
+            <span className="empty-alerts">
               <I18n>There are no active alerts.</I18n>
-            </h6>
+            </span>
           )}
-      </ul>
+      </div>
     </DropdownMenu>
   </Dropdown>
 );

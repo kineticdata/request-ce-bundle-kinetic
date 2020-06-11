@@ -55,9 +55,10 @@ $gray8: lighten($gray, 42.2%) !default; // #ececec (previously $gray4)
 $gray6: lighten($gray, 44.1%) !default; // #f1f1f1 (previously $black-5)
 $gray3: lighten($gray, 46.5%) !default; // #f7f7f7 (previously $black-3)
 $gray2: lighten($gray, 47.75%); // #fafafa
-
 $primary70: darken($primary, 20%) !default; // #021623
-$primary60: darken($primary, 10%) !default; // #063552
+$primary60: darken($primary, 10%) !default;
+
+// #063552
 $primary50: $primary !default; // #095482
 $primary40: lighten($primary, 10%) !default; // #0c73b2
 $primary30: lighten($primary, 20%) !default; // #1092e1
@@ -66,18 +67,19 @@ $secondary60: darken($secondary, 10%) !default; // #cc5f00
 $secondary50: $secondary !default; // #ff7700
 $secondary40: lighten($secondary, 10%) !default; // #ff9233
 $secondary30: lighten($secondary, 20%) !default; // #ffad66
-$tertiary70: darken($tertiary, 20%) !default; // #6a849f (previously $blue1)
+$tertiary70: darken($tertiary, 20%) !default;
+// #6a849f (previously $blue1)
 $tertiary60: darken($tertiary, 10%) !default; // #899db3
 $tertiary50: $tertiary !default; // #a8b7c7 (previously $blue2)
 $tertiary40: lighten($tertiary, 10%) !default; // #c7d1db (previously $blue3)
 $tertiary30: lighten($tertiary, 20%) !default; // #e6eaef
-
 $success70: darken($success, 20%) !default; // #006e37
 $success60: darken($success, 10%) !default; // #00a151
 $success50: $success !default; // #00d46a
 $success40: lighten($success, 10%) !default; // #08ff84
 $success30: lighten($success, 20%) !default; // #3bff9d
-$danger70: darken($danger, 20%) !default; // #c60805
+$danger70: darken($danger, 20%) !default;
+// #c60805
 $danger60: darken($danger, 10%) !default; // #f80a06
 $danger50: $danger !default; // #fa3a37
 $danger40: lighten($danger, 10%) !default; // #fb6b69
@@ -92,7 +94,6 @@ $info60: darken($info, 10%) !default; // #0c7095
 $info50: $info !default; // #1094c4
 $info40: lighten($info, 10%) !default; // #1bb4ec
 $info30: lighten($info, 20%) !default; // #4ac4f0
-
 // Text, link, border, background colors
 $text-color: $gray80 !default; // Global text color on `<body>`.
 $link-color: $blue-lake !default; // Global textual link color.
@@ -101,19 +102,15 @@ $bg1: $gray3 !default;
 $bg2: $gray6 !default;
 $bg3: $gray8 !default;
 $present: $green-grass !default;
-
 // Typography
 // --------------------------------------
-
 $font-family-sans-serif: 'Open Sans', sans-serif !default;
 $font-family-serif: Georgia, 'Times New Roman', Times, serif !default;
 $font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace !default; // Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-base: $font-family-sans-serif !default;
 $font-size-base: 1rem !default; // Default font size. Equal to 16px.
 $line-height-base: 1.5rem !default; // Default line height. Equal to 24px.
-
 // Components
 // --------------------------------------
-
 $enable-rounded: true !default;
 $border-radius-base: 0.25rem !default; // Default border radius. Equal to 4px

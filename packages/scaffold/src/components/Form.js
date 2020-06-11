@@ -31,13 +31,17 @@ export const FormComponent = ({
     <PageTitle parts={[form ? form.name : '']} />
     <div className="page-container container">
       <div className="page-title">
-        <div className="page-title__wrapper">
-          <h3>
+        <div
+          role="navigation"
+          aria-label="breadcrumbs"
+          className="page-title__breadcrumbs"
+        >
+          <span className="breadcrumb-item">
             <Link to={relativeHomePath}>
               <I18n>scaffold</I18n>
             </Link>{' '}
             /{' '}
-          </h3>
+          </span>
           {form && (
             <h1>
               <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>

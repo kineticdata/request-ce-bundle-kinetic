@@ -1,4 +1,3 @@
-import { push } from 'connected-react-router';
 import { compose, withHandlers, withState } from 'recompose';
 import { parse } from 'query-string';
 import { Form } from './Form';
@@ -18,24 +17,31 @@ const valuesFromQueryParams = queryParams => {
 };
 
 export const handleCompleted = props => response => {
-  if (!response.submission.currentPage) {
-    props.push(
-      `/kapps/${props.kappSlug}/requests/request/${
-        response.submission.id
-      }/confirmation`,
-    );
+  if (props.authenticated) {
+    if (!response.submission.currentPage) {
+      props.navigate(
+        `${props.appLocation}/requests/request/${
+          response.submission.id
+        }/confirmation`,
+      );
+    }
+    props.fetchCurrentPage();
   }
-  props.fetchCurrentPage();
 };
 
 export const handleCreated = props => response => {
-  props.push(
-    response.submission.coreState === 'Submitted'
-      ? `${props.appLocation}/requests/request/${
-          response.submission.id
-        }/confirmation`
-      : `${props.match.url}/${response.submission.id}`,
-  );
+  if (
+    response.submission.coreState !== 'Submitted' ||
+    response.submission.currentPage
+  ) {
+    props.navigate(response.submission.id);
+  }
+};
+
+export const handleUnauthorized = props => response => {
+  if (!props.authenticated) {
+    props.navigate(props.authRoute);
+  }
 };
 
 export const handleLoaded = props => form => {
@@ -49,27 +55,24 @@ export const handleLoaded = props => form => {
 export const handleDelete = props => () => {
   const deleteCallback = () => {
     props.fetchCurrentPage();
-    props.push(props.appLocation);
+    props.navigate(props.appLocation);
   };
   props.deleteSubmission({ id: props.submissionId, callback: deleteCallback });
 };
 
 export const mapStateToProps = (state, { categorySlug }) => ({
-  category: categorySlug
-    ? state.servicesApp.categories.find(
-        category => category.slug === categorySlug,
-      )
-    : null,
+  category: state.servicesApp.categoryGetter(categorySlug),
   forms: state.forms.data,
   values: valuesFromQueryParams(state.router.location.search),
   kappSlug: state.app.kappSlug,
   appLocation: state.app.location,
+  authenticated: state.app.authenticated,
+  authRoute: state.app.authRoute,
 });
 
 export const mapDispatchToProps = {
-  push,
   deleteSubmission: actions.deleteSubmissionRequest,
-  fetchCurrentPage: submissionsActions.fetchCurrentPage,
+  fetchCurrentPage: submissionsActions.fetchSubmissionsCurrent,
 };
 
 const enhance = compose(
@@ -78,7 +81,13 @@ const enhance = compose(
     mapDispatchToProps,
   ),
   withState('form', 'setForm', props => props.form),
-  withHandlers({ handleCompleted, handleCreated, handleLoaded, handleDelete }),
+  withHandlers({
+    handleCompleted,
+    handleCreated,
+    handleLoaded,
+    handleDelete,
+    handleUnauthorized,
+  }),
 );
 
 export const FormContainer = enhance(Form);

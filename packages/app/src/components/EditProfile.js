@@ -8,9 +8,9 @@ import {
   LoadingMessage,
   Utils,
   openModalForm,
+  selectVisibleKapps,
 } from 'common';
 import { actions } from '../redux/modules/profile';
-import * as selectors from '../redux/selectors';
 import { PageTitle } from './shared/PageTitle';
 import { I18n } from '@kineticdata/react';
 
@@ -46,13 +46,17 @@ export const EditProfileComponent = ({
       <Fragment>
         <div className="page-panel page-panel--white">
           <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
+            <div
+              role="navigation"
+              aria-label="breadcrumbs"
+              className="page-title__breadcrumbs"
+            >
+              <span className="breadcrumb-item">
                 <Link to="/profile">
                   <I18n>profile</I18n>
-                </Link>{' '}
-                /{' '}
-              </h3>
+                </Link>
+              </span>
+              <span aria-hidden="true">/ </span>
               <h1>
                 <I18n>Edit Profile</I18n>
               </h1>
@@ -227,8 +231,8 @@ export const EditProfileComponent = ({
                     type="submit"
                     disabled={!fieldValuesValid(fieldValues)}
                     className="btn btn-primary"
-                    // TODO: Disable until a change is made. Save Changes
                   >
+                    {/* // TODO: Disable until a change is made. Save Changes */}
                     <I18n>Save Changes</I18n>
                   </button>
                 </div>
@@ -467,7 +471,7 @@ const selectAttributes = profile =>
     : {};
 
 const mapStateToProps = state => ({
-  visibleKapps: selectors.selectVisibleKapps(state),
+  visibleKapps: selectVisibleKapps(state),
   locales: state.app.locales,
   timezones: state.app.timezones,
   profile: state.profile.data,

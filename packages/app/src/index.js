@@ -1,40 +1,20 @@
+import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { matchPath } from 'react-router';
-import { Route } from 'react-router-dom';
 import { Provider, connect } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { store } from './redux/store';
 import { Helmet } from 'react-helmet';
-import axios from 'axios';
-import {
-  KineticLib,
-  configure,
-  addResponseInterceptor,
-  setDefaultAuthAssumed,
-  history,
-} from '@kineticdata/react';
-import AuthInterceptor from './utils/AuthInterceptor';
+import { KineticLib, history } from '@kineticdata/react';
 import { actions as layoutActions } from './redux/modules/layout';
 import { actions } from './redux/modules/app';
-import {
-  actions as authActions,
-  selectors as authSelectors,
-} from './redux/modules/auth';
-import { AuthenticatedContainer } from './AuthenticatedContainer';
+import { Authentication } from './components/authentication/Authentication';
 import { App } from './App';
 
-configure(() => store.getState().auth.token);
-
-const authInterceptor = new AuthInterceptor(
-  store,
-  authActions.timedOut,
-  authSelectors.authenticatedSelector,
-  authSelectors.cancelledSelector,
-);
-axios.interceptors.response.use(null, authInterceptor.handleRejected);
-addResponseInterceptor(null, authInterceptor.handleRejected);
-setDefaultAuthAssumed(true);
+// Shared Components
+import { FormComponents, TableComponents } from 'common';
 
 const ConnectedKineticLib = connect(state => ({
   locale: state.app.locale,
@@ -43,18 +23,26 @@ const ConnectedKineticLib = connect(state => ({
 ReactDOM.render(
   <Fragment>
     <Helmet>
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-      />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
     </Helmet>
     <Provider store={store}>
-      <ConnectedKineticLib>
-        <ConnectedRouter history={history}>
-          <AuthenticatedContainer>
-            <Route path="/" component={App} />
-          </AuthenticatedContainer>
-        </ConnectedRouter>
+      <ConnectedKineticLib
+        components={{
+          fields: {
+            ...FormComponents,
+          },
+          ...TableComponents,
+        }}
+      >
+        {({ initialized, ...authProps }) =>
+          initialized && (
+            <ConnectedRouter history={history}>
+              <Authentication {...authProps}>
+                <App />
+              </Authentication>
+            </ConnectedRouter>
+          )
+        }
       </ConnectedKineticLib>
     </Provider>
   </Fragment>,

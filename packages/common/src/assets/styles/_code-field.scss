@@ -1,0 +1,195 @@
+// base16-solarized-light-scheme
+$base00: #fdf6e3;
+$base01: #eee8d5;
+$base02: #93a1a1;
+$base03: #839496;
+$base04: #657b83;
+$base05: #586e75;
+$base06: #073642;
+$base07: #002b36;
+$base08: #dc322f;
+$base09: #cb4b16;
+$base0A: #b58900;
+$base0B: #859900;
+$base0C: #2aa198;
+$base0D: #268bd2;
+$base0E: #6c71c4;
+$base0F: #d33682;
+
+.code-input {
+  background-color: $base00;
+  border: 1px solid #ced4da;
+  display: flex;
+  border-radius: 0.25rem;
+
+  .content {
+    color: $base05;
+    flex: 1 0 0;
+    font-family: 'menlo', 'consolas', monospace;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    ::selection {
+      background-color: $base02;
+      color: $white;
+    }
+  }
+
+  .toolbar {
+    margin-left: auto;
+    padding: 0.375rem 0.75rem;
+
+    button {
+      background-color: white;
+      opacity: 0.75;
+      box-shadow: 0 2px 4px 0 rgba(14, 30, 37, 0.25);
+      color: $base05;
+      &:hover {
+        color: $base0F;
+        opacity: 1;
+      }
+    }
+  }
+
+  [contenteditable='true'] {
+    padding: 0.375rem 0.75rem;
+  }
+
+  // For IE we add the focus properties to the actual content editable element
+  // when it has focus.
+  [contenteditable='true']:focus {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+      0 0 8px rgba(217, 89, 0, 0.6);
+  }
+
+  // For modern browsers that support the focus-within feature we can add the
+  // focus properties to the wrapper which is how we actually want the field to
+  // look.
+  &:focus-within {
+    border-color: #ede9e8;
+    outline: 0;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+      0 0 8px rgba(217, 89, 0, 0.6);
+
+    [contenteditable='true'] {
+      box-shadow: none;
+    }
+  }
+
+  .code {
+    word-break: break-all;
+  }
+  .code.interpolation {
+    background-color: $base01;
+  }
+  .code.comment {
+    color: $base03;
+  }
+  .code.operator,
+  .code.punctuation {
+    color: $base05;
+  }
+  .code.number,
+  .code.boolean {
+    color: $base09;
+  }
+  .code.string {
+    color: $base0B;
+  }
+  .code.function {
+    color: $base0D;
+  }
+  .code.keyword {
+    color: $base0E;
+  }
+  .code.variable {
+    color: $base0D;
+  }
+  .code.opening-interpolation,
+  .code.closing-interpolation,
+  .code.opening-tag,
+  .code.closing-tag {
+    color: $base0F;
+  }
+
+  .typeahead-start,
+  .typeahead-selection,
+  .typeahead-filter {
+    background-color: $white;
+    border-radius: 2px;
+    border: 1px solid $base00;
+    padding: 2px 6px;
+    margin-right: 2px;
+    &.typeahead-tentative {
+      background-color: $base00;
+      border-radius: 0;
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  .typeahead-start {
+    color: $base08;
+    border-color: rgba($base08, 0.5);
+  }
+
+  .typeahead-selection {
+    color: $base0D;
+    border-color: rgba($base0D, 0.5);
+  }
+
+  .typeahead-filter {
+    color: $base0B;
+    border-color: rgba($base0B, 0.5);
+  }
+
+  .variable-typeahead-menu {
+    background-color: $base00;
+    box-shadow: 0 2px 4px 0 rgba(14, 30, 37, 0.3);
+    margin-top: 3px;
+    border-radius: 3px;
+    z-index: 1;
+    min-width: 12rem;
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      max-height: 250px;
+      overflow-y: auto;
+      li {
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.25rem 0.5rem;
+        .tags {
+          margin-left: 1rem;
+          .tag {
+            color: $base02;
+            + .tag {
+              margin-left: 2px;
+            }
+          }
+        }
+        i {
+          color: $base02;
+          font-size: 0.75em;
+        }
+        &:hover {
+          background-color: $base01;
+        }
+        &.active {
+          background-color: $base02;
+          color: white;
+          .tag,
+          i {
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}

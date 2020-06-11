@@ -21,8 +21,40 @@ import { I18n } from '@kineticdata/react';
 // before users nagivate to the actual forms.
 const globals = import('common/globals');
 
+const Layout = ({ authenticated, kapp, isPublic }) => ({ form, content }) => (
+  <>
+    {!isPublic && (
+      <div className="page-title">
+        <div
+          role="navigation"
+          aria-label="breadcrumbs"
+          className="page-title__breadcrumbs"
+        >
+          {kapp && (
+            <>
+              <span className="breadcrumb-item">
+                <Link to={`/kapps/${kapp.slug}`}>
+                  <I18n>{kapp.name}</I18n>
+                </Link>{' '}
+              </span>
+              <span aria-hidden="true">/ </span>
+              {form && (
+                <h1>
+                  <I18n>{form.name}</I18n>
+                </h1>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    )}
+    {content}
+  </>
+);
+
 export const FormComponent = ({
-  kapp,
+  authenticated,
+  isPublic,
   match: {
     params: { formSlug, id },
   },
@@ -32,22 +64,16 @@ export const FormComponent = ({
   handleDelete,
   values,
   kappSlug,
+  Layout,
 }) => (
   <Fragment>
     <PageTitle parts={['Form']} />
-    <div className="page-container container">
-      <div className="page-panel">
-        <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
-              <Link to={`/kapps/${kappSlug}`}>
-                <I18n>{kapp.name}</I18n>
-              </Link>{' '}
-              /{' '}
-            </h3>
-          </div>
-        </div>
-        <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+    <div className={!isPublic ? 'page-container container' : ''}>
+      <div className={!isPublic ? 'page-panel' : ''}>
+        <I18n
+          context={`kapps.${kappSlug}.forms.${formSlug}`}
+          public={!authenticated}
+        >
           <div className="embedded-core-form--wrapper">
             {id ? (
               <CoreForm
@@ -55,6 +81,8 @@ export const FormComponent = ({
                 globals={globals}
                 loaded={handleLoaded}
                 completed={handleCompleted}
+                public={!authenticated}
+                layoutComponent={Layout}
               />
             ) : (
               <CoreForm
@@ -68,6 +96,8 @@ export const FormComponent = ({
                 notFoundComponent={ErrorNotFound}
                 unauthorizedComponent={ErrorUnauthorized}
                 unexpectedErrorComponent={ErrorUnexpected}
+                public={!authenticated}
+                layoutComponent={Layout}
               />
             )}
           </div>
@@ -88,37 +118,54 @@ const valuesFromQueryParams = queryParams => {
   }, {});
 };
 
-export const handleCompleted = ({ kappSlug, push }) => response => {
-  if (!response.submission.currentPage) {
-    push(`/kapps/${kappSlug}`);
-    addToast('The form was submitted successfully');
+export const handleCompleted = props => response => {
+  if (props.authenticated) {
+    if (!response.submission.currentPage) {
+      props.push(`/kapps/${props.kappSlug}`);
+      addToast('The form was submitted successfully');
+    }
   }
 };
 
-export const handleCreated = ({
-  match: {
-    params: { formSlug, id },
-  },
-  kappSlug,
-  push,
-}) => response => {
-  if (response.submission.coreState === 'Submitted') {
-    push(`/kapps/${kappSlug}`);
-    addToast('The form was submitted successfully');
-  } else {
-    push(
-      `/kapps/${kappSlug}/forms/${formSlug}/submissions/${
-        response.submission.id
-      }`,
-    );
+export const handleCreated = ({ props }) => response => {
+  if (
+    response.submission.coreState !== 'Submitted' ||
+    response.submission.currentPage
+  ) {
+    /*
+     * Only modify the route if the router location does not
+     * contain the embedded & cross_domain parameters. If these
+     * headers are present it is an indication that the form
+     * will implement it's own submitPage() callback function.
+     * This was necessary to support unauthenticated forms inside
+     * of iframes when using Safari. Safari will not send cookies
+     * to a server if they cookie did not originate in a main parent
+     * window request (third party cookies). This includes the
+     * JSESSIONID cookie which is used to validate the submitter
+     * access with an unauthenticated form.
+     */
+    if (props.authenticated || (!props.isEmbedded && !props.isCrossDomain)) {
+      props.push(
+        `/kapps/${props.kappSlug}/forms/${props.formSlug}/submissions/${
+          response.submission.id
+        }`,
+      );
+    }
   }
 };
 
-export const mapStateToProps = state => ({
-  kappSlug: state.app.kappSlug,
-  kapp: state.app.kapp,
-  values: valuesFromQueryParams(state.router.location.search),
-});
+export const mapStateToProps = state => {
+  const search = parse(state.router.location.search);
+  return {
+    kappSlug: state.app.kappSlug,
+    kapp: state.app.kapp,
+    authenticated: state.app.authenticated,
+    values: valuesFromQueryParams(state.router.location.search),
+    isPublic: search.public !== undefined,
+    isEmbedded: search.embedded !== undefined,
+    isCrossDomain: search.cross_domain !== undefined,
+  };
+};
 
 export const mapDispatchToProps = { push };
 
@@ -127,7 +174,7 @@ const enhance = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withHandlers({ handleCompleted, handleCreated }),
+  withHandlers({ Layout, handleCompleted, handleCreated }),
 );
 
 export const Form = enhance(FormComponent);

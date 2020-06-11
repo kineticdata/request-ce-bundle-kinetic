@@ -5,7 +5,6 @@ import searchReducer from './modules/search';
 import submissionsReducer from './modules/submissions';
 import submissionReducer from './modules/submission';
 import submissionCountsReducer from './modules/submissionCounts';
-import servicesSettingsReducer from './modules/settingsServices';
 import settingsFormsReducer from './modules/settingsForms';
 import settingsCategoriesReducer from './modules/settingsCategories';
 
@@ -17,7 +16,6 @@ export default {
   submissions: submissionsReducer,
   submission: submissionReducer,
   submissionCounts: submissionCountsReducer,
-  servicesSettings: servicesSettingsReducer,
   settingsForms: settingsFormsReducer,
   settingsCategories: settingsCategoriesReducer,
 };

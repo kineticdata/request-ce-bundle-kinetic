@@ -1,7 +1,9 @@
 import { LOCATION_CHANGE } from 'connected-react-router';
+import { Utils } from 'common';
+const ns = Utils.namespaceBuilder('services/search');
 
 export const types = {
-  SEACH_INPUT_CHANGE: '@kd/catalog/SEACH_INPUT_CHANGE',
+  SEACH_INPUT_CHANGE: ns('SEACH_INPUT_CHANGE'),
 };
 
 export const actions = {

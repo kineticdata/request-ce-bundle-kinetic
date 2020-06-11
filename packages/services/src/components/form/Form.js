@@ -21,49 +21,66 @@ export const Form = ({
   handleCompleted,
   handleLoaded,
   handleDelete,
+  handleUnauthorized,
   values,
   kappSlug,
   formSlug,
   path,
   appLocation,
+  authenticated,
 }) => (
   <Fragment>
     <PageTitle parts={[form ? form.name : '']} />
     <div className="page-container page-container--color-bar">
       <div className="page-panel">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to={appLocation}>
                 <I18n>services</I18n>
               </Link>{' '}
               /{' '}
               {path.startsWith('request') && (
-                <Link to={`${appLocation}/requests`}>
-                  <I18n>requests</I18n>
-                </Link>
+                <Fragment>
+                  <Link to={`${appLocation}/requests`}>
+                    <I18n>requests</I18n>
+                  </Link>{' '}
+                  /{' '}
+                  {type && (
+                    <Fragment>
+                      <Link to={`${appLocation}/requests/${type || ''}`}>
+                        <I18n>{type}</I18n>
+                      </Link>{' '}
+                      /{' '}
+                    </Fragment>
+                  )}
+                </Fragment>
               )}
-              {path.startsWith('/request') && ' / '}
-              {path.startsWith('/request') &&
-                type && (
-                  <Link to={`${appLocation}/requests/${type || ''}`}>
-                    <I18n>{type}</I18n>
-                  </Link>
-                )}
-              {path.startsWith('/request') && type && ' / '}
               {category && (
-                <Link to={`${appLocation}/categories`}>
-                  <I18n>categories</I18n>
-                </Link>
+                <Fragment>
+                  <Link to={`${appLocation}/categories`}>
+                    <I18n>categories</I18n>
+                  </Link>{' '}
+                  /{' '}
+                  {category.getTrail().map(ancestorCategory => (
+                    <Fragment key={ancestorCategory.slug}>
+                      <Link
+                        to={`${appLocation}/categories/${
+                          ancestorCategory.slug
+                        }`}
+                      >
+                        <I18n>{ancestorCategory.name}</I18n>
+                      </Link>{' '}
+                      /{' '}
+                    </Fragment>
+                  ))}
+                </Fragment>
               )}
-              {category && ' / '}
-              {category && (
-                <Link to={`${appLocation}/categories/${category.slug}`}>
-                  <I18n>{category.name}</I18n>
-                </Link>
-              )}
-              {category && ' / '}
-            </h3>
+            </span>
             {form && (
               <h1>
                 <I18n context={`kapps.${kappSlug}.forms.${form.slug}`}>
@@ -72,7 +89,8 @@ export const Form = ({
               </h1>
             )}
           </div>
-          {submissionId &&
+          {authenticated &&
+            submissionId &&
             form && (
               <button
                 type="button"
@@ -94,16 +112,21 @@ export const Form = ({
         </div>
         <div className="embedded-core-form--wrapper">
           {submissionId ? (
-            <I18n submissionId={submissionId}>
+            <I18n submissionId={submissionId} public={!authenticated}>
               <CoreForm
                 submission={submissionId}
                 globals={globals}
                 loaded={handleLoaded}
                 completed={handleCompleted}
+                unauthorized={handleUnauthorized}
+                public={!authenticated}
               />
             </I18n>
           ) : (
-            <I18n context={`kapps.${kappSlug}.forms.${formSlug}`}>
+            <I18n
+              context={`kapps.${kappSlug}.forms.${formSlug}`}
+              public={!authenticated}
+            >
               <CoreForm
                 kapp={kappSlug}
                 form={formSlug}
@@ -111,10 +134,12 @@ export const Form = ({
                 loaded={handleLoaded}
                 created={handleCreated}
                 completed={handleCompleted}
+                unauthorized={handleUnauthorized}
                 values={values}
                 notFoundComponent={ErrorNotFound}
                 unauthorizedComponent={ErrorUnauthorized}
                 unexpectedErrorComponent={ErrorUnexpected}
+                public={!authenticated}
               />
             </I18n>
           )}

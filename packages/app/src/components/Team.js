@@ -58,20 +58,24 @@ const TeamComponent = ({
           className={`page-panel page-panel--white page-panel--three-fifths`}
         >
           <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
+            <div
+              role="navigation"
+              aria-label="breadcrumbs"
+              className="page-title__breadcrumbs"
+            >
+              <span className="breadcrumb-item">
                 <Link to="/teams">
                   <I18n>teams</I18n>
                 </Link>{' '}
-                /
-              </h3>
+              </span>
+              <span aria-hidden="true">/ </span>
               <h1>
                 <I18n>Team Profile</I18n>
               </h1>
             </div>
             {me.spaceAdmin && (
               <Link
-                to={`/settings/teams/${team.slug}/edit`}
+                to={`/settings/teams/${team.slug}`}
                 className="btn btn-secondary"
               >
                 <I18n>Edit Team</I18n>

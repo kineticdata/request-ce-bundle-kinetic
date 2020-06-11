@@ -2,17 +2,18 @@
   "name": "request-ce-bundle-kinetic",
   "version": "2.1.1",
   "private": true,
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "start":
-      "cd packages/app && react-app-rewired start --scripts-version kinops-react-scripts",
-    "build":
-      "cd packages/app && react-app-rewired build --scripts-version kinops-react-scripts",
-    "test":
-      "cd packages/app && react-app-rewired test --scripts-version kinops-react-scripts --env=jsdom",
-    "eject": "cd packages/app && react-scripts eject",
+    "start": "cd packages/app && yarn start",
+    "build": "cd packages/app && yarn build",
+    "test": "cd packages/app && yarn test",
     "format": "prettier --write \"**\"",
     "precommit": "lint-staged"
+  },
+  "engines": {
+    "node": "10.x"
   },
   "devDependencies": {
     "husky": "^0.14.3",
@@ -20,6 +21,9 @@
     "prettier": "~1.13.3"
   },
   "lint-staged": {
-    "**": ["prettier --write", "git add"]
+    "**": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

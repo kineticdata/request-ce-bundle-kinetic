@@ -136,6 +136,7 @@ const SchedulerOverridesComponent = ({
                         className="btn btn-link icon-wrapper"
                         onClick={() => fetchPreviousSchedulerOverrides()}
                         disabled={paging || !hasPreviousPage}
+                        aria-label="Previous Page"
                         title={translate('Previous Page')}
                       >
                         <span className="icon">
@@ -157,6 +158,7 @@ const SchedulerOverridesComponent = ({
                         className="btn btn-link icon-wrapper"
                         onClick={() => fetchNextSchedulerOverrides()}
                         disabled={paging || !hasNextPage}
+                        aria-label="Next Page"
                         title={translate('Next Page')}
                       >
                         <span className="icon">

@@ -34,12 +34,16 @@ const TeamCardComponent = props => {
           </LinkComponent>
         )}
         {memberships && memberships.length > 0 ? (
-          <p className="members-toggle" onClick={toggleShowMembers}>
-            <I18n>{showMembers ? 'Less' : 'More'}</I18n>
+          <button
+            className="btn btn-none members-toggle"
+            onClick={toggleShowMembers}
+            aria-label={showMembers ? 'Hide Members' : 'Show Members'}
+          >
+            <I18n>{showMembers ? 'Hide Members' : 'Show Members'}</I18n>
             <span
               className={`fa fa-fw fa-chevron-${showMembers ? 'up' : 'down'}`}
             />
-          </p>
+          </button>
         ) : (
           <p>
             <I18n>No members</I18n>
@@ -64,7 +68,7 @@ export const TeamCard = compose(
 )(TeamCardComponent);
 
 const Members = ({ members }) => (
-  <div className="card--team__footer">
+  <div className="card--team__footer" aria-hidden={members ? 'false' : 'true'}>
     <h1>
       <I18n>Members</I18n>
     </h1>

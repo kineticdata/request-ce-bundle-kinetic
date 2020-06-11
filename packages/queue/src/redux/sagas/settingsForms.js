@@ -8,8 +8,9 @@ import {
   fetchKapp,
   updateForm,
   createForm,
+  deleteForm,
 } from '@kineticdata/react';
-import { addSuccess, addError } from 'common';
+import { addToast, addToastAlert, addSuccess, addError } from 'common';
 import axios from 'axios';
 import {
   actions,
@@ -30,6 +31,49 @@ export function* fetchFormSaga(action) {
     yield put(actions.setFormsError(serverError));
   } else {
     yield put(actions.setForm(form));
+  }
+}
+
+export function* cloneFormSaga({ payload }) {
+  const { error: cloneError, form: cloneForm } = yield call(fetchForm, {
+    kappSlug: payload.kappSlug,
+    formSlug: payload.cloneFormSlug,
+    include: FORM_FULL_INCLUDES,
+  });
+
+  if (cloneError) {
+    addToastAlert({
+      title: 'Error Cloning Form',
+      message: 'Could not find form to clone.',
+    });
+    yield put(actions.cloneFormComplete(payload));
+  } else {
+    const { error, form } = yield call(updateForm, {
+      kappSlug: payload.kappSlug,
+      formSlug: payload.formSlug,
+      form: {
+        bridgedResources: cloneForm.bridgedResources,
+        customHeadContent: cloneForm.customHeadContent,
+        pages: cloneForm.pages,
+        securityPolicies: cloneForm.securityPolicies,
+        attributesMap: cloneForm.attributesMap,
+        categorizations: cloneForm.categorizations,
+      },
+    });
+
+    if (error) {
+      addToastAlert({
+        title: 'Error Cloning Form',
+        message: error.message,
+      });
+      yield put(actions.cloneFormComplete(payload));
+    }
+
+    addToast(`${form.name} cloned successfully from ${cloneForm.name}`);
+    if (typeof payload.callback === 'function') {
+      payload.callback(form);
+    }
+    yield put(actions.cloneFormComplete(payload));
   }
 }
 
@@ -232,13 +276,28 @@ export function* createFormSaga(action) {
 }
 
 export function* fetchAllSubmissionsSaga(action) {
-  const { pageToken, accumulator, formSlug, kappSlug, q } = action.payload;
-  const searcher = new SubmissionSearch(true);
+  const {
+    pageToken,
+    accumulator,
+    formSlug,
+    kappSlug,
+    createdAt,
+    coreState,
+    q,
+  } = action.payload;
+  const searcher = new SubmissionSearch(false); // changed to false!
 
   if (q) {
     for (const key in q) {
       searcher.eq(key, q[key]);
     }
+  }
+  if (createdAt) {
+    createdAt['startDate'] && searcher.startDate(createdAt['startDate']);
+    createdAt['endDate'] && searcher.endDate(createdAt['endDate']);
+  }
+  if (coreState) {
+    searcher.coreState(coreState);
   }
   searcher.include('values,form,form.kapp');
   searcher.limit(1000);
@@ -279,13 +338,31 @@ export function* fetchAllSubmissionsSaga(action) {
   }
 }
 
+export function* deleteFormSaga({ payload }) {
+  const { form, error } = yield call(deleteForm, {
+    kappSlug: payload.kappSlug,
+    formSlug: payload.formSlug,
+  });
+  if (form) {
+    if (typeof payload.onSuccess === 'function') {
+      yield call(payload.onSuccess, form);
+    }
+    yield put(actions.deleteFormComplete(payload));
+    addToast('Form deleted successfully.');
+  } else {
+    addToastAlert({ title: 'Error Deleting Form', message: error.message });
+  }
+}
+
 export function* watchSettingsForms() {
   yield takeEvery(types.FETCH_FORM, fetchFormSaga);
   yield takeEvery(types.FETCH_KAPP, fetchKappSaga);
   yield takeEvery(types.UPDATE_QUEUE_FORM, updateFormSaga);
   yield takeEvery(types.CREATE_FORM, createFormSaga);
+  yield takeEvery(types.CLONE_FORM_REQUEST, cloneFormSaga);
   yield takeEvery(types.FETCH_NOTIFICATIONS, fetchNotificationsSaga);
   yield takeEvery(types.FETCH_FORM_SUBMISSIONS, fetchFormSubmissionsSaga);
   yield takeEvery(types.FETCH_FORM_SUBMISSION, fetchFormSubmissionSaga);
   yield takeEvery(types.FETCH_ALL_SUBMISSIONS, fetchAllSubmissionsSaga);
+  yield takeEvery(types.DELETE_FORM_REQUEST, deleteFormSaga);
 }

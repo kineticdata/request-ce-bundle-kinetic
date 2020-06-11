@@ -62,6 +62,7 @@ export const QueueItem = ({
   creationFields,
   onCreated,
   profile,
+  isSmallLayout,
 }) =>
   queueItem !== null && (
     <div className="page-container page-container--panels">
@@ -91,16 +92,17 @@ export const QueueItem = ({
           />
         </div>
       </div>
-      {discussionsEnabled && (
-        <DiscussionsPanel
-          itemType="Submission"
-          itemKey={queueItem.id}
-          creationFields={creationFields}
-          onCreated={onCreated}
-          CreationForm={CreationForm}
-          me={profile}
-        />
-      )}
+      {discussionsEnabled &&
+        !isSmallLayout && (
+          <DiscussionsPanel
+            itemType="Submission"
+            itemKey={queueItem.id}
+            creationFields={creationFields}
+            onCreated={onCreated}
+            CreationForm={CreationForm}
+            me={profile}
+          />
+        )}
     </div>
   );
 
@@ -110,6 +112,7 @@ export const mapStateToProps = (state, props) => ({
   queueItem: state.queue.currentItem,
   discussionsEnabled: selectDiscussionsEnabled(state),
   profile: state.app.profile,
+  isSmallLayout: state.app.layoutSize === 'small',
 });
 
 export const mapDispatchToProps = {
@@ -141,12 +144,12 @@ export const QueueItemContainer = compose(
       },
   ),
   lifecycle({
-    componentWillMount() {
+    componentDidMount() {
       this.props.fetchCurrentItem(this.props.id);
     },
-    componentWillReceiveProps(nextProps) {
-      if (this.props.id !== nextProps.id) {
-        this.props.fetchCurrentItem(nextProps.id);
+    componentDidUpdate(prevProps) {
+      if (this.props.id !== prevProps.id) {
+        this.props.fetchCurrentItem(this.props.id);
       }
     },
     componentWillUnmount() {

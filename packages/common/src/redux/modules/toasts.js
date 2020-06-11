@@ -26,6 +26,9 @@ export const types = {
   REMOVE_TOAST_ALERT: namespace('toasts', 'REMOVE_TOAST_ALERT'),
   CLEAR_TOAST_ALERTS: namespace('toasts', 'CLEAR_TOAST_ALERTS'),
   SET_TOAST_DURATION: namespace('toasts', 'SET_TOAST_DURATION'),
+  OPEN_CONFIRM: namespace('toasts', 'OPEN_CONFIRM'),
+  RESOLVE_CONFIRM: namespace('toasts', 'RESOLVE_CONFIRM'),
+  CLOSE_CONFIRM: namespace('toasts', 'CLOSE_CONFIRM'),
 };
 
 export const actions = {
@@ -48,6 +51,9 @@ export const actions = {
   removeToastAlert: withPayload(types.REMOVE_TOAST_ALERT),
   clearToastAlerts: noPayload(types.CLEAR_TOAST_ALERTS),
   setToastDuration: withPayload(types.SET_TOAST_DURATION),
+  openConfirm: withPayload(types.OPEN_CONFIRM),
+  resolveConfirm: withPayload(types.RESOLVE_CONFIRM),
+  closeConfirm: noPayload(types.CLOSE_CONFIRM),
 
   addSuccess: (msg, title) => ({
     type: types.ADD_TOAST,
@@ -94,6 +100,7 @@ export const actions = {
 export const State = Record({
   list: List(),
   alerts: List(),
+  confirm: undefined,
   duration: 3000,
 });
 
@@ -144,6 +151,10 @@ export const reducer = (state = State(), { type, payload }) => {
       return state.set('alerts', List());
     case types.SET_TOAST_DURATION:
       return state.set('duration', payload);
+    case types.OPEN_CONFIRM:
+      return state.set('confirm', payload);
+    case types.CLOSE_CONFIRM:
+      return state.set('confirm', undefined);
     default:
       return state;
   }
@@ -162,6 +173,9 @@ export const addToastAlert = (...args) =>
   store.dispatch(actions.addToastAlert(...args));
 export const removeToastAlert = (...args) =>
   store.dispatch(actions.removeToastAlert(...args));
+export const openConfirm = (...args) =>
+  store.dispatch(actions.openConfirm(...args));
 
 window.addToast = addToast;
 window.addToastAlert = addToastAlert;
+window.openConfirm = openConfirm;

@@ -2,24 +2,27 @@ import 'bootstrap/scss/bootstrap.scss';
 import 'font-awesome/css/font-awesome.css';
 import 'typeface-open-sans/index.css';
 import './assets/styles/master.scss';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { matchPath } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import { compose, lifecycle, withHandlers, withProps } from 'recompose';
 import { Utils } from 'common';
-import { LoginModal } from './components/authentication/LoginModal';
-import { Header } from './components/header/Header';
 import { actions } from './redux/modules/app';
 import { actions as alertsActions } from './redux/modules/alerts';
 import { actions as layoutActions } from './redux/modules/layout';
+
+import { Header } from './components/header/Header';
+import { AppProvider } from './AppProvider';
+// Import available packages
 import ServicesApp from 'services';
 import QueueApp from 'queue';
 import TechBarApp from 'tech-bar';
 import DiscussionsApp from 'discussions';
 import SettingsApp from 'settings';
-// TODO Remove ScaffoldApp
 import ScaffoldApp from 'scaffold';
-import { AppProvider } from './AppProvider';
+import SurveyApp from 'survey';
+// import { AppProvider } from './AppProvider';
 
 // Mapping of Bundle Package kapp attribute values to App Components
 const BUNDLE_PACKAGE_PROVIDERS = {
@@ -27,101 +30,106 @@ const BUNDLE_PACKAGE_PROVIDERS = {
   queue: QueueApp,
   'tech-bar': TechBarApp,
   scaffold: ScaffoldApp,
+  survey: SurveyApp,
 };
 
-const getAppProvider = (kapp, pathname) => {
+// List of available static packages
+const STATIC_PACKAGE_PROVIDERS = [SettingsApp, DiscussionsApp, ScaffoldApp];
+
+// Determine the correct AppProvider based on the kapp/route
+const getAppProvider = ({ kapp, pathname }) => {
   if (kapp) {
     return (
       BUNDLE_PACKAGE_PROVIDERS[
         Utils.getAttributeValue(kapp, 'Bundle Package', kapp.slug)
       ] || AppProvider
     );
-  } else if (matchPath(pathname, { path: SettingsApp.location })) {
-    return SettingsApp;
-  } else if (matchPath(pathname, { path: DiscussionsApp.location })) {
-    return DiscussionsApp;
-  } else if (matchPath(pathname, { path: ScaffoldApp.location })) {
-    return ScaffoldApp;
   } else {
-    return AppProvider;
+    return (
+      STATIC_PACKAGE_PROVIDERS.find(provider =>
+        matchPath(pathname, { path: provider.location }),
+      ) || AppProvider
+    );
   }
 };
 
 export const AppComponent = props =>
   !props.loading && (
-    <Fragment>
-      <LoginModal />
-      <props.AppProvider
-        appState={{
-          ...props.app.toObject(),
-          location: `${
-            props.kappSlug !== null
-              ? `/kapps/${props.kappSlug}`
-              : props.AppProvider.location || '/'
-          }`,
-          actions: {
-            refreshApp: props.refreshApp,
-          },
-          layoutSize: props.layoutSize,
-        }}
-        render={({ main, sidebar, header }) => (
-          <div className="app-wrapper">
-            {!props.headerHidden && (
-              <div className="app-header">
-                <Header
-                  hasSidebar={sidebar && !props.sidebarHidden}
-                  toggleSidebarOpen={props.toggleSidebarOpen}
-                />
-              </div>
-            )}
-            <div
-              className={`app-body ${
-                sidebar
-                  ? props.sidebarOpen
-                    ? 'open-sidebar'
-                    : 'closed-sidebar'
-                  : ''
-              }`}
-            >
-              {sidebar && (
-                <div className="app-sidebar-container">{sidebar}</div>
-              )}
-              <div
-                className="app-main-container"
-                onClick={
-                  sidebar && props.sidebarOpen && props.layoutSize === 'small'
-                    ? props.toggleSidebarOpen
-                    : undefined
+    <props.AppProvider
+      appState={{
+        ...props.app.toObject(),
+        location: props.appLocation,
+        actions: { refreshApp: props.refreshApp },
+        layoutSize: props.layoutSize,
+        bundleName: 'request-ce-bundle-kinetic',
+      }}
+      location={props.location}
+      render={({ main, sidebar, header }) => (
+        <div className="app-wrapper">
+          {!props.headerHidden && (
+            <div className="app-header">
+              <Header
+                toggleSidebarOpen={
+                  sidebar && !props.sidebarHidden && props.toggleSidebarOpen
                 }
-              >
-                {main}
-              </div>
+              />
+            </div>
+          )}
+          <div
+            className={`app-body ${
+              sidebar && !props.sidebarHidden
+                ? props.sidebarOpen
+                  ? 'open-sidebar'
+                  : 'closed-sidebar'
+                : ''
+            }`}
+          >
+            {sidebar &&
+              !props.sidebarHidden && (
+                <aside
+                  className="app-sidebar-container"
+                  aria-labelledby="toggle-sidebar"
+                  aria-hidden={props.sidebarOpen ? 'false' : 'true'}
+                >
+                  {sidebar}
+                </aside>
+              )}
+
+            <div
+              className="app-main-container"
+              onClick={
+                sidebar &&
+                !props.sidebarHidden &&
+                props.sidebarOpen &&
+                props.layoutSize === 'small'
+                  ? props.toggleSidebarOpen
+                  : undefined
+              }
+            >
+              {main}
             </div>
           </div>
-        )}
-      />
-    </Fragment>
+        </div>
+      )}
+    />
   );
 
 export const mapStateToProps = state => ({
   loading: state.app.loading,
+  authenticated: state.app.authenticated,
+  authRoute: state.app.authRoute,
   kapps: state.app.kapps,
   sidebarOpen: state.layout.sidebarOpen,
   suppressedSidebarOpen: state.layout.suppressedSidebarOpen,
   layoutSize: state.layout.size,
   kappSlug: state.app.kappSlug,
   kapp: state.app.kapp,
-  pathname: state.router.location.pathname,
-  locale: state.app.locale,
-  profile: state.app.profile,
-  space: state.app.space,
-  locales: state.app.locales,
-  timezones: state.app.timezones,
-  version: state.app.coreVersion,
+  location: state.router.location,
   app: state.app,
 });
 
 export const mapDispatchToProps = {
+  push,
   loadApp: actions.fetchApp,
   fetchAlertsRequest: alertsActions.fetchAlertsRequest,
   setSidebarOpen: layoutActions.setSidebarOpen,
@@ -133,39 +141,62 @@ export const App = compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withProps(props => {
-    const AppProvider = getAppProvider(props.kapp, props.pathname);
+  withHandlers({
+    getLocation: ({ kappSlug }) => app =>
+      `${kappSlug !== null ? `/kapps/${kappSlug}` : app.location || '/'}`,
+  }),
+  withProps(({ authenticated, location, kapp, ...props }) => {
+    const app = getAppProvider({ kapp, pathname: location.pathname });
+    const appLocation = props.getLocation(app);
+    const headerHidden = app
+      ? app.shouldHideHeader &&
+        app.shouldHideHeader({ appLocation, authenticated, location, kapp })
+      : true;
+    const sidebarHidden = app
+      ? app.shouldHideSidebar &&
+        app.shouldHideSidebar({ appLocation, authenticated, location, kapp })
+      : true;
     const shouldSuppressSidebar =
-      AppProvider.shouldSuppressSidebar &&
-      AppProvider.shouldSuppressSidebar(props.pathname, props.kappSlug);
+      app &&
+      app.shouldSuppressSidebar &&
+      app.shouldSuppressSidebar({ appLocation, authenticated, location, kapp });
     const sidebarOpen = shouldSuppressSidebar
       ? props.suppressedSidebarOpen
       : props.sidebarOpen;
-    const headerHidden =
-      AppProvider.shouldHideHeader &&
-      AppProvider.shouldHideHeader(props.pathname, props.kappSlug);
-    const sidebarHidden =
-      AppProvider.shouldHideSidebar &&
-      AppProvider.shouldHideSidebar(props.pathname, props.kappSlug);
     return {
-      AppProvider,
-      shouldSuppressSidebar,
-      sidebarOpen,
+      AppProvider: app,
       headerHidden,
       sidebarHidden,
+      shouldSuppressSidebar,
+      sidebarOpen,
+      appLocation,
     };
   }),
   withHandlers({
-    toggleSidebarOpen: props => () =>
-      props.shouldSuppressSidebar
-        ? props.setSuppressedSidebarOpen(!props.sidebarOpen)
-        : props.setSidebarOpen(!props.sidebarOpen),
+    toggleSidebarOpen: props =>
+      !props.sidebarHidden
+        ? () =>
+            props.shouldSuppressSidebar
+              ? props.setSuppressedSidebarOpen(!props.sidebarOpen)
+              : props.setSidebarOpen(!props.sidebarOpen)
+        : undefined,
     refreshApp: props => () => props.loadApp(),
   }),
   lifecycle({
     componentDidMount() {
-      this.props.loadApp(true);
-      this.props.fetchAlertsRequest();
+      this.props.authenticated !== null && this.props.loadApp(true);
+    },
+    componentDidUpdate(prevProps) {
+      if (this.props.authenticated !== prevProps.authenticated) {
+        this.props.loadApp(true);
+      }
+      if (
+        !this.props.loading &&
+        !this.props.authenticated &&
+        !this.props.AppProvider.hasPublicRoutes
+      ) {
+        this.props.push(this.props.authRoute);
+      }
     },
   }),
 )(AppComponent);

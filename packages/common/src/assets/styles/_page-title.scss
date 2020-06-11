@@ -6,7 +6,8 @@
   justify-content: space-between;
   display: flex;
   flex: 1 1 100%;
-  h1 {
+  h1,
+  .breadcrumb-last {
     margin-top: 0;
     color: $blue-slate;
     font-size: 2rem;
@@ -21,12 +22,15 @@
       font-weight: 300;
     }
   }
-  h3 {
+
+  .breadcrumb-item {
+    display: inline-block;
     color: $orange-kinops;
     font-size: 0.9375rem;
     font-weight: 700;
     letter-spacing: 1px;
     line-height: 1.5rem;
+    + span,
     a {
       color: $orange-kinops;
       font-size: 0.9375rem;
@@ -34,6 +38,12 @@
       letter-spacing: 1px;
       line-height: 1.5rem;
     }
+  }
+  ol,
+  &__breadcrumbs {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
   }
   // Any object to the right of the title
   > a,
@@ -50,7 +60,7 @@
       flex-shrink: 0;
     }
   }
-  .page-title__actions {
+  &__actions {
     @media all and (min-width: 0) {
       display: flex;
       justify-content: space-between;
@@ -60,6 +70,7 @@
     }
     @media all and (min-width: 768px) {
       align-self: flex-end;
+      margin-top: 1.5rem;
       .btn {
         margin-left: 0.5rem;
       }
@@ -96,14 +107,19 @@
   border-top: 2px solid $gray16;
   form &,
   .form & {
-    margin-left: -15px;
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
   }
-  a,
-  .fa {
+  > a,
+  > .fa {
     color: $gray50;
     font-size: 0.75rem;
     &:hover {
       color: $blue-lake;
     }
+  }
+
+  + .section__content {
+    margin-bottom: 3rem;
   }
 }

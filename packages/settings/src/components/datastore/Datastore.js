@@ -5,7 +5,7 @@ import { DatastoreSubmission } from './Submission';
 import { FormList } from './FormList';
 import { SubmissionSearch } from './SubmissionSearch/SubmissionSearch';
 import { DatastoreSettings } from './DatastoreSettings';
-import { CreateDatastore } from './CreateDatastore';
+// import { DatastoreEdit } from './DatastoreEdit';
 
 import { I18n } from '@kineticdata/react';
 import { context } from '../../redux/store';
@@ -21,13 +21,17 @@ const DatastoreError = () => (
 const DatastoreVersionError = ({ coreVersion }) => (
   <div className="page-panel page-panel--scrollable">
     <div className="page-title">
-      <div className="page-title__wrapper">
-        <h3>
+      <div
+        role="navigation"
+        aria-label="breadcrumbs"
+        className="page-title__breadcrumbs"
+      >
+        <span className="breadcrumb-item">
           <Link to="/settings">
             <I18n>settings</I18n>
           </Link>{' '}
-          /{` `}
-        </h3>
+        </span>
+        <span aria-hidden="true">/ </span>
         <h1>
           <I18n>Invalid CE Version</I18n>
         </h1>
@@ -40,21 +44,16 @@ const DatastoreVersionError = ({ coreVersion }) => (
   </div>
 );
 
-export const DatastoreRouter = ({
-  match,
-  loading,
-  validVersion,
-  coreVersion,
-}) =>
+export const DatastoreRouter = ({ match, loading, validVersion, version }) =>
   !validVersion ? (
-    <DatastoreVersionError version={coreVersion} />
+    <DatastoreVersionError version={version} />
   ) : (
     !loading && (
       <Router>
-        <CreateDatastore path="new" />
         <DatastoreError path="error" />
         <SubmissionSearch path=":slug" />
         <DatastoreSettings path=":slug/settings" />
+        {/* <DatastoreEdit path=":slug/settings" /> */}
         <DatastoreSubmission path=":slug/new" />
         <DatastoreSubmission path=":slug/:id/:mode" />
         <DatastoreSubmission path=":slug/:id" />

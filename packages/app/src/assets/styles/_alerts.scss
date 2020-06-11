@@ -21,7 +21,8 @@
     .actions {
       align-items: center;
       display: flex;
-      a {
+      a,
+      .btn-link {
         font-size: 0.875rem;
         padding: 0.5rem;
         line-height: 0.5;

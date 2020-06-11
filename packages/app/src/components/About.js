@@ -13,11 +13,9 @@ const AboutComponent = ({ space, users, teams, loading }) => (
     {!loading && (
       <div className="page-panel">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h1>
-              <I18n>About My Space</I18n>
-            </h1>
-          </div>
+          <h1>
+            <I18n>About My Space</I18n>
+          </h1>
         </div>
         <div className="page-content">
           <section>
@@ -79,10 +77,10 @@ const AboutComponent = ({ space, users, teams, loading }) => (
                   <tr>
                     <th />
                     <th scope="col">
-                      <I18n>Email</I18n>
+                      <I18n>Display Name</I18n>
                     </th>
                     <th scope="col">
-                      <I18n>Display Name</I18n>
+                      <I18n>Email</I18n>
                     </th>
                   </tr>
                 </thead>
@@ -92,12 +90,12 @@ const AboutComponent = ({ space, users, teams, loading }) => (
                       <td>
                         <Avatar username={user.username} />
                       </td>
-                      <td>{user.displayName}</td>
                       <td>
-                        <Link to={`/profile/${user.username || user.email}`}>
-                          {user.email}
+                        <Link to={`/profile/${user.username}`}>
+                          {user.displayName || user.username}
                         </Link>
                       </td>
+                      <td>{user.email}</td>
                     </tr>
                   ))}
                 </tbody>

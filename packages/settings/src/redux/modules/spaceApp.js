@@ -1,6 +1,5 @@
-import { Record, List } from 'immutable';
+import { Record } from 'immutable';
 import { Utils } from 'common';
-import moment from 'moment';
 const { namespace, noPayload, withPayload } = Utils;
 
 export const types = {
@@ -15,17 +14,6 @@ export const actions = {
   setAppSettings: withPayload(types.SET_APP_SETTINGS),
   setSidebarOpen: withPayload(types.SET_SIDEBAR_OPEN),
 };
-
-export const selectHasSharedTaskEngine = state =>
-  state.app.loading
-    ? false
-    : Utils.getAttributeValue(state.app.space, 'Task Server Url', '').includes(
-        'shared',
-      ) ||
-      Utils.getAttributeValue(state.app.space, 'Shared Workflow Engine', '')
-        .downcase === 'true'
-      ? true
-      : false;
 
 export const State = Record({
   appLoading: true,

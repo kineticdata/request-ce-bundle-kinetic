@@ -18,19 +18,24 @@ export const CatalogSearchResults = ({
   pageIndexEnd,
   loadPreviousHandler,
   loadNextHandler,
+  clientSideSearch,
 }) => (
   <div>
     <PageTitle parts={[query, 'Search']} />
     <div className="page-container page-container--color-bar">
       <div className="page-panel">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to={`../${query ? '../' : ''}`}>
                 <I18n>services</I18n>
               </Link>{' '}
               / <I18n>search results</I18n>
-            </h3>
+            </span>
             <h1>{query}</h1>
           </div>
         </div>
@@ -38,8 +43,15 @@ export const CatalogSearchResults = ({
           <div className="search-box">
             <CatalogSearchContainer />
           </div>
+          {!clientSideSearch && (
+            <div className="mb-4 text-info">
+              <em>
+                <I18n>Searching by name and keywords only.</I18n>
+              </em>
+            </div>
+          )}
           <StateListWrapper
-            data={forms}
+            data={clientSideSearch ? clientSideSearch.data : forms}
             error={error}
             loadingTitle="Searching"
             emptyTitle="No results found"
@@ -49,7 +61,7 @@ export const CatalogSearchResults = ({
               <Fragment>
                 <div>
                   <ul className="cards__wrapper">
-                    {forms.map(form => (
+                    {data.map(form => (
                       <li key={form.slug}>
                         <ServiceCard
                           path={`${appLocation}/forms/${form.slug}`}

@@ -29,11 +29,9 @@ const IsolatedFormComponent = ({
       <div className="page-panel">
         {showHeader && (
           <div className="page-title">
-            <div className="page-title__wrapper">
-              <h1>
-                <I18n>{formName}</I18n>
-              </h1>
-            </div>
+            <h1>
+              <I18n>{formName}</I18n>
+            </h1>
           </div>
         )}
         {submissionId ? (

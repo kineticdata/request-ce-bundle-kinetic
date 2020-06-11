@@ -22,7 +22,7 @@ export const ViewDiscussionsModal = ({
           <I18n>Close</I18n>
         </button>
         <span>
-          <I18n>{discussionId ? 'View Discussion' : 'View Discussions'}</I18n>
+          <I18n>Discussions</I18n>
         </span>
       </h4>
     </div>

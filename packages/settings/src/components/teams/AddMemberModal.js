@@ -57,6 +57,8 @@ const AddMemberModalComponent = ({
                   placeholder: translate(
                     'Search for a user to add by Name, Username, or Email',
                   ),
+                  'aria-label': 'Search Users',
+                  'aria-haspopup': 'true',
                 }}
                 wrapperStyle={{ marginBottom: '1rem' }}
                 getItemValue={item => item.username}
@@ -67,6 +69,7 @@ const AddMemberModalComponent = ({
                 renderItem={(item, isHighlighted) => (
                   <div
                     className="tt-suggestion tt-selectable"
+                    role="option"
                     style={{
                       background: isHighlighted ? 'lightgray' : 'white',
                     }}
@@ -109,6 +112,7 @@ const AddMemberModalComponent = ({
                       onClick={() => handleRemoveMemberTemp(member)}
                       className="btn btn-danger pull-right"
                     >
+                      <span className="sr-only">Remove team member</span>
                       <span className="fa fa-times fa-fw" />
                     </button>
                   </td>

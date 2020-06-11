@@ -83,6 +83,7 @@ const ClearButton = props => {
         className={`btn btn-subtle ${disabled ? 'disabled' : ''}`}
         onClick={!disabled ? props.action : undefined}
       >
+        <span className="sr-only">Disable</span>
         <i className="fa fa-times" />
       </button>
       {disabled && (

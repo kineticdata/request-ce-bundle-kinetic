@@ -44,8 +44,12 @@ export const RequestList = ({
     <div className="page-container page-container--color-bar">
       <div className="page-panel">
         <div className="page-title">
-          <div className="page-title__wrapper">
-            <h3>
+          <div
+            role="navigation"
+            aria-label="breadcrumbs"
+            className="page-title__breadcrumbs"
+          >
+            <span className="breadcrumb-item">
               <Link to={appLocation}>
                 <I18n>services</I18n>
               </Link>{' '}
@@ -56,7 +60,7 @@ export const RequestList = ({
                 </Link>
               )}
               {type && ' / '}
-            </h3>
+            </span>
             <h1>
               <I18n>{type || 'All Requests'}</I18n>
             </h1>
@@ -66,7 +70,9 @@ export const RequestList = ({
           <StateListWrapper
             data={submissions}
             error={error}
-            emptyTitle={`No ${type !== 'All' ? `${type} ` : ''}Requests Found`}
+            emptyTitle={`No ${
+              type && type !== 'All' ? `${type} ` : ''
+            }Requests Found`}
             emptyMessage={emptyStateMessage(type)}
           >
             {data => (

@@ -49,8 +49,12 @@ const TeamFormComponent = ({
       <Fragment>
         <div className="page-panel page-panel--two-thirds page-panel--white">
           <div className="page-title">
-            <div className="page-title__wrapper">
-              <h3>
+            <div
+              role="navigation"
+              aria-label="breadcrumbs"
+              className="page-title__breadcrumbs"
+            >
+              <span className="breadcrumb-item">
                 <Link to="/settings">
                   <I18n>settings</I18n>
                 </Link>{' '}
@@ -59,7 +63,7 @@ const TeamFormComponent = ({
                   <I18n>teams</I18n>
                 </Link>{' '}
                 /
-              </h3>
+              </span>
               <h1>
                 <I18n>{editing ? 'Edit' : 'New'} Team</I18n>
               </h1>
@@ -194,7 +198,10 @@ const TeamFormComponent = ({
                   className={'fa fa-plus control'}
                   style={{ cursor: 'pointer' }}
                   onClick={handleAddMemberClick}
-                />
+                  aria-label="Add Team member"
+                >
+                  <span className="sr-only">Add team member</span>
+                </i>
               </h3>
 
               <div className="col-12">
@@ -228,6 +235,7 @@ const TeamFormComponent = ({
                             onClick={handleRemoveMember(user.username)}
                             className="btn btn-danger btn-sm"
                           >
+                            <span className="sr-only">Remove Member</span>
                             <span className="fa fa-remove" />
                           </button>
                         </td>
@@ -245,6 +253,7 @@ const TeamFormComponent = ({
                 <I18n>Subteams</I18n>
                 <Link to={`/settings/teams/new?parent=${team.name}`}>
                   <i className={'fa fa-plus control'} />
+                  <span className="sr-only">Add a Subteam</span>
                 </Link>
               </h3>
 

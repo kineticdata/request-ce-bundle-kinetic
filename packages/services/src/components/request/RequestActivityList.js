@@ -9,15 +9,15 @@ import { StartNode } from './activity_nodes/StartNode';
 // returns that otherwise it returns the string value wrapped in an object.
 export const activityData = activity => {
   try {
-    return JSON.parse(activity.data);
+    return activity.data ? JSON.parse(activity.data) : {};
   } catch (e) {
     return { STRING: activity.data };
   }
 };
 
 export const RequestActivityList = ({ submission }) => (
-  <div className="submission-timeline">
-    <ul>
+  <div className="submission-timeline" role="tabpanel">
+    <div>
       {submission.submittedAt ? (
         <StartNode timestamp={submission.submittedAt} label="Started" />
       ) : (
@@ -32,6 +32,6 @@ export const RequestActivityList = ({ submission }) => (
       ) : (
         <InProgressNode />
       )}
-    </ul>
+    </div>
   </div>
 );

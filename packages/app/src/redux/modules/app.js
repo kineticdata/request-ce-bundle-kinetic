@@ -3,13 +3,17 @@ import moment from 'moment';
 import { LOCATION_CHANGE } from 'connected-react-router';
 import { matchPath } from 'react-router';
 import { Utils } from 'common';
+import { parse } from 'query-string';
 const { noPayload, withPayload } = Utils;
 const ns = Utils.namespaceBuilder('app');
+
+const AUTH_ROUTES = ['/login', '/reset-password', '/create-account'];
 
 export const types = {
   FETCH_APP_REQUEST: ns('FETCH_APP_REQUEST'),
   FETCH_APP_SUCCESS: ns('FETCH_APP_SUCCESS'),
   FETCH_APP_FAILURE: ns('FETCH_APP_FAILURE'),
+  FETCH_APP_RESET: ns('FETCH_APP_RESET'),
 
   FETCH_SPACE_REQUEST: ns('FETCH_SPACE_REQUEST'),
   FETCH_SPACE_SUCCESS: ns('FETCH_SPACE_SUCCESS'),
@@ -30,12 +34,15 @@ export const types = {
   SET_USER_LOCALE: ns('SET_USER_LOCALE'),
   SET_KAPP_SLUG: ns('SET_KAPP_SLUG'),
   SET_CORE_VERSION: ns('SET_CORE_VERSION'),
+
+  SET_AUTHENTICATED: ns('SET_AUTHENTICATED'),
 };
 
 export const actions = {
   fetchApp: withPayload(types.FETCH_APP_REQUEST),
   fetchAppSuccess: withPayload(types.FETCH_APP_SUCCESS),
   fetchAppFailure: withPayload(types.FETCH_APP_FAILURE),
+  fetchAppReset: withPayload(types.FETCH_APP_RESET),
 
   fetchSpaceRequest: noPayload(types.FETCH_SPACE_REQUEST),
   fetchSpaceSuccess: withPayload(types.FETCH_SPACE_SUCCESS),
@@ -56,6 +63,8 @@ export const actions = {
   setUserLocale: withPayload(types.SET_USER_LOCALE),
   setKappSlug: withPayload(types.SET_KAPP_SLUG),
   setCoreVersion: withPayload(types.SET_CORE_VERSION),
+
+  setAuthenticated: withPayload(types.SET_AUTHENTICATED),
 };
 
 export const State = Record({
@@ -70,18 +79,23 @@ export const State = Record({
   errors: List(),
   kappSlug: null,
   loading: true,
+  authenticated: null,
+  authRedirect: null,
+  authRoute: '/login',
 });
 
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.FETCH_APP_REQUEST:
-      return state.set('errors', List()).set('loading', true);
+      return state.set('errors', List());
     case types.FETCH_APP_SUCCESS:
       return state.set('errors', List()).set('loading', false);
     case types.FETCH_APP_FAILURE:
       return state
         .update('errors', errors => errors.push(payload))
         .set('loading', false);
+    case types.FETCH_APP_RESET:
+      return state.set('loading', true);
     case types.FETCH_SPACE_SUCCESS:
       return state.set('space', payload);
     case types.FETCH_SPACE_FAILURE:
@@ -116,7 +130,35 @@ export const reducer = (state = State(), { type, payload }) => {
       const kappSlug = match && match.params.kappSlug;
       return state
         .set('kappSlug', kappSlug)
-        .set('kapp', state.kapps.find(kapp => kapp.slug === kappSlug));
+        .set('kapp', state.kapps.find(kapp => kapp.slug === kappSlug))
+        .set(
+          'authRedirect',
+          !state.authenticated
+            ? !AUTH_ROUTES.some(r => payload.location.pathname.startsWith(r))
+              ? `${payload.location.pathname}${payload.location.search}`
+              : state.authRedirect
+            : null,
+        )
+        .set(
+          'authRoute',
+          payload.location.search
+            ? parse(payload.location.search).invitationToken
+              ? `/create-account${payload.location.search}`
+              : `/login${payload.location.search}`
+            : '/login',
+        )
+        .update(
+          'loading',
+          value =>
+            !state.authenticated &&
+            AUTH_ROUTES.some(r => payload.location.pathname.startsWith(r))
+              ? true
+              : value,
+        );
+    case types.SET_AUTHENTICATED:
+      return state
+        .set('loading', payload !== state.authenticated)
+        .set('authenticated', payload);
     default:
       return state;
   }

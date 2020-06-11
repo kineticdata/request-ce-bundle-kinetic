@@ -17,7 +17,7 @@ const AlertRowComponent = ({
   <tr>
     {alert.values.URL ? (
       <td>
-        <a href={alert.values.URL} target="_blank">
+        <a href={alert.values.URL} target="_blank" rel="noopener noreferrer">
           <I18n>{alert.values.Title}</I18n>
           <i className="fa fa-fw fa-external-link " />
         </a>
@@ -42,9 +42,11 @@ const AlertRowComponent = ({
             className="btn btn-danger"
             onClick={toggleDeleteConfirm(alert.id)}
           >
-            <span className="fa fa-fw fa-close" />
+            <span className="sr-only">Delete Alert</span>
+            <span className="fa fa-fw fa-times" />
           </button>
           <Link className="btn btn-primary" to={`/alerts/${alert.id}`}>
+            <span className="sr-only">Edit Alert</span>{' '}
             <span className="fa fa-fw fa-pencil" />
           </Link>
         </div>

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   call,
   put,
@@ -9,7 +10,7 @@ import {
 import {
   fetchForms,
   fetchForm,
-  fetchSpace,
+  fetchBridges,
   fetchBridgeModels,
   createForm,
   updateForm,
@@ -36,7 +37,6 @@ import {
   SUBMISSION_INCLUDES,
   FORMS_INCLUDES,
   FORM_INCLUDES,
-  SPACE_INCLUDES,
   BRIDGE_MODEL_INCLUDES,
 } from '../modules/settingsDatastore';
 import { DatastoreFormSave } from '../../records';
@@ -44,7 +44,8 @@ import { DatastoreFormSave } from '../../records';
 import { chunkList } from '../../utils';
 
 export function* fetchFormsSaga() {
-  const [displayableForms, manageableForms, space] = yield all([
+  const isSpaceAdmin = yield select(state => state.app.profile.spaceAdmin);
+  const [displayableForms, manageableForms, bridges] = yield all([
     call(fetchForms, {
       datastore: true,
       include: FORMS_INCLUDES,
@@ -53,9 +54,7 @@ export function* fetchFormsSaga() {
       datastore: true,
       manage: 'true',
     }),
-    call(fetchSpace, {
-      include: SPACE_INCLUDES,
-    }),
+    isSpaceAdmin ? call(fetchBridges) : '',
   ]);
 
   const manageableFormsSlugs = manageableForms.forms
@@ -66,7 +65,7 @@ export function* fetchFormsSaga() {
     actions.setForms({
       manageableForms: manageableFormsSlugs,
       displayableForms: displayableForms.forms || [],
-      bridges: space.space ? space.space.bridges : [],
+      bridges: (bridges && bridges.bridges) || [],
     }),
   );
 }
@@ -95,6 +94,7 @@ export function* fetchFormSaga(action) {
 }
 
 export function* updateFormSaga() {
+  const isSpaceAdmin = yield select(state => state.app.profile.spaceAdmin);
   const currentForm = yield select(selectCurrentForm);
   const currentFormChanges = yield select(selectCurrentFormChanges);
   let updateError = null;
@@ -135,8 +135,9 @@ export function* updateFormSaga() {
     }
   }
 
-  // Update bridge model if bridge info has changed
+  // Update bridge model if bridge info has changed, and user is space admin
   if (
+    isSpaceAdmin &&
     !updateError &&
     (!currentForm.bridgeModel.equals(currentFormChanges.bridgeModel) ||
       !currentForm.bridgeModelMapping.equals(
@@ -229,8 +230,12 @@ export function* fetchSubmissionsSimpleSaga() {
     query.include(SUBMISSION_INCLUDES);
     query.limit(DATASTORE_LIMIT);
     query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
-    query.index(index.name);
-    query.sw(index.parts[0], simpleSearchParam);
+    if (index) {
+      query.index(index.name);
+    }
+    if (simpleSearchParam) {
+      query.sw(index.parts[0], simpleSearchParam);
+    }
     query.pageToken(pageToken);
 
     const { submissions, nextPageToken = null, serverError } = yield call(
@@ -245,6 +250,24 @@ export function* fetchSubmissionsSimpleSaga() {
       if (pageToken) {
         yield put(actions.pushPageToken(pageToken));
       }
+      // Set the next available page token to the one returned.
+      yield put(actions.setNextPageToken(nextPageToken));
+    }
+    yield put(actions.setSubmissions(submissions));
+  } else if (!simpleSearchParam) {
+    const query = new SubmissionSearch(true);
+    query.include(SUBMISSION_INCLUDES);
+    query.limit(DATASTORE_LIMIT);
+    query.sortDirection(sortDirection === 'DESC' ? sortDirection : 'ASC');
+
+    const { submissions, nextPageToken = null, serverError } = yield call(
+      searchSubmissions,
+      { search: query.build(), datastore: true, form: form.slug },
+    );
+
+    if (serverError) {
+      // What should we do?
+    } else {
       // Set the next available page token to the one returned.
       yield put(actions.setNextPageToken(nextPageToken));
     }

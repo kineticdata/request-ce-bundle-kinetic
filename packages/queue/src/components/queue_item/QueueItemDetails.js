@@ -63,22 +63,19 @@ export const QueueItemDetails = ({
       )}
     <div className="">
       <div className="general">
-        {discussionsEnabled && (
-          <button
-            onClick={openDiscussions}
-            className="btn btn-inverse btn-discussion d-md-none d-lg-none d-xl-none"
-          >
-            <span
-              className="fa fa-fw fa-comments"
-              style={{ fontSize: '16px' }}
-            />
-            <I18n>
-              {queueItem.values['Discussion Id'] === null
-                ? 'New Discussion'
-                : 'View Discussion'}
-            </I18n>
-          </button>
-        )}
+        {discussionsEnabled &&
+          isSmallLayout && (
+            <button
+              onClick={openDiscussions}
+              className="btn btn-inverse btn-discussion"
+            >
+              <span
+                className="fa fa-fw fa-comments"
+                style={{ fontSize: '16px' }}
+              />
+              <I18n>Open Discussions</I18n>
+            </button>
+          )}
         <div className="submission__meta">
           <StatusContent queueItem={queueItem} prevAndNext={prevAndNext} />
         </div>
@@ -152,7 +149,7 @@ export const QueueItemDetails = ({
         )}
         {queueLink(queueItem, kappSlug) && (
           <Link
-            to={`/item/${queueItem.parent.id}`}
+            to={`../${queueItem.parent.id}`}
             className="btn btn-inverse request-button"
           >
             <I18n>View Parent</I18n>

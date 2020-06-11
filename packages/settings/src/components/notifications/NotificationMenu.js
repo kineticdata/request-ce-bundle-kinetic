@@ -50,7 +50,7 @@ const SubmissionMenu = ({ form, handleClick }) => (
         {prop}
       </DropdownItem>
     ))}
-    <div className="dropdown-divider" />
+    <div className="dropdown-divider" role="none" />
     <h6 className="dropdown-header">
       <I18n>Submission Values</I18n>
     </h6>
@@ -89,7 +89,7 @@ const FormMenu = ({ form, handleClick }) => (
         {prop}
       </DropdownItem>
     ))}
-    <div className="dropdown-divider" />
+    <div className="dropdown-divider" role="none" />
     <h6 className="dropdown-header">
       <I18n>Form Attributes</I18n>
     </h6>
@@ -129,7 +129,7 @@ const KappMenu = ({ kapp, handleClick }) => (
         {prop}
       </DropdownItem>
     ))}
-    <div className="dropdown-divider" />
+    <div className="dropdown-divider" role="none" />
     <h6 className="dropdown-header">
       <I18n>Kapp Attributes</I18n>
     </h6>
@@ -170,7 +170,7 @@ const SpaceMenu = ({ space, handleClick }) => (
         {prop}
       </DropdownItem>
     ))}
-    <div className="dropdown-divider" />
+    <div className="dropdown-divider" role="none" />
     <h6 className="dropdown-header">
       <I18n>Space Attributes</I18n>
     </h6>

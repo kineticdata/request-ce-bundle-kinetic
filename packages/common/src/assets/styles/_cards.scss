@@ -228,8 +228,17 @@
       font-size: 0.75rem;
       line-height: 1.125rem;
       margin-bottom: 0;
-      &.members-toggle {
-        margin-bottom: 1rem;
+    }
+    .members-toggle { 
+          
+      color: $gray50;
+      font-size: 0.75rem;
+      line-height: 1.125rem;
+  
+      &.btn{
+display: block; 
+        text-align: center;
+        margin: 0 auto;
       }
     }
     .btn {
@@ -312,18 +321,29 @@
   .sb-avatar--gravatar {
     box-shadow: inset 0px 0px 10px rgba($gray80, 0.9);
   }
+
   img {
     flex-shrink: 0;
     border-radius: 50%;
     height: 100%;
     width: 100%;
   }
-  dl span {
+  .profile-roles-wrapper{    
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: stretch;
+    align-items: flex-start;
+    .profile-role{
+      margin-right: 1rem;
+    }
+  }
+  dl {
     display: flex;
     justify-content: space-between;
     margin: 1rem 0;
-    dt {
-      margin-right: 1rem;
-    }
+    dt{text-align: right;}
+    dd{text-align: left;}
   }
 }

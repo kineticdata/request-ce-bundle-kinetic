@@ -20,9 +20,9 @@
 @mixin setButtonColorAndHover($baseColor) {
   background-color: $baseColor;
   border-color: $baseColor;
-  &:hover,
-  &:focus,
-  &:active {
+  &:not(:disabled):not(.disabled):hover,
+  &:not(:disabled):not(.disabled):focus,
+  &:not(:disabled):not(.disabled):active {
     background-color: darken($baseColor, 5%);
     border-color: $baseColor;
   }

@@ -24,7 +24,8 @@
   .profile-links {
     display: flex;
     flex-direction: column;
-    a {
+    a,
+    button {
       color: $gray50;
       &:hover {
         background-color: lighten($gray8, 5%);

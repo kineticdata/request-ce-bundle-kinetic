@@ -91,13 +91,11 @@ const onCreated = ({
   // Prevent loading the next page of the embedded form since we are just going
   // to close the dialog anyways.
   actions.stop();
-  // If the new queue item that just was created has a parent we fetch the
-  // parent again because we want its subtask list to contain this new queue
-  // item.
-  if (options.get('parentId')) {
-    fetchCurrentItem(options.get('parentId'));
-  }
+  // Close the new item menu
   closeNewItemMenu();
+  // Refresh the current filter
+  refreshFilter && refreshFilter();
+
   // Check if this is assigned to me if so, go to submission
   if (
     username &&
@@ -106,9 +104,11 @@ const onCreated = ({
   ) {
     push(`${location}/item/${submission.submission.id}`);
   }
-  // Else stay on page and refresh whatever list we are on with action passed from console
-  else {
-    refreshFilter && refreshFilter();
+  // Else if the new queue item that was just created has a parent we fetch the
+  // parent again because we want its subtask list to contain this new queue
+  // item.
+  else if (options.get('parentId')) {
+    fetchCurrentItem(options.get('parentId'));
   }
 };
 

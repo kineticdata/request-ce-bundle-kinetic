@@ -12,14 +12,19 @@ import {
 import { connect } from 'react-redux';
 import { compose, withHandlers, withState, withProps } from 'recompose';
 import { Link } from 'react-router-dom';
-import { Utils } from 'common';
+import { Utils, selectVisibleKapps } from 'common';
 import { AlertsDropdown } from './AlertsDropdown';
 import { ProfileDropdown } from './ProfileDropdown';
 import { I18n } from '@kineticdata/react';
 import * as selectors from '../../redux/selectors';
 
 const BuildKappLink = ({ kapp, onClick, nameOverride = kapp.name }) => (
-  <Link className="dropdown-item" to={`/kapps/${kapp.slug}`} onClick={onClick}>
+  <Link
+    className="dropdown-item"
+    to={`/kapps/${kapp.slug}`}
+    onClick={onClick}
+    role="menuitem"
+  >
     <span
       className={`fa fa-fw' ${Utils.getAttributeValue(kapp, 'Icon') ||
         'fa-book'}`}
@@ -29,8 +34,9 @@ const BuildKappLink = ({ kapp, onClick, nameOverride = kapp.name }) => (
 );
 
 export const HeaderComponent = ({
-  hasSidebar,
   toggleSidebarOpen,
+  authenticated,
+  authRoute,
   isGuest,
   hasAccessToManagement,
   hasAccessToSupport,
@@ -40,81 +46,102 @@ export const HeaderComponent = ({
   kappDropdownToggle,
 }) => (
   <Navbar color="faded" light>
-    <Nav className="nav-header">
-      {hasSidebar &&
-        !isGuest && (
-          <NavItem id="header-sidebar-toggle">
-            <NavLink
-              className="drawer-button"
-              role="button"
-              tabIndex="0"
-              onClick={toggleSidebarOpen}
+    <div className="nav nav-header">
+      <Nav>
+        {typeof toggleSidebarOpen === 'function' &&
+          !isGuest && (
+            <NavItem id="header-sidebar-toggle">
+              <NavLink
+                className="drawer-button"
+                role="button"
+                tabIndex="0"
+                onClick={toggleSidebarOpen}
+                id="toggle-sidebar"
+              >
+                <span className="sr-only">Toggle Sidebar</span>
+                <i className="fa fa-fw fa-bars" />
+              </NavLink>
+            </NavItem>
+          )}
+        <NavItem>
+          {!isGuest ? (
+            <Dropdown
+              id="header-kapp-dropdown"
+              isOpen={kappDropdownOpen}
+              toggle={kappDropdownToggle}
             >
-              <i className="fa fa-fw fa-bars" />
-            </NavLink>
-          </NavItem>
-        )}
-      <NavItem>
-        {!isGuest && (
-          <Dropdown
-            id="header-kapp-dropdown"
-            isOpen={kappDropdownOpen}
-            toggle={kappDropdownToggle}
-          >
-            <DropdownToggle nav role="button">
-              <span>{menuLabel}</span> <i className="fa fa-caret-down" />
-            </DropdownToggle>
-            <DropdownMenu>
-              {visibleKapps.map(thisKapp => (
-                <BuildKappLink
-                  kapp={thisKapp}
-                  key={thisKapp.slug}
+              <DropdownToggle nav role="button">
+                <span>{menuLabel}</span> <i className="fa fa-caret-down" />
+              </DropdownToggle>
+              <DropdownMenu>
+                {visibleKapps.map(thisKapp => (
+                  <BuildKappLink
+                    kapp={thisKapp}
+                    key={thisKapp.slug}
+                    onClick={kappDropdownToggle}
+                  />
+                ))}
+                <DropdownItem divider />
+                <Link
+                  className="dropdown-item"
+                  to="/discussions"
                   onClick={kappDropdownToggle}
-                />
-              ))}
-              <DropdownItem divider />
-              <Link
-                className="dropdown-item"
-                to="/discussions"
-                onClick={kappDropdownToggle}
-              >
-                <span className="fa fa-fw fa-comments" />
-                <I18n>Discussions</I18n>
-              </Link>
-              <Link
-                className="dropdown-item"
-                to="/teams"
-                onClick={kappDropdownToggle}
-              >
-                <span className="fa fa-fw fa-users" />
-                <I18n>Teams</I18n>
-              </Link>
-              <Link
-                className="dropdown-item"
-                to="/settings"
-                onClick={kappDropdownToggle}
-              >
-                <span className="fa fa-fw fa-cog" />
-                <I18n>Settings</I18n>
-              </Link>
-            </DropdownMenu>
-          </Dropdown>
-        )}
-      </NavItem>
+                  role="menuitem"
+                >
+                  <span className="fa fa-fw fa-comments" />
+                  <I18n>Discussions</I18n>
+                </Link>
+                <Link
+                  className="dropdown-item"
+                  to="/teams"
+                  onClick={kappDropdownToggle}
+                  role="menuitem"
+                >
+                  <span className="fa fa-fw fa-users" />
+                  <I18n>Teams</I18n>
+                </Link>
+                <Link
+                  className="dropdown-item"
+                  to="/settings"
+                  onClick={kappDropdownToggle}
+                  role="menuitem"
+                >
+                  <span className="fa fa-fw fa-cog" />
+                  <I18n>Settings</I18n>
+                </Link>
+              </DropdownMenu>
+            </Dropdown>
+          ) : (
+            <div id="header-kapp-dropdown">
+              <span className="nav-link nav-link--static">{menuLabel}</span>
+            </div>
+          )}
+        </NavItem>
+      </Nav>
       <div className="nav-item-right">
         {!isGuest && <AlertsDropdown />}
-        <ProfileDropdown />
+        {authenticated ? (
+          <ProfileDropdown />
+        ) : (
+          <NavItem>
+            <Link className="nav-link" to={authRoute} title="Sign In">
+              <i className="fa fa-fw fa-sign-in" />
+            </Link>
+          </NavItem>
+        )}
       </div>
-    </Nav>
+    </div>
   </Navbar>
 );
 
 export const mapStateToProps = state => ({
   loading: state.app.loading,
   kapp: state.app.kapp,
+  authenticated: state.app.authenticated,
+  authRoute: state.app.authRoute,
   pathname: state.router.location.pathname,
   // Selectors
-  visibleKapps: selectors.selectVisibleKapps(state),
+  visibleKapps: selectVisibleKapps(state),
   hasAccessToManagement: selectors.selectHasAccessToManagement(state),
   hasAccessToSupport: selectors.selectHasAccessToSupport(state),
   isGuest: selectors.selectIsGuest(state),

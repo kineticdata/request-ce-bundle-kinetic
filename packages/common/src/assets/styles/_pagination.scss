@@ -2,6 +2,14 @@
  *   Pagination ~ Common
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
+.pagination-bar {
+  text-align: center;
+  padding: 0.5rem 1rem;
+  button {
+    font-size: 1rem;
+  }
+}
+
 .page-item.active .page-link {
   z-index: 1;
   color: $white;

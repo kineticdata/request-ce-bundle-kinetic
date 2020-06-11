@@ -32,7 +32,8 @@ export const BridgeModelMappingQualification = Record({
 
 export const BridgeModelMapping = Record({
   attributes: List(),
-  bridgeName: '',
+  agentSlug: 'system',
+  bridgeSlug: '',
   name: '',
   qualifications: List(),
   status: 'Active',
@@ -62,7 +63,7 @@ export const DatastoreForm = Record({
   isHidden: false,
   bridgeModel: BridgeModel(),
   bridgeModelMapping: BridgeModelMapping(),
-  bridgeName: '',
+  bridgeSlug: '',
   createdAt: '',
   updatedAt: '',
   createdBy: '',

@@ -4,6 +4,7 @@ import { LOCATION_CHANGE } from 'redux-first-history';
 
 export function* locationChangedSaga() {
   yield put(actions.clearToastAlerts());
+  yield put(actions.closeConfirm());
 }
 
 export function* watchLocationChange() {

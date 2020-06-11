@@ -1,46 +1,95 @@
 import React from 'react';
 import { Link, Router } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
-import { Icon } from 'common';
-
+import { Icon, ErrorMessage, LoadingMessage } from 'common';
 import { QueueSettings } from './QueueSettings';
-import { actions } from '../../redux/modules/settingsQueue';
+import { actions as formActions } from '../../redux/modules/settingsForms';
+import { PageTitle } from '../shared/PageTitle';
 import { FormList } from './forms/FormList';
 import { FormSettings } from './forms/FormSettings';
 import { FormActivity } from './forms/FormActivity';
-import { CreateForm } from './forms/CreateForm';
 import { FormSubmissions } from './forms/FormSubmissions';
 import { I18n } from '@kineticdata/react';
 import { connect } from '../../redux/store';
 
-export const SettingsComponent = () => (
-  <Router>
-    <QueueSettings path="general" />
-    <FormList path="forms" />
-    <CreateForm path="forms/new" />
-    <CreateForm path="forms/clone/:id" />
-    <FormSettings path="forms/:id/settings" />
-    <FormSubmissions path="forms/:id/" />
-    <FormActivity path="forms/:id/activity" />
-    <SettingsNavigation default />
-  </Router>
-);
-
-const mapDispatchToProps = {
-  fetchQueueSettings: actions.fetchQueueSettings,
-};
-
-export const Settings = compose(
+// Wrapper for components that require the form object
+export const FormSettingsWrapper = compose(
   connect(
-    null,
-    mapDispatchToProps,
+    state => ({
+      kapp: state.app.kapp,
+      form: state.settingsForms.currentForm,
+      loading: state.settingsForms.loading,
+      error: state.settingsForms.error,
+    }),
+    { fetchFormRequest: formActions.fetchForm },
   ),
   lifecycle({
     componentWillMount(prev, next) {
-      this.props.fetchQueueSettings();
+      this.props.fetchFormRequest({
+        kappSlug: this.props.kapp.slug,
+        formSlug: this.props.formSlug,
+      });
     },
   }),
-)(SettingsComponent);
+)(
+  ({ form, error, loading }) =>
+    loading || error || !form ? (
+      <div className="page-container">
+        <PageTitle parts={[form && form.name, `Forms`]} />
+        <div className="page-panel page-panel--white">
+          <div className="page-title">
+            <div
+              role="navigation"
+              aria-label="breadcrumbs"
+              className="page-title__breadcrumbs"
+            >
+              <span className="breadcrumb-item">
+                <Link to="../../../">
+                  <I18n>queue</I18n>
+                </Link>{' '}
+              </span>
+              <span aria-hidden="true">/ </span>
+              <span className="breadcrumb-item">
+                {' '}
+                <Link to="../../">
+                  <I18n>settings</I18n>
+                </Link>{' '}
+              </span>
+              <span aria-hidden="true">/ </span>
+              <span className="breadcrumb-item">
+                {' '}
+                <Link to="../">
+                  <I18n>forms</I18n>
+                </Link>{' '}
+              </span>
+              <span aria-hidden="true">/ </span>
+            </div>
+          </div>
+          {error ? (
+            <ErrorMessage message={error.message} />
+          ) : (
+            <LoadingMessage />
+          )}
+        </div>
+      </div>
+    ) : (
+      <Router>
+        <FormSettings form={form} path="settings" />
+        <FormActivity form={form} path="submissions/:id" />
+        <FormSubmissions form={form} default />
+      </Router>
+    ),
+);
+
+export const Settings = () => (
+  <Router>
+    <QueueSettings path="general" />
+    <FormList path="forms" />
+    <FormSettingsWrapper path="forms/:formSlug/*" />
+    {/* <FormActivity path="forms/:id/activity" /> */}
+    <SettingsNavigation default />
+  </Router>
+);
 
 const SettingsCard = ({ path, icon, name, description }) => (
   <Link to={path} className="card card--settings">
@@ -58,13 +107,17 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
   <div className="page-container">
     <div className="page-panel page-panel--white">
       <div className="page-title">
-        <div className="page-title__wrapper">
-          <h3>
+        <div
+          role="navigation"
+          aria-label="breadcrumbs"
+          className="page-title__breadcrumbs"
+        >
+          <span className="breadcrumb-item">
             <Link to="/">
               <I18n>queue</I18n>
             </Link>{' '}
-            /{` `}
-          </h3>
+            <span aria-hidden="true">/ </span>
+          </span>
           <h1>
             <I18n>Settings</I18n>
           </h1>

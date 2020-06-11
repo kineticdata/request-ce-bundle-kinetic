@@ -114,7 +114,7 @@ export const ReviewRequestComponent = ({
   ...restProps
 }) => {
   return multiPageForm ? (
-    <div className="multi-page--service">
+    <div className="multi-page--service" role="tabpanel">
       {displayTop && (
         <div className="page-display--top">
           <h3>{displayPages[currentLoc]}</h3>
@@ -122,11 +122,7 @@ export const ReviewRequestComponent = ({
         </div>
       )}
       <div className="form-wrapper--review">
-        <div
-          className={classNames({
-            hidden: !formLoaded,
-          })}
-        >
+        <div className={classNames({ hidden: !formLoaded })}>
           <I18n context={`kapps.${kappSlug}.forms.${submission.form.slug}`}>
             <CoreForm
               loaded={handleLoaded}
@@ -136,11 +132,7 @@ export const ReviewRequestComponent = ({
             />
           </I18n>
         </div>
-        <div
-          className={classNames('load-wrapper', {
-            hidden: formLoaded,
-          })}
-        >
+        <div className={classNames('load-wrapper', { hidden: formLoaded })}>
           <span className="fa fa-spinner fa-spin fa-lg fa-fw" />
         </div>
       </div>
@@ -152,12 +144,15 @@ export const ReviewRequestComponent = ({
     </div>
   ) : (
     <I18n context={`kapps.${kappSlug}.forms.${submission.form.slug}`}>
-      <CoreForm
-        loaded={handleLoaded}
-        submission={submission.id}
-        review
-        globals={globals}
-      />
+      <div role="tabpanel">
+        {' '}
+        <CoreForm
+          loaded={handleLoaded}
+          submission={submission.id}
+          review
+          globals={globals}
+        />
+      </div>
     </I18n>
   );
 };

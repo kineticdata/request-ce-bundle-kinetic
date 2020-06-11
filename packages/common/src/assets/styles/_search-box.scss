@@ -39,7 +39,7 @@
   }
   button {
     position: relative;
-    left: -3rem;
+    // left: -3rem;
     line-height: 1.125rem;
     padding: 0.9375rem;
     cursor: pointer;
@@ -48,7 +48,8 @@
     flex: 1 0 auto;
   }
   // Search Input
-  input[type='text'] {
+  input[type='text'],
+  input[type='search'] {
     height: auto;
     border: none;
     border-radius: $border-radius-base;
@@ -57,9 +58,9 @@
     font-weight: 600;
     line-height: 1.125rem;
     padding: 0.9375rem;
-    &:focus {
-      border: none;
-    }
+    // &:focus {
+    //   border: none;
+    // }
   }
   &::placeholder {
     color: #ffffff;

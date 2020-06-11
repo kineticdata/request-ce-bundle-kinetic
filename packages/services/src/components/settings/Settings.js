@@ -2,51 +2,94 @@ import React from 'react';
 import { Icon } from 'common';
 import { Link, Router } from '@reach/router';
 import { compose, lifecycle } from 'recompose';
-
+import { ErrorMessage, LoadingMessage } from 'common';
+import { PageTitle } from '../shared/PageTitle';
+import { actions as formActions } from '../../redux/modules/settingsForms';
 import { ServicesSettings } from './services_settings/ServicesSettings';
-import { actions } from '../../redux/modules/settingsServices';
-import { FormList } from './forms/FormList';
+import { FormsList } from './forms/FormsList';
 import { FormSettings } from './forms/FormSettings';
+import { FormDetails } from './forms/FormDetails';
 import { FormActivity } from './forms/FormActivity';
-import { CreateForm } from './forms/CreateForm';
-import { CategoriesSettings } from './categories/Categories';
-import { FormSubmissions } from './forms/FormSubmissions';
+import { CategorySettings } from './categories/CategorySettings';
 import { I18n } from '@kineticdata/react';
 import { connect } from '../../redux/store';
 
-export const SettingsComponent = ({ kappSlug }) => (
-  <Router>
-    <ServicesSettings path="general" />
-    <FormList path="forms" />
-    <CreateForm path="forms/new" />
-    <CreateForm path="forms/clone/:id" />
-    <FormSettings path="forms/:id/settings" />
-    <FormActivity path="forms/:id/activity" />
-    <FormSubmissions path="forms/:id" />
-    <CategoriesSettings path="categories" />
-    <SettingsNavigation default />
-  </Router>
-);
-
-const mapStateToProps = (state, props) => ({
-  kappSlug: state.app.kappSlug,
-});
-
-const mapDispatchToProps = {
-  fetchServicesSettings: actions.fetchServicesSettings,
-};
-
-export const Settings = compose(
+// Wrapper for components that require the form object
+export const FormSettingsWrapper = compose(
   connect(
-    mapStateToProps,
-    mapDispatchToProps,
+    state => ({
+      kapp: state.app.kapp,
+      form: state.settingsForms.form,
+      error: state.settingsForms.error,
+    }),
+    { fetchFormRequest: formActions.fetchFormRequest },
   ),
   lifecycle({
     componentWillMount(prev, next) {
-      this.props.fetchServicesSettings();
+      this.props.fetchFormRequest({
+        kappSlug: this.props.kapp.slug,
+        formSlug: this.props.formSlug,
+      });
     },
   }),
-)(SettingsComponent);
+)(
+  ({ form, error }) =>
+    error || !form ? (
+      <div className="page-container">
+        <PageTitle parts={[form && form.name, `Forms`]} />
+        <div className="page-panel page-panel--white">
+          <div className="page-title">
+            <div
+              role="navigation"
+              aria-label="breadcrumbs"
+              className="page-title__breadcrumbs"
+            >
+              <span className="breadcrumb-item">
+                <Link to="../../../">
+                  <I18n>services</I18n>
+                </Link>
+              </span>{' '}
+              <span aria-hidden="true">/ </span>
+              <span className="breadcrumb-item">
+                <Link to="../../">
+                  <I18n>settings</I18n>
+                </Link>
+              </span>{' '}
+              <span aria-hidden="true">/ </span>
+              <span className="breadcrumb-item">
+                <Link to="../">
+                  <I18n>forms</I18n>
+                </Link>
+              </span>{' '}
+              <span aria-hidden="true">/ </span>
+            </div>
+          </div>
+          {error ? (
+            <ErrorMessage message={error.message} />
+          ) : (
+            <LoadingMessage />
+          )}
+        </div>
+      </div>
+    ) : (
+      <Router>
+        <FormSettings form={form} path="settings" />
+        <FormActivity form={form} path="submissions/:id" />
+        <FormDetails form={form} default />
+      </Router>
+    ),
+);
+
+export const Settings = () => (
+  <Router>
+    <ServicesSettings path="general" />
+    <FormsList path="forms" />
+    <FormSettingsWrapper path="forms/:formSlug/*" />
+    <FormActivity path="forms/:id/activity" />
+    <CategorySettings path="categories/*" />
+    <SettingsNavigation default />
+  </Router>
+);
 
 const SettingsCard = ({ path, icon, name, description }) => (
   <Link to={path} className="card card--service">
@@ -60,17 +103,22 @@ const SettingsCard = ({ path, icon, name, description }) => (
   </Link>
 );
 
-const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
+const SettingsNavigationComponent = ({ kapp, isSpaceAdmin }) => (
   <div className="page-container">
+    <PageTitle parts={[]} />
     <div className="page-panel page-panel--white">
       <div className="page-title">
-        <div className="page-title__wrapper">
-          <h3>
+        <div
+          role="navigation"
+          aria-label="breadcrumbs"
+          className="page-title__breadcrumbs"
+        >
+          <span className="breadcrumb-item">
             <Link to="../">
-              <I18n>services</I18n>
+              <I18n>{kapp.name.toLowerCase()}</I18n>
             </Link>{' '}
-            /{` `}
-          </h3>
+            <span aria-hidden="true">/ </span>
+          </span>
           <h1>
             <I18n>Settings</I18n>
           </h1>
@@ -106,6 +154,7 @@ const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
 );
 
 const mapStateToPropsNav = state => ({
+  kapp: state.app.kapp,
   isSpaceAdmin: state.app.profile.spaceAdmin,
 });
 
