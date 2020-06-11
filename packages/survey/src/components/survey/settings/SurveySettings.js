@@ -55,6 +55,7 @@ const fieldSet = [
   'pollingSource',
   'pollingType',
   'pollingReferenceId',
+  'pollingEmailAddress',
   'pollingTrigger',
   'pollingInterval',
   'expiration',
@@ -209,6 +210,7 @@ const SurveySettingsComponent = ({
               {fields.get('pollingSource')}
               {fields.get('pollingType')}
               {fields.get('pollingReferenceId')}
+              {fields.get('pollingEmailAddress')}
               {fields.get('pollingTrigger')}
               {fields.get('pollingInterval')}
               {fields.getIn(['polling', 'props', 'value']) === 'false' && (
@@ -457,6 +459,22 @@ const SurveySettingsComponent = ({
                             surveyConfig['Event Polling']['Reference Id']
                               ? surveyConfig['Event Polling']['Reference Id']
                               : '',
+                          helpText:
+                            'Enter the field name this poller should use as the reference Id source',
+                        },
+                        {
+                          name: 'pollingEmailAddress',
+                          label: 'Email Address',
+                          type: 'text',
+                          visible: ({ values }) =>
+                            values.get('polling') === 'true',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Event Polling']['Email Address']
+                              ? surveyConfig['Event Polling']['Email Address']
+                              : '',
+                          helpText:
+                            'Enter the field name this poller should use as the source for the recipient email address',
                         },
                         {
                           name: 'pollingTrigger',
@@ -656,6 +674,7 @@ const SurveySettingsComponent = ({
                             Source: values.get('pollingSource'),
                             Type: values.get('pollingType'),
                             'Reference Id': values.get('pollingReferenceId'),
+                            'Email Address': values.get('pollingEmailAddress'),
                             Trigger: values.get('pollingTrigger'),
                             Interval: values.get('pollingInterval'),
                           },
