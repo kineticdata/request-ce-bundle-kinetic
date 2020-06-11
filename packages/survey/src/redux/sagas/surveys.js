@@ -19,6 +19,7 @@ import {
   FORM_FULL_INCLUDES,
   SUBMISSION_INCLUDES,
 } from '../modules/surveys';
+import { actions as appActions } from '../modules/surveyApp';
 import {
   DEFAULT_SURVEY_TYPE,
   DEFAULT_TEMPLATE_INCLUDES,
@@ -288,7 +289,7 @@ export function* fetchAllSubmissionsSaga(action) {
   } else {
     if (serverError) {
       // What should we do?
-      // console.log(serverError);
+      console.log(serverError);
     } else {
       yield put(actions.setExportSubmissions(action.payload.accumulator));
     }
@@ -306,6 +307,7 @@ export function* deleteFormSaga({ payload }) {
     }
     yield put(actions.deleteFormComplete(payload));
     addToast('Form deleted successfully.');
+    yield put(appActions.fetchAppDataRequest());
   } else {
     addToastAlert({ title: 'Error Deleting Form', message: error.message });
   }
