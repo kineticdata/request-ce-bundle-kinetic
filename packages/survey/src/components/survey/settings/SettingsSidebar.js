@@ -37,11 +37,13 @@ export const SettingsSidebarComponent = ({
         submission values (click on the {'</>'} to add fields) to create a
         useful label. For example, if you could use:
       </p>
-      <p>values('Recipient Id')'s survey for ticket values('Reference Id')</p>
+      <p>
+        values('Recipient Email')'s survey for ticket values('Reference Id')
+      </p>
       <p>And the resulting list of surveys might look like this:</p>
       <p>
-        mary_manager’s survey for ticket 23456
-        <br />tommy_user’s survey for ticket 34956
+        mary_manager@kineticdata.com’s survey for ticket 23456
+        <br />tommy_user@kineticdata.com’s survey for ticket 34956
       </p>
     </Fragment>
   ) : tab === '2' ? (
@@ -123,7 +125,8 @@ export const SettingsSidebarComponent = ({
       </p>
       <ul className="small">
         <li>
-          userId: the id in the platform for the person to receive the survey
+          recipientEmail: the email address in the platform for the person to
+          receive the survey
         </li>
         <li>
           surveySlug: the slug, or unique identifier, for the survey to be

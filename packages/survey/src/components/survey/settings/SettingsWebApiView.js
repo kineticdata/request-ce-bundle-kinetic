@@ -23,7 +23,7 @@ export const SettingsWebApiView = ({ kappSlug, formSlug, formFields }) => {
           value: formSlug,
         },
         {
-          name: 'userId',
+          name: 'recipientEmail',
           value: 'name@example.com',
         },
         {
