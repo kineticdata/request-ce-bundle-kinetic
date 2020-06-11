@@ -6,7 +6,6 @@ import {
   createSubmission,
 } from '@kineticdata/react';
 import { Seq, Map } from 'immutable';
-import { actions as systemErrorActions } from '../modules/errors';
 import {
   actions,
   types,
@@ -20,16 +19,14 @@ export function* fetchNotificationsSaga() {
   query.limit('1000');
   query.index('createdAt');
 
-  const { submissions, errors, serverError } = yield call(searchSubmissions, {
+  const { submissions, error } = yield call(searchSubmissions, {
     search: query.build(),
     datastore: true,
     form: NOTIFICATIONS_FORM_SLUG,
   });
 
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
-  } else if (errors) {
-    yield put(actions.setFetchNotificationsError(errors));
+  if (error) {
+    yield put(actions.setFetchNotificationsError([error]));
   } else {
     yield put(
       actions.setNotifications(
@@ -53,16 +50,14 @@ export function* fetchNotificationsSaga() {
 
 export function* cloneNotificationSaga(action) {
   const include = 'details,values,form,form.fields.details';
-  const { submission, errors, serverError } = yield call(fetchSubmission, {
+  const { submission, error } = yield call(fetchSubmission, {
     id: action.payload,
     include,
     datastore: true,
   });
 
-  if (serverError) {
-    yield put(systemErrorActions.setSystemError(serverError));
-  } else if (errors) {
-    yield put(actions.setCloneError(errors));
+  if (error) {
+    yield put(actions.setCloneError([error]));
   } else {
     // The values of attachment fields cannot be cloned so we will filter them out
     // of the values POSTed to the new submission.
@@ -86,21 +81,18 @@ export function* cloneNotificationSaga(action) {
       .toJS();
 
     // Make the call to create the clone.
-    const {
-      submission: cloneSubmission,
-      postErrors,
-      postServerError,
-    } = yield call(createSubmission, {
-      datastore: true,
-      formSlug: submission.form.slug,
-      values,
-      completed: false,
-    });
+    const { submission: cloneSubmission, error: postError } = yield call(
+      createSubmission,
+      {
+        datastore: true,
+        formSlug: submission.form.slug,
+        values,
+        completed: false,
+      },
+    );
 
-    if (postServerError) {
-      yield put(systemErrorActions.setSystemError(serverError));
-    } else if (postErrors) {
-      yield put(actions.setCloneError(postErrors));
+    if (postError) {
+      yield put(actions.setCloneError([postError]));
     } else {
       // Determine the type route parameter for the redirect below based on
       // either the form slug or the value of the 'Type' field.

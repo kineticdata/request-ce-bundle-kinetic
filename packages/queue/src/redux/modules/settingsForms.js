@@ -234,7 +234,7 @@ export const State = Record({
 export const reducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.FETCH_FORM:
-      return state.set('loading', true);
+      return state;//.set('loading', true);
     case types.SET_QUEUE_FORM:
       const config = buildFormConfigurationObject(payload);
       const newForm =
