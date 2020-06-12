@@ -189,9 +189,7 @@ const SurveyListComponent = ({
     loadingMessage: 'Loading Surveys...',
     noSearchResultsMessage:
       'No surveys were found - please modify your search criteria',
-    noItemsMessage: 'There are no forms to display.',
-    noItemsLinkTo: `/kapps/${kapp.slug}/new`,
-    noItemsLinkToMessage: 'Add New Survey',
+    noItemsMessage: 'There are no surveys to display.',
   });
   return (
     !loading && (
