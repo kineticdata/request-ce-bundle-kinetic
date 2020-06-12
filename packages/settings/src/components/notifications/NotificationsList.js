@@ -19,7 +19,7 @@ const WallyNoResultsFoundMessage = ({ type }) => {
       <h5>
         <I18n>No Notification {type}s Found</I18n>
       </h5>
-      <img src={wallyHappyImage} alt="Happy Wally" />
+      <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
       <h6>
         <I18n>Add some {type}s by hitting the new button!</I18n>
       </h6>

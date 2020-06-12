@@ -26,7 +26,7 @@ const WallyEmptyMessage = () => {
       <h5>
         <I18n>No Executions Found</I18n>
       </h5>
-      <img src={wallyHappyImage} alt="Happy Wally" />
+      <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
       <h6>
         <I18n>Executions are a record of a run of a robot</I18n>
       </h6>

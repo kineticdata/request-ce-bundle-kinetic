@@ -7,7 +7,7 @@ export const NotificationsNotFound = () => (
     <h5>
       <I18n>Notification Forms Not Found</I18n>
     </h5>
-    <img src={wallyMissingIMage} alt="Missing Wally" />
+    <img src={wallyMissingIMage} alt="Missing Wally" role="presentation" />
     <h6>
       <I18n>
         There are several datastore forms used to implement the notification

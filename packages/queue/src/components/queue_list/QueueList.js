@@ -19,7 +19,7 @@ const WallyEmptyMessage = ({ filter }) => {
         <h5>
           <I18n>No Results</I18n>
         </h5>
-        <img src={wallyMissingImage} alt="Missing Wally" />
+        <img src={wallyMissingImage} alt="Missing Wally" role="presentation" />
         <h6>
           <I18n>Try a less specific filter.</I18n>
         </h6>
@@ -35,7 +35,7 @@ const WallyEmptyMessage = ({ filter }) => {
       <h5>
         <I18n>No Assignments</I18n>
       </h5>
-      <img src={wallyHappyImage} alt="Happy Wally" />
+      <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
       <h6>
         <I18n>An empty queue is a happy queue.</I18n>
       </h6>
