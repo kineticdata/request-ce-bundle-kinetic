@@ -450,7 +450,7 @@ const SurveySettingsComponent = ({
                         },
                         {
                           name: 'pollingReferenceId',
-                          label: 'Reference Id',
+                          label: 'Reference Id Field',
                           type: 'text',
                           visible: ({ values }) =>
                             values.get('polling') === 'true',
@@ -464,7 +464,7 @@ const SurveySettingsComponent = ({
                         },
                         {
                           name: 'pollingEmailAddress',
-                          label: 'Email Address',
+                          label: 'Email Address Field',
                           type: 'text',
                           visible: ({ values }) =>
                             values.get('polling') === 'true',
