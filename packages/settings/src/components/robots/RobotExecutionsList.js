@@ -23,13 +23,13 @@ const getStatusColor = status =>
 const WallyEmptyMessage = () => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>
+      <div className="empty-state__title">
         <I18n>No Executions Found</I18n>
-      </h5>
+      </div>
       <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
-      <h6>
+      <div className="empty-state__message">
         <I18n>Executions are a record of a run of a robot</I18n>
-      </h6>
+      </div>
     </div>
   );
 };

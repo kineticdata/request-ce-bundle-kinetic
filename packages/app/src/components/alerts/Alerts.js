@@ -12,13 +12,13 @@ import { PageTitle } from '../shared/PageTitle';
 const WallyEmptyMessage = ({ canEdit }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>
+      <div className="empty-state__title">
         <I18n>No Alerts Right Now...</I18n>
-      </h5>
+      </div>
       {canEdit && (
-        <h6>
+        <div className="empty-state__message">
           <I18n>Add an alert by hitting the new button!</I18n>
-        </h6>
+        </div>
       )}
     </div>
   );

@@ -16,13 +16,13 @@ import { I18n } from '@kineticdata/react';
 const WallyNoResultsFoundMessage = ({ type }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>
+      <div className="empty-state__title">
         <I18n>No Notification {type}s Found</I18n>
-      </h5>
+      </div>
       <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
-      <h6>
+      <div className="empty-state__message">
         <I18n>Add some {type}s by hitting the new button!</I18n>
-      </h6>
+      </div>
     </div>
   );
 };

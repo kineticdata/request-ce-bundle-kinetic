@@ -39,9 +39,9 @@ const getNextExecution = (nextExecutions, robotId) => {
 const WallyEmptyMessage = () => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>
+      <div className="empty-state__title">
         <I18n>No Robots Found</I18n>
-      </h5>
+      </div>
       <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
     </div>
   );

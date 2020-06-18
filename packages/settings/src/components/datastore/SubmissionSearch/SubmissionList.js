@@ -22,13 +22,13 @@ const DiscussionIcon = () => (
 const WallyNoResultsFoundMessage = ({ form }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>
+      <div className="empty-state__title">
         <I18n>No {form.name} Submissions Found</I18n>
-      </h5>
+      </div>
       <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
-      <h6>
+      <div className="empty-state__message">
         <I18n>Add a new one by hitting the new button!</I18n>
-      </h6>
+      </div>
     </div>
   );
 };
@@ -36,16 +36,16 @@ const WallyNoResultsFoundMessage = ({ form }) => {
 const WallyEnterSearchTerm = ({ form }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>
+      <div className="empty-state__title">
         <I18n>Enter a term to search</I18n>
-      </h5>
+      </div>
       <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
-      <h6>
+      <div className="empty-state__message">
         <I18n>
           You can search by any field on the form, or by choosing an index and
           building a search query.
         </I18n>
-      </h6>
+      </div>
     </div>
   );
 };
@@ -53,13 +53,13 @@ const WallyEnterSearchTerm = ({ form }) => {
 const WallySearching = () => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>
+      <div className="empty-state__title">
         <I18n>Searching</I18n>
-      </h5>
+      </div>
       <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
-      <h6>
+      <div className="empty-state__message">
         <I18n>Just a sec while we find those submissions.</I18n>
-      </h6>
+      </div>
     </div>
   );
 };

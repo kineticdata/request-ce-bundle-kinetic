@@ -10,14 +10,14 @@ const errors = {
 export const DiscussionError = props => (
   <div className="discussions--error">
     <div className="empty-state empty-state--wally">
-      <h5 className="empty-state__title">
+      <div className="empty-state__title">
         {errors[props.error] || props.error}
-      </h5>
+      </div>
       <img src={wallyMissingImage} alt="Missing Wally" role="presentation" />
       {props.fullPage && (
-        <h6 className="empty-state__subtitle">
+        <div className="empty-state__message">
           Head back to the <Link to="/">homepage</Link>.
-        </h6>
+        </div>
       )}
     </div>
   </div>
