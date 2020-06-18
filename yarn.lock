@@ -1081,6 +1081,41 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-9.0.1.tgz#c27b391d8457d1e893f1eddeaf5e5412d12ffbb5"
   integrity sha512-6It2EVfGskxZCQhuykrfnALg7oVeiI6KclWSmGDqB0AiInVrTGB9Jp9i4/Ad21u9Jde/voVQz6eFX/eSg/UsPA==
 
+"@fullcalendar/core@~4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/core/-/core-4.4.0.tgz#79dbc0cca836ce628a07e739a456da11ff141373"
+  integrity sha512-PC4mmXHJHAlXmUEmZVnePyA8yYCOBdxBNq8yjJqedEtT1X0x36yTFz/Y0Ux6bniICZDqYtk0xoxe6jaxi++e0g==
+
+"@fullcalendar/daygrid@^4.4.0", "@fullcalendar/daygrid@~4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-4.4.0.tgz#25fcae7226b62688b4e086a611582e72253b5229"
+  integrity sha512-pDfvL0XZxKHTZ4VFOmwaYe3LmuABEIZsEopeqQ8y5O6BDen9KCbJqgHeCI8FpASSBd6bNlUx7il7EHdSoHhgIw==
+
+"@fullcalendar/list@^4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/list/-/list-4.4.0.tgz#8edab49d06903b7de0ca68eefc1d44d0a58860a9"
+  integrity sha512-uUDSPS71czNTK5Z3x3HzeE3KIvqkCfvhY+mGFdaAL6+7VpCwEIfB6s3GIJOjzu9TONmczMk4jdq0b1WUFLY5PQ==
+
+"@fullcalendar/moment-timezone@^4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/moment-timezone/-/moment-timezone-4.4.0.tgz#35f8b8b4950c3704755a7ebdfbf7af3029c1b88d"
+  integrity sha512-eBzipkwuM/y47M/t2HAM+uWph3b08Gk7xa34X3nM1UNHnryWNFMJgCczcZk+OMRCbuhNMjujj0F/rUYbnE0FDQ==
+
+"@fullcalendar/react@^4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/react/-/react-4.4.0.tgz#243fda9e3d053a51e7eab9263a03847ca6eb5514"
+  integrity sha512-7PExd430is8/KoUkddfSKnvozOw18UzqOW10PmLLxs3l+wki3Z/sh7nxC6df13VC/l9GljhsLZwU0hEF7dm2Kg==
+  dependencies:
+    "@fullcalendar/core" "~4.4.0"
+    fast-deep-equal "^2.0.1"
+
+"@fullcalendar/timegrid@^4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/timegrid/-/timegrid-4.4.0.tgz#c5837cfd676afff0d95535ac4cc054ed65965976"
+  integrity sha512-QwJ9oM87/ZTbXaE8PMIVp20GPtVCFmroaeR1GydJ6BKYtbxG/nsaSv7RhqvDa2jLjHaTWC2NjHo9hRfjQjtCZA==
+  dependencies:
+    "@fullcalendar/daygrid" "~4.4.0"
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"
@@ -1967,7 +2002,7 @@ adjust-sourcemap-loader@2.0.0:
     object-path "0.11.4"
     regex-parser "2.2.10"
 
-airbnb-prop-types@^2.10.0, airbnb-prop-types@^2.15.0:
+airbnb-prop-types@^2.10.0, airbnb-prop-types@^2.14.0, airbnb-prop-types@^2.15.0:
   version "2.15.0"
   resolved "https://registry.yarnpkg.com/airbnb-prop-types/-/airbnb-prop-types-2.15.0.tgz#5287820043af1eb469f5b0af0d6f70da6c52aaef"
   integrity sha512-jUh2/hfKsRjNFC4XONQrxo/n/3GG4Tn6Hl0WlFQN5PY9OMC9loSCoAYKnZsWaP8wEfd5xcrPloK0Zg6iS1xwVA==
@@ -4515,7 +4550,7 @@ enzyme-adapter-utils@^1.13.0:
     prop-types "^15.7.2"
     semver "^5.7.1"
 
-enzyme-shallow-equal@^1.0.1:
+enzyme-shallow-equal@^1.0.0, enzyme-shallow-equal@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/enzyme-shallow-equal/-/enzyme-shallow-equal-1.0.1.tgz#7afe03db3801c9b76de8440694096412a8d9d49e"
   integrity sha512-hGA3i1so8OrYOZSM9whlkNmVHOicJpsjgTzC+wn2JMJXhq1oO4kA4bJ5MsfzSIcC71aLDKzJ6gZpIxrqt3QTAQ==
@@ -5057,6 +5092,11 @@ fast-apply@*:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/fast-apply/-/fast-apply-0.0.3.tgz#7791bb3f7f76b7064c0b73bc3e75bfad8553c861"
   integrity sha1-d5G7P392twZMC3O8PnW/rYVTyGE=
+
+fast-deep-equal@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-2.0.1.tgz#7b05218ddf9667bf7f370bf7fdb2cb15fdd0aa49"
+  integrity sha1-ewUhjd+WZ79/Nwv3/bLLFf3Qqkk=
 
 fast-deep-equal@^3.1.1:
   version "3.1.1"
@@ -10208,25 +10248,26 @@ react-bootstrap-typeahead@^3.2.4:
     react-popper "^1.0.0"
     warning "^4.0.1"
 
-react-dates@^18.1.1:
-  version "18.5.0"
-  resolved "https://registry.yarnpkg.com/react-dates/-/react-dates-18.5.0.tgz#31cc8ab01b2cc546b938e198fd8d4316878f5717"
-  integrity sha512-5zWR3+ekkRzf740omDkO+N0JifsGGOeyvWwQ/7dFxSb2CqHUsOfKgvpXOiwd3hBm4yr+lelESI3b458BEOU5og==
+react-dates@^21.8.0:
+  version "21.8.0"
+  resolved "https://registry.yarnpkg.com/react-dates/-/react-dates-21.8.0.tgz#355c3c7a243a7c29568fe00aca96231e171a5e94"
+  integrity sha512-PPriGqi30CtzZmoHiGdhlA++YPYPYGCZrhydYmXXQ6RAvAsaONcPtYgXRTLozIOrsQ5mSo40+DiA5eOFHnZ6xw==
   dependencies:
-    airbnb-prop-types "^2.10.0"
+    airbnb-prop-types "^2.15.0"
     consolidated-events "^1.1.1 || ^2.0.0"
+    enzyme-shallow-equal "^1.0.0"
     is-touch-device "^1.0.1"
     lodash "^4.1.1"
     object.assign "^4.1.0"
-    object.values "^1.0.4"
-    prop-types "^15.6.1"
-    react-addons-shallow-compare "^15.6.2"
+    object.values "^1.1.0"
+    prop-types "^15.7.2"
+    raf "^3.4.1"
     react-moment-proptypes "^1.6.0"
-    react-outside-click-handler "^1.2.0"
-    react-portal "^4.1.5"
-    react-with-direction "^1.3.0"
-    react-with-styles "^3.2.0"
-    react-with-styles-interface-css "^4.0.2"
+    react-outside-click-handler "^1.2.4"
+    react-portal "^4.2.0"
+    react-with-direction "^1.3.1"
+    react-with-styles "^4.1.0"
+    react-with-styles-interface-css "^6.0.0"
 
 react-dev-utils@^9.1.0:
   version "9.1.0"
@@ -10367,7 +10408,7 @@ react-moment-proptypes@^1.6.0:
   dependencies:
     moment ">=1.6.0"
 
-react-outside-click-handler@^1.2.0:
+react-outside-click-handler@^1.2.4:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/react-outside-click-handler/-/react-outside-click-handler-1.3.0.tgz#3831d541ac059deecd38ec5423f81e80ad60e115"
   integrity sha512-Te/7zFU0oHpAnctl//pP3hEAeobfeHMyygHB8MnjP6sX5OR8KHT1G3jmLsV3U9RnIYo+Yn+peJYWu+D5tUS8qQ==
@@ -10419,7 +10460,7 @@ react-popper@^1.0.0, react-popper@^1.3.4:
     typed-styles "^0.0.7"
     warning "^4.0.2"
 
-react-portal@^4.1.5:
+react-portal@^4.2.0:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/react-portal/-/react-portal-4.2.1.tgz#12c1599238c06fb08a9800f3070bea2a3f78b1a6"
   integrity sha512-fE9kOBagwmTXZ3YGRYb4gcMy+kSA+yLO0xnPankjRlfBv4uCpFXqKPfkpsGQQR15wkZ9EssnvTOl1yMzbkxhPQ==
@@ -10623,7 +10664,7 @@ react-virtualized@^9.19.1:
     prop-types "^15.6.0"
     react-lifecycles-compat "^3.0.4"
 
-react-with-direction@^1.3.0:
+react-with-direction@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/react-with-direction/-/react-with-direction-1.3.1.tgz#9fd414564f0ffe6947e5ff176f6132dd83f8b8df"
   integrity sha512-aGcM21ZzhqeXFvDCfPj0rVNYuaVXfTz5D3Rbn0QMz/unZe+CCiLHthrjQWO7s6qdfXORgYFtmS7OVsRgSk5LXQ==
@@ -10637,23 +10678,24 @@ react-with-direction@^1.3.0:
     object.values "^1.0.4"
     prop-types "^15.6.2"
 
-react-with-styles-interface-css@^4.0.2:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/react-with-styles-interface-css/-/react-with-styles-interface-css-4.0.3.tgz#c4a61277b2b8e4126b2cd25eca3ac4097bd2af09"
-  integrity sha512-wE43PIyjal2dexxyyx4Lhbcb+E42amoYPnkunRZkb9WTA+Z+9LagbyxwsI352NqMdFmghR0opg29dzDO4/YXbw==
+react-with-styles-interface-css@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/react-with-styles-interface-css/-/react-with-styles-interface-css-6.0.0.tgz#b53da7fa8359d452cb934cface8738acaef7b5fe"
+  integrity sha512-6khSG1Trf4L/uXOge/ZAlBnq2O2PEXlQEqAhCRbvzaQU4sksIkdwpCPEl6d+DtP3+IdhyffTWuHDO9lhe1iYvA==
   dependencies:
     array.prototype.flat "^1.2.1"
     global-cache "^1.2.1"
 
-react-with-styles@^3.2.0:
-  version "3.2.3"
-  resolved "https://registry.yarnpkg.com/react-with-styles/-/react-with-styles-3.2.3.tgz#b058584065bb36c0d80ccc911725492692db8a61"
-  integrity sha512-MTI1UOvMHABRLj5M4WpODfwnveHaip6X7QUMI2x6zovinJiBXxzhA9AJP7MZNaKqg1JRFtHPXZdroUC8KcXwlQ==
+react-with-styles@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-with-styles/-/react-with-styles-4.1.0.tgz#4bfc2daa92dd72033fc19fd861b90225a682a640"
+  integrity sha512-zp05fyA6XFetqr07ox/a0bCFyEj//gUozI9cC1GW59zaGJ38STnxYvzotutgpzMyHOd7TFW9ZiZeBKjsYaS+RQ==
   dependencies:
+    airbnb-prop-types "^2.14.0"
     hoist-non-react-statics "^3.2.1"
     object.assign "^4.1.0"
-    prop-types "^15.6.2"
-    react-with-direction "^1.3.0"
+    prop-types "^15.7.2"
+    react-with-direction "^1.3.1"
 
 react@^16.12.0, react@^16.3.0:
   version "16.13.1"

@@ -30,7 +30,7 @@ export const State = Record({
 const surveyAppReducer = (state = State(), { type, payload }) => {
   switch (type) {
     case types.FETCH_APP_DATA_REQUEST:
-      return state.set('error', null);
+      return state.set('error', null).set('loading', true);
     case types.FETCH_APP_DATA_SUCCESS:
       return state
         .set('forms', List(payload.forms))

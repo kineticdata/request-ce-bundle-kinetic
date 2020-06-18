@@ -9,6 +9,7 @@ import { Alert } from '../../../src/components/notifications/Alert';
 import { Confirm } from '../../../src/components/notifications/Confirm';
 import { SchedulerWidget } from '../../../src/components/scheduler/SchedulerWidget';
 import { PeopleSelect } from '../../../src/components/attribute_selectors/PeopleSelect';
+import { Calendar } from '../../../src/components/calendar/Calendar';
 
 // Ensure the bundle global object exists
 const bundle = typeof window.bundle !== 'undefined' ? window.bundle : {};
@@ -112,6 +113,41 @@ bundle.helpers.alert = (options = {}) => {
     );
   }
 };
+
+/**
+ * Displays a calendar.
+ * 
+ * @param options {
+ *    div:              DOM Element *required*
+ *        Element element the calendar is anchored to.
+ * 
+ *    calendarSlug:     Slug of calendar *required*
+ *        The slug of the calendar, must match a calendar configuration
+ *        in the calendar configuration datastore.
+ * 
+ *    size:      Width of the window the calendar is render in. *recommended*
+ *        The options are medium and large.
+ * 
+ *    timezone:         Set the calendar initial timezone
+ * 
+ *    title:            Add a title to the calendar
+ */
+bundle.helpers.calendar = (div, options = {}) => {
+  if (!(options.calendarSlug)) {
+    console.warn('The calendar requires calendarSlug');
+    return;
+  }
+  
+  renderIntoDom(
+    <Calendar 
+      slug={options.calendarSlug}
+      size={options.size}
+      timezone={options.timezone}
+      title={options.title}
+    />,
+    div
+  )
+}
 
 /**
  * Displays a confirm message to the user.

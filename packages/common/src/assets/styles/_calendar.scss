@@ -1,0 +1,208 @@
+.calendar-component {
+  flex-grow: 1;
+  padding: 2rem; 
+  font-size: 1rem;
+  display: flex;
+  margin: 0 -1.5rem;
+
+  // Move this style to the _buttons.scss file.
+  // Keep in this file to keep all calendar style in one file currently.
+  .btn-no-style {
+    background-color: inherit;
+    border: none;
+    &:active,
+    &:focus {
+      outline: none;
+      border: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .calendar-filter {
+    margin-left: 0.5rem;
+  }
+
+  .calendar-options {
+    margin-left: 0.5rem;
+
+    .checkbox__filter {
+      padding-right: 2rem;
+    }
+  }
+  .calendar--filter {
+    .filter-checkbox {
+      flex: 0 1 80%;
+      display: flex;
+    
+      label {
+        display: flex;
+        vertical-align: middle;
+        position: relative;
+        padding-left: 0.5rem;
+        margin-bottom: 0;
+        line-height: 1.5;
+        font-size: 1rem;
+    
+        &::before {
+          content: '';
+          display: inline-block;
+          position: absolute;
+          width: 1rem;
+          height: 1rem;
+          left: 0;
+          top: 5px;
+          margin-left: -0.75rem;
+          border: 1px solid #cccccc;
+          border-radius: 3px;
+          background-color: $white;
+          -webkit-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+          -o-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+          transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+        }
+    
+        &::after {
+          display: inline-block;
+          position: absolute;
+          width: 1rem;
+          height: 1rem;
+          left: 0;
+          top: 5px;
+          margin-left: -0.75rem;
+          padding-left: 3px;
+          padding-top: 1px;
+          font-size: 11px;
+          color: #555555;
+        }
+      }
+    
+      input[type='checkbox'] {
+        opacity: 0;
+        z-index: 1;
+    
+        &:focus + label::before {
+          outline: thin dotted;
+          outline: 5px auto -webkit-focus-ring-color;
+          outline-offset: -2px;
+        }
+    
+        &:checked + label::after {
+          font-family: 'FontAwesome';
+          content: '\f00c';
+        }
+    
+        &:disabled + label {
+          opacity: 0.65;
+        }
+    
+        &:disabled + label::before {
+          background-color: #eeeeee;
+          cursor: not-allowed;
+        }
+      }
+    
+      &--dash {
+        input[type='checkbox'] {
+          &:not(:checked) + label::after {
+            left: 1px;
+            top: 6px;
+            font-family: 'FontAwesome';
+            content: '\f068';
+          }
+        }
+      }
+    }
+    
+    input[type='checkbox']:checked + label::after {
+      color: #fff;
+    }
+  }
+
+  $colors: (
+    blue: rgb(16, 148, 196),
+    blue-gray: rgb(168, 183, 199),
+    blue-lake: rgb(9, 84, 130),
+    blue-slate: rgb(12, 56, 79),
+    blue-sky: rgb(11, 168, 224),
+    green-grass: rgb(0, 212, 106),
+    green: rgb(102, 225, 65),
+    green-teal: rgb(2, 212, 177),
+    orange: rgb(255, 153, 28),
+    purple: rgb(166, 48, 150),
+    indigo: rgb(75, 0, 130),
+    red-purple: rgb(191, 52, 121),
+    red: rgb(250, 58, 55),
+    red-rose: rgb(255, 74, 94),
+    sunflower: rgb(255, 207, 74),
+    yellow: rgb(254, 233, 78),
+  );
+
+  @each $name, $color in $colors {
+    .checkbox-#{$name} {
+      input[type='checkbox']:checked + label::before {
+        background-color: $color;
+      }
+      label.checked::before {
+        background-color: $color;
+      }
+      label::before {
+        border: 2px solid $color;
+      }
+    }
+    .event-#{$name} {
+      background-color: $color;
+    }
+  }
+
+  .checkbox__filter {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .DayPickerNavigation_button.DayPickerNavigation_button__horizontalDefault {
+    padding: 0.25rem;
+    top: 1.5rem;
+
+    svg {
+      height: 1rem;
+      width: 1rem;
+    }
+  }
+
+  .CalendarMonth {
+    &_caption {
+      strong {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  // Move this to typography for future use
+  .ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .rbc-row {
+    font-size: 0.75rem;
+    height: 1.5rem;
+  }
+
+  .calendar-panel {
+    padding: 0 1.5rem;
+
+    &--left {
+      flex: 0 0 calc(256px + 3rem);
+    }
+    &--right {
+      flex: 1 1 auto;
+    }
+  }
+  @media (max-width: 991px) {
+    flex-direction: column;
+    .column-panel {
+      flex-basis: auto;
+    }
+  }
+}

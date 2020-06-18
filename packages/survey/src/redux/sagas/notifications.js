@@ -85,6 +85,9 @@ export function* cloneNotificationSaga(action) {
       .map((value, fieldName) => overrideFields.get(fieldName) || value)
       .toJS();
 
+    // Add custom tag to cloned template name
+    values['Name'] = values['Name'].concat(' - Custom');
+
     // Make the call to create the clone.
     const {
       submission: cloneSubmission,

@@ -21,7 +21,6 @@ const SelectionsContainer = ({ input, selections, value }) => (
     {value && (
       <div className="input-group-append">
         <div className="input-group-text">
-          {console.log('!', value.toJS())}
           <Link
             to={`/settings/notifications/templates/${value.get('slug')}`}
             target="_blank"

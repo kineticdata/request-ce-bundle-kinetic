@@ -28,8 +28,15 @@
 @import 'schedulers';
 @import 'typeahead';
 @import 'code-field';
+@import 'calendar';
 @import 'temp';
 
 @import '~@kineticdata/react/lib/assets/discussions/styles/discussion';
 @import 'discussion';
 @import 'discussion_dialogs';
+
+/* Third party styles */
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+@import '~@fullcalendar/timegrid/main.css';
+@import '~@fullcalendar/list/main.css';

@@ -4,7 +4,7 @@ import { actions, types } from '../modules/surveyApp';
 import { addToastAlert } from 'common';
 
 export function* fetchAppDataRequestSaga() {
-  yield console.log('fetching App data');
+  // yield console.log('fetching App data');
   const authenticated = yield select(state => state.app.authenticated);
   const kappSlug = yield select(state => state.app.kappSlug);
 

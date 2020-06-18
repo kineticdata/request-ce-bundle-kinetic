@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from '../../../redux/store';
 import { compose, withProps } from 'recompose';
 import { actions as notificationsActions } from '../../../redux/modules/notifications';
@@ -36,11 +37,13 @@ export const SettingsSidebarComponent = ({
         submission values (click on the {'</>'} to add fields) to create a
         useful label. For example, if you could use:
       </p>
-      <p>values('Recipient Id')'s survey for ticket values('Reference Id')</p>
+      <p>
+        values('Recipient Email')'s survey for ticket values('Reference Id')
+      </p>
       <p>And the resulting list of surveys might look like this:</p>
       <p>
-        btigges’s survey for ticket 23456
-        <br />jsundberg’s survey for ticket 34956
+        mary_manager@kineticdata.com’s survey for ticket 23456
+        <br />tommy_user@kineticdata.com’s survey for ticket 34956
       </p>
     </Fragment>
   ) : tab === '2' ? (
@@ -61,29 +64,7 @@ export const SettingsSidebarComponent = ({
       <br />
       <p>
         <b>Invitation Notification Template</b> is the notification that is sent
-        to the survey recipient when their survey is created. This text is
-        rather general by default. If desired please clone this notification
-        template and create your custom notification by{' '}
-        <span
-          className="survey-settings-sidebar-link"
-          onClick={() => cloneNotification(defaultTemplate.id)}
-          role="button"
-          tabIndex={0}
-        >
-          clicking here
-        </span>.{' '}
-        <u>
-          If your survey allows users to Opt Out, please update this
-          notification to be Survey Invitation with Opt Out
-        </u>. To start your custom notification using the Opt Out template,{' '}
-        <span
-          className="survey-settings-sidebar-link"
-          onClick={() => cloneNotification(defaultOptOutTemplate.id)}
-          role="button"
-          tabIndex={0}
-        >
-          click here
-        </span>.
+        to the survey recipient when their survey is created.
       </p>
       <p>
         <b>Reminder Notifications Template</b> is the notification that is sent
@@ -91,29 +72,41 @@ export const SettingsSidebarComponent = ({
         responded to the survey, the user will get up to{' '}
         <b>Reminder Notifications Max</b> reminders{' '}
         <b>Reminder Notifications Interval</b> days apart.{' '}
-        <u>There are no reminders configured by default</u>. Note that this uses
-        the generic invitation text by default. If desired please clone this
-        notification template and create your custom notification by{' '}
+        <u>There are no reminders configured by default</u>.
+      </p>
+      <p>
+        Note that the default templates use rather generic invitation language.
+        If desired, you can clone these notification template to create your own
+        custom notification. Be sure to rename your newly created template,
+        update its content, and set its status to "Active." If your survey
+        allows users to Opt Out, start from the "{
+          defaultOptOutTemplate.values['Name']
+        }" template.
+      </p>
+      <p>
+        <Link to="/settings/notifications/templates" target="_blank">
+          View all Notification Templates
+        </Link>
+      </p>
+      <p>
         <span
           className="survey-settings-sidebar-link"
           onClick={() => cloneNotification(defaultTemplate.id)}
           role="button"
           tabIndex={0}
         >
-          clicking here
-        </span>.{' '}
-        <u>
-          If your survey allows users to Opt Out, please update this
-          notification to be Survey Invitation with Opt Out
-        </u>. To start your custom notification using the Opt Out template,{' '}
+          Clone the "{defaultTemplate.values['Name']}" template
+        </span>
+      </p>
+      <p>
         <span
           className="survey-settings-sidebar-link"
           onClick={() => cloneNotification(defaultOptOutTemplate.id)}
           role="button"
           tabIndex={0}
         >
-          click here
-        </span>.
+          Clone the "{defaultOptOutTemplate.values['Name']}" template
+        </span>
       </p>
     </Fragment>
   ) : tab === '3' ? (
@@ -132,7 +125,8 @@ export const SettingsSidebarComponent = ({
       </p>
       <ul className="small">
         <li>
-          userId: the id in the platform for the person to receive the survey
+          recipientEmail: the email address in the platform for the person to
+          receive the survey
         </li>
         <li>
           surveySlug: the slug, or unique identifier, for the survey to be

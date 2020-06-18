@@ -25,9 +25,11 @@ const BuilderLink = ({ tree }) => (
   <span className="workflow-builder-link">
     <a
       className="btn btn-sm btn-primary"
-      href={`${bundle.spaceLocation()}/app/#/space/workflow/trees/builder/${
+      href={`${bundle.spaceLocation()}/app/#/workflow/trees/builder/${
         tree.sourceName
       }/${tree.sourceGroup}/${tree.name}`}
+      target="_blank"
+      rel="noopener noreferrer"
     >
       <span className="fa fa-mouse-pointer fa-fw" />
       Builder
@@ -52,6 +54,8 @@ const fieldSet = [
   'polling',
   'pollingSource',
   'pollingType',
+  'pollingReferenceId',
+  'pollingEmailAddress',
   'pollingTrigger',
   'pollingInterval',
   'expiration',
@@ -205,6 +209,8 @@ const SurveySettingsComponent = ({
               {fields.get('polling')}
               {fields.get('pollingSource')}
               {fields.get('pollingType')}
+              {fields.get('pollingReferenceId')}
+              {fields.get('pollingEmailAddress')}
               {fields.get('pollingTrigger')}
               {fields.get('pollingInterval')}
               {fields.getIn(['polling', 'props', 'value']) === 'false' && (
@@ -268,6 +274,7 @@ const SurveySettingsComponent = ({
     templates.map(t => ({
       value: t.values['Name'],
       label: t.values['Name'],
+      slug: t.id,
     }));
 
   const surveyPollerOptions =
@@ -348,6 +355,7 @@ const SurveySettingsComponent = ({
                           name: 'reminderTemplate',
                           label: 'Reminder Notifications Template',
                           type: 'select',
+                          renderAttributes: { typeahead: true },
                           initialValue:
                             surveyConfig &&
                             surveyConfig['Reminders']['Reminder Template']
@@ -356,6 +364,7 @@ const SurveySettingsComponent = ({
                           options: notificationOptions,
                           helpText:
                             'This email notification template will be used when sending out a survey reminder',
+                          component: FormComponents.NotificationField,
                         },
 
                         {
@@ -387,6 +396,7 @@ const SurveySettingsComponent = ({
                           name: 'invitationTemplate',
                           label: 'Invitation Notification Template',
                           type: 'select',
+                          renderAttributes: { typeahead: true },
                           initialValue:
                             surveyConfig &&
                             surveyConfig['Invitation Notification Name']
@@ -394,6 +404,7 @@ const SurveySettingsComponent = ({
                               : 'Survey Invitation',
                           options: notificationOptions,
                           helpText: `This email notification template will be used when sending out the survey`,
+                          component: FormComponents.NotificationField,
                         },
                         {
                           name: 'polling',
@@ -435,7 +446,35 @@ const SurveySettingsComponent = ({
                               : '',
                           helpText:
                             'Name of the form or object that will be polled',
-                          placeholder: 'PD:HelpDesk',
+                          placeholder: 'HPD:HelpDesk',
+                        },
+                        {
+                          name: 'pollingReferenceId',
+                          label: 'Reference Id Field',
+                          type: 'text',
+                          visible: ({ values }) =>
+                            values.get('polling') === 'true',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Event Polling']['Reference Id']
+                              ? surveyConfig['Event Polling']['Reference Id']
+                              : '',
+                          helpText:
+                            'Enter the field name this poller should use as the reference Id source',
+                        },
+                        {
+                          name: 'pollingEmailAddress',
+                          label: 'Email Address Field',
+                          type: 'text',
+                          visible: ({ values }) =>
+                            values.get('polling') === 'true',
+                          initialValue:
+                            surveyConfig &&
+                            surveyConfig['Event Polling']['Email Address']
+                              ? surveyConfig['Event Polling']['Email Address']
+                              : '',
+                          helpText:
+                            'Enter the field name this poller should use as the source for the recipient email address',
                         },
                         {
                           name: 'pollingTrigger',
@@ -463,6 +502,8 @@ const SurveySettingsComponent = ({
                             surveyConfig['Event Polling']['Interval']
                               ? surveyConfig['Event Polling']['Interval']
                               : 1440,
+                          helpText:
+                            'Number of minutes between each polling query. This value is used to calculate begin and end dates (using last modified date/time on the record) that are appended to the query',
                           component: FormComponents.IntegerField,
                         },
                         {
@@ -524,7 +565,7 @@ const SurveySettingsComponent = ({
                               ? surveyConfig['Maximum Survey Frequency'][
                                   'Count'
                                 ]
-                              : 1000,
+                              : 1,
                           component: FormComponents.IntegerField,
                         },
                         {
@@ -535,7 +576,7 @@ const SurveySettingsComponent = ({
                             surveyConfig &&
                             surveyConfig['Maximum Survey Frequency']['Days']
                               ? surveyConfig['Maximum Survey Frequency']['Days']
-                              : 1,
+                              : 7,
                           component: FormComponents.IntegerField,
                         },
                         // {
@@ -562,7 +603,7 @@ const SurveySettingsComponent = ({
                           initialValue:
                             surveyConfig && surveyConfig['Owning Team']
                               ? surveyConfig['Owning Team']
-                              : '',
+                              : null,
                         },
                         {
                           name: 'owningIndividual',
@@ -573,7 +614,7 @@ const SurveySettingsComponent = ({
                           initialValue:
                             surveyConfig && surveyConfig['Owning Individual']
                               ? surveyConfig['Owning Individual']
-                              : '',
+                              : null,
                         },
                         {
                           name: 'confirmationPageText',
@@ -632,6 +673,8 @@ const SurveySettingsComponent = ({
                             Poll: values.get('polling'),
                             Source: values.get('pollingSource'),
                             Type: values.get('pollingType'),
+                            'Reference Id': values.get('pollingReferenceId'),
+                            'Email Address': values.get('pollingEmailAddress'),
                             Trigger: values.get('pollingTrigger'),
                             Interval: values.get('pollingInterval'),
                           },

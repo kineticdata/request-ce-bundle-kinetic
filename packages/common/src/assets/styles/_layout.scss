@@ -107,8 +107,22 @@
           flex: 1 1 50%;
           padding: 0 1.5rem;
 
+          // Thirds
           &--thirds {
             flex-basis: 33.33333333%;
+          }
+          &--two-thirds {
+            flex: 66.66666666%;
+          }
+          &--one-thirds {
+            flex: 33.33333333%;
+          }
+
+          &--one-quarter {
+            flex-basis: 20%;
+          }
+          &--three-quarters {
+            flex-basis: 80%;
           }
         }
         @media (max-width: 991px) {

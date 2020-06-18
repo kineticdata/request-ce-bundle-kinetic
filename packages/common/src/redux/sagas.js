@@ -5,6 +5,7 @@ import { watchDiscussionRest } from './sagas/discussions.rest';
 import { watchActivityFeed } from './sagas/activityFeed';
 import { watchLocationChange } from './sagas/location';
 import { watchToasts } from './sagas/toasts';
+import { watchCalendar } from './sagas/calendar';
 
 export default function*() {
   yield all([
@@ -14,5 +15,6 @@ export default function*() {
     watchActivityFeed(),
     watchLocationChange(),
     watchToasts(),
+    watchCalendar(),
   ]);
 }
