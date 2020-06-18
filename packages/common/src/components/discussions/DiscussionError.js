@@ -13,7 +13,7 @@ export const DiscussionError = props => (
       <div className="empty-state__title">
         {errors[props.error] || props.error}
       </div>
-      <img src={wallyMissingImage} alt="Missing Wally" role="presentation" />
+      <img src={wallyMissingImage} alt="Missing Wally" />
       {props.fullPage && (
         <div className="empty-state__message">
           Head back to the <Link to="/">homepage</Link>.

@@ -25,7 +25,7 @@ const WallyNoResultsFoundMessage = ({ form }) => {
       <div className="empty-state__title">
         <I18n>No {form.name} Submissions Found</I18n>
       </div>
-      <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
+      <img src={wallyHappyImage} alt="Happy Wally" />
       <div className="empty-state__message">
         <I18n>Add a new one by hitting the new button!</I18n>
       </div>
@@ -39,7 +39,7 @@ const WallyEnterSearchTerm = ({ form }) => {
       <div className="empty-state__title">
         <I18n>Enter a term to search</I18n>
       </div>
-      <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
+      <img src={wallyHappyImage} alt="Happy Wally" />
       <div className="empty-state__message">
         <I18n>
           You can search by any field on the form, or by choosing an index and
@@ -56,7 +56,7 @@ const WallySearching = () => {
       <div className="empty-state__title">
         <I18n>Searching</I18n>
       </div>
-      <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
+      <img src={wallyHappyImage} alt="Happy Wally" />
       <div className="empty-state__message">
         <I18n>Just a sec while we find those submissions.</I18n>
       </div>
