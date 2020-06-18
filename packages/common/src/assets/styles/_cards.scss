@@ -229,14 +229,13 @@
       line-height: 1.125rem;
       margin-bottom: 0;
     }
-    .members-toggle { 
-          
+    .members-toggle {
       color: $gray50;
       font-size: 0.75rem;
       line-height: 1.125rem;
-  
-      &.btn{
-display: block; 
+
+      &.btn {
+        display: block;
         text-align: center;
         margin: 0 auto;
       }
@@ -328,14 +327,14 @@ display: block;
     height: 100%;
     width: 100%;
   }
-  .profile-roles-wrapper{    
+  .profile-roles-wrapper {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
     align-content: stretch;
     align-items: flex-start;
-    .profile-role{
+    .profile-role {
       margin-right: 1rem;
     }
   }
@@ -343,7 +342,11 @@ display: block;
     display: flex;
     justify-content: space-between;
     margin: 1rem 0;
-    dt{text-align: right;}
-    dd{text-align: left;}
+    dt {
+      text-align: right;
+    }
+    dd {
+      text-align: left;
+    }
   }
 }

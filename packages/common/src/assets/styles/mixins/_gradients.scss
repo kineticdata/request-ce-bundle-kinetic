@@ -24,10 +24,30 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr'#{$startColor}',endColorstr='#{$endColor}',GradientType=1);
 }
 
-@mixin vertical-three-colors-gradient($startColor: #00b3ee, $midColor: #7a43b6, $colorStop: 50%, $endColor: #c3325f) {
+@mixin vertical-three-colors-gradient(
+  $startColor: #00b3ee,
+  $midColor: #7a43b6,
+  $colorStop: 50%,
+  $endColor: #c3325f
+) {
   background: $startColor;
-  background: -moz-linear-gradient(45deg, $startColor 0%, $midColor $colorStop, $endColor 100%  );
-  background: -webkit-linear-gradient(45deg, $startColor 0%, $midColor $colorStop, $endColor 100%  );
-  background: linear-gradient(45deg, $startColor 0%, $midColor $colorStop, $endColor 100%);
+  background: -moz-linear-gradient(
+    45deg,
+    $startColor 0%,
+    $midColor $colorStop,
+    $endColor 100%
+  );
+  background: -webkit-linear-gradient(
+    45deg,
+    $startColor 0%,
+    $midColor $colorStop,
+    $endColor 100%
+  );
+  background: linear-gradient(
+    45deg,
+    $startColor 0%,
+    $midColor $colorStop,
+    $endColor 100%
+  );
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$startColor}', endColorstr='#{$endColor}', GradientType=1); // IE9 and down, gets no color-stop at all the proper fallback
 }
