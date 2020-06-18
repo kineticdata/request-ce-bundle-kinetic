@@ -16,13 +16,13 @@ const WallyEmptyMessage = ({ filter }) => {
   if (filter.type === 'adhoc') {
     return (
       <div className="empty-state empty-state--wally">
-        <h5>
+        <div className="empty-state__title">
           <I18n>No Results</I18n>
-        </h5>
+        </div>
         <img src={wallyMissingImage} alt="Missing Wally" role="presentation" />
-        <h6>
+        <div className="empty-state__message">
           <I18n>Try a less specific filter.</I18n>
-        </h6>
+        </div>
         <h5>
           <I18n>Try again</I18n>
         </h5>
@@ -32,13 +32,13 @@ const WallyEmptyMessage = ({ filter }) => {
 
   return (
     <div className="empty-state empty-state--wally">
-      <h5>
+      <div className="empty-state__title">
         <I18n>No Assignments</I18n>
-      </h5>
+      </div>
       <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
-      <h6>
+      <div className="empty-state__message">
         <I18n>An empty queue is a happy queue.</I18n>
-      </h6>
+      </div>
     </div>
   );
 };
@@ -46,34 +46,34 @@ const WallyEmptyMessage = ({ filter }) => {
 const WallyErrorMessage = ({ message }) => {
   return (
     <div className="empty-state empty-state--wally">
-      <h5>
+      <div className="empty-state__title">
         <I18n>
           {message === TOO_MANY_STATUS_STRING ? 'Too Many Items' : 'Error'}
         </I18n>
-      </h5>
+      </div>
       <img src={wallyMissingImage} alt="Missing Wally" />
-      <h6>
+      <div className="empty-state__message">
         <I18n>{message}</I18n>
-      </h6>
-      <h5>
+      </div>
+      <div className="empty-state__message">
         <I18n>Try again</I18n>
-      </h5>
+      </div>
     </div>
   );
 };
 
 const WallyBadFilter = ({ message }) => (
   <div className="empty-state empty-state--wally">
-    <h5>
+    <div className="empty-state__title">
       <I18n>Invalid List</I18n>
-    </h5>
+    </div>
     <img src={wallyMissingImage} alt="Missing Wally" />
-    <h6>
+    <div className="empty-state__message">
       <I18n>
         {message ||
           'Invalid list, please choose a valid list from the left side.'}
       </I18n>
-    </h6>
+    </div>
   </div>
 );
 
