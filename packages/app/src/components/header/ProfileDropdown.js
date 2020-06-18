@@ -52,10 +52,9 @@ const ProfileDropdownComponent = ({
       nav
       role="button"
       className="icon-wrapper"
-      // aria-label="Profile Menu"
+      aria-label="Profile Menu"
       style={{ padding: '0 0.75rem' }}
     >
-      <span className="sr-only">Profile Menu</span>
       <Avatar size={24} user={profile} previewable={false} />
     </DropdownToggle>
     <DropdownMenu right className="profile-menu">
