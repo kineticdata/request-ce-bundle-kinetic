@@ -35,7 +35,7 @@ export const FormSettingsWrapper = compose(
   ({ form, error, loading }) =>
     loading || error || !form ? (
       <div className="page-container">
-        <PageTitle parts={[form && form.name, `Forms`]} />
+        <PageTitle parts={[form && form.name, `Forms | Settings`]} />
         <div className="page-panel page-panel--white">
           <div className="page-title">
             <div
@@ -105,6 +105,7 @@ const SettingsCard = ({ path, icon, name, description }) => (
 
 const SettingsNavigationComponent = ({ isSpaceAdmin }) => (
   <div className="page-container">
+    <PageTitle parts={[`Settings`]} />
     <div className="page-panel page-panel--white">
       <div className="page-title">
         <div

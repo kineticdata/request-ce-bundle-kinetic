@@ -146,7 +146,7 @@ export const QueueSettingsComponent = ({ currentKapp, onSave }) => (
   >
     {({ form, initialized }) => (
       <div className="page-container">
-        <PageTitle parts={[`${currentKapp.name} Settings`]} />
+        <PageTitle parts={[`General | Settings | ${currentKapp.name}`]} />
         <div className="page-panel page-panel--white">
           <div className="page-title">
             <div
