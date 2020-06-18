@@ -84,7 +84,7 @@ export const NewItemMenu = ({
 }) => (
   <Modal isOpen={isOpen} toggle={handleClosed} onExit={handleClosed} size="lg">
     <div className="modal-header">
-      <h4 className="modal-title">
+      <div className="modal-title">
         <button type="button" className="btn btn-link" onClick={handleClosed}>
           <I18n>Close</I18n>
         </button>
@@ -98,7 +98,7 @@ export const NewItemMenu = ({
             <I18n>Task</I18n>
           )}
         </span>
-      </h4>
+      </div>
       {currentForm !== null &&
         currentAssignment === null && (
           <FormsBackButton handleFormClick={handleFormClick} />

@@ -28,7 +28,7 @@ export const FilterMenu = ({
 }) => (
   <Modal isOpen={isOpen} toggle={close}>
     <div className="modal-header">
-      <h4 className="modal-title">
+      <div className="modal-title">
         <button type="button" className="btn btn-link" onClick={close}>
           <I18n>Close</I18n>
         </button>
@@ -43,7 +43,7 @@ export const FilterMenu = ({
         >
           <I18n>Reset</I18n>
         </button>
-      </h4>
+      </div>
       {activeSection !== null && (
         <button
           type="button"

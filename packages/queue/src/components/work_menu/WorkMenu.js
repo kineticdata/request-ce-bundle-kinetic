@@ -21,7 +21,7 @@ export const WorkMenu = ({
   queueItem && (
     <Modal isOpen toggle={handleCloseClick} size="lg" backdrop="static">
       <div className="modal-header">
-        <h4 className="modal-title">
+        <div className="modal-title">
           <button
             type="button"
             className="btn btn-link"
@@ -32,7 +32,7 @@ export const WorkMenu = ({
           <span>
             <I18n>{`${mode} It`}</I18n>
           </span>
-        </h4>
+        </div>
       </div>
       <ModalBody>
         <I18n

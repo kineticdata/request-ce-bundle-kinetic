@@ -22,14 +22,14 @@ export const ViewOriginalRequestComponent = ({
       </button>
       <Modal isOpen={isOpen} toggle={toggleOpen} size="lg" backdrop="static">
         <div className="modal-header">
-          <h4 className="modal-title">
+          <div className="modal-title">
             <button type="button" className="btn btn-link" onClick={toggleOpen}>
               <I18n>Close</I18n>
             </button>
             <span>
               <I18n>Original Request</I18n>
             </span>
-          </h4>
+          </div>
         </div>
         <ModalBody>
           <div style={{ margin: '1em' }}>

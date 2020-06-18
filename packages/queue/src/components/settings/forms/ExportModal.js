@@ -8,14 +8,14 @@ import { I18n } from '@kineticdata/react';
 const ExportModalComponent = ({ modalIsOpen, closeModal, form, filter }) => (
   <Modal isOpen={modalIsOpen} toggle={closeModal} size="lg">
     <div className="modal-header">
-      <h4 className="modal-title">
+      <div className="modal-title">
         <button onClick={closeModal} type="button" className="btn btn-link">
           <I18n>Cancel</I18n>
         </button>
         <span>
           <I18n>Export Records</I18n>
         </span>
-      </h4>
+      </div>
     </div>
     <ModalBody className="modal-body--import-export">
       <div style={{ padding: '1.5rem' }}>
