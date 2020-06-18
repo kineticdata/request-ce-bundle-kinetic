@@ -54,29 +54,18 @@ export const FormSubmissionsComponent = ({
       columnSet={['label', 'createdAt', 'submittedBy', 'coreState']}
       defaultSortColumn={'createdAt'}
       alterColumns={{
-        label: {
-          components: { BodyCell: LinkCell },
-          sortable: true,
-        },
+        label: { components: { BodyCell: LinkCell }, sortable: true },
         createdAt: {
           title: 'Created',
           filter: 'between',
           initial: List(['', '']),
-          components: {
-            BodyCell: TimeAgoCell,
-            Filter: BetweenDateFilter,
-          },
+          components: { BodyCell: TimeAgoCell, Filter: BetweenDateFilter },
         },
-        submittedBy: {
-          sortable: true,
-        },
+        submittedBy: { sortable: true },
         coreState: {
           title: 'State',
           sortable: true,
-          components: {
-            BodyCell: CoreStateBadgeCell,
-            Filter: SelectFilter,
-          },
+          components: { BodyCell: CoreStateBadgeCell, Filter: SelectFilter },
         },
         values: {
           filter: 'custom',
@@ -86,9 +75,7 @@ export const FormSubmissionsComponent = ({
             form && form.fields
               ? form.fields.map(({ name }) => ({ value: name, label: name }))
               : [],
-          components: {
-            Filter: ValuesFilter,
-          },
+          components: { Filter: ValuesFilter },
         },
       }}
       tableOptions={{}}
@@ -131,11 +118,11 @@ export const FormSubmissionsComponent = ({
                   value="export"
                   className="btn btn-secondary pull-left"
                 >
-                  <span className="fa fa-fw fa-download" />
+                  <span className="fa fa-fw fa-download" role="presentation" />
                   <I18n> Export Records</I18n>
                 </button>
                 <Link to="settings" className="btn btn-primary">
-                  <span className="fa fa-fw fa-cog" />
+                  <span className="fa fa-fw fa-cog" role="presentation" />
                   <I18n> Form Settings</I18n>
                 </Link>
               </div>
@@ -189,11 +176,8 @@ export const FormSubmissionsComponent = ({
               </div>
             </div>
           </div>
-          <ExportModal
-            form={form}
-            filter={filter}
-            // createSearchQuery={createSearchQuery}
-          />
+          <ExportModal form={form} filter={filter} />
+          // createSearchQuery={createSearchQuery}
         </div>
       )}
     </SubmissionTable>

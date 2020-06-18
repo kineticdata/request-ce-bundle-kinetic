@@ -8,7 +8,7 @@ import { isActiveClass } from '../../utils';
 export const SidebarComponent = ({ spaceAdmin }) => (
   <div className="sidebar">
     <Link to="/kapps/queue" className="nav-return">
-      <span className="fa fa-fw fa-chevron-left" />
+      <span className="fa fa-fw fa-chevron-left" role="presentation" />
       <I18n>Return to Queue</I18n>
     </Link>
     <div className="sidebar-group--content-wrapper">
@@ -17,12 +17,12 @@ export const SidebarComponent = ({ spaceAdmin }) => (
           {spaceAdmin && (
             <Link to="general" className="nav-link" getProps={isActiveClass}>
               <I18n>General</I18n>
-              <span className="fa fa-fw fa-angle-right" />
+              <span className="fa fa-fw fa-angle-right" role="presentation" />
             </Link>
           )}
           <Link to="forms" className="nav-link" getProps={isActiveClass}>
             <I18n>Forms</I18n>
-            <span className="fa fa-fw fa-angle-right" />
+            <span className="fa fa-fw fa-angle-right" role="presentation" />
           </Link>
         </li>
       </ul>

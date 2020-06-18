@@ -33,14 +33,14 @@ export const Sidebar = ({
         <Nav vertical>
           <NavItem>
             <Link to="list/Mine" getProps={isActiveClass('nav-link')}>
-              <span className="fa fa-fw fa-user" />
+              <span className="fa fa-fw fa-user" role="presentation" />
               <I18n>Mine</I18n> {formatCount(counts.get('Mine', 0))}
             </Link>
           </NavItem>
           {hasTeams && (
             <NavItem>
               <Link to="list/Unassigned" getProps={isActiveClass('nav-link')}>
-                <span className="fa fa-fw fa-inbox" />
+                <span className="fa fa-fw fa-inbox" role="presentation" />
                 <I18n>Unassigned</I18n>{' '}
                 {formatCount(counts.get('Unassigned', 0))}
               </Link>
@@ -48,7 +48,7 @@ export const Sidebar = ({
           )}
           <NavItem>
             <Link to="list/Created By Me" getProps={isActiveClass('nav-link')}>
-              <span className="fa fa-fw fa-user-circle-o" />
+              <span className="fa fa-fw fa-user-circle-o" role="presentation" />
               <I18n>Created By Me</I18n>{' '}
               {formatCount(counts.get('Created By Me', 0))}
             </Link>
@@ -67,7 +67,10 @@ export const Sidebar = ({
                   to={`team/${encodeURIComponent(filter.name)}`}
                   getProps={isActiveClass('nav-link')}
                 >
-                  <span className={`fa fa-fw fa-${filter.icon}`} />
+                  <span
+                    className={`fa fa-fw fa-${filter.icon}`}
+                    role="presentation"
+                  />
                   <I18n>{`${filter.name}`}</I18n>
                 </Link>
               </NavItem>
@@ -86,7 +89,7 @@ export const Sidebar = ({
                 to={`custom/${encodeURIComponent(filter.name)}`}
                 getProps={isActiveClass('nav-link')}
               >
-                <span className="fa fa-fw fa-star-o" />
+                <span className="fa fa-fw fa-star-o" role="presentation" />
 
                 {`${filter.name}`}
               </Link>
@@ -95,7 +98,7 @@ export const Sidebar = ({
           {myFilters.size === 0 && (
             <NavItem>
               <i className="nav-link">
-                <span className="fa fa-filled-star" />
+                <span className="fa fa-filled-star" role="presentation" />
                 <I18n>None Configured</I18n>
               </i>
             </NavItem>
@@ -108,7 +111,7 @@ export const Sidebar = ({
         <li>
           <Link to="settings" className="nav-link">
             <I18n>Settings</I18n>
-            <span className="fa fa-fw fa-angle-right" />
+            <span className="fa fa-fw fa-angle-right" role="presentation" />
           </Link>
         </li>
       </ul>

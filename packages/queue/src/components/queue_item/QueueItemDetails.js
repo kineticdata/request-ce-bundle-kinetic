@@ -72,6 +72,7 @@ export const QueueItemDetails = ({
               <span
                 className="fa fa-fw fa-comments"
                 style={{ fontSize: '16px' }}
+                role="presentation"
               />
               <I18n>Open Discussions</I18n>
             </button>

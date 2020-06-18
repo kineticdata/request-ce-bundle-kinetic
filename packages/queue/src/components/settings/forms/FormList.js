@@ -43,13 +43,13 @@ const ActionsCell = ({ deleteForm, toggleModal, processing }) => ({
   <td className="text-right" style={{ width: '1%' }}>
     {processing.has(row.get('slug')) ? (
       <button type="button" className="btn btn-sm btn-link" disabled="disabled">
-        <span className="fa fa-spinner fa-spin fa-fw" />
+        <span className="fa fa-spinner fa-spin fa-fw" role="presentation" />
       </button>
     ) : (
       <UncontrolledDropdown className="more-actions">
         <DropdownToggle tag="button" className="btn btn-sm btn-link">
           <span className="sr-only">More Actions</span>
-          <span className="fa fa-chevron-down fa-fw" />
+          <span className="fa fa-chevron-down fa-fw" role="presentation" />
         </DropdownToggle>
         <DropdownMenu right>
           <Link to={`${row.get('slug')}/settings`} className="dropdown-item">
@@ -131,7 +131,10 @@ const FormButtons = props => (
     onClick={props.submit}
   >
     {props.submitting && (
-      <span className="fa fa-circle-o-notch fa-spin fa-fw" />
+      <span
+        className="fa fa-circle-o-notch fa-spin fa-fw"
+        role="presentation"
+      />
     )}{' '}
     <I18n>Create Form</I18n>
   </button>
@@ -268,7 +271,10 @@ export const FormListComponent = ({
                         title={translate('New Form')}
                         onClick={() => toggleModal(true)}
                       >
-                        <span className="fa fa-plus fa-fw" />{' '}
+                        <span
+                          className="fa fa-plus fa-fw"
+                          role="presentation"
+                        />{' '}
                         {translate('New Form')}
                       </button>
                     )}
@@ -285,7 +291,7 @@ export const FormListComponent = ({
             {/* Modal for creating a new form */}
             <Modal isOpen={!!modalOpen} toggle={() => toggleModal()} size="lg">
               <div className="modal-header">
-                <h4 className="modal-title">
+                <div className="modal-title">
                   <button
                     type="button"
                     className="btn btn-link btn-delete"
@@ -296,7 +302,7 @@ export const FormListComponent = ({
                   <span>
                     <I18n>New Form</I18n>
                   </span>
-                </h4>
+                </div>
               </div>
               <FormForm
                 kappSlug={kapp.slug}

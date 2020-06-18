@@ -31,15 +31,17 @@ const PrevAndNextGroup = ({ prevAndNext }) => (
       to={`../${prevAndNext.prev}`}
       className="btn btn-inverse"
       disabled={!prevAndNext.prev}
+      aria-label="Previous Queue Item"
     >
-      <span className="fa fa-fw fa-caret-left" />
+      <span className="fa fa-fw fa-caret-left" role="presentation" />
     </Link>
     <Link
       to={`../${prevAndNext.next}`}
       className="btn btn-inverse"
       disabled={!prevAndNext.next}
+      aria-label="Next Queue Item"
     >
-      <span className="fa fa-fw fa-caret-right" />
+      <span className="fa fa-fw fa-caret-right" role="presentation" />
     </Link>
   </ButtonGroup>
 );
@@ -57,24 +59,12 @@ export const StatusContent = ({ queueItem, prevAndNext }) => (
           : 'status-content'
       }
     >
-      <span
-        className={getStatusClass(queueItem.values.Status)}
-        id={getStatusId(queueItem)}
-      >
+      <span className={getStatusClass(queueItem.values.Status)}>
         <I18n>{queueItem.values.Status}</I18n>
-        {queueItem.values.Status !== 'Open' && (
-          <UncontrolledTooltip
-            placement="top"
-            target={getStatusId(queueItem)}
-            delay={0}
-          >
-            {sizeString(getStatusReason(queueItem))}
-          </UncontrolledTooltip>
-        )}
       </span>
     </div>
     {prevAndNext && (
-      <span className="submission-status--reason" id={getStatusId(queueItem)}>
+      <span className="submission-status--reason">
         {getStatusReason(queueItem)}
       </span>
     )}
