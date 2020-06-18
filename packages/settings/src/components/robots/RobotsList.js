@@ -42,7 +42,7 @@ const WallyEmptyMessage = () => {
       <div className="empty-state__title">
         <I18n>No Robots Found</I18n>
       </div>
-      <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
+      <img src={wallyHappyImage} alt="Happy Wally" />
     </div>
   );
 };

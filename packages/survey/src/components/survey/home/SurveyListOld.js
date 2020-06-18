@@ -14,7 +14,7 @@ const WallyEmptyMessage = () => {
       <div className="empty-state__title">
         <I18n>No Surveys Found</I18n>
       </div>
-      <img src={wallyHappyImage} alt="Happy Wally" role="presentation" />
+      <img src={wallyHappyImage} alt="Happy Wally" />
       <div className="empty-state__message">
         <I18n>
           Surveys are Kapp Forms with additional configuration attributes.
