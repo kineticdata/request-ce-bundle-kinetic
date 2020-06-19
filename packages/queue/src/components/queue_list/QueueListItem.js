@@ -72,7 +72,7 @@ export const QueueListItemSmall = ({ queueItem, filter, path }) => {
           )}
         </div>
 
-        <h6 className="submission__title">{queueItem.label}</h6>
+        <div className="submission__title">{queueItem.label}</div>
         <ul className="submission__timestamps list-group">
           <DueOrCloseDate queueItem={queueItem} />
           <Timestamp

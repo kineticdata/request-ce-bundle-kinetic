@@ -82,9 +82,9 @@ const ClearButton = props => {
         id={props.id}
         className={`btn btn-subtle ${disabled ? 'disabled' : ''}`}
         onClick={!disabled ? props.action : undefined}
+        aria-label="Clear Filter"
       >
-        <span className="sr-only">Disable</span>
-        <i className="fa fa-times" />
+        <i className="fa fa-times" aria-hidden="true" />
       </button>
       {disabled && (
         <UncontrolledTooltip placement="right" target={props.id}>
@@ -102,8 +102,9 @@ const SortButton = props => {
       type="button"
       className="btn btn-link icon-wrapper"
       onClick={props.toggle}
+      aria-label={`Sort by ${icon}`}
     >
-      <span className="icon">
+      <span className="icon" aria-hidden="true">
         <span
           className={`fa fa-fw fa-sort-amount-${icon}`}
           style={{ fontSize: '16px', color: '#7e8083' }}
@@ -284,6 +285,7 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                 type="button"
                 className="btn btn-link icon-wrapper"
                 onClick={refresh}
+                aria-label="Refresh"
               >
                 <span className="icon">
                   <span

@@ -20,13 +20,12 @@ const SortButton = props => {
       type="button"
       className="btn btn-link icon-wrapper"
       onClick={props.toggle}
-      aria-label="sort"
+      aria-label={`Sort by ${icon}`}
     >
-      <span className="icon">
+      <span className="icon" aria-hidden={true}>
         <span
           className={`fa fa-fw fa-sort-amount-${icon}`}
           style={{ fontSize: '16px', color: '#7e8083' }}
-          role="presentation"
         />
       </span>
     </button>
@@ -46,11 +45,10 @@ export const FilterMenuMobile = ({ filter, ...props }) => (
             onClick={props.refresh}
             aria-label="Refresh"
           >
-            <span className="icon">
+            <span className="icon" aria-hidden="true">
               <span
                 className="fa fa-fw fa-refresh"
                 style={{ fontSize: '16px', color: '#7e8083' }}
-                role="presentation"
               />
             </span>
           </button>
@@ -63,7 +61,7 @@ export const FilterMenuMobile = ({ filter, ...props }) => (
             <span
               className={`fa fa-fw fa-sliders`}
               style={{ fontSize: '16px', color: '#7e8083' }}
-              role="presentation"
+              aria-hidden="true"
             />
           </button>
         </div>

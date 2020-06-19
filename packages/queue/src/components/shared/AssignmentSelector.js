@@ -80,9 +80,9 @@ export class AssignmentSelector extends Component {
       <div key="menu">
         {Object.keys(byTeams).map(t => (
           <div key={t}>
-            <h5 className="select-combobox__title">
+            <span className="select-combobox__title">
               <I18n>{t}</I18n>
-            </h5>
+            </span>
             {byTeams[t]}
           </div>
         ))}
@@ -115,6 +115,10 @@ export class AssignmentSelector extends Component {
             onChange={this.handleChange}
             onSelect={this.handleSelect}
             onMenuVisibilityChange={this.handleMenuVisible}
+            inputProps={{
+              'aria-label': 'Select Assignment',
+              'aria-haspopup': 'true',
+            }}
           />
         </div>
       </div>
