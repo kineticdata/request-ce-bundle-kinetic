@@ -131,6 +131,7 @@ export function* fetchCalendarEventsSaga({ payload }) {
         }, {});
       source = source.remove('parameterFieldNames');
     }
+    console.log(values);
     acc[key] = call(fetchBridgedResource, {
       ...source.toJS(),
       values,
