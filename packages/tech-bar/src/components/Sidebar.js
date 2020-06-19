@@ -46,12 +46,12 @@ export const SidebarComponent = ({
         </Nav>
       </div>
       <div className="sidebar-group sidebar-group--tech-bars">
-        <h1>
+        <div className="sidebar-group__label">
           <I18n>Tech Bars</I18n>
           <Link to="tech-bars" className="view-all">
             <I18n>View All</I18n>
           </Link>
-        </h1>
+        </div>
         <Nav vertical>
           {techBars.map(techBar => (
             <NavItem key={techBar.id}>

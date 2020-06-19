@@ -40,7 +40,8 @@
     list-style: none;
     z-index: 0;
     // Group Title
-    h1 {
+    h1,
+    &__label {
       color: $blue-lake;
       display: flex;
       align-items: center;

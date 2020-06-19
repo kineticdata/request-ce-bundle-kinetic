@@ -28,7 +28,7 @@ export const SidebarComponent = ({
       {!loading && (
         <Fragment>
           <div className="sidebar-group">
-            <h1>Space Settings</h1>
+            <div className="sidebar-group__label">Space Settings</div>
             <ul className="nav flex-column">
               <li className="nav-item">
                 {spaceAdmin && (

@@ -12,7 +12,7 @@ export const Sidebar = () => (
           alt="Kinops - streamline everyday work for teams"
           style={{ width: '120px', margin: '0 1.5rem ' }}
         />
-        <h1>Kinetic system</h1>
+        <div className="sidebar-group__label">Kinetic system</div>
         <ul className="nav flex-column">
           <li className="nav-item">
             <Link to="/" className="nav-link">
@@ -20,7 +20,7 @@ export const Sidebar = () => (
             </Link>
           </li>
         </ul>
-        <h1>Styles</h1>
+        <div className="sidebar-group__label">Styles</div>
         <ul className="nav flex-column">
           <li className="nav-item">
             <Link to="/breadcrumbs" className="nav-link">

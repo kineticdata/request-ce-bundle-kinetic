@@ -15,10 +15,10 @@ export const Sidebar = ({
   hasTeams,
   hasForms,
 }) => (
-  <div className="sidebar sidebar-queue">
+  <div className="sidebar sidebar--queue">
     <div className="sidebar-group--content-wrapper">
       {hasForms && (
-        <div className="sidebar-group sidebar-new-task">
+        <div className="sidebar-group sidebar-group--action">
           <button
             type="button"
             className="btn btn-secondary btn-sidebar-action"
@@ -28,8 +28,8 @@ export const Sidebar = ({
           </button>
         </div>
       )}
-      <div className="sidebar-group sidebar-default-filters">
-        <h1>Default Filters</h1>
+      <div className="sidebar-group sidebar-group--filters">
+        <div className="sidebar-group__label">Default Filters</div>
         <Nav vertical>
           <NavItem>
             <Link to="list/Mine" getProps={isActiveClass('nav-link')}>
@@ -56,10 +56,10 @@ export const Sidebar = ({
         </Nav>
       </div>
       {hasTeams && (
-        <div className="sidebar-group sidebar-team-filters">
-          <h1>
+        <div className="sidebar-group sidebar-group--filters">
+          <div className="sidebar-group__label">
             <I18n>Team Filters</I18n>
-          </h1>
+          </div>
           <Nav vertical>
             {teamFilters.map(filter => (
               <NavItem key={filter.name}>
@@ -78,10 +78,10 @@ export const Sidebar = ({
           </Nav>
         </div>
       )}
-      <div className="sidebar-group sidebar-my-filters">
-        <h1>
+      <div className="sidebar-group sidebar-group--filters">
+        <div className="sidebar-group__label">
           <I18n>My Filters</I18n>
-        </h1>
+        </div>
         <Nav vertical>
           {myFilters.map(filter => (
             <NavItem key={filter.name}>
@@ -97,10 +97,12 @@ export const Sidebar = ({
           ))}
           {myFilters.size === 0 && (
             <NavItem>
-              <i className="nav-link">
+              <span className="nav-link">
                 <span className="fa fa-filled-star" role="presentation" />
-                <I18n>None Configured</I18n>
-              </i>
+                <em>
+                  <I18n>None Configured</I18n>
+                </em>
+              </span>
             </NavItem>
           )}
         </Nav>

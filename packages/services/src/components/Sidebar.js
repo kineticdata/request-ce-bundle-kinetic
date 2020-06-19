@@ -14,10 +14,10 @@ const itemLink = (mode, slug) =>
 export const Sidebar = props => (
   <div className="sidebar services-sidebar">
     <div className="sidebar-group--content-wrapper">
-      <div className="sidebar-group sidebar-my-requests">
-        <h1>
+      <div className="sidebar-group sidebar-group--my-requests">
+        <div className="sidebar-group__label">
           <I18n>My Requests</I18n>
-        </h1>
+        </div>
         <Nav vertical>
           <NavItem>
             <Link to="requests" getProps={isActiveClass('nav-link')}>
@@ -45,15 +45,15 @@ export const Sidebar = props => (
           </NavItem>
         </Nav>
       </div>
-      <div className="sidebar-group sidebar-home-page-item">
-        <h1>
+      <div className="sidebar-group sidebar-group--homePage">
+        <div className="sidebar-group__label">
           <I18n>{props.homePageMode}</I18n>
           <Link
             to={props.homePageMode === 'Categories' ? 'categories' : 'forms'}
           >
             <I18n>View All</I18n>
           </Link>
-        </h1>
+        </div>
         <Nav vertical>
           {props.homePageItems.map(item => (
             <NavItem key={item.slug}>
