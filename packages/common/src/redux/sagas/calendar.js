@@ -11,6 +11,8 @@ import axios from 'axios';
 import { actions, types } from '../modules/calendar';
 import {
   getDateRange,
+  getStartDate,
+  getEndDate,
   buildFilterActions,
   updateEvents,
   updateFilterActions,
@@ -112,15 +114,20 @@ export function* fetchCalendarEventsSaga({ payload }) {
     let source = eventType.get('source');
     let values = {};
     if (source.has('parameterFieldNames')) {
-      0;
       values = source
         .get('parameterFieldNames')
         .reduce((acc, fieldName, key) => {
           let propertyName = fieldName.trim().length > 0 ? fieldName : key;
-          if (key === 'Date Range') {
-            acc = { ...getDateRange(propertyName, payload.date), ...acc };
-          }
-          return acc;
+          switch(key) {
+            case 'Date Range':
+              return { ...getDateRange(propertyName, payload.date), ...acc };
+            case 'Start Date':
+              return { ...getStartDate(propertyName, payload.date), ...acc };
+            case 'End Date':
+              return { ...getEndDate(propertyName, payload.date), ...acc };
+            default:
+              return acc; 
+          } 
         }, {});
       source = source.remove('parameterFieldNames');
     }

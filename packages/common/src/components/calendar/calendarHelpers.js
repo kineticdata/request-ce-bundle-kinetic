@@ -178,4 +178,10 @@ export const getDateRange = (fieldName, date) => {
   return { [fieldName]: `(${dates.map(date => `"${date}"`).join(',')})` };
 };
 
-// TODO: start and end date functions
+export const getStartDate = (fieldName, date) => {
+  return { [fieldName]: moment(date).startOf('month').format('MM/DD/YYYY') };
+};
+
+export const getEndDate = (fieldName, date) => {
+  return { [fieldName]: moment(date).endOf('month').format('MM/DD/YYYY') };
+}
