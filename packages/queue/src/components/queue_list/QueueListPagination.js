@@ -11,8 +11,9 @@ export const QueueListPagination = ({ filter, paginationProps }) => {
             className="btn btn-link icon-wrapper"
             disabled={!paginationProps.hasPrevPage}
             onClick={paginationProps.gotoPrevPage}
+            aria-label="Previous Page"
           >
-            <span className="icon">
+            <span className="icon" aria-hidden="true">
               <span className="fa fa-fw fa-caret-left" />
             </span>
           </button>
@@ -28,8 +29,9 @@ export const QueueListPagination = ({ filter, paginationProps }) => {
             className="btn btn-link icon-wrapper"
             disabled={!paginationProps.hasNextPage}
             onClick={paginationProps.gotoNextPage}
+            aria-label="Next Page"
           >
-            <span className="icon">
+            <span className="icon" aria-hidden="true">
               <span className="fa fa-fw fa-caret-right" />
             </span>
           </button>
