@@ -113,25 +113,24 @@ export function* fetchCalendarEventsSaga({ payload }) {
   const sources = payload.eventTypes.reduce((acc, eventType, key) => {
     let source = eventType.get('source');
     let values = {};
-    if (source.has('parameterFieldNames')) {
+    if (source.has('parameters')) {
       values = source
-        .get('parameterFieldNames')
-        .reduce((acc, fieldName, key) => {
-          let propertyName = fieldName.trim().length > 0 ? fieldName : key;
+        .get('parameters')
+        .reduce((acc, fieldObj, key) => {
+
           switch(key) {
             case 'Date Range':
-              return { ...getDateRange(propertyName, payload.date), ...acc };
+              return { ...getDateRange(fieldObj, payload.date), ...acc };
             case 'Start Date':
-              return { ...getStartDate(propertyName, payload.date), ...acc };
+              return { ...getStartDate(fieldObj, payload.date), ...acc };
             case 'End Date':
-              return { ...getEndDate(propertyName, payload.date), ...acc };
+              return { ...getEndDate(fieldObj, payload.date), ...acc };
             default:
               return acc; 
           } 
         }, {});
-      source = source.remove('parameterFieldNames');
+      source = source.remove('parameters');
     }
-    console.log(values);
     acc[key] = call(fetchBridgedResource, {
       ...source.toJS(),
       values,
