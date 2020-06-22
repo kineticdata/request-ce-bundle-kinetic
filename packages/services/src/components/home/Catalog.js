@@ -10,6 +10,7 @@ import { getSubmissionPath } from '../../utils';
 import { I18n } from '@kineticdata/react';
 
 export const Catalog = ({
+  navigate,
   kapp,
   forms,
   submissions,
@@ -31,7 +32,9 @@ export const Catalog = ({
                   <I18n>Welcome, how can we help?</I18n>
                 </h1>
                 <div className="search-box">
-                  <CatalogSearchContainer />
+                  <CatalogSearchContainer
+                    onSearch={q => navigate(`search/${q}`)}
+                  />
                 </div>
               </div>
             </div>

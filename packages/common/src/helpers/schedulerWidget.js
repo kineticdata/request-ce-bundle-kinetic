@@ -162,28 +162,35 @@ export const createScheduledEventAction = values =>
     include: 'details,values',
   });
 
-const handleErrors = error => {
+export const handleErrors = error => {
+  const types = {
+    400: 'badRequest',
+    401: 'unauthorized',
+    403: 'forbidden',
+    404: 'notFound',
+    405: 'methodNotAllowed',
+  };
+
+  // handle a javascript runtime exception by re-throwing it, this is in case we
+  // make a mistake in a `then` block in one of our api functions.
   if (error instanceof Error && !error.response) {
-    // When the error is an Error object an exception was thrown in the process.
-    // so we'll just 'convert' it to a 400 error to be handled downstream.
-    return { serverError: { status: 400, statusText: error.message } };
+    throw error;
   }
 
   // Destructure out the information needed.
-  const { data, status, statusText } = error.response;
-  if (status === 400 && typeof data === 'object') {
-    // If the errors returned are from server-side validations or constraints.
-    if (data.errors) {
-      return { errors: data.errors };
-    } else if (data.error) {
-      return { errors: [data.error], ...data };
-    } else {
-      return data;
-    }
+  const { data = {}, status: statusCode, statusText } = error.response;
+  const { error: errorMessage, errorKey: key = null, message, ...rest } = data;
+  const type = types[statusCode];
+  const result = {
+    ...rest,
+    message: errorMessage || message || statusText,
+    key,
+    statusCode,
+  };
+  if (type) {
+    result[type] = true;
   }
-
-  // For all other server-side errors.
-  return { serverError: { status, statusText, error: data && data.error } };
+  return { error: result };
 };
 
 const paramBuilder = options => {

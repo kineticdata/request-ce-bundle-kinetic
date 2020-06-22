@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { compose, withHandlers, withState } from 'recompose';
 import { connect } from '../../redux/store';
 import { actions } from '../../redux/modules/settingsUsers';
-import { Link } from 'react-router-dom';
+import { Link } from '@reach/router';
 import { UserTable, UserForm, fetchUser, I18n } from '@kineticdata/react';
 import { generateEmptyBodyRow } from 'common/src/components/tables/EmptyBodyRow';
 import { generateFilterModalLayout } from 'common/src/components/tables/FilterLayout';
@@ -168,7 +168,7 @@ const CloneErrorFormLayout = () => (
 
 const NameCell = ({ value, row }) => (
   <td>
-    <Link to={`/settings/users/${row.get('username')}`} title="Edit User">
+    <Link to={row.get('username')} title="Edit User">
       {value}
     </Link>
   </td>
@@ -185,10 +185,7 @@ const ActionsCell = ({ toggleModal }) => ({ row }) => (
         <Link to={`/profile/${row.get('username')}`} className="dropdown-item">
           <I18n>View</I18n>
         </Link>
-        <Link
-          to={`/settings/users/${row.get('username')}`}
-          className="dropdown-item"
-        >
+        <Link to={row.get('username')} className="dropdown-item">
           <I18n>Edit</I18n>
         </Link>
         <DropdownItem onClick={() => toggleModal(row.get('username'))}>
@@ -256,7 +253,7 @@ export const UsersListComponent = ({
               className="page-title__breadcrumbs"
             >
               <span className="breadcrumb-item">
-                <Link to="../settings">
+                <Link to="..">
                   <I18n>settings</I18n>
                 </Link>
               </span>{' '}

@@ -21,14 +21,14 @@ import {
 } from '../modules/settingsForms';
 
 export function* fetchFormSaga(action) {
-  const { serverError, form } = yield call(fetchForm, {
+  const { error, form } = yield call(fetchForm, {
     kappSlug: action.payload.kappSlug,
     formSlug: action.payload.formSlug,
     include: FORM_INCLUDES,
   });
 
-  if (serverError) {
-    yield put(actions.setFormsError(serverError));
+  if (error) {
+    yield put(actions.setFormsError(error));
   } else {
     yield put(actions.setForm(form));
   }
@@ -100,13 +100,14 @@ export function* fetchFormSubmissionsSaga(action) {
   searchBuilder.end();
   const search = searchBuilder.build();
 
-  const { submissions, nextPageToken, serverError } = yield call(
-    searchSubmissions,
-    { search, kapp: kappSlug, form: formSlug },
-  );
+  const { submissions, nextPageToken, error } = yield call(searchSubmissions, {
+    search,
+    kapp: kappSlug,
+    form: formSlug,
+  });
 
-  if (serverError) {
-    yield put(actions.setFormsError(serverError));
+  if (error) {
+    yield put(actions.setFormsError(error));
   } else {
     yield put(actions.setFormSubmissions({ submissions, nextPageToken }));
   }
@@ -114,25 +115,25 @@ export function* fetchFormSubmissionsSaga(action) {
 
 export function* fetchFormSubmissionSaga(action) {
   const id = action.payload.id;
-  const { submission, serverError } = yield call(fetchSubmission, {
+  const { submission, error } = yield call(fetchSubmission, {
     id,
     include: SUBMISSION_INCLUDES,
   });
-  if (serverError) {
-    yield put(actions.setFormsError(serverError));
+  if (error) {
+    yield put(actions.setFormsError(error));
   } else {
     yield put(actions.setFormSubmission(submission));
   }
 }
 
 export function* fetchKappSaga(action) {
-  const { serverError, kapp } = yield call(fetchKapp, {
+  const { error, kapp } = yield call(fetchKapp, {
     kappSlug: action.payload,
     include: 'formTypes, categories, formAttributeDefinitions',
   });
 
-  if (serverError) {
-    yield put(actions.setFormsError(serverError));
+  if (error) {
+    yield put(actions.setFormsError(error));
   } else {
     const me = yield select(state => state.app.profile);
     if (
@@ -197,13 +198,13 @@ export function* updateFormSaga(action) {
     description: currentFormChanges.description,
     categorizations: currentFormChanges.categories,
   };
-  const { serverError } = yield call(updateForm, {
+  const { error } = yield call(updateForm, {
     kappSlug: action.payload.kappSlug,
     formSlug: currentForm.slug,
     form: formContent,
     include: FORM_INCLUDES,
   });
-  if (!serverError) {
+  if (!error) {
     yield put(
       addSuccess('The form was successfully updated.', 'Update Successful'),
     );
@@ -222,28 +223,28 @@ export function* fetchNotificationsSaga() {
     .includes(['details', 'values'])
     .build();
 
-  const { serverError, submissions } = yield call(searchSubmissions, {
+  const { error, submissions } = yield call(searchSubmissions, {
     search,
     form: 'notification-data',
     datastore: true,
   });
 
-  if (serverError) {
-    yield put(actions.setFormsError(serverError));
+  if (error) {
+    yield put(actions.setFormsError(error));
   } else {
     yield put(actions.setNotifications(submissions));
   }
 }
 
 export function* createFormSaga(action) {
-  const { serverError, form } = yield call(fetchForm, {
+  const { error, form } = yield call(fetchForm, {
     kappSlug: action.payload.kappSlug,
     formSlug: action.payload.inputs['Template to Clone'],
     include: FORM_FULL_INCLUDES,
   });
 
-  if (serverError) {
-    yield put(actions.setFormsError(serverError));
+  if (error) {
+    yield put(actions.setFormsError(error));
   }
 
   const formContent = {
@@ -264,10 +265,8 @@ export function* createFormSaga(action) {
     form: formContent,
     include: FORM_FULL_INCLUDES,
   });
-  if (createdForm.serverError || createdForm.error) {
-    yield put(
-      addError(createdForm.error || createdForm.serverError.statusText),
-    );
+  if (createdForm.error) {
+    yield put(addError(createdForm.error.message));
   } else {
     if (typeof action.payload.callback === 'function') {
       action.payload.callback(createdForm.form.slug);
@@ -305,7 +304,7 @@ export function* fetchAllSubmissionsSaga(action) {
     searcher.pageToken(pageToken);
   }
 
-  const { submissions, nextPageToken = null, serverError } = yield call(
+  const { submissions, nextPageToken = null, error } = yield call(
     searchSubmissions,
     {
       search: searcher.build(),
@@ -329,9 +328,9 @@ export function* fetchAllSubmissionsSaga(action) {
   if (nextPageToken) {
     yield call(fetchAllSubmissionsSaga, action);
   } else {
-    if (serverError) {
+    if (error) {
       // What should we do?
-      console.log(serverError);
+      console.log(error);
     } else {
       yield put(actions.setExportSubmissions(action.payload.accumulator));
     }

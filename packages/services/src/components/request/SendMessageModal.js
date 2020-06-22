@@ -1,7 +1,6 @@
 import React from 'react';
 import { Modal, ModalFooter } from 'reactstrap';
 import { compose, lifecycle, withHandlers, withState } from 'recompose';
-import { push } from 'connected-react-router';
 import { actions } from '../../redux/modules/submission';
 import { connect } from '../../redux/store';
 
@@ -59,7 +58,6 @@ const mapStateToProps = state => ({
 export const mapDispatchToProps = {
   setModalOpen: actions.setSendMessageModalOpen,
   sendMessage: actions.sendMessageRequest,
-  push,
 };
 
 const close = props => () => props.setModalOpen({ isOpen: false });

@@ -41,7 +41,12 @@ const enhance = compose(
     };
   }),
   withHandlers({
-    handleClick: props => () => props.cloneSubmission(props.submission.id),
+    handleClick: props => () =>
+      props.cloneSubmission({
+        id: props.submission.id,
+        success: clonedSubmission =>
+          props.navigate(`../../../../Draft/request/${clonedSubmission.id}`),
+      }),
   }),
 );
 
