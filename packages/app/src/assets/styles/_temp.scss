@@ -13,6 +13,11 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *   Focus
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+a:focus {
+    outline: none;
+    box-shadow: 0 0 1px 4px rgba($orange-kinops, .25);
+}
+ 
 form{
   [type=text]:focus,
   [type=password]:focus,
@@ -25,6 +30,7 @@ form{
   [type=file]:focus,
   [type=search]:focus,
   [type=submit]:focus,
+  .btn:focus,
   button:focus,
   textarea:focus,
   select:focus,
@@ -39,9 +45,30 @@ form{
   }
 }
 
-a:focus,
+
+
+[type=text]:focus,
+[type=password]:focus,
+[type=number]:focus,
+[type=tel]:focus,
+[type=email]:focus,
+[type=date]:focus,
+[type=radio]:focus,
+[type=checkbox]:focus,
+[type=file]:focus,
+[type=search]:focus,
+[type=submit]:focus,
 .btn:focus,
-button:focus {
-    outline: none;
-    box-shadow: 0 0 1px 4px rgba($orange-kinops, .25);
+button:focus,
+textarea:focus,
+select:focus,
+// Kinetic button types
+[data-button-type='submit-page']:focus,
+[data-button-type='save']:focus,
+[data-button-type='custom']:focus,
+[data-button-type='previous-page']:focus,
+.fileinput-button:focus {
+  outline: none;
+  box-shadow: 0 0 1px 4px rgba($orange-kinops, .25);
 }
+

@@ -27,8 +27,8 @@
   color: $gray80;
   // display: block;
   &--cancelled {
-    color: $red;
-    background-color: rgba($red, 0.2);
+    color: darken($red, 18);
+    background-color: rgba($red, 0.1);
   }
   &--complete {
     color: darken($blue, 11);
