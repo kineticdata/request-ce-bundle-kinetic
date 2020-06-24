@@ -57,7 +57,7 @@
         line-height: 1.5;
         width: 100%;
         .source {
-          color: $orange-kinops;
+          color: darken($orange-kinops, 14);
           font-weight: bold;
           margin-right: 0.25rem;
         }
@@ -67,7 +67,7 @@
 
         margin: 0.25rem 0;
         line-height: 1.5;
-        color: $gray50;
+        color: $gray60;
         a {
           text-decoration: underline;
         }

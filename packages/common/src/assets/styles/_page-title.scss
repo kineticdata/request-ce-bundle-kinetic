@@ -25,14 +25,14 @@
 
   .breadcrumb-item {
     display: inline-block;
-    color: $orange-kinops;
+    color: darken($orange-kinops, 14);
     font-size: 0.9375rem;
     font-weight: 700;
     letter-spacing: 1px;
     line-height: 1.5rem;
     + span,
     a {
-      color: $orange-kinops;
+      color: darken($orange-kinops, 15.5);
       font-size: 0.9375rem;
       font-weight: 700;
       letter-spacing: 1px;

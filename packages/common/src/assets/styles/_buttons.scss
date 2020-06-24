@@ -28,7 +28,6 @@ input[type='button'],
   -ms-user-select: none;
   user-select: none;
   &:hover,
-  &:focus,
   &:active {
     text-decoration: none;
     outline: none;
@@ -70,7 +69,6 @@ input[type='button'],
   @include setButtonColorAndHover(transparent);
   color: $link-color;
   &:hover,
-  &:focus,
   &:active {
     color: tint($link-color, 10%);
     text-decoration: none;
@@ -87,7 +85,6 @@ input[type='button'],
   @include setButtonColorAndHover(transparent);
   color: $link-color;
   &:hover,
-  &:focus,
   &:active {
     color: tint($link-color, 10%);
     text-decoration: none;
@@ -101,7 +98,6 @@ input[type='button'],
   color: $gray80;
 
   &:hover,
-  &:focus,
   &:active {
     color: $link-color;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
@@ -148,7 +144,6 @@ input[type='button'],
   border-color: $primary;
   color: $primary;
   &:not(:disabled):not(.disabled):hover,
-  &:not(:disabled):not(.disabled):focus,
   &:not(:disabled):not(.disabled):active {
     background-color: $primary;
     border-color: $primary;
@@ -161,7 +156,6 @@ input[type='button'],
   border-color: $secondary;
   color: $secondary;
   &:not(:disabled):not(.disabled):hover,
-  &:not(:disabled):not(.disabled):focus,
   &:not(:disabled):not(.disabled):active {
     background-color: $secondary;
     border-color: $secondary;
