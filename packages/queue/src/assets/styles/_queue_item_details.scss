@@ -21,15 +21,18 @@
         line-height: 1.5rem;
         padding: 0;
         .label {
-          color: rgba($gray80, 0.5);
+          color: $gray60;
         }
         .value {
           color: $blue-lake;
           margin-left: 0.25rem;
+          &:hover{
+            text-decoration: underline;
+          }
         }
         &:not(:last-child):after {
           content: '\2022';
-          color: rgba(52, 52, 52, 0.25);
+          color: $gray50;
           margin: 0 0.3125rem;
         }
       }
@@ -109,7 +112,7 @@
       }
 
       &__message {
-        color: $blue-gray;
+        color: $gray60;
         font-size: 0.875rem;
         line-height: 1.5rem;
         margin-top: 1.5rem;

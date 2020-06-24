@@ -80,9 +80,7 @@ export const QueueItemDetails = ({
         <div className="submission__meta">
           <StatusContent queueItem={queueItem} prevAndNext={prevAndNext} />
         </div>
-        <div className="section--general__title">
-          {queueItem.values.Summary}
-        </div>
+        <h1 className="section--general__title">{queueItem.values.Summary}</h1>
         <ul className="list-group timestamps">
           <li className="list-group-item timestamp">
             <span className="label">
@@ -92,9 +90,9 @@ export const QueueItemDetails = ({
                 }`}
               >
                 {queueItem.form.name}
-              </I18n>{' '}
-              ({queueItem.handle})
-            </span>
+              </I18n>
+            </span>{' '}
+            <span className="value">({queueItem.handle})</span>
           </li>
           <li className="list-group-item timestamp">
             <span className="label">
@@ -170,7 +168,7 @@ export const QueueItemDetails = ({
                 onClick={openNewItemMenu}
                 aria-label="Create new subtask"
               >
-                <span className="fa fa-plus" />
+                <span className="fa fa-plus" aria-hidden="true" />
               </button>
             )}
           </h2>

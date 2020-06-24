@@ -26,6 +26,10 @@
     &.btn-sidebar-action {
       margin: 0.75rem 1.5rem;
       width: 80%;
+      color: $gray90;
+      &:hover{
+        color: $white;
+      }
     }
   }
   // Grouping of related links
@@ -56,7 +60,7 @@
         line-height: normal;
         margin-left: auto;
         text-transform: none;
-        color: $gray50;
+        color: $gray60;
         &:hover {
           color: $blue-lake;
         }
@@ -72,7 +76,7 @@
     }
     .nav-link {
       border-left: 3px solid $gray3;
-      color: $gray50;
+      color: $gray60;
       line-height: normal;
       display: flex;
       align-items: center;

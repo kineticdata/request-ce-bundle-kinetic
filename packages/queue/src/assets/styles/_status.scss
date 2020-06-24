@@ -15,6 +15,7 @@
   display: flex;
   align-items: center;
 }
+
 .submission-status {
   font-weight: 600;
   font-size: 0.75rem;
@@ -23,25 +24,26 @@
   line-height: 1.0625rem;
   padding: 0.125rem 0.625rem;
   border-radius: 1rem;
+  color: $gray80;
   // display: block;
   &--cancelled {
     color: $red;
     background-color: rgba($red, 0.2);
   }
   &--complete {
-    color: $blue;
+    color: darken($blue, 11);
     background-color: rgba($blue, 0.2);
   }
   &--open {
-    color: $green-teal;
+    color: darken($green-teal, 18);
     background-color: rgba($green-teal, 0.2);
   }
   &--pending {
-    color: $orange;
+    color: darken($orange, 24);
     background-color: rgba($orange, 0.2);
   }
   &--reason {
-    color: $blue-sky;
+    color: darken($blue-sky, 12);
     font-size: 0.875rem;
     margin-left: 6px;
     overflow: hidden;

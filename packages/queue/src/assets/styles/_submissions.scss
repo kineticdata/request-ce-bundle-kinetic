@@ -34,7 +34,7 @@
       font-size: 0.875rem;
       line-height: 1.3125rem;
       margin-bottom: 0;
-      color: rgba($gray80, 0.5);
+      color: $gray60;
       display: flex;
       align-items: center;
     }
@@ -55,19 +55,23 @@
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
+      
       .list-group-item {
         padding: 0;
-        color: rgba($gray80, 0.5);
+        color: $gray60;
         background-color: transparent;
         font-weight: 400;
         font-size: 0.875rem;
         &:not(:last-child):after {
-          content: '•';
-          color: rgba($gray80, 0.25);
+          content: '\2022';
+          color: $gray50;
           margin: 0 0.3125rem;
         }
         .time-ago__text {
-          color: $gray80;
+          color: $blue-lake;
+          &:hover{
+            text-decoration: underline;
+          }
         }
       }
     }

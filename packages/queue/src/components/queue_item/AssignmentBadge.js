@@ -9,24 +9,26 @@ export const AssignmentBadge = ({ queueItem, toggle, readOnly }) => (
     })}
     onClick={toggle}
     role="button"
+    aria-label="Change Assignment"
+    tabIndex={0}
   >
-    <span className="badge" tabIndex={0}>
+    <span className="badge" aria-hidden="true">
       {(queueItem.values['Assigned Individual Display Name'] &&
         queueItem.values['Assigned Individual Display Name'].charAt(0)) ||
         (queueItem.values['Assigned Team Display Name'] &&
           queueItem.values['Assigned Team Display Name'].charAt(0))}
     </span>
-    <div tabIndex={-1}>
-      <div className="team">
+    <div>
+      <div className="assignment-badge__team">
         <I18n>{queueItem.values['Assigned Team Display Name']}</I18n>
       </div>
-      <div className="individual text-truncate">
+      <div className="assignment-badge__individual text-truncate">
         {queueItem.values['Assigned Individual Display Name']}
       </div>
     </div>
     {!readOnly && (
-      <span className="icon">
-        <span className="fa fa-chevron-right icon" tabIndex={0} />
+      <span className="icon" aria-hidden="true">
+        <span className="fa fa-chevron-right icon" />
       </span>
     )}
   </div>

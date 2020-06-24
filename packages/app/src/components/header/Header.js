@@ -59,7 +59,6 @@ export const HeaderComponent = ({
                 id="toggle-sidebar"
                 aria-label="Toggle Sidebar"
               >
-                {/* <span className="sr-only">Toggle Sidebar</span> */}
                 <i className="fa fa-fw fa-bars" aria-hidden="true" />
               </NavLink>
             </NavItem>

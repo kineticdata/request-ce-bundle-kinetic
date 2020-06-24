@@ -10,8 +10,38 @@
 // }
 
 
-// Testing strong button hovers
-// button:hover {
-//   transform: translateY(-1px);
-//   box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
-// }
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Focus
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+form{
+  [type=text]:focus,
+  [type=password]:focus,
+  [type=number]:focus,
+  [type=tel]:focus,
+  [type=email]:focus,
+  [type=date]:focus,
+  [type=radio]:focus,
+  [type=checkbox]:focus,
+  [type=file]:focus,
+  [type=search]:focus,
+  [type=submit]:focus,
+  button:focus,
+  textarea:focus,
+  select:focus,
+    // Kinetic button types
+  [data-button-type='submit-page']:focus,
+  [data-button-type='save']:focus,
+  [data-button-type='custom']:focus,
+  [data-button-type='previous-page']:focus,
+  .fileinput-button:focus, {
+    outline: none;
+    box-shadow: 0 0 1px 4px rgba($orange-kinops, .25);
+  }
+}
+
+a:focus,
+.btn:focus,
+button:focus {
+    outline: none;
+    box-shadow: 0 0 1px 4px rgba($orange-kinops, .25);
+}

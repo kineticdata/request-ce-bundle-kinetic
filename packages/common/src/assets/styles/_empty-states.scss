@@ -43,9 +43,9 @@
 
 .empty-state,
 .loading-state {
-  color: $gray50;
+  color: $gray60;
   &__message {
-    color: rgba($gray50, 0.8);
+    color: rgba($gray60, 1);
   }
 }
 

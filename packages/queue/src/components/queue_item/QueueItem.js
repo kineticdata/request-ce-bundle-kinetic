@@ -75,12 +75,14 @@ export const QueueItem = ({
       <div className="page-panel page-panel--three-fifths page-panel--white page-panel--no-padding page-panel--flex">
         {filter && (
           <div className="page-panel__header">
-            <Link to="../.." className="nav-return">
-              <span className="icon">
-                <span className="fa fa-fw fa-chevron-left" />
-              </span>
-              <I18n>{filter.name || 'Adhoc'}</I18n>
-            </Link>
+            <div className="nav-return">
+              <Link to="../.." aria-label={`Return to Filter ${filter.name}`}>
+                <span className="icon" aria-hidden="true">
+                  <span className="fa fa-fw fa-chevron-left" />
+                </span>
+                <I18n>{filter.name || 'Adhoc'}</I18n>
+              </Link>
+            </div>
           </div>
         )}
         <div className="page-panel__body">

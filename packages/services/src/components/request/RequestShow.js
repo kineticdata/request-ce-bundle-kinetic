@@ -172,13 +172,12 @@ export const RequestShow = ({
       <PageTitle parts={[submission && `#${submission.handle}`, 'Requests']} />
       {sendMessageModalOpen && <SendMessageModal submission={submission} />}
       <div className="page-panel__header">
-        <Link
-          className="nav-return"
-          to={`${appLocation}/requests/${listType || ''}`}
-        >
-          <span className="fa fa-fw fa-chevron-left" />
-          <I18n>{listType || 'All'} Requests</I18n>
-        </Link>
+        <div className="nav-return">
+          <Link to={`${appLocation}/requests/${listType || ''}`}>
+            <span className="fa fa-fw fa-chevron-left" />
+            <I18n>{listType || 'All'} Requests</I18n>
+          </Link>
+        </div>
         {!error &&
           submission && (
             <div className="submission__meta">

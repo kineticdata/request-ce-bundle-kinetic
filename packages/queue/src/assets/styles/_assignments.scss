@@ -16,9 +16,9 @@
     flex: 0 0 auto;
     justify-content: space-around;
     align-items: center;
-    background-color: $blue-gray;
+    background-color: $blue-lake;
     border-radius: 50%;
-    color: $gray3;
+    color: $white;
     font-size: 1.125rem;
     font-weight: 600;
     margin-right: 0.5rem;
@@ -26,20 +26,21 @@
     width: 2rem;
     text-align: center;
     cursor: pointer;
-    &:focus,
-    &.focus {
-      box-shadow: none;
-      outline: $blue-gray dotted thin;
-    }
+
+  }
+  &:focus,
+  &.focus {
+    outline: none;
+    box-shadow: 0 0 1px 4px rgba($orange-kinops, .25);
   }
   &.read-only .badge {
     cursor: default;
   }
-  .team {
+  &__team {
     font-size: 0.625rem;
-    font-weight: 300;
+    color: $gray80;
   }
-  .individual {
+  &__individual {
     font-size: 0.875rem;
     color: $blue-lake;
   }
