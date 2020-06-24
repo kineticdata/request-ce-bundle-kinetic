@@ -3,7 +3,7 @@ import { CoreForm } from '@kineticdata/react';
 import { Utils } from 'common';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { push } from 'redux-first-history';
+import { push } from 'connected-react-router';
 import { compose, withHandlers } from 'recompose';
 import { I18n } from '@kineticdata/react';
 import { actions } from '../../redux/modules/alerts';

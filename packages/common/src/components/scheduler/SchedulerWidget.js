@@ -1604,15 +1604,9 @@ export const SchedulerWidget = compose(
         !prevPerformSubmit
       ) {
         submitScheduledEvent(stateData.event, 'Scheduled Event').then(
-          ({ submission, serverError, errors }) => {
-            if (serverError) {
-              this.props.dispatch(
-                actions.addSchedulingErrors([
-                  serverError.error || serverError.statusText,
-                ]),
-              );
-            } else if (errors) {
-              this.props.dispatch(actions.addSchedulingErrors(errors));
+          ({ submission, error }) => {
+            if (error) {
+              this.props.dispatch(actions.addSchedulingErrors([error.message]));
             } else {
               this.props.dispatch(actions.setState({ event: submission }));
               performSubmit();

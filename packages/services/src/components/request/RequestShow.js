@@ -155,6 +155,7 @@ const CompletedInItem = ({ submission }) => {
 };
 
 export const RequestShow = ({
+  navigate,
   submission,
   error,
   listType,
@@ -199,7 +200,10 @@ export const RequestShow = ({
                   <ViewDiscussionButtonContainer
                     openDiscussion={openDiscussion}
                   />
-                  <CloneButtonContainer submission={submission} />
+                  <CloneButtonContainer
+                    submission={submission}
+                    navigate={navigate}
+                  />
                   {submission.coreState === constants.CORE_STATE_SUBMITTED &&
                     !discussion && (
                       <CommentButtonContainer submission={submission} />

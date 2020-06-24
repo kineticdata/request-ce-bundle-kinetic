@@ -103,13 +103,14 @@ export function* fetchFormSubmissionsSaga(action) {
   searchBuilder.end();
   const search = searchBuilder.build();
 
-  const { submissions, nextPageToken, serverError } = yield call(
-    searchSubmissions,
-    { search, kapp: kappSlug, form: formSlug },
-  );
+  const { submissions, nextPageToken, error } = yield call(searchSubmissions, {
+    search,
+    kapp: kappSlug,
+    form: formSlug,
+  });
 
-  if (serverError) {
-    yield put(actions.setFormsError(serverError));
+  if (error) {
+    yield put(actions.setFormsError(error));
   } else {
     yield put(actions.setFormSubmissions({ submissions, nextPageToken }));
   }
@@ -130,7 +131,7 @@ export function* fetchAllSubmissionsSaga(action) {
     searcher.pageToken(pageToken);
   }
 
-  const { submissions, nextPageToken = null, serverError } = yield call(
+  const { submissions, nextPageToken = null, error } = yield call(
     searchSubmissions,
     {
       search: searcher.build(),
@@ -153,9 +154,9 @@ export function* fetchAllSubmissionsSaga(action) {
   if (nextPageToken) {
     yield call(fetchAllSubmissionsSaga, action);
   } else {
-    if (serverError) {
+    if (error) {
       // What should we do?
-      console.log(serverError);
+      console.log(error);
     } else {
       yield put(actions.setExportSubmissions(action.payload.accumulator));
     }

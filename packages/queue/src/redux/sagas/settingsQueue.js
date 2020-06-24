@@ -20,7 +20,7 @@ const SPACE_SETTING_INCLUDES = 'kapps,kapps.forms,attributesMap';
 const FORM_INCLUDES = 'details,fields,attributesMap,categorizations,kapp';
 
 export function* fetchQueueSettingsSaga() {
-  const [{ serverError, kapp }, manageableForms] = yield all([
+  const [{ error, kapp }, manageableForms] = yield all([
     call(fetchKapp, {
       include: QUEUE_SETTING_INCLUDES,
       kappSlug: 'queue',
@@ -31,8 +31,8 @@ export function* fetchQueueSettingsSaga() {
     }),
   ]);
 
-  if (serverError) {
-    yield put(actions.updateQueueSettingsError(serverError));
+  if (error) {
+    yield put(actions.updateQueueSettingsError(error));
   } else {
     const manageableFormsSlugs = (manageableForms.forms || []).map(
       form => form.slug,
@@ -50,38 +50,38 @@ export function* fetchQueueSettingsSaga() {
 }
 
 export function* fetchTeamsSaga({ payload }) {
-  const { serverError, teams } = yield call(fetchTeams, {
+  const { error, teams } = yield call(fetchTeams, {
     include: TEAMS_SETTING_INCLUDES,
     teams: payload,
   });
 
-  if (serverError) {
-    yield put(actions.updateQueueSettingsError(serverError));
+  if (error) {
+    yield put(actions.updateQueueSettingsError(error));
   } else {
     yield put(actions.setQueueSettingsTeams(teams));
   }
 }
 
 export function* fetchUsersSaga() {
-  const { serverError, users } = yield call(fetchUsers, {
+  const { error, users } = yield call(fetchUsers, {
     include: 'details',
   });
 
-  if (serverError) {
-    yield put(actions.updateQueueSettingsError(serverError));
+  if (error) {
+    yield put(actions.updateQueueSettingsError(error));
   } else {
     yield put(actions.setQueueSettingsUsers(users));
   }
 }
 
 export function* fetchSpaceSaga({ payload }) {
-  const { serverError, space } = yield call(fetchSpace, {
+  const { error, space } = yield call(fetchSpace, {
     include: SPACE_SETTING_INCLUDES,
     space: payload,
   });
 
-  if (serverError) {
-    yield put(actions.updateQueueSettingsError(serverError));
+  if (error) {
+    yield put(actions.updateQueueSettingsError(error));
   } else {
     yield put(actions.setQueueSettingsSpace(space));
   }
@@ -93,7 +93,7 @@ export function* updateQueueSettingsSaga({ payload }) {
     .map(value => (value.constructor === Array ? value : [value]))
     .toJS();
 
-  const { serverError } = yield call(updateKapp, {
+  const { error } = yield call(updateKapp, {
     include: QUEUE_SETTING_INCLUDES,
     kapp: {
       attributesMap: attributes,
@@ -101,9 +101,9 @@ export function* updateQueueSettingsSaga({ payload }) {
     kappSlug: 'queue',
   });
 
-  if (serverError) {
+  if (error) {
     yield put(addError('Failed to update settings.', 'Update Settings'));
-    yield put(actions.updateServicesSettingsError(serverError));
+    yield put(actions.updateServicesSettingsError(error));
   } else {
     yield put(addSuccess('Updated settings successfully.', 'Update Settings'));
     const appActions = yield select(state => state.app.actions);
@@ -117,28 +117,28 @@ export function* fetchNotificationsSaga() {
     .includes(['details', 'values'])
     .build();
 
-  const { serverError, submissions } = yield call(searchSubmissions, {
+  const { error, submissions } = yield call(searchSubmissions, {
     search,
     form: 'notification-data',
     datastore: true,
   });
 
-  if (serverError) {
-    yield put(actions.updateQueueSettingsError(serverError));
+  if (error) {
+    yield put(actions.updateQueueSettingsError(error));
   } else {
     yield put(actions.setNotifications(submissions));
   }
 }
 
 export function* fetchFormSaga(action) {
-  const { serverError, form } = yield call(fetchForm, {
+  const { error, form } = yield call(fetchForm, {
     kappSlug: action.payload.kappSlug,
     formSlug: action.payload.formSlug,
     include: FORM_INCLUDES,
   });
 
-  if (serverError) {
-    yield put(actions.updateQueueSettingsError(serverError));
+  if (error) {
+    yield put(actions.updateQueueSettingsError(error));
   } else {
     yield put(actions.setForm(form));
   }

@@ -20,7 +20,6 @@ import {
 } from '@kineticdata/react';
 import { addToast, addToastAlert } from 'common';
 import { Map, Seq } from 'immutable';
-import { push } from 'connected-react-router';
 
 import { actions, types } from '../modules/submission';
 import { getCancelFormConfig, getCommentFormConfig } from '../../utils';
@@ -45,7 +44,7 @@ export function* cloneSubmissionRequestSaga(action) {
   const include = 'details,values,form,form.fields.details,form.kapp';
   const kappSlug = yield select(state => state.app.kappSlug);
   const { submission, error } = yield call(fetchSubmission, {
-    id: action.payload,
+    id: action.payload.id,
     include,
   });
 
@@ -94,9 +93,9 @@ export function* cloneSubmissionRequestSaga(action) {
       });
     } else {
       addToast('Submission cloned successfully');
-      yield put(
-        push(`/kapps/${kappSlug}/requests/Draft/request/${cloneSubmission.id}`),
-      );
+      if (typeof action.payload.success === 'function') {
+        action.payload.success(cloneSubmission);
+      }
     }
   }
 }

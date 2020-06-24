@@ -7,6 +7,7 @@ import { CatalogSearchContainer } from '../shared/CatalogSearchContainer';
 import { I18n } from '@kineticdata/react';
 
 export const CatalogSearchResults = ({
+  navigate,
   query,
   error,
   forms,
@@ -41,7 +42,7 @@ export const CatalogSearchResults = ({
         </div>
         <div className="search-results">
           <div className="search-box">
-            <CatalogSearchContainer />
+            <CatalogSearchContainer onSearch={q => navigate(`../${q}`)} />
           </div>
           {!clientSideSearch && (
             <div className="mb-4 text-info">

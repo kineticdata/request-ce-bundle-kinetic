@@ -107,6 +107,7 @@ const fieldSet = [
   'type',
   'submissionLabelExpression',
   'description',
+  'attributesMap',
   'submissionTableFields',
   'prohibitSubtasks',
   'permittedSubtasks',
@@ -190,9 +191,7 @@ export const FormSettingsComponent = ({ form, kapp, onSave }) => {
             label: 'Prohibit Subtasks',
             type: 'select',
             helpText: "Can users create subtasks for this form's submissions.",
-            initialValue: form
-              .getIn(['attributesMap', 'Prohibit Subtasks'])
-              .toJS(),
+            initialValue: form.getIn(['attributesMap', 'Prohibit Subtasks', 0]),
             options: ['Yes', 'No'].map(el => ({
               label: el,
               value: el,
@@ -226,9 +225,11 @@ export const FormSettingsComponent = ({ form, kapp, onSave }) => {
             type: 'select',
             helpText:
               'Can submissions of this form be reassigned to other teams.',
-            initialValue: form
-              .getIn(['attributesMap', 'Allow Reassignment'])
-              .toJS(),
+            initialValue: form.getIn([
+              'attributesMap',
+              'Allow Reassignment',
+              0,
+            ]),
             options: ['Yes', 'No'].map(el => ({
               label: el,
               value: el,
@@ -306,12 +307,16 @@ export const FormSettingsComponent = ({ form, kapp, onSave }) => {
         attributesMap: {
           serialize: ({ values }) => ({
             'Prohibit Subtasks': asArray(values.get('prohibitSubtasks')),
-            'Permitted Subtasks': asArray(values.get('permittedSubtasks')),
+            'Permitted Subtasks': asArray(
+              values.get('permittedSubtasks').join(','),
+            ),
             'Owning Team': values
               .get('owningTeam')
               .map(team => team.get('name')),
             'Allow Reassignment': asArray(values.get('allowReassignment')),
-            'Assignable Teams': asArray(values.getIn('assignableTeams')),
+            'Assignable Teams': values
+              .get('assignableTeams')
+              .map(team => team.get('name')),
             'Notification Template Name - Create': asArray(
               values.get('notificationCreate'),
             ),
@@ -396,7 +401,7 @@ const mapStateToProps = state => ({
   kapp: state.app.kapp,
 });
 
-const mapDispatchToProps = { fetchFormRequest: actions.fetchFormRequest };
+const mapDispatchToProps = { fetchFormRequest: actions.fetchForm };
 
 export const FormSettings = compose(
   connect(
