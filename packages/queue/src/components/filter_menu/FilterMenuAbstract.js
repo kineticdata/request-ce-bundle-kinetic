@@ -126,6 +126,7 @@ const FilterMenuAbstractComponent = props => (
             <select
               value={props.currentFilter.dateRange.timeline}
               onChange={props.changeTimeline}
+              className="form-control form-control-sm"
             >
               <option value="createdAt">{translate('Created At')}</option>
               <option value="updatedAt">{translate('Updated At')}</option>

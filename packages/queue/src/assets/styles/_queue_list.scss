@@ -213,15 +213,42 @@
 }
 
 .filter-menu-popover {
+  input[type='text']{  
+    background: #fff;
+    border: 1px solid #c7d1db;
+    border-radius: 3px;
+    width: 100%;
+  }
+
   input[type='checkbox'],
   input[type='radio'] {
-    margin-right: 0.75rem;
+    
+    position: relative;
+    box-sizing: border-box;
+    vertical-align: bottom;
+    width: 13px;
+    height: 13px;
+    padding: 0;
+    margin-right: .5rem;
+    margin-left: .5rem;
+    vertical-align: bottom;
+    position: relative;
+    top: -1px;
+    *overflow: hidden;
   }
   input[type='radio'] {
-    margin-left: 0.05rem;
+    border: 1px solid green;
   }
   select {
     margin-bottom: 0.5rem;
+    border: 1px solid #c7d1db;
+    border-radius: 3px;
+    padding: .25rem;
+  }
+  label{
+    line-height: 1.0625rem;
+    margin-bottom: 0.5rem;
+    // padding-left: 0;
   }
   &__content,
   &__validations {

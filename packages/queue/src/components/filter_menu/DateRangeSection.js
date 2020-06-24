@@ -32,6 +32,7 @@ export const DateRangeSection = ({
         <select
           value={filter.dateRange.timeline}
           onChange={setDateRangeTimelineHandler}
+          className="form-control form-control-sm"
         >
           <option value="createdAt">{translate('Created At')}</option>
           <option value="updatedAt">{translate('Updated At')}</option>
