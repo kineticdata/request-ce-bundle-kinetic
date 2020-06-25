@@ -21,6 +21,7 @@
   background-color: $baseColor;
   border-color: $baseColor;
   &:not(:disabled):not(.disabled):hover,
+  &:not(:disabled):not(.disabled):focus,
   &:not(:disabled):not(.disabled):active {
     background-color: darken($baseColor, 5%);
     border-color: $baseColor;

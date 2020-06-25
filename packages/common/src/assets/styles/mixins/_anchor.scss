@@ -8,7 +8,8 @@
     color: $color;
     text-decoration: $text-decoration;
 
-    &:hover{
+    &:hover,
+    &:focus{
       color: $hover-color;
       text-decoration: $hover-text-decoration;
     }
