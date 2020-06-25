@@ -191,11 +191,7 @@ form {
       opacity: 1;
     }
   }
-  // Focus
-  input[type='text']:focus,
-  textarea:focus {
-    border-color: $tertiary50;
-  }
+
   select {
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;

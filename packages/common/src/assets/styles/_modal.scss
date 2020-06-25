@@ -150,10 +150,6 @@
           color: $gray80;
           font-size: 0.75rem;
           line-height: 1.5rem;
-          &:focus {
-            outline: 0;
-            box-shadow: 0 0 3px 0 $gray16;
-          }
         }
         .btn {
           margin: 1rem 0;

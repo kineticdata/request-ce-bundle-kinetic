@@ -5,7 +5,6 @@
   transition: background-color 0.3s;
   @include setBgColorAndHover($white);
 
-  &:focus,
   &:hover {
     text-decoration: none;
   }

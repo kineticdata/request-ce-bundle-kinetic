@@ -11,8 +11,13 @@
   flex-direction: row;
   flex: 0 0 auto;
   background-color: $blue-slate;
-  .search-box__form {
-    border: 0;
+  form input, 
+  form button{
+    &:focus {
+      outline: none;
+      border-color: $gray50;
+      box-shadow: 0 0 1px 4px rgba($white, .5);
+    }
   }
   &__wrapper {
     h1 {

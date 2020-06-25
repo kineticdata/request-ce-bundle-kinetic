@@ -26,13 +26,8 @@
     width: 2rem;
     text-align: center;
     cursor: pointer;
+  }
 
-  }
-  &:focus,
-  &.focus {
-    outline: none;
-    box-shadow: 0 0 1px 4px rgba($orange-kinops, .25);
-  }
   &.read-only .badge {
     cursor: default;
   }
