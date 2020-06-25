@@ -45,6 +45,36 @@ form{
     border-color: $gray50;
     box-shadow: 0 0 1px 4px rgba($orange-kinops, .25);
   }
+  // Errors
+  .has-error{
+    input[type=text]:focus,
+    input[type=password]:focus,
+    input[type=number]:focus,
+    input[type=tel]:focus,
+    input[type=email]:focus,
+    input[type=date]:focus,
+    input[type=radio]:focus,
+    input[type=checkbox]:focus,
+    input[type=file]:focus,
+    input[type=search]:focus,
+    input[type=submit]:focus,
+    .btn:focus,
+    button:focus,
+    input:focus,
+    textarea:focus,
+    select:focus,
+    .form-control:focus,
+    // Kinetic button types
+    [data-button-type='submit-page']:focus,
+    [data-button-type='save']:focus,
+    [data-button-type='custom']:focus,
+    [data-button-type='previous-page']:focus,
+    .fileinput-button:focus {
+      outline: none;
+      border-color: $red;
+      box-shadow: 0 0 1px 4px rgba($red, .25);
+    }
+  }
 }
 
 
@@ -77,3 +107,33 @@ select:focus,
   box-shadow: 0 0 1px 4px rgba($orange-kinops, .25);
 }
 
+// Errors
+.has-error{
+  input[type=text]:focus,
+  input[type=password]:focus,
+  input[type=number]:focus,
+  input[type=tel]:focus,
+  input[type=email]:focus,
+  input[type=date]:focus,
+  input[type=radio]:focus,
+  input[type=checkbox]:focus,
+  input[type=file]:focus,
+  input[type=search]:focus,
+  input[type=submit]:focus,
+  .btn:focus,
+  button:focus,
+  input:focus,
+  textarea:focus,
+  select:focus,
+  .form-control:focus,
+  // Kinetic button types
+  [data-button-type='submit-page']:focus,
+  [data-button-type='save']:focus,
+  [data-button-type='custom']:focus,
+  [data-button-type='previous-page']:focus,
+  .fileinput-button:focus {
+    outline: none;
+    border-color: $red;
+    box-shadow: 0 0 1px 4px rgba($red, .25);
+  }
+}
