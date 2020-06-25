@@ -8,10 +8,13 @@
     color: $color;
     text-decoration: $text-decoration;
 
-    &:hover,
-    &:focus{
+    &:hover{
       color: $hover-color;
       text-decoration: $hover-text-decoration;
+    }
+    &:focus{
+      outline: none;
+      box-shadow: 0 0 1px 4px rgba($orange-kinops, .25);
     }
   }
 }
