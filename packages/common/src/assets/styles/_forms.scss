@@ -247,23 +247,32 @@ form {
   .errors {
     display: none;
     margin: 0 auto;
-    width: 90%;
+    width: 100%;
   }
   .errors {
     font-size: 1rem;
-    background-color: #faf0ef;
-    border: 0.1rem solid #d5d5d5;
-    color: #000;
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-    width: 60%;
+    background-color: rgba($red-rose, .125);
+    border-left: .25rem solid $red;
+    color: $black;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    padding: .5rem;
+    width: auto;
     p {
-      font-style: bold;
+      font-weight: bold;
       font-size: larger;
-      background-color: #c00;
-      border-bottom: 0.1rem solid #d5d5d5;
-      color: white;
-      padding: 0.25rem 0.5rem;
+      background-color: transparent;
+      margin: 0;
+      padding: 0 0.5rem 0;
+    }
+    ul{
+      margin: .5rem 0;
+      padding: 0 0 0 1.5rem;
+    }
+    &:focus{
+      outline: none;
+      box-shadow: 0 0 1px 4px rgba($red, .25);
+
     }
   }
   .form-group,
