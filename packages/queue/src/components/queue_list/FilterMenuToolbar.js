@@ -1,29 +1,34 @@
 import React, { Fragment } from 'react';
-import { Popover, PopoverBody, UncontrolledTooltip } from 'reactstrap';
+import {
+  UncontrolledDropdown,
+  UncontrolledTooltip,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+} from 'reactstrap';
 import { FilterMenuAbstract } from '../filter_menu/FilterMenuAbstract';
 import isarray from 'isarray';
 import { I18n } from '@kineticdata/react';
 
 export const Menu = props => {
   const toggle = props.toggleShowing(props.name);
-  const id = `${props.name}-popover`;
+  const id = `${props.name}-dropdown`;
   return (
     <Fragment>
-      {props.renderButton({ onClick: toggle, id })}
-      <Popover
-        placement="bottom"
+      <UncontrolledDropdown
         target={id}
         isOpen={props.showing === props.name}
         toggle={toggle}
-        trigger="legacy"
       >
-        <PopoverBody className="filter-menu-popover">
+        {props.renderButton({ onClick: toggle, id })}
+
+        <DropdownMenu className="filter-menu-dropdown">
           {(isarray(props.renderContent)
             ? props.renderContent
             : [props.renderContent]
           ).map((renderContentFn, index) => (
             <div
-              className="filter-menu-popover__content"
+              className="filter-menu-dropdown__content"
               key={`content-${index}`}
             >
               {renderContentFn()}
@@ -31,7 +36,7 @@ export const Menu = props => {
           ))}
           {(props.validations.length > 0 ||
             (props.messages && props.messages.length > 0)) && (
-            <div className="filter-menu-popover__validations">
+            <div className="filter-menu-dropdown__validations">
               {props.validations.map((validation, i) => (
                 <p key={i} className="text-danger">
                   <small>
@@ -49,7 +54,7 @@ export const Menu = props => {
                 ))}
             </div>
           )}
-          <div className="filter-menu-popover__footer">
+          <div className="filter-menu-dropdown__footer">
             <button className="btn btn-link" onClick={props.reset}>
               <I18n>{props.resetLabel || 'Reset'}</I18n>
             </button>
@@ -63,15 +68,21 @@ export const Menu = props => {
               </I18n>
             </button>
           </div>
-        </PopoverBody>
-      </Popover>
+        </DropdownMenu>
+      </UncontrolledDropdown>
     </Fragment>
   );
 };
 
 // Define some simple button components just to cleanup the toolbar component.
 const MenuButton = props => (
-  <button type="button" className="btn btn-subtle" {...props} />
+  <DropdownToggle
+    tag="button"
+    caret
+    className="btn btn-subtle"
+    {...props}
+    setActiveFromChild
+  />
 );
 const ClearButton = props => {
   const disabled = typeof props.action === 'string';
@@ -151,7 +162,6 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                     filter.teams.isEmpty() ? (
                       <MenuButton {...btnProps}>
                         <I18n>Any Team</I18n>
-                        <i className="fa fa-fw fa-caret-down" />
                       </MenuButton>
                     ) : (
                       <div className="btn-group">
@@ -176,7 +186,6 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                           {translate('Any Assignment')}
                           {filter.createdByMe &&
                             ` | ${translate('Created By Me')}`}
-                          <i className="fa fa-fw fa-caret-down" />
                         </MenuButton>
                       ) : (
                         <div className="btn-group">
@@ -202,7 +211,6 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                   filter.status.isEmpty() ? (
                     <MenuButton {...btnProps}>
                       <I18n>Any Status</I18n>
-                      <i className="fa fa-fw fa-caret-down" />
                     </MenuButton>
                   ) : (
                     <div className="btn-group">
@@ -222,7 +230,6 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                   !filter.dateRange.custom && filter.dateRange.preset === '' ? (
                     <MenuButton {...btnProps}>
                       <I18n>Any Date Range</I18n>
-                      <i className="fa fa-fw fa-caret-down" />
                     </MenuButton>
                   ) : (
                     <div className="btn-group">
@@ -251,7 +258,7 @@ export const FilterMenuToolbar = ({ filter, refresh }) => (
                   resetLabel="Cancel"
                   messages={props.saveMessages}
                   renderButton={btnProps => (
-                    <MenuButton {...btnProps} className="btn btn-primary">
+                    <MenuButton {...btnProps} className="btn-primary">
                       <I18n>Save Filter?</I18n>
                     </MenuButton>
                   )}
