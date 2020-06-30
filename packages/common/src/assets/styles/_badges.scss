@@ -1,0 +1,19 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *   Badges ~ Common
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+ // a11y overrides
+ .badge{
+  &-primary{ 
+    color: $white;
+    background-color: $blue-lake;
+  }
+  &-success{     
+    color: $white;
+    background-color: darken($green-grass, 15);
+  }
+  &-info{
+    background-color: $blue-slate;
+    color: $white;
+  }
+}
