@@ -169,14 +169,10 @@
 }
 
 .queue-filter-save {
-  margin: 0 0 0 1rem;
-  padding: 0;
   display: flex;
   flex: 0 0 auto;
-  button {
-    border: none;
-    margin-bottom: 0.75rem;
-  }
+  margin: 0 0 .75rem 1rem;
+  padding: 0;
 }
 
 .items-grouping {
