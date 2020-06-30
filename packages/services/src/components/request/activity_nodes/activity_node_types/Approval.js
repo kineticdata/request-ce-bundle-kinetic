@@ -6,13 +6,13 @@ import { I18n } from '@kineticdata/react';
 const getStatusColor = status => {
   switch (status) {
     case 'Approved':
-      return 'status--green';
+      return 'status--success';
     case 'Denied':
-      return 'status--red';
+      return 'status--danger';
     case 'In Progress':
-      return 'status--yellow';
+      return 'status--warning';
     default:
-      return 'status--grey';
+      return 'status--default';
   }
 };
 
@@ -22,12 +22,12 @@ export const ApprovalHeader = ({ activity }) => {
   const displayOpt = data.Decision ? data.Decision : data.Status;
   return (
     <Fragment>
-      <h1>
+      <div className="card-title">
         <I18n>{activity.label}</I18n>
         <span className={`status ${getStatusColor(displayOpt)}`}>
           <I18n>{displayOpt}</I18n>
         </span>
-      </h1>
+      </div>
     </Fragment>
   );
 };

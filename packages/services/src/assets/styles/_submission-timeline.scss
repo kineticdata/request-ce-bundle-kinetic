@@ -19,7 +19,7 @@
     margin-bottom: 0.5rem;
   }
   dd {
-    color: $gray50;
+    color: $gray60;
     font-size: 1rem;
     font-weight: 300;
     line-height: 1rem;
@@ -43,13 +43,13 @@
     left: -1.3725rem;
     top: 50%;
   }
-  h1 {
+  .card-title {
     display: flex;
     justify-content: space-between;
     font-size: 1rem;
     line-height: 1.5rem;
     margin: 0;
-    color: $blue;
+    color: $blue-lake;
     margin-bottom: 0.75rem;
     padding-bottom: 0.6875rem;
     border-bottom: 1px solid $gray16;
@@ -66,19 +66,20 @@
 .timeline-status {
   display: table;
   font-size: 0.8rem;
-  font-weight: 900;
-  background-color: $green-grass;
+  font-weight: 700;
   padding: 0.25rem 0.75rem;
   border-radius: $border-radius-base;
-  color: $white;
+  color: darken($green-grass, 18.5);
+  background-color: #d3f6e2;
   text-align: center;
   margin-left: -2.375rem;
   &--end {
-    background-color: $red;
+    color: $white;
+    background-color: darken($red, 18);
   }
   &--pending {
-    background-color: $sunflower;
-    color: $gray80;
+    color: darken($orange, 24);
+    background-color: #ffead4;
     margin-left: -3rem;
   }
 }

@@ -25,7 +25,7 @@
   }
 
   p {
-    color: $gray50;
+    color: $gray60;
     font-size: 1rem;
     line-height: 1.5rem;
     margin-bottom: 0;
@@ -48,7 +48,7 @@
   }
 
   p {
-    color: $gray50;
+    color: $gray60;
     font-size: 0.9375rem;
     line-height: 1rem;
     padding: 0.625rem 0;
@@ -59,7 +59,7 @@
   }
 
   .fa.edit {
-    color: $gray50;
+    color: $gray60;
     line-height: 1.5rem;
   }
 
@@ -86,11 +86,10 @@
 //
 
 .status {
-  color: $white;
   text-align: center;
   padding: 0.125rem 0.625rem;
-  font-size: 50%;
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 600;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
@@ -98,24 +97,30 @@
   border-radius: 0.75rem;
   margin-left: auto;
   flex: 0 0 auto;
+  line-height: 1.0625rem;
+  color: $gray80;
 
-  &--gray {
-    background-color: $gray50;
+  &--default {
+    color: darken($blue, 12);
+    background-color: rgba($blue, 0.2);
   }
 
-  &--yellow {
-    background-color: $sunflower;
-    color: $gray80;
+  &--warning {
+    color: darken($orange, 24);
+    background-color: rgba($orange, 0.2);
   }
 
-  &--green {
-    background-color: $green-grass;
+  &--success {
+    color: darken($green-grass, 18);
+    background-color: rgba($green-grass, 0.2);
   }
 
-  &--red {
-    background-color: $red;
+  &--danger {
+    color: darken($red, 18);
+    background-color: rgba($red, 0.1);
   }
 }
+
 // Empty State Card
 .card--empty-state {
   margin-top: 1rem;

@@ -7,20 +7,20 @@ export const TaskHeader = ({ activity }) => {
   const data = activityData(activity);
   return (
     <Fragment>
-      <h1>
+      <div className="card-title">
         <I18n>{activity.label}</I18n>
         <span
           className={`status ${
             data.Status === 'Complete'
-              ? 'status--gray'
+              ? 'status--default'
               : data.Status === 'In Progress'
-                ? 'status--yellow'
-                : 'status--green'
+                ? 'status--warning'
+                : 'status--success'
           }`}
         >
           <I18n>{data.Status}</I18n>
         </span>
-      </h1>
+      </div>
     </Fragment>
   );
 };

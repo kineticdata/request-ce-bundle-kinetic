@@ -7,12 +7,12 @@ export const SubmissionSubmittedHeader = ({ activity, submission }) => {
   const data = activityData(activity);
   return (
     <Fragment>
-      <h1>
+      <div className="card-title">
         <I18n>{activity.label}</I18n>
-        <span className="status status--green">
+        <span className="status status--success">
           <I18n>{data.Status || 'Submitted'}</I18n>
         </span>
-      </h1>
+      </div>
     </Fragment>
   );
 };

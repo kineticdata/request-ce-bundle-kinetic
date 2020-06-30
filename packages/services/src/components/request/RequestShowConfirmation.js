@@ -8,9 +8,9 @@ import { I18n } from '@kineticdata/react';
 
 export const RequestShowConfirmation = ({ handleOpenFeedback }) => (
   <Fragment>
-    <h4>
+    <h2 className="h4">
       <I18n>Thank you for your submission.</I18n>
-    </h4>
+    </h2>
 
     <p>
       <I18n>With</I18n>{' '}

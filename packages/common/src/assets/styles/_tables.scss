@@ -51,12 +51,12 @@ table.table--settings {
           font-weight: 600;
         }
         > small {
-          color: $gray50;
+          color: $gray60;
         }
         > .list-dropdown {
           & > button {
             padding: 0;
-            color: $gray50;
+            color: $gray60;
             &:hover {
               color: darken($gray50, 5%);
             }

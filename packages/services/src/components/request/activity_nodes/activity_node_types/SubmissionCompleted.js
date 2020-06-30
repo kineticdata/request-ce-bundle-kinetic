@@ -7,16 +7,16 @@ export const SubmissionCompletedHeader = ({ activity }) => {
   const data = activityData(activity);
   return (
     <Fragment>
-      <h1>
+      <div className="card-title">
         <I18n>{activity.label}</I18n>
         <span
           className={`status anotherClass ${
-            data.Status ? 'status--green' : 'status--gray'
+            data.Status ? 'status--success' : 'status--default'
           }`}
         >
           <I18n>{data.Status || 'Complete'}</I18n>
         </span>
-      </h1>
+      </div>
     </Fragment>
   );
 };
