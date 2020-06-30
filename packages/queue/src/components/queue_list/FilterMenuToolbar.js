@@ -20,7 +20,6 @@ export const Menu = props => {
         target={id}
         isOpen={props.showing === props.name}
         toggle={toggle}
-        a11y={false}
       >
         {props.renderButton({ onClick: toggle, id })}
 
