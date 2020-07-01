@@ -18,7 +18,9 @@ const ActivityDataItem = ({ label, value }) => (
   </dl>
 );
 
-export const DefaultHeader = ({ activity }) => <h1>{activity.label}</h1>;
+export const DefaultHeader = ({ activity }) => (
+  <div className="card--title">{activity.label}</div>
+);
 
 export const DefaultBody = ({ activity }) => {
   const data = activityData(activity);

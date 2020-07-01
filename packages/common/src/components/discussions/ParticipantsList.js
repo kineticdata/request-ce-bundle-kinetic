@@ -14,8 +14,9 @@ export const ParticipantsList = props => (
         type="button"
         className="btn btn-icon"
         onClick={props.openInvitations}
+        title="Invite participants"
       >
-        <i className="fa fa-fw fa-plus" />
+        <i className="fa fa-fw fa-plus" aria-hidden="true" />
       </button>
     </div>
     <ul className="participants-list">
@@ -56,8 +57,9 @@ export const ParticipantsList = props => (
                       id={`remove-participant-${i}`}
                       className="btn btn-link"
                       onClick={props.remove(p)}
+                      title="Remove Participant"
                     >
-                      <i className="fa fa-fw fa-trash" />
+                      <i className="fa fa-fw fa-trash" aria-hidden="true" />
                     </button>
                   </span>
                   <Popover

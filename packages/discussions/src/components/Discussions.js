@@ -117,7 +117,7 @@ const renderHeaderHandler = props => () => {
                   onClick={props.toggleCreateDiscussionHandler}
                   title={translate('New Discussion')}
                 >
-                  <span className="icon">
+                  <span className="icon" aria-hidden="true">
                     <span className="fa fa-plus" />
                   </span>
                 </button>

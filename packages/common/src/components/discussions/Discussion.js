@@ -79,8 +79,12 @@ export const DiscussionComponent = props => (
               </span>
             </span>
           </button>*/}
-            <button className="btn btn-icon" onClick={props.openDetails}>
-              <span className="icon">
+            <button
+              className="btn btn-icon"
+              onClick={props.openDetails}
+              title="Discussion Details"
+            >
+              <span className="icon" aria-hidden="true">
                 <span className="fa fa-info-circle" />
               </span>
             </button>
@@ -90,7 +94,7 @@ export const DiscussionComponent = props => (
                 onClick={props.openInNewTab}
                 title="Expand Discussion"
               >
-                <span className="icon">
+                <span className="icon" aria-hidden="true">
                   <span className="fa fa-expand" />
                 </span>
               </button>
