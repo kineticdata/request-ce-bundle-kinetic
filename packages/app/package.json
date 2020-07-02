@@ -20,6 +20,7 @@
     "connected-react-router": "^6.6.1",
     "font-awesome": "^4.7.0",
     "immutable": "4.0.0-rc.9",
+    "inquirer": "^7.2.0",
     "modularscale-sass": "^3.0.5",
     "moment": "^2.22.2",
     "query-string": "^5.1.1",

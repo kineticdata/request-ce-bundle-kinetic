@@ -161,7 +161,7 @@ export const updateEvents = (filterActions, events) => {
   );
 };
 
-export const getDateRange = (fieldName, date) => {
+export const getDateRange = (fieldObj, date) => {
   date = date ? moment(date).format() : moment().format();
   const mDate = moment(date, 'YYYY-MM');
 
@@ -175,7 +175,21 @@ export const getDateRange = (fieldName, date) => {
       return mDate.add(addDays, 'days').format('YYYY-MM-DD');
     });
   dates.push(month);
-  return { [fieldName]: `(${dates.map(date => `"${date}"`).join(',')})` };
+  return { [getPropertyName(fieldObj)]: 
+    `(${dates.map(date => `"${date}"`).join(',')})` };
 };
 
-// TODO: start and end date functions
+export const getStartDate = (fieldObj, date) => {
+  return { [getPropertyName(fieldObj)]: 
+    moment(date).startOf('month').format(fieldObj.get('format')) };
+};
+
+export const getEndDate = (fieldObj, date) => {
+  return { [getPropertyName(fieldObj)]: 
+    moment(date).endOf('month').format(fieldObj.get('format')) };
+}
+
+const getPropertyName = fieldObj =>
+  fieldObj.get('fieldName').trim().length > 0 
+    ? fieldObj.get('fieldName') 
+    : key;

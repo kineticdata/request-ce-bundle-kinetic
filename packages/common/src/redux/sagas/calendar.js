@@ -11,6 +11,8 @@ import axios from 'axios';
 import { actions, types } from '../modules/calendar';
 import {
   getDateRange,
+  getStartDate,
+  getEndDate,
   buildFilterActions,
   updateEvents,
   updateFilterActions,
@@ -111,18 +113,23 @@ export function* fetchCalendarEventsSaga({ payload }) {
   const sources = payload.eventTypes.reduce((acc, eventType, key) => {
     let source = eventType.get('source');
     let values = {};
-    if (source.has('parameterFieldNames')) {
-      0;
+    if (source.has('parameters')) {
       values = source
-        .get('parameterFieldNames')
-        .reduce((acc, fieldName, key) => {
-          let propertyName = fieldName.trim().length > 0 ? fieldName : key;
-          if (key === 'Date Range') {
-            acc = { ...getDateRange(propertyName, payload.date), ...acc };
-          }
-          return acc;
+        .get('parameters')
+        .reduce((acc, fieldObj, key) => {
+
+          switch(key) {
+            case 'Date Range':
+              return { ...getDateRange(fieldObj, payload.date), ...acc };
+            case 'Start Date':
+              return { ...getStartDate(fieldObj, payload.date), ...acc };
+            case 'End Date':
+              return { ...getEndDate(fieldObj, payload.date), ...acc };
+            default:
+              return acc; 
+          } 
         }, {});
-      source = source.remove('parameterFieldNames');
+      source = source.remove('parameters');
     }
     acc[key] = call(fetchBridgedResource, {
       ...source.toJS(),
