@@ -5,7 +5,8 @@ export const FEEDBACK_FORM = 'feedback';
 export const HELP_FORM = 'help';
 
 export const SYMBOLS = 'Symbols';
-export const PERCENT = "%";
+export const PERCENT = '%';
+export const EXCLAMATION = '!';
 
 export const LETTERS = 'Letters';
 
