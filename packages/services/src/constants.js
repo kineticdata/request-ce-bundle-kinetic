@@ -4,6 +4,9 @@ export const COMMENT_FORM = 'comment';
 export const FEEDBACK_FORM = 'feedback';
 export const HELP_FORM = 'help';
 
+export const LETTERS = 'Letters';
+export const NUMBERS = 'Numbers';
+
 // Attribute names
 export const STATUSES_ACTIVE = 'Statuses - Active';
 export const STATUSES_INACTIVE = 'Statuses - Inactive';
