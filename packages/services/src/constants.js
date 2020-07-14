@@ -4,6 +4,12 @@ export const COMMENT_FORM = 'comment';
 export const FEEDBACK_FORM = 'feedback';
 export const HELP_FORM = 'help';
 
+export const ONE = 'one';
+export const TWO = 'two';
+export const THREE = 'three';
+export const FOUR = 'four';
+export const FIVE = 'five';
+
 // Attribute names
 export const STATUSES_ACTIVE = 'Statuses - Active';
 export const STATUSES_INACTIVE = 'Statuses - Inactive';
