@@ -4,7 +4,11 @@ export const COMMENT_FORM = 'comment';
 export const FEEDBACK_FORM = 'feedback';
 export const HELP_FORM = 'help';
 
+export const SYMBOLS = 'Symbols';
+export const PERCENT = "%";
+
 export const LETTERS = 'Letters';
+
 export const NUMBERS = 'Numbers';
 
 // Attribute names
