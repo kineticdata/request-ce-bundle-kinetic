@@ -8,6 +8,10 @@ export const SYMBOLS = 'Symbols';
 export const PERCENT = "%";
 
 export const LETTERS = 'Letters';
+export const TWENTY_FOUR = 'X';
+export const TWENTY_FIVE = 'Y';
+export const TWENTY_SIX = 'Z';
+
 
 export const NUMBERS = 'Numbers';
 
