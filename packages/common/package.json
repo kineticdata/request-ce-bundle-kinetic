@@ -11,7 +11,7 @@
     "jquery": "^3.2.1",
     "lodash.ismatch": "^4.4.0",
     "memoize-one": "^4.0.2",
-    "moment": "^2.22.2",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.23",
     "react": "^16.2.0",
     "react-bootstrap-typeahead": "^3.2.4",
