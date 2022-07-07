@@ -10,7 +10,7 @@
     "immutable": "4.0.0-rc.9",
     "is-function": "^1.0.1",
     "isarray": "^2.0.2",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "react": "^16.2.0",
     "react-addons-shallow-compare": "^15.6.2",
     "react-autocomplete": "^1.8.1",
